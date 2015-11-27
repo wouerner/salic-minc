@@ -1,0 +1,4 @@
+Release.1-2
+  * Os17 - movimentação bancária
+  * Os32
+    * feature-publicaao-dou - #462
