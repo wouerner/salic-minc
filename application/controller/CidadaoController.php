@@ -97,6 +97,75 @@ class CidadaoController extends GenericControllerNew {
             $this->view->intranet = true;
         }
     }
+
+    public function consultarAction() {
+        if(!$this->usuarioInterno){
+            Zend_Layout::startMvc(array('layout' => 'layout_login'));
+        }
+      
+	$idNrReuniaoConsulta = $this->_request->getParam("idNrReuniaoConsulta") ? $this->_request->getParam("idNrReuniaoConsulta") : null;
+        $reuniao = new Reuniao();
+	//Alysson - Na Primeira Consulta exibe dados da ultima reuniao aberta
+	if(!$idNrReuniaoConsulta){
+            $raberta = $reuniao->buscarReuniaoAberta();
+        } else {
+            $raberta = $reuniao->buscarReuniaoPorId($idNrReuniaoConsulta);//idNrReuniao           
+        }
+        $this->view->reuniao = $raberta;
+        $this->view->idNrReuniaoConsulta = $raberta->idNrReuniao;
+
+	//Alysson - Metodos Que Busca Todas as reunioes
+	$this->view->listaReunioes = $reuniao->buscarTodasReunioes();
+        $order = array();
+
+        //==== parametro de ordenacao  ======//
+        if($this->_request->getParam("ordem")) {
+            $ordem = $this->_request->getParam("ordem");
+            if($ordem == "ASC") {
+                $novaOrdem = "DESC";
+            }else {
+                $novaOrdem = "ASC";
+            }
+        }else {
+            $ordem = "ASC";
+            $novaOrdem = "ASC";
+        }
+
+        //==== campo de ordenacao  ======//
+        if($this->_request->getParam("campo")) {
+            $campo = $this->_request->getParam("campo");
+            $order = array($campo." ".$ordem);
+            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+
+        } else {
+            $campo = null;
+            $order = array('12 DESC'); //Vl.Sugerido
+            $ordenacao = null;
+        }
+
+        /* ================== PAGINACAO ======================*/
+        $where = array();
+        $where["b.idNrReuniao = ?"] = $raberta->idNrReuniao;
+        $where["h.stAtivo = ?"] = 1;
+                
+        $Projetos = new Projetos();
+	//Alysson
+	if(!$idNrReuniaoConsulta){
+            $busca = $Projetos->projetosCnicOpinioes($where, $order);
+        }else {
+	    $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($raberta->idNrReuniao, $where, $order);
+        }
+        $this->view->qtdRegistros = count($busca);
+        $this->view->dados = $busca;
+        $this->view->novaOrdem = $novaOrdem;
+        $this->view->ordem = $ordem;
+        $this->view->campo = $campo;
+        
+        $this->view->intranet = false;
+        if(isset($_GET['intranet'])){
+            $this->view->intranet = true;
+        }
+    }
     
     public function imprimirListagemAction() {
         $reuniao = new Reuniao();
