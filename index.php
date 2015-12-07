@@ -21,16 +21,18 @@ define('APPLICATION_PATH', realpath(__DIR__ . DIRECTORY_SEPARATOR . 'application
 //$DIR_BANCO      = "bancos_wotan";                   // Conexar 1
 //$DIR_BANCO      = "bancos_fedra";                   // Conexao 2
 //$DIR_BANCO      = "bancos_yord";                    //
-$DIR_BANCO      = "bancos_minc10";                  // Conexao 3
+//$DIR_BANCO      = "bancos_minc10";                  // Conexao 3
 //$DIR_BANCO        = "bancos_ayphos";                // Conexao 5
 //$DIR_BANCO        = "bancos_xti";                // Conexao 6
+$DIR_BANCO        = "bancos_AMBIENTE";               
 
 //$DIR_BANCOP     = "conexao_01";                     // wotan
 //$DIR_BANCOP     = "conexao_02";                     // fedra
 //$DIR_BANCOP     = "conexao_03";                     // minc10
-$DIR_BANCOP     = "conexao_04";                     //
+//$DIR_BANCOP     = "conexao_04";                     //
 //$DIR_BANCOP     = "conexao_05";                     // ayphos
 //$DIR_BANCOP     = "conexao_xti";                     // ayphos
+$DIR_BANCOP     = "conexao_AMBIENTE";                 
 $DIR_LIB        = "./library/";                       // bibliotecas
 $DIR_CONFIG     = "./application/configs/$DIR_BANCO.ini"; // configuraççes
 $DIR_CONFIGP    = "./application/configs/config.ini"; // configurações
