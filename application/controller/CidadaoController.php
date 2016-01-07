@@ -145,15 +145,37 @@ class CidadaoController extends GenericControllerNew {
 
         /* ================== PAGINACAO ======================*/
         $where = array();
-        $where["b.idNrReuniao = ?"] = $raberta->idNrReuniao;
-        $where["h.stAtivo = ?"] = 1;
-                
+        //$where["t.idNrReuniao = ?"] = $raberta->idNrReuniao;
+        $where["stAtivo = ?"] = 1;
+
+        // Fernao: adicionando filtros
+        if ($this->_request->getParam("NrPronacConsulta")) {
+            $nrPronac = $this->_request->getParam("NrPronacConsulta");
+            $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
+            $this->view->nrPronac = $nrPronac;
+        }
+        if ($this->_request->getParam("CnpjCpfConsulta")) {
+            $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
+            $where["x.CNPJCPF = ?"] = $CnpjCpf;
+            $this->view->cnpjCpf = $CnpjCpf;
+        }
+        if ($this->_request->getParam("ProponenteConsulta")) {
+            $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
+            $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
+            $this->view->proponente = $ProponenteConsulta;
+        }    
+        if ($this->_request->getParam("NomeProjetoConsulta")) {
+            $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
+            $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
+            $this->view->nomeProjeto = $NomeProjetoConsulta;
+        }
+        
         $Projetos = new Projetos();
-	//Alysson
-	if(!$idNrReuniaoConsulta){
+        //Alysson
+        if(!$idNrReuniaoConsulta){
             $busca = $Projetos->projetosCnicOpinioes($where, $order);
-        }else {
-	    $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($raberta->idNrReuniao, $where, $order);
+        } else {
+            $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($raberta->idNrReuniao, $where, $order);
         }
         $this->view->qtdRegistros = count($busca);
         $this->view->dados = $busca;
