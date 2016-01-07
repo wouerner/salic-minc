@@ -128,6 +128,30 @@
                         <input type="button" name="procurar" class="btn_pesquisar" value=" " /><br>
                     </td>
                 </tr>
+                <tr>
+		    <td>
+                        <label for="NrPronacConsulta">N&uacute;mero do PRONAC: </label>
+                        <input name="NrPronacConsulta" id="NrPronacConsulta" class="input_simples" value="<?php echo $this->nrPronac; ?>">
+                    </td>
+                </tr>
+                <tr>
+		    <td>
+                        <label for="CpnjCpfConsulta">CPF/CNPJ: </label>
+			<input type="text" name="CnpjCpfConsulta" id="CnpjCpfConsulta" class="input_simples" value="<?php echo $this->cnpjCpf; ?>">
+                    </td>
+                </tr>
+                <tr>
+		    <td>
+                        <label for="ProponenteConsulta">Proponente: </label>
+			<input type="text" name="ProponenteConsulta" id="ProponenteConsulta" class="input_simples" value="<?php echo $this->proponente; ?>">
+                    </td>
+                </tr>
+                <tr>
+		    <td>
+                        <label for="NomeProjetoConsulta">Nome do projeto: </label>
+                        <input name="NomeProjetoConsulta" id="NomeProjetoConsulta" class="input_simples" value="<?php echo $this->nomeProjeto; ?>">
+                    </td>
+                </tr>
             </table>
         </form>
     </fieldset>
