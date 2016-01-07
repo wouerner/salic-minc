@@ -6206,79 +6206,10 @@ class Projetos extends GenericModel
      * @throws Zend_Db_Select_Exception
      */
     public function projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where = array(), $order = array())
-    {
-        $select1 = $this->select();
-        $select1->setIntegrityCheck(false);
-        $select1->from(
-            array('t' => 'tbDistribuicaoProjetoComissao'), array(
-            new Zend_Db_Expr("
-                        p.IdPRONAC as idPronac,
-                        p.AnoProjeto + p.Sequencial AS Pronac,
-                        p.NomeProjeto,
-                        z.Descricao as Proponente,
-                        p.UfProjeto AS UF,
-                        (SELECT TOP 1 m1.Descricao FROM Agentes.dbo.EnderecoNacional x1
-                            INNER JOIN Agentes.dbo.UF u1 ON (x1.UF = u1.idUF)
-                            INNER JOIN Agentes.dbo.Municipios m1 ON (x1.UF = m1.idUFIBGE AND x1.Cidade = m1.idMunicipioIBGE)
-                            WHERE x.idAgente = x1.idAgente) AS Cidade,
-                        CASE
-                            WHEN e.Enquadramento = 1
-                                THEN 'Artigo 26'
-                            WHEN e.Enquadramento = 2
-                                THEN 'Artigo 18'
-                        END AS descEnquadramento,
-                        a.Descricao AS dsArea,
-                        se.Descricao AS dsSegmento,
-                        CASE
-                            WHEN pr.ParecerFavoravel = '1' THEN 'Desfavor?vel'
-                            WHEN pr.ParecerFavoravel = '2' THEN 'Favor?vel'
-                        END AS descAvaliacao,
-                        p.SolicitadoReal as vlSolicitado,
-                        (SELECT SUM(qtItem*nrOcorrencia*vlUnitario) FROM SAC.dbo.tbPlanilhaAprovacao pa WHERE pa.IdPRONAC = p.IdPRONAC AND stAtivo = 'S' and pa.nrFonteRecurso=109) AS vlSugerido,
-                        p.ResumoProjeto
-                    ")
-        ), 'BDCORPORATIVO.scSAC'
-        );
-
-        $select1->joinInner(
-            array('p' => 'Projetos'), 't.idPronac = p.idPronac', array(''), 'SAC.dbo'
-        );
-        $select1->joinInner(
-            array('pr' => 'Parecer'), 'pr.idPronac = p.idPronac', array(''), 'SAC.dbo'
-        );
-        $select1->joinLeft(
-            array('e' => 'Enquadramento'), 'e.idPronac = p.idPronac', array(''), 'SAC.dbo'
-        );
-        $select1->joinInner(
-            array('s' => 'Situacao'), 'p.Situacao = s.Codigo', array(''), 'SAC.dbo'
-        );
-        $select1->joinInner(
-            array('a' => 'Area'), 'p.Area = a.Codigo', array(''), 'SAC.dbo'
-        );
-        $select1->joinInner(
-            array('se' => 'Segmento'), 'p.Segmento = se.Codigo', array(''), 'SAC.dbo'
-        );
-        $select1->joinInner(
-            array('n' => 'Nomes'), 't.idAgente = n.idAgente', array(''), 'AGENTES.dbo'
-        );
-        $select1->joinInner(
-            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), 'AGENTES.dbo'
-        );
-        $select1->joinInner(
-            array('z' => 'Nomes'), 'x.idAgente = z.idAgente', array(''), 'AGENTES.dbo'
-        );
-        $select1->where('t.stDistribuicao = ?', 'A');
-        $select1->where('pr.stAtivo = ?', 1);
-        $select1->where('z.Status = ?', 0);
-        $select1->where('p.Situacao in (?)', array('C10', 'C30'));
-        $select1->where('NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbPauta  o  WHERE o.IdPRONAC = p.IdPronac)', '');
-
-
-
-
-        $select2 = $this->select();
-        $select2->setIntegrityCheck(false);
-        $select2->from(
+    {     
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
             array('t' => 'tbPauta'), array(
             new Zend_Db_Expr("
                         p.IdPRONAC as idPronac,
@@ -6309,54 +6240,55 @@ class Projetos extends GenericModel
         ), 'BDCORPORATIVO.scSAC'
         );
 
-        $select2->joinInner(
+        $select->joinInner(
             array('z' => 'tbDistribuicaoProjetoComissao'), 't.IdPRONAC = z.idPRONAC', array(''), 'BDCORPORATIVO.scSAC'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('p' => 'Projetos'), 't.idPronac = p.idPronac', array(''), 'SAC.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('pr' => 'Parecer'), 'pr.idPronac = p.idPronac', array(''), 'SAC.dbo'
         );
-        $select2->joinLeft(
+        $select->joinLeft(
             array('e' => 'Enquadramento'), 'e.idPronac = p.idPronac', array(''), 'SAC.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('s' => 'Situacao'), 'p.Situacao = s.Codigo', array(''), 'SAC.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('a' => 'Area'), 'p.Area = a.Codigo', array(''), 'SAC.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('se' => 'Segmento'), 'p.Segmento = se.Codigo', array(''), 'SAC.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('n' => 'Nomes'), 'z.idAgente = n.idAgente', array(''), 'AGENTES.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), 'AGENTES.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), 'AGENTES.dbo'
         );
-        $select2->joinInner(
+        $select->joinInner(
             array('r' => 'tbReuniao'), 't.idNrReuniao = r.idNrReuniao', array(''), 'SAC.dbo'
         );
-        $select2->where('z.stDistribuicao = ?', 'A');
-        $select2->where('pr.idTipoAgente = ?', 6);
-        $select2->where('pr.stAtivo = ?', 1);
-        #$select2->where('r.stEstado = ?', 0);
-        $select2->where('r.idNrReuniao = ?', $idNrReuniao);
-        $select2->where('y.Status = ?', 0);
-
-        $slctUnion = $this->select()->union((array('(' . $select1 . ')', '(' . $select2 . ')')), 'UNION ALL');
-
+        $select->where('z.stDistribuicao = ?', 'A');
+        $select->where('pr.idTipoAgente = ?', 6);
+        $select->where('pr.stAtivo = ?', 1);
+        #$select->where('r.stEstado = ?', 0);
+        $select->where('r.idNrReuniao = ?', $idNrReuniao);
+        $select->where('y.Status = ?', 0);
+        
+        // adiciona quantos filtros foram enviados
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+        
         //adicionando linha order ao select
-        $slctUnion->order($order);
-
-
-        #xd($slctUnion->assemble());
-        return $this->fetchAll($slctUnion);
+        $select->order($order);
+        
+        return $this->fetchAll($select);        
     }
 
     public function cidadaoDadosProjeto($where = array())
