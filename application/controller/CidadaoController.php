@@ -150,27 +150,36 @@ class CidadaoController extends GenericControllerNew {
         //$where["t.idNrReuniao = ?"] = $raberta->idNrReuniao;
         $where["stAtivo = ?"] = 1;
 
+        // Fernao: adicionando complementação da url para GET para pegar filtros POST
+        $urlComplement = "";
+        
         // Fernao: adicionando filtros
         if ($this->_request->getParam("NrPronacConsulta")) {
             $nrPronac = $this->_request->getParam("NrPronacConsulta");
             $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
             $this->view->nrPronac = $nrPronac;
+            $urlComplement = "&NrPronac=$nrPronac";
         }
         if ($this->_request->getParam("CnpjCpfConsulta")) {
             $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
             $this->view->cnpjCpf = $CnpjCpf;
+            $urlComplement = "&CNPJCPF=$CnpjCpf";
         }
         if ($this->_request->getParam("ProponenteConsulta")) {
             $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
             $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
             $this->view->proponente = $ProponenteConsulta;
+            $urlComplement = "&ProponenteConsulta=$ProponenteConsulta";
         }    
         if ($this->_request->getParam("NomeProjetoConsulta")) {
             $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
             $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
             $this->view->nomeProjeto = $NomeProjetoConsulta;
+            $urlComplement = "&NomeProjetoConsulta=$NomeProjetoConsulta";
         }
+        
+        $this->view->urlComplement = $urlComplement;
         
         $Projetos = new Projetos();
         //Alysson
