@@ -26,20 +26,17 @@
         });
 
 
-
-
+	// Fernao
+	$(".tabela input").keypress(function(event) {
+	    if (event.which == 13) {
+		$("#pesquisa").submit();		
+	    }
+	});
 
 	//Alysson - Inicio
 	$(".btn_pesquisar").click(function(){
-            if($.trim($("#idNrReuniaoConsulta").val()) == ''){
-                $("#error").html("Dados obrigat&oacute;rios n&atilde;o informados!");
-                $("#error").dialog("open");
-            }
-            else{
-                $("#pesquisa").submit();
-            }
-        });
-	//Alysson - Fim
+	    $("#pesquisa").submit();
+	});	//Alysson - Fim
     });
 </script>
 
@@ -110,7 +107,11 @@
 
 <!-- ========== INÍCIO TÍTULO ========== -->
 <div id="titulo">
-    <div>Pauta da CNIC n&ordm; <?php echo $this->reuniao['NrReuniao']; ?> <?php if($this->intranet){ echo ' - Intranet'; } else { if(!$this->usuarioInterno){ echo ' - Visão Cidadão'; } } ?> <span class="direita"><a href="http://ouvidoria.cultura.gov.br/" target="_blank" class="faleconosco">Fale Conosco</a></span></div>
+    <div>
+    <?php if (is_object($this->reuniao)) { ?>
+    Pauta da CNIC n&ordm; <?php echo $this->reuniao['NrReuniao']; ?> <?php if($this->intranet){ echo ' - Intranet'; } else { if(!$this->usuarioInterno){ echo ' - Visão Cidadão'; } } ?>
+    <?php } ?>
+    <span class="direita"><a href="http://ouvidoria.cultura.gov.br/" target="_blank" class="faleconosco">Fale Conosco</a></span></div>
 <!-- </div> -->
 
 <!-- Alysson - Inicio Customizando a Consulta para carregar por Reuniao da CNIC -->
@@ -137,19 +138,14 @@
                     </td>
                     <td>
                       <label for="idNrReuniaoConsulta">N&ordm; da Reuni&atilde;o </label>
-                             <!--    <input class="input_simples w100" type="text" name="nrReuniaoConsulta" id="nrReuniaoConsulta" value="<?php //echo ($this->NrReuniaoConsulta > 0) ? $this->NrReuniaoConsulta : '' ;?>" size="30" maxlength="6"/> -->
-
-                <select class="input_simples" name="idNrReuniaoConsulta" id="idNrReuniaoConsulta">
-                    <?php foreach($this->listaReunioes as $u){
-                                              if($this->idNrReuniaoConsulta == $u->idNrReuniao ){ ?>
-                                                  <option value="<?php echo $u->idNrReuniao;?>" selected><?php echo $u->NrReuniao;?></option>
-                  <?php } else { ?>
-                      <option value="<?php echo $u->idNrReuniao;?>"><?php echo $u->NrReuniao;?></option>
-                                              <?php }
-                    }
-                    ?>
-                  </select>
-                </td>
+		      <select class="input_simples" name="idNrReuniaoConsulta" id="idNrReuniaoConsulta">
+			<option value="" selected></option>
+			<?php foreach($this->listaReunioes as $u){
+			$selected = ($this->idNrReuniaoConsulta == $u->idNrReuniao) ? "selected" : ""; ?>
+			<option value="<?php echo $u->idNrReuniao;?>" <?php echo $selected; ?>><?php echo $u->NrReuniao;?></option>
+			<?php } ?>
+		      </select>
+                    </td>
                     <td>
                         <input type="button" name="procurar" class="btn_pesquisar" value=" " /><br>
                     </td>
