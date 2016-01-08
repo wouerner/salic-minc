@@ -103,19 +103,21 @@ class CidadaoController extends GenericControllerNew {
             Zend_Layout::startMvc(array('layout' => 'layout_login'));
         }
       
-	$idNrReuniaoConsulta = $this->_request->getParam("idNrReuniaoConsulta") ? $this->_request->getParam("idNrReuniaoConsulta") : null;
+        $idNrReuniaoConsulta = $this->_request->getParam("idNrReuniaoConsulta") ? $this->_request->getParam("idNrReuniaoConsulta") : null;
         $reuniao = new Reuniao();
-	//Alysson - Na Primeira Consulta exibe dados da ultima reuniao aberta
-	if(!$idNrReuniaoConsulta){
-            $raberta = $reuniao->buscarReuniaoAberta();
+        //Alysson - Na Primeira Consulta exibe dados da ultima reuniao aberta
+        if(!$idNrReuniaoConsulta){
+            $raberta = null;  // Fernao: permite não filtrar
+            $this->view->idNrReuniaoConsulta = null;
         } else {
-            $raberta = $reuniao->buscarReuniaoPorId($idNrReuniaoConsulta);//idNrReuniao           
+            $raberta = $reuniao->buscarReuniaoPorId($idNrReuniaoConsulta);//idNrReuniao
+            $this->view->idNrReuniaoConsulta = $raberta->idNrReuniao;            
         }
         $this->view->reuniao = $raberta;
-        $this->view->idNrReuniaoConsulta = $raberta->idNrReuniao;
 
 	//Alysson - Metodos Que Busca Todas as reunioes
-	$this->view->listaReunioes = $reuniao->buscarTodasReunioes();
+        $order_reuniao = array("NrReuniao DESC");
+        $this->view->listaReunioes = $reuniao->buscarTodasReunioes($order_reuniao);
         $order = array();
 
         //==== parametro de ordenacao  ======//
@@ -173,7 +175,7 @@ class CidadaoController extends GenericControllerNew {
         $Projetos = new Projetos();
         //Alysson
         if(!$idNrReuniaoConsulta){
-            $busca = $Projetos->projetosCnicOpinioes($where, $order);
+            $busca = $Projetos->projetosCnicOpinioesPorIdReuniao(null, $where, $order);            
         } else {
             $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($raberta->idNrReuniao, $where, $order);
         }

@@ -6205,7 +6205,7 @@ class Projetos extends GenericModel
      * @return Zend_Db_Table_Rowset_Abstract
      * @throws Zend_Db_Select_Exception
      */
-    public function projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where = array(), $order = array())
+    public function projetosCnicOpinioesPorIdReuniao($idNrReuniao = null, $where = array(), $order = array())
     {     
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -6270,14 +6270,18 @@ class Projetos extends GenericModel
         $select->joinInner(
             array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), 'AGENTES.dbo'
         );
-        $select->joinInner(
-            array('r' => 'tbReuniao'), 't.idNrReuniao = r.idNrReuniao', array(''), 'SAC.dbo'
-        );
+
+        if (!is_null($idNrReuniao)) {
+            $select->joinInner(
+                array('r' => 'tbReuniao'), 't.idNrReuniao = r.idNrReuniao', array(''), 'SAC.dbo'
+            );
+            $select->where('r.idNrReuniao = ?', $idNrReuniao);
+        }
+        
         $select->where('z.stDistribuicao = ?', 'A');
         $select->where('pr.idTipoAgente = ?', 6);
         $select->where('pr.stAtivo = ?', 1);
         #$select->where('r.stEstado = ?', 0);
-        $select->where('r.idNrReuniao = ?', $idNrReuniao);
         $select->where('y.Status = ?', 0);
         
         // adiciona quantos filtros foram enviados

@@ -57,7 +57,7 @@ class Reuniao extends GenericModel{
         return $this->fetchRow($select);
     }
 
-    public function buscarTodasReunioes(){
+    public function buscarTodasReunioes($order = array()){
         $select = $this->select();
         $select->from(
             $this,
@@ -70,6 +70,7 @@ class Reuniao extends GenericModel{
                 "DtFinal"
             )
         );
+        $select->order($order);
 
         return $this->fetchAll($select);
     }
