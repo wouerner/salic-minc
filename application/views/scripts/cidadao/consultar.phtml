@@ -163,22 +163,21 @@
         <input type="button" class="btn_imprimir">
         <input type="button" class="btn_xls" />
     </center>
-
     <?php if(count($this->dados)>0){ ?>
     <table class="tabela tablesorter">
         <thead>
             <tr class="titulo_tabela">
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=1&ordem='.$this->novaOrdem.$intranet;?>">PRONAC</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=3&ordem='.$this->novaOrdem.$intranet;?>">Nome do Projeto</a> <br /><span class="red" style="text-transform: none;">Passe o mouse sobre o nome do projeto para ver a síntese</span></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=4&ordem='.$this->novaOrdem.$intranet;?>">Proponente</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=5&ordem='.$this->novaOrdem.$intranet;?>">UF</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=6&ordem='.$this->novaOrdem.$intranet;?>">Município</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=7&ordem='.$this->novaOrdem.$intranet;?>">Enquadramento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=8&ordem='.$this->novaOrdem.$intranet;?>">Área</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=9&ordem='.$this->novaOrdem.$intranet;?>">Segmento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=10&ordem='.$this->novaOrdem.$intranet;?>">Avaliação</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=11&ordem='.$this->novaOrdem.$intranet;?>">Vl.Solicitado</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'index')).'?pronac='.$this->pronac.'&campo=12&ordem='.$this->novaOrdem.$intranet;?>">Vl.Sugerido</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=1&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">PRONAC</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=3&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Nome do Projeto</a> <br /><span class="red" style="text-transform: none;">Passe o mouse sobre o nome do projeto para ver a síntese</span></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=4&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Proponente</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=5&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">UF</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=6&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Município</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=7&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Enquadramento</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=8&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Área</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=9&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Segmento</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=10&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Avaliação</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=11&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Solicitado</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=12&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Sugerido</a></th>
                 <?php /*if(!$this->intranet){ ?>
                 <th><?php echo ($this->usuarioInterno) ? 'Opiniões' : 'Cidadão'; ?></th>
                 <?php }*/ ?>
