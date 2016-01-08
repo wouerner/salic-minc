@@ -7,20 +7,20 @@
             id = $(this).attr('idPronac');
             window.open("<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'cadastrar-opiniao'), null, true); ?>?idPronac="+id,"_blank");
         });
-        
+
         $('.btn_ver').click(function(){
             id = $(this).attr('idPronac');
             window.open("<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'visualizar-opinioes'), null, true); ?>?idPronac="+id,"_blank");
         });
-        
+
         $('.btn_imprimir').click(function(){
             $('#formImpressao').submit();
         });
-        
+
         $('.btn_xls').click(function(){
             $('#formxls').submit();
         });
-        
+
         $('.tooltip').click(function(){
             return false;
         });
@@ -75,12 +75,23 @@
         position: absolute;
         z-index: 99;
     }
-    
+
     .faleconosco{
         color: #35953F !important;
         font-size: 20px;
         text-decoration: underline !important;
     }
+    #NrPronacConsulta{
+      width: 50px;
+    }
+    .input_simples{
+      width: 110px;
+    }
+
+    table td{
+      padding: 4px;
+    }
+
 </style>
 
 <?php if($this->intranet){ $intranet = '&intranet'; } else { $intranet = ''; } ?>
@@ -106,50 +117,41 @@
  <div id="error"></div>
 <fieldset>
         <form id="pesquisa" method="post">
-            <table class="tabela">
+            <table style="font-size:13px;" class="tabela">
                 <tr>
                     <td>
-                        <label for="idNrReuniaoConsulta">N&uacute;mero da Reuni&atilde;o: </label>
-                     <!--    <input class="input_simples w100" type="text" name="nrReuniaoConsulta" id="nrReuniaoConsulta" value="<?php //echo ($this->NrReuniaoConsulta > 0) ? $this->NrReuniaoConsulta : '' ;?>" size="30" maxlength="6"/> -->
-
-				<select class="input_simples" name="idNrReuniaoConsulta" id="idNrReuniaoConsulta">
-				    <?php foreach($this->listaReunioes as $u){
-                                    	if($this->idNrReuniaoConsulta == $u->idNrReuniao ){ ?>
-                                    	    <option value="<?php echo $u->idNrReuniao;?>" selected><?php echo $u->NrReuniao;?></option>
-					<?php } else { ?>
-					    <option value="<?php echo $u->idNrReuniao;?>"><?php echo $u->NrReuniao;?></option>
-                                    	<?php }
-				    }
-				    ?>
-                                </select>
-
+                      <label for="NrPronacConsulta">N&ordm; do PRONAC </label>
+                      <input name="NrPronacConsulta" placeholder="______" id="NrPronacConsulta" MAXLENGTH=6 class="input_simples" value="<?php echo $this->nrPronac; ?>">
                     </td>
+                    <td>
+                      <label for="NomeProjetoConsulta">Nome do projeto </label>
+                      <input name="NomeProjetoConsulta" id="NomeProjetoConsulta" class="input_simples" value="<?php echo $this->nomeProjeto; ?>">
+                    </td>
+                    <td>
+                      <label for="CpnjCpfConsulta">CPF/CNPJ </label>
+                      <input type="text" name="CnpjCpfConsulta" id="CnpjCpfConsulta" class="input_simples" value="<?php echo $this->cnpjCpf; ?>">
+                    </td>
+                    <td>
+                      <label for="ProponenteConsulta">Proponente </label>
+        			        <input type="text" name="ProponenteConsulta" id="ProponenteConsulta" class="input_simples" value="<?php echo $this->proponente; ?>">
+                    </td>
+                    <td>
+                      <label for="idNrReuniaoConsulta">N&ordm; da Reuni&atilde;o </label>
+                             <!--    <input class="input_simples w100" type="text" name="nrReuniaoConsulta" id="nrReuniaoConsulta" value="<?php //echo ($this->NrReuniaoConsulta > 0) ? $this->NrReuniaoConsulta : '' ;?>" size="30" maxlength="6"/> -->
+
+                <select class="input_simples" name="idNrReuniaoConsulta" id="idNrReuniaoConsulta">
+                    <?php foreach($this->listaReunioes as $u){
+                                              if($this->idNrReuniaoConsulta == $u->idNrReuniao ){ ?>
+                                                  <option value="<?php echo $u->idNrReuniao;?>" selected><?php echo $u->NrReuniao;?></option>
+                  <?php } else { ?>
+                      <option value="<?php echo $u->idNrReuniao;?>"><?php echo $u->NrReuniao;?></option>
+                                              <?php }
+                    }
+                    ?>
+                  </select>
+                </td>
                     <td>
                         <input type="button" name="procurar" class="btn_pesquisar" value=" " /><br>
-                    </td>
-                </tr>
-                <tr>
-		    <td>
-                        <label for="NrPronacConsulta">N&uacute;mero do PRONAC: </label>
-                        <input name="NrPronacConsulta" id="NrPronacConsulta" class="input_simples" value="<?php echo $this->nrPronac; ?>">
-                    </td>
-                </tr>
-                <tr>
-		    <td>
-                        <label for="CpnjCpfConsulta">CPF/CNPJ: </label>
-			<input type="text" name="CnpjCpfConsulta" id="CnpjCpfConsulta" class="input_simples" value="<?php echo $this->cnpjCpf; ?>">
-                    </td>
-                </tr>
-                <tr>
-		    <td>
-                        <label for="ProponenteConsulta">Proponente: </label>
-			<input type="text" name="ProponenteConsulta" id="ProponenteConsulta" class="input_simples" value="<?php echo $this->proponente; ?>">
-                    </td>
-                </tr>
-                <tr>
-		    <td>
-                        <label for="NomeProjetoConsulta">Nome do projeto: </label>
-                        <input name="NomeProjetoConsulta" id="NomeProjetoConsulta" class="input_simples" value="<?php echo $this->nomeProjeto; ?>">
                     </td>
                 </tr>
             </table>
@@ -241,13 +243,13 @@
         <input type="hidden" name="ordem" value="<?php echo $this->ordem;?>">
         <input type="hidden" name="pronac" value="<?php echo $this->pronac;?>">
     </form>
-    
+
     <form target="_blank" class="form" name="formxls" id="formxls" method="post" action='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'xls-listagem')); ?>'>
         <input type="hidden" name="campo" value="<?php echo $this->campo;?>">
         <input type="hidden" name="ordem" value="<?php echo $this->ordem;?>">
         <input type="hidden" name="pronac" value="<?php echo $this->pronac;?>">
     </form>
-        
+
     <?php } else { ?>
     <table class="tabela">
         <tr>
