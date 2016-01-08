@@ -108,11 +108,12 @@ class CidadaoController extends GenericControllerNew {
         //Alysson - Na Primeira Consulta exibe dados da ultima reuniao aberta
         if(!$idNrReuniaoConsulta){
             $raberta = null;  // Fernao: permite não filtrar
+            $this->view->idNrReuniaoConsulta = null;
         } else {
-            $raberta = $reuniao->buscarReuniaoPorId($idNrReuniaoConsulta);//idNrReuniao           
+            $raberta = $reuniao->buscarReuniaoPorId($idNrReuniaoConsulta);//idNrReuniao
+            $this->view->idNrReuniaoConsulta = $raberta->idNrReuniao;            
         }
         $this->view->reuniao = $raberta;
-        $this->view->idNrReuniaoConsulta = $raberta->idNrReuniao;
 
 	//Alysson - Metodos Que Busca Todas as reunioes
         $order_reuniao = array("NrReuniao DESC");
