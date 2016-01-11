@@ -6205,7 +6205,7 @@ class Projetos extends GenericModel
      * @return Zend_Db_Table_Rowset_Abstract
      * @throws Zend_Db_Select_Exception
      */
-    public function projetosCnicOpinioesPorIdReuniao($idNrReuniao = null, $where = array(), $order = array())
+    public function projetosCnicOpinioesPorIdReuniao($idNrReuniao = null, $where = array(), $order = array(), $tamanho, $inicio=-1, $qtdeTotal=false)
     {     
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -6289,8 +6289,20 @@ class Projetos extends GenericModel
             $select->where($coluna, $valor);
         }
         
+        if ($qtdeTotal) {
+            return $this->fetchAll($select)->count();
+        }
+        
         //adicionando linha order ao select
         $select->order($order);
+        // paginacao
+        if ($tamanho > -1) {
+            $tmpInicio = 0;
+            if ($inicio > -1) {
+                $tmpInicio = $inicio;
+            }
+            $select->limit($tamanho, $tmpInicio);
+        }
         
         return $this->fetchAll($select);        
     }

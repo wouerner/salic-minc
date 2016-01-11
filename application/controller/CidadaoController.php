@@ -120,6 +120,15 @@ class CidadaoController extends GenericControllerNew {
         $this->view->listaReunioes = $reuniao->buscarTodasReunioes($order_reuniao);
         $order = array();
 
+        // paginação
+        if($this->_request->getParam("qtde")) {
+            $this->intTamPag = $this->_request->getParam("qtde");
+        }
+        $pag = 1;
+        $post  = Zend_Registry::get('get');
+        if (isset($post->pag)) $pag = $post->pag;
+        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
+        
         //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
@@ -150,7 +159,7 @@ class CidadaoController extends GenericControllerNew {
         //$where["t.idNrReuniao = ?"] = $raberta->idNrReuniao;
         $where["stAtivo = ?"] = 1;
 
-        // Fernao: adicionando complementação da url para GET para pegar filtros POST
+        // Fernao: adicionando complementação da url para GET para pegar filtros POT
         $urlComplement = "";
         
         // Fernao: adicionando filtros
@@ -182,13 +191,38 @@ class CidadaoController extends GenericControllerNew {
         $this->view->urlComplement = $urlComplement;
         
         $Projetos = new Projetos();
+        
         //Alysson
         if(!$idNrReuniaoConsulta){
-            $busca = $Projetos->projetosCnicOpinioesPorIdReuniao(null, $where, $order);            
+            $idNrReuniao = null;
         } else {
-            $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($raberta->idNrReuniao, $where, $order);
+            $idNrReuniao = $raberta->idNrReuniao;
         }
-        $this->view->qtdRegistros = count($busca);
+
+        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
+        $fim = $inicio + $this->intTamPag;
+        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;       
+        
+        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, $tamanho, $inicio);
+        
+        $paginacao = array(
+            "pag"=>$pag,
+            "qtde"=>$this->intTamPag,
+            "campo"=>$campo,
+            "ordem"=>$ordem,
+            "ordenacao"=>$ordenacao,
+            "novaOrdem"=>$novaOrdem,
+            "total"=>$total,
+            "inicio"=>($inicio+1),
+            "fim"=>$fim,
+            "totalPag"=>$totalPag,
+            "Itenspag"=>$this->intTamPag,
+            "tamanho"=>$tamanho
+         );
+        
+        $this->view->paginacao     = $paginacao;       
+        $this->view->qtdRegistros = $total;
         $this->view->dados = $busca;
         $this->view->novaOrdem = $novaOrdem;
         $this->view->ordem = $ordem;
