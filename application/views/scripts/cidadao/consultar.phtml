@@ -25,11 +25,33 @@
             return false;
         });
 
+        // Pedro - Função da mascara de CPF/CNPJ
+
+      function cpf() {
+          document.getElementById('CnpjCpfConsulta').maxLength = "14";
+          document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cpf); };
+          document.getElementById('CnpjCpfConsulta').focus();
+      }
+      function cnpj() {
+          document.getElementById('CnpjCpfConsulta').maxLength = "18";
+          document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cnpj); };
+          document.getElementById('CnpjCpfConsulta').focus();
+      }
+
+      $("#CnpjCpfConsulta").keypress(function(event){
+        if ($("#CnpjCpfConsulta").val().length < 14) {
+          cpf();
+        } else {
+          cnpj();
+        }
+      });
+//FIM - PEDRO
+
 
 	// Fernao
 	$(".tabela input").keypress(function(event) {
 	    if (event.which == 13) {
-		$("#pesquisa").submit();		
+		$("#pesquisa").submit();
 	    }
 	});
 
