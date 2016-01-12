@@ -235,10 +235,17 @@ class CidadaoController extends GenericControllerNew {
     }
     
     public function imprimirListagemAction() {
+        $idNrReuniaoConsulta = $this->_request->getParam("idNrReuniaoConsulta") ? $this->_request->getParam("idNrReuniaoConsulta") : null;
         $reuniao = new Reuniao();
-        $raberta = $reuniao->buscarReuniaoAberta();
-        $this->view->reuniao = $raberta;
         
+        if(!$idNrReuniaoConsulta){
+            $raberta = null;
+            $this->view->idNrReuniaoConsulta = null;
+        } else {
+            $raberta = $reuniao->buscarReuniaoPorId($idNrReuniaoConsulta);//idNrReuniao
+            $this->view->idNrReuniaoConsulta = $raberta->idNrReuniao;            
+        }
+        $this->view->reuniao = $raberta;
         $order = array();
 
         //==== parametro de ordenacao  ======//
@@ -266,23 +273,65 @@ class CidadaoController extends GenericControllerNew {
             $ordenacao = null;
         }
 
-        $where = array();
-        $where["b.idNrReuniao = ?"] = $raberta->idNrReuniao;
-        $where["h.stAtivo = ?"] = 1;
-                
-        $Projetos = new Projetos();
-        $busca = $Projetos->projetosCnicOpinioes($where, $order);
+        $where["stAtivo = ?"] = 1;
+
+        // Fernao: adicionando filtros
+        if ($this->_request->getParam("NrPronacConsulta")) {
+            $nrPronac = $this->_request->getParam("NrPronacConsulta");
+            $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
+            $this->view->nrPronac = $nrPronac;
+        }
+        if ($this->_request->getParam("CnpjCpfConsulta")) {
+            $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
+            $where["x.CNPJCPF = ?"] = $CnpjCpf;
+            $this->view->cnpjCpf = $CnpjCpf;
+        }
+        if ($this->_request->getParam("ProponenteConsulta")) {
+            $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
+            $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
+            $this->view->proponente = $ProponenteConsulta;
+        }    
+        if ($this->_request->getParam("NomeProjetoConsulta")) {
+            $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
+            $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
+            $this->view->nomeProjeto = $NomeProjetoConsulta;
+        }
         
-        $this->view->qtdRegistros = count($busca);
+        $Projetos = new Projetos();
+        
+        if(!$idNrReuniaoConsulta){
+            $idNrReuniao = null;
+        } else {
+            $idNrReuniao = $raberta->idNrReuniao;
+        }
+        
+        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order);
+        
         $this->view->dados = $busca;
+        $this->view->novaOrdem = $novaOrdem;
+        $this->view->ordem = $ordem;
+        $this->view->campo = $campo;
+        
+        $this->view->intranet = false;
+        if(isset($_GET['intranet'])){
+            $this->view->intranet = true;
+        }        
+        
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
     }
     
     public function xlsListagemAction() {
+        $idNrReuniaoConsulta = $this->_request->getParam("idNrReuniaoConsulta") ? $this->_request->getParam("idNrReuniaoConsulta") : null;
         $reuniao = new Reuniao();
-        $raberta = $reuniao->buscarReuniaoAberta();
-        $this->view->reuniao = $raberta;
         
+        if(!$idNrReuniaoConsulta){
+            $raberta = null;
+            $this->view->idNrReuniaoConsulta = null;
+        } else {
+            $raberta = $reuniao->buscarReuniaoPorId($idNrReuniaoConsulta);//idNrReuniao
+            $this->view->idNrReuniaoConsulta = $raberta->idNrReuniao;            
+        }
+        $this->view->reuniao = $raberta;
         $order = array();
 
         //==== parametro de ordenacao  ======//
@@ -306,16 +355,39 @@ class CidadaoController extends GenericControllerNew {
 
         } else {
             $campo = null;
-            $order = array(1); //idPronac
+            $order = array('12 DESC'); //Vl.Sugerido
             $ordenacao = null;
         }
 
-        $where = array();
-        $where["b.idNrReuniao = ?"] = $raberta->idNrReuniao;
-        $where["h.stAtivo = ?"] = 1;
-                
+        $where["stAtivo = ?"] = 1;
+
+        // Fernao: adicionando filtros
+        if ($this->_request->getParam("NrPronacConsulta")) {
+            $nrPronac = $this->_request->getParam("NrPronacConsulta");
+            $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
+        }
+        if ($this->_request->getParam("CnpjCpfConsulta")) {
+            $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
+            $where["x.CNPJCPF = ?"] = $CnpjCpf;
+        }
+        if ($this->_request->getParam("ProponenteConsulta")) {
+            $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
+            $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
+        }    
+        if ($this->_request->getParam("NomeProjetoConsulta")) {
+            $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
+            $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
+        }
+        
         $Projetos = new Projetos();
-        $busca = $Projetos->projetosCnicOpinioes($where, $order);
+        
+        if(!$idNrReuniaoConsulta){
+            $idNrReuniao = null;
+        } else {
+            $idNrReuniao = $raberta->idNrReuniao;
+        }
+        
+        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order);
         
         $html = "<table cellspacing='0' cellpadding='2' border='1' align='center' width='99%'>
                 <tr>
