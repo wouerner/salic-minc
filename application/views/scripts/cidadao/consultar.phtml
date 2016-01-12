@@ -57,6 +57,10 @@
 		$("#pesquisa").submit();
             }
 	});
+	$(".btn_recarregar").click(function(){
+	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');	    
+            $("#pesquisa").submit();
+	});
 	
 	//Alysson - Inicio
 	$(".btn_pesquisar").click(function(){
@@ -179,7 +183,6 @@
                     </td>
                 </tr>
             </table>
-        </form>
     </fieldset>
 <!-- Alysson - Fim Customizando a Consulta para carregar por Reuniao da CNIC -->
 </div>
@@ -191,7 +194,6 @@
         <tbody>
             <tr>
                 <td align="center">
-                <form name="form1" id="form1" action="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar'));?>" method="get">
                     <?php if($this->paginacao['pag']>1) { ?>
                     <input class="btn_inicio" id="btn_inicio" type="button" class="btn_inicio"
                            onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao']; ?>'">
@@ -199,27 +201,27 @@
                     <input id="btn_p_anterior" type="button"
                     <?php if($this->paginacao['pag']<=1) { ?> class="btn_p_anterior-off"
                     <?php }else { ?>
-                           class="btn_p_anterior" onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao']; ?>'"
+                           class="btn_p_anterior" onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'] . $this->urlComplement; ?>'"
                     <?php } ?>>
                     <input id="btn_p_proximo" type="button"
                            <?php if($this->paginacao['pag']+1 > $this->paginacao['totalPag']) { ?>
                            class="btn_p_proximo-off"
                     <?php }else { ?>
-                           class="btn_p_proximo" onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao']; ?>'"
+                           class="btn_p_proximo" onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'] . $this->urlComplement; ?>'"
                     <?php } ?>>
                     <?php if($this->paginacao['pag'] < $this->paginacao['totalPag']) { ?>
                     <input class="btn_ultimo" id="btn_ultimo" type="button"
-                           onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao']; ?>'">
+                           onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'] . $this->urlComplement; ?>'">
                     <?php } ?>
                     Pág.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
                         <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
                         <option value="<?php echo $i;?>" <?php if($this->paginacao['pag'] == $i) echo "selected";?>><?php echo $i;?>&nbsp;</option>
                         <?php endfor; ?>
                     </select>
-                    &nbsp;Registros por página:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="submit" class="btn_recarregar" value="">
+                    &nbsp;Registros por página:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="button" class="btn_recarregar" value="">
                     <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
                     <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
-                    <input type="hidden" name="tipoFiltro" value="<?php echo $this->filtro;?>">
+<!--                    <input type="hidden" name="tipoFiltro" value="<?php echo $this->filtro;?>">-->
                     <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
                     <input type="button" class="btn_imprimir" title="Imprimir" />
                     <input type="button" class="btn_xls" title="Gerar Excel" />
