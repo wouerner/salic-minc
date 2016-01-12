@@ -120,15 +120,6 @@ class CidadaoController extends GenericControllerNew {
         $this->view->listaReunioes = $reuniao->buscarTodasReunioes($order_reuniao);
         $order = array();
 
-        // paginação
-        if($this->_request->getParam("qtde")) {
-            $this->intTamPag = $this->_request->getParam("qtde");
-        }
-        $pag = 1;
-        $post  = Zend_Registry::get('get');
-        if (isset($post->pag)) $pag = $post->pag;
-        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
-        
         //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
@@ -167,25 +158,25 @@ class CidadaoController extends GenericControllerNew {
             $nrPronac = $this->_request->getParam("NrPronacConsulta");
             $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
             $this->view->nrPronac = $nrPronac;
-            $urlComplement = "&NrPronac=$nrPronac";
+            $urlComplement .= "&NrPronac=$nrPronac";
         }
         if ($this->_request->getParam("CnpjCpfConsulta")) {
             $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
             $this->view->cnpjCpf = $CnpjCpf;
-            $urlComplement = "&CNPJCPF=$CnpjCpf";
-        }
+            $urlComplement .= "&CNPJCPF=$CnpjCpf";
+         }
         if ($this->_request->getParam("ProponenteConsulta")) {
             $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
             $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
             $this->view->proponente = $ProponenteConsulta;
-            $urlComplement = "&ProponenteConsulta=$ProponenteConsulta";
+            $urlComplement .= "&ProponenteConsulta=$ProponenteConsulta";
         }    
         if ($this->_request->getParam("NomeProjetoConsulta")) {
             $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
             $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
             $this->view->nomeProjeto = $NomeProjetoConsulta;
-            $urlComplement = "&NomeProjetoConsulta=$NomeProjetoConsulta";
+            $urlComplement .= "&NomeProjetoConsulta=$NomeProjetoConsulta";
         }
         
         $this->view->urlComplement = $urlComplement;
@@ -198,13 +189,19 @@ class CidadaoController extends GenericControllerNew {
         } else {
             $idNrReuniao = $raberta->idNrReuniao;
         }
-
-        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
-        $fim = $inicio + $this->intTamPag;
-        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
-        $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;       
         
-        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, $tamanho, $inicio);
+        // paginação
+        if($this->_request->getParam("qtde")) {
+            $this->intTamPag = $this->_request->getParam("qtde");
+        }
+        $pag = 1;
+        $post  = Zend_Registry::get('get');
+        if (isset($post->pag)) $pag = $post->pag;
+        $offset = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
+        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
+        $fim = $offset + $this->intTamPag;
+        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $limit = ($fim > $total) ? $total - $offset : $this->intTamPag;
         
         $paginacao = array(
             "pag"=>$pag,
@@ -214,12 +211,14 @@ class CidadaoController extends GenericControllerNew {
             "ordenacao"=>$ordenacao,
             "novaOrdem"=>$novaOrdem,
             "total"=>$total,
-            "inicio"=>($inicio+1),
+            "inicio"=>($offset+1),
             "fim"=>$fim,
             "totalPag"=>$totalPag,
             "Itenspag"=>$this->intTamPag,
-            "tamanho"=>$tamanho
-         );
+            "tamanho"=>$limit
+        );
+        
+        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, $limit, $offset);
         
         $this->view->paginacao     = $paginacao;       
         $this->view->qtdRegistros = $total;
@@ -227,6 +226,7 @@ class CidadaoController extends GenericControllerNew {
         $this->view->novaOrdem = $novaOrdem;
         $this->view->ordem = $ordem;
         $this->view->campo = $campo;
+        $this->view->intTamPag     = $this->intTamPag;        
         
         $this->view->intranet = false;
         if(isset($_GET['intranet'])){
@@ -304,8 +304,23 @@ class CidadaoController extends GenericControllerNew {
         } else {
             $idNrReuniao = $raberta->idNrReuniao;
         }
+
+        // paginação
+        if($this->_request->getParam("qtde")) {
+            $this->intTamPag = $this->_request->getParam("qtde");
+        }
+
+        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
         
-        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order);
+        $pag = 1;
+        $post  = Zend_Registry::get('get');
+        if (isset($post->pag)) $pag = $post->pag;
+        $offset = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
+        $fim = $offset + $this->intTamPag;
+        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $limit = ($fim > $total) ? $total - $offset : $this->intTamPag;
+        
+        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, $limit, $offset);
         
         $this->view->dados = $busca;
         $this->view->novaOrdem = $novaOrdem;
