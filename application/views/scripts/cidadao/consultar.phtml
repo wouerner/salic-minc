@@ -58,13 +58,13 @@
             }
 	});
 	$(".btn_recarregar").click(function(){
-	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');	    
+	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');
             $("#pesquisa").submit();
 	});
 	
 	//Alysson - Inicio
 	$(".btn_pesquisar").click(function(){
-	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');	    
+	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');
             $("#pesquisa").submit();
 	});	//Alysson - Fim
     });
@@ -189,7 +189,7 @@
 <div id="conteudo" align="center">
 
     <?php if(count($this->dados)>0){ ?>
-    <!-- ============ PAGINAÇÃO ============ -->
+    <!-- ============ PAGINAÇÃO ============ --> 
     <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
