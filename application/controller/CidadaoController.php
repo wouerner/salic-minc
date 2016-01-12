@@ -102,7 +102,7 @@ class CidadaoController extends GenericControllerNew {
         if(!$this->usuarioInterno){
             Zend_Layout::startMvc(array('layout' => 'layout_login'));
         }
-      
+
         $idNrReuniaoConsulta = $this->_request->getParam("idNrReuniaoConsulta") ? $this->_request->getParam("idNrReuniaoConsulta") : null;
         $reuniao = new Reuniao();
         //Alysson - Na Primeira Consulta exibe dados da ultima reuniao aberta
@@ -162,6 +162,7 @@ class CidadaoController extends GenericControllerNew {
         }
         if ($this->_request->getParam("CnpjCpfConsulta")) {
             $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
+            $CnpjCpf = str_replace(array('.', '/', '-'), '', $CnpjCpf);
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
             $this->view->cnpjCpf = $CnpjCpf;
             $urlComplement .= "&CNPJCPF=$CnpjCpf";
@@ -283,6 +284,7 @@ class CidadaoController extends GenericControllerNew {
         }
         if ($this->_request->getParam("CnpjCpfConsulta")) {
             $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
+            $CnpjCpf = str_replace(array('.', '/', '-'), '', $CnpjCpf);
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
             $this->view->cnpjCpf = $CnpjCpf;
         }
@@ -383,6 +385,7 @@ class CidadaoController extends GenericControllerNew {
         }
         if ($this->_request->getParam("CnpjCpfConsulta")) {
             $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
+            $CnpjCpf = str_replace(array('.', '/', '-'), '', $CnpjCpf);
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
         }
         if ($this->_request->getParam("ProponenteConsulta")) {
@@ -401,8 +404,23 @@ class CidadaoController extends GenericControllerNew {
         } else {
             $idNrReuniao = $raberta->idNrReuniao;
         }
+
+        // paginação
+        if($this->_request->getParam("qtde")) {
+            $this->intTamPag = $this->_request->getParam("qtde");
+        }
+
+        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
         
-        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order);
+        $pag = 1;
+        $post  = Zend_Registry::get('get');
+        if (isset($post->pag)) $pag = $post->pag;
+        $offset = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
+        $fim = $offset + $this->intTamPag;
+        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $limit = ($fim > $total) ? $total - $offset : $this->intTamPag;
+        
+        $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, $limit, $offset);
         
         $html = "<table cellspacing='0' cellpadding='2' border='1' align='center' width='99%'>
                 <tr>
