@@ -14,50 +14,54 @@
         });
 
         $('.btn_imprimir').click(function(){
-            $('#formImpressao').submit();
+            $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'imprimir-listagem')); ?>');
+            console.log($('#pesquisa').attr('action'));
+            $('#pesquisa').submit();
         });
 
         $('.btn_xls').click(function(){
-            $('#formxls').submit();
+	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'xls-listagem')); ?>');
+	    $("#pesquisa").submit();	    
         });
 
         $('.tooltip').click(function(){
+            $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'imprimir-listagem')); ?>');            
             return false;
         });
 
         // Pedro - Função da mascara de CPF/CNPJ
-
-      function cpf() {
-          document.getElementById('CnpjCpfConsulta').maxLength = "14";
-          document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cpf); };
-          document.getElementById('CnpjCpfConsulta').focus();
-      }
-      function cnpj() {
-          document.getElementById('CnpjCpfConsulta').maxLength = "18";
-          document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cnpj); };
-          document.getElementById('CnpjCpfConsulta').focus();
-      }
-
-      $("#CnpjCpfConsulta").keypress(function(event){
-        if ($("#CnpjCpfConsulta").val().length < 14) {
-          cpf();
-        } else {
-          cnpj();
-        }
-      });
-//FIM - PEDRO
-
-
+	function cpf() {
+            document.getElementById('CnpjCpfConsulta').maxLength = "14";
+            document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cpf); };
+            document.getElementById('CnpjCpfConsulta').focus();
+	}
+	function cnpj() {
+            document.getElementById('CnpjCpfConsulta').maxLength = "18";
+            document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cnpj); };
+            document.getElementById('CnpjCpfConsulta').focus();
+	}
+	
+	$("#CnpjCpfConsulta").keypress(function(event){
+            if ($("#CnpjCpfConsulta").val().length < 14) {
+		cpf();
+            } else {
+		cnpj();
+            }
+	});
+	//FIM - PEDRO
+	
 	// Fernao
 	$(".tabela input").keypress(function(event) {
-	    if (event.which == 13) {
+            if (event.which == 13) {
+		$('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');
 		$("#pesquisa").submit();
-	    }
+            }
 	});
-
+	
 	//Alysson - Inicio
 	$(".btn_pesquisar").click(function(){
-	    $("#pesquisa").submit();
+	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');	    
+            $("#pesquisa").submit();
 	});	//Alysson - Fim
     });
 </script>
@@ -303,18 +307,6 @@
         <input type="button" class="btn_imprimir">
         <input type="button" class="btn_xls" />
     </center>
-
-    <form target="_blank" class="form" name="formImpressao" id="formImpressao" method="post" action='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'imprimir-listagem')); ?>'>
-        <input type="hidden" name="campo" value="<?php echo $this->campo;?>">
-        <input type="hidden" name="ordem" value="<?php echo $this->ordem;?>">
-        <input type="hidden" name="pronac" value="<?php echo $this->pronac;?>">
-    </form>
-
-    <form target="_blank" class="form" name="formxls" id="formxls" method="post" action='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'xls-listagem')); ?>'>
-        <input type="hidden" name="campo" value="<?php echo $this->campo;?>">
-        <input type="hidden" name="ordem" value="<?php echo $this->ordem;?>">
-        <input type="hidden" name="pronac" value="<?php echo $this->pronac;?>">
-    </form>
 
     <?php } else { ?>
     <table class="tabela">
