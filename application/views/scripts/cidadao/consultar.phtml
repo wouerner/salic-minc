@@ -125,7 +125,7 @@
 
 <div id="alerta" class="sumir"></div>
 
-<!-- ========== IN�CIO BREADCRUMB (LINKS TOPO) ========== -->
+<!-- ========== INICIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para In�cio">In�cio</a></li>
@@ -135,7 +135,7 @@
 <!-- ========== FIM BREADCRUMB (LINKS TOPO) ========== -->
 
 
-<!-- ========== IN�CIO T�TULO ========== -->
+<!-- ========== INICIO TITULO ========== -->
 <div id="titulo">
     <div class="direita">
     <?php if (is_object($this->reuniao)) { ?>
@@ -189,7 +189,7 @@
 <div id="conteudo" align="center">
 
     <?php if(count($this->dados)>0){ ?>
-    <!-- ============ PAGINA��O ============ -->
+    <!-- ============ PAGINACAO ============ -->
     <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
@@ -213,12 +213,12 @@
                     <input class="btn_ultimo" id="btn_ultimo" type="button"
                            onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'] . $this->urlComplement; ?>'">
                     <?php } ?>
-                    P�g.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
+                    P&atilde;g.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
                         <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
                         <option value="<?php echo $i;?>" <?php if($this->paginacao['pag'] == $i) echo "selected";?>><?php echo $i;?>&nbsp;</option>
                         <?php endfor; ?>
                     </select>
-                    &nbsp;Registros por p�gina:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="button" class="btn_recarregar" value="">
+                    &nbsp;Registros por p&aacute;gina:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="button" class="btn_recarregar" value="">
                     <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
                     <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
 <!--                    <input type="hidden" name="tipoFiltro" value="<?php echo $this->filtro;?>">-->
@@ -237,7 +237,7 @@
             echo " de ". $this->paginacao['total']. " Projetos listados";
         ?>
     </center>
-    <!-- ========== FIM PAGINA��O ========== -->
+    <!-- ========== FIM PAGINACAO ========== -->
     <?php } ?>
 
     <?php if(count($this->dados)>0){ ?>
@@ -248,15 +248,15 @@
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=3&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Nome do Projeto</a> <br /><span class="red" style="text-transform: none;">Passe o mouse sobre o nome do projeto para ver a s�ntese</span></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=4&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Proponente</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=5&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">UF</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=6&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Munic�pio</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=6&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Munic&iacute;pio</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=7&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Enquadramento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=8&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">�rea</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=8&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">&Aacute;rea</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=9&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Segmento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=10&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Avalia��o</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=10&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Avalia&ccedil;&atilde;o</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=11&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Solicitado</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=12&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Sugerido</a></th>
                 <?php /*if(!$this->intranet){ ?>
-                <th><?php echo ($this->usuarioInterno) ? 'Opini�es' : 'Cidad�o'; ?></th>
+                <th><?php echo ($this->usuarioInterno) ? 'Opini&otilde;es' : 'Cidad&atilde;o'; ?></th>
                 <?php }*/ ?>
             </tr>
         </thead>
@@ -321,7 +321,7 @@
 </div>
 
 
-<!-- ========== IN�CIO RODAP� DO CONTE�DO ========== -->
+<!-- ========== INICIO RODAPE DO CONTEUDO ========== -->
 <div id="rodapeConteudo"><span></span></div>
-<!-- ========== FIM RODAP� DO CONTE�DO ========== -->
+<!-- ========== FIM RODAPE DO CONTEUDO ========== -->
 <br clear="all" />
