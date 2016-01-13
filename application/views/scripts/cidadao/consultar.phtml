@@ -21,15 +21,15 @@
 
         $('.btn_xls').click(function(){
 	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'xls-listagem')); ?>');
-	    $("#pesquisa").submit();	    
+	    $("#pesquisa").submit();
         });
 
         $('.tooltip').click(function(){
-            $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'imprimir-listagem')); ?>');            
+            $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'imprimir-listagem')); ?>');
             return false;
         });
 
-        // Pedro - Função da mascara de CPF/CNPJ
+        // Pedro - Funï¿½ï¿½o da mascara de CPF/CNPJ
 	function cpf() {
             document.getElementById('CnpjCpfConsulta').maxLength = "14";
             document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cpf); };
@@ -40,7 +40,7 @@
             document.getElementById('CnpjCpfConsulta').onkeyup   = function() { mascara(document.forms.pesquisa.CnpjCpfConsulta, format_cnpj); };
             document.getElementById('CnpjCpfConsulta').focus();
 	}
-	
+
 	$("#CnpjCpfConsulta").keypress(function(event){
             if ($("#CnpjCpfConsulta").val().length < 14) {
 		cpf();
@@ -49,7 +49,7 @@
             }
 	});
 	//FIM - PEDRO
-	
+
 	// Fernao
 	$(".tabela input").keypress(function(event) {
             if (event.which == 13) {
@@ -61,7 +61,7 @@
 	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');
             $("#pesquisa").submit();
 	});
-	
+
 	//Alysson - Inicio
 	$(".btn_pesquisar").click(function(){
 	    $('#pesquisa').attr('action', '<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?>');
@@ -125,23 +125,23 @@
 
 <div id="alerta" class="sumir"></div>
 
-<!-- ========== INÍCIO BREADCRUMB (LINKS TOPO) ========== -->
+<!-- ========== INï¿½CIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para Inï¿½cio">Início</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para Inï¿½cio">Inï¿½cio</a></li>
         <li class="last">Lista de Projetos</li>
     </ul>
 </div>
 <!-- ========== FIM BREADCRUMB (LINKS TOPO) ========== -->
 
 
-<!-- ========== INÍCIO TÍTULO ========== -->
+<!-- ========== INï¿½CIO Tï¿½TULO ========== -->
 <div id="titulo">
     <div class="direita">
     <?php if (is_object($this->reuniao)) { ?>
-    Pauta da CNIC n&ordm; <?php echo $this->reuniao['NrReuniao']; ?> <?php if($this->intranet){ echo ' - Intranet'; } else { if(!$this->usuarioInterno){ echo ' - Visão Cidadão'; } } ?>
+    Pauta da CNIC n&ordm; <?php echo $this->reuniao['NrReuniao']; ?> <?php if($this->intranet){ echo ' - Intranet'; } else { if(!$this->usuarioInterno){ echo ' - Visï¿½o Cidadï¿½o'; } } ?>
     <?php } else { ?>
-    
+
     <?php } ?>
     <a class="faleconosco" href="http://ouvidoria.cultura.gov.br/" target="_blank">Fale Conosco</a>
 </div>
@@ -154,7 +154,7 @@
                 <tr>
                     <td>
                       <label for="NrPronacConsulta">N&ordm; do PRONAC </label>
-                      <input name="NrPronacConsulta" id="NrPronacConsulta" MAXLENGTH=6 class="input_simples" value="<?php echo $this->nrPronac; ?>">
+                      <input name="NrPronacConsulta" id="NrPronacConsulta" MAXLENGTH=7 class="input_simples" value="<?php echo $this->nrPronac; ?>">
                     </td>
                     <td>
                       <label for="NomeProjetoConsulta">Nome do projeto </label>
@@ -189,7 +189,7 @@
 <div id="conteudo" align="center">
 
     <?php if(count($this->dados)>0){ ?>
-    <!-- ============ PAGINAÇÃO ============ --> 
+    <!-- ============ PAGINAï¿½ï¿½O ============ -->
     <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
@@ -213,12 +213,12 @@
                     <input class="btn_ultimo" id="btn_ultimo" type="button"
                            onclick="location.href='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'] . $this->urlComplement; ?>'">
                     <?php } ?>
-                    Pág.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
+                    Pï¿½g.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
                         <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
                         <option value="<?php echo $i;?>" <?php if($this->paginacao['pag'] == $i) echo "selected";?>><?php echo $i;?>&nbsp;</option>
                         <?php endfor; ?>
                     </select>
-                    &nbsp;Registros por página:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="button" class="btn_recarregar" value="">
+                    &nbsp;Registros por pï¿½gina:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="button" class="btn_recarregar" value="">
                     <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
                     <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
 <!--                    <input type="hidden" name="tipoFiltro" value="<?php echo $this->filtro;?>">-->
@@ -237,26 +237,26 @@
             echo " de ". $this->paginacao['total']. " Projetos listados";
         ?>
     </center>
-    <!-- ========== FIM PAGINAÇÃO ========== -->
+    <!-- ========== FIM PAGINAï¿½ï¿½O ========== -->
     <?php } ?>
-    
+
     <?php if(count($this->dados)>0){ ?>
     <table class="tabela tablesorter">
         <thead>
             <tr class="titulo_tabela">
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=1&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">PRONAC</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=3&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Nome do Projeto</a> <br /><span class="red" style="text-transform: none;">Passe o mouse sobre o nome do projeto para ver a síntese</span></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=3&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Nome do Projeto</a> <br /><span class="red" style="text-transform: none;">Passe o mouse sobre o nome do projeto para ver a sï¿½ntese</span></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=4&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Proponente</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=5&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">UF</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=6&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Município</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=6&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Municï¿½pio</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=7&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Enquadramento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=8&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Área</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=8&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">ï¿½rea</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=9&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Segmento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=10&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Avaliação</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=10&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Avaliaï¿½ï¿½o</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=11&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Solicitado</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=12&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Sugerido</a></th>
                 <?php /*if(!$this->intranet){ ?>
-                <th><?php echo ($this->usuarioInterno) ? 'Opiniões' : 'Cidadão'; ?></th>
+                <th><?php echo ($this->usuarioInterno) ? 'Opiniï¿½es' : 'Cidadï¿½o'; ?></th>
                 <?php }*/ ?>
             </tr>
         </thead>
@@ -321,7 +321,7 @@
 </div>
 
 
-<!-- ========== INÍCIO RODAPÉ DO CONTEÚDO ========== -->
+<!-- ========== INï¿½CIO RODAPï¿½ DO CONTEï¿½DO ========== -->
 <div id="rodapeConteudo"><span></span></div>
-<!-- ========== FIM RODAPÉ DO CONTEÚDO ========== -->
+<!-- ========== FIM RODAPï¿½ DO CONTEï¿½DO ========== -->
 <br clear="all" />
