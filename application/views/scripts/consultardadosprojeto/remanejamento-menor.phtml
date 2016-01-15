@@ -685,7 +685,7 @@
                         <?php
                     } //fechaForeachcidade
                     ?>
-<!--                    <tr class="master produto etapa" produto="<?php echo $nrproduto; ?>" etapa="<?php echo $nretapa; ?>"  fonte="<?php echo $nrfonte; ?>">
+                    <tr class="master produto etapa" produto="<?php echo $nrproduto; ?>" etapa="<?php echo $nretapa; ?>"  fonte="<?php echo $nrfonte; ?>">
                         <td>
                             <table class="tabela">
                                 <tr>
@@ -695,12 +695,12 @@
                                 </tr>
                             </table>
                         </td>
-                    </tr>-->
+                    </tr>
                     <?php
                     $nretapa++;
                 } //fechaForeachetapa
                 ?>
-<!--                <tr class="master produto etapa cidade" produto="<?php echo $nrproduto; ?>"  fonte="<?php echo $nrfonte; ?>">
+                <tr class="master produto etapa cidade" produto="<?php echo $nrproduto; ?>"  fonte="<?php echo $nrfonte; ?>">
                     <td>
                         <table class="tabela">
                             <tr>
@@ -710,11 +710,11 @@
                             </tr>
                         </table>
                     </td>
-                </tr>-->
+                </tr>
                 <?php $nrproduto++; 
             } //fechaForeachproduto
             ?>
-<!--            <tr class="master produto etapa cidade" produto="<?php echo $nrproduto; ?>"  fonte="<?php echo $nrfonte; ?>">
+            <tr class="master produto etapa cidade" produto="<?php echo $nrproduto; ?>"  fonte="<?php echo $nrfonte; ?>">
                 <td>
                     <table class="tabela">
                         <tr>
@@ -724,12 +724,12 @@
                         </tr>
                     </table>
                 </td>
-            </tr>-->
+            </tr>
             <?php $nrfonte++;
         }//fechaForeachFonteIncentivo
         ?>
         <?php if(is_array($this->planilha) && count($this->planilha)>0){ ?>
-<!--        <tr>
+        <tr>
             <td>
                 <table class="tabela">
                     <tr>
@@ -739,7 +739,7 @@
                     </tr>
                 </table>
             </td>
-        </tr>-->
+        </tr>
         <tr>
             <td class="centro">
                 <input type="button" class="btn_finalizar" id="finalizarRemanejamento">
