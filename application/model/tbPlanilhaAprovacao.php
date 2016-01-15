@@ -154,7 +154,7 @@ class tbPlanilhaAprovacao extends GenericModel {
         $select->from(
                 array('a' => $this->_name),
                 array(
-                    New Zend_Db_Expr('SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario) AS Total')
+                    New Zend_Db_Expr('ROUND(SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario), 2) AS Total')
                 )
         );
         
