@@ -3857,7 +3857,7 @@ class ReadequacoesController extends GenericControllerNew {
         $tiposParaChecklist = array(2,3,10,12,15);
         if(in_array($read->idTipoReadequacao, $tiposParaChecklist)){
 	  // se remanejamento orcamentario
-	  if ($read->idTipoReadequacao == 2 && $alteracaoValorPlanilha) {
+	  if ($read->idTipoReadequacao == 2 && !$alteracaoValorPlanilha) {
 	    $dados['siEncaminhamento'] = 15; //Finalizam sem a necessidade de passar pela publicação no DOU.
 	    $dados['stEstado'] = 1;
 	  } else {
