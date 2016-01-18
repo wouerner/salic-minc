@@ -1780,7 +1780,7 @@ class ReadequacoesController extends GenericControllerNew {
                 $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
                 $tbPlanilhaAprovacao->delete(array('IdPRONAC = ?'=>$idPronac, 'tpPlanilha = ?'=>'SR', 'idReadequacao = ?'=>$get->idReadequacao));
             }
-            
+	    
             //Se for readequação de local de realização, exclui os registros na tbAbrangencia.
             if($dados->idTipoReadequacao == 9){
                 $tbAbrangencia = new tbAbrangencia();
@@ -3448,8 +3448,9 @@ class ReadequacoesController extends GenericControllerNew {
         
         $Parecer = new Parecer();
         $parecerTecnico = $Parecer->buscar(array('IdParecer=(?)'=>$pareceres), array('IdParecer'))->current();
-        
+
         $tbReadequacao = new tbReadequacao();
+	$alteracaoValorPlanilha = False;  // bool para verificar se houve acréscimo ou diminuicao de valores na planilha orcamentaria
                         
         if($parecerTecnico->ParecerFavoravel == 2){ //Se for parecer favorável, atualiza os dados solicitados na readequação
             $read = $tbReadequacao->buscarReadequacao(array('idReadequacao =?'=>$idReadequacao))->current();
@@ -3473,29 +3474,40 @@ class ReadequacoesController extends GenericControllerNew {
                 $where['a.stAtivo = ?'] = 'N';
                 $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
+		// complementacao
                 if($PlanilhaAtiva->Total < $PlanilhaReadequada->Total){
                     $TipoAprovacao = 2;
                     $dadosPrj->Situacao = 'D28';
-                } else {
+		    $alteracaoValorPlanilha = True;
+                } else if ($PlanilhaAtiva->Total == $PlanilhaReadequada->Total) {
+		  // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
+		  $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
+		  $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
+		} else {
+		  // reducao
                     $TipoAprovacao = 4;
                     $dadosPrj->Situacao = 'D29';
+		    $alteracaoValorPlanilha = True;
                 }
-                $dadosPrj->save();
-                
-                $AprovadoReal = number_format(($PlanilhaReadequada->Total-$PlanilhaAtiva->Total), 2, '.', '');
-                $tbAprovacao = new Aprovacao();
-                $dadosAprovacao = array(
-                    'IdPRONAC' => $read->idPronac,
-                    'AnoProjeto' => $dadosPrj->AnoProjeto,
-                    'Sequencial' => $dadosPrj->Sequencial,
-                    'TipoAprovacao' => $TipoAprovacao,
-                    'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
-                    'ResumoAprovacao' => 'Parecer favorável para readequação',
-                    'AprovadoReal' => $AprovadoReal,
-                    'Logon' => $this->idUsuario,
-                    'idReadequacao' => $idReadequacao
-                );
-                $idAprovacao = $tbAprovacao->inserir($dadosAprovacao);
+
+		// insere somente em reducao ou complementacao
+		if ($alteracaoValorPlanilha) {
+		  $dadosPrj->save();
+		  $AprovadoReal = number_format(($PlanilhaReadequada->Total-$PlanilhaAtiva->Total), 2, '.', '');
+		  $tbAprovacao = new Aprovacao();
+		  $dadosAprovacao = array(
+					  'IdPRONAC' => $read->idPronac,
+					  'AnoProjeto' => $dadosPrj->AnoProjeto,
+					  'Sequencial' => $dadosPrj->Sequencial,
+					  'TipoAprovacao' => $TipoAprovacao,
+					  'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+					  'ResumoAprovacao' => 'Parecer favorável para readequação',
+					  'AprovadoReal' => $AprovadoReal,
+					  'Logon' => $this->idUsuario,
+					  'idReadequacao' => $idReadequacao
+					  );
+		  $idAprovacao = $tbAprovacao->inserir($dadosAprovacao);
+		}
             
             // READEQUAÇÃO DE ALTERAÇÃO DE RAZÃO SOCIAL
             } else if($read->idTipoReadequacao == 3){ //Se for readequação de alteração de razão social, atualiza os dados na AGENTES.dbo.Nomes.
@@ -3582,6 +3594,7 @@ class ReadequacoesController extends GenericControllerNew {
             // READEQUAÇÃO DE LOCAL DE REALIZAÇÃO
             } else if($read->idTipoReadequacao == 9){ //Se for readequação de local de realização, atualiza os dados na SAC.dbo.Abrangencia.
                 $Abrangencia = new Abrangencia();
+
                 $tbAbrangencia = new tbAbrangencia();
                 $abrangencias = $tbAbrangencia->buscar(array('idReadequacao=?'=>$idReadequacao));
                 foreach ($abrangencias as $abg) {
@@ -3843,8 +3856,15 @@ class ReadequacoesController extends GenericControllerNew {
         
         $tiposParaChecklist = array(2,3,10,12,15);
         if(in_array($read->idTipoReadequacao, $tiposParaChecklist)){
+	  // se remanejamento orcamentario
+	  if ($read->idTipoReadequacao == 2 && !$alteracaoValorPlanilha) {
+	    $dados['siEncaminhamento'] = 15; //Finalizam sem a necessidade de passar pela publicação no DOU.
+	    $dados['stEstado'] = 1;
+	  } else {
+	    // reducao ou complementacao orcamentaria
             $dados['siEncaminhamento'] = 9; //Encaminhado pelo sistema para o Checklist de Publicação
             $dados['stEstado'] = 0;
+	  }
         }
         
         $dados['idNrReuniao'] = $idNrReuniao;
