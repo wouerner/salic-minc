@@ -7,20 +7,20 @@
             id = $(this).attr('idPronac');
             window.open("<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'cadastrar-opiniao'), null, true); ?>?idPronac="+id,"_blank");
         });
-        
+
         $('.btn_ver').click(function(){
             id = $(this).attr('idPronac');
             window.open("<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'visualizar-opinioes'), null, true); ?>?idPronac="+id,"_blank");
         });
-        
+
         $('.btn_imprimir').click(function(){
             $('#formImpressao').submit();
         });
-        
+
         $('.btn_xls').click(function(){
             $('#formxls').submit();
         });
-        
+
         $('.tooltip').click(function(){
             return false;
         });
@@ -59,7 +59,7 @@
         position: absolute;
         z-index: 99;
     }
-    
+
     .faleconosco{
         color: #35953F !important;
         font-size: 20px;
@@ -171,13 +171,13 @@
         <input type="hidden" name="ordem" value="<?php echo $this->ordem;?>">
         <input type="hidden" name="pronac" value="<?php echo $this->pronac;?>">
     </form>
-    
+
     <form target="_blank" class="form" name="formxls" id="formxls" method="post" action='<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'xls-listagem')); ?>'>
         <input type="hidden" name="campo" value="<?php echo $this->campo;?>">
         <input type="hidden" name="ordem" value="<?php echo $this->ordem;?>">
         <input type="hidden" name="pronac" value="<?php echo $this->pronac;?>">
     </form>
-        
+
     <?php } else { ?>
     <table class="tabela">
         <tr>
