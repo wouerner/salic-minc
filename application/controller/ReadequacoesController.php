@@ -3451,10 +3451,9 @@ class ReadequacoesController extends GenericControllerNew {
 
         $tbReadequacao = new tbReadequacao();
 	$alteracaoValorPlanilha = False;  // bool para verificar se houve acréscimo ou diminuicao de valores na planilha orcamentaria
-                        
+	
         if($parecerTecnico->ParecerFavoravel == 2){ //Se for parecer favorável, atualiza os dados solicitados na readequação
             $read = $tbReadequacao->buscarReadequacao(array('idReadequacao =?'=>$idReadequacao))->current();
-            
             // READEQUAÇÃO DE PLANILHA ORÇAMENTÁRIA
             if($read->idTipoReadequacao == 2){
                 $Projetos = new Projetos();
@@ -3479,17 +3478,13 @@ class ReadequacoesController extends GenericControllerNew {
                     $TipoAprovacao = 2;
                     $dadosPrj->Situacao = 'D28';
 		    $alteracaoValorPlanilha = True;
-                } else if ($PlanilhaAtiva->Total == $PlanilhaReadequada->Total) {
-		  // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
-		  $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
-		  $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
-		} else {
+                } else if ($PlanilhaAtiva->Total > $PlanilhaReadequada->Total) {
 		  // reducao
                     $TipoAprovacao = 4;
                     $dadosPrj->Situacao = 'D29';
 		    $alteracaoValorPlanilha = True;
                 }
-
+		
 		// insere somente em reducao ou complementacao
 		if ($alteracaoValorPlanilha) {
 		  $dadosPrj->save();
@@ -3869,8 +3864,15 @@ class ReadequacoesController extends GenericControllerNew {
         
         $dados['idNrReuniao'] = $idNrReuniao;
         $where = "idReadequacao = $idReadequacao";
+	
         $return = $tbReadequacao->update($dados, $where);
-        
+	
+	if (!$alteracaoValorPlanilha) {
+	  // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
+	    $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
+	    $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
+	}
+	
         //Atualiza a tabela tbDistribuirReadequacao
         $dados = array();
         $dados['stValidacaoCoordenador'] = 1;
