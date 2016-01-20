@@ -27,7 +27,7 @@ class MinC_View_Helper_Vcs extends Zend_View_Helper_Abstract
      * Retorna a versão do projeto, seja branch ou tag
      */
     private function getGitFullVersion() {
-        exec("git describe --tags", $tagNumber);
+        exec("git describe --tags --abbrev=0", $tagNumber);
         exec("git rev-parse --abbrev-ref HEAD", $branchName);
         return "Branch|Tag: " . array_pop($branchName) . " - revisão: " . array_pop($tagNumber);
     }
