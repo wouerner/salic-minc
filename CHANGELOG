@@ -1,0 +1,13 @@
+Release 1.3.1
+  * changelog
+  * melhorias no ambiente git
+
+Release 1.3.0
+  * Tela de consulta de cidadão
+  * Adicionado manual de proposta
+  * Transição para ambiente Git
+
+Release 1.2
+  * Os17 - movimentação bancária
+  * Os32
+    * feature-publicaao-dou - #462
