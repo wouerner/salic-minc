@@ -1,4 +1,5 @@
-application/configs/bancos_treinamento.ini
+application/configs/bancos_*.ini
 application/configs/config.ini
 index.php
 *~
+index.php
