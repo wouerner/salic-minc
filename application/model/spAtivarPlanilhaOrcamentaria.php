@@ -10,11 +10,8 @@ class spAtivarPlanilhaOrcamentaria extends GenericModel {
     protected $_name  = 'spAtivarPlanilhaOrcamentaria';
 
     public function exec($idPronac){
-        
-        $sql = "exec ".$this->_banco.".dbo.".$this->_name." $idPronac";
-        $db = Zend_Registry :: get('db');
-        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
-        return $db->fetchAll($sql);
+      $sql = "exec ".$this->_banco.".dbo.".$this->_name." $idPronac";
+      return $this->getAdapter()->query($sql);
     }
 }
 ?>
