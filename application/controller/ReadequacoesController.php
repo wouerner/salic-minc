@@ -3473,23 +3473,21 @@ class ReadequacoesController extends GenericControllerNew {
                 $where['a.tpPlanilha = ?'] = 'SR';
                 $where['a.stAtivo = ?'] = 'N';
                 $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+		
 		// complementacao
                 if($PlanilhaAtiva->Total < $PlanilhaReadequada->Total){
                     $TipoAprovacao = 2;
                     $dadosPrj->Situacao = 'D28';
+		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de complementação';
 		    $alteracaoValorPlanilha = True;
-                } else if ($PlanilhaAtiva->Total == $PlanilhaReadequada->Total) {
-		  // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
-		  $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
-		  $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
-		} else {
+		} else if ($PlanilhaAtiva->Total > $PlanilhaReadequada->Total) {
 		  // reducao
                     $TipoAprovacao = 4;
                     $dadosPrj->Situacao = 'D29';
+		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de redução';
 		    $alteracaoValorPlanilha = True;
                 }
-
+		
 		// insere somente em reducao ou complementacao
 		if ($alteracaoValorPlanilha) {
 		  $dadosPrj->save();
@@ -3870,7 +3868,13 @@ class ReadequacoesController extends GenericControllerNew {
         $dados['idNrReuniao'] = $idNrReuniao;
         $where = "idReadequacao = $idReadequacao";
         $return = $tbReadequacao->update($dados, $where);
-        
+	
+	if (!$alteracaoValorPlanilha) {
+	  // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
+	  $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
+	  $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
+	}
+	
         //Atualiza a tabela tbDistribuirReadequacao
         $dados = array();
         $dados['stValidacaoCoordenador'] = 1;
