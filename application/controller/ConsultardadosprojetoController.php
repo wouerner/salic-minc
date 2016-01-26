@@ -925,24 +925,9 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
         if(!empty($idPronac)){
             $Projetos = new Projetos();
             $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-	    
-	    $sql = "
-	    SELECT TOP 1 
-	       CASE
-	         WHEN tpPlanilha = 'CO'
-	          THEN 3
-	         WHEN tpPlanilha = 'RP'
-	          THEN 5
-	         WHEN tpPlanilha = 'SR'
-	          THEN 6
-	       END AS tpPlanilha
-	    FROM sac.dbo.tbPlanilhaAprovacao
-	    WHERE IdPRONAC = " . $idPronac . "
-   	    AND stAtivo = 'S'";
-	    
-	    $db = Zend_Registry :: get('db');
-	    $db->setFetchMode(Zend_DB :: FETCH_OBJ);
-	    $tpPlanilha = $db->fetchOne($sql);
+
+            $spSelecionarPlanilhaOrcamentariaAtiva = new spSelecionarPlanilhaOrcamentariaAtiva();
+	    $tpPlanilha = $spSelecionarPlanilhaOrcamentariaAtiva->exec($idPronac);
 	    
             $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
             $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilha);
@@ -2394,7 +2379,8 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
         $this->view->DadosProjeto = $DadosProjeto;
         
         $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 5);
+        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 3);
+	
         $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, 5);
         $this->view->planilha = $planilha;
         $this->view->tipoPlanilha = 5;
