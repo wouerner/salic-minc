@@ -927,14 +927,16 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
             $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
 
             $spSelecionarPlanilhaOrcamentariaAtiva = new spSelecionarPlanilhaOrcamentariaAtiva();
-	    $tpPlanilha = $spSelecionarPlanilhaOrcamentariaAtiva->exec($idPronac);
+	    $tpPlanilhaAtiva = $spSelecionarPlanilhaOrcamentariaAtiva->exec($idPronac);
 	    
             $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-            $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilha);
-	    
+            $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilhaAtiva);
+	    // xd($planilhaOrcamentaria);
 	    if(count($planilhaOrcamentaria)==0){
 	      $this->view->tipoPlanilha = 2;
-            }  else {
+            }  else if ($tpPlanilhaAtiva == 6) {
+	      $this->view->tipoPlanilha = 6;
+	    } else {
 	      $this->view->tipoPlanilha = 3;
 	    }
         }
