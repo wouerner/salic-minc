@@ -925,19 +925,31 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
         if(!empty($idPronac)){
             $Projetos = new Projetos();
             $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-        
+	    
+	    $sql = "
+	    SELECT TOP 1 
+	       CASE
+	         WHEN tpPlanilha = 'CO'
+	          THEN 3
+	         WHEN tpPlanilha = 'RP'
+	          THEN 5
+	         WHEN tpPlanilha = 'SR'
+	          THEN 6
+	       END AS tpPlanilha
+	    FROM sac.dbo.tbPlanilhaAprovacao
+	    WHERE IdPRONAC = " . $idPronac . "
+   	    AND stAtivo = 'S'";
+	    
+	    $db = Zend_Registry :: get('db');
+	    $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+	    $tpPlanilha = $db->fetchOne($sql);
+	    
             $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-            $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 6);
+            $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilha);
             
-            if(count($planilhaOrcamentaria)>0){
-                $this->view->tipoPlanilha = 6;
-            } else {
-                $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 3);
-                if(count($planilhaOrcamentaria)>0){
-                    $this->view->tipoPlanilha = 3;
-                } else {
-                    $this->view->tipoPlanilha = 2;
-                }
+	    $this->view->tipoPlanilha = $tpPlanilha;
+	    if(count($planilhaOrcamentaria)==0){
+	      $this->view->tipoPlanilha = 2;
             }
         }
     }
