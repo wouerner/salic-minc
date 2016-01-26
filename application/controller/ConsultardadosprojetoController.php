@@ -931,11 +931,12 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
 	    
             $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
             $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilha);
-            
-	    $this->view->tipoPlanilha = $tpPlanilha;
+	    
 	    if(count($planilhaOrcamentaria)==0){
 	      $this->view->tipoPlanilha = 2;
-            }
+            }  else {
+	      $this->view->tipoPlanilha = 3;
+	    }
         }
     }
 
@@ -2377,13 +2378,27 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
-        
-        $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 3);
+
+	// verificar se já existe planilha de remanejamento de 20%
+	$sql = "SELECT COUNT(*) FROM sac.dbo.tbPlanilhaAprovacao WHERE idPronac = " . $idPronac . " AND tpPlanilha = 'RP'";	
+	$db = Zend_Registry :: get('db');
+	$db->setFetchMode(Zend_DB :: FETCH_OBJ);
+	$countTpPlanilhaRemanej = $db->fetchOne($sql);
 	
-        $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, 5);
-        $this->view->planilha = $planilha;
-        $this->view->tipoPlanilha = 5;
+	// seleciona planilha ativa
+	$spSelecionarPlanilhaOrcamentariaAtiva = new spSelecionarPlanilhaOrcamentariaAtiva();
+	$tpPlanilhaAtiva = $spSelecionarPlanilhaOrcamentariaAtiva->exec($idPronac);
+
+
+	$spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
+	if ($countTpPlanilhaRemanej == 0) {
+	  $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 3);
+	} else {
+	  $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 5);
+	}
+	$planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, 5);
+	$this->view->planilha = $planilha;
+	$this->view->tipoPlanilha = 5;
     }
     
     public function remanejamentoMenorFinalizarAction()
