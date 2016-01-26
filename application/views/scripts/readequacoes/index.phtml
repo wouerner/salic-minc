@@ -745,6 +745,10 @@
         });
         
         $('.newMultiplicarValores').keyup(function(){
+	    // se digitar , troca por .
+	    var curr_val = $(this).val();
+	    $(this).val(curr_val.replace(',', '.'));
+	    
             // recebe os valores do formulário
             var qtd = $('#newQuantidade').val(),
                 ocorrencia = $('#newOcorrencia').val(),
