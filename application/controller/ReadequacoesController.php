@@ -3479,12 +3479,14 @@ class ReadequacoesController extends GenericControllerNew {
                     $TipoAprovacao = 2;
                     $dadosPrj->Situacao = 'D28';
 		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de complementação';
+		    $dadosPrj->Login = $auth->getIdentity()->usu_codigo;
 		    $alteracaoValorPlanilha = True;
 		} else if ($PlanilhaAtiva->Total > $PlanilhaReadequada->Total) {
 		  // reducao
                     $TipoAprovacao = 4;
                     $dadosPrj->Situacao = 'D29';
 		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de redução';
+		    $dadosPrj->Login = $auth->getIdentity()->usu_codigo;
 		    $alteracaoValorPlanilha = True;
                 }
 		
