@@ -44,9 +44,7 @@ class VerProjetosController extends GenericControllerNew {
      */
     public function indexAction() {
 
-	if(!$this->usuarioInterno){
             Zend_Layout::startMvc(array('layout' => 'layout_login'));
-        }
 
 
         if (isset($_REQUEST['idPronac'])) {
