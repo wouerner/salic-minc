@@ -10,6 +10,7 @@
  * @link http://www.cultura.gov.br
  * @copyright  2010 - Ministerio da Cultura - Todos os direitos reservados.
  */
+
 class VerProjetosController extends GenericControllerNew {
 
     private $blnProponente  = false;
@@ -27,32 +28,14 @@ class VerProjetosController extends GenericControllerNew {
      * @param void
      * @return void
      */
-     public function init() {
-         parent::init(); // chama o init() do pai GenericControllerNew
-         $this->intTamPag = 10;
-         $this->usuarioInterno = false;
-         $this->view->usuarioInterno = false;
+         
+         public function init() {
 
-         $auth = Zend_Auth::getInstance(); // pega a autenticação
-         if(isset($auth->getIdentity()->usu_codigo)){
+       parent::init(); 
+        
+    } 
+   
 
-             //Recupera todos os grupos do Usuario
-             $Usuario = new Usuario(); // objeto usuário
-             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
-             foreach ($grupos as $grupo){
-                 $PermissoesGrupo[] = $grupo->gru_codigo;
-             }
-         }
-
-         if (isset($auth->getIdentity()->usu_codigo)) { // autenticacao novo salic
-             parent::perfil(1, $PermissoesGrupo);
-             $this->getIdUsuario = UsuarioDAO::getIdUsuario($auth->getIdentity()->usu_codigo);
-             $this->getIdUsuario = ($this->getIdUsuario) ? $this->getIdUsuario["idAgente"] : 0;
-             $this->usuarioInterno = true;
-             $this->view->usuarioInterno = true;
-         }
-         parent::init();
-     }
     /**
      * Redireciona para o fluxo inicial do sistema
      * @access public
@@ -61,8 +44,13 @@ class VerProjetosController extends GenericControllerNew {
      */
     public function indexAction() {
 
-        if (isset($_REQUEST['idPronac'])) {
+	if(!$this->usuarioInterno){
+            Zend_Layout::startMvc(array('layout' => 'layout_login'));
+        }
 
+
+        if (isset($_REQUEST['idPronac'])) {
+        	
             $idPronac = $_GET['idPronac'];
             if (strlen($idPronac) > 7) {
                 $idPronac = Seguranca::dencrypt($idPronac);
@@ -96,7 +84,7 @@ class VerProjetosController extends GenericControllerNew {
                 $buscarsomaprojeto = $pp->somarPlanilhaProjeto($idPronac);
                 $buscarsomaaprovacaoC = $pa->somarPlanilhaAprovacao($idPronac, 206, "CO");
                 $buscarsomaaprovacaoP = $pa->somarPlanilhaAprovacao($idPronac, 206, "SE");
-
+                
                 if(isset($buscarsomaaprovacaoP['soma']) && $buscarsomaaprovacaoP['soma']>0){
                     $this->view->linkplanilha = "plenaria";
                 } elseif (isset($buscarsomaaprovacaoC['soma']) && $buscarsomaaprovacaoC['soma']>0){
@@ -165,12 +153,12 @@ class VerProjetosController extends GenericControllerNew {
 
                     $rsPlanilhaAtual = $planilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idPronac), array('dtPlanilha DESC'))->current();
                     $tpPlanilha = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'SE' : 'CO';
-
+                            
                     $arrWhereSomaPlanilha = array();
                     $arrWhereSomaPlanilha['idPronac = ?']=$idPronac;
                     if($this->bln_readequacao == "false"){
                         $fonteincentivo = $planilhaproposta->somarPlanilhaProposta($idPreProjeto, 109);
-                        $outrasfontes   = $planilhaproposta->somarPlanilhaProposta($idPreProjeto, false, 109);
+                        $outrasfontes   = $planilhaproposta->somarPlanilhaProposta($idPreProjeto, false, 109);  
                         $parecerista    = $planilhaprojeto->somarPlanilhaProjeto($idPreProjeto, 109);
                     }else{
                         $arrWhereFontesIncentivo = $arrWhereSomaPlanilha;
@@ -181,7 +169,7 @@ class VerProjetosController extends GenericControllerNew {
                         $arrWhereFontesIncentivo["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')");
                         $arrWhereFontesIncentivo["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
                         $fonteincentivo = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereFontesIncentivo);
-
+                        
                         $arrWhereOutrasFontes = $arrWhereSomaPlanilha;
                         $arrWhereOutrasFontes['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
                         $arrWhereOutrasFontes['tpPlanilha = ? ']='SR';
@@ -206,9 +194,9 @@ class VerProjetosController extends GenericControllerNew {
                     $arrWhereSomaPlanilha['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
                     $arrWhereSomaPlanilha['tpPlanilha = ? ']=$tpPlanilha;
                     $arrWhereSomaPlanilha['NrFonteRecurso = ? ']='109';
-                    $arrWhereSomaPlanilha['stAtivo = ? ']='S';
+                    $arrWhereSomaPlanilha['stAtivo = ? ']='S'; 
                     $componente = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
-
+                    
                     $valoresProjeto = new ArrayObject();
                     $valoresProjeto['fontesincentivo']  = $fonteincentivo['soma'];
                     $valoresProjeto['outrasfontes']     = $outrasfontes['soma'];
@@ -216,7 +204,7 @@ class VerProjetosController extends GenericControllerNew {
                     $valoresProjeto['valorparecerista'] = $parecerista['soma'];
                     $valoresProjeto['valorcomponente']  = $componente['soma'];
                     $this->view->valoresDoProjeto = $valoresProjeto;
-
+                    
                     $tblCaptacao = new Captacao();
                     $rsCount = $tblCaptacao->buscaCompleta(array('idPronac = ?'=>$idPronac), array(), null, null, true);
                     $this->view->totalGeralCaptado = $rsCount->totalGeralCaptado;
@@ -228,13 +216,8 @@ class VerProjetosController extends GenericControllerNew {
                     $cpfProponente 	= !empty($dadosProjeto[0]->CNPJCPF) ? $dadosProjeto[0]->CNPJCPF : '';
                     $respProponente     = 'R';
                     $inabilitado 	= 'N';
-
-                    // Indentificando o Proponente
-                    if($cpfLogado == $cpfProponente)
-                    {
-                    	$respProponente = 'P';
-                    }
-
+                    
+                    
                     // Verificando se o Proponente está inabilitado
 	                $inabilitadoDAO = new Inabilitado();
                         $where['CgcCpf 		= ?'] = $cpfProponente;
@@ -271,9 +254,9 @@ class VerProjetosController extends GenericControllerNew {
                         $this->view->procuracaoValida = $procuracaoValida;
                         $this->view->respProponente = $respProponente;
                         $this->view->inabilitado 	= $inabilitado;
-
+                    
                     /****************************************************************************/
-
+                    
                     $tbemail = $geral->buscarEmail($idPronac);
                     $this->view->email = $tbemail;
 
@@ -295,7 +278,7 @@ class VerProjetosController extends GenericControllerNew {
                     //========== inicio codigo mandato dirigente ================
                     /*==================================================*/
                     $arrMandatos = array();
-
+                    
                     if(!empty($this->idPreProjeto)){
                         $preProjeto = new PreProjeto();
                         $Empresa = $preProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
@@ -304,11 +287,11 @@ class VerProjetosController extends GenericControllerNew {
                         $tbDirigenteMandato = new tbAgentesxVerificacao();
                         foreach($rsDirigentes as $dirigente){
                             $rsMandato = $tbDirigenteMandato->listarMandato(array('idEmpresa = ?' => $idEmpresa, 'idDirigente = ?' => $dirigente->idAgente,'stMandato = ?' => 0));
-                            $arrMandatos[$dirigente->NomeDirigente] = $rsMandato;
+                            $arrMandatos[$dirigente->NomeDirigente] = $rsMandato;                    
                         }
                     }
                     $this->view->mandatos = $arrMandatos;
-
+                    
                     //============== fim codigo dirigente ================
                     /*==================================================*/
 
@@ -389,17 +372,17 @@ class VerProjetosController extends GenericControllerNew {
                     //$tbDirigentes = $geral->buscarDirigentes($idPronac);
                     $this->view->dirigentes = $rsDirigentes;
                     $arrMandatos = array();
-
+                    
                     $tbMandato = new tbMandato();
                     foreach($rsDirigentes as $dirigente){
                         $rsMandato = $tbMandato->listarMandato(array('idAgente = ?' => $dirigente->idAgente, 'stMandatoCancelado = ?' => 0));
                         $arrMandatos[$dirigente->idAgente] = $rsMandato;
                     }
-
+                    
                     xd($arrMandatos);
                     $this->view->mandatos = $buscarMandato;
-
-
+                    
+                    
 
                     $this->view->CgcCpf = $tbdados[0]->CgcCpf;
 
@@ -459,7 +442,7 @@ class VerProjetosController extends GenericControllerNew {
         {
 			if (strlen($idPronac) > 7) {
 				$idPronac = Seguranca::dencrypt($idPronac);
-			}
+			} 
             $tblProjeto = new Projetos();
             $rsProjeto = $tblProjeto->buscar(array("IdPronac=?"=>$idPronac))->current();
             $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
@@ -573,8 +556,8 @@ class VerProjetosController extends GenericControllerNew {
         $tbDirigentes = $geral->buscarDirigentes($idpronac);
         $this->view->dirigentes = $tbDirigentes;
 
-        $this->view->CgcCpf = $tbdados[0]->CgcCpf;
-
+        $this->view->CgcCpf = $tbdados[0]->CgcCpf;      
+        
     }
 
     public function certidoesNegativasAction()
@@ -723,7 +706,7 @@ class VerProjetosController extends GenericControllerNew {
 
         $Projetos = new Projetos();
         $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-
+        
         if(!empty($idPronac)){
             $buscarDistribuicao = RealizarAnaliseProjetoDAO::planodedistribuicao($idPronac);
             $this->view->dados = $buscarDistribuicao;
@@ -760,7 +743,7 @@ class VerProjetosController extends GenericControllerNew {
 
         $Projetos = new Projetos();
         $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-
+        
         if(!empty($idPronac)){
             $buscarDivulgacao = RealizarAnaliseProjetoDAO::divulgacao($idPronac);
             $this->view->dados = $buscarDivulgacao;
@@ -785,7 +768,7 @@ class VerProjetosController extends GenericControllerNew {
             $this->view->tipoPlanilha = 1;
         }
     }
-
+    
     public function planilhaOrcamentariaAprovadaAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -797,10 +780,10 @@ class VerProjetosController extends GenericControllerNew {
         if(!empty($idPronac)){
             $Projetos = new Projetos();
             $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-
+        
             $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
             $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 6);
-
+            
             if(count($planilhaOrcamentaria)>0){
                 $this->view->tipoPlanilha = 6;
             } else {
@@ -881,12 +864,12 @@ class VerProjetosController extends GenericControllerNew {
 
             $rsPlanilhaAtual = $tblPlanilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idPronac, 'stAtivo = ?'=>'S'), array('dtPlanilha DESC'))->current();
             $status = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'N' : 'S';
-
+            
             $tblProjetos = new Projetos();
             $arrBusca['IdPronac = ?']=$idPronac;
             $rsProjeto = $tblProjetos->buscar($arrBusca)->current();
             $idPreProjeto = $rsProjeto->idProjeto;
-
+            
             if(!empty ($idPreProjeto)){
                 $ppr = new PlanilhaProposta();
                 $pp = new PlanilhaProjeto();
@@ -913,7 +896,7 @@ class VerProjetosController extends GenericControllerNew {
                     $planilhaproposta[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['justificitivaproponente'] = $resuplanilha->justificitivaproponente;
                     $planilhaproposta[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['UnidadeProposta'] = $resuplanilha->UnidadeProposta;
                     $count++;
-
+                    
                     $buscarprojeto = $pr->buscar(array('IdPRONAC = ?' => $idPronac))->current();
                     if(isset($buscarprojeto->idProjeto) && !empty($buscarprojeto->idProjeto)){
                         $buscarsomaproposta = $ppr->somarPlanilhaProposta($buscarprojeto->idProjeto);
@@ -921,7 +904,7 @@ class VerProjetosController extends GenericControllerNew {
                     }else{
                      $this->view->totalproponenteAP = '0.00';
                     }
-
+                    
                     $buscarPlanilhaUnidade = PlanilhaUnidadeDAO::buscar();
                     $this->view->planilhaUnidadeAP = $buscarPlanilhaUnidade;
                     $this->view->planilhaAP = $planilhaproposta;
@@ -932,12 +915,12 @@ class VerProjetosController extends GenericControllerNew {
 
             $rsPlanilhaAtual = $tblPlanilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idPronac, 'stAtivo = ?'=>'S'), array('dtPlanilha DESC'))->current();
             $status = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'N' : 'S';
-
+            
             $tblProjetos = new Projetos();
             $arrBusca['IdPronac = ?']=$idPronac;
             $rsProjeto = $tblProjetos->buscar($arrBusca)->current();
             $idPreProjeto = $rsProjeto->idProjeto;
-
+            
             if(!empty ($idPreProjeto)){
                 $ppr = new PlanilhaProposta();
                 $pp = new PlanilhaProjeto();
@@ -964,7 +947,7 @@ class VerProjetosController extends GenericControllerNew {
                     $planilhaproposta[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['justificitivaproponente'] = $resuplanilha->justificitivaproponente;
                     $planilhaproposta[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['UnidadeProposta'] = $resuplanilha->UnidadeProposta;
                     $count++;
-
+                    
                     $buscarprojeto = $pr->buscar(array('IdPRONAC = ?' => $idPronac))->current();
                     if(isset($buscarprojeto->idProjeto) && !empty($buscarprojeto->idProjeto)){
                         $buscarsomaproposta = $ppr->somarPlanilhaProposta($buscarprojeto->idProjeto);
@@ -972,7 +955,7 @@ class VerProjetosController extends GenericControllerNew {
                     }else{
                      $this->view->totalproponenteAAP = '0.00';
                     }
-
+                    
                     $buscarPlanilhaUnidade = PlanilhaUnidadeDAO::buscar();
                     $this->view->planilhaUnidadeAAP = $buscarPlanilhaUnidade;
                     $this->view->planilhaAAP = $planilhaproposta;
@@ -980,7 +963,7 @@ class VerProjetosController extends GenericControllerNew {
                 }
             }
     }
-
+    
     public function readequacoesAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -994,10 +977,10 @@ class VerProjetosController extends GenericControllerNew {
             $rsProjeto = $tblProjeto->buscar(array("IdPronac=?"=>$idPronac))->current();
             $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
             $this->view->projeto = $rsProjeto;
-
+            
             $tbReadequacao = new tbReadequacao();
             $dadosReadequacoes = $tbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento <> ?'=>12))->toArray();
-
+            
             $tbReadequacaoXParecer = new tbReadequacaoXParecer();
             foreach ($dadosReadequacoes as &$dr) {
                 $dr['pareceres'] = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?'=>$dr['idReadequacao']))->toArray();
@@ -1037,9 +1020,9 @@ class VerProjetosController extends GenericControllerNew {
             $resultado = UploadDAO::abrirdocumentosanexados($id, $tipoDoc);
             if(count($resultado) > 0) {
                 if($tipo == 1){
-                    $this->_forward("abrirdocumentosanexadosbinario", "upload", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->_forward("abrirdocumentosanexadosbinario", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
                 } else {
-                    $this->_forward("abrirdocumentosanexados", "upload", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->_forward("abrirdocumentosanexados", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
                 }
                 $bln = "true";
             }
@@ -1053,7 +1036,7 @@ class VerProjetosController extends GenericControllerNew {
         }
 
         if($bln == "false") {
-            $url = Zend_Controller_Front::getInstance()->getBaseUrl()."/consultardadosprojeto/?idPronac={$idPronac}";
+            $url = Zend_Controller_Front::getInstance()->getBaseUrl()."/verprojetos/?idPronac={$idPronac}";
             $this->_helper->viewRenderer->setNoRender(true);
             $this->_helper->flashMessenger->addMessage("N&atilde;o foi poss&iacute;vel abrir o arquivo especificado. Tente anex&aacute;-lo novamente.");
             $this->_helper->flashMessengerType->addMessage("ERROR");
@@ -1212,14 +1195,14 @@ class VerProjetosController extends GenericControllerNew {
     {
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
         $this->view->idPerfil = $GrupoAtivo->codGrupo;
-
+        
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
         if(!empty($idPronac)){
-
+            
             //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
             if($this->_request->getParam("qtde")) {
                 $this->intTamPag = $this->_request->getParam("qtde");
@@ -1288,17 +1271,17 @@ class VerProjetosController extends GenericControllerNew {
             $this->view->qtdRegistros  = $total;
             $this->view->dados         = $busca;
             $this->view->intTamPag     = $this->intTamPag;
-
+            
         } else {
             $idPronacCriptado = Seguranca::encrypt($idPronac);
-            parent::message("Não foi encontrado nenhum projeto!", "consultardadosprojeto?idPronac=$idPronacCriptado", "ERROR");
+            parent::message("Não foi encontrado nenhum projeto!", "verprojetos?idPronac=$idPronacCriptado", "ERROR");
         }
     }
-
+    
     public function imprimirProvidenciaTomadaAction(){
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
         $this->view->idPerfil = $GrupoAtivo->codGrupo;
-
+        
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
         if($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
@@ -1345,16 +1328,16 @@ class VerProjetosController extends GenericControllerNew {
 
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-
+                
         $busca = $tblHisSituacao->buscarHistoricosEncaminhamentoIdPronac($where, $order, $tamanho, $inicio);
-
+        
         $nrPronac = '';
         $nrPronacNm = '';
         if(count($busca) > 0){
             $nrPronac = ' - Pronac: '.$busca[0]->Pronac;
             $nrPronacNm = '_Pronac_'.$busca[0]->Pronac;
         }
-
+        
         if(isset($get->xls) && $get->xls){
             $html = '';
             $html .= '<table style="border: 1px">';
@@ -1367,7 +1350,7 @@ class VerProjetosController extends GenericControllerNew {
                 $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10" colspan="3">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
                 $html .='<tr><td colspan="3"></td></tr>';
             }
-
+                
             $html .= '<tr>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Dt. Situação</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situação</th>';
@@ -1377,9 +1360,9 @@ class VerProjetosController extends GenericControllerNew {
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Nome</th>';
             }
             $html .= '</tr>';
-
+            
             foreach ($busca as $v) {
-
+                
                 $nrCpf = trim($v->cnpjcpf);
                 if($nrCpf == '23969156149') {
                     $Cpf = '-';
@@ -1388,7 +1371,7 @@ class VerProjetosController extends GenericControllerNew {
                     $Cpf = (strlen($nrCpf) > 11) ? Mascara::addMaskCNPJ($nrCpf) : Mascara::addMaskCPF($nrCpf);
                     $nomeUser = $v->usuario;
                 }
-
+                    
                 $html .= '<tr>';
                 $html .= '<td style="border: 1px dotted black;">'.Data::tratarDataZend($v->DtSituacao, 'Brasileira').'</td>';
                 $html .= '<td style="border: 1px dotted black;">'.$v->Situacao.'</td>';
@@ -1400,11 +1383,11 @@ class VerProjetosController extends GenericControllerNew {
                 $html .= '</tr>';
             }
             $html .= '</table>';
-
+            
             header("Content-Type: application/vnd.ms-excel");
             header("Content-Disposition: inline; filename=Providencia_Tomada".$nrPronacNm.".xls;");
             echo $html; die();
-
+            
         } else {
             $this->view->nrPronac      = $nrPronac;
             $this->view->qtdRegistros  = $total;
@@ -1421,31 +1404,31 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         if(!empty($idPronac)){
             $Projetos = new Projetos();
             $rsProjeto = $Projetos->buscar(array("IdPronac=?"=>$idPronac))->current();
             $this->view->projeto = $rsProjeto;
-
+            
             // verifica se há pedidos de reconsideração e de recurso
             $tbRecurso = new tbRecurso();
             $recursos = $tbRecurso->buscar(array('IdPRONAC = ?'=>$idPronac));
             $pedidoReconsideracao = 0;
             $pedidoRecurso = 0;
-
+                    
             if(count($recursos)>0){
                 foreach ($recursos as $r){
                     if($r->tpRecurso == 1){
                         $pedidoReconsideracao = $r->idRecurso;
                         $dados = $tbRecurso->buscarDadosRecursos(array('idRecurso = ?'=>$r->idRecurso))->current();
                         $this->view->dadosReconsideracao = $dados;
-
+                        
                         if($r->siRecurso == 0){
                             $this->view->desistenciaReconsideracao = true;
                         } else {
                             $this->view->desistenciaReconsideracao = false;
                             $this->view->produtosReconsideracao = array();
-
+                            
                             if($dados->siFaseProjeto == 2){
                                 if($dados->tpSolicitacao == 'PI' || $dados->tpSolicitacao == 'EO' || $dados->tpSolicitacao == 'OR'){
 
@@ -1458,7 +1441,7 @@ class VerProjetosController extends GenericControllerNew {
 //                                        $tipoDaPlanilha = 4; // 4=Cortes Orçamentários Aprovados
 //                                    }
                                     $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-                                    $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados->IdPRONAC, $tipoDaPlanilha);
+                                    $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados->IdPRONAC, $tipoDaPlanilha); 
                                     $this->view->planilhaReconsideracao = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoDaPlanilha);
                                 }
                             }
@@ -1474,7 +1457,7 @@ class VerProjetosController extends GenericControllerNew {
                         }
 
                     }
-
+                    
                     if($r->tpRecurso == 2){
                         $pedidoRecurso = $r->idRecurso;
                         $dados = $tbRecurso->buscarDadosRecursos(array('idRecurso = ?'=>$r->idRecurso))->current();
@@ -1496,7 +1479,7 @@ class VerProjetosController extends GenericControllerNew {
                                         $tipoDaPlanilha = 4; // 4=Cortes Orçamentários Aprovados
                                     }
                                     $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-                                    $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados->IdPRONAC, $tipoDaPlanilha);
+                                    $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($dados->IdPRONAC, $tipoDaPlanilha); 
                                     $this->view->planilhaRecurso = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoDaPlanilha);
                                 }
                             }
@@ -1517,7 +1500,7 @@ class VerProjetosController extends GenericControllerNew {
             $this->view->pedidoRecurso = $pedidoRecurso;
         }
     }
-
+    
     public function aprovacaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1531,7 +1514,7 @@ class VerProjetosController extends GenericControllerNew {
             $rsProjeto = $tblProjeto->buscar(array("IdPronac=?"=>$idPronac))->current();
             $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
             $this->view->projeto = $rsProjeto;
-
+            
             $tblAprovacao = new Aprovacao();
             $rsAprovacao = $tblAprovacao->buscaCompleta(array('a.AnoProjeto + a.Sequencial = ?'=>$pronac),array('a.idAprovacao ASC'));
             $this->view->dados = $rsAprovacao;
@@ -1559,7 +1542,7 @@ class VerProjetosController extends GenericControllerNew {
             $this->view->dadosLiberacao = $rsLiberacao;
         }
     }
-
+    
     public function dadosBancariosLiberacaoAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
@@ -1581,7 +1564,7 @@ class VerProjetosController extends GenericControllerNew {
             $this->view->dadosLiberacao = $rsLiberacao;
         }
     }
-
+    
     public function dadosBancariosCaptacaoAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
@@ -1589,11 +1572,11 @@ class VerProjetosController extends GenericControllerNew {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
         $this->view->idPronac = $idPronac;
-
+        
         if(!empty($idPronac)){
             $Projetos = new Projetos();
             $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
-
+            
             //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
             if($this->_request->getParam("qtde")) {
                 $this->intTamPag = $this->_request->getParam("qtde");
@@ -1641,7 +1624,7 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->dtReciboInicio = $_GET['dtReciboInicio'];
                 $this->view->dtReciboFim = $_GET['dtReciboFim'];
             }
-
+            
             if(isset($_GET['dtReciboInicio']) && !empty($_GET['dtReciboInicio']) && isset($_GET['dtReciboFim']) && !empty($_GET['dtReciboFim'])){
                 $di = ConverteData($_GET['dtReciboInicio'], 13)." 00:00:00";
                 $df = ConverteData($_GET['dtReciboFim'], 13)." 23:59:59";
@@ -1649,7 +1632,7 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->dtReciboInicio = $_GET['dtReciboInicio'];
                 $this->view->dtReciboFim = $_GET['dtReciboFim'];
             }
-
+            
             $Captacao = New Captacao();
             $total = $Captacao->painelDadosBancariosCaptacao($where, $order, null, null, true);
             $fim = $inicio + $this->intTamPag;
@@ -1680,13 +1663,13 @@ class VerProjetosController extends GenericControllerNew {
             $this->view->intTamPag = $this->intTamPag;
         }
     }
-
+    
     public function imprimirDadosBancariosCaptacaoAction()
     {
         $this->_helper->layout->disableLayout();
 		$this->dadosBancariosCaptacaoAction();
     }
-
+    
     public function dadosConvenioAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
@@ -1700,16 +1683,16 @@ class VerProjetosController extends GenericControllerNew {
             $DadosProjeto = $projetos->buscar(array('idPronac = ?' => $idPronac))->current();
             $this->view->idPronac = $idPronac;
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $where = array();
             $where['AnoProjeto = ?'] = $DadosProjeto->AnoProjeto;
             $where['Sequencial = ?'] = $DadosProjeto->Sequencial;
-
+            
             $Convenio = new Convenio();
             $this->view->dados = $Convenio->buscarDadosConvenios($where);
         }
     }
-
+    
     public function imprimirDadosConvenioAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -1724,16 +1707,16 @@ class VerProjetosController extends GenericControllerNew {
             $DadosProjeto = $projetos->buscar(array('idPronac = ?' => $idPronac))->current();
             $this->view->idPronac = $idPronac;
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $where = array();
             $where['AnoProjeto = ?'] = $DadosProjeto->AnoProjeto;
             $where['Sequencial = ?'] = $DadosProjeto->Sequencial;
-
+            
             $Convenio = new Convenio();
             $this->view->dados = $Convenio->buscarDadosConvenios($where);
         }
     }
-
+    
     public function historicoEncaminhamentoAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
@@ -1747,12 +1730,12 @@ class VerProjetosController extends GenericControllerNew {
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->idPronac = $idPronac;
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbDistribuirParecer = new tbDistribuirParecer();
             $this->view->dados = $tbDistribuirParecer->buscarHistoricoEncaminhamento(array('a.idPRONAC = ?'=>$idPronac));
         }
     }
-
+    
     public function imprimirHistoricoEncaminhamentoAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -1767,12 +1750,12 @@ class VerProjetosController extends GenericControllerNew {
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->idPronac = $idPronac;
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbDistribuirParecer = new tbDistribuirParecer();
             $this->view->dados = $tbDistribuirParecer->buscarHistoricoEncaminhamento(array('a.idPRONAC = ?'=>$idPronac));
         }
     }
-
+    
     public function dadosRelacaoPagamentosAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1786,12 +1769,12 @@ class VerProjetosController extends GenericControllerNew {
             $projetos = new Projetos();
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbComprovante = new tbComprovantePagamentoxPlanilhaAprovacao();
             $this->view->relacaoPagamentos = $tbComprovante->buscarRelacaoPagamentos($idPronac);
         }
     }
-
+    
     public function pagamentosPorUfMunicipioAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1799,18 +1782,18 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         if(!empty($idPronac)){
             //****** Dados do Projeto - Cabecalho *****//
             $projetos = new Projetos();
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbComprovante = new tbComprovantePagamentoxPlanilhaAprovacao();
             $this->view->pagamentos = $tbComprovante->pagamentosPorUFMunicipio($idPronac);
         }
     }
-
+    
     public function pagamentosConsolidadosPorUfMunicipioAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1818,18 +1801,18 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         if(!empty($idPronac)){
             //****** Dados do Projeto - Cabecalho *****//
             $projetos = new Projetos();
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbComprovante = new tbComprovantePagamentoxPlanilhaAprovacao();
             $this->view->pagamentos = $tbComprovante->pagamentosConsolidadosPorUfMunicipio($idPronac);
         }
     }
-
+    
     public function carregarComprovantesComprovadosPorItemAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1838,18 +1821,18 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         if(!empty($idPronac)){
-
+            
             //****** Dados do Projeto - Cabecalho *****//
             $projetos = new Projetos();
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             //Busca os dados do item
             $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
             $DadosItem = $tbPlanilhaAprovacao->buscar(array('idPlanilhaAprovacao = ?' => $idPlanilhaAprovacao));
-
+            
             $tbComprovante = new tbComprovantePagamentoxPlanilhaAprovacao();
             if(count($DadosItem) > 0){
                 $DadosItem = $DadosItem[0];
@@ -1861,7 +1844,7 @@ class VerProjetosController extends GenericControllerNew {
             $this->view->relacaoPagamentos = $resultado;
         }
     }
-
+    
     public function execucaoReceitaDespesaAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1869,22 +1852,22 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         if(!empty($idPronac)){
             //****** Dados do Projeto - Cabecalho *****//
             $projetos = new Projetos();
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbComprovante = new tbComprovantePagamentoxPlanilhaAprovacao();
             $relExecRecDesp = $tbComprovante->buscarRelatorioExecucaoReceita($idPronac);
             $this->view->relExecRec = $relExecRecDesp;
-
+            
             $relExecRecDesp = $tbComprovante->buscarRelatorioExecucaoDespesa($idPronac);
             $this->view->relExecDesp = $relExecRecDesp;
         }
     }
-
+    
     public function relatorioFisicoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1892,19 +1875,19 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         if(!empty($idPronac)){
             //****** Dados do Projeto - Cabecalho *****//
             $projetos = new Projetos();
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbComprovante = new tbComprovantePagamentoxPlanilhaAprovacao();
             $relatorioFisico = $tbComprovante->buscarRelatorioFisico($idPronac);
             $this->view->relatorioFisico = $relatorioFisico;
         }
     }
-
+    
     public function relatorioBensCapitalAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1912,19 +1895,19 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         if(!empty($idPronac)){
             //****** Dados do Projeto - Cabecalho *****//
             $projetos = new Projetos();
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
             $this->view->DadosProjeto = $DadosProjeto;
-
+            
             $tbComprovante = new tbComprovantePagamentoxPlanilhaAprovacao();
             $relatorioBensDeCapital = $tbComprovante->buscarRelatorioBensDeCapital($idPronac);
             $this->view->relatorioBensDeCapital = $relatorioBensDeCapital;
         }
     }
-
+    
     public function captacaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -1959,20 +1942,20 @@ class VerProjetosController extends GenericControllerNew {
             //if(!empty($post->ordenacao)){ $ordem[] = "{$post->ordenacao} {$post->tipoOrdenacao}"; }
 
             $rsCaptacao = $tblCaptacao->buscaCompleta(array('idPronac = ?'=>$idPronac), $ordem, $tamanho, $inicio);
-
+            
             $tProjeto = 0;
             $CgcCPfMecena = 0;
             $arrRegistros = array();
             foreach($rsCaptacao as $captacao){
 
                 $arrRegistros['incentivador'][$captacao->CgcCPfMecena]['nome'] = $captacao->Nome;
-
+                
                 if($CgcCPfMecena    !=  $captacao->CgcCPfMecena){
                     $tIncentivador  =   0;
                     $qtRegistroI    =   0;
                     $CgcCPfMecena   =   $captacao->CgcCPfMecena;
                 }
-
+                
                 $tIncentivador +=  $captacao->CaptacaoReal;
                 $arrRegistros['incentivador'][$captacao->CgcCPfMecena]['totaIncentivador'] = number_format($tIncentivador,2, ',', '.');
                 $arrRegistros['incentivador'][$captacao->CgcCPfMecena]['recibo'][$captacao->NumeroRecibo]['TipoApoio']         =   $captacao->TipoApoio;
@@ -1981,7 +1964,7 @@ class VerProjetosController extends GenericControllerNew {
                 $arrRegistros['incentivador'][$captacao->CgcCPfMecena]['recibo'][$captacao->NumeroRecibo]['DtRecibo']          =   date('d/m/Y',strtotime($captacao->DtRecibo));
                 $arrRegistros['incentivador'][$captacao->CgcCPfMecena]['recibo'][$captacao->NumeroRecibo]['CaptacaoReal']      =   number_format($captacao->CaptacaoReal,2, ',', '.');
             }
-
+            
             $arrRegistros['totalgeral'] = number_format($totalGeralCaptado,2, ',', '.');
 
             $this->view->registros = $arrRegistros;
@@ -2126,7 +2109,7 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idpronac) > 7) {
             $idpronac = Seguranca::dencrypt($idpronac);
         }
-
+        
         //****** Dados do Projeto - Cabecalho *****//
         $projetos = new Projetos();
         $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idpronac))->current();
@@ -2240,34 +2223,34 @@ class VerProjetosController extends GenericControllerNew {
         }
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
     }
-
+    
     public function remanejamentoMenorAction()
-    {
+    {   
         //REMANEJAMENTO MENOR OU IGUAL A 20%
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         $projetos = new Projetos();
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
-
+        
         $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
         $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, 5);
         $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, 5);
         $this->view->planilha = $planilha;
         $this->view->tipoPlanilha = 5;
     }
-
+    
     public function remanejamentoMenorFinalizarAction()
-    {
+    {   
         //REMANEJAMENTO MENOR OU IGUAL A 20%
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
 
         //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA ATIVA
@@ -2341,16 +2324,16 @@ class VerProjetosController extends GenericControllerNew {
         if($PlanilhaAtivaGrupoD->Total != $PlanilhaRemanejadaGrupoD->Total){
             $erros++;
         }
-
+        
         $id = Seguranca::encrypt($idPronac);
         if($erros > 0){
-            parent::message("<b>A T E N Ç Ã O !!!</b> Somente poderá finalizar a operação de remanejamento se os valores dos grupos A, B, C e D forem iguais a R$0,00 (zero real)!", "consultardadosprojeto/remanejamento-menor?idPronac=$id", "ERROR");
+            parent::message("<b>A T E N Ç Ã O !!!</b> Somente poderá finalizar a operação de remanejamento se os valores dos grupos A, B, C e D forem iguais a R$0,00 (zero real)!", "verprojetos/remanejamento-menor?idPronac=$id", "ERROR");
         } else {
-
+            
             $auth = Zend_Auth::getInstance(); // pega a autenticação
             $tblAgente = new Agentes();
             $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
-
+                
             $tbReadequacao = new tbReadequacao();
             $dadosReadequacao = array();
             $dadosReadequacao['idPronac'] = $idPronac;
@@ -2362,7 +2345,7 @@ class VerProjetosController extends GenericControllerNew {
             $dadosReadequacao['siEncaminhamento'] = 11;
             $dadosReadequacao['stEstado'] = 0;
             $idReadequacao = $tbReadequacao->inserir($dadosReadequacao);
-
+            
             /*if($idReadequacao > 0){
                 $tbReadequacaoXtbTipoReadequacao = new tbReadequacaoXtbTipoReadequacao();
                 $dadosReadequacaoTipo = array();
@@ -2384,13 +2367,13 @@ class VerProjetosController extends GenericControllerNew {
                 $d2 = array('stAtivo' => 'N');
                 $w2 = array('IdPRONAC = ?' => $idPronac, 'tpPlanilha != ?' => 'RP', 'stAtivo = ?' => 'S');
                 $tbPlanilhaAprovacao->update($d2, $w2);
-                parent::message("O remanejamento foi finalizado com sucesso!", "consultardadosprojeto?idPronac=$id", "CONFIRM");
+                parent::message("O remanejamento foi finalizado com sucesso!", "verprojetos?idPronac=$id", "CONFIRM");
             } else {
-                parent::message("Ocorreu um erro durante o cadastro do remanejamento!", "consultardadosprojeto?idPronac=$id", "ERROR");
+                parent::message("Ocorreu um erro durante o cadastro do remanejamento!", "verprojetos?idPronac=$id", "ERROR");
             }
-        }
+        }  
     }
-
+    
     public function carregarValorPorGrupoRemanejamentoAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
@@ -2398,52 +2381,52 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         try {
-
+            
             $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
+        
             //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA ATIVA
             $where = array();
             $where['a.IdPRONAC = ?'] = $idPronac;
             $where['a.stAtivo = ?'] = 'S';
-
+            
             //PLANILHA ATIVA - GRUPO A
             $where['a.idEtapa in (?)'] = array(1,2);
             $PlanilhaAtivaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
             //PLANILHA ATIVA - GRUPO B
             $where['a.idEtapa in (?)'] = array(3);
             $PlanilhaAtivaGrupoB = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
             //PLANILHA ATIVA - GRUPO C
             $where['a.idEtapa in (?)'] = array(4);
             $PlanilhaAtivaGrupoC = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
             //PLANILHA ATIVA - GRUPO D
             $where['a.idEtapa in (?)'] = array(5);
             $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
-
+            
             //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA REMANEJADA
             $where = array();
             $where['a.IdPRONAC = ?'] = $idPronac;
             $where['a.tpPlanilha = ?'] = 'RP';
             $where['a.stAtivo = ?'] = 'N';
             $PlanilhaRemanejada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+            
             //PLANILHA ATIVA - GRUPO A
             $where['a.idEtapa in (?)'] = array(1,2);
             $PlanilhaRemanejadaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
             //PLANILHA ATIVA - GRUPO B
             $where['a.idEtapa in (?)'] = array(3);
             $PlanilhaRemanejadaGrupoB = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
             //PLANILHA ATIVA - GRUPO C
             $where['a.idEtapa in (?)'] = array(4);
             $PlanilhaRemanejadaGrupoC = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
             //PLANILHA ATIVA - GRUPO D
             $where['a.idEtapa in (?)'] = array(5);
             $PlanilhaRemanejadaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
@@ -2453,12 +2436,12 @@ class VerProjetosController extends GenericControllerNew {
             $valorTotalGrupoB = 0;
             $valorTotalGrupoC = 0;
             $valorTotalGrupoD = 0;
-
+            
             $valorTotalGrupoA = $PlanilhaAtivaGrupoA->Total-$PlanilhaRemanejadaGrupoA->Total;
             $valorTotalGrupoB = $PlanilhaAtivaGrupoB->Total-$PlanilhaRemanejadaGrupoB->Total;
             $valorTotalGrupoC = $PlanilhaAtivaGrupoC->Total-$PlanilhaRemanejadaGrupoC->Total;
             $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
-
+            
             $dadosPlanilha = array();
             if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="black bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
@@ -2467,7 +2450,7 @@ class VerProjetosController extends GenericControllerNew {
             } else {
                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
             }
-
+            
             if($PlanilhaAtivaGrupoB->Total == $PlanilhaRemanejadaGrupoB->Total){
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="black bold">R$ '.number_format($valorTotalGrupoB, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoB->Total < $PlanilhaRemanejadaGrupoB->Total){
@@ -2475,7 +2458,7 @@ class VerProjetosController extends GenericControllerNew {
             } else {
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoB, 2, ',', '.')).'</span>';
             }
-
+            
             if($PlanilhaAtivaGrupoC->Total == $PlanilhaRemanejadaGrupoC->Total){
                 $dadosPlanilha['GrupoC'] = utf8_encode('<span class="black bold">R$ '.number_format($valorTotalGrupoC, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoC->Total < $PlanilhaRemanejadaGrupoC->Total){
@@ -2483,7 +2466,7 @@ class VerProjetosController extends GenericControllerNew {
             } else {
                 $dadosPlanilha['GrupoC'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoC, 2, ',', '.')).'</span>';
             }
-
+            
             if($PlanilhaAtivaGrupoD->Total == $PlanilhaRemanejadaGrupoD->Total){
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="black bold">R$ '.number_format($valorTotalGrupoD, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoD->Total < $PlanilhaRemanejadaGrupoD->Total){
@@ -2491,7 +2474,7 @@ class VerProjetosController extends GenericControllerNew {
             } else {
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoD, 2, ',', '.')).'</span>';
             }
-
+            
             if(empty($PlanilhaRemanejada->Total) || $PlanilhaRemanejada->Total == 0){
                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="black bold">R$ '.number_format(0, 2, ',', '.')).'</span>';
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="black bold">R$ '.number_format(0, 2, ',', '.')).'</span>';
@@ -2499,13 +2482,13 @@ class VerProjetosController extends GenericControllerNew {
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="black bold">R$ '.number_format(0, 2, ',', '.')).'</span>';
             }
             echo json_encode(array('resposta'=>true, 'dadosPlanilha'=>$dadosPlanilha));
-
+        
         } catch (Zend_Exception $e) {
             echo json_encode(array('resposta'=>false));
         }
         die();
     }
-
+    
     public function carregarValorEntrePlanilhasAction() {
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
@@ -2514,16 +2497,16 @@ class VerProjetosController extends GenericControllerNew {
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
+        
         //BUSCAR VALOR TOTAL DA PLANILHA ATIVA
         $where = array();
         $where['a.IdPRONAC = ?'] = $idPronac;
         $where['a.stAtivo = ?'] = 'S';
         $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
         //x($PlanilhaAtiva->Total);
-
+                
         //BUSCAR VALOR TOTAL DA PLANILHA DE REMANEJADA
         $where = array();
         $where['a.IdPRONAC = ?'] = $idPronac;
@@ -2531,7 +2514,7 @@ class VerProjetosController extends GenericControllerNew {
         $where['a.stAtivo = ?'] = 'N';
         $where['a.tpAcao != ?'] = 'E';
         $PlanilhaRemanejada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
         if($PlanilhaRemanejada->Total > 0){
             if($PlanilhaAtiva->Total == $PlanilhaRemanejada->Total){
                 $statusPlanilha = 'neutro';
@@ -2545,33 +2528,33 @@ class VerProjetosController extends GenericControllerNew {
             $PlanilhaRemanejada->Total = 0;
             $statusPlanilha = 'neutro';
         }
-
+        
         $this->montaTela(
-            'consultardadosprojeto/carregar-valor-entre-planilhas.phtml', array(
+            'verprojetos/carregar-valor-entre-planilhas.phtml', array(
             'statusPlanilha' => $statusPlanilha,
             'vlDiferencaPlanilhas' => 'R$ '.number_format(($PlanilhaAtiva->Total-$PlanilhaRemanejada->Total), 2, ',', '.')
             )
         );
     }
-
+    
     public function remanejamentoReintegrarItemAction() {
         $this->_helper->layout->disableLayout();
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
+        
         $auth = Zend_Auth::getInstance(); // pega a autenticação
         $tblAgente = new Agentes();
         $rsAgente = $tblAgente->buscar(array('CNPJCPF = ?'=>$auth->getIdentity()->Cpf));
         if($rsAgente->count() > 0){
              $idAgente = $rsAgente[0]->idAgente;
         }
-
+        
         /* DADOS DO ITEM ATIVO */
         $where = array();
         $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
         $where['stAtivo = ?'] = 'S';
         $planilhaAtiva = $tbPlanilhaAprovacao->buscar($where)->current();
-
+        
         try {
             /* DADOS DO ITEM PARA EDICAO DO REMANEJAMENTO */
             $where = array();
@@ -2584,23 +2567,23 @@ class VerProjetosController extends GenericControllerNew {
             $item->vlUnitario = $planilhaAtiva->vlUnitario;
             $item->dsJustificativa = null;
             $item->idAgente = $idAgente;
-
+            
             $dadosPlanilhaEditavel = array();
             $dadosPlanilhaEditavel['Quantidade'] = $planilhaAtiva->qtItem;
             $dadosPlanilhaEditavel['Ocorrencia'] = $planilhaAtiva->nrOcorrencia;
             $dadosPlanilhaEditavel['ValorUnitario'] = utf8_encode('R$ '.number_format($planilhaAtiva->vlUnitario, 2, ',', '.'));
             $dadosPlanilhaEditavel['TotalSolicitado'] = utf8_encode('R$ '.number_format(($planilhaAtiva->qtItem*$planilhaAtiva->nrOcorrencia*$planilhaAtiva->vlUnitario), 2, ',', '.'));
             $dadosPlanilhaEditavel['Justificativa'] = '';
-
+                    
             $x = $item->save();
             echo json_encode(array('resposta'=>true, 'dadosPlanilhaEditavel'=>$dadosPlanilhaEditavel));
-
+        
         } catch (Zend_Exception $e) {
             echo json_encode(array('resposta'=>false));
         }
         die();
     }
-
+    
     public function remanejamentoReintegrarPlanilhaAction() {
         $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("id");
@@ -2608,7 +2591,7 @@ class VerProjetosController extends GenericControllerNew {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
+        
         try {
             $del = $tbPlanilhaAprovacao->delete(array('IdPRONAC = ?'=>$idPronac, 'tpPlanilha = ?'=>'RP', 'stAtivo = ?'=>'N'));
             if($del > 0){
@@ -2649,31 +2632,31 @@ class VerProjetosController extends GenericControllerNew {
                 $msg = utf8_encode('A planilha já foi reintegrada.');
                 echo json_encode(array('resposta'=>false, 'msg'=>$msg));
             }
-
+        
         } catch (Zend_Exception $e) {
             echo json_encode(array('resposta'=>false, 'msg'=>'Ocorreu um erro durante o processo.'));
         }
         die();
     }
-
+    
     public function remanejamentoAlterarItemAction() {
         $this->_helper->layout->disableLayout();
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
+        
         /* DADOS DO ITEM ATIVO */
         $where = array();
         $where['idPlanilhaAprovacao = ? or idPlanilhaAprovacaoPai = ?'] = $idPlanilhaAprovacao;
         $where['stAtivo = ?'] = 'S';
         $planilhaAtiva = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
-
+        
         /* DADOS DO ITEM PARA EDICAO DO REMANEJAMENTO */
         $where = array();
         $where['idPlanilhaAprovacaoPai = ?'] = $idPlanilhaAprovacao;
         $where['tpPlanilha = ?'] = 'RP';
         $where['stAtivo = ?'] = 'N';
         $planilhaEditaval = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
-
+        
         $dadosPlanilhaAtiva = array();
         $dadosPlanilhaEditavel = array();
         if(count($planilhaAtiva) > 0){
@@ -2685,7 +2668,7 @@ class VerProjetosController extends GenericControllerNew {
                 'PRONAC' => $projeto->AnoProjeto.$projeto->Sequencial,
                 'NomeProjeto' => utf8_encode($projeto->NomeProjeto)
             );
-
+            
             foreach ($planilhaAtiva as $registro) {
                 //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
                 $vlAtual = @number_format(($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']), 2, '', '');
@@ -2717,7 +2700,7 @@ class VerProjetosController extends GenericControllerNew {
                 $dadosPlanilhaAtiva['ValorMaximoProItemValidacao'] = utf8_encode(number_format(($vlAtualMax), 2, '', ''));
                 $dadosPlanilhaAtiva['Justificativa'] = utf8_encode($registro['Justificativa']);
             }
-
+            
             if(count($planilhaEditaval) > 0){
                 foreach ($planilhaEditaval as $registroEditavel) {
                     $dadosPlanilhaEditavel['idPlanilhaAprovacao'] = $registroEditavel['idPlanilhaAprovacao'];
@@ -2740,14 +2723,14 @@ class VerProjetosController extends GenericControllerNew {
             } else {
                 $dadosPlanilhaEditavel = $dadosPlanilhaAtiva;
             }
-
+            
             $tbCompPagxPlanAprov = new tbComprovantePagamentoxPlanilhaAprovacao();
             $res = $tbCompPagxPlanAprov->buscarValorComprovadoDoItem($idPlanilhaAprovacao);
             $valoresDoItem = array(
                 'vlComprovadoDoItem' => utf8_encode('R$ '.number_format($res->vlComprovado, 2, ',', '.')),
                 'vlComprovadoDoItemValidacao' => utf8_encode(number_format($res->vlComprovado, 2, '', ''))
             );
-
+            
             //$jsonEncode = json_encode($dadosPlanilha);
             echo json_encode(array('resposta'=>true, 'dadosPlanilhaAtiva'=>$dadosPlanilhaAtiva, 'dadosPlanilhaEditavel'=>$dadosPlanilhaEditavel, 'valoresDoItem'=>$valoresDoItem, 'dadosProjeto'=>$dadosProjeto));
 
@@ -2756,12 +2739,12 @@ class VerProjetosController extends GenericControllerNew {
         }
         die();
     }
-
+    
     public function salvarAvaliacaoDoItemRemanejamentoAction() {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
         $auth = Zend_Auth::getInstance(); // pega a autenticação
-
+        
         $tblAgente = new Agentes();
         $rsAgente = $tblAgente->buscar(array('CNPJCPF = ?'=>$auth->getIdentity()->Cpf));
         if($rsAgente->count() > 0){
@@ -2771,15 +2754,15 @@ class VerProjetosController extends GenericControllerNew {
         $ValorUnitario = str_replace('.', '', $_POST['ValorUnitario']);
         $ValorUnitario = str_replace(',', '.', $ValorUnitario);
         $vlTotal = @number_format(($_POST['Quantidade']*$_POST['Ocorrencia']*$ValorUnitario), 2, '', '');
-
+        
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $verificarPlanilhaRP = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP'));
-
+        
         if(count($verificarPlanilhaRP)==0){
             $planilhaAtiva = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'StAtivo=?'=>'S'));
             $planilhaRP = array();
@@ -2814,22 +2797,22 @@ class VerProjetosController extends GenericControllerNew {
                 $tbPlanilhaAprovacao->inserir($planilhaRP);
             }
         }
-
+        
         //BUSCA OS DADOS DO ITEM ORIGINAL PARA VALIDAÇÃO DE VALORES
         $valoresItem = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'StAtivo=?'=>'S', 'idPlanilhaAprovacao=?'=>$_POST['idPlanilha']))->current();
         $vlAtual = @number_format(($valoresItem['qtItem']*$valoresItem['nrOcorrencia']*$valoresItem['vlUnitario']), 2, '', '');
         $vlAtualPerc = $vlAtual*20/100;
-
+        
         //VALOR MÍNIMO E MÁXIMO DO ITEM ORIGINAL
         $vlAtualMin = $vlAtual-$vlAtualPerc;
         $vlAtualMax = $vlAtual+$vlAtualPerc;
-
+        
         //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE ESTÁ ENTRE O MÍNIMO E MÁXIMO PERMITIDO - 20%
         if($vlTotal < $vlAtualMin || $vlTotal > $vlAtualMax){
             echo json_encode(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de 20%.'));
             die;
         }
-
+        
         $editarItem = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP', 'idPlanilhaAprovacaoPai=?'=>$_POST['idPlanilha']))->current();
         $editarItem->qtItem = $_POST['Quantidade'];
         $editarItem->nrOcorrencia = $_POST['Ocorrencia'];
@@ -2838,7 +2821,7 @@ class VerProjetosController extends GenericControllerNew {
         $editarItem->idAgente = $idAgente;
 //        $editarItem->idAgente = $auth->getIdentity()->IdUsuario;
         $editarItem->save();
-
+        
         echo json_encode(array('resposta'=>true, 'msg'=>'Dados salvos com sucesso!'));
         die();
     }
@@ -2898,7 +2881,7 @@ class VerProjetosController extends GenericControllerNew {
                     $this->view->tipoInabilitacao = $rsTipoInabilitado->dsTipoInabilitado;
                 }
             }
-
+            
         }
     }
 
@@ -2963,7 +2946,7 @@ class VerProjetosController extends GenericControllerNew {
                     $this->view->outrasfontes     = $outrasfontes['soma'];
                     $this->view->valorproposta    = $fonteincentivo['soma'] + $outrasfontes['soma'];
                 }*/
-
+                
                 //TRATANDO SOMA DE PROJETO QUANDO ESTE FOR DE READEQUACAO
                 $arrWhereSomaPlanilha = array();
                 $arrWhereSomaPlanilha['idPronac = ?']=$idPronac;
@@ -3006,10 +2989,10 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->outrasfontes     = $outrasfontes['soma'];
                 $this->view->valorproposta    = $fonteincentivo['soma'] + $outrasfontes['soma'];
                 $this->view->valorparecerista = $parecerista['soma'];
-
+        
                 $tbEnquadramento    = new Enquadramento();
                 $verificaEnquadramento = $tbEnquadramento->buscarDados($idPronac, null, false);
-
+                
                 if(is_object($verificaEnquadramento) && count($verificaEnquadramento) > 0 ){
                     if ($verificaEnquadramento->Enquadramento == '2') {
                         $this->view->enquadramento = 'Artigo 18';
@@ -3031,16 +3014,16 @@ class VerProjetosController extends GenericControllerNew {
                 if(is_object($analiseparecer)){
                     $this->view->resultAnaliseProjetoCNIC = $analiseparecer->toArray();
                 }
-
+                
                 $projeto = new Projetos();
                 $buscarPronac = $projeto->buscar(array('IdPRONAC = ?'=>$idPronac))->current()->toArray();
                 $idprojeto = !empty($buscarPronac['idProjeto']) ? $buscarPronac['idProjeto'] : 0;
-
+                
                 $tpPlanilha = 'CO';
                 $analiseaprovacao = new AnaliseAprovacao();
                 $produtos = $analiseaprovacao->buscarAnaliseProduto($tpPlanilha, $idPronac);
                 $this->view->resultAnaliseProduto = $produtos;
-
+                
                 $planilhaAprovacao = new PlanilhaAprovacao();
                 $rsPlanilhaAtual = $planilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idPronac, 'stAtivo = ?'=>'S'), array('dtPlanilha DESC'))->current();
                 $status = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'N' : 'S';
@@ -3095,9 +3078,9 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->outrasfontes    = $outrasfontes['soma'];
                 $this->view->valorproposta   = $fonteincentivo['soma'] + $outrasfontes['soma'];
                 $this->view->valorcomponente = $valorplanilha['soma'];
-
+                
                 $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idPronac,$tpPlanilha);
-
+                
                 if(count($verificaEnquadramento) > 0 ){
                     if ($verificaEnquadramento[0]->stArtigo18 == true) {
                         $this->view->enquadramento = 'Artigo 18';
@@ -3180,7 +3163,7 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->outrasfontes    = $outrasfontes['soma'];
                 $this->view->valorproposta   = $fonteincentivo['soma'] + $outrasfontes['soma'];
                 $this->view->valorcomponente = $valorplanilha['soma'];
-
+                
                 $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idPronac,$tpPlanilha);
 
                 if(count($verificaEnquadramento) > 0 ){
@@ -3196,7 +3179,7 @@ class VerProjetosController extends GenericControllerNew {
                         $this->view->enquadramento = 'Não Enquadrado';
                 }
             }
-
+            
         }
     }
 
@@ -3230,7 +3213,7 @@ class VerProjetosController extends GenericControllerNew {
             }
         }
     }
-
+    
     public function analiseDeCustoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -3299,7 +3282,7 @@ class VerProjetosController extends GenericControllerNew {
 
                     }
                 }else{
-
+                    
                     $tblPlanilhaAprovacao = new PlanilhaAprovacao();
                     $tblPlanilhaAprovacao = new PlanilhaAprovacao();
                     $tblPlanilhaProposta = new PlanilhaProposta();
@@ -3309,7 +3292,7 @@ class VerProjetosController extends GenericControllerNew {
                     $arrBuscaPlanilha = array();
                     $arrBuscaPlanilha["pap.stAtivo = ? "] = 'N';
                     $arrBuscaPlanilha["pap.idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')"] = '(?)';
-
+            
                     /******** Planilha aprovacao PA (Parecerista) ****************/
                     $resuplanilha = null; $count = 0;
                     $buscarplanilhaPA = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idPronac, 'PA', $arrBuscaPlanilha);
@@ -3326,7 +3309,7 @@ class VerProjetosController extends GenericControllerNew {
                             $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['justificativaparecerista'] = $resuplanilha->dsJustificativa;
                         $count++;
                     }
-
+                    
                     $resuplanilha = null; $count = 0;
                     $buscarplanilhaSR = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idPronac, 'SR', $arrBuscaPlanilha);
                     //xd($buscarplanilhaSR);
@@ -3362,7 +3345,7 @@ class VerProjetosController extends GenericControllerNew {
                      $buscarsomaproposta = $tblPlanilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
                      $arrWhereSomaPlanilha['tpPlanilha = ? ']='PA';
                      $buscarsomaprojeto = $tblPlanilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
-
+                     
                      $buscarPlanilhaUnidade = PlanilhaUnidadeDAO::buscar();
                      $this->view->planilhaUnidade = $buscarPlanilhaUnidade;
                      $this->view->planilha = $planilhaaprovacao;
@@ -3370,7 +3353,7 @@ class VerProjetosController extends GenericControllerNew {
                      $this->view->totalparecerista = $buscarsomaprojeto['soma'];
                      $this->view->totalproponente = $buscarsomaproposta['soma'];
                 }
-                $this->montaTela("/consultardadosprojeto/analise-de-custo-parecerista.phtml", array());
+                $this->montaTela("/verprojetos/analise-de-custo-parecerista.phtml", array());
             }
             //CNIC
             if($tipoAnalise == "cnic")
@@ -3379,7 +3362,7 @@ class VerProjetosController extends GenericControllerNew {
                 $tblPlanilhaProjeto = new PlanilhaProjeto();
                 $tblPlanilhaAprovacao = new PlanilhaAprovacao();
                 $tblProjetos = new Projetos();
-
+                
                 $rsPlanilhaAtual = $tblPlanilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idPronac, 'stAtivo = ?'=>'S'), array('dtPlanilha DESC'))->current();
                 $status = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'N' : 'S';
 
@@ -3387,7 +3370,7 @@ class VerProjetosController extends GenericControllerNew {
                 if($this->bln_readequacao == "false")
                 {
                     $buscarplanilha = $tblPlanilhaAprovacao->buscarAnaliseCustos($idPronac, $tipoplanilha);
-
+                    
                     $planilhaaprovacao = array();
                     $count = 0;
                     $fonterecurso = null;
@@ -3462,7 +3445,7 @@ class VerProjetosController extends GenericControllerNew {
                     $arrBuscaPlanilha = array();
                     $arrBuscaPlanilha["pap.stAtivo = ? "] = 'N';
                     $arrBuscaPlanilha["pap.idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')"] = '(?)';
-
+            
                     $resuplanilha = null; $count = 0;
                     $buscarplanilhaSR = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idPronac, 'SR', $arrBuscaPlanilha);
                     //xd($buscarplanilhaSR);
@@ -3534,7 +3517,7 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->totalparecerista = $buscarsomaprojeto['soma'];
                 $this->view->totalproponente = $buscarsomaproposta['soma'];
 
-                $this->montaTela("/consultardadosprojeto/analise-de-custo-cnic.phtml", array());
+                $this->montaTela("/verprojetos/analise-de-custo-cnic.phtml", array());
             }
             //PLENARIA
             /*if($tipoAnalise == "plenaria_OLD")
@@ -3585,7 +3568,7 @@ class VerProjetosController extends GenericControllerNew {
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['reducao'] = $resuplanilha->VlSugeridoConselheiro < $resuplanilha->VlSolicitado ? 1 : 0;
                     $count++;
                 }
-
+                
                 $buscarprojeto = $pr->buscar(array('IdPRONAC = ?' => $idPronac))->current();
                 $buscarsomaaprovacao = $pa->somarPlanilhaAprovacao($idPronac, 206, $tipoplanilha);
                 if(isset($buscarprojeto->idProjeto) && !empty($buscarprojeto->idProjeto)){
@@ -3611,7 +3594,7 @@ class VerProjetosController extends GenericControllerNew {
                 $tblPlanilhaProjeto = new PlanilhaProjeto();
                 $tblPlanilhaAprovacao = new PlanilhaAprovacao();
                 $tblProjetos = new Projetos();
-
+                
                 $tipoplanilha = 'SE';
 
                 if($this->bln_readequacao == "false")
@@ -3691,7 +3674,7 @@ class VerProjetosController extends GenericControllerNew {
                     $arrBuscaPlanilha = array();
                     $arrBuscaPlanilha["pap.stAtivo = ? "] = 'N';
                     $arrBuscaPlanilha["pap.idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')"] = '(?)';
-
+            
                     $resuplanilha = null; $count = 0;
                     $buscarplanilhaSR = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idPronac, 'SR', $arrBuscaPlanilha);
                     //xd($buscarplanilhaSR);
@@ -3762,7 +3745,7 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->totalparecerista = $buscarsomaprojeto['soma'];
                 $this->view->totalproponente = $buscarsomaproposta['soma'];
 
-                $this->montaTela("/consultardadosprojeto/analise-de-custo-plenaria.phtml", array());
+                $this->montaTela("/verprojetos/analise-de-custo-plenaria.phtml", array());
             }
         }
     }
@@ -3829,7 +3812,7 @@ class VerProjetosController extends GenericControllerNew {
             } else {
                 $projetoDao = new Projetos();
                 $this->view->infoProjeto = $projetoDao->projetosFiscalizacaoConsultar(array('Projetos.IdPRONAC = ?' => $idPronac, 'tbFiscalizacao.idFiscalizacao = ?' => $idFiscalizacao), array('tbFiscalizacao.dtInicioFiscalizacaoProjeto ASC', 'tbFiscalizacao.dtFimFiscalizacaoProjeto ASC'));
-
+                
                 $OrgaoFiscalizadorDao = new OrgaoFiscalizador();
                 if ($idFiscalizacao) {
                     $this->view->dadosOrgaos = $OrgaoFiscalizadorDao->dadosOrgaos(array('tbOF.idFiscalizacao = ?' => $idFiscalizacao));
@@ -3841,14 +3824,14 @@ class VerProjetosController extends GenericControllerNew {
                 $RelatorioFiscalizacaoDAO = new RelatorioFiscalizacao();
                 $this->view->relatorioFiscalizacao = $RelatorioFiscalizacaoDAO->buscaRelatorioFiscalizacao($idFiscalizacao);
 
-                $this->montaTela("/consultardadosprojeto/detalhes-dados-da-fiscalizacao.phtml", array());
+                $this->montaTela("/verprojetos/detalhes-dados-da-fiscalizacao.phtml", array());
                 return;
             }
         }
     }
 
     public function diligenciasAction(){
-
+        
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
@@ -3877,13 +3860,13 @@ class VerProjetosController extends GenericControllerNew {
 		}
         $idDiligencia = $this->_request->getParam("idDiligencia");
         $idDiligenciaPreProjeto = $this->_request->getParam("idDiligenciaPreProjeto");
-
+        
         if(!empty($idPronac) && !empty($idDiligencia))
         {
             $Projetosdao        = new Projetos();
             $PreProjetodao      = new PreProjeto();
             $DocumentosExigidosDao  = new DocumentosExigidos();
-
+            
             if (!empty($idDiligencia) && empty($idDiligenciaPreProjeto)) {
                 $resp = $Projetosdao->listarDiligencias(array('pro.IdPRONAC = ?' => $this->view->idPronac, 'dil.idDiligencia = ?' => $idDiligencia));
                 $this->view->nmCodigo       = 'PRONAC';
@@ -3904,7 +3887,7 @@ class VerProjetosController extends GenericControllerNew {
                     $this->view->Descricao  = $resp[0]->Descricao;
 
             }//fecha if Diligencia PreProjeto
-
+              
             $this->view->stEnviado      = $resp[0]->stEnviado;
             $this->view->pronac         = $resp[0]->pronac;
             $this->view->nomeProjeto    = $resp[0]->nomeProjeto;
@@ -3920,7 +3903,7 @@ class VerProjetosController extends GenericControllerNew {
                 $this->view->Opcao              = $documento[0]->Opcao;
             }
         }
-
+        
         $arquivo = new Arquivo();
         $arquivos = $arquivo->buscarAnexosDiligencias($idDiligencia);
         $this->view->arquivos = $arquivos;
@@ -3935,10 +3918,10 @@ class VerProjetosController extends GenericControllerNew {
 		}
         $arrConteudoImpressao = $this->_request->getParam("conteudoImpressao");
         $this->view->arrConteudoImpressao = $arrConteudoImpressao;
-
+        
         //VERIFICA FASE DO PROJETO
         $this->faseDoProjeto($idPronac);
-
+        
         if(!empty($idPronac))
         {
             //DADOS PRINCIPAIS
@@ -4000,20 +3983,20 @@ class VerProjetosController extends GenericControllerNew {
                             $this->view->proposta = $rsProposta;
                         }
                     }
-
+                 
                     //PLANO DE DISTRIBUICAO
                     if(in_array('planodistribuicao',$arrConteudoImpressao))
                     {
                         $buscarDistribuicao = RealizarAnaliseProjetoDAO::planodedistribuicao($idPronac);
                         $this->view->distribuicao = $buscarDistribuicao;
                     }
-
+                    
                     //LOCAL DE REALIZACAO e DESLOCAMENTO
                     if(in_array('localrealizacao_deslocamento',$arrConteudoImpressao))
                     {
                         $buscarLocalRealizacao = RealizarAnaliseProjetoDAO::localrealizacao($idPronac);
                         $this->view->dadosLocalizacao = $buscarLocalRealizacao;
-
+                    
                         //DESLOCAMENTO
                         $buscarDeslocamento = RealizarAnaliseProjetoDAO::deslocamento($idPronac);
                         $this->view->dadosDeslocamento = $buscarDeslocamento;
@@ -4025,7 +4008,7 @@ class VerProjetosController extends GenericControllerNew {
                         $buscarDivulgacao = RealizarAnaliseProjetoDAO::divulgacao($idPronac);
                         $this->view->divulgacao = $buscarDivulgacao;
                     }
-
+                    
                     $tblProjetos = new Projetos();
 
                     //PLANILHA ORCAMENTARIA
@@ -4041,7 +4024,7 @@ class VerProjetosController extends GenericControllerNew {
                             } else {
                                 $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($rsProjeto->IdPRONAC, 2);
                                 $tipoPlanilha = 2;
-
+                                
                                 if(count($planilhaOrcamentaria)>0){
                                     $tipoPlanilha = 2;
                                 } else {
@@ -4054,7 +4037,7 @@ class VerProjetosController extends GenericControllerNew {
                             $this->view->planilha = $planilha;
                         }
                     }
-
+                    
                    //DOCUMENTOS ANEXADOS
                    $idAgente = null;
                    if(in_array('documentosanexados',$arrConteudoImpressao))
@@ -4074,7 +4057,7 @@ class VerProjetosController extends GenericControllerNew {
                             $this->view->registrosDocAnexados = $rsDocs;
                         }
                    }
-
+                   
                     //DILIGENCIAS
                     $tblPreProjeto = new PreProjeto();
                     if(in_array('diligencias',$arrConteudoImpressao))
@@ -4109,7 +4092,7 @@ class VerProjetosController extends GenericControllerNew {
                         $tbConsolidacaoVotacao = new tbConsolidacaoVotacao();
                         $this->view->consolidacaoPlenaria = $tbConsolidacaoVotacao->consolidacaoPlenaria($idPronac);
                     }
-
+                    
                     //TRAMITACAO DE PROJETO e TRAMITACAO DE DOCUMENTOS
                     if(in_array('tramitacao',$arrConteudoImpressao))
                     {
@@ -4129,7 +4112,7 @@ class VerProjetosController extends GenericControllerNew {
                         $rsHistDoc = $tblHistDoc->buscarHistoricoTramitacaoDocumento($arrBusca, $ordem);
                         $this->view->registrosHisTramDoc = $rsHistDoc;
                     }
-
+                    
                     $tblProjeto = new Projetos();
 
                     //PROVIDENCIA TOMADA
@@ -4207,7 +4190,7 @@ class VerProjetosController extends GenericControllerNew {
                             $this->view->recursos         = $buscarRecursos;
                             $this->view->recursosPlanilha = $buscarRecursosPlanilha;
                         }
-
+                        
                         //APROVACAO
                         if(in_array('aprovacao',$arrConteudoImpressao))
                         {
@@ -4218,7 +4201,7 @@ class VerProjetosController extends GenericControllerNew {
                             $rsAprovacao = $tblAprovacao->buscaCompleta(array('a.AnoProjeto + a.Sequencial = ?'=>$pronac),array('a.idAprovacao ASC'));
                             $this->view->dadosAprovacao = $rsAprovacao;
                         }
-
+                        
                         // =================================== ANALISE DO PROJETO =====================================
                         if(in_array('analiseprojeto',$arrConteudoImpressao))
                         {
@@ -4547,7 +4530,7 @@ class VerProjetosController extends GenericControllerNew {
                             $this->view->planilhaPlenaria = $planilhaaprovacao;
                             $this->view->totalcomponentePlenaria = $buscarsomaaprovacao['soma'];
                             $this->view->totalpareceristaPlenaria = $buscarsomaprojeto['soma'];
-
+                            
                         }//feccha if(in_array('analiseprojeto',$arrConteudoImpressao))
 
                         // === DADOS BANCARIOS e CAPTACAO
@@ -4560,7 +4543,7 @@ class VerProjetosController extends GenericControllerNew {
                             $tbLiberacao =   new Liberacao();
                             $rsLiberacao   =   $tbLiberacao->liberacaoPorProjeto($idPronac);
                             $this->view->dadosLiberacao = $rsLiberacao;
-
+                        
                             // === CAPTACAO
                             $tblCaptacao = new Captacao();
                             $rsCount = $tblCaptacao->buscaCompleta(array('idPronac = ?'=>$idPronac), array(), null, null, true);
@@ -4639,7 +4622,7 @@ class VerProjetosController extends GenericControllerNew {
                             $result_lib = $tbRelatorio->dadosRelatorioLiberacao($idPronac)->current();
                             $this->view->RelatorioLiberacao = $result_lib;
                         }
-
+                        
                         // === DADOS DA FISCALIZACAO
                         if(in_array('dadosfiscalizacao',$arrConteudoImpressao))
                         {
@@ -4680,7 +4663,7 @@ class VerProjetosController extends GenericControllerNew {
                     // ----------------------------------------------------------------------
                     // ---------------------- FASE 4 - PROJETO ENCERRADO  -------------------
                     // ----------------------------------------------------------------------
-                    if($this->intFaseProjeto == '4')
+                    if($this->intFaseProjeto == '4') 
                     {
                         //RELTORIO FINAL
                         if(in_array('relatoriofinal',$arrConteudoImpressao))
@@ -4762,7 +4745,7 @@ class VerProjetosController extends GenericControllerNew {
                                 $this->view->RelatorioConsolidado = $rsRel->current();
                             }
                         }
-
+                        
                         //PRESTACAO DE CONTAS
                         if(in_array('pretacaocontas',$arrConteudoImpressao))
                         {
@@ -4809,8 +4792,8 @@ class VerProjetosController extends GenericControllerNew {
                             }
                         }
                     } //FASE 4
-
-
+                        
+                      
                 }
 
             } catch (Zend_Exception $e) {
@@ -5653,6 +5636,50 @@ class VerProjetosController extends GenericControllerNew {
         $this->view->pronac = $pronac;
     }
 
+ public function abrirAction() {
+        // recebe o id do arquivo via get
+        $get = Zend_Registry::get('get');
+        $id = (int) isset($get->id) ? $get->id : $this->_request->getParam('id');
+
+        // Configuração o php.ini para 10MB
+        @ini_set("mssql.textsize", 10485760);
+        @ini_set("mssql.textlimit", 10485760);
+        @ini_set("upload_max_filesize", "10M");
+
+        $response = new Zend_Controller_Response_Http;
+
+        // busca o arquivo
+        $resultado = UploadDAO::abrir($id);
+
+        // erro ao abrir o arquivo
+        if (!$resultado) {
+            $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+            $this->_helper->viewRenderer->setNoRender();    // Desabilita o Zend Render
+            die("N&atilde;o existe o arquivo especificado");
+            $this->view->message = 'Não foi possível abrir o arquivo!';
+            $this->view->message_type = 'ERROR';
+        } else {
+            // lê os cabeçalhos formatado
+            foreach ($resultado as $r) {
+                $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+                $this->_helper->viewRenderer->setNoRender();    // Desabilita o Zend Render
+                Zend_Layout::getMvcInstance()->disableLayout(); // Desabilita o Zend MVC
+                $this->_response->clearBody();                  // Limpa o corpo html
+                $this->_response->clearHeaders();               // Limpa os headers do Zend
+
+                $this->getResponse()
+                        ->setHeader('Content-Type', $r->dsTipoPadronizado)
+                        ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
+                        //->setHeader("Connection", "close")
+                        //->setHeader("Content-transfer-encoding", "binary")
+                        //->setHeader("Cache-control", "private")
+                        ->setBody($r->biArquivo);
+            } // fecha foreach
+        } // fecha else
+    }
+
+
+
     public function pedidoProrrogacaoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -5671,7 +5698,7 @@ class VerProjetosController extends GenericControllerNew {
         $DadosProrrogacoes = $prorrogacao->buscarProrrogacoes($idpronac);
         $this->view->DadosProrrogacoes = $DadosProrrogacoes;
     }
-
+    
     function formImprimirProjetoAction()
     {
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
@@ -5707,19 +5734,19 @@ class VerProjetosController extends GenericControllerNew {
             return "";
         }
     }
-
+    
     /**
-     *
+     * 
      */
     public function devolucoesDoIncentivadorAction(){
-
+        
     	$this->view->itemMenu = 'devolucoes-do-incentivador';
-
+    	
         $idPronac = $this->_request->getParam("idPronac");
     	if (strlen($idPronac) > 7) {
     		$idPronac = Seguranca::dencrypt($idPronac);
     	}
-
+    	
     	$Projetos = new Projetos();
     	$this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
     	$this->view->idPronac = $idPronac;
@@ -5731,11 +5758,255 @@ class VerProjetosController extends GenericControllerNew {
     	if ($this->getRequest()->getParam('dtDevolucaoFim')) {
     		$whereData['dtLote <= ?'] = ConverteData($this->getRequest()->getParam('dtDevolucaoFim'), 13);
     	}
-
+        
     	$aporteModel = new tbAporteCaptacao();
     	$this->view->dados = $aporteModel->pesquisarDevolucoesIncentivador($whereData);
     	$this->view->dataDevolucaoInicio = $this->getRequest()->getParam('dtDevolucaoInicio');
     	$this->view->dataDevolucaoFim = $this->getRequest()->getParam('dtDevolucaoFim');
     }
+   
+  public function resultadoProjetoAction(){
 
+        Zend_Layout::startMvc(array('layout' => 'layout_login')); //Desabilita Botões de 'Perfil' e 'Sair'  
+
+        
+        $this->intTamPag = 30;
+        
+        //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
+        if($this->_request->getParam("qtde")) {
+            $this->intTamPag = $this->_request->getParam("qtde");
+        }
+        $order = array();
+
+        //==== parametro de ordenacao  ======//
+        if($this->_request->getParam("ordem")) {
+            $ordem = $this->_request->getParam("ordem");
+            if($ordem == "ASC") {
+                $novaOrdem = "DESC";
+            }else {
+                $novaOrdem = "ASC";
+            }
+        }else {
+            $ordem = "ASC";
+            $novaOrdem = "ASC";
+        }
+
+        //==== campo de ordenacao  ======//
+        if($this->_request->getParam("campo")) {
+            $campo = $this->_request->getParam("campo");
+            $order = array($campo." ".$ordem);
+            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+
+        } else {
+            $campo = null;
+            $order = array(2); //Pronac
+            $ordenacao = null;
+        }
+
+        $pag = 1;
+        $get = Zend_Registry::get('get');
+        if (isset($get->pag)) $pag = $get->pag;
+        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
+
+        $where = array();
+        
+        if((isset($get->pronac) && !empty($get->pronac))){
+            $where['pr.AnoProjeto+pr.Sequencial = ?'] = $get->pronac;
+            $this->view->pronac = $get->pronac;
+        }
+        if((isset($get->cnpfcpf) && !empty($get->cnpfcpf))){
+            $where['pr.CgcCpf = ?'] = retiraMascara($get->cnpfcpf);
+            $this->view->cnpfcpf = $get->cnpfcpf;
+        }
+        if((isset($get->nomeProjeto) && !empty($get->nomeProjeto))){
+            $where['pr.NomeProjeto like (?)'] = "%".$get->nomeProjeto."%";;
+            $this->view->nomeProjeto = $get->nomeProjeto;
+        }
+        if((isset($get->nomeProponente) && !empty($get->nomeProponente))){
+            $where['nm.Descricao like (?)'] = "%".$get->nomeProponente."%";;
+            $this->view->nomeProponente = $get->nomeProponente;
+        }
+        if((isset($get->area) && !empty($get->area))){
+            $where['ar.Codigo = ?'] = $get->area;
+            $this->view->area = $get->area;
+        }
+        if((isset($get->segmento) && !empty($get->segmento))){
+            $where['sg.Codigo = ?'] = $get->segmento;
+            $this->view->segmento = $get->segmento;
+        }
+        if((isset($get->mecanismo) && !empty($get->mecanismo))){
+            $where['pr.Mecanismo = ?'] = $get->mecanismo;
+            $this->view->mecanismo = $get->mecanismo;
+        }
+        if((isset($get->uf) && !empty($get->uf))){
+            $where['uf.CodUfIbge = ?'] = $get->uf;
+            $this->view->uf = $get->uf;
+        }
+        if((isset($get->municipio) && !empty($get->municipio))){
+            $where['u.idMunicipio = ?'] = $get->municipio;
+            $this->view->municipio = $get->municipio;
+        }
+        if((isset($get->situacao) && !empty($get->situacao))){
+            $where['pr.Situacao = ?'] = $get->situacao;
+            $this->view->situacao = $get->situacao;
+        }
+        $where = GenericControllerNew::montaBuscaData($get, "tpDtSituacao", "dtSituacao", "pr.DtSituacao", "dtSituacao_Final", $where);
+        $where = GenericControllerNew::montaBuscaData($get, "tpDtPublicacao", "dtPublicacao", "ap.DtPublicacaoAprovacao", "dtPublicacao_Final", $where);
+        $where = GenericControllerNew::montaBuscaData($get, "tpDtPortaria", "dtPortaria", "ap.DtPortariaAprovacao", "dtPortaria_Final", $where);     
+
+        if((isset($get->dtInicioExec) && isset($get->dtFimExec) && !empty($get->dtInicioExec) && !empty($get->dtFimExec))){
+            $di = data::dataAmericana($get->dtInicioExec);
+            $df = data::dataAmericana($get->dtFimExec);
+            $where["pr.DtInicioExecucao BETWEEN '$di' AND '$df'"] = '';
+            $where["pr.DtFimExecucao BETWEEN '$di' AND '$df'"] = '';
+            $this->view->dtInicioExec = $get->dtInicioExec;
+            $this->view->dtFimExec = $get->dtFimExec;
+        }
+        if((isset($get->propRegular) && !empty($get->propRegular))){
+            $where['inab.Habilitado = ?'] = $get->propRegular;
+            $this->view->propRegular = $get->propRegular;
+        }
+        if((isset($get->planoAnual) && !empty($get->planoAnual))){
+            $where['p.stPlanoAnual = ?'] = $get->planoAnual;
+            $this->view->planoAnual = $get->planoAnual;
+        }
+        if((isset($get->datafixa) && !empty($get->datafixa))){
+            $where['p.stDataFixa = ?'] = $get->datafixa;
+            $this->view->datafixa = $get->datafixa;
+        }
+                
+        $Projetos = New Projetos();
+        $total = $Projetos->relatorioProjeto($where, $order, null, null, true);
+        $fim = $inicio + $this->intTamPag;
+        
+        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
+
+        $busca = $Projetos->relatorioProjeto($where, $order, $tamanho, $inicio);
+        $paginacao = array(
+            "pag"=>$pag,
+            "qtde"=>$this->intTamPag,
+            "campo"=>$campo,
+            "ordem"=>$ordem,
+            "ordenacao"=>$ordenacao,
+            "novaOrdem"=>$novaOrdem,
+            "total"=>$total,
+            "inicio"=>($inicio+1),
+            "fim"=>$fim,
+            "totalPag"=>$totalPag,
+            "Itenspag"=>$this->intTamPag,
+            "tamanho"=>$tamanho
+        );
+        
+        $this->view->paginacao     = $paginacao;
+        $this->view->qtdRegistros  = $total;
+        $this->view->dados         = $busca;
+        $this->view->intTamPag     = $this->intTamPag;
+        
+        //**************//
+//        header("Content-Type: text/html; charset=ISO-8859-1");
+//        $this->_helper->layout->disableLayout();
+//        $post = Zend_Registry::get('post');
+//        
+//        $tbl = new Projetos();
+//        
+//        //recuperando filtros do POST
+//        $arrBusca = array();
+//        //$arrBusca["pr.idProjeto is not null"] = "";
+//        if ($post->fundo != "") {
+//            $arrBusca["p.idEdital <> ?"] = "0";
+//            $tblCD = new tbClassificaDocumento();
+//            $rsCD = $tblCD->fundoSetorialXClassificacao(array("f.stModalidadeDocumento is not null" => "", "cdTipoFundo = ?" => $post->fundo));
+//            $arrClassificaDocumento = array();
+//            foreach($rsCD as $registro){
+//                $arrClassificaDocumento[] = $registro->idClassificaDocumento;
+//            }
+//            if(!empty ($arrClassificaDocumento)){
+//                $arrBusca["cl.idClassificaDocumento IN (?)"] = $arrClassificaDocumento;
+//            }
+//        }
+//
+//        if($post->dtInicioExec != "" && $post->dtFimExec != ""){
+//            $di = data::dataAmericana($post->dtInicioExec);
+//            $df = data::dataAmericana($post->dtFimExec);
+//            $arrBusca["pr.DtInicioExecucao BETWEEN '$di' AND '$df'"] = '';
+//            $arrBusca["pr.DtFimExecucao BETWEEN '$di' AND '$df'"] = '';
+//        }
+//        if($post->planoAnual != ""){ $arrBusca["p.stPlanoAnual = ?"] = $post->planoAnual; }
+//        if($post->datafixa != ""){ $arrBusca["p.stDataFixa = ?"] = $post->datafixa; }
+//        if($post->classificacao != ""){ $arrBusca["cl.idClassificaDocumento = ?"] = $post->classificacao; }
+//        if($post->edital != ""){ $arrBusca["e.idEdital = ?"] = $post->edital; }
+//        if($post->pronac != ""){ $arrBusca["pr.AnoProjeto+pr.Sequencial = ?"] = $post->pronac; }
+//        if($post->cnpfcpf != ""){ $arrBusca["pr.CgcCpf = ?"] = retiraMascara($post->cnpfcpf); }
+//        if($post->nomeProjeto != ""){ $arrBusca["pr.NomeProjeto like (?)"] = "%".$post->nomeProjeto."%"; }
+//        if($post->nomeProponente != ""){ $arrBusca["nm.Descricao like (?)"] = "%".$post->nomeProponente."%"; }
+//        if($post->area != ""){ $arrBusca["ar.Codigo = ?"] = $post->area; }
+//        if($post->segmento != ""){ $arrBusca["sg.Codigo = ?"] = $post->segmento; }
+//        if($post->mecanismo != ""){ $arrBusca["pr.Mecanismo = ?"] = $post->mecanismo; }
+//        if($post->propRegular != ""){ $arrBusca["inab.Habilitado = ?"] = $post->propRegular; }
+//        if($post->situacao != ""){ $arrBusca["pr.Situacao = ?"] = $post->situacao; }
+//        if($post->uf != ""){ $arrBusca["pr.UfProjeto = ?"] = $post->uf; }
+//        $arrBusca = GenericControllerNew::montaBuscaData($post, "tpDtSituacao", "dtSituacao", "pr.DtSituacao", "dtSituacao_Final", $arrBusca);
+//        $arrBusca = GenericControllerNew::montaBuscaData($post, "tpDtPublicacao", "dtPublicacao", "ap.DtPublicacaoAprovacao", "dtPublicacao_Final", $arrBusca);
+//        $arrBusca = GenericControllerNew::montaBuscaData($post, "tpDtPortaria", "dtPortaria", "ap.DtPortariaAprovacao", "dtPortaria_Final", $arrBusca);     
+//
+//        $total = $tbl->relatorioProjeto($arrBusca , null, null, null, true);
+//        
+//        if($post->tipo == 'xls' || $post->tipo == 'pdf') {
+//            //Verifica se foi solicitado a ordenação
+//            if(!empty($post->ordenacao)) {
+//                $ordem[] = "{$post->ordenacao} {$post->tipoOrdenacao}";
+//            } else {
+//                $ordem = array('1');
+//            }
+//
+//            $tamanho = -1;
+//            $inicio = -1;
+//            $pag = 0;
+//            $totalPag = 0;
+//            $fim = 0;
+//
+//            $rs = $tbl->relatorioProjeto($arrBusca , $ordem, null, null , false);
+//            $this->_forward('preparar-xls-pdf', null, null, array(
+//                    'dados'=>$rs,
+//                    'view'=>'relatorio/preparar-xls-pdf-resultado-projeto.phtml',
+//                    'tipo'=> $post->tipo
+//                    )
+//            );
+//            
+//        } else {
+//            //controlando a paginacao
+//            $this->intTamPag = 10;
+//            $pag = 1;
+//            if (isset($post->pag)) $pag = $post->pag;
+//            if (isset($post->tamPag)) $this->intTamPag = $post->tamPag;
+//            $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
+//            $fim = $inicio + $this->intTamPag;
+//
+//            $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+//            $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
+//            if ($fim>$total) $fim = $total;
+//
+//            //Varifica se foi solicitado a ordenação
+//            if(!empty($post->ordenacao)) {
+//                $ordem[] = "{$post->ordenacao} {$post->tipoOrdenacao}";
+//            }else {
+//                $ordem = array('1');
+//            }
+//
+//            $rs = $tbl->relatorioProjeto($arrBusca, $ordem, $tamanho, $inicio);
+//        }
+//
+//        $this->view->registros = $rs;
+//        $this->view->pag = $pag;
+//        $this->view->total = $total;
+//        $this->view->inicio = ($inicio+1);
+//        $this->view->fim = $fim;
+//        $this->view->totalPag = $totalPag;
+//        $this->view->parametrosBusca = $_POST;
+    }
+
+
+
+ 
 }

@@ -265,7 +265,7 @@
             <?php foreach($this->dados as $d){ ?>
             <tr>
                 <td align="center" class="w100">
-                    <a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'dados-projeto'));?>?idPronac=<?php echo Seguranca::encrypt($d->idPronac); ?>" target="_blank">
+                    <a href="<?php echo $this->url(array('controller' => 'verprojetos', 'action' => 'index'));?>?idPronac=<?php echo Seguranca::encrypt($d->idPronac); ?>" target="_blank">
                         <?php echo $d->Pronac; ?>
                     </a>
                 </td>
