@@ -334,11 +334,13 @@ if($this->tipoPublicacao == 'readequacao') {
         } else if($this->tipoPublicacao == 'complementacao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
+            $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';		    
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'reducao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Reduzido:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
+            $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';	    
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'aprovacaoPrestacao'){
@@ -424,11 +426,13 @@ if($this->tipoPublicacao == 'readequacao') {
         } else if($this->tipoPublicacao == 'complementacao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
+            $txValor .= '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'reducao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Reduzido:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
+            $txValor .= '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';	    
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'aprovacaoPrestacao'){
