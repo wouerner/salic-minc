@@ -1541,9 +1541,13 @@ class VerProjetosController extends GenericControllerNew {
         }
     }
     
-    public function dadosBancariosLiberacaoAction()
-    {
+    public function dadosBancariosLiberacaoAction(){
+
+
+        Zend_Layout::startMvc(array('layout' => 'layout_login'));
+        
         $idPronac = $this->_request->getParam("idPronac");
+
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
@@ -1563,8 +1567,11 @@ class VerProjetosController extends GenericControllerNew {
         }
     }
     
-    public function dadosBancariosCaptacaoAction()
-    {
+    public function dadosBancariosCaptacaoAction() {
+
+        Zend_Layout::startMvc(array('layout' => 'layout_login'));
+
+
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
