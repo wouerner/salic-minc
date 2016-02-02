@@ -180,7 +180,7 @@
 
                 <!-- ======================= Prestação de Contas  =======================   -->
                 <div class="sanfonaDiv" style="display:none;"></div>
-                <a href="#" title="Execução" class="ancoraExecucao" onclick="return false;">Presta&ccedil;&atilde;o de Contas</a>
+                <a href="#" title="Prestação de Contas" class="ancoraExecucao" onclick="return false;">Presta&ccedil;&atilde;o de Contas</a>
                 <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
                     <?php /*if(in_array($this->fnLiberarLinks['FaseDoProjeto'],array('4','5'))  || $this->usuarioInterno){ ?>
                         <a href='#' class="no_seta" onclick="carregaDados('<?php echo $this->url(array('controller' => 'verprojetos', 'action' => 'prestacao-de-contas')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Presta&ccedil;&atilde;o de Contas">Presta&ccedil;&atilde;o de contas</a>
@@ -298,18 +298,6 @@
                     <a class="no_seta" href="<?php echo $this->url(array('controller' => 'listarprojetos', 'action' => 'listarprojetos')); ?>">Listar Projetos</a>
                 <?php } ?>
                 <!--  ==================== FIM - LISTAR PROJETOS ======================  -->
-
-
-
-
-                <!--  ======================= IMPRIMIR PROJETOS =======================  -->
-                <a class="no_seta" href='#' onclick="imprimirProjeto('<?php echo $this->idPronac;?>'); return false;" title="Ir Imprimir Projeto">Imprimir Projeto</a>
-                <?php if (isset($this->menumsg)) { ?>
-                    <div class="sanfonaDiv"></div>
-                <?php } ?>
-                <!--  ==================== FIM - IMPRIMIR PROJETOS ======================  -->
-
-
 
 
                 <!--  ======================= MANTER MENSAGENS =======================  -->
