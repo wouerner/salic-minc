@@ -320,6 +320,10 @@ if($this->tipoPublicacao == 'readequacao') {
         $ValorCaptado           = $portaria->ValorCaptado;
         $ComprovacaoValidada    = $portaria->ComprovacaoValidada;
 
+	if ($this->tipoPublicacao == 'complementacao' || $this->tipoPublicacao == 'reducao') {
+	    $novoValor = $portaria->ValorAprovado + $vlapoio;	    
+	}
+	
         if($areaprojetoCodigo != $areaprojetoAnterior){
             $linhaArea = '<p class="saltoLinha_primeira">&Aacute;REA:&nbsp;&nbsp;' . $areaprojetoCodigo . '&nbsp;&nbsp;' . $areaprojeto . '&nbsp;&nbsp;(' . $artigo . ' , &sect;  1&ordm; )</p>';
         } else {
@@ -334,13 +338,13 @@ if($this->tipoPublicacao == 'readequacao') {
         } else if($this->tipoPublicacao == 'complementacao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-            $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';		    
+            $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';		    
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'reducao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Reduzido:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-            $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';	    
+            $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';	    
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'aprovacaoPrestacao'){
@@ -412,6 +416,10 @@ if($this->tipoPublicacao == 'readequacao') {
         $ValorCaptado = $portaria->ValorCaptado;
         $ComprovacaoValidada = $portaria->ComprovacaoValidada;
 
+	if ($this->tipoPublicacao == 'complementacao' || $this->tipoPublicacao == 'reducao') {
+	    $novoValor = $portaria->ValorAprovado + $vlapoio;
+	}
+	
         if($areaprojetoCodigo != $areaprojetoAnterior2){
             $linhaArea = '<p class="saltoLinha_primeira">&Aacute;REA:&nbsp;&nbsp;' . $areaprojetoCodigo . '&nbsp;&nbsp;' . $areaprojeto . '&nbsp;&nbsp;(' . $artigo . ' , &sect;  1&ordm; )</p>';
         } else {
@@ -426,13 +434,13 @@ if($this->tipoPublicacao == 'readequacao') {
         } else if($this->tipoPublicacao == 'complementacao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-            $txValor .= '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';
+            $txValor .= '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'reducao'){
             $txProcesso = '';
             $txValor = '<p class="saltoLinha">Valor Reduzido:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-            $txValor .= '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($ValorAprovado) . '</p>';	    
+            $txValor .= '<p class="saltoLinha">Valor Complementado:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';	    
             $txPrazoCaptacao = '';
             $txResumoProjeto = '';
         } else if($this->tipoPublicacao == 'aprovacaoPrestacao'){
