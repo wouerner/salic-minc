@@ -150,7 +150,7 @@ foreach ($this->portaria as $portaria)
     $DtFimPublicacaoAprovacao = $portaria->DataFimPublicacao;
 
     if ($this->tipoPublicacao == 'complementacao' || $this->tipoPublicacao == 'reducao') {
-	$novoValor = $portaria->ValorAprovado + $vlapoio;
+	$novoValor = $portaria->ValorAprovado;
     }
     
     if($areaprojetoCodigo != $areaprojetoAnterior){
@@ -225,7 +225,7 @@ foreach ($this->portaria as $portaria)
     $DtFimPublicacaoAprovacao = $portaria->DataFimPublicacao;
 
     if ($this->tipoPublicacao == 'complementacao' || $this->tipoPublicacao == 'reducao') {
-	$novoValor = $portaria->ValorAprovado + $vlapoio;
+	$novoValor = $portaria->ValorAprovado;
     }
     
     if($areaprojetoCodigo != $areaprojetoAnterior2){
