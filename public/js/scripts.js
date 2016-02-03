@@ -89,6 +89,13 @@ function format_num_pontos(v) // formato: somente números inteiros
     return v;
 }
 
+function format_num_float(v) // formato: 2.5 (aceita . e numero)
+{
+    v = v.replace(',', '.');
+    v = v.replace(/[^0-9\.]/g, '');
+    return v;
+}
+
 function format_hora(v) // formato: 00:00:00
 {
     v = v.replace(/\D/g, "");

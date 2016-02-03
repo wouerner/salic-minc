@@ -623,9 +623,61 @@ class PublicacaoDouController extends GenericControllerNew {
 
             $auth = Zend_Auth::getInstance(); // pega a autenticação
             $usuarioLogado = $auth->getIdentity()->usu_codigo;
-
+	    
             try {
-                if($TipoAprovacao == 5){
+	        // REDUÇÃO OU COMPLEMENTACAO
+                if($TipoAprovacao == 2 || $TipoAprovacao == 4) {
+		  $where = array();
+		  if($orgaoSuperior->Superior == 251){
+		    $where['a.Area <> ?'] = 2;
+		  } else {
+		    $where['a.Area = ?'] = 2;
+		  }
+		  $where['b.TipoAprovacao = ?'] = $TipoAprovacao;
+		  $where['b.PortariaAprovacao = ?'] = $PortariaAprovacao;
+                    
+		  $ap = new Aprovacao();
+		  $projetos = $ap->consultaPortariaReadequacoes($where);
+		  
+		  foreach ($projetos as $p) {
+		    // entra em cada projeto e atualiza tbReadequacao e troca planilha
+		    $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+		    //BUSCAR VALOR TOTAL DA PLANILHA ATIVA
+		    $where = array();
+		    $where['a.IdPRONAC = ?'] = $p->IdPRONAC;
+		    $where['a.stAtivo = ?'] = 'S';
+		    $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
+		    		    
+		    //BUSCAR VALOR TOTAL DA PLANILHA DE READEQUADA
+		    $where = array();
+		    $where['a.IdPRONAC = ?'] = $p->IdPRONAC;
+		    $where['a.tpPlanilha = ?'] = 'SR';
+		    $where['a.stAtivo = ?'] = 'N';
+		    $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
+
+		    if($PlanilhaAtiva->Total != $PlanilhaReadequada->Total){
+		      // quando atualiza portaria na dou, troca planilhas e muda status na tbReadequacao
+		      //Atualiza a tabela tbReadequacao
+		      $tbReadequacao = new tbReadequacao();
+		      
+		      $dados = array();
+		      $dados['siEncaminhamento'] = 15; //Finalizam sem a necessidade de passar pela publicação no DOU.
+		      $dados['stEstado'] = 1;
+		      $where = "idReadequacao = " . $p->idReadequacao;
+		      $return = $tbReadequacao->update($dados, $where);
+		      
+		      $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
+		      $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($p->IdPRONAC);
+		    }
+		    
+		    // PUBLICA NO DOU
+                    PublicacaoDouDAO::situcaopublicacaodou($TipoAprovacao, $PortariaAprovacao, 'E10', $situacaoAtual, $usuarioLogado, $orgaoSuperior->Superior);
+                    PublicacaoDouDAO::situcaopublicacaodou($TipoAprovacao, $PortariaAprovacao, 'E12', $situacaoAtual, $usuarioLogado, $orgaoSuperior->Superior);
+		    
+		    // fim da atualizacao da complementacao / reducao
+		  }
+		    		    
+                } else if($TipoAprovacao == 5){
                     PublicacaoDouDAO::situcaopublicacaodou($TipoAprovacao, $PortariaAprovacao, 'E19', $situacaoAtual, $usuarioLogado, $orgaoSuperior->Superior);
                 } else if($TipoAprovacao == 6){
                     PublicacaoDouDAO::situcaopublicacaodou($TipoAprovacao, $PortariaAprovacao, 'L05', $situacaoAtual, $usuarioLogado, $orgaoSuperior->Superior);
@@ -643,9 +695,8 @@ class PublicacaoDouController extends GenericControllerNew {
                     $ap = new Aprovacao();
                     $projetos = $ap->consultaPortariaReadequacoes($where);
                     foreach ($projetos as $p) {
-                        
                         // READEQUAÇÃO DE ALTERAÇÃO DE RAZÃO SOCIAL
-                        if($p->idTipoReadequacao == 3){
+			if($p->idTipoReadequacao == 3){
 
                             $Projetos = new Projetos();
                             $dadosPrj = $Projetos->find(array('IdPRONAC=?'=>$p->IdPRONAC))->current();
