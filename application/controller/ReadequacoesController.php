@@ -3492,8 +3492,16 @@ class ReadequacoesController extends GenericControllerNew {
 
 		// insere somente em reducao ou complementacao
 		if ($alteracaoValorPlanilha) {
+
 		  $dadosPrj->save();
-		  $AprovadoReal = number_format(($PlanilhaReadequada->Total-$PlanilhaAtiva->Total), 2, '.', '');
+		  // reducao
+		  if ($TipoAprovacao == 4) {
+		    $AprovadoReal = number_format(($PlanilhaAtiva->Total-$PlanilhaReadequada->Total), 2, '.', '');
+		    // aprovacao
+		  } else if ($TipoAprovacao == 2) {
+		    $AprovadoReal = number_format(($PlanilhaReadequada->Total-$PlanilhaAtiva->Total), 2, '.', '');		    
+		  }
+		  
 		  $tbAprovacao = new Aprovacao();
 		  $dadosAprovacao = array(
 					  'IdPRONAC' => $read->idPronac,
