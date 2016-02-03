@@ -321,7 +321,7 @@ if($this->tipoPublicacao == 'readequacao') {
         $ComprovacaoValidada    = $portaria->ComprovacaoValidada;
 
 	if ($this->tipoPublicacao == 'complementacao' || $this->tipoPublicacao == 'reducao') {
-	    $novoValor = $portaria->ValorAprovado + $vlapoio;	    
+	    $novoValor = $portaria->ValorAprovado;	    
 	}
 	
         if($areaprojetoCodigo != $areaprojetoAnterior){
@@ -417,7 +417,7 @@ if($this->tipoPublicacao == 'readequacao') {
         $ComprovacaoValidada = $portaria->ComprovacaoValidada;
 
 	if ($this->tipoPublicacao == 'complementacao' || $this->tipoPublicacao == 'reducao') {
-	    $novoValor = $portaria->ValorAprovado + $vlapoio;
+	    $novoValor = $portaria->ValorAprovado;
 	}
 	
         if($areaprojetoCodigo != $areaprojetoAnterior2){
