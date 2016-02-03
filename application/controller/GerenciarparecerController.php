@@ -515,7 +515,6 @@ class GerenciarparecerController extends GenericControllerNew {
         } else {
             $pareceristas = $spSelecionarParecerista->exec($buscaDadosProjeto[0]->idOrgao, $buscaDadosProjeto[0]->idArea, $buscaDadosProjeto[0]->idSegmento, $buscaDadosProjeto[0]->Valor);
         }
-
         $orgaos = new Orgaos();
         $buscar = $orgaos->buscar(array("Codigo <> ?" => $codOrgao, "Status = ?" => 0, "Vinculo = ?" => 1));
 

@@ -10,9 +10,8 @@ class spAtivarPlanilhaOrcamentaria extends GenericModel {
     protected $_name  = 'spAtivarPlanilhaOrcamentaria';
 
     public function exec($idPronac){
-        
-        $sql = "exec ".$this->_banco.".dbo.".$this->_name." $idPronac";
-	return $this->getAdapter()->query($sql);
+      $sql = "exec ".$this->_banco.".dbo.".$this->_name." $idPronac";
+      return $this->getAdapter()->query($sql);
     }
 }
 ?>
