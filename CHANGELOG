@@ -1,3 +1,14 @@
+Release 1.3.2
+  * Fix: projeto não era encaminhado para a Portaria após a redução nem a resposta foi enviada ao proponente
+  * Fix: apresentando grid na funcionalidade "aprovação de projeto"
+  * Fix: alterando situção do projeto
+  * Fix: reduções e complementações com valor corrigido
+  * Fix: incluído 'Valor Total Atualizado' na publicação da portaria no DOU
+  * Fix: possibilidade de incluir campos com quantidade fracionada nos itens de complementação / redução
+  * Fix: remanejamento apresenta planilha correta ao proponente na fase de readequação
+  * Fix: eliminação dos valores -0.00 na readequação
+  * Fix: mostrando planilha readequada no ambiente UC 75 após finalização por partedo proponente
+	
 Release 1.3.1
   * changelog
   * melhorias no ambiente git
