@@ -3472,23 +3472,35 @@ class ReadequacoesController extends GenericControllerNew {
                 $where['a.tpPlanilha = ?'] = 'SR';
                 $where['a.stAtivo = ?'] = 'N';
                 $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+		
 		// complementacao
                 if($PlanilhaAtiva->Total < $PlanilhaReadequada->Total){
                     $TipoAprovacao = 2;
                     $dadosPrj->Situacao = 'D28';
+		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de complementação';
+		    $dadosPrj->Logon = $auth->getIdentity()->usu_codigo;
 		    $alteracaoValorPlanilha = True;
                 } else if ($PlanilhaAtiva->Total > $PlanilhaReadequada->Total) {
 		  // reducao
                     $TipoAprovacao = 4;
                     $dadosPrj->Situacao = 'D29';
+		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de redução';
+		    $dadosPrj->Logon = $auth->getIdentity()->usu_codigo;
 		    $alteracaoValorPlanilha = True;
                 }
 		
 		// insere somente em reducao ou complementacao
 		if ($alteracaoValorPlanilha) {
+
 		  $dadosPrj->save();
-		  $AprovadoReal = number_format(($PlanilhaReadequada->Total-$PlanilhaAtiva->Total), 2, '.', '');
+		  // reducao
+		  if ($TipoAprovacao == 4) {
+		    $AprovadoReal = number_format(($PlanilhaAtiva->Total-$PlanilhaReadequada->Total), 2, '.', '');
+		    // aprovacao
+		  } else if ($TipoAprovacao == 2) {
+		    $AprovadoReal = number_format(($PlanilhaReadequada->Total-$PlanilhaAtiva->Total), 2, '.', '');		    
+		  }
+		  
 		  $tbAprovacao = new Aprovacao();
 		  $dadosAprovacao = array(
 					  'IdPRONAC' => $read->idPronac,
@@ -3869,8 +3881,8 @@ class ReadequacoesController extends GenericControllerNew {
 	
 	if (!$alteracaoValorPlanilha) {
 	  // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
-	    $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
-	    $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
+	  $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
+	  $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
 	}
 	
         //Atualiza a tabela tbDistribuirReadequacao
