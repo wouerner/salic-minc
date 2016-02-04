@@ -1,14 +1,18 @@
 Release 1.3.2
-  * Fix: projeto não era encaminhado para a Portaria após a redução nem a resposta foi enviada ao proponente
-  * Fix: apresentando grid na funcionalidade "aprovação de projeto"
-  * Fix: alterando situção do projeto
-  * Fix: reduções e complementações com valor corrigido
-  * Fix: incluído 'Valor Total Atualizado' na publicação da portaria no DOU
-  * Fix: possibilidade de incluir campos com quantidade fracionada nos itens de complementação / redução
-  * Fix: remanejamento apresenta planilha correta ao proponente na fase de readequação
-  * Fix: eliminação dos valores -0.00 na readequação
-  * Fix: mostrando planilha readequada no ambiente UC 75 após finalização por partedo proponente
-	
+  * Fix: alterando situação do projeto
+  * Fix: reduções não são mais transformadas em complementações
+  * Fix: incluído Valor Total Atualizado nas portarias de redução e complementação
+  * Fix: gerando registro correto na tabela Aprovação
+  * Fix: alterando campos dtSituacao e providenciaTomada
+  * Fix: não alterar mais a data de início de execução na tabela Projetos
+  * Fix: ao inserir o registro de complementação na tabela aprovação os campos dtInicioCaptacao e dtFimCaptacao deverão ser NULL
+  * Fix: apresentar a planilha correta ao proponente durante a fase de readequação
+  * Fix: eliminação das mensagens de erro (-0,00, +0,00)
+  * Fix: permitir digitação de campos fracionados em quantidade e ocorrência durante remanejamento
+  * Fix: somente mostrar a planilha readequada no ambiente do UC 75 após a finalização por parte do proponente.
+  * Fix: remanejamento 20%: caracteres de controle aparecem no campo de justificativa do remanejamento
+  * Fix: após finalizar readequação de 20% atributo stEstado de tbReadequacao deverá ser 1
+
 Release 1.3.1
   * changelog
   * melhorias no ambiente git
