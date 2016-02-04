@@ -393,14 +393,17 @@ class PublicacaoDouController extends GenericControllerNew {
                     if($post->tipoPublicacao == 'prorrogacao'){
                         $pronac = $resultado->AnoProjeto.$resultado->Sequencial;
                         $datas = $ap->buscarDatasCaptacao($pronac, $buscaridpronac->idProrrogacao);
-                        $dadosPortaria['DtInicioCaptacao'] = $datas[0]->DtInicio;
+			$dadosPortaria['DtInicioCaptacao'] = $datas[0]->DtInicio;
                         $dadosPortaria['DtFimCaptacao'] = $datas[0]->DtFinal;
 
                         if(strtotime($dtFimExecucao) < strtotime($datas[0]->DtFinal)){
                             $dtFimExecucao = $datas[0]->DtFinal;
                         }
-                    }
-
+                    } else if ($post->tipoPublicacao == 'reducao' || $post->tipoPublicacao == 'complementacao') {
+		      $dadosPortaria['DtInicioCaptacao'] = null;
+		      $dadosPortaria['DtFimCaptacao'] = null;
+		    }
+		    
                     $where = 'idAprovacao = ' . $idaprovacao;
                     $portariagerar = $ap->alterar($dadosPortaria, $where);
 
