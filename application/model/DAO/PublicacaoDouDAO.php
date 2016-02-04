@@ -593,8 +593,7 @@ class PublicacaoDouDAO extends Zend_Db_Table {
             } else if($TipoAprovacao == 4){
                 $ProvidenciaTomada = 'Redução aprovada e publicada no Di&aacute;rio Oficial da Uni&atilde;o.';
             }
-            $DtInicioExecucao = strftime("%Y-%m-%d %H:%M:%S", strtotime("+1 days"));
-            
+	    
             if($orgaoSuperior == 251){
                 $area = ' p.Area <> 2 ';
             } else {
@@ -605,7 +604,7 @@ class PublicacaoDouDAO extends Zend_Db_Table {
                 UPDATE SAC.dbo.Projetos
                 SET Situacao = '$novaSituacao',
                 ProvidenciaTomada = '$ProvidenciaTomada',
-                DtInicioExecucao = '$DtInicioExecucao',
+                DtSituacao = GETDATE(),
                 Logon = '$usuarioLogado'
                 FROM SAC.dbo.Projetos p 
                 INNER JOIN SAC.dbo.Aprovacao a ON (p.AnoProjeto = a.AnoProjeto AND p.Sequencial = a.Sequencial)
