@@ -2977,7 +2977,7 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
         $editarItem->qtItem = $_POST['Quantidade'];
         $editarItem->nrOcorrencia = $_POST['Ocorrencia'];
         $editarItem->vlUnitario = $ValorUnitario;
-        $editarItem->dsJustificativa = $_POST['Justificativa'];
+        $editarItem->dsJustificativa = utf8_decode($_POST['Justificativa']); // 
         $editarItem->idAgente = $idAgente;
 //        $editarItem->idAgente = $auth->getIdentity()->IdUsuario;
         $editarItem->save();
