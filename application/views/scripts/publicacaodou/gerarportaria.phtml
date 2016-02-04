@@ -167,13 +167,13 @@ foreach ($this->portaria as $portaria)
     } else if($this->tipoPublicacao == 'complementacao'){
         $txProcesso = '';
         $txValor = '<p class="saltoLinha">Valor Complementado R$:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-        $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';	
+        $txValor .= '<p class="saltoLinha">Valor total atual em R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';	
         $txPrazoCaptacao = '';
         $txResumoProjeto = '';
     } else if($this->tipoPublicacao == 'reducao'){
         $txProcesso = '';
         $txValor = '<p class="saltoLinha">Valor Reduzido R$:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-        $txValor .= '<p class="saltoLinha">Valor total anual R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';		
+        $txValor .= '<p class="saltoLinha">Valor total anual em R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';		
         $txPrazoCaptacao = '';
         $txResumoProjeto = '';
     } else {
@@ -242,13 +242,13 @@ foreach ($this->portaria as $portaria)
     } else if($this->tipoPublicacao == 'complementacao'){
         $txProcesso = '';
         $txValor = '<p class="saltoLinha">Valor Complementado: R$:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-	$txValor .= '<p class="saltoLinha">Valor total atual: R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';
+	$txValor .= '<p class="saltoLinha">Valor total atual em R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';
         $txPrazoCaptacao = '';
         $txResumoProjeto = '';
     } else if($this->tipoPublicacao == 'reducao'){
         $txProcesso = '';
         $txValor = '<p class="saltoLinha">Valor Reduzido: R$:&nbsp;&nbsp;' . $this->formatarReal($vlapoio) . '</p>';
-	$txValor .= '<p class="saltoLinha">Valor total atual: R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';	
+	$txValor .= '<p class="saltoLinha">Valor total atual em R$:&nbsp;&nbsp;' . $this->formatarReal($novoValor) . '</p>';	
         $txPrazoCaptacao = '';
         $txResumoProjeto = '';
     } else {
