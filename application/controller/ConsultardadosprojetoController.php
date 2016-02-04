@@ -2503,7 +2503,7 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
             $dadosReadequacao['dsJustificativa'] = 'Readequação até 20%';
             $dadosReadequacao['stAtendimento'] = 'D';
             $dadosReadequacao['siEncaminhamento'] = 11;
-            $dadosReadequacao['stEstado'] = 0;
+            $dadosReadequacao['stEstado'] = 1;
             $idReadequacao = $tbReadequacao->inserir($dadosReadequacao);
             
             /*if($idReadequacao > 0){
