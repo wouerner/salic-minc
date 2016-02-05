@@ -928,8 +928,11 @@ class ConsultarDadosProjetoController extends GenericControllerNew {
 
             $spSelecionarPlanilhaOrcamentariaAtiva = new spSelecionarPlanilhaOrcamentariaAtiva();
 	    $tpPlanilhaAtiva = $spSelecionarPlanilhaOrcamentariaAtiva->exec($idPronac);
-	    
-            $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
+	    // fix de compatibilidade para projetos sem planilha de aprovação
+	    if (!$tpPlanilhaAtiva) {
+	      $tpPlanilhaAtiva = 2;
+	    }
+	    $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
             $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilhaAtiva);
 	    // xd($planilhaOrcamentaria);
 	    if(count($planilhaOrcamentaria)==0){
