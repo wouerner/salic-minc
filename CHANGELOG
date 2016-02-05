@@ -1,3 +1,6 @@
+Release 1.3.3
+  * Fix: compatibilidade para projetos sem planilha de aprovação na consulta de projetos
+
 Release 1.3.2
   * Fix: alterando situação do projeto
   * Fix: reduções não são mais transformadas em complementações
