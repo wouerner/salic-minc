@@ -254,14 +254,20 @@
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=9&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Segmento</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=10&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Avalia&ccedil;&atilde;o</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=11&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Solicitado</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=12&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Sugerido</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=12&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Aprovado</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')).'?pronac='.$this->pronac.'&campo=13&ordem='.$this->novaOrdem.$intranet . $this->urlComplement;?>">Vl.Captado</a></th>
+
                 <?php /*if(!$this->intranet){ ?>
                 <th><?php echo ($this->usuarioInterno) ? 'Opini&otilde;es' : 'Cidad&atilde;o'; ?></th>
                 <?php }*/ ?>
             </tr>
         </thead>
         <tbody>
-            <?php $TotalSol = 0; $TotalSug = 0; ?>
+            <?php 
+            $TotalSolicitado = 0;
+            $TotalAprovado = 0; 
+            $TotalCaptado = 0; 
+            ?>
             <?php foreach($this->dados as $d){ ?>
             <tr>
                 <td align="center" class="w100">
@@ -284,21 +290,20 @@
                     <a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'parecer-consolidado'));?>?idPronac=<?php echo Seguranca::encrypt($d->idPronac); ?>" target="_blank"><?php echo $d->descAvaliacao; ?></a>
                 </td>
                 <td align="right"><?php echo (!empty($d->vlSolicitado)) ? @number_format($d->vlSolicitado, 2, ",", ".") : ''; ?></td>
-                <td align="right"><?php echo (!empty($d->vlSugerido)) ? @number_format($d->vlSugerido, 2, ",", ".") : ''; ?></td>
-                <?php /*if(!$this->intranet){ ?>
-                <td align="center" nowrap>
-                    <input type="button" class="btn_ver" idPronac="<?php echo Seguranca::encrypt($d->idPronac); ?>">
-                    <?php if(!$this->usuarioInterno){ ?>
-                    <input type="button" class="btn_avaliar" idPronac="<?php echo Seguranca::encrypt($d->idPronac); ?>">
-                    <?php } ?>
-                </td>
-                <?php }*/ ?>
+                <td align="right"><?php echo (!empty($d->vlAprovado)) ? @number_format($d->vlAprovado, 2, ",", ".") : ''; ?></td>
+                <td align="right"><?php echo (!empty($d->vlCaptado)) ? @number_format($d->vlCaptado, 2, ",", ".") : ''; ?></td>
+
             </tr>
-            <?php $TotalSol=$TotalSol+$d->vlSolicitado; $TotalSug=$TotalSug+$d->vlSugerido; } ?>
+            <?php 
+            $TotalSolicitado = $TotalSolicitado + $d->vlSolicitado; 
+            $TotalAprovado = $TotalAprovado + $d->vlAprovado;
+            $TotalCaptado = $TotalCaptado + $d->vlCaptado;
+            } ?>
             <tr class="direita bold destacar" style="font-size: 14px;">
                 <td colspan="9" style="padding: 15px 5px;">TOTAL</td>
-                <td nowrap><?php echo @number_format($TotalSol, 2, ",", "."); ?></td>
-                <td nowrap><?php echo @number_format($TotalSug, 2, ",", "."); ?></td>
+                <td nowrap><?php echo @number_format($TotalSolicitado, 2, ",", "."); ?></td>
+                <td nowrap><?php echo @number_format($TotalAprovado, 2, ",", "."); ?></td>
+                <td nowrap><?php echo @number_format($TotalCaptado, 2, ",", "."); ?></td>
             </tr>
         </tbody>
     </table>
