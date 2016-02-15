@@ -444,6 +444,8 @@ abstract class Zend_Db_Adapter_Abstract
      */
     public function query($sql, $bind = array())
     {
+        #die( $sql );
+
         // connect to the database if needed
         $this->_connect();
         // is the $sql a Zend_Db_Select object?
