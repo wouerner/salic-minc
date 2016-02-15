@@ -131,7 +131,7 @@ class CidadaoController extends GenericControllerNew {
             }else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
@@ -149,13 +149,14 @@ class CidadaoController extends GenericControllerNew {
             $urlComplement[] = "ordem=$ordem";
 
         } else {
-            $campo = null;
-            $order = array('12 DESC');
+            $campo = 12;
+            $ordem = 'DESC';
             $ordenacao = null;
-            $urlComplement[] = 'ordem=DESC';
-            //$urlComplement[] = 'campo=12';
+            $urlComplement[] = "ordem=" . $ordem;
+            $urlComplement[] = "campo=" . $campo;
         }
-
+        $order = array("$campo $ordem");
+        
         /* ================== PAGINACAO ======================*/
         $where = array();
         //$where["t.idNrReuniao = ?"] = $raberta->idNrReuniao;
@@ -206,7 +207,7 @@ class CidadaoController extends GenericControllerNew {
         $post  = Zend_Registry::get('get');
         if (isset($post->pag)) $pag = $post->pag;
         $offset = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
-        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
+        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $ordem, false, false, true);
         $fim = $offset + $this->intTamPag;
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $limit = ($fim > $total) ? $total - $offset : $this->intTamPag;
