@@ -120,11 +120,16 @@
                 <th>Segmento</th>
                 <th>Avaliação</th>
                 <th>Vl.Solicitado</th>
-                <th>Vl.Sugerido</th>
+                <th>Vl.Aprovado</th>
+                <th>Vl.Captado</th>
             </tr>
         </thead>
         <tbody>
-            <?php $TotalSol = 0; $TotalSug = 0; ?>
+            <?php 
+            $TotalSolicitado = 0;
+            $TotalAprovado = 0;
+            $TotalCaptado = 0;
+            ?>
             <?php foreach($this->dados as $d){ ?>
             <tr>
                 <td><?php echo $d->Pronac; ?></td>
@@ -137,13 +142,20 @@
                 <td><?php echo $d->dsSegmento; ?></td>
                 <td><?php echo $d->descAvaliacao; ?></td>
                 <td align="right"><?php echo (!empty($d->vlSolicitado)) ? @number_format($d->vlSolicitado, 2, ",", ".") : ''; ?></td>
-                <td align="right"><?php echo (!empty($d->vlSugerido)) ? @number_format($d->vlSugerido, 2, ",", ".") : ''; ?></td>
+                <td align="right"><?php echo (!empty($d->vlAprovado)) ? @number_format($d->vlAprovado, 2, ",", ".") : ''; ?></td>
+                <td align="right"><?php echo (!empty($d->vlCaptado)) ? @number_format($d->vlCaptado, 2, ",", ".") : ''; ?></td>
             </tr>
-            <?php $TotalSol=$TotalSol+$d->vlSolicitado; $TotalSug=$TotalSug+$d->vlSugerido; } ?>
+            <?php 
+            $TotalSolicitado=$TotalSolicitado+$d->vlSolicitado;
+            $TotalAprovado=$TotalAprovado+$d->vlAprovado;
+            $TotalCaptado=$TotalCaptado+$d->vlCaptado; 
+
+            } ?>
             <tr align="right">
                 <th colspan="9" style="font-size: 14px !important; padding: 15px 5px;">TOTAL</th>
-                <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalSol, 2, ",", "."); ?></th>
-                <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalSug, 2, ",", "."); ?></th>
+                <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalSolicitado, 2, ",", "."); ?></th>
+                <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalAprovado, 2, ",", "."); ?></th>
+                <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalCaptado, 2, ",", "."); ?></th>
             </tr>
         </tbody>
     </table>
