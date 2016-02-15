@@ -196,6 +196,7 @@ class CidadaoController extends GenericControllerNew {
             $idNrReuniao = null;
         } else {
             $idNrReuniao = $raberta->idNrReuniao;
+            $urlComplement[] = "idNrReuniaoConsulta=" . $idNrReuniao;            
         }
         
         // paginação
