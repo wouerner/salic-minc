@@ -274,6 +274,8 @@ class PlanilhaAprovacao extends GenericModel {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
 
+        #xd($select->assemble());
+
         return $this->fetchAll($select);
     }
 
