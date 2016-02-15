@@ -397,6 +397,7 @@ class ComprovantePagamento extends GenericModel
      */
     public function pesquisarComprovantePorItem($item)
     {
+        #die($item);
         $select = "SELECT
                     comp.*,
                     arq.nmArquivo,
@@ -446,6 +447,8 @@ class ComprovantePagamento extends GenericModel
                     pa.idPlanilhaAprovacao = ?
                     AND pa.stAtivo = 'S'
                 ORDER BY prod.Descricao ASC";
+
+        #die($select);
         $statement = $this->getAdapter()->query($select, array($item));
         return $statement->fetchAll();
     }
