@@ -271,25 +271,35 @@
 <?php
 function parseUrlByOrder($url, $campo, $ordem) {
     // verifica se ja existe um campo ordenado e forca a troca pelo definido
-    $url = preg_replace('/(.*)campo=[0-9]{1,2}/', '${1}campo=' . $campo , $url);
+    // se nao vier passado campo 
+    if (!preg_match('/campo/', $url)) {
+        // se for segundo parametro
+        if (preg_match('/\?/', $url)) {
+            $url .= "&campo=" . $campo;
+        } else {
+            // se for primeiro parametro
+            $url .= "?campo=" . $campo;
+        }        
+    } else {
+        $url = preg_replace('/(.*)campo=[0-9]{1,2}/', '${1}campo=' . $campo , $url);
+    }
     $url = preg_replace('/(.*)ordem=[a-zA-Z]{3,4}/', '${1}ordem=' . $ordem , $url);
-    echo $url;
-
-// passar a url composta ja com o url(controller=> etc...)
+    
+    return $url;
 }
 ?>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php parseUrlByOrder($this->urlComplement, 1, $this->novaOrdem); ?>">PRONAC</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 3, $this->novaOrdem); ?>">Nome do Projeto</a> <br /><span class="red" style="text-transform: none;">Passe o mouse sobre o nome do projeto para ver a s&iacute;ntese</span></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 4, $this->novaOrdem); ?>">Proponente</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 5, $this->novaOrdem); ?>">UF</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 6, $this->novaOrdem); ?>">Munic&iacute;pio</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 7, $this->novaOrdem); ?>">Enquadramento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 8, $this->novaOrdem); ?>">Aacute;rea</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 9, $this->novaOrdem); ?>">Segmento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 10, $this->novaOrdem); ?>">Avalia&ccedil;&atilde;o</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 11, $this->novaOrdem); ?>">Vl.Solicitado</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 12, $this->novaOrdem); ?>">Vl.Aprovado</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')) . parseUrlByOrder($this->urlComplement, 13, $this->novaOrdem); ?>">Vl.Captado</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 1, $this->novaOrdem); ?>">PRONAC</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 3, $this->novaOrdem); ?>">Nome do Projeto</a> <br /><span class="red" style="text-transform: none;">Passe o mouse sobre o nome do projeto para ver a s&iacute;ntese</span></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 4, $this->novaOrdem); ?>">Proponente</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 5, $this->novaOrdem); ?>">UF</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 6, $this->novaOrdem); ?>">Munic&iacute;pio</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 7, $this->novaOrdem); ?>">Enquadramento</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 8, $this->novaOrdem); ?>">A&aacute;rea</a></th>                                     
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 9, $this->novaOrdem); ?>">Segmento</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 10, $this->novaOrdem); ?>">Avalia&ccedil;&atilde;o</a></th>                                                                                                               
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 11, $this->novaOrdem); ?>">Vl.Solicitado</a></th>                                                                                                               
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 12, $this->novaOrdem); ?>">Vl.Aprovado</a></th>                                                                                                               
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlByOrder($this->urlComplement, 12, $this->novaOrdem); ?>">Vl.Captado</a></th>                                                                                                               
 
                 <?php /*if(!$this->intranet){ ?>
                 <th><?php echo ($this->usuarioInterno) ? 'Opini&otilde;es' : 'Cidad&atilde;o'; ?></th>
