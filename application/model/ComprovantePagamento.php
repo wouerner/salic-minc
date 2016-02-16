@@ -393,12 +393,15 @@ class ComprovantePagamento extends GenericModel
     }
 
     /**
-     * @return Zend_Db_Table_Rowset_Abstract
+     * Author: Alysson Vicuña de Oliveira
+     * Descrição: Alteração realizada por pedido da Área Finalistica em 16/02/2016 as 11:33
+     * @param $item
+     * @return array
      */
-    public function pesquisarComprovantePorItem($item)
+    public function pesquisarComprovantePorItem($item, $idPronac)
     {
         #die($item);
-        $select = "SELECT
+        /*$select = "SELECT
                     comp.*,
                     arq.nmArquivo,
                     convert(char(10), comp.dtEmissao, 103) as dtEmissao,
@@ -446,10 +449,62 @@ class ComprovantePagamento extends GenericModel
                 WHERE 
                     pa.idPlanilhaAprovacao = ?
                     AND pa.stAtivo = 'S'
+                ORDER BY prod.Descricao ASC";*/
+
+        $select = "SELECT
+                    comp.*,
+                    arq.nmArquivo,
+                    convert(char(10), comp.dtEmissao, 103) as dtEmissao,
+                    (
+                        CASE pa.idProduto
+                            WHEN 0 THEN ('Administração do projeto')
+                            ELSE prod.Descricao
+                        END
+                    ) as produtonome,
+                    pEtapa.Descricao as etapanome,
+                    pit.Descricao as itemnome,
+                    (
+                        CASE tpFormaDePagamento
+                            WHEN 1 THEN ('Cheque')
+                            WHEN 2 THEN ('Transferência Bancária')
+                            WHEN 3 THEN ('Saque/Dinheiro')
+                        END
+                    ) as tipoFormaPagamentoNome,
+                    (
+                        CASE tpDocumento
+                            WHEN 1 THEN ('Boleto Banc&aacute;rio')
+                            WHEN 2 THEN ('Cupom Fiscal')
+                            WHEN 3 THEN ('Guia de Recolhimento')
+                            WHEN 4 THEN ('Nota Fiscal/Fatura')
+                            WHEN 5 THEN ('Recibo de Pagamento')
+                            WHEN 6 THEN ('RPA')
+                        END
+                    ) as tipoDocumentoNome,
+                    ROUND((pa.QtItem * pa.nrOcorrencia * pa.VlUnitario),2) AS valorAprovado,
+                    (
+                        SELECT sum(b1.vlComprovacao) AS vlPagamento
+                        FROM BDCORPORATIVO.scSAC.tbComprovantePagamentoxPlanilhaAprovacao AS a1
+                        INNER JOIN BDCORPORATIVO.scSAC.tbComprovantePagamento AS b1 ON (a1.idComprovantePagamento = b1.idComprovantePagamento)
+                        INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS c1 ON (a1.idPlanilhaAprovacao = c1.idPlanilhaAprovacao)
+                        WHERE c1.stAtivo = 'S' AND c1.idPlanilhaAprovacao = pa.idPlanilhaAprovacao
+                        GROUP BY a1.idPlanilhaAprovacao
+                    ) AS valorComprovado
+                FROM bdcorporativo.scSAC.tbComprovantePagamento AS comp
+                    INNER JOIN bdcorporativo.scSAC.tbComprovantePagamentoxPlanilhaAprovacao AS cpxpa ON cpxpa.idComprovantePagamento = comp.idComprovantePagamento
+                    INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS pa ON pa.idPlanilhaAprovacao = cpxpa.idPlanilhaAprovacao
+                    INNER JOIN SAC.dbo.tbPlanilhaItens AS pit ON pit.idPlanilhaItens = pa.idPlanilhaItem
+                    INNER JOIN SAC.dbo.tbPlanilhaEtapa AS pEtapa ON pa.idEtapa = pEtapa.idPlanilhaEtapa
+                    INNER JOIN BDCORPORATIVO.scCorp.tbArquivo as arq ON arq.idArquivo = comp.idArquivo
+                    LEFT JOIN SAC.dbo.Produto AS prod ON pa.idProduto = prod.Codigo
+                WHERE
+                    pa.idPlanilhaItem = ?
+                    AND pa.idPronac = ?
                 ORDER BY prod.Descricao ASC";
 
         #die($select);
-        $statement = $this->getAdapter()->query($select, array($item));
+        //$statement = $this->getAdapter()->query($select, array($item));
+        $statement = $this->getAdapter()->query($select, array($item, $idPronac));
+
         return $statement->fetchAll();
     }
 
