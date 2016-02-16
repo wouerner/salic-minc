@@ -1560,7 +1560,9 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
     }
 
     /**
-     * 
+     * Author: Alysson Vicuña de Oliveira
+     * Descrição: Alteração realizada por pedido da Área Finalistica em 16/02/2016 as 10:48
+     * @throws Zend_Db_Table_Exception
      */
     public function comprovacaopagamentoAction()
     {
@@ -1568,6 +1570,9 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
 
         $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
 
+        //Adicionado para ser usado como novo parametro do método pesquisarComprovantePorItem
+        $idPronac = $this->getRequest()->getParam('idpronac');
+        #xd($idPronac);
         $planilhaItemModel = new PlanilhaItem();
         $produtoModel = new Produto();
         $etapaModel = new PlanilhaEtapa();
@@ -1591,7 +1596,8 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
         }
 
         $comprovanteParamentoModel = new ComprovantePagamento();
-        $comprovantesDePagamento = $comprovanteParamentoModel->pesquisarComprovantePorItem($idPlanilhaAprovacao);
+        //$comprovantesDePagamento = $comprovanteParamentoModel->pesquisarComprovantePorItem($idPlanilhaAprovacao);
+        $comprovantesDePagamento = $comprovanteParamentoModel->pesquisarComprovantePorItem($item->idPlanilhaItens, $idPronac); //ID Recuperado
         array_walk($comprovantesDePagamento, function(&$comprovanteDePagamento) use ($fornecedorModel) {
             $comprovanteDePagamento = (object) $comprovanteDePagamento;
             $fornecedor = $fornecedorModel

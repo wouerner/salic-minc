@@ -453,9 +453,10 @@ abstract class Zend_Db_Adapter_Abstract
             if (empty($bind)) {
                 $bind = $sql->getBind();
             }
-
+            #xd($sql->assemble());
             $sql = $sql->assemble();
         }
+
 
         // make sure $bind to an array;
         // don't use (array) typecasting because
@@ -466,10 +467,12 @@ abstract class Zend_Db_Adapter_Abstract
 
         // prepare and execute the statement with profiling
         $stmt = $this->prepare($sql);
+
         $stmt->execute($bind);
 
         // return the results embedded in the prepared statement object
         $stmt->setFetchMode($this->_fetchMode);
+
         return $stmt;
     }
 
