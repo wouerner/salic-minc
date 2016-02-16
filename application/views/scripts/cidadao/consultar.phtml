@@ -298,10 +298,12 @@ function parseUrlWithParams($url, $params = array()) {
               <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 7, 'ordem' => "$this->novaOrdem")); ?>">Enquadramento</a></th>
               <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 8, 'ordem' => "$this->novaOrdem")); ?>">&Aacute;rea</a></th>                                     
               <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 9, 'ordem' => "$this->novaOrdem")); ?>">Segmento</a></th>
-              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 10, 'ordem' => "$this->novaOrdem")); ?>">Avalia&ccedil;&atilde;o</a></th>                                                                                                               
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 15, 'ordem' => "$this->novaOrdem")); ?>">Dt Inicio</a></th>
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 16, 'ordem' => "$this->novaOrdem")); ?>">Dt Fim</a></th>                                                                                                               
+	      <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 10, 'ordem' => "$this->novaOrdem")); ?>">Avalia&ccedil;&atilde;o</a></th>                                                                                                               
               <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 11, 'ordem' => "$this->novaOrdem")); ?>">Vl.Solicitado</a></th>                                                                                                               
               <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 12, 'ordem' => "$this->novaOrdem")); ?>">Vl.Aprovado</a></th>                                                                                                               
-              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 12, 'ordem' => "$this->novaOrdem")); ?>">Vl.Captado</a></th>                                                                                                               
+              <th><a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'consultar')); ?><?php echo parseUrlWithParams($this->urlComplement, array('campo' => 13, 'ordem' => "$this->novaOrdem")); ?>">Vl.Captado</a></th>                                                                                                               
 
                 <?php /*if(!$this->intranet){ ?>
                 <th><?php echo ($this->usuarioInterno) ? 'Opini&otilde;es' : 'Cidad&atilde;o'; ?></th>
@@ -332,7 +334,25 @@ function parseUrlWithParams($url, $params = array()) {
                 <td><?php echo $d->descEnquadramento; ?></td>
                 <td><?php echo $d->dsArea; ?></td>
                 <td><?php echo $d->dsSegmento; ?></td>
-                <td>
+
+<!--Se passar da data, o valor fica em vermelho -->
+<?php
+                     if(!empty($d->DtFimExecucao)){
+                         $classRed = null;
+                         $hoje = new DateTime();
+                         $fimExecucao = new DateTime($d->DtFimExecucao);
+
+                         if($hoje > $fimExecucao){
+                             $classRed = 'style="color:red;"';
+                         }
+                     }
+?>
+<!--FIM-->
+
+		<td align="center" class="bold" <?php echo $classRed; ?>><?php echo !empty($d->DtInicioExecucao) ? Data::tratarDataZend($d->DtInicioExecucao, 'Brasileira') : '<em>Dados n&atilde;o informados!</em>'; ?></td>
+ 	        <td align="center" class="bold" <?php echo $classRed; ?>><?php echo !empty($d->DtFimExecucao) ? Data::tratarDataZend($d->DtFimExecucao, 'Brasileira') : '<em>Dados n&atilde;o informados!</em>'; ?></td>
+            
+<td>
                     <a href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'parecer-consolidado'));?>?idPronac=<?php echo Seguranca::encrypt($d->idPronac); ?>" target="_blank"><?php echo $d->descAvaliacao; ?></a>
                 </td>
                 <td align="right"><?php echo (!empty($d->vlSolicitado)) ? @number_format($d->vlSolicitado, 2, ",", ".") : ''; ?></td>
@@ -346,7 +366,7 @@ function parseUrlWithParams($url, $params = array()) {
             $TotalCaptado = $TotalCaptado + $d->vlCaptado;
             } ?>
             <tr class="direita bold destacar" style="font-size: 14px;">
-                <td colspan="9" style="padding: 15px 5px;">TOTAL</td>
+                <td colspan="11" style="padding: 15px 5px;">TOTAL</td>
                 <td nowrap><?php echo @number_format($TotalSolicitado, 2, ",", "."); ?></td>
                 <td nowrap><?php echo @number_format($TotalAprovado, 2, ",", "."); ?></td>
                 <td nowrap><?php echo @number_format($TotalCaptado, 2, ",", "."); ?></td>
