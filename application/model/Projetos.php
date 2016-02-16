@@ -6241,7 +6241,10 @@ class Projetos extends GenericModel
                         END AS vlAprovado,
                         sac.dbo.fnCustoProjeto (p.AnoProjeto,p.Sequencial) AS vlCaptado,
 
-                        p.ResumoProjeto
+                        p.ResumoProjeto,
+			DtInicioExecucao,
+			DtFimExecucao
+
                     ")
         ), 'BDCORPORATIVO.scSAC'
         );
@@ -6309,7 +6312,6 @@ class Projetos extends GenericModel
             }
             $select->limit($tamanho, $tmpInicio);
         }
-
         return $this->fetchAll($select);
     }
 
