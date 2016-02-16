@@ -166,6 +166,13 @@ class PlanilhaAprovacao extends GenericModel {
         return $this->fetchAll($select);
     }
 
+    /**
+     * Author: Alysson Vicuña de Oliveira
+     * Descrição: Alteração realizada por pedido da Área Finalistica em 16/02/2016 as 10:48
+     * @param $idpronac
+     * @param null $itemAvaliadoFilter
+     * @return Zend_Db_Table_Rowset_Abstract
+     */
     public function buscarItensPagamento($idpronac, $itemAvaliadoFilter = null)
     {
         $select = $this->select();
@@ -175,13 +182,22 @@ class PlanilhaAprovacao extends GenericModel {
             array(
                 'pAprovacao.idPlanilhaAprovacao', 'vlUnitario','qtItem','nrOcorrencia',
                 new Zend_Db_Expr('(pAprovacao.qtItem*pAprovacao.nrOcorrencia*pAprovacao.vlUnitario) as Total'),
-                new Zend_Db_Expr(
+                /*new Zend_Db_Expr(
                     "(SELECT sum(b1.vlComprovacao) AS vlPagamento
                     FROM BDCORPORATIVO.scSAC.tbComprovantePagamentoxPlanilhaAprovacao AS a1
                     INNER JOIN BDCORPORATIVO.scSAC.tbComprovantePagamento AS b1 ON (a1.idComprovantePagamento = b1.idComprovantePagamento)
                     INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS c1 ON (a1.idPlanilhaAprovacao = c1.idPlanilhaAprovacao)
                     WHERE c1.stAtivo = 'S' AND c1.idPlanilhaAprovacao = pAprovacao.idPlanilhaAprovacao AND (c1.idPronac = pAprovacao.idPronac)
                     GROUP BY a1.idPlanilhaAprovacao) as vlComprovado"
+                ),*/
+                new Zend_Db_Expr(
+                    "(SELECT sum(b1.vlComprovacao) AS vlPagamento
+                    FROM BDCORPORATIVO.scSAC.tbComprovantePagamentoxPlanilhaAprovacao AS a1
+                    INNER JOIN BDCORPORATIVO.scSAC.tbComprovantePagamento AS b1 ON (a1.idComprovantePagamento = b1.idComprovantePagamento)
+                    INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS c1 ON (a1.idPlanilhaAprovacao = c1.idPlanilhaAprovacao)
+                    WHERE c1.idPlanilhaItem = pAprovacao.idPlanilhaItem
+                     AND (c1.idPronac = pAprovacao.idPronac)
+                     GROUP BY c1.idPlanilhaItem) as vlComprovado"
                 ),
                 new Zend_Db_Expr(
                     "(SELECT sum(b2.vlComprovacao) AS vlPagamento
