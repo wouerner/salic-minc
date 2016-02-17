@@ -102,7 +102,17 @@ $urlPronac = (isset($this->idPronac)) ? "?idPronac=".Seguranca::encrypt($this->i
                 <td class="centro"><b>Proponente</b></td>
             </tr>
             <tr>
-               <td align="center"><a href="<?php echo $this->url(array('controller' => 'relatorio', 'action' => 'resultado-projeto'))."?cnpfcpf=".$this->projeto->CgcCPf; ?>"><?php echo empty($this->projeto->CgcCPf) ? '<em>Dados n&atilde;o informados!</em>' : (strlen($this->projeto->CgcCPf) > 11) ? Mascara::addMaskCNPJ($this->projeto->CgcCPf) : Mascara::addMaskCPF($this->projeto->CgcCPf); ?></a></td>
+               <td align="center">
+               <?php if ($this->projeto->CgcCPf) { ?>
+                   <?php if ($this->usuarioInterno){ ?>
+                       <a href="<?php echo $this->url(array('controller' => 'relatorio', 'action' => 'resultado-projeto'))."?cnpfcpf=".$this->projeto->CgcCPf; ?>"><?php echo (strlen($this->projeto->CgcCPf) > 11) ? Mascara::addMaskCNPJ($this->projeto->CgcCPf) : Mascara::addMaskCPF($this->projeto->CgcCPf); ?></a>
+                   <?php } else { ?>
+                       <?php echo (strlen($this->projeto->CgcCPf) > 11) ? Mascara::addMaskCNPJ($this->projeto->CgcCPf) : Mascara::addMaskCPF($this->projeto->CgcCPf); ?>
+                   <?php } ?>
+               <?php } else { ?>
+                   <em>Dados n&atilde;o informados!</em>
+               <?php } ?>
+                </td>
                 <td align="center"><?php echo empty($this->projeto->Proponente) ? '<em>Dados n&atilde;o informados!</em>' : $this->projeto->Proponente; ?></td>
             </tr>
         </table>
