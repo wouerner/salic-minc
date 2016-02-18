@@ -516,7 +516,7 @@ class PlanilhaAprovacao extends GenericModel {
     }
 
     public function buscarcomprovantepagamento($idpronac, $idPlanilhaItem){
-        $select = $this->select()->setIntegrityCheck(false)->distinct();
+        $select = $this->select()->setIntegrityCheck(false);
         $select->from(array('pAprovacao'=>$this->_name), array());
         $select->joinInner(
                             array('cppa'=>'tbComprovantePagamentoxPlanilhaAprovacao'),
@@ -524,7 +524,7 @@ class PlanilhaAprovacao extends GenericModel {
                             array(
                                 'cppa.idComprovantePagamento',
                                 'cppa.stItemAvaliado',
-                                'ocorrencia' => 'cppa.dsJustificativa',
+                                'CAST(cppa.dsJustificativa AS TEXT) as ocorrencia',
                                 'dtValidacao' => 'CONVERT(CHAR(23), cppa.dtValidacao, 120)',
                                 'vlComprovadoPlanilhaAprovacao' => 'vlComprovado',
                                 'idPlanilhaAprovacao',
