@@ -152,6 +152,7 @@
                                     $html .= "<span>{$titulo}</span>";
                                     if(is_array($subItem)) {
                                         foreach($subItem as $titulo => $tabelaItem) {
+                                            #xd($tabelaItem);
                                             $html .= '<div style="margin-left: 15px;">';
                                             $html .= "<span>{$titulo}</span>";
                                             if(is_array($tabelaItem)) {
@@ -164,6 +165,7 @@
                                                 $html .= '<th>Modalidade Vinculada</th>';
                                                 $html .= '</tr>';
                                                 foreach($tabelaItem as $key=>$valor) {
+                                                    #xd($valor);
                                                     $vlrImpugnado = $valor[1] - $valor[3];
                                                     $vlrTotalImpugnado = $vlrTotalImpugnado+$vlrImpugnado;
                                                     $urlComprovarItemArray['idPlanilhaAprovacao'] = $key;

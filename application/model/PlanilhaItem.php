@@ -14,7 +14,8 @@ class PlanilhaItem   extends GenericModel
      */
     public function pesquisar($item)
     {
-        $select = "SELECT
+        #xd($item);
+        /*$select = "SELECT
                     pa.*,
                     (
                         SELECT sum(b1.vlComprovacao) AS vlPagamento
@@ -32,8 +33,34 @@ class PlanilhaItem   extends GenericModel
                 WHERE 
                     pa.idPlanilhaAprovacao = ?
                     AND pa.stAtivo = 'S'
+                ORDER BY prod.Descricao ASC";*/
+
+        $select = "SELECT
+                    pa.*,
+                    (
+                        SELECT sum(b1.vlComprovacao) AS vlPagamento
+                        FROM BDCORPORATIVO.scSAC.tbComprovantePagamentoxPlanilhaAprovacao AS a1
+                        INNER JOIN BDCORPORATIVO.scSAC.tbComprovantePagamento AS b1 ON a1.idComprovantePagamento = b1.idComprovantePagamento
+                        INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS c1 ON a1.idPlanilhaAprovacao = c1.idPlanilhaAprovacao
+                        WHERE
+                            c1.idPlanilhaItem = pa.idPlanilhaItem
+                             AND (c1.idPronac = pa.idPronac)
+                           GROUP BY c1.idPlanilhaItem) AS vlComprovado,
+                    ROUND((pa.QtItem * pa.nrOcorrencia * pa.VlUnitario),2) as valorAprovado
+                FROM SAC.dbo.tbPlanilhaAprovacao AS pa
+                    INNER JOIN SAC.dbo.tbPlanilhaItens as pit ON pit.idPlanilhaItens = pa.idPlanilhaItem
+                    INNER JOIN SAC.dbo.tbPlanilhaEtapa AS pEtapa ON pEtapa.idPlanilhaEtapa = pa.idEtapa
+                    LEFT JOIN SAC.dbo.Produto AS prod ON prod.Codigo = pa.idProduto
+                WHERE
+                    pa.idPlanilhaAprovacao = ?
+                    AND pa.stAtivo = 'S'
                 ORDER BY prod.Descricao ASC";
+
+
         $statement = $this->getAdapter()->query($select, array($item));
+
+        #xd($select);
+
         return $statement->fetchObject();
     }
 }
