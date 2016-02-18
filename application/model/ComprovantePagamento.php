@@ -398,7 +398,7 @@ class ComprovantePagamento extends GenericModel
      * @param $item
      * @return array
      */
-    public function pesquisarComprovantePorItem($item, $idPronac)
+    public function pesquisarComprovantePorItem($item, $idPronac=false)
     {
         #die($item);
         /*$select = "SELECT
@@ -498,12 +498,19 @@ class ComprovantePagamento extends GenericModel
                     LEFT JOIN SAC.dbo.Produto AS prod ON pa.idProduto = prod.Codigo
                 WHERE
                     pa.idPlanilhaItem = ?
-                    AND pa.idPronac = ?
+        ";
+        $select .= $idPronac ? " AND pa.idPronac = ? " : "";
+        $select .= "
                 ORDER BY prod.Descricao ASC";
 
         #die($select);
         //$statement = $this->getAdapter()->query($select, array($item));
-        $statement = $this->getAdapter()->query($select, array($item, $idPronac));
+        if($idPronac){
+            $statement = $this->getAdapter()->query($select, array($item, $idPronac));
+        } else{
+            $statement = $this->getAdapter()->query($select, array($item));
+        }
+
 
         return $statement->fetchAll();
     }
