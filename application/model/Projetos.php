@@ -2924,18 +2924,13 @@ class Projetos extends GenericModel
     {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
-
-        $slct->from(array("a" => "Orgaos"), array("*"), "SAC.dbo");
-
-        $slct->joinInner(array("b" => "vwUsuariosOrgaosGrupos"), "a.Codigo = b.uog_orgao", array("*"), "TABELAS.dbo");
-
-        $slct->joinInner(array("c" => "Agentes"), "c.CNPJCPF = b.usu_identificacao", array('c.idAgente'), "AGENTES.dbo");
-//$slct->where("org_superior = ? ", $idorgao);
-        $slct->where("a.Codigo = ? ", $idOrgaoDestino);
-        $slct->where("b.sis_codigo = ? ", 21);
-        $slct->where("gru_codigo in (?) ", array('124', '100'));
-
-//xd($slct);
+	
+        $slct->from(array("a" => "vwUsuariosOrgaosGrupos"), array("usu_codigo", "usu_nome"), "TABELAS.dbo");
+	$slct->where("gru_codigo = ? ", 124);
+	$slct->where("uog_orgao = ? ", $idOrgaoDestino);
+	$slct->where("uog_status = ? ", 1);		
+	$slct->order("2 ASC");
+	
         return $this->fetchAll($slct);
     }
 
