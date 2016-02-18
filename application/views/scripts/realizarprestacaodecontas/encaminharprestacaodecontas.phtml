@@ -26,10 +26,10 @@
 
                     if(data.resposta){
                         recebe.html('');
-                        recebe.append("<option value=''>- Selecione o agente -</option>");
+                        recebe.append("<option value=''>- Selecione um t&eacute;cnico -</option>");
                         for ( i in data.conteudo)
                         {
-                            recebe.append("<option value='"+data.conteudo[i].idAgente+"/"+data.conteudo[i].idperfil+"'>"+data.conteudo[i].Perfil+" - "+data.conteudo[i].usu_nome+"</option>");
+                            recebe.append("<option value='"+data.conteudo[i].idAgente+"/"+data.conteudo[i].idperfil+"'>"+data.conteudo[i].usu_nome+"</option>");
                         }
                     }
                     else{
@@ -107,7 +107,7 @@
         </tr>
         <tr>
             <td id="HPronac" class="centro"><?php echo $this->PRONAC; ?></td>
-            <td id="HnomeProjeto" class="centro"><?php echo utf8_decode(htmlentities($this->NomeProjeto)); ?></td>
+            <td id="HnomeProjeto" class="centro"><?php echo $this->NomeProjeto; ?></td>
         </tr>
     </table>
     
@@ -117,7 +117,7 @@
         <input type="hidden" name="dsjustificativa<?php echo $this->pag;?>" id="dsjustificativa<?php echo $this->pag;?>" value=".">
         <?php } else { ?>
         <tr>
-            <td colspan="2">
+            <td colspan="2" class="destacar bold">Justificativa de encaminhamento para an&aacute;lise t&eacute;cnica
                 <textarea name="dsjustificativa<?php echo $this->pag;?>" id="dsjustificativa<?php echo $this->pag;?>" rows="6" style="width: 98%;" class="input_simples"></textarea>
 <!--                <script type="text/javascript">
                     <![CDATA[
