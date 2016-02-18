@@ -1898,35 +1898,26 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                 $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
                 $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             }
-
+	    $where['e.stAtivo = ?'] = 1;
+	    $where['e.idAgenteDestino = ?'] = $this->getIdUsuario; //id Tecnico de Prestação de Contas
+	    $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
+	    $filtro = '';
+	    
             if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
                 $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
+		$where['p.Situacao in (?)'] = array('E17', 'E20', 'E27', 'E30');
+		
                 switch ($filtro) {
-                    case 'diligenciados': //Projetos diligenciados
-                        $where['p.Situacao in (?)'] = array('E17', 'E30');
-                        $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                        $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-                        $where['e.cdGruposOrigem IN (?)'] = array('125','126'); //grupo de coordenador de prestacao de contas
-                        $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Prestação de Contas
-                        $where['e.stAtivo = ?'] = 1;
-                        $where['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
-                        break;
+ 		    case 'em_analise':
+		        $where['e.idSituacaoEncPrestContas = ?'] = '2';
+		      break;
+		    case 'analisados':
+		        $where['e.idSituacaoEncPrestContas = ?'] = '3';		      
+		      break;
                     default: //Aguardando Análise
-                        $where['p.Situacao = ?'] = 'E27';
-                        $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                        $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-                        $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Prestação de Contas
-                        $where['e.stAtivo = ?'] = 1;
+                        $where['e.idSituacaoEncPrestContas =  ?'] = '1'; //Situacao Aguardando analise
                         break;
                 }
-                
-            } else { //Aguardando Análise
-                $filtro = '';
-                $where['p.Situacao = ?'] = 'E27';
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-                $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Prestação de Contas
-                $where['e.stAtivo = ?'] = 1;
             }
             $this->view->filtro = $filtro;
             
