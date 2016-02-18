@@ -209,16 +209,20 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
                     $modalidade =   '-';
                     $idmod      =   'sem';
                 }
-                
+
                 $itemComprovacao = $planilhaItemModel->pesquisar($val->idPlanilhaAprovacao);
+                #x($itemComprovacao);
                 if ($val->tpCusto == 'A') {
                     $arrayA[$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaAprovacao] = array(
-                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->valorComprovado, $modalidade, $idmod
+                        #$val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->valorComprovado, $modalidade, $idmod
+                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->vlComprovado, $modalidade, $idmod
                     );
                 }
                 if ($val->tpCusto == 'P') {
+                    #x($itemComprovacao);
                     $arrayP[$val->Descricao][$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaAprovacao] = array(
-                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->valorComprovado, $modalidade, $idmod
+                        //$val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->valorComprovado, $modalidade, $idmod
+                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->vlComprovado, $modalidade, $idmod
                     );
                 }
             }
