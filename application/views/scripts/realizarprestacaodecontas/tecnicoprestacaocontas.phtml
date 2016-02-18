@@ -170,7 +170,8 @@
             <td width="150">
                 <select name="tipoFiltro" id="tipoFiltro" class="input_simples">
                     <option value="">Aguardando análise</option>
-                    <option value="diligenciados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='diligenciados')?'selected="selected"':''; ?>>Projetos diligenciados</option>
+                    <option value="em_analise" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_analise') ? 'selected="selected"' : '';  ?>>Em análise</option>		    
+                    <option value="analisados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados') ? 'selected="selected"' : '';  ?>>Analisados</option>
                 </select>
             </td>
             <td>
