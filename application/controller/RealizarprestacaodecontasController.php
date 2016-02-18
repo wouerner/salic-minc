@@ -2218,7 +2218,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$RelatorioTecnico = new tbRelatorioTecnico();
 		$rsParecerTecnico = $RelatorioTecnico->buscar(array('IdPRONAC=?'=>$idpronac,'cdGrupo=?'=>124))->current();
 		$rsParecerChefe   = $RelatorioTecnico->buscar(array('IdPRONAC=?'=>$idpronac,'cdGrupo=?'=>132))->current();
-
+		
 		if(is_object($rsParecerTecnico)){
 			$this->view->parecerTecnico = $rsParecerTecnico;
 			$this->view->parecerChefe   = $rsParecerChefe;
@@ -2256,28 +2256,30 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$bln_chefedivisao = $post->parecerChefeDivisao;
 
 		$relatorioTecnico = new tbRelatorioTecnico();
-		$rsParecer        = $relatorioTecnico->buscar(array('IdPRONAC=?'=>$idPronac,'cdGrupo=?'=>$this->codGrupo))->current();
 
+		$rsParecer        = $relatorioTecnico->buscar(array('IdPRONAC=?'=>$idPronac,'cdGrupo=?'=>$this->codGrupo))->current();
+		
 		$dados ['meRelatorio']  =   utf8_decode(trim($parecer));
 		$dados ['dtRelatorio']  =   date("Y-m-d H:i:s");
 		$dados ['IdPRONAC']     =   $idPronac;
-		$dados ['idAgente']     =   $this->getIdAgenteLogado;
+		$dados ['idAgente']     =   $this->getIdUsuario;
 		$dados ['cdGrupo']      =   $this->codGrupo;
 		$dados ['siManifestacao'] = $this->getRequest()->getParam('manifestacao');
-
+		
 		try{
 			if(!empty ($rsParecer)){
 				$where = array(
                                 'IdPRONAC = ?'  =>  $idPronac,
-                                'cdGrupo = ?'   =>  $this->codGrupo,
-                                'idAgente = ?'  =>  $this->getIdAgenteLogado
+                                'idRelatorioTecnico = ?'   =>  $rsParecer['idRelatorioTecnico'],
 				);
+				
 				$relatorioTecnico->update($dados,$where);
 			}
 			else{
 				//inlcui parecer
 				$relatorioTecnico->inserir($dados);
 			}
+			
 			$this->_helper->flashMessenger->addMessage('Parecer salvo com sucesso!');
 			$this->_helper->flashMessengerType->addMessage('CONFIRM');
 			$this->_redirect("realizarprestacaodecontas/emitirparecertecnico/idPronac/{$idPronac}");
