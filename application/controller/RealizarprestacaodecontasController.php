@@ -1636,7 +1636,6 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
         /** Usuario Logado *********************************************** */
         // caso o formulário seja enviado via post
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
-
         $auth               = Zend_Auth::getInstance();
         $Usuario            = new Usuario();
         $idagente           = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
@@ -1653,7 +1652,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                 $idOrgaoOrigem          = $this->codOrgao;
                 $idOrgaoDestino         = $post->passaValor;
                 $arrAgenteGrupo         = explode("/", $post->recebeValor);
-                $idAgenteOrigem         = $idagente['idAgente'];
+                $idAgenteOrigem         = $auth->getIdentity()->usu_codigo;
                 $idAgenteDestino        = $arrAgenteGrupo[0];
                 $idGrupoDestino         = $arrAgenteGrupo[1];
                 $idSituacaoPrestContas  = $post->idSituacaoPrestContas;
@@ -1673,11 +1672,11 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                     $tblProjeto = new Projetos();
                     $rsProjeto  = $tblProjeto->find($idPronac)->current();
                     $idSituacao = $rsProjeto->Situacao;
-
+		    
                     //ENCAMINHA PROJETO
                     $dados = array(
                         'idPronac'                  => $idPronac,
-                        'idAgenteOrigem'            => $this->getIdAgenteLogado,
+                        'idAgenteOrigem'            => $idAgenteOrigem,
                         'idAgenteDestino'           => $idAgenteDestino,
                         'idOrgaoOrigem'             => $idOrgaoOrigem,
                         'idOrgaoDestino'            => $idOrgaoDestino,
@@ -1713,10 +1712,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                 $this->view->nomemodal = 'encaminhar';
                 $this->view->Historico = array();
                 $this->view->ocultarJustificativa = false;
-                if(isset($post->ocultarJustificativa) && !empty($post->ocultarJustificativa) && $post->ocultarJustificativa){
-                    $this->view->ocultarJustificativa = true;
-                }
-
+		
                 $tblEncaminhamento = new tbEncaminhamentoPrestacaoContas();
                 $rsEnc = $tblEncaminhamento->buscar(array('idPronac = ?' => $idPronac, 'idOrgaoDestino=?' => $idOrgaoDestino), array('dtFimEncaminhamento'));
                 $this->view->consultorias = $rsEnc;
@@ -1728,7 +1724,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                     //$idPronac = 130978;
                     $tblProjeto = new Projetos();
                     $rsProjeto = $tblProjeto->find($idPronac)->current();
-
+		    
                     $this->view->PRONAC = $rsProjeto->AnoProjeto . $rsProjeto->Sequencial;
                     $this->view->NomeProjeto = $rsProjeto->NomeProjeto;
                     $this->view->idPronac = $idPronac;
@@ -1776,9 +1772,8 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                 foreach($AgentesOrgao as $agentes) {
                     $dadosAgente[$a]['usu_codigo'] = $agentes->usu_codigo;
                     $dadosAgente[$a]['usu_nome']   = utf8_encode ( $agentes->usu_nome );
-                    $dadosAgente[$a]['Perfil']     = utf8_encode ( $agentes->gru_nome );
-                    $dadosAgente[$a]['idperfil']   = $agentes->gru_codigo;
-                    $dadosAgente[$a]['idAgente']   = utf8_encode ( $agentes->idAgente );
+                    $dadosAgente[$a]['idperfil']   = 124;
+                    $dadosAgente[$a]['idAgente']   = $agentes->usu_codigo;
                     $a ++;
                 }
 
