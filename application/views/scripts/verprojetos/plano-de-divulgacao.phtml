@@ -62,7 +62,7 @@
 <?php foreach ($this->marcas as $marca) : ?>
     <tr>
         <td><?php echo $marca->dsDocumento; ?></td>
-        <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $marca->idArquivo; ?>"><?php echo $marca->nmArquivo ?></a></td>
+        <td><a href="<?php echo $this->url(array('controller' => 'verprojetos', 'action' => 'abrir')); ?>?id=<?php echo $marca->idArquivo; ?>"><?php echo $marca->nmArquivo ?></a></td>
         <td><?php echo Data::tratarDataZend($marca->dtEnvio, 'Brasileira'); ?></td>
         <td>
             <?php
