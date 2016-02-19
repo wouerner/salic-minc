@@ -1,7 +1,7 @@
 <?php
-    header('Content-Type: text/plain; charset=ISO-8859-1');
-    if(count($this->consultorias)==0) {
-?>
+header('Content-Type: text/plain; charset=ISO-8859-1');
+    if(count($this->consultorias)==0 || $this->idPerfilDestino == 132) {
+?>    
 <script>
     $(document).ready(function(){
         carregarDestinatariosCombo();
@@ -14,11 +14,12 @@
             recebe.append("<option value=''>carregando...</option>");
 
             $.ajax({
-                url : '<?php echo $this->url ( array ('controller' => 'realizarprestacaodecontas', 'action' => 'carregar-destinatarios-tecnicos' ) );?>',
+                url : '<?php echo $this->url ( array ('controller' => 'realizarprestacaodecontas', 'action' => 'carregar-destinatarios' ) );?>',
                 data :
                     {
                     idorgao : idorgao,
-                    verifica : 'a'
+                    verifica : 'a',
+		    idPerfilDestino : <?php echo $this->idPerfilDestino; ?>
                 },
                 success: function(data){
                     $('#encaminhar').find('.AgentePerfil').val('');
