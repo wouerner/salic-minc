@@ -668,7 +668,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             $this->_helper->layout->disableLayout (); 
 
             $tblProjetos  = new Projetos();
-            $AgentesOrgao = $tblProjetos->buscarComboOrgaos($idOrgaoDestino);
+            $AgentesOrgao = $tblProjetos->buscarComboOrgaos($idOrgaoDestino, 125);
 
             $a = 0;
             if (count($AgentesOrgao)>0) {
@@ -1640,8 +1640,10 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
         $Usuario            = new Usuario();
         $idagente           = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem     = $idagente['idAgente'];
+	$idPerfilDestino    = (null === $this->_request->getParam('idPerfilDestino')) ? 124 : $this->_request->getParam('idPerfilDestino'); // se nao receber idPerfilDestino, define como 124 por padrao (tecnico)
         $this->usu_codigo   = $auth->getIdentity()->usu_codigo;
-
+	$this->view->idPerfilDestino = $idPerfilDestino;
+	
             // recebe os dados via post
             $post = Zend_Registry::get('post');
             if ($this->getRequest()->isPost() && !empty($post->dsjustificativa)) {
@@ -1756,23 +1758,25 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             }
         }
 
-    public function carregarDestinatariosTecnicosAction()
+    public function carregarDestinatariosAction()
     {
         //IF - RECUPERA ORGAOS PARA POPULAR COMBO AO ENCAMINHAR PROJETO
         if (isset ( $_POST ['verifica'] ) and $_POST ['verifica'] == 'a') {
-            $idOrgaoDestino = $_POST ['idorgao'];
+            $idOrgaoDestino  = $_POST ['idorgao'];
+	    $idPerfilDestino = $_POST['idPerfilDestino'];
+	    
             // desabilita o Zend_Layout
             $this->_helper->layout->disableLayout (); 
 
             $tblProjetos  = new Projetos();
-            $AgentesOrgao = $tblProjetos->buscarComboOrgaos($idOrgaoDestino);
+            $AgentesOrgao = $tblProjetos->buscarComboOrgaos($idOrgaoDestino, $idPerfilDestino);
 
             $a = 0;
             if (count($AgentesOrgao)>0) {
                 foreach($AgentesOrgao as $agentes) {
                     $dadosAgente[$a]['usu_codigo'] = $agentes->usu_codigo;
                     $dadosAgente[$a]['usu_nome']   = utf8_encode ( $agentes->usu_nome );
-                    $dadosAgente[$a]['idperfil']   = 124;
+                    $dadosAgente[$a]['idperfil']   = $idPerfilDestino;
                     $dadosAgente[$a]['idAgente']   = $agentes->usu_codigo;
                     $a ++;
                 }
@@ -1903,7 +1907,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$where['p.Situacao in (?)'] = array('E17', 'E20', 'E27', 'E30');
 		
                 switch ($filtro) {
- 		    case 'em_analise':
+ 		    case 'emanalise':
 		        $where['e.idSituacaoEncPrestContas = ?'] = '2';
 		      break;
 		    case 'analisados':

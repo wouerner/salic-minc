@@ -28,7 +28,8 @@
 
 <!-- ========== INÍCIO TÍTULO ========== -->
 <div id="titulo">
-    <div>Analisar presta&ccedil;&atilde;o de contas - <?php echo ($this->filtro == 'diligenciados') ? 'Projetos Diligenciados' : 'Aguardando Análise'; ?>
+<?php $filtroNome = array('' => 'Aguardando Análise', 'emanalise' => 'Em análise', 'analisados' => 'Analisados'); ?>
+    <div>Analisar presta&ccedil;&atilde;o de contas - <?php echo ($filtroNome[$this->filtro]); ?>
         <span class="voltar" style="float: right;">
             <a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
         </span>
@@ -63,6 +64,51 @@
             $('#formImpressao').submit();
         });
     });	
+
+    function JSEncaminharParaAnalise(idPronac,idOrgaoDestino,tipoFiltro,ocultarJustificativa){               
+        $('html').css('overflow', 'hidden');
+        $("body").append("<div id='divDinamica'></div>");
+        $("#divDinamica").html("");
+        $('#divDinamica').html("<br><br><center>Carregando dados...</center>");
+        $.ajax({
+            url : '<?php echo $this->url ( array ('controller' => 'realizarprestacaodecontas', 'action' => 'encaminharprestacaodecontas' )); ?>',
+            data : {
+                idPronac : idPronac,
+                idOrgaoDestino : idOrgaoDestino,
+                idSituacaoPrestContas : 1,
+                tipoFiltro : tipoFiltro,
+                ocultarJustificativa : true,
+		idPerfilDestino: 132
+            },
+            success: function(data){
+                $('#divDinamica').html(data);
+            },
+            type : 'post'
+        });
+
+        var title = 'Encaminhar Projeto para Análise';
+        $("#divDinamica").dialog({
+            resizable: true,
+            width:750,
+            height:550,
+            modal: true,
+            autoOpen:true,
+            draggable:false,
+            title: title,
+            buttons: {
+                'Cancelar': function() {
+                    $("#divDinamica").remove();
+                    $(this).dialog('close');
+                    $('html').css('overflow', 'auto');
+                }
+            },
+            close: function() {
+                $("#divDinamica").remove();
+                $(this).dialog('close');
+                $('html').css('overflow', 'auto');
+            }
+        });
+    }
 
     function JSEncaminharParaConsultoriaDI(idPronac,idOrgaoDestino)
     {
@@ -170,7 +216,7 @@
             <td width="150">
                 <select name="tipoFiltro" id="tipoFiltro" class="input_simples">
                     <option value="">Aguardando análise</option>
-                    <option value="em_analise" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_analise') ? 'selected="selected"' : '';  ?>>Em análise</option>		    
+                    <option value="emanalise" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'emanalise') ? 'selected="selected"' : '';  ?>>Em análise</option>		    
                     <option value="analisados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados') ? 'selected="selected"' : '';  ?>>Analisados</option>
                 </select>
             </td>
@@ -247,6 +293,7 @@
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=9&ordem='.$this->paginacao['novaOrdem'];?>">Mecanismo</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=5&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Recebimento</a></th>
                 <th>Analisar Prestação de Contas</th>
+                <th>Encaminhar para Chefe de Divisão</th>		
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <th>Consultoria AECI</th>
                     <th>Consultoria CONJUR</th>
@@ -271,6 +318,9 @@
                 <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
                 <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
+                <td align="center">
+                    <img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaAnalise('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar" />
+                </td>
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','177')" alt="Encaminhar" /></td>
                     <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','12')" alt="Encaminhar" /></td>
