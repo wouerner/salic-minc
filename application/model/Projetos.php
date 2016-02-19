@@ -2920,13 +2920,13 @@ class Projetos extends GenericModel
 
 // fecha m?todo buscaProjetosFiscalizacao()
 
-    public function buscarComboOrgaos($idOrgaoDestino)
+    public function buscarComboOrgaos($idOrgaoDestino, $idGrupo)
     {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
 	
         $slct->from(array("a" => "vwUsuariosOrgaosGrupos"), array("usu_codigo", "usu_nome"), "TABELAS.dbo");
-	$slct->where("gru_codigo = ? ", 124);
+	$slct->where("gru_codigo = ? ", $idGrupo);
 	$slct->where("uog_orgao = ? ", $idOrgaoDestino);
 	$slct->where("uog_status = ? ", 1);		
 	$slct->order("2 ASC");
