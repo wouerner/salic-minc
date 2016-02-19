@@ -286,7 +286,7 @@
 
                 <!--  ======================= MARCAS =======================  -->
                 <?php if($this->blnProponente) { ?>
-                    <a class="no_seta" href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'form-enviar-arquivo-marca')); ?><?php echo $codPronac;?>">Marcas</a>
+                    <a class="no_seta" href="<?php echo $this->url(array('controller' => 'verprojetos', 'action' => 'form-enviar-arquivo-marca')); ?><?php echo $codPronac;?>">Marcas</a>
                 <?php } ?>
                 <!--  ==================== FIM - MARCAS ====================  -->
 
