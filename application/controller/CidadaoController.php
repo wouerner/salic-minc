@@ -459,7 +459,9 @@ class CidadaoController extends GenericControllerNew {
                     <th>Área</th>
                     <th>Segmento</th>
                     <th>Avaliação</th>
-                    <th>Vl.Solicitado</th>
+		    <th>Dt. Início Execução</th>
+		    <th>Dt. Término Execução</th>
+		    <th>Vl.Solicitado</th>
                     <th>Vl.Aprovado</th>
                     <th>Vl.Captado</th>
                 </tr>";
@@ -498,6 +500,8 @@ class CidadaoController extends GenericControllerNew {
                             <td>".$d->dsArea."</td>
                             <td>".$d->dsSegmento."</td>
                             <td>".$d->descAvaliacao."</td>
+			    <td>".Data::tratarDataZend($d->DtInicioExecucao, 'Brasileira')."</td>
+			    <td>".Data::tratarDataZend($d->DtFimExecucao, 'Brasileira')."</td>
                             <td>".$vl1."</td>
                             <td>".$vl2."</td>
                             <td>".$vl3."</td>
@@ -508,7 +512,7 @@ class CidadaoController extends GenericControllerNew {
         };
         
         $html .="<tr>
-                    <th colspan='9'>TOTAL</th>
+                    <th colspan='11'>TOTAL</th>
                     <th nowrap>". @number_format($TotalSolicitado, 2, ',', '.')."</th>
                     <th nowrap>". @number_format($TotalAprovado, 2, ',', '.')."</th>
                     <th nowrap>". @number_format($TotalCaptado, 2, ',', '.')."</th>
