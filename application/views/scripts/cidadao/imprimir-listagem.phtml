@@ -101,7 +101,12 @@
     <div align="center">
         <img id="brasao" src="<?php echo $this->baseUrl(); ?>/public/img/brasaoArmas.jpg" alt="Ministério da Cultura"/>
         <br clear="all" /><span class="TituloMinC">Ministério da Cultura</span>
-        <br clear="all" /><span class="TituloDoDocumento">Pauta da CNIC n&ordm; <?php echo $this->reuniao['NrReuniao']; ?> - Participação Social</span>
+        <br clear="all" /><span class="TituloDoDocumento">
+            <?php if($this->reuniao['NrReuniao']){
+                      echo 'Pauta da CNIC n&ordm; '.$this->reuniao['NrReuniao'].' - Vis&atilde;o Cidad&atilde;o';
+                }else{
+			echo 'Consulta Cidad&atilde;o';
+                }  ?></span>
         <br clear="all" /><span class="DataDoDocumento">Data da impressão: <?php echo date('d/m/Y - H:i:s'); ?></span>
         <br clear="all" /><br clear="all" /><span class="QntdRegistros"><?php echo count($this->dados).' projetos listados'; ?></span>
     </div>
@@ -119,6 +124,8 @@
                 <th>Área</th>
                 <th>Segmento</th>
                 <th>Avaliação</th>
+		<th>Dt. Início Execução</th>
+		<th>Dt. Término Execução</th>
                 <th>Vl.Solicitado</th>
                 <th>Vl.Aprovado</th>
                 <th>Vl.Captado</th>
@@ -141,6 +148,9 @@
                 <td><?php echo $d->dsArea; ?></td>
                 <td><?php echo $d->dsSegmento; ?></td>
                 <td><?php echo $d->descAvaliacao; ?></td>
+		<td align="center" class"bold"><?php echo !empty($d->DtInicioExecucao) ? Data::tratarDataZend($d->DtInicioExecucao, 'Brasileira') : '<em>Dados n&atilde;o informados!</em>'; ?></td>
+		<td align="center" class="bold"><?php echo !empty($d->DtFimExecucao) ? Data::tratarDataZend($d->DtFimExecucao, 'Brasileira') : '<em>Dados n&atilde;o informados!</em>'; ?></td>
+
                 <td align="right"><?php echo (!empty($d->vlSolicitado)) ? @number_format($d->vlSolicitado, 2, ",", ".") : ''; ?></td>
                 <td align="right"><?php echo (!empty($d->vlAprovado)) ? @number_format($d->vlAprovado, 2, ",", ".") : ''; ?></td>
                 <td align="right"><?php echo (!empty($d->vlCaptado)) ? @number_format($d->vlCaptado, 2, ",", ".") : ''; ?></td>
@@ -152,7 +162,7 @@
 
             } ?>
             <tr align="right">
-                <th colspan="9" style="font-size: 14px !important; padding: 15px 5px;">TOTAL</th>
+                <th colspan="11" style="font-size: 14px !important; padding: 15px 5px;">TOTAL</th>
                 <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalSolicitado, 2, ",", "."); ?></th>
                 <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalAprovado, 2, ",", "."); ?></th>
                 <th nowrap style="font-size: 14px !important;"><?php echo @number_format($TotalCaptado, 2, ",", "."); ?></th>
