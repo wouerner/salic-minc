@@ -196,9 +196,13 @@ class PlanilhaAprovacao extends GenericModel {
                     INNER JOIN BDCORPORATIVO.scSAC.tbComprovantePagamento AS b1 ON (a1.idComprovantePagamento = b1.idComprovantePagamento)
                     INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS c1 ON (a1.idPlanilhaAprovacao = c1.idPlanilhaAprovacao)
                     WHERE c1.idPlanilhaItem = pAprovacao.idPlanilhaItem
-                    AND c1.idEtapa = pAprovacao.idEtapa
-                    AND (c1.idPronac = pAprovacao.idPronac)
-                     GROUP BY c1.idPlanilhaItem) as vlComprovado"
+                        AND c1.nrFonteRecurso = pAprovacao.nrFonteRecurso
+                        AND c1.idProduto = pAprovacao.idProduto
+                        AND c1.idEtapa = pAprovacao.idEtapa
+                        AND c1.idUFDespesa = pAprovacao.idUFDespesa
+                        AND c1.idMunicipioDespesa = pAprovacao.idMunicipioDespesa
+                         AND c1.idPronac = pAprovacao.idPronac
+                         GROUP BY c1.idPlanilhaItem) as vlComprovado"
                 ),
                 new Zend_Db_Expr(
                     "(SELECT sum(b2.vlComprovacao) AS vlPagamento
@@ -274,6 +278,7 @@ class PlanilhaAprovacao extends GenericModel {
         );
         $select->where('pAprovacao.IdPRONAC = ?', $idpronac);
         $select->where('pAprovacao.stAtivo = ?','S');
+        $select->where('pAprovacao.nrFonteRecurso = ?', 109); //Incentivo Fiscal Federal
         $select->order('prod.Descricao');
         $select->order('pEtapa.idPlanilhaEtapa');
         $select->order('pItens.Descricao');
