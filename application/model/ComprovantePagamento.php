@@ -398,7 +398,7 @@ class ComprovantePagamento extends GenericModel
      * @param $item
      * @return array
      */
-    public function pesquisarComprovantePorItem($item, $idPronac=false, $idEtapa=false)
+    public function pesquisarComprovantePorItem($item, $idPronac=false, $idEtapa=false, $idProduto = false)
     {
         #die($item);
         /*$select = "SELECT
@@ -498,25 +498,17 @@ class ComprovantePagamento extends GenericModel
                     LEFT JOIN SAC.dbo.Produto AS prod ON pa.idProduto = prod.Codigo
                 WHERE
                     pa.idPlanilhaItem = ?
+                    AND pa.nrFonteRecurso = 109 -- BATIZADO: Incentivo Fiscal Federal
         ";
-        $select .= $idPronac ? " AND pa.idPronac = ? " : "";
-        $select .= $idEtapa ? " AND pa.idEtapa = ? " : "";
+
+        $select .= $idPronac ? " AND pa.idPronac = " . $idPronac . " " : "";
+        $select .= $idEtapa ? " AND pa.idEtapa = " . $idEtapa . " " : "";
+        $select .= $idProduto ? " AND pa.idProduto = " . $idProduto . " " : "";
         $select .= "
                 ORDER BY prod.Descricao ASC";
 
         #die($select);
-        //$statement = $this->getAdapter()->query($select, array($item));
-        if($idPronac || $idEtapa){
-            if($idPronac && !$idEtapa){
-                $statement = $this->getAdapter()->query($select, array($item, $idPronac));
-            } else if(!$idPronac && $idEtapa){
-                $statement = $this->getAdapter()->query($select, array($item, $idEtapa));
-            } else {
-                $statement = $this->getAdapter()->query($select, array($item, $idPronac, $idEtapa));
-            }
-        } else{
-            $statement = $this->getAdapter()->query($select, array($item));
-        }
+        $statement = $this->getAdapter()->query($select, array($item));
 
 
         return $statement->fetchAll();
