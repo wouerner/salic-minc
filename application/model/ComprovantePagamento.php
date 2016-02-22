@@ -398,7 +398,7 @@ class ComprovantePagamento extends GenericModel
      * @param $item
      * @return array
      */
-    public function pesquisarComprovantePorItem($item, $idPronac=false, $idEtapa=false, $idProduto = false)
+    public function pesquisarComprovantePorItem($item, $idPronac=false, $idEtapa=false, $idProduto = false, $idUFDespesa=false, $idMunicipioDespesa=false)
     {
         #die($item);
         /*$select = "SELECT
@@ -504,6 +504,8 @@ class ComprovantePagamento extends GenericModel
         $select .= $idPronac ? " AND pa.idPronac = " . $idPronac . " " : "";
         $select .= $idEtapa ? " AND pa.idEtapa = " . $idEtapa . " " : "";
         $select .= $idProduto ? " AND pa.idProduto = " . $idProduto . " " : "";
+        $select .= $idUFDespesa ? " AND pa.idUFDespesa = " . $idUFDespesa . " " : "";
+        $select .= $idMunicipioDespesa ? " AND pa.idMunicipioDespesa = " . $idMunicipioDespesa . " " : "";
         $select .= "
                 ORDER BY prod.Descricao ASC";
 
