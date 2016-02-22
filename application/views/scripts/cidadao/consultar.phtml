@@ -193,7 +193,7 @@ function parseUrlWithParams($url, $params = array()) {
 
 <!-- Alysson - Inicio Customizando a Consulta para carregar por Reuniao da CNIC -->
 <fieldset>
-        <form id="pesquisa" method="post">
+        <form id="pesquisa" method="post" target="_blank">
           <!-- alinhamento filtro ( Samir ) -->
             <table style="font-size:13px;" class="tabela">
                 <tr>
@@ -377,7 +377,8 @@ function parseUrlWithParams($url, $params = array()) {
     <br clear="all" />
     <center>
         <?php echo count($this->dados). " Projetos listados"; ?>
-        <input type="button" class="btn_imprimir">
+	</br>
+		<input type="button" class="btn_imprimir">
         <input type="button" class="btn_xls" />
     </center>
 
