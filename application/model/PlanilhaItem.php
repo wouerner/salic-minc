@@ -60,7 +60,7 @@ class PlanilhaItem   extends GenericModel
                 WHERE
                     pa.idPlanilhaAprovacao = ?
                     AND pa.stAtivo = 'S'
-                    AND pa.nrFonteRecurso = 109 --BATIZADO
+                    AND pa.nrFonteRecurso = 109 -- BATIZADO: Incentivo Fiscal Federal
                 ORDER BY prod.Descricao ASC";
 
         #xd($select);
