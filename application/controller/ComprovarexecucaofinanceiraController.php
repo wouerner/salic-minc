@@ -1576,7 +1576,7 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
 
         //Adicionado para ser usado como novo parametro do método pesquisarComprovantePorItem
         $idPronac = $this->getRequest()->getParam('idpronac');
-        #xd($idPronac);
+        #xd($this->getRequest());
         $planilhaItemModel = new PlanilhaItem();
         $produtoModel = new Produto();
         $etapaModel = new PlanilhaEtapa();
@@ -1586,6 +1586,8 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
         $produto = $produtoModel->find($itemPlanilhaAprovacao->idProduto)->current();
         $etapa = $etapaModel->find($itemPlanilhaAprovacao->idEtapa)->current();
         $item = $itemModel->find($itemPlanilhaAprovacao->idPlanilhaItem)->current();
+
+        #xd($etapa->idPlanilhaEtapa);
 
         $fornecedorModel = new FornecedorModel();
         $fornecedor = $fornecedorModel->pesquisarFornecedorItem($idPlanilhaAprovacao);
@@ -1601,7 +1603,7 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
 
         $comprovanteParamentoModel = new ComprovantePagamento();
         //$comprovantesDePagamento = $comprovanteParamentoModel->pesquisarComprovantePorItem($idPlanilhaAprovacao);
-        $comprovantesDePagamento = $comprovanteParamentoModel->pesquisarComprovantePorItem($item->idPlanilhaItens, $idPronac); //ID Recuperado
+        $comprovantesDePagamento = $comprovanteParamentoModel->pesquisarComprovantePorItem($item->idPlanilhaItens, $idPronac, $etapa->idPlanilhaEtapa); //ID Recuperado
         array_walk($comprovantesDePagamento, function(&$comprovanteDePagamento) use ($fornecedorModel) {
             $comprovanteDePagamento = (object) $comprovanteDePagamento;
             $fornecedor = $fornecedorModel

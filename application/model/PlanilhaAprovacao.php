@@ -196,7 +196,8 @@ class PlanilhaAprovacao extends GenericModel {
                     INNER JOIN BDCORPORATIVO.scSAC.tbComprovantePagamento AS b1 ON (a1.idComprovantePagamento = b1.idComprovantePagamento)
                     INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS c1 ON (a1.idPlanilhaAprovacao = c1.idPlanilhaAprovacao)
                     WHERE c1.idPlanilhaItem = pAprovacao.idPlanilhaItem
-                     AND (c1.idPronac = pAprovacao.idPronac)
+                    AND c1.idEtapa = pAprovacao.idEtapa
+                    AND (c1.idPronac = pAprovacao.idPronac)
                      GROUP BY c1.idPlanilhaItem) as vlComprovado"
                 ),
                 new Zend_Db_Expr(
