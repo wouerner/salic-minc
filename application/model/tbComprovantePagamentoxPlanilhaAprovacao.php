@@ -234,7 +234,9 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
 		
 		$select->order("d.Descricao");
 		$select->order("e.Descricao");
-        //xd($select->assemble());
+
+        #xd($select->assemble());
+
 		return $this->fetchAll($select);
 	} // fecha método buscarDados()
     
@@ -286,7 +288,8 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
 		$select->order("Agentes.dbo.fnMunicipioAgente(idFornecedor)");
 		$select->group("Agentes.dbo.fnUFAgente(idFornecedor), Agentes.dbo.fnMunicipioAgente(idFornecedor)");
         
-        //xd($select->assemble());
+        #xd($select->assemble());
+
 		return $this->fetchAll($select);
 	} // fecha método buscarDados()
     
@@ -343,8 +346,10 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
 			,array()
             ,"BDCORPORATIVO.scSAC"
 		);
-        
-        $select->where("c.stAtivo = ?", 'S');
+
+        //Linha retirada para corrigir problema na Visualização dos Projetos (24/02/2016)
+        #$select->where("c.stAtivo = ?", 'S');
+
         $select->where("c.idPronac = ?", $idPronac);
 		$select->order(3);
         //xd($select->assemble());
@@ -403,8 +408,10 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
 			,array()
             ,"SAC.dbo"
 		);
-        
-        $select->where("c.stAtivo = ?", 'S');
+
+        //Linha retirada para corrigir problema na Visualização dos Projetos (24/02/2016)
+        //$select->where("c.stAtivo = ?", 'S');
+
         $select->where("c.idPronac = ?", $idPronac);
 		$select->group(array('c.idPronac','f.Descricao','d.Descricao','g.Descricao','c.qtItem','nrOcorrencia','c.vlUnitario','f.idPlanilhaEtapa'));
 		$select->order(array(1,2));
@@ -432,7 +439,9 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
         $a->where('a.AnoProjeto+a.Sequencial = (SELECT x.Anoprojeto+x.Sequencial FROM SAC.dbo.Projetos x WHERE x.idPronac = ? )', $idPronac);
         $a->group(array('a.CgcCpfMecena','c.Descricao'));
         $a->order(array('2','3'));
-        
+
+        #xd($a->assemble());
+
         return $this->fetchAll($a);
 	} // fecha método buscarDados()
     
@@ -460,7 +469,9 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
                 array('f' => 'tbPlanilhaEtapa'), "c.idEtapa = f.idPlanilhaEtapa",
                 array(), 'SAC.dbo'
         );
-        $b->where('c.stAtivo = ?', 'S');
+        //Linha retirada para corrigir problema na Visualização dos Projetos (24/02/2016)
+        #$b->where('c.stAtivo = ?', 'S');
+
         $b->where('c.idPronac = ?', $idPronac);
         $b->group(array('c.idPronac','f.Descricao','d.Descricao'));
         $b->order(array('2','3'));
