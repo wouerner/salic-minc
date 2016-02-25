@@ -160,6 +160,7 @@
 			?>
             <tr>
                 <td>
+		    <?php if (!is_null($d->idAgente)) { ?>
                 	<a href="
                 		<?php
                 			echo $this->url(array(
@@ -171,6 +172,9 @@
                 	>
                 		<?php echo($d->CgcCPfMecena != $cnpjcpf) ? $d->Nome : '';  ?>
                 	</a>
+		    <?php } else { ?>
+			<?php echo $d->Nome; ?>
+		    <?php } ?>
                 </td>
                 <td><?php echo $d->NumeroRecibo; ?></td>
                 <td><?php echo $d->TipoApoio; ?></td>
