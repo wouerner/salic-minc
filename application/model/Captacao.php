@@ -1348,7 +1348,7 @@ class Captacao extends GenericModel {
             array('i' => 'Interessado'), 'c.CgcCPfMecena = i.CgcCPf',
             array(''), 'SAC.dbo'
         );
-        $select->joinInner(array('a' => 'agentes'), 'a.CNPJCPf = i.CgcCPf', array('idAgente'), 'Agentes.dbo');
+        $select->joinLeft(array('a' => 'agentes'), 'a.CNPJCPf = c.CgcCPfMecena', array('idAgente'), 'Agentes.dbo');
         
        //adiciona quantos filtros foram enviados
         foreach ($where as $coluna => $valor) {
