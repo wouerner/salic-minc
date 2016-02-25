@@ -3450,7 +3450,6 @@ class ReadequacoesController extends GenericControllerNew {
         $parecerTecnico = $Parecer->buscar(array('IdParecer=(?)'=>$pareceres), array('IdParecer'))->current();
 
         $tbReadequacao = new tbReadequacao();
-	$alteracaoValorPlanilha = False;  // bool para verificar se houve acréscimo ou diminuicao de valores na planilha orcamentaria
 	
         if($parecerTecnico->ParecerFavoravel == 2){ //Se for parecer favorável, atualiza os dados solicitados na readequação
             $read = $tbReadequacao->buscarReadequacao(array('idReadequacao =?'=>$idReadequacao))->current();
@@ -3472,25 +3471,27 @@ class ReadequacoesController extends GenericControllerNew {
                 $where['a.tpPlanilha = ?'] = 'SR';
                 $where['a.stAtivo = ?'] = 'N';
                 $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-		
+
+		// chama SP que verifica o tipo do remanejamento
+		$spTipoDeReadequacaoOrcamentaria = new spTipoDeReadequacaoOrcamentaria();
+		$TipoDeReadequacao = $spTipoDeReadequacaoOrcamentaria->exec($read->idPronac);
+
 		// complementacao
-                if($PlanilhaAtiva->Total < $PlanilhaReadequada->Total){
+                if($TipoDeReadequacao == 'CO'){
                     $TipoAprovacao = 2;
                     $dadosPrj->Situacao = 'D28';
 		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de complementação';
 		    $dadosPrj->Logon = $auth->getIdentity()->usu_codigo;
-		    $alteracaoValorPlanilha = True;
-                } else if ($PlanilhaAtiva->Total > $PlanilhaReadequada->Total) {
+                } else if ($TipoDeReadequacao == 'RE'){
 		  // reducao
                     $TipoAprovacao = 4;
                     $dadosPrj->Situacao = 'D29';
 		    $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de redução';
 		    $dadosPrj->Logon = $auth->getIdentity()->usu_codigo;
-		    $alteracaoValorPlanilha = True;
                 }
 		
 		// insere somente em reducao ou complementacao
-		if ($alteracaoValorPlanilha) {
+		if ($TipoDeReadequacao == 'CO' || $TipoDeReadequacao == 'RE') {
 
 		  $dadosPrj->save();
 		  // reducao
@@ -3864,9 +3865,11 @@ class ReadequacoesController extends GenericControllerNew {
         $tiposParaChecklist = array(2,3,10,12,15);
         if(in_array($read->idTipoReadequacao, $tiposParaChecklist)){
 	  // se remanejamento orcamentario
-	  if ($read->idTipoReadequacao == 2 && !$alteracaoValorPlanilha) {
-	    $dados['siEncaminhamento'] = 15; //Finalizam sem a necessidade de passar pela publicação no DOU.
-	    $dados['stEstado'] = 1;
+	  if ($read->idTipoReadequacao == 2) {
+	    if ($TipoDeReadequacao == 'RE') {
+	      $dados['siEncaminhamento'] = 15; //Finalizam sem a necessidade de passar pela publicação no DOU.
+	      $dados['stEstado'] = 1;
+	    }
 	  } else {
 	    // reducao ou complementacao orcamentaria
             $dados['siEncaminhamento'] = 9; //Encaminhado pelo sistema para o Checklist de Publicação
@@ -3879,10 +3882,12 @@ class ReadequacoesController extends GenericControllerNew {
 	
         $return = $tbReadequacao->update($dados, $where);
 	
-	if (!$alteracaoValorPlanilha) {
-	  // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
-	  $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
-	  $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
+	if ($read->idTipoReadequacao == 2) {
+	  if ($TipoDeReadequacao == 'RE') {
+	    // remanejamento: chama sp para trocar planilha ativa (desativa atual e ativa remanejada)
+	    $spAtivarPlanilhaOrcamentaria = new spAtivarPlanilhaOrcamentaria();
+	    $ativarPlanilhaOrcamentaria = $spAtivarPlanilhaOrcamentaria->exec($read->idPronac);		  
+	  }
 	}
 	
         //Atualiza a tabela tbDistribuirReadequacao
