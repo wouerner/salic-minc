@@ -2122,6 +2122,12 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             $this->view->idPronac,
             ($this->view->itemAvaliadoFilter ? $this->view->itemAvaliadoFilter : null)
         );
+       
+        $idPlanilhaAprovacao = $this->_request->getParam("idPlanilhaAprovacao");
+
+	$planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $this->view->projeto = $planilhaAprovacaoModel->dadosdoitem($this->_request->getParam("idPlanilhaAprovacao"), $this->view->idPronac)->current();
+
 
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
         $rsEncaminhamento = $tblEncaminhamento->buscar(array('idPronac=?'=>$this->view->idPronac,'stAtivo=?'=>1))->current();
@@ -2133,7 +2139,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 
         $arrayA = array();
         $arrayP = array();
-        
+
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
                 $modalidade = '';
@@ -2193,6 +2199,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             }
         }
 
+        $this->view->comprovantesPagamento = $planilhaAprovacaoModel->buscarcomprovantepagamento($this->view->idPronac, $idPlanilhaAprovacao);
         $this->view->incFiscaisA = array(utf8_encode('Administra&ccedil;&atilde;o do Projeto') =>$arrayA);
         $this->view->incFiscaisP = array(utf8_encode('Custo por Produto') =>$arrayP);
     }
