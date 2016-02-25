@@ -142,33 +142,21 @@
             <td align="center"><?php echo $this->nomeProjeto;?></td>
             <?php if($this->itemAvaliadoFilter == 2 || $this->codGrupo == 132){ ?>
                 <?php
-                    $TotalAprovado = 0;
-                    $TotalImpugnado = 0;
-                    foreach ($this->incFiscaisA as $val1) {
-                        foreach ($val1 as $val1) {
-                            foreach ($val1 as $val1) {
-                                foreach ($val1 as $val1) {
-                                    $TotalAprovado = $TotalAprovado + $val1[1];
-                                    $TotalImpugnado = $TotalImpugnado + $val1[7];
-                                }
-                            }
-                        }
-                    }
 
-                    foreach ($this->incFiscaisP as $val2) {
-                        foreach ($val2 as $val2) {
-                            foreach ($val2 as $val2) {
-                                foreach ($val2 as $val2) {
-                                    foreach ($val2 as $val2) {
-                                        $TotalAprovado = $TotalAprovado + $val2[1];
-                                        $TotalImpugnado = $TotalImpugnado + $val2[7];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                ?>
-                <td align="center"><?php echo $this->formatarReal($TotalAprovado - $TotalImpugnado); ?></td>
+//Calcula a somatório dos valore impugnados
+ 		    $vlTotalImpugnado=0;
+                    define('CONST_PRESTACAO_CONTAS_INPUGNADO', 3);
+   
+           
+
+                foreach ($this->comprovantesPagamento as $index => $impugnado) {
+                    if ($impugnado->stItemAvaliado == CONST_PRESTACAO_CONTAS_INPUGNADO){
+	              	$vlTotalImpugnado += $impugnado->vlComprovacao;
+                     }
+                }
+
+                  ?>
+                <td align="center"><?php echo $this->formatarReal($vlTotalImpugnado); ?></td>
             <?php } ?>
         </tr>
     </table>
