@@ -228,8 +228,9 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
 			,array()
             ,"Agentes.dbo"
 		);
-        
-        $select->where("c.stAtivo = ?", 'S');
+
+        //Alteração realizada no dia 25/02/2016 a pedido da area demandante.
+        #$select->where("c.stAtivo = ?", 'S');
         $select->where("c.idPronac = ?", $idPronac);
 		
 		$select->order("d.Descricao");
@@ -280,8 +281,9 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
 			,array()
             ,"Agentes.dbo"
 		);
-        
-        $select->where("c.stAtivo = ?", 'S');
+
+        //Alteração realizada no dia 25/02/2016 a pedido da area demandante.
+        #$select->where("c.stAtivo = ?", 'S');
         $select->where("c.idPronac = ?", $idPronac);
 		
 		$select->order("Agentes.dbo.fnUFAgente(idFornecedor)");
