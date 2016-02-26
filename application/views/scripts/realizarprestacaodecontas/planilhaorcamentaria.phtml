@@ -141,22 +141,7 @@
             <td align="center"><?php echo $this->pronac;?></td>
             <td align="center"><?php echo $this->nomeProjeto;?></td>
             <?php if($this->itemAvaliadoFilter == 2 || $this->codGrupo == 132){ ?>
-                <?php
-
-//Calcula a somatório dos valore impugnados
- 		    $vlTotalImpugnado=0;
-                    define('CONST_PRESTACAO_CONTAS_INPUGNADO', 3);
-   
-           
-
-                foreach ($this->comprovantesPagamento as $index => $impugnado) {
-                    if ($impugnado->stItemAvaliado == CONST_PRESTACAO_CONTAS_INPUGNADO){
-	              	$vlTotalImpugnado += $impugnado->vlComprovacao;
-                     }
-                }
-
-                  ?>
-                <td align="center"><?php echo $this->formatarReal($vlTotalImpugnado); ?></td>
+                <td align="center"><?php echo $this->formatarReal($this->vlComprovacaoImpugnado); ?></td>
             <?php } ?>
         </tr>
     </table>
