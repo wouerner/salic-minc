@@ -5845,7 +5845,7 @@ class Projetos extends GenericModel
                             then 'Artigo 26'
                             when Enquadramento = '2'
                             then 'Artigo 18'
-                            else 'N?o enquadrado'
+                            else 'Não enquadrado'
                             end as Enquadramento, p.Situacao as codSituacao,
                             (SELECT sum(b1.vlComprovacao)
                                 FROM BDCORPORATIVO.scSAC.tbComprovantePagamentoxPlanilhaAprovacao AS a1
@@ -6233,9 +6233,18 @@ class Projetos extends GenericModel
                             WHEN pr.ParecerFavoravel = '1' THEN 'Desfavorável'
                             WHEN pr.ParecerFavoravel = '2' THEN 'Favorável'
                         END AS descAvaliacao,
-                        p.SolicitadoReal as vlSolicitado,
-                        (SELECT SUM(qtItem*nrOcorrencia*vlUnitario) FROM SAC.dbo.tbPlanilhaAprovacao pa WHERE pa.IdPRONAC = p.IdPRONAC AND stAtivo = 'S' and pa.nrFonteRecurso=109) AS vlSugerido,
-                        p.ResumoProjeto
+                        p.SolicitadoReal AS vlSolicitado,
+                        CASE
+                            WHEN p.Mecanismo ='2' OR p.Mecanismo ='6'
+                                THEN sac.dbo.fnValorAprovadoConvenio(p.AnoProjeto,p.Sequencial)
+                            ELSE sac.dbo.fnValorAprovado(p.AnoProjeto,p.Sequencial)
+                        END AS vlAprovado,
+                        sac.dbo.fnCustoProjeto (p.AnoProjeto,p.Sequencial) AS vlCaptado,
+
+                        p.ResumoProjeto,
+			DtInicioExecucao,
+			DtFimExecucao
+
                     ")
         ), 'BDCORPORATIVO.scSAC'
         );
@@ -6303,7 +6312,6 @@ class Projetos extends GenericModel
             }
             $select->limit($tamanho, $tmpInicio);
         }
-
         return $this->fetchAll($select);
     }
 

@@ -74,7 +74,7 @@ class CidadaoController extends GenericControllerNew {
 
         } else {
             $campo = null;
-            $order = array('12 DESC'); //Vl.Sugerido
+            $order = array('12 DESC'); //Vl.Aprovado
             $ordenacao = null;
         }
 
@@ -120,6 +120,9 @@ class CidadaoController extends GenericControllerNew {
         $this->view->listaReunioes = $reuniao->buscarTodasReunioes($order_reuniao);
         $order = array();
 
+        // Fernao: adicionando complementação da url para GET para pegar filtros POT
+        $urlComplement = array();
+ 
         //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
@@ -128,60 +131,64 @@ class CidadaoController extends GenericControllerNew {
             }else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
-
+        
+        if($this->_request->getParam("pag")) {
+           $pag = $this->_request->getParam("pag");
+           $urlComplement[] = "pag=" . $pag;
+        }
+        // xd($this->_request); 
         //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
-            $order = array($campo." ".$ordem);
-            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+            $ordenacao = "&campo=".$campo;
+            $urlComplement[] = "campo=$campo";
+            $urlComplement[] = "ordem=$ordem";
 
         } else {
-            $campo = null;
-            $order = array('12 DESC'); //Vl.Sugerido
+            $campo = 12;
+            $ordem = 'DESC';
             $ordenacao = null;
+            $urlComplement[] = "ordem=" . $ordem;
+            $urlComplement[] = "campo=" . $campo;
         }
-
+        $order = array("$campo $ordem");
+        
         /* ================== PAGINACAO ======================*/
         $where = array();
         //$where["t.idNrReuniao = ?"] = $raberta->idNrReuniao;
         $where["stAtivo = ?"] = 1;
-
-        // Fernao: adicionando complementação da url para GET para pegar filtros POT
-        $urlComplement = "";
-        
+       
         // Fernao: adicionando filtros
         if ($this->_request->getParam("NrPronacConsulta")) {
             $nrPronac = $this->_request->getParam("NrPronacConsulta");
             $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
             $this->view->nrPronac = $nrPronac;
-            $urlComplement .= "&NrPronac=$nrPronac";
+            $urlComplement[] = "NrPronac=$nrPronac";
         }
         if ($this->_request->getParam("CnpjCpfConsulta")) {
             $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
             $CnpjCpf = str_replace(array('.', '/', '-'), '', $CnpjCpf);
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
             $this->view->cnpjCpf = $CnpjCpf;
-            $urlComplement .= "&CNPJCPF=$CnpjCpf";
+            $urlComplement[] = "CNPJCPF=$CnpjCpf";
          }
         if ($this->_request->getParam("ProponenteConsulta")) {
             $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
             $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
             $this->view->proponente = $ProponenteConsulta;
-            $urlComplement .= "&ProponenteConsulta=$ProponenteConsulta";
+            $urlComplement[] = "ProponenteConsulta=$ProponenteConsulta";
         }    
         if ($this->_request->getParam("NomeProjetoConsulta")) {
             $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
             $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
             $this->view->nomeProjeto = $NomeProjetoConsulta;
-            $urlComplement .= "&NomeProjetoConsulta=$NomeProjetoConsulta";
+            $urlComplement[] = "NomeProjetoConsulta=$NomeProjetoConsulta";
         }
-        
-        $this->view->urlComplement = $urlComplement;
-        
+       
         $Projetos = new Projetos();
         
         //Alysson
@@ -189,17 +196,19 @@ class CidadaoController extends GenericControllerNew {
             $idNrReuniao = null;
         } else {
             $idNrReuniao = $raberta->idNrReuniao;
+            $urlComplement[] = "idNrReuniaoConsulta=" . $idNrReuniao;            
         }
         
         // paginação
         if($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
+            $urlComplement[] = 'qtde=' . $this->intTamPag;
         }
         $pag = 1;
         $post  = Zend_Registry::get('get');
         if (isset($post->pag)) $pag = $post->pag;
         $offset = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
-        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
+        $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $ordem, false, false, true);
         $fim = $offset + $this->intTamPag;
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $limit = ($fim > $total) ? $total - $offset : $this->intTamPag;
@@ -220,7 +229,24 @@ class CidadaoController extends GenericControllerNew {
         );
         
         $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, $limit, $offset);
-        
+
+        // gera url completa com paginacao e variáveis
+        $strUrlComplement = '';   // campo texto vazio
+
+        // se houver complementos
+        if (!empty($urlComplement)) {
+            $first = true;
+            foreach ($urlComplement as $complement) {
+                if ($first) {
+                    $strUrlComplement .= '?' . $complement;
+                    $first = false;
+                } else { 
+                    $strUrlComplement .= '&' . $complement;
+                }
+            } 
+        }
+ 
+        $this->view->urlComplement = $strUrlComplement;
         $this->view->paginacao     = $paginacao;       
         $this->view->qtdRegistros = $total;
         $this->view->dados = $busca;
@@ -433,12 +459,17 @@ class CidadaoController extends GenericControllerNew {
                     <th>Área</th>
                     <th>Segmento</th>
                     <th>Avaliação</th>
-                    <th>Vl.Solicitado</th>
-                    <th>Vl.Sugerido</th>
+		    <th>Dt. Início Execução</th>
+		    <th>Dt. Término Execução</th>
+		    <th>Vl.Solicitado</th>
+                    <th>Vl.Aprovado</th>
+                    <th>Vl.Captado</th>
                 </tr>";
         
-        $TotalSol = 0;
-        $TotalSug = 0;
+        $TotalSolicitado = 0;
+        $TotalAprovado = 0;
+        $TotalCaptado = 0;
+
         foreach($busca as $d){
             if(!empty($d->vlSolicitado)){
                 $vl1 = @number_format($d->vlSolicitado, 2, ",", ".");
@@ -446,11 +477,18 @@ class CidadaoController extends GenericControllerNew {
                 $vl1 = '';
             }
 
-            if(!empty($d->vlSugerido)){
-                $vl2 = @number_format($d->vlSugerido, 2, ",", ".");
+            if(!empty($d->vlAprovado)){
+                $vl2 = @number_format($d->vlAprovado, 2, ",", ".");
             } else {
                 $vl2 = '';
             }
+
+            if(!empty($d->vlCaptado)){
+                $vl3 = @number_format($d->vlCaptado, 2, ",", ".");
+            } else {
+                $vl3 = '';
+            }
+
 
             $html .= "  <tr>
                             <td>".$d->Pronac."</td>
@@ -462,16 +500,22 @@ class CidadaoController extends GenericControllerNew {
                             <td>".$d->dsArea."</td>
                             <td>".$d->dsSegmento."</td>
                             <td>".$d->descAvaliacao."</td>
+			    <td>".Data::tratarDataZend($d->DtInicioExecucao, 'Brasileira')."</td>
+			    <td>".Data::tratarDataZend($d->DtFimExecucao, 'Brasileira')."</td>
                             <td>".$vl1."</td>
                             <td>".$vl2."</td>
+                            <td>".$vl3."</td>
                     </tr>";
-            $TotalSol=$TotalSol+$d->vlSolicitado; $TotalSug=$TotalSug+$d->vlSugerido;
+            $TotalSolicitado = $TotalSolicitado + $d->vlSolicitado; 
+            $TotalAprovado = $TotalAprovado + $d->vlAprovado;
+            $TotalCaptado = $TotalCaptado + $d->vlCaptado;
         };
         
         $html .="<tr>
-                    <th colspan='9'>TOTAL</th>
-                    <th nowrap>". @number_format($TotalSol, 2, ',', '.')."</th>
-                    <th nowrap>". @number_format($TotalSug, 2, ',', '.')."</th>
+                    <th colspan='11'>TOTAL</th>
+                    <th nowrap>". @number_format($TotalSolicitado, 2, ',', '.')."</th>
+                    <th nowrap>". @number_format($TotalAprovado, 2, ',', '.')."</th>
+                    <th nowrap>". @number_format($TotalCaptado, 2, ',', '.')."</th>
                 </tr>
             ";
         $html .="</table>";
