@@ -1,3 +1,9 @@
+
+
+Release 1.4.1
+  * Novo: [consulta cidadao] - Implementação da nova funcionalida de consulta, cidadao/consultar
+  * Fix: [readequação] - Corrigindo a Readequacao para que o valor aprovado seja trazido pelo banco de dados corretamente através de uma procedure 
+
 Release 1.3.7
   * Fix: [remanejamento] - correção na soma dos valores na finalização da readequação
   * Fix: [remanejamento] - removendo campos desnecessários na totalização
