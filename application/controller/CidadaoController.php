@@ -99,6 +99,10 @@ class CidadaoController extends GenericControllerNew {
     }
 
     public function consultarAction() {
+
+	#Pedro - Criando a variavel de Sessao para Usar na impressao PDF 
+	$sess = new Zend_Session_Namespace('Filtro_de_Pesquisa');
+
         if(!$this->usuarioInterno){
             Zend_Layout::startMvc(array('layout' => 'layout_login'));
         }
@@ -135,10 +139,15 @@ class CidadaoController extends GenericControllerNew {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
-        
+	#Pedro
+        $sess->novaOrdem = $novaOrdem;
+        $sess->ordem = $ordem;
+
         if($this->_request->getParam("pag")) {
            $pag = $this->_request->getParam("pag");
            $urlComplement[] = "pag=" . $pag;
+	   #Pedro - Criando a variavel de Sessao para Usar na impressao 
+           $sess->pag = $pag;
         }
         // xd($this->_request); 
         //==== campo de ordenacao  ======//
@@ -147,6 +156,7 @@ class CidadaoController extends GenericControllerNew {
             $ordenacao = "&campo=".$campo;
             $urlComplement[] = "campo=$campo";
             $urlComplement[] = "ordem=$ordem";
+	    $sess->campo = $campo;
 
         } else {
             $campo = 12;
@@ -154,7 +164,10 @@ class CidadaoController extends GenericControllerNew {
             $ordenacao = null;
             $urlComplement[] = "ordem=" . $ordem;
             $urlComplement[] = "campo=" . $campo;
+	    $sess->campo = $campo;
+	    $sess->ordem = $ordem;
         }
+
         $order = array("$campo $ordem");
         
         /* ================== PAGINACAO ======================*/
@@ -165,6 +178,7 @@ class CidadaoController extends GenericControllerNew {
         // Fernao: adicionando filtros
         if ($this->_request->getParam("NrPronacConsulta")) {
             $nrPronac = $this->_request->getParam("NrPronacConsulta");
+	    $sess->nrPronac = $nrPronac;
             $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
             $this->view->nrPronac = $nrPronac;
             $urlComplement[] = "NrPronac=$nrPronac";
@@ -175,18 +189,21 @@ class CidadaoController extends GenericControllerNew {
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
             $this->view->cnpjCpf = $CnpjCpf;
             $urlComplement[] = "CNPJCPF=$CnpjCpf";
+	    $sess->CnpjCpf = $CnpjCpf;
          }
         if ($this->_request->getParam("ProponenteConsulta")) {
             $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
             $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
             $this->view->proponente = $ProponenteConsulta;
             $urlComplement[] = "ProponenteConsulta=$ProponenteConsulta";
+	    $sess->ProponenteConsulta = $ProponenteConsulta;
         }    
         if ($this->_request->getParam("NomeProjetoConsulta")) {
             $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
             $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
             $this->view->nomeProjeto = $NomeProjetoConsulta;
             $urlComplement[] = "NomeProjetoConsulta=$NomeProjetoConsulta";
+	    $sess->NomeProjetoConsulta = $NomeProjetoConsulta;
         }
        
         $Projetos = new Projetos();
@@ -196,13 +213,14 @@ class CidadaoController extends GenericControllerNew {
             $idNrReuniao = null;
         } else {
             $idNrReuniao = $raberta->idNrReuniao;
-            $urlComplement[] = "idNrReuniaoConsulta=" . $idNrReuniao;            
+            $urlComplement[] = "idNrReuniaoConsulta=" . $idNrReuniao;           
         }
         
         // paginação
         if($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
             $urlComplement[] = 'qtde=' . $this->intTamPag;
+            $sess->qtde = $this->intTamPag;
         }
         $pag = 1;
         $post  = Zend_Registry::get('get');
@@ -262,6 +280,10 @@ class CidadaoController extends GenericControllerNew {
     }
     
     public function imprimirListagemAction() {
+
+	#Pedro - recuperando a Sessao Salva da pesquisa
+	$sess = new Zend_Session_Namespace('Filtro_de_Pesquisa');
+
         $idNrReuniaoConsulta = $this->_request->getParam("idNrReuniaoConsulta") ? $this->_request->getParam("idNrReuniaoConsulta") : null;
         $reuniao = new Reuniao();
         
@@ -276,8 +298,8 @@ class CidadaoController extends GenericControllerNew {
         $order = array();
 
         //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
-            $ordem = $this->_request->getParam("ordem");
+        if($sess->ordem) {
+            $ordem = $sess->ordem;
             if($ordem == "ASC") {
                 $novaOrdem = "DESC";
             }else {
@@ -289,8 +311,8 @@ class CidadaoController extends GenericControllerNew {
         }
 
         //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
-            $campo = $this->_request->getParam("campo");
+        if($sess->campo) {
+            $campo = $sess->campo;
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
 
@@ -303,24 +325,25 @@ class CidadaoController extends GenericControllerNew {
         $where["stAtivo = ?"] = 1;
 
         // Fernao: adicionando filtros
-        if ($this->_request->getParam("NrPronacConsulta")) {
-            $nrPronac = $this->_request->getParam("NrPronacConsulta");
+        if ($sess->nrPronac) {
+            #$nrPronac = $this->_request->getParam("NrPronacConsulta");
+            $nrPronac = $sess->nrPronac; #Pedro
             $where["p.AnoProjeto+p.Sequencial = ?"] = $nrPronac;
             $this->view->nrPronac = $nrPronac;
         }
-        if ($this->_request->getParam("CnpjCpfConsulta")) {
-            $CnpjCpf = $this->_request->getParam("CnpjCpfConsulta");
+        if ($sess->CnpjCpf) {
+            $CnpjCpf = $sess->CnpjCpf;
             $CnpjCpf = str_replace(array('.', '/', '-'), '', $CnpjCpf);
             $where["x.CNPJCPF = ?"] = $CnpjCpf;
             $this->view->cnpjCpf = $CnpjCpf;
         }
-        if ($this->_request->getParam("ProponenteConsulta")) {
-            $ProponenteConsulta = $this->_request->getParam("ProponenteConsulta");
+        if ($sess->ProponenteConsulta) {
+            $ProponenteConsulta = $sess->ProponenteConsulta;
             $where["y.Descricao LIKE ?"] = "%" . $ProponenteConsulta. "%";
             $this->view->proponente = $ProponenteConsulta;
         }    
-        if ($this->_request->getParam("NomeProjetoConsulta")) {
-            $NomeProjetoConsulta = $this->_request->getParam("NomeProjetoConsulta");
+        if ($sess->NomeProjetoConsulta) {
+            $NomeProjetoConsulta = $sess->NomeProjetoConsulta;
             $where["p.NomeProjeto LIKE ?"] = "%" . $NomeProjetoConsulta . "%";
             $this->view->nomeProjeto = $NomeProjetoConsulta;
         }
@@ -334,15 +357,16 @@ class CidadaoController extends GenericControllerNew {
         }
 
         // paginação
-        if($this->_request->getParam("qtde")) {
-            $this->intTamPag = $this->_request->getParam("qtde");
+        if($sess->qtde){
+            $this->intTamPag = $sess->qtde;
         }
 
         $total = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, false, false, true);
         
         $pag = 1;
         $post  = Zend_Registry::get('get');
-        if (isset($post->pag)) $pag = $post->pag;
+
+        if (isset($sess->pag)) $pag = $sess->pag;
         $offset = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;        
         $fim = $offset + $this->intTamPag;
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
@@ -351,9 +375,9 @@ class CidadaoController extends GenericControllerNew {
         $busca = $Projetos->projetosCnicOpinioesPorIdReuniao($idNrReuniao, $where, $order, $limit, $offset);
         
         $this->view->dados = $busca;
-        $this->view->novaOrdem = $novaOrdem;
-        $this->view->ordem = $ordem;
-        $this->view->campo = $campo;
+        $this->view->novaOrdem = $sess->novaOrdem;
+        $this->view->ordem = $sess->ordem;
+        $this->view->campo = $sess->campo;
         
         $this->view->intranet = false;
         if(isset($_GET['intranet'])){
