@@ -75,7 +75,7 @@
         <td align="center"><?php echo Data::tratarDataZend($relPagamentos->DtPagamento, 'Brasileira'); ?></td>
         <td><?php echo $relPagamentos->tpFormaDePagamento; ?></td>
         <td><?php echo $relPagamentos->nrDocumentoDePagamento; ?></td>
-        <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $relPagamentos->idArquivo; ?>"><?php echo $relPagamentos->nmArquivo; ?></a></td>
+        <td><a href="<?php echo $this->url(array('controller' => 'verprojetos', 'action' => 'abrir')); ?>?id=<?php echo $relPagamentos->idArquivo; ?>"><?php echo $relPagamentos->nmArquivo; ?></a></td>
         <td align="right"><?php echo number_format($relPagamentos->vlPagamento, 2, ",", "."); ?></td>
     </tr>
     <?php $x++; $idPlanilhaAnterior=$relPagamentos->idPlanilhaAprovacao; $vlTotal=$vlTotal+$relPagamentos->vlPagamento; } ?>

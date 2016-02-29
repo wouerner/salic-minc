@@ -57,7 +57,7 @@ if (count($this->readequacoes) > 0):
                         <tr>
                             <td align="center">
                             <?php if(!empty($r->idArquivo)){ ?>
-                                <a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $r->idArquivo; ?>"><?php echo $r->nmArquivo; ?></a>
+                                <a href="<?php echo $this->url(array('controller' => 'verprojetos', 'action' => 'abrir')); ?>?id=<?php echo $r->idArquivo; ?>"><?php echo $r->nmArquivo; ?></a>
                             <?php } else { echo '-'; } ?>
                             </td>
                             <td align="center"><?php echo Data::tratarDataZend($r->dtSolicitacao, 'brasileira'); ?></td>
