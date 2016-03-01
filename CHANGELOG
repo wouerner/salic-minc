@@ -1,4 +1,7 @@
-
+Release 1.4.2
+  * Fix: [consulta cidadao] - Correção do cabeçalho 
+  * Fix: [consulta cidadao] - Correção da impressão dos dados
+  * Fix: [manual proposta] - Apresentando manual de como apresentar sua proposta cultural
 
 Release 1.4.1
   * Novo: [consulta cidadao] - Implementação da nova funcionalida de consulta, cidadao/consultar
