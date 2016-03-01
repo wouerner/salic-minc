@@ -107,6 +107,7 @@
         color: #35953F !important;
         font-size: 20px;
         text-decoration: underline !important;
+	float: right;	
     }
     #NrPronacConsulta{
       width: 60px;
@@ -134,6 +135,10 @@
 
     #qtde{
       width: 50px;
+    }
+    
+    #faleconosco{
+
     }
 
     .input_simples{
@@ -183,11 +188,11 @@ function parseUrlWithParams($url, $params = array()) {
 
 <!-- ========== INICIO TITULO ========== -->
 <div id="titulo">
-    <div class="direita">
+    <div class="esquerda">
     <?php if (is_object($this->reuniao)) { ?>
     Pauta da CNIC n&ordm; <?php echo $this->reuniao['NrReuniao']; ?> <?php if($this->intranet){ echo ' - Intranet'; } else { if(!$this->usuarioInterno){ echo ' - Vis&atilde;o Cidad&atilde;o'; } } ?>
     <?php } else { ?>
-
+             &nbsp
     <?php } ?>
     <a class="faleconosco" href="http://ouvidoria.cultura.gov.br/" target="_blank">Fale conosco</a>
 </div>
