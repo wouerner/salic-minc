@@ -2122,6 +2122,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             $this->view->idPronac,
             ($this->view->itemAvaliadoFilter ? $this->view->itemAvaliadoFilter : null)
         );
+       
 
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
         $rsEncaminhamento = $tblEncaminhamento->buscar(array('idPronac=?'=>$this->view->idPronac,'stAtivo=?'=>1))->current();
@@ -2133,9 +2134,14 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 
         $arrayA = array();
         $arrayP = array();
-        
+
+	#Alysson
+	$planilhaAprovacaoModel = new PlanilhaAprovacao();
+        #$vlTotalImpugnado = 0;
+        $arrComprovantesImpugnados = array();
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
+		#xd($resposta);
                 $modalidade = '';
                 if($val->idCotacao != '') {
                     $modalidade = 'Cota&ccedil;&atilde;o';
@@ -2190,9 +2196,23 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                         $val->ComprovacaoValidada
                     );
                 }
+
+		#Pedro - Somatorio dos Itens Impugnados
+                    $obComprovantesPagamento = $planilhaAprovacaoModel->buscarcomprovantepagamento($this->view->idPronac, $val->idPlanilhaAprovacao);
+                    foreach($obComprovantesPagamento as $index => $comprovante){
+			if($comprovante->stItemAvaliado == 3) { //Prestacao de Contas Inpugnada
+                                $arrComprovantesImpugnados[$comprovante->idComprovantePagamento] = $comprovante->vlComprovacao;
+			}
+                    }
+ 		
             }
         }
-
+	#Realiza a soma dos itens
+	$vlTotalImpugnado = 0;
+	foreach($arrComprovantesImpugnados as $valorImpugnado){
+	     $vlTotalImpugnado += $valorImpugnado;
+        }
+        $this->view->vlComprovacaoImpugnado = $vlTotalImpugnado;
         $this->view->incFiscaisA = array(utf8_encode('Administra&ccedil;&atilde;o do Projeto') =>$arrayA);
         $this->view->incFiscaisP = array(utf8_encode('Custo por Produto') =>$arrayP);
     }
