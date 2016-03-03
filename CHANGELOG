@@ -1,3 +1,10 @@
+Release 1.4.3
+  * Fix: [Comprovação financeira] Ajuste solicitado pela Área na cláusula WHERE do painel de comprovação financeira
+  * Fix: [Prestação de contas] - Valor Impugnado agora é calculado através dos itens comprovados
+  * Fix: [Analise Execução financeira - técnico] - Corrigido a funcionalidade de paginação
+  * Fix: [Analise Execução financeira - técnico] - Corrigido botão de voltar (agora retorna para a página principal)
+  * Novo: [Analise Execução financeira - técnico] - Agora é possivel ordenar os campos
+
 Release 1.4.2
   * Fix: [consulta cidadao] - Correção do cabeçalho 
   * Fix: [consulta cidadao] - Correção da impressão dos dados
