@@ -201,8 +201,9 @@ class PlanilhaAprovacao extends GenericModel {
                         AND c1.idEtapa = pAprovacao.idEtapa
                         AND c1.idUFDespesa = pAprovacao.idUFDespesa
                         AND c1.idMunicipioDespesa = pAprovacao.idMunicipioDespesa
-                         AND c1.idPronac = pAprovacao.idPronac
-                         GROUP BY c1.idPlanilhaItem) as vlComprovado"
+                        AND c1.idPronac = pAprovacao.idPronac
+                        AND pAprovacao.tpAcao <> 'E' /*Adicionado para não listar as que ja foram excluidas*/
+                    GROUP BY c1.idPlanilhaItem) as vlComprovado"
                 ),
                 new Zend_Db_Expr(
                     "(SELECT sum(b2.vlComprovacao) AS vlPagamento
