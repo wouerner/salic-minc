@@ -72,6 +72,7 @@ class AnalisarexecucaofisicatecnicoController extends GenericControllerNew {
             $novaOrdem = "ASC";
         }
 
+
         //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
@@ -93,6 +94,7 @@ class AnalisarexecucaofisicatecnicoController extends GenericControllerNew {
         $where = array();
         $where['a.Orgao = ?'] = $codOrgao;
         $where['a.idTecnicoAvaliador = ?'] = $idusuario;
+
 
         if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
             $where['Pronac = ?'] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
@@ -123,16 +125,25 @@ class AnalisarexecucaofisicatecnicoController extends GenericControllerNew {
                 "tamanho"=>$tamanho
          );
 
+	if(!$campo){
+	   $campo = 2; //Se o campo para ordenar for vazio ele ordena pelo campo 2 (pronac)
+	}
+
+
+        $this->view->campo = $campo;		
+	$this->view->pag = $pag;
+	$this->view->novaOrdem = $novaOrdem;
         $this->view->paginacao     = $paginacao;
         $this->view->qtdRelatorios = $total;
         $this->view->dados         = $busca;
         $this->view->intTamPag     = $this->intTamPag;
+
     }
 
     public function parecerTecnicoAction() {
 
         //** Usuario Logado ************************************************/
-        $auth               = Zend_Auth::getInstance(); // pega a autenticação
+        $auth               = Zend_Auth::getInstance(); // pega a autenticação	
         $idusuario          = $auth->getIdentity()->usu_codigo;
         $GrupoAtivo         = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
         $codOrgao           = $GrupoAtivo->codOrgao; //  Órgão ativo na sessão
