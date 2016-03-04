@@ -179,7 +179,7 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $planilhaItemModel = new PlanilhaItem();
 
-        $resposta   = $planilhaAprovacaoModel->buscarItensPagamento($this->view->idpronac);
+        $resposta   = $planilhaAprovacaoModel->buscarItensPagamento($this->view->idpronac); //Alysson - Alteração da Query para não mostrar os itens excluidos
 
         $arrayA =   array();
         $arrayP =   array();

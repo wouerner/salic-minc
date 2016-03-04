@@ -49,7 +49,6 @@ class PlanilhaItem   extends GenericModel
                             AND c1.idUFDespesa = pa.idUFDespesa
                             AND c1.idMunicipioDespesa = pa.idMunicipioDespesa
                             AND c1.idPronac = pa.idPronac
-                            AND pa.tpAcao <> 'E' /*Adicionado para não listar as que ja foram excluidas*/
                         GROUP BY c1.idPlanilhaItem
                     ) AS vlComprovado,
 
