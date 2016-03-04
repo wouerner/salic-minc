@@ -147,7 +147,9 @@
                 <td>
                     Documento:
                     <br clear="all" />
-                    <input class="input_simples" type="file" id="arquivoAcessibilidadeFisica" name="imagensMedidasAcessibilidadeFisica" style="width:350px;" />
+<!--                    <input class="input_simples" type="file" id="arquivoAcessibilidadeFisica" name="imagensMedidasAcessibilidadeFisica" style="width:350px;" />-->
+                    <!-- Alysson - -->
+                    <input class="input_simples obrigatorio" type="file" id="arquivoAcessibilidadeFisica" name="imagensMedidasAcessibilidadeFisica" style="width:350px;" /> &nbsp; <span style="color: red;">*</span>
                     <?php
                     if ($this->cumprimentoDoObjeto->getMedidasAcessibilidadeImagens()) :
                         echo $this->partial(
@@ -181,7 +183,9 @@
                 <td>
                     Documento:
                     <br clear="all" />
-                    <input class="input_simples" type="file" id="arquivoAcessibilidadePublica" name="imagensMedidasAcessibilidadePublica" style="width:350px;" />
+<!--                    <input class="input_simples" type="file" id="arquivoAcessibilidadePublica" name="imagensMedidasAcessibilidadePublica" style="width:350px;" /> -->
+                    <!-- Alysson -->
+                    <input class="input_simples obrigatorio" type="file" id="arquivoAcessibilidadePublica" name="imagensMedidasAcessibilidadePublica" style="width:350px;" /> &nbsp; <span style="color: red;">*</span>
                     <?php
                     if ($this->cumprimentoDoObjeto->getMedidasFruicaoImagens()) :
                         echo $this->partial(
@@ -215,7 +219,9 @@
                 <td>
                     Documento:
                     <br clear="all" />
-                    <input class="input_simples" type="file" id="arquivoImpactosAmbientais" name="imagensImpactosAmbientais" style="width:350px;" />
+<!--                    <input class="input_simples" type="file" id="arquivoImpactosAmbientais" name="imagensImpactosAmbientais" style="width:350px;" />-->
+                    <!-- Alysson -->
+                    <input class="input_simples obrigatorio" type="file" id="arquivoImpactosAmbientais" name="imagensImpactosAmbientais" style="width:350px;" /> &nbsp; <span style="color: red;">*</span>
                     <?php
                     if ($this->cumprimentoDoObjeto->getMedidasPreventivasImagens()) :
                         echo $this->partial(
