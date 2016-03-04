@@ -1,3 +1,6 @@
+Release 1.4.4
+  * Fix: [Comprovação financeira] Ajuste solicitado pela Área na cláusula WHERE do painel de comprovação financeira para não listar projetos excluidos ou nulos
+
 Release 1.4.3
   * Fix: [Comprovação financeira] Ajuste solicitado pela Área na cláusula WHERE do painel de comprovação financeira
   * Fix: [Prestação de contas] - Valor Impugnado agora é calculado através dos itens comprovados
