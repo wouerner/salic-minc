@@ -279,7 +279,7 @@ class PlanilhaAprovacao extends GenericModel {
         $select->where('pAprovacao.IdPRONAC = ?', $idpronac);
         $select->where('pAprovacao.stAtivo = ?','S');
         $select->where('pAprovacao.nrFonteRecurso = ?', 109); //Incentivo Fiscal Federal
-        $select->where('pAprovacao.tpAcao <> ? ', 'E'); //Adicionado para não listar as que ja foram excluidas
+        $select->where('pAprovacao.tpAcao IS NULL OR pAprovacao.tpAcao <> ? ', 'E'); //Adicionado para não listar as que ja foram excluidas
         $select->order('prod.Descricao');
         $select->order('pEtapa.idPlanilhaEtapa');
         $select->order('pItens.Descricao');
