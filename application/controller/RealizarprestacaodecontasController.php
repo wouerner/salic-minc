@@ -1694,10 +1694,13 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                     );
                     $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
                     
-                    // altera todos os encaminhamentos anteriores para stAtivo = 0
-                    $tblEncaminhamento->update(array('stAtivo'=>0),array('idPronac = ?'=>$idPronac));                    
+                    $idTblEncaminhamento = $tblEncaminhamento->inserir($dados);
+
+                    if ($idTblEncaminhamento) {
+                        // altera todos os encaminhamentos anteriores para stAtivo = 0
+                        $tblEncaminhamento->update(array('stAtivo'=>0),array('idPronac = ?'=>$idPronac, 'idEncPrestContas != ?' => $idTblEncaminhamento));
+                    }
                     
-                    $tblEncaminhamento->inserir($dados);
                     if($this->codGrupo == 132){
                         parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoFiltro=diligenciados", 'CONFIRM');
                     } else if($this->codGrupo == 124){
