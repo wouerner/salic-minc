@@ -1664,6 +1664,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                     //100: 177 AECI
                     //100: 12 CONJUR
                     //SE O ENCAMINHAMENTO FOR DO COORDENADOR PARA O TECNICO - ALTERA SITUACAO DO PROJETO
+                    
                     if (($this->codGrupo == 125 || $this->codGrupo == 126) && $idGrupoDestino == 124) {
                         // altera a situação do projeto AO ENCAMINHAR PARA O TECNICO
                         $tblProjeto = new Projetos();
@@ -1692,11 +1693,15 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                         'stAtivo'                   => 1
                     );
                     $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
+                    
+                    // altera todos os encaminhamentos anteriores para stAtivo = 0
+                    $tblEncaminhamento->update(array('stAtivo'=>0),array('idPronac = ?'=>$idPronac));                    
+                    
                     $tblEncaminhamento->inserir($dados);
                     if($this->codGrupo == 132){
                         parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoFiltro=diligenciados", 'CONFIRM');
                     } else if($this->codGrupo == 124){
-                        parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/tecnicoprestacaocontas?tipoFiltro=diligenciados", 'CONFIRM');
+                        parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/tecnicoprestacaocontas", 'CONFIRM');
                     } else {
                         parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/painel?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                     }
