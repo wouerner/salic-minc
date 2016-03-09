@@ -86,7 +86,7 @@
             type : 'post'
         });
 
-        var title = 'Encaminhar Projeto para Chefe de Divis&aatilde;o';
+        var title = 'Encaminhar Projeto para Chefe de Divisão';
         $("#divDinamica").dialog({
             resizable: true,
             width:750,
@@ -319,7 +319,7 @@
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
                 <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
                 <td align="center">
-                    <img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para chefe de divisão" />
+                    <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para chefe de divisão" />
                 </td>
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','177')" alt="Encaminhar" /></td>
