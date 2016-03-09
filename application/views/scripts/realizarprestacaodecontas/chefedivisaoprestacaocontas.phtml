@@ -310,14 +310,14 @@
                 <td align="center"><?php echo $projeto->UfProjeto; ?></td>
                 <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
-                <td align="center"><img style="cursor: pointer;" src="../public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $projeto->idPronac)); ?>'" alt="Analisar"></td>
+                <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $projeto->idPronac)); ?>'" alt="Analisar"></td>
                 <td align="center">
-                    <img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaTecnico('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para técnico" />
+                    <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaTecnico('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para técnico" />
                 </td>                        
                 <?php if($this->filtro == 'diligenciados'){ ?>
-                    <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','177')" alt="Encaminhar" /></td>
-                    <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','12')" alt="Encaminhar" /></td>
-                    <td align="center"><img style="cursor: pointer;" src="../public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamentoDI('<?php echo $projeto->idPronac; ?>')" alt="Visualizar Histórico" />
+                    <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','177')" alt="Encaminhar" /></td>
+                    <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','12')" alt="Encaminhar" /></td>
+                    <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>"/public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamentoDI('<?php echo $projeto->idPronac; ?>')" alt="Visualizar Histórico" />
                 <?php } ?>
                 <td background="" align="center">
                     <?php
