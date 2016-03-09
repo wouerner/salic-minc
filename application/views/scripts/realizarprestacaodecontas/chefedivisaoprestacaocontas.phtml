@@ -87,7 +87,52 @@
             }
         });
     }
-    
+
+    function JSEncaminharParaTecnico(idPronac,idOrgaoDestino,tipoFiltro,ocultarJustificativa){               
+        $('html').css('overflow', 'hidden');
+        $("body").append("<div id='divDinamica'></div>");
+        $("#divDinamica").html("");
+        $('#divDinamica').html("<br><br><center>Carregando dados...</center>");
+        $.ajax({
+            url : '<?php echo $this->url ( array ('controller' => 'realizarprestacaodecontas', 'action' => 'encaminharprestacaodecontas' )); ?>',
+            data : {
+                idPronac : idPronac,
+                idOrgaoDestino : idOrgaoDestino,
+                idSituacaoPrestContas : 1,
+                tipoFiltro : tipoFiltro,
+                ocultarJustificativa : true,
+                idPerfilDestino: 124
+            },
+            success: function(data){
+                $('#divDinamica').html(data);
+            },
+            type : 'post'
+        });
+
+        var title = 'Encaminhar Projeto para Técnico';
+        $("#divDinamica").dialog({
+            resizable: true,
+            width:750,
+            height:550,
+            modal: true,
+            autoOpen:true,
+            draggable:false,
+            title: title,
+            buttons: {
+                'Cancelar': function() {
+                    $("#divDinamica").remove();
+                    $(this).dialog('close');
+                    $('html').css('overflow', 'auto');
+                }
+            },
+            close: function() {
+                $("#divDinamica").remove();
+                $(this).dialog('close');
+                $('html').css('overflow', 'auto');
+            }
+        });
+    }
+
     function JShistoricoEncaminhamentoDI(idPronac)
     {
         $('html').css('overflow', 'hidden');
@@ -246,6 +291,7 @@
                     <th>Consultoria CONJUR</th>
                     <th>Visualizar Histórico</th>
                 <?php } ?>
+                <th>Encaminhar para T&eacute;cnico</th>
                 <th>Diligência</th>
             </tr>
         </thead>
@@ -265,6 +311,9 @@
                 <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
                 <td align="center"><img style="cursor: pointer;" src="../public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $projeto->idPronac)); ?>'" alt="Analisar"></td>
+                <td align="center">
+                    <img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaTecnico('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para técnico" />
+                </td>                        
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','177')" alt="Encaminhar" /></td>
                     <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','12')" alt="Encaminhar" /></td>

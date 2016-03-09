@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/plain; charset=ISO-8859-1');
-    if(count($this->consultorias)==0 || $this->idPerfilDestino == 132) {
+    if(count($this->consultorias)==0 || $this->idPerfilDestino == 132 || $this->idPerfilDestino == 124) {
 ?>    
 <script>
     $(document).ready(function(){
@@ -27,7 +27,13 @@ header('Content-Type: text/plain; charset=ISO-8859-1');
 
                     if(data.resposta){
                         recebe.html('');
-                        recebe.append("<option value=''>- Selecione um t&eacute;cnico -</option>");
+                        
+                        // altera texto conforme perfil do destinatário
+                        if (data.conteudo[0].idperfil == 132) {                        
+                            recebe.append("<option value=''>- Selecione um chefe de divis&atilde;o -</option>");
+                        } else {
+                            recebe.append("<option value=''>- Selecione um t&eacute;cnico -</option>");
+                        }
                         for ( i in data.conteudo)
                         {
                             recebe.append("<option value='"+data.conteudo[i].idAgente+"/"+data.conteudo[i].idperfil+"'>"+data.conteudo[i].usu_nome+"</option>");
@@ -118,7 +124,13 @@ header('Content-Type: text/plain; charset=ISO-8859-1');
         <input type="hidden" name="dsjustificativa<?php echo $this->pag;?>" id="dsjustificativa<?php echo $this->pag;?>" value=".">
         <?php } else { ?>
         <tr>
-            <td colspan="2" class="destacar bold">Justificativa de encaminhamento para an&aacute;lise t&eacute;cnica
+            <td colspan="2" class="destacar bold">
+                <?php // exibe texto conforme perfil do destinatário ?>
+                <?php if ($this->idPerfilDestino == 132) { ?>
+                      Justificativa de encaminhamento para chefe de divis&aacute;o
+                <?php } else { ?>
+                       Justificativa de encaminhamento para an&aacute;lise t&eacute;cnica
+                <?php } ?>
                 <textarea name="dsjustificativa<?php echo $this->pag;?>" id="dsjustificativa<?php echo $this->pag;?>" rows="6" style="width: 98%;" class="input_simples"></textarea>
 <!--                <script type="text/javascript">
                     <![CDATA[

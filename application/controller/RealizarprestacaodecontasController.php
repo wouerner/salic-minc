@@ -1640,10 +1640,10 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
         $Usuario            = new Usuario();
         $idagente           = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem     = $idagente['idAgente'];
-	$idPerfilDestino    = (null === $this->_request->getParam('idPerfilDestino')) ? 124 : $this->_request->getParam('idPerfilDestino'); // se nao receber idPerfilDestino, define como 124 por padrao (tecnico)
+        $idPerfilDestino    = (null === $this->_request->getParam('idPerfilDestino')) ? 124 : $this->_request->getParam('idPerfilDestino'); // se nao receber idPerfilDestino, define como 124 por padrao (tecnico)
         $this->usu_codigo   = $auth->getIdentity()->usu_codigo;
 	$this->view->idPerfilDestino = $idPerfilDestino;
-	
+
             // recebe os dados via post
             $post = Zend_Registry::get('post');
             if ($this->getRequest()->isPost() && !empty($post->dsjustificativa)) {
@@ -1702,9 +1702,9 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                     }
                     
                     if($this->codGrupo == 132){
-                        parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoFiltro=diligenciados", 'CONFIRM');
+                        parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                     } else if($this->codGrupo == 124){
-                        parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/tecnicoprestacaocontas", 'CONFIRM');
+                        parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/tecnicoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                     } else {
                         parent::message('Solicitação enviada com sucesso!', "realizarprestacaodecontas/painel?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                     }
