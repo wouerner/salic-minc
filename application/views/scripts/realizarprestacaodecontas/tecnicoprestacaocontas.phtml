@@ -65,7 +65,7 @@
         });
     });	
 
-    function JSEncaminharParaAnalise(idPronac,idOrgaoDestino,tipoFiltro,ocultarJustificativa){               
+    function JSEncaminharParaChefeDivisao(idPronac,idOrgaoDestino,tipoFiltro,ocultarJustificativa){               
         $('html').css('overflow', 'hidden');
         $("body").append("<div id='divDinamica'></div>");
         $("#divDinamica").html("");
@@ -86,7 +86,7 @@
             type : 'post'
         });
 
-        var title = 'Encaminhar Projeto para Análise';
+        var title = 'Encaminhar Projeto para Chefe de Divis&aatilde;o';
         $("#divDinamica").dialog({
             resizable: true,
             width:750,
@@ -293,13 +293,13 @@
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=9&ordem='.$this->paginacao['novaOrdem'];?>">Mecanismo</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=5&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Recebimento</a></th>
                 <th>Analisar Prestação de Contas</th>
-                <th>Encaminhar para Chefe de Divisão</th>		
+                <th>Encaminhar para Chefe de Divis&aacute;o</th>		
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <th>Consultoria AECI</th>
                     <th>Consultoria CONJUR</th>
-                    <th>Visualizar Histórico</th>
+                    <th>Visualizar Hist&oacute;rico</th>
                 <?php } ?>
-                <th>Diligência</th>
+                    <th>Dilig&ecirc;ncia</th>
             </tr>
         </thead>
         <tbody>
@@ -319,7 +319,7 @@
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
                 <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
                 <td align="center">
-                    <img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaAnalise('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar" />
+                    <img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para chefe de divisão" />
                 </td>
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','177')" alt="Encaminhar" /></td>
