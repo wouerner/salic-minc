@@ -641,9 +641,15 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
             $this->verificarPermissaoAcesso(false, true, false);
             $request = $this->getRequest();
 
-            $pais = $this->getRequest()->getParam('pais');
+            #$pais = $this->getRequest()->getParam('pais');
+            #if (empty($pais)) {
+            #    throw new Exception('Favor preencher o campo "Nacionalidade do Fornecedor"');
+            #}
+            #xd($this->getRequest()->getParams());
+            #Este Campo sempre é Preenchido, porem quando se tenta enviar um arquivo muito grande A Requisição se perde
+            #Podemos identificar esta perda pelo campo de pais.
             if (empty($pais)) {
-                throw new Exception('Favor preencher o campo "Nacionalidade do Fornecedor"');
+                throw new Exception('Por favor inserir um arquivo com tamanho máximo de 5MB."');
             }
 
             $arquivoModel = new ArquivoModel();
