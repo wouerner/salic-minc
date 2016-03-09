@@ -1,3 +1,6 @@
+Release 1.4.5
+  * Fix: [Comprovação financeira] Alterar a mensagem da Compravação Financeira para limitar o tamanho maximo do arquivo para 5Mb
+
 Release 1.4.4
   * Fix: [Comprovação financeira] Ajuste solicitado pela Área na cláusula WHERE do painel de comprovação financeira para não listar projetos excluidos ou nulos
 
