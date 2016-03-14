@@ -2280,7 +2280,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$dados ['meRelatorio']  =   utf8_decode(trim($parecer));
 		$dados ['dtRelatorio']  =   date("Y-m-d H:i:s");
 		$dados ['IdPRONAC']     =   $idPronac;
-		$dados ['idAgente']     =   $this->getIdUsuario;
+		$dados ['idAgente']     =   $this->getIdAgenteLogado;        
 		$dados ['cdGrupo']      =   $this->codGrupo;
 		$dados ['siManifestacao'] = $this->getRequest()->getParam('manifestacao');
 		
