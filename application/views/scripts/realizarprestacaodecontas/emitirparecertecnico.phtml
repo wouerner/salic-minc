@@ -98,7 +98,7 @@
                     <?php endif; ?>
                         <textarea cols="80" id="ParecerTecnico" name="ParecerTecnico" class="cParecerTecnico" 
                             rows="10"><?php
-                                if (!empty($this->parecerChefe)) :
+                                if (!empty($this->parecerChefe) && $this->codGrupo == 132) :
                                     echo $this->parecerChefe->meRelatorio;
                                 else:
                                     if (!empty($this->parecerTecnico) && $this->codGrupo != 132 ) :
