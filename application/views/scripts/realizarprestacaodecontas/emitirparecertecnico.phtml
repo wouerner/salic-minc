@@ -5,7 +5,10 @@
 
         $("#salvar").click(function(){
 
-            var texto = CKEDITOR.instances['ParecerTecnico'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
+            var texto = CKEDITOR.instances['ParecerTecnico'].getData();
+	    $('#ParecerTecnico').val(texto);
+	    $('#ParecerTecnico')[0].value = texto;
+            
             if (texto == ""){
                 $("#obrigatorio").dialog('open');
                 $("#obrigatorio").html('Dados obrigat&oacute;rios n&atilde;o informados!');
@@ -23,9 +26,8 @@
                 });
                 $('.ui-dialog-titlebar-close').remove();
             }else{
-
-                $("#formEncaminhar").submit();
-            }
+		$("#formEncaminhar").submit();
+	    }
         });
 
     });
