@@ -2269,8 +2269,9 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$this->_helper->viewRenderer->setNoRender(true);
 
 		$post             = Zend_Registry::get ( 'post' );
+        
 		$idPronac         = $post->idPronac;
-		$parecer          = $post->ParecerTecnico;
+		$parecer          = $this->getRequest()->getParam('ParecerTecnico');
 		$bln_chefedivisao = $post->parecerChefeDivisao;
 
 		$relatorioTecnico = new tbRelatorioTecnico();
@@ -2283,7 +2284,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$dados ['idAgente']     =   $this->getIdAgenteLogado;        
 		$dados ['cdGrupo']      =   $this->codGrupo;
 		$dados ['siManifestacao'] = $this->getRequest()->getParam('manifestacao');
-		
+        
 		try{
 			if(!empty ($rsParecer)){
 				$where = array(
