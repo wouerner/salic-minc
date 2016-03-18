@@ -1664,8 +1664,10 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                     //100: 177 AECI
                     //100: 12 CONJUR
                     //SE O ENCAMINHAMENTO FOR DO COORDENADOR PARA O TECNICO - ALTERA SITUACAO DO PROJETO
-                    
-                    if (($this->codGrupo == 125 || $this->codGrupo == 126) && $idGrupoDestino == 124) {
+		  
+                    if (
+			($this->codGrupo == 125 || $this->codGrupo == 126 || $this->codGrupo == 132)
+			&& $idGrupoDestino == 124) {
                         // altera a situação do projeto AO ENCAMINHAR PARA O TECNICO
                         $tblProjeto = new Projetos();
                         $tblProjeto->alterarSituacao($idPronac, '', 'E27', 'Comprovação Financeira do Projeto em Análise');
@@ -1908,33 +1910,18 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 	    $where['e.stAtivo = ?'] = 1;
 	    $where['e.idAgenteDestino = ?'] = $this->getIdUsuario; //id Tecnico de Prestação de Contas
 	    $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-	    $filtro = '';
+
+	    // técnico só visualiza projetos encaminhados para ele
+	    $where['p.Situacao in (?)'] = array('E17', 'E20', 'E27', 'E30');
+	    $where['e.idSituacaoEncPrestContas = ?'] = '2';
 	    
-            if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
-                $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
-		$where['p.Situacao in (?)'] = array('E17', 'E20', 'E27', 'E30');
-		
-                switch ($filtro) {
- 		    case 'emanalise':
-		        $where['e.idSituacaoEncPrestContas = ?'] = '2';
-		      break;
-		    case 'analisados':
-		        $where['e.idSituacaoEncPrestContas = ?'] = '3';		      
-		      break;
-                    default: //Aguardando Análise
-                        $where['e.idSituacaoEncPrestContas =  ?'] = '1'; //Situacao Aguardando analise
-                        break;
-                }
-            }
-            $this->view->filtro = $filtro;
-            
             $Projetos = new Projetos();
-            $total = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, null, null, true, $filtro);
+            $total = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, null, null, true);
             $fim = $inicio + $this->intTamPag;
 
             $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
             $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-            $busca = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
+            $busca = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, $tamanho, $inicio, false);
 
             $paginacao = array(
                 "pag"=>$pag,
@@ -2264,7 +2251,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 	}
 
 	public function parecertecnicoAction() {
-		
+                $auth             = Zend_Auth::getInstance();
 		$this->_helper->layout->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(true);
 
@@ -2281,7 +2268,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$dados ['meRelatorio']  =   utf8_decode(trim($parecer));
 		$dados ['dtRelatorio']  =   date("Y-m-d H:i:s");
 		$dados ['IdPRONAC']     =   $idPronac;
-		$dados ['idAgente']     =   $this->getIdAgenteLogado;        
+		$dados ['idAgente']     =   $auth->getIdentity()->usu_codigo;
 		$dados ['cdGrupo']      =   $this->codGrupo;
 		$dados ['siManifestacao'] = $this->getRequest()->getParam('manifestacao');
         
@@ -2476,27 +2463,25 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
                 $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
                 switch ($filtro) {
-                    case 'diligenciados': //Projetos diligenciados
-                        $where['p.Situacao = ?'] = 'E17';
-                        $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                        $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divisão
-                        $where['e.stAtivo = ?'] = 1;
-                        $where['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
-                        break;
+                    case 'analisados': //Analisados
+                        $where['e.idSituacaoEncPrestContas = ?'] = 3;
+			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];			
+                        break;			
+   		    case 'emanalise': //Em Análise
+  		        $where['p.Situacao in (?)'] = array('E14', 'E17', 'E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
+                        $where['e.idSituacaoEncPrestContas = ?'] = 2;
+			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];			
+                        break;			
                     default: //Aguardando Análise
-                        $where['p.Situacao <> ?'] = 'E17';
-                        $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                        $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divisão
-                        $where['e.stAtivo = ?'] = 1;
+		        $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
                         break;
                 }
                 
             } else { //Aguardando Análise
                 $filtro = '';
-                $where['p.Situacao <> ?'] = 'E17';
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divisão
-                $where['e.stAtivo = ?'] = 1;
+		$where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+		$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
             }
             $this->view->filtro = $filtro;
             
@@ -2994,7 +2979,8 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 	}
 
 	public function enviarchefedivisaoAction(){
-
+	        $auth               = Zend_Auth::getInstance();
+		
 		$get = Zend_Registry::get("get");
 		
 		$pronac   = $this->getRequest()->getParam('idPronac');
@@ -3004,8 +2990,8 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 		$rsEPC             = $tblEncaminhamento->buscar(array("idPronac = ?"=>$pronac, 'stAtivo=?'=>1))->current();
 
 		$tblRelatorio = new tbRelatorioTecnico();
-		$rsRelatorio  = $tblRelatorio->buscar(array('IdPRONAC = ?'=>$pronac,'idAgente=?'=>$this->getIdAgenteLogado,'cdGrupo=?'=>124));
-
+		$rsRelatorio  = $tblRelatorio->buscar(array('IdPRONAC = ?'=>$pronac,'idAgente=?'=>$auth->getIdentity()->usu_codigo,'cdGrupo=?'=>124));
+		
 		if($rsRelatorio->count() > 0){
 			//DESLIGA STATUS ATUAL
 			$rsEPC->stAtivo = 0;
@@ -3026,34 +3012,13 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                                 'dtFimEncaminhamento'    => new Zend_Db_Expr ( 'GETDATE()' ),
 				
                                 'dsJustificativa'   => $rsEPC->dsJustificativa,
-                                'cdGruposOrigem'    => $rsEPC->cdGruposOrigem,
-                                'cdGruposDestino'   => $rsEPC->cdGruposDestino,
+                                'cdGruposOrigem'    => $rsEPC->cdGruposDestino,
+                                'cdGruposDestino'   => 132,
 				
                                 'idSituacaoEncPrestContas' => 3, //projeto Finalizado
 				
                                 'idSituacao'        => $rsEPC->idSituacao,
-                                'stAtivo'           => 0);
-				$tblEncaminhamento->inserir($dados);
-
-
-				//ENCAMINHA PROJETO PARA CHEFE DIVISAO
-				$dados = array ('idPronac'          => $pronac,
-                                'idAgenteOrigem'    => $rsEPC->idAgenteOrigem,
-                                'idAgenteDestino'   => 0,
-                                'idOrgaoOrigem'     => $rsEPC->idOrgaoOrigem,
-                                'idOrgaoDestino'    => 0,
-				
-                                'dtInicioEncaminhamento' => new Zend_Db_Expr ( 'GETDATE()' ),
-                                'dtFimEncaminhamento'    => new Zend_Db_Expr ( 'GETDATE()' ),
-				
-                                'dsJustificativa'   => $rsEPC->dsJustificativa,
-                                'cdGruposOrigem'    => $rsEPC->cdGruposDestino,
-                                'cdGruposDestino'   => 132,
-				
-                                'idSituacaoEncPrestContas' => 1,
-
-                                'idSituacao'        => $rsEPC->idSituacao,
-                                'stAtivo'           => 1);
+				'stAtivo'           => 1);
 				$tblEncaminhamento->inserir($dados);
 
 				$this->_redirect("realizarprestacaodecontas/tecnicoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
@@ -3461,14 +3426,14 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                         break;
                     default: //Aguardando Análise
                         $where['p.Orgao = ?'] = $this->codOrgao;
-                        $where['p.Situacao in (?)'] = array('E68', 'E77');
+                        $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
                         break;
                 }
                 
             } else { //Aguardando Análise
                 $filtro = '';
                 $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E68', 'E77');
+		$where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
             }
             
             if((isset($_POST['situacao']) && !empty($_POST['situacao'])) || (isset($_GET['situacao']) && !empty($_GET['situacao']))){
