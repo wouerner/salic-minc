@@ -28,8 +28,7 @@
 
 <!-- ========== INÍCIO TÍTULO ========== -->
 <div id="titulo">
-<?php $filtroNome = array('' => 'Aguardando Análise', 'emanalise' => 'Em análise', 'analisados' => 'Analisados'); ?>
-    <div>Analisar presta&ccedil;&atilde;o de contas - <?php echo ($filtroNome[$this->filtro]); ?>
+    <div>Analisar presta&ccedil;&atilde;o de contas - Em análise
         <span class="voltar" style="float: right;">
             <a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
         </span>
@@ -42,9 +41,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#btn_pesquisar").click(function(){
-            var pronac = $('#pronacPesquisa').val(),
-                filtro = $('#tipoFiltro').val();
-            window.location = "<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')); ?>?pag=1&tipoFiltro="+filtro+"&pronac="+pronac;
+            var pronac = $('#pronacPesquisa').val();
+            window.location = "<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')); ?>?pag=1&pronac="+pronac;
         });
 
         $('#pronacPesquisa').keydown(function(event){
@@ -65,7 +63,7 @@
         });
     });	
 
-    function JSEncaminharParaChefeDivisao(idPronac,idOrgaoDestino,tipoFiltro,ocultarJustificativa){               
+    function JSEncaminharParaChefeDivisao(idPronac,idOrgaoDestino,ocultarJustificativa){               
         $('html').css('overflow', 'hidden');
         $("body").append("<div id='divDinamica'></div>");
         $("#divDinamica").html("");
@@ -76,7 +74,7 @@
                 idPronac : idPronac,
                 idOrgaoDestino : idOrgaoDestino,
                 idSituacaoPrestContas : 1,
-                tipoFiltro : tipoFiltro,
+                tipoFiltro : '',
                 ocultarJustificativa : true,
 		idPerfilDestino: 132
             },
@@ -214,11 +212,6 @@
                 <input type="text" class="input_simples" name="pronacPesquisa" id="pronacPesquisa" maxlength="7" style="width: 90px;" value="<?php echo $this->pronacProjeto;?>">
             </td>
             <td width="150">
-                <select name="tipoFiltro" id="tipoFiltro" class="input_simples">
-                    <option value="">Aguardando análise</option>
-                    <option value="emanalise" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'emanalise') ? 'selected="selected"' : '';  ?>>Em análise</option>		    
-                    <option value="analisados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados') ? 'selected="selected"' : '';  ?>>Analisados</option>
-                </select>
             </td>
             <td>
                 <input type="button" name="btn_pesquisar" id="btn_pesquisar" class="btn_pesquisar" value="">
@@ -319,13 +312,8 @@
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
                 <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
                 <td align="center">
-                    <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para chefe de divisão" />
+                    <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>',true)" alt="Encaminhar para chefe de divisão" />
                 </td>
-                <?php if($this->filtro == 'diligenciados'){ ?>
-                    <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','177')" alt="Encaminhar" /></td>
-                    <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaConsultoriaDI('<?php echo $projeto->idPronac;?>','12')" alt="Encaminhar" /></td>
-                    <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamentoDI('<?php echo $projeto->idPronac; ?>')" alt="Visualizar Histórico" />
-                <?php } ?>
                 <td background="" align="center">
                     <?php
                         $arrPrazo = $this->prazoRespostaDiligencia($projeto->idPronac, 174);

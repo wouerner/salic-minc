@@ -98,7 +98,7 @@
             data : {
                 idPronac : idPronac,
                 idOrgaoDestino : idOrgaoDestino,
-                idSituacaoPrestContas : 1,
+                idSituacaoPrestContas : 2,
                 tipoFiltro : tipoFiltro,
                 ocultarJustificativa : true,
                 idPerfilDestino: 124
@@ -189,7 +189,8 @@
 
 <!-- ========== INÍCIO TÍTULO ========== -->
 <div id="titulo">
-    <div>Analisar presta&ccedil;&atilde;o de contas - <?php echo ($this->filtro == 'diligenciados') ? 'Projetos Diligenciados' : 'Aguardando Análise'; ?>
+    <?php $filtroNome = array('' => 'Aguardando Análise', 'emanalise' => 'Em análise', 'analisados' => 'Analisados'); ?>
+    <div>Analisar presta&ccedil;&atilde;o de contas - <?php echo $filtroNome[$this->filtro]; ?>
         <span class="voltar" style="float: right;">
             <a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
         </span>
@@ -210,7 +211,8 @@
             <td width="150">
                 <select name="tipoFiltro" id="tipoFiltro" class="input_simples">
                     <option value="">Aguardando análise</option>
-                    <option value="diligenciados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='diligenciados')?'selected="selected"':''; ?>>Projetos diligenciados</option>
+                    <option value="emanalise" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'emanalise') ? 'selected="selected"' : '';  ?>>Em análise</option>
+                    <option value="analisados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados') ? 'selected="selected"' : '';  ?>>Analisados</option>
                 </select>
             </td>
             <td>
@@ -284,15 +286,18 @@
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=7&ordem='.$this->paginacao['novaOrdem'];?>">Área / Segmento</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=4&ordem='.$this->paginacao['novaOrdem'];?>">Estado</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=9&ordem='.$this->paginacao['novaOrdem'];?>">Mecanismo</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=5&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Recebimento</a></th>
+                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=5&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Envio</a></th>
+		<th>Técnico</th>
+		<?php if($this->filtro != 'emanalise') { ?>	
                 <th>Analisar Prestação de Contas</th>
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <th>Consultoria AECI</th>
                     <th>Consultoria CONJUR</th>
                     <th>Visualizar Histórico</th>
                 <?php } ?>
-                <th>Encaminhar para T&eacute;cnico</th>
-                <th>Diligência</th>
+                    <th>Encaminhar para T&eacute;cnico</th>
+		    <th>Diligência</th>
+		<?php } ?>
             </tr>
         </thead>
         <tbody>
@@ -310,6 +315,9 @@
                 <td align="center"><?php echo $projeto->UfProjeto; ?></td>
                 <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
+		<td align="center"><?php echo $projeto->Tecnico; ?></td>
+		
+		<?php if($this->filtro != 'emanalise') { ?>	    
                 <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $projeto->idPronac)); ?>'" alt="Analisar"></td>
                 <td align="center">
                     <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaTecnico('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar para técnico" />
@@ -331,6 +339,7 @@
                     <a target="_blank" href="<?php echo $this->url(array('controller' => 'diligenciar', 'action' =>'listardiligenciaanalista')).'?idPronac=' . $projeto->idPronac . '&situacao=E27&tpDiligencia=174';?>" ><img src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>" title="<?php echo $title; ?>" width="30px"/></a><br>
                     <?php } ?>
                 </td>
+		<?php } ?>
             </tr>
             <?php $x++; } ?>
 

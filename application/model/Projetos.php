@@ -2455,7 +2455,11 @@ class Projetos extends GenericModel
      */
     public function alterarSituacao($idPronac = null, $pronac = null, $situacao, $ProvidenciaTomada = null)
     {
-        // grava no hist?rico a situa??o atual do projeto caso a trigger HISTORICO_INSERT esteja desabilitada
+        // pega logon para gravar alteracao da situacao
+        $auth               = Zend_Auth::getInstance();
+	$Logon           = $auth->getIdentity()->usu_codigo;
+	
+	// grava no hist?rico a situa??o atual do projeto caso a trigger HISTORICO_INSERT esteja desabilitada
         $HistoricoInsert = new HistoricoInsert();
         if ($HistoricoInsert->statusHISTORICO_INSERT() == 1) { // desabilitada
             // busca a situa??o atual do projeto
@@ -2478,7 +2482,8 @@ class Projetos extends GenericModel
         $dados = array(
             'Situacao' => $situacao
             , 'DtSituacao' => new Zend_Db_Expr('GETDATE()')
-            , 'ProvidenciaTomada' => $ProvidenciaTomada);
+            , 'ProvidenciaTomada' => $ProvidenciaTomada
+	    ,  'Logon' => $Logon);
 
         $where = '';
         // alterar pelo idPronac
@@ -6611,7 +6616,8 @@ class Projetos extends GenericModel
                     p.NomeProjeto,
                     p.UfProjeto,
                     p.DtSituacao,
-                    p.Situacao
+                    p.Situacao,
+                    ISNULL(usu_Nome, ' ') as Tecnico
                 ")
             )
         );
@@ -6636,9 +6642,14 @@ class Projetos extends GenericModel
             array(''), 'SAC.dbo'
         );
         $select->joinLeft(
-            array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac',
+			  array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
             array(''), 'BDCORPORATIVO.scSAC'
         );
+	$select->joinLeft(
+			  array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
+			  array(''), 'TABELAS.DBO'
+	);
+	
         if($filtro == 'diligenciados'){
             $select->joinInner(
                 array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC and d.DtSolicitacao = (
@@ -6670,7 +6681,7 @@ class Projetos extends GenericModel
             $select->limit($tamanho, $tmpInicio);
         }
 
-        //xd($select->assemble());
+	//xd($select->assemble());
         return $this->fetchAll($select);
     }
 
