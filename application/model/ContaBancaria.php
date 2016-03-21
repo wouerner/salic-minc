@@ -88,36 +88,30 @@ class ContaBancaria extends GenericModel {
 
     public function contaPorProjeto($idPronac){
 
-        $slct = $this->select();
-        $slct->distinct();
-        $slct->setIntegrityCheck(false);
-        $slct->from(
-                array("c"=>$this->_name),
-                array(
-                        "c.Banco",
-                        "c.Agencia",
-                        "c.ContaBloqueada",
-                        "c.DtLoteRemessaCB",
-                        "c.OcorrenciaCB",
-                        "c.ContaLivre",
-                        "c.DtLoteRemessaCL",
-                        "c.OcorrenciaCL"
-                    )
-                );
-        $slct->joinInner(
-                array("p"=>"projetos"),
-                "c.AnoProjeto = p.AnoProjeto AND c.Sequencial = p.Sequencial",
-                array(
-                        'NrProjeto'=>new Zend_Db_Expr('p.AnoProjeto+p.Sequencial'),
-                        'p.NomeProjeto'
-                    )
-                );
+	$select = "
+		SELECT DISTINCT c.Banco,
+                 		c.Agencia,
+                		c.ContaBloqueada,
+                		c.DtLoteRemessaCB,
+                		v.Descricao AS OcorrenciaCB,
+                		c.ContaLivre,
+                		c.DtLoteRemessaCL,
+                		x.Descricao AS OcorrenciaCL,
+                		p.AnoProjeto+p.Sequencial AS NrProjeto,
+                		p.NomeProjeto
+		FROM ContaBancaria AS c
+		INNER JOIN projetos AS p ON c.AnoProjeto = p.AnoProjeto
+		AND c.Sequencial = p.Sequencial
+		LEFT JOIN Verificacao AS v ON c.OcorrenciaCB = SUBSTRING(v.Descricao,1,3)
+		AND v.idTipo = 22
+		LEFT JOIN Verificacao AS x ON c.OcorrenciaCL = SUBSTRING(x.Descricao,1,3)
+		AND x.idTipo = 22
+		WHERE (p.IdPRONAC = '$idPronac')
+	      ";
 
+	$statement = $this->getAdapter()->query($select);
 
-        $slct->where('p.IdPRONAC = ?',$idPronac );
-
-        //xd($slct2->assemble());
-        return $this->fetchAll($slct)->current();
+        return $statement->fetchObject();
     }
 
     public function consultarDadosPorPronac($pronac, $orgao = NULL){
