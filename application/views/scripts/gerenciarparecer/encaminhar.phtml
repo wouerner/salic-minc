@@ -48,6 +48,7 @@
             $("#btnenviar").hide();
         }
     }
+
 </script>
 
 <!-- ========== INÍCIO BREADCRUMB (LINKS TOPO) ========== -->
@@ -149,6 +150,7 @@
                 <tr>
                     <td>
                         <textarea id="<?php echo $count; ?>" name="obs" rows="5" cols="100" class="input_simples editor"></textarea>
+			<script>CKEDITOR.replace('<?php echo $count; ?>');</script>
                     </td>
                 </tr>
             </table>
