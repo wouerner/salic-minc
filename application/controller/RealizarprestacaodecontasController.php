@@ -3336,7 +3336,8 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             }
             
             $tblSituacao = new Situacao();
-            $rsSitucao = $tblSituacao->buscar(array("Codigo IN (?)"=>array('E17','E20','E22','E27','E30','E68','E77','L05','L06')));
+            $rsSitucao = $tblSituacao->buscar(array("Codigo IN (?)"=>array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54')));
+	    
             $this->view->situacoes = $rsSitucao;
             $this->intTamPag = 10;
             
