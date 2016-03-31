@@ -6617,6 +6617,11 @@ class Projetos extends GenericModel
                     p.UfProjeto,
                     p.DtSituacao,
                     p.Situacao,
+                    CASE 
+                        WHEN r.idRelatorioTecnico is null
+                        THEN 'False'
+                        ELSE 'True'
+                    END AS 'RelatorioTecnico',
                     ISNULL(usu_Nome, ' ') as Tecnico
                 ")
             )
@@ -6649,6 +6654,10 @@ class Projetos extends GenericModel
 			  array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
 			  array(''), 'TABELAS.DBO'
 	);
+	$select->joinLeft(
+			  array('r' => 'tbRelatorioTecnico'), 'r.idPRONAC = p.IdPRONAC AND cdGrupo = 124',
+			  array(''), 'SAC.DBO'
+        );
 	
         if($filtro == 'diligenciados'){
             $select->joinInner(
