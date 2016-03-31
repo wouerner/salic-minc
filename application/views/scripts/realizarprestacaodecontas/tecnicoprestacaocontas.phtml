@@ -312,7 +312,11 @@
                 <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
                 <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
                 <td align="center">
+		    <?php if ($projeto->RelatorioTecnico == "False") { ?>
                     <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>',true)" alt="Encaminhar para chefe de divisão" />
+		    <?php } else { ?>
+		    <em>Análise j&aacute; iniciada</em>
+                    <?php } ?>
                 </td>
                 <td background="" align="center">
                     <?php
