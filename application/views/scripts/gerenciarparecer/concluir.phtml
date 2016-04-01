@@ -1,7 +1,45 @@
+<script type="text/javascript" src="<?php echo $this->baseUrl();?>/public/js/tinymce/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        CKEDITOR.replace( 'obs', { toolbar: [] } );
-    });
+ 
+  //Contador e limitadores de caracteres
+
+function ExecucaoDaFuncaoLimiterPag(){
+		    var caracteres  = CountCharacters('obs'); //valor vindo do ID da textarea
+ 
+                   //Atualização para os contadores de caracteres
+		    document.getElementById("contadorobs").innerHTML = "Caracteres: " + caracteres;
+                     
+
+}
+   //inicializao e configuração do editor tinyMCE
+
+    window.onload = function () {
+        tinymce.init({
+	    plugins:"paste,textcolor",
+	    paste_as_text: true,
+            selector: 'textarea',
+            width: 1725,
+	    toolbar : "bold,italic,underline,color,forecolor backcolor",
+	    menubar:"",
+            setup: function (ed) {
+                ed.on('load', function (e) {
+		ExecucaoDaFuncaoLimiterPag();
+                }).on('keyup',function (e) {
+		ExecucaoDaFuncaoLimiterPag();
+		});
+            }
+        });
+    }
+    
+    //Onde é feita a contagem do elemento do contador
+    function CountCharacters(contador) {
+        var body = tinymce.get(contador).getBody();
+        var content = tinymce.trim(body.innerText || body.textContent);
+        return content.length;
+    } 
+
+
+
 
     function confirmaConcluir() {
         $("#msgmodal").html("Deseja Concluir o Produto?");
@@ -75,7 +113,7 @@
             <tr>
                 <td>
                     <textarea name="obs" rows="5" cols="100" class="input_simples"></textarea>
-		    <script>CKEDITOR.replace('obs')</script>
+		    <div id="contadorobs"></div>
                 </td>
             </tr>
         </table>
