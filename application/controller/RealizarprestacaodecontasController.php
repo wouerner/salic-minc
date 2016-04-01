@@ -2473,7 +2473,7 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];			
                         break;			
                     default: //Aguardando Análise
-		        $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+                        $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E27', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
                         break;
                 }
