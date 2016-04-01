@@ -27,7 +27,7 @@ class AnalisarexecucaofisicatecnicoController extends GenericControllerNew {
         // verifica as permissões
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 97;  // Gestor do SALIC
-        $PermissoesGrupo[] = 129; // Técnico de Acompanhamento
+        $PermissoesGrupo[] = 129;
         $PermissoesGrupo[] = 121; // Técnico de Acompanhamento
         parent::perfil(1, $PermissoesGrupo);
 
