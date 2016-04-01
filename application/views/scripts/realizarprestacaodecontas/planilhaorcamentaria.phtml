@@ -117,7 +117,9 @@
         <?php }else if($this->codGrupo == 124): ?>
             <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
         <?php else: ?>
+        <?php if ($this->grupoAtivo != 121) { //Tecnico de Acompanhamento ?>
             <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel'));?>">Presta&ccedil;&atilde;o de contas</a></li>
+        <?php } ?>
         <?php endif; ?>
         <li class="last">Planilha or&ccedil;ament&aacute;ria comprovada</li>
     </ul>
@@ -234,6 +236,7 @@
                                                                 'idPronac' => $this->idPronac,
                                                                 'idPlanilhaAprovacao' => $key,
                                                                 'idPlanilhaItem' => $valor[6],
+                                                                'idRelatorio' => $this->idRelatorio, #Alysson - Adicionado
                                                             )
                                                         );
                                                         $html .= "<a href='{$href}' class='editarIco'>Analisar item</a>";

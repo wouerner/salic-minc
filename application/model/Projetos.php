@@ -5615,13 +5615,16 @@ class Projetos extends GenericModel
 
     public function buscarLocaisDeRealizacao($idPronac)
     {
+
         $a = $this->select();
         $a->setIntegrityCheck(false);
         $a->from(
                 array('a' => $this->_name), array('')
         );
         $a->joinInner(
-                array('b' => 'Abrangencia'), "a.idProjeto = b.idProjeto", array('idAbrangencia', 'idProjeto', 'dtRealizacao', 'idPais', 'idUF', 'idMunicipioIBGE', 'siAbrangencia', 'CAST(dsJustificativa AS TEXT) AS dsJustificativa'), 'SAC.dbo'
+                #array('b' => 'Abrangencia'), "a.idProjeto = b.idProjeto", array('idAbrangencia', 'idProjeto', 'dtRealizacao', 'idPais', 'idUF', 'idMunicipioIBGE', 'siAbrangencia', 'CAST(dsJustificativa AS TEXT) AS dsJustificativa'), 'SAC.dbo'
+                #Alysson - A coluna dtRealizacao não existe mais na tabela Abrangencia
+                array('b' => 'Abrangencia'), "a.idProjeto = b.idProjeto", array('idAbrangencia', 'idProjeto', 'dtInicioRealizacao','dtFimRealizacao',  'idPais', 'idUF', 'idMunicipioIBGE', 'siAbrangencia', 'CAST(dsJustificativa AS TEXT) AS dsJustificativa'), 'SAC.dbo'
         );
         $a->joinInner(
                 array('c' => 'Pais'), "b.idPais = c.idPais", array('Descricao as Pais'), 'AGENTES.dbo'
@@ -5640,6 +5643,7 @@ class Projetos extends GenericModel
 //        $a->order('d.Descricao');
 //        $a->order('e.Descricao');
 
+        #xd($a->assemble());
         return $this->fetchAll($a);
     }
 
