@@ -225,7 +225,7 @@
                 <select name="tipoFiltro" id="tipoFiltro" class="input_simples">
                     <option value="">Aguardando análise</option>
                     <option value="emanalise" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='emanalise')?'selected="selected"':''; ?>>Em análise</option>
-                    <option value="devolvidos" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='devolvidos')?'selected="selected"':''; ?>>Devolvidos após análise</option>
+                    <option value="analisados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='analisados')?'selected="selected"':''; ?>>Analisados</option>
                     <option value="diligenciados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='diligenciados')?'selected="selected"':''; ?>>Projetos diligenciados</option>
                     <option value="tce" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='tce')?'selected="selected"':''; ?>>Projetos em TCE</option>
                 </select>

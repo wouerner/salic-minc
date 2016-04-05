@@ -3393,11 +3393,18 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                 switch ($filtro) {
                     case 'emanalise': //Em análise
                         $where['p.Orgao = ?'] = $this->codOrgao;
-                        $where['p.Situacao in (?)'] = array('E27');
+                        $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
                         $where['e.idSituacaoEncPrestContas in (?)'] = array('1');
                         $where['e.cdGruposDestino in (?)'] = array('124');
                         $where['e.stAtivo = ?'] = 1;
                         break;
+		    case 'analisados': // Analisados
+		        $where['p.Orgao = ?'] = $this->codOrgao;
+		        $where['p.Situacao in (?)'] = array('E14','E18', 'E27', 'E46', 'G08', 'G21', 'G22');
+		        $where['e.idSituacaoEncPrestContas in (?)'] = array('1');
+		        $where['e.cdGruposDestino in (?)'] = array('125', '126');
+		        $where['e.stAtivo = ?'] = 1;			
+		        break;
                     case 'devolvidos': //Devolvidos após análise
                         $where['p.Orgao = ?'] = $this->codOrgao;
                         $where['p.Situacao in (?)'] = array('E27');
@@ -3410,20 +3417,21 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                     case 'diligenciados': //Projetos diligenciados
                         $where['p.Orgao = ?'] = $this->codOrgao;
                         $where['p.Situacao in (?)'] = array('E17', 'E20', 'E30');
-                        $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2');
+                        $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
                         $where['e.cdGruposDestino in (?)'] = array('125','126');
                         $where['e.cdGruposOrigem = ?'] = 132;
                         $where['e.stAtivo = ?'] = 1;
-                        $where['d.DtSolicitacao = (SELECT top 1 d2.DtSolicitacao FROM SAC.dbo.tbDiligencia d2 WHERE d2.idPronac = d.idPronac ORDER BY d2.DtSolicitacao DESC)'] = '';
+			$where['d.stEstado = ?'] = 0;
                         $where['d.idTipoDiligencia = ?'] = 174;
                         break;
                     case 'tce': //Projetos em TCE
                         $where['p.Orgao = ?'] = $this->codOrgao;
-                        $where['p.Situacao in (?)'] = array('E22', 'L05', 'L06');
-                        $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2');
-                        $where['e.cdGruposDestino in (?)'] = array('125','126');
-                        $where['e.cdGruposOrigem = ?'] = 132;
+                        $where['p.Situacao in (?)'] = array('E22');
+                        $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
+			//                        $where['e.cdGruposDestino in (?)'] = array('125','126');
                         $where['e.stAtivo = ?'] = 1;
+			$where['d.idTipoDiligencia = ?'] = 174;
+			$where['d.stEstado = ?'] = 0;
                         break;
                     default: //Aguardando Análise
                         $where['p.Orgao = ?'] = $this->codOrgao;

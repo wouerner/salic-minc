@@ -6571,6 +6571,18 @@ class Projetos extends GenericModel
                 array('Descricao AS nmAgente'), 'AGENTES.dbo'
             );
         }
+	if ($filtro == 'analisados') {
+            $select->joinInner(
+                array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
+                array('e.idSituacaoEncPrestContas'), 'BDCORPORATIVO.scSAC'
+            );
+	}
+	if ($filtro == 'tce') {
+            $select->joinInner(
+                array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC',
+                array(''), 'SAC.dbo'
+            );
+	}	
 
         //adiciona quantos filtros foram enviados
         foreach ($where as $coluna => $valor) {
