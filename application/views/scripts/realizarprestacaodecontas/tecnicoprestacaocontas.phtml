@@ -63,7 +63,7 @@
         });
     });	
 
-    function JSEncaminharParaChefeDivisao(idPronac,idOrgaoDestino,ocultarJustificativa){               
+    function JSDevolverParaChefeDivisao(idPronac,idOrgaoDestino,ocultarJustificativa){               
         $('html').css('overflow', 'hidden');
         $("body").append("<div id='divDinamica'></div>");
         $("#divDinamica").html("");
@@ -76,7 +76,8 @@
                 idSituacaoPrestContas : 1,
                 tipoFiltro : '',
                 ocultarJustificativa : true,
-		idPerfilDestino: 132
+		idPerfilDestino: 132,
+		
             },
             success: function(data){
                 $('#divDinamica').html(data);
@@ -84,7 +85,7 @@
             type : 'post'
         });
 
-        var title = 'Encaminhar Projeto para Chefe de Divisão';
+        var title = 'Devolver Projeto para Chefe de Divisão';
         $("#divDinamica").dialog({
             resizable: true,
             width:750,
@@ -286,7 +287,7 @@
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=9&ordem='.$this->paginacao['novaOrdem'];?>">Mecanismo</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=5&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Recebimento</a></th>
                 <th>Analisar Prestação de Contas</th>
-                <th>Encaminhar para Chefe de Divis&aacute;o</th>		
+                <th>Devolver para Chefe de Divis&aacute;o</th>		
                 <?php if($this->filtro == 'diligenciados'){ ?>
                     <th>Consultoria AECI</th>
                     <th>Consultoria CONJUR</th>
@@ -313,7 +314,7 @@
                 <td align="center"><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
                 <td align="center">
 		    <?php if ($projeto->RelatorioTecnico == "False") { ?>
-                    <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSEncaminharParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>',true)" alt="Encaminhar para chefe de divisão" />
+                    <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSDevolverParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>',true)" alt="Devolver para chefe de divisão" />
 		    <?php } else { ?>
 		    <em>Análise j&aacute; iniciada</em>
                     <?php } ?>
