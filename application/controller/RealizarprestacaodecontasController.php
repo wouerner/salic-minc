@@ -1671,7 +1671,11 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                         // altera a situação do projeto AO ENCAMINHAR PARA O TECNICO
                         $tblProjeto = new Projetos();
                         $tblProjeto->alterarSituacao($idPronac, '', 'E27', 'Comprovação Financeira do Projeto em Análise');
-                    }
+                    } else if ($this->codGrupo == 124 && $idGrupoDestino == 132) {
+			       // SE O ENCAMINHAMENTO FOR DO TECNICO PARA O CHEFE/COORDENADOR (DEVOLUCAO) - ALTERAR SITUACAO DO PROJETO
+                        $tblProjeto = new Projetos();
+                        $tblProjeto->alterarSituacao($idPronac, '', 'E68', 'Projeto devolvido para o Chefe de Divisão - Aguarda análise financeira');		      
+		    }
 
                     //BUSCA ULTIMO STATUS DO PROJETO
                     $tblProjeto = new Projetos();
@@ -2465,15 +2469,17 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
                 switch ($filtro) {
                     case 'analisados': //Analisados
                         $where['e.idSituacaoEncPrestContas = ?'] = 3;
+			$where['e.cdGruposDestino = ?'] = 132;
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];			
                         break;			
    		    case 'emanalise': //Em Análise
   		        $where['p.Situacao in (?)'] = array('E14', 'E17', 'E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
                         $where['e.idSituacaoEncPrestContas = ?'] = 2;
+			$where['e.cdGruposDestino = ?'] = 124;
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];			
                         break;			
                     default: //Aguardando Análise
-                        $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E27', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+                        $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
                         break;
                 }
@@ -2481,17 +2487,18 @@ class RealizarPrestacaoDeContasController extends GenericControllerNew {
             } else { //Aguardando Análise
                 $filtro = '';
 		$where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+		
 		$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
             }
             $this->view->filtro = $filtro;
             
             $Projetos = new Projetos();
-            $total = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, null, null, true, $filtro);
+            $total = $Projetos->buscarPainelChefeDivisaoPrestacaoDeContas($where, $order, null, null, true, $filtro);
             $fim = $inicio + $this->intTamPag;
 
             $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
             $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-            $busca = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
+            $busca = $Projetos->buscarPainelChefeDivisaoPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
 
             $paginacao = array(
                 "pag"=>$pag,

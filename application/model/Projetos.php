@@ -6619,6 +6619,7 @@ class Projetos extends GenericModel
 
         $select = $this->select();
         $select->setIntegrityCheck(false);
+	$select->distinct();
         $select->from(
             array('p' => $this->_name),
             array(
@@ -6706,6 +6707,114 @@ class Projetos extends GenericModel
         return $this->fetchAll($select);
     }
 
+    /*
+     * Criada em 07/04/2016
+     * @author: Fernão Lopes
+     * Essa consulta retorna os dados do painel de prestação de contas - Perfil: Chefe de divisão
+     */
+    public function buscarPainelChefeDivisaoPrestacaoDeContas($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $qtdeTotal=false, $filtro='') {
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+	
+	// em aguardando análise, nao puxa técnico nem relatório
+	if ($filtro == '') {
+            $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao
+                    ")
+                )
+            );  
+
+	} else {
+            $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao,
+                        ISNULL(usu_Nome, ' ') as Tecnico
+                    ")
+                )
+            );  
+	}
+	
+        $select->joinInner(
+            array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
+            array(''), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('a' => 'Area'), 'p.Area = a.Codigo',
+            array('a.Descricao AS Area'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('s' => 'Segmento'), 'p.Segmento = s.Codigo',
+            array('s.Descricao AS Segmento'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('m' => 'Mecanismo'), 'p.Mecanismo = m.Codigo',
+            array('m.Descricao AS Mecanismo'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('sit' => 'Situacao'), 'sit.Codigo = p.Situacao',
+            array(''), 'SAC.dbo'
+        );
+        $select->joinLeft(
+			  array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
+            array(''), 'BDCORPORATIVO.scSAC'
+        );
+
+	// se não for 'aguardando análise'
+	if ($filtro != '') {
+	    $select->joinLeft(
+	                  array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
+			  array(''), 'TABELAS.DBO'
+            );
+	}
+	
+        if($filtro == 'diligenciados'){
+            $select->joinInner(
+                array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC and d.DtSolicitacao = (
+                    SELECT top 1 d2.DtSolicitacao FROM SAC..tbDiligencia d2 WHERE d2.idPronac = d.idPronac ORDER BY d2.DtSolicitacao DESC
+                )',
+                array(), 'SAC.dbo'
+            );
+        }
+
+        //adiciona quantos filtros foram enviados
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
+        if ($qtdeTotal) {
+            //xd($select->assemble());
+            return $this->fetchAll($select)->count();
+        }
+
+        //adicionando linha order ao select
+        $select->order($order);
+
+        // paginacao
+        if ($tamanho > -1) {
+            $tmpInicio = 0;
+            if ($inicio > -1) {
+                $tmpInicio = $inicio;
+            }
+            $select->limit($tamanho, $tmpInicio);
+        }
+	
+	//xd($select->assemble());
+        return $this->fetchAll($select);
+    }
+    
+    
     /*
      * Criada em 26/02/2015
      * @author: Jefferson Alessandro
