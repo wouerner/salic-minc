@@ -48,7 +48,7 @@ class LocalizacaoFisicaModel extends GenericModel
     }
 
     /**
-     * Pesquisa os projetos / localização de acordo com o pronac informado
+     * Pesquisa os projetos / localizaÃ§Ã£o de acordo com o pronac informado
      */
     public function pesquisarPorPronac($idPronac, $orgaosUsuario, $showOnlyLast = false)
     {
@@ -59,7 +59,7 @@ class LocalizacaoFisicaModel extends GenericModel
     }
 
     /**
-     * Pesquisa os projetos / localização de acordo com o técnico
+     * Pesquisa os projetos / localizaÃ§Ã£o de acordo com o tÃ©cnico
      */
     public function pesquisarPorTecnico($idTecnico, $orgaosUsuario, $showOnlyLast = false)
     {
@@ -70,7 +70,7 @@ class LocalizacaoFisicaModel extends GenericModel
     }
 
     /**
-     * Pesquisa os projetos / localização de acordo com a vinculada
+     * Pesquisa os projetos / localizaÃ§Ã£o de acordo com a vinculada
      */
     public function pesquisarPorVinculada($idVinculada, $orgaosUsuario, $showOnlyLast = false)
     {
@@ -165,7 +165,7 @@ class LocalizacaoFisicaModel extends GenericModel
         }
 
         if ($qtdeTotal) {
-            xd($select->assemble());
+  //          xd($select->assemble());
             return $this->fetchAll($select)->count();
         }
 
