@@ -6517,19 +6517,35 @@ class Projetos extends GenericModel
 
         $select = $this->select();
         $select->setIntegrityCheck(false);
-        $select->from(
-            array('p' => $this->_name),
-            array(
-                new Zend_Db_Expr("
-                    p.IdPRONAC AS idPronac,
-                    (p.AnoProjeto+p.Sequencial) AS Pronac,
-                    p.NomeProjeto,
-                    p.UfProjeto,
-                    p.DtSituacao,
-                    p.Situacao
-                ")
-            )
-        );
+
+	if ($filtro == 'emanalise') {
+	    $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao,
+                        e.dtInicioEncaminhamento,
+                        DATEDIFF(day, e.dtInicioEncaminhamento, GETDATE()) AS qtDiasAnalise
+                    ")
+                )
+            );
+	} else {
+	    $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao
+                    ")
+                )
+            );
+	}
+	
         $select->joinInner(
             array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
             array(''), 'SAC.dbo'
@@ -6567,8 +6583,8 @@ class Projetos extends GenericModel
 
         if($filtro == 'emanalise'){
             $select->joinInner(
-                array('nm' => 'Nomes'), 'e.idAgenteDestino = nm.idAgente',
-                array('Descricao AS nmAgente'), 'AGENTES.dbo'
+                array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
+                array('usu_nome'), 'TABELAS.dbo'
             );
         }
 	if ($filtro == 'analisados') {

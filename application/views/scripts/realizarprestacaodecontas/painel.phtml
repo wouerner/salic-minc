@@ -226,8 +226,6 @@
                     <option value="">Aguardando análise</option>
                     <option value="emanalise" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='emanalise')?'selected="selected"':''; ?>>Em análise</option>
                     <option value="analisados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='analisados')?'selected="selected"':''; ?>>Analisados</option>
-                    <option value="diligenciados" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='diligenciados')?'selected="selected"':''; ?>>Projetos diligenciados</option>
-                    <option value="tce" <?php echo (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro']=='tce')?'selected="selected"':''; ?>>Projetos em TCE</option>
                 </select>
             </td>
             <td>
@@ -300,43 +298,32 @@
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=3&ordem='.$this->paginacao['novaOrdem'];?>">Nome do Projeto</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=6&ordem='.$this->paginacao['novaOrdem'];?>">Situação</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=7&ordem='.$this->paginacao['novaOrdem'];?>">Área / Segmento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=4&ordem='.$this->paginacao['novaOrdem'];?>">Estado</a></th>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=9&ordem='.$this->paginacao['novaOrdem'];?>">Mecanismo</a></th>
-                
-                <?php if(!isset($_GET['tipoFiltro']) || (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] != 'devolvidos')){ ?>
-                    <?php if(isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'emanalise'){ ?>
-                    <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=10&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Encaminhamento</a></th>
-                    <?php } else { ?>
-                    <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=5&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Recebimento</a></th>
-                    <?php } ?>
-                <?php } else { ?>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=10&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Início</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=11&ordem='.$this->paginacao['novaOrdem'];?>">Dt. Fim</a></th>
+		<?php
+		
+		?>
+                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == 'analisados'){ ?>		
+                <th>Laudo final</th>
                 <?php } ?>
-                
-                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == ''){ ?>
+		
+                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == '' || $_GET['tipoFiltro'] == 'analisados'){ ?>		
                 <th>Encaminhar para Análise</th>
                 <?php } ?>
                 
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'diligenciados' || $_GET['tipoFiltro'] == 'devolvidos')){ ?>
-                <th>Analisar Prestação de Contas</th>
-                <?php } ?>
-                
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'tce' || $_GET['tipoFiltro'] == 'devolvidos' || $_GET['tipoFiltro'] == 'diligenciados')){ ?>
+                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'analisados')){ ?>
                 <th>Consultoria AECI</th>
                 <th>Consultoria CONJUR</th>
                 <?php } ?>
                 
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'diligenciados' || $_GET['tipoFiltro'] == 'devolvidos')){ ?>
-                <th>Visualizar Hist&oacute;rico</th>
-                <th>Diligência</th>
-                <?php } ?>
-                
                 <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise')){ ?>
                 <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=13&ordem='.$this->paginacao['novaOrdem'];?>">Técnico</a></th>
-                <th>Devolver p/ Coordenador</th>
+		<th>Dt. Envio</th>
+		<th>Dias em análise</th>
                 <?php } ?>
-                
+
+                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise')){ ?>
+		<th>Hist&oacute;rico</th>
+		<?php } ?>
             </tr>
         </thead>
         <tbody>
@@ -351,55 +338,33 @@
                 <td><?php echo $projeto->NomeProjeto; ?></td>
                 <td align="center"><?php echo $projeto->Situacao; ?></td>
                 <td><?php echo $projeto->Area.' / '.$projeto->Segmento; ?></td>
-                <td align="center"><?php echo $projeto->UfProjeto; ?></td>
                 <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
-                
-                <?php if(!isset($_GET['tipoFiltro']) || (isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] != 'devolvidos')){ ?>
-                    <?php if(isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'emanalise'){ ?>
-                        <td align="center"><?php echo Data::tratarDataZend($projeto->dtInicioEncaminhamento, 'brasileira');?></td>
-                    <?php } else { ?>
-                        <td align="center"><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
-                    <?php } ?>
-                <?php } else { ?>
-                    <td align="center"><?php echo Data::tratarDataZend($projeto->dtInicioEncaminhamento, 'brasileira'); ?></td>
-                    <td align="center"><?php echo Data::tratarDataZend($projeto->dtFimEncaminhamento, 'brasileira'); ?></td>
+
+                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'analisados')){ ?>
+                <td align="center"><img style="cursor: pointer;" src="../public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'laudofinal') ) . '?idPronac=' . $projeto->idPronac; ?>'" alt="Analisar" /></td>
                 <?php } ?>
                 
-                
-                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == ''){ ?>
+                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == '' || $_GET['tipoFiltro'] == 'analisados'){ ?>
                 <td align="center">
                     <img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaAnalise('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar" />
                 </td>
                 <?php } ?>
                 
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'diligenciados' || $_GET['tipoFiltro'] == 'devolvidos')){ ?>
-                <td align="center"><img style="cursor: pointer;" src="../public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'laudofinal') ) . '?idPronac=' . $projeto->idPronac; ?>'" alt="Analisar" /></td>
-                <?php } ?>
-                
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'tce' || $_GET['tipoFiltro'] == 'devolvidos' || $_GET['tipoFiltro'] == 'diligenciados')){ ?>
+                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'analisados')){ ?>
                 <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoria('<?php echo $projeto->idPronac;?>','177','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>')" alt="Encaminhar" /></td>
                 <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoria('<?php echo $projeto->idPronac;?>','12','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>')" alt="Encaminhar" /></td>
                 <?php } ?>
                 
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'diligenciados' || $_GET['tipoFiltro'] == 'devolvidos')){ ?>
-                <td align="center"><img style="cursor: pointer;" src="../public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamento('<?php echo $projeto->idPronac; ?>')" alt="Encaminhar" /></td>
-                <td background="" align="center">
-                    <?php
-                        $arrPrazo = $this->prazoRespostaDiligencia($projeto->idPronac, 174);
-                        $icone = $arrPrazo['iconeDiligencia']['icone'];
-                        $title = $arrPrazo['iconeDiligencia']['title'];
-                    ?>
-                    <a target="_blank" href="<?php echo $this->url(array('controller' => 'diligenciar', 'action' =>'listardiligenciaanalista')).'?idPronac=' . $projeto->idPronac . '&situacao=E17&tpDiligencia=174';?>" ><img src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>" title="<?php echo $title; ?>" width="30px"/></a><br>
-                </td>
-                <?php } ?>
-                
                 <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise')){ ?>
-                <td align="center"><?php echo $projeto->nmAgente; ?></td>
-                <td background="" align="center">
-                    <img style="cursor: pointer;" src="../public/img/ico/undo.png" alt="Devolver" enc="<?php echo $projeto->idEncPrestContas; ?>" idPronac="<?php echo $projeto->idPronac; ?>" class="cancelarEncaminhamento" />
-                </td>
+                <td align="center"><?php echo $projeto->usu_nome; ?></td>
+		<td align="center"><?php echo Data::tratarDataZend($projeto->dtInicioEncaminhamento, 'brasileira'); ?></td>
+		<td align="center"><?php echo $projeto->qtDiasAnalise; ?></td>
                 <?php } ?>
-                
+
+                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise')){ ?>
+                <td align="center"><img style="cursor: pointer;" src="../public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamento('<?php echo $projeto->idPronac; ?>')" alt="Encaminhar" /></td>
+                <?php } ?>
+		
             </tr>
             <?php $x++; } ?>
 

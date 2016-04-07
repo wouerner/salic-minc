@@ -79,7 +79,11 @@
             <td align="left">
                 <fieldset>
                     <legend> Parecer T&eacute;cnico </legend>
-                    <textarea class="input_simples" cols="80" rows="10" style="width: 98%" readonly><?php if(!empty($this->parecerTecnico)):echo $this->parecerTecnico->meRelatorio;endif;?></textarea>
+                    <div class="input_simples" style="width: 98%">
+			<?php if(!empty($this->parecerTecnico)):echo $this->parecerTecnico->meRelatorio;endif;?>
+		    </div>
+		    <br/>
+		    
                     <?php
                         if ($this->parecerTecnico) :
                             echo '<span style="color: #35953F; font-size: 16px; font-weight: bold; padding: 5px;">Manifestação Final: </span>';
