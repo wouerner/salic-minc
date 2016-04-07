@@ -15,15 +15,15 @@
             <th>Data de Envio</th>
             <th>Nome do Remetente</th>
             <th>Nome do Destinat&aacute;rio</th>
-            <!--<th>Mensagem</th>-->
+            <th>Justificativa</th>
         </tr>
         <?php if(count($this->Historico)>0){
                 foreach ($this->Historico as $chave => $dadosHis ) { ?>
                 <tr>
-                    <td id="Pronac"><?php echo ConverteData($dadosHis->dtInicioEncaminhamento,5); ?></td>
+                    <td id="Pronac"><?php echo $dadosHis->dtInicioEncaminhamento; ?></td>
                     <td id="nomeProjeto"><?php echo utf8_decode(htmlentities($dadosHis->NomeOrigem)); ?></td>
                     <td id="remetente"><?php echo utf8_decode(htmlentities($dadosHis->NomeDestino)); ?></td>
-                    <!--<td id="destinatario"><?php echo utf8_decode(htmlentities($dadosHis->dsJustificativa)); ?></td>-->
+                    <td id="destinatario"><?php echo utf8_decode(htmlentities($dadosHis->dsJustificativa)); ?></td>
                 </tr>
         <?php   } ?>
         <?php }else{ ?>
