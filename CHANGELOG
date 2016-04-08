@@ -22,7 +22,6 @@ Release 1.5.0
   * Fix: [Parecer técnico] campo richtext e limitação de caracteres
   * Fix: [Localização física do projeto] correção na listagem
   * Fix: [Localização física do projeto] agora é possível cadastrar sem um técnico
-  * Fix: [Gerenciar pareceres] análise concluída e aguardando distribuição: adicionado richtext em distribuição de produtos e projetos
   
 Release 1.4.4
   * Fix: [Comprovação financeira] Ajuste solicitado pela Área na cláusula WHERE do painel de comprovação financeira para não listar projetos excluidos ou nulos
