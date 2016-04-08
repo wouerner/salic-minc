@@ -115,11 +115,9 @@
                 ?>
             </td>
             <td>
-                <?php #Alysson - A coluna dtRealizacao não existe mais na tabela Abrangencia ?>
                 <?php echo Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira'); ?>
             </td>
             <td>
-                <?php #Alysson - A coluna dtRealizacao não existe mais na tabela Abrangencia ?>
                 <?php echo !empty($LocaisDeRealizacao->dtFimRealizacao) ? Data::tratarDataZend($LocaisDeRealizacao->dtFimRealizacao, 'Brasileira') : Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira');; ?>
             </td>
             <td align="center">
