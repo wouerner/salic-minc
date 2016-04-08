@@ -2455,7 +2455,11 @@ class Projetos extends GenericModel
      */
     public function alterarSituacao($idPronac = null, $pronac = null, $situacao, $ProvidenciaTomada = null)
     {
-        // grava no hist?rico a situa??o atual do projeto caso a trigger HISTORICO_INSERT esteja desabilitada
+        // pega logon para gravar alteracao da situacao
+        $auth               = Zend_Auth::getInstance();
+	$Logon           = $auth->getIdentity()->usu_codigo;
+	
+	// grava no hist?rico a situa??o atual do projeto caso a trigger HISTORICO_INSERT esteja desabilitada
         $HistoricoInsert = new HistoricoInsert();
         if ($HistoricoInsert->statusHISTORICO_INSERT() == 1) { // desabilitada
             // busca a situa??o atual do projeto
@@ -2478,7 +2482,8 @@ class Projetos extends GenericModel
         $dados = array(
             'Situacao' => $situacao
             , 'DtSituacao' => new Zend_Db_Expr('GETDATE()')
-            , 'ProvidenciaTomada' => $ProvidenciaTomada);
+            , 'ProvidenciaTomada' => $ProvidenciaTomada
+	    ,  'Logon' => $Logon);
 
         $where = '';
         // alterar pelo idPronac
@@ -2920,22 +2925,17 @@ class Projetos extends GenericModel
 
 // fecha m?todo buscaProjetosFiscalizacao()
 
-    public function buscarComboOrgaos($idOrgaoDestino)
+    public function buscarComboOrgaos($idOrgaoDestino, $idGrupo)
     {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
-
-        $slct->from(array("a" => "Orgaos"), array("*"), "SAC.dbo");
-
-        $slct->joinInner(array("b" => "vwUsuariosOrgaosGrupos"), "a.Codigo = b.uog_orgao", array("*"), "TABELAS.dbo");
-
-        $slct->joinInner(array("c" => "Agentes"), "c.CNPJCPF = b.usu_identificacao", array('c.idAgente'), "AGENTES.dbo");
-//$slct->where("org_superior = ? ", $idorgao);
-        $slct->where("a.Codigo = ? ", $idOrgaoDestino);
-        $slct->where("b.sis_codigo = ? ", 21);
-        $slct->where("gru_codigo in (?) ", array('124', '100'));
-
-//xd($slct);
+	
+        $slct->from(array("a" => "vwUsuariosOrgaosGrupos"), array("usu_codigo", "usu_nome"), "TABELAS.dbo");
+	$slct->where("gru_codigo = ? ", $idGrupo);
+	$slct->where("uog_orgao = ? ", $idOrgaoDestino);
+	$slct->where("uog_status = ? ", 1);		
+	$slct->order("2 ASC");
+	
         return $this->fetchAll($slct);
     }
 
@@ -6521,19 +6521,35 @@ class Projetos extends GenericModel
 
         $select = $this->select();
         $select->setIntegrityCheck(false);
-        $select->from(
-            array('p' => $this->_name),
-            array(
-                new Zend_Db_Expr("
-                    p.IdPRONAC AS idPronac,
-                    (p.AnoProjeto+p.Sequencial) AS Pronac,
-                    p.NomeProjeto,
-                    p.UfProjeto,
-                    p.DtSituacao,
-                    p.Situacao
-                ")
-            )
-        );
+
+	if ($filtro == 'emanalise') {
+	    $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao,
+                        e.dtInicioEncaminhamento,
+                        DATEDIFF(day, e.dtInicioEncaminhamento, GETDATE()) AS qtDiasAnalise
+                    ")
+                )
+            );
+	} else {
+	    $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao
+                    ")
+                )
+            );
+	}
+	
         $select->joinInner(
             array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
             array(''), 'SAC.dbo'
@@ -6571,10 +6587,22 @@ class Projetos extends GenericModel
 
         if($filtro == 'emanalise'){
             $select->joinInner(
-                array('nm' => 'Nomes'), 'e.idAgenteDestino = nm.idAgente',
-                array('Descricao AS nmAgente'), 'AGENTES.dbo'
+                array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
+                array('usu_nome'), 'TABELAS.dbo'
             );
         }
+	if ($filtro == 'analisados') {
+            $select->joinInner(
+                array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
+                array('e.idSituacaoEncPrestContas'), 'BDCORPORATIVO.scSAC'
+            );
+	}
+	if ($filtro == 'tce') {
+            $select->joinInner(
+                array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC',
+                array(''), 'SAC.dbo'
+            );
+	}	
 
         //adiciona quantos filtros foram enviados
         foreach ($where as $coluna => $valor) {
@@ -6611,6 +6639,7 @@ class Projetos extends GenericModel
 
         $select = $this->select();
         $select->setIntegrityCheck(false);
+	$select->distinct();
         $select->from(
             array('p' => $this->_name),
             array(
@@ -6620,7 +6649,13 @@ class Projetos extends GenericModel
                     p.NomeProjeto,
                     p.UfProjeto,
                     p.DtSituacao,
-                    p.Situacao
+                    p.Situacao,
+                    CASE 
+                        WHEN r.idRelatorioTecnico is null
+                        THEN 'False'
+                        ELSE 'True'
+                    END AS 'RelatorioTecnico',
+                    ISNULL(usu_Nome, ' ') as Tecnico
                 ")
             )
         );
@@ -6645,9 +6680,18 @@ class Projetos extends GenericModel
             array(''), 'SAC.dbo'
         );
         $select->joinLeft(
-            array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac',
+			  array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
             array(''), 'BDCORPORATIVO.scSAC'
         );
+	$select->joinLeft(
+			  array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
+			  array(''), 'TABELAS.DBO'
+	);
+	$select->joinLeft(
+			  array('r' => 'tbRelatorioTecnico'), 'r.idPRONAC = p.IdPRONAC AND cdGrupo = 124',
+			  array(''), 'SAC.DBO'
+        );
+	
         if($filtro == 'diligenciados'){
             $select->joinInner(
                 array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC and d.DtSolicitacao = (
@@ -6679,10 +6723,118 @@ class Projetos extends GenericModel
             $select->limit($tamanho, $tmpInicio);
         }
 
-        //xd($select->assemble());
+	//xd($select->assemble());
         return $this->fetchAll($select);
     }
 
+    /*
+     * Criada em 07/04/2016
+     * @author: Fernão Lopes
+     * Essa consulta retorna os dados do painel de prestação de contas - Perfil: Chefe de divisão
+     */
+    public function buscarPainelChefeDivisaoPrestacaoDeContas($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $qtdeTotal=false, $filtro='') {
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+	
+	// em aguardando análise, nao puxa técnico nem relatório
+	if ($filtro == '') {
+            $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao
+                    ")
+                )
+            );  
+
+	} else {
+            $select->from(
+                array('p' => $this->_name),
+                array(
+                    new Zend_Db_Expr("
+                        p.IdPRONAC AS idPronac,
+                        (p.AnoProjeto+p.Sequencial) AS Pronac,
+                        p.NomeProjeto,
+                        p.Situacao,
+                        ISNULL(usu_Nome, ' ') as Tecnico
+                    ")
+                )
+            );  
+	}
+	
+        $select->joinInner(
+            array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
+            array(''), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('a' => 'Area'), 'p.Area = a.Codigo',
+            array('a.Descricao AS Area'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('s' => 'Segmento'), 'p.Segmento = s.Codigo',
+            array('s.Descricao AS Segmento'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('m' => 'Mecanismo'), 'p.Mecanismo = m.Codigo',
+            array('m.Descricao AS Mecanismo'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('sit' => 'Situacao'), 'sit.Codigo = p.Situacao',
+            array(''), 'SAC.dbo'
+        );
+        $select->joinLeft(
+			  array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
+            array(''), 'BDCORPORATIVO.scSAC'
+        );
+
+	// se não for 'aguardando análise'
+	if ($filtro != '') {
+	    $select->joinLeft(
+	                  array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
+			  array(''), 'TABELAS.DBO'
+            );
+	}
+	
+        if($filtro == 'diligenciados'){
+            $select->joinInner(
+                array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC and d.DtSolicitacao = (
+                    SELECT top 1 d2.DtSolicitacao FROM SAC..tbDiligencia d2 WHERE d2.idPronac = d.idPronac ORDER BY d2.DtSolicitacao DESC
+                )',
+                array(), 'SAC.dbo'
+            );
+        }
+
+        //adiciona quantos filtros foram enviados
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
+        if ($qtdeTotal) {
+            //xd($select->assemble());
+            return $this->fetchAll($select)->count();
+        }
+
+        //adicionando linha order ao select
+        $select->order($order);
+
+        // paginacao
+        if ($tamanho > -1) {
+            $tmpInicio = 0;
+            if ($inicio > -1) {
+                $tmpInicio = $inicio;
+            }
+            $select->limit($tamanho, $tmpInicio);
+        }
+	
+	//xd($select->assemble());
+        return $this->fetchAll($select);
+    }
+    
+    
     /*
      * Criada em 26/02/2015
      * @author: Jefferson Alessandro
