@@ -199,12 +199,12 @@
             }
 
             if(n[0] == 2){
-                $('#dtRealizacao'+n[1]).addClass('obrigatorio');
-                $('#dtRealizacao'+n[1]).removeClass('sumir');
-                $('#dtRealizacao'+n[1]).val('');
+                $('#dtInicioRealizacao'+n[1]).addClass('obrigatorio');
+                $('#dtInicioRealizacao'+n[1]).removeClass('sumir');
+                $('#dtInicioRealizacao'+n[1]).val('');
             } else {
-                $('#dtRealizacao'+n[1]).removeClass('obrigatorio');
-                $('#dtRealizacao'+n[1]).addClass('sumir');
+                $('#dtInicioRealizacao'+n[1]).removeClass('obrigatorio');
+                $('#dtInicioRealizacao'+n[1]).addClass('sumir');
             }
 
         });
@@ -326,10 +326,10 @@
                     <?php } ?>
                 </td>
                 <td>
-                    <?php if(!empty($LocaisDeRealizacao->dtRealizacao)) : ?>
-                    <div style="height: 24px; padding: 6px 0px 0px 4px;"><?php echo Data::tratarDataZend($LocaisDeRealizacao->dtRealizacao, 'Brasileira'); ?></div>
+                    <?php if(!empty($LocaisDeRealizacao->dtInicioRealizacao)) : ?>
+                    <div style="height: 24px; padding: 6px 0px 0px 4px;"><?php echo Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira'); ?></div>
                     <?php else: ?>
-                    <input type="text" name="dtRealizacao<?php echo $LocaisDeRealizacao->idAbrangencia; ?>" id="dtRealizacao<?php echo $LocaisDeRealizacao->idAbrangencia; ?>" class="input_simples calendario sumir" maxlength="10" value="<?php echo !empty($LocaisDeRealizacao->dtRealizacao) ? Data::tratarDataZend($LocaisDeRealizacao->dtRealizacao, 'Brasileira'):''; ?>" /></td>
+                    <input type="text" name="dtInicioRealizacao<?php echo $LocaisDeRealizacao->idAbrangencia; ?>" id="dtInicioRealizacao<?php echo $LocaisDeRealizacao->idAbrangencia; ?>" class="input_simples calendario sumir" maxlength="10" value="<?php echo !empty($LocaisDeRealizacao->dtInicioRealizacao) ? Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira'):''; ?>" /></td>
                     <?php endif; ?>
                 <td align="center">
                     <?php if($LocaisDeRealizacao->siAbrangencia == 3) : ?>
