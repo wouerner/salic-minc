@@ -115,6 +115,7 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends GenericModel
                             b.nrDocumentoDePagamento,
                             a.vlComprovado as vlPagamento,
                             b.idArquivo,
+                            b.dsJustificativa,
                             f.nmArquivo"
                         )
                     )

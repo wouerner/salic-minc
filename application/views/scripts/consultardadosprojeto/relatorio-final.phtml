@@ -1,5 +1,6 @@
 <?php header('Content-Type: text/plain; charset=ISO-8859-1'); ?>
 <script type="text/javascript">
+    //console.log('2uhgudoghueguiegueiu');
     $(document).ready(function(){
 
         //ATUALIZA TITULO DA PAGINA
@@ -66,7 +67,8 @@
         <td align="center"><?php echo $this->DadosProjeto->nomeProjeto; ?></td>
     </tr>
 </table>
-
+<?php #xd( $this->DadosRelatorio ); ?>
+<?php #xd( !empty($this->DadosRelatorio->dsEtapasConcluidas) ? $this->DadosRelatorio->dsEtapasConcluidas :'xxx' ); ?>
 <?php if(!empty($this->DadosRelatorio)) { ?>
 <table class="tabela">
     <tr align="center">
@@ -76,7 +78,7 @@
         <td colspan="3" class="destacar bold">ETAPAS DE TRABALHO EXECUTADAS</td>
     </tr>
     <tr>
-        <td colspan="3" style="text-align: justify;"><?php echo $this->DadosRelatorio->dsEtapasConcluidas; ?><br /><br /></td>
+        <td colspan="3" style="text-align: justify;"><?php echo !empty($this->DadosRelatorio->dsEtapasConcluidas) ? $this->DadosRelatorio->dsEtapasConcluidas :'&nbsp' ; ?><br /><br /></td>
     </tr>
     <tr>
         <td colspan="3" class="destacar bold">MEDIDAS DE ACESSIBILIDADE, NOS TERMOS DA PORTARIA DE APROVAÇÃO</td>
@@ -119,14 +121,15 @@
 <?php if(count($this->LocaisDeRealizacao)>0) { ?>
 <table class="tabela">
     <tr align="center">
-        <th colspan="6">Local de Realização</th>
+        <th colspan="7">Local de Realização</th>
     </tr>
     <tr align="center">
         <td class="destacar bold">País</td>
         <td class="destacar bold">UF</td>
         <td class="destacar bold">Município</td>
         <td class="destacar bold" width="120px">Realizado</td>
-        <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Realização</td>
+        <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Início Realização</td>
+        <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Fim Realização</td>
         <td class="destacar bold" width="120px">Justificativa</td>
     </tr>
     <?php foreach ($this->LocaisDeRealizacao as $LocaisDeRealizacao) { ?>
@@ -148,7 +151,10 @@
             ?>
         </td>
         <td>
-            <?php echo Data::tratarDataZend($LocaisDeRealizacao->dtRealizacao, 'Brasileira'); ?>
+            <?php echo Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira'); ?>
+        </td>
+        <td>
+            <?php echo !empty($LocaisDeRealizacao->dtFimRealizacao) ? Data::tratarDataZend($LocaisDeRealizacao->dtFimRealizacao, 'Brasileira') : Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira');; ?>
         </td>
         <td align="center">
             <?php if(!empty($LocaisDeRealizacao->dsJustificativa)){ ?>

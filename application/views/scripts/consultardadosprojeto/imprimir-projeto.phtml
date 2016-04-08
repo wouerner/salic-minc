@@ -3444,7 +3444,7 @@
                                     <tr>
                                          <td valign="top">
                                             <b>N&uacute;mero</b><br>
-                                            <?php echo ($this->dadosContaBancaria->ContaBloqueada == '000000000000') ? " - " : $this->dadosContaBancaria->ContaBloqueada;?>
+						    <?php echo ($this->dadosContaBancaria->ContaBloqueada == '000000000000') ? " - " : $this->dadosContaBancaria->ContaBloqueada;?>
                                         </td>
                                         <td valign="top">
                                             <b>Dt. Abertura</b><br>
@@ -3452,7 +3452,7 @@
                                         </td>
                                         <td valign="top">
                                             <b>Ocorr&ecirc;ncia</b><br>
-                                            <?php echo ($this->dadosContaBancaria->OcorrenciaCB == '000') ? " - " : $this->dadosContaBancaria->OcorrenciaCB;?>
+                                            <?php echo ($this->dadosContaBancaria->OcorrenciaCB == NULL) ? " - " : $this->dadosContaBancaria->OcorrenciaCB;?>
                                         </td>
                                     </tr>
                                     <tr class="destacar">
@@ -3469,7 +3469,7 @@
                                         </td>
                                         <td valign="top">
                                             <b>Ocorr&ecirc;ncia</b><br>
-                                            <?php echo ($this->dadosContaBancaria->OcorrenciaCL == '000') ? " - " : $this->dadosContaBancaria->OcorrenciaCL;?>
+                                            <?php echo ($this->dadosContaBancaria->OcorrenciaCL == NULL) ? " - " : $this->dadosContaBancaria->OcorrenciaCL;?>
                                         </td>
                                     </tr>
                                 </table>

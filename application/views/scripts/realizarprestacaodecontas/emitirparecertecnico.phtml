@@ -5,7 +5,10 @@
 
         $("#salvar").click(function(){
 
-            var texto = CKEDITOR.instances['ParecerTecnico'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
+            var texto = CKEDITOR.instances['ParecerTecnico'].getData();
+	    $('#ParecerTecnico').val(texto);
+	    $('#ParecerTecnico')[0].value = texto;
+            
             if (texto == ""){
                 $("#obrigatorio").dialog('open');
                 $("#obrigatorio").html('Dados obrigat&oacute;rios n&atilde;o informados!');
@@ -23,9 +26,8 @@
                 });
                 $('.ui-dialog-titlebar-close').remove();
             }else{
-
-                $("#formEncaminhar").submit();
-            }
+		$("#formEncaminhar").submit();
+	    }
         });
 
     });
@@ -77,7 +79,11 @@
             <td align="left">
                 <fieldset>
                     <legend> Parecer T&eacute;cnico </legend>
-                    <textarea class="input_simples" cols="80" rows="10" style="width: 98%" readonly><?php if(!empty($this->parecerTecnico)):echo $this->parecerTecnico->meRelatorio;endif;?></textarea>
+                    <div class="input_simples" style="width: 98%">
+			<?php if(!empty($this->parecerTecnico)):echo $this->parecerTecnico->meRelatorio;endif;?>
+		    </div>
+		    <br/>
+		    
                     <?php
                         if ($this->parecerTecnico) :
                             echo '<span style="color: #35953F; font-size: 16px; font-weight: bold; padding: 5px;">Manifestação Final: </span>';
@@ -98,7 +104,7 @@
                     <?php endif; ?>
                         <textarea cols="80" id="ParecerTecnico" name="ParecerTecnico" class="cParecerTecnico" 
                             rows="10"><?php
-                                if (!empty($this->parecerChefe)) :
+                                if (!empty($this->parecerChefe) && $this->codGrupo == 132) :
                                     echo $this->parecerChefe->meRelatorio;
                                 else:
                                     if (!empty($this->parecerTecnico) && $this->codGrupo != 132 ) :
@@ -125,7 +131,7 @@
                 <input type="radio" name="manifestacao" id="irregular" 
                     value="0"
                     <?php
-                        if ($this->codGrupo != 132) : // tecnico
+                        if ($this->codGrupo == 124) : // tecnico
                             $parecer = $this->parecerTecnico;
                         else :
                             $parecer = $this->parecerChefe;
