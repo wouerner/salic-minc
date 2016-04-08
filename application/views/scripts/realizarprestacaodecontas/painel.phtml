@@ -302,7 +302,7 @@
 		<?php
 		
 		?>
-                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == 'analisados'){ ?>		
+                <?php if(isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados'){ ?>	
                 <th>Laudo final</th>
                 <?php } ?>
 		
@@ -340,7 +340,7 @@
                 <td><?php echo $projeto->Area.' / '.$projeto->Segmento; ?></td>
                 <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
 
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'analisados')){ ?>
+                <?php if(isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados'){ ?>	
                 <td align="center"><img style="cursor: pointer;" src="../public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'laudofinal') ) . '?idPronac=' . $projeto->idPronac; ?>'" alt="Analisar" /></td>
                 <?php } ?>
                 
