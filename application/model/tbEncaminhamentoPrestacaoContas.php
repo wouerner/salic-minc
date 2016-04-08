@@ -167,38 +167,37 @@ class tbEncaminhamentoPrestacaoContas extends GenericModel {
    public function HistoricoEncaminhamentoPrestacaoContas($idPronac){
     	$select = $this->select();
         $select->setIntegrityCheck(false);
-        $select->from(array('tbepc'=>$this->_name),
+        $select->from(array('a'=>$this->_name),
                         array(
-                              '*',
-                              'CONVERT(CHAR(23), tbepc.dtInicioEncaminhamento, 120) AS dtInicioEncaminhamento'
+			      'b.AnoProjeto+b.Sequencial as PRONAC,b.NomeProjeto,
+                               CONVERT(CHAR(10), 
+                               a.dtInicioEncaminhamento, 101) AS dtInicioEncaminhamento,
+a.dsJustificativa,
+                               c.usu_nome AS NomeOrigem,
+                               c.usu_nome AS NomeDestino'
                               ),$this->_banco.'.'.$this->_schema
                       );
+	
         $select->joinInner(
-                            array('a'=>'Agentes'),
-                            'a.idAgente = tbepc.idAgenteDestino',
+                            array('b'=>'Projetos'),
+                            'a.idPronac = b.IdPRONAC',
                             array(),
-                            'AGENTES.dbo'
+                            'SAC.dbo'
                            );
         $select->joinInner(
-                            array('ag'=>'Agentes'),
-                            'ag.idAgente = tbepc.idAgenteOrigem',
+                            array('c'=>'Usuarios'),
+                            'a.idAgenteOrigem = c.usu_codigo',
                             array(),
-                            'AGENTES.dbo'
+                            'TABELAS.dbo'
                            );
         $select->joinInner(
-                            array('n'=>'Nomes'),
-                            'n.idAgente = tbepc.idAgenteOrigem',
-                            array('n.Descricao as NomeOrigem'),
-                            'AGENTES.dbo'
+                            array('d'=>'Usuarios'),
+                            'a.idAgenteOrigem = d.usu_codigo',
+                            array(),
+                            'TABELAS.dbo'
                            );
-        $select->joinInner(
-                            array('no'=>'Nomes'),
-                            'no.idAgente = tbepc.idAgenteDestino',
-                            array('no.Descricao as NomeDestino'),
-                            'AGENTES.dbo'
-                           );             
-                           
-        $select->where('tbepc.idPronac = ?',$idPronac);
+	
+        $select->where('a.idPronac = ?',$idPronac);
 	
 	return $this->fetchAll($select);
     }

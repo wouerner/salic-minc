@@ -1,4 +1,24 @@
-Release 1.4.5
+Release 1.5.0
+  * Novo: [Prestação de contas] chefe de divisão consegue encaminhar para técnico
+  * Novo: [Prestação de contas] técnico consegue encaminhar para chefe de divisão
+  * Novo: [Prestação de contas] correção e novos filtros para o painel do coordenador de prestação de contas
+  * Novo: [Prestação de contas] justificativa no campo de encaminhamento
+  * Novo: [Prestação de contas] exibindo coluna justificativa nos itens da comprovação financeira
+  * Novo: [Prestação de contas] é possível editar a comprovação de itens
+  * Novo: [Coordenador de pronac/parecer] adicionados vídeos introdutórios para parecerista e coordenador de pronac
+  * Fix: [Coordenador de pronac/parecer] mudança de nomenclatura dos vídeos introdutórios para coordenador de pronac/parecer
+  * Fix: [dados bancários] correção na ocorrência
+  * Fix: [Proposta] atualização dos textos de ajuda
+  * Fix: [Gerenciar parecer] implementando contador de caracteres e editor ricktext nos formulários de distribuir, encaminhar e concluir parecer
+  * Fix: [Prestação de contas] alterado o campo glosado para impugnado
+  * Fix: [Prestação de contas] lista de técnicos atualizada no formulário de encaminhamento
+  * Fix: [Prestação de contas] correção na gravação do parecer do técnico
+  * Fix: [Prestação de contas] técnico: exibe apenas a listagem dos projetos designados para análise
+  * Fix: [Prestação de contas] chefe de divisão : correção nos filtros
+  * Fix: [Prestação de contas] validação de item orçamentário comprovado retorna mais de 255 caracteres
+  * Fix: [Prestação de contas] editor de texto gravando parecer do chefe de divisão com formatação html
+  * Fix: [Prestação de contas] histórico de alterações corrigido para os coordenadores de prestação de contas
+  * Fix: [Prestação de contas] correção na finalização da analise pelo chefe de divisão
   * Fix: [Comprovação financeira] Alterar a mensagem da Compravação Financeira para limitar o tamanho maximo do arquivo para 5Mb
 
 Release 1.4.4
