@@ -50,7 +50,7 @@
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="#" title="In&iacute;cio">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->baseUrl(); ?>/analisarexecucaofisicatecnico" title="CLista de Relatórios">Lista de Relatórios</a></li>
+        <li class="second"><a href="<?php echo $this->baseUrl(); ?>/analisarexecucaofisicatecnico" title="Lista de Relatórios">Lista de Relatórios</a></li>
         <li class="last">Local de Realização</li>
     </ul>
 </div>
@@ -85,14 +85,15 @@
 
     <table class="tabela">
         <tr align="center">
-            <th colspan="6">Local de Realização</th>
+            <th colspan="7">Local de Realização</th>
         </tr>
         <tr align="center">
             <td class="destacar bold">País</td>
             <td class="destacar bold">UF</td>
             <td class="destacar bold">Município</td>
             <td class="destacar bold" width="120px">Realizado</td>
-            <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Realização</td>
+            <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Início Realização</td>
+            <td class="destacar bold" width="120px" nowrap>Dt.&nbsp;Fim Realização</td>
             <td class="destacar bold" width="120px">Justificativa</td>
         </tr>
         <?php foreach ($this->LocaisDeRealizacao as $LocaisDeRealizacao) { ?>
@@ -114,7 +115,10 @@
                 ?>
             </td>
             <td>
-                <?php echo Data::tratarDataZend($LocaisDeRealizacao->dtRealizacao, 'Brasileira'); ?>
+                <?php echo Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira'); ?>
+            </td>
+            <td>
+                <?php echo !empty($LocaisDeRealizacao->dtFimRealizacao) ? Data::tratarDataZend($LocaisDeRealizacao->dtFimRealizacao, 'Brasileira') : Data::tratarDataZend($LocaisDeRealizacao->dtInicioRealizacao, 'Brasileira');; ?>
             </td>
             <td align="center">
                 <?php if(!empty($LocaisDeRealizacao->dsJustificativa)){ ?>

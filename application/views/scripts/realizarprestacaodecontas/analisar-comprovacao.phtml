@@ -2,7 +2,9 @@
 <div id="breadcrumb">
     <ul>
        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
-        <li class=""><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Analisar presta&ccedil;&atilde;o de contas</a></li>
+        <?php if ($this->grupoAtivo != 121) { //Tecnico de Acompanhamento ?>
+            <li class=""><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Analisar presta&ccedil;&atilde;o de contas</a></li>
+        <?php } ?>
         <li class=""><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $this->projeto->IdPRONAC, 'idPlanilhaAprovacao' => $this->projeto->idPlanilhaAprovacao, 'idPlanilhaItem' => $this->projeto->idPlanilhaItens), '', true); ?>">Planilha or&ccedil;amentária comprovada</a></li>
         <li class="last">Analisar item</li>
     </ul>
@@ -10,7 +12,7 @@
 <div id="titulo">
     <div>
         Consultar item
-        <span class="voltar" style="float:right;"><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $this->projeto->IdPRONAC, 'idPlanilhaAprovacao' => $this->projeto->idPlanilhaAprovacao, 'idPlanilhaItem' => $this->projeto->idPlanilhaItens), '', true); ?>" title="Ir para p&aacute;gina anterior">Voltar</a></span>
+        <span class="voltar" style="float:right;"><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac' => $this->projeto->IdPRONAC, 'idPlanilhaAprovacao' => $this->projeto->idPlanilhaAprovacao, 'idPlanilhaItem' => $this->projeto->idPlanilhaItens, 'idRelatorio' => $this->idRelatorio ), '', true); ?>" title="Ir para p&aacute;gina anterior">Voltar</a></span>
     </div>
 </div>
 <div id="conteudo">
@@ -150,13 +152,11 @@
         $editable = false;
         foreach ($this->comprovantesPagamento as $index => $comprovante) :
             $comprovanteNodeId = "comprovantePagamento{$comprovante->idComprovantePagamento}";
-            if (4 == $comprovante->stItemAvaliado) :
                 $editable = true;
     ?>
     <form id="frmValidar" name="frmValidar" action="<?php echo $actionForm; ?>" method="post">
         <input type="hidden" name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][idComprovantePagamento]" value="<?php echo $comprovante->idComprovantePagamento;?>" />
         <input type="hidden" name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][idPlanilhaAprovacao]" value="<?php echo $comprovante->idPlanilhaAprovacao;?>" />
-        <?php endif; ?>
             <table class="tabela">
                 <caption <?php
                     if (4 == $comprovante->stItemAvaliado) :
@@ -217,9 +217,6 @@
                     <tr>
                         <td class="destacar" align="right"><b>Status</b></td>
                         <td colspan="5">
-                            <?php
-                                if (4 == $comprovante->stItemAvaliado) :
-                            ?>
                                 <input
                                     type="radio"
                                     id="situacao-1-<?php echo $comprovanteNodeId; ?>"
@@ -236,41 +233,22 @@
                                     <?php echo 3 == $comprovante->stItemAvaliado ? 'checked="checked"': ''; ?>
                                     >
                                 <label for="situacao-3-<?php echo $comprovanteNodeId; ?>">Comprovação recusada</label><br>
-                            <?php
-                                else :
-                                    switch ($comprovante->stItemAvaliado) :
-                                        case 1: echo 'Comprovado Integralmente'; break;
-                                        case 2: echo 'Comprovado Parcialmente'; break;
-                                        case 3: echo 'Não comprovado'; break;
-                                    endswitch;
-                                endif;
-                            ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="destacar" align="right"><b>Ocorrência do Técnico</b></td>
                         <td colspan="5">
-                            <?php
-                                if (4 == $comprovante->stItemAvaliado) :
-                            ?>
                                 <textarea
                                     name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][observacao]"
                                     rows="10" cols="100"
                                     class="input_simples"><?php echo $comprovante->ocorrencia; ?></textarea>
-                            <?php
-                                else :
-                                    echo $comprovante->ocorrencia;
-                                endif;
-                            ?>
                         </td>
                     </tr>
-                    <?php if($comprovante->stItemAvaliado == 4){ ?>
                     <tr>
                         <td colspan="6">
                             <input type="submit" class="btn_salvar" value="" style="margin: 0px 480px;">
                         </td>
                     </tr>
-                    <?php } ?>
                 </tbody>
             </table>
         </form>

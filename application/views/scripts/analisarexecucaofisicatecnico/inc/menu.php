@@ -25,6 +25,19 @@
                 $("div#rodapeConteudo").attr("id", "rodapeConteudo_com_menu");
             }
 
+            function carregaDados(url,divRetorno){
+                //alert( url );
+                //$("#titulo").html('');
+                $("#conteudo").html('<br><br><center>Aguarde, carregando dados...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br><br>');
+                $.ajax({
+                    url : url,
+                    success: function(data){
+                        $("#"+divRetorno).html(data);
+                    },
+                    type : 'post'
+                });
+            }
+
             $(document).ready(function(){
 
                 $(".Desativado").click(function(){
@@ -44,6 +57,9 @@
                     });
                     $("#produtoDesativado").dialog('open');
                 });
+
+
+
             });
 
         </script>
@@ -51,6 +67,7 @@
         <style type="text/css">
             .sanfonaDiv {
                 clear: both;
+                /*display: none;*/
             }
         </style>
         
@@ -65,6 +82,22 @@
                 <a href="<?php echo $this->baseUrl(); ?>/analisarexecucaofisicatecnico/metas-comprovadas?idpronac=<?php echo $this->idPronac; ?>&relatorio=<?php echo $this->idRelatorio; ?>" title="Metas Comprovadas" class="no_seta">Metas Comprovadas</a>
                 <a href="<?php echo $this->baseUrl(); ?>/analisarexecucaofisicatecnico/itens-comprovados?idpronac=<?php echo $this->idPronac; ?>&relatorio=<?php echo $this->idRelatorio; ?>" title="Itens Comprovados" class="no_seta">Itens Comprovados</a>
                 <a href="<?php echo $this->baseUrl(); ?>/analisarexecucaofisicatecnico/comprovantes-de-execucao?idpronac=<?php echo $this->idPronac; ?>&relatorio=<?php echo $this->idRelatorio; ?>" title="Comprovantes de Execu&ccedil;&atilde;o" class="no_seta">Comprovantes de Execu&ccedil;&atilde;o</a>
+
+                <div class="sanfonaDiv" style="display:none;"></div>
+                <a href="#" title="Execução" class="ancoraPrestacaoContas" onclick="return false;">Presta&ccedil;&atilde;o de Contas</a>
+                <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'execucao-receita-despesa', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Execu&ccedil;&atilde;o da receita e despesa">Execu&ccedil;&atilde;o da receita e despesa</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'dados-relacao-pagamentos', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Rela&ccedil;&atilde;o de Pagamentos">Rela&ccedil;&atilde;o de pagamentos</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'relatorio-fisico', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Relat&oacute;rio f&iacute;sico">Relat&oacute;rio f&iacute;sico</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'relatorio-bens-capital', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Rela&ccedil;&atilde;o de bens de capital">Rela&ccedil;&atilde;o de bens de capital</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'pagamentos-por-uf-municipio', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Pagamentos por UF/Munic&iacute;pio">Pagamentos por UF / Munic&iacute;pio</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'pagamentos-consolidados-por-uf-municipio', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Pagamentos por UF/Munic&iacute;pio">Pagamentos Consolidados</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'relatorios-trimestrais', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Relat&oacute;rios trimestrais">Relat&oacute;rios trimestrais</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'relatorio-final', 'idPronac'=>$this->idPronac)); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Relat&oacute;rio de cumprimento do objeto">Relat&oacute;rio de cumprimento do objeto</a>
+                </div>
+                <div class="sanfonaDiv" style="display:none;"></div>
+
+                <a class="no_seta" href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria', 'idPronac'=>$this->idPronac)).'?idPronac='.$this->idPronac.'&idRelatorio='.$this->idRelatorio; ?>" title="Ir para Execução Financeira Comprovada">Execução Financeira Comprovada</a>
             </div>
             <div class="bottom"></div>
         </div>

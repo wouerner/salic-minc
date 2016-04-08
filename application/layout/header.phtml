@@ -907,6 +907,33 @@ header("Content-Type: text/html; charset=ISO-8859-1", true);
                                 <!-- ========== FIM MENU MANUAIS ========== -->
                                 <?php } ?>
 
+
+                                 <!-- ========== INICIO VIDEO AULAS ========== -->
+                                <?php if($this->grupoAtivo == 94 || $this->grupoAtivo == 137 ) { ?>
+                                <li>
+                                    <div id="div">
+                                        <div id="divleft"></div>
+                                        <div id="divmenuprincipalcenter">
+                                            <a href="#menu-aulas" title="Ir para Aulas" class="menuHorizontal fg-button fg-button-icon-right ui-widget ui-state-default ui-corner-all hierarchybreadcrumb">Introdu&ccedil;&atilde;o a an&aacute;lise de projetos</a>
+                                            <div id="menu-aulas" class="hidden">
+                                                <ul>
+                                                    <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula1.m4v', '_blank');" title="Ir para Aula 1">1. Introdu&ccedil;&atilde;o</a></li>
+                                                    <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula2.m4v', '_blank');" title="Ir para Aula 2">2. Normativos</a></li>
+					            <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula3.m4v', '_blank');" title="Ir para Aula 3">3. D&uacute;vidas</a></li>
+						    <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula4.m4v', '_blank');" title="Ir para Aula 4">4. Abordagem do Projeto</a></li>
+ 						    <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula5.m4v', '_blank');" title="Ir para Aula 5">5. Itens Or&ccedil;ament&aacute;rios</a></li>
+						    <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula6.m4v', '_blank');" title="Ir para Aula 6">6. Intera&ccedil;&otilde;es</a></li>
+						    <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula7.m4v', '_blank');" title="Ir para Aula 7">7. Como Elaborar Parecer</a></li>
+						    <li><a href="#" target="_blank"  onclick="window.open('<?php echo $this->url(array('controller' => 'public', 'action' => 'videos'), '', true); ?>/introducao-a-analise-de-projetos/aula8.m4v', '_blank');" title="Ir para Aula 8">8. Considera&ccedil;&otilde;es</a></li>
+					        </ul>
+                                            </div>
+                                        </div>
+                                        <div id="divrigth"></div>
+                                    </div>
+                                </li>
+                                <!-- ========== FIM MEN ========== -->
+                                <?php } ?>
+
 			</ul>
 		</div>
 		<!-- ================================= -->

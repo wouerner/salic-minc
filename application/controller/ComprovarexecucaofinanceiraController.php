@@ -641,7 +641,7 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
             $this->verificarPermissaoAcesso(false, true, false);
             $request = $this->getRequest();
 
-            #$pais = $this->getRequest()->getParam('pais');
+            $pais = $this->getRequest()->getParam('pais');
             #if (empty($pais)) {
             #    throw new Exception('Favor preencher o campo "Nacionalidade do Fornecedor"');
             #}

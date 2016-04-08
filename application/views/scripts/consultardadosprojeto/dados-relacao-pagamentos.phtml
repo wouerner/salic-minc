@@ -10,10 +10,10 @@
             var tipo = $(this).children('img').attr('src'),
                 id = $(this).attr('classReg');
                 
-            if(tipo == '/salic/public/img/icn_menos.gif'){
-                $(this).children('img').attr('src','/salic/public/img/icn_mais.gif');
+            if(tipo == '<?php echo $this->baseUrl(); ?>/public/img/icn_menos.gif'){
+                $(this).children('img').attr('src','<?php echo $this->baseUrl(); ?>/public/img/icn_mais.gif');
             } else {
-                $(this).children('img').attr('src','/salic/public/img/icn_menos.gif');
+                $(this).children('img').attr('src','<?php echo $this->baseUrl(); ?>/public/img/icn_menos.gif');
             }
             $('.detalhar_'+id).toggle();
         });
@@ -54,6 +54,7 @@
         <td width="1" class="destacar bold">Forma de Pagamento</td>
         <td width="1" class="destacar bold">N&ordm; Doc. Pagamento</td>
         <td width="1" class="destacar bold">Arquivo</td>
+        <td width="1" class="destacar bold">Justificativa</td>        
         <td width="1" class="destacar bold">Vl. Pagamento</td>
     </tr>
     <?php foreach ($this->relacaoPagamentos as $relPagamentos) { ?>
@@ -76,6 +77,7 @@
         <td><?php echo $relPagamentos->tpFormaDePagamento; ?></td>
         <td><?php echo $relPagamentos->nrDocumentoDePagamento; ?></td>
         <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $relPagamentos->idArquivo; ?>"><?php echo $relPagamentos->nmArquivo; ?></a></td>
+        <td align="right"><?php echo $relPagamentos->dsJustificativa; ?></td>
         <td align="right"><?php echo number_format($relPagamentos->vlPagamento, 2, ",", "."); ?></td>
     </tr>
     <?php $x++; $idPlanilhaAnterior=$relPagamentos->idPlanilhaAprovacao; $vlTotal=$vlTotal+$relPagamentos->vlPagamento; } ?>

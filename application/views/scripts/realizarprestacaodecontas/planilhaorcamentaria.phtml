@@ -117,7 +117,9 @@
         <?php }else if($this->codGrupo == 124): ?>
             <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
         <?php else: ?>
+        <?php if ($this->grupoAtivo != 121) { //Tecnico de Acompanhamento ?>
             <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel'));?>">Presta&ccedil;&atilde;o de contas</a></li>
+        <?php } ?>
         <?php endif; ?>
         <li class="last">Planilha or&ccedil;ament&aacute;ria comprovada</li>
     </ul>
@@ -178,7 +180,7 @@
 		                                <option value="1" <?php echo $this->itemAvaliadoFilter == 1 ? 'selected="true"' : null; ?>>Aguardando Análise</option>
 		                                <option value="2" <?php echo $this->itemAvaliadoFilter == 2 ? 'selected="true"' : null; ?>>Analisados</option>
 						            <?php else : ?>
-	                                	<option value="3" <?php echo $this->itemAvaliadoFilter == 3 ? 'selected="true"' : null; ?>>Glosados</option>
+	                                	<option value="3" <?php echo $this->itemAvaliadoFilter == 3 ? 'selected="true"' : null; ?>>Impugnados</option>
 						            <?php endif; ?>
 	                            </select>
 	                        </td>
@@ -234,6 +236,7 @@
                                                                 'idPronac' => $this->idPronac,
                                                                 'idPlanilhaAprovacao' => $key,
                                                                 'idPlanilhaItem' => $valor[6],
+                                                                'idRelatorio' => $this->idRelatorio, #Alysson - Adicionado
                                                             )
                                                         );
                                                         $html .= "<a href='{$href}' class='editarIco'>Analisar item</a>";
