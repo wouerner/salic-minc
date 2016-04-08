@@ -19,8 +19,11 @@ Release 1.5.0
   * Fix: [Prestação de contas] editor de texto gravando parecer do chefe de divisão com formatação html
   * Fix: [Prestação de contas] histórico de alterações corrigido para os coordenadores de prestação de contas
   * Fix: [Prestação de contas] correção na finalização da analise pelo chefe de divisão
-  * Fix: [Comprovação financeira] Alterar a mensagem da Compravação Financeira para limitar o tamanho maximo do arquivo para 5Mb
-
+  * Fix: [Parecer técnico] campo richtext e limitação de caracteres
+  * Fix: [Localização física do projeto] correção na listagem
+  * Fix: [Localização física do projeto] agora é possível cadastrar sem um técnico
+  * Fix: [Gerenciar pareceres] análise concluída e aguardando distribuição: adicionado richtext em distribuição de produtos e projetos
+  
 Release 1.4.4
   * Fix: [Comprovação financeira] Ajuste solicitado pela Área na cláusula WHERE do painel de comprovação financeira para não listar projetos excluidos ou nulos
 
