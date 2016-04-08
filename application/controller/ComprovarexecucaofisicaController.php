@@ -243,9 +243,9 @@ class ComprovarexecucaofisicaController extends GenericControllerNew
                 list($abragenciaSituacao, $abrangenciaId) = explode(':', $valores);
 
                 $dt = null;
-                if (filter_input(INPUT_POST, 'dtRealizacao' . $abrangenciaId)) {
-                    $dt = Data::dataAmericana(filter_input(INPUT_POST, 'dtRealizacao' . $abrangenciaId));
-                    $validacao = Data::validarData(filter_input(INPUT_POST, 'dtRealizacao' . $abrangenciaId));
+                if (filter_input(INPUT_POST, 'dtInicioRealizacao' . $abrangenciaId)) {
+                    $dt = Data::dataAmericana(filter_input(INPUT_POST, 'dtInicioRealizacao' . $abrangenciaId));
+                    $validacao = Data::validarData(filter_input(INPUT_POST, 'dtInicioRealizacao' . $abrangenciaId));
                     if (!$validacao) {
                         parent::message('Data inválida.', $redirectUrl, 'ERROR');
                     }
@@ -254,9 +254,9 @@ class ComprovarexecucaofisicaController extends GenericControllerNew
                 $abragenciaRow = $AbrangenciaDAO->find($abrangenciaId)->current();
                 if ($abragenciaRow) {
                     if (2 != $abragenciaRow->siAbrangencia && 2 == $abragenciaSituacao) {
-                        $abragenciaRow->dtRealizacao = $dt;
+                        $abragenciaRow->dtInicioRealizacao = $dt;
                     } elseif (2 != $abragenciaSituacao) {
-                        $abragenciaRow->dtRealizacao = null;
+                        $abragenciaRow->dtInicioRealizacao = null;
                     }
                     if (1 == $abragenciaSituacao) {
                         $justificativa = filter_input(INPUT_POST, 'justificativa' . $abrangenciaId);
@@ -310,7 +310,7 @@ class ComprovarexecucaofisicaController extends GenericControllerNew
                         'stAbrangencia' => 1,
                         'siAbrangencia' => filter_input(INPUT_POST, 'novoRealizado'),
                         'dsJustificativa' => $dsJustificativa,
-                        'dtRealizacao' => $dtNovo
+                        'dtInicioRealizacao' => $dtNovo
                     );
                     $AbrangenciaDAO->cadastrar($dados);
                 } else {

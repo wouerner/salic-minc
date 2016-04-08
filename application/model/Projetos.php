@@ -5622,8 +5622,6 @@ class Projetos extends GenericModel
                 array('a' => $this->_name), array('')
         );
         $a->joinInner(
-                #array('b' => 'Abrangencia'), "a.idProjeto = b.idProjeto", array('idAbrangencia', 'idProjeto', 'dtRealizacao', 'idPais', 'idUF', 'idMunicipioIBGE', 'siAbrangencia', 'CAST(dsJustificativa AS TEXT) AS dsJustificativa'), 'SAC.dbo'
-                #Alysson - A coluna dtRealizacao não existe mais na tabela Abrangencia
                 array('b' => 'Abrangencia'), "a.idProjeto = b.idProjeto", array('idAbrangencia', 'idProjeto', 'dtInicioRealizacao','dtFimRealizacao',  'idPais', 'idUF', 'idMunicipioIBGE', 'siAbrangencia', 'CAST(dsJustificativa AS TEXT) AS dsJustificativa'), 'SAC.dbo'
         );
         $a->joinInner(
