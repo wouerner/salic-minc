@@ -65,9 +65,7 @@
 
 <div id="titulo">
     <div>Comprovar Pagamento
-        <?php if (!$this->vrSituacao || !$this->pagCompRecusado) : ?>
         <span class="voltar"><a href="<?php echo $voltarHref; ?>" title="Ir para p&aacute;gina anterior">Voltar</a></span>
-        <?php endif; ?>
     </div>
 </div>
 
@@ -389,6 +387,7 @@
                     <a href="<?php echo $voltarHref; ?>" id="btnVoltar" style="text-decoration:none;"><input type="button" class="btn_voltar" /></a>
                     <?php endif; ?>
                     <input type="submit" name="frComprovarPagamentoSubmit" id="frComprovarPagamentoSubmit" value="" class="btn_incluir" />
+		    <input type="button" class="btn_voltar" />
                 </div>
             </form>
 
@@ -853,6 +852,10 @@
                 }
             });
         };
+	
+	$('.btn_voltar').click(function() {
+	    window.location.href = "<?php echo $voltarHref; ?>";
+	});
     });
 
     function toggleTabelaComprovacaoPagamentoInvoice() {
