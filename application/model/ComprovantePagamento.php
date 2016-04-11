@@ -378,7 +378,8 @@ class ComprovantePagamento extends GenericModel
                         INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS c1 ON (a1.idPlanilhaAprovacao = c1.idPlanilhaAprovacao)
                         WHERE c1.stAtivo = 'S' AND c1.idPlanilhaAprovacao = pa.idPlanilhaAprovacao
                         GROUP BY a1.idPlanilhaAprovacao
-                    ) AS valorComprovado, cpxpa.dsJustificativa as JustificativaTecnico
+                    ) AS valorComprovado, CAST(cpxpa.dsJustificativa AS TEXT) as JustificativaTecnico
+
                 FROM bdcorporativo.scSAC.tbComprovantePagamento AS comp
                     INNER JOIN bdcorporativo.scSAC.tbComprovantePagamentoxPlanilhaAprovacao AS cpxpa ON cpxpa.idComprovantePagamento = comp.idComprovantePagamento
                     INNER JOIN SAC.dbo.tbPlanilhaAprovacao AS pa ON pa.idPlanilhaAprovacao = cpxpa.idPlanilhaAprovacao

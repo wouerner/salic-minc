@@ -1690,7 +1690,6 @@ class ComprovarexecucaofinanceiraController extends GenericControllerNew
         $comprovantePagamentoModel = new ComprovantePagamento();
         $comprovantesDePagamento = $comprovantePagamentoModel->pesquisarComprovante($idComprovantePagamento);
         $comprovantePagamento = (object)$comprovantesDePagamento[0]; 
-        //echo '<pre>'; print_r($comprovantePagamento); die;
 
         $this->view->idComprovantePagamento = $idComprovantePagamento;
         $this->view->vlComprovado = number_format($comprovantePagamento->vlComprovacao, 2, ',', '.');
