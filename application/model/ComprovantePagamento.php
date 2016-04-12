@@ -343,7 +343,20 @@ class ComprovantePagamento extends GenericModel
     public function pesquisarComprovante($idComprovante)
     {
         $select = "SELECT
-                    comp.*,
+                    comp.tpDocumento,
+                    comp.nrComprovante,
+                    comp.nrSerie,
+                    comp.idComprovantePagamento,
+                    CAST(comp.dsJustificativa AS TEXT) AS dsJustificativa,
+                    comp.vlComprovacao,
+                    comp.dtEmissao,
+                    comp.dtPagamento,
+                    comp.idFornecedorExterior,
+                    comp.idArquivo,
+                    comp.dsOutrasFontes,
+                    comp.tpFormaDePagamento,
+                    comp.nrDocumentoDePagamento,
+                    comp.tbComprovantePagamento,
                     arq.nmArquivo,
                     convert(char(10), comp.dtEmissao, 103) as dtEmissao,
                     (
