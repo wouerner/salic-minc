@@ -82,10 +82,12 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar,maxchar){
 
     function Validacao(){
 	var preenchimento = true;
-        if(CountCharacters('parecerTecnico') <= 0) {
+        if(CountCharacters('parecerTecnico') <= 0 || CountCharacters('parecerTecnico') > 3000) {
             preenchimento = false;
         }
-
+        if(CountCharacters('recomendacoes') > 1000){
+	    preenchimento = false;
+        }
 	return preenchimento;
     }
 
