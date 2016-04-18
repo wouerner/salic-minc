@@ -5,12 +5,9 @@
 
 function ExecucaoDaFuncaoLimiterPag(fieldName, minchar,maxchar){
 	var minchar;
+ 
 
- 	if(typeof minchar === 'undefined'){
-	    minchar = 0;
-        }
-
-        countChars  = CountCharacters(fieldName);
+        var countChars  = CountCharacters(fieldName);
         //Atualização para os contadores de caracteres
         if(fieldName === "parecerTecnico"){
             document.getElementById("contador" + fieldName).innerHTML = "Caracteres: " + countChars+ "/3000";
@@ -19,16 +16,15 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar,maxchar){
             document.getElementById("contador" + fieldName).innerHTML = "Caracteres: " + countChars +"/1000";
             
         }
+
         //mudança de cor caso ultrapasse o numero de caracteres
-            if (countChars <= minchar){
-		if(fieldName === "recomendacoes"){
-	            document.getElementById("contador" + fieldName).style.color = "black";
-                }else{
-	            document.getElementById("contador" + fieldName).style.color = "red";
-		}
+
+            if ((countChars > maxchar) || (countChars <= minchar) ){
+	         document.getElementById("contador" + fieldName).style.color = "red";
             }else{
-                document.getElementById("contador" + fieldName).style.color = "black";
-            }
+	         document.getElementById("contador" + fieldName).style.color = "black";
+	    }
+
 }
 
    $(document).ready(function(){    
@@ -45,9 +41,9 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar,maxchar){
 	    menubar:"",
             setup: function (ed) {
                 ed.on('init', function (e) {
-		ExecucaoDaFuncaoLimiterPag('parecerTecnico');
+		ExecucaoDaFuncaoLimiterPag('parecerTecnico',0,3000);
                 }).on('keyup',function (e) {
-		ExecucaoDaFuncaoLimiterPag('parecerTecnico');
+		ExecucaoDaFuncaoLimiterPag('parecerTecnico',0,3000);
 		});
             }
         });
@@ -62,9 +58,9 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar,maxchar){
 	    menubar:"",
             setup: function (ed) {
                 ed.on('init', function (e) {
-		ExecucaoDaFuncaoLimiterPag('recomendacoes');
+		ExecucaoDaFuncaoLimiterPag('recomendacoes',-1,1000);
                 }).on('keyup',function (e) {
-		ExecucaoDaFuncaoLimiterPag('recomendacoes');
+		ExecucaoDaFuncaoLimiterPag('recomendacoes',-1,1000);
 		});
             }
         });
@@ -102,7 +98,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar,maxchar){
             var preenchimento = Validacao();
             if(preenchimento == false) {
                 $("#camposObrigatorios").dialog("destroy");
-                $("#camposObrigatorios").html("Favor preencher o campo obrig&aacute;torio!");
+                $("#camposObrigatorios").html("Preencha corretamente os campos!");
                 $("#camposObrigatorios").dialog({
                     resizable: false,
                     title: 'Alerta!',
