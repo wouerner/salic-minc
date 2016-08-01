@@ -17,6 +17,10 @@ resources.view.encoding = "ISO-8859-1"
 resources.view.escape = "htmlentities"
 resources.view.basePath = APPLICATION_PATH "/views"
 resources.view.helperPath.MinC_View_Helper = APPLICATION_PATH "/../library/MinC/View/Helper"
+resources.view.service.salicMobileHash = "***REMOVED***"
+resources.view.service.encryptHash = "e@75e9R!3450otZ"
+resources.view.service.gcmApiKey = "***REMOVED***"
+resources.view.service.gcmUrl = "***REMOVED***"
 
 [conexao_01:default]
 db.adapter = PDO_MSSQL
