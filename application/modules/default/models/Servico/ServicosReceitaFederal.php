@@ -15,8 +15,8 @@ class ServicosReceitaFederal {
 
     # Constante usada na classe para conexao com o WS
     const username 		        = "***REMOVED***";
-    #const password 		    = "***REMOVED***"; #Produ��o
-    const password 		        = "***REMOVED***"; #Homologa��o
+    const password 		    = "***REMOVED***"; #Producao
+//    const password 		        = "***REMOVED***"; #Homologa��o
     #const hostServico           = "sistemasweb.cultura.gov.br";
     #const urlServico 	        = "/minc-pessoa/servicos/"; #Produ��o
     const hostServico           = "homolog.cultura.gov.br";
