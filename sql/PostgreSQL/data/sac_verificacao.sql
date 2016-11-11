@@ -1,532 +1,541 @@
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  1,7,'Público',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  2,7,'Privado com fins lucrativo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  3,8,'Municipal',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  4,8,'Estadual',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  5,8,'Federal',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  8,9,'Executivo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  9,9,'Legislativo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  10,9,'Judiciário',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  11,10,'Direta',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  12,10,'Indireta',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  13,11,'ONG',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  14,11,'OSCIP',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  17,11,'Órgão Gestor de Cultura',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  18,1,'Nome de Registro',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  19,1,'Razão Social',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  20,1,'Nome Fantasia',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  21,1,'Apelido',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  22,2,'Residencial',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  23,2,'Comercial',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  24,3,'Residencial',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  25,3,'Comercial',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  26,3,'Celular',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  27,3,'Fax',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  28,4,'E-mail Particular',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  29,4,'E-mail Institucional',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  30,5,'Carteira de Identidade',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  31,5,'Título de Eleitor',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  35,7,'Privado sem fins lucrativo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  36,4,'Blog',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  37,4,'Orkut',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  38,4,'Site',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  39,1,'Nome Artístico',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  41,13,'Avenida',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  43,13,'Praça',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  44,13,'Quadra',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  45,13,'Rua',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  46,13,'Outros',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  48,14,'Prefeitura',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  49,14,'Biblioteca',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  50,14,'Ponto de Cultura',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  51,11,'Conselho/Órgão Colegiado de Cultura',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  52,14,'Museu',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  53,14,'Instituto',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  54,14,'Fundação',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  55,14,'Forum de Cultura',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  58,14,'Secretaria',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  59,14,'Empresa',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  60,14,'Griôs',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  61,14,'Vago',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  62,14,'Departamento',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  63,14,'Agência',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  64,11,'Órgão de Administração Municipal',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  65,11,'Órgão de Administração Estadual',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  66,11,'Órgão de Administração Federal',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  67,13,'Largo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  68,13,'Alameda',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  70,13,'Ladeira',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  72,11,'Empresa Privada',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  73,11,'Conselho/Órgão Colegiado de Patrimônio Cultural',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  74,11,'Conselho/Órgão Colegiado Setorial de Artes',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  75,11,'Conselho/Órgão Colegiado de Incentivo à Cultura',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  76,11,'Conselho/Órgão Colegiado Setorial de Artes Visuais',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  77,11,'Conselho/Órgão Colegiado Setorial de Artes Cênicas',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  78,11,'Conselho/Órgão Colegiado Setorial de Artes do Espetáculo',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  79,11,'Conselho/Órgão Colegiado Setorial de Música',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  80,11,'Conselho/Órgão Colegiado Setorial de Dança',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  81,11,'Conselho/Órgão Colegiado Setorial de Teatro',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  82,11,'Conselho/Órgão Colegiado Setorial de Circo',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  83,11,'Conselho/Órgão Colegiado Setorial do Audiovisual',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  84,11,'Conselho/Órgão Colegiado Setorial do Livro e Leitura',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  85,11,'Conselho/Órgão Colegiado Setorial de Museus e Arquivos',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  86,11,'Conselho/Órgão Colegiado Setorial de Museu(s)',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  87,11,'Conselho/Órgão Colegiado Setorial de Arquivo(s)',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  88,11,'Conselho/Órgão Colegiado Setorial de Biblioteca(s) Pública(s)',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  89,11,'Conselho/Órgão Colegiado Setorial de Centro(s) Cultural(is)',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  90,11,'Conselho/Órgão Colegiado Setorial de Região Urbana',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  91,11,'Conselho/Órgão Colegiado Setorial de Micro/Mesorregião',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  92,11,'Conselho/Órgão Colegiado Setorial de Distrito Municipal',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  94,11,'Órgao Consultivo/Deliberativo de Cultura',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  95,11,'Conselho/Órgão Colegiado Setorial de Culturas Indígenas',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  96,11,'Conselho/Órgão Colegiado Setorial de Culturas Afro-Brasileira',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  97,11,'Conselho/Órgão Colegiado Setorial da Cultura GLTB',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  98,14,'Empresa',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  99,11,'Empresa Pública',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  100,14,'Servidor Público',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  101,11,'Servidor Público Federal',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  102,11,'Servidor Público Estadual',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  103,11,'Servidor Público Municipal',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  104,11,'Servidor do Programa Monumenta',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  105,11,'Servidor Consultor de Órgão Internacional',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  106,11,'Servidor Vigilante',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  107,11,'Servidor Motorista',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  108,13,'Aeroporto',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  109,13,'Área',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  110,13,'Campo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  111,13,'Chácara',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  112,13,'Colônia',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  113,13,'Condomínio',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  114,13,'Conjunto',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  115,13,'Distrito',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  116,13,'Esplanada',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  117,13,'Estação',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  118,13,'Estrada',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  119,13,'Favela',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  120,13,'Fazenda',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  121,13,'Feira',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  122,13,'Jardim',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  123,13,'Lago',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  124,13,'Lagoa',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  125,13,'Loteamento',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  126,13,'Morro',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  127,13,'Núcleo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  128,13,'Parque',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  129,13,'Passarela',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  130,13,'Pátio',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  131,13,'Recanto',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  132,13,'Residência',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  133,13,'Rodovia',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  134,13,'Setor',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  135,13,'Sítio',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  136,13,'Travessa',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  137,13,'Trecho',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  138,13,'Vale',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  139,13,'Vereda',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  140,13,'Via',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  141,13,'Viaduto',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  142,13,'Viela',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  143,13,'Vila',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  144,16,'Proponente',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  145,16,'Incentivador',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  146,16,'Servidor',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  147,14,'Prestadores de Serviços',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  148,11,'Servidor de Limpeza',3);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  150,16,'Órgãos de Cultura',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  151,14,'Conselho',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  152,11,'Órgão Colegiado Setorial',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  153,11,'Órgão Colegiado',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  154,11,'Órgao Consultivo',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  155,11,'Órgão Deliberativo',13);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  156,16,'Operadora do Ticket Cultural',4);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  157,16,'Doadora do Ticket Cultural',4);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  160,17,'Certidão de Quitação de Tributos Municipais',12);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  161,17,'Certidão de Quitação de Tributos Estaduais',12);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  162,17,'Certidão Conjunta Negativa de Tributos Federais e Dívida Ativa da União',12);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  163,17,'Certidão Negativa de Débitos junto ao INSS',12);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  164,17,'Certidão Negativa de Débitos junto ao FGTS',12);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  165,16,'Poder Executivo Municipal',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  166,16,'Poder Executivo Estadual',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  167,16,'Poder Executivo Federal',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  169,16,'Cadastro',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  170,11,'Nenhum',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  171,1,'Sigla',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  172,16,'Cultura Viva',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  173,16,'Mala Direta',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  174,4,'Grupo de e-mail',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  175,5,'Registro Profissional',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  176,5,'Carteira de Trabalho',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  177,16,'Diversidade Cultural',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  178,14,'Inclusão Cultural da Pessoa Idosa',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  179,14,'Governo Estadual',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  180,14,'Governo Federal',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  181,20,'Ficha de inscrição devidamente preenchida',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  182,18,'Cópia autenticada da carteira de identidade',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  183,18,'Cópia autenticada do CPF',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  184,18,'Curriculum Vitae',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  185,20,'Carta de recomendação de autoridade na área cultural endossando a iniciativa',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  186,20,'Material complementar sobre a iniciativa: matérias de jornal, DVDs, CDs, fotos, folders, cartazes',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  187,19,'Cópia autenticada do estatuto da instituição e alterações, se houver',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  188,19,'Cópia autenticada do termo de posse do dirigente em exercício',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  189,19,'Cópia autenticada do cartão do CNPJ',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  190,19,'Cópia autenticada da carteira de identidade do dirigente em exercício',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  191,19,'Cópia autenticada do CPF do dirigente em exercício',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  192,19,'Relatório das atividades da instituição na área cultural',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  193,14,'Prêmio Culturas Ciganas',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  194,14,'Prêmio Culturas Populares',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  195,19,'Cópia autenticada da última alteração',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  196,20,'Termo de responsabilidade assinado',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  197,16,'Parceiro de Projeto Cultural',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  198,16,'Dirigente de Instituição',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  199,16,'Beneficiário de produtos do projeto cultural',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  200,16,'Interviniente',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  201,20,'Cópia autenticada de comprovante de endereço atualizado',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  202,20,'Proponente habilitado de acordo com o edital',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  203,16,'Vago',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  204,14,'Seção',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  205,14,'Coordenação',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  206,14,'Gerência',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  207,14,'Divisão',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  208,14,'Diretoria',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  209,16,'Parecerista de projeto cultural',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  210,16,'Componente da Comissão',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  211,16,'Avaliador de Edital',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  212,16,'Representantes na CNIC',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  213,16,'Coord Acompanhamento',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  214,16,'Coord Parecerista',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  215,16,'Vago',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  216,16,'Tecnico',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  217,16,'Votantes da Cnic',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  218,21,'Ensino Fundamental',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  219,21,'Ensino Médio',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  220,21,'Ensino Superior - Biblioteconomia',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  221,21,'Ensino Superior - Outros',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  222,21,'Especialização',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  223,21,'Mestrado',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  224,21,'Doutorado',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  225,22,'Efetivo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  226,22,'Cedido',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  227,22,'Temporário',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  228,22,'Terceirizado',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  229,22,'Voluntário',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  230,22,'Estagiário ou Bolsista',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  231,23,'0',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  232,23,'De 0 a 499',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  233,23,'De 500 a 1499',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  234,23,'De 1500 a 2499',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  235,23,'De 2500 a 2999',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  236,23,'De 3000 a 4999',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  237,23,'De 5000 a 6999',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  238,23,'De 7000 a 8999',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  239,23,'De 9000 a 10999',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  240,23,'De 11000 acima',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  241,24,'Diretoria',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  242,24,'Corpo Técnico',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  243,24,'Administrativo',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  244,24,'Manutenção',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  245,16,'SNIIC',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  246,14,'Proprietário/Mantenedor',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  247,16,'Procurador ',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  248,16,'Fornecedor',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  249,25,'Nivel I',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  250,25,'Nivel II',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  251,25,'Nivel III',0);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  252,24,'Secretário de Fomento e Incentivo à Cultura',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  253,24,'Secretário de Fomento e Incentivo à Cultura - Substituto',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  254,24,'Secretário do Audiovisual',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  255,24,'Secretário do Audiovisual - Substituto',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  256,26,'Henilton Parente de Menezes',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  257,26,'Leopoldo Nunes da Silva Filho',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  258,26,'João Batista da Silva',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  259,26,'Jorge Alan Pinheiro Guimarães',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  260,26,'Kleber da Silva Rocha',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  261,26,'João Batista da Silva',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  262,27,'Secretário de Fomento e Incentivo à Cultura',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  263,27,'Diretor de Gestão de Mecanismos de Fomento',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  264,27,'Coordenador-Geral de Desenvolvimento Controle e Avaliação',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  265,27,'Coordenador Técnico do Pronac',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  266,16,'Servidor Comissionado',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  267,27,'Coordenador',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  268,27,'Coordenador-Geral',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  269,27,'Ordenador de Despesas-substituto',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  270,26,'Flávia Rodrigues Dias',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  271,26,'Cleide Lopes de Oliveira',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  272,26,'Antônio Carlos Silva',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  273,26,'Ana Cristina da Cunha Wanzeler ',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  274,27,'Agente Administrativo',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  275,27,'Coordenador-Geral Substituto',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  276,27,'Ordenador de Despesas',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  277,27,'Coordenador(a)-substituto(a)',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  279,27,'Chefe de divisão',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  280,3,'Telefone - Receita Federal',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  281,1,'Nome - Receita Federal',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  282,2,'Endereço - Receita Federal',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  283,4,'Internet - Receita Federal',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  284,13,'Logradouro - Receita Federal',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  285,27,'Diretor de Incentivo à Cultura',21);
-INSERT INTO agentes.Verificacao (idVerificacao,IdTipo,Descricao,Sistema) VALUES (
-  286,27,'Diretor(a) de Incentivo à Cultura-Substituto(a)',21);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Anúncio de  página dupla', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Apostila', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Apresentação multimídia ', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Arte slide/insert', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Audiovisual 3'' a 5''', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Back-drop/paínel', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Back-light/front-light/empenas de prédios', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Banner/faixa adesiva/faixa de lona/saia de palco/testeira/pórtico', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Boletim', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Broadside por página', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Busdoor (vidro traseiro)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (2, 'TV', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (2, 'Mídia Exterior', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (2, 'Impressos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (2, 'Jornal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (2, 'Revista', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (2, 'Internet', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Adesivo de chão', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Album/book', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Anúncio de 1 de página', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Anúncio de 1/2 de  página', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Anúncio de 1/3 de página', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Anúncio de 1/4 de página', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Anúncio de 2/3 de página', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na parte interna da capa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na primeira página de apresentação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na contracapa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Junto ao expediente', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na última capa do folheto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na contracapa da caixa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Antes dos letreiros de apresentação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Antes dos créditos finais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na capa dos vídeos cassetes', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Durante a locução e no final em peça pré-gravada', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na locução de apresentação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Nos créditos finais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Ao final do comercial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (3, 'Na parte inferior direita junto c/a logomarca do governo federal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Caderno', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Calendário/folinha por lâmina', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Capa de caderno/livro/Revista/ Relaório/Catálogo/Carilha Manual Técnico', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Capa de CD/DVD/Rótulo de CD/DVD/Adesivo de CD', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Cartaz/Poster', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Cartazete', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Cartilha', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Catalogo', 0);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'CD_ROM', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Circular/carta', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Convite', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Convite Eletrônico/Folder Eletrônico', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'E-Mail', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Encarte de CD por página', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Envelopamento ônibus', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Envelopamento taxi', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Etiqueta/Adesivo/Etiqueta de Bagagem', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Faixa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Filme/VT Institucional acima de 30"/Informativo Eletrônico', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Filme/VT Institucional até 30"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Folder formato até A1(84x59,4cm)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Folder formato até A2(59,4x42cm)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Folder formato até A3(29,7x42cm)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Folder formato até A4(21x29,7cm)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Folder formato até A5(15,5x21cm)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Folheto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Jingle acima de 30"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Jingle de até 30"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Jornal / Encarte de jornal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Lateral de Onibus', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Livreto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Livro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Luminoso teto de táxi', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Manual Técnico', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Outdoor simples', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Painel externo metrô', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Paínel Frontal de Ponto de Onibus', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Paínel Lateral de Ponto de Onibus', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Peças de Audio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Peças de Internet(criação/textos/frames/multmídia)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Placa de Estrada, de Obra e de Sinalização', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Placa de rua (esquina)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Revista / Encarte de revista', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Sítio de internet', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Spot acima de 30"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Spot de até 15"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Spot de até 30"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Testeira de Ponto de Onibus', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Traseira de Onibus', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Traseira de taxi (vidro)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'VT varejo acima de 30"/Vinhetas acima 30"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'VT varejo até 15"/Vinheta até 15"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'VT varejo até 30"/Vinheta até 30"', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (4, 'Proposta com o proponente', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (4, 'Proposta para Análise Inicial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (4, 'Proposta em Conformidade Visual e / ou Análise Documental ', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Pendência documental', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Recursos Privados de Terceiros', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Recursos de Organização não governamental', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Recursos de Organismo internacional', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Recursos da Administração Municipal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Recursos da Administração Estadual', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Recursos da Administração Federal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Não há pendência documental', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Informar o nº do projeto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, ' Incentivo Fiscal Federal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Outros assuntos', 0);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Outro assunto', 0);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Incentivo Fiscal Estadual', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Incentivo Fiscal Municipal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (5, 'Recursos Privados Próprios', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Rádio', 0);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Rádio', 0);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'rádio', 0);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (2, 'Rádio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Anúncio de Rodapé', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (1, 'Display', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (7, 'Edíficio Sede', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (7, 'Edifício Elcy Meireles', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (7, 'Edifício 502 Sul', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na Análise Técnica Inicial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Diligências', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na CNIC - Análise Inicial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (4, 'Proposta encaminhada para apreciação do Coordenador', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (4, 'Proposta em Análise Final ', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (10, 'Recurso de Prorrogação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (11, 'Alteração do nome do projeto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (11, 'Alteração da razão social', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (11, 'Alteração do proponente', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (11, 'Alteração do local de realização', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Programa Cultura Viva', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Audiovisual', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'GLTB', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Culturas Populares', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Pessoa Idosa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Cultura Indígena', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (13, 'Prêmio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (13, 'Concurso', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Curta Metragem (Audiovisual)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Documentário (Audiovisual)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Mais Cinema (Audiovisual)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Longa Metragem (Audiovisual)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Roteiro (Audiovisual)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Comercialização (Audiovisual)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (14, 'Incentivo Fiscal', 0);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (14, 'Convênio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (14, 'Edital', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (14, 'Emenda Parlamentar', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Circuito de Música Popular', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Conexões Visuais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Residências em Artes Cênicas', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Estímulo às Artes Cênicas- Circo, Dança e Tetro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Myriam Muniz', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (12, 'Carequinha de Estímulo ao Circo', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Nacional de cultura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Artes Visuais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Dança, Teatro e Circo', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Música', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Acesso e Diversidade', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Patrimônio e Memória', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Livro, Leitura, Literatura e Língua Portuguesa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Incentivo à Inovação  do Audiovisual', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo Setorial de Ações Transversais e Equalização de Políticas Culturais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na readequação - Técnico', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na fiscalização', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na avaliação - Relatório Trimestral', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na prestação de contas', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (13, 'Auxílio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Arquivamento de proposta cultural', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (9, 'Despacho de Admissibilidade', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (13, 'Bolsa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Informar nº Pronac do Edital', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Arquivamento de Proposta de Edital', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na CNIC - Readequação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na readequação - Parecerista', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na movimentação bancária', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'VIDEOARTE: ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PRODUÇÃO LONGA METRAGEM DE DOCUMENTÁRIO PARA SALA DE CINEMA: ATÉ R$ 350.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PRODUÇÃO LONGA DE FICÇÃO E ANIMAÇÃO PARA SALA DE CINEMA: ATÉ R$ 800.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'REALIZAÇÃO DE CURTA METRAGEM EM DIGITAL ALTA DEFINIÇÃO – ESTREANTE: ATÉ R$ 40.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'REALIZAÇÃO DE CURTA METRAGEM EM HD (TV, INTERNET): ATÉ R$ 60.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'REALIZAÇÃO DE CURTA METRAGEM SALA DE CINEMA: ATÉ R$ 110.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'REALIZAÇÃO DE OBRA PARA TELEVISÃO (26 MIN): ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'REALIZAÇÃO DE OBRA PARA TELEVISÃO (52 MIN): ATÉ R$ 100.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FINALIZAÇÃO DE LONGA METRAGEM FICÇÃO, ANIMAÇÃO E DOCUMENTÁRIO: ATÉ R$ 200.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'DESENVOLVIMENTO DE PROJETO DE LONGA METRAGEM: ATÉ R$ 60.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'LANÇAMENTO DE OBRA DE LONGA METRAGEM EM 35MM: ATÉ R$ 110.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FINALIZAÇÃO DE CURTA METRAGEM EM 35MM: ATÉ R$ 40.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FINALIZAÇÃO DE CURTA METRAGEM EM DIGITAL ALTA DEFINIÇÃO: ATÉ R$ 10.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'AUTORAÇÃO/REPLICAGEM LONGA, MÉDIA OU CONJUNTO DE CURTA: ATÉ R$ 40.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PROJETO MULTIÁREA: ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'VIDEODANÇA: ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'GRAVAÇÃO DE CD – MÓDULO I: ATÉ R$ 20.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CIRCULAÇÃO DF E ENTORNO: ATÉ R$ 60.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'GRAVAÇÃO DE CD – MÓDULO III: ATÉ R$ 45.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'GRAVAÇÃO DE DVD: ATÉ R$ 120.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'GRAVAÇÃO DE VIDEOCLIPE: ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PRÊMIOS E SALÕES - MÓDULO I:  ATÉ R$ 120.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PRÊMIOS E SALÕES - MÓDULO II:  ATÉ R$ 300.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'EVENTOS (MOSTRAS, FESTIVAIS): ATÉ R$ 120.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PROJETOS DE INCENTIVO À LEITURA EM MÍDIAS (SITES, RÁDIO, TV): ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'GRAVAÇÃO DE CD – MÓDULO II: ATÉ R$ 35.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CIRCULAÇÃO NACIONAL: ATÉ R$ 170.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CIRCULAÇÃO REGIONAL: ATÉ R$ 120.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO II: ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Administração Direta / PRODEC', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'LANÇAMENTO DE CD/DVD: ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (18, 'Devolução Judicial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FAC/DIFUSÃO/PASSAGENS E DIÁRIAS: ATÉ R$ 10.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO I: ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO II: ATÉ R$ 140.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Diligenciado - Projeto aprovado - (Solicitação de Documentos)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Óperas e Musicais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CIRCULAÇÃO NACIONAL: ATÉ R$ 120.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CIRCULAÇÃO REGIONAL: ATÉ R$ 90.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Arte e Responsabilidade Social', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO II: ATÉ R$ 60.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO III: ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Técnicos (cenotécnicos,  técnico de som, cenários, etc)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO E CAPACITAÇÃO DE PROFISSIONAIS – MÓDULO I: ATÉ R$ 20.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO E CAPACITAÇÃO DE PROFISSIONAIS – MÓDULO I: ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos (coletivos, individuais, intervenções urb.) Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO E CAPACITAÇÃO DE PROFISSIONAIS – MÓDULO II: ATÉ R$ 40.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Prêmios e  Salões - Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Prêmios e  Salões - Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'ENSINO DA ARTE/ENSINO DA ARTE E RESPONSABILIDADE SOCIAL – MÓDULO I: ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'ENSINO DA ARTE/ENSINO DA ARTE E RESPONSABILIDADE SOCIAL – MÓDULO II: ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CAPACITAÇÃO PARA A GESTÃO CULTURAL – MÓDULO I: ATÉ R$ 7.500,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CAPACITAÇÃO PARA A GESTÃO CULTURAL – MÓDULO I: ATÉ R$ 15.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'GESTÃO CONTINUADA (REDES, SISTEMAS DE INFORMAÇÃO): ATÉ R$ 120.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PESQUISA (INDICADORES, ECONOMIA, PÚBLICO): ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CONTADORES DE HISTÓRIAS: ATÉ R$ 6.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MEDIADORES DE LEITURA: ATÉ R$ 6.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'OFICINAS DE CAPACITAÇÃO: ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO DE MEDIADORES DE LEITURA: ATÉ R$ 160.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PESQUISA, ELABORAÇÃO E DESENVOLVIMENTO DE OBRA LITERÁRIA: ATÉ R$ 20.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO E CAPACITAÇÃO DE PROFISSIONAIS – MÓDULO I: ATÉ R$ 15.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Lançamento de Longa Metragem', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'EDUCAÇÃO PATRIMONIAL – MÓDULO I: ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'EDUCAÇÃO PATRIMONIAL – MÓDULO II: ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PESQUISA: ATÉ R$ 300.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festivais, encontros e mostras', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Autoração/replicagem longa, média ou conjunto de curta', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE ESPAÇOS/COLETIVOS – MÓDULO II: ATÉ R$ 100.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE ESPAÇOS/COLETIVOS – MÓDULO I: ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS – MÓDULO i: ATÉ R$ 80.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS – MÓDULO I: ATÉ R$ 110.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Circulação DF e Entorno', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Circulação Regional', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Circulação Nacional', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Apoio a Temporada', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS – MÓDULO III: ATÉ R$ 110.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE ESPAÇOS CULTURAIS MULTIÁREAS: ATÉ R$ 120.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS DE PESQUISA – MÓDULO I: ATÉ R$ 80.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS DE PESQUISA – MÓDULO II: ATÉ R$ 110.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS - MÓDULO I: ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS - MÓDULO III: ATÉ R$ 110.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (20, 'Patrocinador', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'INICIANTE: ATÉ R$ 20.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MÓDULO I: ATÉ R$ 40.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MÓDULO II: ATÉ R$ 80.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MÓDULO III: ATÉ R$ 100.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'INICIANTE: ATÉ R$ 12.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CATÁLOGO, LIVRO, PESQUISA, MEMÓRIA DE ARTES VISUAIS: ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Desenvolvimento de obra literária', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'REGISTRO (CATÁLOGO, CD, LIVRO, SITE, ENTRE OUTROS): ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Desenvolvimento de obras visuais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'IMPRESSÃO DE LIVROS: ATÉ R$ 15.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festas e Celebrações', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festivais, encontros, mostras e calendário continuado de celebrações tradicionais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Apoio para montagem de Óperas e Musicais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'IMPRESSÃO DE LIVRETOS (CORDEL): ATÉ R$ 3.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'IMPRESSÃO DE LIVROS – MÓDULO INICIANTES: ATÉ R$ 12.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Arte e responsabilidade social', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação local', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação nacional', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Catálogo, livro, pesquisa, memória de Artes visuais Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Catálogo, livro, pesquisa, memória de Artes visuais Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Circuito de Feiras', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Contadores de Histórias', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Desenvolvimento de projeto de longa documentário', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência na avaliação - Relatório Final', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência de Checklist - Análise', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência de Checklist - Readequação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Artes Visuais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Cinema', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Dança', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Música', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Circo', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Cultura Popular', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Diversidade', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Literatura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Passagens', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Patrimônio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Teatro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Ensino da Arte / Responsabilidade Social', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Gestão Cultural', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Espaços Culturais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fundo de Apoio à Cultura - GDF', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'REALIZAÇÃO DE CURTA METRAGEM EM DIGITAL ALTA DEFINIÇÃO – INICIANTES: ATÉ R$ 20.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Programa Museu, Memória e Cidadania (Ibram)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (18, 'Devolução ao Fundo Nacional de Cultura - FNC', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Circuitos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Eventos Consolidados', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Bolsas de Estudos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Patrimônio Histórico Material e Imaterial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Gestão Cultural', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO I: ATÉ R$ 80.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (19, 'Inicial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (19, 'Readequação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'TEMPORADA: ATÉ R$ 15.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'EVENTOS CULTURA E DIVERSIDADE - MÓDULO I: ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'EVENTOS CULTURA E DIVERSIDADE - MÓDULO II: ATÉ R$ 60.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'EVENTOS CULTURA E DIVERSIDADE - MÓDULO III: ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CONCURSO LITERÁRIO REGIONAL E NACIONAL (CONTOS, CRÔNICAS, POEMAS): ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (19, 'Recurso', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos (coletivos, individuais, intervenções urb.) Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO III: ATÉ R$ 250.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'LANÇAMENTO DE LIVRO: ATÉ R$ 12.500,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'APOIO PARA MONTAGEM DE OPERETAS E MUSICAIS: ATÉ R$ 160.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Evento literário (concursos,feiras, encontros, seminários) Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Evento literário (feiras, encontros, seminários) Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Eventos (mostras e festivais) Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Eventos (mostras e festivais) Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festivais mostras, seminários, foruns - Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festivais mostras, seminários, foruns - Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Finalização de curta metragem com masterização em DCP', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Finalização de longa metragem ficção, animação e doc 35mm', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Formação de Mediadores de Leitura e/ou Contadores de Histórias', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de Álbum', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Impressão de livretos (cordel) Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Impressão de livros -  Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Impressão de livros -  Módulo Iniciantes', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Impressão de livros - Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Impressão de periódicos (revistas, jornais)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Lançamento e Distribuição de CD/DVD', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Lançamento e Distribuição de Livro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Manutenção de Espaços', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Manutenção de Espaços/coletivos - Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Manutenção de Espaços/coletivos - Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Manutenção de grupo Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Manutenção de grupo Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Manutenção de grupos de pesquisa Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Manutenção de grupos de pesquisa Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Mediadores de Leitura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Montagem de Espetáculo Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Montagem de Espetáculo Iniciante', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Montagem de Espetáculo Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Multiárea', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Produção longa de Ficção e Animação em 35mm e/ou DCP', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Produção longa-metragem de documentário em 35mm e/ou DCP', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos de incentivo a leitura em mídias', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Publicações/registro  (catálogo, CD,  livro, site)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Realização de curta metragem em 35mm e/ou DCP', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Realização de curta metragem em HD  Estreantes', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Realização de obra radiofônica - rádio documentário', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Realização de obra radiofônica - revista de jornalismo cultural', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Realização de Projeto de série de TV DOC ou Ficção (Bíblia e Piloto)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Realização de série radiofônica - rádio conto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Audiovisual', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (20, 'Proponente', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Digitalização e/ou Tratamento de Acervo: até R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Circulação de Exposição Individual ou Coletiva: até R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Registro e Memória', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Apoio para montagem de Óperas e Musicais – Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Apoio para montagem de Óperas e Musicais – Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Arte e responsabilidade social - Módulo I', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Arte e responsabilidade social - Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Artes Visuais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Biblioteca Nacional', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Calendário continuado de celebrações tradicionais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação em Elaboração e Gestão de Projetos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação nacional e/ou internacional', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Cinema', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Cultura nos Trilhos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Cultura Popular & Circo', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Desenvolvimento de Projeto de longa-metragem', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Temporadas de Sol', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Teatro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Digitalização e/ou tratamento de acervos bibliográficos e gráficos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festas e Celebrações Tradicionais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festas, Festivais e mostras com mais de 10 anos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festas, Festivais e mostras com mais de 5 anos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festejos do ciclo Natalino e Junino nas Regiões Administrativas', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festivais, encontros e mostras Cine Brasília', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Finalização de curta metragem com masterização em DCP', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Finalização de longa metragem ficção, animação e doc 35mm', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Galeria Athos Bulcão', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de Álbum - Módulo I (iniciantes)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de Álbum - Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de DVD', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de Videoclipe', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Impressão de catálogo e livro de Pesquisa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Literatura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Museu Sonoro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Música', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Pesquisa aspectos socioeconômicos da cultura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Pesquisa inventário de bem imaterial', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Prêmios e Salões - Módulo III', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Produção longa de Ficção e Animação com finalização digital', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Produção longa-metragem de documentário com finalização digital', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto de disponibilização de acervo', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto de publicação (livro, catálogo, site, CD)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Dança', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Museu da República', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Museus Históricos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Música  nas Escolas', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Teatro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos (coletivos, individuais, intervenções urb.)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos de Acessbilidade a obras artísticas e culturais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos Módulo I (Iniciantes)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos Módulo II', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Restauro de obras artísticas e museológicas', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Dança, Circo, Cultura Pop., Literatura, Música, Teatro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Etapas de Trabalho', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Democratização de Acesso', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Acessibilidade', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Justificativa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Objetivos', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Resumo do Projeto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (15, 'Fomento a projetos, eventos e intercâmbio na área museológica', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (18, 'Outras Devoluções de recursos captados', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Plano de Divulgação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Período de Execução', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Nome do Projeto', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Planilha Orçamentária', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Plano de Distribuição', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Alteração de Razão Social', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Alteração de Proponente', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Local de Realização', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Estratégia de Execução', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Especificação Técnica', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Impacto Ambiental', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Sinópse da Obra', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Agência Bancária', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência no Recurso - Técnico', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência no Recurso - CNIC', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (8, 'Diligência no Recurso - Parecerista', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Ponto de Cultura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Economia Criativa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Disponibilização de acervo', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Publicações/Registro (CD, livro, site)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Todas as Áreas/Lingugens, exceto Literatura e Patrimônio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Todas as Áreas / Linguagens', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Rádio', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Panoramas', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Ocupação', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Eventos Consolidados', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Diversidade/Acessibilidade', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Dança, Circo, Cultura Pop., Teatro', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Circulação – Artes Visuais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (20, 'Beneficiário', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO E CAPACITAÇÃO DE PROFISSIONAIS – MÓDULO II: ATÉ R$ 7.500,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO III: ATÉ R$ 220.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FESTIVAIS, ENCONTROS E MOSTRAS - MÓDULO II: ATÉ R$ 180.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO E CAPACITAÇÃO DE PROFISSIONAIS – MÓDULO II: ATÉ R$ 15.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'FORMAÇÃO E CAPACITAÇÃO DE PROFISSIONAIS – MÓDULO II: ATÉ R$ 30.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MANUTENÇÃO DE GRUPOS – MÓDULO II: ATÉ R$ 80.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'CIRCULAÇÃO DF E ENTORNO: ATÉ R$ 40.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Apoio a Eventos do Calendário', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para o Museu Histórico MVMC (visita orientada)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Acessibilidade a Obras Artísticas e Culturais', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Biblioteca Viva', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Temporadas de Sol (até R$ 120.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projetos de Acessbilidade a obras artísticas e culturais (até R$ 200.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Teatro (até R$ 60.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para o Museus Históricos - Catetinho (até R$ 350.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Música de Orquestra no Teatro (até R$ 600.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Música de Câmara nas Escolas (até R$ 70.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Museus Históricos - MVMC (até R$ 350.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Museus Históricos - 3 poderes (até R$ 350.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Museu da República (até R$ 320.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto Educativo para Dança (até R$ 60.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Projeto de disponibilização de acervo (até R$ 50.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Pesquisa Módulo I - inventário de bem imaterial (até R$ 150.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Pesquisa  Módulo II - áreas de memória (até R$ 350.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Museu Sonoro (até R$ 80.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Multiárea (até R$ 250.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Montagem de Opereta e Musicais (até R$ 160.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Montagem  de Espetáculos - Módulo II (até R$ 80.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Montagem  de Espetáculos - Módulo I (até R$ 40.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de Videoclipe (até R$ 50.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de DVD (até R$ 120.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de Álbum - Módulo II  (até R$ 45.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Gravação de Álbum - Módulo I (até R$ 20.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Formação e capacitação de profissionais - Módulo II (até R$ 30.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Formação e capacitação de profissionais - Módulo I (até R$ 15.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Formação de Jovens Agentes de Cultura (até R$ 30.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festejos do ciclo Natalino e Junino nas Regiões Administrativas (até R$ 40.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festas, Festivais e mostras com mais de 5 anos (até R$ 250.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Festas, Festivais e mostras com mais de 10 anos (até R$ 500.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Eventos  (até R$ 150.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Espaços Teatrais (até R$ 90.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Eixão Cultural (até R$ 80.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Digitalização e/ou tratamento de acervos em audiovisual (até R$ 80.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Digitalização e/ou tratamento de acervos bibliográficos e gráficos (até R$ 80.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Desenvolvimento de site sobre produção cinematográfica em BSB (até R$ 50.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Cultura nos Trilhos (até R$ 50.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Circulação DF e Entorno (até R$ 150.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação nacional (até R$ 80.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação nacional (até R$ 50.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação local (até R$ 30.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Capacitação em Elaboração e Gestão de Projetos (até R$ 150.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Bolsa de Estudo nacional (até R$ 36.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Bolsa de Estudo local (até R$ 20.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PROJETOS  - MÓDULO III : ATÉ R$ 150.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PROJETOS  - MÓDULO II : ATÉ R$ 80.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PROJETOS  - MÓDULO I : ATÉ R$ 50.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'PROJETOS  - INICIANTES : ATÉ R$ 20.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Bolsa de Estudo internacional (até R$ 60.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Biblioteca Viva (até R$ 30.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Arte e responsabilidade social - Módulo II (até R$ 150.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Arte e responsabilidade social - Módulo I (até R$ 80.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Apoio a Temporada (até R$ 30.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Apoio a eventos do calendário (até R$ 100.000,00)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'MÍDIAS ELETRÔNICAS (E-BOOKS, ENTRE OUTROS): ATÉ R$ 10.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'IMPRESSÃO DE PERIÓDICOS (REVISTAS, JORNAIS, HISTÓRIA EM QUADRINHOS, ENTRE OUTROS): ATÉ R$ 90.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'IMPRESSÃO DE LIVROS – MÓDULO III: ATÉ R$ 25.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'IMPRESSÃO DE LIVROS – MÓDULO II: ATÉ R$ 20.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'IMPRESSÃO DE LIVROS – MÓDULO I: ATÉ R$ 15.000,00', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Comunicado de encerramento do prazo de prestação de contas', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '017 - Tipo de pessoa não permitido para esse processo/tipo de repasse', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '016 - Tipo de repasse inválido', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '015 - Tipo de pessoa incompatível com a natureza jurídica', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '014 - Perfil da agência incompatível com o tipo de pessoa', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '013 - Cliente BB-Campus não é o titular do CPF', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '011 - Dados da pessoa jurídica divergentess com a Receita Federal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '010 - Dados da pessoa física divergentes com a Receita Federal', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '009 - Cliente BB-Campus não é pessoa física', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '008 - Cliente BB-Campus fora da faixa etária (16 a 28 anos)', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '007 - Mais de 5 clientes cadastrados para CPF informado', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '006 - Agência/dv inválido', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '005 - Nome cliente inválido', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '004 - Data nascimento inválida', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '003 - CPF/CNPJ inválido', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '002 - Tipo CPF/CNPJ inválido', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (22, '001 - Tipo pessoa inválido', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'EDITAL - Confirmação do recebimento no Ministério da Cultura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (16, 'Livro, Leitura e Literatura', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Readequação até 20%', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (6, 'Projeto avaliado na reunião da Comissão Nacional de Incentivo à Cultura (CNIC). ', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (17, 'Credenciamento', 1);
+INSERT INTO sac.dbo.Verificacao (idTipo, Descricao, stEstado) VALUES (21, 'Ficha Técnica', 1);
