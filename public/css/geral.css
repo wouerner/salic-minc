@@ -149,6 +149,8 @@ x - MENSAGENS
 }
 
 
+
+
 /*--------------------------------------------------------------
 x - SANFONA
 --------------------------------------------------------------*/
@@ -217,30 +219,49 @@ x - HEADER
 
 header #topo {
     /*width:100%;*/
-    margin-top: -4px;
-    height: 130px;
-    background: url(../img/bg-topo.png) no-repeat 0 0 #acda5d;
-    /*margin-bottom:10px;*/
-    /*margin-top: 30px;*/
+    /*margin-top: -4px;*/
+    height: 60px;
+    /*background: url(../img/bg-topo.png) no-repeat 0 0;*/
+    /*background-size: 255px;*/
 }
+
+header #logo {
+    /*height: 60px;*/
+    width: 224px;
+    display: inline-block;
+}
+
+header #logo h1 {
+    /*width: 100%;*/
+    height: 60px;
+
+    font-size: 12px;
+    margin: 0;
+    text-indent: -1000px;
+    background: url(../img/logo_salic.png) center no-repeat;
+    background-size: 150px;
+    cursor: pointer;
+}
+
+header #logo h1 a {
+    display: block;
+    /*height: 95px;*/
+    /*width: 224px;*/
+    /*margin-top: 3px;*/
+}
+
 
 header #combousuario {
     float: right;
-    /*width: 700px;*/
     position: relative;
     right: 32px;
     top: 43px;
     z-index: 1;
-    /*height: 30px;*/
 }
 
 header #combousuario label {
-    /*float: right;*/
-    /*text-transform: uppercase;*/
     position: relative;
     color: #000;
-    /*float: right;*/
-    /*position: absolute;*/
     top: 0;
     font-size: 13px;
     font-weight: 500;
@@ -249,41 +270,17 @@ header #combousuario label {
 }
 
 header #combousuario select {
-    /*float: right;*/
 }
 
 header .perfilXgrupo {
-    /*display: inline;*/
     background: #fc0;
     background: #36963f;
     color: #fff;
     font-weight: bold;
     font-size: 12px;
-    /*padding:0;*/
-    /*margin:0;*/
     margin-top: -4px;
     height: 25px;
     float: right;
-}
-
-header #logo {
-    height: 95px;
-    width: 224px;
-}
-
-header #logo h1 {
-    width: 100%;
-    margin: 0;
-    text-indent: -1000px;
-    background: url(../img/novo_logo.png) center no-repeat;
-    cursor: pointer;
-}
-
-header #logo h1 a {
-    display: block;
-    height: 95px;
-    width: 224px;
-    margin-top: 3px;
 }
 
 header #atalhos {
@@ -337,14 +334,12 @@ header #barra-brasil {
 
 header #navglobal {
     background: #36963f;
-    /*background: #1B5E20;*/
     display: block;
     /*height: 34px;*/
     height: 35px;
     float: left;
     width: 100% !important;
     clear: both;
-    /*margin-bottom: 10px;*/
 }
 
 header #navglobal ul li {
@@ -379,10 +374,51 @@ header #navglobal ul li a.home {
     padding: 2px;
 }
 
-header#navglobal ul li a.home span {
+header #navglobal ul li a.home span {
     visibility: hidden;
 }
 
+header nav .nav-wrapper {
+    color: #fff;
+    /*width: 100%;*/
+    /*height: 56px;*/
+    /*line-height: 56px;*/
+    height: 40px;
+    line-height: 40px;
+}
+
+/*Inherited from nav.nav-extended*/
+/*@media only screen and (min-width: 601px)*/
+header nav,
+header nav .nav-wrapper i,
+header nav a.button-collapse,
+header nav a.button-collapse i {
+    height: 40px;
+    line-height: 40px;
+}
+header nav {
+    color: #fff;
+    background-color: #ee6e73;
+    width: 100%;
+    height: 40px;
+    /*line-height: 56px;*/
+}
+header nav ul a {
+    transition: background-color .3s;
+    font-size: 1rem;
+    color: #fff;
+    display: block;
+    padding: 0 15px;
+    cursor: pointer;
+}
+
+header .dropdown-content li > a, .dropdown-content li > span {
+    font-size: 16px;
+    color: #00481d;
+    display: block;
+    line-height: 22px;
+    padding: 14px 16px;
+}
 
 /*--------------------------------------------------------------
 x - CONTAINER
@@ -1298,7 +1334,7 @@ x - CORES
 
 #conteudo .black, 
 #conteudo .black a,
-#conteudo table.tabela td.black,
+#conteudo table.tabela td.black
 { 
     color:#000; 
     background: white !important;
@@ -1705,7 +1741,7 @@ x - BOTOES
 .btn_enviar_para_pagamento:hover,
 .btn_registrar_ordem_bancaria:hover,
 .btn_visualizar2:hover,
-.btn_historico:hover,
+.btn_historico:hover
 {
 	background-color:#fff;
 	border-top:1px solid #aaa;
@@ -2358,3 +2394,11 @@ table.tabela td.destacar span,
 #planilhaOrcamentaria .tabela tr td.green {
     background: transparent !important;
 }
+
+
+/*--------------------------------------------------------------
+x - CORES
+--------------------------------------------------------------*/
+body { background: #f8f8f8; }
+header #topo { background-color: #35839f; }
+#navbar-header nav { background-color: #2a6b81; }
