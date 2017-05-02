@@ -630,37 +630,3 @@ div.dataTables_length .select-wrapper {
 div.dataTables_length select {
     height: 30px;
 }
-/*--------------------------------------------------------------
-x - FOOTER
---------------------------------------------------------------*/
-footer {
-    background-color: #1B5E20;
-    color: #fff;
-    position: inherit;
-    bottom: 0;
-    width: 100%;
-
-    display: block;
-    text-align: center;
-    margin-top: 30px;
-}
-
-footer.green,
-footer.green a {
-    color: #ffcc80;
-}
-
-footer.page-footer {
-    margin-top: 0;
-    padding-top: 0;
-    background-color: #ee6e73;
-}
-
-footer a{
-    color: #ffcc80;
-}
-
-footer {
-    color: #FFFFFF;
-    background-color: rgb(93, 64, 55);
-}

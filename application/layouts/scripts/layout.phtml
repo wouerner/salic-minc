@@ -20,59 +20,27 @@
         <div id="logo">
             <h1><a href="<?php echo $logoLink; ?>" title="Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura">Salic</a></h1>
         </div>
-
-        <?php if (isset($auth['usu_codigo']) && !isset($auth['cpf'])) : ?>
-            <?php $idAgente = isset($this->idAgente) ? $this->idAgente : "false"; ?>
-            <div id="combousuario" class="input-field">
-                <label for="perfilXgrupo"></label>
-                <select name="perfilXgrupo" id="perfilXgrupo" class="perfilXgrupo browser-default" onchange="alterarPerfil(this.value);">
-                    <?php if ($this->arrayGrupos): ?>
-                        <?php foreach ($this->arrayGrupos as $g){ ?>
-                            <option value="<?php echo $g->gru_codigo; ?>:<?php echo $g->uog_orgao; ?>"
-                                <?php if ($g->gru_codigo == $this->grupoAtivo && $g->uog_orgao == $this->orgaoAtivo){ echo "selected=\"selected=\""; } ?>>
-                                &nbsp; <?php echo $g->org_siglaautorizado; ?> - <?php echo $g->gru_nome; ?> &nbsp;
-                            </option>
-                        <?php } ?>
-                    <?php endif; ?>
-                    <?php if(!empty($this->arrayGrupoProponente)){ ?>
-                        <option value="<?php echo $this->arrayGrupoProponente["gru_codigo"]; ?>:<?php echo $this->arrayGrupoProponente["uog_orgao"]; ?>">&nbsp; <?php echo $this->arrayGrupoProponente["gru_nome"]; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-            <script type="text/javascript">
-                /**
-                 * Funcao para mudar o perfil (órgao) do usuario
-                 */
-                function alterarPerfil(GrupoOrgao){
-                    grupo = GrupoOrgao.substring(0, (i = GrupoOrgao.indexOf(':')));
-                    orgao = GrupoOrgao.substring(++i);
-
-                    url = '<?php echo $this->url(array('controller' => 'perfil', 'action' => 'alterarperfil', 'module' => 'autenticacao'), '', true); ?>';
-                    url+= '?codGrupo=' + grupo;
-                    url+= '&codOrgao=' + orgao;
-                    redirecionar(url);
-                } // fecha funcao alterarPerfil()
-            </script>
-        <?php endif; ?>
-
-        <?php if (!empty($this->usuario->usu_identificacao) && !empty($this->usuario->usu_nome)) : ?>
-            <?php $nomeUsuario = explode(" ", $this->usuario->usu_nome); ?>
-            <?php $cpfUsuario = Validacao::mascaraCPFCNPJ($this->usuario->usu_identificacao); ?>
-        <?php endif; ?>
-
-        <?php $user = array_change_key_case((array) $this->usuario); ?>
-        <?php if (!empty($user['cpf']) && !empty($user['nome'])) : ?>
-            <?php $nomeUsuario = explode(" ", $user['nome']); ?>
-            <?php $cpfUsuario = Validacao::mascaraCPFCNPJ($user['cpf']); ?>
-        <?php endif; ?>
-
-        <?php
-            $key = key( array_slice( $nomeUsuario, -1, 1, TRUE ) );
-
-            $primeiroNome = isset($nomeUsuario[0]) ? $nomeUsuario[0] : 'User';
-            $ultimoNome = isset($nomeUsuario[$key]) ? $nomeUsuario[$key] : 'User';
-        ?>
         <div id="atalhos">
+
+            <?php if (!empty($this->usuario->usu_identificacao) && !empty($this->usuario->usu_nome)) : ?>
+                <?php $nomeUsuario = explode(" ", $this->usuario->usu_nome); ?>
+                <?php $cpfUsuario = Validacao::mascaraCPFCNPJ($this->usuario->usu_identificacao); ?>
+            <?php endif; ?>
+
+            <?php $user = array_change_key_case((array) $this->usuario); ?>
+            <?php if (!empty($user['cpf']) && !empty($user['nome'])) : ?>
+                <?php $nomeUsuario = explode(" ", $user['nome']); ?>
+                <?php $cpfUsuario = Validacao::mascaraCPFCNPJ($user['cpf']); ?>
+            <?php endif; ?>
+
+            <?php
+                if( !empty($nomeUsuario))
+                    $key = key( array_slice( $nomeUsuario, -1, 1, TRUE ) );
+
+                $primeiroNome = isset($nomeUsuario[0]) ? $nomeUsuario[0] : 'Usu&aacute;rio';
+                $ultimoNome = isset($nomeUsuario[$key]) ? $nomeUsuario[$key] : '';
+            ?>
+
             <ul id="dropdown1" class="dropdown-content">
                 <li>
                     <a href="#!">
@@ -96,6 +64,24 @@
             </ul>
 
             <ul>
+                <?php if (isset($auth['usu_codigo']) && !isset($auth['cpf'])) : ?>
+                    <?php $idAgente = isset($this->idAgente) ? $this->idAgente : "false"; ?>
+                    <li id="combousuario">
+                        <select name="perfilXgrupo" id="perfilXgrupo" class="perfilXgrupo" onchange="alterarPerfil(this.value);">
+                            <?php if ($this->arrayGrupos): ?>
+                                <?php foreach ($this->arrayGrupos as $g){ ?>
+                                    <option value="<?php echo $g->gru_codigo; ?>:<?php echo $g->uog_orgao; ?>"
+                                        <?php if ($g->gru_codigo == $this->grupoAtivo && $g->uog_orgao == $this->orgaoAtivo){ echo "selected='selected='"; } ?>><?php echo $g->org_siglaautorizado; ?> - <?php echo $g->gru_nome; ?></option>
+                                <?php } ?>
+                            <?php endif; ?>
+                            <?php if(!empty($this->arrayGrupoProponente)){ ?>
+                                <option value="<?php echo $this->arrayGrupoProponente["gru_codigo"]; ?>:<?php echo $this->arrayGrupoProponente["uog_orgao"]; ?>">&nbsp; <?php echo $this->arrayGrupoProponente["gru_nome"]; ?></option>
+                            <?php } ?>
+                        </select>
+                        <label></label>
+                    </li>
+                <?php endif; ?>
+
                 <li>
                     <a class="dropdown-button" href="#!" data-activates="dropdown1">
                         <i class="material-icons left">person</i>
@@ -114,6 +100,19 @@
     <div id="dialog-confirm" class="sumir" title="Acesso ao Sistema"><p>Deseja realmente sair do sistema?</p></div>
 
     <script type="text/javascript">
+        /**
+         * Funcao para mudar o perfil (órgao) do usuario
+         */
+        function alterarPerfil(GrupoOrgao){
+            grupo = GrupoOrgao.substring(0, (i = GrupoOrgao.indexOf(':')));
+            orgao = GrupoOrgao.substring(++i);
+
+            url = '<?php echo $this->url(array('controller' => 'perfil', 'action' => 'alterarperfil', 'module' => 'autenticacao'), '', true); ?>';
+            url+= '?codGrupo=' + grupo;
+            url+= '&codOrgao=' + orgao;
+            redirecionar(url);
+        }
+
         function logout() {
             $("#dialog").dialog("destroy");
             $('html').css('overflow', 'hidden');
@@ -133,7 +132,12 @@
                 }
             });
             $('.ui-dialog-titlebar-close').remove();
-        } // fecha funcao logout()
+        }
+
+        $3(document).ready(function() {
+            $3('select').material_select();
+        });
+
     </script>
 
     <!-- ========== INICIO MENSAGENS (ERROS, CONFIRMACOES E ADVERTENCIAS) ========== -->

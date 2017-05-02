@@ -216,22 +216,25 @@ x - BARRA GOVERNO
 /*--------------------------------------------------------------
 x - HEADER
 --------------------------------------------------------------*/
-
+/*--------------------------------------------------------------
+x - Logo
+--------------------------------------------------------------*/
 header #topo {
     /*width:100%;*/
     /*margin-top: -4px;*/
     height: 60px;
     /*background: url(../img/bg-topo.png) no-repeat 0 0;*/
     /*background-size: 255px;*/
+    background-color: #acda5d;
 }
 
-header #logo {
+header #topo #logo {
     /*height: 60px;*/
     width: 224px;
     display: inline-block;
 }
 
-header #logo h1 {
+header #topo #logo h1 {
     /*width: 100%;*/
     height: 60px;
 
@@ -243,95 +246,124 @@ header #logo h1 {
     cursor: pointer;
 }
 
-header #logo h1 a {
+header #topo  #logo h1 a {
     display: block;
-    /*height: 95px;*/
+    height: 58px;
+
     /*width: 224px;*/
     /*margin-top: 3px;*/
 }
 
 
-header #combousuario {
-    float: right;
-    position: relative;
-    right: 32px;
-    top: 43px;
-    z-index: 1;
-}
-
-header #combousuario label {
-    position: relative;
-    color: #000;
-    top: 0;
-    font-size: 13px;
-    font-weight: 500;
-    width: 40px;
-    margin-right: 5px;
-}
-
-header #combousuario select {
-}
-
-header .perfilXgrupo {
-    background: #fc0;
-    background: #36963f;
-    color: #fff;
-    font-weight: bold;
-    font-size: 12px;
-    margin-top: -4px;
-    height: 25px;
-    float: right;
-}
-
+/*--------------------------------------------------------------
+x - Atalhos
+--------------------------------------------------------------*/
 header #atalhos {
     position: absolute;
-    top: 26px;
-    right: 22px;;
-}
-
-header #atalhos .config {
-    background: url(../img/config.png) no-repeat;
-}
-
-header #atalhos .ajuda {
-    background: url(../img/ajuda.png) no-repeat;
-}
-
-header #atalhos .sair {
-    background: url(../img/sair.png) no-repeat;
-}
-
-header #atalhos ul li {
-    display: block;
-    float: left;
-    list-style-type: none;
-    padding: 0 12px 1px 0;
+    top: 8px;
+    right: 20px;
+    width: 80%;
+    text-align: right;
 }
 
 header #atalhos a {
+    color: #fff;
+    display: block;
+    font-size: 13px;
+    min-width: 150px;
+    line-height: 2;
+    font-weight: bold;
+}
+
+header #atalhos a i {
+    text-align: center;
+}
+
+header #atalhos ul li {
+    display: inline-block;
+}
+
+
+header #atalhos ul ul li {
+    display: block;
+}
+
+header #atalhos ul ul {
+    min-width: 200px;
+}
+
+header #atalhos ul ul li a{
     color: #27360d;
-    text-decoration: none;
-    display: block;
-    text-indent: 21px;
+    width: 100%;
 }
 
-header #atalhos a.btn-floating.small {
-    width: 25px;
-    height: 25px;
-    margin-top: 2px;
+header #atalhos ul ul li:last-child a{
+    text-align: right;
+    padding-right: 30px;
 }
 
-header #atalhos .btn-floating.small i {
-    line-height: 28px;
-    font-size: 1.3rem;
+/*header #atalhos a.btn-floating.small {*/
+    /*width: 25px;*/
+    /*height: 25px;*/
+    /*margin-top: 2px;*/
+/*}*/
+
+/*header #atalhos .btn-floating.small i {*/
+    /*line-height: 28px;*/
+    /*font-size: 1.3rem;*/
+/*}*/
+
+header #atalhos #combousuario {
+    min-width: 530px;
+    color: #212121;
+    margin-right: 20px;
 }
 
-header #barra-brasil {
-    height: 32px !important;
-    display: block;
-    background: #f1f1f1 !important;
+header #atalhos #combousuario input.select-dropdown {
+    text-align: right;
+    padding-right: 15px;
+    border-bottom: none;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
+header #atalhos #combousuario select {
+    display: none;
+}
+
+header #atalhos #combousuario li {
+    min-height: 25px;
+}
+
+header #atalhos #combousuario li span {
+    font-size: 13px;
+    line-height: 14px;
+    padding: 8px 5px;
+    margin: 0px;
+    color: #27360d;
+}
+header #atalhos #combousuario span.caret {
+    color: #fff;
+    line-height: 8px;
+}
+
+header #atalhos #combousuario select.perfilXgrupo {
+
+    background: transparent;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+header #atalhos #combousuario select.perfilXgrupo option {
+    color: #27360d;
+}
+
+/*--------------------------------------------------------------
+x - Menu principal
+--------------------------------------------------------------*/
 header #navglobal {
     background: #36963f;
     display: block;
@@ -398,7 +430,7 @@ header nav a.button-collapse i {
 }
 header nav {
     color: #fff;
-    background-color: #ee6e73;
+    background-color: #388E3C;
     width: 100%;
     height: 40px;
     /*line-height: 56px;*/
@@ -2395,10 +2427,52 @@ table.tabela td.destacar span,
     background: transparent !important;
 }
 
+/*--------------------------------------------------------------
+x - FOOTER
+--------------------------------------------------------------*/
+footer,
+footer.page-footer {
+    background-color: #1B5E20;
+    color: #fff;
+    position: inherit;
+    bottom: 0;
+    width: 100%;
+
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+}
+
+footer.green,
+footer.green a {
+    color: #ffcc80;
+}
+
+footer.page-footer {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+footer a{
+    color: #ffcc80;
+}
+
+footer {
+    color: #FFFFFF;
+    background-color: rgb(93, 64, 55);
+}
 
 /*--------------------------------------------------------------
-x - CORES
+x - CORES azul
 --------------------------------------------------------------*/
 body { background: #f8f8f8; }
 header #topo { background-color: #35839f; }
 #navbar-header nav { background-color: #2a6b81; }
+footer.page-footer { background-color: #2a6b81; }
+
+header #atalhos #combousuario {color: #fff}
+
+#titulo {
+    background: linear-gradient(to bottom, #2a6b81 0%,rgba(53, 131, 159, 0) 0%,rgba(53, 131, 159, 0.15) 100%);
+    color: #3c3b3b;
+}
