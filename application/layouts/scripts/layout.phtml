@@ -49,7 +49,7 @@
                             <?php echo $primeiroNome . " " . $ultimoNome; ?><br>
                         </p>
                         <p>
-                            <?php echo Validacao::mascaraCPFCNPJ($this->usuario->usu_identificacao); ?>
+                            <?php echo $cpfUsuario; ?>
                         </p>
                     </a>
                 </li>
@@ -135,7 +135,7 @@
         }
 
         $3(document).ready(function() {
-            $3('select').material_select();
+            $3('#perfilXgrupo').material_select();
         });
 
     </script>

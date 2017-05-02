@@ -1,42 +1,98 @@
 <div class="col s2">
-	<div class="top"></div>
-	<div id="qm0" class="qmmc">
-		<a class="sanfona" href="#" title="Ir para Estrutura de P&aacute;ginas">Estrutura de P&aacute;ginas</a>
-		<div class="sanfonaDiv sumir">
-			<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'pagina-simples'), '', true); ?>" title="Ir para P&aacute;gina Simples">P&aacute;gina Simples</a>
-			<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'pagina-menu-lateral'), '', true); ?>" title="Ir para P&aacute;gina com Menu Lateral">P&aacute;gina com Menu Lateral</a>
-		</div>
-        <a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'buttons'), '', true); ?>" title="Ir para P&aacute;gina com Menu Lateral">
-            buttons
-        </a>
 
-		<a class="sanfona" href="#" title="Ir para Menus">Menus</a>
-		<div class="sanfonaDiv sumir">
-			<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'menu-lateral'), '', true); ?>" title="Ir para Menu Lateral">Menu Lateral</a>
-			<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'menu-abas1'), '', true); ?>" title="Ir para Menu de Abas">Menu de Abas</a>
-		</div>
+	<aside id="left-sidebar-nav">
+		<ul class="sidebar-nav">
+			<li class="detalhes-proposta no-padding">
+				<div class="row">
+					<div class="col s12 m12 l12">
+						<p>
+							<i class="material-icons left tiny">lock_open</i>
+							<b>Proposta Cultural</b>
+						</p>
+						<p class="white-text">Proposta 248735</p>
+						<p class="white-text">Encontro com os proponentes</p>
+					</div>
+				</div>
+			</li>
 
-		<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'mensagens'), '', true); ?>" title="Ir para Mensagens">Mensagens</a>
+			<li class="no-padding">
+				<ul class="collapsible collapsible-accordion">
+					<li class="bold active">
+						<a id="informacaoinicial" class="collapsible-header waves-effect waves-cyan active" href="javascript:void(0);">Informações iniciais                                    </a>
+						<div class="collapsible-body" style="display: block;">
+							<ul>
+								<li>
+									<a class="waves-effect waves-cyan active" href="/proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/248735" title="Ir para Identificação da proposta">Identificação da proposta</a>
+								</li>
+								<li>
+									<a class="waves-effect waves-cyan " href="/proposta/manterpropostaincentivofiscal/responsabilidadesocial/idPreProjeto/248735" title="Ir para Responsabilidade Social">Responsabilidade Social</a>
+								</li>
+								<li>
+									<a class="waves-effect waves-cyan " href="/proposta/manterpropostaincentivofiscal/detalhestecnicos/idPreProjeto/248735" title="Ir para Detalhes técnicos">Detalhes técnicos</a>
+								</li>
+								<li>
+									<a class="waves-effect waves-cyan " href="/proposta/manterpropostaincentivofiscal/outrasinformacoes/idPreProjeto/248735" title="Ir para Outras informações">Outras informações</a>
+								</li>                    </ul>
+						</div>
+					</li>
+				</ul>
+			</li>
+			<li class="bold">
+				<a id="localderealizacoes" class="" href="/proposta/localderealizacao/index/idPreProjeto/248735" title="Ir para Local de realização">Local de realização</a>
+			</li>
+			<li class="bold">
+				<a id="planodedistribuicao" class="" href="/proposta/plano-distribuicao/index/idPreProjeto/248735" title="Ir para Plano de distribuição">Plano de distribuição</a>
+			</li>
+			<li class="no-padding">
+				<ul class="collapsible collapsible-accordion">
+					<li class="bold">
+						<a id="planodedistribuicao" class="collapsible-header waves-effect waves-cyan" href="javascript:void(0);">Orçamento do projeto                                    </a>
+						<div class="collapsible-body">
+							<ul>
 
-		<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'formularios'), '', true); ?>" title="Ir para Formul&aacute;rios">Formul&aacute;rios</a>
+								<li>
+									<a class="waves-effect waves-cyan " href="/proposta/manterorcamento/produtoscadastrados/idPreProjeto/248735" title="Ir para Custos por produtos">Custos por produtos</a>
+								</li>
+								<li>
+									<a class="waves-effect waves-cyan " href="/proposta/manterorcamento/planilhaorcamentariageral/idPreProjeto/248735" title="Ir para Visualizar planilha">Visualizar planilha</a>
+								</li>                    </ul>
+						</div>
+					</li>
+				</ul>
+			</li>
+			<li class="no-padding">
+				<ul class="collapsible collapsible-accordion">
+					<li class="bold">
+						<a id="itensorcamentario" class="collapsible-header waves-effect waves-cyan" href="javascript:void(0);">Itens orçamentários                                    </a>
+						<div class="collapsible-body">
+							<ul>
 
-		<a class="sanfona" href="#" title="Ir para M&aacute;scaras">M&aacute;scaras</a>
-		<div class="sanfonaDiv sumir">
-			<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'mascaras-js'), '', true); ?>" title="Ir para M&aacute;scaras em JavaScript">M&aacute;scaras em JavaScript</a>
-			<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'mascaras-php'), '', true); ?>" title="Ir para M&aacute;scaras em PHP">M&aacute;scaras em PHP</a>
-		</div>
-
-		<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'tabelas'), '', true); ?>" title="Ir para Tabelas">Tabelas</a>
-
-		<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'grids'), '', true); ?>" title="Ir para Grids">Grids</a>
-
-		<a class="no_seta" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'planilha'), '', true); ?>" title="Ir para Planilha">Planilha</a>
-
-		<a class="no_seta last" href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'modal'), '', true); ?>" title="Ir para Modal">Modal</a>
-
-	</div>
-	<br clear="left" class="br" />
-	<div class="bottom"></div>
-	<div id="espaco"></div>
+								<li>
+									<a class="waves-effect waves-cyan " href="/proposta/mantertabelaitens/index/idPreProjeto/248735?idPreProjeto=248735" title="Ir para Solicitar inclusão de itens">Solicitar inclusão de itens</a>
+								</li>
+								<li>
+									<a class="waves-effect waves-cyan " href="/proposta/mantertabelaitens/minhas-solicitacoes/idPreProjeto/248735?idPreProjeto=248735" title="Ir para Minhas solicitações">Minhas solicitações</a>
+								</li>                    </ul>
+						</div>
+					</li>
+				</ul>
+			</li>
+			<li class="bold">
+				<a id="anexardocumentos" class="" href="/proposta/manterpropostaedital/enviararquivoedital/idPreProjeto/248735?idPreProjeto=248735" title="Ir para Anexar documentos">Anexar documentos</a>
+			</li>
+			<li class="bold">
+				<a id="imprimir" class="" href="/proposta/Gerarimprimirpdf/index/idPreProjeto/248735" title="Ir para Gerar PDF">Gerar PDF</a>
+			</li>
+			<li class="bold">
+				<a id="mensagensenviadas" class="" href="/proposta/diligenciar/listardiligenciaproponente/idPreProjeto/248735" title="Ir para Diligências">Diligências</a>
+			</li>
+			<li class="bold">
+				<a id="excluirproposta" class="" href="javascript:void(0);" title="Ir para Excluir proposta">Excluir proposta</a>
+			</li>
+			<li class="bold">
+				<a id="enviarproposta" class="" href="/proposta/manterpropostaincentivofiscal/enviar-proposta/idPreProjeto/248735" title="Ir para Enviar proposta ao MinC">Enviar proposta ao MinC</a>
+			</li>        </ul>
+	</aside>
 </div>
 <!-- ========== FIM MENU ========== -->
+

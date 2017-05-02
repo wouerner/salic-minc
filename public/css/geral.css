@@ -249,9 +249,6 @@ header #topo #logo h1 {
 header #topo  #logo h1 a {
     display: block;
     height: 58px;
-
-    /*width: 224px;*/
-    /*margin-top: 3px;*/
 }
 
 
@@ -264,6 +261,9 @@ header #atalhos {
     right: 20px;
     width: 80%;
     text-align: right;
+    top: 20px;
+    right: 20px;
+    min-height: 45px;
 }
 
 header #atalhos a {
@@ -302,17 +302,6 @@ header #atalhos ul ul li:last-child a{
     padding-right: 30px;
 }
 
-/*header #atalhos a.btn-floating.small {*/
-    /*width: 25px;*/
-    /*height: 25px;*/
-    /*margin-top: 2px;*/
-/*}*/
-
-/*header #atalhos .btn-floating.small i {*/
-    /*line-height: 28px;*/
-    /*font-size: 1.3rem;*/
-/*}*/
-
 header #atalhos #combousuario {
     min-width: 530px;
     color: #212121;
@@ -320,12 +309,16 @@ header #atalhos #combousuario {
 }
 
 header #atalhos #combousuario input.select-dropdown {
+    padding: 0px;
+    margin: 0px;
     text-align: right;
     padding-right: 15px;
     border-bottom: none;
     font-size: 12px;
     text-transform: uppercase;
     font-weight: bold;
+    height: 2rem;
+    line-height: 2rem;
 }
 
 header #atalhos #combousuario select {
@@ -735,6 +728,114 @@ x - Menu lateral
 #menuContainer {
     z-index: 30;
 }
+
+/*--------------------------------------------------------------
+x - Sidebar
+--------------------------------------------------------------*/
+ul.sidebar-nav {
+    /*border-radius: 5px;*/
+    /*background: #fff;*/
+    /*box-shadow: 0px 1px 4px #9e9e9e;*/
+    /*overflow: hidden;*/
+    /*min-width: 100px;*/
+}
+
+ul.sidebar-nav ul {
+    /*margin: 0px;*/
+    /*padding: 0px;*/
+}
+.sidebar-nav .collapsible-header,
+.sidebar-nav .collapsible-body,
+.sidebar-nav .collapsible {
+    /*box-shadow: none;*/
+    /*border: none;*/
+    /*margin: 0;*/
+    /*padding-bottom: 0px;*/
+    /*padding-top: 0px;*/
+    /*padding: 0px;*/
+}
+
+.sidebar-nav a.collapsible-header,
+.sidebar-nav li a {
+    /*position: relative;*/
+    /*font-size: 12px;*/
+    /*!*color: #565656;*!*/
+    /*color: #212121;*/
+    /*line-height: 44px;*/
+    /*height: 44px;*/
+    /*padding: 0 30px;*/
+    /*display: block;*/
+    /*border: none;*/
+    /*border-bottom: 1px solid #D2D2D2;*/
+    /*overflow: hidden;*/
+}
+
+.sidebar-nav li a.active:before,
+.sidebar-nav a.collapsible-header:before {
+    /*content: "";*/
+    /*display: block;*/
+    /*position: absolute;*/
+    /*right: 16px;*/
+    /*top: 18px;*/
+    /*width: 0;*/
+    /*border-width: 6px 0 6px 6px;*/
+    /*border-style: solid;*/
+    /*border-color: transparent #666;*/
+}
+
+.sidebar-nav li a.active:before {
+    /*border-color: transparent #afaaaa;*/
+}
+
+.sidebar-nav a.collapsible-header.active:before {
+    /*border-width: 6px 6px 0px 6px;*/
+    /*border-color: #666 transparent;*/
+    /*top: 20px*/
+}
+
+.sidebar-nav a.collapsible-header.active,
+.sidebar-nav li a.active,
+.sidebar-nav a.collapsible-header:hover,
+.sidebar-nav li a:hover {
+    /*background: rgba(0, 0, 0, 0.11);*/
+}
+
+.sidebar-nav li .collapsible-body a {
+    /*border: none;*/
+    /*font-weight: normal;*/
+    /*color: #212121;*/
+    /*padding-left: 50px;*/
+
+}
+.sidebar-nav li .collapsible-body{
+    /*border-bottom: 1px solid #D2D2D2;*/
+}
+
+.sidebar-nav .detalhes-proposta .row {
+    /*margin-bottom: 0px;*/
+}
+
+.sidebar-nav .detalhes-proposta p {
+    /*line-height: 12pt;*/
+    /*padding: 0 0 2px;*/
+    /*font-size: 13px;*/
+    /*margin: 10px 0px;*/
+}
+
+.sidebar-nav .detalhes-proposta i {
+    /*margin-right: 5px;*/
+}
+
+@media screen and (max-width: 1300px) {
+    /*.sidebar-nav a.collapsible-header, .sidebar-nav li a {*/
+        /*padding: 0 10px;*/
+    /*}*/
+
+    /*.sidebar-nav li .collapsible-body a {*/
+        /*padding-left: 15px;*/
+    /*}*/
+}
+
 
 /*--------------------------------------------------------------
 x - CONTEÚDO
