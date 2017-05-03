@@ -13,6 +13,7 @@ $arrMenuProponente['principal'] = array(
     'label' => 'Informa&ccedil;&otilde;es iniciais',
     'title' => '',
     'url' => '',
+    'icon' => 'home',
     'menu' => array(),
     'grupo' => array()
 );
@@ -38,6 +39,7 @@ $arrMenuProponente['localderealizacoes'] = array(
     'label' => 'Local de realiza&ccedil;&atilde;o',
     'title' => '',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'index', 'idPreProjeto' => $idPreProjeto)),
+    'icon' => 'pin_drop',
     'menu' => array(),
     'grupo' => array()
 );
@@ -47,6 +49,7 @@ $arrMenuProponente['planodedistribuicao'] = array(
     'label' => 'Plano de distribui&ccedil;&atilde;o',
     'title' => 'Ir para plano de distribui&ccedil;&atilde;o',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'plano-distribuicao', 'action' => 'index', 'idPreProjeto' => $idPreProjeto)),
+    'icon' => 'multiline_chart',
     'menu' => array(),
     'grupo' => array()
 );
@@ -56,6 +59,7 @@ $arrMenuProponente['planilhaorcamentaria'] = array(
     'label' => 'Or&ccedil;amento do projeto',
     'title' => '',
     'url' => '',
+    'icon' => 'insert_chart',
     'menu' => array(),
     'grupo' => array()
 );
@@ -73,6 +77,7 @@ $arrMenuProponente['itensorcamentario'] = array(
     'label' => 'Itens or&ccedil;ament&aacute;rios',
     'title' => '',
     'url' => '',
+    'icon' => 'show_chart',
     'menu' => array(),
     'grupo' => array()
 );
@@ -90,6 +95,7 @@ $arrMenuProponente['anexardocumentos'] = array(
     'label' => 'Anexar documentos',
     'title' => '',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaedital', 'action' => 'enviararquivoedital')) . '?idPreProjeto=' . $idPreProjeto,
+    'icon' => 'attachment',
     'menu' => array(),
     'grupo' => array()
 );
@@ -99,6 +105,7 @@ $arrMenuProponente['imprimir'] = array(
     'label' => 'Gerar PDF',
     'title' => '',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'Gerarimprimirpdf', 'action' => 'index', 'idPreProjeto' => $idPreProjeto)),
+    'icon' => 'picture_as_pdf',
     'menu' => array(),
     'grupo' => array()
 );
@@ -108,6 +115,7 @@ $arrMenuProponente['mensagensenviadas'] = array(
     'label' => 'Dilig&ecirc;ncias',
     'title' => '',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaproponente', 'idPreProjeto' => $idPreProjeto)),
+    'icon' => 'announcement',
     'menu' => array(),
     'grupo' => array()
 );
@@ -121,6 +129,7 @@ if ($this->isEditavel) {
             'label' => 'Excluir proposta',
             'title' => '',
             'url' => '',
+            'icon' => 'delete_forever',
             'menu' => array(),
             'grupo' => array()
         );
@@ -130,6 +139,7 @@ if ($this->isEditavel) {
             'label' => 'Enviar proposta ao MinC',
             'title' => '',
             'url' => $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'enviar-proposta', 'idPreProjeto' => $idPreProjeto)),
+            'icon' => 'send',
             'menu' => array(),
             'grupo' => array()
         );
@@ -139,6 +149,7 @@ if ($this->isEditavel) {
             'label' => 'Encaminhar projeto ao MinC',
             'title' => '',
             'url' => $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'encaminharprojetoaominc', 'idPreProjeto' => $idPreProjeto)),
+            'icon' => 'send',
             'menu' => array(),
             'grupo' => array()
         );
@@ -147,29 +158,25 @@ if ($this->isEditavel) {
 }
 ?>
 <div class="col s2 m12 l2">
-    <aside id="left-sidebar-nav">
+    <aside id="left-sidebar-nav" class="side-nav fixed">
         <ul class="sidebar-nav">
-            <li class="detalhes-proposta <?php echo (!$this->isEditavel) ? 'grey' : 'green'; ?> darken-2 no-padding">
-                <div class="row">
-                    <div class="col s12 m12 l12">
-                        <p class="white-text">
-                            <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
-                            <b><?php echo $this->layout['titleFull']; ?></b>
-                        </p>
-                        <p class="white-text">
-                            <?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
-                            <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?>
-                        </p>
-                        <p class="white-text"><?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?></p>
-                        <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>
-                            <p class="white-text">
-                                <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
-                                <i class="material-icons left tiny">query_builder</i>
-                                <span id="cronometro"></span>
-                            </p>
-                        <?php endif; ?>
-                    </div>
-                </div>
+            <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'grey' : 'green'; ?> darken-2 ">
+                <p class="white-text">
+                    <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
+                    <b><?php echo $this->layout['titleFull']; ?></b>
+                </p>
+                <p class="white-text">
+                    <?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
+                    <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?>
+                </p>
+                <p class="white-text"><?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?></p>
+                <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>
+                    <p class="white-text">
+                        <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
+                        <i class="material-icons left tiny">query_builder</i>
+                        <span id="cronometro"></span>
+                    </p>
+                <?php endif; ?>
             </li>
             <?php echo $this->partialLoop('inc/item.phtml', $arrMenuProponente); ?>
         </ul>

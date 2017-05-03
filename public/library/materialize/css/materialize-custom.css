@@ -187,12 +187,11 @@ x - Botões
 
 .btn-warning {}
 
-.btn-success {}
-
 .btn-info {
     background: #212121;
     color: #fff;
 }
+
 .btn-info:focus,
 .btn-info:hover {
     background: #757575;
