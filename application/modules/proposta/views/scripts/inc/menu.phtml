@@ -160,7 +160,7 @@ if ($this->isEditavel) {
 <div class="col s2 m12 l2">
     <aside id="left-sidebar-nav" class="side-nav fixed">
         <ul class="sidebar-nav">
-            <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'grey' : 'green'; ?> darken-2 ">
+            <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'grey disabled' : 'green'; ?> darken-2 ">
                 <p class="white-text">
                     <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
                     <b><?php echo $this->layout['titleFull']; ?></b>

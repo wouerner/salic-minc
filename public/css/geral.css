@@ -466,6 +466,17 @@ x - CONTAINER
     min-height: 500px;
 }
 
+.content-wrap {
+    margin-left: 0px;
+}
+
+.menu-lateral-visivel .content-wrap {
+    margin-left: 250px;
+}
+
+.menu-lateral-visivel-menor .content-wrap {
+    margin-left: 250px;
+}
 
 /*--------------------------------------------------------------
 x - Container-fluid
@@ -648,7 +659,7 @@ x - TITULO
 
 
 /*--------------------------------------------------------------
-x - SIDEBAR - #menuContainer -  - Menu lateral
+x - SIDEBAR (legado) - #menuContainer -  - Menu lateral
 --------------------------------------------------------------*/
 #menuContainer {
     background: #36963f;
@@ -730,15 +741,16 @@ x - Menu lateral
 }
 
 /*--------------------------------------------------------------
-x - Sidebar
+x - Sidebar (nova)
 --------------------------------------------------------------*/
 aside#left-sidebar-nav {
     margin-top: 99px;
     max-width: 250px !important;
-    transition: transform .3s ease,width .3s ease;
+    /*transition: transform .3s ease,width .3s ease;*/
     background-color: #35384C;
     position: absolute;
 }
+
 body.nav-fixed aside#left-sidebar-nav {
     margin-top:40px;
     position: fixed;
@@ -795,8 +807,6 @@ ul.sidebar-nav ul {
     margin-right: 5px;
     color: inherit;
 }
-
-
 
 .sidebar-nav .collapsible-header,
 .side-nav.fixed .collapsible-header,
@@ -930,7 +940,7 @@ aside#left-sidebar-nav::-webkit-scrollbar-thumb {
 }
 
 /*--------------------------------------------------------------
-x - CONTEÚDO
+x - CONTEÚDO (legado)
 --------------------------------------------------------------*/
 #conteudo {
     margin-bottom: 20px;

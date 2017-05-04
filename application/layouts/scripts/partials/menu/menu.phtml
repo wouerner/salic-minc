@@ -710,7 +710,8 @@ if (isset ($auth['cpf'])) {
 <div id="navbar-header">
     <nav class="">
         <div class="nav-wrapper  container">
-            <a  href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            <a href="#" data-activates="left-sidebar-nav" class="button-collapse left"><i class="material-icons">menu</i></a>
+            <a href="#" data-activates="nav-mobile" class="button-collapse right"><i class="material-icons">menu</i></a>
             <ul class="left hide-on-med-and-down">
                 <?php echo $this->partialLoop('partials/menu/item.phtml', $arrMenu); ?>
             </ul>
