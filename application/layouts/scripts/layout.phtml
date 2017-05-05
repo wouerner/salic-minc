@@ -6,7 +6,7 @@
     echo $this->partial('partials/head.phtml');
     ?>
 </head>
-<body>
+<body class="nano-menu">
 <header>
     <?php $auth = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity()); ?>
     <div id="topo" style="">

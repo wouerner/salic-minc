@@ -158,16 +158,13 @@ if ($this->isEditavel) {
 }
 ?>
 <div class="col s2 m12 l2">
-    <aside id="left-sidebar-nav" class="side-nav fixed">
-        <ul class="sidebar-nav">
-            <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'grey disabled' : 'green'; ?> darken-2 ">
+    <aside id="sidebar">
+        <ul id="sidenav" class="side-nav fixed">
+            <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'disabled' : ''; ?>">
                 <p class="white-text">
                     <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
-                    <b><?php echo $this->layout['titleFull']; ?></b>
-                </p>
-                <p class="white-text">
-                    <?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
-                    <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?>
+                    <b><?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
+                    <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?></b>
                 </p>
                 <p class="white-text"><?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?></p>
                 <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>

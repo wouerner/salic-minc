@@ -712,8 +712,8 @@ if (isset ($auth['cpf'])) {
 <div id="navbar-header">
     <nav class="">
         <div class="nav-wrapper  container">
-            <a href="#" data-activates="left-sidebar-nav" class="button-collapse left"><i class="material-icons">menu</i></a>
-            <a href="#" data-activates="nav-mobile" class="button-collapse right"><i class="material-icons">menu</i></a>
+            <a id="menu-left" href="#" data-activates="sidenav" class="button-collapse left"><i class="material-icons">menu</i></a>
+            <a id="menu-right" href="#" data-activates="nav-mobile" class="button-collapse right"><i class="material-icons">menu</i></a>
             <ul class="left hide-on-med-and-down">
                 <?php echo $this->partialLoop('partials/menu/item.phtml', $arrMenu); ?>
             </ul>
@@ -723,6 +723,7 @@ if (isset ($auth['cpf'])) {
 <!--                <li><a class="white-text" href="sass.html"><i class="material-icons">power_settings_new</i></a></li>-->
 <!--                <li><a class="white-text" href="mobile.html"><i class="material-icons">more_vert</i></a></li>-->
             </ul>
+
             <ul class="side-nav" id="nav-mobile">
                 <?php echo $this->partialLoop('partials/menu/item-side-nav.phtml', $arrMenu); ?>
             </ul>
@@ -731,7 +732,12 @@ if (isset ($auth['cpf'])) {
     </nav>
 </div>
 <script>
-    $3(".button-collapse").sideNav();
+    $3(document).ready(function(){
+        $3("#menu-left").sideNav({edge: 'left', menuWidth: 250});
+        $3("#menu-right").sideNav({edge: 'right'});
+    });
+
+
 //    $3('.dropdown-button').dropdown({
 //            inDuration: 300,
 //            outDuration: 225,
@@ -744,19 +750,29 @@ if (isset ($auth['cpf'])) {
 //    );
     $3(document).ready(function(){
         $3(window).scroll(function(){
-            if($(window).scrollTop() > '60'){
-                $("#navbar-header").addClass('navbar-fixed');
-                $("body").addClass('nav-fixed');
+            if($3(window).scrollTop() > '59'){
+                $3("#navbar-header").addClass('navbar-fixed');
+                $3("body").addClass('nav-fixed');
             } else{
-                $("#navbar-header").removeClass('navbar-fixed');
-                $("body").removeClass('nav-fixed');
+                $3("#navbar-header").removeClass('navbar-fixed');
+                $3("body").removeClass('nav-fixed');
             }
 
         });
 
-        if($(window).scrollTop() > '60'){
-            $("#navbar-header").addClass('navbar-fixed');
-            $("body").addClass('nav-fixed');
+        if($3(window).scrollTop() > '60'){
+            $3("#navbar-header").addClass('navbar-fixed');
+            $3("body").addClass('nav-fixed');
         }
-    })
+
+        //@todo isso eh temoprario, ate a migracao do layout
+        if ($3('#sidenav').length && $3('#sidenav').is(":visible")) {
+            $3('body').addClass('menu-lateral-visivel');
+        }
+
+        // Ajuste na sidebar
+        var height = $3('body').height();
+        $3('#sidenav').css('min-height', height - 100);
+
+    });
 </script>
