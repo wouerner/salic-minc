@@ -714,6 +714,7 @@ if (isset ($auth['cpf'])) {
         <div class="nav-wrapper  container">
             <a id="menu-left" href="#" data-activates="sidenav" class="button-collapse left"><i class="material-icons">menu</i></a>
             <a id="menu-right" href="#" data-activates="nav-mobile" class="button-collapse right"><i class="material-icons">menu</i></a>
+
             <ul class="left hide-on-med-and-down">
                 <?php echo $this->partialLoop('partials/menu/item.phtml', $arrMenu); ?>
             </ul>
@@ -765,14 +766,33 @@ if (isset ($auth['cpf'])) {
             $3("body").addClass('nav-fixed');
         }
 
-        //@todo isso eh temoprario, ate a migracao do layout
+        //@todo isso eh temporario, ate a migracao do layout
         if ($3('#sidenav').length && $3('#sidenav').is(":visible")) {
+
             $3('body').addClass('menu-lateral-visivel');
+
+            $3('#navbar-header nav .container').prepend('<a id="nano-menu-button" href="#" class="left hide-on-med-and-down"><i class="material-icons">more_vert</i></a>');
+
         }
 
-        // Ajuste na sidebar
+        // Ajuste na sidebar, quando faz scroll ela dá um bug
         var height = $3('body').height();
         $3('#sidenav').css('min-height', height - 100);
+
+        $3('#nano-menu-button').on('click', function(){
+            $(this).find('i').text('more_horiz');
+            $3('body').toggleClass('nano-menu');
+
+            if($3('body.nano-menu').is(':visible')){
+                $(this).find('i').text('more_horiz');
+            }else {
+                $(this).find('i').text('more_vert');
+            }
+
+        });
+
+
+
 
     });
 </script>

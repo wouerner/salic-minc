@@ -817,6 +817,8 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         try {
             $validacao = new stdClass();
 
+
+
             $tbPreProjeto = new Proposta_Model_DbTable_PreProjeto();
             $arrResultado = $tbPreProjeto->spChecklistParaApresentacaoDeProposta($idPreProjeto);
 

@@ -161,19 +161,25 @@ if ($this->isEditavel) {
     <aside id="sidebar">
         <ul id="sidenav" class="side-nav fixed">
             <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'disabled' : ''; ?>">
-                <p class="white-text">
-                    <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
-                    <b><?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
-                    <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?></b>
-                </p>
-                <p class="white-text"><?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?></p>
+                <div>
+                    <p>
+                        <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
+                        <b>
+                            <?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
+                            <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?>
+                        </b>
+                    </p>
+                    <p class="info-title">
+                        <?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?>
+                    </p>
                 <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>
-                    <p class="white-text">
+                    <p class="">
                         <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
                         <i class="material-icons left tiny">query_builder</i>
                         <span id="cronometro"></span>
                     </p>
                 <?php endif; ?>
+                </div>
             </li>
             <?php echo $this->partialLoop('inc/item.phtml', $arrMenuProponente); ?>
         </ul>
