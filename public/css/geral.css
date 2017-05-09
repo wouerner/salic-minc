@@ -1695,6 +1695,47 @@ x - CORES
 .CS { color:#06f; }
 
 /*--------------------------------------------------------------
+x - content
+--------------------------------------------------------------*/
+.content-wrap {
+    padding: 2rem;
+}
+
+.content-wrap .page-title {
+    display: block;
+    margin: -2rem -2rem 2rem;
+    padding: 1.53846rem 2rem;
+    border-bottom: 1px solid #DEE1EC;
+    background: #fff;
+}
+
+.content-wrap .page-title h1 {
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    margin: 0 15px 0 0;
+}
+
+.content-wrap .page-title ul {
+    color: #7C7E89;
+    margin: 5px 0 0;
+}
+
+.content-wrap .page-title li {
+    display: inline-block;
+}
+
+.content-wrap .page-title li .sp-cancel,
+.content-wrap .page-title li a {
+    color: inherit;
+    padding: 0 6px;
+}
+
+.content-wrap .page-title li:first-child .sp-cancel,
+.content-wrap .page-title li:first-child a {
+    padding-left: 0;
+}
+
+/*--------------------------------------------------------------
 x - PLANILHAS
 --------------------------------------------------------------*/
 .planilha_incentivo div.plan, .total_planilha_incentivo {
