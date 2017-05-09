@@ -771,7 +771,7 @@ if (isset ($auth['cpf'])) {
 
             $3('body').addClass('menu-lateral-visivel');
 
-            $3('#navbar-header nav .container').prepend('<a id="nano-menu-button" href="#" class="left hide-on-med-and-down"><i class="material-icons">more_vert</i></a>');
+            $3('#navbar-header nav').prepend('<a id="nano-menu-button" href="#" class="left hide-on-med-and-down"><i class="material-icons">more_vert</i></a>');
 
         }
 
@@ -780,19 +780,16 @@ if (isset ($auth['cpf'])) {
         $3('#sidenav').css('min-height', height - 100);
 
         $3('#nano-menu-button').on('click', function(){
-            $(this).find('i').text('more_horiz');
+            $3(this).find('i').text('more_horiz');
             $3('body').toggleClass('nano-menu');
 
             if($3('body.nano-menu').is(':visible')){
-                $(this).find('i').text('more_horiz');
+                $3(this).find('i').text('more_horiz');
             }else {
-                $(this).find('i').text('more_vert');
+                $3(this).find('i').text('more_vert');
             }
-
+            return false;
         });
-
-
-
 
     });
 </script>
