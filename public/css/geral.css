@@ -474,117 +474,6 @@ x - CONTAINER
 }
 
 /*--------------------------------------------------------------
-x - Container-fluid
---------------------------------------------------------------*/
-.container-fluid #breadcrumb {
-    left: 0px;
-}
-
-.container-fluid #novo-titulo {
-}
-
-.container-fluid #novo-titulo div {
-    background: transparent;
-    padding: 0px;
-}
-
-.container-fluid #novo-titulo .voltar {
-    background: transparent;
-    color: #1D5B22;
-    font-size: 18px;
-    line-height: 22px;
-}
-
-.container-fluid #novo-titulo .voltar i {
-    margin-right: 5px;
-    font-size: 20px;
-}
-
-.container-fluid table {
-    margin: 0px;
-    width: 100%;
-    background: transparent;
-}
-
-.container-fluid table td {
-    background: transparent;
-}
-
-.container-fluid table.tabela .btn-localizar {
-    margin-top: 20px;
-}
-
-.container-fluid form#frmNovaProposta table th {
-    background: #abda5d;
-    padding: 10px;
-    color: #3a7300;
-    text-transform: uppercase;
-    font-size: 13px;
-    border-bottom: 3px solid #dddddd;
-    background: transparent;
-}
-
-.container-fluid form#frmNovaProposta table td {
-    padding: 20px 0px;
-}
-
-.container-fluid table td a:not(.btn) {
-    text-decoration: underline;
-}
-
-.container-fluid form#frmNovaProposta table td .btn {
-    margin-right: 15px;
-}
-
-.container-fluid .loading {
-    text-align: center;
-}
-
-.container-fluid .loading {
-    width: 600px;
-    margin: 0 auto;
-}
-
-.container-fluid select {
-    background: transparent;
-    border: 1px solid #ddd;
-}
-
-.container-fluid {
-    margin-left: 0px;
-}
-
-/* remover apos migracao do layout */
-.menu-lateral-visivel .container-fluid .row .col.s2.m12.l2 {
-    margin: 0;
-    width: 0;
-    padding: 0;
-}
-
-/* remover apos migracao do layout */
-@media only screen and (min-width: 993px) {
-    .menu-lateral-visivel .container-fluid > .row > .col.s10.m12.l10  {
-        width: 100% !important;
-    }
-}
-
-@media screen and (min-width: 990px) {
-    .menu-lateral-visivel .container-fluid {
-        transition: margin-left .3s ease;
-        padding-left: 250px;
-    }
-
-    .nano-menu .container-fluid {
-        transition: margin-left .3s ease;
-        padding-left: 70px;
-    }
-
-    .menu-lateral-visivel footer {
-        padding-left: 100px;
-    }
-}
-
-/*--------------------------------------------------------------
 x - BREADCRUMB
 --------------------------------------------------------------*/
 
@@ -1709,9 +1598,19 @@ x - content
     background: #fff;
 }
 
+.content-wrap .page-title .row {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.content-wrap .page-title .row .col {
+    padding: 0px;
+}
+
+
 .content-wrap .page-title h1 {
-    font-size: 1.8rem;
-    line-height: 1.8rem;
+    font-size: 2rem;
+    line-height: 2rem;
     margin: 0 15px 0 0;
 }
 
@@ -1728,12 +1627,141 @@ x - content
 .content-wrap .page-title li a {
     color: inherit;
     padding: 0 6px;
+    font-size: 12px
+}
+
+.content-wrap .page-title li a i {
+    font-size: 14px;
+    line-height: 13px;
+    vertical-align: middle;
 }
 
 .content-wrap .page-title li:first-child .sp-cancel,
 .content-wrap .page-title li:first-child a {
     padding-left: 0;
 }
+
+
+/*--------------------------------------------------------------
+x - Container-fluid
+--------------------------------------------------------------*/
+.container-fluid #breadcrumb {
+    left: 0px;
+}
+
+.container-fluid #novo-titulo {
+}
+
+.container-fluid #novo-titulo div {
+    background: transparent;
+    padding: 0px;
+}
+
+.container-fluid #novo-titulo .voltar {
+    background: transparent;
+    color: #1D5B22;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.container-fluid #novo-titulo .voltar i {
+    margin-right: 5px;
+    font-size: 20px;
+}
+
+.container-fluid table {
+    margin: 0px;
+    width: 100%;
+    background: transparent;
+}
+
+.container-fluid table td {
+    background: transparent;
+}
+
+.container-fluid table.tabela .btn-localizar {
+    margin-top: 20px;
+}
+
+.container-fluid form#frmNovaProposta table th {
+    background: #abda5d;
+    padding: 10px;
+    color: #3a7300;
+    text-transform: uppercase;
+    font-size: 13px;
+    border-bottom: 3px solid #dddddd;
+    background: transparent;
+}
+
+.container-fluid form#frmNovaProposta table td {
+    padding: 20px 0px;
+}
+
+.container-fluid table td a:not(.btn) {
+    text-decoration: underline;
+}
+
+.container-fluid form#frmNovaProposta table td .btn {
+    margin-right: 15px;
+}
+
+.container-fluid .loading {
+    text-align: center;
+}
+
+.container-fluid .loading {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.container-fluid select {
+    background: transparent;
+    border: 1px solid #ddd;
+}
+
+.container-fluid {
+    margin-left: 0px;
+}
+
+/* remover apos migracao do layout */
+.menu-lateral-visivel .container-fluid .row .col.s2.m12.l2 {
+    margin: 0;
+    width: 0;
+    padding: 0;
+}
+
+/* remover apos migracao do layout */
+@media only screen and (min-width: 993px) {
+    .menu-lateral-visivel .container-fluid > .row > .col.s10.m12.l10  {
+        width: 100% !important;
+    }
+}
+
+@media screen and (min-width: 990px) {
+    .menu-lateral-visivel .container-fluid {
+        transition: margin-left .3s ease;
+        margin-left: 250px;
+        width: auto;
+    }
+
+    .menu-lateral-visivel footer,
+    .menu-lateral-visivel footer.page-footer {
+        margin-left: 100px;
+        width: auto;
+    }
+
+    .menu-lateral-visivel footer,
+    .menu-lateral-visivel footer.page-footer {
+        margin-left: 100px;
+        width: auto;
+    }
+
+    .nano-menu footer.page-footer,
+    .nano-menu .container-fluid {
+        margin-left: 70px;
+    }
+}
+
 
 /*--------------------------------------------------------------
 x - PLANILHAS
