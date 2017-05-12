@@ -1,3 +1,5 @@
+<?php echo $this->partial('manual/inc/menu.inc.phtml', $this); ?>
+
 <div class="container-fluid">
 	<div class="page-title">
 		<div class="row">
@@ -20,22 +22,20 @@
 	</div>
 
 	<div class="content">
-		<p>
-			Esse é o esqueleto de uma página simples, sem menu.
-			Caso a página contenha textos fora de tabelas, crie uma <strong>div</strong>
-			com o atributo <strong>id="miolo"</strong> e coloque o conteúdo dentro da mesma.
-			Caso precise utilizar a margem mais de uma vez na mesma página, utilize o atributo <strong>class="miolo"</strong>.
-			Esse é um exemplo de texto que está fora de <strong>&lt;div id="miolo"&gt; &lt;/div&gt;</strong>.
-		</p>
+		<p>Esse é o esqueleto de uma página com menu lateral.</p>
+
 		<br />
 
-		<table class="tabela">
-			<tr>
-				<th>Esqueleto de Página Simples</th>
-			</tr>
-			<tr>
-				<td>Esse é o esqueleto de uma página simples, sem menu.</td>
-			</tr>
-		</table>
+		<p>
+			Crie uma pasta chamada <strong>inc</strong> dentro de sua view e utilize o arquivo
+			<strong>/application/modules/layout/views/scripts/manual/inc/menu.inc.phtml</strong> como exemplo.
+		</p>
+
+		<br />
+
+		<p>
+			Inclua o arquivo no início da view que utilizará o menu lateral:
+			<strong>echo $this->partial('manual/inc/menu.inc.phtml', $this);</strong>
+		</p>
 	</div>
 </div>

@@ -651,7 +651,6 @@ x - Sidebar (nova)
 #sidebar {
     height: 100%;
     display: block;
-    background-color: green;
 }
 #sidenav {
     max-width: 250px;
@@ -661,7 +660,7 @@ x - Sidebar (nova)
     height: 100%;
     height: calc(100% - 99px);
     padding-bottom: 99px;
-
+    overflow-x: hidden;
 }
 
 @media only screen and (min-width: 993px) {
@@ -669,8 +668,6 @@ x - Sidebar (nova)
         transition: transform .3s ease,width .3s ease;
     }
 }
-
-
 
 body.nav-fixed #sidenav {
     top:40px;
@@ -718,7 +715,8 @@ body.nav-fixed #sidenav {
 }
 
 #sidenav li.active {
-    background-color: rgba(0, 0, 0, 0.33);
+    /*background-color: rgba(0, 0, 0, 0.33);*/
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 #sidenav li > a > i.material-icons,
@@ -760,15 +758,26 @@ body.nav-fixed #sidenav {
     width: 0;
     border-width: 6px 0 6px 6px;
     border-style: solid;
-    border-color: transparent #666;
+
+    border-color: transparent #afaaaa;
+
+    border-width: 8px 8px 8px 0px;
 }
 
 #sidenav li a.active:before {
-    border-color: transparent #afaaaa;
+    border-style: solid;
+    border-width: 8px 0 8px 8px;
+    border-color: transparent #666;
+    border-color: transparent #666;
+
+}
+
+#sidenav li a.active:before {
+
 }
 
 #sidenav a.collapsible-header.active:before {
-    border-width: 6px 6px 0px 6px;
+    border-width: 8px 8px 0px 8px;
     border-color: #666 transparent;
     top: 20px
 }
@@ -779,7 +788,7 @@ body.nav-fixed #sidenav {
 }
 
 #sidenav li .collapsible-body a.active {
-    background-color: #101117;
+    background-color: #232533;
 }
 
 /*************  nano-menu *************/
@@ -923,6 +932,7 @@ body.nav-fixed #sidenav {
     bottom: 8px;
     color: #fff;
 }
+
 /*--------------------------------------------------------------
 x - CONTEÚDO (legado)
 --------------------------------------------------------------*/
@@ -1586,58 +1596,61 @@ x - CORES
 /*--------------------------------------------------------------
 x - content
 --------------------------------------------------------------*/
-.content-wrap {
+.container-fluid {
+    margin: 0 auto;
+    width: 100%;
     padding: 2rem;
 }
 
-.content-wrap .page-title {
+.container-fluid .page-title {
     display: block;
     margin: -2rem -2rem 2rem;
-    padding: 1.53846rem 2rem;
+    padding: 1rem 2rem;
     border-bottom: 1px solid #DEE1EC;
     background: #fff;
 }
 
-.content-wrap .page-title .row {
+.container-fluid .page-title .row {
     margin-bottom: 0;
     margin-top: 0;
 }
 
-.content-wrap .page-title .row .col {
+.container-fluid .page-title .row .col {
     padding: 0px;
 }
 
 
-.content-wrap .page-title h1 {
+.container-fluid .page-title h1 {
     font-size: 2rem;
     line-height: 2rem;
     margin: 0 15px 0 0;
+    color: #404040;
 }
 
-.content-wrap .page-title ul {
+.container-fluid .page-title ul {
     color: #7C7E89;
     margin: 5px 0 0;
 }
 
-.content-wrap .page-title li {
+.container-fluid .page-title li {
     display: inline-block;
 }
 
-.content-wrap .page-title li .sp-cancel,
-.content-wrap .page-title li a {
+.container-fluid .page-title li .sp-cancel,
+.container-fluid .page-title li a {
     color: inherit;
     padding: 0 6px;
     font-size: 12px
 }
 
-.content-wrap .page-title li a i {
+.container-fluid .page-title li a i {
     font-size: 14px;
     line-height: 13px;
     vertical-align: middle;
 }
 
-.content-wrap .page-title li:first-child .sp-cancel,
-.content-wrap .page-title li:first-child a {
+.container-fluid .page-title li:first-child .sp-cancel,
+.container-fluid .page-title li:first-child a {
     padding-left: 0;
 }
 
@@ -1742,6 +1755,7 @@ x - Container-fluid
         transition: margin-left .3s ease;
         margin-left: 250px;
         width: auto;
+        overflow: hidden;
     }
 
     .menu-lateral-visivel footer,
@@ -2848,6 +2862,28 @@ header #atalhos #combousuario {color: #fff}
     color: #3c3b3b;
 }
 
+table.dataTable thead th,
+#conteudo table th {
+    background-color: rgb(65, 129, 150);
+}
+
+.btn,
+.btn-large,
+.btn-default,
+.btn-sucess,
+.btn-default,
+.btn-success {
+    background: #2a6b81;
+    color: #fff;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #2a6b81 !important;
+    color: #fff !important;
+}
+
+
 /*!*--------------------------------------------------------------*/
 /*x - CORES contraste*/
 /*--------------------------------------------------------------*!*/
@@ -2861,4 +2897,28 @@ header #atalhos #combousuario {color: #fff}
 /*#titulo {*/
     /*background: linear-gradient(to bottom, #2a6b81 0%,rgba(53, 131, 159, 0) 0%,rgba(53, 131, 159, 0.15) 100%);*/
     /*color: #3c3b3b;*/
+/*}*/
+
+
+/*!*--------------------------------------------------------------*/
+/*x - Sidebar (cinza)*/
+/*--------------------------------------------------------------*!*/
+/*#sidenav {*/
+    /*background-color: #eeeeee;*/
+
+/*}*/
+
+/*#sidenav .sidebar-info {*/
+    /*!*background-color: green;*!*/
+/*}*/
+
+/*#sidenav a.collapsible-header,*/
+/*#sidenav.fixed a.collapsible-header,*/
+/*#sidenav li > a.collapsible-header,*/
+/*#sidenav li > a {*/
+    /*color: #404040;*/
+/*}*/
+
+/*#sidenav li .collapsible-body a.active {*/
+    /*background-color: #e4e4e4;*/
 /*}*/
