@@ -651,6 +651,8 @@ x - Sidebar (nova)
 #sidebar {
     height: 100%;
     display: block;
+    max-width: 250px;
+    display: inline;
 }
 #sidenav {
     max-width: 250px;
