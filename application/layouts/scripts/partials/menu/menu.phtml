@@ -772,12 +772,11 @@ if (isset ($auth['cpf'])) {
             $3('body').addClass('menu-lateral-visivel');
 
             $3('#navbar-header nav').prepend('<a id="nano-menu-button" href="#" class="left hide-on-med-and-down"><i class="material-icons">more_vert</i></a>');
-
         }
 
         // Ajuste na sidebar, quando faz scroll ela dá um bug
         var height = $3('body').height();
-        $3('#sidenav').css('min-height', height - 100);
+        $3('#sidenav, .qmmc').css('min-height', height - 100);
 
         $3('#nano-menu-button').on('click', function(){
             $3(this).find('i').text('more_horiz');
@@ -789,6 +788,13 @@ if (isset ($auth['cpf'])) {
                 $3(this).find('i').text('more_vert');
             }
             return false;
+        });
+
+        // menu legado
+        $3( ".sanfonaDiv:hidden" ).each(function(index){
+           if( $3(this).children().length > 0 ) {
+               $3(this).prev().addClass('submenu');
+           }
         });
 
     });

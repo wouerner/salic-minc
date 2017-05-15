@@ -606,43 +606,126 @@ x - SIDEBAR (legado) - #menuContainer -  - Menu lateral
 x - Menu lateral (legado)
 --------------------------------------------------------------*/
 #menuContexto {
-    width: 224px;
-    position: relative;
-    left: 9px;
-    background: url(../img/sombra-menu-contexto.gif) right repeat-y #fff;
-    margin-bottom: 300px;
+    /*width: 224px;*/
+    /*position: relative;*/
+    /*left: 9px;*/
+    /*background: url(../img/sombra-menu-contexto.gif) right repeat-y #fff;*/
+    /*margin-bottom: 300px;*/
 }
 
 #menuContexto .top {
-    background: url(../img/sombra-menu-contexto-top.gif) no-repeat;
-    height: 11px;
+    /*background: url(../img/sombra-menu-contexto-top.gif) no-repeat;*/
+    /*height: 11px;*/
 }
 
 #menuContexto .bottom {
-    background: url(../img/sombra-menu-contexto-bottom.gif) no-repeat;
-    height: 11px;
+    /*background: url(../img/sombra-menu-contexto-bottom.gif) no-repeat;*/
+    /*height: 11px;*/
 }
 
 #menuContexto .last {
-    border-bottom: none;
+    /*border-bottom: none;*/
 }
 
 #menuContexto br.br {
-    line-height: 1px;
+    /*line-height: 1px;*/
 }
 
 #menuContexto #espaco {
-    background: #f8f8f8;
-    height: auto;
+    /*background: #f8f8f8;*/
+    /*height: auto;*/
 }
 
 #menu #container {
-    position: relative;
-    top: 10px;
+    /*position: relative;*/
+    /*top: 10px;*/
 }
 
 #menuContainer {
-    z-index: 30;
+    /*z-index: 30;*/
+}
+
+#menuContexto {
+    display: block;
+    height:100%;
+    min-width: 230px;
+    min-height: 500px;
+    /*position: relative;*/
+}
+
+#qm0,
+#qm0.qmmc {
+    position: absolute !important;
+    left: 0;
+    width: 230px;
+    max-width: 230px;
+    margin: 0;
+    overflow-y: auto;
+    will-change: transform;
+    background-color: #35384C;
+    height: 100%;
+    height: calc(100% - 99px);
+    padding-bottom: 99px;
+    overflow-x: hidden;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+
+.nav-fixed #qm0,
+.nav-fixed #qm0.qmmc {
+    top:40px;
+    position: fixed !important;
+    height: 100%;
+    height: calc(100% - 40px);
+    height: -moz-calc(100% - 40px);
+    padding-bottom: 40px;
+}
+
+#qm0.qmmc a.submenu,
+#qm0.qmmc .sanfonaDiv > a.sanfona,
+#qm0.qmmc a.sanfona,
+#qm0.qmmc a {
+    color: rgba(0, 0, 0, 0.87);
+    display: block;
+    height: 48px;
+    line-height: 48px;
+    cursor: pointer;
+    color: #D8D8D8;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 0 20px;
+    position: relative !important;
+    overflow: hidden;
+}
+
+#qm0.qmmc a:hover {
+    background-color: #2d2f40;
+}
+#qm0.qmmc div {
+    width: 100% !important;
+    background-color: #232533;
+}
+
+
+#qm0.qmmc div a {
+    font-size: 13px;
+    line-height: 13px;
+    padding: 15px 5px 0 40px;
+    clear: both;
+    width: 100%;
+}
+
+#qm0.qmmc a.submenu:before,
+#qm0.qmmc .sanfonaDiv > a.sanfona:before,
+#qm0.qmmc a.sanfona:before {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 16px;
+    top: 18px;
+    width: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 8px;
+    border-color: transparent #afaaaa;
 }
 
 /*--------------------------------------------------------------
@@ -758,11 +841,8 @@ body.nav-fixed #sidenav {
     right: 16px;
     top: 18px;
     width: 0;
-    border-width: 6px 0 6px 6px;
     border-style: solid;
-
     border-color: transparent #afaaaa;
-
     border-width: 8px 8px 8px 0px;
 }
 
@@ -770,16 +850,11 @@ body.nav-fixed #sidenav {
     border-style: solid;
     border-width: 8px 0 8px 8px;
     border-color: transparent #666;
-    border-color: transparent #666;
-
-}
-
-#sidenav li a.active:before {
 
 }
 
 #sidenav a.collapsible-header.active:before {
-    border-width: 8px 8px 0px 8px;
+    border-width: 8px 8px 0 8px;
     border-color: #666 transparent;
     top: 20px
 }
