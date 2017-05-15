@@ -650,13 +650,14 @@ x - Menu lateral (legado)
     height:100%;
     min-width: 230px;
     min-height: 500px;
-    /*position: relative;*/
+    position: relative;
 }
 
 #qm0,
 #qm0.qmmc {
     position: absolute !important;
     left: 0;
+    top: 0;
     width: 230px;
     max-width: 230px;
     margin: 0;
@@ -670,9 +671,15 @@ x - Menu lateral (legado)
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
 }
 
+.container-fluid #qm0.qmmc {
+    left: -42px;
+    top: -31px;
+}
+
 .nav-fixed #qm0,
 .nav-fixed #qm0.qmmc {
     top:40px;
+    left: 0px;
     position: fixed !important;
     height: 100%;
     height: calc(100% - 40px);
@@ -1828,6 +1835,7 @@ x - Container-fluid
 }
 
 @media screen and (min-width: 990px) {
+    .menu-lateral.container-fluid,
     .menu-lateral-visivel .container-fluid {
         transition: margin-left .3s ease;
         margin-left: 250px;
