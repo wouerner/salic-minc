@@ -1,3 +1,19 @@
+Release 2.0.9
+  *	Fix: [Análise de projeto] Erro no layout
+  *	Fix: [Comprovação financeira] Ajuste nos titulos da tela
+  *	Fix: [Comprovação financeira] Erro ao tentar enviar
+  * Update: [Envio proposta cultural] Adicionando segmentos que não necessitam validar o CNAE do proponente
+  * Update: [Proposta] Adicionando criterio para busca
+  * Update: [Proposta] Ao verificar CNAE Cultural validando verificando se Pessoa Juridica ou Fisica
+  * Fix: [Enquadramento] Ajuste da query para trazer dados corretos em enquadramento
+  * Fix: [Menu] Label da nova IN trocada de 2016 para 2013
+  * Fix: [Login] Erro ao tentar logar no sistema com senha gerada pelo gestor do salic
+  * Fix: [Consulta cidadão] Corrigindo funcionalidade
+  * Fix: [Dados bancários] Correção de charset
+  * Fix: [Layout] Ajuste das telas de incluir agentes + menu com novo formato
+  * Fix: [Readequações] Botão finalizar não estava funcionando
+  * Add: [Proposta] Atualizando dados do proponente com webservice da receita quando o CNAE cultural nao é compativel com a proposta atual
+
 Release 2.0.8
   * Fix [Manter usuários] correções em férias e atestados
   * Fix [Manter usuários] Correção de charset
