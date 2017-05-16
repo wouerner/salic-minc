@@ -769,20 +769,20 @@ if (isset ($auth['cpf'])) {
         //@todo isso eh temporario, ate a migracao do layout
         if ($3('#sidenav').length && $3('#sidenav').is(":visible")) {
 
-            $3('body').addClass('menu-lateral-visivel');
+            $3('body').addClass('large-menu');
 
-            $3('#navbar-header nav').prepend('<a id="nano-menu-button" href="#" class="left hide-on-med-and-down"><i class="material-icons">more_vert</i></a>');
+            $3('#navbar-header nav').prepend('<a id="small-menu-button" href="#" class="left hide-on-med-and-down"><i class="material-icons">more_vert</i></a>');
         }
 
         // Ajuste na sidebar, quando faz scroll ela dá um bug
         var height = $3('body').height();
         $3('#sidenav, .qmmc').css('min-height', height - 100);
 
-        $3('#nano-menu-button').on('click', function(){
+        $3('#small-menu-button').on('click', function(){
             $3(this).find('i').text('more_horiz');
-            $3('body').toggleClass('nano-menu');
+            $3('body').toggleClass('small-menu');
 
-            if($3('body.nano-menu').is(':visible')){
+            if($3('body.small-menu').is(':visible')){
                 $3(this).find('i').text('more_horiz');
             }else {
                 $3(this).find('i').text('more_vert');

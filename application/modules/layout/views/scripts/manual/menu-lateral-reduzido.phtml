@@ -4,7 +4,7 @@
 	<div class="page-title">
 		<div class="row">
 			<div class="col s12 m9 l10">
-				<h1>Layout Salic</h1>
+				<h1>Menu lateral reduzido</h1>
 
 				<ul id="migalhas">
 					<li><a  href="#"><i class="material-icons">home</i>Home</a> /</li>
@@ -22,7 +22,7 @@
 	</div>
 
 	<div class="content">
-		<p>Esse é o esqueleto de uma página com menu lateral.</p>
+		<p>Esse é o esqueleto de uma página com menu lateral menor, mostrando apenas os ícones.</p>
 
 		<br />
 
@@ -36,6 +36,9 @@
 		<p>
 			Inclua o arquivo no início da view que utilizará o menu lateral:
 			<strong>echo $this->partial('manual/inc/menu.inc.phtml', $this);</strong>
+			<br />
+			<br />
+			Na action ou init da controller adicione o código <strong>$this->view->bodyClass = 'small-menu';</strong>
 		</p>
 	</div>
 </div>

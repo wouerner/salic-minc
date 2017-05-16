@@ -8,6 +8,7 @@ class Layout_ManualController extends MinC_Controller_Action_Abstract
 //		Zend_Layout::startMvc(array('layout' => 'layout_login'));
 
 		parent::init(); // chama o init() do pai GenericControllerNew
+        $this->view->bodyClass = 'large-menu';
 	}
 
 	/**
@@ -57,6 +58,16 @@ class Layout_ManualController extends MinC_Controller_Action_Abstract
 	} // fecha método menuLateralAction()
 
 
+    /**
+     * Menu Lateral Reduzido
+     * @access public
+     * @param void
+     * @return void
+     */
+    public function menuLateralReduzidoAction()
+    {
+        $this->view->bodyClass = 'small-menu';
+    } // fecha método menuLateralReduzidoAction()
 
 	/**
 	 * Mensagens
@@ -140,6 +151,17 @@ class Layout_ManualController extends MinC_Controller_Action_Abstract
 	{
 	} // fecha método tabelasAction()
 
+    /**
+     * Datatables
+     * @access public
+     * @param void
+     * @return void
+     */
+    public function dataTablesAction()
+    {
+        $this->view->bodyClass = 'nano-menu';
+
+    } // fecha método tabelasAction()
 
 
 	/**
