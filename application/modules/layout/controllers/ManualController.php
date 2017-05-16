@@ -31,6 +31,7 @@ class Layout_ManualController extends MinC_Controller_Action_Abstract
 	 */
 	public function paginaSimplesAction()
 	{
+        $this->view->bodyClass = '';
 	} // fecha método paginaSimplesAction()
 
 

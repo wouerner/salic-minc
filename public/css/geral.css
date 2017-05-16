@@ -1819,10 +1819,10 @@ x - titulo da pagina (novo)
     display: inline-block;
 }
 
-.page-title li .sp-cancel,
+.page-title li,
 .page-title li a {
     color: inherit;
-    padding: 0 6px;
+    padding: 0 4px;
     font-size: 12px
 }
 
@@ -1830,12 +1830,15 @@ x - titulo da pagina (novo)
     font-size: 14px;
     line-height: 13px;
     vertical-align: middle;
+    margin-right: 3px;
 }
 
 .page-title li:first-child .sp-cancel,
 .page-title li:first-child a {
     padding-left: 0;
 }
+
+
 
 
 /*--------------------------------------------------------------
@@ -2313,6 +2316,7 @@ header #atalhos #combousuario {color: #fff}
     color: #3c3b3b;
 }
 
+#conteudo .titulo_tabela,
 #conteudo table tr.destacar td,
 #conteudo table td.destacar,
 #conteudo table th {
