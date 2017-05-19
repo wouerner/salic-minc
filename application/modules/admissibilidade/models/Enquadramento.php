@@ -24,7 +24,11 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         }
     }
 
-    public function buscarDados($idPronac = null, $pronac = null, $buscarTodos = true)
+    public function buscarDados(
+        $idPronac = null,
+        $pronac = null,
+        $buscarTodos = true
+    )
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -69,11 +73,9 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
     {
         if (!empty($idEnquadramento)) {
             $where = "IdEnquadramento = " . $idEnquadramento;
-        }
-        else if (!empty($idPronac)) {
+        } else if (!empty($idPronac)) {
             $where = "IdPRONAC = " . $idPronac;
-        }
-        else if (!empty($pronac)) {
+        } else if (!empty($pronac)) {
             $where = "AnoProjeto+Sequencial = " . $pronac;
         }
 
@@ -142,19 +144,19 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         $select->from(
             array("projetos"),
             array(
-                  'pronac' => New Zend_Db_Expr('projetos.AnoProjeto + projetos.Sequencial'),
-                  'projetos.nomeProjeto',
-                  'projetos.IdPRONAC',
-                  'projetos.CgcCpf',
-                  'projetos.idpronac',
-                  'projetos.Area',
-                  'projetos.ResumoProjeto',
-                  'projetos.UfProjeto',
-                  'projetos.DtInicioExecucao',
-                  'projetos.DtFimExecucao',
-                  'projetos.Situacao',
-                  'projetos.DtSituacao',
-                  'dias' => 'DATEDIFF(DAY, projetos.DtSituacao, GETDATE())'
+                'pronac' => New Zend_Db_Expr('projetos.AnoProjeto + projetos.Sequencial'),
+                'projetos.nomeProjeto',
+                'projetos.IdPRONAC',
+                'projetos.CgcCpf',
+                'projetos.idpronac',
+                'projetos.Area',
+                'projetos.ResumoProjeto',
+                'projetos.UfProjeto',
+                'projetos.DtInicioExecucao',
+                'projetos.DtFimExecucao',
+                'projetos.Situacao',
+                'projetos.DtSituacao',
+                'dias' => 'DATEDIFF(DAY, projetos.DtSituacao, GETDATE())'
             ),
             $this->_schema
         );
@@ -186,7 +188,7 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         $queryMensagensRespondidas->setIntegrityCheck(false);
         $queryMensagensRespondidas->from(array('tbMensagemProjeto'), 'count(*) as quantidade', $this->getSchema("BDCORPORATIVO.scsac"));
         $queryMensagensRespondidas->where("Projetos.IdPRONAC = tbMensagemProjeto.IdPRONAC");
-        $queryMensagensNaoRespondidas->where("tbMensagemProjeto.idMensagemOrigem IS NOT NULL");
+        $queryMensagensRespondidas->where("tbMensagemProjeto.idMensagemOrigem IS NOT NULL");
 
         $select->setIntegrityCheck(false);
         $select->from(
@@ -223,63 +225,6 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         return $this->_db->fetchAll($select);
     }
 
-    public function obterProjetosEncaminhadosParaAssinatura($codOrgao, $ordenacao = array())
-    {
-        $query = $this->select();
-        $query->setIntegrityCheck(false);
-
-        $queryPlanilhaOrcamentaria = $this->select();
-        $queryPlanilhaOrcamentaria->setIntegrityCheck(false);
-        $queryPlanilhaOrcamentaria->from('tbPlanilhaAprovacao', array(
-            "vlAprovado" => New Zend_Db_Expr(
-                "tbPlanilhaAprovacao.vlUnitario * tbPlanilhaAprovacao.qtItem * tbPlanilhaAprovacao.nrOcorrencia"
-            )
-        ), $this->_schema
-        );
-        $queryPlanilhaOrcamentaria->where("tbPlanilhaAprovacao.IdPRONAC = projetos.IdPRONAC");
-
-        $query->from(
-            array("Projetos" => "Projetos"),
-            array(
-                'pronac' => New Zend_Db_Expr('Projetos.AnoProjeto + Projetos.Sequencial'),
-                'Projetos.nomeProjeto',
-                'Projetos.IdPRONAC',
-                'Projetos.CgcCpf',
-                'Projetos.Area as cdarea',
-                'Projetos.ResumoProjeto',
-                'Projetos.UfProjeto',
-                'Projetos.DtInicioExecucao',
-                'Projetos.DtFimExecucao',
-                'Projetos.Situacao',
-                'Projetos.DtSituacao',
-                'Projetos.Orgao',
-                'dias' => 'DATEDIFF(DAY, projetos.DtSituacao, GETDATE())',
-                '(' . $queryPlanilhaOrcamentaria->assemble() . ') as vlAprovado'
-            ),
-            $this->_schema
-        );
-        $query->joinInner(
-            array('Area' => 'Area'),
-            "Area.Codigo = Projetos.Area",
-            "Area.Descricao as area",
-            $this->_schema
-        );
-        $query->joinInner(
-            array('Segmento' => 'Segmento'),
-            "Segmento.Codigo = Projetos.Segmento",
-            array(
-                "Segmento.Descricao as segmento",
-                "Segmento.tp_enquadramento"
-            ),
-            $this->_schema
-        );
-        $query->where("Projetos.Orgao = ?", $codOrgao);
-        $query->where("Projetos.Situacao in (?)", array('B04'));
-        $query->order($ordenacao);
-
-        return $this->_db->fetchAll($query);
-    }
-
     public function verificarDesistenciaRecursal($idPronac)
     {
         $select = $this->select();
@@ -293,10 +238,21 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         $queryDesistenciaRecursal->where("stEstado = ?", 1);
         $queryDesistenciaRecursal->where("IdPRONAC = ?", $idPronac);
         
-        return ($this->_db->fetchOne($query)) ? $this->_db->fetchOne($query) : false;
+        return ($this->_db->fetchOne($queryDesistenciaRecursal)) ? $this->_db->fetchOne($queryDesistenciaRecursal) : false;
     }
 
-    public function findBy($where) 
+    public function obterEnquadramentoPorProjeto($idPronac, $anoProjeto, $sequencial)
+    {
+        $arrayPesquisa = array(
+            'AnoProjeto' => $anoProjeto,
+            'Sequencial' => $sequencial,
+            'IdPRONAC' => $idPronac
+        );
+
+        return $this->findBy($arrayPesquisa);
+    }
+
+    public function findBy($where)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(PDO::FETCH_ASSOC);
