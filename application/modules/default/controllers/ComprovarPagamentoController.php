@@ -26,6 +26,7 @@ class ComprovarPagamentoController extends MinC_Controller_Action_Abstract
     {
         $comprovanteParamentoModel = new ComprovantePagamento($this->getRequest()->getParam('comprovante'));
         $comprovanteParamentoModel->deletar();
+        $this->_helper->json(['success'=> true]);
     }
 
     /**
