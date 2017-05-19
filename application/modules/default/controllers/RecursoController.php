@@ -505,7 +505,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             case 'emanalise':
                 $where['d.siRecurso = ?'] = 4;
                 $where['a.idAvaliador IS NOT NULL'] = '';
-                $this->view->nmPagina = 'Em an�lise';
+                $this->view->nmPagina = 'Em an&aacute;lise';
                 break;
             case 'analisados':
                 $where['d.siRecurso = ?'] = 5;
