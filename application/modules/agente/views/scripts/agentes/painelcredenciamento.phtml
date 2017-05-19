@@ -1,4 +1,6 @@
+<div class="row">
 <?php echo $this->partial('agentes/inc/menu.inc.php', $this) ?>
+<div class="col s10">
 <!-- ========== IN�CIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
@@ -8,55 +10,56 @@
 </div>
 <!-- ========== FIM BREADCRUMB (LINKS TOPO) ========== -->
 
-
 <!-- ========== IN�CIO T�TULO ========== -->
-<div id="titulo">
-    <div>Pareceristas Ativos</div>
+<div class="titulo" id="">
+    <h4>Pareceristas Ativos</h4>
 </div>
 <!-- ========== FIM T�TULO ========== -->
-<div id="conteudo">
-<form id="form" action="<?php echo $this->url(array('controller' => 'agentes', 'action' => 'painelcredenciamento'));?>" method="post">
-    <table class="tabela">
-        <tr>
-            <th colspan="3">Busca</th>
-        </tr>
-        <tr>
-            <td width="300"><label for="nome">Nome:</label> <br /> <input type="text" name="nome" id="nome" class="input_simples" size="40" /></td>
-            <td><label for="cpf">CPF: </label> <br />
-                <input class="input_simples" type="text" name="cpf" id="cpf" maxlength="14"
-                       onkeyup="mascara(this, format_cpf);"
-                       onclick="limpar_campo(this, ' ');"
-                       onkeypress="limpar_campo(this, ' ');"
-                       onmouseout="restaurar_campo(this, ' ');"
-                       value=""  />
-            </td>
-            <td width="120" align="center"><input type="submit" class="btn_localizar" value=" " /></td>
-        </tr>
-    </table>
-</form>
-
-
+<div id="">
+    <form id="form" action="<?php echo $this->url(array('controller' => 'agentes', 'action' => 'painelcredenciamento'));?>" method="post">
+            <div class="row">
+                <fieldset>
+                    <legend>Busca</legend>
+                    <div class="input-field col s4">
+                        <input type="text" name="nome" id="nome" class="input_simples" size="40" /></td>
+                        <label for="nome">Nome:</label> 
+                    </div>
+                    <div class="input-field col s4">
+                        <input class="input_simples" type="text" name="cpf" id="cpf" maxlength="14"
+                               onkeyup="mascara(this, format_cpf);"
+                               onclick="limpar_campo(this, ' ');"
+                               onkeypress="limpar_campo(this, ' ');"
+                               onmouseout="restaurar_campo(this, ' ');"
+                               value=""  />
+                        <label for="cpf">CPF: </label>
+                    </div>
+                    <div class="input-field col s4">
+                       <button type="submit" class="btn" value=" ">localizar</button>
+                    </div>
+                </fieldset>
+            </div>
+    </form>
     <?php echo $this->qtd?>
-        <table class="tabela " id="pareceristas">
-            <thead>
-            <tr class="titulo_tabela">
+    <table class="bordered" id="pareceristas">
+        <thead>
+            <tr class="">
                 <th>Nome</th>
                 <th>CPF</th>
                 <th>A&ccedil;&atilde;o</th>
             </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($this->dados as $dado): ?>
+        </thead>
+        <tbody>
+            <?php foreach ($this->dados as $dado): ?>
                 <tr>
                     <td><?php echo $dado->Nome; ?></td>
                     <td><?php echo Mascara::addMaskCPF($dado->CNPJCPF); ?></td>
-
-                        <td align="center"><input type="button" value=" " class="btn_editar" onclick="redirecionar('<?php echo $this->url(array('module'=>'agente', 'controller' => 'agentes', 'action' => 'agentes','id' =>$dado->idParecerista),'',true);?>')" /></td>
-
+                    <td align="center"><input type="button" value=" " class="btn_editar" onclick="redirecionar('<?php echo $this->url(array('module'=>'agente', 'controller' => 'agentes', 'action' => 'agentes','id' =>$dado->idParecerista),'',true);?>')" /></td>
                 </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    </div>
+</div>
 
 </div>
 
@@ -66,14 +69,13 @@
 
 <br clear="all" />
 
-
 <script
     src="https://code.jquery.com/jquery-1.12.4.js"
     integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
     crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.13/js/dataTables.material.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
 
 <script type="text/javascript">
         
@@ -88,12 +90,6 @@
                     , "order": [0,1]
                     , "searching": true
                     , "lengthChange": true
-                    ,  columnDefs: [
-                    {
-                        targets: [],
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ]
                     ,
                     "aoColumnDefs": [
                         { 'bSortable': false, 'aTargets': [ 2 ] }
@@ -101,5 +97,4 @@
                 });
         });
     }($.noConflict(true)));
-
 </script>
