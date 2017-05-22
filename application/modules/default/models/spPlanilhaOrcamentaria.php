@@ -220,22 +220,22 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
             'b.idPlanilhaItem',
             'b.UfDespesa as idUF',
             'b.MunicipioDespesa as idMunicipio',
-            'b.Quantidade',
-            'b.Ocorrencia',
+            'b.Quantidade as Quantidade',
+            'b.Ocorrencia as Ocorrencia',
             'b.ValorUnitario as vlUnitario',
-            'b.QtdeDias',
+            'b.QtdeDias as QtdeDias',
             'b.FonteRecurso as idFonte',
             'b.idUsuario',
             new Zend_Db_Expr('convert(varchar(max),b.Justificativa) as JustParecerista'),
-            new Zend_Db_Expr('round((b.quantidade * b.ocorrencia * b.valorunitario),2) as vlsugerido')
+            new Zend_Db_Expr('round((b.quantidade * b.ocorrencia * b.valorunitario),2) as vlSugerido')
         );
 
         $z = array(
-            new Zend_Db_Expr(' round((z.quantidade * z.ocorrencia * z.valorunitario),2) as vlsolicitado'),
-            new Zend_Db_Expr('convert(varchar(max),z.dsjustificativa) as justproponente')
+            new Zend_Db_Expr(' round((z.quantidade * z.ocorrencia * z.valorunitario),2) as vlSolicitado'),
+            new Zend_Db_Expr('convert(varchar(max),z.dsjustificativa) as JustProponente')
         );
 
-        $f = array('f.uf', 'f.municipio');
+        $f = array('f.uf as UF', 'f.municipio as Municipio');
 
         $sac = 'sac.dbo';
 
@@ -245,10 +245,10 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
             ->joinInner(array('z' => 'tbplanilhaproposta'), '(b.idplanilhaproposta=z.idplanilhaproposta)', $z, $sac)
             ->joinLeft(array('c' => 'produto'), '(b.idproduto = c.codigo)', null, $sac)
             ->joinInner(array('d' => 'tbPlanilhaEtapa'), '(b.idEtapa = d.idPlanilhaEtapa)', 'd.Descricao as Etapa', $sac)
-            ->joinInner(array('e' => 'tbplanilhaunidade'), '(b.idunidade = e.idunidade)', 'e.descricao as unidade', $sac)
-            ->joinInner(array('i' => 'tbplanilhaitens'), '(b.idplanilhaitem=i.idplanilhaitens)', 'i.descricao as item', $sac)
-            ->joinInner(array('x' => 'verificacao'), '(b.fonterecurso = x.idverificacao)', 'x.descricao as fonterecurso', $sac)
-            ->joinInner(array('f' => 'vufmunicipio'), '(b.ufdespesa = f.iduf and b.municipiodespesa = f.idmunicipio)', $f, 'agentes.dbo')
+            ->joinInner(array('e' => 'tbplanilhaunidade'), '(b.idunidade = e.idunidade)', 'e.descricao as Unidade', $sac)
+            ->joinInner(array('i' => 'tbplanilhaitens'), '(b.idplanilhaitem=i.idplanilhaitens)', 'i.descricao as Item', $sac)
+            ->joinInner(array('x' => 'verificacao'), '(b.fonterecurso = x.idverificacao)', 'x.descricao as FonteRecurso', $sac)
+            ->joinInner(array('f' => 'vufmunicipio'), '(b.ufdespesa = f.iduf and b.municipiodespesa = f.idmunicipio)', $f, $this->getSchema('agentes'))
             ->where('a.idPronac = ?', $idPronac)
             ->order('x.Descricao')
             ->order('c.Descricao DESC')
@@ -256,6 +256,8 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
             ->order('f.uf')
             ->order('f.Municipio')
             ->order('i.Descricao');
+//        xd($db->fetchAll($sql)); die;
+
         return $db->fetchAll($sql);
     }
 
