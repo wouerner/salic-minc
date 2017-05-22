@@ -147,7 +147,7 @@ class tbEncaminhamentoPrestacaoContas extends MinC_Db_Table_Abstract {
 a.dsJustificativa,
                                c.usu_nome AS NomeOrigem,
                                c.usu_nome AS NomeDestino'
-                              ),$this->_banco.'.'.$this->_schema
+                              ), $this->_schema
                       );
 
         $select->joinInner(
