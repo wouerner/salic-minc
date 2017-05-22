@@ -13,7 +13,7 @@
 class EncaminhamentoPrestacaoContas extends MinC_Db_Table_Abstract {
 
     protected $_name   = 'tbEncaminhamentoPrestacaoContas';
-    protected $_schema = 'scSAC';
+    protected $_schema = 'BDCORPORATIVO.scSAC';
     protected $_banco  = 'BDCORPORATIVO';
 
 
