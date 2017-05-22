@@ -2739,7 +2739,7 @@ class Projetos extends MinC_Db_Table_Abstract
 
         if ($HistoricoInsert->statusHISTORICO_INSERT() == 1) { // desabilitada
 
-            // busca a situa??o atual do projeto
+            // busca a situacao atual do projeto
             $p = $this->buscarSituacaoAtual($idPronac, $pronac);
 
             // grava o hist?rico da situa??o
