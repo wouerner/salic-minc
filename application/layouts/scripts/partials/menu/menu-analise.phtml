@@ -104,22 +104,25 @@ $arrMenu['analise']['menu'][] = array('label' => 'Recurso', 'title' => 'Ir para 
     'url' => $this->url(array('controller' => 'recurso', 'action' => 'index'), '', true),
     'grupo' => array(Autenticacao_Model_Grupos::COORDENADOR_ANALISE,Autenticacao_Model_Grupos::COORDENADOR_ATENDIMENTO)
 );
+
 $arrMenu['analise']['menu'][] = array('label' => 'Avaliar Recursos', 'title' => 'Ir para Avaliar Recursos',
     'url' => $this->url(array('controller' => 'recurso', 'action' => 'painel-recursos'), '', true),
-    'grupo' => array(Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA, Autenticacao_Model_Grupos::PARECERISTA, Autenticacao_Model_Grupos::TECNICO_ANALISE)
+    'grupo' => array( Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA, Autenticacao_Model_Grupos::PARECERISTA, Autenticacao_Model_Grupos::TECNICO_ANALISE)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'Avaliar Readequa&ccedil;&otilde;es', 'title' => 'Ir para Avaliar Readequa&ccedil;&otilde;es',
     'url' => $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes'), '', true),
-    'grupo' => array(Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA, Autenticacao_Model_Grupos::PARECERISTA, Autenticacao_Model_Grupos::TECNICO_ANALISE)
+    'grupo' => array( Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA, Autenticacao_Model_Grupos::PARECERISTA, Autenticacao_Model_Grupos::TECNICO_ANALISE)
 );
+
 $arrMenu['analise']['menu'][] = array('label' => 'Avaliar Readequa&ccedil;&otilde;es', 'title' => 'Ir para Avaliar Readequa&ccedil;&otilde;es',
-    'url' => $this->url(array('controller' => 'recurso', 'action' => 'analisar-recursos-cnic'), '', true),
-    'grupo' => array(118)
-);
-$arrMenu['analise']['menu'][] = array('label' => 'Avaliar Recursos', 'title' => 'Ir para Avaliar Recursos',
     'url' => $this->url(array('controller' => 'readequacoes', 'action' => 'analisar-readequacoes-cnic'), '', true),
     'grupo' => array(118)
 );
+$arrMenu['analise']['menu'][] = array('label' => 'Avaliar Recursos', 'title' => 'Ir para Avaliar Recursos',
+    'url' => $this->url(array('controller' => 'recurso', 'action' => 'analisar-recursos-cnic'), '', true),
+    'grupo' => array(118)
+);
+
 $arrMenu['analise']['menu'][] = array('label' => 'Configurar Assinatura', 'title' => 'Ir para Configurar Assinatura',
     'url' => $this->url(array('controller' => 'configuracoes', 'action' => 'secretarios'), '', true),
     'grupo' => array(Autenticacao_Model_Grupos::TECNICO_PORTARIA)
@@ -135,8 +138,8 @@ $arrMenu['analise']['menu'][] = array(
     ,152
     ),
     'url' => $this->url(array(
-        'module' => 'assinatura',
-        'controller' => 'enquadramento',
+        'module' => 'admissibilidade',
+        'controller' => 'enquadramento-assinatura',
         'action' => 'gerenciar-projetos'
     ), '', true),
     'title' => 'Assinatura',

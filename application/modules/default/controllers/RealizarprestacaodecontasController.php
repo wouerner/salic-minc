@@ -16,7 +16,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 	private $codGrupo 	   = null;
 	private $codOrgao 	   = null;
 	public  $intTamPag     = 15;
-	private $modalidade    = array('Selecione','Convite','Tomada de Pre�os','Concorr&ecirc;ncia','Concurso','Preg&atilde;o');
+	private $modalidade    = array('Selecione','Convite','Tomada de Pre&ccedil;os','Concorr&ecirc;ncia','Concurso','Preg&atilde;o');
 	private $tipoDocumento = array('Selecione','Boleto Banc&aacute;rio','Cupom Fiscal','Nota Fiscal/Fatura','Recibo de Pagamento','Aut&ocirc;nomo', 'Guia De Recolhimento');
 	private $tipoSituacao  = array('1'=>'Executado integralmente','2'=>'Executado parcialmente','3'=>'N&atilde;o Executado','4'=>'Sem informa&ccedil;&atilde;o');
 	private $cdGruposDestinoAtual  = null;
@@ -60,14 +60,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
             parent::perfil ( 1, $PermissoesGrupo );
 
-            // cria a sess�o com o grupo ativo
+            // cria a sessao com o grupo ativo
             $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
-            // pega a autentica��o
+            // pega a autenticacao
             $auth 		  = Zend_Auth::getInstance ();
             $GrupoUsuario = $GrupoAtivo->codGrupo;
 
-            // instancia da autentica��o
+            // instancia da autenticacao
             $auth = Zend_Auth::getInstance();
             $this->getIdUsuario = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
             $tblAgente = new Agente_Model_DbTable_Agentes();
@@ -102,12 +102,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     $this->view->cdGruposDestinoAtual       = $this->cdGruposDestinoAtual;
                 }
             }
-	} // fecha m�todo init()
+	} // fecha metodo init()
 
         /**
-         * N�o deletar essa action pois � usada para renderizar a view.
-         * Quando loga no sistema com o perfil de T�cnico de presta��o de contas
-         * Acessa o menu 'Presta��o de Contas' -> 'Imprimir Laudo Final' e clicar
+         * Nao deletar essa action pois eh usada para renderizar a view.
+         * Quando loga no sistema com o perfil de Tecnico de prestacao de contas
+         * Acessa o menu 'Presta&ccedil;&atilde;o de Contas' -> 'Imprimir Laudo Final' e clicar
          * em 'Cancelar' vem para essa action
          */
         public function indexAction()
@@ -261,7 +261,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $arrBusca['p.Situacao = ?']                    = 'E27';
                 $arrBusca['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
                 $arrBusca['e.cdGruposDestino = ?']             = 124; //grupo do tecnico de prestacao de contas
-                $arrBusca['e.idAgenteDestino = ?']             = $this->getIdAgenteLogado; //id Tecnico de Presta��o de Contas
+                $arrBusca['e.idAgenteDestino = ?']             = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
                 $arrBusca['e.stAtivo = ?']                     = 1;
                 $bln_encaminhamento = true;
             }
@@ -273,7 +273,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $arrBusca['p.Situacao <> ?']                    = 'E17'; //exclui projetos diligenciados
                 $arrBusca['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
                 $arrBusca['e.cdGruposDestino = ?']             = 132; //grupo do chefe de divisao
-                //$arrBusca['e.idAgenteDestino = ?']             = $this->getIdAgenteLogado; //id Tecnico de Presta��o de Contas
+                //$arrBusca['e.idAgenteDestino = ?']             = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
                 $arrBusca['e.stAtivo = ?']                     = 1;
                 $bln_encaminhamento = true;
             }
@@ -623,7 +623,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     {
         $post   = Zend_Registry::get('post');
         $bln_envioufiltro = 'false';
-        $this->view->parametroPesquisado = 'OUTRAS SITUA��ES';
+        $this->view->parametroPesquisado = 'OUTRAS SITUA&Ccedil;&Otilde;ES';
 
         // cria a sess�o com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace ( 'GrupoAtivo' );
@@ -964,7 +964,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 	 */
 	public function laudofinalAction(){
 
-            $auth = Zend_Auth::getInstance(); // pega a autentica��o
+            $auth = Zend_Auth::getInstance(); // pega a autenticacao
             $get = Zend_Registry::get ('get');
             $idpronac = $this->getRequest()->getParam('idPronac');
             $nomeProponente = null;
@@ -1208,7 +1208,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             }
 
             $this->_forward('gerarpdf');
-//            parent::message('Laudo final da presta��o de contas emitido com sucesso!', "realizarprestacaodecontas/laudofinal?idPronac={$idPronac}&gerarGuia=true", 'CONFIRM');
+//            parent::message('Laudo final da prestacao de contas emitido com sucesso!', "realizarprestacaodecontas/laudofinal?idPronac={$idPronac}&gerarGuia=true", 'CONFIRM');
         } catch (Exception $e) {
             parent::message('Erro ao gravar laudo final!', "realizarprestacaodecontas/laudofinal?idPronac=" . $idPronac, 'ERROR');
             //$this->_redirect("realizarprestacaodecontas/laudofinal?idPronac=".$idPronac."&tipoMsg=ERROR&msg=Erro ao gravar laudo final! ");
@@ -1218,7 +1218,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     /*
      * Consultar Laudo Final
-     * Perfis: Coord. de Presta��o de Contas, T�c. de Presta��o de Contas e Chefe de Divis�o
+     * Perfis: Coord. de Presta&ccedil;&atilde;o de Contas, Tec. de Presta&ccedil;&atilde;o de Contas e Chefe de Divis�o
      */
     public function consultarLaudoFinalAction()
     {
@@ -1227,15 +1227,15 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     /*
      * Analisar Laudo Final
-     * Perfis: Coord. Geral de Presta��o de Contas
+     * Perfis: Coord. Geral de Presta&ccedil;&atilde;o de Contas
      */
     public function analisarLaudoFinalAction()
     {
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $GrupoUsuario = $GrupoAtivo->codGrupo;
 
-        if($GrupoUsuario != 126 && $GrupoUsuario != 151 && $GrupoUsuario != 148){ //Se o perfil for diferente de Coord. Geral de Presta��o de Contas, n�o permite o acesso dessa funcionalidade.
-            parent::message('Voc� n�o tem permiss�o para acessar essa funcionalidade.', "principal", 'ALERT');
+        if($GrupoUsuario != 126 && $GrupoUsuario != 151 && $GrupoUsuario != 148){ //Se o perfil for diferente de Coord. Geral de Presta&ccedil;&atilde;o de Contas, n�o permite o acesso dessa funcionalidade.
+            parent::message('Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa funcionalidade.', "principal", 'ALERT');
         }
 
         $this->intTamPag = 10;
@@ -1301,7 +1301,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 case 'reprovado': //Reprovados
                     $where['rt.siManifestacao = ?'] = 0;
                     break;
-                default: //Aguardando An�lise
+                default: //Aguardando Analise
                     break;
             }
         }
@@ -1402,7 +1402,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 case 'reprovado': //Reprovados
                     $where['rt.siManifestacao = ?'] = 0;
                     break;
-                default: //Aguardando An�lise
+                default: //Aguardando Analise
                     break;
             }
         }
@@ -1427,8 +1427,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">#</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">PRONAC</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Nome do Projeto</th>';
-            $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa��o</th>';
-            $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">�rea / Segmento</th>';
+            $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa&ccedil;&atilde;o</th>';
+            $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">&Aacute;rea / Segmento</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Cidade</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Mecanismo</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Dt. Recebimento</th>';
@@ -1476,7 +1476,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     /*
      * Imprimir Laudo Final
-     * Perfis: Coord. de Presta��o de Contas, T�c. de Presta��o de Contas e Chefe de Divis�o
+     * Perfis: Coord. de Presta&ccedil;&atilde;o de Contas, Tec. de Presta&ccedil;&atilde;o de Contas e Chefe de Divisao
      */
     public function imprimirLaudoFinalAction()
     {
@@ -1492,7 +1492,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $totalRegistros = $resultados->count();
         if (empty($totalRegistros)) {
             parent::message(
-                    'Este PRONAC n�o possui Laudo Final.',
+                    'Este PRONAC n&atilde;o possui Laudo Final.',
                     '/realizarprestacaodecontas/consultar-laudo-final',
                     'ERROR'
                     );
@@ -1515,7 +1515,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         if (empty($folder)) {
             parent::message(
-                    'Informe se a presta��o de contas foi Aprovada ou Reprovada',
+                    'Informe se a presta&ccedil;&atilde;o de contas foi Aprovada ou Reprovada',
                     '/realizarprestacaodecontas/laudofinal/idPronac/' . $dados->IdPRONAC,
                     'ERROR'
                     );
@@ -1561,7 +1561,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     }
 
     /**
-     * Avalia��o final do laudo de presta��o de contas - Perfil: Coord. Geral de Presta��o de Contas
+     * Avaliacao final do laudo de prestacao de contas - Perfil: Coord. Geral de Presta&ccedil;&atilde;o de Contas
      * @access public
      * @param void
      * @return void
@@ -1583,14 +1583,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             if($get->avaliacao == 'aprovado') {
                 // Aprovado
                 $situacao = 'D42';
-                $ProvidenciaTomada = 'Aguardando Publica��o de Portaria da Presta��o de Contas';
-                $textoPrestacaoDeContas = 'Aprova��o da Presta��o de Contas';
+                $ProvidenciaTomada = 'Aguardando Publica&ccedil;&atilde;o de Portaria da Presta&ccedil;&atilde;o de Contas';
+                $textoPrestacaoDeContas = 'Aprova&ccedil;&atilde;o da Presta&ccedil;&atilde;o de Contas';
                 $TpApPrestacaoDeContas = 5;
             } elseif ($get->avaliacao == 'reprovado') {
                 // Reprovado
                 $situacao = 'D43';
-                $ProvidenciaTomada = 'Aguardando Portaria da Presta��o de Contas';
-                $textoPrestacaoDeContas = 'Reprova��o da Presta��o de Contas';
+                $ProvidenciaTomada = 'Aguardando Portaria da Presta&ccedil;&atilde;o de Contas';
+                $textoPrestacaoDeContas = 'Reprova&ccedil;&atilde;o da Presta&ccedil;&atilde;o de Contas';
                 $TpApPrestacaoDeContas = 6;
             } else {
                 parent::message('Erro ao tentar salvar os dados. Entre em contato com o administrador do sistema!', "realizarprestacaodecontas/analisar-laudo-final", 'ERRO');
@@ -1599,7 +1599,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             // altera a situa��o do projeto
             $tblProjeto->alterarSituacao($get->idPronac, '', $situacao, $ProvidenciaTomada);
 
-            $auth = Zend_Auth::getInstance(); // pega a autentica��o
+            $auth = Zend_Auth::getInstance(); // pega a autenticacao
             $agente = GerenciarPautaReuniaoDAO::consultaAgenteUsuario($auth->getIdentity()->usu_codigo);
             $idagente = $agente['idAgente'];
 
@@ -1614,15 +1614,15 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 'Logon' => $idagente
             );
             $Aprovacao->inserir($dadosAprovacao);
-            parent::message('Projeto encaminhado para publica��o do Di�rio Oficial com sucesso.', "realizarprestacaodecontas/analisar-laudo-final", 'CONFIRM');
+            parent::message('Projeto encaminhado para publica&ccedil;&atilde;o do Di&aacute;rio Oficial com sucesso.', "realizarprestacaodecontas/analisar-laudo-final", 'CONFIRM');
 
         } catch (Exception $e) {
-            parent::message('Erro ao encaminhar o projeto para publica��o do Di�rio Oficial.', "realizarprestacaodecontas/analisar-laudo-final", 'ERROR');
+            parent::message('Erro ao encaminhar o projeto para publica&ccedil;&atilde;o do Di&aacute;rio Oficial.', "realizarprestacaodecontas/analisar-laudo-final", 'ERROR');
         }
     }
 
     /**
-     * Encaminha a presta��o de contas
+     * Encaminha a prestacao de contas
      *
      * @access public
      * @param void
@@ -1630,18 +1630,18 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      */
     public function encaminharprestacaodecontasAction() {
         $tipoFiltro = $this->_request->getParam('tipoFiltro');
-        $this->view->pag = 1; //Se tirar isso, n�o funciona. Por isso n�o foi retirado!
+        $this->view->pag = 1; //Se tirar isso, nao funciona. Por isso nao foi retirado!
 
         /** Usuario Logado *********************************************** */
-        // caso o formul�rio seja enviado via post
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
+        // caso o formulario seja enviado via post
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $auth               = Zend_Auth::getInstance();
         $Usuario            = new Autenticacao_Model_Usuario();
         $idagente           = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem     = $idagente['idAgente'];
         $idPerfilDestino    = (null === $this->_request->getParam('idPerfilDestino')) ? 124 : $this->_request->getParam('idPerfilDestino'); // se nao receber idPerfilDestino, define como 124 por padrao (tecnico)
         $this->usu_codigo   = $auth->getIdentity()->usu_codigo;
-	$this->view->idPerfilDestino = $idPerfilDestino;
+	    $this->view->idPerfilDestino = $idPerfilDestino;
 
             // recebe os dados via post
             $post = Zend_Registry::get('post');
@@ -1664,17 +1664,15 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     //100: 12 CONJUR
                     //SE O ENCAMINHAMENTO FOR DO COORDENADOR PARA O TECNICO - ALTERA SITUACAO DO PROJETO
 
-                    if (
-			($this->codGrupo == 125 || $this->codGrupo == 126 || $this->codGrupo == 132)
-			&& $idGrupoDestino == 124) {
-                        // altera a situa��o do projeto AO ENCAMINHAR PARA O TECNICO
+                    if ( ($this->codGrupo == 125 || $this->codGrupo == 126 || $this->codGrupo == 132) && $idGrupoDestino == 124) {
+                        // altera a situacao do projeto AO ENCAMINHAR PARA O TECNICO
                         $tblProjeto = new Projetos();
-                        $tblProjeto->alterarSituacao($idPronac, '', 'E27', 'Comprova��o Financeira do Projeto em An�lise');
+                        $tblProjeto->alterarSituacao($idPronac, '', 'E27', 'Comprova&ccedil;&atilde;o Financeira do Projeto em Análise');
                     } else if ($this->codGrupo == 124 && $idGrupoDestino == 132) {
 			       // SE O ENCAMINHAMENTO FOR DO TECNICO PARA O CHEFE/COORDENADOR (DEVOLUCAO) - ALTERAR SITUACAO DO PROJETO
                         $tblProjeto = new Projetos();
-                        $tblProjeto->alterarSituacao($idPronac, '', 'E68', 'Projeto devolvido para o Chefe de Divis�o - Aguarda an�lise financeira');
-		    }
+                        $tblProjeto->alterarSituacao($idPronac, '', 'E68', 'Projeto devolvido para o Chefe de Divis&atilde;o - Aguarda an&aacute;lise financeira');
+		            }
 
                     //BUSCA ULTIMO STATUS DO PROJETO
                     $tblProjeto = new Projetos();
@@ -1707,14 +1705,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     }
 
                     if($this->codGrupo == 132){
-                        parent::message('Solicita��o enviada com sucesso!', "realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
+                        parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                     } else if($this->codGrupo == 124){
-                        parent::message('Solicita��o enviada com sucesso!', "realizarprestacaodecontas/tecnicoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
+                        parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "realizarprestacaodecontas/tecnicoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                     } else {
-                        parent::message('Solicita��o enviada com sucesso!', "realizarprestacaodecontas/painel?tipoFiltro=".$tipoFiltro, 'CONFIRM');
+                        parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "realizarprestacaodecontas/painel?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                     }
                 } catch (Exception $e) {
-                    parent::message('Erro ao tentar salvar os dados!', "principal", 'ERRO');
+                    parent::message('Erro ao tentar salvar os dados!', "principal", 'ERROR');
                 }
             } else {
                 // desabilita o Zend_Layout
@@ -1805,17 +1803,17 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    // fecha m�todo encaminharprestacaodecontasAction()
+    // fecha metodo encaminharprestacaodecontasAction()
 
 
-	/*Emcaminhamento para o Chefe de Divis�o*/
+	/*Emcaminhamento para o Chefe de Divisao*/
 	public function encaminharchefedivisaoAction() {
 
-		// caso o formul�rio seja enviado via post
-		// cria a sess�o com o grupo ativo
+		// caso o formulario seja enviado via post
+		// cria a sessao com o grupo ativo
 		$GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
-		// pega a autentica��o
+		// pega a autenticacao
 		$auth         = Zend_Auth::getInstance ();
 		$GrupoUsuario = $GrupoAtivo->codGrupo;
 		if ($this->getRequest ()->isPost ()) {
@@ -1847,14 +1845,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 			$updateprojetos->alterarSituacao($idPronac,NULL,'E27','Encaminhado');
 
 			if ($cadastrar) {
-				parent::message ( "cadastrado com sucesso!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "CONFIRM" );
+				parent::message ( "Cadastrado com sucesso!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "CONFIRM" );
 			} else {
 				parent::message ( "Desculpe ocorreu um erro!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "ERROR" );
 			}
 		} // fecha $_POST
-	} // fecha m�todo encaminharprestacaodecontasAction()
+	} // fecha metodo encaminharprestacaodecontasAction()
 
-	/*Buscar Projeto do Coordenados Geral e Coordenador de Presta��o de Contas*/
+	/*Buscar Projeto do Coordenados Geral e Coordenador de Presta&ccedil;&atilde;o de Contas*/
 	public function coordenadorprestacaocontasAction() {
 
 		$prescontas                  = new Projetos ();
@@ -1865,7 +1863,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 		$this->view->CoordPresContasDiligenciados = $dados;
 	}
 
-	/*Buscar Projeto do Tecnico de Presta��o de Contas*/
+	/*Buscar Projeto do Tecnico de Presta&ccedil;&atilde;o de Contas*/
 	public function tecnicoprestacaocontasAction()
 	{
             //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
@@ -1911,7 +1909,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             }
 	    $where['e.stAtivo = ?'] = 1;
-	    $where['e.idAgenteDestino = ?'] = $this->getIdUsuario; //id Tecnico de Presta��o de Contas
+	    $where['e.idAgenteDestino = ?'] = $this->getIdUsuario; //id Tecnico de Presta&ccedil;&atilde;o de Contas
 	    $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
 
 	    // t�cnico s� visualiza projetos encaminhados para ele
@@ -2003,27 +2001,27 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                         $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
                         $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
                         $where['e.cdGruposOrigem IN (?)'] = array('125','126'); //grupo de coordenador de prestacao de contas
-                        $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta��o de Contas
+                        $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
                         $where['e.stAtivo = ?'] = 1;
                         $where['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
                         break;
-                    default: //Aguardando An�lise
-                        $this->view->tituloPag = 'Aguardando An�lise';
+                    default: //Aguardando An&aacute;lise
+                        $this->view->tituloPag = 'Aguardando An&aacute;lise';
                         $where['p.Situacao = ?'] = 'E27';
                         $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
                         $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-                        $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta��o de Contas
+                        $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
                         $where['e.stAtivo = ?'] = 1;
                         break;
                 }
 
-            } else { //Aguardando An�lise
-                $this->view->tituloPag = 'Aguardando An�lise';
+            } else { //Aguardando An&aacute;lise
+                $this->view->tituloPag = 'Aguardando An&aacute;lise';
                 $filtro = '';
                 $where['p.Situacao = ?'] = 'E27';
                 $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
                 $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-                $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta��o de Contas
+                $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
                 $where['e.stAtivo = ?'] = 1;
             }
             $this->view->filtro = $filtro;
@@ -2039,7 +2037,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             if(isset($post->xls) && $post->xls){
                 $html = '';
                 $html .= '<table style="border: 1px">';
-                $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="8">Analisar presta��o de contas - '.$this->view->tituloPag.'</td></tr>';
+                $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="8">Analisar presta&ccedil;&atilde;o de contas - '.$this->view->tituloPag.'</td></tr>';
                 $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10" colspan="8">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
                 $html .='<tr><td colspan="8"></td></tr>';
 
@@ -2047,8 +2045,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">#</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">PRONAC</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Nome do Projeto</th>';
-                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa��o</th>';
-                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">�rea / Segmento</th>';
+                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa&ccedil;&atilde;o</th>';
+                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">&Aacute;rea / Segmento</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Estado</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Mecanismo</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Dt. Recebimento</th>';
@@ -2086,7 +2084,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             }
 	}
 
-	/*PLANILHA Ora�mentaria COMPROVADA*/
+	/*PLANILHA Orcamentaria COMPROVADA*/
 	public function dadosProjeto() {
 		$idpronac = $this->getRequest()->getParam('idPronac');
 		$projetosDAO = new Projetos ();
@@ -2097,7 +2095,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
 	public function planilhaorcamentariaAction()
 	{
-        // pega a autentica��o
+        // pega a autenticacao
         $auth = Zend_Auth::getInstance ();
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
 
@@ -2379,7 +2377,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 				return;
 			}
 		}else{
-			$this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Dados obrigat�rios n�o informados");
+			$this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Dados obrigat&oacute;rios n&atilde;o informados");
 		}
 	}
 
@@ -2401,7 +2399,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 	 * @method tecnicoprestacaocontas
 	 * @since 11/02/2011
 	 * @version 1.0
-	 * @access Tecnico Presta��o de Contas
+	 * @access Tecnico Presta&ccedil;&atilde;o de Contas
 	 */
 	public function tecnicoprestacaocontassAction() {
 
@@ -2472,19 +2470,19 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 			$where['e.cdGruposDestino = ?'] = 132;
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
                         break;
-   		    case 'emanalise': //Em An�lise
+   		    case 'emanalise': //Em An&aacute;lise
   		        $where['p.Situacao in (?)'] = array('E14', 'E17', 'E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
                         $where['e.idSituacaoEncPrestContas = ?'] = 2;
 			$where['e.cdGruposDestino = ?'] = 124;
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
                         break;
-                    default: //Aguardando An�lise
+                    default: //Aguardando An&aacute;lise
                         $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
 			$where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
                         break;
                 }
 
-            } else { //Aguardando An�lise
+            } else { //Aguardando An&aacute;lise
                 $filtro = '';
 		$where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
 
@@ -2575,25 +2573,25 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                         $this->view->tituloPag = 'Projetos diligenciados';
                         $where['p.Situacao = ?'] = 'E17';
                         $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                        $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divis�o
+                        $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divisao
                         $where['e.stAtivo = ?'] = 1;
                         $where['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
                         break;
-                    default: //Aguardando An�lise
-                        $this->view->tituloPag = 'Aguardando An�lise';
+                    default: //Aguardando An&aacute;lise
+                        $this->view->tituloPag = 'Aguardando An&aacute;lise';
                         $where['p.Situacao <> ?'] = 'E17';
                         $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                        $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divis�o
+                        $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divisao
                         $where['e.stAtivo = ?'] = 1;
                         break;
                 }
 
-            } else { //Aguardando An�lise
-                $this->view->tituloPag = 'Aguardando An�lise';
+            } else { //Aguardando An&aacute;lise
+                $this->view->tituloPag = 'Aguardando An&aacute;lise';
                 $filtro = '';
                 $where['p.Situacao <> ?'] = 'E17';
                 $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divis�o
+                $where['e.cdGruposDestino = ?'] = 132; //grupo do chefe de divisao
                 $where['e.stAtivo = ?'] = 1;
             }
             $this->view->filtro = $filtro;
@@ -2609,7 +2607,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             if(isset($post->xls) && $post->xls){
                 $html = '';
                 $html .= '<table style="border: 1px">';
-                $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="8">Analisar presta��o de contas - '.$this->view->tituloPag.'</td></tr>';
+                $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="8">Analisar presta&ccedil;&atilde;o de contas - '.$this->view->tituloPag.'</td></tr>';
                 $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10" colspan="8">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
                 $html .='<tr><td colspan="8"></td></tr>';
 
@@ -2617,8 +2615,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">#</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">PRONAC</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Nome do Projeto</th>';
-                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa��o</th>';
-                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">�rea / Segmento</th>';
+                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa&ccedil;&atilde;o</th>';
+                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">&Aacute;rea / Segmento</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Estado</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Mecanismo</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Dt. Recebimento</th>';
@@ -2712,7 +2710,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 	public function pareceristaprestacaocontasAction() {
 
 		$Usuario        = new Autenticacao_Model_Usuario();
-		$auth           = Zend_Auth::getInstance (); // pega a autentica��o
+		$auth           = Zend_Auth::getInstance (); // pega a autenticacao
 		$idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
 		$idAgenteOrigem = $idagente['idAgente'];
 
@@ -2733,7 +2731,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 	public function coordenadorpareceristaprestacaocontasAction() {
 
 		$Usuario        = new Autenticacao_Model_Usuario();
-		$auth           = Zend_Auth::getInstance (); // pega a autentica��o
+		$auth           = Zend_Auth::getInstance (); // pega a autenticacao
 		$idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
 		$idAgenteOrigem = $idagente['idAgente'];
 
@@ -2759,7 +2757,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
             if (!$this->view->projeto) {
                 $this->_helper->flashMessengerType->addMessage('ALERT');
-                $this->_helper->flashMessenger->addMessage('N�o houve comprova��o para este item.');
+                $this->_helper->flashMessenger->addMessage('N&atilde;o houve comprova&ccedil;&atilde;o para este item.');
                 $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria/idPronac/{$idPronac}");
             } else {
                 $this->view->tipoComprovante = $this->tipoDocumento;
@@ -2804,13 +2802,13 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 			$this->view->idPlanilhaAprovacao   = $idPlanilhaAprovacao;
 			$this->view->idPlanilhaItem        = $idPlanilhaItem;
 		}else{
-			$this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$idPronac}&tipoMsg=ALERT&msg=N�o houve comprova��o para este item.");
+			$this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$idPronac}&tipoMsg=ALERT&msg=N&atilde;o houve comprova&ccedil;&atilde;o para este item.");
 		}
 	}
-
+    // @todo: avaliar este try catch com transacao
     public function validaritemAction()
     {
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
 
         $idPronac = $this->_request->getParam("idPronac");
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
@@ -2872,7 +2870,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->_helper->flashMessenger->addMessage('Item validado com sucesso!');
             $this->_helper->flashMessengerType->addMessage('CONFIRM');
         } else {
-            $this->_helper->flashMessenger->addMessage('Preencha os dados para valida��o de item.');
+            $this->_helper->flashMessenger->addMessage('Preencha os dados para valida&ccedil;&atilde;o de item.');
             $this->_helper->flashMessengerType->addMessage('ERROR');
         }
         $tblComprovantePag->getAdapter()->commit();
@@ -2963,7 +2961,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 		    return;
 		  }
 		}else{
-		  $this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An�lise � necess�rio Emitir parecer.");
+		  $this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
 		}
 	}
 
@@ -3017,7 +3015,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 				return;
 			}
 		}else{
-			$this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An�lise � necess�rio Emitir parecer.");
+			$this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
 		}
 	}
 
@@ -3025,7 +3023,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
 		$get = Zend_Registry::get("get");
 
-		$auth = Zend_Auth::getInstance (); // pega a autentica��o
+		$auth = Zend_Auth::getInstance (); // pega a autenticacao
 
 		$pronac   = $get->idPronac;
 		$situacao = $get->situacao;
@@ -3056,7 +3054,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                             'idSituacao'        => $rsEPC->idSituacao);
 
 			if($tblEncaminhamentoPrestacaoContas->inserir($dados)){
-				$this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=CONFIRM&msg=Projeto em an�lise!");
+				$this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=CONFIRM&msg=Projeto em an&aacute;lise!");
 			}else{
 				$this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=ERROR&msg=Falha ao alterar status do Projeto!");
 			}
@@ -3107,7 +3105,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         if (empty($folder)) {
             parent::message(
-                    'Informe se a presta��o de contas foi Aprovada ou Reprovada',
+                    'Informe se a presta&ccedil;&atilde;o de contas foi Aprovada ou Reprovada',
                     '/realizarprestacaodecontas/laudofinal/idPronac/' . $this->getRequest()->getParam('idPronac'),
                     'ERROR'
                     );
@@ -3137,18 +3135,18 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         echo $html;
     }
 
-        /*Buscar Situa��o PC*/
+        /*Buscar Situa&ccedil;&atilde;o PC*/
 	public function buscarsituacaoAction()
 	{
 
 
 	}
 
-	/*Fim Situa��o PC*/
+	/*Fim Situa&ccedil;&atilde;o PC*/
 	public function imprimirguiaarquivoAction()
 	{
 		//** Usuario Logado ************************************************/
-		$auth = Zend_Auth::getInstance(); // pega a autentica��o
+		$auth = Zend_Auth::getInstance(); // pega a autenticacao
 
 		/******************************************************************/
 		$this->_helper->layout->disableLayout();
@@ -3190,7 +3188,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 							<table cellspacing='0' cellpadding='2' border='1' align='center' width='99%'>
 								<tr align='center'>
 									<td colspan='4'>
-									<h2>MINIST�RIO DA CULTURA</h2>
+									<h2>MINIST&Eacute;RIO DA CULTURA</h2>
 									<h3>Guia de Arquivamento de projetos - Enviado</h3></td>
 								</tr>
 								<tr>
@@ -3300,7 +3298,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $rsAcesso = $tblAcesso->consultarAcessoPronac($idPronac, 1);  // Acessibilidade
                 if(isset($rsAcesso[0]->idAcesso)){
                     $this->view->idAcessoA = $rsAcesso[0]->idAcesso;
-                    $rsAcesso2 = $tblAcesso->consultarAcessoPronac($idPronac, 2);  // Democratiza�?o
+                    $rsAcesso2 = $tblAcesso->consultarAcessoPronac($idPronac, 2);  // Democratizacao
                     $this->view->idAcessoB = $rsAcesso2[0]->idAcesso;
                 }
 
@@ -3320,7 +3318,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         public function painelAction(){
 
             if(isset($_GET['msg']) && $_GET['msg'] == 'sucessoLaudoFinal'){
-                parent::message('Laudo final da presta��o de contas emitido com sucesso!', "realizarprestacaodecontas/painel?pag=1&tipoFiltro=devolvidos", 'CONFIRM');
+                parent::message('Laudo final da presta&ccedil;&atilde;o de contas emitido com sucesso!', "realizarprestacaodecontas/painel?pag=1&tipoFiltro=devolvidos", 'CONFIRM');
             }
 
             $tblSituacao = new Situacao();
@@ -3379,7 +3377,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
                 $this->view->filtro = $filtro;
                 switch ($filtro) {
-                    case 'emanalise': //Em an�lise
+                    case 'emanalise': //Em an&aacute;lise
                         $where['p.Orgao = ?'] = $this->codOrgao;
                         $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
                         $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
@@ -3411,13 +3409,13 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 			            $where['d.idTipoDiligencia = ?'] = 174;
 			              $where['d.stEstado = ?'] = 0;
                         break;
-                    default: //Aguardando An�lise
+                    default: //Aguardando An&aacute;lise
                         $where['p.Orgao = ?'] = $this->codOrgao;
                         $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
                         break;
                 }
 
-            } else { //Aguardando An�lise
+            } else { //Aguardando An&aacute;lise
                 $filtro = '';
                 $where['p.Orgao = ?'] = $this->codOrgao;
 		$where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
@@ -3517,8 +3515,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
                 $this->view->filtro = $filtro;
                 switch ($filtro) {
-                    case 'emanalise': //Em an�lise
-                        $this->view->tituloPag = 'Em an�lise';
+                    case 'emanalise': //Em an&aacute;lise
+                        $this->view->tituloPag = 'Em an&aacute;lise';
                         $where['p.Orgao = ?'] = $this->codOrgao;
                         $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
                         $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
@@ -3552,15 +3550,15 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                         $where['d.idTipoDiligencia = ?'] = 174;
                         $where['d.stEstado = ?'] = 0;
                         break;
-                    default: //Aguardando An�lise
-                        $this->view->tituloPag = 'Aguardando An�lise';
+                    default: //Aguardando An&aacute;lise
+                        $this->view->tituloPag = 'Aguardando An&aacute;lise';
                         $where['p.Orgao = ?'] = $this->codOrgao;
                         $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
                         break;
                 }
 
-            } else { //Aguardando An�lise
-                $this->view->tituloPag = 'Aguardando An�lise';
+            } else { //Aguardando An&aacute;lise
+                $this->view->tituloPag = 'Aguardando An&aacute;lise';
                 $filtro = '';
                 $where['p.Orgao = ?'] = $this->codOrgao;
                 $where['p.Situacao in (?)'] = array('E68', 'E77');
@@ -3593,22 +3591,22 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 $html = '';
                 $html .= '<table style="border: 1px">';
-                $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="'.$colspan.'">Analisar presta��o de contas - '.$this->view->tituloPag.'</td></tr>';
+                $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="'.$colspan.'">Analisar presta&ccedil;&atilde;o de contas - '.$this->view->tituloPag.'</td></tr>';
                 $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10" colspan="'.$colspan.'">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
                 $html .='<tr><td colspan="'.$colspan.'"></td></tr>';
 
                 if(isset($filtro) && $filtro == 'emanalise'){
                     $addTec = '<th style="border: 1px dotted black; background-color: #9BBB59;">T�cnico</th>';
                     $addDataEnvio = '<th style="border: 1px dotted black; background-color: #9BBB59;">Dt. Envio</th>';
-                    $addDiasAnalise = '<th style="border: 1px dotted black; background-color: #9BBB59;">Dias em An�lise</th>';
+                    $addDiasAnalise = '<th style="border: 1px dotted black; background-color: #9BBB59;">Dias em An&aacute;lise</th>';
                 }
 
                 $html .= '<tr>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">#</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">PRONAC</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Nome do Projeto</th>';
-                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa��o</th>';
-                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">�rea / Segmento</th>';
+                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa&ccedil;&atilde;o</th>';
+                $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">&Aacute;rea / Segmento</th>';
                 $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Mecanismo</th>';
                 if(isset($filtro) && $filtro == 'emanalise'){
                     $html .= $addTec;
@@ -3669,7 +3667,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $busca->delete();
 
                 $tblProjeto = new Projetos();
-                $tblProjeto->alterarSituacao($get->idPronac, '', 'E68', 'Presta��o de Contas apresentada - Aguardando An�lise');
+                $tblProjeto->alterarSituacao($get->idPronac, '', 'E68', 'Presta&ccedil;&atilde;o de Contas apresentada - Aguardando An&aacute;lise');
                 parent::message('Projeto devolvido com sucesso!', "realizarprestacaodecontas/painel?tipoFiltro=emanalise", 'CONFIRM');
 
             } catch (Exception $e) {
@@ -3728,7 +3726,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 case 'coordIncFiscTec': //Coordenador (a) de Incentivos Fiscais e Apoio T�cnico
                     $where['a.tpCargo = ?'] = 1;
                     break;
-                case 'coordGeral': //Coordenador (a) Geral de Presta��o de Contas
+                case 'coordGeral': //Coordenador (a) Geral de Presta&ccedil;&atilde;o de Contas
                     $where['a.tpCargo = ?'] = 2;
                     break;
                 case 'diretorExecutivo': //Diretor (a) Executivo de Incentivo � Cultura
@@ -3819,16 +3817,16 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($filtro) {
-                case 'coordIncFiscTec': //Coordenador (a) de Incentivos Fiscais e Apoio T�cnico
+                case 'coordIncFiscTec': //Coordenador (a) de Incentivos Fiscais e Apoio Tecnico
                     $where['a.tpCargo = ?'] = 1;
                     break;
-                case 'coordGeral': //Coordenador (a) Geral de Presta��o de Contas
+                case 'coordGeral': //Coordenador (a) Geral de Presta&ccedil;&atilde;o de Contas
                     $where['a.tpCargo = ?'] = 2;
                     break;
-                case 'diretorExecutivo': //Diretor (a) Executivo de Incentivo � Cultura
+                case 'diretorExecutivo': //Diretor (a) Executivo de Incentivo a Cultura
                     $where['a.tpCargo = ?'] = 3;
                     break;
-                case 'secretarioFomento': //Secret�rio (a) de Fomento e Incentivo � Cultura
+                case 'secretarioFomento': //Secretario (a) de Fomento e Incentivo a Cultura
                     $where['a.tpCargo = ?'] = 4;
                     break;
                 default: //Todos os cargos
@@ -3848,8 +3846,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         if(isset($post->xls) && $post->xls){
             $html = '';
             $html .= '<table style="border: 1px">';
-            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="5">Manter Assinantes</td></tr>';
-            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10" colspan="5">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
+            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16px; font-weight: bold;" colspan="5">Manter Assinantes</td></tr>';
+            $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10px" colspan="5">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
             $html .='<tr><td colspan="5"></td></tr>';
 
             $html .= '<tr>';
@@ -3857,7 +3855,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Nome do Assinante</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Tipo do Cargo</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Dt. Cadastro</th>';
-            $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa��o</th>';
+            $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa&ccedil;&atilde;o</th>';
             $html .= '</tr>';
 
             $i=1;
@@ -3865,16 +3863,16 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 switch ($d->tpCargo) {
                     case '1':
-                        $tpCargo = 'Coordenador (a) de Incentivos Fiscais e Apoio T�cnico';
+                        $tpCargo = 'Coordenador (a) de Incentivos Fiscais e Apoio T&eacute;cnico';
                         break;
                     case '2':
-                        $tpCargo = 'Coordenador (a) Geral de Presta��o de Contas';
+                        $tpCargo = 'Coordenador (a) Geral de Presta&ccedil;&atilde;o de Contas';
                         break;
                     case '3':
-                        $tpCargo = 'Diretor (a) Executivo de Incentivo � Cultura';
+                        $tpCargo = 'Diretor (a) Executivo de Incentivo &agrave; Cultura';
                         break;
                     case '4':
-                        $tpCargo = 'Secret�rio (a) de Fomento e Incentivo � Cultura';
+                        $tpCargo = 'Secret&aacute;rio (a) de Fomento e Incentivo &agrave; Cultura';
                         break;
                     default:
                         $tpCargo = ' - ';

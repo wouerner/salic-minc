@@ -1,3 +1,37 @@
+Release 2.0.10
+  * Fix: [Prestacao de contas] Corrige quando um coordenador encaminha uma prestacao de contas para analise
+  * Fix: [CNIC] Ajuste de menu para componente da comissão
+  * Fix: [Parecerista] Corrigindo planilha na avaliacao do recurso
+  * Fix: [CNIC] Ajuste no layout do painel de credenciamento.
+  * Fix: [Recurso] Charset Recurso em Análise.
+  * Fix: [Comprovação Financeira] Ajuste dos botões.
+  * Fix: [Comprovação Financeira] Ajuste na hora de salvar fornecedor do exterior
+  * Fix: [Parecer Técnico] Erros no layout
+  * Fix: [Consultar dados projeto] Corrige charset e cores das planilhas
+  * Update: [Sistema] Padroniza algumas transacoes e corrige varios charsets
+  * Update: [Assinatura] Melhorias no fluxo de criação de documento e assinatura do documento de acordo com o que foi definido no arquivo de configuração.
+  * Add: [Assinatura] Adição de Markdown com passo-a-passo e dependências do módulo de assinatura
+  * Update: [Assinatura] Reestruturação de tudo o que envolve a criação de um documento de assinatura.
+  * Remove: [Assinatura] Remoção de todas as dependências do enquadramentro da geração de um documento de assinatura.
+  * Add: [Assinatura] Criação de Interfaces e segmentação de classes com o intuito de definir o que é comum e pode ser aplicado um padrão para que seja possível implementar a assinatura dentro do SALIC em outras funcionalidades.
+  * Update: [Assinatura] Substituição de remoção física para remoção lógica das assinaturas
+
+Release 2.0.9
+  * Fix: [Análise de projeto] Erro no layout
+  * Fix: [Comprovação financeira] Ajuste nos titulos da tela
+  * Fix: [Comprovação financeira] Erro ao tentar enviar
+  * Update: [Envio proposta cultural] Adicionando segmentos que não necessitam validar o CNAE do proponente
+  * Update: [Proposta] Adicionando criterio para busca
+  * Update: [Proposta] Ao verificar CNAE Cultural validando verificando se Pessoa Juridica ou Fisica
+  * Fix: [Enquadramento] Ajuste da query para trazer dados corretos em enquadramento
+  * Fix: [Menu] Label da nova IN trocada de 2016 para 2013
+  * Fix: [Login] Erro ao tentar logar no sistema com senha gerada pelo gestor do salic
+  * Fix: [Consulta cidadão] Corrigindo funcionalidade
+  * Fix: [Dados bancários] Correção de charset
+  * Fix: [Layout] Ajuste das telas de incluir agentes + menu com novo formato
+  * Fix: [Readequações] Botão finalizar não estava funcionando
+  * Add: [Proposta] Atualizando dados do proponente com webservice da receita quando o CNAE cultural nao é compativel com a proposta atual
+
 Release 2.0.8
   * Fix [Manter usuários] correções em férias e atestados
   * Fix [Manter usuários] Correção de charset

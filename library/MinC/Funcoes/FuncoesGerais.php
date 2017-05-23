@@ -462,6 +462,14 @@ function isCnpjValid($cnpj) {
     }
 }
 
+function strConvertCharset($str) {
+
+    if (mb_detect_encoding($str, 'UTF-8', true) === false) {
+        $str = utf8_encode($str);
+    }
+
+    return utf8_decode($str);
+}
 
 function converterArrayParaObjetos($array)
 {
