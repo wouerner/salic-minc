@@ -395,7 +395,7 @@
                 </fieldset>
                 <!-- ========== FIM FORMULARIO E-MAIL ========== -->
             <?php } ?>
-            <button type="button" class="btn" value=" " onclick="validaAgenteNovo();"/>salvar</button>
+            <button type="button" class="btn" value=" " onclick="validaAgenteNovo();">salvar</button>
         </form>
 </div>
 
@@ -487,7 +487,7 @@
         };
         document.getElementById('cpf').focus();
         <?php if($this->modulo != "movimentacaobancaria"): ?>
-        $('#cadDirigente').show(); // mostra a aba com os dirigentes
+            $('#cadDirigente').show(); // mostra a aba com os dirigentes
         <?php endif; ?>
     }
 
@@ -543,7 +543,7 @@
                             var event = new CustomEvent("agenteJaCadastrado", {"detail": data[0].agente});
                             document.dispatchEvent(event);
                         <?php if ($this->modulo != "movimentacaobancaria") : ?>
-                        window.location = '<?php echo $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data[0].idAgente;
+                            window.location = '<?php echo $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data[0].idAgente;
                         <?php endif; ?>
                         }
                         else if (data[0].msgCPF == 'invalido') {
