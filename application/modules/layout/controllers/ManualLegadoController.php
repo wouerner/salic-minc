@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller Manual Layout
+ * Controller Manual Legado
  * (Exemplo de Utilização do Layout)
  * @author emanuel.sampaio - Politec
  * @since 27/05/2011
@@ -11,7 +11,7 @@
  * @copyright © 2011 - Ministério da Cultura - Todos os direitos reservados.
  */
 
-class Manual_ManualLayoutController extends MinC_Controller_Action_Abstract
+class Layout_ManualLegadoController extends MinC_Controller_Action_Abstract
 {
 	/**
 	 * Reescreve o método init()
