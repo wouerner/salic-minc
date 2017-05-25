@@ -20,10 +20,9 @@ class MinC_Assinatura_Autenticacao_Padrao implements MinC_Assinatura_Autenticaca
     public function autenticar()
     {
         $isUsuarioESenhaValidos = $this->usuario->isUsuarioESenhaValidos();
-        if (!$isUsuarioESenhaValidos) {
-            return false;
+        if ($isUsuarioESenhaValidos) {
+            return true;
         }
-        return true;
     }
 
     /**

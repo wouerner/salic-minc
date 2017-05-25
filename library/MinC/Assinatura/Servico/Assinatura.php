@@ -47,20 +47,22 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
     public function assinarProjeto(MinC_Assinatura_Model_Assinatura $modelAssinatura)
     {
 
-        if (empty($modelAssinatura->getDsManifestacao())) {
+        if (empty(trim($modelAssinatura->getDsManifestacao()))) {
             throw new Exception ("Campo \"De acordo do Assinante\" &eacute; de preenchimento obrigat&oacute;rio.");
         }
 
-        if (empty($modelAssinatura->getIdPronac())) {
+        if (empty(trim($modelAssinatura->getIdPronac()))) {
             throw new Exception ("O n&uacute;mero do projeto &eacute; obrigat&oacute;rio.");
         }
 
-        if (empty($modelAssinatura->getIdTipoDoAtoAdministrativo())) {
+        if (empty(trim($modelAssinatura->getIdTipoDoAtoAdministrativo()))) {
             throw new Exception ("O Tipo do Ato Administrativo &eacute; obrigat&oacute;rio.");
         }
 
         $servicoAutenticacao = $this->obterServicoAutenticacao();
-        if(!$servicoAutenticacao->autenticar()) {
+        $metodoAutenticacao = $servicoAutenticacao->obterMetodoAutenticacao();
+
+        if(!$metodoAutenticacao->autenticar()) {
             throw new Exception ("Os dados utilizados para autentica&ccedil;&atilde;o s&atilde;o inv&aacute;lidos.");
         }
 
@@ -84,7 +86,7 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
             throw new Exception ("A fase atual de assinaturas do projeto atual n&atilde;o permite realizar essa opera&ccedil;&atilde;o.");
         }
 
-        $usuario = $servicoAutenticacao->obterInformacoesAssinante();
+        $usuario = $metodoAutenticacao->obterInformacoesAssinante();
         $objTbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
 
         $assinaturaExistente = $objTbAssinatura->buscar(array(
@@ -94,7 +96,7 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
             'idDocumentoAssinatura = ?' => $dadosDocumentoAssinatura['idDocumentoAssinatura']
         ));
 
-        if($assinaturaExistente) {
+        if($assinaturaExistente->current()) {
             throw new Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
         }
 
