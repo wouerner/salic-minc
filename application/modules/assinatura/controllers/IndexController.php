@@ -27,7 +27,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
         $ordenacao = array("projetos.DtSituacao asc");
         $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas($this->grupoAtivo->codOrgao, $ordenacao);
-//xd($this->view->dados);
+// xd($this->view->dados);
         // tipoDoAtoAdministrativo
         // idTipoDoAtoAdministrativo
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
@@ -174,10 +174,47 @@ class Assinatura_IndexController extends Assinatura_GenericController
                         'CONFIRM'
                     );
                 } catch (Exception $objException) {
-                    $this->_helper->viewRenderer->setNoRender(false);
-                    $this->_helper->flashMessenger->addMessage($objException->getMessage());
-                    $this->_helper->flashMessengerType->addMessage("ERROR");
+                    parent::message(
+                        $objException->getMessage(),
+                        "/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}",
+                        'ERROR'
+                    );
                 }
+            }
+
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $this->view->documentoAssinatura = $objModelDocumentoAssinatura->findBy(
+                array(
+                    'IdPRONAC' => $idPronac,
+                    'idTipoDoAtoAdministrativo' => $idTipoDoAtoAdministrativo
+                )
+            );
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $documentoAssinatura = $objModelDocumentoAssinatura->findBy(
+                array(
+                    'IdPRONAC' => $idPronac,
+                    'idTipoDoAtoAdministrativo' => $idTipoDoAtoAdministrativo,
+                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+                )
+            );
+
+            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
+                $idTipoDoAtoAdministrativo,
+                $this->grupoAtivo->codGrupo,
+                $this->grupoAtivo->codOrgao
+            );
+
+            $objTbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+            $assinaturaExistente = $objTbAssinatura->buscar(array(
+                'idPronac = ?' => $idPronac,
+                'idAtoAdministrativo = ?' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
+                'idAssinante = ?' => $this->auth->getIdentity()->usu_codigo,
+                'idDocumentoAssinatura = ?' => $documentoAssinatura['idDocumentoAssinatura']
+            ));
+
+            if($assinaturaExistente->current()) {
+                throw new Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
             }
 
             $objProjeto = new Projeto_Model_DbTable_Projetos();
@@ -196,8 +233,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $this->view->templateAutenticacao = $objAssinatura->obterServicoAutenticacao()->obterMetodoAutenticacao()->obterTemplateAutenticacao();
 
             $this->view->idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
-
         } catch (Exception $objException) {
+
             parent::message(
                 $objException->getMessage(),
                 "/{$this->moduleName}/index/gerenciar-assinaturas"
