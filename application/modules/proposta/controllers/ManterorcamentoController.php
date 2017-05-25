@@ -303,6 +303,10 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->Produtos = $buscarProduto->buscarProdutos($this->idPreProjeto);
     }
 
+    public function custosvinculadosAction() {
+
+    }
+
     /**
      * resumoplanilhaAction
      *
@@ -597,6 +601,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             if ($item) {
                 $totalItemSalvo = $item['Quantidade'] * $item['Ocorrencia'] * $item['ValorUnitario'];
+
                 $custosDesteItem = $this->somarTotalCustosVinculados($idPreProjeto, $totalItemSalvo);
                 $totalItemSalvo = $totalItemSalvo + $custosDesteItem;
             }
@@ -609,6 +614,128 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $valorTotalProjetoIncentivo = $valorTotaldosProdutosIncentivados + $custosvinculados;
 
         return ($valorTotalIncentivoOriginal < $valorTotalProjetoIncentivo);
+    }
+
+    public function somarTotalCustosVinculados($idPreProjeto, $valorTotalProdutos = null)
+    {
+        $tbCustos = new Proposta_Model_DbTable_TbCustosVinculados();
+        $itens = $tbCustos->calcularCustosVinculados($idPreProjeto, $valorTotalProdutos);
+
+        if ($itens == 0)
+            return 0;
+
+        if ($itens) {
+            $soma = 0;
+            foreach ($itens as $item) {
+                $soma = $item['valorunitario'] + $soma;
+            }
+        }
+        return $soma;
+    }
+
+    public function calcularCustosVinculados($idPreProjeto, $valorTotalProdutos = null)
+    {
+
+        if (empty($idPreProjeto))
+            return false;
+
+
+        $ModelCV = new Proposta_Model_TbCustosVinculados();
+        $idEtapa = $ModelCV::ID_ETAPA_CUSTOS_VINCULADOS;
+        $fonteRecurso = $ModelCV::ID_FONTE_RECURSO_CUSTOS_VINCULADOS;
+
+        $dados = array();
+
+        $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
+
+        if (empty($valorTotalProdutos)) {
+            $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaProdutos($idPreProjeto, 109);
+            $valorTotalProdutos = $somaPlanilhaPropostaProdutos['soma'];
+        }
+
+        if (!is_numeric($valorTotalProdutos)) {
+            return 0;
+        }
+
+        $ufRegionalizacaoPlanilha = $TPP->buscarItensUfRegionalizacao($idPreProjeto);
+
+        # definindo os criterios de regionalizacao
+        if (!empty($ufRegionalizacaoPlanilha)) { # sudeste e sul
+            $calcDivugacao = 0.2;     # custo de divulgacao 20%
+            $calcCaptacao = 0.1;      # custo para captação 10%
+            $limiteCaptacao = 100000; # valor máximo para captação 100.000,00
+
+            $idUf = $ufRegionalizacaoPlanilha->idUF;
+            $idMunicipio = $ufRegionalizacaoPlanilha->idMunicipio;
+        } else { # demais regiões
+            $calcDivugacao = 0.3;     # custo de divulgação 30%
+            $calcCaptacao = 0.15;     # custo para captação 15%
+            $limiteCaptacao = 150000; # valor máximo para captação 150.000,00
+
+            $arrBusca['idprojeto'] = $idPreProjeto;
+            $arrBusca['stabrangencia'] = 1;
+
+            $idUf = 1;
+            $idMunicipio = 1;
+        }
+
+        // Busca os itens da etapa 8 (custos vinculados)
+        $itensPlanilhaProduto = new tbItensPlanilhaProduto();
+        $itensCustoAdministrativo = $itensPlanilhaProduto->buscarItens($idEtapa);
+
+        foreach ($itensCustoAdministrativo as $item) {
+            $custosVinculados = null;
+            $valorCustoItem = null;
+            $calcular = true;
+
+            switch ($item->idPlanilhaItens) {
+                case $ModelCV::ID_CUSTO_ADMINISTRATIVO:// Custo Administrativo, pode zerar qualquer um
+                    $valorCustoItem = ($valorTotalProdutos * 0.15);
+                    break;
+                case $ModelCV::ID_DIVULGACAO: // Divulgacao, pode zerar qualquer um
+                    $valorCustoItem = ($valorTotalProdutos * $calcDivugacao);
+                    break;
+                case $ModelCV::ID_REMUNERACAO_CAPTACAO: // Remuneracao p/ Captar Recursos
+                    $valorCustoItem = ($valorTotalProdutos * $calcCaptacao);
+                    if ($valorCustoItem > $limiteCaptacao)
+                        $valorCustoItem = $limiteCaptacao;
+                    break;
+                case $ModelCV::ID_CONTROLE_E_AUDITORIA: // Controle e Auditoria
+                    $valorCustoItem = ($valorTotalProdutos * 0.1);
+                    if ($valorCustoItem > 100000)
+                        $valorCustoItem = 100000;
+                    break;
+                case $ModelCV::ID_DIREITOS_AUTORAIS: // direito autoral, pode zerar qualquer um
+                    $valorCustoItem = ($valorTotalProdutos * 0.1 );
+                    break;
+                default:
+                    $calcular = false;
+            }
+
+            if ($calcular == true) {
+
+                $dados[] = array(
+                    'idprojeto' => $idPreProjeto,
+                    'idetapa' => $idEtapa,
+                    'idplanilhaitem' => $item->idPlanilhaItens,
+                    'descricao' => '',
+                    'unidade' => '1',
+                    'quantidade' => '1',
+                    'ocorrencia' => '1',
+                    'valorunitario' => $valorCustoItem,
+                    'qtdedias' => '1',
+                    'tipodespesa' => '0',
+                    'tipopessoa' => '0',
+                    'contrapartida' => '0',
+                    'fonterecurso' => $fonteRecurso,
+                    'ufdespesa' => $idUf,
+                    'municipiodespesa' => $idMunicipio,
+                    'idusuario' => 462,
+                    'dsjustificativa' => ''
+                );
+            }
+        }
+        return $dados;
     }
 
     /**
