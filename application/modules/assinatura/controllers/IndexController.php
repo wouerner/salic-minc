@@ -147,11 +147,13 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $post = $this->getRequest()->getPost();
             $objAssinatura = new MinC_Assinatura_Servico_Assinatura($post, $this->auth->getIdentity());
             $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = false;
-            if($get->isMovimentarAssinatura == 'true') {
-                $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = true;
-            }
 
             if ($post) {
+
+                if($get->isMovimentarAssinatura == 'true') {
+                    $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = true;
+                }
+
                 try {
                     $this->view->dsManifestacao = $post['dsManifestacao'];
                     foreach ($arrayIdPronacs as $idPronac) {
@@ -237,10 +239,11 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $this->view->templateAutenticacao = $objAssinatura->obterServicoAutenticacao()->obterMetodoAutenticacao()->obterTemplateAutenticacao();
             $this->view->idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
             $this->view->isMovimentarAssinatura = false;
+
             if($get->isMovimentarAssinatura == 'true') {
-                $this->view->isMovimentarAssinatura = true;
+                $this->view->isMovimentarAssinatura = 'true';
             }
-//            xd($get->isMovimentarAssinatura);
+
         } catch (Exception $objException) {
 
             parent::message(
