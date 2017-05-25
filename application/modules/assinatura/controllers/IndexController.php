@@ -135,7 +135,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             if (is_array($get->IdPRONAC)) {
                 $idPronacUnidos = implode(',', $get->IdPRONAC);
-                $this->redirect("/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronacUnidos}");
+                $this->redirect("/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronacUnidos}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}");
             }
 
             $this->view->IdPRONAC = $get->IdPRONAC;
@@ -146,6 +146,10 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             $post = $this->getRequest()->getPost();
             $objAssinatura = new MinC_Assinatura_Servico_Assinatura($post, $this->auth->getIdentity());
+            $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = false;
+            if($get->isMovimentarAssinatura == 'true') {
+                $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = true;
+            }
 
             if ($post) {
                 try {
@@ -170,7 +174,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                     }
                     parent::message(
                         "Projeto assinado com sucesso!",
-                        "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}",
+                        "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}",
                         'CONFIRM'
                     );
                 } catch (Exception $objException) {
@@ -231,8 +235,12 @@ class Assinatura_IndexController extends Assinatura_GenericController
             ));
 
             $this->view->templateAutenticacao = $objAssinatura->obterServicoAutenticacao()->obterMetodoAutenticacao()->obterTemplateAutenticacao();
-
             $this->view->idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
+            $this->view->isMovimentarAssinatura = false;
+            if($get->isMovimentarAssinatura == 'true') {
+                $this->view->isMovimentarAssinatura = true;
+            }
+//            xd($get->isMovimentarAssinatura);
         } catch (Exception $objException) {
 
             parent::message(
