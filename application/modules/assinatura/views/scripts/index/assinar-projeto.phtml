@@ -25,7 +25,7 @@
                     'action' => 'assinar-projeto'
                 )
             )
-            . "?IdPRONAC={$this->IdPRONAC}&idTipoDoAtoAdministrativo={$this->idTipoDoAtoAdministrativo}";
+            . "?IdPRONAC={$this->IdPRONAC}&idTipoDoAtoAdministrativo={$this->idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$isMovimentarAssinatura}";
         ?>"
         method="post">
             <input type="hidden" name="IdPRONAC" value="<?php echo $this->IdPRONAC ?>" />
