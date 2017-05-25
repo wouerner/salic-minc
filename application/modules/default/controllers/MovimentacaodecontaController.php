@@ -1813,11 +1813,11 @@ class MovimentacaodecontaController extends MinC_Controller_Action_Abstract
         // caso o formulario seja enviado via post
         if ($this->getRequest()->isPost()) {
             // configuracao o php.ini para 100MB
-            @set_time_limit(0);
+            /* @set_time_limit(0); */
             @ini_set('mssql.textsize',      10485760000);
             @ini_set('mssql.textlimit',     10485760000);
             @ini_set('mssql.timeout',       10485760000);
-            @ini_set('upload_max_filesize', '100M');
+            /* @ini_set('upload_max_filesize', '100M'); */
 
             try {
                 $auth = Zend_Auth::getInstance();
@@ -1833,7 +1833,6 @@ class MovimentacaodecontaController extends MinC_Controller_Action_Abstract
                     $arrRetorno['error'] = false;
                     $arrRetorno['msg']   = 'Rotina executada com sucesso!';
                     $this->_helper->json($arrRetorno);
-                    $this->_helper->viewRenderer->setNoRender(TRUE);
                 }else {
                     parent::message('Rotina executada com sucesso!', 'movimentacaodeconta/listar-inconsistencias', 'CONFIRM');
                 }
@@ -1842,7 +1841,6 @@ class MovimentacaodecontaController extends MinC_Controller_Action_Abstract
                     $arrRetorno['error'] = true;
                     $arrRetorno['msg']   = $e->getMessage();
                     $this->_helper->json($arrRetorno);
-                    $this->_helper->viewRenderer->setNoRender(TRUE);
                 }else {
                     parent::message( $e->getMessage() , 'movimentacaodeconta/listar-inconsistencias', 'ERROR');
                 }

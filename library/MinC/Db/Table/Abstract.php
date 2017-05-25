@@ -200,30 +200,35 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
      */
     public function buscar($where = array(), $order = array(), $tamanho = -1, $inicio = -1)
     {
-        $select = $this->select()->from($this->_name, $this->_getCols(), $this->_schema);
+        try {
 
-        //adiciona quantos filtros foram enviados
-        foreach ($where as $coluna => $valor) {
-            if (!is_null($valor)) {
-                $select->where($coluna, $valor);
+            $select = $this->select()->from($this->_name, $this->_getCols(), $this->_schema);
+
+            //adiciona quantos filtros foram enviados
+            foreach ($where as $coluna => $valor) {
+                if (!is_null($valor)) {
+                    $select->where($coluna, $valor);
+                }
             }
-        }
-        $select->order($order);
+            $select->order($order);
 
-        // paginacao
-        if ($tamanho > -1) {
-            $tmpInicio = 0;
-            if ($inicio > -1) {
-                $tmpInicio = $inicio;
+            // paginacao
+            if ($tamanho > -1) {
+                $tmpInicio = 0;
+                if ($inicio > -1) {
+                    $tmpInicio = $inicio;
+                }
+                $select->limit($tamanho, $tmpInicio);
             }
-            $select->limit($tamanho, $tmpInicio);
-        }
 
-        if($this->debugMode === true) {
-            xd($select->assemble());
-        }
+            if($this->debugMode === true) {
+                xd($select->assemble());
+            }
 
-        return $this->fetchAll($select);
+            return $this->fetchAll($select);
+        } catch (Exception $exception) {
+            throw $exception;
+        }
     }
 
     public function alterar($dados, $where)
