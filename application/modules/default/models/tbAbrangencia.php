@@ -15,12 +15,9 @@
 
 class tbAbrangencia extends MinC_Db_Table_Abstract
 {
-	/* dados da tabela */
-//	protected $_banco   = "SAC";
 	protected $_schema  = "sac";
 	protected $_name    = "tbAbrangencia";
     protected $_primary = 'idAbrangencia';
-
 
 	/**
 	 * Busca os locais de abrangencia originais (aprovados)
@@ -199,7 +196,7 @@ class tbAbrangencia extends MinC_Db_Table_Abstract
 		$select = $this->select();
 		$select->setIntegrityCheck(false);
 		$select->from(
-			array('a' => 'Abrangencia'),
+			array('a' => 'Abrangencia'), # @todo tabela abrangencia eh diferente de tbAbrangencia
 			array(
                 new Zend_Db_Expr('a.*')
             ), 'SAC.dbo'
@@ -213,6 +210,29 @@ class tbAbrangencia extends MinC_Db_Table_Abstract
         
 		return $this->fetchAll($select);
 	} // fecha metodo historicoReadequacao()
+
+    public function buscarUfRegionalizacao( $idPreProjeto )
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            array(
+                'idPreProjeto'=>'a.idPronac',
+            ),
+            $this->_schema
+        );
+        $select->joinInner(array('uf' => 'UF'), 'uf.idUF = a.idUF', array('idUF'=>'uf.idUF', 'UF'=>'uf.Sigla'), $this->getSchema('agentes'));
+        $select->joinInner(array('mun' => 'Municipios'), 'mun.idMunicipioIBGE = a.idMunicipioIBGE', array('idMunicipio'=>'mun.idMunicipioIBGE', 'Municipio'=>'mun.Descricao'), $this->getSchema('agentes'));
+        $select->where('a.idPronac = ?', $idPreProjeto);
+        $select->where("uf.Regiao = 'Sul' OR uf.Regiao = 'Sudeste'");
+        $select->order('a.idPronac DESC');
+        $select->limit(1);
+
+        $db= Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+        return $db->fetchRow($select);
+    }
 
 
 } // fecha class
