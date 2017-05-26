@@ -193,6 +193,87 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
         }
     }
 
+    public function calcularCustosVinculados($idPreProjeto, $valorTotalProdutos = null)
+    {
+
+        if (empty($idPreProjeto))
+            return false;
+
+        $ModelCV = new Proposta_Model_TbCustosVinculados();
+        $idEtapa = $ModelCV::ID_ETAPA_CUSTOS_VINCULADOS;
+        $fonteRecurso = $ModelCV::ID_FONTE_RECURSO_CUSTOS_VINCULADOS;
+        $idUf = 1;
+        $idMunicipio = 1;
+        $dados = array();
+
+        $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $ModelCV = new Proposta_Model_TbCustosVinculados();
+
+        if (empty($valorTotalProdutos)) {
+            $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaProdutos($idPreProjeto, 109);
+            $valorTotalProdutos = $somaPlanilhaPropostaProdutos['soma'];
+        }
+
+        if (!is_numeric($valorTotalProdutos)) {
+            return 0;
+        }
+
+        $itensPlanilhaProduto = new tbItensPlanilhaProduto();
+        $itensCustosVinculados = $itensPlanilhaProduto->buscarItens($idEtapa, null, Zend_DB::FETCH_ASSOC);
+
+        $CustosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+
+        foreach ($itensCustosVinculados as $item) {
+
+            $custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $idPreProjeto, 'idPlanilhaItem' => $item['idPlanilhaItens']));
+
+            if ($custoVinculadoProponente['dsObservacao'] > 0) {
+                $valorCustoItem = ($valorTotalProdutos * ($custoVinculadoProponente['dsObservacao'] / 100));
+            } elseif ($custoVinculadoProponente['dsObservacao'] == 0) {
+                $valorCustoItem = 0;
+            }
+
+            $dados[] = array(
+                'idprojeto' => $idPreProjeto,
+                'idetapa' => $idEtapa,
+                'idplanilhaitem' => $item['idPlanilhaItens'],
+                'descricao' => '',
+                'unidade' => '1',
+                'quantidade' => '1',
+                'ocorrencia' => '1',
+                'valorunitario' => $valorCustoItem,
+                'qtdedias' => '1',
+                'tipodespesa' => '0',
+                'tipopessoa' => '0',
+                'contrapartida' => '0',
+                'fonterecurso' => $fonteRecurso,
+                'ufdespesa' => $idUf,
+                'municipiodespesa' => $idMunicipio,
+                'idusuario' => 462,
+                'dsjustificativa' => ''
+            );
+        }
+
+        return $dados;
+    }
+
+    public function somarTotalCustosVinculados($idPreProjeto, $valorTotalProdutos = null)
+    {
+        $itens = $this->calcularCustosVinculados($idPreProjeto, $valorTotalProdutos);
+        $soma = '';
+
+        if ($itens == 0)
+            return 0;
+
+        if ($itens) {
+            $soma = 0;
+            foreach ($itens as $item) {
+                $soma = $item['valorunitario'] + $soma;
+            }
+        }
+        return $soma;
+    }
+
     public function contagemRegressivaDias($datainicial = null, $prazo = null)
     {
         $datafinal = "NOW";
