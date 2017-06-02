@@ -1,3 +1,11 @@
+Release 2.0.11
+ * Fix: [Proposta] Ajuste na inclusão de itens orçamentarios
+ * Fix: [Agente] Erros nas combos de UF e Cidade
+ * Add: [Assinatura] Adição de tratamento para quando o módulo utiliza ou não a movimentação de assinatura.
+ * Add: [Assinatura] Adição de tratamento para quando o módulo utiliza ou não a movimentação de assinatura.
+ * Add: [Assinatura] Adição de validação para quando o usuario entrar na tela de assinar e já tiver assinado o projeto.
+ * Fix: [Movimentação de Conta] Ajusta na SP de execução.
+
 Release 2.0.10
   * Fix: [Prestacao de contas] Corrige quando um coordenador encaminha uma prestacao de contas para analise
   * Fix: [CNIC] Ajuste de menu para componente da comissão
