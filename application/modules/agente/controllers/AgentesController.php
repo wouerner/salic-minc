@@ -1800,7 +1800,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      * @param void
      * @return void
      */
-    public function agentecadastradoAction() { //Metodo chamado pela Modal
+    public function agentecadastradoAction() 
+    { 
         $this->_helper->layout->disableLayout(); // desabilita o layout
         $this->_helper->viewRenderer->setNoRender(true);
         $cpf = preg_replace('/\.|-|\//','',$_REQUEST['cpf']);
