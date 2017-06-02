@@ -2773,8 +2773,6 @@ class Projetos extends MinC_Db_Table_Abstract
             $where = "(AnoProjeto+Sequencial) = '" . $pronac . "'";
         }
 
-        //x("Se voce esta vendo esta mensagem, favor entrar em contato com o Everton ou Danilo Lisboa urgentemente! <br>Informe tambem os dados abaixo, se houver! ");
-
         if (!empty($where)) {
             return $this->update($dados, $where);
         } else {
