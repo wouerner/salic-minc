@@ -172,15 +172,14 @@ function enviar_pag_nao_assincrono(url, dados, id)
 		}
 	}
 	ajax.send(dados);
-} // fecha função enviar_pag()
-
-
+}
 
 /**
  * Função para buscar os dados de um combo de acordo com o valor de outro
  */
 function carregar_combo(valor, combo, url, txt_combo, campo_selecionado)
 {
+    console.log(valor, combo, url, txt_combo, campo_selecionado);
 	ajax = xmlhttp(); // instancia ajax
 
 	// deixa apenas um elemento no combo, os outros são excluídos
@@ -203,6 +202,7 @@ function carregar_combo(valor, combo, url, txt_combo, campo_selecionado)
 			if (ajax.responseXML)
 			{
 				buscar_xml_combo(ajax.responseXML, combo, txt_combo, campo_selecionado);
+                $3('#' + combo).material_select();
 			}
 			else
 			{
@@ -213,9 +213,8 @@ function carregar_combo(valor, combo, url, txt_combo, campo_selecionado)
 	// passa o código do ítem escolhido
 	var params = "id=" + valor;
 	ajax.send(params);
-} // fecha função carregar_combo()
 
-
+}
 
 /**
  * Função para lê o XML de um combo gerado a partir de outro
