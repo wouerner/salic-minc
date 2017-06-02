@@ -1,15 +1,6 @@
 <?php
-
-/**
- * AgentesController Responsavel por manter os agentes e seus tipos.
- * @author Equipe RUP - Politec
- * @author wouerner <woeurner@gmail.com>
- * @since 25/05/2011
- * @package agente
- * @subpackage controllers
- */
-class Agente_AgentesController extends MinC_Controller_Action_Abstract {
-
+class Agente_AgentesController extends MinC_Controller_Action_Abstract 
+{
     /**
      * @var integer (variavel com o id do usuario logado)
      * @access private
@@ -1809,7 +1800,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract {
      * @param void
      * @return void
      */
-    public function agentecadastradoAction() { //Metodo chamado pela Modal
+    public function agentecadastradoAction() 
+    { 
         $this->_helper->layout->disableLayout(); // desabilita o layout
         $this->_helper->viewRenderer->setNoRender(true);
         $cpf = preg_replace('/\.|-|\//','',$_REQUEST['cpf']);
@@ -2179,7 +2171,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract {
             echo '</script>';
             echo '<br/><br/><br/><br/><center><font color="green">Cadastrado com sucesso!</font></center>';
             // Retorna para a url anterior do UC116
-            parent::message("Cadastro realizado com sucesso.", "cadastrarprojeto", "CONFIRM");
+            parent::message("Cadastro realizado com sucesso.", "cadastrar-projeto", "CONFIRM");
         } else if (($acao != '')) {
             parent::message(
                 'Proponente cadastrado com sucesso. Uma solicita&ccedil;&atilde;o de v&iacute;nculo foi enviada a ele.',

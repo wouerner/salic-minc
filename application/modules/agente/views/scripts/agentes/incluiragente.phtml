@@ -190,10 +190,12 @@
                 <fieldset>
                     <legend>Novo Endere&ccedil;o</legend>
                     <div class="input-field col s3">
-                        <input class="input_simples" type="text" name="cep" id="cep" maxlength="10"
-                               onkeyup="mascara(this, format_cep);" onblur="buscarcep(this.value);"
-                               onclick="limpar_campo(this, '');" onkeypress="limpar_campo(this, '');"
-                               onblur="restaurar_campo(this, '');" onmouseout="restaurar_campo(this, '');" value=""/>
+                        <input 
+                           class="input_simples" type="text" name="cep" id="cep" maxlength="10"
+                           onkeyup="mascara(this, format_cep);" 
+                           onblur="buscarcep(this.value);"
+                           onclick="limpar_campo(this, '');" onkeypress="limpar_campo(this, '');"
+                           onblur="restaurar_campo(this, '');" onmouseout="restaurar_campo(this, '');" value=""/>
                         <label for="cep">CEP *</label><br/>
                         <span id="erroCep" class="spanError"></span>
                     </div>
@@ -212,7 +214,7 @@
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <label for="uf">UF *</label> <br/>
+                        <label class="" for="uf">UF *</label> <br/>
                         <span id="erroUf" class="spanError"></span>
                     </div>
                     <div class="input-field col s2">
@@ -395,7 +397,7 @@
                 </fieldset>
                 <!-- ========== FIM FORMULARIO E-MAIL ========== -->
             <?php } ?>
-            <button type="button" class="btn" value=" " onclick="validaAgenteNovo();"/>salvar</button>
+            <button type="button" class="btn" value=" " onclick="validaAgenteNovo();">salvar</button>
         </form>
 </div>
 
@@ -412,16 +414,6 @@
             $('#imgPF').show();
             //$('#erroCpf').html("<img src='/public/img/ajax.gif' alt='' /> Aguarde...");
             $('#erroCpf').html("<img src='<?php echo $this->baseUrl(); ?>/public/img/ajax.gif' alt='' /> Aguarde...");
-
-            /*
-             $('#RESPONSAVEL_NOME').val('');
-
-
-             var txt = $(this).val();
-
-             if(txt == '___.___.___-__'){
-             $('#imgPF').hide();
-             }else{*/
 
             $.ajax({
                 type: "POST",
@@ -442,7 +434,8 @@
                         $('#erroCpf').html("");
                         //$('#RESPONSAVEL_CARGO').focus();
                         $('#imgPF').hide();
-                        $('#cep').blur();
+                        /* $('#cep').blur(); */
+                        $('#cep').trigger('blur');
                     }
 
                 }, error: function (data) {
@@ -487,7 +480,7 @@
         };
         document.getElementById('cpf').focus();
         <?php if($this->modulo != "movimentacaobancaria"): ?>
-        $('#cadDirigente').show(); // mostra a aba com os dirigentes
+            $('#cadDirigente').show(); // mostra a aba com os dirigentes
         <?php endif; ?>
     }
 
@@ -543,7 +536,7 @@
                             var event = new CustomEvent("agenteJaCadastrado", {"detail": data[0].agente});
                             document.dispatchEvent(event);
                         <?php if ($this->modulo != "movimentacaobancaria") : ?>
-                        window.location = '<?php echo $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data[0].idAgente;
+                            window.location = '<?php echo $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data[0].idAgente;
                         <?php endif; ?>
                         }
                         else if (data[0].msgCPF == 'invalido') {
@@ -564,6 +557,8 @@
     }
 
     function buscarcep(cep) {
+         $3('#cidade').material_select('destroy');
+
         // pega os dados a serem populados
         logradouro = document.getElementById("logradouro");
         tipoLogradouro = document.getElementById("tipoLogradouro");
@@ -613,8 +608,10 @@
                 }
                 else // caso o cep exista
                 {
+
                     $('#erroCep').html("");
                     txtLogradouro = s.substring(0, (i = s.indexOf(':')));
+
                     s = s.substring(++i);
                     txtTipoLogradouro = s.substring(0, (i = s.indexOf(':')));
                     s = s.substring(++i);
@@ -688,6 +685,7 @@
                     }
                     // preenche o combo com a cidade
                     else {
+
                         // deixa apenas um elemento no combo, os outros sao excluidos
                         document.getElementById("cidade").options.length = 0;
 
@@ -697,6 +695,10 @@
                         novo.text = txtCidade; // atribui um texto ao option
                         document.getElementById("cidade").options.add(novo);
                     }
+
+
+                     $3('select').material_select();
+                    Materialize.updateTextFields()
                 }
             }
         }
