@@ -141,7 +141,7 @@ if (empty($_GET['acao'])) {
         uf             = document.getElementById("uf");
 
         ajax = xmlhttp(); // instancia ajax
-        ajax.open("GET", "<?php echo $this->url(array('controller' => 'cep', 'action' => 'cep')); ?>?cep=" + cep, true);
+        ajax.open("GET", "<?php echo $this->url(array('module' => 'default', 'controller' => 'cep', 'action' => 'cep')); ?>?cep=" + cep, true);
         ajax.onreadystatechange = function()
         {
             if (cep.length != 10)
@@ -243,7 +243,6 @@ if (empty($_GET['acao'])) {
                     {
                         bairro.disabled = false; // habilita para preenchimento
                     }
-
 
                     // uf
                     // seleciona o combo de acordo com a lista existente no formulário
@@ -483,10 +482,10 @@ if (empty($_GET['acao'])) {
                                 <option value="0"> -- </option>
                             <?php } ?>
 
-                            <?php foreach ($this->comboestados as $comboestado): ?>
-                                <option value="<?php echo $comboestado->id; ?>"
-                                        <?php if ($this->uf == $comboestado->id) echo "selected=\"selected\""; ?> >
-                                            <?php echo $comboestado->descricao; ?>
+                            <?php foreach ($this->comboestados as $id => $comboestado): ?>
+                                <option value="<?php echo $id; ?>"
+                                        <?php if ($this->uf == $id) echo "selected=\"selected\""; ?> >
+                                            <?php echo $comboestado; ?>
                                 </option>
                             <?php endforeach; ?>
 
@@ -498,13 +497,15 @@ if (empty($_GET['acao'])) {
                         <select name="cidade" id="cidade" disabled="disabled" class="input_simples" style="width: 250px;">
                             <option value="0"> - Selecione - </option>
 
-                            <?php foreach ($this->combocidades as $combocidade): ?>
-                                <option value="<?php echo $combocidade->id; ?>"
-                                        id="<?php echo $combocidade->idUF; ?>"
-                                        <?php if ($this->cidade == $combocidade->id) echo "selected=\"selected\""; ?>>
-                                            <?php echo utf8_encode($combocidade->descricao); ?>
-                                </option>
-                            <?php endforeach; ?>
+                            <?php if ($this->combocidades ): ?>
+                                <?php foreach ($this->combocidades as $combocidade): ?>
+                                    <option value="<?php echo $combocidade->id; ?>"
+                                            id="<?php echo $combocidade->idUF; ?>"
+                                            <?php if ($this->cidade == $combocidade->id) echo "selected=\"selected\""; ?>>
+                                                <?php echo utf8_encode($combocidade->descricao); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
 
                         </select>
                         <span id="erroCidade" class="spanError"></span>
