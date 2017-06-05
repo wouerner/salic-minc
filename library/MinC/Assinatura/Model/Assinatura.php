@@ -28,6 +28,29 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
     private $cod_orgao;
 
     /**
+     * @var int $idOrdemDaAssinatura
+     */
+    private $idOrdemDaAssinatura;
+
+    /**
+     * @return int
+     */
+    public function getIdOrdemDaAssinatura()
+    {
+        return $this->idOrdemDaAssinatura;
+    }
+
+    /**
+     * @param int $idOrdemDaAssinatura
+     * @return MinC_Assinatura_Model_Assinatura
+     */
+    public function setIdOrdemDaAssinatura($idOrdemDaAssinatura)
+    {
+        $this->idOrdemDaAssinatura = $idOrdemDaAssinatura;
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getCodGrupo()
