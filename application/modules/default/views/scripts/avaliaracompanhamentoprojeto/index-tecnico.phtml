@@ -195,7 +195,7 @@
             <td nowrap><?php echo $dp->Situacao.' - '.$dp->dsSituacao; ?></td>
             <td><?php echo Data::tratarDataZend($dp->dtCadastro, 'Brasileiro'); ?></td>
             <td align="center">
-            <?php echo $this->partial('avaliaracompanhamentoprojeto/partial/diligenciar-table-column.phtml',
+            <?php echo $this->partial('avaliaracompanhamentoprojeto/partial/diligenciar-table-column.phtml','proposta',
                     array(
                         'idPronac' => $dp->IdPRONAC,
                         'situacao' => $dp->Situacao,
