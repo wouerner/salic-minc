@@ -27,9 +27,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
         $ordenacao = array("projetos.DtSituacao asc");
         $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas($this->grupoAtivo->codOrgao, $ordenacao);
-// xd($this->view->dados);
-        // tipoDoAtoAdministrativo
-        // idTipoDoAtoAdministrativo
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
     }
 
@@ -246,6 +243,43 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
         } catch (Exception $objException) {
 
+            parent::message(
+                $objException->getMessage(),
+                "/{$this->moduleName}/index/gerenciar-assinaturas"
+            );
+        }
+    }
+
+    public function encaminharProjetoAction()
+    {
+        try {
+            $get = Zend_Registry::get('get');
+
+            if (!filter_input(INPUT_GET, 'IdPRONAC')) {
+                throw new Exception("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
+            }
+
+            if (!filter_input(INPUT_GET, 'idTipoDoAtoAdministrativo')) {
+                throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
+            }
+
+            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+
+            $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
+                $get->idTipoDoAtoAdministrativo,
+                $this->grupoAtivo->codGrupo,
+                $this->grupoAtivo->codOrgao
+            );
+
+            $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
+            $modelAssinatura->setIdPronac($get->IdPRONAC);
+            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
+            $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
+
+            $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura();
+            $servicoAssinatura->movimentarProjeto($modelAssinatura);
+
+        } catch (Exception $objException) {
             parent::message(
                 $objException->getMessage(),
                 "/{$this->moduleName}/index/gerenciar-assinaturas"

@@ -82,6 +82,8 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
             $modelAssinatura->getCodOrgao()
         );
 
+        $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
+
         if (!$dadosAtoAdministrativoAtual) {
             throw new Exception ("A fase atual de assinaturas do projeto atual n&atilde;o permite realizar essa opera&ccedil;&atilde;o.");
         }
@@ -112,13 +114,21 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
         $objTbAssinatura->inserir($dadosInclusaoAssinatura);
 
         if($this->isMovimentarProjetoPorOrdemAssinatura) {
-            $orgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino($modelAssinatura->getIdTipoDoAtoAdministrativo(), $dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
-
-            if ($orgaoDestino) {
-                $objTbProjetos = new Projeto_Model_DbTable_Projetos();
-                $objTbProjetos->alterarOrgao($orgaoDestino, $modelAssinatura->getIdPronac());
-            }
+            $this->movimentarProjeto($modelAssinatura);
         }
+    }
+
+    public function movimentarProjeto($modelAssinatura)
+    {
+        $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino($modelAssinatura->getIdTipoDoAtoAdministrativo(), $modelAssinatura->getIdOrdemDaAssinatura());
+
+        if ($codigoOrgaoDestino) {
+            throw new Exception("O projeto não pode ser movimentado.");
+        }
+
+        $objTbProjetos = new Projeto_Model_DbTable_Projetos();
+        $objTbProjetos->alterarOrgao($codigoOrgaoDestino, $modelAssinatura->getIdPronac());
     }
 
 }

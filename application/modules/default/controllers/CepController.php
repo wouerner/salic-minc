@@ -17,7 +17,6 @@ class CepController extends MinC_Controller_Action_Abstract
      */
     public function cepAction()
     {
-
         $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
         $strCharset = $config->resources->db->params->charset;
         $this->view->charset = $strCharset;
