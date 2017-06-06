@@ -252,6 +252,19 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             }
             $objTbProjetos->alterarOrgao($orgaoDestino, $get->IdPRONAC);
 
+            $enquadramento = new Admissibilidade_Model_Enquadramento();
+            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto($get->IdPRONAC, $dadosProjeto['AnoProjeto'], $dadosProjeto['Sequencial']);
+
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $data = array('cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA);
+            $where = array(
+                'IdPRONAC = ?' => $get->IdPRONAC,
+                'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
+                'idAtoDeGestao = ?' => $dadosEnquadramento['IdEnquadramento'],
+                'cdSituacao = ?' => 1
+            );
+            $objModelDocumentoAssinatura->update($data, $where);
+
             $auth = Zend_Auth::getInstance();
 
             $valoresProjeto = $objTbProjetos->obterValoresProjeto($get->IdPRONAC);
