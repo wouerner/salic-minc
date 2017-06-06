@@ -104,11 +104,13 @@
         <div class="row center-align">
             <a class="btn waves-effect waves-dark"
                href="<?php
-               echo $this->url(array(
-                       'module' => 'assinatura',
-                       'controller' => 'index',
-                       'action' => 'gerenciar-projetos'
-                   ))
+               echo $this->url(
+                       array(
+                           'module' => 'assinatura',
+                           'controller' => 'index',
+                           'action' => 'gerenciar-assinaturas'
+                       )
+                   )
                    . "?IdPRONAC={$this->IdPRONAC}";
                ?>">Voltar</a>
             <a class="btn waves-effect waves-dark"
