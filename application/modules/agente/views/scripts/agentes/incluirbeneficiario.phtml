@@ -513,38 +513,32 @@ if (empty($_GET['acao'])) {
                 </tr>
                 <tr>
                     <td>
-                        <label for="tipoEndereco">Tipo de Endere&ccedil;o *</label> <br />
+                    <label for="tipoEndereco">Tipo de Endere&ccedil;o *</label> <br />
                         <select name="tipoEndereco" id="tipoEndereco" class="input_simples" style="width: 250px;">
-
-                            <?php if (!isset($this->tipoEndereco) || empty($this->tipoEndereco)) { ?>
+                            <?php if (!isset($this->tipoEndereco) || empty($this->tipoEndereco)) : ?>
                                 <option value="0"> - Selecione - </option>
-                            <?php } ?>
-
-                            <?php foreach ($this->combotiposenderecos as $combotipoendereco): ?>
-                                <option value="<?php echo $combotipoendereco->id; ?>"
-                                        <?php if ($this->tipoEndereco == $combotipoendereco->id) echo "selected=\"selected\""; ?>>
-                                            <?php echo $combotipoendereco->descricao; ?>
+                            <?php endif; ?>
+                            <?php foreach ($this->combotiposenderecos as $id => $combotipoendereco): ?>
+                                <option value="<?php echo $id; ?>"
+                                        <?php if ($this->tipoEndereco == $id) echo "selected=\"selected\""; ?>>
+                                            <?php echo $combotipoendereco; ?>
                                 </option>
                             <?php endforeach; ?>
-
                         </select>
                         <span id="erroTipoEndereco" class="spanError"></span>
                     </td>
                     <td>
                         <label for="tipoLogradouro">Tipo de Logradouro *</label> <br />
                         <select name="tipoLogradouro" id="tipoLogradouro" class="input_simples" style="width: 250px;">
-
-                            <?php if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) { ?>
+                            <?php if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) :  ?>
                                 <option value="0"> - Selecione - </option>
-                            <?php } ?>
-
-                            <?php foreach ($this->combotiposlogradouros as $combotipologradouro): ?>
-                                <option value="<?php echo $combotipologradouro->id; ?>"
-                                        <?php if ($this->tipoLogradouro == $combotipologradouro->id) echo "selected=\"selected\""; ?>>
-                                            <?php echo ($combotipologradouro->descricao); ?>
+                            <?php endif; ?>
+                            <?php foreach ($this->combotiposlogradouros as $id => $combotipologradouro): ?>
+                                <option value="<?php echo $id; ?>"
+                                        <?php if ($this->tipoLogradouro == $id) echo "selected=\"selected\""; ?>>
+                                            <?php echo $combotipologradouro; ?>
                                 </option>
                             <?php endforeach; ?>
-
                         </select>
                         <span id="erroTipoLogradouro" class="spanError"></span>
                     </td>
