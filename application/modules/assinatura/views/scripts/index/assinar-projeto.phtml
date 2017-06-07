@@ -41,7 +41,9 @@
                 <div class="col s1"></div>
                 <div class="col s2">
                     <p>
-                        <label>PRONAC</label>
+                        <b>
+                            <label class="black-text">PRONAC</label>
+                        </b>
                     </p>
                     <div class="padding20 bordered bold">
                         <?php foreach($this->projeto as $projeto):  ?>
@@ -51,7 +53,9 @@
                 </div>
                 <div class="col s8">
                     <p>
-                        <label>Nome do Projeto</label>
+                        <b>
+                            <label class="black-text">Nome do Projeto</label>
+                        </b>
                     </p>
                     <div class="padding20 bordered bold">
                         <?php foreach($this->projeto as $projeto):  ?>
@@ -64,7 +68,11 @@
             <div class="row">
                 <div class="col s1"></div>
                 <div class="col s10">
-                    <label>Tipo Documento</label>
+                    <p>
+                        <b>
+                            <label class="black-text">Tipo Documento</label>
+                        </b>
+                    </p>
                     <p class="padding20 bordered bold">
                         <?php echo $this->tipoDocumento['Descricao']; ?>
                     </p>
@@ -75,7 +83,9 @@
                 <div class="col s1"></div>
                 <div class="col s5">
                     <p>
-                        <label>Assinante: </label>
+                        <b>
+                            <label class="black-text">Assinante: </label>
+                        </b>
                     </p>
                     <div class="padding20 bordered bold">
                         <?php echo $this->usuario->usu_nome; ?>
@@ -83,7 +93,9 @@
                 </div>
                 <div class="col s5">
                     <p>
-                        <label>Cargo: </label>
+                        <b>
+                            <label class="black-text">Cargo: </label>
+                        </b>
                     </p>
                     <div class="padding20 bordered bold">
                         <?php echo $this->perfilAssinante['dsCargoAssinante'] ?>
@@ -95,13 +107,15 @@
                 <div class="col s1"></div>
                 <div class="col s10">
                     <p>
-                        <label>
-                            De acordo do assinante
+                        <label class="black-text">
+                            <b>
+                                De acordo do assinante
+                            </b>
                             <font color="#f08080">*</font>
                         </label>
                     </p>
-                    <div class="padding20 bordered" style="height: 200px">
-                        <textarea style="height: 100%"
+                    <div class="padding20 bordered" style="height: 200px;">
+                        <textarea style="height: 100%; border: 1px solid grey;"
                                   class="padding20 bordered"
                                   id="dsManifestacao"
                                   name="dsManifestacao"><?php echo $this->dsManifestacao ?></textarea>
