@@ -210,4 +210,15 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
 //xd($this->_db->fetchAll($query));
         return $this->_db->fetchAll($query);
     }
+
+    public function isProjetoDisponivelParaAssinatura($idPronac, $idTipoDoAtoAdministrativo) {
+        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $where = array(
+            'IdPRONAC = ?' => $idPronac,
+            'idTipoDoAtoAdministrativo = ?' => $idTipoDoAtoAdministrativo,
+            'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+        );
+
+        return (count($objModelDocumentoAssinatura->findBy($where)) > 1);
+    }
 }

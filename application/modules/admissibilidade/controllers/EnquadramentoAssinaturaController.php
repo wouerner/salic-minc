@@ -116,12 +116,10 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             }
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-            $where = array(
-                'IdPRONAC = ?' => $get->IdPRONAC,
-                'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-                'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+            $this->view->abertoParaDevolucao = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
+                $get->IdPRONAC,
+                $this->idTipoDoAtoAdministrativo
             );
-            $this->view->abertoParaDevolucao = (count($objModelDocumentoAssinatura->findBy($where)) > 1);
 
             $this->view->IdPRONAC = $get->IdPRONAC;
 
@@ -145,7 +143,6 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
             $this->view->titulo = "Devolver";
         } catch (Exception $objException) {
-xd($objException->getMessage());
             parent::message($objException->getMessage(), "/{$this->moduleName}/enquadramento-assinatura/devolver-projeto?IdPRONAC={$get->IdPRONAC}");
         }
     }
