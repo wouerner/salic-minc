@@ -129,7 +129,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
 
             if (!$this->view->perfilAssinante) {
-                throw new Exception ("A fase atual de assinaturas do projeto atual n&atilde;o permite realizar essa opera&ccedil;&atilde;o.");
+                throw new Exception ("Usu&aacute;rio sem autoriza&ccedil;&atilde;o para assinar o documento.");
             }
 
             if (is_array($get->IdPRONAC)) {
