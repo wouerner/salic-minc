@@ -96,20 +96,22 @@
                                     <td class="center-align" align="center">
                                         <?php
                                         $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true";
-                                        ?>
-                                        <a class="btn waves-effect waves-light tooltipped small"
-                                           href="<?php echo $this->url(
-                                               array(
-                                                   'module' => 'assinatura',
-                                                   'controller' => 'index',
-                                                   'action' => 'assinar-projeto'
-                                               )
-                                           ) . $parametrosAssinatura ?>"
-                                           data-position="top"
-                                           data-delay="50"
-                                           data-tooltip="Assinar">
-                                            <i class="material-icons">create</i>
-                                        </a>
+                                        if(is_null($dado['possuiAssinatura'])) :
+                                            ?>
+                                            <a class="btn waves-effect waves-light tooltipped small"
+                                               href="<?php echo $this->url(
+                                                   array(
+                                                       'module' => 'assinatura',
+                                                       'controller' => 'index',
+                                                       'action' => 'assinar-projeto'
+                                                   )
+                                               ) . $parametrosAssinatura ?>"
+                                               data-position="top"
+                                               data-delay="50"
+                                               data-tooltip="Assinar">
+                                                <i class="material-icons">create</i>
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="center-align" align="center">
                                         <?php
