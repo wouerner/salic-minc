@@ -282,8 +282,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 'Sequencial' => $dadosProjeto['Sequencial'],
                 'TipoAprovacao' => 1,
                 'dtAprovacao' => $objTbProjetos->getExpressionDate(),
-                'ResumoAprovacao' => 'Projeto Aprovado para capta&ccedil;&atilde;o de recursos',
-                'AprovadoReal' => $valoresProjeto['ValorAprovado'],
+                'ResumoAprovacao' => $dadosEnquadramento['Observacao'],
+                'AprovadoReal' => $valoresProjeto['ValorProposta'],
                 'Logon' => $auth->getIdentity()->usu_codigo,
             );
             $objAprovacao = new Aprovacao();
