@@ -107,10 +107,28 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         return $this->_db->fetchAll($query);
     }
 
-    public function obterProjetosComAssinaturasAbertas($idOrgaoDoAssinante = null, $idPerfilDoAssinante = null, $ordenacao = array())
+    public function obterProjetosComAssinaturasAbertas($idOrgaoDoAssinante, $idPerfilDoAssinante, $ordenacao = array())
     {
         $query = $this->select();
         $query->setIntegrityCheck(false);
+
+
+//        $query->joinLeft(
+//            array('TbAssinatura' => 'TbAssinatura'),
+//            "TbAssinatura.idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura",
+//            array(),
+//            $this->_schema
+//        );
+//
+//        $query->joinLeft(
+//            array('TbAtoAdministrativo' => 'TbAtoAdministrativo'),
+//            "TbAtoAdministrativo.idAtoAdministrativo = TbAssinatura.idAtoAdministrativo
+//             AND TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
+//             AND TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
+//             AND TbAtoAdministrativo.idTipoDoAto = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
+//            array('possuiAssinatura'=>"TbAtoAdministrativo.idAtoAdministrativo"),
+//            $this->_schema
+//        );
 
         $query->from(
             array("Projetos" => "Projetos"),
@@ -127,7 +145,17 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                 'Projetos.Situacao',
                 'Projetos.DtSituacao',
                 'Projetos.Orgao',
-                'tbDocumentoAssinatura.cdSituacao'
+                'tbDocumentoAssinatura.cdSituacao',
+                'possuiAssinatura'=> new Zend_Db_Expr("
+                    (select {$this->_schema}.TbAtoAdministrativo.idAtoAdministrativo 
+                       from {$this->_schema}.TbAssinatura
+                      inner join {$this->_schema}.TbAtoAdministrativo 
+                         ON {$this->_schema}.TbAtoAdministrativo.idAtoAdministrativo = {$this->_schema}.TbAssinatura.idAtoAdministrativo
+                        AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
+                        AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
+                      WHERE {$this->_schema}.TbAssinatura.idDocumentoAssinatura = {$this->_schema}.tbDocumentoAssinatura.idDocumentoAssinatura
+                      AND {$this->_schema}.TbAtoAdministrativo.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo)
+                ")
             ),
             $this->_schema
         );
@@ -174,31 +202,12 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
             $this->_schema
         );
 
-        $query->joinLeft(
-            array('TbAssinatura' => 'TbAssinatura'),
-            "TbAssinatura.idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura",
-            array("TbAssinatura.idAssinatura"),
-            $this->_schema
-        );
-
-        $query->joinLeft(
-            array('TbAtoAdministrativo' => 'TbAtoAdministrativo'),
-            "TbAtoAdministrativo.idAtoAdministrativo = TbAssinatura.idAtoAdministrativo
-             AND TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
-             AND TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
-             AND TbAtoAdministrativo.idTipoDoAto = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
-            array('possuiAssinatura'=>"TbAtoAdministrativo.idAtoAdministrativo"),
-            $this->_schema
-        );
-
-        if ($idOrgaoDoAssinante) {
-            $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
-        }
+        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
 
         $query->where("tbDocumentoAssinatura.cdSituacao = ?", Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
         $ordenacao[] = 'possuiAssinatura asc';
         $query->order($ordenacao);
-
+//xd($this->_db->fetchAll($query));
         return $this->_db->fetchAll($query);
     }
 }
