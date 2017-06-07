@@ -250,7 +250,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
         }
     }
 
-    public function encaminharProjetoAction()
+    public function movimentarProjetoAction()
     {
         try {
             $get = Zend_Registry::get('get');
@@ -273,11 +273,23 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
             $modelAssinatura->setIdPronac($get->IdPRONAC);
-            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
-            $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
+
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $dadosDocumentoAssinatura = $objModelDocumentoAssinatura->findBy(
+                array(
+                    'IdPRONAC' => $modelAssinatura->getIdPronac(),
+                    'idTipoDoAtoAdministrativo' => $modelAssinatura->getIdTipoDoAtoAdministrativo(),
+                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+                )
+            );
 
             $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura();
-            $servicoAssinatura->movimentarProjeto($modelAssinatura);
+            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
+            $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
+            $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
+            $modelAssinatura->setIdAssinante($this->auth->getIdentity()->usu_codigo);
+            $modelAssinatura->setIdDocumentoAssinatura($dadosDocumentoAssinatura['idDocumentoAssinatura']);
+            $servicoAssinatura->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
 
         } catch (Exception $objException) {
             parent::message(
