@@ -172,12 +172,14 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             "/{$this->moduleName}/index/gerenciar-assinaturas",
                             'CONFIRM'
                         );
+                    } else {
+                        parent::message(
+                            "Projeto assinado com sucesso!",
+                            "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}",
+                            'CONFIRM'
+                        );
+                        die;
                     }
-                    parent::message(
-                        "Projeto assinado com sucesso!",
-                        "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}",
-                        'CONFIRM'
-                    );
                 } catch (Exception $objException) {
                     parent::message(
                         $objException->getMessage(),
