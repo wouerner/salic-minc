@@ -774,22 +774,6 @@
         var este = $('#alteraritemsolicitado');
         este.html('<br><br><br><br><br><br><br><center>Aguarde, carregando dados...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br>');
         este.dialog(
-        {
-            title:"Alterar Item",
-            resizable: false,
-            width:800,
-            height:600,
-            modal: false,
-            autoOpen:true,
-            closeOnEscape:true
-        });
-
-        $.post(este.attr('link'),{idPlanilhaProjeto:idPlanilhaProjeto,idPronac:idPronac,idProduto:idProduto,stPrincipal:stPrincipal}
-        ,function(data)
-        {
-
-            este.html(data);
-            este.dialog(
             {
                 title:"Alterar Item",
                 resizable: false,
@@ -797,58 +781,73 @@
                 height:600,
                 modal: false,
                 autoOpen:true,
-                closeOnEscape:true,
-                buttons:
-                    {
-                    'Cancelar': function()
-                    {
-                        $(this).dialog('close');
-                        //$('html').css('overflow', 'auto');
-                    },
-                    'Salvar': function()
-                    {
+                closeOnEscape:true
+            }
+        );
 
-                        var texto = $('#justificativa'+$('#idPlanilhaProjeto').val()).val();
-                        texto = texto.replace(/^\s+|\s+$/g,""); //retirando espa¿os
-                        if (texto.length <= 0 || texto=="")
-                        {
-                            alertar('Dados obrigat¿rios n¿o informados.');
-                            return false;
-                        }
-                        else
-                        {
-                            var vlSugerido = $('#calcular_total'+$('#idPlanilhaProjeto').val()).html().replace(/\R\$\s+/g, '');
-                            $('#totalcalculos'+$('#idPlanilhaProjeto').val()).val(vlSugerido);
-
-                            var dados = $('#formSalvarItem').serialize();
-                            $(this).append('<br><center>Aguarde, salvando informa¿¿es...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br>');
-                            $.post($('#formSalvarItem').attr('action'),dados
-                            ,function(data)
+        $.post(
+            este.attr('link'),
+            {idPlanilhaProjeto:idPlanilhaProjeto,idPronac:idPronac,idProduto:idProduto,stPrincipal:stPrincipal},
+            function(data)
+                {
+                    este.html(data);
+                    console.log('teste: fim');
+                    este.dialog(
+                    {
+                        title:"Alterar Item",
+                        resizable: false,
+                        width:800,
+                        height:600,
+                        modal: false,
+                        autoOpen:true,
+                        closeOnEscape:true,
+                        buttons:
                             {
-                                var resposta = data;
-                                $('#item'+$('#idPlanilhaProjeto').val()+' .JustParecerista').html($("#justificativa"+$('#idPlanilhaProjeto').val()).val());
-                                $('#item'+$('#idPlanilhaProjeto').val()+' .ValorSugerido').html($("#calcular_total"+$('#idPlanilhaProjeto').val()).html());
-                                somarValores();
+                            'Cancelar': function() {
+                                    $(this).dialog('close');
+                            },
+                            'Salvar': function() {
+                                var texto = $('#justificativa'+$('#idPlanilhaProjeto').val()).val();
+                                texto = texto.replace(/^\s+|\s+$/g,""); //retirando espa¿os
+                                if (texto.length <= 0 || texto=="")
+                                {
+                                    alertar('Dados obrigat¿rios n¿o informados.');
+                                    return false;
+                                }
+                                else
+                                {
+                                    var vlSugerido = $('#calcular_total'+$('#idPlanilhaProjeto').val()).html().replace(/\R\$\s+/g, '');
+                                    $('#totalcalculos'+$('#idPlanilhaProjeto').val()).val(vlSugerido);
 
-                                //atualiza novo valor possivel de remanejamento
-                                var vlSolicitado = '<?php echo $this->vlSolicitado;?>';
-                                var vlTotalSugerido = recuperaTotalSugerido();
-                                var valorpossivel = vlSolicitado - vlTotalSugerido;
+                                    var dados = $('#formSalvarItem').serialize();
+                                    $(this).append('<br><center>Aguarde, salvando informa¿¿es...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br>');
+                                    $.post($('#formSalvarItem').attr('action'),dados
+                                    ,function(data)
+                                    {
+                                        var resposta = data;
+                                        $('#item'+$('#idPlanilhaProjeto').val()+' .JustParecerista').html($("#justificativa"+$('#idPlanilhaProjeto').val()).val());
+                                        $('#item'+$('#idPlanilhaProjeto').val()+' .ValorSugerido').html($("#calcular_total"+$('#idPlanilhaProjeto').val()).html());
+                                        somarValores();
 
-                                $("#valorpossivel").val(valorpossivel);
+                                        //atualiza novo valor possivel de remanejamento
+                                        var vlSolicitado = '<?php echo $this->vlSolicitado;?>';
+                                        var vlTotalSugerido = recuperaTotalSugerido();
+                                        var valorpossivel = vlSolicitado - vlTotalSugerido;
 
-                                //atualiza campo de apresentacao do novo valor possivel de remanejamento
-                                var valorpossivelApresentacao = formatarParaReal(valorpossivel);
-                                $("#valorpossivelApresentacao").html(valorpossivelApresentacao);
+                                        $("#valorpossivel").val(valorpossivel);
 
-                                este.dialog('close');
-                                janelaAlerta('Informa¿¿es salvas com sucesso');
-                            });
+                                        //atualiza campo de apresentacao do novo valor possivel de remanejamento
+                                        var valorpossivelApresentacao = formatarParaReal(valorpossivel);
+                                        $("#valorpossivelApresentacao").html(valorpossivelApresentacao);
+
+                                        este.dialog('close');
+                                        janelaAlerta('Informa¿¿es salvas com sucesso');
+                                    });
+                                }
+                            }
                         }
-                    }
-                }
-            });
-        });
+                    });
+                });
     }
 
     function recuperaTotalSugerido()

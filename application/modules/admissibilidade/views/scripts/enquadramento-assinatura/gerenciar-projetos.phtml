@@ -53,12 +53,14 @@
                             <?php foreach ($this->dados as $dado): ?>
                                 <tr>
                                     <td class="center-align" style="padding-left: 20px">
+                                        <?php  if(is_null($dado['possuiAssinatura'])) : ?>
                                         <input type="checkbox"
                                                name="IdPRONAC[]"
                                                id="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"
                                                class="checkbox_legal filled-in"
                                                value="<?php echo $dado['IdPRONAC'] ?>"/>
                                         <label for="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"></label>
+                                        <?php  endif; ?>
                                     </td>
                                     <td class="center-align" align="center">
                                         <a class="waves-effect waves-dark btn white black-text"
@@ -106,19 +108,23 @@
                                     </td>
                                     <td class="center-align" align="center">
                                         <?php
-                                        $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true";
-                                        ?>
-                                        <a class="btn waves-effect waves-light tooltipped small"
-                                           href="<?php echo $this->url(array(
-                                                   'module' => 'assinatura',
-                                                   'controller' => 'index',
-                                                   'action' => 'assinar-projeto'
-                                               )) . $parametrosAssinatura ?>"
-                                           data-position="top"
-                                           data-delay="50"
-                                           data-tooltip="Assinar">
-                                            <i class="material-icons">create</i>
-                                        </a>
+                                        $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true&isMovimentarAssinatura=true";
+                                        if(is_null($dado['possuiAssinatura'])) :
+                                            ?>
+                                            <a class="btn waves-effect waves-light tooltipped small"
+                                               href="<?php echo $this->url(
+                                                       array(
+                                                           'module' => 'assinatura',
+                                                           'controller' => 'index',
+                                                           'action' => 'assinar-projeto'
+                                                       )
+                                                   ) . $parametrosAssinatura ?>"
+                                               data-position="top"
+                                               data-delay="50"
+                                               data-tooltip="Assinar">
+                                                <i class="material-icons">create</i>
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="center-align" align="center">
                                         <?php
@@ -127,8 +133,10 @@
                                         $assinaturas = $objAssinatura->obterAssinaturas($dado['IdPRONAC'], $this->idTipoDoAtoAdministrativo);
                                         if (count($assinaturas) >= $this->quantidade_minima_assinaturas):
                                             ?>
-                                            <a class="btn waves-effect waves-light tooltipped small"
-                                               href="<?php echo $this->url(
+                                            <a class="btn waves-effect waves-light tooltipped small btn"
+                                               href="#modalConfirmacao"
+                                               data-nrpronac="<?php echo $dado['pronac']; ?>"
+                                               data-redirect-url="<?php echo $this->url(
                                                        array(
                                                            'module' => 'admissibilidade',
                                                            'controller' => 'enquadramento-assinatura',
@@ -149,6 +157,7 @@
                         </table>
                         <div class="center-align" id="divAssinaturaEmMassa"
                              style="display: none;">
+
                             <button class="btn waves-effect waves-light" type="submit" name="action">
                                 Assinar em massa <i class="material-icons right">send</i>
                             </button>
@@ -163,6 +172,43 @@
             <div class="col s11"></div>
         </div>
         <?php endif; ?>
+
+
+        <div id="conteudoDialogoModal">
+
+            <div id="modalConfirmacao" class="modal modal-fixed-footer">
+                <div class="modal-content">
+                    <h4>Confirma&ccedil;&atilde;o</h4>
+                    <p>Tem certeza que deseja finalizar ao projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" id="botaoConfirmacaoEncaminhamento" class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">N&atilde;o</a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $3(document).ready(function(){
+                $3('.modal').modal({
+                        dismissible: true,
+                        opacity: .5,
+                        inDuration: 300,
+                        outDuration: 200,
+                        startingTop: '4%',
+                        endingTop: '10%',
+                        ready: function(modal, trigger) {
+                            $(modal).find('#nrPronacConfirmacao').html($3(trigger).data('nrpronac'));
+                            $(modal).find('#botaoConfirmacaoEncaminhamento').attr('href', $3(trigger).data('redirectUrl'));
+                        }
+//                    ,complete: function() {
+//                        alert('Closed');
+//                    } // Callback for Modal close
+                    }
+                );
+            });
+        </script>
+
         <br clear="all"/>
         <script src="https://code.jquery.com/jquery-1.12.4.js"
                 integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
