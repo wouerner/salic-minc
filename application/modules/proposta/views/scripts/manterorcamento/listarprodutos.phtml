@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col s12">
                             <?php if ( !empty($this->localRealizacao) ) : ?>
-                                <?php if ( !empty($this->custoVinculadoProponente) ) : ?>
+                                <?php if ( !empty($this->custoVinculadoProponente)  ) : ?>
                                     <?php foreach ($this->localRealizacao as $local) : ?>
                                         <ul class="collapsible coll-local popout localizacao local-<?php echo $local['idMunicipioIBGE']; ?>" data-collapsible="expandable">
                                             <li>
@@ -132,7 +132,6 @@
                                                                 <div class="row">
                                                                     <div class="col s12 center-align">
                                                                         <p>
-
                                                                             <a class="waves-effect waves-light btn tooltipped btn_default" data-ajax-modal="<?php echo $this->url($novoProduto)?>" href="javascript:void(0);" class="waves-effect waves-light btn tooltipped" data-position="top" data-delay="50" data-tooltip="Cadastrar novo item" data-ajax-modal-type="bottom-sheet">
                                                                                 Novo item
                                                                             </a>
