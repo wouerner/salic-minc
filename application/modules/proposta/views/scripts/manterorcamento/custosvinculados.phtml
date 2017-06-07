@@ -31,34 +31,49 @@
                                 <p>Aqui voc&ecirc; pode definir os percentuais para c&aacute;lculo dos custos vinculados
                                     do seu projeto, essas escolhas ir&atilde;o influenciar no or&ccedil;amento do seu
                                     projeto.</p>
-                                <p>Ao clicar em salvar, o sistema ir&aacute; atualizar sua planilha or&ccedil;ament&aacute;ria com os novos c&aacute;lculos.
-                                    </p>
+                                <p>Ao clicar em salvar, o sistema ir&aacute; atualizar sua planilha or&ccedil;ament&aacute;ria com os novos c&aacute;lculos.</p>
                             </div>
                             <?php if ($this->localRealizacao) : ?>
                                 <?php foreach ($this->itensCustosVinculados as $item) : ?>
-                                    <input type="hidden"
-                                           name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][idCustosVinculados]"
-                                           value="<?= $item['idCustosVinculados']; ?>">
+                                    <div class="row">
+                                        <input type="hidden"
+                                               name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][idCustosVinculados]"
+                                               value="<?= $item['idCustosVinculados']; ?>">
 
-                                    <div class="input-field col s7">
-                                        <select
-                                            name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][percentual]" class="validate" required>
-                                            <option value="" disabled selected>Selecione</option>
-                                            <?php while ($item['Percentual'] >= 0) : ?>
-                                                <option
-                                                    <?= (isset($item['PercentualProponente']) && $item['PercentualProponente'] == $item['Percentual']) ? 'selected' : '' ?>
-                                                    value="<?= $item['Percentual']; ?>"><?= $item['Percentual']; ?>%
-                                                </option>
-                                                <?php $item['Percentual']--; ?>
-                                            <?php endwhile; ?>
-                                        </select>
-                                        <label><?= $item['Descricao']; ?></label>
+                                        <div class="input-field col s6">
+                                            <select
+                                                name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][percentual]" class="validate" required>
+                                                <option value="" disabled selected>Selecione</option>
+                                                <?php $percentual = $item['Percentual']; ?>
+                                                <?php while ($percentual >= 0) : ?>
+                                                    <option
+                                                        <?= (isset($item['PercentualProponente']) && $item['PercentualProponente'] == $percentual) ? 'selected' : '' ?>
+                                                        value="<?= $percentual; ?>"><?= $percentual; ?>%
+                                                    </option>
+                                                    <?php $percentual--; ?>
+                                                <?php endwhile; ?>
+                                            </select>
+                                            <label><?= $item['Descricao']; ?></label>
+                                        </div>
+                                        <div class="col s6">
+                                            <p>
+                                                <br>
+                                            <?php if( $item['Percentual'] ) : ?>
+                                                   Percentual padrão: <?= $item['Percentual']; ?>%
+                                            <?php endif; ?>
+                                            <?php if( $item['Limite'] ) : ?>
+                                                <br>
+                                                    Limite: R$ <?= number_format($item['Limite'], 2, ",", "."); ?>
+
+                                            <?php endif; ?>
+                                               </p>
+                                        </div>
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
                             <div class="col s12">
                                 <div class="valign-wrapper">
-                                    <p class="valign"> Para preencher a planilha, &eacute; necess&aacute;rio informar o
+                                    <p class="valign"> Para preencher os custos vinculados, &eacute; necess&aacute;rio informar o
                                         <a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'index', 'idPreProjeto' => $this->idPreProjeto)); ?>"
                                            titlte="Preencher local de reali&ccedil;&atilde;o">local de realiza&ccedil;&atilde;o</a>.
                                     </p>
