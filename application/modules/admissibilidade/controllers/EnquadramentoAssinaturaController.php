@@ -263,7 +263,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto($get->IdPRONAC, $dadosProjeto['AnoProjeto'], $dadosProjeto['Sequencial']);
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-            $data = array('cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA);
+            $data = array('cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA);
             $where = array(
                 'IdPRONAC = ?' => $get->IdPRONAC,
                 'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
