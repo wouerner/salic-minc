@@ -107,8 +107,9 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
 
         $objTbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
         $objTbAssinatura->inserir($dadosInclusaoAssinatura);
+        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino($modelAssinatura->getIdTipoDoAtoAdministrativo(), $modelAssinatura->getIdOrdemDaAssinatura());
 
-        if($this->isMovimentarProjetoPorOrdemAssinatura) {
+        if($this->isMovimentarProjetoPorOrdemAssinatura && $codigoOrgaoDestino) {
             $this->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
         }
     }
