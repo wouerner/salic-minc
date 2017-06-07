@@ -24,9 +24,11 @@ class Assinatura_IndexController extends Assinatura_GenericController
     {
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
         $documentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas(
+            $this->grupoAtivo->codOrgao,
+            $this->grupoAtivo->codGrupo
+        );
 
-        $ordenacao = array("projetos.DtSituacao asc");
-        $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas($this->grupoAtivo->codOrgao, $ordenacao);
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
     }
 
@@ -262,17 +264,16 @@ class Assinatura_IndexController extends Assinatura_GenericController
             if (!filter_input(INPUT_GET, 'idTipoDoAtoAdministrativo')) {
                 throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
+            $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
+            $modelAssinatura->setIdPronac($get->IdPRONAC);
+            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
 
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-
             $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
-                $get->idTipoDoAtoAdministrativo,
+                $modelAssinatura->getIdTipoDoAtoAdministrativo(),
                 $this->grupoAtivo->codGrupo,
                 $this->grupoAtivo->codOrgao
             );
-
-            $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
-            $modelAssinatura->setIdPronac($get->IdPRONAC);
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $dadosDocumentoAssinatura = $objModelDocumentoAssinatura->findBy(
@@ -284,17 +285,22 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
 
             $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura();
-            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
+
             $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
             $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
             $modelAssinatura->setIdAssinante($this->auth->getIdentity()->usu_codigo);
             $modelAssinatura->setIdDocumentoAssinatura($dadosDocumentoAssinatura['idDocumentoAssinatura']);
             $servicoAssinatura->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
 
+            parent::message(
+                'Projeto Movimentado com sucesso!'
+                ,"/{$this->moduleName}/index/gerenciar-assinaturas"
+                ,'CONFIRM'
+            );
         } catch (Exception $objException) {
             parent::message(
-                $objException->getMessage(),
-                "/{$this->moduleName}/index/gerenciar-assinaturas"
+                $objException->getMessage()
+                ,"/{$this->moduleName}/index/gerenciar-assinaturas"
             );
         }
     }
