@@ -2,14 +2,12 @@
 
 class GerenciarparecerController extends MinC_Controller_Action_Abstract
 {
-
     /**
      * @var integer (vari�vel com o id do usu�rio logado)
      * @access private
      */
     private $getIdUsuario = 0;
     private $intTamPag = 10;
-
 
     public function init()
     {
@@ -60,7 +58,6 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
     public function listaprojetosAction()
     {
-
         $auth = Zend_Auth::getInstance();
         $idusuario = $auth->getIdentity()->usu_codigo;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
@@ -160,7 +157,6 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $this->view->dados = $busca;
         $this->view->intTamPag = $this->intTamPag;
     }
-
 
     public function produtosdistribuidosAction()
     {
@@ -347,7 +343,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $projetos = new Projetos();
 
         try {
-            $db->beginTransaction();
+            /* $db->beginTransaction(); */
 
             foreach ($buscaDadosProjeto as $dp) {
 
@@ -394,7 +390,6 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $msg = "Distribui&ccedil;&atilde;o Realizada com sucesso!";
 
                     // DISTRIBUIR OU REDISTRIBUIR ( COORDENADOR DE PARECER )
-
                     $dadosD = array(
                         'idOrgao' => $dp->idOrgao,
                         'DtEnvio' => $dp->DtEnvioMincVinculada,
@@ -420,17 +415,15 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $projetos = new Projetos();
                     $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para o perito para an�lise t�cnica e emiss�o de parecer.');
                 }
-
             }
 
-            parent::message($msg, "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
-            $db->commit();
+            parent::message($msg . ' '.$insere, "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+            /* $db->commit(); */
 
         } catch (Zend_Exception $ex) {
-            $db->rollBack();
+            /* $db->rollBack(); */
             parent::message("Error" . $ex->getMessage(), "gerenciarparecer/distribuir/idDistribuirParecer/" . $idDistribuirParecer . "/idproduto/" . $idProduto . "/tipoanalise/" . $TipoAnalise . "/idpronac/" . $idPronac . "/tipoFiltro/" . $tipoFiltro, "ERROR");
         }
-
     }
 
     public function encaminharAction()
