@@ -28,6 +28,98 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
     private $cod_orgao;
 
     /**
+     * @var int $idOrdemDaAssinatura
+     */
+    private $idOrdemDaAssinatura;
+
+    /**
+     * @var int $idDocumentoAssinatura
+     */
+    private $idDocumentoAssinatura;
+
+    /**
+     * @var int $idAssinante
+     */
+    private $idAssinante;
+
+    /**
+     * @var int $idAtoAdministrativo
+     */
+    private $idAtoAdministrativo;
+
+    /**
+     * @return int
+     */
+    public function getIdAtoAdministrativo()
+    {
+        return $this->idAtoAdministrativo;
+    }
+
+    /**
+     * @param int $idAtoAdministrativo
+     * @return MinC_Assinatura_Model_Assinatura
+     */
+    public function setIdAtoAdministrativo($idAtoAdministrativo)
+    {
+        $this->idAtoAdministrativo = $idAtoAdministrativo;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdDocumentoAssinatura()
+    {
+        return $this->idDocumentoAssinatura;
+    }
+
+    /**
+     * @param int $idDocumentoAssinatura
+     * @return MinC_Assinatura_Model_Assinatura
+     */
+    public function setIdDocumentoAssinatura($idDocumentoAssinatura)
+    {
+        $this->idDocumentoAssinatura = $idDocumentoAssinatura;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdAssinante()
+    {
+        return $this->idAssinante;
+    }
+
+    /**
+     * @param int $idAssinante
+     * @return MinC_Assinatura_Model_Assinatura
+     */
+    public function setIdAssinante($idAssinante)
+    {
+        $this->idAssinante = $idAssinante;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdOrdemDaAssinatura()
+    {
+        return $this->idOrdemDaAssinatura;
+    }
+
+    /**
+     * @param int $idOrdemDaAssinatura
+     * @return MinC_Assinatura_Model_Assinatura
+     */
+    public function setIdOrdemDaAssinatura($idOrdemDaAssinatura)
+    {
+        $this->idOrdemDaAssinatura = $idOrdemDaAssinatura;
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getCodGrupo()
