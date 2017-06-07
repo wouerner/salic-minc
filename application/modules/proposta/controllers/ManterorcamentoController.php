@@ -667,7 +667,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
     public function gerarArrayCustosVinculados($idPreProjeto)
     {
         $valoresCustosVinculados = array();
-        $TPP = new tbAbrangencia();
+        $TPP = new Proposta_Model_DbTable_Abrangencia();
         $ufRegionalizacaoPlanilha = $TPP->buscarUfRegionalizacao($idPreProjeto);
 
         $ModelCV = new Proposta_Model_TbCustosVinculados();
