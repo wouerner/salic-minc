@@ -20,6 +20,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
     private $idAgente 	    = 0;
     private $bln_readequacao = "false";
     private $idPreProjeto   = 0;
+
+    const TIPO_PLANILHA_APROVADA = 3;
+    const TIPO_PLANILHA_REMANEJADA = 5;
+    const TIPO_PLANILHA_COMPLEMENTACAO_REDUCAO = 6;
+    
     /**
      * Reescreve o metodo init()
      * @access public
@@ -2295,17 +2300,17 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
 	// seleciona planilha ativa
 	$spSelecionarPlanilhaOrcamentariaAtiva = new spSelecionarPlanilhaOrcamentariaAtiva();
 	$tpPlanilhaAtiva = $spSelecionarPlanilhaOrcamentariaAtiva->exec($idPronac);
-
+    
 	$spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
 	if ($countTpPlanilhaRemanej == 0) {
         $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilhaAtiva);
 	} else {
-        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tpPlanilhaAtiva);
+        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, self::TIPO_PLANILHA_REMANEJADA);
 	}
 
-	$planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, 5);
+	$planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, self::TIPO_PLANILHA_REMANEJADA);
 	$this->view->planilha = $planilha;
-	$this->view->tipoPlanilha = 5;
+	$this->view->tipoPlanilha = self::TIPO_PLANILHA_REMANEJADA;
     }
 
     public function remanejamentoMenorFinalizarAction()
