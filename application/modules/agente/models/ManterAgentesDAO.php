@@ -1,13 +1,4 @@
 <?php
-/**
- * ManterAgentesDAO
- * @author Equipe RUP - Politec
- * @author wouerner <wouerner@gmail.com>
- * @since 09/08/2010
- * @version 1.0
- * @package application
- * @subpackage application.model.DAO
- */
 
 class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
 {
@@ -23,8 +14,8 @@ class Agente_Model_ManterAgentesDAO extends MinC_Db_Table_Abstract
     public static function buscarAgentes($cnpjcpf = null, $nome = null, $idAgente = null)
     {
         $db= Zend_Db_Table::getDefaultAdapter();
-        $schemaAgentes = parent::getSchema('agentes');
-        $schemaSac = parent::getSchema('sac');
+        $schemaAgentes = parent::getStaticTableName('agentes');
+        $schemaSac = parent::getStaticTableName('sac');
 
         $a = array(
             'a.idagente'
