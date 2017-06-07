@@ -133,8 +133,10 @@
                                         $assinaturas = $objAssinatura->obterAssinaturas($dado['IdPRONAC'], $this->idTipoDoAtoAdministrativo);
                                         if (count($assinaturas) >= $this->quantidade_minima_assinaturas):
                                             ?>
-                                            <a class="btn waves-effect waves-light tooltipped small"
-                                               href="<?php echo $this->url(
+                                            <a class="btn waves-effect waves-light tooltipped small btn"
+                                               href="#modalConfirmacao"
+                                               data-nrpronac="<?php echo $dado['pronac']; ?>"
+                                               data-redirect-url="<?php echo $this->url(
                                                        array(
                                                            'module' => 'admissibilidade',
                                                            'controller' => 'enquadramento-assinatura',
@@ -177,7 +179,7 @@
             <div id="modalConfirmacao" class="modal modal-fixed-footer">
                 <div class="modal-content">
                     <h4>Confirma&ccedil;&atilde;o</h4>
-                    <p>Tem certeza que deseja movimentar ao projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
+                    <p>Tem certeza que deseja finalizar ao projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
                 </div>
                 <div class="modal-footer">
                     <a href="#!" id="botaoConfirmacaoEncaminhamento" class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
