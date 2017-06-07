@@ -2732,8 +2732,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $vlAtualPerc = $vlAtual*50/100;
 
                 //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
-                $vlAtualMin = $vlAtual-$vlAtualPerc;
-                $vlAtualMax = $vlAtual+$vlAtualPerc;
+                $vlAtualMin = round($vlAtual-$vlAtualPerc);
+                $vlAtualMax = round($vlAtual+$vlAtualPerc);
 
                 $dadosPlanilhaAtiva['idPlanilhaAprovacao'] = $registro['idPlanilhaAprovacao'];
                 $dadosPlanilhaAtiva['idProduto'] = $registro['idProduto'];
@@ -2859,24 +2859,24 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $valoresItem = $tbPlanilhaAprovacao->buscar(
             array(
                 'IdPRONAC=?'=>$idPronac,
-                'StAtivo=?'=>'S',
-                '(idPlanilhaAprovacaoPai=? OR idPlanilhaAprovacao=?)'=> $_POST['idPlanilha']
+                'StAtivo=?'=>'N',
+                'idPlanilhaAprovacao=?'=> $_POST['idPlanilha']
             )
         )->current();
         $vlAtual = @number_format(($valoresItem['qtItem']*$valoresItem['nrOcorrencia']*$valoresItem['vlUnitario']), 2, '', '');
         $vlAtualPerc = $vlAtual*50/100;
 
         //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
-        $vlAtualMin = $vlAtual-$vlAtualPerc;
-        $vlAtualMax = $vlAtual+$vlAtualPerc;
+        $vlAtualMin = round($vlAtual-$vlAtualPerc);
+        $vlAtualMax = round($vlAtual+$vlAtualPerc);
 
         //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO - 50%
         if($vlTotal < $vlAtualMin || $vlTotal > $vlAtualMax){
             $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de 50%.'));
             $this->_helper->viewRenderer->setNoRender(TRUE);
         }
-
-        $editarItem = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP', 'idPlanilhaAprovacaoPai=?'=>$_POST['idPlanilha']))->current();
+        
+        $editarItem = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP', 'idPlanilhaAprovacao=?'=>$_POST['idPlanilha']))->current();
         $editarItem->qtItem = $_POST['Quantidade'];
         $editarItem->nrOcorrencia = $_POST['Ocorrencia'];
         $editarItem->vlUnitario = $ValorUnitario;
