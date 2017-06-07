@@ -116,6 +116,7 @@
                                     <td class="center-align" align="center">
                                         <?php
                                         $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true";
+                                        if(!is_null($dado['possuiProximaAssinatura'])):
                                         ?>
                                         <a class="btn waves-effect waves-light tooltipped small btn"
                                            href="#modalConfirmacao"
@@ -132,6 +133,7 @@
                                            data-tooltip="Assinar">
                                             <i class="material-icons">arrow_forward</i>
                                         </a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
