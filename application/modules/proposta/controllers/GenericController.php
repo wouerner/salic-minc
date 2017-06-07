@@ -159,7 +159,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
      * @access public
      * @return void
      */
-    public function salvarcustosvinculados($idPreProjeto)
+    public function atualizarcustosvinculadosdaplanilha($idPreProjeto)
     {
         $idEtapa = '8'; // Custos Vinculados
         $tipoCusto = 'A';
@@ -227,9 +227,9 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
 
             $custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $idPreProjeto, 'idPlanilhaItem' => $item['idPlanilhaItens']));
 
-            if ($custoVinculadoProponente['dsObservacao'] > 0) {
-                $valorCustoItem = ($valorTotalProdutos * ($custoVinculadoProponente['dsObservacao'] / 100));
-            } elseif ($custoVinculadoProponente['dsObservacao'] == 0) {
+            if ($custoVinculadoProponente['pcCalculo'] > 0) {
+                $valorCustoItem = ($valorTotalProdutos * ($custoVinculadoProponente['pcCalculo'] / 100));
+            } elseif ($custoVinculadoProponente['pcCalculo'] == 0) {
                 $valorCustoItem = 0;
             }
 
