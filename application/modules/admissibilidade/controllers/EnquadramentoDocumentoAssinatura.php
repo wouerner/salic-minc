@@ -28,23 +28,31 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
             throw new Exception("Situa&ccedil;&atilde;o do projeto inv&aacute;lida!");
         }
 
-        $auth = Zend_Auth::getInstance();
-        $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
-        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ENQUADRAMENTO;
+        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
+            $this->idPronac,
+            $this->idTipoDoAtoAdministrativo
+        );
 
-        $enquadramento = new Admissibilidade_Model_Enquadramento();
-        $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto($this->idPronac, $dadosProjeto['AnoProjeto'], $dadosProjeto['Sequencial']);
+        if(!$isProjetoDisponivelParaAssinatura) {
+            $auth = Zend_Auth::getInstance();
+            $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
+            $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ENQUADRAMENTO;
 
-        $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
-        $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
-        $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
-        $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
-        $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
-        $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
+            $enquadramento = new Admissibilidade_Model_Enquadramento();
+            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto($this->idPronac, $dadosProjeto['AnoProjeto'], $dadosProjeto['Sequencial']);
 
-        $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
+            $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
+            $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
+            $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
+            $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
+            $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
+            $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
 
-        $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+            $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
+            $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+        }
+
         $objProjeto = new Projetos();
         $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto encamihado para Portaria.');
 
