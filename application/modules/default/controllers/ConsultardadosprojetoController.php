@@ -2729,7 +2729,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             foreach ($planilhaAtiva as $registro) {
                 //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
                 $vlAtual = @number_format(($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']), 2, '', '');
-                $vlAtualPerc = $vlAtual*20/100;
+                $vlAtualPerc = $vlAtual*50/100;
 
                 //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
                 $vlAtualMin = $vlAtual-$vlAtualPerc;
@@ -2749,8 +2749,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilhaAtiva['ValorUnitario'] = utf8_encode('R$ '.number_format($registro['ValorUnitario'], 2, ',', '.'));
                 $dadosPlanilhaAtiva['QtdeDias'] = $registro['QtdeDias'];
                 $dadosPlanilhaAtiva['TotalSolicitado'] = utf8_encode('R$ '.number_format(($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']), 2, ',', '.'));
-                $dadosPlanilhaAtiva['ValorMinimoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] - (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * 20/100) ), 2, ',', '.'));
-                $dadosPlanilhaAtiva['ValorMaximoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] + (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * 20/100) ), 2, ',', '.'));
+                $dadosPlanilhaAtiva['ValorMinimoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] - (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * 50/100) ), 2, ',', '.'));
+                $dadosPlanilhaAtiva['ValorMaximoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] + (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * 50/100) ), 2, ',', '.'));
                 $dadosPlanilhaAtiva['vlMinimoValidacao'] = utf8_encode($vlAtualMin);
                 $dadosPlanilhaAtiva['vlMaximoValidacao'] = utf8_encode($vlAtualMax);
                 $dadosPlanilhaAtiva['ValorMinimoProItemValidacao'] = utf8_encode(number_format(($vlAtualMin), 2, '', ''));
@@ -2864,15 +2864,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             )
         )->current();
         $vlAtual = @number_format(($valoresItem['qtItem']*$valoresItem['nrOcorrencia']*$valoresItem['vlUnitario']), 2, '', '');
-        $vlAtualPerc = $vlAtual*20/100;
+        $vlAtualPerc = $vlAtual*50/100;
 
         //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
         $vlAtualMin = $vlAtual-$vlAtualPerc;
         $vlAtualMax = $vlAtual+$vlAtualPerc;
 
-        //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO - 20%
+        //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO - 50%
         if($vlTotal < $vlAtualMin || $vlTotal > $vlAtualMax){
-            $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de 20%.'));
+            $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de 50%.'));
             $this->_helper->viewRenderer->setNoRender(TRUE);
         }
 
