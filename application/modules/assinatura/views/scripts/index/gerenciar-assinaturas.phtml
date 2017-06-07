@@ -1,7 +1,7 @@
 <main>
     <?php
     $links = array(
-        array('Gerenciar Projetos' => array())
+        array('Gerenciar Assinaturas' => array())
     );
     ?>
     <div class="content padding20 clearfix">
@@ -48,7 +48,7 @@
                                 <th class="center-align" align="center">Tipo</th>
                                 <th class="center-align" align="center">Ver</th>
                                 <th class="center-align" align="center">Assinar</th>
-                                <th class="center-align" align="center">Encaminhar</th>
+                                <th class="center-align" align="center">Movimentar</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -121,7 +121,7 @@
                                                    array(
                                                        'module' => 'assinatura',
                                                        'controller' => 'index',
-                                                       'action' => 'encaminhar-projeto'
+                                                       'action' => 'movimentar-projeto'
                                                    )
                                                ) . $parametrosAssinatura ?>"
                                            data-nrpronac="<?php echo $dado['pronac']; ?>"
