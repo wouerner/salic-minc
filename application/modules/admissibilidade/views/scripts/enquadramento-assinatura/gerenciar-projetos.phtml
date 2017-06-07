@@ -53,12 +53,14 @@
                             <?php foreach ($this->dados as $dado): ?>
                                 <tr>
                                     <td class="center-align" style="padding-left: 20px">
+                                        <?php  if(is_null($dado['possuiAssinatura'])) : ?>
                                         <input type="checkbox"
                                                name="IdPRONAC[]"
                                                id="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"
                                                class="checkbox_legal filled-in"
                                                value="<?php echo $dado['IdPRONAC'] ?>"/>
                                         <label for="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"></label>
+                                        <?php  endif; ?>
                                     </td>
                                     <td class="center-align" align="center">
                                         <a class="waves-effect waves-dark btn white black-text"
@@ -153,6 +155,7 @@
                         </table>
                         <div class="center-align" id="divAssinaturaEmMassa"
                              style="display: none;">
+
                             <button class="btn waves-effect waves-light" type="submit" name="action">
                                 Assinar em massa <i class="material-icons right">send</i>
                             </button>
