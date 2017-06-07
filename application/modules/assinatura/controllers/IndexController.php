@@ -179,6 +179,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                         'CONFIRM'
                     );
                 } catch (Exception $objException) {
+//$objException->getMessage();
                     parent::message(
                         $objException->getMessage(),
                         "/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}",
