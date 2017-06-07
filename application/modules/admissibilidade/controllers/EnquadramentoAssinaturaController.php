@@ -162,7 +162,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             );
 
             if (!$this->view->perfilAssinante) {
-                throw new Exception ("A fase atual de assinaturas do projeto atual n&atilde;o permite realizar essa opera&ccedil;&atilde;o.");
+                throw new Exception ("Usu&aacute;rio sem autoriza&ccedil;&atilde;o para assinar o documento.");
             }
 
             if(is_array($get->IdPRONAC)) {
@@ -282,8 +282,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 'Sequencial' => $dadosProjeto['Sequencial'],
                 'TipoAprovacao' => 1,
                 'dtAprovacao' => $objTbProjetos->getExpressionDate(),
-                'ResumoAprovacao' => 'Projeto Aprovado para capta&ccedil;&atilde;o de recursos',
-                'AprovadoReal' => $valoresProjeto['ValorAprovado'],
+                'ResumoAprovacao' => $dadosEnquadramento['Observacao'],
+                'AprovadoReal' => $valoresProjeto['ValorProposta'],
                 'Logon' => $auth->getIdentity()->usu_codigo,
             );
             $objAprovacao = new Aprovacao();
