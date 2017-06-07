@@ -8,6 +8,7 @@ class Proposta_Model_TbCustosVinculados extends MinC_Db_Model
     protected $_dtCadastro;
     protected $_dsObservacao;
     protected $_idUsuario;
+    protected $_pcCalculo;
 
     const ID_ETAPA_CUSTOS_VINCULADOS = '8';           # Custos Vinculados
     const ID_FONTE_RECURSO_CUSTOS_VINCULADOS = '109'; #Incentivo fiscal
@@ -128,6 +129,22 @@ class Proposta_Model_TbCustosVinculados extends MinC_Db_Model
     public function setIdUsuario($idUsuario)
     {
         $this->_idUsuario = $idUsuario;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPcCalculo()
+    {
+        return $this->_pcCalculo;
+    }
+
+    /**
+     * @param mixed $pcCalculo
+     */
+    public function setPcCalculo($pcCalculo)
+    {
+        $this->_pcCalculo = $pcCalculo;
     }
 
 
