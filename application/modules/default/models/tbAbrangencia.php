@@ -15,12 +15,9 @@
 
 class tbAbrangencia extends MinC_Db_Table_Abstract
 {
-	/* dados da tabela */
-//	protected $_banco   = "SAC";
 	protected $_schema  = "sac";
 	protected $_name    = "tbAbrangencia";
     protected $_primary = 'idAbrangencia';
-
 
 	/**
 	 * Busca os locais de abrangencia originais (aprovados)
@@ -199,7 +196,7 @@ class tbAbrangencia extends MinC_Db_Table_Abstract
 		$select = $this->select();
 		$select->setIntegrityCheck(false);
 		$select->from(
-			array('a' => 'Abrangencia'),
+			array('a' => 'Abrangencia'), # @todo tabela abrangencia eh diferente de tbAbrangencia
 			array(
                 new Zend_Db_Expr('a.*')
             ), 'SAC.dbo'
