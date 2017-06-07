@@ -116,7 +116,7 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
     public function movimentarProjetoAssinadoPorOrdemDeAssinatura(MinC_Assinatura_Model_Assinatura $modelAssinatura)
     {
         if (!$modelAssinatura->getIdOrdemDaAssinatura()) {
-            throw new Exception("O projeto n&atilde;o pode ser movimentado.");
+            throw new Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
         }
 
         if(!$this->isProjetoAssinado($modelAssinatura)) {
@@ -126,7 +126,7 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
         $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino($modelAssinatura->getIdTipoDoAtoAdministrativo(), $modelAssinatura->getIdOrdemDaAssinatura());
         if (!$codigoOrgaoDestino) {
-            throw new Exception("O projeto n&atilde;o pode ser movimentado.");
+            throw new Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
         }
 
         $objTbProjetos = new Projeto_Model_DbTable_Projetos();
