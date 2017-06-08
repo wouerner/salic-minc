@@ -212,7 +212,7 @@
                 <a href="#" title="Execução" class="ancoraExecucao" onclick="return false;">Readequa&ccedil;&atilde;o</a>
                 <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
                     <?php if($this->fnLiberarLinks['Readequacao_20']) { ?>
-                    <a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-menor'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac);?>" title="Ir para Remanejamento &le; 20%">Remanejamento &le; 20%</a>
+                    <a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-menor'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac);?>" title="Ir para Remanejamento &le; 50%">Remanejamento &le; 50%</a>
                     <?php } ?>
 
                     <?php if($this->fnLiberarLinks['ReadequacaoPlanilha']) { ?>
