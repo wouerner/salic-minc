@@ -1,14 +1,4 @@
 <?php
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of tbAcesso
- *
- * @author 01129075125
- */
 class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
 {
 
@@ -17,7 +7,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
 
 
     /**
-     * M�todo para consultar o Valor Real por ano
+     * Metodo para consultar o Valor Real por ano
      * @access public
      * @param array $dados
      * @param integer $where
@@ -160,21 +150,8 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function buscarItens($idEtapa, $idproduto = null)
+    public function buscarItens($idEtapa, $idproduto = null, $fetchMode = Zend_DB::FETCH_OBJ)
     {
-        /*    $sql = "select distinct
-                        pp.idPlanilhaItem as idPlanilhaItens,
-                        right(i.Descricao,40) as Descricao
-                    from SAC.dbo.tbPlanilhaProposta pp
-                        inner join SAC.dbo.tbPlanilhaItens as i on pp.idPlanilhaItem = i.idPlanilhaItens
-                        inner join SAC.dbo.tbPlanilhaEtapa as e on pp.idEtapa = e.idPlanilhaEtapa
-                    where idEtapa = $idEtapa order by i.Descricao "; */
-//
-//        $sql = "select distinct a.idPlanilhaItens,b.Descricao
-//                   FROM SAC..tbItensPlanilhaProduto a
-//                   INNER JOIN SAC..tbPlanilhaItens b on (a.idPlanilhaItens = b.idPlanilhaItens)
-//                   WHERE idPlanilhaEtapa = " . $idEtapa . " ";
-
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -197,7 +174,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
         $select->order('b.Descricao');
 
         $db = Zend_Db_Table::getDefaultAdapter();
-        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+        $db->setFetchMode($fetchMode);
         return $db->fetchAll($select);
     }
 
