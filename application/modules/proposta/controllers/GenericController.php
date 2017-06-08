@@ -159,7 +159,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
      * @access public
      * @return void
      */
-    public function salvarcustosvinculados($idPreProjeto)
+    public function atualizarcustosvinculadosdaplanilha($idPreProjeto)
     {
         $idEtapa = '8'; // Custos Vinculados
         $tipoCusto = 'A';
@@ -199,11 +199,15 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
         if (empty($idPreProjeto))
             return false;
 
-        $idEtapa = '8'; // Custos Vinculados
-        $fonteRecurso = '109'; // incentivo fiscal
+        $ModelCV = new Proposta_Model_TbCustosVinculados();
+        $idEtapa = $ModelCV::ID_ETAPA_CUSTOS_VINCULADOS;
+        $fonteRecurso = $ModelCV::ID_FONTE_RECURSO_CUSTOS_VINCULADOS;
+        $idUf = 1;
+        $idMunicipio = 1;
         $dados = array();
 
         $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $ModelCV = new Proposta_Model_TbCustosVinculados();
 
         if (empty($valorTotalProdutos)) {
             $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaProdutos($idPreProjeto, 109);
@@ -214,87 +218,49 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             return 0;
         }
 
-        $ufRegionalizacaoPlanilha = $TPP->buscarItensUfRegionalizacao($idPreProjeto);
-
-        # definindo os criterios de regionalizacao
-        if (!empty($ufRegionalizacaoPlanilha)) { # sudeste e sul
-            $calcDivugacao = 0.2;     # custo de divulgacao 20%
-            $calcCaptacao = 0.1;      # custo para captação 10%
-            $limiteCaptacao = 100000; # valor máximo para captação 100.000,00
-
-            $idUf = $ufRegionalizacaoPlanilha->idUF;
-            $idMunicipio = $ufRegionalizacaoPlanilha->idMunicipio;
-        } else { # demais regiões
-            $calcDivugacao = 0.3;     # custo de divulgação 30%
-            $calcCaptacao = 0.15;     # custo para captação 15%
-            $limiteCaptacao = 150000; # valor máximo para captação 150.000,00
-
-            $arrBusca['idprojeto'] = $idPreProjeto;
-            $arrBusca['stabrangencia'] = 1;
-
-            $idUf = 1;
-            $idMunicipio = 1;
-        }
-
-        // Busca os itens da etapa 8 (custos vinculados)
         $itensPlanilhaProduto = new tbItensPlanilhaProduto();
-        $itensCustoAdministrativo = $itensPlanilhaProduto->buscarItens($idEtapa);
+        $itensCustosVinculados = $itensPlanilhaProduto->buscarItens($idEtapa, null, Zend_DB::FETCH_ASSOC);
 
-        foreach ($itensCustoAdministrativo as $item) {
-            $custosVinculados = null;
-            $valorCustoItem = null;
-            $calcular = true;
+        $CustosMapper = new Proposta_Model_TbCustosVinculadosMapper();
 
-            switch ($item->idPlanilhaItens) {
-                case 8197: // Custo Administrativo
-                    $valorCustoItem = ($valorTotalProdutos * 0.15);
-                    break;
-                case 8198: // Divulgacao
-                    $valorCustoItem = ($valorTotalProdutos * $calcDivugacao);
-                    break;
-                case 5249: // Remuneracao p/ Captar Recursos
-                    $valorCustoItem = ($valorTotalProdutos * $calcCaptacao);
-                    if ($valorCustoItem > $limiteCaptacao)
-                        $valorCustoItem = $limiteCaptacao;
-                    break;
-                case 8199: // Controle e Auditoria
-                    $valorCustoItem = ($valorTotalProdutos * 0.1);
-                    if ($valorCustoItem > 100000)
-                        $valorCustoItem = 100000;
-                    break;
-                default:
-                    $calcular = false;
+        foreach ($itensCustosVinculados as $item) {
+
+            $custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $idPreProjeto, 'idPlanilhaItem' => $item['idPlanilhaItens']));
+
+            if ($custoVinculadoProponente['pcCalculo'] > 0) {
+                $valorCustoItem = ($valorTotalProdutos * ($custoVinculadoProponente['pcCalculo'] / 100));
+            } elseif ($custoVinculadoProponente['pcCalculo'] == 0) {
+                $valorCustoItem = 0;
             }
 
-            if ($calcular == true) {
-
-                $dados[] = array(
-                    'idprojeto' => $idPreProjeto,
-                    'idetapa' => $idEtapa,
-                    'idplanilhaitem' => $item->idPlanilhaItens,
-                    'descricao' => '',
-                    'unidade' => '1',
-                    'quantidade' => '1',
-                    'ocorrencia' => '1',
-                    'valorunitario' => $valorCustoItem,
-                    'qtdedias' => '1',
-                    'tipodespesa' => '0',
-                    'tipopessoa' => '0',
-                    'contrapartida' => '0',
-                    'fonterecurso' => $fonteRecurso,
-                    'ufdespesa' => $idUf,
-                    'municipiodespesa' => $idMunicipio,
-                    'idusuario' => 462,
-                    'dsjustificativa' => ''
-                );
-            }
+            $dados[] = array(
+                'idprojeto' => $idPreProjeto,
+                'idetapa' => $idEtapa,
+                'idplanilhaitem' => $item['idPlanilhaItens'],
+                'descricao' => '',
+                'unidade' => '1',
+                'quantidade' => '1',
+                'ocorrencia' => '1',
+                'valorunitario' => $valorCustoItem,
+                'qtdedias' => '1',
+                'tipodespesa' => '0',
+                'tipopessoa' => '0',
+                'contrapartida' => '0',
+                'fonterecurso' => $fonteRecurso,
+                'ufdespesa' => $idUf,
+                'municipiodespesa' => $idMunicipio,
+                'idusuario' => 462,
+                'dsjustificativa' => ''
+            );
         }
+
         return $dados;
     }
 
     public function somarTotalCustosVinculados($idPreProjeto, $valorTotalProdutos = null)
     {
         $itens = $this->calcularCustosVinculados($idPreProjeto, $valorTotalProdutos);
+        $soma = '';
 
         if ($itens == 0)
             return 0;
