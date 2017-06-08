@@ -2500,9 +2500,6 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $valorTotalGrupoC = $PlanilhaAtivaGrupoC->Total-$PlanilhaRemanejadaGrupoC->Total;
             $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
 
-            // grupo A pode usufruir do saldo dos outros grupos
-            $valorTotalGrupoA += $valorTotalGrupoB + $valorTotalGrupoC + $valorTotalGrupoD;
-            
             $dadosPlanilha = array();
             if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
