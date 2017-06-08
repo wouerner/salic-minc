@@ -78,8 +78,10 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
 
     public function regerarsenhaAction()
     {
+
         if ( isset ($_POST['alterar'] )  )
         {
+
             $cpf = Mascara::delMaskCPF($_POST['cpf']);
             $nome = $_POST['nome'];
             $senha = Gerarsenha::gerasenha(15, true, true, true, true);
@@ -122,6 +124,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
             $cpf = $_POST['cpf'];
 
             $usuario = new Autenticacao_Model_Usuario();
+
             $usuariosBuscar = $usuario->pesquisarUsuarioOrgao(array ('usu_identificacao = ?' => $cpf))->current();
 
             if ( empty ( $usuariosBuscar ) )
@@ -132,37 +135,38 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                 $this->_helper->viewRenderer->setNoRender(TRUE);
 
             }
-
-            $agentes = new Agente_Model_DbTable_Agentes();
-            $agentesBuscar = $agentes->buscar(array ('CNPJCPF = ?' => $cpf))->current();
-
-            if ( empty ( $agentesBuscar ) )
-            {
-                $dados['semdados'] = 'semdados';
-                $json = json_encode($dados);
-                echo $json;
-                $this->_helper->viewRenderer->setNoRender(TRUE);
-            }
-
-            $idAgente = $agentesBuscar['idAgente'];
-
-            $internet = new Internet();
-            $internetBuscar = $internet->buscar(array ('idAgente = ?' => $idAgente))->toArray();
-
-            if ( empty ( $internetBuscar ) )
-            {
-                  $dados['sememail'] = 'sememail';
-                  $json = json_encode($dados);
-                  echo $json;
-                  $this->_helper->viewRenderer->setNoRender(TRUE);
-            }
+//
+//            $agentes = new Agente_Model_DbTable_Agentes();
+//            $agentesBuscar = $agentes->buscar(array ('CNPJCPF = ?' => $cpf))->current();
+//
+//            if ( empty ( $agentesBuscar ) )
+//            {
+//                $dados['semdados'] = 'semdados';
+//                $json = json_encode($dados);
+//                echo $json;
+//                $this->_helper->viewRenderer->setNoRender(TRUE);
+//            }
+//
+//            $idAgente = $agentesBuscar['idAgente'];
+//
+//            $internet = new Internet();
+//            $internetBuscar = $internet->buscar(array ('idAgente = ?' => $idAgente))->toArray();
+//
+//            if ( empty ( $internetBuscar ) )
+//            {
+//                  $dados['sememail'] = 'sememail';
+//                  $json = json_encode($dados);
+//                  echo $json;
+//                  $this->_helper->viewRenderer->setNoRender(TRUE);
+//            }
 
             $json = array('error' => false);
-            if($usuariosBuscar && $agentesBuscar && $internetBuscar)
+//            if($usuariosBuscar && $agentesBuscar && $internetBuscar)
+            if($usuariosBuscar)
             {
                 $usuarioResultado = $usuariosBuscar->toArray();
-                $mesclagem = array_merge($usuarioResultado, $internetBuscar[0]);
-                $utf8Array = (array_map('utf8_encode', $mesclagem));
+//                $mesclagem = array_merge($usuarioResultado, $internetBuscar[0]);
+                $utf8Array = (array_map('utf8_encode', $usuarioResultado));
                 $json = json_encode($utf8Array);
             }
             echo $json;
