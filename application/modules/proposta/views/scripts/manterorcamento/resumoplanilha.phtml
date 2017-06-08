@@ -4,7 +4,15 @@
                 <table class="bordered striped centered" width="98%" >
                     <thead>
                     <tr class="title">
-                        <th colspan="2">Custos Vinculados</th>
+                        <th colspan="2">Custos Vinculados
+
+                            <?php if ($this->isEditavel) : ?>
+                                <a  href="<?php echo $this->url( array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' =>'custosvinculados','idPreProjeto' => $this->idPreProjeto)); ?>"
+                                    class="waves-effect waves-darken black-text small">
+                                    <i class="material-icons">edit</i></a>
+                            <?php endif; ?>
+                        </th>
+
                     </tr>
 
                     </thead>
