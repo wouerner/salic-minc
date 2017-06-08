@@ -24,9 +24,11 @@ class Assinatura_IndexController extends Assinatura_GenericController
     {
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
         $documentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas(
+            $this->grupoAtivo->codOrgao,
+            $this->grupoAtivo->codGrupo
+        );
 
-        $ordenacao = array("projetos.DtSituacao asc");
-        $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas($this->grupoAtivo->codOrgao, $ordenacao);
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
     }
 
@@ -127,7 +129,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
 
             if (!$this->view->perfilAssinante) {
-                throw new Exception ("A fase atual de assinaturas do projeto atual n&atilde;o permite realizar essa opera&ccedil;&atilde;o.");
+                throw new Exception ("Usu&aacute;rio sem autoriza&ccedil;&atilde;o para assinar o documento.");
             }
 
             if (is_array($get->IdPRONAC)) {
@@ -170,12 +172,14 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             "/{$this->moduleName}/index/gerenciar-assinaturas",
                             'CONFIRM'
                         );
+                    } else {
+                        parent::message(
+                            "Projeto assinado com sucesso!",
+                            "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}",
+                            'CONFIRM'
+                        );
+                        die;
                     }
-                    parent::message(
-                        "Projeto assinado com sucesso!",
-                        "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}",
-                        'CONFIRM'
-                    );
                 } catch (Exception $objException) {
                     parent::message(
                         $objException->getMessage(),
@@ -250,7 +254,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
         }
     }
 
-    public function encaminharProjetoAction()
+    public function movimentarProjetoAction()
     {
         try {
             $get = Zend_Registry::get('get');
@@ -262,28 +266,69 @@ class Assinatura_IndexController extends Assinatura_GenericController
             if (!filter_input(INPUT_GET, 'idTipoDoAtoAdministrativo')) {
                 throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
+            $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
+            $modelAssinatura->setIdPronac($get->IdPRONAC);
+            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
 
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-
             $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
-                $get->idTipoDoAtoAdministrativo,
+                $modelAssinatura->getIdTipoDoAtoAdministrativo(),
                 $this->grupoAtivo->codGrupo,
                 $this->grupoAtivo->codOrgao
             );
 
-            $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
-            $modelAssinatura->setIdPronac($get->IdPRONAC);
-            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
-            $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $dadosDocumentoAssinatura = $objModelDocumentoAssinatura->findBy(
+                array(
+                    'IdPRONAC' => $modelAssinatura->getIdPronac(),
+                    'idTipoDoAtoAdministrativo' => $modelAssinatura->getIdTipoDoAtoAdministrativo(),
+                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+                )
+            );
 
             $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura();
-            $servicoAssinatura->movimentarProjeto($modelAssinatura);
 
+            $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
+            $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
+            $modelAssinatura->setIdAssinante($this->auth->getIdentity()->usu_codigo);
+            $modelAssinatura->setIdDocumentoAssinatura($dadosDocumentoAssinatura['idDocumentoAssinatura']);
+            $servicoAssinatura->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
+
+            parent::message(
+                'Projeto Movimentado com sucesso!'
+                ,"/{$this->moduleName}/index/gerenciar-assinaturas"
+                ,'CONFIRM'
+            );
         } catch (Exception $objException) {
             parent::message(
-                $objException->getMessage(),
-                "/{$this->moduleName}/index/gerenciar-assinaturas"
+                $objException->getMessage()
+                ,"/{$this->moduleName}/index/gerenciar-assinaturas"
             );
         }
+    }
+
+    public function gerarPdfAction()
+    {
+        ini_set("memory_limit", "5000M");
+        set_time_limit(30);
+
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+        $cssContents = file_get_contents(APPLICATION_PATH . '/../public/library/materialize/css/materialize.css');
+        $cssContents .= file_get_contents(APPLICATION_PATH . '/../public/library/materialize/css/materialize-custom.css');
+        $html = $_POST['html'];
+
+        $pdf = new mPDF('pt', 'A4', 12, '', 8, 8, 5, 14, 9, 9, 'P');
+        $pdf->allow_charset_conversion = true;
+        $pdf->WriteHTML($cssContents, 1);
+        $pdf->charset_in = 'ISO-8859-1';
+
+        if(!mb_check_encoding($html, 'ISO-8859-1')) {
+            $pdf->charset_in = 'UTF-8';
+        }
+
+        $pdf->WriteHTML($html, 2);
+        $pdf->Output();
+        die;
     }
 }

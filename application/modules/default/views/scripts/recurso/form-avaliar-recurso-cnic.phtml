@@ -1221,8 +1221,8 @@
                     <td valign="top" width="200px">
                         <select name="areaCultural" id="areaCultural" class="input_simples obrigatorio" style="width: 160px;" <?php echo (!$habilitarAnaliseDeCusto) ? 'disabled="disabled"' : ''; ?>>
                             <option value=""> - Selecione - </option>
-                            <?php foreach ($this->comboareasculturais as $comboareacultural){ ?>
-                            <option value="<?php echo $comboareacultural->id; ?>" <?php if ($this->projetosEN->cdArea == $comboareacultural->id) echo "selected=\"selected\""; ?>><?php echo $comboareacultural->descricao; ?></option>
+                        <?php foreach ($this->comboareasculturais as $codAreaCultural => $descricaoAreaCultural){ ?>
+                        <option value="<?php echo $codAreaCultural; ?>" <?php if ($this->projetosEN->cdArea == $codAreaCultural) echo "selected=\"selected\""; ?>><?php echo $descricaoAreaCultural; ?></option>
                             <?php } ?>
                         </select>
                     </td>
@@ -1287,10 +1287,11 @@
             <tr <?php echo $sumir; ?>>
                 <td align="right" class="destacar bold w150">Área</td>
                 <td valign="top" width="200px">
+
                     <select name="areaCultural" id="areaCultural" class="input_simples obrigatorio" style="width: 160px;">
                         <option value=""> - Selecione - </option>
-                        <?php foreach ($this->comboareasculturais as $comboareacultural){ ?>
-                        <option value="<?php echo $comboareacultural->id; ?>" <?php if ($this->projetosEN->cdArea == $comboareacultural->id) echo "selected=\"selected\""; ?>><?php echo $comboareacultural->descricao; ?></option>
+                        <?php foreach ($this->comboareasculturais as $codAreaCultural => $descricaoAreaCultural){ ?>
+                        <option value="<?php echo $codAreaCultural; ?>" <?php if ($this->projetosEN->cdArea == $codAreaCultural) echo "selected=\"selected\""; ?>><?php echo $descricaoAreaCultural; ?></option>
                         <?php } ?>
                     </select>
                 </td>
@@ -1347,8 +1348,10 @@
         </tr>
         <tr>
             <td>
-                <label style="margin-right:25px; font-weight: normal;"><input type="radio" name="planaria" value="1" class="envioPlenaria" />Sim</label>
-                <label style="font-weight: normal;"><input type="radio" name="planaria" value="0" checked="checked" />Não</label>
+	      <input id="plenaria_sim" type="radio" name="planaria" value="1" class="envioPlenaria" />
+	      <label for="plenaria_sim" style="margin-right:25px; font-weight: normal;">Sim</label>
+	      <input id="plenaria_nao" type="radio" name="planaria" value="0" checked="checked" />
+              <label for="plenaria_nao" style="font-weight: normal;">Não</label>
             </td>
         </tr>
     </table>
