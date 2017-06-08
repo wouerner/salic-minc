@@ -8,13 +8,13 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 	public function init()
 	{
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-            $auth = Zend_Auth::getInstance(); // instancia da autentica��o
+            $auth = Zend_Auth::getInstance(); // instancia da autenticacao
             $PermissoesGrupo = array();
 
             //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
             if(isset($auth->getIdentity()->usu_codigo)){
                 //Recupera todos os grupos do Usuario
-                $Usuario = new Autenticacao_Model_Usuario(); // objeto usu�rio
+                $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
                 $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
                 foreach ($grupos as $grupo){
                     $PermissoesGrupo[] = $grupo->gru_codigo;
@@ -195,7 +195,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $arrBusca = array();
         $arrBusca['a.idProjeto = ?'] = $this->_idPreProjeto;
         $arrBusca['a.stPrincipal = ?'] = 1;
-       !empty( $post->idPlanoDistribuicao ) ? $arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao :'' ;
+       !empty( $post->idPlanoDistribuicao ) ? $arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao : '' ;
         //$arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao;
         $arrBusca['stPlanoDistribuicaoProduto = ?'] = 1;
         $arrPlanoDistribuicao = $tblPlanoDistribuicao->buscar($arrBusca, array("idPlanoDistribuicao DESC"))->toArray();
