@@ -43,19 +43,20 @@ label.error{color:red;}
         });
 
         $("#cpf").keyup(function() {
-            console.log('teste');
             if($("#cpf").val().length > 13){
 
                 var cpfLimpo = replaceAll(replaceAll(replaceAll($(this).val(),".",""),"-",""),"/","");
+
                 $.ajax({ //funcao jquery para enviar os formularios via ajax
                     type: "POST",
                     dataType: 'json',
-                    url:  "<?php echo $this->url(array('controller' => 'manterusuario', 'action' => 'regerarsenha')); ?>",
+                    url:  "<?php echo $this->url(array('module' => 'default', 'controller' => 'manterusuario', 'action' => 'regerarsenha')); ?>",
                     data: {
                         cpf : cpfLimpo
                     },
 
                     success: function(data) {
+console.log(data);
                         if(!data.error)
                         {
                             if ( data.semdados )

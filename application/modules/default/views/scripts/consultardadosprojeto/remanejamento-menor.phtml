@@ -333,7 +333,8 @@
                                             mensagem += '- O valor total do item n&atilde;o pode ser menor que '+data.dadosPlanilhaAtiva.ValorMinimoProItem+'.<br/>';
                                         }
                                     }
-                                    if(parseInt(TotalCalculadoComponente) > parseInt(valorMaximoValidacao)){
+                                    
+                                    if(parseInt(TotalCalculadoComponente).toFixed(2) > parseInt(valorMaximoValidacao)){
                                         mensagem += '- O valor total do item n&atilde;o pode ser maior que '+data.dadosPlanilhaAtiva.ValorMaximoProItem+'.<br/>';
                                         erros++;
                                     }
@@ -520,7 +521,7 @@
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
         <li class="second"><a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>" title="Consultar dados projeto">Consultar dados projeto</a></li>
-        <li class="last">Remanejamento &le; 20%</li>
+        <li class="last">Remanejamento &le; 50%</li>
     </ul>
 </div>
 <!-- ========== FIM BREADCRUMB (LINKS TOPO) ========== -->
@@ -528,7 +529,7 @@
 <div id="alerta" class="sumir"></div>
 
 <div id="titulo">
-    <div>Remanejamento &le; 20% <span class="voltar"><a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a></span></div>
+    <div>Remanejamento &le; 50% <span class="voltar"><a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a></span></div>
 </div>
 
 <div id="conteudo">
