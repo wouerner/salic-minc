@@ -333,8 +333,7 @@
                                             mensagem += '- O valor total do item n&atilde;o pode ser menor que '+data.dadosPlanilhaAtiva.ValorMinimoProItem+'.<br/>';
                                         }
                                     }
-                                    alert(parseInt(TotalCalculadoComponente));
-                                    alert(parseInt(valorMaximoValidacao));
+                                    
                                     if(parseInt(TotalCalculadoComponente).toFixed(2) > parseInt(valorMaximoValidacao)){
                                         mensagem += '- O valor total do item n&atilde;o pode ser maior que '+data.dadosPlanilhaAtiva.ValorMaximoProItem+'.<br/>';
                                         erros++;

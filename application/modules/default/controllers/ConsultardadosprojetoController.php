@@ -24,6 +24,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
     const TIPO_PLANILHA_APROVADA = 3;
     const TIPO_PLANILHA_REMANEJADA = 5;
     const TIPO_PLANILHA_COMPLEMENTACAO_REDUCAO = 6;
+    const PERCENTUAL_REMANEJAMENTO = 50;
     
     /**
      * Reescreve o metodo init()
@@ -2499,6 +2500,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $valorTotalGrupoC = $PlanilhaAtivaGrupoC->Total-$PlanilhaRemanejadaGrupoC->Total;
             $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
 
+            // grupo A pode usufruir do saldo dos outros grupos
+            $valorTotalGrupoA += $valorTotalGrupoB + $valorTotalGrupoC + $valorTotalGrupoD;
+            
             $dadosPlanilha = array();
             if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
@@ -2729,7 +2733,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             foreach ($planilhaAtiva as $registro) {
                 //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
                 $vlAtual = @number_format(($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']), 2, '', '');
-                $vlAtualPerc = $vlAtual*50/100;
+                $vlAtualPerc = $vlAtual* self::PERCENTUAL_REMANEJAMENTO/100;
 
                 //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
                 $vlAtualMin = round($vlAtual-$vlAtualPerc);
@@ -2749,8 +2753,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilhaAtiva['ValorUnitario'] = utf8_encode('R$ '.number_format($registro['ValorUnitario'], 2, ',', '.'));
                 $dadosPlanilhaAtiva['QtdeDias'] = $registro['QtdeDias'];
                 $dadosPlanilhaAtiva['TotalSolicitado'] = utf8_encode('R$ '.number_format(($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']), 2, ',', '.'));
-                $dadosPlanilhaAtiva['ValorMinimoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] - (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * 50/100) ), 2, ',', '.'));
-                $dadosPlanilhaAtiva['ValorMaximoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] + (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * 50/100) ), 2, ',', '.'));
+                $dadosPlanilhaAtiva['ValorMinimoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] - (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * self::PERCENTUAL_REMANEJAMENTO/100) ), 2, ',', '.'));
+                $dadosPlanilhaAtiva['ValorMaximoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] + (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * self::PERCENTUAL_REMANEJAMENTO/100) ), 2, ',', '.'));
                 $dadosPlanilhaAtiva['vlMinimoValidacao'] = utf8_encode($vlAtualMin);
                 $dadosPlanilhaAtiva['vlMaximoValidacao'] = utf8_encode($vlAtualMax);
                 $dadosPlanilhaAtiva['ValorMinimoProItemValidacao'] = utf8_encode(number_format(($vlAtualMin), 2, '', ''));
@@ -2864,15 +2868,16 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             )
         )->current();
         $vlAtual = @number_format(($valoresItem['qtItem']*$valoresItem['nrOcorrencia']*$valoresItem['vlUnitario']), 2, '', '');
-        $vlAtualPerc = $vlAtual*50/100;
+        $vlAtualPerc = $vlAtual* self::PERCENTUAL_REMANEJAMENTO /100;
 
         //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
         $vlAtualMin = round($vlAtual-$vlAtualPerc);
         $vlAtualMax = round($vlAtual+$vlAtualPerc);
 
-        //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO - 50%
+        //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO
+        
         if($vlTotal < $vlAtualMin || $vlTotal > $vlAtualMax){
-            $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de 50%.'));
+            $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de ' . self::PERCENTUAL_REMANEJAMENTO . '.'));
             $this->_helper->viewRenderer->setNoRender(TRUE);
         }
         
