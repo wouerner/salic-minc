@@ -17,7 +17,7 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
     }
 
     /**
-     * @return MinC_Assinatura_Documento_IDocumentoAssinatura
+     * @return Admissibilidade_EnquadramentoDocumentoAssinaturaController
      */
     function obterServicoDocumentoAssinatura()
     {
