@@ -58,7 +58,7 @@ Vue.component('input-money', {
         }
     },
     mounted: function () {
-        this.formatValue()
+        this.formatValue();
         console.log(this.disabled);
         this.$refs.input.disabled = this.disabled;
     },
@@ -74,7 +74,7 @@ Vue.component('input-money', {
     },
     watch: {
         disabled: function (){
-            console.log(this.disabled)
+            console.log(this.disabled);
             this.$refs.input.disabled = this.disabled;
             if (this.disabled){
                 this.value= 0;
@@ -257,7 +257,7 @@ Vue.component('my-component', {
                 total += numeral(vl).value();
             }
             return numeral(total).format('0,0.00');
-        },
+        }
     },
     watch:{
         //Quantidade de exemplar / Ingresso
@@ -399,14 +399,14 @@ Vue.component('my-component', {
                 vlUnitarioProponenteIntegral : this.vlUnitarioProponenteIntegral,
                 vlReceitaProponenteIntegral : this.vlReceitaProponenteIntegral,
                 vlReceitaProponenteParcial : this.vlReceitaProponenteParcial,
-                vlReceitaPrevista : numeral(this.vlReceitaPrevista).format('0.00'),
+                vlReceitaPrevista : numeral(this.vlReceitaPrevista).format('0.00')
             }
 
             var vue = this;
             $3.ajax({
               type: "POST",
               url: "/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/" + this.idpreprojeto,
-              data: p,
+              data: p
             })
             .done(function() {
                 vue.t();
@@ -421,7 +421,7 @@ Vue.component('my-component', {
             $3.ajax({
                 type: "POST",
                 url: "/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/" + this.idpreprojeto,
-                data: {idDetalhaPlanoDistribuicao: index, idPlanoDistribuicao: this.idplanodistribuicao},
+                data: {idDetalhaPlanoDistribuicao: index, idPlanoDistribuicao: this.idplanodistribuicao}
             })
             .done(function() {
                 vue.t();
@@ -453,5 +453,5 @@ Vue.component('my-component', {
 })
 
 var app6 = new Vue({
-        el: '#example',
+        el: '#example'
     })
