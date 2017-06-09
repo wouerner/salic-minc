@@ -4,9 +4,9 @@
         font-size: 8pt;
     }
 
-    .gratuito { background-color: #d0d0d0; text-align: center}
-    .popular { background-color: #dcdcdc; text-align: center}
+    .gratuito,
     .proponente { background-color: #e6e6e6; text-align: center}
+    .popular { background-color: #dcdcdc; text-align: center}
 
     .resumo-distribuicao caption {
         font-size: 13px;
@@ -38,28 +38,31 @@
                                     <th>&Aacute;rea</th>
                                     <th>Segmento</th>
                                     <th>Principal</th>
-                                    <th width="20%" class="center-align">A&ccedil;&otilde;es</th>
+                                    <th width="25%" class="center-align">A&ccedil;&otilde;es</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($this->planosDistribuicao as $planoDistribuicao) : ?>
 
-                                    <tr id="produto_<?= $planoDistribuicao->idPlanoDistribuicao; ?>">
+                                    <tr id="produto_<?= $planoDistribuicao->idPlanoDistribuicao; ?>" class="produto-header" produto_id="<?= $planoDistribuicao->idPlanoDistribuicao; ?>">
                                         <td><?php echo $planoDistribuicao->Produto; ?></td>
                                         <td><?php echo $planoDistribuicao->DescricaoArea; ?></td>
                                         <td><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
                                         <td><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
                                         <td class="action right-align">
                                             <?php if ($this->isEditarProposta || ($this->isEditarProjeto && $planoDistribuicao->stPrincipal != 1)) : ?>
-                                                <button class="btn small waves-effect waves-light tooltipped" id="btn_editar" onclick="mostrarResumo(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Visualizar resumo">
+                                                <a class="btn small waves-effect waves-light tooltipped" id="btn_editar" onclick="mostrarResumo(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Visualizar resumo">
+                                                    <i class="material-icons">visibility</i>
+                                                </a>
+                                                <a href="/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/<?= $this->idPreProjeto; ?>/idPlanoDistribuicao/<?= $planoDistribuicao->idPlanoDistribuicao; ?>" class="btn small waves-effect waves-light tooltipped" data-position="top" data-delay="50" data-tooltip="Detalhar produto">
                                                     <i class="material-icons">zoom_in</i>
-                                                </button>
-                                                <button class="btn small waves-effect waves-light tooltipped btn-primary" id="btn_editar" onclick="editar(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Editar">
+                                                </a>
+                                                <a class="btn small waves-effect waves-light tooltipped btn-primary" id="btn_editar" onclick="editar(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Editar Produto">
                                                     <i class="material-icons">edit</i>
-                                                </button>
-                                                <button class="btn small waves-effect waves-light tooltipped btn-danger" id="btn_excluir" onclick="confirma('<?php echo $this->urlApagar; ?>&idPlanoDistribuicao=<?php echo $planoDistribuicao['idPlanoDistribuicao']; ?>')" data-position="top"  data-tooltip="Excluir">
+                                                </a>
+                                                <a class="btn small waves-effect waves-light tooltipped btn-danger" id="btn_excluir" onclick="confirma('<?php echo $this->urlApagar; ?>&idPlanoDistribuicao=<?php echo $planoDistribuicao['idPlanoDistribuicao']; ?>')" data-position="top"  data-tooltip="Excluir Produto e Detalhamentos">
                                                     <i class="material-icons">delete</i>
-                                                </button>
+                                                </a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -115,12 +118,9 @@
                             <p>
                                 <br>
                                 <?php if ($this->isEditavel): ?>
-                                    <button type="button" class="btn white-text" id="btn_novo">Novo</button>
-                                    <a href="/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/<?php echo $this->idPreProjeto ?>"
-                                       class="btn white-text" id="detalhar">Detalhar</a>
+                                    <button type="button" class="btn white-text" id="btn_novo">Novo Produto</button>
                                 <?php else: ?>
-                                    <button disabled type="button" class="btn white-text" id="btn_novo">Novo</button>
-                                    <button disabled class="btn white-text" >Detalhar</button>
+                                    <button disabled type="button" class="btn white-text" id="btn_novo">Novo Produto</button>
                                 <?php endif ?>
                             </p>
                         </div>
