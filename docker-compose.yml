@@ -8,9 +8,9 @@ services:
      - "9000:9000"
      - "8888:8888"
     volumes:
-     - /var/www/project/salic:/var/www
-     - /var/www/log/apache2:/var/log/apache2
-     - /var/www/project/salic/public/txt:/var/www/public/txt/
-     - /var/www/project/salic/public/plenaria:/var/www/public/plenaria/
+     - .:/var/www
+     - /var/www/log/apache2/salic:/var/log/apache2
+     - ./public/txt:/var/www/public/txt/
+     - ./public/plenaria:/var/www/public/plenaria/
     environment:
      - APPLICATION_ENV=development
