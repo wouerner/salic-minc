@@ -175,24 +175,24 @@
                 </div>
             </div>
 
-            <div id="criar-detalhamento" class="card" style="max-width: 1200px; margin: 0 auto; padding: 10px;">
+            <div id="form-detalhamento" class="card" style="max-width: 1200px; margin: 0 auto; padding: 10px;">
                 <form>
                     <div class="row">
-                        <h5 class="light center-align">Cadastrar novo detalhamento</h5>
+                        <h5 class="light center-align">Novo detalhamento</h5>
                         <div class="row">
                             <div class="input-field col s6">
                                 <p><b>Tipo de venda</b><br>
-                                    <input name="group1" type="radio" id="test1" />
-                                    <label for="test1">Ingresso</label>
-                                    <input name="group1" type="radio" id="test2" />
-                                    <label for="test2">Exemplar</label>
+                                    <input name="tipoVenda" type="radio" id="tipoVendaIngresso" value="ingresso" v-model="tipoVenda" />
+                                    <label for="tipoVendaIngresso">Ingresso</label>
+                                    <input name="tipoVenda" type="radio" id="tipoVendaExemplar" value="exemplar" v-model="tipoVenda"/>
+                                    <label for="tipoVendaExemplar">Exemplar</label>
                                 </p>
                             </div>
                             <div class="input-field col s6">
                                 <p><b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
-                                    <input name="group1" type="radio" :id=" _uid + '1' " value="s" v-model="radio"/>
+                                    <input name="group1" type="radio" :id=" _uid + '1' " value="s" v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '1'">Sim</label>
-                                    <input name="group1" type="radio" :id=" _uid + '2' " value="n"  v-model="radio"/>
+                                    <input name="group1" type="radio" :id=" _uid + '2' " value="n"  v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '2'">N&atilde;o</label>
                                 </p>
                             </div>
@@ -201,18 +201,18 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <p><b>Tipo  do local de apresenta&ccedil;&atilde;o</b><br>
-                                    <input name="group1" type="radio" id="test1" />
-                                    <label for="test1">Aberto</label>
-                                    <input name="group1" type="radio" id="test2" />
-                                    <label for="test2">Fechado</label>
+                                    <input name="tipoLocalRealizacao" type="radio" id="tipoAberto" value="aberto" v-model="tipoLocalRealizacao" />
+                                    <label for="tipoAberto">Aberto</label>
+                                    <input name="tipoLocalRealizacao" type="radio" id="tipoFechado" value="fechado" v-model="tipoLocalRealizacao" />
+                                    <label for="tipoFechado">Fechado</label>
                                 </p>
                             </div>
                             <div class="input-field col s6">
                                 <p><b>Espa&ccedil;o p&uacute;blico</b><br>
-                                    <input name="group1" type="radio" :id=" _uid + '1' " value="s" v-model="radio"/>
-                                    <label :for="_uid + '1'">Sim</label>
-                                    <input name="group1" type="radio" :id=" _uid + '2' " value="n"  v-model="radio"/>
-                                    <label :for="_uid + '2'">N&atilde;o</label>
+                                    <input type="radio" id="espacoPublicoSim" value="s" v-model="espacoPublico"/>
+                                    <label for="espacoPublicoSim">Sim</label>
+                                    <input type="radio" id="espacoPublicoNao" value="n"  v-model="espacoPublico"/>
+                                    <label for="espacoPublicoNao">N&atilde;o</label>
                                 </p>
                             </div>
                         </div>
@@ -227,139 +227,104 @@
                             </div>
                         </div>
 
-                        <div class="row" class="distribuicao-gratuita">
-                            <table class="bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="center-align gratuito" colspan="3">
-                                            Distribui&ccedil;&atilde;o Gratuita (no minimo 30%)
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th class="gratuito" >Divulga&ccedil;&atilde;o (At&eacute; {{ (qtExemplares * 0.1) }})</th>
-                                        <th class="gratuito" >Patrocinador (At&eacute; {{ (qtExemplares * 0.1) }})</th>
-                                        <th class="gratuito" >Popula&ccedil;&atilde;o (de {{ (qtExemplares * 0.1) }} at&eacute; {{ (qtExemplares * 0.3) }})</th>
-                                    </tr>
-                                </thead>
-                                <tbody class=" green lighten-7">
-                                    <tr>
-                                        <td>
-                                            <div class="input-field">
-                                                <input  class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="input-field">
-                                                <input  class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="input-field">
-                                                <input  class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="distribuicao-gratuita">
+                            <div class="row">
+                                <div class="input-field col s12 center-align">
+                                    <b>Distribui&ccedil;&atilde;o Gratuita (no minimo 30%)</b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12 m3 l2">
+                                    <input id="" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
+                                    <label class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ (qtExemplares * 0.1) }})</label>
+                                </div>
+                                <div class="input-field col s12 m3 l2">
+                                    <input  class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
+                                    <label class="active" for="qtGratuitaPatrocinador">Patrocinador (At&eacute; {{ (qtExemplares * 0.1) }})</label>
+                                </div>
+                                <div class="input-field col s12 m3 l2">
+                                    <input  class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
+                                    <label class="active" for="qtGratuitaPopulacao">Popula&ccedil;&atilde;o (de {{ (qtExemplares * 0.1) }} at&eacute; {{ (qtExemplares * 0.3) }})</label>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="row" class="preco-popular">
-                            <table class="bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="center-align popular" colspan="5">
-                                            Pre&ccedil;o Popular (at&eacute; 20%)
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th class="popular">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</th>
-                                        <th class="popular">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</th>
-                                        <th class="popular">Pre&ccedil;o Unitario (At&eacute; 50,00)</th>
-                                        <th class="popular">Valor da inteira</th>
-                                        <th class="popular">Valor da meia</th>
-                                    </tr>
-                                </thead>
-                                <tbody class=" green lighten-7">
-                                    <tr>
-                                        <!-- Preço popular-->
-                                        <td>
-                                            <div class="input-field">
-                                                <input  class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                            </div>
-                                        </td>
-                                        <td class="right-align">
-                                            <div class="input-field">
-                                                <input class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="input-field ">
-                                                <input-money
-                                                    v-bind:disabled="radio =='s'? true: false"
-                                                    v-bind:value="vlUnitarioPopularIntegral"
-                                                    v-on:ev="vlUnitarioPopularIntegral = $event">
-                                                </input-money>
-                                            </div>
-                                        </td>
-                                        <td class="right-align">{{ vlReceitaPopularIntegral }}</td>
-                                        <td class="right-align">{{ vlReceitaPopularParcial }}</td>
-                                        <!-- Preço popular-->
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <!-- Preço popular-->
+                        <div class="preco-popular">
+                            <div class="row">
+                                <div class="input-field col s12 center-align">
+                                    <b>Pre&ccedil;o Popular (at&eacute; 20%)</b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6 l2">
+                                    <input-money
+                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
+                                        v-bind:value="vlUnitarioPopularIntegral"
+                                        v-on:ev="vlUnitarioPopularIntegral = $event">
+                                    </input-money>
+                                    <label class="active" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; 50,00)</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input  class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
+                                    <label class="active" for="qtPopularIntegral">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
+                                    <label class="active" for="qtPopularParcial">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
+                                    <label class="active" for="vlReceitaPopularIntegral">Valor inteira</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="vlReceitaPopularParcial">
+                                    <label class="active" for="vlReceitaPopularParcial">Valor meia</label>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="row" class="proponente">
-                            <table class="bordered">
-                                <thead>
-                                    <tr>
-                                        <th  class="center-align proponente" colspan="5">
-                                            Proponente (50%)
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th class="proponente" >Qtd. Inteira</th>
-                                        <th class="proponente" >Qtd. Meia</th>
-                                        <th class="proponente" >Pre&ccedil;o Unitario do Ingresso</th>
-                                        <th class="proponente" >Valor da inteira</th>
-                                        <th class="proponente" >Valor da meia</th>
-                                    </tr>
-                                </thead>
-                                <tbody class=" green lighten-7">
-                                    <tr>
-                                        <td class="right-align">{{ qtProponenteIntegral }}</td>
-                                        <td class="right-align">{{ qtProponenteParcial }}</td>
-                                        <td class="right-align">
-                                            <div class="input-field ">
-                                                <input-money
-                                                    v-bind:disabled="radio =='s'? true: false"
-                                                    v-bind:value="vlUnitarioProponenteIntegral"
-                                                    v-on:ev="vlUnitarioProponenteIntegral = $event">
-                                                </input-money>
-                                            </div>
-                                        </td>
-                                        <td class="right-align">{{ vlReceitaProponenteIntegral }}</td>
-                                        <td class="right-align">{{ vlReceitaProponenteParcial }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="proponente-s">
+                            <div class="row">
+                                <div class="input-field col s12 center-align">
+                                    <b>Proponente (50%)</b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6 l2">
+                                    <input-money
+                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
+                                        v-bind:value="vlUnitarioProponenteIntegral"
+                                        v-on:ev="vlUnitarioProponenteIntegral = $event">
+                                    </input-money>
+                                    <label class="active" for="vlUnitarioProponenteIntegral">Pre&ccedil;o Unitario</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="qtProponenteIntegral">
+                                    <label class="active" for="qtProponenteIntegral">Qtd. Inteira</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="qtProponenteParcial">
+                                    <label class="active" for="qtProponenteParcial">Qtd. Meia</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="vlReceitaProponenteIntegral">
+                                    <label class="active" for="vlReceitaProponenteIntegral">Valor inteira</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="vlReceitaProponenteParcial">
+                                    <label class="active" for="vlReceitaProponenteParcial">Valor meia</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row" class="receita-total">
-                            <table class="bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Receita Prevista</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="green lighten-7">
-                                    <tr>
-                                        <td class="right-align">{{ vlReceitaPrevista }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="row" class="receita-prevista center-align">
+                            <div class="col s6 l2 offset-l6">
+                                <p><b>Receita Prevista<b></p>
+                            </div>
+                            <div class="col s6 l2">
+                                {{vlReceitaPrevista}}
+                            </div>
                         </div>
-
                         <div class="row" class="salvar center-align">
+                            <br>
                             <br>
                             <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="salvar">Salvar
                                 <i class="material-icons right">send</i>
