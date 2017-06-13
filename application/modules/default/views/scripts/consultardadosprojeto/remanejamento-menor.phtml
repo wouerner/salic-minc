@@ -124,12 +124,14 @@
         });
         
         $('.reintegrar').click(function(){
-            var idPlanilha = $(this).attr('idPlanilha');
+            var idPlanilha = $(this).attr('idPlanilha'),
+		idPlanilhaAprovacaoPai = $(this).attr('idPlanilhaAprovacaoPai');
             $.ajax({
                 type: 'POST',
                 url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-reintegrar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                 data: {
-                    idPlanilha: idPlanilha
+                    idPlanilha: idPlanilha,
+                    idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai
                 },
                 success: function(data){
                     if(data.resposta){
@@ -177,14 +179,14 @@
             var idPronac = $(this).attr('idPronac');
             $("#modalItem").dialog('close');
             $("#alerta").dialog("destroy");
-            $("#alerta").html('Deseja realmente cancelar todas as modifica&ccedil;&ätilde;es feitas nos itens da planilha?');
+            $("#alerta").html('Deseja realmente cancelar todas as modifica&ccedil;&atilde;es feitas nos itens da planilha?');
             $("#alerta").dialog({
                 resizable: false,
                 title: 'Alerta!',
                 width:330,
                 modal: true,
                 buttons : {
-                    'N�o' : function(){
+                    'N&atilde;o' : function(){
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
@@ -226,6 +228,7 @@
         
         $('.editarItem').click(function(){
             var idPlanilhaAprovacao = $(this).attr('idPlanilhaAprovacao'),
+                idPlanilhaAprovacaoPai = $(this).attr('idPlanilhaAprovacaoPai'),
                 itemClicado = $(this);
                 
             //AO ABRIR A MODAL, LIMPA TODOS OS CAMPOS EDIT�VEIS
@@ -243,7 +246,8 @@
                 type: 'POST',
                 url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-alterar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                 data: {
-                    idPlanilha: idPlanilhaAprovacao
+                  idPlanilha: idPlanilhaAprovacao,
+                  idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai
                 },
                 success: function(data){
                     
@@ -275,6 +279,7 @@
                         $('#TotalCalculado').html(data.dadosPlanilhaEditavel.TotalSolicitado);
                         
                         $('#campoIdPlanilha').attr('idPlanilha', idPlanilhaAprovacao);
+			$('#campoIdPlanilha').attr('idPlanilhaAprovacaoPai', idPlanilhaAprovacaoPai);
 
                         var valorMinimoValidacao = data.dadosPlanilhaAtiva.ValorMinimoProItemValidacao,
                             valorMaximoValidacao = data.dadosPlanilhaAtiva.ValorMaximoProItemValidacao,
@@ -315,7 +320,7 @@
                                     });
                                     
                                     if(obrigatorios > 0){
-                                        mensagem += '- Favor preencher os dados obrigat�rios.<br/>';
+                                        mensagem += '- Favor preencher os dados obrigat&oacute;rios.<br/>';
                                     }
 
                                     var TotalCalculadoComponente = $('#TotalCalculado').html().replace(/[^\d]/g, "");
@@ -366,6 +371,7 @@
                                             url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'salvar-avaliacao-do-item-remanejamento'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                                             data: {
                                                 idPlanilha: idPlanilhaAprovacao,
+						idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai,
                                                 Quantidade: Quantidade,
                                                 Ocorrencia: Ocorrencia,
                                                 ValorUnitario: ValorUnitario,
@@ -423,6 +429,7 @@
                                                     itemClicado.parent().parent().find('.textQuantidade').html(Quantidade);
                                                     itemClicado.parent().parent().find('.textOcorrencia').html(Ocorrencia);
                                                     itemClicado.parent().parent().find('.textValorUnitario').html(ValorUnitario);
+						    itemClicado.parent().parent().find('.textValorAprovado').html(Total);
                                                     itemClicado.parent().parent().find('.textValorTotalSugerido').html(Total);
                                                     itemClicado.parent().parent().find('.textJustificativa').html(Justificativa);
                                                     atualizarDiferencaDeValores();
@@ -799,7 +806,7 @@
             <td id="campoDiasSolicitado" class="direita camposModal">&nbsp;</td>
             <td id="campoTotalSolicitado" class="direita camposModal">&nbsp;</td>
             <td class="centro">
-                <img idPlanilha="" src="<?php echo $this->baseUrl(); ?>/public/img/refresh.gif" title="Reintegrar Item" class="reintegrar" id="campoIdPlanilha" style="cursor: pointer">
+                <img idPlanilha="" idPlanilhaAprovacaoPai="" src="<?php echo $this->baseUrl(); ?>/public/img/refresh.gif" title="Reintegrar Item" class="reintegrar" id="campoIdPlanilha" style="cursor: pointer">
             </td>
         </tr>
     </table>
