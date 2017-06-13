@@ -28,7 +28,7 @@
 }));
 
 // switch between locales
-//numeral.locale('pt-br');
+numeral.locale('pt-br');
 
 // register
 Vue.component('input-money', {
@@ -38,7 +38,7 @@ Vue.component('input-money', {
                     v-bind:disabled="false"\
                     v-bind:value="value"\
                     ref="input"\
-                    v-on:input="updateMoney($event.target.value)"\
+                    v-on:placeholder="updateMoney($event.target.value)"\
                     v-on:blur="formatValue"\
                 >\
                 </div>',
@@ -124,6 +124,8 @@ Vue.component('my-component', {
             if (this.distribuicaoGratuita == 'n') {
                 return parseInt(this.qtPopularIntegral) * parseFloat(this.vlUnitarioPopularIntegral);
             }
+
+            console.log("vlUnitarioPopularIntegral" + this.vlUnitarioPopularIntegral);
             return 0;
         },
         vlReceitaPopularParcial: function() {
@@ -157,7 +159,8 @@ Vue.component('my-component', {
         vlReceitaPrevista: function() {
             var total =  (parseFloat(this.vlReceitaPopularIntegral) + parseFloat(this.vlReceitaPopularParcial)
                 + parseFloat(this.vlReceitaProponenteIntegral) + parseFloat(this.vlReceitaProponenteParcial)).toFixed(2);
-            return numeral(total).format('0,0.00');
+            console.log('vlreceitaprevista' +this.vlReceitaPopularIntegral);
+            return total;
         },
         // Total de exemplares
         qtExemplaresTotal: function() {
@@ -451,10 +454,6 @@ Vue.component('my-component', {
         mostrar: function() {
             this.active = this.active == true ? false: true ;
             this.icon = this.icon == 'visibility_off' ? 'add': 'visibility_off';
-        },
-        formatPrice(value) {
-            let val = (value/1).toFixed(2).replace('.', ',');
-            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         }
     }
 });
