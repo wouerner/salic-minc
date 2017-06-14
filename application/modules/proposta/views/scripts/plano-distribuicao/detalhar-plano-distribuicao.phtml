@@ -3,6 +3,10 @@
     .gratuito,
     .proponente { background-color: #e6e6e6; text-align: center}
     .popular { background-color: #dcdcdc; text-align: center}
+
+    .input-field label.active {
+        font-size: 1rem;
+    }
 </style>
 
 <div class="container-fluid">
@@ -85,7 +89,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script type="text/x-template" id="app-6">
-    <div>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 10px;">
         <div class="row">
             <div class="col s12 center">
                <button class="btn" v-on:click.prevent="mostrar()"><i class="material-icons">{{icon}}</i></button>
@@ -99,7 +103,7 @@
                             <tr>
                                 <th rowspan="2">Categoria</th>
                                 <th rowspan="2">Quantidade</th>
-                                <th class="gratuito" colspan="3">
+                                <th class="gratuito" rowspan="2">
                                     Distribui&ccedil;&atilde;o Gratuita
                                 </th>
                                 <th class="popular" colspan="3">
@@ -112,24 +116,19 @@
                                 <th rowspan="2" width="5%">A&ccedil;&otildees</th>
                             </tr>
                             <tr>
-                                <th class="gratuito" >Divulga&ccedil;&atilde;o</th>
-                                <th class="gratuito" >Patrocinador</th>
-                                <th class="gratuito" >Popula&ccedil;&atilde;o</th>
                                 <th class="popular">Qtd. Inteira</th>
                                 <th class="popular">Qtd. Meia</th>
-                                <th class="popular">Pre&ccedil;o Unitario</th>
+                                <th class="popular">Pre&ccedil;o <br> Unitario</th>
                                 <th class="proponente" >Qtd. Inteira</th>
                                 <th class="proponente" >Qtd. Meia</th>
-                                <th class="proponente" >Pre&ccedil;o Unitario</th>
+                                <th class="proponente" >Pre&ccedil;o <br> Unitario</th>
                             </tr>
                         </thead>
                         <tbody v-if="produtos.length > 0">
                                 <tr  v-for="( produto, index ) in produtos">
                                     <td>{{ produto.dsProduto }}</td>
                                     <td class="center-align">{{ produto.qtExemplares }}</td>
-                                    <td class="center-align">{{ produto.qtGratuitaDivulgacao }}</td>
-                                    <td class="center-align">{{ produto.qtGratuitaPatrocinador }}</td>
-                                    <td class="center-align">{{ produto.qtGratuitaPopulacao }}</td>
+                                    <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) + parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}</td>
                                     <!--Preço Popular -->
                                     <td class="center-align">{{ produto.qtPopularIntegral }}</td>
                                     <td class="center-align">{{ produto.qtPopularParcial }}</td>
@@ -156,9 +155,7 @@
                             <tr>
                                 <td><b>Totais</b></td>
                                 <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
-                                <td class="center-align"><b>{{ qtGratuitaDivulgacaoTotal }}</b></td>
-                                <td class="center-align"><b>{{ qtGratuitaPatrocinadorTotal }}</b></td>
-                                <td class="center-align"><b>{{ qtGratuitaPopulacaoTotal }}</b></td>
+                                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +  parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b></td>
                                 <!--Preço Popular -->
                                 <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
                                 <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
@@ -230,21 +227,21 @@
                         <div class="distribuicao-gratuita">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <b>Distribui&ccedil;&atilde;o Gratuita (no minimo 30%)</b>
+                                    <b>Distribui&ccedil;&atilde;o Gratuita (no m&iacute;nimo 30%)</b>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m3 l2">
                                     <input id="" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
-                                    <label class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ (qtExemplares * 0.1) }})</label>
+                                    <label class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
                                     <input  class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
-                                    <label class="active" for="qtGratuitaPatrocinador">Patrocinador (At&eacute; {{ (qtExemplares * 0.1) }})</label>
+                                    <label class="active" for="qtGratuitaPatrocinador">Patrocinador (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
                                     <input  class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
-                                    <label class="active" for="qtGratuitaPopulacao">Popula&ccedil;&atilde;o (de {{ (qtExemplares * 0.1) }} at&eacute; {{ (qtGratuitaPopulacaoTotal) }})</label>
+                                    <label class="active" for="qtGratuitaPopulacao">Popula&ccedil;&atilde;o (m&iacute;nimo {{ qtGratuitaPopulacaoMinimo }})</label>
                                 </div>
                             </div>
                         </div>
@@ -262,11 +259,11 @@
                                         v-bind:value="vlUnitarioPopularIntegral"
                                         v-on:ev="vlUnitarioPopularIntegral = $event">
                                     </input-money>
-                                    <label class="active" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; 50,00)</label>
+                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; 50,00)</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input  class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                    <label class="active" for="qtPopularIntegral">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                    <label class="active" for="qtPopularIntegrals">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
@@ -295,7 +292,7 @@
                                         v-bind:value="vlUnitarioProponenteIntegral"
                                         v-on:ev="vlUnitarioProponenteIntegral = $event">
                                     </input-money>
-                                    <label class="active" for="vlUnitarioProponenteIntegral">Pre&ccedil;o Unitario</label>
+                                    <label class="active" for="vlUnitarioProponenteIntegral">Pre&ccedil;o Unit&aacute;rio</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="qtProponenteIntegral">
