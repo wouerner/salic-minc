@@ -2416,7 +2416,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         
         $id = Seguranca::encrypt($idPronac);
         if($erros > 0){
-            parent::message("<b>A T E N &CCEDIL; &ATILDE; O !!!</b> Somente poder&aacute; finalizar a opera&ccedil;&atilde;o de remanejamento se os valores dos grupos A, B, C e D forem iguais a R$0,00 (zero real)!", "consultardadosprojeto/remanejamento-menor?idPronac=$id", "ERROR");
+            parent::message("<b>A T E N &Ccedil; &Atilde;; O !!!</b> Para finalizar a opera&ccedil;&atilde;o de remanejamento os valores da coluna 'Valor da Planilha Remanejada' devem ser igual a R$0,00 (zero real) e os Grupos B, C e D n&atilde;o poder&atilde;o conter valores negativos!.", "consultardadosprojeto/remanejamento-menor?idPronac=$id", "ERROR");
         } else {
 
             $auth = Zend_Auth::getInstance(); // pega a autentica��o
@@ -2520,6 +2520,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $valorTotalGrupoASoma = $valorTotalGrupoA;
             
             $dadosPlanilha = array();
+
+            if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
+                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
+             } else if($PlanilhaAtivaGrupoA->Total < $PlanilhaRemanejadaGrupoA->Total){
+                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
+             } else {
+                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
+            }
+            
             if($PlanilhaAtivaGrupoB->Total == $PlanilhaRemanejadaGrupoB->Total){
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoB, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoB->Total < $PlanilhaRemanejadaGrupoB->Total){
@@ -2548,11 +2557,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             }
 
             if($valorTotalGrupoASoma == 0){
-                $dadosPlanilha['GrupoA'] .= utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+                $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
             } else if($valorTotalGrupoASoma < 0){
-                $dadosPlanilha['GrupoA'] .= utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';                
+                $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="red bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';                
             } else {
-                $dadosPlanilha['GrupoA'] .= utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+                $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
             }
             
             if(empty($PlanilhaRemanejada->Total) || $PlanilhaRemanejada->Total == 0){
