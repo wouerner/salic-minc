@@ -24,6 +24,7 @@
                     $("#td-grupo-b").html(data.dadosPlanilha.GrupoB);
                     $("#td-grupo-c").html(data.dadosPlanilha.GrupoC);
                     $("#td-grupo-d").html(data.dadosPlanilha.GrupoD);
+                    $("#td-somatoria").html(data.dadosPlanilha.Somatoria);
                 } else {
                     $("#alerta").dialog("destroy");
                     $("#alerta").html("N&atilde;o foi poss&iacute;vel fazer os c&aacute;lculos da planilha.<br />Tente novamente mais tarde!");
@@ -112,7 +113,7 @@
                 width:370,
                 modal: true,
                 buttons : {
-                    'N&atilde;o' : function(){
+                    'N\xE3o' : function(){
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
@@ -565,12 +566,7 @@
             <td align="center" id="td-grupo-b"><span class= "bold">R$ 0,00</span></td>
             <td align="center" id="td-grupo-c"><span class= "bold">R$ 0,00</span></td>
             <td align="center" id="td-grupo-d"><span class= "bold">R$ 0,00</span></td>
-            <td align="center">
-                <?php /***** CARREGA VALOR ENTRE AS PLANILHAS ATIVA E REMANEJADA *****/ ?>
-                <script type="text/javascript">
-                    jqAjaxLink('<?php echo $this->Url(array('controller' => 'consultardadosprojeto', 'action' => 'carregar-valor-entre-planilhas'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'valorEntrePlanilhas');
-                </script>
-                <div id="valorEntrePlanilhas"><span class="bold black-text">R$ 0,00</span></div>
+            <td align="center" id="td-somatoria"><span class= "bold">R$ 0,00</span></td>
                 <?php /****** FIM VALOR ENTRE AS PLANILHAS ATIVA E REMANEJADA ******/ ?>
             </td>
             <td class="centro">
