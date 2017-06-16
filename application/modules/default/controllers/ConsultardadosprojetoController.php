@@ -2380,25 +2380,25 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
 
         // caso haja saldo positivo nos grupos B, C ou D, remaneja saldo para grupo A
-        if ($PlanilhaRemanejadaGrupoB > 0) {
-            $PlanilhaRemanejadaGrupoA->Total += $valorTotalGrupoB;
-            $valorTotalGrupoA -= $valorTotalGrupoB;
-            $PlanilhaRemanejadaGrupoB->Total += $valorTotalGrupoB;
+        if ($valorTotalGrupoB > 0) {
+            $PlanilhaRemanejadaGrupoA->Total += $valorTotalGrupoB; // adiciona saldo de B a A
+            $valorTotalGrupoA += $valorTotalGrupoB;                // adiciona ao total de A
+            $PlanilhaRemanejadaGrupoB->Total += $valorTotalGrupoB; // zera saldo de B
         }
-        if ($PlanilhaRemanejadaGrupoC > 0) {
+        if ($valorTotalGrupoC > 0) {
             $PlanilhaRemanejadaGrupoA->Total += $valorTotalGrupoC;
-            $valorTotalGrupoA -= $valorTotalGrupoC;
+            $valorTotalGrupoA += $valorTotalGrupoC;
             $PlanilhaRemanejadaGrupoC->Total += $valorTotalGrupoC;
-            
         }
-        if ($PlanilhaRemanejadaGrupoD > 0) {
+        if ($valorTotalGrupoD > 0) {
             $PlanilhaRemanejadaGrupoA->Total += $valorTotalGrupoD;
-            $valorTotalGrupoA -= $valorTotalGrupoD;
+            $valorTotalGrupoA += $valorTotalGrupoD;
             $PlanilhaRemanejadaGrupoD->Total += $valorTotalGrupoD;
         }
         
         $erros = 0;
-        if($PlanilhaAtivaGrupoA->Total != ($PlanilhaRemanejadaGrupoA->Total + $valorTotalGrupoA)){
+        
+        if($valorTotalGrupoA != 0){
             $erros++;
         }
 
@@ -2413,7 +2413,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         if($PlanilhaAtivaGrupoD->Total != $PlanilhaRemanejadaGrupoD->Total){
             $erros++;
         }
-
+        
         $id = Seguranca::encrypt($idPronac);
         if($erros > 0){
             parent::message("<b>A T E N &CCEDIL; &ATILDE; O !!!</b> Somente poder&aacute; finalizar a opera&ccedil;&atilde;o de remanejamento se os valores dos grupos A, B, C e D forem iguais a R$0,00 (zero real)!", "consultardadosprojeto/remanejamento-menor?idPronac=$id", "ERROR");
@@ -2429,7 +2429,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $dadosReadequacao['idTipoReadequacao'] = 1;
             $dadosReadequacao['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
             $dadosReadequacao['idSolicitante'] = $rsAgente->idAgente;
-            $dadosReadequacao['dsJustificativa'] = 'Readequação até 50%';
+            $dadosReadequacao['dsJustificativa'] = utf_decode('Readequação até 50%');
             $dadosReadequacao['stAtendimento'] = 'D';
             $dadosReadequacao['siEncaminhamento'] = 11;
             $dadosReadequacao['stEstado'] = 1;
@@ -2520,14 +2520,6 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $valorTotalGrupoASoma = $valorTotalGrupoA;
             
             $dadosPlanilha = array();
-            if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
-                $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
-            } else if($PlanilhaAtivaGrupoA->Total < $PlanilhaRemanejadaGrupoA->Total){
-                $dadosPlanilha['GrupoA'] = utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
-            } else {
-                $dadosPlanilha['GrupoA'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
-            }
-            
             if($PlanilhaAtivaGrupoB->Total == $PlanilhaRemanejadaGrupoB->Total){
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoB, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoB->Total < $PlanilhaRemanejadaGrupoB->Total){
@@ -2554,10 +2546,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoD, 2, ',', '.')).'</span>';
                 $valorTotalGrupoASoma += $valorTotalGrupoD;
             }
-            if ($valorTotalGrupoA != $valorTotalGrupoASoma) {
-                $dadosPlanilha['GrupoA'] .= utf8_encode('<br/><span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
-            }
 
+            if($valorTotalGrupoASoma == 0){
+                $dadosPlanilha['GrupoA'] .= utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+            } else if($valorTotalGrupoASoma < 0){
+                $dadosPlanilha['GrupoA'] .= utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';                
+            } else {
+                $dadosPlanilha['GrupoA'] .= utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+            }
+            
             if(empty($PlanilhaRemanejada->Total) || $PlanilhaRemanejada->Total == 0){
                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format(0, 2, ',', '.')).'</span>';
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="bold">R$ '.number_format(0, 2, ',', '.')).'</span>';
@@ -2729,11 +2726,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
         $idPlanilhaAprovacaoPai = $this->_request->getParam("idPlanilhaAprovacaoPai");
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
+        
         /* DADOS DO ITEM ATIVO */
         $where = array();
-        $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacaoPai;
 
+        if (empty($idPlanilhaAprovacaoPai) || $idPlanilhaAprovacaoPai == '') {
+            $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
+        } else {
+            $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacaoPai;
+        }
         $planilhaAtiva = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
         
         /* DADOS DO ITEM PARA EDICAO DO REMANEJAMENTO */
@@ -2742,7 +2743,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $where['tpPlanilha = ?'] = 'RP';
         $where['stAtivo = ?'] = 'N';
         $planilhaEditaval = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
-
+        
         $dadosPlanilhaAtiva = array();
         $dadosPlanilhaEditavel = array();
         if(count($planilhaAtiva) > 0){
@@ -2817,7 +2818,6 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 'vlComprovadoDoItemValidacao' => utf8_encode(number_format($res->vlComprovado, 2, '', ''))
             );
 
-            //$jsonEncode = json_encode($dadosPlanilha);
             $this->_helper->json(array('resposta'=>true, 'dadosPlanilhaAtiva'=>$dadosPlanilhaAtiva, 'dadosPlanilhaEditavel'=>$dadosPlanilhaEditavel, 'valoresDoItem'=>$valoresDoItem, 'dadosProjeto'=>$dadosProjeto));
 
         } else {
@@ -2887,13 +2887,23 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         }
 
         //BUSCA OS DADOS DO ITEM ORIGINAL PARA VALIDA��O DE VALORES
-        $valoresItem = $tbPlanilhaAprovacao->buscar(
-            array(
-                'IdPRONAC=?'=>$idPronac,
-                'StAtivo=?'=>'N',
-                'idPlanilhaAprovacaoPai=?'=> $idPlanilhaAprovacaoPai
-            )
-        )->current();
+        if (empty($idPlanilhaAprovacaoPai)) {
+            $valoresItem = $tbPlanilhaAprovacao->buscar(
+                array(
+                    'IdPRONAC=?'=>$idPronac,
+                    'StAtivo=?'=>'S',
+                    'idPlanilhaAprovacao=?'=> $idPlanilhaAprovacao
+                )
+            )->current();
+        } else {
+            $valoresItem = $tbPlanilhaAprovacao->buscar(
+                array(
+                    'IdPRONAC=?'=>$idPronac,
+                    'StAtivo=?'=>'N',
+                    'idPlanilhaAprovacaoPai=?'=> $idPlanilhaAprovacaoPai
+                )
+            )->current();
+        }
         
         $vlAtual = @number_format(($valoresItem['qtItem']*$valoresItem['nrOcorrencia']*$valoresItem['vlUnitario']), 2, '', '');
         $vlAtualPerc = $vlAtual* self::PERCENTUAL_REMANEJAMENTO /100;
@@ -2908,7 +2918,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $this->_helper->viewRenderer->setNoRender(TRUE);
         }
 
-        $editarItem = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP', 'idPlanilhaAprovacao=?'=>$_POST['idPlanilha']))->current();
+        if (empty($idPlanilhaAprovacaoPai)) {
+            $editarItem = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP', 'idPlanilhaAprovacaoPai=?'=>$idPlanilhaAprovacao))->current();
+        } else {
+            $editarItem = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP', 'idPlanilhaAprovacao=?'=>$idPlanilhaAprovacao))->current();
+        }
         
         $editarItem->qtItem = $_POST['Quantidade'];
         $editarItem->nrOcorrencia = $_POST['Ocorrencia'];
