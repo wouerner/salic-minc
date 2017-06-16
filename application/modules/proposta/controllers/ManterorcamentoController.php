@@ -664,66 +664,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         return ($valorTotalIncentivoOriginal < $valorTotalProjetoIncentivo);
     }
 
-    public function gerarArrayCustosVinculados($idPreProjeto)
-    {
-        $valoresCustosVinculados = array();
-        $TPP = new Proposta_Model_DbTable_Abrangencia();
-        $ufRegionalizacaoPlanilha = $TPP->buscarUfRegionalizacao($idPreProjeto);
-
-        $ModelCV = new Proposta_Model_TbCustosVinculados();
-
-        $itensPlanilhaProduto = new tbItensPlanilhaProduto();
-        $itensCustosVinculados = $itensPlanilhaProduto->buscarItens($ModelCV::ID_ETAPA_CUSTOS_VINCULADOS, null, Zend_DB::FETCH_ASSOC);
-
-        if (!empty($ufRegionalizacaoPlanilha)) { # sudeste e sul
-            $valoresCustosVinculados['percentualDivulgacao']  = $ModelCV::PERCENTUAL_DIVULGACAO_SUL_SUDESTE;
-            $valoresCustosVinculados['percentualRemuneracaoCaptacao'] = $ModelCV::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
-            $valoresCustosVinculados['limiteRemuneracaoCaptacao'] = $ModelCV::LIMITE_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
-
-        } else { # demais regiões
-            $valoresCustosVinculados['percentualDivulgacao']  = $ModelCV::PERCENTUAL_DIVULGACAO_OUTRAS_REGIOES;
-            $valoresCustosVinculados['percentualRemuneracaoCaptacao'] = $ModelCV::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
-            $valoresCustosVinculados['limiteRemuneracaoCaptacao'] = $ModelCV::LIMITE_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
-        }
-
-        $CustosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-
-        $custosVinculados = array();
-        foreach ($itensCustosVinculados as $item) {
-
-            switch ($item['idPlanilhaItens']) {
-                case $ModelCV::ID_CUSTO_ADMINISTRATIVO:
-                    $item['Percentual'] = $ModelCV::PERCENTUAL_CUSTO_ADMINISTRATIVO;
-                    break;
-                case $ModelCV::ID_DIVULGACAO:
-                    $item['Percentual'] = $valoresCustosVinculados['percentualDivulgacao'];
-                    break;
-                case $ModelCV::ID_REMUNERACAO_CAPTACAO:
-                    $item['Percentual'] = $valoresCustosVinculados['percentualRemuneracaoCaptacao'];
-                    $item['Limite'] = $valoresCustosVinculados['limiteRemuneracaoCaptacao'];
-                    break;
-                case $ModelCV::ID_CONTROLE_E_AUDITORIA:
-                    $item['Percentual'] = $ModelCV::PERCENTUAL_CONTROLE_E_AUDITORIA;
-                    $item['Limite'] = $ModelCV::LIMITE_CONTROLE_E_AUDITORIA;
-                    break;
-                case $ModelCV::ID_DIREITOS_AUTORAIS:
-                    $item['Percentual'] = $ModelCV::PERCENTUAL_DIREITOS_AUTORAIS;
-                    break;
-            }
-
-            $custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $idPreProjeto, 'idPlanilhaItem' => $item['idPlanilhaItens']));
-
-            if( $custoVinculadoProponente ) {
-                $item['PercentualProponente'] = $custoVinculadoProponente['pcCalculo'];
-                $item['idCustosVinculados'] = $custoVinculadoProponente['idCustosVinculados'];
-            }
-
-            $custosVinculados[] = $item;
-        }
-
-        return $custosVinculados;
-    }
-
     /**
      * excluiritemAction
      *
@@ -756,7 +696,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $return['status'] = true;
         }
 
-        $this->_helper->json($return);
+        //        $this->_helper->json($return); @todo corrigir retorno para o padrão
+        echo json_encode($return);
         die;
     }
 
@@ -1334,9 +1275,9 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $return['status'] = 0;
         }
 
-        $this->_helper->json($return);
+//        $this->_helper->json($return); @todo corrigir retorno para o padrão
+        echo json_encode($return);
         die;
     }
-
 
 }
