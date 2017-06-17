@@ -1275,8 +1275,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $return['status'] = 0;
         }
 
-//        $this->_helper->json($return); @todo corrigir retorno para o padrão
-        echo json_encode($return);
+       $this->_helper->json($return);
         die;
     }
 
