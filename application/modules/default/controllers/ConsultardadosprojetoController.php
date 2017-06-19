@@ -2380,17 +2380,17 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
 
         // caso haja saldo positivo nos grupos B, C ou D, remaneja saldo para grupo A
-        if ($valorTotalGrupoB > 0) {
+        if (!empty($PlanilhaRemanejadaGrupoB->Total) && $valorTotalGrupoB > 0) {
             $PlanilhaRemanejadaGrupoA->Total += $valorTotalGrupoB; // adiciona saldo de B a A
             $valorTotalGrupoA += $valorTotalGrupoB;                // adiciona ao total de A
             $PlanilhaRemanejadaGrupoB->Total += $valorTotalGrupoB; // zera saldo de B
         }
-        if ($valorTotalGrupoC > 0) {
+        if (!empty($PlanilhaRemanejadaGrupoC->Total) && $valorTotalGrupoC > 0) {
             $PlanilhaRemanejadaGrupoA->Total += $valorTotalGrupoC;
             $valorTotalGrupoA += $valorTotalGrupoC;
             $PlanilhaRemanejadaGrupoC->Total += $valorTotalGrupoC;
         }
-        if ($valorTotalGrupoD > 0) {
+        if (!empty($PlanilhaRemanejadaGrupoD->Total) && $valorTotalGrupoD > 0) {
             $PlanilhaRemanejadaGrupoA->Total += $valorTotalGrupoD;
             $valorTotalGrupoA += $valorTotalGrupoD;
             $PlanilhaRemanejadaGrupoD->Total += $valorTotalGrupoD;
@@ -2398,19 +2398,21 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         
         $erros = 0;
         
-        if($valorTotalGrupoA != 0){
+        if (!empty($PlanilhaRemanejadaGrupoA->Total) && $PlanilhaAtivaGrupoA->Total != $PlanilhaRemanejadaGrupoA->Total){
+            if($valorTotalGrupoA != 0){
+                $erros++;
+            }
+        }
+        
+        if(!empty($PlanilhaRemanejadaGrupoB->Total) && $PlanilhaAtivaGrupoB->Total != $PlanilhaRemanejadaGrupoB->Total){
             $erros++;
         }
 
-        if($PlanilhaAtivaGrupoB->Total != $PlanilhaRemanejadaGrupoB->Total){
+        if(!empty($PlanilhaRemanejadaGrupoC->Total) && $PlanilhaAtivaGrupoC->Total != $PlanilhaRemanejadaGrupoC->Total){
             $erros++;
         }
 
-        if($PlanilhaAtivaGrupoC->Total != $PlanilhaRemanejadaGrupoC->Total){
-            $erros++;
-        }
-
-        if($PlanilhaAtivaGrupoD->Total != $PlanilhaRemanejadaGrupoD->Total){
+        if(!empty($PlanilhaRemanejadaGrupoD->Total) && $PlanilhaAtivaGrupoD->Total != $PlanilhaRemanejadaGrupoD->Total){
             $erros++;
         }
         
@@ -2429,7 +2431,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $dadosReadequacao['idTipoReadequacao'] = 1;
             $dadosReadequacao['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
             $dadosReadequacao['idSolicitante'] = $rsAgente->idAgente;
-            $dadosReadequacao['dsJustificativa'] = utf_decode('Readequação até 50%');
+            $dadosReadequacao['dsJustificativa'] = utf8_decode('Readequação até 50%');
             $dadosReadequacao['stAtendimento'] = 'D';
             $dadosReadequacao['siEncaminhamento'] = 11;
             $dadosReadequacao['stEstado'] = 1;
@@ -2517,15 +2519,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $valorTotalGrupoB = $PlanilhaAtivaGrupoB->Total-$PlanilhaRemanejadaGrupoB->Total;
             $valorTotalGrupoC = $PlanilhaAtivaGrupoC->Total-$PlanilhaRemanejadaGrupoC->Total;
             $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
-            $valorTotalGrupoASoma = $valorTotalGrupoA;
+            $valorTotalGrupoASoma = 0;
             
             $dadosPlanilha = array();
 
             if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
-                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
-             } else if($PlanilhaAtivaGrupoA->Total < $PlanilhaRemanejadaGrupoA->Total){
-                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
-             } else {
+                $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
+            } else if($PlanilhaAtivaGrupoA->Total < $PlanilhaRemanejadaGrupoA->Total){
+                $dadosPlanilha['GrupoA'] = utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
+            } else if (!empty($PlanilhaRemanejadaGrupoA->Total)) {
                  $dadosPlanilha['GrupoA'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
             }
             
@@ -2533,7 +2535,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoB, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoB->Total < $PlanilhaRemanejadaGrupoB->Total){
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoB, 2, ',', '.')).'</span>';
-            } else {
+            } else if (!empty($PlanilhaRemanejadaGrupoB->Total)) {
                 $dadosPlanilha['GrupoB'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoB, 2, ',', '.')).'</span>';
                 $valorTotalGrupoASoma += $valorTotalGrupoB;
             }
@@ -2542,7 +2544,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilha['GrupoC'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoC, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoC->Total < $PlanilhaRemanejadaGrupoC->Total){
                 $dadosPlanilha['GrupoC'] = utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoC, 2, ',', '.')).'</span>';
-            } else {
+            } else if (!empty($PlanilhaRemanejadaGrupoC->Total)) {
                 $dadosPlanilha['GrupoC'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoC, 2, ',', '.')).'</span>';
                 $valorTotalGrupoASoma += $valorTotalGrupoC;
             }
@@ -2551,7 +2553,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoD, 2, ',', '.')).'</span>';
             } else if($PlanilhaAtivaGrupoD->Total < $PlanilhaRemanejadaGrupoD->Total){
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="red bold">R$ '.number_format($valorTotalGrupoD, 2, ',', '.')).'</span>';
-            } else {
+            } else if (!empty($PlanilhaRemanejadaGrupoC->Total)) {
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="blue bold">R$ '.number_format($valorTotalGrupoD, 2, ',', '.')).'</span>';
                 $valorTotalGrupoASoma += $valorTotalGrupoD;
             }
@@ -2561,6 +2563,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             } else if($valorTotalGrupoASoma < 0){
                 $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="red bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';                
             } else {
+                $valorTotalGrupoASoma += $valorTotalGrupoA;
                 $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
             }
             
@@ -2571,7 +2574,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="bold">R$ '.number_format(0, 2, ',', '.')).'</span>';
             }
             
-            $this->_helper->json(array('resposta'=>true, 'dadosPlanilha'=>$dadosPlanilha));
+            $this->_helper->json(array('resposta'=>true, 'dadosPlanilha'=>$dadosPlanilha
+            ));
+            /*
+            'valorTotalGrupoA' => $valorTotalGrupoA,
+            'planilhaRemanejadaAtotal' => $PlanilhaRemanejadaGrupoA->Total,
+            'planilhaRemanejadaBtotal' => $PlanilhaRemanejadaGrupoB->Total,
+            'planilhaRemanejadaCtotal' => $PlanilhaRemanejadaGrupoC->Total,
+            'planilhaRemanejadaDtotal' => $PlanilhaRemanejadaGrupoD->Total
+            */
 
         } catch (Zend_Exception $e) {
             $this->_helper->json(array('resposta'=>false));
