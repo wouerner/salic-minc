@@ -197,7 +197,7 @@
 
                         <div class="row">
                             <div class="input-field col s6">
-                                <p><b>Tipo  do local de apresenta&ccedil;&atilde;o</b><br>
+                                <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
                                     <input name="tipoLocalRealizacao" type="radio" id="tipoAberto" value="aberto" v-model="tipoLocalRealizacao" />
                                     <label for="tipoAberto">Aberto</label>
                                     <input name="tipoLocalRealizacao" type="radio" id="tipoFechado" value="fechado" v-model="tipoLocalRealizacao" />
@@ -224,65 +224,23 @@
                             </div>
                         </div>
 
-                        <div class="distribuicao-gratuita">
-                            <div class="row">
-                                <div class="input-field col s12 center-align">
-                                    <b>Distribui&ccedil;&atilde;o Gratuita (no m&iacute;nimo 30%)</b>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s12 m3 l2">
-                                    <input id="" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
-                                    <label class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
-                                </div>
-                                <div class="input-field col s12 m3 l2">
-                                    <input  class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
-                                    <label class="active" for="qtGratuitaPatrocinador">Patrocinador (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
-                                </div>
-                                <div class="input-field col s12 m3 l2">
-                                    <input  class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
-                                    <label class="active" for="qtGratuitaPopulacao">Popula&ccedil;&atilde;o (m&iacute;nimo {{ qtGratuitaPopulacaoMinimo }})</label>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Preço popular-->
-                        <div class="preco-popular">
-                            <div class="row">
-                                <div class="input-field col s12 center-align">
-                                    <b>Pre&ccedil;o Popular (at&eacute; 20%)</b>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s6 l2">
-                                    <input-money
-                                        v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
-                                        v-bind:value="vlUnitarioPopularIntegral"
-                                        v-on:ev="vlUnitarioPopularIntegral = $event">
-                                    </input-money>
-                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; 50,00)</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input  class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                    <label class="active" for="qtPopularIntegrals">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
-                                    <label class="active" for="qtPopularParcial">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
-                                    <label class="active" for="vlReceitaPopularIntegral">Valor inteira</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="vlReceitaPopularParcial">
-                                    <label class="active" for="vlReceitaPopularParcial">Valor meia</label>
-                                </div>
-                            </div>
-                        </div>
                         <div class="proponente-s">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <strong>Proponente (50%)</strong>
+                                    <strong>Proponente(at&eacute; {{ percentualProponentePadrao * 100 }}%)</strong>
+                                    <span v-if="percentualProponentePadrao !== percentualProponente"> Atual {{ percentualProponente *  100 }}%</span>
+
+                                    <select
+                                        name="" class="validate" required>
+                                        <?php $percentual = 50; ?>
+                                        <?php while ($percentual >= 0) : ?>
+                                            <option
+                                                <?= (isset($item['PercentualProponente']) && $item['PercentualProponente'] == $percentual) ? 'selected' : '' ?>
+                                                value="<?= $percentual; ?>"><?= $percentual; ?>%
+                                            </option>
+                                            <?php $percentual--; ?>
+                                        <?php endwhile; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -312,6 +270,87 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Preço popular-->
+                        <div class="preco-popular">
+                            <div class="row">
+                                <div class="input-field col s12 center-align">
+                                    <b>Pre&ccedil;o Popular (m&iacute;nimo {{ percentualPrecoPopularPadrao * 100 }}%)</b>
+                                    <span v-if="percentualPrecoPopularPadrao !== percentualPrecoPopular"> Atual {{ percentualPrecoPopular *  100 }}%</span>
+                                    <select-percent
+                                        v-bind:total="percentualPrecoPopular *  100"
+                                        v-on:ev="percentualPrecoPopular = $event">
+                                    </select-percent>
+
+<!--                                    <select>-->
+<!--                                        <template v-for="n in qtGratuitaPopulacaoMinimo | reverse">-->
+<!--                                            <option>{{ n }}</option>-->
+<!--                                        </template>-->
+<!--                                    </select>-->
+                                    <select
+                                        name="" class="validate" required>
+                                        <?php $percentual = 70; ?>
+                                        <?php while ($percentual >= 0) : ?>
+                                            <option
+                                                <?= (20 == $percentual) ? 'selected' : '' ?>
+                                                value="<?= $percentual; ?>"><?= $percentual; ?>%
+                                            </option>
+                                            <?php $percentual--; ?>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s6 l2">
+                                    <input-money
+                                        v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
+                                        v-bind:value="vlUnitarioPopularIntegral"
+                                        v-on:ev="vlUnitarioPopularIntegral = $event">
+                                    </input-money>
+                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; 50,00)</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input  class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
+                                    <label class="active" for="qtPopularIntegrals">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
+                                    <label class="active" for="qtPopularParcial">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
+                                    <label class="active" for="vlReceitaPopularIntegral">Valor inteira</label>
+                                </div>
+                                <div class="input-field col s6 l2">
+                                    <input class="disabled" disabled v-model="vlReceitaPopularParcial">
+                                    <label class="active" for="vlReceitaPopularParcial">Valor meia</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="distribuicao-gratuita">
+                            <div class="row">
+                                <div class="input-field col s12 center-align">
+                                    <b>Distribui&ccedil;&atilde;o Gratuita (m&iacute;nimo {{ percentualGratuitoPadrao *  100 }}%)</b>
+                                    <span v-if="percentualGratuitoPadrao !== percentualGratuito"> Atual {{ percentualGratuito *  100 }}%</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12 m3 l2">
+                                    <input id="" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
+                                    <label class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                </div>
+                                <div class="input-field col s12 m3 l2">
+                                    <input  class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
+                                    <label class="active" for="qtGratuitaPatrocinador">Patrocinador (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                </div>
+                                <div class="input-field col s12 m3 l2">
+                                    <input  class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
+                                    <label class="active" for="qtGratuitaPopulacao">Popula&ccedil;&atilde;o (m&iacute;nimo {{ qtGratuitaPopulacaoMinimo }})</label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row receita-prevista center-align">
                             <div class="col s6 l2 offset-l6">
                                 <p><strong>Receita Prevista</strong></p>
