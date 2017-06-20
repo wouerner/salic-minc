@@ -153,7 +153,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 'Analise' => $linksGeral[8],
                 'Execucao' => $linksGeral[9],
                 'PrestacaoContas' => $linksGeral[10],
-                'Readequacao_20' => $linksGeral[11],
+                'Readequacao_50' => $linksGeral[11],
                 'Marcas' => $linksGeral[12],
                 'SolicitarProrrogacao' => $linksGeral[13],
                 'ReadequacaoPlanilha' => $linksGeral[14]
