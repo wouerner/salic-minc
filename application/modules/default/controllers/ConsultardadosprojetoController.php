@@ -2558,12 +2558,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $valorTotalGrupoASoma += $valorTotalGrupoD;
             }
 
+            $valorTotalGrupoASoma += $valorTotalGrupoA;
             if($valorTotalGrupoASoma == 0){
                 $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
             } else if($valorTotalGrupoASoma < 0){
                 $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="red bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';                
             } else {
-                $valorTotalGrupoASoma += $valorTotalGrupoA;
                 $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
             }
             
