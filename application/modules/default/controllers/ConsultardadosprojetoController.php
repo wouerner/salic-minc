@@ -2826,7 +2826,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             }
 
             $tbCompPagxPlanAprov = new tbComprovantePagamentoxPlanilhaAprovacao();
-            $res = $tbCompPagxPlanAprov->buscarValorComprovadoDoItem($idPlanilhaAprovacao);
+            if (!empty($idPlanilhaAprovacaoPai)) {
+                $idPlanilhaAprovacao = $idPlanilhaAprovacaoPai;
+            }
+            $res = $tbCompPagxPlanAprov->buscarValorComprovadoDoItem($idPlanilhaAprovacao);  // <<--- quando já foi remanejado, deve puxar idPlanilhaAprovacaoPai
             $valoresDoItem = array(
                 'vlComprovadoDoItem' => utf8_encode('R$ '.number_format($res->vlComprovado, 2, ',', '.')),
                 'vlComprovadoDoItemValidacao' => utf8_encode(number_format($res->vlComprovado, 2, '', ''))
