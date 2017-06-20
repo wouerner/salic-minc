@@ -2559,12 +2559,14 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             }
 
             $valorTotalGrupoASoma += $valorTotalGrupoA;
-            if($valorTotalGrupoASoma == 0){
-                $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
-            } else if($valorTotalGrupoASoma < 0){
-                $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="red bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';                
-            } else {
-                $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+            if (!empty($PlanilhaRemanejadaGrupoA->Total) || !empty($PlanilhaRemanejadaGrupoB->Total) || !empty($PlanilhaRemanejadaGrupoC->Total) || !empty($PlanilhaRemanejadaGrupoD->Total)) {
+                if($valorTotalGrupoASoma == 0){
+                    $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+                } else if($valorTotalGrupoASoma < 0){
+                    $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="red bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+                } else {
+                    $dadosPlanilha['Somatoria'] .= utf8_encode(' <span class="blue bold">R$ '.number_format($valorTotalGrupoASoma, 2, ',', '.')).' (A+B+C+D)</span>';
+                }
             }
             
             if(empty($PlanilhaRemanejada->Total) || $PlanilhaRemanejada->Total == 0){
@@ -2574,16 +2576,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilha['GrupoD'] = utf8_encode('<span class="bold">R$ '.number_format(0, 2, ',', '.')).'</span>';
             }
             
-            $this->_helper->json(array('resposta'=>true, 'dadosPlanilha'=>$dadosPlanilha
-            ));
-            /*
-            'valorTotalGrupoA' => $valorTotalGrupoA,
-            'planilhaRemanejadaAtotal' => $PlanilhaRemanejadaGrupoA->Total,
-            'planilhaRemanejadaBtotal' => $PlanilhaRemanejadaGrupoB->Total,
-            'planilhaRemanejadaCtotal' => $PlanilhaRemanejadaGrupoC->Total,
-            'planilhaRemanejadaDtotal' => $PlanilhaRemanejadaGrupoD->Total
-            */
-
+            $this->_helper->json(array('resposta'=>true, 'dadosPlanilha'=>$dadosPlanilha));
+            
         } catch (Zend_Exception $e) {
             $this->_helper->json(array('resposta'=>false));
         }
