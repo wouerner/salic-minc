@@ -203,7 +203,7 @@
                     <div tipo="fonte" fonte="<?php echo $nrfonte; ?>" aberto="true" class="icn_menos" style="width:90%"><span class="red-text del_link" style="font-size: 20pt; font-weight: 800;"><?php echo $fonte; ?></span></div>
                 </td>
             </tr>
-    <?php
+            <?php
                 $nrproduto = 0;
                 foreach ($arrayProdutos as $produto => $arrayEtapas) {
                     ?>
@@ -791,7 +791,6 @@
             function(data)
                 {
                     este.html(data);
-                    console.log('teste: fim');
                     este.dialog(
                     {
                         title:"Alterar Item",
@@ -841,7 +840,7 @@
                                         $("#valorpossivelApresentacao").html(valorpossivelApresentacao);
 
                                         este.dialog('close');
-                                        janelaAlerta('Informa¿¿es salvas com sucesso');
+                                        janelaAlerta('Informa&ccedil;&otilde;es salvas com sucesso');
                                     });
                                 }
                             }
