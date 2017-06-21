@@ -29,30 +29,32 @@
 
 // switch between locales
 numeral.locale('pt-br');
-//
-// <select
-// name="" class="validate" required>
-// <?php $percentual = 70; ?>
-// <?php while ($percentual >= 0) : ?>
-// <option
-// <?= (20 == $percentual) ? 'selected' : '' ?>
-// value="<?= $percentual; ?>"><?= $percentual; ?>%
-// </option>
-// <?php $percentual--; ?>
-// <?php endwhile; ?>
-// </select>
-//
-Vue.component('select-percent', {
-    template: '<select><option v-for="n in total">{{ n }}%</option></select>',
-    props: {
-        total: {
-            type: Number,
-            default: 50
 
+// register
+Vue.component('select-percent', {
+    template: '<div><select @change="valorSelecionado($event.target.value)"><option v-for="item in items">{{ item }}%</option></select></div>',
+    props: ['maximoCombo'],
+    computed: {
+        items: function() {
+            var total = [];
+            for ( var i = this.maximoCombo ; i >= 0; i--){
+                total.push(parseInt(i));
+            }
+            return total;
+        },
+        data:function(){
+            return {
+                retorno: 1
+            }
+        }
+    },
+    methods: {
+        valorSelecionado: function(value) {
+            this.retorno = value;
+            this.$emit('evento', parseInt(this.retorno))
         }
     }
 });
-
 
 // register
 Vue.component('input-money', {
