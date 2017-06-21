@@ -88,6 +88,8 @@
 </div>
 <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<!-- my_component -->
 <script type="text/x-template" id="app-6">
     <div style="max-width: 1200px; margin: 0 auto; padding: 10px;">
         <div class="row">
@@ -230,8 +232,20 @@
                                     <strong>Proponente(at&eacute; {{ percentualProponentePadrao * 100 }}%)</strong>
                                     <span v-if="percentualProponentePadrao !== percentualProponente"> Atual {{ percentualProponente *  100 }}%</span>
 
+                                    <select-percent
+                                        v-bind:maximoCombo="(percentualProponentePadrao *  100)"
+                                        v-on:evento="percentualProponente = $event/100"
+                                    >
+                                    </select-percent>
+
+                                    <select-percent
+                                        v-bind:maximoCombo="(percentualPrecoPopularPadrao *  100)"
+                                        v-on:evento="percentualPrecoPopular = $event/100"
+                                    >
+                                    </select-percent>
+
                                     <select
-                                        name="" class="validate" required>
+                                         class="validate" >
                                         <?php $percentual = 50; ?>
                                         <?php while ($percentual >= 0) : ?>
                                             <option
@@ -277,16 +291,23 @@
                                 <div class="input-field col s12 center-align">
                                     <b>Pre&ccedil;o Popular (m&iacute;nimo {{ percentualPrecoPopularPadrao * 100 }}%)</b>
                                     <span v-if="percentualPrecoPopularPadrao !== percentualPrecoPopular"> Atual {{ percentualPrecoPopular *  100 }}%</span>
-                                    <select-percent
-                                        v-bind:total="percentualPrecoPopular *  100"
-                                        v-on:ev="percentualPrecoPopular = $event">
-                                    </select-percent>
+
+<!--                                    <select-percent>-->
+<!---->
+<!--                                    </select-percent>-->
+<!---->
+<!--                                    <select v-model="selected">-->
+<!--                                        <option v-for="n in (percentualPrecoPopular *  100)" v-bind:value="n" v-bind:selected="(percentualPrecoPopularPadrao * 100)">-->
+<!--                                            {{ n }}%-->
+<!--                                        </option>-->
+<!--                                    </select>-->
 
 <!--                                    <select>-->
 <!--                                        <template v-for="n in qtGratuitaPopulacaoMinimo | reverse">-->
 <!--                                            <option>{{ n }}</option>-->
 <!--                                        </template>-->
 <!--                                    </select>-->
+                                    <select-percent></select-percent>
                                     <select
                                         name="" class="validate" required>
                                         <?php $percentual = 70; ?>
@@ -372,6 +393,7 @@
         </div>
     </div>
 </script>
+<!-- /my_component -->
 <script type="text/javascript" src="/public/scripts/proposta/plano-distribuicao/detalhar-plano-distribuicao.js"></script>
 <style>
     /*#detalhamento-plano table {*/
