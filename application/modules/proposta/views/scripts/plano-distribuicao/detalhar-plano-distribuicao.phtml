@@ -229,32 +229,12 @@
                         <div class="proponente-s">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <strong>Proponente(at&eacute; {{ percentualProponentePadrao * 100 }}%)</strong>
-                                    <span v-if="percentualProponentePadrao !== percentualProponente"> Atual {{ percentualProponente *  100 }}%</span>
-
+                                    <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
                                     <select-percent
                                         v-bind:maximoCombo="(percentualProponentePadrao *  100)"
                                         v-on:evento="percentualProponente = $event/100"
                                     >
-                                    </select-percent>
-
-                                    <select-percent
-                                        v-bind:maximoCombo="(percentualPrecoPopularPadrao *  100)"
-                                        v-on:evento="percentualPrecoPopular = $event/100"
-                                    >
-                                    </select-percent>
-
-                                    <select
-                                         class="validate" >
-                                        <?php $percentual = 50; ?>
-                                        <?php while ($percentual >= 0) : ?>
-                                            <option
-                                                <?= (isset($item['PercentualProponente']) && $item['PercentualProponente'] == $percentual) ? 'selected' : '' ?>
-                                                value="<?= $percentual; ?>"><?= $percentual; ?>%
-                                            </option>
-                                            <?php $percentual--; ?>
-                                        <?php endwhile; ?>
-                                    </select>
+                                    </select-percent></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -289,36 +269,12 @@
                         <div class="preco-popular">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <b>Pre&ccedil;o Popular (m&iacute;nimo {{ percentualPrecoPopularPadrao * 100 }}%)</b>
-                                    <span v-if="percentualPrecoPopularPadrao !== percentualPrecoPopular"> Atual {{ percentualPrecoPopular *  100 }}%</span>
-
-<!--                                    <select-percent>-->
-<!---->
-<!--                                    </select-percent>-->
-<!---->
-<!--                                    <select v-model="selected">-->
-<!--                                        <option v-for="n in (percentualPrecoPopular *  100)" v-bind:value="n" v-bind:selected="(percentualPrecoPopularPadrao * 100)">-->
-<!--                                            {{ n }}%-->
-<!--                                        </option>-->
-<!--                                    </select>-->
-
-<!--                                    <select>-->
-<!--                                        <template v-for="n in qtGratuitaPopulacaoMinimo | reverse">-->
-<!--                                            <option>{{ n }}</option>-->
-<!--                                        </template>-->
-<!--                                    </select>-->
-                                    <select-percent></select-percent>
-                                    <select
-                                        name="" class="validate" required>
-                                        <?php $percentual = 70; ?>
-                                        <?php while ($percentual >= 0) : ?>
-                                            <option
-                                                <?= (20 == $percentual) ? 'selected' : '' ?>
-                                                value="<?= $percentual; ?>"><?= $percentual; ?>%
-                                            </option>
-                                            <?php $percentual--; ?>
-                                        <?php endwhile; ?>
-                                    </select>
+                                    <b>Pre&ccedil;o Popular</b> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100 }}%)
+                                    <select-percent
+                                        v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
+                                        v-on:evento="percentualPrecoPopular = $event/100"
+                                    >
+                                    </select-percent>
                                 </div>
                             </div>
                             <div class="row">
@@ -332,7 +288,7 @@
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input  class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                    <label class="active" for="qtPopularIntegrals">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                    <label class="active" for="qtPopularIntegral">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
@@ -352,8 +308,8 @@
                         <div class="distribuicao-gratuita">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <b>Distribui&ccedil;&atilde;o Gratuita (m&iacute;nimo {{ percentualGratuitoPadrao *  100 }}%)</b>
-                                    <span v-if="percentualGratuitoPadrao !== percentualGratuito"> Atual {{ percentualGratuito *  100 }}%</span>
+                                    <b>Distribui&ccedil;&atilde;o Gratuita</b> (m&iacute;nimo {{ percentualGratuitoPadrao *  100 }}%)
+                                    <span v-if="percentualGratuitoPadrao !== percentualGratuito"> Atual {{ parseInt(percentualGratuito *  100) }}%</span>
                                 </div>
                             </div>
                             <div class="row">
