@@ -221,7 +221,7 @@
                                 <label class="active" for="dsProduto">Categoria</label>
                             </div>
                             <div class="input-field col s2">
-                                <input id="qtExemplares" type="text" class="validate" placeholder="0" v-model.lazy="qtExemplares">
+                                <input id="qtExemplares" type="number" class="validate" placeholder="0" v-model.lazy="qtExemplares">
                                 <label class="active" for="qtExemplares">Quantidade</label>
                             </div>
                         </div>
@@ -231,9 +231,9 @@
                                 <div class="input-field col s12 center-align">
                                     <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
                                     <select-percent
+                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
                                         v-bind:maximoCombo="(percentualProponentePadrao *  100)"
-                                        v-on:evento="percentualProponente = $event/100"
-                                    >
+                                        v-on:evento="percentualProponente = $event/100">
                                     </select-percent></span>
                                 </div>
                             </div>
@@ -271,6 +271,7 @@
                                 <div class="input-field col s12 center-align">
                                     <b>Pre&ccedil;o Popular</b> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100 }}%)
                                     <select-percent
+                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
                                         v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
                                         v-on:evento="percentualPrecoPopular = $event/100"
                                     >
@@ -282,16 +283,17 @@
                                     <input-money
                                         v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
                                         v-bind:value="vlUnitarioPopularIntegral"
-                                        v-on:ev="vlUnitarioPopularIntegral = $event">
+                                        v-on:ev="vlUnitarioPopularIntegral = $event"
+                                        >
                                     </input-money>
                                     <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; 50,00)</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input  class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
+                                    <input type="number" class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
                                     <label class="active" for="qtPopularIntegral">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
+                                    <input type="number" class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
                                     <label class="active" for="qtPopularParcial">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
@@ -314,15 +316,15 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m3 l2">
-                                    <input id="" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
-                                    <label class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                    <input type="number" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
+                                    <label  class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
-                                    <input  class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
+                                    <input type="number" class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
                                     <label class="active" for="qtGratuitaPatrocinador">Patrocinador (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
-                                    <input  class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
+                                    <input type="number" class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
                                     <label class="active" for="qtGratuitaPopulacao">Popula&ccedil;&atilde;o (m&iacute;nimo {{ qtGratuitaPopulacaoMinimo }})</label>
                                 </div>
                             </div>
