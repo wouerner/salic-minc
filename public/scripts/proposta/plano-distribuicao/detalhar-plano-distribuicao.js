@@ -142,11 +142,12 @@ Vue.component('my-component', {
             produto:{ }, // produto sendo manipulado
             produtos:  [], // lista de produtos
             active : false,
+            visualizarFormulario: false,
             icon : 'add',
             "distribuicaoGratuita" : 'n',
-            "tipoVenda" : 'ingresso',
-            "tipoLocalRealizacao" : 'aberto',
-            "espacoPublico" : 'n',
+            "tpVenda" : 'i',
+            "tpLocal" : 'a',
+            "tpEspaco" : 'n',
             "percentualGratuitoPadrao" : 0.3,
             "percentualGratuito" : 0.3,
             "percentualPrecoPopularPadrao" : 0.2,
@@ -214,35 +215,31 @@ Vue.component('my-component', {
         //Preço Popular: Valor da inteira
         vlReceitaPopularIntegral: function() {
             if (this.distribuicaoGratuita == 'n') {
-                return numeral(parseInt(this.qtPopularIntegral) * parseFloat(this.vlUnitarioPopularIntegral)).format();
+                return numeral(parseInt(this.qtPopularIntegral) * parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral))).format();
             }
             return 0;
 
         },
         vlReceitaPopularParcial: function() {
-            return numeral(this.qtPopularParcial * ( this.vlUnitarioPopularIntegral * 0.5)).format();
+            return numeral(this.qtPopularParcial * parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral)) * 0.5).format();
         },
         vlReceitaProponenteIntegral: function() {
             if (this.distribuicaoGratuita == 'n') {
-                return numeral(parseFloat( this.vlUnitarioProponenteIntegral * this.qtProponenteIntegral )).format();
+                return numeral(parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral) * parseInt(this.qtProponenteIntegral) )).format();
             }
             return 0;
         },
         vlReceitaProponenteParcial: function(){
             if (this.distribuicaoGratuita == 'n'){
-                return numeral(parseFloat( ( this.vlUnitarioProponenteIntegral * 0.5 ) * this.qtProponenteParcial)).format();
+                return numeral( ( parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral)) * 0.5 ) * this.qtProponenteParcial).format();
             }
             return 0;
         },
         vlReceitaPrevista: function() {
-            // var total = numeral();
-            // console.log('this' + this.vlReceitaPopularIntegral);
-            // console.log('parse' + parseFloat(this.vlReceitaPopularIntegral));
-            // total.add(parseFloat(this.vlReceitaPopularIntegral));
-            // console.log('numeraç' + total.value());
-            var total =  numeral(parseFloat(this.vlReceitaPopularIntegral) + parseFloat(this.vlReceitaPopularParcial)
-                + parseFloat(this.vlReceitaProponenteIntegral) + parseFloat(this.vlReceitaProponenteParcial)).format();
-            return total;
+
+            var total = parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral)) + parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularParcial))
+                + parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral)) + parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial));
+            return numeral(total).format();
         },
         // Total de exemplares
         qtExemplaresTotal: function() {
@@ -298,6 +295,7 @@ Vue.component('my-component', {
                 var vl = (this.produtos[i]['vlReceitaPopularIntegral']);
                 total += numeral(vl).value();
             }
+            console.log("vlReceitaPopularIntegralTotal" + total);
             return numeral(total).format();
         },
         vlReceitaPopularParcialTotal: function() {
@@ -396,19 +394,9 @@ Vue.component('my-component', {
         vlUnitarioPopularIntegral: function() {
 
             if (this.distribuicaoGratuita == 'n') {
-                if (this.vlUnitarioPopularIntegral > 50.00) {
+                if (parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral)) > 50.00) {
+                    this.vlUnitarioPopularIntegral = numeral(50.00).format();
                     alert('O valor n\xE3o pode ser maior que 50.00');
-                    this.vlUnitarioPopularIntegral = 50.00;
-                }
-                return;
-            }
-            this.vlUnitarioPopularIntegral = 0;
-        },
-        definirPercentualPrecoPopular: function() {
-            if (this.distribuicaoGratuita == 'n') {
-                if (this.vlUnitarioPopularIntegral > 50.00) {
-                    alert('O valor n\xE3o pode ser maior que 50.00');
-                    this.vlUnitarioPopularIntegral = 50.00;
                 }
                 return;
             }
@@ -506,17 +494,19 @@ Vue.component('my-component', {
                 qtGratuitaPopulacao : this.qtGratuitaPopulacao,
                 qtPopularIntegral :this.qtPopularIntegral,
                 qtPopularParcial : this.qtPopularParcial,
-                vlUnitarioPopularIntegral : this.vlUnitarioPopularIntegral,
-                vlReceitaPopularIntegral : this.vlReceitaPopularIntegral,
-                vlReceitaPopularParcial : this.vlReceitaPopularParcial,
+                vlUnitarioPopularIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral)),
+                vlReceitaPopularIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral)),
+                vlReceitaPopularParcial : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularParcial)),
                 qtProponenteIntegral : this.qtProponenteIntegral,
                 qtProponenteParcial : this.qtProponenteParcial,
-                vlUnitarioProponenteIntegral : this.vlUnitarioProponenteIntegral,
-                vlReceitaProponenteIntegral : this.vlReceitaProponenteIntegral,
-                vlReceitaProponenteParcial : this.vlReceitaProponenteParcial,
-                vlReceitaPrevista : this.vlReceitaPrevista
+                vlUnitarioProponenteIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral)),
+                vlReceitaProponenteIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral)),
+                vlReceitaProponenteParcial : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial)),
+                vlReceitaPrevista : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPrevista)),
+                tpVenda: this.tpVenda,
+                tpLocal: this.tpLocal,
+                tpEspaco: this.tpEspaco
             };
-
             var vue = this;
             $3.ajax({
               type: "POST",
@@ -567,18 +557,7 @@ Vue.component('my-component', {
                 this.qtGratuitaPopulacao = this.qtExemplares;
             }
         },
-        impedirDigitarLetra: function() {
-            var tecla = ( window.event ) ? e.keyCode : e.which;
-            if ( tecla == 8 || tecla == 0 )
-                return true;
-            if ( tecla != 44 && tecla < 48 || tecla > 57 )
-                return false;
-        },
-        formatPrice: function(value) {
-            var val = (value/1).toFixed(2).replace('.', ',');
-            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-        },
-        converteParaMoeda: function() {
+        converterParaMoedaBrasileira: function(valor) {
             if( !valor )
                 valor = '0';
 
@@ -592,9 +571,26 @@ Vue.component('my-component', {
 
             return valor;
         },
+        converterParaMoedaAmericana: function (valor) {
+            if( isNaN( valor ) )
+                valor = 0;
+
+            valor = parseFloat( valor );
+            valor = valor.toFixed( 2 );
+            valor = valor.replace( /\./g, ',' );
+
+            return valor;
+        },
         mostrar: function() {
             this.active = this.active == true ? false: true ;
             this.icon = this.icon == 'visibility_off' ? 'add': 'visibility_off';
+        },
+        mostrarFormulario: function() {
+            this.visualizarFormulario = this.visualizarFormulario == true ? false: true ;
+
+        },
+        formatarValor: function (valor) {
+            return numeral(valor).format();
         }
     }
 });
