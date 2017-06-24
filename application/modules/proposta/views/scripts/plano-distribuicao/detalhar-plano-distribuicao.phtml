@@ -134,12 +134,12 @@
                                     <!--Preço Popular -->
                                     <td class="center-align">{{ produto.qtPopularIntegral }}</td>
                                     <td class="center-align">{{ produto.qtPopularParcial }}</td>
-                                    <td class="right-align">{{ produto.vlUnitarioPopularIntegral }}</td>
+                                    <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
                                     <!--Preço Proponente -->
                                     <td class="center-align">{{ produto.qtProponenteIntegral }}</td>
                                     <td class="center-align">{{ produto.qtProponenteParcial }}</td>
-                                    <td class="right-align">{{ produto.vlUnitarioProponenteIntegral }}</td>
-                                    <td class="right-align">{{ produto.vlReceitaPrevista }}</td>
+                                    <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
+                                    <td class="right-align">{{ formatarValor(produto.vlReceitaPrevista) }}</td>
                                     <td>
                                         <button class="btn red white-text small" v-bind:disabled="!disabled"
                                             v-on:click="excluir(produto.idDetalhaPlanoDistribuicao)">
@@ -150,7 +150,7 @@
                         </tbody>
                         <tbody v-else>
                             <tr>
-                                <td colspan="12" class="center-align">Sem dados</td>
+                                <td colspan="12" class="center-align">{{ mensagemCarregando }}</td>
                             </tr>
                         </tbody>
                         <tfoot v-if="produtos.length > 0" style="opacity: 0.5">
@@ -174,16 +174,24 @@
                 </div>
             </div>
 
-            <div id="form-detalhamento" class="card" style="max-width: 1200px; margin: 0 auto; padding: 10px;">
+            <div class="row mostrar-forn center-align">
+                <br>
+                <br>
+                <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="mostrarFormulario">Novo detalhamento
+                    <i class="material-icons right">edit</i>
+                </button>
+            </div>
+
+            <div v-show="visualizarFormulario" id="form-detalhamento" class="card" style="max-width: 1200px; margin: 0 auto; padding: 10px;">
                 <form>
                     <div class="row">
                         <h5 class="light center-align">Novo detalhamento</h5>
                         <div class="row">
                             <div class="input-field col s6">
                                 <p><b>Tipo de venda</b><br>
-                                    <input name="tipoVenda" type="radio" id="tipoVendaIngresso" value="ingresso" v-model="tipoVenda" />
+                                    <input name="tipoVenda" type="radio" id="tipoVendaIngresso" value="i" v-model="tpVenda" />
                                     <label for="tipoVendaIngresso">Ingresso</label>
-                                    <input name="tipoVenda" type="radio" id="tipoVendaExemplar" value="exemplar" v-model="tipoVenda"/>
+                                    <input name="tipoVenda" type="radio" id="tipoVendaExemplar" value="e" v-model="tpVenda"/>
                                     <label for="tipoVendaExemplar">Exemplar</label>
                                 </p>
                             </div>
@@ -200,17 +208,17 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
-                                    <input name="tipoLocalRealizacao" type="radio" id="tipoAberto" value="aberto" v-model="tipoLocalRealizacao" />
+                                    <input name="tipoLocalRealizacao" type="radio" id="tipoAberto" value="a" v-model="tpLocal" />
                                     <label for="tipoAberto">Aberto</label>
-                                    <input name="tipoLocalRealizacao" type="radio" id="tipoFechado" value="fechado" v-model="tipoLocalRealizacao" />
+                                    <input name="tipoLocalRealizacao" type="radio" id="tipoFechado" value="f" v-model="tpLocal" />
                                     <label for="tipoFechado">Fechado</label>
                                 </p>
                             </div>
                             <div class="input-field col s6">
                                 <p><b>Espa&ccedil;o p&uacute;blico</b><br>
-                                    <input type="radio" id="espacoPublicoSim" value="s" v-model="espacoPublico"/>
+                                    <input type="radio" id="espacoPublicoSim" value="s" v-model="tpEspaco"/>
                                     <label for="espacoPublicoSim">Sim</label>
-                                    <input type="radio" id="espacoPublicoNao" value="n"  v-model="espacoPublico"/>
+                                    <input type="radio" id="espacoPublicoNao" value="n"  v-model="tpEspaco"/>
                                     <label for="espacoPublicoNao">N&atilde;o</label>
                                 </p>
                             </div>
@@ -244,23 +252,23 @@
                                         v-bind:value="vlUnitarioProponenteIntegral"
                                         v-on:ev="vlUnitarioProponenteIntegral = $event">
                                     </input-money>
-                                    <label class="active" for="vlUnitarioProponenteIntegral">Pre&ccedil;o Unit&aacute;rio</label>
+                                    <label class="active" for="vlUnitarioProponenteIntegral">Pre&ccedil;o Unit&aacute;rio R$</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="qtProponenteIntegral">
                                     <label class="active" for="qtProponenteIntegral">Qtd. Inteira</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="qtProponenteParcial">
+                                    <input class="disabled" disabled v-model="qtProponenteParcial" >
                                     <label class="active" for="qtProponenteParcial">Qtd. Meia</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteIntegral">
-                                    <label class="active" for="vlReceitaProponenteIntegral">Valor inteira</label>
+                                    <label class="active" for="vlReceitaProponenteIntegral">Valor inteira R$</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteParcial">
-                                    <label class="active" for="vlReceitaProponenteParcial">Valor meia</label>
+                                    <label class="active" for="vlReceitaProponenteParcial">Valor meia R$</label>
                                 </div>
                             </div>
                         </div>
@@ -286,23 +294,23 @@
                                         v-on:ev="vlUnitarioPopularIntegral = $event"
                                         >
                                     </input-money>
-                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; 50,00)</label>
+                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; R$ 50,00)</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input type="number" class="right-align" v-model="qtPopularIntegral" ref="qtPopularIntegral">
+                                    <input type="number" class="right-align disabled" disabled v-model="qtPopularIntegral" ref="qtPopularIntegral">
                                     <label class="active" for="qtPopularIntegral">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input type="number" class="right-align" v-model="qtPopularParcial" ref="qtPopularParcial">
+                                    <input type="number" class="right-align disabled" disabled v-model="qtPopularParcial" ref="qtPopularParcial">
                                     <label class="active" for="qtPopularParcial">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
-                                    <label class="active" for="vlReceitaPopularIntegral">Valor inteira</label>
+                                    <label class="active" for="vlReceitaPopularIntegral">Valor inteira R$</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaPopularParcial">
-                                    <label class="active" for="vlReceitaPopularParcial">Valor meia</label>
+                                    <label class="active" for="vlReceitaPopularParcial">Valor meia R$</label>
                                 </div>
                             </div>
                         </div>
