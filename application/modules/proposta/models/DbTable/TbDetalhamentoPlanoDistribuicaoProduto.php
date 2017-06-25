@@ -42,15 +42,15 @@ class Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto extends MinC
             'qtGratuitaPopulacao' ,
             'qtPopularIntegral' ,
             'qtPopularParcial' ,
-            "FORMAT(vlUnitarioPopularIntegral, 'N') as vlUnitarioPopularIntegral",
-            "FORMAT(vlReceitaPopularIntegral, 'N') as vlReceitaPopularIntegral",
-            "FORMAT(vlReceitaPopularParcial, 'N') as vlReceitaPopularParcial",
+            "vlUnitarioPopularIntegral as vlUnitarioPopularIntegral",
+            "vlReceitaPopularIntegral as vlReceitaPopularIntegral",
+            "vlReceitaPopularParcial as vlReceitaPopularParcial",
             'qtProponenteIntegral' ,
             'qtProponenteParcial' ,
-            "FORMAT(vlUnitarioProponenteIntegral, 'N') as  vlUnitarioProponenteIntegral",
-            "FORMAT(vlReceitaProponenteIntegral, 'N') as vlReceitaProponenteIntegral",
-            "FORMAT(vlReceitaProponenteParcial, 'N') as vlReceitaProponenteParcial",
-            "FORMAT(vlReceitaPrevista, 'N') as vlReceitaPrevista"
+            "vlUnitarioProponenteIntegral as  vlUnitarioProponenteIntegral",
+            "vlReceitaProponenteIntegral as vlReceitaProponenteIntegral",
+            "vlReceitaProponenteParcial as vlReceitaProponenteParcial",
+            "vlReceitaPrevista as vlReceitaPrevista"
         );
 
         $sql = $this->select()
