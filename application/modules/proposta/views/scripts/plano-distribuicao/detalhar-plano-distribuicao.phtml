@@ -1,4 +1,5 @@
 <?php $frmplanoHref = $this->url(array('module' => 'proposta' , 'controller' => 'plano-distribuicao', 'action' => 'frm-plano-distribuicao')).'?idPreProjeto='.$_GET['idPreProjeto']; ?>
+
 <style>
     .gratuito,
     .proponente { background-color: #e6e6e6; text-align: center}
@@ -150,7 +151,7 @@
                         </tbody>
                         <tbody v-else>
                             <tr>
-                                <td colspan="12" class="center-align">{{ mensagemCarregando }}</td>
+                                <td colspan="12" class="center-align">Sem dados</td>
                             </tr>
                         </tbody>
                         <tfoot v-if="produtos.length > 0" style="opacity: 0.5">
@@ -389,4 +390,50 @@
         /*border-spacing: 1;*/
         /*border-radius: 0px;*/
     /*}*/
+
+    .modal {
+        height: 200px;
+        width: 300px;
+        background-color: #FFFFFF;
+        border: white 3px solid;
+        position: fixed;
+        top: 40%;
+        z-index: 999;
+    }
+
+    .modal .modal-pre-loader {
+        width: 300px;
+        height: 180px;
+        padding: 10px;
+    }
+
+    .modal.modal-pre-loader .modal-content {
+        padding: 10px;
+    }
+
 </style>
+
+
+<div id="modal-pre-loader" class="modal modal-pre-loader" style="display: none">
+    <div class="modal-header center valign"><h5>Aguarde!</h5></div>
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s4">
+                <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-blue-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s8">
+                <p>Carregando...</p>
+            </div>
+        </div>
+    </div>
+</div>

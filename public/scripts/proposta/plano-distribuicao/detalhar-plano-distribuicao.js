@@ -215,31 +215,36 @@ Vue.component('my-component', {
         //Preço Popular: Valor da inteira
         vlReceitaPopularIntegral: function() {
             if (this.distribuicaoGratuita == 'n') {
-                return numeral(parseInt(this.qtPopularIntegral) * parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral))).format();
+                return numeral(parseInt(this.qtPopularIntegral) * this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral)).format();
             }
             return 0;
 
         },
         vlReceitaPopularParcial: function() {
-            return numeral(this.qtPopularParcial * parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral)) * 0.5).format();
+            return numeral(this.qtPopularParcial * this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral) * 0.5).format();
         },
         vlReceitaProponenteIntegral: function() {
             if (this.distribuicaoGratuita == 'n') {
-                return numeral(parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral) * parseInt(this.qtProponenteIntegral) )).format();
+                return numeral(this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral) * parseInt(this.qtProponenteIntegral)).format();
             }
             return 0;
         },
         vlReceitaProponenteParcial: function(){
             if (this.distribuicaoGratuita == 'n'){
-                return numeral( ( parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral)) * 0.5 ) * this.qtProponenteParcial).format();
+                return numeral( ( this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral) * 0.5 ) * this.qtProponenteParcial).format();
             }
             return 0;
         },
         vlReceitaPrevista: function() {
 
-            var total = parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral)) + parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularParcial))
-                + parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral)) + parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial));
-            return numeral(total).format();
+            var soma = numeral();
+
+            soma.add(this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral));
+            soma.add(this.converterParaMoedaAmericana(this.vlReceitaPopularParcial));
+            soma.add(this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral));
+            soma.add(this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial));
+
+            return numeral(soma).format();
         },
         // Total de exemplares
         qtExemplaresTotal: function() {
@@ -295,7 +300,6 @@ Vue.component('my-component', {
                 var vl = (this.produtos[i]['vlReceitaPopularIntegral']);
                 total += numeral(vl).value();
             }
-            console.log("vlReceitaPopularIntegralTotal" + total);
             return numeral(total).format();
         },
         vlReceitaPopularParcialTotal: function() {
@@ -324,7 +328,7 @@ Vue.component('my-component', {
             total = 0 ;
             for ( var i = 0 ; i < this.produtos.length ; i++){
                 vl = (this.produtos[i]['vlReceitaProponenteIntegral']);
-                total += numeral(vl).value();
+                total += this.converterParaMoedaAmericana(vl);
             }
             return numeral(total).format();
         },
@@ -332,17 +336,18 @@ Vue.component('my-component', {
             total = 0 ;
             for ( var i = 0 ; i < this.produtos.length ; i++){
                 var vl = (this.produtos[i]['vlReceitaProponenteParcial']);
-                total += numeral(vl).value();
+                total += this.converterParaMoedaAmericana(vl);
             }
             return numeral(total).format();
         },
         receitaPrevistaTotal: function() {
-            var total = 0 ;
+            var total = numeral();
+
             for ( var i = 0 ; i < this.produtos.length ; i++){
                 var vl = this.produtos[i]['vlReceitaPrevista'];
-                total += numeral(vl).value();
+                total.add(parseFloat(vl));
             }
-            return numeral(total).format();
+            return total.format();
         }
     },
     watch:{
@@ -394,7 +399,7 @@ Vue.component('my-component', {
         vlUnitarioPopularIntegral: function() {
 
             if (this.distribuicaoGratuita == 'n') {
-                if (parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral)) > 50.00) {
+                if (this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral) > 50.00) {
                     this.vlUnitarioPopularIntegral = numeral(50.00).format();
                     alert('O valor n\xE3o pode ser maior que 50.00');
                 }
@@ -477,10 +482,11 @@ Vue.component('my-component', {
             .done(function(data) {
                 vue.$data.produtos = data.data;
             })
-            .fail(function(){ alert('error'); });
+            .fail(function(){ alert('Erro ao buscar detalhamento'); });
 
         },
         salvar: function (event) {
+            this.visualizarFormulario = false;
 
             p = {
                 idPlanoDistribuicao: this.idplanodistribuicao,
@@ -494,15 +500,15 @@ Vue.component('my-component', {
                 qtGratuitaPopulacao : this.qtGratuitaPopulacao,
                 qtPopularIntegral :this.qtPopularIntegral,
                 qtPopularParcial : this.qtPopularParcial,
-                vlUnitarioPopularIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral)),
-                vlReceitaPopularIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral)),
-                vlReceitaPopularParcial : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPopularParcial)),
+                vlUnitarioPopularIntegral : this.converterParaMoedaAmericana(this.vlUnitarioPopularIntegral),
+                vlReceitaPopularIntegral : this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral),
+                vlReceitaPopularParcial : this.converterParaMoedaAmericana(this.vlReceitaPopularParcial),
                 qtProponenteIntegral : this.qtProponenteIntegral,
                 qtProponenteParcial : this.qtProponenteParcial,
-                vlUnitarioProponenteIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral)),
-                vlReceitaProponenteIntegral : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral)),
-                vlReceitaProponenteParcial : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial)),
-                vlReceitaPrevista : parseFloat(this.converterParaMoedaAmericana(this.vlReceitaPrevista)),
+                vlUnitarioProponenteIntegral : this.converterParaMoedaAmericana(this.vlUnitarioProponenteIntegral),
+                vlReceitaProponenteIntegral : this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral),
+                vlReceitaProponenteParcial : this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial),
+                vlReceitaPrevista : this.converterParaMoedaAmericana(this.vlReceitaPrevista),
                 tpVenda: this.tpVenda,
                 tpLocal: this.tpLocal,
                 tpEspaco: this.tpEspaco
@@ -515,9 +521,11 @@ Vue.component('my-component', {
             })
             .done(function() {
                 vue.t();
+                this.limparFormulario();
                 alert('Salvo com sucesso');
             })
             .fail(function(){ alert('error'); });
+
         },
         excluir: function(index){
             //this.produtos.splice(index, 1)
@@ -557,27 +565,16 @@ Vue.component('my-component', {
                 this.qtGratuitaPopulacao = this.qtExemplares;
             }
         },
-        converterParaMoedaBrasileira: function(valor) {
-            if( !valor )
-                valor = '0';
+        converterParaMoedaAmericana: function(valor) {
+            valor = String(valor);
+            // retira os pontos e as virgulas, deixando somente numeros
+            valor = valor.replace(/\D/g, "");
+            valor = valor.replace(/(\d{0})(\d)/, "$1$2");
 
-            valor = valor.replace( /\./g, '' );
-            valor = valor.replace( /\,/g, '.' );
-            valor = parseFloat( valor );
-            valor = valor.toFixed( 2 );
-
-            if( isNaN( valor ) )
-                valor = 0;
-
-            return valor;
-        },
-        converterParaMoedaAmericana: function (valor) {
-            if( isNaN( valor ) )
-                valor = 0;
-
-            valor = parseFloat( valor );
-            valor = valor.toFixed( 2 );
-            valor = valor.replace( /\./g, ',' );
+            // adiciona o ponto na casa decimal
+            valor = valor.replace(/(\d)(\d{2})$/, "$1.$2");
+            // converte para float e adiciona precisao decimal
+            valor = parseFloat(valor).toFixed(2);
 
             return valor;
         },
@@ -590,7 +587,21 @@ Vue.component('my-component', {
 
         },
         formatarValor: function (valor) {
+            valor = parseFloat(valor);
             return numeral(valor).format();
+        },
+        limparFormulario: function() {
+            this.qtExemplares = 0;
+            this.qtGratuitaDivulgacao = 0;
+            this.qtGratuitaPatrocinador = 0;
+            this.vlUnitarioPopularIntegral = 0.0; // Preço popular: Preço Unitario do Ingresso
+            this.qtPrecoPopularValorIntegral = 0; //Preço Popular: Quantidade de Inteira
+            this.qtPrecoPopularValorParcial =  0;//Preço Popular: Quantidade de meia entrada
+            this.vlUnitarioProponenteIntegral =  0;
+            this.qtPopularIntegral = 0;
+            this.qtPopularParcial = 0;
+            this.vlReceitaPopularIntegral = 0;
+            this.dsProduto = '';
         }
     }
 });
@@ -598,3 +609,18 @@ Vue.component('my-component', {
 var app6 = new Vue({
         el: '#example'
     });
+
+
+$3(document).ready(function () {
+
+    $3('#modal-pre-loader').show();
+
+});
+
+$3(document).ajaxStart(function() {
+    $3('#modal-pre-loader').show();
+});
+
+$3(document).ajaxComplete(function () {
+    $3('#modal-pre-loader').hide();
+});
