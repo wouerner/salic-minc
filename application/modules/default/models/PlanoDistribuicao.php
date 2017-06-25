@@ -296,19 +296,20 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
     {
         $cols = array(
             'sum(qtExemplares) as QtdeProduzida',
+
             'sum(qtGratuitaDivulgacao) as QtdeProponente',
             'sum(qtGratuitaPatrocinador) as QtdePatrocinador',
             'sum(qtGratuitaPopulacao) as QtdeOutros',
             'sum(qtPopularIntegral) as QtdeVendaPopularNormal',
             'sum(qtPopularParcial) as QtdeVendaPopularPromocional',
-            'sum(vlUnitarioPopularIntegral) as vlUnitarioPopularNormal',
-            'sum(vlReceitaPopularIntegral) ReceitaPopularNormal',
+            'sum(vlReceitaPopularIntegral) as ReceitaPopularNormal',
             'sum(vlReceitaPopularParcial) as ReceitaPopularPromocional',
+            'sum(vlUnitarioPopularIntegral) as vlUnitarioPopularNormal',
             'sum(qtProponenteIntegral) as QtdeVendaNormal',
             'sum(qtProponenteParcial) as QtdeVendaPromocional',
-            'avg(vlUnitarioProponenteIntegral) vlUnitarioNormal',
             'sum(vlReceitaProponenteIntegral) as PrecoUnitarioNormal',
             'sum(vlReceitaProponenteParcial) as PrecoUnitarioPromocional',
+            'sum(vlUnitarioProponenteIntegral) as vlUnitarioNormal'
             //'(sum(vlReceitaPopularParcial) + sum(vlReceitaPopularIntegral)+  sum(vlReceitaProponenteIntegral)+ sum(vlReceitaProponenteParcial)) as  PrecoUnitarioPromocional'
         );
 
