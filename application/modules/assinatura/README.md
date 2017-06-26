@@ -1,23 +1,34 @@
 Módulo de Assinatura
 =========================
 
+#### Sobre
+
 M&oacute;dulo respons&aacute;vel por realizar a admissibilidade da Projetos Culturais.
+Este m&oacute;dulo fornece opera&ccedil;&otilde;es b&aacute;sicas para assinatura tais como :
 
-#### Regras
+ * Gerenciamento de Assinaturas
+ * Visualiza&ccedil;&atilde;o de Projeto
+ * Assinar Projeto Cultural
+ * Gerar PDF
+ * Movimentar Assinatura para pr&oacute;ximo respons&aacute;vel
 
-Neste m&oacute;dulo &eacute; poss&iacute;vel realizar a Assinatura de Projetos por usu&aacute;rios que est&atilde;o vinculados a sub-secretarias com os perfis &agrave; seguir: 
+#### Workflow
 
-* Secretário
-* Diretor
-* Coordenador Geral
+Neste m&amp;oacute;dulo &amp;eacute; poss&amp;iacute;vel realizar a Assinatura de Projetos por usu&amp;aacute;rios que est&amp;atilde;o vinculados a sub-secretarias com os perfis que podem ser localizados na tabela do schema &quot;sac&quot;, &quot;TbAtoAdministrativo&quot;.
+Nesta tabela &eacute; poss&iacute;vel identificar informa&ccedil;&otilde;es tais como Unidade, Cargo do Assinante, Ordem de assinatura, Tipo do Ato administrativo e al&eacute;m de outras informa&ccedil;&otilde;es.
 
-Quando o usuário com perfil Coordenador Geral assinar a próxima assinatura deve ser do Secretário.
+Um exemplo pr&aacute;tico podemos levantar a seguinte situal&ccedil;&atilde;o para o enquadramento, quando o usu&aacute;rio com perfil Coordenador Geral assinar, caso o projeto seja movimentado, a pr&oacute;xima assinatura deve ser do Secret&aacute;rio.
 
-Somente quem pode finalizar as assinaturas do Projeto Cultural e encaminhar para Portaria é perfil:
+Na tabela "TbAssinatura" do schema "sac", quando o Projeto Cultural possui todas as assinaturas de acordo com a tabela "TbAtoAdministrativo" é possível finalizar a assinatura.
 
-* Diretor 
+O processo de finalização da assinatura é particular para cada módulo e não fica dentro deste módulo, pois cada módulo apresenta necessidades diferentes tanto para alteração de situações quanto para o acionamento de outras funcionalidades dentro do sistema.
+Portanto cada módulo que necessitar desta funcionalidade precisa implementa-lo de acordo com a necessidade fora deste módulo.
 
 #### Dependências
 
-Este módulo depende da library 'MinC_Assinatura_DocumentoAssinatura'. Atualmente essa dependência foi criada dentro da 
+Este módulo depende da library 'MinC_Assinatura_Assinatura' e utiliza serviços como:
+  * MinC_Assinatura_Servico_Assinatura
+  * MinC_Assinatura_Servico_Autenticacao
+  * MinC_Assinatura_Servico_DocumentoAssinatura
+Atualmente essa dependência foi criada dentro da 
 pasta library por limitações do framework na geração de serviços. 
