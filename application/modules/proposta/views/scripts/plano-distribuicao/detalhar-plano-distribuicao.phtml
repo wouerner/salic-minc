@@ -190,17 +190,17 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <p><b>Tipo de venda</b><br>
-                                    <input name="tipoVenda" type="radio" id="tipoVendaIngresso" value="i" v-model="tpVenda" />
-                                    <label for="tipoVendaIngresso">Ingresso</label>
-                                    <input name="tipoVenda" type="radio" id="tipoVendaExemplar" value="e" v-model="tpVenda"/>
-                                    <label for="tipoVendaExemplar">Exemplar</label>
+                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaIngresso'" value="i" v-model="tpVenda" />
+                                    <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
+                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaExemplar'" value="e" v-model="tpVenda"/>
+                                    <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
                                 </p>
                             </div>
                             <div class="input-field col s6">
                                 <p><b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
-                                    <input name="group1" type="radio" :id=" _uid + '1' " value="s" v-model="distribuicaoGratuita"/>
+                                    <input name="group1" type="radio" :id="_uid + '1' " value="s" v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '1'">Sim</label>
-                                    <input name="group1" type="radio" :id=" _uid + '2' " value="n"  v-model="distribuicaoGratuita"/>
+                                    <input name="group1" type="radio" :id="_uid + '2' " value="n"  v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '2'">N&atilde;o</label>
                                 </p>
                             </div>
@@ -209,29 +209,29 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
-                                    <input name="tipoLocalRealizacao" type="radio" id="tipoAberto" value="a" v-model="tpLocal" />
-                                    <label for="tipoAberto">Aberto</label>
-                                    <input name="tipoLocalRealizacao" type="radio" id="tipoFechado" value="f" v-model="tpLocal" />
-                                    <label for="tipoFechado">Fechado</label>
+                                    <input name="tipoLocalRealizacao" type="radio" :id="_uid + 'tipoAberto'" value="a" v-model="tpLocal" />
+                                    <label :for=" _uid + 'tipoAberto'">Aberto</label>
+                                    <input name="tipoLocalRealizacao" type="radio" :id=" _uid + 'tipoFechado'" value="f" v-model="tpLocal" />
+                                    <label :for=" _uid + 'tipoFechado'">Fechado</label>
                                 </p>
                             </div>
                             <div class="input-field col s6">
                                 <p><b>Espa&ccedil;o p&uacute;blico</b><br>
-                                    <input type="radio" id="espacoPublicoSim" value="s" v-model="tpEspaco"/>
-                                    <label for="espacoPublicoSim">Sim</label>
-                                    <input type="radio" id="espacoPublicoNao" value="n"  v-model="tpEspaco"/>
-                                    <label for="espacoPublicoNao">N&atilde;o</label>
+                                    <input type="radio" :id="_uid + 'espacoPublicoSim'" value="s" v-model="tpEspaco"/>
+                                    <label :for="_uid + 'espacoPublicoSim'">Sim</label>
+                                    <input type="radio" id="espacoPublicoNao" :id=" _uid + 'espacoPublicoNao'" value="n"  v-model="tpEspaco"/>
+                                    <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s6">
-                                <input id="dsProduto" type="text" class="validate" placeholder="Ex: Arquibancada" v-model="dsProduto">
-                                <label class="active" for="dsProduto">Categoria</label>
+                                <input :id="_uid + 'dsProduto'" type="text" class="validate" placeholder="Ex: Arquibancada" v-model="dsProduto">
+                                <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
                             </div>
                             <div class="input-field col s2">
-                                <input id="qtExemplares" type="number" class="validate" placeholder="0" v-model.lazy="qtExemplares">
-                                <label class="active" for="qtExemplares">Quantidade</label>
+                                <input :id="_uid + 'qtExemplares'" type="number" class="validate" placeholder="0" v-model.lazy="qtExemplares">
+                                <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
                             </div>
                         </div>
 
@@ -253,23 +253,23 @@
                                         v-bind:value="vlUnitarioProponenteIntegral"
                                         v-on:ev="vlUnitarioProponenteIntegral = $event">
                                     </input-money>
-                                    <label class="active" for="vlUnitarioProponenteIntegral">Pre&ccedil;o Unit&aacute;rio R$</label>
+                                    <label class="active" :for="_uid + 'vlUnitarioProponenteIntegral'">Pre&ccedil;o Unit&aacute;rio R$</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="qtProponenteIntegral">
-                                    <label class="active" for="qtProponenteIntegral">Qtd. Inteira</label>
+                                    <label class="active" :for="_uid + 'qtProponenteIntegral'">Qtd. Inteira</label>
                                 </div>
-                                <div class="input-field col s6 l2">
+                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="qtProponenteParcial" >
-                                    <label class="active" for="qtProponenteParcial">Qtd. Meia</label>
+                                    <label class="active" :for="_uid + 'qtProponenteParcial'">Qtd. Meia</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteIntegral">
-                                    <label class="active" for="vlReceitaProponenteIntegral">Valor inteira R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaProponenteIntegral'">Valor inteira R$</label>
                                 </div>
-                                <div class="input-field col s6 l2">
+                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteParcial">
-                                    <label class="active" for="vlReceitaProponenteParcial">Valor meia R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaProponenteParcial'">Valor meia R$</label>
                                 </div>
                             </div>
                         </div>
@@ -295,23 +295,23 @@
                                         v-on:ev="vlUnitarioPopularIntegral = $event"
                                         >
                                     </input-money>
-                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" for="vlUnitarioPopularIntegral">Pre&ccedil;o Unit&aacute;rio (At&eacute; R$ 50,00)</label>
+                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio (At&eacute; R$ 50,00)</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input type="number" class="right-align disabled" disabled v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                    <label class="active" for="qtPopularIntegral">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                    <label class="active" :for="_uid + 'qtPopularIntegral'">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
                                 </div>
-                                <div class="input-field col s6 l2">
+                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input type="number" class="right-align disabled" disabled v-model="qtPopularParcial" ref="qtPopularParcial">
-                                    <label class="active" for="qtPopularParcial">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
+                                    <label class="active" :for="_uid + 'qtPopularParcial'">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
-                                    <label class="active" for="vlReceitaPopularIntegral">Valor inteira R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">Valor inteira R$</label>
                                 </div>
-                                <div class="input-field col s6 l2">
+                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="vlReceitaPopularParcial">
-                                    <label class="active" for="vlReceitaPopularParcial">Valor meia R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaPopularParcial'">Valor meia R$</label>
                                 </div>
                             </div>
                         </div>
@@ -326,15 +326,15 @@
                             <div class="row">
                                 <div class="input-field col s12 m3 l2">
                                     <input type="number" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
-                                    <label  class="active" for="qtGratuitaDivulgacao">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                    <label  class="active" :for="_uid + 'qtGratuitaDivulgacao'">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
                                     <input type="number" class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
-                                    <label class="active" for="qtGratuitaPatrocinador">Patrocinador (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                    <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">Patrocinador (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
                                     <input type="number" class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
-                                    <label class="active" for="qtGratuitaPopulacao">Popula&ccedil;&atilde;o (m&iacute;nimo {{ qtGratuitaPopulacaoMinimo }})</label>
+                                    <label class="active" :for="_uid + 'qtGratuitaPopulacao'">Popula&ccedil;&atilde;o (m&iacute;nimo {{ qtGratuitaPopulacaoMinimo }})</label>
                                 </div>
                             </div>
                         </div>
@@ -390,6 +390,35 @@
         /*border-spacing: 1;*/
         /*border-radius: 0px;*/
     /*}*/
+
+    input:not([type]):disabled + label,
+    input:not([type])[readonly="readonly"] + label,
+    input[type=text]:disabled + label,
+    input[type=text][readonly="readonly"] + label,
+    input[type=password]:disabled + label,
+    input[type=password][readonly="readonly"] + label,
+    input[type=email]:disabled + label,
+    input[type=email][readonly="readonly"] + label,
+    input[type=url]:disabled + label,
+    input[type=url][readonly="readonly"] + label,
+    input[type=time]:disabled + label,
+    input[type=time][readonly="readonly"] + label,
+    input[type=date]:disabled + label,
+    input[type=date][readonly="readonly"] + label,
+    input[type=datetime]:disabled + label,
+    input[type=datetime][readonly="readonly"] + label,
+    input[type=datetime-local]:disabled + label,
+    input[type=datetime-local][readonly="readonly"] + label,
+    input[type=tel]:disabled + label,
+    input[type=tel][readonly="readonly"] + label,
+    input[type=number]:disabled + label,
+    input[type=number][readonly="readonly"] + label,
+    input[type=search]:disabled + label,
+    input[type=search][readonly="readonly"] + label,
+    textarea.materialize-textarea:disabled + label,
+    textarea.materialize-textarea[readonly="readonly"] + label {
+        color: rgba(0, 0, 0, 0.44);
+    }
 
     .modal {
         height: 200px;
