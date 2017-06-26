@@ -8,13 +8,13 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 	public function init()
 	{
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-            $auth = Zend_Auth::getInstance(); // instancia da autentica��o
+            $auth = Zend_Auth::getInstance(); // instancia da autenticacao
             $PermissoesGrupo = array();
 
             //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
             if(isset($auth->getIdentity()->usu_codigo)){
                 //Recupera todos os grupos do Usuario
-                $Usuario = new Autenticacao_Model_Usuario(); // objeto usu�rio
+                $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
                 $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
                 foreach ($grupos as $grupo){
                     $PermissoesGrupo[] = $grupo->gru_codigo;
@@ -195,7 +195,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $arrBusca = array();
         $arrBusca['a.idProjeto = ?'] = $this->_idPreProjeto;
         $arrBusca['a.stPrincipal = ?'] = 1;
-       !empty( $post->idPlanoDistribuicao ) ? $arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao :'' ;
+       !empty( $post->idPlanoDistribuicao ) ? $arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao : '' ;
         //$arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao;
         $arrBusca['stPlanoDistribuicaoProduto = ?'] = 1;
         $arrPlanoDistribuicao = $tblPlanoDistribuicao->buscar($arrBusca, array("idPlanoDistribuicao DESC"))->toArray();
@@ -265,6 +265,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
     public function detalharPlanoDistribuicaoAction()
     {
+        $params = $this->getRequest()->getParams();
         $pag = 1;
         $get = Zend_Registry::get('get');
         if (isset($get->pag)) $pag = $get->pag;
@@ -275,8 +276,11 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $total = $tblPlanoDistribuicao->pegaTotal(array("a.idProjeto = ?"=>$this->_idPreProjeto, "a.stPlanoDistribuicaoProduto = ?"=>1));
         $tamanho = (($inicio+$this->intTamPag)<=$total) ? $this->intTamPag : $total - ($inicio) ;
 
+        if (empty($params['idPlanoDistribuicao']))
+            parent::message("&Eacute; necess&aacute;rio informar o produto do plano de distribui&ccedil;&atilde;o", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+
         $rsPlanoDistribuicao = $tblPlanoDistribuicao->buscar(
-            array("a.idprojeto = ?" => $this->_idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
+            array("a.idplanodistribuicao = ?" => $params['idPlanoDistribuicao'], "a.idprojeto = ?" => $this->_idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
             array("idplanodistribuicao DESC"),
             $tamanho,
             $inicio
