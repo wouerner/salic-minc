@@ -16,7 +16,7 @@ class Assinatura_Model_TbDocumentoAssinatura extends MinC_Db_Model
     const CD_SITUACAO_FECHADO_PARA_ASSINATURA = 2;
 
     const ST_ESTADO_DOCUMENTO_ATIVO = 1;
-    const ST_ESTADO_DOCUMENTO_INATIVO = 2;
+    const ST_ESTADO_DOCUMENTO_INATIVO = 0;
 
     /**
      * @return mixed
