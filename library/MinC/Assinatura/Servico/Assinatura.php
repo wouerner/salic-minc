@@ -74,7 +74,8 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
             array(
                 'IdPRONAC' => $modelAssinatura->getIdPronac(),
                 'idTipoDoAtoAdministrativo' => $modelAssinatura->getIdTipoDoAtoAdministrativo(),
-                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+                'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
             )
         );
 
@@ -107,7 +108,10 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
 
         $objTbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
         $objTbAssinatura->inserir($dadosInclusaoAssinatura);
-        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino($modelAssinatura->getIdTipoDoAtoAdministrativo(), $modelAssinatura->getIdOrdemDaAssinatura());
+        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
+            $modelAssinatura->getIdTipoDoAtoAdministrativo(),
+            $modelAssinatura->getIdOrdemDaAssinatura()
+        );
 
         if($this->isMovimentarProjetoPorOrdemAssinatura && $codigoOrgaoDestino) {
             $this->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
