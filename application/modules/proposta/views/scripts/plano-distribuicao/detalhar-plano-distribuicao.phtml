@@ -207,7 +207,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s6" v-if="tpVenda == 'i'">
                                 <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
                                     <input name="tipoLocalRealizacao" type="radio" :id="_uid + 'tipoAberto'" value="a" v-model="tpLocal" />
                                     <label :for=" _uid + 'tipoAberto'">Aberto</label>
@@ -215,7 +215,7 @@
                                     <label :for=" _uid + 'tipoFechado'">Fechado</label>
                                 </p>
                             </div>
-                            <div class="input-field col s6">
+                            <div class="input-field col s6" v-if="tpVenda == 'i'">
                                 <p><b>Espa&ccedil;o p&uacute;blico</b><br>
                                     <input type="radio" :id="_uid + 'espacoPublicoSim'" value="s" v-model="tpEspaco"/>
                                     <label :for="_uid + 'espacoPublicoSim'">Sim</label>
@@ -225,9 +225,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s6" v-if="tpVenda == 'i'">
                                 <input :id="_uid + 'dsProduto'" type="text" class="validate" placeholder="Ex: Arquibancada" v-model="dsProduto">
-                                <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
+                                <label class="active" :for="_uid + 'dsProduto'" >Categoria</label>
                             </div>
                             <div class="input-field col s2">
                                 <input :id="_uid + 'qtExemplares'" type="number" class="validate" placeholder="0" v-model.lazy="qtExemplares">
@@ -257,15 +257,15 @@
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="qtProponenteIntegral">
-                                    <label class="active" :for="_uid + 'qtProponenteIntegral'">Qtd. Inteira</label>
+                                    <label class="active" :for="_uid + 'qtProponenteIntegral'">Quantidade {{labelInteira}}</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="qtProponenteParcial" >
-                                    <label class="active" :for="_uid + 'qtProponenteParcial'">Qtd. Meia</label>
+                                    <label class="active" :for="_uid + 'qtProponenteParcial'">Quantidade Meia</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteIntegral">
-                                    <label class="active" :for="_uid + 'vlReceitaProponenteIntegral'">Valor inteira R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaProponenteIntegral'">Valor {{labelInteira}} R$</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteParcial">
@@ -295,19 +295,19 @@
                                         v-on:ev="vlUnitarioPopularIntegral = $event"
                                         >
                                     </input-money>
-                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio (At&eacute; R$ 50,00)</label>
+                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio <br>(At&eacute; R$ 50,00)</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input type="number" class="right-align disabled" disabled v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                    <label class="active" :for="_uid + 'qtPopularIntegral'">Qtd. Inteira (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                    <label class="active" :for="_uid + 'qtPopularIntegral'">Quantidade {{labelInteira}} (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input type="number" class="right-align disabled" disabled v-model="qtPopularParcial" ref="qtPopularParcial">
-                                    <label class="active" :for="_uid + 'qtPopularParcial'">Qtd. Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
+                                    <label class="active" :for="_uid + 'qtPopularParcial'">Quantidade Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
-                                    <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">Valor inteira R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">Valor {{labelInteira}} R$</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="vlReceitaPopularParcial">
