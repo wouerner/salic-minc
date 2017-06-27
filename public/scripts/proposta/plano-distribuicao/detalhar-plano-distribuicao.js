@@ -154,6 +154,7 @@ Vue.component('my-component', {
             "percentualPrecoPopular" : 0.2,
             "percentualProponentePadrao" : 0.5,
             "percentualProponente" : 0.5,
+            "labelInteira" : 'Inteira',
             activeForm : false
         }
     },
@@ -430,6 +431,12 @@ Vue.component('my-component', {
         tpVenda: function() {
             this.qtPopularParcial = this.quantidadePopularParcial;
             this.qtPopularIntegral = this.quantidadePopularIntegral;
+
+            if( this.tpVenda == 'e') {
+                this.labelInteira = '';
+            }else {
+                this.labelInteira = 'Inteira';
+            }
         },
         //Distribuição Gratuita: Patrocinador
         patrocinador: function(val)  {
@@ -485,7 +492,10 @@ Vue.component('my-component', {
                 this.$refs.divulgacao.disabled = true;
                 this.$refs.patrocinador.disabled = true;
                 this.$refs.qtPopularIntegral.disabled = true;
-                this.$refs.qtPopularParcial.disabled = true;
+
+                if(typeof this.$refs.qtPopularParcial !== 'undefined') {
+                    this.$refs.qtPopularParcial.disabled = true;
+                }
 
                 this.qtGratuitaDivulgacao = 0;
                 this.qtGratuitaPatrocinador = 0;
@@ -535,13 +545,13 @@ Vue.component('my-component', {
         },
         salvar: function (event) {
 
-            if( this.dsProduto == '' ) {
+            if( this.dsProduto == '' && this.tpVenda == 'i' ) {
                 alert("\xC9 obrigat\xF3rio informar a categoria");
                 return;
             }
 
             if( this.qtExemplares == 0) {
-                alert("Quantidade de exemplares \xE9 obrigat\xF3rio!");
+                alert("Quantidade \xE9 obrigat\xF3rio!");
                 return;
             }
 
@@ -579,7 +589,7 @@ Vue.component('my-component', {
             })
             .done(function() {
                 vue.t();
-                this.limparFormulario();
+                vue.limparFormulario();
                 alert('Salvo com sucesso');
             })
             .fail(function(){ alert('error'); });
@@ -635,8 +645,6 @@ Vue.component('my-component', {
             if( isNaN( valor ) )
                 valor = 0;
 
-            console.log(valor);
-
             return valor;
         },
         mostrar: function() {
@@ -663,6 +671,8 @@ Vue.component('my-component', {
             this.qtPopularParcial = 0;
             this.vlReceitaPopularIntegral = 0;
             this.dsProduto = '';
+            this.tpVenda = 'i';
+            this.distribuicaoGratuita = 'n';
         }
     }
 });
