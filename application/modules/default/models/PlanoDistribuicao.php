@@ -296,7 +296,6 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
     {
         $cols = array(
             'sum(qtExemplares) as QtdeProduzida',
-
             'sum(qtGratuitaDivulgacao) as QtdeProponente',
             'sum(qtGratuitaPatrocinador) as QtdePatrocinador',
             'sum(qtGratuitaPopulacao) as QtdeOutros',
