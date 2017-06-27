@@ -23,7 +23,9 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
     {
         if(!isset($this->servicoDocumentoAssinatura)) {
             require_once __DIR__ . DIRECTORY_SEPARATOR . "EnquadramentoDocumentoAssinatura.php";
-            $this->servicoDocumentoAssinatura = new Admissibilidade_EnquadramentoDocumentoAssinaturaController($this->getRequest()->getPost());
+            $this->servicoDocumentoAssinatura = new Admissibilidade_EnquadramentoDocumentoAssinaturaController(
+                $this->getRequest()->getPost()
+            );
         }
         return $this->servicoDocumentoAssinatura;
     }
