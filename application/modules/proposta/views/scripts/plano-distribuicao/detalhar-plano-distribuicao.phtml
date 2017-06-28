@@ -226,11 +226,11 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s6" v-if="tpVenda == 'i'">
-                                <input :id="_uid + 'dsProduto'" type="text" class="validate" placeholder="Ex: Arquibancada" v-model="dsProduto">
+                                <input :id="_uid + 'dsProduto'" type="text" class="validate" ref="dsProduto" placeholder="Ex: Arquibancada" v-model="dsProduto">
                                 <label class="active" :for="_uid + 'dsProduto'" >Categoria</label>
                             </div>
                             <div class="input-field col s2">
-                                <input :id="_uid + 'qtExemplares'" type="number" class="validate" placeholder="0" v-model.lazy="qtExemplares">
+                                <input :id="_uid + 'qtExemplares'" type="number" class="validate" ref="qtExemplares" placeholder="0" v-model.lazy="qtExemplares">
                                 <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
                             </div>
                         </div>
@@ -256,7 +256,7 @@
                                     <label class="active" :for="_uid + 'vlUnitarioProponenteIntegral'">Pre&ccedil;o Unit&aacute;rio R$</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="qtProponenteIntegral">
+                                    <input class="disabled" disabled v-model="qtProponenteIntegral" ref="qtProponenteIntegral">
                                     <label class="active" :for="_uid + 'qtProponenteIntegral'">Quantidade {{labelInteira}}</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
