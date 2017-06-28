@@ -82,7 +82,7 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
                 "FORMAT( a.ReceitaPopularPromocional, 'N','pt-br') AS ReceitaPopularPromocional",
                 "FORMAT( a.PrecoUnitarioPromocional, 'N','pt-br') AS PrecoUnitarioPromocional",
                 "FORMAT( a.PrecoUnitarioNormal, 'N', 'pt-br') AS PrecoUnitarioNormal",
-                "FORMAT(( ReceitaPopularPromocional ) + ( ReceitaPopularNormal )+ ( PrecoUnitarioNormal )+ ( PrecoUnitarioPromocional ),'N','pt-br') AS Receita"
+                "FORMAT( a.vlReceitaTotalPrevista, 'N', 'pt-br') AS Receita"
             ));
 
             $slct->from(array("a"=> $this->_name), $cols, $this->_schema);
@@ -307,9 +307,9 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
             'sum(qtProponenteIntegral) as QtdeVendaNormal',
             'sum(qtProponenteParcial) as QtdeVendaPromocional',
             'avg(vlReceitaProponenteIntegral) as PrecoUnitarioNormal',
-            'avg(vlReceitaProponenteParcial) as PrecoUnitarioPromocional', # proponente qt meia
-            'avg(vlUnitarioProponenteIntegral) as vlUnitarioNormal' # proponente valor medio
-            //'(sum(vlReceitaPopularParcial) + sum(vlReceitaPopularIntegral)+  sum(vlReceitaProponenteIntegral)+ sum(vlReceitaProponenteParcial)) as  PrecoUnitarioPromocional'
+            'avg(vlReceitaProponenteParcial) as PrecoUnitarioPromocional', #
+            'avg(vlUnitarioProponenteIntegral) as vlUnitarioNormal',
+            '(avg(vlReceitaPopularParcial) + avg(vlReceitaPopularIntegral)+  avg(vlReceitaProponenteIntegral)+ avg(vlReceitaProponenteParcial)) as  vlReceitaTotalPrevista'
         );
 
         $sql = $this->select()
