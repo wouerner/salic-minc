@@ -547,11 +547,32 @@ Vue.component('my-component', {
 
             if( this.dsProduto == '' && this.tpVenda == 'i' ) {
                 alert("\xC9 obrigat\xF3rio informar a categoria");
+                this.$refs.dsProduto.focus();
                 return;
             }
 
             if( this.qtExemplares == 0) {
                 alert("Quantidade \xE9 obrigat\xF3rio!");
+                this.$refs.qtExemplares.focus();
+                return;
+            }
+
+            if (this.distribuicaoGratuita == 'n'){
+
+                if(this.vlUnitarioProponenteIntegral == 0 && this.percentualProponente > 0) {
+                    alert("Pre\xE7o unit\xE1rio no Proponente \xE9 obrigat\xF3rio!");
+                    return;
+                }
+
+                if(this.vlUnitarioPopularIntegral == 0 && this.percentualPrecoPopular > 0) {
+                    alert("Pre\xE7o unit\xE1rio no Pre\xE7o Popular \xE9 obrigat\xF3rio!");
+                    return;
+                }
+            }
+            if(this.qtGratuitaPopulacao < this.qtGratuitaPopulacaoMinimo) {
+                alert("Quantidade para popula\xE7\xE3o n\xE3o pode ser menor que "+ this.qtGratuitaPopulacaoMinimo);
+                this.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
+                this.$refs.populacao.focus();
                 return;
             }
 
@@ -615,7 +636,7 @@ Vue.component('my-component', {
                 var quantidadeMinima = this.qtGratuitaPopulacaoMinimo;
 
                 if(val < quantidadeMinima) {
-                    alert("Valor n\xE3o pode ser menor que: "+ quantidadeMinima);
+                    alert("Quantidade para popula\xE7\xE3o n\xE3o pode ser menor que "+ quantidadeMinima);
                      this.qtGratuitaPopulacao = quantidadeMinima;
                 }
 
@@ -663,7 +684,7 @@ Vue.component('my-component', {
             this.qtExemplares = 0;
             this.qtGratuitaDivulgacao = 0;
             this.qtGratuitaPatrocinador = 0;
-            this.vlUnitarioPopularIntegral = 0.0; // Preço popular: Preço Unitario do Ingresso
+            this.vlUnitarioPopularIntegral = 0; // Preço popular: Preço Unitario do Ingresso
             this.qtPrecoPopularValorIntegral = 0; //Preço Popular: Quantidade de Inteira
             this.qtPrecoPopularValorParcial =  0;//Preço Popular: Quantidade de meia entrada
             this.vlUnitarioProponenteIntegral =  0;
