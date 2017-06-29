@@ -1,9 +1,16 @@
-<?php $frmplanoHref = $this->url(array('module' => 'proposta' , 'controller' => 'plano-distribuicao', 'action' => 'frm-plano-distribuicao')).'?idPreProjeto='.$_GET['idPreProjeto']; ?>
+<?php $frmplanoHref = $this->url(array('module' => 'proposta', 'controller' => 'plano-distribuicao', 'action' => 'frm-plano-distribuicao')) . '?idPreProjeto=' . $_GET['idPreProjeto']; ?>
 
 <style>
     .gratuito,
-    .proponente { background-color: #e6e6e6; text-align: center}
-    .popular { background-color: #dcdcdc; text-align: center}
+    .proponente {
+        background-color: #e6e6e6;
+        text-align: center
+    }
+
+    .popular {
+        background-color: #dcdcdc;
+        text-align: center
+    }
 
     .input-field label.active {
         font-size: 1rem;
@@ -12,78 +19,76 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="">
-           <div class="row">
-               <div class="col s12" id="example">
-                    <?php
-                    gerarBreadCrumb(array(
-                        $this->layout['listagem'],
-                        array('Detalhamento do Plano de Distribui&ccedil;&atilde;o' => '')
-                    )); ?>
+        <div class="col s12" id="example">
+            <?php
+            gerarBreadCrumb(array(
+                $this->layout['listagem'],
+                array('Detalhamento do Plano de Distribui&ccedil;&atilde;o' => '')
+            )); ?>
 
-               <div class="row">
-                   <div class="col s12 center" >
-                        <a class="btn white black-text" href="<?php echo $this->url(array('module' => 'proposta', 'controller'=>'plano-distribuicao','action' => 'index')) ?>">Voltar</a>
-                   </div>
-               </div>
-                <?php $totalExemplares=0; $totalReceita=0; ?>
-                    <?php foreach($this->planosDistribuicao as $planoDistribuicao) : ?>
-                        <div class="row">
-                            <div id="detalhamento-plano" class="col s12">
-                                <table class="bordered" >
-                                    <thead>
-                                        <tr>
-                                            <th>Nome do Evento / Produto</th>
-                                            <th>&Aacute;rea</th>
-                                            <th>Segmento</th>
-                                            <th>Principal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td ><?php echo $planoDistribuicao->Produto; ?></td>
-                                            <td ><?php echo $planoDistribuicao->DescricaoArea; ?></td>
-                                            <td ><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
-                                            <td ><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <?php foreach($this->abrangencias as $abrangencia): ?>
-                            <div class=" col s12 ">
-                                <div class="row">
-                                    <table class="bordered">
-                                        <tbody>
-                                        <tr>
-                                            <td><?php echo $abrangencia['uf']?> - <?php echo $abrangencia['cidade']?> </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <my-component
-                                                    disabled="<?php echo $this->isEditavel; ?>"
-                                                    idplanodistribuicao="<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>"
-                                                    idpreprojeto="<?php echo $this->idPreProjeto; ?>"
-                                                    iduf="<?php echo $abrangencia['idUF']; ?>"
-                                                    idmunicipioibge="<?php echo $abrangencia['idMunicipioIBGE']; ?>"
-                                                ></my-component>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endforeach ?>
-                </div>
-            </div>
             <div class="row">
-                <div class="col s12 center" >
-                        <a class="btn white black-text" href="<?php echo $this->url(array('module' => 'proposta', 'controller'=>'plano-distribuicao','action' => 'index')) ?>">Voltar</a>
-                  </div>
-               </div>
+                <div class="col s12 center">
+                    <a class="btn white black-text"
+                       href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'plano-distribuicao', 'action' => 'index')) ?>">Voltar</a>
                 </div>
             </div>
+            <?php $totalExemplares = 0;
+            $totalReceita = 0; ?>
+            <?php foreach ($this->planosDistribuicao as $planoDistribuicao) : ?>
+                <div class="row">
+                    <div id="detalhamento-plano" class="col s12">
+                        <table class="bordered">
+                            <thead>
+                            <tr>
+                                <th>Nome do Evento / Produto</th>
+                                <th>&Aacute;rea</th>
+                                <th>Segmento</th>
+                                <th>Principal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><?php echo $planoDistribuicao->Produto; ?></td>
+                                <td><?php echo $planoDistribuicao->DescricaoArea; ?></td>
+                                <td><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
+                                <td><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <?php foreach ($this->abrangencias as $abrangencia): ?>
+                    <div class="col s12">
+                        <div class="row">
+                            <table class="bordered">
+                                <tbody>
+                                    <tr>
+                                        <td><?php echo $abrangencia['uf'] ?>
+                                            - <?php echo $abrangencia['cidade'] ?> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <my-component
+                                                disabled="<?php echo $this->isEditavel; ?>"
+                                                idplanodistribuicao="<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>"
+                                                idpreprojeto="<?php echo $this->idPreProjeto; ?>"
+                                                iduf="<?php echo $abrangencia['idUF']; ?>"
+                                                idmunicipioibge="<?php echo $abrangencia['idMunicipioIBGE']; ?>"
+                                            ></my-component>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endforeach ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center">
+            <a class="btn white black-text"
+               href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'plano-distribuicao', 'action' => 'index')) ?>">Voltar</a>
         </div>
     </div>
 </div>
@@ -95,18 +100,18 @@
     <div style="max-width: 1200px; margin: 0 auto; padding: 10px;">
         <div class="row">
             <div class="col s12 center">
-               <button class="btn" v-on:click.prevent="mostrar()"><i class="material-icons">{{icon}}</i></button>
-           </div>
+                <button class="btn" v-on:click.prevent="mostrar()"><i class="material-icons">{{icon}}</i></button>
+            </div>
         </div>
         <div v-show="active">
-            <div class="row" >
+            <div class="row">
                 <div class="center">
                     <table class="bordered">
                         <thead v-if="produtos.length > 0">
                             <tr>
                                 <th rowspan="2">Categoria</th>
                                 <th rowspan="2">Quantidade</th>
-                                <th  class="proponente" colspan="3">
+                                <th class="proponente" colspan="3">
                                     Proponente
                                 </th>
                                 <th class="popular" colspan="3">
@@ -119,36 +124,38 @@
                                 <th rowspan="2" width="5%">A&ccedil;&otildees</th>
                             </tr>
                             <tr>
-                                <th class="proponente" >Qtd. Inteira</th>
-                                <th class="proponente" >Qtd. Meia</th>
-                                <th class="proponente" >Pre&ccedil;o <br> Unitario</th>
+                                <th class="proponente">Qtd. Inteira</th>
+                                <th class="proponente">Qtd. Meia</th>
+                                <th class="proponente">Pre&ccedil;o <br> Unitario</th>
                                 <th class="popular">Qtd. Inteira</th>
                                 <th class="popular">Qtd. Meia</th>
                                 <th class="popular">Pre&ccedil;o <br> Unitario</th>
                             </tr>
                         </thead>
                         <tbody v-if="produtos.length > 0">
-                                <tr  v-for="( produto, index ) in produtos">
-                                    <td>{{ produto.dsProduto }}</td>
-                                    <td class="center-align">{{ produto.qtExemplares }}</td>
-                                    <!--Preço Proponente -->
-                                    <td class="center-align">{{ produto.qtProponenteIntegral }}</td>
-                                    <td class="center-align">{{ produto.qtProponenteParcial }}</td>
-                                    <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
-                                    <!--Preço Popular -->
-                                    <td class="center-align">{{ produto.qtPopularIntegral }}</td>
-                                    <td class="center-align">{{ produto.qtPopularParcial }}</td>
-                                    <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
-                                    <!-- Distribuicao Gratuita-->
-                                    <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) + parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}</td>
-                                    <td class="right-align">{{ formatarValor(produto.vlReceitaPrevista) }}</td>
-                                    <td>
-                                        <button class="btn red white-text small" v-bind:disabled="!disabled"
+                            <tr v-for="( produto, index ) in produtos">
+                                <td>{{ produto.dsProduto }}</td>
+                                <td class="center-align">{{ produto.qtExemplares }}</td>
+                                <!--Preço Proponente -->
+                                <td class="center-align">{{ produto.qtProponenteIntegral }}</td>
+                                <td class="center-align">{{ produto.qtProponenteParcial }}</td>
+                                <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
+                                <!--Preço Popular -->
+                                <td class="center-align">{{ produto.qtPopularIntegral }}</td>
+                                <td class="center-align">{{ produto.qtPopularParcial }}</td>
+                                <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
+                                <!-- Distribuicao Gratuita-->
+                                <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) +
+                                    parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}
+                                </td>
+                                <td class="right-align">{{ formatarValor(produto.vlReceitaPrevista) }}</td>
+                                <td>
+                                    <button class="btn red white-text small" v-bind:disabled="!disabled"
                                             v-on:click="excluir(produto.idDetalhaPlanoDistribuicao)">
-                                            <i class="material-icons">delete</i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                         <tbody v-else>
                             <tr>
@@ -162,14 +169,16 @@
                                 <!--Fim: Preço Popular -->
                                 <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
                                 <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
-                                <td class="right-align"> - </td>
+                                <td class="right-align"> -</td>
                                 <!--Preço Popular -->
                                 <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
                                 <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
-                                <td class="right-align"> - </td>
-                                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +  parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b></td>
+                                <td class="right-align"> -</td>
+                                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
+                                        parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
+                                </td>
                                 <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
-                                <td>  </td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -178,30 +187,35 @@
 
             <div class="row mostrar-forn center-align">
                 <br>
-                <br>
-                <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="mostrarFormulario">Novo detalhamento
+                <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="mostrarFormulario">Novo
+                    detalhamento
                     <i class="material-icons right">edit</i>
                 </button>
             </div>
 
-            <div v-show="visualizarFormulario" id="form-detalhamento" class="card" style="max-width: 1200px; margin: 0 auto; padding: 10px;">
+            <div v-show="visualizarFormulario" id="form-detalhamento" class="card"
+                 style="max-width: 1200px; margin: 0 auto; padding: 10px;">
                 <form>
                     <div class="row">
                         <h5 class="light center-align">Novo detalhamento</h5>
                         <div class="row">
                             <div class="input-field col s6">
                                 <p><b>Tipo de venda</b><br>
-                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaIngresso'" value="i" v-model="tpVenda" />
+                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaIngresso'" value="i"
+                                           v-model="tpVenda"/>
                                     <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
-                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaExemplar'" value="e" v-model="tpVenda"/>
+                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaExemplar'" value="e"
+                                           v-model="tpVenda"/>
                                     <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
                                 </p>
                             </div>
                             <div class="input-field col s6">
                                 <p><b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
-                                    <input name="group1" type="radio" :id="_uid + '1' " value="s" v-model="distribuicaoGratuita"/>
+                                    <input name="group1" type="radio" :id="_uid + '1' " value="s"
+                                           v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '1'">Sim</label>
-                                    <input name="group1" type="radio" :id="_uid + '2' " value="n"  v-model="distribuicaoGratuita"/>
+                                    <input name="group1" type="radio" :id="_uid + '2' " value="n"
+                                           v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '2'">N&atilde;o</label>
                                 </p>
                             </div>
@@ -210,9 +224,11 @@
                         <div class="row">
                             <div class="input-field col s6" v-if="tpVenda == 'i'">
                                 <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
-                                    <input name="tipoLocalRealizacao" type="radio" :id="_uid + 'tipoAberto'" value="a" v-model="tpLocal" />
+                                    <input name="tipoLocalRealizacao" type="radio" :id="_uid + 'tipoAberto'" value="a"
+                                           v-model="tpLocal"/>
                                     <label :for=" _uid + 'tipoAberto'">Aberto</label>
-                                    <input name="tipoLocalRealizacao" type="radio" :id=" _uid + 'tipoFechado'" value="f" v-model="tpLocal" />
+                                    <input name="tipoLocalRealizacao" type="radio" :id=" _uid + 'tipoFechado'" value="f"
+                                           v-model="tpLocal"/>
                                     <label :for=" _uid + 'tipoFechado'">Fechado</label>
                                 </p>
                             </div>
@@ -220,18 +236,21 @@
                                 <p><b>Espa&ccedil;o p&uacute;blico</b><br>
                                     <input type="radio" :id="_uid + 'espacoPublicoSim'" value="s" v-model="tpEspaco"/>
                                     <label :for="_uid + 'espacoPublicoSim'">Sim</label>
-                                    <input type="radio" id="espacoPublicoNao" :id=" _uid + 'espacoPublicoNao'" value="n"  v-model="tpEspaco"/>
+                                    <input type="radio" id="espacoPublicoNao" :id=" _uid + 'espacoPublicoNao'" value="n"
+                                           v-model="tpEspaco"/>
                                     <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s6" v-if="tpVenda == 'i'">
-                                <input :id="_uid + 'dsProduto'" type="text" class="validate" ref="dsProduto" placeholder="Ex: Arquibancada" v-model="dsProduto">
-                                <label class="active" :for="_uid + 'dsProduto'" >Categoria</label>
+                                <input :id="_uid + 'dsProduto'" type="text" class="validate" ref="dsProduto"
+                                       placeholder="Ex: Arquibancada" v-model="dsProduto">
+                                <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
                             </div>
                             <div class="input-field col s2">
-                                <input :id="_uid + 'qtExemplares'" type="number" class="validate" ref="qtExemplares" placeholder="0" v-model.lazy="qtExemplares">
+                                <input :id="_uid + 'qtExemplares'" type="number" class="validate" ref="qtExemplares"
+                                       placeholder="0" v-model.lazy="qtExemplares">
                                 <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
                             </div>
                         </div>
@@ -244,7 +263,8 @@
                                         v-bind:disabled="distribuicaoGratuita =='s'? true: false"
                                         v-bind:maximoCombo="(percentualProponentePadrao *  100)"
                                         v-on:evento="percentualProponente = $event/100">
-                                    </select-percent></span>
+                                    </select-percent>
+                                    </span>
                                 </div>
                             </div>
                             <div class="row">
@@ -254,23 +274,28 @@
                                         v-bind:value="vlUnitarioProponenteIntegral"
                                         v-on:ev="vlUnitarioProponenteIntegral = $event">
                                     </input-money>
-                                    <label class="active" :for="_uid + 'vlUnitarioProponenteIntegral'">Pre&ccedil;o Unit&aacute;rio R$</label>
+                                    <label class="active" :for="_uid + 'vlUnitarioProponenteIntegral'">Pre&ccedil;o Unit&aacute;rio
+                                        R$</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="qtProponenteIntegral" ref="qtProponenteIntegral">
-                                    <label class="active" :for="_uid + 'qtProponenteIntegral'">Quantidade {{labelInteira}}</label>
+                                    <input class="disabled" disabled v-model="qtProponenteIntegral"
+                                           ref="qtProponenteIntegral">
+                                    <label class="active" :for="_uid + 'qtProponenteIntegral'">Quantidade
+                                        {{labelInteira}}</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
-                                    <input class="disabled" disabled v-model="qtProponenteParcial" >
+                                    <input class="disabled" disabled v-model="qtProponenteParcial">
                                     <label class="active" :for="_uid + 'qtProponenteParcial'">Quantidade Meia</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteIntegral">
-                                    <label class="active" :for="_uid + 'vlReceitaProponenteIntegral'">Valor {{labelInteira}} R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaProponenteIntegral'">Valor
+                                        {{labelInteira}} R$</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="vlReceitaProponenteParcial">
-                                    <label class="active" :for="_uid + 'vlReceitaProponenteParcial'">Valor meia R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaProponenteParcial'">Valor meia
+                                        R$</label>
                                 </div>
                             </div>
                         </div>
@@ -279,7 +304,8 @@
                         <div class="preco-popular">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <b>Pre&ccedil;o Popular</b> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100 }}%)
+                                    <b>Pre&ccedil;o Popular</b> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100
+                                    }}%)
                                     <select-percent
                                         v-bind:disabled="distribuicaoGratuita =='s'? true: false"
                                         v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
@@ -294,21 +320,28 @@
                                         v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
                                         v-bind:value="vlUnitarioPopularIntegral"
                                         v-on:ev="vlUnitarioPopularIntegral = $event"
-                                        >
+                                    >
                                     </input-money>
-                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false" :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio <br>(At&eacute; R$ 50,00)</label>
+                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
+                                           :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio <br>(At&eacute;
+                                        R$ 50,00)</label>
                                 </div>
                                 <div class="input-field col s6 l2">
-                                    <input type="number" class="right-align disabled" disabled v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                    <label class="active" :for="_uid + 'qtPopularIntegral'">Quantidade {{labelInteira}} (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                    <input type="number" class="right-align disabled" disabled
+                                           v-model="qtPopularIntegral" ref="qtPopularIntegral">
+                                    <label class="active" :for="_uid + 'qtPopularIntegral'">Quantidade {{labelInteira}}
+                                        (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
-                                    <input type="number" class="right-align disabled" disabled v-model="qtPopularParcial" ref="qtPopularParcial">
-                                    <label class="active" :for="_uid + 'qtPopularParcial'">Quantidade Meia (At&eacute; {{ qtPrecoPopularValorParcialLimite }})</label>
+                                    <input type="number" class="right-align disabled" disabled
+                                           v-model="qtPopularParcial" ref="qtPopularParcial">
+                                    <label class="active" :for="_uid + 'qtPopularParcial'">Quantidade Meia (At&eacute;
+                                        {{ qtPrecoPopularValorParcialLimite }})</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
-                                    <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">Valor {{labelInteira}} R$</label>
+                                    <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">Valor
+                                        {{labelInteira}} R$</label>
                                 </div>
                                 <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
                                     <input class="disabled" disabled v-model="vlReceitaPopularParcial">
@@ -320,22 +353,29 @@
                         <div class="distribuicao-gratuita">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <b>Distribui&ccedil;&atilde;o Gratuita</b> (m&iacute;nimo {{ percentualGratuitoPadrao *  100 }}%)
+                                    <b>Distribui&ccedil;&atilde;o Gratuita</b> (m&iacute;nimo {{
+                                    percentualGratuitoPadrao * 100 }}%)
                                     <span v-if="percentualGratuitoPadrao !== percentualGratuito"> Atual {{ parseInt(percentualGratuito *  100) }}%</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m3 l2">
-                                    <input type="number" class="right-align" v-model.number="qtGratuitaDivulgacao" ref="divulgacao">
-                                    <label  class="active" :for="_uid + 'qtGratuitaDivulgacao'">Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                    <input type="number" class="right-align" v-model.number="qtGratuitaDivulgacao"
+                                           ref="divulgacao">
+                                    <label class="active" :for="_uid + 'qtGratuitaDivulgacao'">Divulga&ccedil;&atilde;o
+                                        (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
-                                    <input type="number" class="right-align" v-model="qtGratuitaPatrocinador" ref="patrocinador">
-                                    <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">Patrocinador (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                    <input type="number" class="right-align" v-model="qtGratuitaPatrocinador"
+                                           ref="patrocinador">
+                                    <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">Patrocinador (At&eacute;
+                                        {{ parseInt(qtExemplares * 0.1) }})</label>
                                 </div>
                                 <div class="input-field col s12 m3 l2">
-                                    <input type="number" class="right-align" v-model="qtGratuitaPopulacao" ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
-                                    <label class="active" :for="_uid + 'qtGratuitaPopulacao'">Popula&ccedil;&atilde;o (m&iacute;nimo {{ qtGratuitaPopulacaoMinimo }})</label>
+                                    <input type="number" class="right-align" v-model="qtGratuitaPopulacao"
+                                           ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
+                                    <label class="active" :for="_uid + 'qtGratuitaPopulacao'">Popula&ccedil;&atilde;o (m&iacute;nimo
+                                        {{ qtGratuitaPopulacaoMinimo }})</label>
                                 </div>
                             </div>
                         </div>
@@ -362,19 +402,20 @@
     </div>
 </script>
 <!-- /my_component -->
-<script type="text/javascript" src="/public/scripts/proposta/plano-distribuicao/detalhar-plano-distribuicao.js"></script>
+<script type="text/javascript"
+        src="/public/scripts/proposta/plano-distribuicao/detalhar-plano-distribuicao.js"></script>
 <style>
     /*#detalhamento-plano table {*/
-        /*font-size: 8pt;*/
-        /*width: 100%;*/
+    /*font-size: 8pt;*/
+    /*width: 100%;*/
     /*}*/
     /*#detalhamento-plano button.btn {*/
-        /*margin: 1;*/
-        /*padding-left: 3px;*/
-        /*padding-right: 3px;*/
+    /*margin: 1;*/
+    /*padding-left: 3px;*/
+    /*padding-right: 3px;*/
     /*}*/
     /*#detalhamento-plano button.red {*/
-        /*background-color: #c30;*/
+    /*background-color: #c30;*/
     /*}*/
     /*#detalhamento-plano,*/
     /*#detalhamento-plano table,*/
@@ -383,13 +424,13 @@
     /*#detalhamento-plano thead,*/
     /*#detalhamento-plano tbody,*/
     /*#detalhamento-plano tr{*/
-        /*padding: 3px;*/
-        /*border: 1px solid #666;*/
+    /*padding: 3px;*/
+    /*border: 1px solid #666;*/
     /*}*/
 
     /*#detalhamento-plano table {*/
-        /*border-spacing: 1;*/
-        /*border-radius: 0px;*/
+    /*border-spacing: 1;*/
+    /*border-radius: 0px;*/
     /*}*/
 
     input:not([type]):disabled + label,
@@ -453,9 +494,11 @@
                     <div class="spinner-layer spinner-blue-only">
                         <div class="circle-clipper left">
                             <div class="circle"></div>
-                        </div><div class="gap-patch">
+                        </div>
+                        <div class="gap-patch">
                             <div class="circle"></div>
-                        </div><div class="circle-clipper right">
+                        </div>
+                        <div class="circle-clipper right">
                             <div class="circle"></div>
                         </div>
                     </div>
