@@ -89,7 +89,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 $objProjetos->alterarSituacao(
                     $get->IdPRONAC,
                     null,
-                    Projeto_Model_Situacao::PROPOSTA_DEVOLVIDA_PARA_ENQUADRAMENTO,
+                    Projeto_Model_Situacao::PROJETO_DEVOLVIDO_PARA_ENQUADRAMENTO,
                     'Projeto encaminhado para nova avalia&ccedil;&atilde;o do enquadramento'
                 );
 
