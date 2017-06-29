@@ -2491,8 +2491,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $where['a.IdPRONAC = ?'] = $idPronac;
             $where['a.tpPlanilha = ?'] = 'RP';
             $where['a.stAtivo = ?'] = 'N';
+            
             $PlanilhaRemanejada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+            
             //PLANILHA ATIVA - GRUPO A
             $where['a.idEtapa in (?)'] = array(1,2);
             $PlanilhaRemanejadaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
@@ -2522,6 +2523,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $valorTotalGrupoASoma = 0;
             
             $dadosPlanilha = array();
+            $dadosPlanilha['dadosPlanilhaAtivaA'] = $PlanilhaAtivaGrupoA->Total;
+            $dadosPlanilha['dadosPlanilhaRemanejadaA'] = $PlanilhaRemanejadaGrupoA->Total;
 
             if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
                 $dadosPlanilha['GrupoA'] = utf8_encode('<span class="bold">R$ '.number_format($valorTotalGrupoA, 2, ',', '.')).'</span>';
@@ -2739,17 +2742,66 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $this->_helper->layout->disableLayout();
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
         $idPlanilhaAprovacaoPai = $this->_request->getParam("idPlanilhaAprovacaoPai");
-        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         
         /* DADOS DO ITEM ATIVO */
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $where = array();
 
         if (empty($idPlanilhaAprovacaoPai) || $idPlanilhaAprovacaoPai == '') {
             $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
         } else {
-            $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacaoPai;
+            $where['idPlanilhaAprovacaoPai = ?'] = $idPlanilhaAprovacaoPai;
         }
         $planilhaAtiva = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
+
+        if (!empty($idPlanilhaAprovacaoPai)) {
+            $idPlanilhaAprovacaoComprovado = array($idPlanilhaAprovacao,$idPlanilhaAprovacaoPai);
+        }
+        $tbCompPagxPlanAprov = new tbComprovantePagamentoxPlanilhaAprovacao();
+        $resComprovado = $tbCompPagxPlanAprov->buscarValorComprovadoDoItem($idPlanilhaAprovacaoComprovado);
+        
+        
+        /* DADOS ORIGINAIS PARA REFERÊNCIA DE MÍNIMO E MÁXIMO */
+        $idPronac = $planilhaAtiva[0]['idPRONAC'];
+        $idPlanilhaItem = $planilhaAtiva[0]['idPlanilhaItem'];
+
+        $where = array();
+        $where['tpPlanilha = ?'] = 'CO';
+        $where['IdPRONAC = ?'] = $idPronac;
+        $where['idPlanilhaItem = ?'] = $idPlanilhaItem;
+        
+        $planilhaOriginal = $tbPlanilhaAprovacao->buscar($where);
+
+        $dadosPlanilhaOriginal = array();
+        foreach ($planilhaOriginal as $registro) {
+            $vlTotalItem = $registro['qtItem']*$registro['nrOcorrencia']*$registro['vlUnitario'];
+            
+            //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
+            $vlAtual = @number_format(($registro['qtItem']*$registro['nrOcorrencia']*$registro['vlUnitario']), 2, '', '');
+            $vlAtualPerc = $vlAtual* self::PERCENTUAL_REMANEJAMENTO/100;
+            
+            //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
+            $vlAtualMin = (number_format($resComprovado->vlComprovado, 2, '', '') > round($vlAtual-$vlAtualPerc)) ? number_format($resComprovado->vlComprovado, 2, '', '') : round($vlAtual-$vlAtualPerc);
+            $vlAtualMax = round($vlAtual+$vlAtualPerc);
+                
+            if ($vlAtualMin > $vlTotalItem) {
+                $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode('R$ '.number_format($vlAtualMin/100, 2, ',', '.'));
+            } else {
+                $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode('R$ '.number_format( ( $vlAtual - ($vlAtual * self::PERCENTUAL_REMANEJAMENTO/100) ), 2, ',', '.'));
+            }
+            $dadosPlanilhaOriginal['ValorMaximoProItem'] = utf8_encode('R$ '.number_format( ( $vlAtual + ($vlAtual * self::PERCENTUAL_REMANEJAMENTO/100) )/100 , 2, ',', '.'));
+            $dadosPlanilhaOriginal['vlMinimoValidacao'] = utf8_encode($vlAtualMin);
+            $dadosPlanilhaOriginal['vlMaximoValidacao'] = utf8_encode($vlAtualMax);
+            $dadosPlanilhaOriginal['ValorMinimoProItemValidacao'] = utf8_encode($vlAtualMin);
+            $dadosPlanilhaOriginal['ValorMaximoProItemValidacao'] = utf8_encode($vlAtualMax);
+            
+            $dadosPlanilhaOriginal['idPlanilhaAprovacao'] = $registro['idPlanilhaAprovacao'];
+            $dadosPlanilhaOriginal['idPlanilhaItem'] = $registro['idPlanilhaItem'];
+            $dadosPlanilhaOriginal['Quantidade'] = $registro['qtItem'];
+            $dadosPlanilhaOriginal['Ocorrencia'] = $registro['nrOcorrencia'];
+            $dadosPlanilhaOriginal['ValorUnitario'] = utf8_encode('R$ '.number_format($registro['vlUnitario'], 2, ',', '.'));
+            $dadosPlanilhaOriginal['TotalSolicitado'] = utf8_encode('R$ '.number_format(($vlTotalItem), 2, ',', '.'));                
+        }
         
         /* DADOS DO ITEM PARA EDICAO DO REMANEJAMENTO */
         $where = array();
@@ -2771,14 +2823,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             );
 
             foreach ($planilhaAtiva as $registro) {
-                //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
-                $vlAtual = @number_format(($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']), 2, '', '');
-                $vlAtualPerc = $vlAtual* self::PERCENTUAL_REMANEJAMENTO/100;
-
-                //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
-                $vlAtualMin = round($vlAtual-$vlAtualPerc);
-                $vlAtualMax = round($vlAtual+$vlAtualPerc);
-
+                $vlTotalItem = $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'];
+                
                 $dadosPlanilhaAtiva['idPlanilhaAprovacao'] = $registro['idPlanilhaAprovacao'];
                 $dadosPlanilhaAtiva['idProduto'] = $registro['idProduto'];
                 $dadosPlanilhaAtiva['descProduto'] = utf8_encode($registro['descProduto']);
@@ -2792,13 +2838,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilhaAtiva['Ocorrencia'] = $registro['Ocorrencia'];
                 $dadosPlanilhaAtiva['ValorUnitario'] = utf8_encode('R$ '.number_format($registro['ValorUnitario'], 2, ',', '.'));
                 $dadosPlanilhaAtiva['QtdeDias'] = $registro['QtdeDias'];
-                $dadosPlanilhaAtiva['TotalSolicitado'] = utf8_encode('R$ '.number_format(($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']), 2, ',', '.'));
-                $dadosPlanilhaAtiva['ValorMinimoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] - (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * self::PERCENTUAL_REMANEJAMENTO/100) ), 2, ',', '.'));
-                $dadosPlanilhaAtiva['ValorMaximoProItem'] = utf8_encode('R$ '.number_format( ( $registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario'] + (($registro['Quantidade']*$registro['Ocorrencia']*$registro['ValorUnitario']) * self::PERCENTUAL_REMANEJAMENTO/100) ), 2, ',', '.'));
-                $dadosPlanilhaAtiva['vlMinimoValidacao'] = utf8_encode($vlAtualMin);
-                $dadosPlanilhaAtiva['vlMaximoValidacao'] = utf8_encode($vlAtualMax);
-                $dadosPlanilhaAtiva['ValorMinimoProItemValidacao'] = utf8_encode(number_format(($vlAtualMin), 2, '', ''));
-                $dadosPlanilhaAtiva['ValorMaximoProItemValidacao'] = utf8_encode(number_format(($vlAtualMax), 2, '', ''));
+                $dadosPlanilhaAtiva['TotalSolicitado'] = utf8_encode('R$ '.number_format(($vlTotalItem), 2, ',', '.'));
+                
                 $dadosPlanilhaAtiva['Justificativa'] = utf8_encode($registro['Justificativa']);
             }
 
@@ -2831,11 +2872,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             }
             $res = $tbCompPagxPlanAprov->buscarValorComprovadoDoItem($idPlanilhaAprovacao);  // <<--- quando já foi remanejado, deve puxar idPlanilhaAprovacaoPai
             $valoresDoItem = array(
-                'vlComprovadoDoItem' => utf8_encode('R$ '.number_format($res->vlComprovado, 2, ',', '.')),
-                'vlComprovadoDoItemValidacao' => utf8_encode(number_format($res->vlComprovado, 2, '', ''))
+                'vlComprovadoDoItem' => utf8_encode('R$ '.number_format($resComprovado->vlComprovado, 2, ',', '.')),
+                'vlComprovadoDoItemValidacao' => utf8_encode(number_format($resComprovado->vlComprovado, 2, '', ''))
             );
 
-            $this->_helper->json(array('resposta'=>true, 'dadosPlanilhaAtiva'=>$dadosPlanilhaAtiva, 'dadosPlanilhaEditavel'=>$dadosPlanilhaEditavel, 'valoresDoItem'=>$valoresDoItem, 'dadosProjeto'=>$dadosProjeto));
+            $this->_helper->json(array('resposta'=>true, 'dadosPlanilhaAtiva'=>$dadosPlanilhaAtiva, 'dadosPlanilhaEditavel'=>$dadosPlanilhaEditavel, 'valoresDoItem'=>$valoresDoItem, 'dadosProjeto'=>$dadosProjeto, 'dadosPlanilhaOriginal' => $dadosPlanilhaOriginal));
 
         } else {
             $this->_helper->json(array('resposta'=>false));
@@ -2867,7 +2908,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
 
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $verificarPlanilhaRP = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'tpPlanilha=?'=>'RP'));
-
+        
         if(count($verificarPlanilhaRP)==0){
             $planilhaAtiva = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'StAtivo=?'=>'S'));
             $planilhaRP = array();
@@ -2894,17 +2935,19 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                 $planilhaRP['idMunicipioDespesa'] = $value['idMunicipioDespesa'];
                 $planilhaRP['dsJustificativa'] = null;
                 $planilhaRP['idAgente'] = 0;
-                $planilhaRP['idPlanilhaAprovacaoPai'] = $value['idPlanilhaAprovacao'];
+                $planilhaRP['idPlanilhaAprovacaoPai'] = $idPlanilhaAprovacaoPai;//$value['idPlanilhaAprovacao'];  <<--- veriricar se está gravando idPlanilhaAprovacaoPai correto (tem q ser da planilha original)
                 $planilhaRP['idReadequacao'] = $value['idReadequacao'];
                 $planilhaRP['tpAcao'] = $value['tpAcao'];
                 $planilhaRP['idRecursoDecisao'] = $value['idRecursoDecisao'];
                 $planilhaRP['stAtivo'] = 'N';
                 $tbPlanilhaAprovacao->inserir($planilhaRP);
+                
             }
         }
-
+        
         //BUSCA OS DADOS DO ITEM ORIGINAL PARA VALIDA��O DE VALORES
         if (empty($idPlanilhaAprovacaoPai)) {
+            print 1;
             $valoresItem = $tbPlanilhaAprovacao->buscar(
                 array(
                     'IdPRONAC=?'=>$idPronac,
@@ -2912,16 +2955,16 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                     'idPlanilhaAprovacao=?'=> $idPlanilhaAprovacao
                 )
             )->current();
-        } else {
+        } else if ($idPlanilhaAprovacaoPai) {
             $valoresItem = $tbPlanilhaAprovacao->buscar(
                 array(
                     'IdPRONAC=?'=>$idPronac,
-                    'StAtivo=?'=>'N',
+                    'StAtivo=?'=>'S',
                     'idPlanilhaAprovacaoPai=?'=> $idPlanilhaAprovacaoPai
                 )
-            )->current();
-        }
-        
+            )->current();                
+        }            
+       
         $vlAtual = @number_format(($valoresItem['qtItem']*$valoresItem['nrOcorrencia']*$valoresItem['vlUnitario']), 2, '', '');
         $vlAtualPerc = $vlAtual* self::PERCENTUAL_REMANEJAMENTO /100;
         
@@ -2931,7 +2974,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         
         //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO
         if($vlTotal < $vlAtualMin || $vlTotal > $vlAtualMax){
-            $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de ' . self::PERCENTUAL_REMANEJAMENTO . '.'));
+            $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de ' . self::PERCENTUAL_REMANEJAMENTO . '.',
+            'qtItem' => $valoresItem['qtItem'],
+            'nrOcorrencia' => $valoresItem['nrOcorrencia'],
+            'vlUnitario' => $valoresItem['vlUnitario'],
+            'vlTotal' => $vlTotal,
+            'vlAtual' => $vlAtual,            
+            'vlAtualMin' => $vlAtualMin,
+            'vlAtualMax' => $vlAtualMax
+            ));
             $this->_helper->viewRenderer->setNoRender(TRUE);
         }
 
