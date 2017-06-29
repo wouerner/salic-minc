@@ -613,7 +613,7 @@ Vue.component('my-component', {
                 vue.limparFormulario();
                 alert('Salvo com sucesso');
             })
-            .fail(function(){ alert('error'); });
+            .fail(function(){ alert('Erro ao salvar!'); });
 
         },
         excluir: function(index){
