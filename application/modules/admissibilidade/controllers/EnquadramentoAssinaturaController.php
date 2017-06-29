@@ -89,8 +89,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 $objProjetos->alterarSituacao(
                     $get->IdPRONAC,
                     null,
-                    'B01',
-                    'Projeto encaminhado ao t&eacute;cnico para a readequa&ccedil;&atilde;o do Enquadramento'
+                    Projeto_Model_Situacao::PROPOSTA_DEVOLVIDA_PARA_ENQUADRAMENTO,
+                    'Projeto encaminhado para nova avalia&ccedil;&atilde;o do enquadramento'
                 );
 
                 $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
