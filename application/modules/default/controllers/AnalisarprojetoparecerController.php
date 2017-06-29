@@ -1567,7 +1567,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                 
                 $tbDistribuirParecer->getAdapter()->commit();
                 
-                parent::message("An&aacute;lise conclu&iacute;da com sucesso !", "Analisarprojetoparecer/index", "CONFIRM");
+                parent::message("Declara&ccedil;&atilde;o de impedimento conclu&iacute;da com sucesso !", "Analisarprojetoparecer/index", "CONFIRM");
                 
             } catch (Zend_Db_Exception $e) {
                 
