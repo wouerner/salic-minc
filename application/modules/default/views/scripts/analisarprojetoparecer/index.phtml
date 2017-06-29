@@ -55,7 +55,7 @@
             <th width="120">Tempo da Dilig&ecirc;ncia</th>
             <th width="70">Hist&oacute;rico</th>
             <th width="70">Conclus&atilde;o</th>
-            <th width="70">Devolver</th>
+            <th width="70">Declarar impedimento</th>
         </tr>
         <?php
             $contador = 1;
@@ -202,6 +202,7 @@
                 <?php if(($pscount == 0) && ($d->stPrincipal == 1) && ($countAnalizado == 0) && ($countEnquadramentoP != 0) && ($countParecerP != 0) && ($dilig == 0)):?>
                 <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
                 <?php elseif(($d->stPrincipal == 0) && ($countAnalizado == 0)  && ($dilig == 0)):?>
+		<?php $this->IN2017 = true; ?>
 		<?php if($this->IN2017): ?>
                 <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'assinar-parecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Assinar parecer" alt="Assinar parecer"/>		
 		<?php else: ?>
@@ -210,7 +211,7 @@
                 <?php endif; ?>
             </td>
             <td align="center">
-	      <img id="img_encaminhar_parecer834782" style="cursor:pointer; " title="Distribuir Produtos" src="/public/img/table_multiple.png" onclick="redirecionar('<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'devolver-parecer'))?>?idPronac=<?php echo $d->IdPRONAC ?>&idProduto=<?php echo $d->idProduto ;?>&situacao=<?php echo $d->situacao ;?>&idD=<?php echo $d->idDistribuirParecer; ?>')">
+	      <img id="img_encaminhar_parecer834782" style="cursor:pointer; " title="Declarar impedimento" src="/public/img/table_multiple.png" onclick="redirecionar('<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'devolver-parecer'))?>?idPronac=<?php echo $d->IdPRONAC ?>&idProduto=<?php echo $d->idProduto ;?>&situacao=<?php echo $d->situacao ;?>&idD=<?php echo $d->idDistribuirParecer; ?>')">
 	    </td>             
         </tr>
         <?php
