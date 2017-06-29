@@ -106,40 +106,41 @@
                             <tr>
                                 <th rowspan="2">Categoria</th>
                                 <th rowspan="2">Quantidade</th>
-                                <th class="gratuito" rowspan="2">
-                                    Distribui&ccedil;&atilde;o Gratuita
+                                <th  class="proponente" colspan="3">
+                                    Proponente
                                 </th>
                                 <th class="popular" colspan="3">
                                     Pre&ccedil;o Popular
                                 </th>
-                                <th  class="proponente" colspan="3">
-                                    Proponente
+                                <th class="gratuito" rowspan="2">
+                                    Distribui&ccedil;&atilde;o <br>Gratuita
                                 </th>
-                                <th rowspan="2">Receita Prevista</th>
+                                <th rowspan="2" class="center-align">Receita <br> Prevista</th>
                                 <th rowspan="2" width="5%">A&ccedil;&otildees</th>
                             </tr>
                             <tr>
-                                <th class="popular">Qtd. Inteira</th>
-                                <th class="popular">Qtd. Meia</th>
-                                <th class="popular">Pre&ccedil;o <br> Unitario</th>
                                 <th class="proponente" >Qtd. Inteira</th>
                                 <th class="proponente" >Qtd. Meia</th>
                                 <th class="proponente" >Pre&ccedil;o <br> Unitario</th>
+                                <th class="popular">Qtd. Inteira</th>
+                                <th class="popular">Qtd. Meia</th>
+                                <th class="popular">Pre&ccedil;o <br> Unitario</th>
                             </tr>
                         </thead>
                         <tbody v-if="produtos.length > 0">
                                 <tr  v-for="( produto, index ) in produtos">
                                     <td>{{ produto.dsProduto }}</td>
                                     <td class="center-align">{{ produto.qtExemplares }}</td>
-                                    <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) + parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}</td>
-                                    <!--Preço Popular -->
-                                    <td class="center-align">{{ produto.qtPopularIntegral }}</td>
-                                    <td class="center-align">{{ produto.qtPopularParcial }}</td>
-                                    <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
                                     <!--Preço Proponente -->
                                     <td class="center-align">{{ produto.qtProponenteIntegral }}</td>
                                     <td class="center-align">{{ produto.qtProponenteParcial }}</td>
                                     <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
+                                    <!--Preço Popular -->
+                                    <td class="center-align">{{ produto.qtPopularIntegral }}</td>
+                                    <td class="center-align">{{ produto.qtPopularParcial }}</td>
+                                    <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
+                                    <!-- Distribuicao Gratuita-->
+                                    <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) + parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}</td>
                                     <td class="right-align">{{ formatarValor(produto.vlReceitaPrevista) }}</td>
                                     <td>
                                         <button class="btn red white-text small" v-bind:disabled="!disabled"
@@ -158,15 +159,15 @@
                             <tr>
                                 <td><b>Totais</b></td>
                                 <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
-                                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +  parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b></td>
-                                <!--Preço Popular -->
-                                <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
-                                <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
-                                <td class="right-align"> - </td>
                                 <!--Fim: Preço Popular -->
                                 <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
                                 <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
                                 <td class="right-align"> - </td>
+                                <!--Preço Popular -->
+                                <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
+                                <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
+                                <td class="right-align"> - </td>
+                                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +  parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b></td>
                                 <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
                                 <td>  </td>
                             </tr>
