@@ -1,3 +1,6 @@
+Release 2.1.1
+ * [Fix] Projeto/Readequação orçamentária: ajuste da lista de etapas conforme a IN 2017 ao incluir novo item
+
 Release 2.1.0
  * [Novo] Documentação: novo formato de arquivo CHANGELOG
  * [Novo] Proposta/Plano de distribuição: Novo funcionamento, totalmente reescrito
