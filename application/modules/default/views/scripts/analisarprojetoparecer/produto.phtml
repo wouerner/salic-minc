@@ -787,6 +787,7 @@
         //$('html').css('overflow', 'hidden');
         var este = $('#alteraritemsolicitado');
         este.html('<br><br><br><br><br><br><br><center>Aguarde, carregando dados...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br>');
+	
         este.dialog(
             {
                 title:"Alterar Item",
@@ -824,7 +825,7 @@
                                 texto = texto.replace(/^\s+|\s+$/g,""); //retirando espa¿os
                                 if (texto.length <= 0 || texto=="")
                                 {
-                                    alertar('Dados obrigat¿rios n¿o informados.');
+                                    alertar('Dados obrigat\xF3rios n\xE3o informados.');
                                     return false;
                                 }
                                 else
@@ -833,7 +834,7 @@
                                     $('#totalcalculos'+$('#idPlanilhaProjeto').val()).val(vlSugerido);
 
                                     var dados = $('#formSalvarItem').serialize();
-                                    $(this).append('<br><center>Aguarde, salvando informa¿¿es...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br>');
+                                    $(this).append('<br><center>Aguarde, salvando informa\xE7\xF5es...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br>');
                                     $.post($('#formSalvarItem').attr('action'),dados
                                     ,function(data)
                                     {
