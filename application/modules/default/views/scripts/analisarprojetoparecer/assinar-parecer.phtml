@@ -188,7 +188,7 @@
 		    <?php foreach($this->dadosDiligencias as $diligencia) : ?>
 		    <tr>
 		      <td align="center"><a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaanalista'))?>?idPronac=<?php echo $diligencia->IdPRONAC; ?>"><?php echo $diligencia->TipoDiligencia; ?></a>
-		      <td align="center"><?php echo Data::tratarDataZend($diligencia->DtEnvio, 'Brasileira'); ?></td>
+		      <td align="center"><?php echo Data::tratarDataZend($diligencia->DtEnvio, 'Brasileira'); ?> // tratar null </td>
 		      <td align="center"><?php echo ($diligencia->DtResposta) ? Data::tratarDataZend($diligencia->DtResposta, 'Brasileira') : '-'; ?></td>
 		    </tr>
 		    <?php endforeach; ?>
