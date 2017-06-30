@@ -152,32 +152,91 @@
                 </tr>
             </table>
             <table class="tabela" style="width: 95%;">
-                <tr>
-                    <td colspan="5">
-                        <b>Parecer Favor&aacute;vel? *</b>
-                        <p style="margin-top: 10px;">
-                            <input type="radio" style="margin-right: 5px;" value="1" class="ParecerFavoravel" name="ParecerFavoravel" checked="checked" />Sim &nbsp;&nbsp;
-                            <input type="radio" style="margin-right: 5px;" value="0" class="ParecerFavoravel" name="ParecerFavoravel" />N&atilde;o
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                        <b>Parecer de Conteúdo do Produto*</b>
-                        <p>
-                        <center>
-                            <textarea class="textarea_simples" id="ParecerDeConteudo" name="ParecerDeConteudo" rows="10" style="width: 98%;"></textarea>
-                        </center>
-                    </td>
-                <?php if($this->grupoAtivo == 93):?>
-                    </tr>
-                <?php else: ?>
-                    <tr id="btSalvar">
-                        <td colspan="6" align="center">
-                            <input type="button" id="btSalvarAnaliseDeConteudo" value=" " class="btn_salvar"/>
-                        </td>
-                    </tr>
-                <?php endif; ?>
+	      <?php if ($this->IN2017): ?>
+
+	      <?php /*
+              <tr>
+		<td colspan="5" class="destacar bold">
+                  <strong>Mem&oacute;ria de C&aacute;lculo</strong>
+		</td>
+	      </tr>
+	      
+              <tr>
+		<td align="center" class="bold" colspan="2">Proponente</td>
+		<td>&nbsp;</td>
+		<td align="center" class="bold" colspan="2">T&eacute;cnico</td>
+	      </tr>
+	      
+              <tr>
+		<td align="center">vl. Solicitado:</td>
+		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlSolicitado); ?></td>
+		<td>&nbsp;</td>
+		<td align="center">Custo do Projeto:</td>
+		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->CustoProjeto); ?></td>
+	      </tr>
+	      
+              <tr>
+		<td align="center">vl. Outras Fontes:</td>
+		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlOutrasFontes); ?></td>
+		<td>&nbsp;</td>
+		<td align="center">vl. Outras Fontes</td>
+		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlOutrasFontesAprovado); ?></td>
+	      </tr>	      
+	      
+              <tr>
+		<td align="center" class="bold">Vl. Projeto:</td>
+		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlProjeto); ?></td>
+		<td>&nbsp;</td>
+		<td align="center" class="bold">Custo Total</td>
+		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->CustoProjeto); ?></td>		
+	      </tr>
+	      */ ?>
+	      
+	      <tr>
+		<td class="destacar bold" colspan="5">
+                  A&ccedil;&otilde;es relevantes para o sucesso do projeto*
+		</td>
+	      </tr>    
+              <tr>
+		<td colspan="5">
+                  <p>
+                    <center>
+                      <textarea class="textarea_simples" id="dsAcaoAlcanceProduto" name="dsAcaoAlcanceProduto" rows="10" style="width: 98%;"></textarea>
+                    </center>
+		</td>
+	      </tr>
+	      <?php endif; ?>
+	      
+            <tr>
+              <td colspan="5">
+                <b>Parecer de Conteúdo do Produto*</b>
+                <p>
+                  <center>
+                    <textarea class="textarea_simples" id="ParecerDeConteudo" name="ParecerDeConteudo" rows="10" style="width: 98%;"></textarea>
+                  </center>
+              </td>
+	    </tr>
+
+	    <tr>
+              <td colspan="5">
+                <b>Parecer Favor&aacute;vel? *</b>
+                <p style="margin-top: 10px;">
+                  <input type="radio" style="margin-right: 5px;" value="1" class="ParecerFavoravel" name="ParecerFavoravel" checked="checked" />Sim &nbsp;&nbsp;
+                  <input type="radio" style="margin-right: 5px;" value="0" class="ParecerFavoravel" name="ParecerFavoravel" />N&atilde;o
+                </p>
+              </td>
+            </tr>
+
+	    <?php if($this->grupoAtivo == 93):?>
+            
+            <?php else: ?>
+            <tr id="btSalvar">
+              <td colspan="6" align="center">
+                <input type="button" id="btSalvarAnaliseDeConteudo" value=" " class="btn_salvar"/>
+              </td>
+            </tr>
+            <?php endif; ?>
+
             </table>
         </form>
     </div>
@@ -422,58 +481,6 @@
                 <td align="left" class="destacar bold">Sugerido</td>
                 <td align="left" colspan="2"><?php echo $this->itens['totalSugerido']; ?></td>
             </tr>
-	    <?php if ($this->IN2017): ?>
-              <tr>
-		<td colspan="5" class="destacar bold">
-                  <strong>Mem&oacute;ria de C&aacute;lculo</strong>
-		</td>
-	      </tr>
-
-              <tr>
-		<td align="center" class="bold" colspan="2">Proponente</td>
-		<td>&nbsp;</td>
-		<td align="center" class="bold" colspan="2">T&eacute;cnico</td>
-	      </tr>
-	      
-              <tr>
-		<td align="center">vl. Solicitado:</td>
-		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlSolicitado); ?></td>
-		<td>&nbsp;</td>
-		<td align="center">Custo do Projeto:</td>
-		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->CustoProjeto); ?></td>
-	      </tr>
-	      
-              <tr>
-		<td align="center">vl. Outras Fontes:</td>
-		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlOutrasFontes); ?></td>
-		<td>&nbsp;</td>
-		<td align="center">vl. Outras Fontes</td>
-		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlOutrasFontesAprovado); ?></td>
-	      </tr>	      
-
-              <tr>
-		<td align="center" class="bold">Vl. Projeto:</td>
-		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlProjeto); ?></td>
-		<td>&nbsp;</td>
-		<td align="center" class="bold">Custo Total</td>
-		<td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->CustoProjeto); ?></td>		
-	      </tr>	      
-
-	    <tr>
-	      <td class="destacar bold" colspan="5">
-                 A&ccedil;&otilde;es relevantes para o sucesso do projeto*
-		 </td>
-	    </tr>    
-            <tr>
-              <td colspan="5">
-                <p>
-                  <center>
-                    <textarea class="textarea_simples" id="AcoesRelevantes" name="AcoesRelevantes" rows="10" style="width: 98%;"><?php if ($this->IN2017) { echo $this->AcoesRelevantes; } ?></textarea>
-                  </center>
-              </td>
-	    </tr>
-	    <?php endif; ?>
-
 	    <tr>
 	      <td class="destacar bold" colspan="5">
                 Parecer t&eacute;cnico*
@@ -566,7 +573,7 @@
     function carregarTextAreaCKEditor(){
     CKEDITOR.replace( 'ParecerDeConteudo', { toolbar: [] } );
 	<?php if ($this->IN2017): ?>
-	CKEDITOR.replace( 'AcoesRelevantes', { toolbar: [] } );
+	CKEDITOR.replace( 'dsAcaoAlcanceProduto', { toolbar: [] } );
 	<?php endif; ?>
         <?php if(($this->stPrincipal == 1) && ($this->produtosSecundariosEmAnalise == 0)){ ?>
         CKEDITOR.replace( 'dsConsolidacao', { toolbar: [] } );
@@ -577,13 +584,20 @@
         
         carregarAnaliseDeConteudo();
         $('#btSalvarAnaliseDeConteudo').click(function(){
-            var parecer = CKEDITOR.instances['ParecerDeConteudo'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
+            var parecer = CKEDITOR.instances['ParecerDeConteudo'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,''),
+		erros = 0;
 	    <?php if ($this->IN2017): ?>
-	    var acoesRelevantes = CKEDITOR.instances['AcoesRelevantes'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
+		var acoesRelevantes = CKEDITOR.instances['dsAcaoAlcanceProduto'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
+            if( acoesRelevantes.length  < 11){
+		alertar('As a\xE7\xF5es relevantes devem ter no m\xEDnimo 11 caracteres!');
+		erros ++;
+	    }	    
 	    <?php endif; ?>
             if( parecer.length  < 11){
-                alertar('O parecer t&eacute;cnico deve ter no m¿nimo 11 caracter!');
-            } else {
+		alertar('O parecer t&eacute;cnico deve ter no m\xEDnimo 11 caracteres!');
+		erros ++;
+	    }
+            if (!erros) {
                 $('#formAnaliseConteudo').submit();
             }
             return false;
