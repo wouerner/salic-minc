@@ -4,7 +4,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 {
     private $idTipoDoAtoAdministrativo;
 
-    private function validarPerfis() {
+    private function validarPerfis()
+    {
         $auth = Zend_Auth::getInstance();
 
         $PermissoesGrupo = array();
@@ -159,14 +160,14 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 throw new Exception ("Usu&aacute;rio sem autoriza&ccedil;&atilde;o para assinar o documento.");
             }
 
-            if(is_array($get->IdPRONAC)) {
+            if (is_array($get->IdPRONAC)) {
                 $idPronacUnidos = implode(',', $get->IdPRONAC);
                 $this->redirect("/{$this->moduleName}/enquadramento-assinatura/assinar-projeto?IdPRONAC={$idPronacUnidos}");
             }
 
             $this->view->IdPRONAC = $get->IdPRONAC;
             $arrayIdPronacs = explode(',', $get->IdPRONAC);
-            if(count($arrayIdPronacs) < 1) {
+            if (count($arrayIdPronacs) < 1) {
                 throw new Exception ("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
 
@@ -174,7 +175,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
             if ($post) {
 
-                foreach($arrayIdPronacs as $idPronac) {
+                foreach ($arrayIdPronacs as $idPronac) {
                     $this->assinarProjeto(
                         $idPronac,
                         $post['password'],
@@ -182,7 +183,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                     );
                 }
 
-                if(count($arrayIdPronacs) > 1) {
+                if (count($arrayIdPronacs) > 1) {
                     parent::message(
                         "Projetos assinados com sucesso!",
                         "/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos",
@@ -198,7 +199,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
             $objProjeto = new Projeto_Model_DbTable_Projetos();
             $this->view->projeto = array();
-            foreach($arrayIdPronacs as $idPronac) {
+            foreach ($arrayIdPronacs as $idPronac) {
                 $this->view->projeto[] = $objProjeto->findBy(array(
                     'IdPRONAC' => $idPronac
                 ));
@@ -210,7 +211,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             ));
 
         } catch (Exception $objException) {
-            if(is_array($get->IdPRONAC)) {
+            if (is_array($get->IdPRONAC)) {
                 parent::message(
                     $objException->getMessage(),
                     "/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos"
@@ -236,8 +237,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             $objProjetos->alterarSituacao(
                 $get->IdPRONAC,
                 null,
-                'D27',
-                'Projeto para inclus&atilde;o em Portaria'
+                Projeto_Model_Situacao::PROJETO_APROVADO_AGUARDANDO_ANALISE_DOCUMENTAL,
+                'Projeto aprovado - aguardando an&aacute;lise documental'
             );
 
             $objTbProjetos = new Projeto_Model_DbTable_Projetos();
@@ -245,11 +246,12 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 'IdPRONAC' => $get->IdPRONAC
             ));
 
-            $orgaoDestino = 166;
+            $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
             $objOrgaos = new Orgaos();
             $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
+
             if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-                $orgaoDestino = 272;
+                $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
             }
             $objTbProjetos->alterarOrgao($orgaoDestino, $get->IdPRONAC);
 
@@ -284,7 +286,19 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 'Logon' => $auth->getIdentity()->usu_codigo,
             );
             $objAprovacao = new Aprovacao();
-            $objAprovacao->inserir($dadosInclusaoAprovacao);
+            $idAprovacao = $objAprovacao->inserir($dadosInclusaoAprovacao);
+
+            $idTecnico = new Zend_Db_Expr("sac.dbo.fnPegarTecnico(110, {$orgaoDestino}, 3)");
+
+            $tblVerificaProjeto = new tbVerificaProjeto();
+            $dadosVP['idPronac'] = $get->IdPRONAC;
+            $dadosVP['idOrgao'] = $orgaoDestino;
+            $dadosVP['idAprovacao'] = $idAprovacao;
+            $dadosVP['idUsuario'] = $idTecnico;
+            $dadosVP['stAnaliseProjeto'] = 1;
+            $dadosVP['dtRecebido'] = $tblVerificaProjeto->getExpressionDate();
+            $dadosVP['stAtivo'] = 1;
+            $tblVerificaProjeto->inserir($dadosVP);
 
             parent::message('Projeto finalizado com sucesso!', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos", 'CONFIRM');
         } catch (Exception $objException) {
