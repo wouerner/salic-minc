@@ -49,14 +49,16 @@
                                         <td><?php echo $planoDistribuicao->DescricaoArea; ?></td>
                                         <td><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
                                         <td><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
-                                        <td class="action right-align">
+                                        <td class="action center-align" >
+
+                                            <a class="btn small waves-effect waves-light tooltipped" id="btn_editar" onclick="mostrarResumo(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Visualizar resumo">
+                                                <i class="material-icons">visibility</i>
+                                            </a>
+                                            <a href="/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/<?= $this->idPreProjeto; ?>/idPlanoDistribuicao/<?= $planoDistribuicao->idPlanoDistribuicao; ?>" class="btn small waves-effect waves-light tooltipped" data-position="top" data-delay="50" data-tooltip="Detalhar produto">
+                                                <i class="material-icons">zoom_in</i>
+                                            </a>
+
                                             <?php if ($this->isEditarProposta || ($this->isEditarProjeto && $planoDistribuicao->stPrincipal != 1)) : ?>
-                                                <a class="btn small waves-effect waves-light tooltipped" id="btn_editar" onclick="mostrarResumo(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Visualizar resumo">
-                                                    <i class="material-icons">visibility</i>
-                                                </a>
-                                                <a href="/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/<?= $this->idPreProjeto; ?>/idPlanoDistribuicao/<?= $planoDistribuicao->idPlanoDistribuicao; ?>" class="btn small waves-effect waves-light tooltipped" data-position="top" data-delay="50" data-tooltip="Detalhar produto">
-                                                    <i class="material-icons">zoom_in</i>
-                                                </a>
                                                 <a class="btn small waves-effect waves-light tooltipped btn-primary" id="btn_editar" onclick="editar(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Editar Produto">
                                                     <i class="material-icons">edit</i>
                                                 </a>
