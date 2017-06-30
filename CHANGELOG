@@ -1,3 +1,56 @@
+Release 2.1.0
+ * [Novo] Documentação: novo formato de arquivo CHANGELOG
+ * [Novo] Proposta/Plano de distribuição: Novo funcionamento, totalmente reescrito
+ * [Novo] Proposta/Plano distribuicão: acrescentando novos campos e removando tabelas dos formularios
+ * [Novo] Projeto/Remanejamento 50%: Grupo A pode receber saldo dos grupos B, C ou D
+ * [Update] Proposta/Plano de Distribuição: Salvando media ponderada no resumo do plano de distribuicao
+ * [Update] Proposta/Plano de Distribuição: Validando regras de negocio no front-end
+ * [Update] Proposta/Plano de Distribuição: Adiciona novo campo de vlReceitaTotalPrevista no plano de distribuicao
+ * [Update] Proposta/Plano de Distribuição: Salvando o valor medio no plano de distribuicao
+ * [Update] Proposta/Plano de Distribuição: ocultando campos quando for do tipo de venda Exemplar
+ * [Update] Proposta/Plano de Distribuição: Melhorando as conversoes e ocultando calculos parciais quando eh do tipo Exemplar
+ * [Update] Proposta/Plano de Distribuição: Salva valores corretamente e mostra de mensagem quando carrega
+ * [Update] Proposta/Planilha Orçamentária: Aumenta quantidade de caracteres no valor unitario
+ * [Update] Proposta/Plano de Distribuição: formatando valores para salvar
+ * [Update] Proposta/Plano de Distribuição: Ajustando combos no vuejs
+ * [Update] Proposta/Plano de Distribuição: ajustando componentes
+ * [Fix] Assinatura/Gerenciamento de assinaturas : Correção de validação que verifica quantidade minima de assinaturas para exibir a listagem.
+ * [Fix] Consultardadosprojeto:remanejamento_menor correção nas mensagens ao usuário
+ * [Fix] Consultardadosprojeto/remanetamento_menor: correção na cor na totalização dos valores remanejados
+ * [Fix] Consultardadosprojeto/remanejamento menor: correção na totalização da readequação e ao enviar projeto sem valor remanejado
+ * [Fix] Consultardadosprojeto/remanejamento menor: correção de encoding em mensagem de erro
+ * [Fix] Mediana: Rollback no retorno da mensagem
+ * [Fix] Proposta/Plano de Distribuição: Ajuste ao mostrar resumo do plano de distribuicao
+ * [Fix] Custos vinculados: Corrige limite para alguns itens dos custos vinculados
+ * [Fix] Projeto/Remanejamento 50%] correções para funcionar remanejamento de saldo entre grupos A, B, C e D; correção para buscar dados corretos quando planilha RP ainda não foi criada
+ * [Fix] Projeto/Remanejamento 50%: bug de alterar item que altera valor de referência na exibição
+ * [Fix] Proposta/Plano de distribuicao: alterando formato da moeda e atualizando form 2
+ * [Fix] Proposta/Local de realizacao: Botao de excluir
+ * [Update] Ambiente/Docker: Atualização das informações utilizada para funcionamento do docker no salic.
+ * [Update] Ambiente/Docker: Melhoria no docker-compose.yml para que as configurações de volumem utilizem o diretório atual como referência e somente logs definidos como a pasta /var/www/log/apache2
+ * [Update] Proposta/Plano de distribuicao: alterando formato da moeda e atualizando form
+ * [Add] Ambiente/Docker: Adição do docker-compose.yml para carregamento automático das configurações necessárias e ambiente para que o Salic seja executado. [ REMOVE ] Remoção de arquivos legados que não são mais utilizados
+ * [Refactor] Proposta/Plano distribuicão: Trabalhando no novo formato para detalhamento do plano distribuicao
+ * [Refactor] Proposta/Plano distribuicão: Atualizando layout e disponibilizacao de botoes do plano de distribuicao
+
+Release 2.0.16
+ * Fix: Correção da funcionalidade de links incorretos para gerenciamento de assinaturas.
+
+Release 2.0.15
+ * Fix: [Analisar Parecer] Erros com pop-up de erro aparecendo em todo instante.
+ * Fix: [Custos vinculados] corrigindo local de realizacao na consulta dos custos vinculados
+ * Fix: [Index] Correção da funcionalidade de regerar senha
+ * Fix: [Remanejamento 50%] Removendo soma dos grupo a, b, c d
+ * Fix: [Remanejamento 50%] Alterando texto do menu lateral
+ * Fix: [Remanejamento 50%] Somando grupo a, b, c d - em andamento
+ * Fix: [Remanejamento 50%] Corrigindo arredondamento de valor mínimo e valor máximo; puxando valor do item da planilha correta
+ * Fix: [Remanejamento 50%] Alterando valor permitido de 20% para 50%
+ * Fix: [Remanejamento 50%] Exibindo planilha correta ao realizar remanejamento
+ * Update: [Assinatura] Ajustes de situação para definir implicitamente os valores padroes para o documento de assinatura
+ * Update: [Custos vinculados] mostrando valores padrões para o usuário
+ * Update: [Custos vinculados] salvando os percentuais dos custos vinculados nos novos campos no banco
+ * Update: [Planilha orcamentaria] finalizando atualizacoes para os custos vinculados
+
 Release 2.0.14
  * Fix: [Recursos] Exibindo combo de área cultural corretamente; correção no checkbox da finalização
 
@@ -10,7 +63,7 @@ Release 2.0.12
  * Fix: [Readequações] Erros no acesso a tela de Avaliar readequações.
  * Update: adição de funcionalidade de encaminhar assinatura
  * Fix: [Agente] Erro na combo de UF
- * Update: Criação do método "movimentarProjeto" [ UPDATE ] Adição da propriedade $idOrdemDaAssinatura na classe "MinC_Assinatura_Model_Assinatura" com getters e setters.
+ * Update: Criação do método "movimentarProjeto" [ Update ] Adição da propriedade $idOrdemDaAssinatura na classe "MinC_Assinatura_Model_Assinatura" com getters e setters.
  * Fix: Correção do link do botão "Voltar" da a gerência de assinaturas.
  * Fix:  Alteração da situação do documento de assinatura para fechado quando nalizar as assinaturas do enquadramento.
  * Fix: [Gerenciar Parecer] Ajuste para erro ao encaminhar parecer
@@ -95,7 +148,7 @@ Release 2.0.5
   * Fix: [Proponente] Corrige charset nas certidões negativas
   * Fix: [Coordenador CNIC] ajustes ao abrir tabela de diligencias
   * Fix: [Proponente] corrige erro ao acessar proposta de proponente vinculado
-  * FIX: Erro geral de sql quando vai fazer algumas consultar e retorna como objeto
+  * Fix: Erro geral de sql quando vai fazer algumas consultar e retorna como objeto
   * Fix: [CNIC] Votantes: exibindo membros natos
   * Update: [Projeto] Consultar dados do projeto para IN2017 e IN2016 para consultar os dados de plano de distribuição
   * Fix: [Proponente] Tela de natureza ao cadastrar agente
