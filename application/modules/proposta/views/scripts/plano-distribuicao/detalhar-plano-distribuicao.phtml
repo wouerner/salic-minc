@@ -184,220 +184,221 @@
                     </table>
                 </div>
             </div>
+            <?php if($this->isEditavel) :  ?>
+                <div class="row mostrar-forn center-align">
+                    <br>
+                    <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="mostrarFormulario">Novo
+                        detalhamento
+                        <i class="material-icons right">edit</i>
+                    </button>
+                </div>
 
-            <div class="row mostrar-forn center-align">
-                <br>
-                <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="mostrarFormulario">Novo
-                    detalhamento
-                    <i class="material-icons right">edit</i>
-                </button>
-            </div>
-
-            <div v-show="visualizarFormulario" id="form-detalhamento" class="card"
-                 style="max-width: 1200px; margin: 0 auto; padding: 10px;">
-                <form>
-                    <div class="row">
-                        <h5 class="light center-align">Novo detalhamento</h5>
+                <div v-show="visualizarFormulario" id="form-detalhamento" class="card"
+                     style="max-width: 1200px; margin: 0 auto; padding: 10px;">
+                    <form>
                         <div class="row">
-                            <div class="input-field col s6">
-                                <p><b>Tipo de venda</b><br>
-                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaIngresso'" value="i"
-                                           v-model="tpVenda"/>
-                                    <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
-                                    <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaExemplar'" value="e"
-                                           v-model="tpVenda"/>
-                                    <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
-                                </p>
+                            <h5 class="light center-align">Novo detalhamento</h5>
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <p><b>Tipo de venda</b><br>
+                                        <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaIngresso'" value="i"
+                                               v-model="tpVenda"/>
+                                        <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
+                                        <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaExemplar'" value="e"
+                                               v-model="tpVenda"/>
+                                        <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
+                                    </p>
+                                </div>
+                                <div class="input-field col s6">
+                                    <p><b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
+                                        <input name="group1" type="radio" :id="_uid + '1' " value="s"
+                                               v-model="distribuicaoGratuita"/>
+                                        <label :for="_uid + '1'">Sim</label>
+                                        <input name="group1" type="radio" :id="_uid + '2' " value="n"
+                                               v-model="distribuicaoGratuita"/>
+                                        <label :for="_uid + '2'">N&atilde;o</label>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="input-field col s6">
-                                <p><b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
-                                    <input name="group1" type="radio" :id="_uid + '1' " value="s"
-                                           v-model="distribuicaoGratuita"/>
-                                    <label :for="_uid + '1'">Sim</label>
-                                    <input name="group1" type="radio" :id="_uid + '2' " value="n"
-                                           v-model="distribuicaoGratuita"/>
-                                    <label :for="_uid + '2'">N&atilde;o</label>
-                                </p>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="input-field col s6" v-if="tpVenda == 'i'">
-                                <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
-                                    <input name="tipoLocalRealizacao" type="radio" :id="_uid + 'tipoAberto'" value="a"
-                                           v-model="tpLocal"/>
-                                    <label :for=" _uid + 'tipoAberto'">Aberto</label>
-                                    <input name="tipoLocalRealizacao" type="radio" :id=" _uid + 'tipoFechado'" value="f"
-                                           v-model="tpLocal"/>
-                                    <label :for=" _uid + 'tipoFechado'">Fechado</label>
-                                </p>
+                            <div class="row">
+                                <div class="input-field col s6" v-if="tpVenda == 'i'">
+                                    <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
+                                        <input name="tipoLocalRealizacao" type="radio" :id="_uid + 'tipoAberto'" value="a"
+                                               v-model="tpLocal"/>
+                                        <label :for=" _uid + 'tipoAberto'">Aberto</label>
+                                        <input name="tipoLocalRealizacao" type="radio" :id=" _uid + 'tipoFechado'" value="f"
+                                               v-model="tpLocal"/>
+                                        <label :for=" _uid + 'tipoFechado'">Fechado</label>
+                                    </p>
+                                </div>
+                                <div class="input-field col s6" v-if="tpVenda == 'i'">
+                                    <p><b>Espa&ccedil;o p&uacute;blico</b><br>
+                                        <input type="radio" :id="_uid + 'espacoPublicoSim'" value="s" v-model="tpEspaco"/>
+                                        <label :for="_uid + 'espacoPublicoSim'">Sim</label>
+                                        <input type="radio" id="espacoPublicoNao" :id=" _uid + 'espacoPublicoNao'" value="n"
+                                               v-model="tpEspaco"/>
+                                        <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="input-field col s6" v-if="tpVenda == 'i'">
-                                <p><b>Espa&ccedil;o p&uacute;blico</b><br>
-                                    <input type="radio" :id="_uid + 'espacoPublicoSim'" value="s" v-model="tpEspaco"/>
-                                    <label :for="_uid + 'espacoPublicoSim'">Sim</label>
-                                    <input type="radio" id="espacoPublicoNao" :id=" _uid + 'espacoPublicoNao'" value="n"
-                                           v-model="tpEspaco"/>
-                                    <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
-                                </p>
+                            <div class="row">
+                                <div class="input-field col s6" v-if="tpVenda == 'i'">
+                                    <input :id="_uid + 'dsProduto'" type="text" class="validate" ref="dsProduto"
+                                           placeholder="Ex: Arquibancada" v-model="dsProduto">
+                                    <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input :id="_uid + 'qtExemplares'" type="number" class="validate" ref="qtExemplares"
+                                           placeholder="0" v-model.lazy="qtExemplares">
+                                    <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s6" v-if="tpVenda == 'i'">
-                                <input :id="_uid + 'dsProduto'" type="text" class="validate" ref="dsProduto"
-                                       placeholder="Ex: Arquibancada" v-model="dsProduto">
-                                <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
-                            </div>
-                            <div class="input-field col s2">
-                                <input :id="_uid + 'qtExemplares'" type="number" class="validate" ref="qtExemplares"
-                                       placeholder="0" v-model.lazy="qtExemplares">
-                                <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
-                            </div>
-                        </div>
 
-                        <div class="proponente-s">
-                            <div class="row">
-                                <div class="input-field col s12 center-align">
-                                    <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
-                                    <select-percent
-                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
-                                        v-bind:maximoCombo="(percentualProponentePadrao *  100)"
-                                        v-on:evento="percentualProponente = $event/100">
-                                    </select-percent>
-                                    </span>
+                            <div class="proponente-s">
+                                <div class="row">
+                                    <div class="input-field col s12 center-align">
+                                        <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
+                                        <select-percent
+                                            v-bind:disabled="distribuicaoGratuita =='s'? true: false"
+                                            v-bind:maximoCombo="(percentualProponentePadrao *  100)"
+                                            v-on:evento="percentualProponente = $event/100">
+                                        </select-percent>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s6 l2">
+                                        <input-money
+                                            v-bind:disabled="distribuicaoGratuita =='s'? true: false"
+                                            v-bind:value="vlUnitarioProponenteIntegral"
+                                            v-on:ev="vlUnitarioProponenteIntegral = $event">
+                                        </input-money>
+                                        <label class="active" :for="_uid + 'vlUnitarioProponenteIntegral'">Pre&ccedil;o Unit&aacute;rio
+                                            R$</label>
+                                    </div>
+                                    <div class="input-field col s6 l2">
+                                        <input class="disabled" disabled v-model="qtProponenteIntegral"
+                                               ref="qtProponenteIntegral">
+                                        <label class="active" :for="_uid + 'qtProponenteIntegral'">Quantidade
+                                            {{labelInteira}}</label>
+                                    </div>
+                                    <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
+                                        <input class="disabled" disabled v-model="qtProponenteParcial">
+                                        <label class="active" :for="_uid + 'qtProponenteParcial'">Quantidade Meia</label>
+                                    </div>
+                                    <div class="input-field col s6 l2">
+                                        <input class="disabled" disabled v-model="vlReceitaProponenteIntegral">
+                                        <label class="active" :for="_uid + 'vlReceitaProponenteIntegral'">Valor
+                                            {{labelInteira}} R$</label>
+                                    </div>
+                                    <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
+                                        <input class="disabled" disabled v-model="vlReceitaProponenteParcial">
+                                        <label class="active" :for="_uid + 'vlReceitaProponenteParcial'">Valor meia
+                                            R$</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="input-field col s6 l2">
-                                    <input-money
-                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
-                                        v-bind:value="vlUnitarioProponenteIntegral"
-                                        v-on:ev="vlUnitarioProponenteIntegral = $event">
-                                    </input-money>
-                                    <label class="active" :for="_uid + 'vlUnitarioProponenteIntegral'">Pre&ccedil;o Unit&aacute;rio
-                                        R$</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="qtProponenteIntegral"
-                                           ref="qtProponenteIntegral">
-                                    <label class="active" :for="_uid + 'qtProponenteIntegral'">Quantidade
-                                        {{labelInteira}}</label>
-                                </div>
-                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
-                                    <input class="disabled" disabled v-model="qtProponenteParcial">
-                                    <label class="active" :for="_uid + 'qtProponenteParcial'">Quantidade Meia</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="vlReceitaProponenteIntegral">
-                                    <label class="active" :for="_uid + 'vlReceitaProponenteIntegral'">Valor
-                                        {{labelInteira}} R$</label>
-                                </div>
-                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
-                                    <input class="disabled" disabled v-model="vlReceitaProponenteParcial">
-                                    <label class="active" :for="_uid + 'vlReceitaProponenteParcial'">Valor meia
-                                        R$</label>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Preço popular-->
-                        <div class="preco-popular">
-                            <div class="row">
-                                <div class="input-field col s12 center-align">
-                                    <b>Pre&ccedil;o Popular</b> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100
-                                    }}%)
-                                    <select-percent
-                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
-                                        v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
-                                        v-on:evento="percentualPrecoPopular = $event/100"
-                                    >
-                                    </select-percent>
+                            <!-- Preço popular-->
+                            <div class="preco-popular">
+                                <div class="row">
+                                    <div class="input-field col s12 center-align">
+                                        <b>Pre&ccedil;o Popular</b> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100
+                                        }}%)
+                                        <select-percent
+                                            v-bind:disabled="distribuicaoGratuita =='s'? true: false"
+                                            v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
+                                            v-on:evento="percentualPrecoPopular = $event/100"
+                                        >
+                                        </select-percent>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s6 l2">
+                                        <input-money
+                                            v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
+                                            v-bind:value="vlUnitarioPopularIntegral"
+                                            v-on:ev="vlUnitarioPopularIntegral = $event"
+                                        >
+                                        </input-money>
+                                        <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
+                                               :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio <br>(At&eacute;
+                                            R$ 50,00)</label>
+                                    </div>
+                                    <div class="input-field col s6 l2">
+                                        <input type="number" class="right-align disabled" disabled
+                                               v-model="qtPopularIntegral" ref="qtPopularIntegral">
+                                        <label class="active" :for="_uid + 'qtPopularIntegral'">Quantidade {{labelInteira}}
+                                            (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
+                                    </div>
+                                    <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
+                                        <input type="number" class="right-align disabled" disabled
+                                               v-model="qtPopularParcial" ref="qtPopularParcial">
+                                        <label class="active" :for="_uid + 'qtPopularParcial'">Quantidade Meia (At&eacute;
+                                            {{ qtPrecoPopularValorParcialLimite }})</label>
+                                    </div>
+                                    <div class="input-field col s6 l2">
+                                        <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
+                                        <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">Valor
+                                            {{labelInteira}} R$</label>
+                                    </div>
+                                    <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
+                                        <input class="disabled" disabled v-model="vlReceitaPopularParcial">
+                                        <label class="active" :for="_uid + 'vlReceitaPopularParcial'">Valor meia R$</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="input-field col s6 l2">
-                                    <input-money
-                                        v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
-                                        v-bind:value="vlUnitarioPopularIntegral"
-                                        v-on:ev="vlUnitarioPopularIntegral = $event"
-                                    >
-                                    </input-money>
-                                    <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
-                                           :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio <br>(At&eacute;
-                                        R$ 50,00)</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input type="number" class="right-align disabled" disabled
-                                           v-model="qtPopularIntegral" ref="qtPopularIntegral">
-                                    <label class="active" :for="_uid + 'qtPopularIntegral'">Quantidade {{labelInteira}}
-                                        (At&eacute; {{ qtPrecoPopularValorIntegralLimite }})</label>
-                                </div>
-                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
-                                    <input type="number" class="right-align disabled" disabled
-                                           v-model="qtPopularParcial" ref="qtPopularParcial">
-                                    <label class="active" :for="_uid + 'qtPopularParcial'">Quantidade Meia (At&eacute;
-                                        {{ qtPrecoPopularValorParcialLimite }})</label>
-                                </div>
-                                <div class="input-field col s6 l2">
-                                    <input class="disabled" disabled v-model="vlReceitaPopularIntegral">
-                                    <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">Valor
-                                        {{labelInteira}} R$</label>
-                                </div>
-                                <div class="input-field col s6 l2" v-if="tpVenda == 'i'">
-                                    <input class="disabled" disabled v-model="vlReceitaPopularParcial">
-                                    <label class="active" :for="_uid + 'vlReceitaPopularParcial'">Valor meia R$</label>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="distribuicao-gratuita">
-                            <div class="row">
-                                <div class="input-field col s12 center-align">
-                                    <b>Distribui&ccedil;&atilde;o Gratuita</b> (m&iacute;nimo {{
-                                    percentualGratuitoPadrao * 100 }}%)
-                                    <span v-if="percentualGratuitoPadrao !== percentualGratuito"> Atual {{ parseInt(percentualGratuito *  100) }}%</span>
+                            <div class="distribuicao-gratuita">
+                                <div class="row">
+                                    <div class="input-field col s12 center-align">
+                                        <b>Distribui&ccedil;&atilde;o Gratuita</b> (m&iacute;nimo {{
+                                        percentualGratuitoPadrao * 100 }}%)
+                                        <span v-if="percentualGratuitoPadrao !== percentualGratuito"> Atual {{ parseInt(percentualGratuito *  100) }}%</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 m3 l2">
+                                        <input type="number" class="right-align" v-model.number="qtGratuitaDivulgacao"
+                                               ref="divulgacao">
+                                        <label class="active" :for="_uid + 'qtGratuitaDivulgacao'">Divulga&ccedil;&atilde;o
+                                            (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
+                                    </div>
+                                    <div class="input-field col s12 m3 l2">
+                                        <input type="number" class="right-align" v-model="qtGratuitaPatrocinador"
+                                               ref="patrocinador">
+                                        <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">Patrocinador (At&eacute;
+                                            {{ parseInt(qtExemplares * 0.1) }})</label>
+                                    </div>
+                                    <div class="input-field col s12 m3 l2">
+                                        <input type="number" class="right-align" v-model="qtGratuitaPopulacao"
+                                               ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
+                                        <label class="active" :for="_uid + 'qtGratuitaPopulacao'">Popula&ccedil;&atilde;o (m&iacute;nimo
+                                            {{ qtGratuitaPopulacaoMinimo }})</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="input-field col s12 m3 l2">
-                                    <input type="number" class="right-align" v-model.number="qtGratuitaDivulgacao"
-                                           ref="divulgacao">
-                                    <label class="active" :for="_uid + 'qtGratuitaDivulgacao'">Divulga&ccedil;&atilde;o
-                                        (At&eacute; {{ parseInt(qtExemplares * 0.1) }})</label>
-                                </div>
-                                <div class="input-field col s12 m3 l2">
-                                    <input type="number" class="right-align" v-model="qtGratuitaPatrocinador"
-                                           ref="patrocinador">
-                                    <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">Patrocinador (At&eacute;
-                                        {{ parseInt(qtExemplares * 0.1) }})</label>
-                                </div>
-                                <div class="input-field col s12 m3 l2">
-                                    <input type="number" class="right-align" v-model="qtGratuitaPopulacao"
-                                           ref="populacao" v-on:blur="populacaoValidate(qtGratuitaPopulacao)">
-                                    <label class="active" :for="_uid + 'qtGratuitaPopulacao'">Popula&ccedil;&atilde;o (m&iacute;nimo
-                                        {{ qtGratuitaPopulacaoMinimo }})</label>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row receita-prevista center-align">
-                            <div class="col s6 l2 offset-l6">
-                                <p><strong>Receita Prevista</strong></p>
+                            <div class="row receita-prevista center-align">
+                                <div class="col s6 l2 offset-l6">
+                                    <p><strong>Receita Prevista</strong></p>
+                                </div>
+                                <div class="col s6 l2">
+                                    {{vlReceitaPrevista}}
+                                </div>
                             </div>
-                            <div class="col s6 l2">
-                                {{vlReceitaPrevista}}
+                            <div class="row salvar center-align">
+                                <br>
+                                <br>
+                                <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="salvar">Salvar
+                                    <i class="material-icons right">send</i>
+                                </button>
                             </div>
                         </div>
-                        <div class="row salvar center-align">
-                            <br>
-                            <br>
-                            <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="salvar">Salvar
-                                <i class="material-icons right">send</i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </script>
