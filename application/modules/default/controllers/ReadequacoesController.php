@@ -4071,8 +4071,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
             $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
             $this->view->Produtos = $PlanoDistribuicaoProduto->comboProdutosParaInclusaoReadequacao($idPronac);
 
-            $tbPlanilhaEtapa = new Proposta_Model_DbTable_TbPlanilhaEtapa();
-            $this->view->Etapas = $tbPlanilhaEtapa->buscar(array('stEstado = ?'=>1));
+            $spSelecionarEtapa = new spSelecionarEtapa();
+            $this->view->Etapas = $spSelecionarEtapa->exec($idPronac);
 
             $TbPlanilhaUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
             $buscarUnidade = $TbPlanilhaUnidade->buscarUnidade();
