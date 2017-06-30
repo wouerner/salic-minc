@@ -265,7 +265,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                     $this->view->dadosProjeto = $rsProjeto;
 
 
-                    //VERIFICA SE O PROJETO EST� NA CNIC //
+                    //VERIFICA SE O PROJETO ESTA NA CNIC //
                     $Parecer = new Parecer();
                     $dadosCNIC = $Parecer->verificaProjSituacaoCNIC($pronac);
 
@@ -357,7 +357,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                     $this->view->totalGeralCaptado = $rsCount->totalGeralCaptado;
                     /***************** FIM  - MODO NOVO ********************/
 
-                    /*** Valida��o do Proponente Inabilitado ************************************/
+                    /*** Validacao do Proponente Inabilitado ************************************/
 
                     $cpfLogado 		= $this->cpfLogado;
                     $cpfProponente 	= !empty($dadosProjeto[0]->CNPJCPF) ? $dadosProjeto[0]->CNPJCPF : '';
