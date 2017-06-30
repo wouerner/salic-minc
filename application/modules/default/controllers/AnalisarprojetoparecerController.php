@@ -92,7 +92,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $currentPage = $this->_getParam('page', 1);
         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina
         // ========== FIM PAGINA¿¿O ==========
-
+        
         $projetos = new Projetos();
         $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
         $this->view->qtdRegistro = count($resp);
@@ -799,6 +799,9 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $idProduto = $this->_request->getParam("idProduto");
         $stPrincipal = $this->_request->getParam("stPrincipal");
         $idD = $this->_request->getParam("idD");
+
+        $projetos = new Projetos();                    
+        $IN2017 = $projetos->verificarIN2017($idPronac);
         
         switch ($stAcao) {
             case 1: /* CONSULTA */
@@ -806,6 +809,17 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                 $resp = $analisedeConteudoDAO->dadosAnaliseconteudo(false, array('idPRONAC = ?' => $idPronac, 'idProduto = ?' => $idProduto))->current()->toArray();
                 foreach ($resp as $key => $val) {
                     $arrayRetorno[$key] = utf8_encode($val);
+                }
+                
+                if ($IN2017) {
+                    $tbAcaoAlcanteProjeto = new tbAcaoAlcanceProjeto();
+                    $buscarAcaoAlcanceProjeto = $tbAcaoAlcanteProjeto->buscar(array('idPronac = ?' => $idPronac, 'idParecer = ?' => $resp['idAnaliseDeConteudo']));
+
+                    if (count($buscarAcaoAlcanceProjeto) > 0) {
+                        foreach ($buscarAcaoAlcanceProjeto->current() as $key => $val) {
+                            $arrayRetorno[$key] = utf8_encode($val);
+                        }
+                    }
                 }
                 
                 $this->_helper->json($arrayRetorno);
@@ -826,9 +840,9 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                         $analisedeConteudoDAO = new Analisedeconteudo();
                         $whereB['idPronac  = ?'] = $idPronac;
                         $whereB['idProduto = ?'] = $idProduto;
-                        $busca = $analisedeConteudoDAO->buscar($whereB);
+                        $buscaAnaliseConteudo = $analisedeConteudoDAO->buscar($whereB);
 
-                        if ($busca[0]->ParecerFavoravel == 0) {
+                        if ($buscaAnaliseConteudo[0]->ParecerFavoravel == 0) {
                             $copiaPlanilha = PlanilhaPropostaDAO::parecerFavoravel($idPronac, $idProduto);                            
                         }
                     }
@@ -857,6 +871,33 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                     $where['idPRONAC = ?'] = $idPronac;
                     $where['idProduto = ?'] = $idProduto;
                     $analisedeConteudoDAO->update($dados, $where);
+                    
+                    if ($IN2017) {                        
+                        $idParecer = $buscaAnaliseConteudo[0]->idAnaliseDeConteudo;
+                        
+                        $tbAcaoAlcanteProjeto = new tbAcaoAlcanceProjeto();
+                        $buscarAcaoAlcanceProjeto = $tbAcaoAlcanteProjeto->buscar(array('idPronac = ?' => $idPronac, 'idParecer = ?' => $idParecer));
+                        
+                        $dados = array(
+                            'idPronac' => $idPronac,
+                            'idParecer' => $idParecer,
+                            'tpAnalise' => 1,
+                            'dtAnalise' => MinC_Db_Expr::date(),
+                            'dsAcaoAlcanceProduto' => $this->_request->getParam("dsAcaoAlcanceProduto"),
+                            'idUsuario' => $idusuario,
+                            'stEstado' => 1
+                        );
+                        
+                        if (count($buscarAcaoAlcanceProjeto) > 0) {
+                            $where = array(
+                                'idPronac = ?' => $idPronac,
+                                'idParecer = ?' => $idParecer
+                            );
+                            $tbAcaoAlcanteProjeto->update($dados, $where);
+                        } else {
+                            $tbAcaoAlcanteProjeto->insert($dados);
+                        }
+                    }
                     
                     parent::message("Altera&ccedil;&atilde;o realizada com sucesso!", "Analisarprojetoparecer/produto/?idPronac={$idPronac}&idProduto={$idProduto}&stPrincipal={$stPrincipal}&idD={$idD}", "CONFIRM");
                 } catch (Exception $e) {
