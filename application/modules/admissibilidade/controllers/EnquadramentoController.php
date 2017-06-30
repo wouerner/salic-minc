@@ -131,12 +131,16 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
 
             $situacaoFinalProjeto = 'B02';
             $orgaoDestino = null;
+            $providenciaTomada = 'Projeto enquadrado ap&oacute;s avalia&ccedil;&atilde;o t&eacute;cnica.';
             if($projeto['Situacao'] == 'B03') {
-                $situacaoFinalProjeto = 'D27';
-                $orgaoDestino = 272;
-                if($projeto['Area'] == 2) {
-                    $orgaoDestino = 166;
+                $situacaoFinalProjeto = Projeto_Model_Situacao::PROJETO_ENQUADRADO_COM_RECURSO;
+                $objOrgaos = new Orgaos();
+                $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($projeto['Orgao']);
+                $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
+                if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
+                    $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
                 }
+                $providenciaTomada = 'Projeto enquadrado ap&oacute;s avalia&ccedil;&atilde;o t&eacute;cnica do recurso.';
             }
 
             $objPlanoDistribuicaoProduto = new PlanoDistribuicao();
@@ -146,7 +150,7 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
             $arrayDadosProjeto = array(
                 'Situacao' => $situacaoFinalProjeto,
                 'DtSituacao' => $objProjeto->getExpressionDate(),
-                'ProvidenciaTomada' => 'Projeto enquadrado após avaliação técnica.',
+                'ProvidenciaTomada' => $providenciaTomada,
                 'Area' => $post['areaCultural'],
                 'Segmento' => $post['segmentoCultural'],
                 'logon' => $authIdentity['usu_codigo']
