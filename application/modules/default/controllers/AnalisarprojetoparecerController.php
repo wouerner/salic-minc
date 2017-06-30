@@ -674,7 +674,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
             // Se etapa for igual a Divulgacao/Comercializacao e tiver ultrapassado os 20% do valor total do projeto, libera para alteracao
             $bln_regra20Porecento = $this->validaRegra20Porcento($idPronac);
             if (($analisedeConteudo[0]->ParecerFavoravel == 1) && ($val->NrFonteRecurso == '109') && ($val->idEtapa == 3) && $bln_regra20Porecento == "false") {
-                $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "<a href='#' onclick='javascript:AlterarItem({$val->idPlanilhaProjeto},{$idPronac},{$idProduto},{$stPrincipal})'>{$val->Item}</a>";
+                $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "<a href='javascript:void(0);' onclick='javascript:AlterarItem({$val->idPlanilhaProjeto},{$idPronac},{$idProduto},{$stPrincipal})'>{$val->Item}</a>";
             } else {
                 $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "{$val->Item}";
             }
