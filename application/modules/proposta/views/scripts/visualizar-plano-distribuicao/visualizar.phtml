@@ -1,159 +1,174 @@
-<!--script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
-<script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script-->
-<!--script type="text/javascript" src="/public/scripts/proposta/plano-distribuicao/visualizar-plano-distribuicao.js"></script-->
-<div class="container-fluid">
-    <div class="row">
+<div id="example" class="plano-distribuicao">
+    <?php $totalExemplares = 0;
+    $totalReceita = 0; ?>
+    <?php foreach ($this->planosDistribuicao as $planoDistribuicao) : ?>
         <div class="">
-           <div class="row">
-               <div class="col s12" id="example">
-                <?php $totalExemplares=0; $totalReceita=0; ?>
-                    <?php foreach($this->planosDistribuicao as $planoDistribuicao) : ?>
-                        <div class="row">
-                            <div id="detalhamento-plano" class="col s12">
-                                <table class="bordered" >
-                                    <thead>
-                                        <tr>
-                                            <th>Nome do Evento / Produto</th>
-                                            <th>&Aacute;rea</th>
-                                            <th>Segmento</th>
-                                            <th>Principal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td ><?php echo $planoDistribuicao->Produto; ?></td>
-                                            <td ><?php echo $planoDistribuicao->DescricaoArea; ?></td>
-                                            <td ><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
-                                            <td ><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4">
-                                                <?php foreach($this->abrangencias as $abrangencia): ?>
-                                                    <div class=" col s12 ">
-                                                       <div class="row">
-                                                            <table class="bordered">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td><?php echo $abrangencia['uf']?> - <?php echo $abrangencia['cidade']?> </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <visualizar-plano-distribuicao
-                                                                                idplanodistribuicao="<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>"
-                                                                                idpreprojeto="<?php echo $this->idPreProjeto; ?>"
-                                                                                iduf="<?php echo $abrangencia['idUF']?>"
-                                                                                idmunicipioibge="<?php echo $abrangencia['idMunicipioIBGE']?>"
-                                                                            ></visualizar-plano-distribuicao>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    <?php endforeach ?>
-                </div>
-            </div>
-                </div>
-            </div>
+            <table class="bordered">
+                <thead>
+                    <tr>
+                        <th class="center-align" colspan="3" style="font-size: 14px;"><?php echo $planoDistribuicao->Produto; ?></th>
+                    </tr>
+                    <tr>
+                        <th>&Aacute;rea</th>
+                        <th>Segmento</th>
+                        <th>Principal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><?php echo $planoDistribuicao->DescricaoArea; ?></td>
+                    <td><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
+                    <td><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
+                </tr>
+
+                <?php foreach ($this->abrangencias as $abrangencia): ?>
+                    <tr>
+                        <td colspan="3" style="padding: 0px; border: none">
+                            <table style="width: 100%; margin: 0px !important; padding: 0px;">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <?= isset($abrangencia['uf']) ? $abrangencia['uf'] : 'Exterior' ?> <?= isset($abrangencia['cidade']) ? ' - ' . $abrangencia['cidade'] : '' ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <visualizar-plano-distribuicao
+                                                idplanodistribuicao="<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>"
+                                                idpreprojeto="<?php echo $this->idPreProjeto; ?>"
+                                                iduf="<?php echo $abrangencia['idUF']; ?>"
+                                                idmunicipioibge="<?php echo $abrangencia['idMunicipioIBGE']; ?>"
+                                            ></visualizar-plano-distribuicao>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    <tr>
+                <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <table class="resumo-distribuicao planoDistribuicao ">
+                                <caption>Resumo <?php echo $planoDistribuicao->Produto; ?></caption>
+                                <thead>
+                                    <tr>
+                                        <th class="center-align" rowspan="2">Quantidade</th>
+                                        <th colspan="3" class="proponente">Proponente</th>
+                                        <th colspan="3" class="popular">Pre&ccedil;o Popular</th>
+                                        <th colspan="3" class="gratuito">Distribui&ccedil;&atilde;o Gratuita</th>
+                                        <th class="right-align" rowspan="2" width="8%">Receita Prevista total</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="proponente">Qtd. de Inteira</th>
+                                        <th class="proponente">Qtd. de Meia</th>
+                                        <th class="proponente">Valor m&eacute;dio</th>
+                                        <th class="popular">Qtd. de Inteira</th>
+                                        <th class="popular">Qtd. de Meia</th>
+                                        <th class="popular">Valor m&eacute;dio</th>
+                                        <th class="gratuito">Divulga&ccedil;&atilde;o</th>
+                                        <th class="gratuito">Patrocinador</th>
+                                        <th class="gratuito">Popula&ccedil;&atilde;o</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="center-align"><?php echo $planoDistribuicao->QtdeProduzida; ?></td>
+                                        <td class="proponente"><?php echo $planoDistribuicao->QtdeVendaNormal; ?></td>
+                                        <td class="proponente"><?php echo $planoDistribuicao->QtdeVendaPromocional; ?></td>
+                                        <td class="proponente"><?php echo $planoDistribuicao->PrecoUnitarioNormal; ?></td>
+                                        <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularNormal; ?></td>
+                                        <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularPromocional; ?></td>
+                                        <td class="popular"><?php echo $planoDistribuicao->ReceitaPopularNormal; ?>	</td>
+                                        <td class="gratuito"><?php echo $planoDistribuicao->QtdeProponente;	?></td>
+                                        <td class="gratuito"><?php echo $planoDistribuicao->QtdePatrocinador; ?></td>
+                                        <td class="gratuito"><?php echo $planoDistribuicao->QtdeOutros; ?></td>
+                                        <td class="right-align"><?php echo $planoDistribuicao->Receita; ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-    </div>
+    <?php endforeach ?>
 </div>
+
+<!-- my_component -->
 <script type="text/x-template" id="visualizar-plano-distribuicao">
     <div>
-        <div class="row">
-            <div class="col s12 center">
-               <button class="btn" v-on:click.prevent="mostrar()"><i class="material-icons">{{icon}}</i></button>
-           </div>
-        </div>
-        <div v-show="active">
-            <div class="row" >
-                <div class=" center">
-                    <table class="bordered">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">Categoria</th>
-                                <th rowspan="2">Qtd. de exemplar / Ingresso</th>
-                                <th class="center green lighten-4" colspan="3">
-                                    Distribui&ccedil;&atilde;o Gratuita
-                                </th>
-                                <th class="center red lighten-4"colspan="5">
-                                    Pre&ccedil;o Popular
-                                </th>
-                                <th  class="center lime lighten-3 black-text" colspan="5">
-                                    Proponente
-                                </th>
-                                <th rowspan="2">Receita Prevista</th>
-                            </tr>
-                            <tr>
-                                <th class="green lighten-4" >Divulga&ccedil;&atilde;o</th>
-                                <th class="green lighten-4" >Patrocinador</th>
-                                <th class="green lighten-4" >Popula&ccedil;&atilde;o</th>
-                                <th class="red lighten-4">Qtd. de Inteira</th>
-                                <th class="red lighten-4">Qtd. de Meia Entrada</th>
-                                <th class="red lighten-4">Pre&ccedil;o Unitario do Ingresso</th>
-                                <th class="red lighten-4">Valor da inteira</th>
-                                <th class="red lighten-4">Valor da meia entrada</th>
-                                <th class="lime lighten-3 black-text" >Qtd. de Inteira</th>
-                                <th class="lime lighten-3 black-text" >Qtd. de Meia Inteira</th>
-                                <th class="lime lighten-3 black-text" >Pre&ccedil;o Unitario do Ingresso</th>
-                                <th class="lime lighten-3 black-text" >Valor da inteira</th>
-                                <th class="lime lighten-3 black-text" >Valor da meia entrada</th>
-                            </tr>
+        <div>
+            <div class="row">
+                <div class="center">
+                    <table class="">
+                        <thead v-if="produtos.length > 0">
+                        <tr>
+                            <th rowspan="2">Categoria</th>
+                            <th rowspan="2">Quantidade</th>
+                            <th class="proponente" colspan="3">
+                                Proponente
+                            </th>
+                            <th class="popular" colspan="3">
+                                Pre&ccedil;o Popular
+                            </th>
+                            <th class="gratuito" rowspan="2">
+                                Distribui&ccedil;&atilde;o <br>Gratuita
+                            </th>
+                            <th rowspan="2" class="center-align">Receita <br> Prevista</th>
+                        </tr>
+                        <tr>
+                            <th class="proponente">Qtd. Inteira</th>
+                            <th class="proponente">Qtd. Meia</th>
+                            <th class="proponente">Pre&ccedil;o <br> Unitario</th>
+                            <th class="popular">Qtd. Inteira</th>
+                            <th class="popular">Qtd. Meia</th>
+                            <th class="popular">Pre&ccedil;o <br> Unitario</th>
+                        </tr>
                         </thead>
                         <tbody v-if="produtos.length > 0">
-                                <tr  v-for="( produto, index ) in produtos">
-                                    <td>{{ produto.dsProduto }}</td>
-                                    <td class="right-align">{{ produto.qtExemplares }}</td>
-                                    <td class="right-align">{{ produto.qtGratuitaDivulgacao }}</td>
-                                    <td class="right-align">{{ produto.qtGratuitaPatrocinador }}</td>
-                                    <td class="right-align">{{ produto.qtGratuitaPopulacao }}</td>
-                                    <!--Preço Popular -->
-                                    <td class="right-align">{{ produto.qtPopularIntegral }}</td>
-                                    <td class="right-align">{{ produto.qtPopularParcial }}</td>
-                                    <td class="right-align">{{ produto.vlUnitarioPopularIntegral }}</td>
-                                    <td class="right-align">{{ produto.vlReceitaPopularIntegral }}</td>
-                                    <td class="right-align">{{ produto.vlReceitaPopularParcial }}</td>
-                                    <!--Preço Popular -->
-                                    <td class="right-align">{{ produto.qtProponenteIntegral }}</td>
-                                    <td class="right-align">{{ produto.qtProponenteParcial }}</td>
-                                    <td class="right-align">{{ produto.vlUnitarioProponenteIntegral }}</td>
-                                    <td class="right-align">{{ produto.vlReceitaProponenteIntegral }}</td>
-                                    <td class="right-align">{{ produto.vlReceitaProponenteParcial }}</td>
-                                    <td class="right-align">{{ produto.vlReceitaPrevista }}</td>
-                                </tr>
+                            <tr v-for="( produto, index ) in produtos">
+                                <td>{{ produto.dsProduto }}</td>
+                                <td class="center-align">{{ produto.qtExemplares }}</td>
+                                <!--Preço Proponente -->
+                                <td class="center-align">{{ produto.qtProponenteIntegral }}</td>
+                                <td class="center-align">{{ produto.qtProponenteParcial }}</td>
+                                <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
+                                <!--Preço Popular -->
+                                <td class="center-align">{{ produto.qtPopularIntegral }}</td>
+                                <td class="center-align">{{ produto.qtPopularParcial }}</td>
+                                <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
+                                <!-- Distribuicao Gratuita-->
+                                <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) +
+                                    parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}
+                                </td>
+                                <td class="right-align">{{ formatarValor(produto.vlReceitaPrevista) }}</td>
+
+                            </tr>
                         </tbody>
                         <tbody v-else>
                             <tr>
-                                <td colspan="16">Sem dados</td>
+                                <td colspan="12" class="center-align">Sem detalhamento</td>
                             </tr>
                         </tbody>
-                        <tfoot class=" grey lighten-1">
+                        <tfoot v-if="produtos.length > 0" style="opacity: 0.5">
                             <tr>
                                 <td><b>Totais</b></td>
-                                <td class="right-align"><b>{{ qtExemplaresTotal }}</b></td>
-                                <td class="right-align"><b>{{ qtGratuitaDivulgacaoTotal }}</b></td>
-                                <td class="right-align"><b>{{ qtGratuitaPatrocinadorTotal }}</b></td>
-                                <td class="right-align"><b>{{ qtGratuitaPopulacaoTotal }}</b></td>
-                                <!--Preço Popular -->
-                                <td class="right-align"><b>{{ qtPopularIntegralTotal }}</b></td>
-                                <td class="right-align"><b>{{ qtPopularParcialTotal }}</b></td>
-                                <td> - </td>
-                                <td class="right-align"><b>{{ vlReceitaPopularIntegralTotal }}</b></td>
-                                <td class="right-align"><b>{{ vlReceitaPopularParcialTotal }}</b></td>
+                                <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
                                 <!--Fim: Preço Popular -->
-                                <td class="right-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
-                                <td class="right-align"><b>{{ qtProponenteParcialTotal }}</b></td>
-                                <td> - </td>
-                                <td class="right-align"><b>{{ vlReceitaProponenteIntegralTotal }}</b></td>
-                                <td class="right-align"><b>{{ vlReceitaProponenteParcialTotal }}</b></td>
+                                <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
+                                <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
+                                <td class="right-align"> -</td>
+                                <!--Preço Popular -->
+                                <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
+                                <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
+                                <td class="right-align"> -</td>
+                                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
+                                        parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
+                                </td>
                                 <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
+
                             </tr>
                         </tfoot>
                     </table>
@@ -162,35 +177,7 @@
         </div>
     </div>
 </script>
-<style>
-    #detalhamento-plano table {
-        font-size: 8pt;
-        width: 100%;
-    }
-    #detalhamento-plano button.btn {
-        margin: 1;
-        padding-left: 3px;
-        padding-right: 3px;
-    }
-    #detalhamento-plano button.red {
-        background-color: #c30;
-    }
-    #detalhamento-plano,
-    #detalhamento-plano table,
-    #detalhamento-plano td,
-    #detalhamento-plano th,
-    #detalhamento-plano thead,
-    #detalhamento-plano tbody,
-    #detalhamento-plano tr{
-        padding: 3px;
-        border: 1px solid #666;
-    }
 
-    #detalhamento-plano table {
-        border-spacing: 1;
-        border-radius: 0px;
-    }
-</style>
 <script>
 (function (global, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -221,135 +208,22 @@
     });
 }));
 
-// switch between locales
-//numeral.locale('pt-br');
 
-// register
-Vue.component('input-money', {
-    template: '<div>\
-                <input\
-                    class="right-align"\
-                    v-bind:disabled="false"\
-                    v-bind:value="value"\
-                    ref="input"\
-                    v-on:input="updateMoney($event.target.value)"\
-                    v-on:blur="formatValue"\
-                >\
-                </div>',
-    props: {
-        value: {
-          type: Number,
-          default: 0
-        },
-        disabled: {
-          type: Boolean,
-          default: false
-        }
-    },
-    data:function(){
-        return {
-           val:1
-        }
-    },
-    mounted: function () {
-        this.formatValue()
-        console.log(this.disabled);
-        this.$refs.input.disabled = this.disabled;
-    },
-    methods:{
-        formatValue: function () {
-          this.$refs.input.value = numeral(this.$refs.input.value).format('0,0.00');
-        },
-        updateMoney: function(value) {
-            console.log(value);
-            this.val = value;
-            this.$emit('ev', this.val)
-        }
-    },
-    watch: {
-        disabled: function (){
-            console.log(this.disabled)
-            this.$refs.input.disabled = this.disabled;
-            if (this.disabled){
-                this.value= 0;
-            }
-        }
-    }
-})
+
 
 // register
 Vue.component('visualizar-plano-distribuicao', {
-  template: '#visualizar-plano-distribuicao',
+    template: '#visualizar-plano-distribuicao',
     data: function() {
-       return {
-            "dsProduto": '', // Categoria
-            "qtExemplares": 0, // Quantidade de exemplar / Ingresso
-            "qtGratuitaDivulgacao" : 0,
-            "qtGratuitaPatrocinador": 0,
-            "qtGratuitaPopulacao": 0,
-            "vlUnitarioPopularIntegral": 0.0, // Preço popular: Preço Unitario do Ingresso
-            "qtPrecoPopularValorIntegral" : 0, //Preço Popular: Quantidade de Inteira
-            "qtPrecoPopularValorParcial": 0,//Preço Popular: Quantidade de meia entrada
-            "vlUnitarioProponenteIntegral": 0,
-            "qtPopularIntegral": 0,
-            "qtPopularParcial": 0,
+        return {
             produto:{ }, // produto sendo manipulado
             produtos:  [], // lista de produtos
             active : false,
-            icon : 'add',
-            radio : 'n'
+            icon : 'add'
         }
     },
     props:['idpreprojeto','idplanodistribuicao', 'idmunicipioibge', 'iduf', 'disabled'],
     computed:{
-        // Limite: preço popular: Quantidade de Inteira
-        qtPrecoPopularValorIntegralLimite: function() {
-            return ((this.qtExemplares * 0.5)  - (parseInt(this.qtGratuitaDivulgacao) + parseInt(this.qtGratuitaPatrocinador) + parseInt(this.qtGratuitaPopulacao))) * 0.6 ;
-        },
-        // Limite: preço popular: Quantidade de meia entrada
-        qtPrecoPopularValorParcialLimite: function () {
-            return  ( ((this.qtExemplares * 0.5) - (parseInt(this.qtGratuitaDivulgacao) + parseInt(this.qtGratuitaPatrocinador) + parseInt(this.qtGratuitaPopulacao))) *0.4 );
-        },
-        //Preço Popular: Valor da inteira
-        vlReceitaPopularIntegral: function() {
-            if (this.radio == 'n') {
-                return parseInt(this.qtPopularIntegral) * parseFloat(this.vlUnitarioPopularIntegral);
-            }
-            return 0;
-        },
-        vlReceitaPopularParcial: function() {
-            return this.qtPopularParcial * ( this.vlUnitarioPopularIntegral * 0.5);
-        },
-        /*verificar esse calculo com mais cuidado*/
-        qtProponenteIntegral: function() {
-            if (this.radio == 'n') {
-                return (this.qtExemplares * 0.5) * 0.5 ;
-            }
-            return 0;
-        },
-        qtProponenteParcial: function() {
-            if (this.radio == 'n') {
-                return (this.qtExemplares * 0.5) * 0.5 ;
-            }
-            return 0;
-        },
-        vlReceitaProponenteIntegral: function() {
-            if (this.radio == 'n') {
-                return parseFloat( this.vlUnitarioProponenteIntegral * this.qtProponenteIntegral ).toFixed(2);
-            }
-            return 0;
-        },
-        vlReceitaProponenteParcial: function(){
-            if (this.radio == 'n'){
-                return parseFloat( ( this.vlUnitarioProponenteIntegral * 0.5 ) * this.qtProponenteParcial).toFixed(2);
-            }
-            return 0;
-        },
-        vlReceitaPrevista: function() {
-            var total =  (parseFloat(this.vlReceitaPopularIntegral) + parseFloat(this.vlReceitaPopularParcial)
-                + parseFloat(this.vlReceitaProponenteIntegral) + parseFloat(this.vlReceitaProponenteParcial)).toFixed(2);
-            return numeral(total).format('0,0.00');
-        },
         // Total de exemplares
         qtExemplaresTotal: function() {
             total = 0 ;
@@ -390,7 +264,7 @@ Vue.component('visualizar-plano-distribuicao', {
             }
             return total;
         },
-        //Preço Popular: Quantidade de mei entrada
+        //Preço Popular: Quantidade de meia entrada
         qtPopularParcialTotal:function() {
             total = 0 ;
             for ( var i = 0 ; i < this.produtos.length ; i++){
@@ -404,7 +278,7 @@ Vue.component('visualizar-plano-distribuicao', {
                 var vl = (this.produtos[i]['vlReceitaPopularIntegral']);
                 total += numeral(vl).value();
             }
-            return numeral(total).format('0,0.00');
+            return numeral(total).format();
         },
         vlReceitaPopularParcialTotal: function() {
             total = 0 ;
@@ -412,7 +286,7 @@ Vue.component('visualizar-plano-distribuicao', {
                 var vl = (this.produtos[i]['vlReceitaPopularParcial']);
                 total += numeral(vl).value();
             }
-            return numeral(total).format('0,0.00');
+            return numeral(total).format();
         },
         qtProponenteIntegralTotal:function(){
             total = 0 ;
@@ -432,128 +306,34 @@ Vue.component('visualizar-plano-distribuicao', {
             total = 0 ;
             for ( var i = 0 ; i < this.produtos.length ; i++){
                 vl = (this.produtos[i]['vlReceitaProponenteIntegral']);
-                total += numeral(vl).value();
+                total += this.converterParaMoedaAmericana(vl);
             }
-            return numeral(total).format('0,0.00');
+            return numeral(total).format();
         },
         vlReceitaProponenteParcialTotal: function() {
             total = 0 ;
             for ( var i = 0 ; i < this.produtos.length ; i++){
                 var vl = (this.produtos[i]['vlReceitaProponenteParcial']);
-                total += numeral(vl).value();
+                total += this.converterParaMoedaAmericana(vl);
             }
-            return numeral(total).format('0,0.00');
+            return numeral(total).format();
         },
         receitaPrevistaTotal: function() {
-            var total = 0 ;
+            var total = numeral();
+
             for ( var i = 0 ; i < this.produtos.length ; i++){
                 var vl = this.produtos[i]['vlReceitaPrevista'];
-                total += numeral(vl).value();
+                total.add(parseFloat(vl));
             }
-            return numeral(total).format('0,0.00');
-        },
+            return total.format();
+        }
     },
     watch:{
-        //Quantidade de exemplar / Ingresso
-        qtExemplares: function(val)  {
-            if (this.radio == 'n'){
-                this.qtGratuitaDivulgacao = this.qtExemplares * 0.1;
-                this.qtGratuitaPatrocinador = this.qtExemplares * 0.1;
-                this.qtGratuitaPopulacao = parseInt(this.qtExemplares * 0.1);
-                this.qtPopularIntegral = ((this.qtExemplares * 0.5)  - (parseInt(this.qtGratuitaDivulgacao) + parseInt(this.qtGratuitaPatrocinador) + parseInt(this.qtGratuitaPopulacao))) * 0.6 ;
-                this.qtPopularParcial =  ( ((this.qtExemplares * 0.5) - (parseInt(this.qtGratuitaDivulgacao) + parseInt(this.qtGratuitaPatrocinador) + parseInt(this.qtGratuitaPopulacao))) *0.4 );
-            } else {
-                this.qtGratuitaPopulacao = this.qtExemplares;
-            }
-        },
-        //Distribuição Gratuita: Divulgação
-        qtGratuitaDivulgacao: function(val)  {
-            if (this.radio == 'n'){
-                quantidade = this.qtExemplares * 0.1;
-                if(val > quantidade) {
-                    alert("Valor não pode passar de: "+quantidade);
-                    this.qtGratuitaDivulgacao = this.qtExemplares * 0.1;
-                }
-                return;
-            }
-            this.qtGratuitaDivulgacao = 0;
-        },
-        //Distribuição Gratuita: Patrocinador
-        patrocinador: function(val)  {
-            quantidade = this.qtExemplares * 0.1;
 
-            if (this.radio == 'n') {
-                if(val > quantidade) {
-                    alert("Valor não pode passar de: "+quantidade);
-                    this.qtGratuitaPatrocinador = this.qtExemplares * 0.1;
-                }
-                return;
-            }
-            this.qtGratuitaPatrocinador = 0;
-        },
-        vlUnitarioPopularIntegral: function() {
-            if (this.radio == 'n') {
-                if (this.vlUnitarioPopularIntegral > 50.00) {
-                    alert('O valor não pode ser maior que 50.00');
-                    this.vlUnitarioPopularIntegral = 50.00;
-                }
-                return;
-            }
-            this.vlUnitarioPopularIntegral = 0;
-        },
-        qtPrecoPopularValorIntegral: function(val){
-            if (this.radio == 'n') {
-                if (this.qtPrecoPopularValorIntegral > this.qtPrecoPopularValorIntegralLimite) {
-                    alert('O valor não pode ser maior que ' + this.qtPrecoPopularValorIntegralLimite);
-                }
-                return ;
-            }
-            this.qtPrecoPopularValorIntegral = 0;
-        },
-        qtPrecoPopularValorParcial: function(val){
-            if (this.radio == 'n') {
-                if (this.qtPrecoPopularValorParcial > this.qtPrecoPopularValorParcialLimite) {
-                    alert('O valor não pode ser maior que ' + this.qtPrecoPopularValorParcialLimite);
-                }
-                return;
-            }
-            this.qtPrecoPopularValorParcial = 0;
-        },
-        radio : function(val){
-            if (this.radio == 's') {
-
-                console.log(this.radio);
-                this.qtGratuitaPopulacao = this.qtExemplares;
-
-                this.$refs.populacao.disabled = true;
-                this.$refs.divulgacao.disabled = true;
-                this.$refs.patrocinador.disabled = true;
-                this.$refs.qtPopularIntegral.disabled = true;
-                this.$refs.qtPopularParcial.disabled = true;
-
-                this.qtGratuitaDivulgacao = 0;
-                this.qtGratuitaPatrocinador = 0;
-                this.vlUnitarioPopularIntegral = 0.0; // Preço popular: Preço Unitario do Ingresso
-                this.qtPrecoPopularValorIntegral = 0; //Preço Popular: Quantidade de Inteira
-                this.qtPrecoPopularValorParcial =  0;//Preço Popular: Quantidade de meia entrada
-                this.vlUnitarioProponenteIntegral =  0;
-                this.qtPopularIntegral = 0,
-                this.qtPopularParcial = 0;
-                this.vlReceitaPopularIntegral = 0;
-
-            } else {
-                this.$refs.populacao.disabled = false;
-                this.$refs.divulgacao.disabled = false;
-                this.$refs.patrocinador.disabled = false;
-                this.$refs.qtPopularIntegral.disabled = false;
-                this.$refs.qtPopularParcial.disabled = false;
-            }
-        }
     },
     mounted: function() {
         this.t();
-        //console.log(this.disabled);
-        //this.$refs.add.disabled = !this.disabled;
+
     },
     methods: {
         t: function(){
@@ -561,42 +341,42 @@ Vue.component('visualizar-plano-distribuicao', {
 
             this.$data.produtos = [];
             url = "/proposta/visualizar-plano-distribuicao/detalhar/idPreProjeto/"+this.idpreprojeto+"?idPlanoDistribuicao=" + this.idplanodistribuicao + "&idMunicipio=" + this.idmunicipioibge +"&idUF=" + this.iduf
-            console.log(url);
             $3.ajax({
-              type: "GET",
-              url:url
+                type: "GET",
+                url:url
             })
-            .done(function(data) {
-                vue.$data.produtos = data.data;
-            })
-            .fail(function(){ alert('error'); });
+                .done(function(data) {
+                    vue.$data.produtos = data.data;
+                })
+                .fail(function(){ alert('Erro ao buscar detalhamento'); });
 
         },
-        populacaoValidate: function(val){
-            if (this.radio == 'n'){
-                quantidade = this.qtExemplares * 0.1;
-                if(val < quantidade) {
-                    alert("Valor não pode ser menor que: "+quantidade);
-                    this.qtGratuitaPopulacao = this.qtExemplares * 0.1;
-                }
+        converterParaMoedaAmericana: function(valor) {
+            if( !valor )
+                valor = '0';
 
-                if((parseInt( this.qtGratuitaDivulgacao ) + parseInt(this.qtGratuitaPatrocinador) + parseInt(this.qtGratuitaPopulacao)) > (this.qtExemplares * 0.3)) {
-                    alert("A soma dos valores de divulgação, patrocinador e população não pode passar de 30%");
-                    this.$refs.patrocinador.focus();
-                }
-            } else {
+            valor = valor.replace( /\./g, '' );
+            valor = valor.replace( /\,/g, '.' );
+            valor = parseFloat( valor );
+            valor = valor.toFixed( 2 );
 
-                this.qtGratuitaPopulacao = this.qtExemplares;
-            }
+            if( isNaN( valor ) )
+                valor = 0;
+
+            return valor;
         },
         mostrar: function() {
             this.active = this.active == true ? false: true ;
             this.icon = this.icon == 'visibility_off' ? 'add': 'visibility_off';
+        },
+        formatarValor: function (valor) {
+            valor = parseFloat(valor);
+            return numeral(valor).format();
         }
     }
-})
+});
 
 var app6 = new Vue({
-        el: '#example',
-    })
+    el: '#example'
+});
 </script>
