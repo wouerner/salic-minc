@@ -1181,15 +1181,17 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $this->view->dados = $dadosProjetoProduto;
         
         $this->view->idpronac = $idPronac;
-      
+        
         $dadosProjeto = $projetos->assinarParecer($idPronac);
-
+        
+        $this->view->IN2017 = $projetos->verificarIN2017($idPronac);        
         $this->view->dadosEnquadramento = $dadosProjeto['enquadramento'];
         $this->view->dadosProdutos = $dadosProjeto['produtos'];
         $this->view->dadosDiligencias = $dadosProjeto['diligencias'];
-        $this->view->dadosAlcance = $dadosProjeto['alcance'];
+        if ($this->view->IN2017) {
+            $this->view->dadosAlcance = $dadosProjeto['alcance'][0];
+        }
         $this->view->dadosParecer = $dadosProjeto['parecer'];
-        $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
         
     }
     
