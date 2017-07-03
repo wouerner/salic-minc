@@ -1298,7 +1298,7 @@ x - CORES
 
 #conteudo .black, 
 #conteudo .black a,
-#conteudo table.tabela td.black,
+#conteudo table.tabela td.black
 { 
     color:#000; 
     background: white !important;
@@ -1709,7 +1709,7 @@ x - BOTOES
 .btn_enviar_para_pagamento:hover,
 .btn_registrar_ordem_bancaria:hover,
 .btn_visualizar2:hover,
-.btn_historico:hover,
+.btn_historico:hover
 {
 	background-color:#fff;
 	border-top:1px solid #aaa;
@@ -2218,7 +2218,9 @@ x - RESET - Ajustes para compatibilidade com materialize
 .conteudoImprimir table th,
 #conteudo table.tabela th {
     border-radius: 0px;
-    padding: 5px 10px;
+    padding: 10px 10px;
+    background: #dee2e7;
+    border: 1px solid #ddd;
 }
 
 .conteudoImprimir table td,
