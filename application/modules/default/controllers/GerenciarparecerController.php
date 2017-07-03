@@ -613,7 +613,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $insere = $tbDistribuirParecer->inserir($dadosD);
                     $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Produto <strong>' . $dp->Produto . '</strong> encaminhado ao perito para an�lise t�cnica e emiss�o de parecer.');
 
-                    parent::message("Distribui��o Realizada com sucesso!  ", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+                    parent::message("Distribui&ccedil;&atilde;o Realizada com sucesso!  ", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
                 }
             }
 
@@ -665,7 +665,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
 
         if (strlen($observacao) < 11) {
-            parent::message("O campo observa��o deve ter no m�nimo 11 caracteres!",
+            parent::message("O campo observa&ccedil;&atilde;o deve ter no m�nimo 11 caracteres!",
                 "gerenciarparecer/concluir/idDistribuirParecer/" . $idDistribuirParecer . "/idpronac/" . $idPronac,
                 "ALERT");
         }
