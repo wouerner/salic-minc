@@ -23,7 +23,7 @@
 
     <!-- ========== INA� CIO CONTEAšDO ==========-->
 
-    <div id="conteudo">
+    <div id="conteudo" class="assinar_parecer">
     <div id="confirma"></div>
 		<?php if($this->verifica15porcento == 0) { ?>
     
@@ -151,14 +151,14 @@
 		    <tr>
 		      <td align="center"><a target="_blank" href="<?php echo $this->url(array('controller'=> 'analisarprojetoparecer','action' =>'produtosecundario'));?>?idPronac=<?php echo $produto->IdPRONAC; ?>&idProduto=<?php echo $produto->idProduto; ?>&stPrincipal=<?php echo $produto->tpProduto;?>">
 <?php echo $produto->Produto; ?></a></td> <!-- TODO: fazer if do produto principal / secundário -->
-		      <td align="center"><?php echo $produto->tpProduto; ?></td>		      
-		      <td align="center"><?php echo $produto->QtdeProduzida; ?></td>
-		      <td align="center"><?php echo $produto->QtdeDistribuicaoGratuita; ?></td>
-		      <td align="center"><?php echo $produto->QtdeVendaPopular; ?></td>
-		      <td align="center"><?php echo $produto->QtdeVendaProponente; ?></td>
-		      <td align="center"><?php echo $this->formatarReal($produto->PrecoMedio, 'Brasileira'); ?></td>
-		      <td align="center"><?php echo $this->formatarReal($produto->vlProduto, 'Brasileira'); ?></td>
-		      <td align="center"><?php echo $this->formatarReal($produto->ReceitaTotal, 'Brasileira'); ?></td>
+		      <td><?php echo $produto->tpProduto; ?></td>		      
+		      <td><?php echo number_format($produto->QtdeProduzida, 0, '', '.'); ?></td>
+		      <td><?php echo number_format($produto->QtdeDistribuicaoGratuita, 0, '', '.') ?></td>
+		      <td><?php echo number_format($produto->QtdeVendaPopular, 0, '', '.'); ?></td>
+		      <td><?php echo number_format($produto->QtdeVendaProponente, 0, '', '.'); ?></td>
+		      <td><?php echo $this->formatarReal($produto->PrecoMedio, 'Brasileira'); ?></td>
+		      <td><?php echo $this->formatarReal($produto->vlProduto, 'Brasileira'); ?></td>
+		      <td><?php echo $this->formatarReal($produto->ReceitaTotal, 'Brasileira'); ?></td>
 		    </tr>
 		    <?php $ReceitaTotal += $produto->ReceitaTotal; ?>
 		    <?php $ProdutoTotal += $produto->vlProduto; ?>
@@ -188,14 +188,14 @@
 		    <?php foreach($this->dadosDiligencias as $diligencia) : ?>
 		    <tr>
 		      <td align="center"><a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaanalista'))?>?idPronac=<?php echo $diligencia->IdPRONAC; ?>"><?php echo $diligencia->TipoDiligencia; ?></a>
-		      <td align="center"><?php echo Data::tratarDataZend($diligencia->DtEnvio, 'Brasileira'); ?> // tratar null </td>
-		      <td align="center"><?php echo ($diligencia->DtResposta) ? Data::tratarDataZend($diligencia->DtResposta, 'Brasileira') : '-'; ?></td>
+                        <td align="center"><?php echo ($diligencia->DtEnvio) ? Data::tratarDataZend($diligencia->DtEnvio, 'Brasileira') : '-'; ?></td>
+			<td align="center"><?php echo ($diligencia->DtResposta) ? Data::tratarDataZend($diligencia->DtResposta, 'Brasileira') : '-'; ?></td>
 		    </tr>
 		    <?php endforeach; ?>
 		  </table>
 		</td>
 	      </tr>
-	      
+	      <?php if ($this->view->IN2017): ?>
 	      <tr>
 		<td class="destacar bold" colspan="5">
                   A&ccedil;&otilde;es relevantes para o sucesso do projeto*
@@ -203,17 +203,17 @@
 	      </tr>    
 	      <tr>
 		<td colspan="5">
-                  <p><?php echo $this->dadosAlcance->AcoesRelevantes; ?></p>
+                  <p><?php echo $this->dadosAlcance->dsAcaoAlcanceProduto; ?></p>
 		</td>
 	      </tr>
-
+	      <?php endif; ?>
               <tr>
                 <td colspan="5" class="destacar bold">Posicionamento T&eacute;cnico</td>
               </tr>
 
 	      <tr>
-		<td colspan="2">Parecer:</td>
-		<td><?php echo $this->dadosParecer[0]['p.tpResultado']; ?></td>
+		<td>Parecer:</td>
+		<td colspan="4"><?php echo $this->dadosParecer[0]['p.tpResultado']; ?></td>
 	      </tr>
 	      
 	    </table>
