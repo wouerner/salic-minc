@@ -2362,3 +2362,7 @@ table.tabela td.destacar span,
 #planilhaOrcamentaria .tabela tr td.green {
     background: transparent !important;
 }
+
+.assinar_parecer td {
+    text-align: right;
+}
