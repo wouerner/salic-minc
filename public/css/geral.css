@@ -55,6 +55,7 @@ html {
 }
 
 body {
+    position: relative;
     margin: 0;
     background: #f8f8f8;
     color: #000;
@@ -2219,8 +2220,25 @@ x - RESET - Ajustes para compatibilidade com materialize
 #conteudo table.tabela th {
     border-radius: 0px;
     padding: 10px 10px;
+
+}
+
+.exibir-proposta-cultural .collapsible > li > .collapsible-header {
+    background: #e8ebef;
+}
+
+.exibir-proposta-cultural .collapsible .collapsible li > .collapsible-header,
+.exibir-proposta-cultural table tr th {
+    background-color: #f2f2f2;
+
+}
+.exibir-proposta-cultural table > tbody > tr > th {
     background: #dee2e7;
     border: 1px solid #ddd;
+}
+
+.exibir-proposta-cultural .collapsible > .collapsible-header.active {
+    border-bottom: none;
 }
 
 .conteudoImprimir table td,

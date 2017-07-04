@@ -25,6 +25,28 @@
                         </tbody>
                     </table>
 
+                    <div class="row">
+                        <div class="col s12">
+                            <ul class="collapsible collapsible-abrangencia" data-collapsible="expandable">
+                                <?php foreach ($this->abrangencias as $abrangencia): ?>
+                                    <li>
+                                        <div class="collapsible-header"><i class="material-icons">place</i>
+                                            Detalhamento - <?= isset($abrangencia['uf']) ? $abrangencia['uf'] : 'Exterior' ?> <?= isset($abrangencia['cidade']) ? ' - ' . $abrangencia['cidade'] : '' ?>
+                                        </div>
+                                        <div class="collapsible-body">
+                                            <visualizar-plano-distribuicao
+                                                idplanodistribuicao="<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>"
+                                                idpreprojeto="<?php echo $this->idPreProjeto; ?>"
+                                                iduf="<?php echo $abrangencia['idUF']; ?>"
+                                                idmunicipioibge="<?php echo $abrangencia['idMunicipioIBGE']; ?>"
+                                            ></visualizar-plano-distribuicao>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+
                     <table class="resumo-distribuicao planoDistribuicao ">
                         <caption><b>Resumo - <?php echo $planoDistribuicao->Produto; ?></b></caption>
                         <thead>
@@ -63,27 +85,6 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div class="row">
-                        <div class="col s12">
-                            <ul class="collapsible" data-collapsible="expandable">
-                                <?php foreach ($this->abrangencias as $abrangencia): ?>
-                                    <li>
-                                        <div class="collapsible-header"><i class="material-icons">add</i>
-                                            <?= isset($abrangencia['uf']) ? $abrangencia['uf'] : 'Exterior' ?> <?= isset($abrangencia['cidade']) ? ' - ' . $abrangencia['cidade'] : '' ?>
-                                        </div>
-                                        <div class="collapsible-body">
-                                            <visualizar-plano-distribuicao
-                                                idplanodistribuicao="<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>"
-                                                idpreprojeto="<?php echo $this->idPreProjeto; ?>"
-                                                iduf="<?php echo $abrangencia['idUF']; ?>"
-                                                idmunicipioibge="<?php echo $abrangencia['idMunicipioIBGE']; ?>"
-                                            ></visualizar-plano-distribuicao>
-                                        </div>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </div>
 
                 </div>
             </li>
@@ -95,11 +96,20 @@
 <script>
     $3(document).ready(function(){
 
-        $3('.collapsible').collapsible({
+        $3('.collapsible-produto').collapsible({
             accordion: true,
             onOpen: function(el) { el.find('.material-icons:first').html('remove'); },
             onClose: function(el) { el.find('.material-icons:first').html('add'); }
         });
+
+        $3('.collapsible-abrangencia').collapsible({
+            accordion: true,
+            onOpen: function(el) { el.find('.material-icons:first').html('remove'); },
+            onClose: function(el) { el.find('.material-icons:first').html('place'); }
+        });
+
+
+
     });
 
 </script>
