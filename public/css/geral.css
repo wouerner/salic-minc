@@ -55,6 +55,7 @@ html {
 }
 
 body {
+    position: relative;
     margin: 0;
     background: #f8f8f8;
     color: #000;
@@ -1298,7 +1299,7 @@ x - CORES
 
 #conteudo .black, 
 #conteudo .black a,
-#conteudo table.tabela td.black,
+#conteudo table.tabela td.black
 { 
     color:#000; 
     background: white !important;
@@ -1709,7 +1710,7 @@ x - BOTOES
 .btn_enviar_para_pagamento:hover,
 .btn_registrar_ordem_bancaria:hover,
 .btn_visualizar2:hover,
-.btn_historico:hover,
+.btn_historico:hover
 {
 	background-color:#fff;
 	border-top:1px solid #aaa;
@@ -2218,7 +2219,26 @@ x - RESET - Ajustes para compatibilidade com materialize
 .conteudoImprimir table th,
 #conteudo table.tabela th {
     border-radius: 0px;
-    padding: 5px 10px;
+    padding: 10px 10px;
+
+}
+
+.exibir-proposta-cultural .collapsible > li > .collapsible-header {
+    background: #e8ebef;
+}
+
+.exibir-proposta-cultural .collapsible .collapsible li > .collapsible-header,
+.exibir-proposta-cultural table tr th {
+    background-color: #f2f2f2;
+
+}
+.exibir-proposta-cultural table > tbody > tr > th {
+    background: #dee2e7;
+    border: 1px solid #ddd;
+}
+
+.exibir-proposta-cultural .collapsible > .collapsible-header.active {
+    border-bottom: none;
 }
 
 .conteudoImprimir table td,
