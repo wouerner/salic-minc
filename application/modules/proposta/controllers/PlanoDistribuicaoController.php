@@ -320,6 +320,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         try {
             $detalhamento->salvar($dados);
             $tblPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
+
         } catch(Exception $e) {
             $this->_helper->json(array('data' => $dados, 'success' => 'false', 'error'=>$e));
         }
