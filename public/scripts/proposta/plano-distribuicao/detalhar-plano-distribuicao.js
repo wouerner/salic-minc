@@ -710,9 +710,7 @@ var app6 = new Vue({
 
 
 $3(document).ready(function () {
-
     $3('#modal-pre-loader').show();
-
 });
 
 $3(document).ajaxStart(function() {
