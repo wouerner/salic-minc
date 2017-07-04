@@ -317,7 +317,7 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
             'sum(qtProponenteIntegral) as QtdeVendaNormal',
             'sum(qtProponenteParcial) as QtdeVendaPromocional',
             'avg(vlUnitarioProponenteIntegral) as vlUnitarioNormal',
-            '(avg(vlReceitaPopularParcial) + avg(vlReceitaPopularIntegral)+avg(vlReceitaProponenteIntegral)+ avg(vlReceitaProponenteParcial)) as  vlReceitaTotalPrevista'
+            'sum(vlReceitaPrevista) as  vlReceitaTotalPrevista'
         );
 
         $sql = $this->select()
