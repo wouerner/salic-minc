@@ -89,66 +89,70 @@
 <!-- ========== INICIO CONTEUDO ========== -->
 <div id="confirma" class="sumir"></div>
 <div id="msgAlerta" class="sumir"></div>
-<form action="<?php echo $this->acaoSalvar; ?>" name="frmPlanoDistribuicao" id="frmPlanoDistribuicao" method="post">
-    <input type="hidden" name="idPlanoDistribuicao" id="idPlanoDistribuicao" value="<?php echo $this->planoDistribuicao['idPlanoDistribuicao']; ?>">
-    <input type="hidden" name="idProjeto" id="idProjeto" value="<?php echo $this->planoDistribuicao['idProjeto']; ?>">
-    <!-- ========== INICIO TABELA DADOS ========== -->
-    <table  class="tabela">
-        <tr>
-            <th colspan="4" class="center-align">Cadastrar novo produto</th>
-        </tr>
-        <tr>
-            <td class="destacar bold w150">Produto <span style="color: red;">*</span></td>
-            <td>
-                <select class="input_simples w300 obrigatorio" name="produto" id="produto"
-                        <?php echo (!empty($this->planoDistribuicao->idProduto)) ? " disabled='disabled'" : ""; ?>>
-                    <option value=""> - Selecione - </option>
-                    <?php foreach ($this->comboprodutos as $produto): ?>
-                        <option value="<?php echo $produto['Codigo']; ?>" <?php echo ($produto['Codigo'] == $this->planoDistribuicao['idProduto']) ? " selected='selected'" : ""; ?>>
-                            <?php echo $produto['Descricao']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </td>
-            <td class="destacar bold w150">Produto Principal? <span style="color: red;">*</span></td>
-            <td>
-                <?php if (($this->bln_exitePP == "false") || isset($this->planoDistribuicao['idPlanoDistribuicao'])): //Verifica se existe produto principal ja cadastrado ?>
-                    <select class="input_simples w100 obrigatorio" name="prodprincipal" id="prodprincipal">
-                        <option value="" selected>- Selecione -</option>
-                        <option value="0" <?php echo ($this->planoDistribuicao['stPrincipal'] == "0") ? " selected='selected'" : ""; ?>>N&atilde;o</option>
-                        <option value="1" <?php echo ($this->planoDistribuicao['stPrincipal'] == "1") ? " selected='selected'" : ""; ?>>Sim</option>
+<div class="row card">
+    <div class="col s12">
+    <form action="<?php echo $this->acaoSalvar; ?>" name="frmPlanoDistribuicao" id="frmPlanoDistribuicao" method="post" class="">
+        <input type="hidden" name="idPlanoDistribuicao" id="idPlanoDistribuicao" value="<?php echo $this->planoDistribuicao['idPlanoDistribuicao']; ?>">
+        <input type="hidden" name="idProjeto" id="idProjeto" value="<?php echo $this->planoDistribuicao['idProjeto']; ?>">
+        <!-- ========== INICIO TABELA DADOS ========== -->
+        <table  class="">
+            <tr>
+                <th colspan="4" class="center-align">Cadastrar novo produto</th>
+            </tr>
+            <tr>
+                <td class="destacar bold w150">Produto <span style="color: red;">*</span></td>
+                <td>
+                    <select class="input_simples w300 obrigatorio" name="produto" id="produto"
+                            <?php echo (!empty($this->planoDistribuicao->idProduto)) ? " disabled='disabled'" : ""; ?>>
+                        <option value=""> - Selecione - </option>
+                        <?php foreach ($this->comboprodutos as $produto): ?>
+                            <option value="<?php echo $produto['Codigo']; ?>" <?php echo ($produto['Codigo'] == $this->planoDistribuicao['idProduto']) ? " selected='selected'" : ""; ?>>
+                                <?php echo $produto['Descricao']; ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
-                <?php else: ?>
-                    <select class="input_simples w100" name="prodprincipal" id="prodprincipal">
-                        <option value="0" selected>N&atilde;o</option>
+                </td>
+                <td class="destacar bold w150">Produto Principal? <span style="color: red;">*</span></td>
+                <td>
+                    <?php if (($this->bln_exitePP == "false") || isset($this->planoDistribuicao['idPlanoDistribuicao'])): //Verifica se existe produto principal ja cadastrado ?>
+                        <select class="input_simples w100 obrigatorio" name="prodprincipal" id="prodprincipal">
+                            <option value="" selected>- Selecione -</option>
+                            <option value="0" <?php echo ($this->planoDistribuicao['stPrincipal'] == "0") ? " selected='selected'" : ""; ?>>N&atilde;o</option>
+                            <option value="1" <?php echo ($this->planoDistribuicao['stPrincipal'] == "1") ? " selected='selected'" : ""; ?>>Sim</option>
+                        </select>
+                    <?php else: ?>
+                        <select class="input_simples w100" name="prodprincipal" id="prodprincipal">
+                            <option value="0" selected>N&atilde;o</option>
+                        </select>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="destacar bold" style="width: 1px;">&Aacute;rea <span style="color: red;">*</span></td>
+                <td>
+                    <select class="input_simples obrigatorio" name="areaCultural" id="areaCultural">
+                        <option value=""> - Selecione uma &Aacute;rea Cultural - </option>
+                        <?php foreach ($this->comboareasculturais as $comboareacultural): ?>
+                            <option value="<?php echo $comboareacultural->id; ?>" <?php echo ($comboareacultural->id == $this->planoDistribuicao['Area']) ? " selected='selected'" : ""; ?>>
+                                <?php echo $comboareacultural->descricao; ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
-                <?php endif; ?>
-            </td>
-        </tr>
-        <tr>
-            <td class="destacar bold" style="width: 1px;">&Aacute;rea <span style="color: red;">*</span></td>
-            <td>
-                <select class="input_simples obrigatorio" name="areaCultural" id="areaCultural">
-                    <option value=""> - Selecione uma &Aacute;rea Cultural - </option>
-                    <?php foreach ($this->comboareasculturais as $comboareacultural): ?>
-                        <option value="<?php echo $comboareacultural->id; ?>" <?php echo ($comboareacultural->id == $this->planoDistribuicao['Area']) ? " selected='selected'" : ""; ?>>
-                            <?php echo $comboareacultural->descricao; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </td>
-            <td class="destacar bold" style="width: 1px;">Segmento <span style="color: red;">*</span></td>
-            <td>
-                <select class="input_simples obrigatorio" name="segmentoCultural" id="segmentoCultural">
-                    <option value=""> <?php echo " - Selecione um segmento cultural - "; ?> </option>
-                </select>
-            </td>
-        </tr>
-    </table>
-    <div class="row">
-        <div class="col s12 center-align">
-            <br>
-            <button type="button" value="" class="btn" id="btn_salvar" >salvar</button>
+                </td>
+                <td class="destacar bold" style="width: 1px;">Segmento <span style="color: red;">*</span></td>
+                <td>
+                    <select class="input_simples obrigatorio" name="segmentoCultural" id="segmentoCultural">
+                        <option value=""> <?php echo " - Selecione um segmento cultural - "; ?> </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div class="row">
+            <div class="col s12 center-align">
+                <br>
+                <button type="button" value="" class="btn" id="btn_salvar" >salvar</button>
+            </div>
         </div>
+    </form>
     </div>
-</form>
+</div>
