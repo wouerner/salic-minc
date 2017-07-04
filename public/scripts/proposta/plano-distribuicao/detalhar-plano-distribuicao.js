@@ -33,7 +33,7 @@ numeral.defaultFormat('0,0.00');
 
 // register
 Vue.component('select-percent', {
-    template: '<select @change="valorSelecionado($event.target.value)" ref="combo"><option v-for="item in items">{{ item }}%</option></select>',
+    template: '<select @change="valorSelecionado($event.target.value)" ref="combo" tabindex="-1"><option v-for="item in items">{{ item }}%</option></select>',
     props: {
         disabled: {
             type: Boolean,
@@ -540,19 +540,19 @@ Vue.component('my-component', {
             .done(function(data) {
                 vue.$data.produtos = data.data;
             })
-            .fail(function(){ alert('Erro ao buscar detalhamento'); });
+            .fail(function(){ vue.mensagemErro('Erro ao buscar detalhamento'); });
 
         },
         salvar: function (event) {
 
             if( this.dsProduto == '' && this.tpVenda == 'i' ) {
-                alert("\xC9 obrigat\xF3rio informar a categoria");
+                this.mensagemAlerta("\xC9 obrigat\xF3rio informar a categoria");
                 this.$refs.dsProduto.focus();
                 return;
             }
 
             if( this.qtExemplares == 0) {
-                alert("Quantidade \xE9 obrigat\xF3rio!");
+                this.mensagemAlerta("Quantidade \xE9 obrigat\xF3rio!");
                 this.$refs.qtExemplares.focus();
                 return;
             }
@@ -560,17 +560,17 @@ Vue.component('my-component', {
             if (this.distribuicaoGratuita == 'n'){
 
                 if(this.vlUnitarioProponenteIntegral == 0 && this.percentualProponente > 0) {
-                    alert("Pre\xE7o unit\xE1rio no Proponente \xE9 obrigat\xF3rio!");
+                    this.mensagemAlerta("Pre\xE7o unit\xE1rio no Proponente \xE9 obrigat\xF3rio!");
                     return;
                 }
 
                 if(this.vlUnitarioPopularIntegral == 0 && this.percentualPrecoPopular > 0) {
-                    alert("Pre\xE7o unit\xE1rio no Pre\xE7o Popular \xE9 obrigat\xF3rio!");
+                    this.mensagemAlerta("Pre\xE7o unit\xE1rio no Pre\xE7o Popular \xE9 obrigat\xF3rio!");
                     return;
                 }
             }
             if(this.qtGratuitaPopulacao < this.qtGratuitaPopulacaoMinimo) {
-                alert("Quantidade para popula\xE7\xE3o n\xE3o pode ser menor que "+ this.qtGratuitaPopulacaoMinimo);
+                this.mensagemAlerta("Quantidade para popula\xE7\xE3o n\xE3o pode ser menor que "+ this.qtGratuitaPopulacaoMinimo);
                 this.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
                 this.$refs.populacao.focus();
                 return;
@@ -611,9 +611,9 @@ Vue.component('my-component', {
             .done(function() {
                 vue.t();
                 vue.limparFormulario();
-                alert('Salvo com sucesso');
+                vue.mensagemSucesso('Salvo com sucesso');
             })
-            .fail(function(){ alert('Erro ao salvar!'); });
+            .fail(function(){ vue.mensagemErro('Erro ao salvar!'); });
 
         },
         excluir: function(index){
@@ -627,7 +627,7 @@ Vue.component('my-component', {
             })
             .done(function() {
                 vue.t();
-                alert("Excluido com sucesso");
+                vue.mensagemSucesso("Excluido com sucesso");
             });
         },
         populacaoValidate: function(val){
@@ -636,7 +636,7 @@ Vue.component('my-component', {
                 var quantidadeMinima = this.qtGratuitaPopulacaoMinimo;
 
                 if(val < quantidadeMinima) {
-                    alert("Quantidade para popula\xE7\xE3o n\xE3o pode ser menor que "+ quantidadeMinima);
+                    vue.mensagemAlerta("Quantidade para popula\xE7\xE3o n\xE3o pode ser menor que "+ quantidadeMinima);
                      this.qtGratuitaPopulacao = quantidadeMinima;
                 }
 
@@ -691,6 +691,15 @@ Vue.component('my-component', {
             this.dsProduto = '';
             this.tpVenda = 'i';
             this.distribuicaoGratuita = 'n';
+        },
+        mensagemSucesso: function(msg) {
+            Materialize.toast(msg, 8000, 'green white-text');
+        },
+        mensagemErro: function(msg) {
+            Materialize.toast(msg, 8000, 'red darken-1 white-text');
+        },
+        mensagemAlerta: function(msg) {
+            Materialize.toast(msg, 8000, 'mensagem1 orange darken-3 white-text');
         }
     }
 });
