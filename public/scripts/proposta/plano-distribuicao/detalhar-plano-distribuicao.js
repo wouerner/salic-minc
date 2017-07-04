@@ -640,15 +640,6 @@ Vue.component('my-component', {
                      this.qtGratuitaPopulacao = quantidadeMinima;
                 }
 
-                // if( this.qtGratuitaPopulacao > quantidadeMinima) {
-                //
-                //      alert("A soma dos valores de divulga\xE7\xE3o, patrocinador e popula\xE7\xE3o n\xE3o pode passar de 30%");
-                //     this.$refs.patrocinador.focus();
-                //
-                // }else {
-                //     // this.percentualGratuito = this.percentualGratuitoPadrao;
-                //     // this.percentualProponente =  this.percentualProponentePadrao;
-                // }
             } else {
 
                 this.qtGratuitaPopulacao = this.qtExemplares;
@@ -672,9 +663,15 @@ Vue.component('my-component', {
             this.active = this.active == true ? false: true ;
             this.icon = this.icon == 'visibility_off' ? 'add': 'visibility_off';
         },
-        mostrarFormulario: function() {
-            this.visualizarFormulario = this.visualizarFormulario == true ? false: true ;
+        mostrarFormulario: function(el) {
+            this.visualizarFormulario = this.visualizarFormulario == true ? false: true;
 
+            if( this.visualizarFormulario == true ) {
+                var element = $('#' + el).offset().top - 60;
+                $('body').animate({
+                    scrollTop: element
+                }, 500);
+            }
         },
         formatarValor: function (valor) {
             valor = parseFloat(valor);
