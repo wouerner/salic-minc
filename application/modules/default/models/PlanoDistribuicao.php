@@ -312,8 +312,8 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
             'sum(qtPopularIntegral) as QtdeVendaPopularNormal',
             'sum(qtPopularParcial) as QtdeVendaPopularPromocional',
             'avg(vlUnitarioPopularIntegral) as vlUnitarioPopularNormal',
-            'sum(vlReceitaPopularIntegral + vlReceitaPopularParcial) /  sum(qtPopularIntegral + qtPopularParcial) AS ReceitaPopularNormal', #valor médio ponderado do preco popular
-            'sum(vlReceitaProponenteIntegral + vlReceitaProponenteParcial) /  sum(qtProponenteIntegral + qtProponenteParcial) AS PrecoUnitarioNormal', # valor médio ponderado do proponente
+            'COALESCE(sum(vlReceitaPopularIntegral + vlReceitaPopularParcial) / nullif((sum(qtPopularIntegral + qtPopularParcial)), 0), 0) AS ReceitaPopularNormal', #valor médio ponderado do preco popular
+            'COALESCE(sum(vlReceitaProponenteIntegral + vlReceitaProponenteParcial) / nullif((sum(qtProponenteIntegral + qtProponenteParcial)), 0), 0) AS PrecoUnitarioNormal', # valor médio ponderado do proponente
             'sum(qtProponenteIntegral) as QtdeVendaNormal',
             'sum(qtProponenteParcial) as QtdeVendaPromocional',
             'avg(vlUnitarioProponenteIntegral) as vlUnitarioNormal',
