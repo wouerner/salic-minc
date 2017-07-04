@@ -186,50 +186,51 @@
                         <h5 class="light center-align">Cadastrar novo detalhamento</h5>
                         <div class="row">
                             <div class="input-field col s6">
-                                <p><b>Tipo de venda</b><br>
+                                <span><b>Tipo de venda</b><br>
                                     <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaIngresso'" value="i"
                                            v-model="tpVenda"/>
                                     <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
                                     <input name="tipoVenda" type="radio" :id="_uid + 'tipoVendaExemplar'" value="e"
                                            v-model="tpVenda"/>
                                     <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
-                                </p>
+                                </span>
                             </div>
                             <div class="input-field col s6">
-                                <p><b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
+                                <span><b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
                                     <input name="group1" type="radio" :id="_uid + '1' " value="s"
                                            v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '1'">Sim</label>
                                     <input name="group1" type="radio" :id="_uid + '2' " value="n"
                                            v-model="distribuicaoGratuita"/>
                                     <label :for="_uid + '2'">N&atilde;o</label>
-                                </p>
+                                </span>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="input-field col s6" v-if="tpVenda == 'i'">
-                                <p><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
+                        <div class="row" v-if="tpVenda == 'i'">
+                            <div class="input-field col s6">
+                                <span><b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
                                     <input name="tipoLocalRealizacao" type="radio" :id="_uid + 'tipoAberto'" value="a"
                                            v-model="tpLocal"/>
                                     <label :for=" _uid + 'tipoAberto'">Aberto</label>
                                     <input name="tipoLocalRealizacao" type="radio" :id=" _uid + 'tipoFechado'" value="f"
                                            v-model="tpLocal"/>
                                     <label :for=" _uid + 'tipoFechado'">Fechado</label>
-                                </p>
+                                </span>
                             </div>
-                            <div class="input-field col s6" v-if="tpVenda == 'i'">
-                                <p><b>Espa&ccedil;o p&uacute;blico</b><br>
+                            <div class="input-field col s6">
+                                <span><b>Espa&ccedil;o p&uacute;blico</b><br>
                                     <input type="radio" :id="_uid + 'espacoPublicoSim'" value="s" v-model="tpEspaco"/>
                                     <label :for="_uid + 'espacoPublicoSim'">Sim</label>
                                     <input type="radio" id="espacoPublicoNao" :id=" _uid + 'espacoPublicoNao'" value="n"
                                            v-model="tpEspaco"/>
                                     <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
-                                </p>
+                                </span>
                             </div>
                         </div>
+                        <br>
                         <div class="row">
-                            <div class="input-field col s6" v-if="tpVenda == 'i'">
+                            <div class="input-field col s6">
                                 <input :id="_uid + 'dsProduto'" type="text" class="validate" ref="dsProduto"
                                        placeholder="Ex: Arquibancada" v-model="dsProduto">
                                 <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
