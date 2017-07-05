@@ -100,8 +100,19 @@ $arrMenu['assinatura']['menu'][] = array(
             'controller' => 'index',
             'action' => 'gerenciar-assinaturas'
         ), '', true),
-    'title' => 'Ir para Listar Selecionados',
+    'title' => 'Ir para Gerenciamento de assinaturas',
     'label' => 'Gerenciar Assinaturas'
+);
+
+$arrMenu['assinatura']['menu'][] = array(
+    'url' => $this->url(
+        array(
+            'module' => 'assinatura',
+            'controller' => 'index',
+            'action' => 'visualizar-assinaturas'
+        ), '', true),
+    'title' => 'Ir para Visualização de Assinaturas',
+    'label' => 'Visualizar Assinaturas'
 );
 
 $arrMenu['acompanhamento'] = array(
