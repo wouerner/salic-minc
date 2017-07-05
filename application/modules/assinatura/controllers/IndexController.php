@@ -6,6 +6,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     private $grupoAtivo;
 
+    private $cod_usuario;
+
     public function init()
     {
         parent::init();
@@ -13,6 +15,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         parent::perfil();
+
+        $this->cod_usuario = $this->auth->getIdentity()->usu_codigo;
     }
 
     public function indexAction()
@@ -31,6 +35,20 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
     }
+
+    public function visualizarAssinaturasAction()
+    {
+        $this->view->idUsuarioLogado = $this->cod_usuario;
+        $documentoAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+        $this->view->dados = $documentoAssinatura->obterProjetosAssinados(
+            $this->grupoAtivo->codOrgao,
+            $this->cod_usuario
+        );
+
+        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
+    }
+
+
 
     public function visualizarProjetoAction()
     {
