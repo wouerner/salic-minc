@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col s1"></div>
     <div class="col s2">
-        <label>PRONAC</label>
+        <label style="color: black">PRONAC</label>
         <p class="bold padding20 bordered">
             <?php
             echo $this->projeto['AnoProjeto'] . $this->projeto['Sequencial'];
@@ -16,7 +16,7 @@
         </p>
     </div>
     <div class="col s8">
-        <label>Nome do Projeto</label>
+        <label style="color: black">Nome do Projeto</label>
         <p class="bold padding20 bordered">
             <?php
             echo $this->projeto['NomeProjeto'];
@@ -28,14 +28,14 @@
 <div class="row">
     <div class="col s1"></div>
     <div class="col s3">
-        <label>CNPJ / CPF</label>
+        <label style="color: black">CNPJ / CPF</label>
         <p class="bold padding20 bordered">
             <?php
             echo $this->projeto['CgcCpf'];
             ?>
     </div>
     <div class="col s7">
-        <label>Proponente</label>
+        <label style="color: black">Proponente</label>
         <br/>
         <p class="bold padding20 bordered">
             <?php
@@ -48,7 +48,7 @@
 <div class="row">
     <div class="col s1"></div>
     <div class="col s1">
-        <label>UF</label>
+        <label style="color: black">UF</label>
         <p class="bold padding20 bordered">
             <?php
             echo $this->projeto['UfProjeto'];
@@ -56,7 +56,7 @@
         </p>
     </div>
     <div class="col s3">
-        <label>&Aacute;rea Cultural</label>
+        <label style="color: black">&Aacute;rea Cultural</label>
         <p class="bold padding20 bordered">
             <?php
             echo $this->areaCultural['Descricao'];
@@ -64,7 +64,7 @@
         </p>
     </div>
     <div class="col s4">
-        <label>Segmento Cultural</label>
+        <label style="color: black">Segmento Cultural</label>
         <p class="bold padding20 bordered">
             <?php
             echo $this->segmentoCultural['Descricao'];
@@ -72,7 +72,7 @@
         </p>
     </div>
     <div class="col s2">
-        <label>Per&iacute;odo de Execu&ccedil;&atilde;o</label>
+        <label style="color: black">Per&iacute;odo de Execu&ccedil;&atilde;o</label>
         <p class="padding20 bordered">
             <b>
                 <?php
@@ -93,7 +93,7 @@
 <div class="row">
     <div class="col s1"></div>
     <div class="col s2 center-align">
-        <label>
+        <label style="color: black">
             Vl. Solicita&ccedil;&atilde;o
             <br/>
             (A)
@@ -105,7 +105,7 @@
         </p>
     </div>
     <div class="col s2 center-align">
-        <label>
+        <label style="color: black">
             Vl. Outras Fontes
             <br/>
             (B)
@@ -115,7 +115,7 @@
         </p>
     </div>
     <div class="col s2 center-align">
-        <label>
+        <label style="color: black">
             Vl. Proposta
             <br/>
             (C = A + B)
@@ -134,7 +134,7 @@
         </p>
     </div>
     <div class="col s2 center-align">
-        <label>
+        <label style="color: black">
             Vl. Aprovado
             <br/>
             (D)
@@ -160,7 +160,7 @@
         </p>
     </div>
     <div class="col s2 center-align">
-        <label>
+        <label style="color: black">
             Vl. Projeto
             <br/>
             (E = B + D)
@@ -175,7 +175,7 @@
 <div class="row">
     <div class="col s1"></div>
     <div class="col s10">
-        <label>S&iacute;ntese do Projeto</label>
+        <label style="color: black">S&iacute;ntese do Projeto</label>
         <p class="padding20 bordered">
             <?php
             echo $this->projeto['ResumoProjeto'];
@@ -187,16 +187,16 @@
 <div class="row">
     <div class="col s1"></div>
     <div class="col s10">
-        <h5>Produ&ccedil;&atilde;o do Projeto</h5>
+        <h5 style="color: black">Produ&ccedil;&atilde;o do Projeto</h5>
         <div class="bordered padding20">
             <div class="row">
                 <table class="table margin0">
                     <thead>
                     <tr>
-                        <th class=""><label>Produto</label></th>
-                        <th><label>Tipo</label></th>
-                        <th><label>Total Produzido</label></th>
-                        <th><label>Total de Receita Prevista</label></th>
+                        <th><label style="color: black">Produto</label></th>
+                        <th><label style="color: black">Tipo</label></th>
+                        <th><label style="color: black">Total Produzido</label></th>
+                        <th><label style="color: black">Total de Receita Prevista</label></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -204,8 +204,8 @@
                         <tr>
                             <td><?php echo $dadoProducaoProjeto['Produto'] ?></td>
                             <td><?php echo $dadoProducaoProjeto['tpProduto'] ?></td>
-                            <td><?php echo number_format($dadoProducaoProjeto['QtdeProduzida'], 2, ',', '.') ?></td>
-                            <td><?php echo number_format($dadoProducaoProjeto['ReceitaTotal'], 2, ',', '.') ?></td>
+                            <td align="right"><?php echo $dadoProducaoProjeto['QtdeProduzida'] ?></td>
+                            <td align="right"><?php echo number_format($dadoProducaoProjeto['ReceitaTotal'], 2, ',', '.') ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -219,7 +219,7 @@
     <div class="col s1"></div>
     <div class="col s10">
         <p>
-            <label class="margin-bottom20">Motiva&ccedil;&atilde;o do Enquadramento</label>
+            <label class="margin-bottom20" style="color: black">Parecer T&eacute;cnico:</label>
         </p>
         <div class="padding20 bordered">
             <?php

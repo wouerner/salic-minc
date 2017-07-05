@@ -80,9 +80,9 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 $objOrgaos = new Orgaos();
                 $orgaoSuperior = $objOrgaos->obterOrgaoSuperior($this->view->projeto['Orgao']);
 
-                $orgaoDestino = 171;
+                $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
                 if ($orgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-                    $orgaoDestino = 262;
+                    $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
                 }
 
                 $objTbProjetos->alterarOrgao($orgaoDestino, $get->IdPRONAC);
