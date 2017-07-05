@@ -143,28 +143,9 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             $this->_schema
         );
 
-        $query->joinLeft(
-            array('Enquadramento' => 'Enquadramento'),
-            "Enquadramento.IdPRONAC = Projetos.IdPRONAC
-             AND Enquadramento.AnoProjeto = Projetos.AnoProjeto
-             AND Enquadramento.Sequencial = Projetos.Sequencial",
-            array("Enquadramento.IdEnquadramento"),
-            $this->_schema
-        );
-
-        $query->joinInner(
-            array('tbAssinatura' => 'tbAssinatura'),
-            "tbAssinatura.IdPRONAC = Projetos.IdPRONAC",
-            array(
-                "tbAssinatura.*"
-            ),
-            $this->_schema
-        );
-
         $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
 
         if($idAssinante) {
-//            $query->where("tbAssinatura.idAssinante = ?", $idAssinante);
             $query->where(new Zend_Db_Expr(
 
             'tbDocumentoAssinatura.idDocumentoAssinatura IN (
@@ -173,9 +154,9 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
              )'
             ));
         }
-//        $ordenacao[] = 'possuiAssinatura asc';
-//        $query->order($ordenacao);
-xd($query->assemble());
+        $ordenacao[] = 'tbDocumentoAssinatura.dt_criacao desc';
+        $query->order($ordenacao);
+
         return $this->_db->fetchAll($query);
     }
 }
