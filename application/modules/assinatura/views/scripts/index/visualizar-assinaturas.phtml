@@ -83,9 +83,9 @@
                                     </td>
                                     <td class="center-align" align="center">
                                         <?php
-                                        $estadoAssinatura = "<span class='color-red'>Inativo</span>";
+                                        $estadoAssinatura = "<span style='color:red'>Inativo</span>";
                                         if($dado['stEstado'] == Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO) {
-                                            $estadoAssinatura = "<span class='color-green'>Ativo</span>";
+                                            $estadoAssinatura = "<span style='color:green'>Ativo</span>";
                                         }
                                         echo $estadoAssinatura;
                                         ?>
