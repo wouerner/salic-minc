@@ -81,4 +81,101 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 //        }
 //    }
 
+    public function obterProjetosAssinados(
+        $idOrgaoDoAssinante,
+        $idAssinante = null
+    )
+    {
+        $query = $this->select();
+        $query->setIntegrityCheck(false);
+
+        $query->from(
+            array("Projetos" => "Projetos"),
+            array(
+                'pronac' => New Zend_Db_Expr('Projetos.AnoProjeto + Projetos.Sequencial'),
+                'Projetos.nomeProjeto',
+                'Projetos.IdPRONAC',
+                'Projetos.CgcCpf',
+                'Projetos.Area as cdarea',
+                'Projetos.ResumoProjeto',
+                'Projetos.UfProjeto',
+                'Projetos.DtInicioExecucao',
+                'Projetos.DtFimExecucao',
+                'Projetos.Situacao',
+                'Projetos.DtSituacao',
+                'Projetos.Orgao',
+                'tbDocumentoAssinatura.cdSituacao',
+                'tbDocumentoAssinatura.stEstado'
+            ),
+            $this->_schema
+        );
+
+        $query->joinInner(
+            array('Area' => 'Area'),
+            "Area.Codigo = Projetos.Area",
+            "Area.Descricao as area",
+            $this->_schema
+        );
+
+        $query->joinInner(
+            array('Segmento' => 'Segmento'),
+            "Segmento.Codigo = Projetos.Segmento",
+            array(
+                "Segmento.Descricao as segmento",
+                "Segmento.tp_enquadramento"
+            ),
+            $this->_schema
+        );
+
+        $query->joinInner(
+            array('tbDocumentoAssinatura' => 'tbDocumentoAssinatura'),
+            "tbDocumentoAssinatura.IdPRONAC = Projetos.IdPRONAC",
+            array(
+                "tbDocumentoAssinatura.idTipoDoAtoAdministrativo"
+            ),
+            $this->_schema
+        );
+
+        $query->joinInner(
+            array('Verificacao' => 'Verificacao'),
+            "Verificacao.idVerificacao = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
+            'Verificacao.Descricao as tipoDoAtoAdministrativo',
+            $this->_schema
+        );
+
+        $query->joinLeft(
+            array('Enquadramento' => 'Enquadramento'),
+            "Enquadramento.IdPRONAC = Projetos.IdPRONAC
+             AND Enquadramento.AnoProjeto = Projetos.AnoProjeto
+             AND Enquadramento.Sequencial = Projetos.Sequencial",
+            array("Enquadramento.IdEnquadramento"),
+            $this->_schema
+        );
+
+        $query->joinInner(
+            array('tbAssinatura' => 'tbAssinatura'),
+            "tbAssinatura.IdPRONAC = Projetos.IdPRONAC",
+            array(
+                "tbAssinatura.*"
+            ),
+            $this->_schema
+        );
+
+        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
+
+        if($idAssinante) {
+//            $query->where("tbAssinatura.idAssinante = ?", $idAssinante);
+            $query->where(new Zend_Db_Expr(
+
+            'tbDocumentoAssinatura.idDocumentoAssinatura IN (
+                SELECT distinct idDocumentoAssinatura from "sac"."dbo"."tbAssinatura"
+                 where "sac"."dbo"."tbAssinatura".idAssinante = ' . $idAssinante . '
+             )'
+            ));
+        }
+//        $ordenacao[] = 'possuiAssinatura asc';
+//        $query->order($ordenacao);
+xd($query->assemble());
+        return $this->_db->fetchAll($query);
+    }
 }
