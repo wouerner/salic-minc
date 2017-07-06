@@ -1,3 +1,10 @@
+Release 2.1.2
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Melhoria nas mensagens, adiciona toast do materialize
+ * [FIX] PROPOSTA:PLANO DE DISTRIBUICAO Corrige ao salvar receita total prevista
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Mostrando categoria quando for exemplar
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Melhoria na visualizacao do plano de distribuicao na admissibilidade
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Visualizando plano de distribuicao detalhado em outras partes do sistema
+
 Release 2.1.1
  * [Fix] Projeto/Readequação orçamentária: ajuste da lista de etapas conforme a IN 2017 ao incluir novo item
 
