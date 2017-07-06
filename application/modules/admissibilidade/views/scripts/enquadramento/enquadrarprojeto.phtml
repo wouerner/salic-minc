@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="col s12">
                             <label class="green-text text-darken-4">
-                                Justificativa <b style="color: red">*</b>
+                                Parecer de Enquadramento <b style="color: red">*</b>
                             </label>
                             <textarea cols="80" id="observacao"
                                       name="observacao"
@@ -142,10 +142,12 @@
 
         jQuery(function ($) {
 
+            var limiteMaximo = 8000;
+
             var editorRico = $("#observacao").editorRico({
                 altura: 200,
                 isLimitarCarateres: true,
-                maxchar: 8000
+                maxchar: limiteMaximo
             });
 
             $3('#areaCultural').change(function () {
@@ -188,7 +190,7 @@
                 }
             });
             $.validator.addMethod("validarPreenchimentoMaximo", function (value, element) {
-                if (editorRico.contarCaracteres() <= 1000) {
+                if (editorRico.contarCaracteres() <= limiteMaximo) {
                     return true;
                 }
             });
