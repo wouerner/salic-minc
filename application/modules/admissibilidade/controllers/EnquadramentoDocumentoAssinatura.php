@@ -49,6 +49,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
             $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
+            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
 
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
@@ -75,7 +76,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-documento-assinatura');
 
-        $view->titulo = 'Enquadramento';
+        $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
 
         $objPlanoDistribuicaoProduto = new Projeto_Model_vwPlanoDeDistribuicaoProduto();
         $view->dadosProducaoProjeto = $objPlanoDistribuicaoProduto->obterProducaoProjeto(array(
