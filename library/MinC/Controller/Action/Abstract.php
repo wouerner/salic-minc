@@ -579,9 +579,9 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
      * @access public
      * @param bool $obrigatoriedadeIdProjeto
      * @param bool $obrigatoriedadeIdPronac
-     * @return void
+     * @return mixed
      */
-    public function verificarPermissaoAcesso($proposta = false, $projeto = false, $administrativo = false)
+    public function verificarPermissaoAcesso($proposta = false, $projeto = false, $administrativo = false, $callback=false)
     {
         $msgERRO = '';
         $auth = Zend_Auth::getInstance()->getIdentity(); // pega a autentica??o
@@ -615,9 +615,16 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
 
             //Se o usuario nao tiver permissao pra acessar o Projeto / Proposta / Administrativo, exibe a msg de alerta.
             if (!$permissao) {
+
+                if( $callback ) {
+                    return ['status' => false, 'msg' => $msgERRO];
+                }
                 $this->message($msgERRO, 'principalproponente', 'ALERT');
             }
 
+            if( $callback ) {
+                return ['status' => true, 'msg' => 'Usu&aacute;rio com permiss&atilde;o'];
+            }
         }
 
     } // fecha metodo verificarPermissaoAcesso()
