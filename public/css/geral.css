@@ -187,6 +187,15 @@ x - LOADER
     word-wrap: break-word;
 }
 
+.modal.modal-pre-loader {
+    width: 300px !important;
+    height: 180px !important;
+    padding: 10px;
+}
+
+.modal.modal-pre-loader .modal-content {
+    padding: 10px;
+}
 /*--------------------------------------------------------------
 x - BARRA GOVERNO
 --------------------------------------------------------------*/
