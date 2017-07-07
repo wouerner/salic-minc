@@ -6038,11 +6038,11 @@ class Projetos extends MinC_Db_Table_Abstract
             array('en' => 'Enquadramento'), 'en.idpronac = pr.IdPRONAC', array(''), 'SAC.dbo'
         );
 
-        $select->joinInner(
+        $select->joinLeft(
             array('tp' => 'tbpauta'), 'tp.idpronac = pr.idpronac AND tp.dtenviopauta IN (SELECT TOP 1 Max(dtenviopauta) FROM bdcorporativo.scsac.tbpauta WHERE  idpronac = pr.idpronac)', array(''), 'BDCORPORATIVO.scSAC'
         );
 
-        $select->joinInner(
+        $select->joinLeft(
             array('tr' => 'tbreuniao'), 'tr.idnrreuniao = tp.idnrreuniao', array('nrreuniao'), 'SAC.dbo'
         );
 
