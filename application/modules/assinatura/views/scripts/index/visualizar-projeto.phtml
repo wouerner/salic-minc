@@ -69,6 +69,9 @@
                                 <?php endforeach; ?>
                             </div>
                         </div>
+                        <div class="center-align">
+                            <img src="/public/img/logo-500px.png" style="width:68px">
+                        </div>
                     </div>
                     <div class="col s1"></div>
                 </div>
@@ -113,6 +116,9 @@
                    )
                    . "?IdPRONAC={$this->IdPRONAC}";
                ?>">Voltar</a>
+            <?php
+            if($this->documentoAssinatura['cdSituacao'] == Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO):
+            ?>
             <a class="btn waves-effect waves-dark"
                href="<?php
                echo $this->url(array(
@@ -122,6 +128,9 @@
                    ))
                    . "?IdPRONAC={$this->IdPRONAC}&idTipoDoAtoAdministrativo={$this->idTipoDoAtoAdministrativo}";
                ?>">Assinar</a>
+            <?php
+            endif;
+            ?>
             <a id="acao_imprimir"
                href="#"
                class="btn waves-effect waves-dark"
