@@ -993,6 +993,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $this->view->dadosCombo = $dadosCombo;
         $this->view->idResponsavel = $this->idResponsavel;
         $this->view->idUsuario = $this->idUsuario;
+        $this->view->idAgente = $this->idAgente;
     }
 
     public function listarPropostasAjaxAction()
