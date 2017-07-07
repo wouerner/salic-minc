@@ -74,9 +74,9 @@
                                     <td class="center-align" align="center"><?php echo $dado['tipoDoAtoAdministrativo']; ?></td>
                                     <td class="center-align" align="center">
                                         <?php
-                                        $situacaoAssinatura = "Dispon&iacute;vel para assinatura";
+                                        $situacaoAssinatura = "Fechado para assinatura";
                                         if($dado['cdSituacao'] == Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA) {
-                                            $situacaoAssinatura = "Fechado para assinatura";
+                                            $situacaoAssinatura = "Dispon&iacute;vel para assinatura";
                                         }
                                         echo $situacaoAssinatura;
                                         ?>
