@@ -132,26 +132,26 @@
             }
         });
 
-//        $("#frmNovaProposta").validate({
-//            rules: {
-//                mecanismo: {required: true},
-//                proponente: {required: true}
-//            },
-//            messages: {
-//                mecanismo: {required: " Obrigat&oacute;rio"},
-//                proponente: {required: " Obrigat&oacute;rio"}
-//            },
-//            submitHandler: function (form) {
-//                //form.submit();
-//                $("#msgValidaProponente").html("");
-//                var nomeProponente = $('#proponente option:selected').text();
-//                if (nomeProponente == "- TODOS -") {
-//                    $("#msgValidaProponente").html("<font color='red'>Informe o nome de um Proponente.</font>");
-//                    return false;
-//                }
-//                jqAjaxForm(form, 'propostasCadastradas');
-//            }
-//        });
+        $("#frmNovaProposta").validate({
+            rules: {
+                mecanismo: {required: true},
+                proponente: {required: true}
+            },
+            messages: {
+                mecanismo: {required: " Obrigat&oacute;rio"},
+                proponente: {required: " Obrigat&oacute;rio"}
+            },
+            submitHandler: function (form) {
+                //form.submit();
+                $("#msgValidaProponente").html("");
+                var nomeProponente = $('#proponente option:selected').text();
+                if (nomeProponente == "- TODOS -") {
+                    $("#msgValidaProponente").html("<font color='red'>Informe o nome de um Proponente.</font>");
+                    return false;
+                }
+                jqAjaxForm(form, 'propostasCadastradas');
+            }
+        });
 
     });
 </script>
