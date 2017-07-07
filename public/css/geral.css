@@ -2363,6 +2363,6 @@ table.tabela td.destacar span,
     background: transparent !important;
 }
 
-.assinar_parecer td {
+.assinar_parecer .produtos td {
     text-align: right;
 }
