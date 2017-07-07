@@ -132,7 +132,20 @@ class ListarprojetosController extends MinC_Controller_Action_Abstract
 
                 if (count($ProjetosVinculados) > 0) {
                     foreach ($ProjetosVinculados as $projeto) {
-                        $projeto['projetoPossuiProposta'] = $tbProjetos->verificarSeProjetoPossuiProposta($projeto['IdPRONAC']);
+                        $projeto['projetoPossuiProposta'] = false;
+
+                        $idPreProjeto = $tbProjetos->verificarSeProjetoPossuiProposta($projeto['IdPRONAC']);
+
+                        if (!empty($idPreProjeto)) {
+                            $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
+                            $permissao = $fnVerificarPermissao->verificarPermissaoProposta($idPreProjeto, $this->getIdUsuario);
+
+                            $projeto['projetoPossuiProposta'] = ($permissao == 1) ? true : false;
+
+                        } else {
+                            $projeto['projetoPossuiProposta'] = false;
+                        }
+
                         $projeto['liberarEdicao'] = $tbProjetos->fnChecarLiberacaoDaAdequacaoDoProjeto($projeto['IdPRONAC']);
 
                         $projetos[] = $projeto;
@@ -205,14 +218,14 @@ class ListarprojetosController extends MinC_Controller_Action_Abstract
 
         $idPronac = isset($params['idPronac']) ? $params['idPronac'] : '';
 
-        $permissao = $this->verificarPermissaoAcesso(false, $idPronac, false, true);
+        $permissaoProjeto = $this->verificarPermissaoAcesso(false, $idPronac, false, true);
 
-        if (true !== $permissao['status']) {
-            $this->_helper->json($permissao);
+        if (true !== $permissaoProjeto['status']) {
+            $this->_helper->json($permissaoProjeto);
             die;
         }
 
-        if(empty($this->idAgente)) {
+        if (empty($this->idAgente)) {
             $return['msg'] = 'Agente inv&aacute;lido!';
             $return['status'] = false;
 
@@ -222,21 +235,28 @@ class ListarprojetosController extends MinC_Controller_Action_Abstract
 
         $tbProjetos = new Projeto_Model_DbTable_Projetos();
 
-        if ($tbProjetos->verificarSeProjetoPossuiProposta($idPronac) ) {
+        $idPreProjeto = $tbProjetos->verificarSeProjetoPossuiProposta($idPronac);
 
-            $retorno = $tbProjetos->spClonarProjeto($idPronac, $this->idAgente);
+        if (!empty($idPreProjeto)) {
 
-            if( $retorno->stEstado == 'TRUE' ) {
-                $return['idPreProjeto'] = $retorno->Mensagem;
+            $permissaoProposta = $this->verificarPermissaoAcesso($idPreProjeto, false, false, true);
+
+            if (true !== $permissaoProposta['status']) {
+                $this->_helper->json($permissaoProposta);
+                die;
+            }
+
+            $retorno = (array) $tbProjetos->spClonarProjeto($idPronac, $this->idAgente);
+
+            if ($retorno['stEstado'] == 'TRUE') {
+                $return['idPreProjeto'] = $retorno['Mensagem'];
                 $return['msg'] = 'Sucesso! Voc&ecirc; ser&aacute; redirecionado para a proposta!';
                 $return['status'] = true;
-            }else {
-                $return['msg'] = $retorno->Mensagem;
+            } else {
+                $return['msg'] = $retorno['Mensagem'];
                 $return['status'] = false;
             }
 
-            $this->_helper->json($return);
-            die;
         } else {
             $return['msg'] = 'Esse projeto n&atilde;o pode ser clonado!';
             $return['status'] = false;
