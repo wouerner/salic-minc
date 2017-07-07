@@ -142,9 +142,9 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
                     'stestado' => '0'
                 );
 
-                if(!empty($idPlanilhaItens) && $idPlanilhaItens!="0") {
+                if (!empty($idPlanilhaItens) && $idPlanilhaItens!="0") {
                     $itemNome = $nomeItem[0]->NomeDoItem;
-                }else {
+                } else {
                     $itemNome = $post->Descricao;
                 }
 
@@ -171,7 +171,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
                     $associaritem = new MantertabelaitensDAO();
                     $associaritem = $associaritem->associarItemObj($dadosassociar);
                     if ($associaritem) {
-                        parent::message("A solicitação foi encaminhada ao Minc. Aguarde a resposta!", "/proposta/mantertabelaitens/solicitacoes?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
+                        parent::message("A solicita&ccedil;&atilde;o foi encaminhada ao Minc. Aguarde a resposta!", "/proposta/mantertabelaitens/solicitacoes?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
                     }
                 }else if ($solicitacao == 'novoitem');
                 {
@@ -180,7 +180,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
                         throw new Exception("Por favor, informe o nome do Item!");
                     }
                     else if (strlen($post->Descricao) > 100) {
-                        throw new Exception("O nome do Item n?o pode conter mais de 100 caracteres!");
+                        throw new Exception("O nome do Item n&atilde;o pode conter mais de 100 caracteres!");
                     }
 
                     //codigo antigo
