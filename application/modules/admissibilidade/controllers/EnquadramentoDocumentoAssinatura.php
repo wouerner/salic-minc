@@ -57,13 +57,13 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
         }
 
         $objProjeto = new Projetos();
-        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto encaminhado para assinatura.');
+        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto em an&aacute;lise documental.');
 
-        $orgaoDestino = 166;
+        $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
         $objOrgaos = new Orgaos();
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
         if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $orgaoDestino = 262;
+            $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
         }
         $objTbProjetos->alterarOrgao($orgaoDestino, $this->idPronac);
     }
@@ -119,6 +119,10 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
         );
 
         $view->dadosEnquadramento = $objEnquadramento->findBy($arrayPesquisa);
+
+        $auth = Zend_Auth::getInstance();
+        $dadosUsuarioLogado = $auth->getIdentity();
+        $view->orgaoSuperior = $dadosUsuarioLogado->usu_org_max_superior;
 
         return $view->render('documento-assinatura.phtml');
     }
