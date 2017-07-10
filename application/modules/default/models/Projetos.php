@@ -233,11 +233,11 @@ class Projetos extends MinC_Db_Table_Abstract
         $select->joinInner(
             array('a' => 'Agentes'), 'a.CNPJCPF = p.CgcCpf', array('a.idAgente'
         , 'a.CNPJCPF'
-        ), 'AGENTES.dbo'
+        ), $this->getSchema('agentes')
         );
 
         $select->joinLeft(
-            array('n' => 'Nomes'), 'n.idAgente = a.idAgente', array('n.Descricao AS NomeProponente'), 'AGENTES.dbo'
+            array('n' => 'Nomes'), 'n.idAgente = a.idAgente', array('n.Descricao AS NomeProponente'), $this->getSchema('agentes')
         );
 
         // adiciona quantos filtros foram enviados
@@ -1245,11 +1245,11 @@ class Projetos extends MinC_Db_Table_Abstract
         $select->joinInner(
             array('mun' => 'Municipios'),
             //"mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE",
-            "mun.idUFIBGE = abrAux.idUF AND mun.idMunicipioIBGE = abrAux.idMunicipioIBGE", array('mun.Descricao as cidade'), 'AGENTES.dbo'
+            "mun.idUFIBGE = abrAux.idUF AND mun.idMunicipioIBGE = abrAux.idMunicipioIBGE", array('mun.Descricao as cidade'), $this->getSchema('agentes')
         );
         $select->joinInner(
-        //array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), 'AGENTES.dbo'
-            array('uf' => 'UF'), "uf.idUF = mun.idUFIBGE", array('uf.Descricao as uf', 'uf.Regiao'), 'AGENTES.dbo'
+        //array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), $this->getSchema('agentes')
+            array('uf' => 'UF'), "uf.idUF = mun.idUFIBGE", array('uf.Descricao as uf', 'uf.Regiao'), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('apr' => $selectAp), "apr.Anoprojeto = Projetos.AnoProjeto and apr.Sequencial = Projetos.Sequencial", array('apr.somatorio')
@@ -1320,10 +1320,10 @@ class Projetos extends MinC_Db_Table_Abstract
         //array('abr' => 'Abrangencia'), "abr.idProjeto = Projetos.idProjeto", array('abr.idAbrangencia')
         );
         $select->joinLeft(
-            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), 'AGENTES.dbo'
+            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), $this->getSchema('agentes')
         );
         $select->joinLeft(
-            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), 'AGENTES.dbo'
+            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), $this->getSchema('agentes')
         );
         $select->joinLeft(
             array('tbFiscalizacao'), "tbFiscalizacao.IdPRONAC = Projetos.IdPRONAC", array('idTecnico' => 'tbFiscalizacao.idAgente', 'tbFiscalizacao.tpDemandante',
@@ -1379,19 +1379,19 @@ class Projetos extends MinC_Db_Table_Abstract
         //array('abr' => 'Abrangencia'), "abr.idProjeto = Projetos.idProjeto", array()
         );
         $select->joinInner(
-            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array(), 'AGENTES.dbo'
+            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array(), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('uf' => 'UF'), "uf.idUF = abr.idUF", array(), 'AGENTES.dbo'
+            array('uf' => 'UF'), "uf.idUF = abr.idUF", array(), $this->getSchema('agentes')
         );
         $select->joinLeft(
             array('tbFiscalizacao'), "tbFiscalizacao.IdPRONAC = Projetos.IdPRONAC", array()
         );
         $select->joinLeft(
-            array('tbAg' => 'Agentes'), "tbFiscalizacao.idAgente = tbAg.idAgente", array(), 'AGENTES.dbo'
+            array('tbAg' => 'Agentes'), "tbFiscalizacao.idAgente = tbAg.idAgente", array(), $this->getSchema('agentes')
         );
         $select->joinLeft(
-            array('tbNm' => 'Nomes'), "tbFiscalizacao.idAgente = tbNm.idAgente", array(), 'AGENTES.dbo'
+            array('tbNm' => 'Nomes'), "tbFiscalizacao.idAgente = tbNm.idAgente", array(), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('tbint' => 'Internet'), "tbint.idAgente = tbFiscalizacao.idAgente and tbint.Status = 1", array('tbint.Descricao AS emailtecnico'), 'Agentes.dbo'
@@ -1450,19 +1450,19 @@ class Projetos extends MinC_Db_Table_Abstract
         //array('abr' => 'Abrangencia'), "abr.idProjeto = Projetos.idProjeto", array('abr.idAbrangencia')
         );
         $select->joinInner(
-            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), 'AGENTES.dbo'
+            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), 'AGENTES.dbo'
+            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), $this->getSchema('agentes')
         );
         $select->joinLeft(
             array('tbFiscalizacao'), "tbFiscalizacao.IdPRONAC = Projetos.IdPRONAC and tbFiscalizacao.stFiscalizacaoProjeto in ('0','1')", array('idTecnico' => 'tbFiscalizacao.idAgente', 'tbFiscalizacao.tpDemandante', 'CAST(tbFiscalizacao.dsFiscalizacaoProjeto AS TEXT) AS dsFiscalizacaoProjeto', 'tbFiscalizacao.idFiscalizacao', 'tbFiscalizacao.dtInicioFiscalizacaoProjeto', 'tbFiscalizacao.dtFimFiscalizacaoProjeto', 'tbFiscalizacao.stFiscalizacaoProjeto', 'tbFiscalizacao.dtRespostaSolicitada')
         );
         $select->joinLeft(
-            array('tbAg' => 'Agentes'), "tbFiscalizacao.idAgente = tbAg.idAgente", array('cpfTecnico' => 'tbAg.CNPJCPF'), 'AGENTES.dbo'
+            array('tbAg' => 'Agentes'), "tbFiscalizacao.idAgente = tbAg.idAgente", array('cpfTecnico' => 'tbAg.CNPJCPF'), $this->getSchema('agentes')
         );
         $select->joinLeft(
-            array('tbNm' => 'Nomes'), "tbFiscalizacao.idAgente = tbNm.idAgente", array('nmTecnico' => 'tbNm.Descricao'), 'AGENTES.dbo'
+            array('tbNm' => 'Nomes'), "tbFiscalizacao.idAgente = tbNm.idAgente", array('nmTecnico' => 'tbNm.Descricao'), $this->getSchema('agentes')
         );
 
 
@@ -1518,19 +1518,19 @@ class Projetos extends MinC_Db_Table_Abstract
         //array('abr' => 'Abrangencia'), "abr.idProjeto = Projetos.idProjeto", array('abr.idAbrangencia')
         );
         $select->joinInner(
-            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), 'AGENTES.dbo'
+            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), 'AGENTES.dbo'
+            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao'), $this->getSchema('agentes')
         );
         $select->joinLeft(
             array('tbFiscalizacao'), "tbFiscalizacao.IdPRONAC = Projetos.IdPRONAC and tbFiscalizacao.stFiscalizacaoProjeto = 'S'", array('idTecnico' => 'tbFiscalizacao.idAgente', 'CAST(tbFiscalizacao.dsFiscalizacaoProjeto AS TEXT) AS dsFiscalizacaoProjeto', 'tbFiscalizacao.idFiscalizacao', 'tbFiscalizacao.dtInicioFiscalizacaoProjeto', 'tbFiscalizacao.dtFimFiscalizacaoProjeto', 'tbFiscalizacao.stFiscalizacaoProjeto', 'tbFiscalizacao.dtRespostaSolicitada')
         );
         $select->joinLeft(
-            array('tbAg' => 'Agentes'), "tbFiscalizacao.idAgente = tbAg.idAgente", array('cpfTecnico' => 'tbAg.CNPJCPF'), 'AGENTES.dbo'
+            array('tbAg' => 'Agentes'), "tbFiscalizacao.idAgente = tbAg.idAgente", array('cpfTecnico' => 'tbAg.CNPJCPF'), $this->getSchema('agentes')
         );
         $select->joinLeft(
-            array('tbNm' => 'Nomes'), "tbFiscalizacao.idAgente = tbNm.idAgente", array('nmTecnico' => 'tbNm.Descricao'), 'AGENTES.dbo'
+            array('tbNm' => 'Nomes'), "tbFiscalizacao.idAgente = tbNm.idAgente", array('nmTecnico' => 'tbNm.Descricao'), $this->getSchema('agentes')
         );
 
 
@@ -1638,10 +1638,10 @@ class Projetos extends MinC_Db_Table_Abstract
         $select->joinInner(
             array('mun' => 'Municipios'),
             //"mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE",
-            "mun.idUFIBGE = abrAux.idUFIBGE AND mun.idMunicipioIBGE = abrAux.idMunicipioIBGE", array('mun.Descricao as cidade'), 'AGENTES.dbo'
+            "mun.idUFIBGE = abrAux.idUFIBGE AND mun.idMunicipioIBGE = abrAux.idMunicipioIBGE", array('mun.Descricao as cidade'), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('uf' => 'UF'), "uf.idUF = mun.idUFIBGE", array('uf.Descricao as uf', 'uf.Regiao'), 'AGENTES.dbo'
+            array('uf' => 'UF'), "uf.idUF = mun.idUFIBGE", array('uf.Descricao as uf', 'uf.Regiao'), $this->getSchema('agentes')
         );
 
         if (!empty($selectCa)) {
@@ -1766,11 +1766,11 @@ class Projetos extends MinC_Db_Table_Abstract
         );
 
         $slct->joinInner(
-            array('b' => 'Nomes'), "dp.idAgenteParecerista = b.idAgente", array(), 'AGENTES.dbo'
+            array('b' => 'Nomes'), "dp.idAgenteParecerista = b.idAgente", array(), $this->getSchema('agentes')
         );
 
         $slct->joinInner(
-            array('h' => 'Agentes'), "h.idAgente = b.idAgente", array('h.CNPJCPF as cpfParecerista'), 'AGENTES.dbo'
+            array('h' => 'Agentes'), "h.idAgente = b.idAgente", array('h.CNPJCPF as cpfParecerista'), $this->getSchema('agentes')
         );
 
 // adicionando clausulas where
@@ -2406,7 +2406,7 @@ class Projetos extends MinC_Db_Table_Abstract
 
 
         $select->joinInner(
-            array('a' => 'Agentes'), 'd.idAgenteParecerista = a.idAgente', array(), 'AGENTES.dbo'
+            array('a' => 'Agentes'), 'd.idAgenteParecerista = a.idAgente', array(), $this->getSchema('agentes')
         );
 
         $select->joinInner(
@@ -2561,7 +2561,7 @@ class Projetos extends MinC_Db_Table_Abstract
 
 
         $select->joinInner(
-            array('a' => 'Agentes'), 'd.idAgenteParecerista = a.idAgente', array(), 'AGENTES.dbo'
+            array('a' => 'Agentes'), 'd.idAgenteParecerista = a.idAgente', array(), $this->getSchema('agentes')
         );
 
         $select->joinInner(
@@ -2658,7 +2658,7 @@ class Projetos extends MinC_Db_Table_Abstract
         );
 
         $select->joinInner(
-            array('f' => 'vUFMunicipio'), 'b.UfDespesa = f.idUF AND b.MunicipioDespesa = f.idMunicipio', array('f.UF', 'f.idUF', 'f.Municipio', 'f.idMunicipio'), 'AGENTES.dbo'
+            array('f' => 'vUFMunicipio'), 'b.UfDespesa = f.idUF AND b.MunicipioDespesa = f.idMunicipio', array('f.UF', 'f.idUF', 'f.Municipio', 'f.idMunicipio'), $this->getSchema('agentes')
         );
 
 
@@ -3080,10 +3080,10 @@ class Projetos extends MinC_Db_Table_Abstract
         //array('abr' => 'Abrangencia'), "abr.idAbrangencia = abrAux.idAbrangencia", array('abr.idAbrangencia')
         );
         $select->joinInner(
-            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), 'AGENTES.dbo'
+            array('mun' => 'Municipios'), "mun.idUFIBGE = abr.idUF and mun.idMunicipioIBGE = abr.idMunicipioIBGE", array('mun.Descricao as cidade'), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao', 'uf.sigla as ufSigla'), 'AGENTES.dbo'
+            array('uf' => 'UF'), "uf.idUF = abr.idUF", array('uf.Descricao as uf', 'uf.Regiao', 'uf.sigla as ufSigla'), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('apr' => $selectAp), "apr.Anoprojeto = Projetos.AnoProjeto and apr.Sequencial = Projetos.Sequencial", array('isnull(apr.somatorio,0) as TotalAprovado')
@@ -3318,7 +3318,7 @@ class Projetos extends MinC_Db_Table_Abstract
             array('ag' => 'Agentes'), 'pro.CgcCpf = ag.CNPJCPF', array(
                 'ag.idAgente'
             )
-            , 'AGENTES.dbo'
+            , $this->getSchema('agentes')
         );
         foreach ($consulta as $coluna => $valor) {
             $select->where($coluna, $valor);
@@ -4670,7 +4670,7 @@ class Projetos extends MinC_Db_Table_Abstract
             array("org" => "Orgaos"), "org.Codigo = d.idOrgao", array()
         );
         $slct->joinInner(
-            array("n" => "Nomes"), "d.idAgenteParecerista = n.idAgente", array(), 'AGENTES.dbo'
+            array("n" => "Nomes"), "d.idAgenteParecerista = n.idAgente", array(), $this->getSchema('agentes')
         );
         $slct->joinInner(
             array("pr" => "Produto"), "d.idProduto = pr.Codigo", array()
@@ -4728,7 +4728,7 @@ class Projetos extends MinC_Db_Table_Abstract
             array("org" => "Orgaos"), "org.Codigo = d.idOrgao", array()
         );
         $slct->joinInner(
-            array("n" => "Nomes"), "d.idAgenteParecerista = n.idAgente", array(), 'AGENTES.dbo'
+            array("n" => "Nomes"), "d.idAgenteParecerista = n.idAgente", array(), $this->getSchema('agentes')
         );
         $slct->joinInner(
             array("pr" => "Produto"), "d.idProduto = pr.Codigo", array()
@@ -4758,10 +4758,10 @@ class Projetos extends MinC_Db_Table_Abstract
             array("a" => "Agentes"), "a.CNPJCPF = p.CGCCPF", array(), 'agentes.dbo'
         );
         $slct->joinInner(
-            array("n" => "Nomes"), "a.idAgente = n.idAgente", array('Destinatario' => 'Descricao'), 'AGENTES.dbo'
+            array("n" => "Nomes"), "a.idAgente = n.idAgente", array('Destinatario' => 'Descricao'), $this->getSchema('agentes')
         );
         $slct->joinInner(
-            array("int" => "Internet"), "a.idAgente = int.idAgente", array('Email' => 'Descricao'), 'AGENTES.dbo'
+            array("int" => "Internet"), "a.idAgente = int.idAgente", array('Email' => 'Descricao'), $this->getSchema('agentes')
         );
 
         $slct->where('p.idPronac = ?', $idPronac);
@@ -5526,19 +5526,22 @@ class Projetos extends MinC_Db_Table_Abstract
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
-            array('p' => $this->_name), array('Pronac' => New Zend_Db_Expr('p.AnoProjeto + p.Sequencial')
-            , 'p.CgcCpf'
-            , 'p.NomeProjeto'
-            , 'p.IdPRONAC'
-            )
+            array('p' => $this->_name),
+            array(
+                'Pronac' => New Zend_Db_Expr('p.AnoProjeto + p.Sequencial')
+                , 'p.CgcCpf'
+                , 'p.NomeProjeto'
+                , 'p.IdPRONAC'
+            ),
+            $this->_schema
         );
 
         $select->joinInner(
-            array('a' => 'Agentes'), 'p.CgcCpf = a.CNPJCPF', array('idAgente'), 'AGENTES.dbo'
+            array('a' => 'Agentes'), 'p.CgcCpf = a.CNPJCPF', array('idAgente'), $this->getSchema('agentes')
         );
 
         $select->joinInner(
-            array('n' => 'Nomes'), 'a.idAgente = n.idAgente', array('Descricao as nmAgente'), 'AGENTES.dbo'
+            array('n' => 'Nomes'), 'a.idAgente = n.idAgente', array('Descricao as nmAgente'), $this->getSchema('agentes')
         );
 
         // adiciona quantos filtros foram enviados
@@ -5560,19 +5563,19 @@ class Projetos extends MinC_Db_Table_Abstract
             array('a' => $this->_name), array()
         );
         $a->joinInner(
-            array('b' => 'tbProcuradorProjeto'), "a.IdPRONAC = b.idPronac", array(), 'AGENTES.dbo'
+            array('b' => 'tbProcuradorProjeto'), "a.IdPRONAC = b.idPronac", array(), $this->getSchema('agentes')
         );
         $a->joinInner(
-            array('c' => 'tbProcuracao'), "b.idProcuracao = c.idProcuracao", array('idProcuracao', 'siProcuracao'), 'AGENTES.dbo'
+            array('c' => 'tbProcuracao'), "b.idProcuracao = c.idProcuracao", array('idProcuracao', 'siProcuracao'), $this->getSchema('agentes')
         );
         $a->joinInner(
             array('e' => 'SGCacesso'), "a.CgcCpf = e.Cpf", array(), 'CONTROLEDEACESSO.dbo'
         );
         $a->joinInner(
-            array('f' => 'Agentes'), "f.idAgente = c.idAgente", array(), 'AGENTES.dbo'
+            array('f' => 'Agentes'), "f.idAgente = c.idAgente", array(), $this->getSchema('agentes')
         );
         $a->joinInner(
-            array('g' => 'Nomes'), "g.idAgente = f.idAgente", array('Descricao AS Procurador'), 'AGENTES.dbo'
+            array('g' => 'Nomes'), "g.idAgente = f.idAgente", array('Descricao AS Procurador'), $this->getSchema('agentes')
         );
         $a->joinInner(
             array('h' => 'tbDocumento'), "h.idDocumento = c.idDocumento", array('idDocumento'), 'BDCORPORATIVO.scCorp'
@@ -5581,10 +5584,10 @@ class Projetos extends MinC_Db_Table_Abstract
             array('i' => 'tbArquivo'), "i.idArquivo = h.idArquivo", array('dtEnvio', 'idArquivo', 'nmArquivo'), 'BDCORPORATIVO.scCorp'
         );
         $a->joinInner(
-            array('j' => 'Agentes'), "a.CgcCpf = j.CNPJCPF", array(), 'AGENTES.dbo'
+            array('j' => 'Agentes'), "a.CgcCpf = j.CNPJCPF", array(), $this->getSchema('agentes')
         );
         $a->joinInner(
-            array('l' => 'Nomes'), "j.idAgente = l.idAgente", array('Descricao AS Proponente'), 'AGENTES.dbo'
+            array('l' => 'Nomes'), "j.idAgente = l.idAgente", array('Descricao AS Proponente'), $this->getSchema('agentes')
         );
 //        $a->where('c.siProcuracao = ?', 1);
 //        $a->where('b.siEstado = ?', 2);
@@ -5598,16 +5601,16 @@ class Projetos extends MinC_Db_Table_Abstract
             array('a' => $this->_name), array()
         );
         $b->joinInner(
-            array('b' => 'tbProcuradorProjeto'), "a.IdPRONAC = b.idPronac", array(), 'AGENTES.dbo'
+            array('b' => 'tbProcuradorProjeto'), "a.IdPRONAC = b.idPronac", array(), $this->getSchema('agentes')
         );
         $b->joinInner(
-            array('c' => 'tbProcuracao'), "b.idProcuracao = c.idProcuracao", array('idProcuracao', 'siProcuracao'), 'AGENTES.dbo'
+            array('c' => 'tbProcuracao'), "b.idProcuracao = c.idProcuracao", array('idProcuracao', 'siProcuracao'), $this->getSchema('agentes')
         );
         $b->joinInner(
-            array('f' => 'Agentes'), "f.idAgente = c.idAgente", array(), 'AGENTES.dbo'
+            array('f' => 'Agentes'), "f.idAgente = c.idAgente", array(), $this->getSchema('agentes')
         );
         $b->joinInner(
-            array('g' => 'Nomes'), "g.idAgente = f.idAgente", array('Descricao AS Procurador'), 'AGENTES.dbo'
+            array('g' => 'Nomes'), "g.idAgente = f.idAgente", array('Descricao AS Procurador'), $this->getSchema('agentes')
         );
         $b->joinInner(
             array('e' => 'SGCacesso'), "f.CNPJCPF = e.Cpf", array(), 'CONTROLEDEACESSO.dbo'
@@ -5619,10 +5622,10 @@ class Projetos extends MinC_Db_Table_Abstract
             array('i' => 'tbArquivo'), "i.idArquivo = h.idArquivo", array('dtEnvio', 'idArquivo', 'nmArquivo'), 'BDCORPORATIVO.scCorp'
         );
         $b->joinInner(
-            array('j' => 'Agentes'), "a.CgcCpf = j.CNPJCPF", array(), 'AGENTES.dbo'
+            array('j' => 'Agentes'), "a.CgcCpf = j.CNPJCPF", array(), $this->getSchema('agentes')
         );
         $b->joinInner(
-            array('l' => 'Nomes'), "j.idAgente = l.idAgente", array('Descricao AS Proponente'), 'AGENTES.dbo'
+            array('l' => 'Nomes'), "j.idAgente = l.idAgente", array('Descricao AS Proponente'), $this->getSchema('agentes')
         );
 //        $b->where('c.siProcuracao = ?', 1);
 //        $b->where('b.siEstado = ?', 2);
@@ -5645,9 +5648,9 @@ class Projetos extends MinC_Db_Table_Abstract
             array('Pronac' => New Zend_Db_Expr('a.AnoProjeto + a.Sequencial'), 'a.NomeProjeto', 'a.IdPRONAC',
                 new Zend_Db_Expr("CASE
                           WHEN b.siEstado = 0
-                               THEN 'Aguardando v�nculo'
+                               THEN 'Aguardando v&iacute;nculo'
                           WHEN  b.siEstado = 1
-                               THEN 'V�nculo rejeitado'
+                               THEN 'V&iacute;nculo rejeitado'
                           WHEN  b.siEstado = 2
                                THEN 'Vinculado'
                           WHEN  b.siEstado = 3
@@ -5657,27 +5660,27 @@ class Projetos extends MinC_Db_Table_Abstract
         );
         $select->joinInner(
             array('b' => 'tbProcuradorProjeto'), "a.IdPRONAC = b.idPronac",
-            array('siEstado as status', 'idProcuradorProjeto'), 'AGENTES.dbo'
+            array('siEstado as status', 'idProcuradorProjeto'), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('c' => 'tbProcuracao'), "b.idProcuracao = c.idProcuracao",
-            array('idDocumento', 'siProcuracao', 'idProcuracao', 'dsObservacao'), 'AGENTES.dbo'
+            array('idDocumento', 'siProcuracao', 'idProcuracao', 'dsObservacao'), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('d' => 'Agentes'), "d.idAgente = c.idAgente",
-            array(), 'AGENTES.dbo'
+            array(), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('e' => 'Nomes'), "e.idAgente = d.idAgente",
-            array('Descricao as Procurador'), 'AGENTES.dbo'
+            array('Descricao as Procurador'), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('f' => 'Agentes'), "a.CgcCpf = f.CNPJCPF",
-            array(), 'AGENTES.dbo'
+            array(), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('g' => 'Nomes'), "f.idAgente = g.idAgente",
-            array('Descricao as Proponente'), 'AGENTES.dbo'
+            array('Descricao as Proponente'), $this->getSchema('agentes')
         );
 
         $select->where('c.idDocumento = ?', $idDocumento);
@@ -5693,7 +5696,7 @@ class Projetos extends MinC_Db_Table_Abstract
             array('a' => $this->_name), array('Pronac' => New Zend_Db_Expr('a.AnoProjeto + a.Sequencial'), 'a.NomeProjeto')
         );
         $select->joinInner(
-            array('b' => 'tbProcuradorProjeto'), "a.idPronac = b.IdPRONAC", array(), 'AGENTES.dbo'
+            array('b' => 'tbProcuradorProjeto'), "a.idPronac = b.IdPRONAC", array(), $this->getSchema('agentes')
         );
         $select->where('b.siEstado = ?', 0);
         $select->where('b.idProcuracao = ?', $idProcuracao);
@@ -5721,7 +5724,7 @@ class Projetos extends MinC_Db_Table_Abstract
             )
         );
         $a->joinInner(
-            array('b' => 'Agentes'), "a.CgcCpf = b.CNPJCPF", array('idAgente', 'dbo.fnNome(b.idAgente) AS NomeProponente'), 'AGENTES.dbo'
+            array('b' => 'Agentes'), "a.CgcCpf = b.CNPJCPF", array('idAgente', 'dbo.fnNome(b.idAgente) AS NomeProponente'), $this->getSchema('agentes')
         );
         $a->joinInner(
             array('c' => 'SGCacesso'), "a.CgcCpf = c.Cpf", array(), 'CONTROLEDEACESSO.dbo'
@@ -5755,16 +5758,16 @@ class Projetos extends MinC_Db_Table_Abstract
             )
         );
         $b->joinInner(
-            array('b' => 'Agentes'), "a.CgcCpf = b.CNPJCPF", array('idAgente', 'dbo.fnNome(b.idAgente) AS NomeProponente'), 'AGENTES.dbo'
+            array('b' => 'Agentes'), "a.CgcCpf = b.CNPJCPF", array('idAgente', 'dbo.fnNome(b.idAgente) AS NomeProponente'), $this->getSchema('agentes')
         );
         $b->joinInner(
-            array('c' => 'tbProcuradorProjeto'), "a.IdPRONAC = c.idPronac", array(), 'AGENTES.dbo'
+            array('c' => 'tbProcuradorProjeto'), "a.IdPRONAC = c.idPronac", array(), $this->getSchema('agentes')
         );
         $b->joinInner(
-            array('d' => 'tbProcuracao'), "c.idProcuracao = d.idProcuracao", array(), 'AGENTES.dbo'
+            array('d' => 'tbProcuracao'), "c.idProcuracao = d.idProcuracao", array(), $this->getSchema('agentes')
         );
         $b->joinInner(
-            array('f' => 'Agentes'), "d.idAgente = f.idAgente", array(), 'AGENTES.dbo'
+            array('f' => 'Agentes'), "d.idAgente = f.idAgente", array(), $this->getSchema('agentes')
         );
         $b->joinInner(
             array('e' => 'SGCacesso'), "f.CNPJCPF = e.Cpf", array(), 'CONTROLEDEACESSO.dbo'
@@ -5799,13 +5802,13 @@ class Projetos extends MinC_Db_Table_Abstract
             )
         );
         $c->joinInner(
-            array('b' => 'Agentes'), "a.CgcCpf = b.CNPJCPF", array('idAgente', 'dbo.fnNome(b.idAgente) AS NomeProponente'), 'AGENTES.dbo'
+            array('b' => 'Agentes'), "a.CgcCpf = b.CNPJCPF", array('idAgente', 'dbo.fnNome(b.idAgente) AS NomeProponente'), $this->getSchema('agentes')
         );
         $c->joinInner(
-            array('c' => 'Vinculacao'), "b.idAgente = c.idVinculoPrincipal", array(), 'AGENTES.dbo'
+            array('c' => 'Vinculacao'), "b.idAgente = c.idVinculoPrincipal", array(), $this->getSchema('agentes')
         );
         $c->joinInner(
-            array('d' => 'Agentes'), "c.idAgente = d.idAgente", array(), 'AGENTES.dbo'
+            array('d' => 'Agentes'), "c.idAgente = d.idAgente", array(), $this->getSchema('agentes')
         );
         $c->joinInner(
             array('e' => 'SGCacesso'), "d.CNPJCPF = e.Cpf", array(), 'CONTROLEDEACESSO.dbo'
@@ -5841,7 +5844,7 @@ class Projetos extends MinC_Db_Table_Abstract
             array('pr' => 'PreProjeto'), "p.idProjeto = pr.idPreProjeto", array(), 'SAC.dbo'
         );
         $a->joinInner(
-            array('i' => 'Internet'), "i.idAgente = pr.idAgente", array('Descricao as Email'), 'AGENTES.dbo'
+            array('i' => 'Internet'), "i.idAgente = pr.idAgente", array('Descricao as Email'), $this->getSchema('agentes')
         );
         $a->where('p.IdPRONAC = ?', $idPronac);
         return $this->fetchAll($a);
@@ -5894,13 +5897,13 @@ class Projetos extends MinC_Db_Table_Abstract
             array('b' => 'Abrangencia'), "a.idProjeto = b.idProjeto", array('idAbrangencia', 'idProjeto', 'dtInicioRealizacao', 'dtFimRealizacao', 'idPais', 'idUF', 'idMunicipioIBGE', 'siAbrangencia', 'CAST(dsJustificativa AS TEXT) AS dsJustificativa'), 'SAC.dbo'
         );
         $a->joinInner(
-            array('c' => 'Pais'), "b.idPais = c.idPais", array('Descricao as Pais'), 'AGENTES.dbo'
+            array('c' => 'Pais'), "b.idPais = c.idPais", array('Descricao as Pais'), $this->getSchema('agentes')
         );
         $a->joinLeft(
-            array('d' => 'UF'), "b.idUF = d.idUF", array('Descricao as UF'), 'AGENTES.dbo'
+            array('d' => 'UF'), "b.idUF = d.idUF", array('Descricao as UF'), $this->getSchema('agentes')
         );
         $a->joinLeft(
-            array('e' => 'Municipios'), "b.idUF = e.idUFIBGE and b.idMunicipioIBGE = e.idMunicipioIBGE", array('Descricao as Municipio'), 'AGENTES.dbo'
+            array('e' => 'Municipios'), "b.idUF = e.idUFIBGE and b.idMunicipioIBGE = e.idMunicipioIBGE", array('Descricao as Municipio'), $this->getSchema('agentes')
         );
         $a->where('a.IdPRONAC = ?', $idPronac);
         $a->where('b.stAbrangencia = ?', 1);
@@ -6139,10 +6142,10 @@ class Projetos extends MinC_Db_Table_Abstract
             array('e' => 'Enquadramento'), 'p.idPronac = e.idPronac', array(''), 'SAC.dbo'
         );
         $select->joinInner(
-            array('ag' => 'Agentes'), 'p.CgcCPf = ag.CNPJCPF', array(''), 'AGENTES.dbo'
+            array('ag' => 'Agentes'), 'p.CgcCPf = ag.CNPJCPF', array(''), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('n' => 'Nomes'), 'ag.idAgente = n.idAgente', array(''), 'AGENTES.dbo'
+            array('n' => 'Nomes'), 'ag.idAgente = n.idAgente', array(''), $this->getSchema('agentes')
         );
         $select->joinInner(
             array('a' => 'Area'), 'p.Area = a.Codigo', array(''), 'SAC.dbo'
@@ -6179,10 +6182,10 @@ class Projetos extends MinC_Db_Table_Abstract
         );
 
         $select->joinLeft(
-            array('ag' => 'Agentes'), 'p.CgcCPf = ag.CNPJCPF', array(''), 'AGENTES.dbo'
+            array('ag' => 'Agentes'), 'p.CgcCPf = ag.CNPJCPF', array(''), $this->getSchema('agentes')
         );
         $select->joinLeft(
-            array('n' => 'Nomes'), 'ag.idAgente = n.idAgente', array(''), 'AGENTES.dbo'
+            array('n' => 'Nomes'), 'ag.idAgente = n.idAgente', array(''), $this->getSchema('agentes')
         );
         $select->where('p.AnoProjeto+p.Sequencial = ?', $Pronac);
 
@@ -6289,7 +6292,7 @@ class Projetos extends MinC_Db_Table_Abstract
             array('tf' => 'tbFiscalizacao'), 'tf.IdPRONAC = p.IdPRONAC', array('idFiscalizacao', 'dtInicioFiscalizacaoProjeto', 'dtFimFiscalizacaoProjeto', 'stFiscalizacaoProjeto', 'dsFiscalizacaoProjeto', 'dtRespostaSolicitada', 'idUsuarioInterno as idTecnico'), "SAC.dbo"
         );
         $select->joinLeft(
-            array('tbNm' => 'Nomes'), "tf.idAgente = tbNm.idAgente", array('nmTecnico' => 'tbNm.Descricao'), 'AGENTES.dbo'
+            array('tbNm' => 'Nomes'), "tf.idAgente = tbNm.idAgente", array('nmTecnico' => 'tbNm.Descricao'), $this->getSchema('agentes')
         );
         $select->joinLeft(
             array('trf' => 'tbRelatorioFiscalizacao'), 'tf.idFiscalizacao = trf.idFiscalizacao',
@@ -6377,13 +6380,13 @@ class Projetos extends MinC_Db_Table_Abstract
             array('se' => 'Segmento'), 'p.Segmento = se.Codigo', array(''), 'SAC.dbo'
         );
         $select1->joinInner(
-            array('n' => 'Nomes'), 't.idAgente = n.idAgente', array(''), 'AGENTES.dbo'
+            array('n' => 'Nomes'), 't.idAgente = n.idAgente', array(''), $this->getSchema('agentes')
         );
         $select1->joinInner(
-            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), 'AGENTES.dbo'
+            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), $this->getSchema('agentes')
         );
         $select1->joinInner(
-            array('z' => 'Nomes'), 'x.idAgente = z.idAgente', array(''), 'AGENTES.dbo'
+            array('z' => 'Nomes'), 'x.idAgente = z.idAgente', array(''), $this->getSchema('agentes')
         );
         $select1->where('t.stDistribuicao = ?', 'A');
         $select1->where('pr.stAtivo = ?', 1);
@@ -6447,13 +6450,13 @@ class Projetos extends MinC_Db_Table_Abstract
             array('se' => 'Segmento'), 'p.Segmento = se.Codigo', array(''), 'SAC.dbo'
         );
         $select2->joinInner(
-            array('n' => 'Nomes'), 'z.idAgente = n.idAgente', array(''), 'AGENTES.dbo'
+            array('n' => 'Nomes'), 'z.idAgente = n.idAgente', array(''), $this->getSchema('agentes')
         );
         $select2->joinInner(
-            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), 'AGENTES.dbo'
+            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), $this->getSchema('agentes')
         );
         $select2->joinInner(
-            array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), 'AGENTES.dbo'
+            array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), $this->getSchema('agentes')
         );
         $select2->joinInner(
             array('r' => 'tbReuniao'), 't.idNrReuniao = r.idNrReuniao', array(''), 'SAC.dbo'
@@ -6548,10 +6551,10 @@ class Projetos extends MinC_Db_Table_Abstract
             array('se' => 'Segmento'), 'p.Segmento = se.Codigo', array(''), 'SAC.dbo'
         );
         $select->joinInner(
-            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), 'AGENTES.dbo'
+            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), 'AGENTES.dbo'
+            array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), $this->getSchema('agentes')
         );
 
         if (!is_null($idNrReuniao)) {
@@ -6611,10 +6614,10 @@ class Projetos extends MinC_Db_Table_Abstract
             array('pr' => 'Parecer'), 'pr.idPronac = p.idPronac', array(''), 'SAC.dbo'
         );
         $select->joinInner(
-            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), 'AGENTES.dbo'
+            array('x' => 'Agentes'), 'p.CgcCpf = x.CNPJCPF', array(''), $this->getSchema('agentes')
         );
         $select->joinInner(
-            array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), 'AGENTES.dbo'
+            array('y' => 'Nomes'), 'x.idAgente = y.idAgente', array(''), $this->getSchema('agentes')
         );
 
         if (!is_null($idNrReuniao)) {
@@ -6803,7 +6806,7 @@ class Projetos extends MinC_Db_Table_Abstract
         );
         $select->joinLeft(
             array('n' => 'Nomes'), 'd.idAgenteParecerista = n.idAgente',
-            array(''), 'AGENTES.dbo'
+            array(''), $this->getSchema('agentes')
         );
         $select->joinLeft(
             array('pr' => 'Produto'), 'd.idProduto = pr.Codigo',
