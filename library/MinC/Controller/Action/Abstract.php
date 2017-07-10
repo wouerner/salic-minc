@@ -595,7 +595,8 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             if ($idProjeto) {
 
                 $msgERRO = 'Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esse Projeto!';
-                $idPronac = !empty($this->_request->getParam('idpronac')) ? $this->_request->getParam('idpronac') : $idProjeto;
+                $idPronac = $this->_request->getParam('idpronac') ? $this->_request->getParam('idpronac') : $this->_request->getParam('idPronac');
+                $idPronac = !empty($idPronac) ? $idPronac : $idProjeto;
 
                 if (strlen($idPronac) > 7) {
                     $idPronac = Seguranca::dencrypt($idPronac);
@@ -603,6 +604,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
 
                 $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
                 $consulta = $fnVerificarPermissao->verificarPermissaoProjeto($idPronac, $idUsuarioLogado);
+
                 $permissao = $consulta->Permissao;
             }
             # Verifica Permissao de Proposta
