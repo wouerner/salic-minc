@@ -23,59 +23,63 @@
               action="<?php echo $this->url(array('module'=>'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'declaracaonovaproposta')); ?>"
               method="post">
 
-            <table class="tabela">
-                <tr class="centro">
-                    <th class="centro">Cadastro</th>
-                </tr>
-                <tr>
-                    <td align="left">Mecanismo:&nbsp;
-                        <select name="mecanismo" id="mecanismo" class="input_simples w200">
-                            <option value="1" <?php echo ($this->mecanismo == 1) ? 'selected="selected"' : ''; ?>>Incentivo
-                                Fiscal Federal
-                            </option>
-                        </select>
-                        &nbsp;&nbsp;&nbsp;CPF Proponente:&nbsp;
+                <table class="tabela">
+                    <tr class="centro">
+                        <th class="centro">Cadastro</th>
+                    </tr>
+                    <tr>
+                        <td align="left">Mecanismo:&nbsp;
+                            <select name="mecanismo" id="mecanismo" class="input_simples w200">
+                                <option value="1" <?php echo ($this->mecanismo == 1) ? 'selected="selected"' : ''; ?>>Incentivo
+                                    Fiscal Federal
+                                </option>
+                            </select>
+                            &nbsp;&nbsp;&nbsp;CPF Proponente:&nbsp;
 
-                        <select name="propronente" id="propronente" class="input_simples">
-                            <option value="">- Todos -</option>
-                            <?php if (!empty($this->dadosCombo)): ?>
-                                <?php $idProponente = ''; ?>
-                                <?php foreach ($this->dadosCombo as $dc): ?>
-                                    <?php if ($dc['idAgenteProponente'] != $idProponente): ?>
-                                        <option value="<?php echo $dc['idAgenteProponente']; ?>">[<?php echo $dc['CPF']; ?>]
-                                            - <?php echo $dc['Nome']; ?></option>
-                                    <?php endif; ?>
-                                    <?php $idProponente = $dc['idAgenteProponente']; ?>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>&nbsp;
-                        <span id="msgValidaProponente"></span>&nbsp;&nbsp;&nbsp;
+                            <select name="proponente" id="proponente" class="input_simples">
+                                <option>- Selecione -</option>
+                                <?php if (!empty($this->dadosCombo)): ?>
+                                    <?php $idProponente = '' ?>
+                                    <?php foreach ($this->dadosCombo as $dc): ?>
+                                        <?php if ($dc['idAgenteProponente'] != $idProponente): ?>
+                                            <option
+                                                <?= ($dc['idAgenteProponente'] == $this->idAgente) ? 'selected' : '' ?>
+                                                value="<?php echo $dc['idAgenteProponente']; ?>">[<?php echo $dc['CPF']; ?>]
+                                                - <?php echo $dc['Nome']; ?>
+                                            </option>
+                                        <?php endif; ?>
+                                        <?php $idProponente = $dc['idAgenteProponente']; ?>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>&nbsp;
+                            <span id="msgValidaProponente"></span>&nbsp;&nbsp;&nbsp;
 
-                        <button class="waves-effect waves-light btn btn-primary small btn-novaproposta" type="submit"
-                                name="novo" id="novo">
-                            <i class="material-icons left">border_color</i>Nova Proposta
-                        </button>
+                            <button class="waves-effect waves-light btn btn-primary small btn-novaproposta" type="submit"
+                                    name="novo" id="novo">
+                                <i class="material-icons left">border_color</i>Nova Proposta
+                            </button>
 
-                        <a class="waves-effect waves-light btn black white-text small text-right"
-                           onclick="window.location='<?php echo $this->usuarioLogado == 'prop' ? $this->url(array('controller' => 'vincularresponsavel', 'action' => 'index')) : $this->url(array('controller' => 'vincularresponsavel', 'action' => 'index')); ?>'">
-                            <i class="material-icons left">person</i>Novo Proponente
-                        </a>
-                    </td>
-                </tr>
-            </table>
-            <table class="tabela">
-                <tr class="centro">
-                    <th class="centro">Filtro</th>
-                </tr>
-                <tr>
-                    <td class="center" align="center">
-                        <a id="localizar" class="btn-localizar waves-effect waves-light btn btn-default small">
-                            <i class="material-icons left">search</i>Localizar
-                        </a>
-                    </td>
-                </tr>
-            </table>
-        </form>
+                            <a class="waves-effect waves-light btn black white-text small text-right"
+                               onclick="window.location='<?php echo $this->usuarioLogado == 'prop' ? $this->url(array('controller' => 'vincularresponsavel', 'action' => 'index')) : $this->url(array('controller' => 'vincularresponsavel', 'action' => 'index')); ?>'">
+                                <i class="material-icons left">person</i>Novo Proponente
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                <table class="tabela">
+                    <tr class="centro">
+                        <th class="centro">Filtro</th>
+                    </tr>
+                    <tr>
+                        <td class="center" align="center">
+                            <a id="localizar" class="btn-localizar waves-effect waves-light btn btn-default small">
+                                <i class="material-icons left">search</i>Localizar
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
     </div>
     <div class="content">
         <div class="row">
@@ -119,7 +123,7 @@
             var elemento = $(this),
                 idAgente = elemento.attr('idAgente');
 
-            $('.mostraProposta_' + idAgente).toggle()
+            $('.mostraProposta_' + idAgente).toggle();
             if (elemento.hasClass('btn_adicionar')) {
                 elemento.addClass('btn_remover');
                 elemento.removeClass('btn_adicionar');
@@ -132,16 +136,16 @@
         $("#frmNovaProposta").validate({
             rules: {
                 mecanismo: {required: true},
-                propronente: {required: true}
+                proponente: {required: true}
             },
             messages: {
                 mecanismo: {required: " Obrigat&oacute;rio"},
-                propronente: {required: " Obrigat&oacute;rio"}
+                proponente: {required: " Obrigat&oacute;rio"}
             },
             submitHandler: function (form) {
                 //form.submit();
                 $("#msgValidaProponente").html("");
-                var nomeProponente = $('#propronente option:selected').text();
+                var nomeProponente = $('#proponente option:selected').text();
                 if (nomeProponente == "- TODOS -") {
                     $("#msgValidaProponente").html("<font color='red'>Informe o nome de um Proponente.</font>");
                     return false;
@@ -170,7 +174,7 @@
                     , "ajax": {
                         url: "/proposta/manterpropostaincentivofiscal/listar-propostas-ajax",
                         data: {"idagente": function (d) {
-                            return $('#propronente').val();
+                            return $('#proponente').val();
                         }},
                         type: "POST"
                 },

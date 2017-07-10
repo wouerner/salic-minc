@@ -383,7 +383,7 @@ x - Tabelas
 }
 
 table > tbody > tr:nth-child(odd) {
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
 }
 
 table > tbody > tr {
@@ -391,7 +391,7 @@ table > tbody > tr {
 }
 
 table > tbody > tr:hover {
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
 }
 
 

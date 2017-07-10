@@ -574,50 +574,64 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
 
 
     /**
-     * M?todo para verificar se o usu?rio logado tem permiss?o para acessar o projeto
-     * OBS: SERVE APENAS PARA RESPONS?VEL E AGENTE (PROPONENTE E PROCURADOR)
+     * Metodo para verificar se o usuario logado tem permissao para acessar o projeto
+     * OBS: SERVE APENAS PARA RESPONSAVEL E AGENTE (PROPONENTE E PROCURADOR)
      * @access public
-     * @param bool $obrigatoriedadeIdProjeto
-     * @param bool $obrigatoriedadeIdPronac
-     * @return void
+     * @param int
+     * @param int
+     * @return mixed
      */
-    public function verificarPermissaoAcesso($proposta = false, $projeto = false, $administrativo = false)
+    public function verificarPermissaoAcesso($idPreProjeto = null, $idProjeto = null, $administrativo = false, $callback=false)
     {
-        $msgERRO = '';
-        $auth = Zend_Auth::getInstance()->getIdentity(); // pega a autentica??o
-        $arrAuth = array_change_key_case((array) $auth);
-        if (!isset($arrAuth['usu_codigo'])) { // autenticacao novo salic
-            //Verifica Permissao de Projeto
+        $msgERRO = "Usu&aacute;rio com permiss&atilde;o";
+        $permissao = 0;
+        $auth = Zend_Auth::getInstance()->getIdentity();
 
-            if ($projeto) {
+        $arrAuth = array_change_key_case((array) $auth);
+        if (!isset($arrAuth['usu_codigo'])) {
+            $idUsuarioLogado = $arrAuth['idusuario'];
+
+            #Verifica Permissao de Projeto
+            if ($idProjeto) {
+
                 $msgERRO = 'Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esse Projeto!';
-                $idUsuarioLogado = $arrAuth['idusuario'];
-                $idPronac = $this->_request->getParam('idpronac') ? $this->_request->getParam('idpronac') : $this->_request->getParam('idPronac');
+                $idPronac = !empty($this->_request->getParam('idpronac')) ? $this->_request->getParam('idpronac') : $idProjeto;
+
                 if (strlen($idPronac) > 7) {
                     $idPronac = Seguranca::dencrypt($idPronac);
                 }
+
                 $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
                 $consulta = $fnVerificarPermissao->verificarPermissaoProjeto($idPronac, $idUsuarioLogado);
                 $permissao = $consulta->Permissao;
             }
-            //Verifica Permissao de Proposta
-            if ($proposta) {
+            # Verifica Permissao de Proposta
+            if ($idPreProjeto) {
+
                 $msgERRO = 'Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa Proposta!';
-                $idUsuarioLogado = $arrAuth['idusuario'];
-                $idPreProjeto = $this->_request->getParam('idPreProjeto');
+                $idPreProjeto = !empty($this->_request->getParam('idPreProjeto')) ? $this->_request->getParam('idPreProjeto') : $idPreProjeto;
+
                 $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
-                $consulta = $fnVerificarPermissao->verificarPermissaoProposta($idPreProjeto, $idUsuarioLogado);
-                $permissao = $consulta->Permissao;
+                $permissao = $fnVerificarPermissao->verificarPermissaoProposta($idPreProjeto, $idUsuarioLogado);
             }
 
             if ($administrativo) {
             }
 
-            //Se o usuario nao tiver permissao pra acessar o Projeto / Proposta / Administrativo, exibe a msg de alerta.
+            //Se o usuario nao tiver permissao pra acessar o Projeto / Proposta / Administrativo,
+            // exibe a msg de alerta ou retorna um array
             if (!$permissao) {
+
+                if( $callback ) {
+                    return ['status' => false, 'msg' => $msgERRO];
+                }
+
                 $this->message($msgERRO, 'principalproponente', 'ALERT');
             }
 
+            if( $callback ) {
+                return ['status' => true, 'msg' => $msgERRO];
+            }
         }
 
     } // fecha metodo verificarPermissaoAcesso()

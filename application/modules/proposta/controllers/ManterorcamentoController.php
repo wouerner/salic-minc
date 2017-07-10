@@ -131,6 +131,9 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             }
         }
         $this->view->localRealizacao = $novosLocais;
+
+        $CustosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+        $this->view->custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $this->idPreProjeto));
 //
 //     $this->view->idPreProjeto = $this->idPreProjeto;
 //     $this->view->charset = Zend_Registry::get('config')->db->params->charset;
@@ -301,6 +304,55 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $buscarProduto = new Proposta_Model_DbTable_PreProjeto();
         $this->view->Produtos = $buscarProduto->buscarProdutos($this->idPreProjeto);
+    }
+
+    public function custosvinculadosAction()
+    {
+        $this->view->acao = $this->_urlPadrao . "/proposta/manterorcamento/salvarpercentuaiscustosvinculados";
+
+        $arrBusca = array(
+            'idprojeto' => $this->idPreProjeto,
+            'stabrangencia' => 1
+        );
+
+        $tblAbrangencia = new Proposta_Model_DbTable_Abrangencia();
+        $this->view->localRealizacao = $tblAbrangencia->buscar($arrBusca);
+
+        $this->view->itensCustosVinculados = $this->gerarArrayCustosVinculados($this->idPreProjeto);
+    }
+
+    public function salvarpercentuaiscustosvinculadosAction()
+    {
+        $params = $this->getRequest()->getParams();
+
+        $custosVinculados = $params['itensCustosVinculados'];
+        $arrayCustosVinculados = $this->gerarArrayCustosVinculados($params['idPreProjeto']);
+
+        $mapper = new Proposta_Model_TbCustosVinculadosMapper();
+
+        try {
+            foreach($custosVinculados as $key => $item) {
+                if( in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
+
+                    $dados = array(
+                        'idCustosVinculados' => $item['idCustosVinculados'],
+                        'idProjeto' => $params['idPreProjeto'],
+                        'idPlanilhaItem' => $key,
+                        'dtCadastro' => new Zend_Db_Expr('getdate()'),
+                        'pcCalculo' => $item['percentual'],
+                        'idUsuario' => $params['idagente']
+                    );
+
+                    $mapper->save(new Proposta_Model_TbCustosVinculados($dados));
+                }
+            }
+
+            $this->atualizarcustosvinculadosdaplanilha($this->idPreProjeto);
+
+            parent::message('Cadastro realizado com sucesso!', "/proposta/manterorcamento/custosvinculados?idPreProjeto=" . $this->idPreProjeto, "CONFIRM");
+        } catch (Zend_Exception $ex) {
+            parent::message("N&atilde;o foi poss&iacute;vel realizar a opera&ccedil;&atilde;o!" . $ex->getMessage(), "/proposta/manterorcamento/custosvinculados?idPreProjeto=" . $this->idPreProjeto, "ERROR");
+        }
     }
 
     /**
@@ -519,7 +571,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         if ($result) {
 
-            $this->salvarcustosvinculados($idPreProjeto);
+            $this->atualizarcustosvinculadosdaplanilha($idPreProjeto);
 
             $tbItens = new tbItensPlanilhaProduto();
             $item = $tbItens->buscarItem(array("idPlanilhaItens = ?" => $dados['idPlanilhaItem']));
@@ -597,6 +649,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             if ($item) {
                 $totalItemSalvo = $item['Quantidade'] * $item['Ocorrencia'] * $item['ValorUnitario'];
+
                 $custosDesteItem = $this->somarTotalCustosVinculados($idPreProjeto, $totalItemSalvo);
                 $totalItemSalvo = $totalItemSalvo + $custosDesteItem;
             }
@@ -637,13 +690,14 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $result = $tbPlanilhaProposta->delete($where);
 
         if ($result) {
-            $this->salvarcustosvinculados($this->idPreProjeto);
+            $this->atualizarcustosvinculadosdaplanilha($this->idPreProjeto);
 
             $return['msg'] = "Exclus&atilde;o realizada com sucesso!";
             $return['status'] = true;
         }
 
-        $this->_helper->json($return);
+        //        $this->_helper->json($return); @todo corrigir retorno para o padrão
+        echo json_encode($return);
         die;
     }
 
@@ -848,7 +902,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             $tblanilhaProposta->editarPlanilhaProdutos($dados, $where);
 
-            $this->salvarcustosvinculados($_POST['idPreProjeto']);
+            $this->atualizarcustosvinculadosdaplanilha($_POST['idPreProjeto']);
 
             $this->_helper->layout->disableLayout();
             echo "Altera&ccedil;&atilde;o realizada com sucesso!";
@@ -1052,7 +1106,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                     $unidade, $quantidade, $ocorrencia, $vlunitario, $qtdDias, $fonte, $idUf, $idMunicipio, $justificativa, $this->idUsuario);
 
                 if ($this->view->SalvarNovo)
-                    $this->salvarcustosvinculados($idProposta);
+                    $this->atualizarcustosvinculadosdaplanilha($idProposta);
 
                 $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
                 echo "Item cadastrado com sucesso. Deseja cadastrar um novo item?";
@@ -1193,7 +1247,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $resposta = $tbPlaninhaProposta->delete($where);
 
         if ($resposta) {
-            $this->salvarcustosvinculados($idPlanilhaProposta);
+            $this->atualizarcustosvinculadosdaplanilha($idPlanilhaProposta);
             parent::message("Exclus&atilde;o realizada com sucesso!", "/proposta/manterorcamento/" . $retorno . "?idPreProjeto=" . $this->idPreProjeto, "CONFIRM");
         } else {
             parent::message("Erro ao excluir os dados", "/proposta/manterorcamento/" . $retorno . "?idPreProjeto=" . $this->idPreProjeto, "ERROR");
@@ -1221,9 +1275,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $return['status'] = 0;
         }
 
-        $this->_helper->json($return);
+       $this->_helper->json($return);
         die;
     }
-
 
 }

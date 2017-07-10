@@ -48,13 +48,16 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
             $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
             $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
+            $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
+            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
+            $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
 
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
             $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
         }
 
         $objProjeto = new Projetos();
-        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto encamihado para Portaria.');
+        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto encaminhado para assinatura.');
 
         $orgaoDestino = 166;
         $objOrgaos = new Orgaos();
@@ -73,7 +76,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-documento-assinatura');
 
-        $view->titulo = 'Enquadramento';
+        $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
 
         $objPlanoDistribuicaoProduto = new Projeto_Model_vwPlanoDeDistribuicaoProduto();
         $view->dadosProducaoProjeto = $objPlanoDistribuicaoProduto->obterProducaoProjeto(array(

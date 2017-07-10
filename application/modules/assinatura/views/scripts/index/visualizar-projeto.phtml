@@ -5,7 +5,7 @@
             'Gerenciar Projetos' => array(
                 'module' => 'assinatura',
                 'controller' => 'index',
-                'action' => 'gerenciar-projetos'
+                'action' => 'gerenciar-assinaturas'
             )
         ),
         array('Enquadramento ' => array())
@@ -42,7 +42,7 @@
                         <div class="bordered padding20">
                             <p> Documento assinado eletronicamente com fundamento no artigo 132 da instru&ccedil;&atilde;o
                                 normativa n&ordm; 01/2017 do Minist&eacute;rio da Cultura publicado conforme hor&aacute;rio
-                                oficial de bras&iacute;lia no Di&aacute;rio Oficial da Uni&atilde;o data de xxxx/xxxx
+                                oficial de bras&iacute;lia no Di&aacute;rio Oficial da Uni&atilde;o data de 20/03/2017
                                 por: </p>
                             <div class="padding20 bordered row">
                                 <div class="row">
@@ -92,7 +92,7 @@
                                     'module' => 'assinatura',
                                     'controller' => 'index',
                                     'action' => 'visualizar-projeto'
-                                )) . "?IdPRONAC={$this->IdPRONAC}" ?>"/>
+                                )) . "?IdPRONAC={$this->IdPRONAC}&idTipoDoAtoAdministrativo={$this->idTipoDoAtoAdministrativo}" ?>"/>
                         </div>
                     </div>
                 </div>

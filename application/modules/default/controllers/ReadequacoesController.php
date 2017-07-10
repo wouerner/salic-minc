@@ -2474,7 +2474,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
         $idReadequacao = $this->_request->getParam('idReadequacao');
 
         //Atualiza a tabela tbDistribuirReadequacao
-        if ($vinculada != Orgaos::ORGAO_SUPERIOR_IPHAN) { // todos os casos exceto IPHAN
+        if ($vinculada != Orgaos::ORGAO_IPHAN_PRONAC) { // todos os casos exceto IPHAN
             $idAvaliador = $this->_request->getParam('parecerista');
 
             $dados = array();
@@ -4071,8 +4071,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
             $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
             $this->view->Produtos = $PlanoDistribuicaoProduto->comboProdutosParaInclusaoReadequacao($idPronac);
 
-            $tbPlanilhaEtapa = new Proposta_Model_DbTable_TbPlanilhaEtapa();
-            $this->view->Etapas = $tbPlanilhaEtapa->buscar(array('stEstado = ?'=>1));
+            $spSelecionarEtapa = new spSelecionarEtapa();
+            $this->view->Etapas = $spSelecionarEtapa->exec($idPronac);
 
             $TbPlanilhaUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
             $buscarUnidade = $TbPlanilhaUnidade->buscarUnidade();
@@ -4306,7 +4306,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
         $idUnidade = $this->_request->getParam('vinculada');
 
         try {
-            if (in_array($idUnidade, array(Orgaos::ORGAO_SAV, Orgaos::ORGAO_SEFIC))) {
+            if (in_array($idUnidade, array(Orgaos::ORGAO_SAV_CAP, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI))) {
                 // MUDANÇA DE TECNICO
                 $tbDistribuirReadequacao = new tbDistribuirReadequacao();
                 $dados = array(
