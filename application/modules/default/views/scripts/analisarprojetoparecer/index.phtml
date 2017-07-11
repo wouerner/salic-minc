@@ -79,7 +79,7 @@
                 $SecundariosAtivos = $tbDistribuirParecerDAO->dadosParaDistribuir($dadosWhere);
                 $pscount = count($SecundariosAtivos);
                 /***********************************************************************************/
-
+                
                 /** Verificar se o Produto j&aacute; foi dado o Parecer ***********************************/
                 $tbAnaliseDeConteudoDAO = new Analisedeconteudo();
                 $where['IdPRONAC = ?'] = $d->IdPRONAC;
@@ -202,9 +202,10 @@
                 <?php if(($pscount == 0) && ($d->stPrincipal == 1) && ($countAnalizado == 0) && ($countEnquadramentoP != 0) && ($countParecerP != 0) && ($dilig == 0)):?>
                 <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
                 <?php elseif(($d->stPrincipal == 0) && ($countAnalizado == 0)  && ($dilig == 0)):?>
-		<?php $this->IN2017 = true; ?>
-		<?php if($this->IN2017): ?>
-                <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'assinar-parecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Assinar parecer" alt="Assinar parecer"/>		
+                
+		<?php if($this->verificarIN2017($d->IdPRONAC)): ?>
+                <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Assinar parecer" alt="Assinar parecer"/>		                
+<!--                <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'assinar-parecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Assinar parecer" alt="Assinar parecer"/>		-->
 		<?php else: ?>
                 <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise"/>
 		<?php endif; ?>
