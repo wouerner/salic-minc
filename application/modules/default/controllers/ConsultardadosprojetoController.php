@@ -2515,12 +2515,21 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $valorTotalGrupoC = 0;
             $valorTotalGrupoD = 0;
 
-            $valorTotalGrupoA = $PlanilhaAtivaGrupoA->Total-$PlanilhaRemanejadaGrupoA->Total;
-            $valorTotalGrupoB = $PlanilhaAtivaGrupoB->Total-$PlanilhaRemanejadaGrupoB->Total;
-            $valorTotalGrupoC = $PlanilhaAtivaGrupoC->Total-$PlanilhaRemanejadaGrupoC->Total;
-            $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
-            $valorTotalGrupoASoma = 0;
+            if ($PlanilhaRemanejadaGrupoA->Total > 0) {
+                $valorTotalGrupoA = $PlanilhaAtivaGrupoA->Total-$PlanilhaRemanejadaGrupoA->Total;
+            }
+            if ($PlanilhaRemanejadaGrupoB->Total > 0) {
+                $valorTotalGrupoB = $PlanilhaAtivaGrupoB->Total-$PlanilhaRemanejadaGrupoB->Total;
+            }
+            if ($PlanilhaRemanejadaGrupoC->Total > 0) {
+                $valorTotalGrupoC = $PlanilhaAtivaGrupoC->Total-$PlanilhaRemanejadaGrupoC->Total;
+            }
+            if ($PlanilhaRemanejadaGrupoD->Total > 0) {
+                $valorTotalGrupoD = $PlanilhaAtivaGrupoD->Total-$PlanilhaRemanejadaGrupoD->Total;
+            }
             
+            $valorTotalGrupoASoma = 0;
+                        
             $dadosPlanilha = array();
 
             if($PlanilhaAtivaGrupoA->Total == $PlanilhaRemanejadaGrupoA->Total){
