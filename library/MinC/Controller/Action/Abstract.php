@@ -153,9 +153,9 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
         $objModelUsuario = new Autenticacao_Model_Usuario(); // objeto usuario
         $UsuarioAtivo = new Zend_Session_Namespace('UsuarioAtivo'); // cria a sessao com o usuario ativo
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-
-
         // somente autenticacao zend
+
+        $from = base64_encode($this->getRequest()->getRequestUri());
         if ($tipo == 0 || empty($tipo)) {
             if ($auth->hasIdentity()) // caso o usuario esteja autenticado
             {
@@ -170,7 +170,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
 
                     $this->tratarPerfilOAuth($objIdentity);
                 } else {
-                    return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout', 'module' => 'autenticacao'), null, true);
+                    return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout', 'module' => 'autenticacao', 'from' => $from), null, true);
                 }
 
                 // manda os dados para a visao
@@ -180,15 +180,32 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuario para a vis?o
                 $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o orgao ativo do usuario para a vis?o
             } else {
-                return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout', 'module' => 'autenticacao'), null, true);
+
+                return $this->_helper->redirector->goToRoute(
+                    array(
+                        'controller' => 'index',
+                        'action' => 'logout',
+                        'module' => 'autenticacao',
+                        'from' => $from
+                    )
+                    , null
+                    , true
+                );
+
             }
         # autenticacao e permissoes zend (AMBIENTE MINC)
         } else if ($tipo === 1) {
             # Caso o usuario esteja autenticado
             if ($auth->hasIdentity()) {
-
                 if(empty($permissoes)) {
-                   return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout', 'module' => 'autenticacao'), null, true);
+                   return $this->_helper->redirector->goToRoute(
+                       array(
+                           'controller' => 'index',
+                           'action' => 'logout',
+                           'module' => 'autenticacao'
+                       ),
+                       null,
+                       true);
                 }
 
                 # Verifica se o grupo ativo esta no array de permissoes
@@ -209,7 +226,16 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             }
             else
             {
-                return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout', 'module' => 'autenticacao'), null, true);
+                return $this->_helper->redirector->goToRoute(
+                    array(
+                        'controller' => 'index',
+                        'action' => 'logout',
+                        'module' => 'autenticacao',
+                        'from' => $from
+                    )
+                    , null
+                    , true
+                );
             }
 
         # autenticacao scriptcase (AMBIENTE PROPONENTE)
@@ -294,6 +320,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
         } else if ($tipo == 4) {
             # autenticacao migracao e autenticacao/permissao zend (AMBIENTE DE MIGRACAO E MINC)
             $codUsuario = isset($arrAuth['idusuario']) ? (int) $arrAuth['idusuario'] : $UsuarioAtivo->codusuario;
+
             if (isset($codUsuario) && !empty($codUsuario)) {
 
                 # ====== NICIO AUTENTICACAO MIGRACAO ==========
@@ -316,23 +343,27 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 # ========== INICIO AUTENTICACAO ZEND ==========
                 # caso o usuario nao esteja autenticado pelo scriptcase
                 # verifica se o grupo ativo esta no array de permissoes
-                if (!in_array($GrupoAtivo->codGrupo, $permissoes)) {
-                    $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
-                }
 
-                // pega as unidades autorizadas, org?os e grupos do usuario (pega todos os grupos)
-                if (isset($objIdentity->usu_codigo) && !empty($objIdentity->usu_codigo)) {
-                    $grupos = $objModelUsuario->buscarUnidades($objIdentity->usu_codigo, 21);
+                if(!$objIdentity) {
+                    return self::perfil(0, $permissoes);
                 } else {
-                    $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
-                }
+                    if (!in_array($GrupoAtivo->codGrupo, $permissoes)) {
+                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
+                    }
 
-                // manda os dados para a visao
-                $this->view->usuario = $objIdentity; // manda os dados do usu?rio para a vis?o
-                $this->view->arrayGrupos = $grupos; // manda todos os grupos do usu?rio para a vis?o
-                $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usu?rio para a vis?o
-                $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o ?rg?o ativo do usu?rio para a vis?o
-                # ========== FIM AUTENTICACAO ZEND ==========
+                    // pega as unidades autorizadas, org?os e grupos do usuario (pega todos os grupos)
+                    if (isset($objIdentity->usu_codigo) && !empty($objIdentity->usu_codigo)) {
+                        $grupos = $objModelUsuario->buscarUnidades($objIdentity->usu_codigo, 21);
+                    } else {
+                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
+                    }
+
+                    $this->view->usuario = $objIdentity; // manda os dados do usu?rio para a vis?o
+                    $this->view->arrayGrupos = $grupos; // manda todos os grupos do usu?rio para a vis?o
+                    $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usu?rio para a vis?o
+                    $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o ?rg?o ativo do usu?rio para a vis?o
+
+                }
             }
         }
 
@@ -792,7 +823,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 $seq++;
             }
         }
-        //xd($planilha);
         return $planilha;
     }
 
@@ -813,13 +843,12 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 return false;
             }
         } catch (Exception $objException) {
-            xd($objException->getMessage());
+            throw $objException;
         }
     }
 
     /**
      * @param $objAuth
-     * @author Vinícius Feitosa da Silva <viniciusfesil@mail.com>
      * @return void
      */
     protected function redirecionarParaCadastroOauth($objAuth)
@@ -832,7 +861,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
      * @param $controllerName
      * @param $actionName
      * @param $parameters
-     * @author Vinícius Feitosa da Silva <viniciusfesil@mail.com>
      * @return void
      */
     protected function postFoward($module, $controllerName, $actionName, $parameters)
@@ -850,7 +878,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
      * @param array $data
      * @param array|null $headers
      * @throws Exception
-     * @author Vinícius Feitosa da Silva <viniciusfesil@mail.com>
      * @return void
      */
     public function postRedirector($url, array $data, array $headers = null) {
