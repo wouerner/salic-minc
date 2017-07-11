@@ -1,0 +1,21 @@
+<div class="msgERROR">
+  <div class="float_right"></div>
+  <div>Aten&ccedil;&atilde;o! Custo de Divulga&ccedil;&atilde;o/Comercializa&ccedil;&atilde;o superior a 20% do valor total do projeto. Favor readequar os custos em <b><?php echo $this->formatarReal($this->valorRetirar); ?></b> para finalizar sua an&aacute;lise. <br> Favor verificar em todos os produtos que possuem esta etapa!</div>
+</div>
+<table class="tabela">
+  <tr>
+    <th width="100"><span><b>Pronac</b></span></th>
+    <th width="350"><span><b>Nome do Projeto</b></span></th>
+    <th><span><b>Produto</b></span></th>
+  </tr>
+  <tr>
+    <td align="center"><?php echo $this->dados[0]->PRONAC; ?></td>
+    <td align="center"><?php echo $this->dados[0]->NomeProjeto; ?></td>
+    <td align="center"><?php echo $this->dados[0]->Produto; ?></td>
+  </tr>
+</table>
+<table class="tabela">
+  <tr>
+    <td align="center"><input type="button" class="btn_voltar" style="width: 85px;" onclick="window.location=('<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'produto')); ?>');" /></td>
+  </tr>
+</table>
