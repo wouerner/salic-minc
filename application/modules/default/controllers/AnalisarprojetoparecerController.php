@@ -83,7 +83,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                 'distribuirParecer.idOrgao = ?' => $idOrgao,
             )
         );
-
+        
         // ========== IN¿CIO PAGINA¿¿O ==========
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
@@ -93,8 +93,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina
         // ========== FIM PAGINA¿¿O ==========
         
-        $projetos = new Projetos();
-        $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
         $this->view->qtdRegistro = count($resp);
         $this->view->situacao = $situacao;
         $this->view->buscar = $paginator;
