@@ -1,0 +1,179 @@
+<?php if(!$this->verifica15porcento == 0) : ?>
+          <?php echo $this->partial('/index/partials/verifica15Porcento.phtml', $this); ?>
+      <?php else: ?>
+          <?php if ($this->totaldivulgacao != "true") : ?>
+              <?php echo $this->partial('/index/partials/totalDivulgacao.phtml', $this); ?>
+         <?php else: ?>
+
+<table class="tabela">
+  <tr>
+    <td colspan="5" class="destacar bold">
+      <strong>Parecer T&eacute;cnico do Projeto</strong>
+    </td>
+  </tr>     
+  <tr>
+    <td align="center">PRONAC: </td>
+    <td class="bold"><?php echo $this->dadosEnquadramento[0]->Pronac; ?></td>
+    <td colspan="3"><?php echo $this->dadosEnquadramento[0]->NomeProjeto; ?></td>
+  </tr>
+  <tr>
+    <td align="center">Proponente:</td>
+    <td><?php echo $this->dadosEnquadramento[0]->CNPJCPF; ?></td>
+    <td colspan="3"><?php echo $this->dadosEnquadramento[0]->Proponente; ?></td>
+  </tr>
+  <tr>
+    <td align="center">&Aacute;rea: </td>
+    <td><?php echo $this->dadosEnquadramento[0]->Area; ?></td>
+    <td>Segmento: </td>
+    <td colspan="2"><?php echo $this->dadosEnquadramento[0]->Segmento; ?></td>
+  </tr>
+  <tr>
+    <td align="center">UF:</td>
+    <td><?php echo $this->dadosEnquadramento[0]->UfProjeto; ?></td>
+    <td>Per&iacute;odo de execu&ccedil;&atilde;o:</td>
+    <td><?php echo Data::tratarDataZend($this->dadosEnquadramento[0]->DtInicioExecucao, 'Brasileira') . " a " . Data::tratarDataZend($this->dadosEnquadramento[0]->DtFimExecucao, 'Brasileira'); ?></td>
+    <td>Enquadramento: <?php echo $this->dadosEnquadramento[0]->Enquadramento; ?></td>
+  </tr>
+  <tr>
+    <td colspan="5" class="destacar bold">
+      <strong>Resumo do Projeto</strong>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="5">
+      <?php echo $this->dadosEnquadramento[0]->ResumoProjeto; ?>
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="5" class="destacar bold">
+      <strong>Mem&oacute;ria de C&aacute;lculo</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center" class="bold" colspan="2">Proponente</td>
+    <td>&nbsp;</td>
+    <td align="center" class="bold" colspan="2">T&eacute;cnico</td>
+  </tr>
+  
+  <tr>
+    <td align="center">vl. Solicitado:</td>
+    <td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlSolicitado); ?></td>
+    <td>&nbsp;</td>
+    <td align="center">Custo do Projeto:</td>
+    <td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->CustoProjeto); ?></td>
+  </tr>
+  
+  <tr>
+    <td align="center">vl. Outras Fontes:</td>
+    <td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlOutrasFontes); ?></td>
+    <td>&nbsp;</td>
+    <td align="center">vl. Outras Fontes</td>
+    <td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlOutrasFontesAprovado); ?></td>
+  </tr>	      
+
+  <tr>
+    <td align="center" class="bold">Vl. Projeto:</td>
+    <td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->VlProjeto); ?></td>
+    <td>&nbsp;</td>
+    <td align="center" class="bold">Custo Total</td>
+    <td><?php echo $this->formatarReal($this->dadosEnquadramento[0]->CustoProjeto); ?></td>		
+  </tr>	      
+
+  <tr>
+    <td colspan="5" class="destacar bold">
+      <strong>Produtos</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="5">
+      <table>
+        <tr>
+          <th>Produto</th>
+          <th>Tipo</th>
+          <th>Qtde Produzidas</th>
+          <th>Qtde Distribui&ccedil;&atilde;o gratuita</th>
+	  <th>Qtde Venda Popular</th>
+	  <th>Qtde Venda Proponente</th>
+	  <th>Pre&ccedil;o m&eacute;dio</th>
+	  <th>Vl. Produto</th>
+	  <th>Receita Prevista</th>
+	</tr>
+	<?php $ReceitaTotal = 0; ?>
+	<?php $ProdutoTotal = 0; ?>
+	<?php foreach($this->dadosProdutos as $produto): ?>
+	<tr>
+	  <td align="center"><a target="_blank" href="<?php echo $this->url(array('controller'=> 'analisarprojetoparecer','action' =>'produtosecundario'));?>?idPronac=<?php echo $produto->IdPRONAC; ?>&idProduto=<?php echo $produto->idProduto; ?>&stPrincipal=<?php echo $produto->tpProduto;?>">
+	      <?php echo $produto->Produto; ?></a></td> <!-- TODO: fazer if do produto principal / secundário -->
+          <td><?php echo $produto->tpProduto; ?></td>		      
+	  <td><?php echo number_format($produto->QtdeProduzida, 0, '', '.'); ?></td>
+	  <td><?php echo number_format($produto->QtdeDistribuicaoGratuita, 0, '', '.') ?></td>
+	  <td><?php echo number_format($produto->QtdeVendaPopular, 0, '', '.'); ?></td>
+	  <td><?php echo number_format($produto->QtdeVendaProponente, 0, '', '.'); ?></td>
+	  <td><?php echo $this->formatarReal($produto->PrecoMedio, 'Brasileira'); ?></td>
+	  <td><?php echo $this->formatarReal($produto->vlProduto, 'Brasileira'); ?></td>
+	  <td><?php echo $this->formatarReal($produto->ReceitaTotal, 'Brasileira'); ?></td>
+	</tr>
+	<?php $ReceitaTotal += $produto->ReceitaTotal; ?>
+	<?php $ProdutoTotal += $produto->vlProduto; ?>
+	<?php endforeach; ?>
+	<tr>
+	  <td colspan="7">&nbsp;</td>
+	  <td class="bold"><?php echo $this->formatarReal($ProdutoTotal, 'Brasileira'); ?></td>
+	  <td class="bold"><?php echo $this->formatarReal($ReceitaTotal, 'Brasileira'); ?></td>
+	</tr>
+      </table>
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="5" class="destacar bold">
+      <strong>Dilig&ecirc;ncias</strong>
+    </td>
+  </tr>	      
+  <tr>
+    <td colspan="5">
+      <table>
+        <tr>
+          <th>Tipo de dilig&ecirc;ncia</th>
+	  <th>Data de Envio</th>
+	  <th>Data de Resposta</th>
+	</tr>
+	<?php foreach($this->dadosDiligencias as $diligencia) : ?>
+	<tr>
+	  <td align="center"><a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaanalista'))?>?idPronac=<?php echo $diligencia->IdPRONAC; ?>"><?php echo $diligencia->TipoDiligencia; ?></a>
+	  <td align="center"><?php echo ($diligencia->DtEnvio) ? Data::tratarDataZend($diligencia->DtEnvio, 'Brasileira') : '-'; ?></td>
+	  <td align="center"><?php echo ($diligencia->DtResposta) ? Data::tratarDataZend($diligencia->DtResposta, 'Brasileira') : '-'; ?></td>
+	</tr>
+	<?php endforeach; ?>
+      </table>
+    </td>
+  </tr>
+  <?php if ($this->view->IN2017): ?>
+  <tr>
+    <td class="destacar bold" colspan="5">
+      A&ccedil;&otilde;es relevantes para o sucesso do projeto*
+    </td>
+  </tr>    
+  <tr>
+    <td colspan="5">
+      <p><?php echo $this->dadosAlcance->dsAcaoAlcanceProduto; ?></p>
+    </td>
+  </tr>
+  <?php endif; ?>
+  <tr>
+    <td colspan="5" class="destacar bold">Posicionamento T&eacute;cnico</td>
+  </tr>
+
+  <tr>
+    <td>Parecer:</td>
+    <td colspan="4"><?php echo $this->dadosParecer[0]['p.tpResultado']; ?></td>
+  </tr>
+  
+</table>
+
+    <?php endif; ?>
+    <?php endif; ?>
+                                                                                                  
