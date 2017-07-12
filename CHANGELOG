@@ -1,3 +1,7 @@
+Release 2.1.3
+ * [UPDATE] PlanilhaOrcamentaria: Adicionando alteração da IN2017 para planilha orçamentária tipo 3
+ * [ADD] Consultardadosprojeto/Remanejamento 50%: correções ao fazer readequação de 50% quando já tem uma readequação SR
+
 Release 2.1.2
  * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Melhoria nas mensagens, adiciona toast do materialize
  * [FIX] PROPOSTA:PLANO DE DISTRIBUICAO Corrige ao salvar receita total prevista
