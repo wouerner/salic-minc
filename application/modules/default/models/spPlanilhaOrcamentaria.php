@@ -518,7 +518,6 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
 
             $sql = $db->select()->from(array('a' => 'Projetos'), $a, $this->_schema)
                 ->join(array('k' => 'tbPlanilhaAprovacao'), '(a.idPronac = k.idPronac)', null, $this->_schema)
-                ->join(array('z' => 'tbPlanilhaProposta'), '(k.idPlanilhaProposta=z.idPlanilhaProposta)', null, $this->_schema)
                 ->joinLeft(array('c' => 'Produto'), '(k.idProduto = c.Codigo)', null, $this->_schema)
                 ->join(array('d' => 'tbPlanilhaEtapa'), '(k.idEtapa = d.idPlanilhaEtapa)', null, $this->_schema)
                 ->join(array('e' => 'tbPlanilhaUnidade'), '(k.idUnidade = e.idUnidade)', null, $this->_schema)
