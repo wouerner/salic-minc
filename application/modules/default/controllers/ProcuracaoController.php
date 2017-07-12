@@ -439,7 +439,7 @@ class ProcuracaoController extends MinC_Controller_Action_Abstract {
                 //$buscarProjeto = $vinculoPropostaDAO->buscar($wherePROP);
                 $alteraPRO = $preProjetoDAO->alteraresponsavel($idVinculoProposta[$i], $responsavel) ;
             }
-            parent::message("Procura��o ".$situacaoMSG." com sucesso!", "procuracao/analisar", "CONFIRM");
+            parent::message("Procura&ccedil;&atilde;o ".$situacaoMSG." com sucesso!", "procuracao/analisar", "CONFIRM");
 
         } catch (Exception $e) {
             parent::message("Error".$e->getMessage(), "procuracao/avaliar/idDocumento/".$idDocumento, "ERROR");
@@ -516,12 +516,12 @@ class ProcuracaoController extends MinC_Controller_Action_Abstract {
 
         // ==================== Dados do arquivo de upload ===============================
         $arquivoNome 	= $_FILES['arquivoProcuracao']['name']; // nome
-        $arquivoTemp 	= $_FILES['arquivoProcuracao']['tmp_name']; // nome tempor�rio
+        $arquivoTemp 	= $_FILES['arquivoProcuracao']['tmp_name']; // nome temporario
         $arquivoTipo 	= $_FILES['arquivoProcuracao']['type']; // tipo
         $arquivoTamanho = $_FILES['arquivoProcuracao']['size']; // tamanho
 
-        $arquivoExtensao = Upload::getExtensao($arquivoNome); // extens�o
-        $arquivoBinario  = Upload::setBinario($arquivoTemp); // bin�rio
+        $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensao
+        $arquivoBinario  = Upload::setBinario($arquivoTemp); // binario
         $arquivoHash     = Upload::setHash($arquivoTemp); // hash
 
         if(!isset($_FILES['arquivoProcuracao'])){
@@ -654,8 +654,8 @@ class ProcuracaoController extends MinC_Controller_Action_Abstract {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $idProcuracao = $_POST['id'];
 
-        /*** siProcuracao = Situa��o da procura��o, informando qual fase de homologa��o que esta se encontra, com as op��es a seguir:
-        0-Pendente de Valida��o; 1-Aceita; 2-Rejeitada.
+        /*** siProcuracao = Situacao da procuracao, informando qual fase de homologacao que esta se encontra, com as opcoes a seguir:
+        0-Pendente de Validacao; 1-Aceita; 2-Rejeitada.
         ***/
         $dadostbProcuracao = array(
             'siProcuracao' => $_POST['siProcuracao']
