@@ -409,6 +409,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->_helper->layout->disableLayout();
 
         $this->view->idPreProjeto = $this->idPreProjeto;
+        $this->view->locaisRealizacao = array();
+
         $params = $this->getRequest()->getParams();
 
         $idPreProjeto = $params['idPreProjeto'];
@@ -418,8 +420,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $etapa = $params['etapa'];
 
         if (!empty($params['idPlanilhaProposta'])) { // editar item
-
-
             $idProposta = $params['idPreProjeto'];
             $idEtapa = $params['etapa'];
             $idProduto = $params['produto'];
@@ -436,6 +436,10 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 $this->view->Dados = $TDP->buscarDadosCadastrarProdutos($idPreProjeto, $idProduto);
                 $this->view->idProduto = $idProduto;
             }
+
+            $tbLocaisDeRealizacao = new Proposta_Model_DbTable_Abrangencia();
+            $this->view->locaisRealizacao = $tbLocaisDeRealizacao->buscar(['idProjeto'=> $params['idPreProjeto']]);
+
         }
 
         $uf = new Agente_Model_DbTable_UF();
