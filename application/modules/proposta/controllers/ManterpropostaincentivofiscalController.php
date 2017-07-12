@@ -185,7 +185,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
         //METODO QUE MONTA TELA DO USUARIO ENVIANDO TODOS OS PARAMENTROS NECESSARIO DENTRO DO ARRAY
         $this->montaTela("manterpropostaincentivofiscal/declaracaonovaproposta.phtml", array("acao" => $url,
-            "agente" => $post->propronente));
+            "agente" => $post->proponente));
     }
 
     /**
@@ -993,6 +993,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $this->view->dadosCombo = $dadosCombo;
         $this->view->idResponsavel = $this->idResponsavel;
         $this->view->idUsuario = $this->idUsuario;
+        $this->view->idAgente = $this->idAgente;
     }
 
     public function listarPropostasAjaxAction()

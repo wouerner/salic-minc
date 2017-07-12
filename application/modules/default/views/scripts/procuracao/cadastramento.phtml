@@ -96,6 +96,7 @@ $buscarFornecedorHref = $this->url(array('controller' => 'comprovarexecucaofinan
                                         $('#divDinamicaAgentes').html(data.msg);
                                     } else {
                                         $('#divDinamicaAgentes').html(data);
+                                        console.log(data);
                                     }
                                 },
                                 complete: function(){

@@ -76,16 +76,11 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
         $sql = $db->select()
-            ->from(array('p' => $this->_name), array('p.idPRONAC'), $this->_schema)
-            ->join(array('pre' => 'preprojeto'), 'pre.idPreProjeto = p.idProjeto', array(), $this->_schema)
-            ->where("p.idPronac = ?", $idPronac)
-            ->limit(1);
+            ->from(array('p' => $this->_name), array(), $this->_schema)
+            ->join(array('pre' => 'preprojeto'), 'pre.idPreProjeto = p.idProjeto', array('pre.idPreProjeto'), $this->_schema)
+            ->where('p.idPronac = ?', $idPronac);
 
-        if(!empty($db->fetchOne($sql))) {
-            return true;
-        }
-
-        return false;
+        return $db->fetchOne($sql);
     }
 
     public function fnChecarLiberacaoDaAdequacaoDoProjeto($idPronac) {
