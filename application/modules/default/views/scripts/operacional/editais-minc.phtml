@@ -198,7 +198,7 @@
     } // fecha funç?o selecionarOptions()
 </script>
 
-<?php include("scripts/operacional/inc/menu.inc.php"); ?>
+<?php echo $this->partial('operacional/inc/menu.inc.php', $this); ?>
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'operacional', 'action' => '')); ?>">In&iacute;cio</a></li>
@@ -275,7 +275,7 @@
                         <select class="input_simples w200" name="uf" id="uf">
                             <option value="">Todos</option>
                                 <?php foreach($this->ufs as $uf):?>
-                                <option value="<?php echo $uf->idUF; ?>" regiao="<?php echo $uf->Regiao; ?>"><?php echo $uf->Descricao; ?></option>
+                                <option value="<?php echo $uf->idUF; ?>" regiao="<?php echo $uf->Regiao; ?>"><?php echo $uf->Sigla; ?></option>
                                 <?php endforeach; ?>
                         </select>
                     </td>
