@@ -119,8 +119,9 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         if($idItem){
             $sql->where('pp.idplanilhaitem = ?', $idItem);
         }
+
         if($idPlanilhaProposta){
-            $sql->where('pre.idpreprojeto  = ?', $idPreProjeto);
+            $sql->where('pp.idplanilhaproposta  = ?', $idPlanilhaProposta);
         }
 
         if($idUf){
