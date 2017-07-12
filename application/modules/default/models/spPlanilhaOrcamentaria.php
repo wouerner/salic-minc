@@ -33,6 +33,25 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
         // tipoPlanilha = 5 : Remanejamento menor que 20%
         // tipoPlanilha = 6 : Readequacao
 
+        $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();
+        $projetoIN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($idPronac);
+        
+        if ($tipoPlanilha == 3 && $projetoIN2017) {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+            $sql = $db->select()
+                      ->from('tbPlanilhaAprovacao',
+                      array(new Zend_Db_Expr("TOP 1 IdPRONAC")),
+                      $this->_schema)
+                      ->where('tpPlanilha = ? ', 'CO')
+                      ->where('IdPRONAC = ? ', $idPronac);
+            
+            if($db->fetchRow($sql)) {
+                $tipoPlanilha = 0;
+            }
+        }
+        
         switch($tipoPlanilha){
         case 0:
             return $this->planilhaOrcamentariaProposta($idPronac);
