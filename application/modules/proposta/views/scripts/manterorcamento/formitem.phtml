@@ -197,6 +197,22 @@
                         </div>
 
                     </div>
+                    <?php if( !empty($this->locaisRealizacao) && count($this->locaisRealizacao) > 1  ) : ?>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <select multiple>
+                                    <option value="" disabled selected>Selecione as cidades</option>
+                                    <option value="all">Todas cidades</option>
+                                    <?php foreach ($this->locaisRealizacao as $local) :?>
+                                        <?php if( $local['idMunicipioIBGE'] != $this->Municipio['idMunicipioIBGE'] ) : ?>
+                                            <option value="<?= $local['idUF'] ?>:<?= $local['idMunicipioIBGE'] ?>"><?= $local['uf']?> - <?= $local['cidade'] ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label>Deseja aplicar este item em outras cidades? (Opcional)</label>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <?php if ($this->isEditavel) : ?>
                         <div class="row">
                             <div class="input-field col s12 center-align">
