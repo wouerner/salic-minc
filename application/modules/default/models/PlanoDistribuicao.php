@@ -305,19 +305,19 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
     {
 
         $cols = array(
-            'sum(qtExemplares) as QtdeProduzida',
-            'sum(qtGratuitaDivulgacao) as QtdeProponente',
-            'sum(qtGratuitaPatrocinador) as QtdePatrocinador',
-            'sum(qtGratuitaPopulacao) as QtdeOutros',
-            'sum(qtPopularIntegral) as QtdeVendaPopularNormal',
-            'sum(qtPopularParcial) as QtdeVendaPopularPromocional',
-            'avg(vlUnitarioPopularIntegral) as vlUnitarioPopularNormal',
-            'sum(vlReceitaPopularIntegral + vlReceitaPopularParcial) /  sum(qtPopularIntegral + qtPopularParcial) AS ReceitaPopularNormal', #valor médio ponderado do preco popular
-            'sum(vlReceitaProponenteIntegral + vlReceitaProponenteParcial) /  sum(qtProponenteIntegral + qtProponenteParcial) AS PrecoUnitarioNormal', # valor médio ponderado do proponente
-            'sum(qtProponenteIntegral) as QtdeVendaNormal',
-            'sum(qtProponenteParcial) as QtdeVendaPromocional',
-            'avg(vlUnitarioProponenteIntegral) as vlUnitarioNormal',
-            '(avg(vlReceitaPopularParcial) + avg(vlReceitaPopularIntegral)+avg(vlReceitaProponenteIntegral)+ avg(vlReceitaProponenteParcial)) as  vlReceitaTotalPrevista'
+            'COALESCE(sum(qtExemplares),0) as QtdeProduzida',
+            'COALESCE(sum(qtGratuitaDivulgacao), 0) as QtdeProponente',
+            'COALESCE(sum(qtGratuitaPatrocinador), 0) as QtdePatrocinador',
+            'COALESCE(sum(qtGratuitaPopulacao), 0) as QtdeOutros',
+            'COALESCE(sum(qtPopularIntegral), 0) as QtdeVendaPopularNormal',
+            'COALESCE(sum(qtPopularParcial), 0) as QtdeVendaPopularPromocional',
+            'COALESCE(avg(vlUnitarioPopularIntegral), 0) as vlUnitarioPopularNormal',
+            'COALESCE(sum(vlReceitaPopularIntegral + vlReceitaPopularParcial) / nullif((sum(qtPopularIntegral + qtPopularParcial)), 0), 0) AS ReceitaPopularNormal', #valor médio ponderado do preco popular
+            'COALESCE(sum(vlReceitaProponenteIntegral + vlReceitaProponenteParcial) / nullif((sum(qtProponenteIntegral + qtProponenteParcial)), 0), 0) AS PrecoUnitarioNormal', # valor médio ponderado do proponente
+            'COALESCE(sum(qtProponenteIntegral), 0) as QtdeVendaNormal',
+            'COALESCE(sum(qtProponenteParcial), 0) as QtdeVendaPromocional',
+            'COALESCE(avg(vlUnitarioProponenteIntegral),0) as vlUnitarioNormal',
+            'COALESCE(sum(vlReceitaPrevista), 0) as  vlReceitaTotalPrevista'
         );
 
         $sql = $this->select()

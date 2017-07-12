@@ -49,14 +49,16 @@
                                         <td><?php echo $planoDistribuicao->DescricaoArea; ?></td>
                                         <td><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
                                         <td><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
-                                        <td class="action right-align">
+                                        <td class="action center-align" >
+
+                                            <a class="btn small waves-effect waves-light tooltipped" id="btn_editar" onclick="mostrarResumo(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Visualizar resumo">
+                                                <i class="material-icons">visibility</i>
+                                            </a>
+                                            <a href="/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/<?= $this->idPreProjeto; ?>/idPlanoDistribuicao/<?= $planoDistribuicao->idPlanoDistribuicao; ?>" class="btn small waves-effect waves-light tooltipped" data-position="top" data-delay="50" data-tooltip="Detalhar produto">
+                                                <i class="material-icons">zoom_in</i>
+                                            </a>
+
                                             <?php if ($this->isEditarProposta || ($this->isEditarProjeto && $planoDistribuicao->stPrincipal != 1)) : ?>
-                                                <a class="btn small waves-effect waves-light tooltipped" id="btn_editar" onclick="mostrarResumo(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Visualizar resumo">
-                                                    <i class="material-icons">visibility</i>
-                                                </a>
-                                                <a href="/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/<?= $this->idPreProjeto; ?>/idPlanoDistribuicao/<?= $planoDistribuicao->idPlanoDistribuicao; ?>" class="btn small waves-effect waves-light tooltipped" data-position="top" data-delay="50" data-tooltip="Detalhar produto">
-                                                    <i class="material-icons">zoom_in</i>
-                                                </a>
                                                 <a class="btn small waves-effect waves-light tooltipped btn-primary" id="btn_editar" onclick="editar(<?php echo $planoDistribuicao->idPlanoDistribuicao; ?>)" data-position="top" data-delay="50" data-tooltip="Editar Produto">
                                                     <i class="material-icons">edit</i>
                                                 </a>
@@ -93,12 +95,12 @@
                                                 <tbody>
                                                     <tr>
                                                         <td class="center-align"><?php echo $planoDistribuicao->QtdeProduzida; ?></td>
-                                                        <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularNormal; ?></td>
-                                                        <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularPromocional; ?></td>
-                                                        <td class="popular"><?php echo $planoDistribuicao->ReceitaPopularNormal; ?>	</td>
                                                         <td class="proponente"><?php echo $planoDistribuicao->QtdeVendaNormal; ?></td>
                                                         <td class="proponente"><?php echo $planoDistribuicao->QtdeVendaPromocional; ?></td>
                                                         <td class="proponente"><?php echo $planoDistribuicao->PrecoUnitarioNormal; ?></td>
+                                                        <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularNormal; ?></td>
+                                                        <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularPromocional; ?></td>
+                                                        <td class="popular"><?php echo $planoDistribuicao->ReceitaPopularNormal; ?>	</td>
                                                         <td class="gratuito"><?php echo $planoDistribuicao->QtdeProponente;	?></td>
                                                         <td class="gratuito"><?php echo $planoDistribuicao->QtdePatrocinador; ?></td>
                                                         <td class="gratuito"><?php echo $planoDistribuicao->QtdeOutros; ?></td>

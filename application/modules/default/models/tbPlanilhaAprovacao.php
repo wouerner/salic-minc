@@ -144,7 +144,6 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract {
             $select->where($key, $valor);
         }
         
-
         return $this->fetchAll($select);
     }
 
@@ -166,4 +165,25 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract {
         return $this->fetchAll($select);
     }
 
+
+    public function getInfoIdPlanilhaPai($idPlanilhaAprovacao, $tpPlanilha = null) {
+        $idPlanilhaAprovacaoPai = array();
+        
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+                array('a' => $this->_name),
+                array(
+                    New Zend_Db_Expr('a.idPlanilhaAprovacao, a.idPlanilhaAprovacaoPai, a.tpAcao, a.tpPlanilha')
+                )
+        );
+        
+        $select->where('(idPlanilhaAprovacao = ?) OR (idPlanilhaAprovacaoPai = ?)', $idPlanilhaAprovacao);
+        if ($tpPlanilha) {
+            $select->where('tpPlanilha = ?', $tpPlanilha);
+        }
+        
+        return $this->fetchAll($select);
+    }
+    
 }
