@@ -187,6 +187,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @deprecated metodo substituido apos a IN 2017
      */
     public function consultarcomponenteAction()
     {
@@ -229,6 +230,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @deprecated metodo substituido apos a IN 2017
      */
     public function cadastrarprodutosAction()
     {
