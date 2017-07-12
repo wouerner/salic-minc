@@ -330,7 +330,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col s8">
+            <div id="msg-pre-loader" class="col s8">
                 <p>Carregando...</p>
             </div>
         </div>
@@ -499,6 +499,10 @@ $3(document).ready(function () {
     $3('body').on('focusout', '#vlunitario', function () {
         if($3(this).val() == 0)
             return false;
+
+        var msg_old = $3('#modal-pre-loader #msg-pre-loader p').html();
+        $3('#modal-pre-loader #msg-pre-loader p').html('Verificando valor unitário ...');
+
         $3('#modal-pre-loader').modal('open');
 
         $3("#btn-salvar").removeClass('btn-salvar').addClass('disabled');
@@ -533,6 +537,7 @@ $3(document).ready(function () {
             }
 
             $3('#modal-pre-loader').modal('close');
+            $3('#modal-pre-loader #msg-pre-loader p').html(msg_old);
 
         });
         return false;
