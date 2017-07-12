@@ -143,7 +143,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             $this->_schema
         );
 
-        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
+//        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
 
         if($idAssinante) {
             $query->where(new Zend_Db_Expr(
@@ -156,7 +156,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         }
         $ordenacao[] = 'tbDocumentoAssinatura.dt_criacao desc';
         $query->order($ordenacao);
-
+//xd($query->assemble());
         return $this->_db->fetchAll($query);
     }
 }
