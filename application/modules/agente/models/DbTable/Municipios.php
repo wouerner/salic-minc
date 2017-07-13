@@ -84,4 +84,19 @@ class Agente_Model_DbTable_Municipios extends MinC_Db_Table_Abstract
 
         return $db->fetchAll($select);
     }
+
+    public function municipioEstado($where = array())
+    {
+        $sql = $this->select()
+            ->setIntegrityCheck(false)
+            ->from(array('m' => $this->_name), array('m.idMunicipioIBGE as idMunicipio', 'm.Descricao as Municipio'), $this->getSchema('agentes'))
+            ->joinInner(array('u' => 'uf'), 'm.idUFIBGE = u.iduf', array('u.idUF', 'u.Descricao as Uf'), $this->getSchema('agentes'));
+
+        foreach ($where as $coluna => $valor) {
+            $sql->where($coluna . '= ?', $valor);
+        }
+
+        $result = $this->fetchRow($sql);
+        return ($result) ? $result->toArray() : array();
+    }
 }
