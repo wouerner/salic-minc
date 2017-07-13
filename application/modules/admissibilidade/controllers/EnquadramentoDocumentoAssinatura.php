@@ -49,6 +49,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
             $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
+            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
 
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
@@ -56,13 +57,13 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
         }
 
         $objProjeto = new Projetos();
-        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto encaminhado para assinatura.');
+        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto em an&aacute;lise documental.');
 
-        $orgaoDestino = 166;
+        $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
         $objOrgaos = new Orgaos();
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
         if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $orgaoDestino = 262;
+            $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
         }
         $objTbProjetos->alterarOrgao($orgaoDestino, $this->idPronac);
     }
@@ -75,7 +76,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-documento-assinatura');
 
-        $view->titulo = 'Enquadramento';
+        $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
 
         $objPlanoDistribuicaoProduto = new Projeto_Model_vwPlanoDeDistribuicaoProduto();
         $view->dadosProducaoProjeto = $objPlanoDistribuicaoProduto->obterProducaoProjeto(array(
@@ -118,6 +119,10 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
         );
 
         $view->dadosEnquadramento = $objEnquadramento->findBy($arrayPesquisa);
+
+        $auth = Zend_Auth::getInstance();
+        $dadosUsuarioLogado = $auth->getIdentity();
+        $view->orgaoSuperior = $dadosUsuarioLogado->usu_org_max_superior;
 
         return $view->render('documento-assinatura.phtml');
     }

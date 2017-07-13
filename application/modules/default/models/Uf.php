@@ -53,7 +53,8 @@ class Uf extends MinC_Db_Table_Abstract {
         $select->from(
             array('uf'=>$this->_name), array(
             'idUF',
-            'Sigla'
+            'Sigla',
+            'Regiao'
         ), $this->_schema
         );
         $select->order('Sigla ASC');

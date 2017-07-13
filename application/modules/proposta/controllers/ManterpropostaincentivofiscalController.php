@@ -61,6 +61,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         if ($agente) {
             $this->idResponsavel = $acessos['IdUsuario'];
             $this->idAgente = $agente['idAgente'];
+            $this->view->idAgente = $agente['idAgente'];
         }
         if ($usuario) {
             $this->idUsuario = $usuario['usu_codigo'];
@@ -68,6 +69,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
                 $this->usuarioProponente = "S";
             }
         }
+
 
         // Busca na tabela apoio ExecucaoImediata
         $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
@@ -80,6 +82,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $this->usuario = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
         $this->view->usuarioLogado = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
         $this->view->usuarioProponente = $this->usuarioProponente;
+
         parent::init();
 
         //recupera ID do pre projeto (proposta)
@@ -182,7 +185,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
         //METODO QUE MONTA TELA DO USUARIO ENVIANDO TODOS OS PARAMENTROS NECESSARIO DENTRO DO ARRAY
         $this->montaTela("manterpropostaincentivofiscal/declaracaonovaproposta.phtml", array("acao" => $url,
-            "agente" => $post->propronente));
+            "agente" => $post->proponente));
     }
 
     /**
@@ -990,6 +993,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $this->view->dadosCombo = $dadosCombo;
         $this->view->idResponsavel = $this->idResponsavel;
         $this->view->idUsuario = $this->idUsuario;
+        $this->view->idAgente = $this->idAgente;
     }
 
     public function listarPropostasAjaxAction()
@@ -1002,6 +1006,17 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
         $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : array("idpreprojeto DESC");
+
+        $idAgente = empty($idAgente) ? $this->idAgente : $idAgente;
+
+        if(empty($idAgente)) {
+            $this->_helper->json(array(
+                "data" =>  0,
+                'recordsTotal' =>  0,
+                'draw' => 0,
+                'recordsFiltered' => 0));
+            die;
+        }
 
         $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
 

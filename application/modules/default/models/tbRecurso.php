@@ -139,7 +139,7 @@ class tbRecurso extends MinC_Db_Table_Abstract
 	 * @access public
 	 * @param integer $idPronac (excluir todos os recursos de um projeto)
 	 * @param integer $idRecurso (excluir um determinado recurso)
-	 * @return integer (quantidade de registros exclu�dos)
+	 * @return integer (quantidade de registros excluidos)
 	 */
 	public function excluirDados($idPronac = null, $idRecurso = null)
 	{
@@ -469,7 +469,7 @@ class tbRecurso extends MinC_Db_Table_Abstract
                                     WHEN tpSolicitacao = 'EO' THEN 'Enquadramento e Or&ccedil;amento'
                                  END AS tpSolicitacao,
                                  CASE
-                                    WHEN tpRecurso = 1 THEN 'Pedido de Reconsideração'
+                                    WHEN tpRecurso = 1 THEN 'Pedido de Reconsidera&ccedil;&atilde;o'
                                     WHEN tpRecurso = 2 THEN 'Recurso'
                                  END AS tpRecurso, a.siRecurso
                 "),
