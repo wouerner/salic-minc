@@ -194,7 +194,9 @@
     }
 
     .modal.bottom-sheet {
-        max-height: 50%;
+        max-height: 70%;
+        height: 70%;
+        overflow-y: visible; /* select ultrapassa a modal */
     }
 
     .section {
@@ -407,39 +409,41 @@ $3(document).ready(function () {
 
 
             $3.post($3('#form').attr('action'), $3('#form').serialize(), function (result) {
-                if (result.status == '1') {
-                    console.log(result.status + result.action);
 
-                    if( result.action == 'update') {
-                        $("#item-planilha-" +result.idPlanilhaProposta).replaceWith(result.html);
+                $3.each(result, function(index, item) {
+                    if (item.status == '1') {
+                        if( item.action == 'update') {
+                            $("#item-planilha-" +item.idPlanilhaProposta).replaceWith(item.html);
+                        }
+                        else if( item.action == 'insert') {
+
+                            var produto = item.dados.idProduto;
+                            var etapa = item.dados.idEtapa;
+                            var mun = item.dados.MunicipioDespesa;
+
+                            var idEtapa = "#etapa" + produto + "" + etapa + "" + mun;
+
+                            $3(idEtapa + " div.info").hide();
+                            $3(idEtapa + ' table tbody').append(item.html);
+                            $3("#planilhaitem").focus();
+                        }
+
+                        if(item.close == '1' )
+                            $3('#modal').modal('close');
+
+                        $3('#form')[0].reset();
+                        Materialize.toast(item.msg, 4000, 'green white-text');
+                    } else {
+                        Materialize.toast(item.msg, 8000, 'red darken-1 white-text');
                     }
-                    else if( result.action == 'insert') {
+                });
 
-                        var produto = $3('#produto').val();
-                        var etapa = $3('#idPlanilhaEtapa').val();
-                        var mun = $3('#municipio').val();
-
-                        var idEtapa = "#etapa" + produto + "" + etapa + "" + mun;
-
-                        $3(idEtapa + " div.info").hide();
-                        $3(idEtapa + ' table tbody').append(result.html);
-                        $3("#planilhaitem").focus();
-                    }
-
-                    if(result.close == '1' )
-                        $3('#modal').modal('close');
-
-                    $3('#form')[0].reset();
-                    Materialize.toast(result.msg, 4000, 'green white-text');
-                    $3.each($('#custosvinculados[data-ajax-render]'), function () {
-                        $3.ajaxRender({
-                            strUrl: $('#custosvinculados').attr('data-ajax-render'),
-                            strTarget: '#custosvinculados'
-                        });
+                $3.each($('#custosvinculados[data-ajax-render]'), function () {
+                    $3.ajaxRender({
+                        strUrl: $('#custosvinculados').attr('data-ajax-render'),
+                        strTarget: '#custosvinculados'
                     });
-                } else {
-                    Materialize.toast(result.msg, 8000, 'red darken-1 white-text');
-                }
+                });
             });
          }
          return false;
@@ -516,12 +520,11 @@ $3(document).ready(function () {
             idunidade: $3("#unidade").val(),
             idufdespesa: $3("#uf").val(),
             idmunicipiodespesa: $3("#municipio").val(),
-            vlunitario: $3("#vlunitario").val(),
+            vlunitario: $3("#vlunitario").val()
         };
 
         $.post(urlAction, dados, function (result) {
             if (result.status == '1') {
-//                Materialize.toast(result.msg, 5000, 'green white-text');
                 $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
                 $3('#editor1').removeClass('valida');
                 $3("#vlunitario").parent().removeClass("danger");
