@@ -14,9 +14,15 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
         Zend_Layout::startMvc(array('layout' => 'open'));
         $oauthConfigArray = Zend_Registry::get("config")->toArray();
         $this->view->habilitarServicoLoginCidadao = false;
-        if($oauthConfigArray && $oauthConfigArray['OAuth']) {
+        if ($oauthConfigArray && $oauthConfigArray['OAuth']) {
             $this->view->habilitarServicoLoginCidadao = (bool)$oauthConfigArray['OAuth']['servicoHabilitado'];
         }
+//        xd(base64_decode($this->getRequest()->getParam('from', null)));
+        $this->view->from = $this->getRequest()->getParam('from', null);
+        if ($this->view->from) {
+            $this->view->from = base64_decode($this->view->from);
+        }
+
     }
 
     /**
@@ -34,8 +40,7 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
             $username = Mascara::delMaskCNPJ(Mascara::delMaskCPF($this->getParam('Login', null)));
             $password = $this->getParam('Senha', null);
 
-            if (empty($username) || empty($password))
-            {
+            if (empty($username) || empty($password)) {
                 throw new Exception("Login ou Senha inv&aacute;lidos!");
             } else if (strlen($username) == 11 && !Validacao::validarCPF($username)) {
                 throw new Exception("O CPF informado &eacute; inv&aacute;lido!");
@@ -45,10 +50,10 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                 $Usuario = new Autenticacao_Model_Usuario();
                 $buscar = $Usuario->login($username, $password);
                 if ($buscar) {
-                    $auth = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity());
+                    $auth = array_change_key_case((array)Zend_Auth::getInstance()->getIdentity());
                     $objUnidades = $Usuario->buscarUnidades($auth['usu_codigo'], 21)->current();
-                    if($objUnidades) {
-                       $objUnidades = $objUnidades->toArray();
+                    if ($objUnidades) {
+                        $objUnidades = $objUnidades->toArray();
                     }
                     // registra o primeiro grupo do usuario (pega unidade autorizada, orgao e grupo do usuario)
                     $Grupo = array_change_key_case($objUnidades);
@@ -58,11 +63,13 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                     $this->orgaoAtivo = $GrupoAtivo->codOrgao;
 
 //                    return $this->_helper->redirector->goToRoute(array('controller' => 'principal'), null, true);
-                    $this->_helper->json(array('status' => 1, 'msg' => 'Login realizado com sucesso!','redirect' => '/principal'));
+                    //xd(base64_decode());
+                    $from = $this->getParam('from', '/principal');
+                    $this->_helper->json(array('status' => 1, 'msg' => 'Login realizado com sucesso!', 'redirect' => $from));
                 } else {
-                        //se nenhum registro foi encontrado na tabela Usuario, ele passa a tentar se logar como proponente.
-                        //neste ponto o _forward encaminha o processamento para o metodo login do controller login, que recebe
-                        //o post igualmente e tenta encontrar usuario cadastrado em SGCAcesso
+                    //se nenhum registro foi encontrado na tabela Usuario, ele passa a tentar se logar como proponente.
+                    //neste ponto o _forward encaminha o processamento para o metodo login do controller login, que recebe
+                    //o post igualmente e tenta encontrar usuario cadastrado em SGCAcesso
                     $this->forward("login-proponente", "index", "autenticacao");
 //                    $this->_helper->json(array('status' => false, 'msg' => 'Cpf ou senha invalida!'));
 //                        throw new Exception("Usuario inexistente!");
@@ -129,32 +136,17 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                 if ($buscar) {
                     $verificaSituacao = $verificaStatus['Situacao'];
                     if ($verificaSituacao == 1) {
-//                        parent::message("Voc&ecirc; logou com uma senha tempor&aacute;ria. Por favor, troque a senha.", "/autenticacao/index/alterarsenha?idUsuario=" . $IdUsuario, "ALERT");
-                        $this->_helper->json(array('status' => 1, 'msg' => 'Voc&ecirc; logou com uma senha tempor&aacute;ria. Por favor, troque a senha.','redirect' => "/autenticacao/index/alterarsenha?idUsuario={$IdUsuario}"));
+                        $this->_helper->json(array('status' => 1, 'msg' => 'Voc&ecirc; logou com uma senha tempor&aacute;ria. Por favor, troque a senha.', 'redirect' => "/autenticacao/index/alterarsenha?idUsuario={$IdUsuario}"));
                     } else {
-                        $agentes = new Agente_Model_DbTable_Agentes();
-                        $verificaAgentes = $agentes->buscar(array('cnpjcpf = ?' => $username))->current();
-                        if (!empty ($verificaAgentes)) {
-                            //                                        $this->_redirect("/agente/agentes/incluiragenteexterno");
-                            //                                        parent::message("Voc&ecirc; ainda n&atilde;o est&aacute; cadastrado como proponente, por favor fa&ccedil;a isso agora.", "/manteragentes/agentes?acao=cc&idusuario={$verificaStatus[0]->IdUsuario}", "ALERT");
-//                            return $this->_helper->redirector->goToRoute(array('controller' => 'principalproponente'), null, true);
-                            $this->_helper->json(array('status' => 1, 'msg' => 'Login realizado com sucesso!','redirect' => '/principalproponente'));
-                        } else {
-//                            return $this->_helper->redirector->goToRoute(array('controller' => 'principalproponente'), null, true);
-                            $this->_helper->json(array('status' => 1, 'msg' => 'Login realizado com sucesso!','redirect' => '/principalproponente'));
-                            //parent::message("Voc&ecirc; ainda n&atilde;o est&aacute; cadastrado como proponente, por favor fa&ccedil;a isso agora.", "/agente/manteragentes/agentes?acao=cc&idusuario={$verificaStatus['idusuario']}", "ALERT");
-                        }
+                        $from = $this->getParam('from', '/principalproponente');
+                        $this->_helper->json(array('status' => 1, 'msg' => 'Login realizado com sucesso!', 'redirect' => $from));
                     }
-                }
-                else {
+                } else {
                     throw new Exception("Usu&aacute;rio n&atilde;o cadastrado");
                 }
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->_helper->json(array('status' => false, 'msg' => $e->getMessage()));
-//            $this->_helper->viewRenderer->setNoRender(TRUE);
-//            parent::message($e->getMessage(), "index", "ERROR");
         }
     }
 
@@ -172,11 +164,15 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
         unset($_SESSION);
 
         $arrayOauthConfiguration = $this->getOPAuthConfiguration();
-        if(count($arrayOauthConfiguration) > 0) {
+        if (count($arrayOauthConfiguration) > 0) {
             $url = $arrayOauthConfiguration['logout_uri'];
             $this->redirect($url);
         } else {
-            $this->redirect('index');
+            $from = '';
+            if ($this->getRequest()->getParam('from')) {
+                $from = "from/{$this->getRequest()->getParam('from')}";
+            }
+            $this->redirect("/autenticacao/index/index/{$from}");
         }
     }
 
@@ -254,9 +250,9 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                             $idResp = $sgcAcesso->buscar(array('Cpf = ?' => $sgcAcessoSave)); // pega o id do responsavel cadastrado
                             $dadosVinculo = array(
                                 'idAgenteProponente' => $idAgenteProp
-                            ,'dtVinculo' => new Zend_Db_Expr('GETDATE()')
-                            ,'siVinculo' => 2
-                            ,'idUsuarioResponsavel' => $idResp[0]->IdUsuario
+                            , 'dtVinculo' => new Zend_Db_Expr('GETDATE()')
+                            , 'siVinculo' => 2
+                            , 'idUsuarioResponsavel' => $idResp[0]->IdUsuario
                             );
                             $tbVinculo->inserir($dadosVinculo);
                         }
@@ -329,7 +325,7 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                 $assunto = "Cadastro SALICWEB";
                 $perfil = "SALICWEB";
                 $mens = "Ol&aacute; " . $nome . ",<br><br>";
-                $mens .= "Senha....: " . $senha. "<br><br>";
+                $mens .= "Senha....: " . $senha . "<br><br>";
                 $mens .= "Esta &eacute; a sua senha tempor&aacute;ria de acesso ao Sistema de Apresenta&ccedil;&atilde;o de Projetos via Web do ";
                 $mens .= "Minist&eacute;rio da Cultura.<br><br>Lembramos que a mesma dever&aacute; ser ";
                 $mens .= "trocada no seu primeiro acesso ao sistema.<br><br>";
@@ -363,7 +359,7 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
         //parent::perfil(4);
 
         /* ========== INICIO ID DO USUARIO LOGADO ========== */
-        $auth = (array) Zend_Auth::getInstance()->getIdentity();
+        $auth = (array)Zend_Auth::getInstance()->getIdentity();
         $Usuario = new Autenticacao_Model_Usuario();
 
         // verifica se o usuario logado e agente
@@ -383,7 +379,7 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
         if (count(Zend_Auth::getInstance()->getIdentity()) > 0) {
             $auth = Zend_Auth::getInstance();
 
-            $idUsuario = $auth->getIdentity()->IdUsuario ?$auth->getIdentity()->IdUsuario : $auth->getIdentity()->IdUsuario ;
+            $idUsuario = $auth->getIdentity()->IdUsuario ? $auth->getIdentity()->IdUsuario : $auth->getIdentity()->IdUsuario;
 
             $this->view->idUsuario = $idUsuario;
             $cpf = $auth->getIdentity()->Cpf;
@@ -641,7 +637,7 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
         parent::perfil(4);
 
         /* ========== INICIO ID DO USUARIO LOGADO ========== */
-        $auth = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity());
+        $auth = array_change_key_case((array)Zend_Auth::getInstance()->getIdentity());
         $Usuario = new Autenticacao_Model_Usuario();
 
         // verifica se o usuario logado e agente

@@ -55,6 +55,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                 'Projetos.DtSituacao',
                 'Projetos.Orgao',
                 'tbDocumentoAssinatura.cdSituacao',
+                'tbDocumentoAssinatura.stEstado',
                 'dias' => 'DATEDIFF(DAY, projetos.DtSituacao, GETDATE())',
                 '(' . $queryPlanilhaOrcamentaria->assemble() . ') as vlAprovado'
             ),
@@ -101,6 +102,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         }
 
         $query->where("tbDocumentoAssinatura.cdSituacao = ?", Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
+        $query->where("tbDocumentoAssinatura.stEstado = ?", Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
         $query->where("Projetos.Situacao in (?)", array('B04'));
         $query->order($ordenacao);
 
@@ -128,6 +130,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                 'Projetos.DtSituacao',
                 'Projetos.Orgao',
                 'tbDocumentoAssinatura.cdSituacao',
+                'tbDocumentoAssinatura.stEstado',
                 'possuiAssinatura'=> new Zend_Db_Expr("
                     (select {$this->_schema}.TbAssinatura.idAssinatura 
                        from {$this->_schema}.TbAssinatura
@@ -207,6 +210,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
 
         $query->where("tbDocumentoAssinatura.cdSituacao = ?", Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
+        $query->where("tbDocumentoAssinatura.stEstado = ?", Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
         $ordenacao[] = 'possuiAssinatura asc';
         $query->order($ordenacao);
 
@@ -218,7 +222,8 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $where = array(
             'IdPRONAC = ?' => $idPronac,
             'idTipoDoAtoAdministrativo = ?' => $idTipoDoAtoAdministrativo,
-            'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+            'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+            'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
         );
 
         return (count($objModelDocumentoAssinatura->findBy($where)) > 1);

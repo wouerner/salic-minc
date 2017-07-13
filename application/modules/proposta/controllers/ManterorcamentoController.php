@@ -88,7 +88,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @name produtoscadastradosAction
      */
-   public function produtoscadastradosAction()
+    public function produtoscadastradosAction()
     {
         $this->view->idPreProjeto = $this->idPreProjeto;
 
@@ -187,6 +187,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @deprecated metodo substituido apos a IN 2017
      */
     public function consultarcomponenteAction()
     {
@@ -229,6 +230,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @deprecated metodo substituido apos a IN 2017
      */
     public function cadastrarprodutosAction()
     {
@@ -331,8 +333,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $mapper = new Proposta_Model_TbCustosVinculadosMapper();
 
         try {
-            foreach($custosVinculados as $key => $item) {
-                if( in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
+            foreach ($custosVinculados as $key => $item) {
+                if (in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
 
                     $dados = array(
                         'idCustosVinculados' => $item['idCustosVinculados'],
@@ -365,7 +367,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->_helper->layout->disableLayout();
 
         $tbPreprojeto = new Proposta_Model_DbTable_PreProjeto();
-        $itens = $tbPreprojeto->listarItensProdutos($this->idPreProjeto, null,  Zend_DB::FETCH_ASSOC);
+        $itens = $tbPreprojeto->listarItensProdutos($this->idPreProjeto, null, Zend_DB::FETCH_ASSOC);
 
         $manterOrcamento = new Proposta_Model_DbTable_TbPlanilhaEtapa();
         $listaEtapa = $manterOrcamento->buscarEtapas('P', Zend_DB::FETCH_ASSOC);
@@ -506,7 +508,9 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
 
-        $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idPreProjeto, $params['etapa'], $params['produto'], $params['planilhaitem'], null, $params['uf'], $params['municipio']);
+        $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idPreProjeto, $params['etapa'], $params['produto'], $params['planilhaitem'], null,
+            $params['uf'], $params['municipio'], null, null, null, null, null, $params['fonterecurso'] );
+
         $buscarProdutos = converterObjetosParaArray($buscarProdutos);
 
         if ($buscarProdutos && !in_array($params['idPlanilhaProposta'], array_column($buscarProdutos, 'idPlanilhaProposta'))) {
@@ -735,7 +739,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         die;
     }
 
-    public function resumorestaurarplanilhaAction() {
+    public function resumorestaurarplanilhaAction()
+    {
 
     }
 
@@ -1255,7 +1260,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->idPreProjeto = $this->idPreProjeto;
     }
 
-    public function buscarValorMedianaAjaxAction() {
+    public function buscarValorMedianaAjaxAction()
+    {
 
         $params = $idPreProjeto = $this->getRequest()->getParams();
 
@@ -1271,11 +1277,11 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $params['vlunitario'] = str_replace(",", ".", str_replace(".", "", $params['vlunitario']));
 
         if (!empty($valorMediana) && $valorMediana < $params['vlunitario']) {
-            $return['msg'] = utf8_encode('O valor unit&aacute;rio para este item, ultrapassa o valor(R$ '. number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
+            $return['msg'] = utf8_encode('O valor unit&aacute;rio para este item, ultrapassa o valor(R$ ' . number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
             $return['status'] = 0;
         }
 
-       $this->_helper->json($return);
+        $this->_helper->json($return);
         die;
     }
 
