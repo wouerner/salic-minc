@@ -438,7 +438,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             }
 
             $tbLocaisDeRealizacao = new Proposta_Model_DbTable_Abrangencia();
-            $this->view->locaisRealizacao = $tbLocaisDeRealizacao->buscar(['idProjeto'=> $params['idPreProjeto']]);
+            $this->view->locaisRealizacao = $tbLocaisDeRealizacao->buscar(['idProjeto' => $params['idPreProjeto']]);
 
         }
 
@@ -478,12 +478,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
 
-        $return['msg'] = "Mensagem inicial, isso pode ser um erro";
-        $return['close'] = false;
-        $return['status'] = true;
-        $result = false;
-        $resultAlterarProjeto = true;
-
         $idPreProjeto = $params['idPreProjeto'];
 
         $justificativa = utf8_decode(substr(trim(strip_tags($params['editor1'])), 0, 500));
@@ -510,120 +504,157 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             'stCustoPraticado' => $params['stCustoPraticado']
         );
 
-        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $idPlanilhaProposta = isset($params['idPlanilhaProposta']) ? $params['idPlanilhaProposta'] : '';
 
-        $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idPreProjeto, $params['etapa'], $params['produto'], $params['planilhaitem'], null,
-            $params['uf'], $params['municipio'], null, null, null, null, null, $params['fonterecurso'] );
+        $retorno[] = self::salvarItemPlanilha($dados, $idPlanilhaProposta); # salva o item principal
+
+        $outrasLocalidades = isset($params['comboOutrasCidades']) ? $params['comboOutrasCidades'] : '';
+
+        if ($outrasLocalidades && count($outrasLocalidades) > 0) {
+            foreach ($outrasLocalidades as $localidade) {
+
+                if ($localidade == 'all') continue;
+
+                $estadoMunicipio = explode(':', $localidade);
+
+                $dados['UfDespesa'] = $estadoMunicipio[0];
+                $dados['MunicipioDespesa'] = $estadoMunicipio[1];
+
+                $retorno[] = self::salvarItemPlanilha($dados, null, true);
+            }
+        }
+
+        $this->atualizarcustosvinculadosdaplanilha($idPreProjeto);
+
+        $this->_helper->json($retorno);
+        die;
+    }
+
+    private function salvarItemPlanilha($dados, $idPlanilhaProposta = null, $outraLocalidade = false)
+    {
+        $resultAlterarProjeto = true;
+        $idPreProjeto = $dados['idProjeto'];
+
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idPreProjeto, $dados['idEtapa'], $dados['idProduto'], $dados['idPlanilhaItem'], null,
+            $dados['UfDespesa'], $dados['MunicipioDespesa'], null, null, null, null, null, $dados['FonteRecurso']);
 
         $buscarProdutos = converterObjetosParaArray($buscarProdutos);
 
-        if ($buscarProdutos && !in_array($params['idPlanilhaProposta'], array_column($buscarProdutos, 'idPlanilhaProposta'))) {
-            $return['msg'] = "Item duplicado na mesma etapa. Transa&ccedil;&atilde;o cancelada!";
-            $return['close'] = false;
-            $return['status'] = false;
-
+        if ($buscarProdutos && !in_array($idPlanilhaProposta, array_column($buscarProdutos, 'idPlanilhaProposta'))) {
+            $retorno['msg'] = "Item duplicado na mesma etapa!";
+            $retorno['close'] = false;
+            $retorno['status'] = false;
         } else {
 
             if ($this->isEditarProjeto($idPreProjeto)) {
 
-                $verifica = $this->verificarSeUltrapassaValorOriginal($idPreProjeto, $dados, $params['idPlanilhaProposta']);
+                $verifica = $this->verificarSeUltrapassaValorOriginal($idPreProjeto, $dados, $idPlanilhaProposta);
 
                 if ($verifica && $dados['FonteRecurso'] == 109) {
-                    $return['msg'] = "O item cadastrado ultrapassa o valor original do projeto. Transa&ccedil;&atilde;o cancelada!";
-                    $return['close'] = false;
-                    $return['status'] = false;
+                    $retorno['msg'] = "O item cadastrado ultrapassa o valor original do projeto!";
+                    $retorno['close'] = false;
+                    $retorno['status'] = false;
                     $resultAlterarProjeto = false;
                 }
             }
 
             if ($resultAlterarProjeto == true) {
-                if (empty($params['idPlanilhaProposta'])) {
+                if (empty($idPlanilhaProposta)) { #insert
 
                     if ($buscarProdutos) {
-                        $return['msg'] = "Item duplicado na mesma etapa. Transa&ccedil;&atilde;o cancelada!";
-                        $return['close'] = false;
-                        $return['status'] = false;
-
+                        $retorno['msg'] = "Item duplicado na mesma etapa!";
+                        $retorno['close'] = false;
+                        $retorno['status'] = false;
                     } else {
                         $result = $tbPlanilhaProposta->insert($dados);
 
                         if ($result) {
-                            $return['idPlanilhaProposta'] = $result;
-
-                            $return['msg'] = "Item cadastrado com sucesso.";
-                            $return['close'] = false;
-                            $return['status'] = true;
-                            $return['action'] = 'insert';
+                            $retorno['idPlanilhaProposta'] = $result;
+                            $retorno['msg'] = "Item cadastrado com sucesso.";
+                            $retorno['close'] = false;
+                            $retorno['status'] = true;
+                            $retorno['action'] = 'insert';
                         }
 
                     }
-                } else {
 
-                    if (isset($params['produto'])) {
+                } else { #update
 
-                        $where = "idPlanilhaProposta = " . $params['idPlanilhaProposta'];
+                    if (isset($dados['idProduto'])) {
+
+                        $where = "idPlanilhaProposta = " . $idPlanilhaProposta;
 
                         $result = $tbPlanilhaProposta->update($dados, $where);
 
                         if ($result) {
-                            $return['idPlanilhaProposta'] = $params['idPlanilhaProposta'];
-                            $return['msg'] = "Altera&ccedil;&atilde;o realizada com sucesso!";
-                            $return['close'] = true;
-                            $return['status'] = true;
-                            $return['action'] = 'update';
+                            $retorno['idPlanilhaProposta'] = $idPlanilhaProposta;
+                            $retorno['msg'] = "Altera&ccedil;&atilde;o realizada com sucesso!";
+                            $retorno['close'] = true;
+                            $retorno['status'] = true;
+                            $retorno['action'] = 'update';
                         }
                     }
                 }
             }
+
+            if (isset($retorno['idPlanilhaProposta']) && !empty($retorno['idPlanilhaProposta'])) {
+                $retorno['html'] = self::criarItemHtml($dados, $retorno['idPlanilhaProposta']);
+                $retorno['dados'] = $dados;
+            }
         }
 
-        if ($result) {
+//        if($outraLocalidade) {
+//            $tbLocaisDeRealizacao = new Agente_Model_DbTable_Municipios();
+//            $localidade = $tbLocaisDeRealizacao->municipioEstado(['idMunicipioIBGE' => $dados['MunicipioDespesa']]);
+//            $retorno['msg'] = $retorno['msg'] .' ('.  $localidade['Uf'] . " - ". $localidade['Municipio'] . ')';
+//        }
 
-            $this->atualizarcustosvinculadosdaplanilha($idPreProjeto);
+        return $retorno;
+    }
 
-            $tbItens = new tbItensPlanilhaProduto();
-            $item = $tbItens->buscarItem(array("idPlanilhaItens = ?" => $dados['idPlanilhaItem']));
+    protected function criarItemHtml($dados, $idPlanilhaProposta)
+    {
+        $tbItens = new tbItensPlanilhaProduto();
+        $item = $tbItens->buscarItem(array("idPlanilhaItens = ?" => $dados['idPlanilhaItem']));
 
-            $buscarUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
-            $unidade = $buscarUnidade->findBy(array("idUnidade" => $dados['Unidade']));
+        $buscarUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
+        $unidade = $buscarUnidade->findBy(array("idUnidade" => $dados['Unidade']));
 
-            $editarProduto = array(
-                'module' => 'proposta',
-                'controller' => 'manterorcamento',
-                'action' => 'formitem',
-                'item' => $dados['idPlanilhaItem'],
-                'etapa' => $dados['idEtapa'],
-                'produto' => $dados['idProduto'],
-                'idPlanilhaProposta' => $return['idPlanilhaProposta'],
-                'idPreProjeto' => $dados['idProjeto'],
-                'idUf' => $dados['UfDespesa'],
-                'idMunicipio' => $dados['MunicipioDespesa'],
-            );
+        $editarProduto = array(
+            'module' => 'proposta',
+            'controller' => 'manterorcamento',
+            'action' => 'formitem',
+            'item' => $dados['idPlanilhaItem'],
+            'etapa' => $dados['idEtapa'],
+            'produto' => $dados['idProduto'],
+            'idPlanilhaProposta' => $idPlanilhaProposta,
+            'idPreProjeto' => $dados['idProjeto'],
+            'idUf' => $dados['UfDespesa'],
+            'idMunicipio' => $dados['MunicipioDespesa'],
+        );
 
-            $urlEditarProduto = $this->_helper->url->url($editarProduto);
+        $urlEditarProduto = $this->_helper->url->url($editarProduto);
 
-            $html = '<tr id="item-planilha-' . $return['idPlanilhaProposta'] . '" class="green lighten-3">'
-                . '<td class="left-align">' . utf8_encode($item->Descricao) . '</td>'
-                . '<td>' . utf8_encode($unidade['Descricao']) . '</td>'
-                . '<td>' . number_format($dados['Quantidade'], 0) . '</td>'
-                . '<td>' . number_format($dados['Ocorrencia'], 0) . '</td>'
-                . '<td class="right-align">' . number_format($dados['ValorUnitario'], 2, ",", ".") . '</td>'
-                . '<td class="right-align">' . number_format(($dados['Quantidade'] * $dados['ValorUnitario']) * $dados['Ocorrencia'], 2, ",", ".") . '</td>'
-                . '<td class="action right-align">'
-                . '<a data-ajax-modal="' . $urlEditarProduto . '" href="javascript:void(0);" class="btn small waves-effect waves-light tooltipped btn-primary" data-position="top" data-delay="50" data-tooltip="Editar" data-ajax-modal-type="bottom-sheet">'
-                . '<i class="material-icons">edit</i>'
-                . '</a>'
-                . '</td>'
-                . '<td class="action left-align">'
-                . '<a class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item" href="javascript:void(0);" data-tooltip="Excluir" data-ajax="' . $return['idPlanilhaProposta'] . '" ><i class="material-icons">delete</i></a>'
-                . '</td>'
-                . '</tr>';
+        $html = '<tr id="item-planilha-' . $idPlanilhaProposta . '" class="green lighten-3">'
+            . '<td class="left-align">' . utf8_encode($item->Descricao) . '</td>'
+            . '<td>' . utf8_encode($unidade['Descricao']) . '</td>'
+            . '<td>' . number_format($dados['Quantidade'], 0) . '</td>'
+            . '<td>' . number_format($dados['Ocorrencia'], 0) . '</td>'
+            . '<td class="right-align">' . number_format($dados['ValorUnitario'], 2, ",", ".") . '</td>'
+            . '<td class="right-align">' . number_format(($dados['Quantidade'] * $dados['ValorUnitario']) * $dados['Ocorrencia'], 2, ",", ".") . '</td>'
+            . '<td class="action right-align">'
+            . '<a data-ajax-modal="' . $urlEditarProduto . '" href="javascript:void(0);" class="btn small waves-effect waves-light tooltipped btn-primary" data-position="top" data-delay="50" data-tooltip="Editar" data-ajax-modal-type="bottom-sheet">'
+            . '<i class="material-icons">edit</i>'
+            . '</a>'
+            . '</td>'
+            . '<td class="action left-align">'
+            . '<a class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item" href="javascript:void(0);" data-tooltip="Excluir" data-ajax="' . $return['idPlanilhaProposta'] . '" ><i class="material-icons">delete</i></a>'
+            . '</td>'
+            . '</tr>';
 
-            $return['html'] = $html;
-        }
+        return $html;
 
-        $this->_helper->json($return);
-        die;
     }
 
     /*
@@ -1108,7 +1139,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             if ($buscarProdutos) {
                 $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-                echo "Cadastro duplicado de Produto na mesma etapa envolvendo o mesmo Item, transa&ccedil;&atilde;o cancelada! Deseja cadastrar um novo item?";
+                echo "Cadastro duplicado de Produto na mesma etapa envolvendo o mesmo Item! Deseja cadastrar um novo item?";
                 die;
             } else {
                 $this->view->SalvarNovo = $tbPlanilhaProposta->salvarNovoProduto($idProposta, $idProduto, $idEtapa, $idItem,
@@ -1186,7 +1217,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 $buscarCustos = $TPP->buscarCustos($idProposta, $tipoCusto, $idEtapa, $idItem, $idUf, $idMunicipio);
                 if ($buscarCustos) {
                     $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-                    echo "Cadastro duplicado de Custo na mesma etapa envolvendo o mesmo Item, transa&ccedil;&atilde;o cancelada! Deseja cadastrar um novo item?";
+                    echo "Cadastro duplicado de Custo na mesma etapa envolvendo o mesmo Item! Deseja cadastrar um novo item?";
                     die;
                 } else {
                     $TPP->insert($dados);
