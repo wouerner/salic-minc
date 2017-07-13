@@ -2592,10 +2592,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $situacaoProjeto = Projeto_Model_Situacao::PROPOSTA_TRANSFORMADA_EM_PROJETO;
         $providenciaTomada = 'Proposta transformada em projeto cultural';
 
-        if (!empty($stProposta) && $stProposta != $propostaNormal) {
-            $situacaoProjeto = Projeto_Model_Situacao::ENCAMINHADO_PARA_ANALISE_TECNICA;
-            $providenciaTomada = 'Projeto encamihado a unidade vinculada para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico';
-        }
+
+//        if (!empty($stProposta) && $stProposta != $propostaNormal) {
+//            $situacaoProjeto = Projeto_Model_Situacao::ENCAMINHADO_PARA_ANALISE_TECNICA;
+//            $providenciaTomada = 'Projeto encamihado a unidade vinculada para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico';
+//        }
 
         $sqlProjetos = "INSERT INTO SAC.dbo.Projetos
                               (AnoProjeto,Sequencial,UFProjeto,Area,Segmento,Mecanismo,NomeProjeto,CgcCpf,Situacao,DtProtocolo,DtAnalise,
@@ -2619,22 +2620,22 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         $idPronac = $db->lastInsertId();
         if (!empty($idPronac)) {
-
-            if (!empty($stProposta) && $stProposta != $propostaNormal) {
-
-                $tbPlanoDistribuicao = new PlanoDistribuicao();
-                $idVinculada = $tbPlanoDistribuicao->buscarIdVinculada($idPreProjeto);
-
-                $tbDistribuirParecer = new tbDistribuirParecer();
-                $resultado = $tbDistribuirParecer->inserirDistribuicaoParaParecer($idPreProjeto, $idPronac, $idVinculada);
-
-                $tbAnaliseDeConteudo = new tbAnaliseDeConteudo();
-                $resultado = $tbAnaliseDeConteudo->inserirAnaliseConteudoParaParecerista($idPreProjeto, $idPronac);
-
-                $PlanilhaProjeto = new PlanilhaProjeto();
-                $resultado = $PlanilhaProjeto->inserirPlanilhaParaParecerista($idPreProjeto, $idPronac);
-
-            }
+// @todo a pedido do Rômulo todas as propostas seguirao o fluxo normal
+//            if (!empty($stProposta) && $stProposta != $propostaNormal) {
+//
+//                $tbPlanoDistribuicao = new PlanoDistribuicao();
+//                $idVinculada = $tbPlanoDistribuicao->buscarIdVinculada($idPreProjeto);
+//
+//                $tbDistribuirParecer = new tbDistribuirParecer();
+//                $resultado = $tbDistribuirParecer->inserirDistribuicaoParaParecer($idPreProjeto, $idPronac, $idVinculada);
+//
+//                $tbAnaliseDeConteudo = new tbAnaliseDeConteudo();
+//                $resultado = $tbAnaliseDeConteudo->inserirAnaliseConteudoParaParecerista($idPreProjeto, $idPronac);
+//
+//                $PlanilhaProjeto = new PlanilhaProjeto();
+//                $resultado = $PlanilhaProjeto->inserirPlanilhaParaParecerista($idPreProjeto, $idPronac);
+//
+//            }
 
             # INSERIR INFORMAÇÕES NA TABELA CONTABANCARIA
             $sqlContaBancaria = "INSERT INTO SAC.dbo.ContaBancaria (AnoProjeto,Sequencial,Mecanismo,Banco,Agencia,Logon)
