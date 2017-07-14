@@ -42,13 +42,19 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
             if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
                 $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
                 $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
-                parent::message('Projeto encaminhado com sucesso.', '/default/analisarprojetoparecer/index', 'CONFIRM');
+                
+                $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+                $this->redirect("/assinatura/index/visualizar-projeto/?IdPRONAC=" . $get['IdPRONAC'] . "&idTipoDoAtoAdministrativo=" . $idTipoDoAtoAdministrativo);
             } elseif(isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
+                // ainda nao implementado o encaminhamento de vários para pareceres
+                /*
                 foreach($post['IdPRONAC'] as $idPronac) {
                     $servicoDocumentoAssinatura->idPronac = $idPronac;
                     $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
                 }
+                
                 parent::message('Projetos encaminhados com sucesso.', '/default/analisarprojetoparecer/index', 'CONFIRM');
+                */
             }
             $this->carregarListaEncaminhamentoAssinatura();
         } catch (Exception $objException) {
@@ -56,92 +62,6 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
         }
     }
 
-    public function assinarParecerAction() {
-        $auth = Zend_Auth::getInstance();
-        $idUsuario = $auth->getIdentity()->usu_codigo;
-        $dtAtual = Date("Y/m/d h:i:s");
-        $codOrgao = $this->grupoAtivo->codOrgao;
-        
-        $idPronac = $this->_request->getParam("idPronac");
-        $idProduto = $this->_request->getParam("idProduto");
-        $idDistribuirParecer = $this->_request->getParam("idD");
-        $stPrincipal = $this->_request->getParam("stPrincipal");
-        $this->view->totaldivulgacao = "true";
-        
-        $projetos = new Projetos();
-        $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
-        
-        if (!$this->view->IN2017) {
-            $planilhaProjeto = new PlanilhaProjeto();
-            $valorProjeto = $planilhaProjeto->somarPlanilhaProjeto($idPronac, 109);
-
-            $totalDivulgacao = 0;
-            
-            if ($somaValorProjeto > 0 && $stPrincipal == "1") {
-                $analisarprojetoparecerController = new AnalisarprojetoparecerController();
-                $this->view->verifica15porcento = $this->validaRegra20Porcento($idPronac);
-            }
-            $this->view->verifica15porcento = $this->validacao15($idPronac, $stPrincipal, $valorProjeto['soma']);
-        }
-        
-        $projetos = new Projetos();
-        $dadosProjetoProduto = $projetos->dadosFechar($idUsuario, $idPronac, $idDistribuirParecer);
-        $this->view->dados = $dadosProjetoProduto;
-        $this->view->idpronac = $idPronac;
-        $dadosProjeto = $projetos->assinarParecer($idPronac);
-
-        $this->view->dadosEnquadramento = $dadosProjeto['enquadramento'];
-        $this->view->dadosProdutos = $dadosProjeto['produtos'];
-        $this->view->dadosDiligencias = $dadosProjeto['diligencias'];
-        if ($this->view->IN2017) {
-            $this->view->dadosAlcance = $dadosProjeto['alcance'][0];
-        }
-        $this->view->dadosParecer = $dadosProjeto['parecer'];        
-    }
-
-    public function visualizarParecerAction() {
-        $auth = Zend_Auth::getInstance();
-        $idUsuario = $auth->getIdentity()->usu_codigo;
-        $dtAtual = Date("Y/m/d h:i:s");
-        $codOrgao = $this->grupoAtivo->codOrgao;
-        
-        $idPronac = $this->_request->getParam("idPronac");
-        $idProduto = $this->_request->getParam("idProduto");
-        $idDistribuirParecer = $this->_request->getParam("idD");
-        $stPrincipal = $this->_request->getParam("stPrincipal");
-        $this->view->totaldivulgacao = "true";
-        
-        $projetos = new Projetos();
-        $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
-        
-        if (!$this->view->IN2017) {
-            $planilhaProjeto = new PlanilhaProjeto();
-            $valorProjeto = $planilhaProjeto->somarPlanilhaProjeto($idPronac, 109);
-
-            $totalDivulgacao = 0;
-            
-            if ($somaValorProjeto > 0 && $stPrincipal == "1") {
-                $analisarprojetoparecerController = new AnalisarprojetoparecerController();
-                $this->view->verifica15porcento = $this->validaRegra20Porcento($idPronac);
-            }
-            $this->view->verifica15porcento = $this->validacao15($idPronac, $stPrincipal, $valorProjeto['soma']);
-        }
-        
-        $projetos = new Projetos();
-        $dadosProjetoProduto = $projetos->dadosFechar($idUsuario, $idPronac, $idDistribuirParecer);
-        $this->view->dados = $dadosProjetoProduto;
-        $this->view->idpronac = $idPronac;
-        $dadosProjeto = $projetos->assinarParecer($idPronac);
-
-        $this->view->dadosEnquadramento = $dadosProjeto['enquadramento'];
-        $this->view->dadosProdutos = $dadosProjeto['produtos'];
-        $this->view->dadosDiligencias = $dadosProjeto['diligencias'];
-        if ($this->view->IN2017) {
-            $this->view->dadosAlcance = $dadosProjeto['alcance'][0];
-        }
-        $this->view->dadosParecer = $dadosProjeto['parecer'];        
-    }    
-    
     private function carregarListaEncaminhamentoAssinatura() {
         /**
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
