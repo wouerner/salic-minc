@@ -92,9 +92,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $currentPage = $this->_getParam('page', 1);
         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina
         // ========== FIM PAGINA¿¿O ==========
-
-        $projetos = new Projetos();
-        $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
+        
         $this->view->qtdRegistro = count($resp);
         $this->view->situacao = $situacao;
         $this->view->buscar = $paginator;
