@@ -12,7 +12,6 @@ class Parecer_DocumentoAssinaturaController implements MinC_Assinatura_Documento
     }
 
     function encaminharProjetoParaAssinatura() {
-
         if(!$this->idPronac) {
             throw new Exception("Identificador do Projeto não informado.");
         }
@@ -64,18 +63,6 @@ class Parecer_DocumentoAssinaturaController implements MinC_Assinatura_Documento
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
             $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
         }
-
-        $objProjeto = new Projetos();
-        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto encaminhado para assinatura.');
-
-        $orgaoDestino = 166;
-        $objOrgaos = new Orgaos();
-        $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
-        if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $orgaoDestino = 262;
-        }
-        $objTbProjetos->alterarOrgao($orgaoDestino, $this->idPronac);
-
     }
 
     /**
