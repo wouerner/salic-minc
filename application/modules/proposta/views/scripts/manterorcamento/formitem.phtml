@@ -192,17 +192,15 @@
                         </div>
 
                         <div class="input-field col s8 justificativa">
-                            <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                            <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
+                            <label for="justificativa">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
+                            <textarea cols="80" id="justificativa" name="justificativa" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
                         </div>
-
                     </div>
                     <?php if( !empty($this->locaisRealizacao) && count($this->locaisRealizacao) > 1  ) : ?>
                         <div class="row">
                             <div class="input-field  col s6">
-                                <select multiple="multiple" name="comboOutrasCidades[]">
+                                <select id="combo_cidades" multiple="multiple" name="comboOutrasCidades[]" class="comboOutrasCidades">
                                     <option disabled>Selecione as cidades</option>
-                                    <option value="all">Todas cidades</option>
                                     <?php foreach ($this->locaisRealizacao as $local) :?>
                                         <?php if( $local['idMunicipioIBGE'] != $this->Municipio['idMunicipioIBGE'] ) : ?>
                                             <option value="<?= $local['idUF'] ?>:<?= $local['idMunicipioIBGE'] ?>"><?= $local['uf']?> - <?= $local['cidade'] ?></option>
@@ -215,69 +213,9 @@
 
                         <div class="row">
                             <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
+                                <label for="justificativa">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
+                                <textarea cols="80" id="justificativa" name="justificativa" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
                             </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>  <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>  <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-                            <div class="input-field col s8 justificativa">
-                                <label for="edito1">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="editor1" name="editor1" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
-
-
                         </div>
                     <?php endif; ?>
                     <?php if ($this->isEditavel) : ?>
@@ -302,14 +240,220 @@
 
         $3('.btn-close-modal').on('click', function() {
             $3('#modal').modal('close');
-
         });
 
-        $3("ul.dropdown-content li:nth-child(2)").on('click', function(){
-            $3('ul.dropdown-content li').not(':first-child,:nth-child(2)').each(function(index) {
-                $3(this).click();
+
+
+        // ao clicar em todas cidades marcar todas
+//        $3("ul.dropdown-content li:nth-child(2)").on('click', function(){
+//            $3('ul.dropdown-content li').not(':first-child,:nth-child(2)').each(function(index) {
+//                $3(this).click();
+//            });
+//        });
+
+        $3('body').on('click', '.btn-salvar', function () {
+
+            var validar = true;
+            $3('.valida').each(function () {
+                if ($3(this).val() == '') {
+                    validar = false;
+                }
             });
+
+            if (validar == false) {
+                Materialize.toast("Dados obrigat&oacute;rios n&atilde;o informados!", 4000);
+                return false;
+            } else {
+                if ($3("#qtd").val() == 0) {
+                    Materialize.toast('Quantidade n&atilde;o pode ser igual a zero', 4000);
+                    $3("#qtd").focusin();
+                    return false;
+                }
+
+                if ($3("#ocorrencia").val() == 0) {
+                    Materialize.toast('Ocorr&ecirc;ncia n&atilde;o pode ser igual a zero', 4000);
+                    $3("#ocorrencia").focusin();
+                    return false;
+                }
+
+                var vlunitario = $3("#vlunitario").val();
+                vlunitario = vlunitario.replace(/\D/g, "");
+                vlunitario = vlunitario.replace(/(\d{0})(\d)/, "$1$2");
+
+                if (vlunitario == 0) {
+                    Materialize.toast('Valor unit&aacute;rio n&atilde;o pode ser igual a zero', 4000);
+                    $3("#vlunitario").focusin();
+                    return false;
+                }
+
+                if ($3("#qtdDias").val() == 0) {
+                    Materialize.toast('Quantidade de dias n&atilde;o pode ser igual a zero', 4000);
+                    $3("#qtdDias").focusin();
+                    return false;
+                }
+
+                if ($3("#justificativa.valida").val() == '') {
+                    Materialize.toast('Justificativa neste caso &eacute; obrigat&oacute;ria!', 4000);
+                    $3("#justificativa").focus();
+                    return false;
+                }
+
+
+                $3.post($3('#form').attr('action'), $3('#form').serialize(), function (result) {
+
+                    $3.each(result, function(index, item) {
+                        if (item.status == '1') {
+                            if( item.action == 'update') {
+                                $("#item-planilha-" +item.idPlanilhaProposta).replaceWith(item.html);
+                            }
+                            else if( item.action == 'insert') {
+
+                                var produto = item.dados.idProduto;
+                                var etapa = item.dados.idEtapa;
+                                var mun = item.dados.MunicipioDespesa;
+
+                                var idEtapa = "#etapa" + produto + "" + etapa + "" + mun;
+
+                                $3(idEtapa + " div.info").hide();
+                                $3(idEtapa + ' table tbody').append(item.html);
+                                $3("#planilhaitem").focus();
+                            }
+
+                            if(item.close == '1' )
+                                $3('#modal').modal('close');
+
+                            $3('#form')[0].reset();
+                            Materialize.toast(item.msg, 4000, 'green white-text');
+                        } else {
+                            Materialize.toast(item.msg, 8000, 'red darken-1 white-text');
+                        }
+                    });
+
+                    $3.each($('#custosvinculados[data-ajax-render]'), function () {
+                        $3.ajaxRender({
+                            strUrl: $('#custosvinculados').attr('data-ajax-render'),
+                            strTarget: '#custosvinculados'
+                        });
+                    });
+                });
+            }
+            return false;
         });
+
+        $3('body').on('focusout', '#vlunitario', function () {
+            if($3(this).val() == 0)
+                return false;
+
+            var msg_old = $3('#modal-pre-loader #msg-pre-loader p').html();
+            $3('#modal-pre-loader #msg-pre-loader p').html('Verificando valor unitário ...');
+
+            $3('#modal-pre-loader').modal('open');
+
+            $3("#btn-salvar").removeClass('btn-salvar').addClass('disabled');
+            $3('#editor1').addClass('valida');
+
+            var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'buscar-valor-mediana-ajax')); ?>";
+
+            var dados = {
+                idproduto: $3("#produto").val(),
+                idplanilhaitem: $3("#planilhaitem").val(),
+                idunidade: $3("#unidade").val(),
+                vlunitario: $3("#vlunitario").val(),
+                idufdespesa: $3("#uf").val(),
+                idmunicipiodespesa: $3("#municipio").val()
+            };
+
+            $.post(urlAction, dados, function (result) {
+                if (result.status == '1') {
+                    $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
+                    $3('#editor1').removeClass('valida');
+                    $3("#vlunitario").parent().removeClass("danger");
+                    $3(".justificativa label").text('Detalhamento / Justificativa / Observa\xE7\xF5es (Opcional)').parent().removeClass("danger");
+                    $3("#stCustoPraticado").val(0);
+                } else {
+                    $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
+                    $3('#editor1').addClass('valida');
+                    Materialize.toast(result.msg, 60000, 'mensagem1 orange darken-3 white-text');
+                    $3("#vlunitario").parent().addClass("danger");
+                    $3(".justificativa label").text('Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
+                    $3("#stCustoPraticado").val(1);
+                }
+
+                $3('#modal-pre-loader').modal('close');
+                $3('#modal-pre-loader #msg-pre-loader p').html(msg_old);
+
+            });
+            return false;
+        });
+
+        $3('body').on('keyup', '#justificativa', function () {
+            if ($3("#justificativa.valida").val() != '') {
+                $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
+                $3('.mensagem1').fadeOut(function(){
+                    $(this).remove();
+                });
+            }else{
+                $3("#btn-salvar").removeClass('btn-salvar').addClass('disabled');
+            }
+        });
+
+        var array_cidades = '';
+
+        $3('.comboOutrasCidades ul.dropdown-content li').on('click', function () {
+
+            var array2 = $3('#combo_cidades').val();
+            var difference = [];
+
+            $3.grep(array2, function (el) {
+                if ($3.inArray(el, array_cidades) == -1) difference.push(el);
+            });
+
+            $3.each(difference, function(index, item) {
+
+                var ufMunicipio = item.split(':');
+                var uf = ufMunicipio[0];
+                var municipio = ufMunicipio[1];
+
+                var stringLocalizacao = $3(".comboOutrasCidades option[value='" + item + "']").text();
+
+                var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'buscar-valor-mediana-ajax')); ?>";
+
+                var dados = {
+                    idproduto: $3("#produto").val(),
+                    idplanilhaitem: $3("#planilhaitem").val(),
+                    idunidade: $3("#unidade").val(),
+                    vlunitario: $3("#vlunitario").val(),
+                    idufdespesa: uf,
+                    idmunicipiodespesa: municipio,
+                    stringLocalizacao: stringLocalizacao
+                };
+
+                $.post(urlAction, dados, function (result) {
+                    if (result.status == '1') {
+//                        $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
+//                        $3('#editor1').removeClass('valida');
+//                        $3("#vlunitario").parent().removeClass("danger");
+//                        $3(".justificativa label").text('Detalhamento / Justificativa / Observa\xE7\xF5es (Opcional)').parent().removeClass("danger");
+//                        $3("#stCustoPraticado").val(0);
+                    } else {
+//                        $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
+//                        $3('#editor1').addClass('valida');
+                        Materialize.toast(result.msg, 60000, 'mensagem1 orange darken-3 white-text');
+//                        $3("#vlunitario").parent().addClass("danger");
+//                        $3(".justificativa label").text('Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
+//                        $3("#stCustoPraticado").val(1);
+                    }
+
+//                    $3('#modal-pre-loader').modal('close');
+//                    $3('#modal-pre-loader #msg-pre-loader p').html(msg_old);
+
+                });
+
+            });
+
+            array_cidades = array2;
+        });
+
 
     });
 </script>

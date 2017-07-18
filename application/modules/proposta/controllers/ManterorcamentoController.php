@@ -480,7 +480,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $idPreProjeto = $params['idPreProjeto'];
 
-        $justificativa = utf8_decode(substr(trim(strip_tags($params['editor1'])), 0, 500));
+        $justificativa = utf8_decode(substr(trim(strip_tags($params['justificativa'])), 0, 500));
 
         $dados = array(
             'idProjeto' => $idPreProjeto,
@@ -932,7 +932,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 'fonterecurso' => $_POST['fonterecurso'],
                 'ufdespesa' => $_POST['uf'],
                 'municipiodespesa' => $_POST['municipio'],
-                'dsjustificativa' => $_POST['editor1']
+                'dsjustificativa' => $_POST['justificativa']
             );
 
             $where = "idPlanilhaProposta = " . $_POST['proposta'];
@@ -1134,7 +1134,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $ocorrencia = $_POST['ocorrencia'];
             $vlunitario = str_replace(",", ".", str_replace(".", "", $_POST['vlunitario']));
             $qtdDias = $_POST['qtdDias'];
-            $justificativa = utf8_decode(substr(trim(strip_tags($_POST['editor1'])), 0, 500));
+            $justificativa = utf8_decode(substr(trim(strip_tags($_POST['justificativa'])), 0, 500));
             $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idProposta, $idEtapa, $idProduto, $idItem, null, $idUf, $idMunicipio);
 
             if ($buscarProdutos) {
@@ -1180,7 +1180,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $ocorrencia = $_POST['ocorrencia'];
             $vlunitario = str_replace(",", ".", str_replace(".", "", $_POST['vlunitario']));
             $qtdDias = $_POST['qtdDias'];
-            $dsJustificativa = substr(trim(strip_tags($_POST['editor1'])), 0, 500);
+            $dsJustificativa = substr(trim(strip_tags($_POST['justificativa'])), 0, 500);
             $tipoCusto = 'A';
 
             $db = Zend_Db_Table::getDefaultAdapter();
@@ -1309,10 +1309,12 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $return['status'] = 1;
         $return['valorMediana'] = $valorMediana;
 
+        $stringLocalizacao = isset($params['stringLocalizacao']) ? $params['stringLocalizacao'] : 'este item';
+
         $params['vlunitario'] = str_replace(",", ".", str_replace(".", "", $params['vlunitario']));
 
         if (!empty($valorMediana) && $valorMediana < $params['vlunitario']) {
-            $return['msg'] = utf8_encode('O valor unit&aacute;rio para este item, ultrapassa o valor(R$ ' . number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
+            $return['msg'] = utf8_encode('O valor unit&aacute;rio para ' . $stringLocalizacao . ', ultrapassa o valor(R$ ' . number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
             $return['status'] = 0;
         }
 
