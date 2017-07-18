@@ -1,10 +1,11 @@
 <main>
     <?php
+
     $links = array(
         array(
             'Gerenciar Projetos' => array(
-                'module' => 'assinatura',
-                'controller' => 'index',
+                'module' => $this->moduleOrigin,
+                'controller' => $this->controllerOrigin,
                 'action' => 'gerenciar-assinaturas'
             )
         ),
@@ -29,6 +30,7 @@
         )
         . "?IdPRONAC={$this->IdPRONAC}";
     ?>">
+        <input type="hidden" name="origin" value="<?php echo $this->origin ?>"/>
         <div class="content padding20 clearfix">
             <?php echo $this->documentoAssinatura['conteudo'] ?>
 
@@ -106,29 +108,20 @@
         </div>
         <div class="row center-align">
             <a class="btn waves-effect waves-dark"
-               href="<?php
-               echo $this->url(
-                       array(
+               href="<?php echo "/{$this->moduleOrigin}/{$this->controllerOrigin}/gerenciar-assinaturas"; ?>">Voltar</a>
+            <?php
+            if ($this->documentoAssinatura['cdSituacao'] == Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO):
+                ?>
+                <a class="btn waves-effect waves-dark"
+                   href="<?php
+                   echo $this->url(array(
                            'module' => 'assinatura',
                            'controller' => 'index',
-                           'action' => 'gerenciar-assinaturas'
-                       )
-                   )
-                   . "?IdPRONAC={$this->IdPRONAC}";
-               ?>">Voltar</a>
-            <?php
-            if($this->documentoAssinatura['cdSituacao'] == Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO):
-            ?>
-            <a class="btn waves-effect waves-dark"
-               href="<?php
-               echo $this->url(array(
-                       'module' => 'assinatura',
-                       'controller' => 'index',
-                       'action' => 'assinar-projeto'
-                   ))
-                   . "?IdPRONAC={$this->IdPRONAC}&idTipoDoAtoAdministrativo={$this->idTipoDoAtoAdministrativo}";
-               ?>">Assinar</a>
-            <?php
+                           'action' => 'assinar-projeto'
+                       ))
+                       . "?IdPRONAC={$this->IdPRONAC}&idTipoDoAtoAdministrativo={$this->idTipoDoAtoAdministrativo}&origin={$this->origin}";
+                   ?>">Assinar</a>
+                <?php
             endif;
             ?>
             <a id="acao_imprimir"
