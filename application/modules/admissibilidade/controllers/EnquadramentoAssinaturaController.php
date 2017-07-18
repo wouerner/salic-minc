@@ -34,7 +34,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
         $this->redirect("/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas");
     }
 
-    public function gerenciarProjetosAction()
+    public function gerenciarAssinaturasAction()
     {
         $this->validarPerfis();
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
@@ -42,7 +42,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
         $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas(
             $this->grupoAtivo->codOrgao,
-            $this->grupoAtivo->codGrupo
+            $this->grupoAtivo->codGrupo,
+            $this->idTipoDoAtoAdministrativo
         );
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
 
