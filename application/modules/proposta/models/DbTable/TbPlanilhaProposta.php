@@ -677,6 +677,7 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
 
         try {
             $db= Zend_Db_Table::getDefaultAdapter();
+            $db->setFetchMode(Zend_DB::FETCH_ASSOC);
         } catch (Zend_Exception_Db $e) {
             $this->view->message = $e->getMessage();
         }
