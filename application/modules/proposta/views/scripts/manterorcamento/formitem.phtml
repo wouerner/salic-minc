@@ -197,11 +197,28 @@
                         </div>
 
                     </div>
+                    <?php if( !empty($this->locaisRealizacao) && count($this->locaisRealizacao) > 1  ) : ?>
+                        <div class="row">
+                            <div class="input-field  col s6">
+                                <select multiple="multiple" name="comboOutrasCidades[]">
+                                    <option disabled>Selecione as cidades</option>
+                                    <option value="all">Todas cidades</option>
+                                    <?php foreach ($this->locaisRealizacao as $local) :?>
+                                        <?php if( $local['idMunicipioIBGE'] != $this->Municipio['idMunicipioIBGE'] ) : ?>
+                                            <option value="<?= $local['idUF'] ?>:<?= $local['idMunicipioIBGE'] ?>"><?= $local['uf']?> - <?= $local['cidade'] ?></option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label>Deseja aplicar este item para outras cidades? (Opcional)</label>
+
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <?php if ($this->isEditavel) : ?>
                         <div class="row">
                             <div class="input-field col s12 center-align">
                                 <a class="btn-close-modal waves-effect waves-teal btn btn-info"><i class="material-icons left">clear</i>Fechar</a>
-                                <a id="btn-salvar" href="javascript:void(0);" class="btn-salvar btn waves-effect waves-light" name="action">Salvar
+                                <a id="btn-salvar" href="javascript:void(0);" class="disabled btn waves-effect waves-light" name="action">Salvar
                                     <i class="material-icons right">send</i>
                                 </a>
                             </div>
@@ -221,5 +238,12 @@
             $3('#modal').modal('close');
 
         });
+
+        $3("ul.dropdown-content li:nth-child(2)").on('click', function(){
+            $3('ul.dropdown-content li').not(':first-child,:nth-child(2)').each(function(index) {
+                $3(this).click();
+            });
+        });
+
     });
 </script>

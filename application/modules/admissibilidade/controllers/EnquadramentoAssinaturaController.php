@@ -31,10 +31,10 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
     public function indexAction()
     {
         $this->validarPerfis();
-        $this->redirect("/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos");
+        $this->redirect("/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas");
     }
 
-    public function gerenciarProjetosAction()
+    public function gerenciarAssinaturasAction()
     {
         $this->validarPerfis();
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
@@ -42,7 +42,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
         $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas(
             $this->grupoAtivo->codOrgao,
-            $this->grupoAtivo->codGrupo
+            $this->grupoAtivo->codGrupo,
+            $this->idTipoDoAtoAdministrativo
         );
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
 
@@ -107,7 +108,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 );
                 $objModelDocumentoAssinatura->update($data, $where);
 
-                parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos", 'CONFIRM');
+                parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas", 'CONFIRM');
             }
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -186,7 +187,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 if (count($arrayIdPronacs) > 1) {
                     parent::message(
                         "Projetos assinados com sucesso!",
-                        "/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos",
+                        "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas",
                         'CONFIRM'
                     );
                 }
@@ -214,7 +215,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             if (is_array($get->IdPRONAC)) {
                 parent::message(
                     $objException->getMessage(),
-                    "/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos"
+                    "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas"
                 );
             }
             parent::message(
@@ -300,7 +301,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             $dadosVP['stAtivo'] = 1;
             $tblVerificaProjeto->inserir($dadosVP);
 
-            parent::message('Projeto finalizado com sucesso!', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-projetos", 'CONFIRM');
+            parent::message('Projeto finalizado com sucesso!', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas", 'CONFIRM');
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/{$this->moduleName}/enquadramento-assinatura/assinar-projeto?IdPRONAC={$get->IdPRONAC}");
         }
