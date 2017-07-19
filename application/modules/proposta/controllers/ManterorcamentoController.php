@@ -480,7 +480,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $idPreProjeto = $params['idPreProjeto'];
 
-        $justificativa = utf8_decode(substr(trim(strip_tags($params['justificativa'])), 0, 500));
+        $justificativa = utf8_decode(substr(trim(strip_tags($params['justificativa'])), 0, 1000));
 
         $dados = array(
             'idProjeto' => $idPreProjeto,
@@ -499,7 +499,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             'FonteRecurso' => $params['fonterecurso'],
             'UfDespesa' => $params['uf'],
             'MunicipioDespesa' => $params['municipio'],
-            'dsJustificativa' => substr($justificativa, 0, 510),
+            'dsJustificativa' => $justificativa,
             'idUsuario' => $this->idUsuario,
             'stCustoPraticado' => $params['stCustoPraticado']
         );
@@ -515,12 +515,27 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
                 if ($localidade == 'all') continue;
 
-                $estadoMunicipio = explode(':', $localidade);
+                $custoPraticado = isset($params['stCustoPraticado_' . $localidade]) ? $params['stCustoPraticado_' . $localidade] : 0;
 
+                # se o custo praticado for igual a 1, justificativa eh obrigatoria
+                if ($custoPraticado == 1) {
+                    $justificativa = isset($params['justificativa_' . $localidade]) ? $params['justificativa_' . $localidade] : '';
+
+                    $dados['dsJustificativa'] = utf8_decode(substr(trim(strip_tags($justificativa)), 0, 1000));
+
+                    if (empty($justificativa)) {
+                        continue;
+                    }
+                }
+
+                $dados['stCustoPraticado'] = $custoPraticado;
+
+                $estadoMunicipio = explode(':', $localidade);
                 $dados['UfDespesa'] = $estadoMunicipio[0];
                 $dados['MunicipioDespesa'] = $estadoMunicipio[1];
 
                 $retorno[] = self::salvarItemPlanilha($dados, null, true);
+
             }
         }
 
@@ -600,15 +615,11 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             if (isset($retorno['idPlanilhaProposta']) && !empty($retorno['idPlanilhaProposta'])) {
                 $retorno['html'] = self::criarItemHtml($dados, $retorno['idPlanilhaProposta']);
-                $retorno['dados'] = $dados;
+                $dados['dsJustificativa'] = utf8_encode($dados['dsJustificativa']);
             }
         }
 
-//        if($outraLocalidade) {
-//            $tbLocaisDeRealizacao = new Agente_Model_DbTable_Municipios();
-//            $localidade = $tbLocaisDeRealizacao->municipioEstado(['idMunicipioIBGE' => $dados['MunicipioDespesa']]);
-//            $retorno['msg'] = $retorno['msg'] .' ('.  $localidade['Uf'] . " - ". $localidade['Municipio'] . ')';
-//        }
+        $retorno['dados'] = $dados;
 
         return $retorno;
     }
