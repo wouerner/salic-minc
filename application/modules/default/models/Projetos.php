@@ -4783,7 +4783,7 @@ class Projetos extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function buscaProjetosProdutos($where)
+    public function buscaProjetosProdutosParaAnalise($where)
     {
         $select = $this
             ->select()
