@@ -30,8 +30,14 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
 
     public function indexAction()
     {
-        $this->redirect("/{$this->moduleName}/index/encaminhar-assinatura");
+        $this->redirect("/{$this->moduleName}/index/analisar-projeto-parecer");
     }
+
+    public function gerenciarAssinaturasAction()
+    {
+        $this->redirect("/{$this->moduleName}/index/analisar-projeto-parecer");
+    }
+
 
     public function encaminharAssinaturaAction() {
         try {
@@ -44,7 +50,7 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
                 $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
                 
                 $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
-                $this->redirect("/assinatura/index/visualizar-projeto/?IdPRONAC=" . $get['IdPRONAC'] . "&idTipoDoAtoAdministrativo=" . $idTipoDoAtoAdministrativo);
+               $this->redirect("/assinatura/index/visualizar-projeto/?IdPRONAC=" . $get['IdPRONAC'] . "&idTipoDoAtoAdministrativo=" . $idTipoDoAtoAdministrativo);
             } elseif(isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
                 // ainda nao implementado o encaminhamento de vários para pareceres
                 /*
@@ -55,29 +61,49 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
                 
                 parent::message('Projetos encaminhados com sucesso.', '/default/analisarprojetoparecer/index', 'CONFIRM');
                 */
-            }
+           }
             $this->carregarListaEncaminhamentoAssinatura();
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), '/{$this->moduleName}/index/encaminhar-assinatura');
         }
     }
 
-    private function carregarListaEncaminhamentoAssinatura() {
-        /**
-        $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
-        $enquadramento = new Admissibilidade_Model_Enquadramento();
+    
+    public function analisarProjetoParecerAction() {
+        $auth = Zend_Auth::getInstance();
+        $idusuario = $auth->getIdentity()->usu_codigo;
 
-        $this->view->dados = array();
-        $ordenacao = array("dias desc");
-        $dados = $enquadramento->obterProjetosEnquadradosParaAssinatura($this->grupoAtivo->codOrgao, $ordenacao);
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $idOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o
 
-        foreach ($dados as $dado) {
-            $dado->desistenciaRecursal = $enquadramento->verificarDesistenciaRecursal($dado->IdPRONAC);
-            $this->view->dados[] = $dado;
-        }
+        $UsuarioDAO = new Autenticacao_Model_Usuario();
+        $agente = $UsuarioDAO->getIdUsuario($idusuario);
+        $idAgenteParecerista = $agente['idagente'];
 
-        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
-        $this->view->codOrgao = $this->grupoAtivo->codOrgao;
-        */
+        $situacao = $this->_request->getParam('situacao');
+        
+        $projeto = new Projetos();
+        $resp = $projeto->buscaProjetosProdutosParaAnalise(
+            array(
+                'distribuirParecer.idAgenteParecerista = ?' => $idAgenteParecerista,
+                'distribuirParecer.idOrgao = ?' => $idOrgao,
+            )
+        );
+
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $this->view->quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas($this->idTipoDoAtoAdministrativo, $idOrgao);
+        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+        $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
+        
+        Zend_Paginator::setDefaultScrollingStyle('Sliding');
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
+        $paginator = Zend_Paginator::factory($resp); // dados a serem paginados
+        $currentPage = $this->_getParam('page', 1);
+        $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina
+        
+        $this->view->qtdRegistro = count($resp);
+        $this->view->situacao = $situacao;
+        $this->view->buscar = $paginator;
     }
 }

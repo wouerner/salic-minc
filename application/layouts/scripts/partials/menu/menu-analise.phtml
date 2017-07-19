@@ -89,7 +89,7 @@ $arrMenu['analise']['menu'][] = array('label' => 'Gerenciar Pareceres', 'title' 
     'grupo' => array(Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'An&aacute;lise T&eacute;cnica Inicial', 'title' => 'Ir para An&aacute;lise T&eacute;cnica Inicial',
-    'url' => $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'index'), '', true),
+    'url' => $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'analisar-projeto-parecer'), '', true),
     'grupo' => array(Autenticacao_Model_Grupos::PARECERISTA)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'Parecer T&eacute;cnico FNC', 'title' => 'Ir para Parecer T&eacute;cnico FNC',
