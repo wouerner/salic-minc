@@ -128,7 +128,6 @@
                     <input type="hidden" name="municipio" id="municipio" value="<?php echo $this->Municipio['idMunicipioIBGE'] ?>" />
                     <input type="hidden" name="idPlanilhaEtapa" id="idPlanilhaEtapa" value="<?php echo $this->Etapa['idPlanilhaEtapa'] ?>" />
                     <input type="hidden" name="valorMediana" id="valorMediana" value="" />
-                    <input type="hidden" name="stCustoPraticado" id="stCustoPraticado" value="<?php echo $dados->stCustoPraticado; ?>" />
 
                     <div class="row">
                         <div class="col s4">
@@ -191,9 +190,10 @@
                             </select>
                         </div>
 
-                        <div class="input-field col s8 justificativa">
+                        <div id="justificativa_current_item" class="input-field col s8 justificativa">
                             <label for="justificativa">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
                             <textarea cols="80" id="justificativa" name="justificativa" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
+                            <input type="hidden" name="stCustoPraticado" class="stCustoPraticado" value="<?php echo $dados->stCustoPraticado; ?>" />
                         </div>
                     </div>
                     <?php if( !empty($this->locaisRealizacao) && count($this->locaisRealizacao) > 1  ) : ?>
@@ -211,11 +211,8 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="input-field col s8 justificativa">
-                                <label for="justificativa">Detalhamento / Justificativa / Observa&ccedil;&otilde;es (Opcional)</label>
-                                <textarea cols="80" id="justificativa" name="justificativa" rows="7" class="materialize-textarea browser-default" placeholder=" "><?php echo $dados->Justificativa; ?></textarea>
-                            </div>
+                        <div id="another-cities">
+
                         </div>
                     <?php endif; ?>
                     <?php if ($this->isEditavel) : ?>
@@ -252,6 +249,7 @@
 //        });
 
         $3('body').on('click', '.btn-salvar', function () {
+
 
             var validar = true;
             $3('.valida').each(function () {
@@ -302,6 +300,12 @@
                 $3.post($3('#form').attr('action'), $3('#form').serialize(), function (result) {
 
                     $3.each(result, function(index, item) {
+                        console.log(result);
+
+                        var uf = item.dados.UfDespesa;
+                        var mun = item.dados.MunicipioDespesa;
+                        var stringLocalizacao = $3("select option[value='" + uf + ":" +  mun + "']").text();
+
                         if (item.status == '1') {
                             if( item.action == 'update') {
                                 $("#item-planilha-" +item.idPlanilhaProposta).replaceWith(item.html);
@@ -310,7 +314,6 @@
 
                                 var produto = item.dados.idProduto;
                                 var etapa = item.dados.idEtapa;
-                                var mun = item.dados.MunicipioDespesa;
 
                                 var idEtapa = "#etapa" + produto + "" + etapa + "" + mun;
 
@@ -323,9 +326,9 @@
                                 $3('#modal').modal('close');
 
                             $3('#form')[0].reset();
-                            Materialize.toast(item.msg, 4000, 'green white-text');
+                            Materialize.toast(stringLocalizacao + ' '+ item.msg, 4000, 'green white-text');
                         } else {
-                            Materialize.toast(item.msg, 8000, 'red darken-1 white-text');
+                            Materialize.toast(stringLocalizacao + ' ' +item.msg, 8000, 'red darken-1 white-text');
                         }
                     });
 
@@ -350,7 +353,7 @@
             $3('#modal-pre-loader').modal('open');
 
             $3("#btn-salvar").removeClass('btn-salvar').addClass('disabled');
-            $3('#editor1').addClass('valida');
+            $3('#justificativa').addClass('valida');
 
             var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'buscar-valor-mediana-ajax')); ?>";
 
@@ -363,31 +366,37 @@
                 idmunicipiodespesa: $3("#municipio").val()
             };
 
-            $.post(urlAction, dados, function (result) {
+            $3.post(urlAction, dados, function (result) {
                 if (result.status == '1') {
                     $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
-                    $3('#editor1').removeClass('valida');
-                    $3("#vlunitario").parent().removeClass("danger");
-                    $3(".justificativa label").text('Detalhamento / Justificativa / Observa\xE7\xF5es (Opcional)').parent().removeClass("danger");
-                    $3("#stCustoPraticado").val(0);
+
+                    resetDadosMediana();
                 } else {
-                    $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
-                    $3('#editor1').addClass('valida');
                     Materialize.toast(result.msg, 60000, 'mensagem1 orange darken-3 white-text');
+                    $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
+                    $3('#justificativa').addClass('valida');
                     $3("#vlunitario").parent().addClass("danger");
-                    $3(".justificativa label").text('Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
-                    $3("#stCustoPraticado").val(1);
+                    $3("#justificativa_current_item label").text('Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
+                    $3("#justificativa_current_item .stCustoPraticado").val(1);
                 }
 
                 $3('#modal-pre-loader').modal('close');
                 $3('#modal-pre-loader #msg-pre-loader p').html(msg_old);
 
             });
+
             return false;
         });
 
-        $3('body').on('keyup', '#justificativa', function () {
-            if ($3("#justificativa.valida").val() != '') {
+        // verificar se os textareas foram preenchidos quando obrigat�rios
+        $3('body').on('keyup', '.justificativa textarea', function () {
+
+            var qtdJustificativaValida = parseInt($3(".justificativa textarea.valida").length);
+            var qtdJustificaValidaVazia = parseInt($3(".justificativa textarea.valida").filter(function() {
+                return !this.value;
+            }).length);
+
+            if (qtdJustificaValidaVazia == 0 || qtdJustificativaValida == 0) {
                 $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
                 $3('.mensagem1').fadeOut(function(){
                     $(this).remove();
@@ -401,21 +410,29 @@
 
         $3('.comboOutrasCidades ul.dropdown-content li').on('click', function () {
 
-            var array2 = $3('#combo_cidades').val();
-            var difference = [];
+            var array_combo = $3('#combo_cidades').val();
+            var diferenca = [];
 
-            $3.grep(array2, function (el) {
-                if ($3.inArray(el, array_cidades) == -1) difference.push(el);
+            $3.grep(array_combo, function (el) {
+                if ($3.inArray(el, array_cidades) == -1) diferenca.push(el);
             });
 
-            $3.each(difference, function(index, item) {
+            // limpar os itens que foram desmarcados
+            $3("#another-cities div[localizacao]").each(function() {
+                var checkExist = $3.inArray($3(this).attr('localizacao'), array_combo);
+
+                if(checkExist == -1) {
+                    $3(this).remove();
+                }
+            });
+
+            // adicionar novos itens marcados
+            $3.each(diferenca, function(index, item) {
 
                 var ufMunicipio = item.split(':');
                 var uf = ufMunicipio[0];
                 var municipio = ufMunicipio[1];
-
                 var stringLocalizacao = $3(".comboOutrasCidades option[value='" + item + "']").text();
-
                 var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'buscar-valor-mediana-ajax')); ?>";
 
                 var dados = {
@@ -428,31 +445,43 @@
                     stringLocalizacao: stringLocalizacao
                 };
 
-                $.post(urlAction, dados, function (result) {
+                $3.post(urlAction, dados, function (result) {
+
+                    var msg_old = $3('#modal-pre-loader #msg-pre-loader p').html();
+                    $3('#modal-pre-loader #msg-pre-loader p').html('Verificando valor unit�rio ...');
+                    $3('#modal-pre-loader').modal('open');
+
                     if (result.status == '1') {
-//                        $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
-//                        $3('#editor1').removeClass('valida');
-//                        $3("#vlunitario").parent().removeClass("danger");
-//                        $3(".justificativa label").text('Detalhamento / Justificativa / Observa\xE7\xF5es (Opcional)').parent().removeClass("danger");
-//                        $3("#stCustoPraticado").val(0);
+                        $3("#another-cities").find("[localizacao='" + item + "']").remove();
                     } else {
-//                        $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
-//                        $3('#editor1').addClass('valida');
                         Materialize.toast(result.msg, 60000, 'mensagem1 orange darken-3 white-text');
-//                        $3("#vlunitario").parent().addClass("danger");
-//                        $3(".justificativa label").text('Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
-//                        $3("#stCustoPraticado").val(1);
+
+                        $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
+                        $3('#justificativa-wraper-' + item).remove();
+
+                        var $klon = $3('#justificativa-current-item').clone().prop('id', 'justificativa-wraper-' + item).attr('localizacao', item);
+                        $klon.find("label").text(stringLocalizacao + ' - Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
+                        $klon.find('textarea').prop('id','justificativa_' + item).prop('name','justificativa_' + item).addClass('valida').val('');
+                        $klon.find('.stCustoPraticado').prop('name','stCustoPraticado_' + item).val(1);
+                        $klon.appendTo( "#another-cities");
                     }
 
-//                    $3('#modal-pre-loader').modal('close');
-//                    $3('#modal-pre-loader #msg-pre-loader p').html(msg_old);
+                    $3('#modal-pre-loader').modal('close');
+                    $3('#modal-pre-loader #msg-pre-loader p').html(msg_old);
 
                 });
 
             });
 
-            array_cidades = array2;
+            array_cidades = array_combo;
         });
+
+        function resetDadosMediana() {
+            $3('#justificativa').removeClass('valida');
+            $3("#vlunitario").parent().removeClass("danger");
+            $3("#justificativa_current_item label").text('Detalhamento / Justificativa / Observa\xE7\xF5es (Opcional)').parent().removeClass("danger");
+            $3("#justificativa_current_item .stCustoPraticado").val(0);
+        }
 
 
     });
