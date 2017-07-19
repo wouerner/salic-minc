@@ -77,12 +77,18 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $situacao = $this->_request->getParam('situacao');
         
         $projeto = new Projetos();
-        $resp = $projeto->buscaProjetosProdutos(
+        $resp = $projeto->buscaProjetosProdutosParaAnalise(
             array(
                 'distribuirParecer.idAgenteParecerista = ?' => $idAgenteParecerista,
                 'distribuirParecer.idOrgao = ?' => $idOrgao,
             )
         );
+
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $this->view->quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas($this->idTipoDoAtoAdministrativo, $idOrgao);
+        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+        $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
         
         // ========== IN¿CIO PAGINA¿¿O ==========
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
