@@ -24,7 +24,7 @@ Paleta de cores by Jamile
 x - Elementos básicos
 --------------------------------------------------------------*/
 label {
-    width: 100%;
+    /*width: 100%; tá quebrando os selects com checkbox do materialize*/
 }
 
 .ui-dialog {
@@ -328,9 +328,6 @@ textarea.materialize-textarea:focus.invalid {
     color: #F44336;
 }
 
-label {
-    width: 100%;
-}
 
 /* label color */
 .input-field label {
