@@ -45,7 +45,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
-    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto)
+    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto, $idOrgaoDoAssinante = null)
     {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
@@ -60,6 +60,10 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         );
         $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
         $objQuery->where('stEstado = ?', true);
+        if ($idOrgaoDoAssinante) {
+            $objQuery->where('idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
+        }
+        
         $objResultado = $this->fetchRow($objQuery);
         if ($objResultado) {
             $resultadoArray = $objResultado->toArray();
