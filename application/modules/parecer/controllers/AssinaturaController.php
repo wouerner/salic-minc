@@ -8,13 +8,11 @@ class Parecer_AssinaturaController extends Assinatura_GenericController
         $auth = Zend_Auth::getInstance();
 
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 147;
-        $PermissoesGrupo[] = 148;
-        $PermissoesGrupo[] = 149;
-        $PermissoesGrupo[] = 150;
-        $PermissoesGrupo[] = 151;
-        $PermissoesGrupo[] = 152;
-
+        $PermissoesGrupo[] = 93;
+        $PermissoesGrupo[] = 94;
+        $PermissoesGrupo[] = 153;
+        $PermissoesGrupo[] = 154;
+        
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
 
