@@ -1,7 +1,7 @@
 <main>
     <?php
     $links = array(
-        array('Gerenciar Projetos' => array())
+        array('Gerenciar Assinaturas' => array())
     );
     ?>
     <div class="content padding20 clearfix">
@@ -23,7 +23,7 @@
                                   'action' => 'assinar-projeto'
                               ),
                               '',
-                              true); ?>"
+                              true); ?>?origin=admissibilidade/enquadramento-assinatura"
                           onsubmit="return false;">
                         <table class="bordered margin0" id="enquadramento">
                             <thead>
@@ -60,7 +60,7 @@
                                                class="checkbox_legal filled-in"
                                                value="<?php echo $dado['IdPRONAC'] ?>"/>
                                         <label for="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"></label>
-                                        <?php  endif; ?>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="center-align" align="center">
                                         <a class="waves-effect waves-dark btn white black-text"
@@ -86,7 +86,7 @@
                                                    'module' => 'assinatura',
                                                    'controller' => 'index',
                                                    'action' => 'visualizar-projeto'
-                                               )) . "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true" ?>"
+                                               )) . "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true&origin=admissibilidade/enquadramento-assinatura" ?>"
                                            data-position="top"
                                            data-delay="50"
                                            data-tooltip="Visualizar">
@@ -99,7 +99,7 @@
                                                    'module' => 'admissibilidade',
                                                    'controller' => 'enquadramento-assinatura',
                                                    'action' => 'devolver-projeto'
-                                               )) . "?IdPRONAC={$dado['IdPRONAC']}&encaminhar=true" ?>"
+                                               )) . "?IdPRONAC={$dado['IdPRONAC']}&encaminhar=true&origin=admissibilidade/enquadramento-assinatura" ?>"
                                            data-position="top"
                                            data-delay="50"
                                            data-tooltip="Devolver">
@@ -108,7 +108,7 @@
                                     </td>
                                     <td class="center-align" align="center">
                                         <?php
-                                        $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true&isMovimentarAssinatura=true";
+                                        $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true&isMovimentarAssinatura=true&origin=admissibilidade/enquadramento-assinatura";
                                         if(is_null($dado['possuiAssinatura'])) :
                                             ?>
                                             <a class="btn waves-effect waves-light tooltipped small"
@@ -143,7 +143,7 @@
                                                            'action' => 'finalizar-assinatura'
                                                        )
                                                    )
-                                                   . "?IdPRONAC={$dado['IdPRONAC']}&encaminhar=true" ?>"
+                                                   . "?IdPRONAC={$dado['IdPRONAC']}&encaminhar=true&origin=admissibilidade/enquadramento-assinatura" ?>"
                                                data-position="top"
                                                data-delay="50"
                                                data-tooltip="Finalizar">
