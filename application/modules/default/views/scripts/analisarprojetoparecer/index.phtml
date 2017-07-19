@@ -204,27 +204,49 @@
             || (($d->stPrincipal == 0) && ($countAnalizado == 0)  && ($dilig == 0))
               ) :?>
 	      <?php if($this->verificarIN2017($d->IdPRONAC)): ?>
-	      <?php if ($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL)): ?>
+
+	      <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
                 <a class="btn waves-effect waves-light cyan tooltipped small"
                    href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?IdPRONAC={$d->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>"
                   data-tooltip="Visualizar documento para assinatura">
                   <i class="material-icons white-text">pageview</i>
                 </a>
 		&nbsp;&nbsp;
+		
+		<?php if ($this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
+                <a class="btn waves-effect waves-light tooltipped small cyan"
+                   href="<?php echo $this->url(
+                                      array(
+                                      'controller' => 'analisarprojetoparecer',
+                                      'action' => 'fecharparecer',
+				      'idPronac'=> $d->IdPRONAC,
+				      'idD'=> $d->idDistribuirParecer,
+				      'idProduto' => $d->idProduto,
+				      'stPrincipal' => $d->stPrincipal
+                                      )
+                                      ); ?>"
+                   data-position="top"
+                   data-delay="50"
+                   data-tooltip="Finalizar">
+                  <i class="material-icons white-text">grade</i>
+                </a>
+		
+		<?php elseif (!$this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
                 <a class="btn waves-effect waves-light cyan tooltipped small"
                    href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$d->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>"
                   data-tooltip="Assinar documento">
                   <i class="material-icons white-text">create</i>
-                </a>	
-		<?php else : ?>
-	      
+                </a>
+		<?php endif; ?>
+                   
+		<?php elseif(!$this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
                 <a class="btn waves-effect waves-light cyan tooltipped small"
-                   href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true" ?>"
+        href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true" ?>"
                   data-tooltip="Gerar documento para assinatura">
                   <i class="material-icons white-text">pageview</i>
                 </a>
 		<?php endif; ?>
-		<?php else: ?>	      
+		<?php elseif(!$this->verificarIN2017($d->IdPRONAC)): ?>
                 <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
 		<?php endif; ?>
 <?php endif; ?>
