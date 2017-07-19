@@ -17,6 +17,18 @@ class Assinatura_IndexController extends Assinatura_GenericController
         parent::perfil();
 
         $this->cod_usuario = $this->auth->getIdentity()->usu_codigo;
+
+        $this->definirModuloDeOrigem();
+    }
+
+    private function definirModuloDeOrigem() {
+//        $this->view->module = $this->moduleName;
+        $get = Zend_Registry::get('get');
+        $post = (object)$this->getRequest()->getPost();
+        $this->view->origin = "{$this->moduleName}/index";
+        if(!empty($get->origin) || !empty($post->origin)) {
+            $this->view->origin = (!empty($post->origin)) ? $post->origin : $get->origin;
+        }
     }
 
     public function indexAction()
@@ -48,8 +60,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
     }
 
-
-
     public function visualizarProjetoAction()
     {
         $get = Zend_Registry::get('get');
@@ -65,7 +75,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                     throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
                 }
             } catch (Exception $objException) {
-                parent::message($objException->getMessage(), "/{$this->moduleName}/index/gerenciar-assinaturas");
+                parent::message($objException->getMessage(), "/{$this->view->origin}/gerenciar-assinaturas");
             }
 
             $this->view->IdPRONAC = $idPronac;
@@ -115,13 +125,18 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 )
             );
 
+            $moduleAndControllerArray = explode('/', $this->view->origin);
+            $this->view->moduleOrigin = $moduleAndControllerArray[0];
+            $this->view->controllerOrigin = $moduleAndControllerArray[1];
+
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}");
+            parent::message($objException->getMessage(), "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&origin={$this->view->origin}");
         }
     }
 
     public function assinarProjetoAction()
     {
+
         $get = Zend_Registry::get('get');
         $idPronac = $get->IdPRONAC;
         $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
@@ -135,8 +150,9 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), "/{$this->moduleName}/index/gerenciar-assinaturas");
+            parent::message($objException->getMessage(), "/{$this->view->origin}/gerenciar-assinaturas");
         }
+
 
         try {
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
@@ -153,7 +169,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             if (is_array($get->IdPRONAC)) {
                 $idPronacUnidos = implode(',', $get->IdPRONAC);
-                $this->redirect("/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronacUnidos}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}");
+                $this->redirect("/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronacUnidos}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&origin={$this->view->origin}");
             }
 
             $this->view->IdPRONAC = $get->IdPRONAC;
@@ -188,13 +204,13 @@ class Assinatura_IndexController extends Assinatura_GenericController
                     if (count($arrayIdPronacs) > 1) {
                         parent::message(
                             "Projetos assinados com sucesso!",
-                            "/{$this->moduleName}/index/gerenciar-assinaturas",
+                            "/{$this->view->origin}/gerenciar-assinaturas",
                             'CONFIRM'
                         );
                     } else {
                         parent::message(
                             "Projeto assinado com sucesso!",
-                            "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}",
+                            "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}",
                             'CONFIRM'
                         );
                         die;
@@ -202,7 +218,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 } catch (Exception $objException) {
                     parent::message(
                         $objException->getMessage(),
-                        "/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}",
+                        "/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}",
                         'ERROR'
                     );
                 }
@@ -258,11 +274,15 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 $this->view->isMovimentarAssinatura = 'true';
             }
 
+            $moduleAndControllerArray = explode('/', $this->view->origin);
+            $this->view->moduleOrigin = $moduleAndControllerArray[0];
+            $this->view->controllerOrigin = $moduleAndControllerArray[1];
+
         } catch (Exception $objException) {
 
             parent::message(
                 $objException->getMessage(),
-                "/{$this->moduleName}/index/gerenciar-assinaturas"
+                "/{$this->view->origin}/gerenciar-assinaturas"
             );
         }
     }
@@ -310,13 +330,13 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             parent::message(
                 'Projeto Movimentado com sucesso!'
-                ,"/{$this->moduleName}/index/gerenciar-assinaturas"
+                ,"/{$this->view->origin}/gerenciar-assinaturas"
                 ,'CONFIRM'
             );
         } catch (Exception $objException) {
             parent::message(
                 $objException->getMessage()
-                ,"/{$this->moduleName}/index/gerenciar-assinaturas"
+                ,"/{$this->view->origin}/gerenciar-assinaturas"
             );
         }
     }
