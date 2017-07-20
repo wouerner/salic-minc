@@ -27,7 +27,7 @@
 		  <th class="center-align">Dilig&ecirc;ncia</th>
 		  <th class="center-align">Tempo da Dilig&ecirc;ncia</th>
 		  <th class="center-align">Hist&oacute;rico</th>
-		  <th class="center-align" width="150">Conclus&atilde;o</th>
+		  <th class="center-align" width="250">Conclus&atilde;o</th>
 		  <th class="center-align">Declarar impedimento</th>
 		</thead>
 <?php
@@ -179,24 +179,23 @@ foreach($this->buscar as $d) {
 		  </a>
 		  &nbsp;&nbsp;
 		  
-		  <?php if ($this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
-		  <a class="btn waves-effect waves-light tooltipped small cyan"
-		     href="<?php echo $this->url(
-			   array(
-			   'module' => 'default',
-			   'controller' => 'analisarprojetoparecer',
-			   'action' => 'fecharparecer',
-			   'idPronac'=> $d->IdPRONAC,
-			   'idD'=> $d->idDistribuirParecer,
-			   'idProduto' => $d->idProduto,
-			   'stPrincipal' => $d->stPrincipal
-			   )
-			   ); ?>"
-		     data-position="top"
-		     data-delay="50"
-		     data-tooltip="Finalizar">
-		    <i class="material-icons white-text">grade</i>
-		  </a>
+		  <?php if ($this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):
+          $parametrosAssinatura = "?idPronac=". $d->IdPRONAC ."&idProduto=". $d->idProduto . "&situacao=". $d->situacao ."&idD=". $d->idDistribuirParecer . "&concluir=1";
+          ?>
+                  <a class="btn waves-effect waves-light tooltipped small btn cyan"
+                     href="#modalConfirmacao"
+                     data-redirect-url="<?php echo $this->url(
+                                        array(
+                                        'module' => 'default',
+                                        'controller' => 'analisarprojetoparecer',
+                                        'action' => 'fecharparecer'
+                                        )
+                                        ) . $parametrosAssinatura ?>"
+                     data-position="top"
+                     data-delay="50"
+                     data-tooltip="Concluir">
+                    <i class="material-icons">grade</i>
+                  </a>	
 		  
 		  <?php elseif (!$this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
@@ -283,7 +282,7 @@ foreach($this->buscar as $d) {
       <div id="modalConfirmacao" class="modal modal-fixed-footer">
 	<div class="modal-content">
 	  <h4>Confirma&ccedil;&atilde;o</h4>
-	  <p>Tem certeza que deseja concluir a an&aacute; do projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
+	  <p>Tem certeza que deseja concluir a an&aacute;lise do projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
 	</div>
 	<div class="modal-footer">
 	  <a href="#!" id="botaoConfirmacaoEncaminhamento" class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
@@ -292,6 +291,22 @@ foreach($this->buscar as $d) {
       </div>
     </div>
 
+    <script>
+        $3(document).ready(function(){
+            $3('.modal').modal({
+                dismissible: true,
+                opacity: .5,
+                inDuration: 300,
+                outDuration: 200,
+                startingTop: '4%',
+                endingTop: '10%',
+                ready: function(modal, trigger) {
+		    $(modal).find('#botaoConfirmacaoEncaminhamento').attr('href', $3(trigger).data('redirectUrl'));
+                }
+            });;
+        });
+    </script>
+    
     <br clear="all"/>
     <script
        src="https://code.jquery.com/jquery-1.12.4.js"
