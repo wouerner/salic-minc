@@ -615,10 +615,11 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             if (isset($retorno['idPlanilhaProposta']) && !empty($retorno['idPlanilhaProposta'])) {
                 $retorno['html'] = self::criarItemHtml($dados, $retorno['idPlanilhaProposta']);
-                $dados['dsJustificativa'] = utf8_encode($dados['dsJustificativa']);
+
             }
         }
 
+        $dados['dsJustificativa'] = utf8_encode($dados['dsJustificativa']);
         $retorno['dados'] = $dados;
 
         return $retorno;
@@ -1320,7 +1321,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $return['status'] = 1;
         $return['valorMediana'] = $valorMediana;
 
-        $stringLocalizacao = isset($params['stringLocalizacao']) ? $params['stringLocalizacao'] : 'este item';
+        $stringLocalizacao = isset($params['stringLocalizacao']) ? utf8_decode($params['stringLocalizacao']) : 'este item';
 
         $params['vlunitario'] = str_replace(",", ".", str_replace(".", "", $params['vlunitario']));
 
