@@ -480,7 +480,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $idPreProjeto = $params['idPreProjeto'];
 
-        $justificativa = utf8_decode(substr(trim(strip_tags($params['editor1'])), 0, 500));
+        $justificativa = utf8_decode(substr(trim(strip_tags($params['justificativa'])), 0, 1000));
 
         $dados = array(
             'idProjeto' => $idPreProjeto,
@@ -499,7 +499,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             'FonteRecurso' => $params['fonterecurso'],
             'UfDespesa' => $params['uf'],
             'MunicipioDespesa' => $params['municipio'],
-            'dsJustificativa' => substr($justificativa, 0, 510),
+            'dsJustificativa' => $justificativa,
             'idUsuario' => $this->idUsuario,
             'stCustoPraticado' => $params['stCustoPraticado']
         );
@@ -515,12 +515,27 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
                 if ($localidade == 'all') continue;
 
-                $estadoMunicipio = explode(':', $localidade);
+                $custoPraticado = isset($params['stCustoPraticado_' . $localidade]) ? $params['stCustoPraticado_' . $localidade] : 0;
 
+                # se o custo praticado for igual a 1, justificativa eh obrigatoria
+                if ($custoPraticado == 1) {
+                    $justificativa = isset($params['justificativa_' . $localidade]) ? $params['justificativa_' . $localidade] : '';
+
+                    $dados['dsJustificativa'] = utf8_decode(substr(trim(strip_tags($justificativa)), 0, 1000));
+
+                    if (empty($justificativa)) {
+                        continue;
+                    }
+                }
+
+                $dados['stCustoPraticado'] = $custoPraticado;
+
+                $estadoMunicipio = explode(':', $localidade);
                 $dados['UfDespesa'] = $estadoMunicipio[0];
                 $dados['MunicipioDespesa'] = $estadoMunicipio[1];
 
                 $retorno[] = self::salvarItemPlanilha($dados, null, true);
+
             }
         }
 
@@ -600,15 +615,12 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             if (isset($retorno['idPlanilhaProposta']) && !empty($retorno['idPlanilhaProposta'])) {
                 $retorno['html'] = self::criarItemHtml($dados, $retorno['idPlanilhaProposta']);
-                $retorno['dados'] = $dados;
+
             }
         }
 
-//        if($outraLocalidade) {
-//            $tbLocaisDeRealizacao = new Agente_Model_DbTable_Municipios();
-//            $localidade = $tbLocaisDeRealizacao->municipioEstado(['idMunicipioIBGE' => $dados['MunicipioDespesa']]);
-//            $retorno['msg'] = $retorno['msg'] .' ('.  $localidade['Uf'] . " - ". $localidade['Municipio'] . ')';
-//        }
+        $dados['dsJustificativa'] = utf8_encode($dados['dsJustificativa']);
+        $retorno['dados'] = $dados;
 
         return $retorno;
     }
@@ -932,7 +944,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 'fonterecurso' => $_POST['fonterecurso'],
                 'ufdespesa' => $_POST['uf'],
                 'municipiodespesa' => $_POST['municipio'],
-                'dsjustificativa' => $_POST['editor1']
+                'dsjustificativa' => $_POST['justificativa']
             );
 
             $where = "idPlanilhaProposta = " . $_POST['proposta'];
@@ -1134,7 +1146,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $ocorrencia = $_POST['ocorrencia'];
             $vlunitario = str_replace(",", ".", str_replace(".", "", $_POST['vlunitario']));
             $qtdDias = $_POST['qtdDias'];
-            $justificativa = utf8_decode(substr(trim(strip_tags($_POST['editor1'])), 0, 500));
+            $justificativa = utf8_decode(substr(trim(strip_tags($_POST['justificativa'])), 0, 500));
             $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idProposta, $idEtapa, $idProduto, $idItem, null, $idUf, $idMunicipio);
 
             if ($buscarProdutos) {
@@ -1180,7 +1192,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $ocorrencia = $_POST['ocorrencia'];
             $vlunitario = str_replace(",", ".", str_replace(".", "", $_POST['vlunitario']));
             $qtdDias = $_POST['qtdDias'];
-            $dsJustificativa = substr(trim(strip_tags($_POST['editor1'])), 0, 500);
+            $dsJustificativa = substr(trim(strip_tags($_POST['justificativa'])), 0, 500);
             $tipoCusto = 'A';
 
             $db = Zend_Db_Table::getDefaultAdapter();
@@ -1309,10 +1321,12 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $return['status'] = 1;
         $return['valorMediana'] = $valorMediana;
 
+        $stringLocalizacao = isset($params['stringLocalizacao']) ? utf8_decode($params['stringLocalizacao']) : 'este item';
+
         $params['vlunitario'] = str_replace(",", ".", str_replace(".", "", $params['vlunitario']));
 
         if (!empty($valorMediana) && $valorMediana < $params['vlunitario']) {
-            $return['msg'] = utf8_encode('O valor unit&aacute;rio para este item, ultrapassa o valor(R$ ' . number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
+            $return['msg'] = utf8_encode('O valor unit&aacute;rio para ' . $stringLocalizacao . ', ultrapassa o valor(R$ ' . number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
             $return['status'] = 0;
         }
 
