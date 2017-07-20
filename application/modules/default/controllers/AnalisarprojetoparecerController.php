@@ -1127,14 +1127,13 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         }
 
 
-        if ($_POST) {
-            $justificativa = trim(strip_tags($this->_request->getParam("justificativa")));
+        if ($_POST || $this->_request->getParam("concluir") == 1) {
+            $justificativa = ($this->_request->getParam("concluir") == 1) ? "" : trim(strip_tags($this->_request->getParam("justificativa")));
             $tbDistribuirParecer = new tbDistribuirParecer();
             $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
             $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
 
             
-
             try {
                 $tbDistribuirParecer->getAdapter()->beginTransaction();
                 foreach ($buscaDadosProjeto as $dp):
@@ -1169,12 +1168,12 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
                 $tbDistribuirParecer->getAdapter()->commit();
 
-                parent::message("An&aacute;lise conclu&iacute;da com sucesso !", "Analisarprojetoparecer/index", "CONFIRM");
+                parent::message("An&aacute;lise conclu&iacute;da com sucesso !", "parecer/index/analisar-projeto-parecer", "CONFIRM");
 
             } catch (Zend_Db_Exception $e) {
 
                 $tbDistribuirParecer->getAdapter()->rollBack();
-                parent::message("Error" . $e->getMessage(), "Analisarprojetoparecer/fecharparecer/idD/" . $idDistribuirParecer, "ERROR");
+                parent::message("Error" . $e->getMessage(), "parecer/index/analisar-projeto-parecer", "ERROR");
             }
 
 
