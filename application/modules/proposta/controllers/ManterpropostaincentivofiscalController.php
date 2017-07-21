@@ -15,106 +15,114 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      * @var integer (variï¿½vel com o id do usuï¿½rio logado)
      * @access private
      */
-    private $idResponsavel = 0;
-    private $idAgente = 0;
-    private $idUsuario = 0;
-    private $idPreProjeto = null;
+//    private $idResponsavel = 0;
+//    private $idAgente = 0;
+//    private $idUsuario = 0;
+//    private $idPreProjeto = null;
     private $blnPossuiDiligencias = 0;
-    private $idAgenteProponente = 0;
-    private $cpfLogado = null;
+//    private $idAgenteProponente = 0;
+//    private $cpfLogado = null;
     private $usuarioProponente = "N";
 
     public function init()
     {
-        $auth = Zend_Auth::getInstance();
-        $arrAuth = array_change_key_case((array)$auth->getIdentity());
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        parent::init();
 
-        // verifica as permissoes
-        $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 97;  // Gestor do SALIC
-        $PermissoesGrupo[] = 93;  // Coordenador de Parecerista
-        $PermissoesGrupo[] = 94;  // Parecerista
-        $PermissoesGrupo[] = 121; // Tecnico
-        $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
+//        $auth = Zend_Auth::getInstance();
+//        $arrAuth = array_change_key_case((array)$auth->getIdentity());
+//        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+//
+//        // verifica as permissoes
+//        $PermissoesGrupo = array();
+//        $PermissoesGrupo[] = 97;  // Gestor do SALIC
+//        $PermissoesGrupo[] = 93;  // Coordenador de Parecerista
+//        $PermissoesGrupo[] = 94;  // Parecerista
+//        $PermissoesGrupo[] = 121; // Tecnico
+//        $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
+//
+//        if (isset($auth->getIdentity()->usu_codigo)) {
+//            parent::perfil(1, $PermissoesGrupo);
+//        } else {
+//            parent::perfil(4, $PermissoesGrupo);
+//        }
+//
+//        $cpf = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
+//
+//        // Busca na SGCAcesso
+//        $sgcAcesso = new Autenticacao_Model_Sgcacesso();
+//        $acessos = $sgcAcesso->findBy(array('cpf' => $cpf));
+//
+//        // Busca na Usuarios
+//        $mdlusuario = new Autenticacao_Model_Usuario();
+//        $usuario = $mdlusuario->findBy(array('usu_identificacao' => $cpf));
+//
+//        // Busca na Agentes
+//        $tblAgentes = new Agente_Model_DbTable_Agentes();
+//        $agente = $tblAgentes->findBy(array('cnpjcpf' => $cpf));
+//
+//        if ($agente) {
+//            $this->idResponsavel = $acessos['IdUsuario'];
+//            $this->idAgente = $agente['idAgente'];
+//            $this->view->idAgente = $agente['idAgente'];
+//        }
+//        if ($usuario) {
+//            $this->idUsuario = $usuario['usu_codigo'];
+//            if ($this->proponente != 0) {
+//                $this->usuarioProponente = "S";
+//            }
+//        }
+//
 
-        if (isset($auth->getIdentity()->usu_codigo)) {
-            parent::perfil(1, $PermissoesGrupo);
-        } else {
-            parent::perfil(4, $PermissoesGrupo);
+        // Busca na tabela apoio ExecucaoImediata
+//        $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
+//        $listaExecucaoImediata = $tableVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idTipo' => 23), array('idVerificacao'));
+//        $this->view->listaExecucaoImediata = $listaExecucaoImediata;
+//        $this->view->listaExecucaoImediata = $listaExecucaoImediata;
+//
+//        $this->cpfLogado = $cpf;
+//        $this->idAgenteProponente = $this->idAgente;
+//        $this->usuario = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
+//        $this->view->usuarioLogado = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
+//        $this->view->usuarioProponente = $this->usuarioProponente;
+
+
+//        xd($this->idUsuario, $this->idAgente, $this->idAgenteProponente);
+//        //recupera ID do pre projeto (proposta)
+//        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+//
+        if (!empty($this->idPreProjeto)) {
+//            $this->idPreProjeto = $idPreProjeto;
+//            $this->view->idPreProjeto = $idPreProjeto;
+//
+//            $this->verificarPermissaoAcesso(true, false, false);
+//
+//            //VERIFICA SE A PROPOSTA ESTA COM O MINC
+//            // @todo criei um metodo separado para verificar a situacao, fazer os testes e retirar esse trecho
+//            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
+//            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($this->idPreProjeto);
+//            $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
+//
+//            //VERIFICA SE A PROPOSTA FOI ENVIADA AO MINC ALGUMA VEZ
+//            $arrbusca = array();
+//            $arrbusca['idprojeto = ?'] = $this->idPreProjeto;
+//            $arrbusca['movimentacao = ?'] = '96';
+//            $rsHistMov = $Movimentacao->buscar($arrbusca);
+//            $this->view->blnJaEnviadaAoMinc = $rsHistMov->count();
+//
+//            //VERIFICA SE A PROPOSTA TEM DILIGENCIAS
+//            $PreProjeto = new Proposta_Model_DbTable_PreProjeto();
+//            $rsDiligencias = $PreProjeto->listarDiligenciasPreProjeto(array('pre.idpreprojeto = ?' => $this->idPreProjeto));
+//            $this->view->blnPossuiDiligencias = $rsDiligencias->count();
+//
+            $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar";
+//
         }
-
-        $cpf = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
-
-        // Busca na SGCAcesso
-        $sgcAcesso = new Autenticacao_Model_Sgcacesso();
-        $acessos = $sgcAcesso->findBy(array('cpf' => $cpf));
-
-        // Busca na Usuarios
-        $mdlusuario = new Autenticacao_Model_Usuario();
-        $usuario = $mdlusuario->findBy(array('usu_identificacao' => $cpf));
-
-        // Busca na Agentes
-        $tblAgentes = new Agente_Model_DbTable_Agentes();
-        $agente = $tblAgentes->findBy(array('cnpjcpf' => $cpf));
-
-        if ($agente) {
-            $this->idResponsavel = $acessos['IdUsuario'];
-            $this->idAgente = $agente['idAgente'];
-            $this->view->idAgente = $agente['idAgente'];
-        }
-        if ($usuario) {
-            $this->idUsuario = $usuario['usu_codigo'];
-            if ($this->proponente != 0) {
-                $this->usuarioProponente = "S";
-            }
-        }
-
 
         // Busca na tabela apoio ExecucaoImediata
         $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
         $listaExecucaoImediata = $tableVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idTipo' => 23), array('idVerificacao'));
         $this->view->listaExecucaoImediata = $listaExecucaoImediata;
         $this->view->listaExecucaoImediata = $listaExecucaoImediata;
-
-        $this->cpfLogado = $cpf;
-        $this->idAgenteProponente = $this->idAgente;
-        $this->usuario = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
-        $this->view->usuarioLogado = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
-        $this->view->usuarioProponente = $this->usuarioProponente;
-
-        parent::init();
-
-        //recupera ID do pre projeto (proposta)
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-
-        if (!empty($idPreProjeto)) {
-            $this->idPreProjeto = $idPreProjeto;
-            $this->view->idPreProjeto = $idPreProjeto;
-
-            $this->verificarPermissaoAcesso(true, false, false);
-
-            //VERIFICA SE A PROPOSTA ESTA COM O MINC
-            // @todo criei um metodo separado para verificar a situacao, fazer os testes e retirar esse trecho
-            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($this->idPreProjeto);
-            $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
-
-            //VERIFICA SE A PROPOSTA FOI ENVIADA AO MINC ALGUMA VEZ
-            $arrbusca = array();
-            $arrbusca['idprojeto = ?'] = $this->idPreProjeto;
-            $arrbusca['movimentacao = ?'] = '96';
-            $rsHistMov = $Movimentacao->buscar($arrbusca);
-            $this->view->blnJaEnviadaAoMinc = $rsHistMov->count();
-
-            //VERIFICA SE A PROPOSTA TEM DILIGENCIAS
-            $PreProjeto = new Proposta_Model_DbTable_PreProjeto();
-            $rsDiligencias = $PreProjeto->listarDiligenciasPreProjeto(array('pre.idpreprojeto = ?' => $this->idPreProjeto));
-            $this->view->blnPossuiDiligencias = $rsDiligencias->count();
-
-            $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar";
-
-        }
     }
 
     /**
@@ -123,6 +131,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      * @param mixed $idPreProjeto
      * @access public
      * @return void
+     * @deprecated existe o metodo $this->verificarPermissaoAcesso();
      */
     public function verificaPermissaoAcessoProposta($idPreProjeto)
     {
@@ -1007,7 +1016,8 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $columns = $this->getRequest()->getParam('columns');
         $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : array("idpreprojeto DESC");
 
-        $idAgente = empty($idAgente) ? $this->idAgente : $idAgente;
+
+        $idAgente = ((int) $idAgente == 0) ? $this->idAgente : (int) $idAgente;
 
         if(empty($idAgente)) {
             $this->_helper->json(array(
