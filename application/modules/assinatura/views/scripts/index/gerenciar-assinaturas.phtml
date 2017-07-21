@@ -52,12 +52,18 @@
                             <?php foreach ($this->dados as $dado): ?>
                                 <tr>
                                     <td class="center-align" style="padding-left: 20px">
+                                        <?php
+//                                        $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+//                                        $assinaturas = $objAssinatura->obterAssinaturas($dado['IdPRONAC'], $dado['idTipoDoAtoAdministrativo']);
+//
+//                                        if(is_null($dado['possuiAssinatura']) && count($assinaturas) < $this->quantidade_minima_assinaturas) : ?>
                                         <input type="checkbox"
                                                name="IdPRONAC[]"
                                                id="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"
                                                class="checkbox_legal filled-in"
                                                value="<?php echo $dado['IdPRONAC'] ?>"/>
                                         <label for="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"></label>
+<!--                                        --><?php //endif; ?>
                                     </td>
                                     <td class="center-align" align="center">
                                         <a class="waves-effect waves-dark btn white black-text"
