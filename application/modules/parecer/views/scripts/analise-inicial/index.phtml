@@ -3,7 +3,6 @@
     $links = array(
         array('An&aacute;lise t&eacute;cnica inicial' => array())
     );
-    gerarBreadCrumb($links);
     ?>
     <div class="content padding20 clearfix">
 	<?php if($this->qtdRegistro != 0){ ?>
@@ -173,8 +172,8 @@ foreach($this->buscar as $d) {
 		  
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?IdPRONAC={$d->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/index"
-		    data-tooltip="Visualizar documento para assinatura">
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?IdPRONAC={$d->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/analise-inicial"
+		    data-tooltip="Visualizar documento assinado">
 		    <i class="material-icons white-text">pageview</i>
 		  </a>
 		  &nbsp;&nbsp;
@@ -199,7 +198,7 @@ foreach($this->buscar as $d) {
 		  
 		  <?php elseif (!$this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$d->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/index"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$d->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/analise-inicial"
 		    data-tooltip="Assinar documento">
 		    <i class="material-icons white-text">create</i>
 		  </a>
@@ -207,7 +206,7 @@ foreach($this->buscar as $d) {
 		  
 		  <?php elseif(!$this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true&origin=parecer/index" ?>"
+		     href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true&origin=parecer/analise-inicial" ?>"
 		    data-tooltip="Gerar documento para assinatura">
 		    <i class="material-icons white-text">pageview</i>
 		  </a>
