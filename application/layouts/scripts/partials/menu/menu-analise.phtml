@@ -85,11 +85,11 @@ $arrMenu['analise']['menu'][] = array('label' => 'Calend&aacute;rio CNIC', 'titl
     'grupo' => array(Autenticacao_Model_Grupos::COORDENADOR_CNIC)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'Gerenciar Pareceres', 'title' => 'Ir para Gerenciar Pareceres',
-    'url' => $this->url(array('controller' => 'gerenciarparecer', 'action' => 'listaprojetos'), '', true),
+    'url' => $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'), '', true),
     'grupo' => array(Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'An&aacute;lise T&eacute;cnica Inicial', 'title' => 'Ir para An&aacute;lise T&eacute;cnica Inicial',
-    'url' => $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'analisar-projeto-parecer'), '', true),
+    'url' => $this->url(array('module' => 'parecer', 'controller' => 'analise-inicial', 'action' => 'index'), '', true),
     'grupo' => array(Autenticacao_Model_Grupos::PARECERISTA)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'Parecer T&eacute;cnico FNC', 'title' => 'Ir para Parecer T&eacute;cnico FNC',
