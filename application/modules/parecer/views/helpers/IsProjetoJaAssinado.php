@@ -19,8 +19,14 @@ class Zend_View_Helper_IsProjetoJaAssinado
         $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
         
         foreach($assinaturas as $assinatura) {
-            if ($assinatura['idPerfilDoAssinante'] == $idPerfilDoAssinante) {
-                return true;
+            if (is_array($assinatura)) {
+                if ($assinatura['idPerfilDoAssinante'] == $idPerfilDoAssinante) {
+                    return true;
+                }
+            } else if (is_object($assinatura)) {
+                if ($assinatura->idPerfilDoAssinante == $idPerfilDoAssinante) {
+                    return true;
+                }                
             }
         }
         return false;
