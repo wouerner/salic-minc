@@ -236,11 +236,13 @@ $filtros = array(
 
 		<td class="center-align">
 		  <!-- distribuir parecer -->
-		  <?php if ($dp->stPrincipal == 1) { ?>
+		  <?php if (!$this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
+		  <?php if ($dp->stPrincipal == 1) : ?>
 		  <img id="img_distribuir_parecer<?php echo $dp->idDistribuirParecer; ?>" style="cursor:pointer; " title="Distribuir Projeto" src="<?php echo  $this->baseUrl() . '/public/img/ico/archive.png'; ?>" onclick="redirecionar('<?php echo $this->url(array('module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'distribuir', 'idpronac'=>$dp->IdPRONAC)); ?>/tipoFiltro/<?php echo $this->tipoFiltro; ?>')" />
-		  <?php } ?>
+		  <?php endif; ?>
 		  <!-- distribuir produtos -->
 		  <img id="img_encaminhar_parecer<?php echo $dp->idDistribuirParecer; ?>" style="cursor:pointer; " title="Distribuir Produtos" src="<?php echo $this->baseUrl() . '/public/img/table_multiple.png'; ?>" onclick="redirecionar('<?php echo $this->url(array('module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'encaminhar', 'idpronac'=>$dp->IdPRONAC, 'idproduto'=>$dp->idProduto)); ?>/tipoFiltro/<?php echo $this->tipoFiltro; ?>')" />
+		  <?php endif; ?>
 		</td>
 		<?php if ($this->tipoFiltro != 'aguardando_distribuicao' && $this->tipoFiltro != '') { ?>
                 <td class="center-align">
