@@ -56,6 +56,10 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         return $this->_helper->redirector->goToRoute(array('controller' => 'gerenciarparecer', 'action' => 'listaprojetos'), null, true);
     }
 
+    /*
+     * Deprecated
+     *  - movida para parecer/controller/GerenciarParecerController->index()
+     */
     public function listaprojetosAction()
     {
         $auth = Zend_Auth::getInstance();
@@ -772,7 +776,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                 /****************************************************************************************************************/
             }
             $db->commit();
-            parent::message("Conclu&iacute;do com sucesso!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+            parent::message("Conclu&iacute;do com sucesso!", "parecer/gerenciar-parecer?tipoFiltro=" . $tipoFiltro, "CONFIRM");
 
         } catch (Zend_Exception $ex) {
             $db->rollBack();
