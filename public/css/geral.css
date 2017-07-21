@@ -190,6 +190,7 @@ x - LOADER
     width: 300px !important;
     height: 180px !important;
     padding: 10px;
+    z-index: 1002 !important;
 }
 
 .modal.modal-pre-loader .modal-content {

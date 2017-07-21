@@ -88,7 +88,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @name produtoscadastradosAction
      */
-   public function produtoscadastradosAction()
+    public function produtoscadastradosAction()
     {
         $this->view->idPreProjeto = $this->idPreProjeto;
 
@@ -187,6 +187,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @deprecated metodo substituido apos a IN 2017
      */
     public function consultarcomponenteAction()
     {
@@ -229,6 +230,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @deprecated metodo substituido apos a IN 2017
      */
     public function cadastrarprodutosAction()
     {
@@ -331,8 +333,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $mapper = new Proposta_Model_TbCustosVinculadosMapper();
 
         try {
-            foreach($custosVinculados as $key => $item) {
-                if( in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
+            foreach ($custosVinculados as $key => $item) {
+                if (in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
 
                     $dados = array(
                         'idCustosVinculados' => $item['idCustosVinculados'],
@@ -365,7 +367,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->_helper->layout->disableLayout();
 
         $tbPreprojeto = new Proposta_Model_DbTable_PreProjeto();
-        $itens = $tbPreprojeto->listarItensProdutos($this->idPreProjeto, null,  Zend_DB::FETCH_ASSOC);
+        $itens = $tbPreprojeto->listarItensProdutos($this->idPreProjeto, null, Zend_DB::FETCH_ASSOC);
 
         $manterOrcamento = new Proposta_Model_DbTable_TbPlanilhaEtapa();
         $listaEtapa = $manterOrcamento->buscarEtapas('P', Zend_DB::FETCH_ASSOC);
@@ -407,6 +409,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->_helper->layout->disableLayout();
 
         $this->view->idPreProjeto = $this->idPreProjeto;
+        $this->view->locaisRealizacao = array();
+
         $params = $this->getRequest()->getParams();
 
         $idPreProjeto = $params['idPreProjeto'];
@@ -416,8 +420,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $etapa = $params['etapa'];
 
         if (!empty($params['idPlanilhaProposta'])) { // editar item
-
-
             $idProposta = $params['idPreProjeto'];
             $idEtapa = $params['etapa'];
             $idProduto = $params['produto'];
@@ -434,6 +436,10 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 $this->view->Dados = $TDP->buscarDadosCadastrarProdutos($idPreProjeto, $idProduto);
                 $this->view->idProduto = $idProduto;
             }
+
+            $tbLocaisDeRealizacao = new Proposta_Model_DbTable_Abrangencia();
+            $this->view->locaisRealizacao = $tbLocaisDeRealizacao->buscar(['idProjeto' => $params['idPreProjeto']]);
+
         }
 
         $uf = new Agente_Model_DbTable_UF();
@@ -472,15 +478,9 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
 
-        $return['msg'] = "Mensagem inicial, isso pode ser um erro";
-        $return['close'] = false;
-        $return['status'] = true;
-        $result = false;
-        $resultAlterarProjeto = true;
-
         $idPreProjeto = $params['idPreProjeto'];
 
-        $justificativa = utf8_decode(substr(trim(strip_tags($params['editor1'])), 0, 500));
+        $justificativa = utf8_decode(substr(trim(strip_tags($params['justificativa'])), 0, 1000));
 
         $dados = array(
             'idProjeto' => $idPreProjeto,
@@ -499,123 +499,174 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             'FonteRecurso' => $params['fonterecurso'],
             'UfDespesa' => $params['uf'],
             'MunicipioDespesa' => $params['municipio'],
-            'dsJustificativa' => substr($justificativa, 0, 510),
+            'dsJustificativa' => $justificativa,
             'idUsuario' => $this->idUsuario,
             'stCustoPraticado' => $params['stCustoPraticado']
         );
 
-        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $idPlanilhaProposta = isset($params['idPlanilhaProposta']) ? $params['idPlanilhaProposta'] : '';
 
-        $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idPreProjeto, $params['etapa'], $params['produto'], $params['planilhaitem'], null, $params['uf'], $params['municipio']);
+        $retorno[] = self::salvarItemPlanilha($dados, $idPlanilhaProposta); # salva o item principal
+
+        $outrasLocalidades = isset($params['comboOutrasCidades']) ? $params['comboOutrasCidades'] : '';
+
+        if ($outrasLocalidades && count($outrasLocalidades) > 0) {
+            foreach ($outrasLocalidades as $localidade) {
+
+                if ($localidade == 'all') continue;
+
+                $custoPraticado = isset($params['stCustoPraticado_' . $localidade]) ? $params['stCustoPraticado_' . $localidade] : 0;
+
+                # se o custo praticado for igual a 1, justificativa eh obrigatoria
+                if ($custoPraticado == 1) {
+                    $justificativa = isset($params['justificativa_' . $localidade]) ? $params['justificativa_' . $localidade] : '';
+
+                    $dados['dsJustificativa'] = utf8_decode(substr(trim(strip_tags($justificativa)), 0, 1000));
+
+                    if (empty($justificativa)) {
+                        continue;
+                    }
+                }
+
+                $dados['stCustoPraticado'] = $custoPraticado;
+
+                $estadoMunicipio = explode(':', $localidade);
+                $dados['UfDespesa'] = $estadoMunicipio[0];
+                $dados['MunicipioDespesa'] = $estadoMunicipio[1];
+
+                $retorno[] = self::salvarItemPlanilha($dados, null, true);
+
+            }
+        }
+
+        $this->atualizarcustosvinculadosdaplanilha($idPreProjeto);
+
+        $this->_helper->json($retorno);
+        die;
+    }
+
+    private function salvarItemPlanilha($dados, $idPlanilhaProposta = null, $outraLocalidade = false)
+    {
+        $resultAlterarProjeto = true;
+        $idPreProjeto = $dados['idProjeto'];
+
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idPreProjeto, $dados['idEtapa'], $dados['idProduto'], $dados['idPlanilhaItem'], null,
+            $dados['UfDespesa'], $dados['MunicipioDespesa'], null, null, null, null, null, $dados['FonteRecurso']);
+
         $buscarProdutos = converterObjetosParaArray($buscarProdutos);
 
-        if ($buscarProdutos && !in_array($params['idPlanilhaProposta'], array_column($buscarProdutos, 'idPlanilhaProposta'))) {
-            $return['msg'] = "Item duplicado na mesma etapa. Transa&ccedil;&atilde;o cancelada!";
-            $return['close'] = false;
-            $return['status'] = false;
-
+        if ($buscarProdutos && !in_array($idPlanilhaProposta, array_column($buscarProdutos, 'idPlanilhaProposta'))) {
+            $retorno['msg'] = "Item duplicado na mesma etapa!";
+            $retorno['close'] = false;
+            $retorno['status'] = false;
         } else {
 
             if ($this->isEditarProjeto($idPreProjeto)) {
 
-                $verifica = $this->verificarSeUltrapassaValorOriginal($idPreProjeto, $dados, $params['idPlanilhaProposta']);
+                $verifica = $this->verificarSeUltrapassaValorOriginal($idPreProjeto, $dados, $idPlanilhaProposta);
 
                 if ($verifica && $dados['FonteRecurso'] == 109) {
-                    $return['msg'] = "O item cadastrado ultrapassa o valor original do projeto. Transa&ccedil;&atilde;o cancelada!";
-                    $return['close'] = false;
-                    $return['status'] = false;
+                    $retorno['msg'] = "O item cadastrado ultrapassa o valor original do projeto!";
+                    $retorno['close'] = false;
+                    $retorno['status'] = false;
                     $resultAlterarProjeto = false;
                 }
             }
 
             if ($resultAlterarProjeto == true) {
-                if (empty($params['idPlanilhaProposta'])) {
+                if (empty($idPlanilhaProposta)) { #insert
 
                     if ($buscarProdutos) {
-                        $return['msg'] = "Item duplicado na mesma etapa. Transa&ccedil;&atilde;o cancelada!";
-                        $return['close'] = false;
-                        $return['status'] = false;
-
+                        $retorno['msg'] = "Item duplicado na mesma etapa!";
+                        $retorno['close'] = false;
+                        $retorno['status'] = false;
                     } else {
                         $result = $tbPlanilhaProposta->insert($dados);
 
                         if ($result) {
-                            $return['idPlanilhaProposta'] = $result;
-
-                            $return['msg'] = "Item cadastrado com sucesso.";
-                            $return['close'] = false;
-                            $return['status'] = true;
-                            $return['action'] = 'insert';
+                            $retorno['idPlanilhaProposta'] = $result;
+                            $retorno['msg'] = "Item cadastrado com sucesso.";
+                            $retorno['close'] = false;
+                            $retorno['status'] = true;
+                            $retorno['action'] = 'insert';
                         }
 
                     }
-                } else {
 
-                    if (isset($params['produto'])) {
+                } else { #update
 
-                        $where = "idPlanilhaProposta = " . $params['idPlanilhaProposta'];
+                    if (isset($dados['idProduto'])) {
+
+                        $where = "idPlanilhaProposta = " . $idPlanilhaProposta;
 
                         $result = $tbPlanilhaProposta->update($dados, $where);
 
                         if ($result) {
-                            $return['idPlanilhaProposta'] = $params['idPlanilhaProposta'];
-                            $return['msg'] = "Altera&ccedil;&atilde;o realizada com sucesso!";
-                            $return['close'] = true;
-                            $return['status'] = true;
-                            $return['action'] = 'update';
+                            $retorno['idPlanilhaProposta'] = $idPlanilhaProposta;
+                            $retorno['msg'] = "Altera&ccedil;&atilde;o realizada com sucesso!";
+                            $retorno['close'] = true;
+                            $retorno['status'] = true;
+                            $retorno['action'] = 'update';
                         }
                     }
                 }
             }
+
+            if (isset($retorno['idPlanilhaProposta']) && !empty($retorno['idPlanilhaProposta'])) {
+                $retorno['html'] = self::criarItemHtml($dados, $retorno['idPlanilhaProposta']);
+
+            }
         }
 
-        if ($result) {
+        $dados['dsJustificativa'] = utf8_encode($dados['dsJustificativa']);
+        $retorno['dados'] = $dados;
 
-            $this->atualizarcustosvinculadosdaplanilha($idPreProjeto);
+        return $retorno;
+    }
 
-            $tbItens = new tbItensPlanilhaProduto();
-            $item = $tbItens->buscarItem(array("idPlanilhaItens = ?" => $dados['idPlanilhaItem']));
+    protected function criarItemHtml($dados, $idPlanilhaProposta)
+    {
+        $tbItens = new tbItensPlanilhaProduto();
+        $item = $tbItens->buscarItem(array("idPlanilhaItens = ?" => $dados['idPlanilhaItem']));
 
-            $buscarUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
-            $unidade = $buscarUnidade->findBy(array("idUnidade" => $dados['Unidade']));
+        $buscarUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
+        $unidade = $buscarUnidade->findBy(array("idUnidade" => $dados['Unidade']));
 
-            $editarProduto = array(
-                'module' => 'proposta',
-                'controller' => 'manterorcamento',
-                'action' => 'formitem',
-                'item' => $dados['idPlanilhaItem'],
-                'etapa' => $dados['idEtapa'],
-                'produto' => $dados['idProduto'],
-                'idPlanilhaProposta' => $return['idPlanilhaProposta'],
-                'idPreProjeto' => $dados['idProjeto'],
-                'idUf' => $dados['UfDespesa'],
-                'idMunicipio' => $dados['MunicipioDespesa'],
-            );
+        $editarProduto = array(
+            'module' => 'proposta',
+            'controller' => 'manterorcamento',
+            'action' => 'formitem',
+            'item' => $dados['idPlanilhaItem'],
+            'etapa' => $dados['idEtapa'],
+            'produto' => $dados['idProduto'],
+            'idPlanilhaProposta' => $idPlanilhaProposta,
+            'idPreProjeto' => $dados['idProjeto'],
+            'idUf' => $dados['UfDespesa'],
+            'idMunicipio' => $dados['MunicipioDespesa'],
+        );
 
-            $urlEditarProduto = $this->_helper->url->url($editarProduto);
+        $urlEditarProduto = $this->_helper->url->url($editarProduto);
 
-            $html = '<tr id="item-planilha-' . $return['idPlanilhaProposta'] . '" class="green lighten-3">'
-                . '<td class="left-align">' . utf8_encode($item->Descricao) . '</td>'
-                . '<td>' . utf8_encode($unidade['Descricao']) . '</td>'
-                . '<td>' . number_format($dados['Quantidade'], 0) . '</td>'
-                . '<td>' . number_format($dados['Ocorrencia'], 0) . '</td>'
-                . '<td class="right-align">' . number_format($dados['ValorUnitario'], 2, ",", ".") . '</td>'
-                . '<td class="right-align">' . number_format(($dados['Quantidade'] * $dados['ValorUnitario']) * $dados['Ocorrencia'], 2, ",", ".") . '</td>'
-                . '<td class="action right-align">'
-                . '<a data-ajax-modal="' . $urlEditarProduto . '" href="javascript:void(0);" class="btn small waves-effect waves-light tooltipped btn-primary" data-position="top" data-delay="50" data-tooltip="Editar" data-ajax-modal-type="bottom-sheet">'
-                . '<i class="material-icons">edit</i>'
-                . '</a>'
-                . '</td>'
-                . '<td class="action left-align">'
-                . '<a class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item" href="javascript:void(0);" data-tooltip="Excluir" data-ajax="' . $return['idPlanilhaProposta'] . '" ><i class="material-icons">delete</i></a>'
-                . '</td>'
-                . '</tr>';
+        $html = '<tr id="item-planilha-' . $idPlanilhaProposta . '" class="green lighten-3">'
+            . '<td class="left-align">' . utf8_encode($item->Descricao) . '</td>'
+            . '<td>' . utf8_encode($unidade['Descricao']) . '</td>'
+            . '<td>' . number_format($dados['Quantidade'], 0) . '</td>'
+            . '<td>' . number_format($dados['Ocorrencia'], 0) . '</td>'
+            . '<td class="right-align">' . number_format($dados['ValorUnitario'], 2, ",", ".") . '</td>'
+            . '<td class="right-align">' . number_format(($dados['Quantidade'] * $dados['ValorUnitario']) * $dados['Ocorrencia'], 2, ",", ".") . '</td>'
+            . '<td class="action right-align">'
+            . '<a data-ajax-modal="' . $urlEditarProduto . '" href="javascript:void(0);" class="btn small waves-effect waves-light tooltipped btn-primary" data-position="top" data-delay="50" data-tooltip="Editar" data-ajax-modal-type="bottom-sheet">'
+            . '<i class="material-icons">edit</i>'
+            . '</a>'
+            . '</td>'
+            . '<td class="action left-align">'
+            . '<a class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item" href="javascript:void(0);" data-tooltip="Excluir" data-ajax="' . $return['idPlanilhaProposta'] . '" ><i class="material-icons">delete</i></a>'
+            . '</td>'
+            . '</tr>';
 
-            $return['html'] = $html;
-        }
+        return $html;
 
-        $this->_helper->json($return);
-        die;
     }
 
     /*
@@ -735,7 +786,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         die;
     }
 
-    public function resumorestaurarplanilhaAction() {
+    public function resumorestaurarplanilhaAction()
+    {
 
     }
 
@@ -892,7 +944,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 'fonterecurso' => $_POST['fonterecurso'],
                 'ufdespesa' => $_POST['uf'],
                 'municipiodespesa' => $_POST['municipio'],
-                'dsjustificativa' => $_POST['editor1']
+                'dsjustificativa' => $_POST['justificativa']
             );
 
             $where = "idPlanilhaProposta = " . $_POST['proposta'];
@@ -1094,12 +1146,12 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $ocorrencia = $_POST['ocorrencia'];
             $vlunitario = str_replace(",", ".", str_replace(".", "", $_POST['vlunitario']));
             $qtdDias = $_POST['qtdDias'];
-            $justificativa = utf8_decode(substr(trim(strip_tags($_POST['editor1'])), 0, 500));
+            $justificativa = utf8_decode(substr(trim(strip_tags($_POST['justificativa'])), 0, 500));
             $buscarProdutos = $tbPlanilhaProposta->buscarDadosEditarProdutos($idProposta, $idEtapa, $idProduto, $idItem, null, $idUf, $idMunicipio);
 
             if ($buscarProdutos) {
                 $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-                echo "Cadastro duplicado de Produto na mesma etapa envolvendo o mesmo Item, transa&ccedil;&atilde;o cancelada! Deseja cadastrar um novo item?";
+                echo "Cadastro duplicado de Produto na mesma etapa envolvendo o mesmo Item! Deseja cadastrar um novo item?";
                 die;
             } else {
                 $this->view->SalvarNovo = $tbPlanilhaProposta->salvarNovoProduto($idProposta, $idProduto, $idEtapa, $idItem,
@@ -1140,7 +1192,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $ocorrencia = $_POST['ocorrencia'];
             $vlunitario = str_replace(",", ".", str_replace(".", "", $_POST['vlunitario']));
             $qtdDias = $_POST['qtdDias'];
-            $dsJustificativa = substr(trim(strip_tags($_POST['editor1'])), 0, 500);
+            $dsJustificativa = substr(trim(strip_tags($_POST['justificativa'])), 0, 500);
             $tipoCusto = 'A';
 
             $db = Zend_Db_Table::getDefaultAdapter();
@@ -1177,7 +1229,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 $buscarCustos = $TPP->buscarCustos($idProposta, $tipoCusto, $idEtapa, $idItem, $idUf, $idMunicipio);
                 if ($buscarCustos) {
                     $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-                    echo "Cadastro duplicado de Custo na mesma etapa envolvendo o mesmo Item, transa&ccedil;&atilde;o cancelada! Deseja cadastrar um novo item?";
+                    echo "Cadastro duplicado de Custo na mesma etapa envolvendo o mesmo Item! Deseja cadastrar um novo item?";
                     die;
                 } else {
                     $TPP->insert($dados);
@@ -1255,7 +1307,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->idPreProjeto = $this->idPreProjeto;
     }
 
-    public function buscarValorMedianaAjaxAction() {
+    public function buscarValorMedianaAjaxAction()
+    {
 
         $params = $idPreProjeto = $this->getRequest()->getParams();
 
@@ -1268,14 +1321,16 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $return['status'] = 1;
         $return['valorMediana'] = $valorMediana;
 
+        $stringLocalizacao = isset($params['stringLocalizacao']) ? utf8_decode($params['stringLocalizacao']) : 'este item';
+
         $params['vlunitario'] = str_replace(",", ".", str_replace(".", "", $params['vlunitario']));
 
         if (!empty($valorMediana) && $valorMediana < $params['vlunitario']) {
-            $return['msg'] = utf8_encode('O valor unit&aacute;rio para este item, ultrapassa o valor(R$ '. number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
+            $return['msg'] = utf8_encode('O valor unit&aacute;rio para ' . $stringLocalizacao . ', ultrapassa o valor(R$ ' . number_format($valorMediana, 2, ",", ".") . ') aprovado pelo MinC. Justifique o motivo!');
             $return['status'] = 0;
         }
 
-       $this->_helper->json($return);
+        $this->_helper->json($return);
         die;
     }
 

@@ -11,15 +11,6 @@
     <?php $auth = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity()); ?>
     <div id="topo" style="">
 
-        <?php
-        $logoLink =  $this->url(array('module' => 'default', 'controller' => 'principalproponente', 'action' => ''), '', true);
-        if( isset($auth['usu_codigo']) && !isset($auth['cpf']) ) {
-            $logoLink =  $this->url(array('module' => 'default', 'controller' => 'principal', 'action' => ''), '', true);
-        }
-        ?>
-        <div id="logo">
-            <h1><a href="<?php echo $logoLink; ?>" title="Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura">Salic</a></h1>
-        </div>
         <div id="atalhos">
 
             <?php if (!empty($this->usuario->usu_identificacao) && !empty($this->usuario->usu_nome)) : ?>
@@ -93,6 +84,15 @@
         </div>
 
 
+    <?php
+    $logoLink =  $this->url(array('module' => 'default', 'controller' => 'principalproponente', 'action' => ''), '', true);
+    if( isset($auth['usu_codigo']) && !isset($auth['cpf']) ) {
+        $logoLink =  $this->url(array('module' => 'default', 'controller' => 'principal', 'action' => ''), '', true);
+    }
+    ?>
+    <div id="logo">
+        <h1><a href="<?php echo $logoLink; ?>" title="Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura">Salic</a></h1>
+    </div>
     </div>
         <?php
             echo $this->partial('partials/menu/menu.phtml', array('grupoAtivo' => $this->grupoAtivo, 'idAgenteKeyLog' => $this->idAgenteKeyLog, 'menumsg' => $this->menumsg));
