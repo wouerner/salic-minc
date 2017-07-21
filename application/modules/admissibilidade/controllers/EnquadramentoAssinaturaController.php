@@ -143,88 +143,6 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
         }
     }
 
-    public function assinarProjetoAction()
-    {
-        $this->validarPerfis();
-        $get = Zend_Registry::get('get');
-
-        try {
-
-            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-            $this->view->perfilAssinante = $objTbAtoAdministrativo->obterPerfilAssinante(
-                $this->grupoAtivo->codOrgao,
-                $this->grupoAtivo->codGrupo,
-                $this->idTipoDoAtoAdministrativo
-            );
-
-            if (!$this->view->perfilAssinante) {
-                throw new Exception ("Usu&aacute;rio sem autoriza&ccedil;&atilde;o para assinar o documento.");
-            }
-
-            if (is_array($get->IdPRONAC)) {
-                $idPronacUnidos = implode(',', $get->IdPRONAC);
-                $this->redirect("/{$this->moduleName}/enquadramento-assinatura/assinar-projeto?IdPRONAC={$idPronacUnidos}");
-            }
-
-            $this->view->IdPRONAC = $get->IdPRONAC;
-            $arrayIdPronacs = explode(',', $get->IdPRONAC);
-            if (count($arrayIdPronacs) < 1) {
-                throw new Exception ("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
-            }
-
-            $post = $this->getRequest()->getPost();
-
-            if ($post) {
-
-                foreach ($arrayIdPronacs as $idPronac) {
-                    $this->assinarProjeto(
-                        $idPronac,
-                        $post['password'],
-                        $post['dsManifestacao']
-                    );
-                }
-
-                if (count($arrayIdPronacs) > 1) {
-                    parent::message(
-                        "Projetos assinados com sucesso!",
-                        "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas",
-                        'CONFIRM'
-                    );
-                }
-                parent::message(
-                    "Projeto assinado com sucesso!",
-                    "/{$this->moduleName}/enquadramento-assinatura/visualizar-projeto?IdPRONAC={$idPronac}",
-                    'CONFIRM'
-                );
-            }
-
-            $objProjeto = new Projeto_Model_DbTable_Projetos();
-            $this->view->projeto = array();
-            foreach ($arrayIdPronacs as $idPronac) {
-                $this->view->projeto[] = $objProjeto->findBy(array(
-                    'IdPRONAC' => $idPronac
-                ));
-            }
-
-            $objVerificacao = new Verificacao();
-            $this->view->tipoDocumento = $objVerificacao->findBy(array(
-                'idVerificacao = ?' => $this->idTipoDoAtoAdministrativo
-            ));
-
-        } catch (Exception $objException) {
-            if (is_array($get->IdPRONAC)) {
-                parent::message(
-                    $objException->getMessage(),
-                    "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas"
-                );
-            }
-            parent::message(
-                $objException->getMessage(),
-                "/{$this->moduleName}/enquadramento-assinatura/assinar-projeto?IdPRONAC={$get->IdPRONAC}"
-            );
-        }
-    }
-
     public function finalizarAssinaturaAction()
     {
         $this->validarPerfis();
@@ -303,7 +221,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
             parent::message('Projeto finalizado com sucesso!', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas", 'CONFIRM');
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), "/{$this->moduleName}/enquadramento-assinatura/assinar-projeto?IdPRONAC={$get->IdPRONAC}");
+            parent::message($objException->getMessage(), "/{$this->moduleName}/enquadramento-assinatura/finalizar-assinatura?IdPRONAC={$get->IdPRONAC}");
         }
     }
 
