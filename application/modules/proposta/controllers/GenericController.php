@@ -2,42 +2,126 @@
 
 abstract class Proposta_GenericController extends MinC_Controller_Action_Abstract
 {
+    /**
+     * idPreProjeto
+     * Primary key da proposta
+     * @var int
+     */
+    protected $idPreProjeto = null;
+
+    /**
+     * idUsuario
+     * ID do usuario do sistema, nao eh proponente
+     * @var int
+     */
+    protected $idUsuario = null;
+
+
+    /**
+     * @todo Falta verificar o sentido do idResponsavel, parece que eh o mesmo do idUsuario
+     * @var int
+     */
+    protected $idResponsavel = null;
+
+
+    /**
+     * ID do proponente, responsavel pela proposta cultural e projeto no sistema
+     * @var int
+     */
+    protected $idAgente = null;
+
+
+    /**
+     * @var int
+     */
+    protected $idAgenteProponente = null;
+
+
+    /**
+     * @var array
+     */
+    protected $usuario = null;
+
+
+    /**
+     * @var int
+     */
+    protected $cpfLogado = null;
 
     protected $_proposta;
-
     protected $_proponente;
 
     private $_movimentacaoAlterarProposta = '95';
-
     private $_situacaoAlterarProjeto = Projeto_Model_Situacao::PROJETO_LIBERADO_PARA_AJUSTES;
-
     private $_diasParaAlterarProjeto = 10;
 
     public function init()
     {
         parent::init();
 
-        //recupera ID do pre projeto (proposta)
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+        $auth = Zend_Auth::getInstance();
+        $PermissoesGrupo = array();
 
-        if (!empty($idPreProjeto)) {
+        //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
+        if (isset($auth->getIdentity()->usu_codigo)) {
+            //Recupera todos os grupos do Usuario
+            $Usuario = new Autenticacao_Model_Usuario();
+            $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
+            foreach ($grupos as $grupo) {
+                $PermissoesGrupo[] = $grupo->gru_codigo;
+            }
+        }
 
-            $this->_proposta = $this->buscarProposta($idPreProjeto);
+        isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
+
+        $arrAuth = array_change_key_case((array)$auth->getIdentity());
+        $this->usuario = $arrAuth;
+
+        /**
+         * Quando eh colaborador do MinC o cpf eh o usu_identificacao da Autenticacao_Model_Usuario
+         */
+        $cpf = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
+
+        /**
+         * Quando eh colabadordor do MinC (funcionarios e pareceristas)
+         * o idUsuario eh o usu_codigo da Autenticacao_Model_Usuario
+         */
+        $this->idUsuario = !empty($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
+
+        $this->idResponsavel = $auth->getIdentity()->IdUsuario;
+
+        /**
+         * Agentes sao proponentes da proposta ou do projeto
+         */
+        $tblAgentes = new Agente_Model_DbTable_Agentes();
+        $agente = $tblAgentes->findBy(array('cnpjcpf' => $cpf));
+
+
+        if ($agente) {
+            $this->idAgente = $agente['idAgente'];
+            $this->view->idAgente = $agente['idAgente'];
+        }
+
+        $this->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+
+        if (!empty($this->idPreProjeto)) {
+
+            $this->_proposta = $this->buscarProposta($this->idPreProjeto);
             $this->_proponente = $this->buscarProponente($this->_proposta['idagente']);
 
-            $this->view->idPreProjeto = $idPreProjeto;
+            $this->view->idPreProjeto = $this->idPreProjeto;
             $this->view->proposta = $this->_proposta;
             $this->view->proponente = $this->_proponente;
 
             $this->view->url = $this->getRequest()->REQUEST_URI;
-            $this->view->isEditarProposta = $this->isEditarProposta($idPreProjeto);
-            $this->view->isEditarProjeto = $this->isEditarProjeto($idPreProjeto);
-            $this->view->isEditavel = $this->isEditavel($idPreProjeto);
+            $this->view->isEditarProposta = $this->isEditarProposta($this->idPreProjeto);
+            $this->view->isEditarProjeto = $this->isEditarProjeto($this->idPreProjeto);
+            $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
 
             $layout = array(
                 'titleShort' => 'Proposta',
                 'titleFull' => 'Proposta Cultural',
-                'projeto' => $idPreProjeto,
+                'projeto' => $this->idPreProjeto,
                 'listagem' => array('Lista de propostas' => array('controller' => 'manterpropostaincentivofiscal', 'action' => 'listarproposta')),
             );
 
@@ -45,7 +129,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             if (!empty($this->view->isEditarProjeto)) {
 
                 $tblProjetos = new Projetos();
-                $projeto = array_change_key_case($tblProjetos->findBy(array('idprojeto = ?' => $idPreProjeto)));
+                $projeto = array_change_key_case($tblProjetos->findBy(array('idprojeto = ?' => $this->idPreProjeto)));
 
                 if (!isset($projeto['nrprojeto']))
                     $projeto['nrprojeto'] = $projeto['anoprojeto'] . $projeto['sequencial'];
@@ -60,7 +144,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
                     'prazoAlterarProjeto' => $this->contagemRegressivaSegundos($projeto['dtsituacao'], $this->_diasParaAlterarProjeto)
                 );
 
-                $this->salvarDadosPropostaSerializada($idPreProjeto);
+                $this->salvarDadosPropostaSerializada($this->idPreProjeto);
             }
             $this->view->layout = $layout;
         }
@@ -165,12 +249,12 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
         $itensCustosVinculados = $itensPlanilhaProduto->buscarItens($ModelCV::ID_ETAPA_CUSTOS_VINCULADOS, null, Zend_DB::FETCH_ASSOC);
 
         if (!empty($ufRegionalizacaoPlanilha)) { # sudeste e sul
-            $valoresCustosVinculados['percentualDivulgacao']  = $ModelCV::PERCENTUAL_DIVULGACAO_SUL_SUDESTE;
+            $valoresCustosVinculados['percentualDivulgacao'] = $ModelCV::PERCENTUAL_DIVULGACAO_SUL_SUDESTE;
             $valoresCustosVinculados['percentualRemuneracaoCaptacao'] = $ModelCV::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
             $valoresCustosVinculados['limiteRemuneracaoCaptacao'] = $ModelCV::LIMITE_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
 
         } else { # demais regiões
-            $valoresCustosVinculados['percentualDivulgacao']  = $ModelCV::PERCENTUAL_DIVULGACAO_OUTRAS_REGIOES;
+            $valoresCustosVinculados['percentualDivulgacao'] = $ModelCV::PERCENTUAL_DIVULGACAO_OUTRAS_REGIOES;
             $valoresCustosVinculados['percentualRemuneracaoCaptacao'] = $ModelCV::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
             $valoresCustosVinculados['limiteRemuneracaoCaptacao'] = $ModelCV::LIMITE_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
         }
@@ -202,7 +286,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
 
             $custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $idPreProjeto, 'idPlanilhaItem' => $item['idPlanilhaItens']));
 
-            if( $custoVinculadoProponente ) {
+            if ($custoVinculadoProponente) {
                 $item['PercentualProponente'] = $custoVinculadoProponente['pcCalculo'];
                 $item['idCustosVinculados'] = $custoVinculadoProponente['idCustosVinculados'];
             }
@@ -284,7 +368,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             if ($item['PercentualProponente'] > 0) {
                 $valorCustoItem = ($valorTotalProdutos * ($item['PercentualProponente'] / 100));
 
-                if(isset($item['Limite']) && $valorCustoItem > $item['Limite']) {
+                if (isset($item['Limite']) && $valorCustoItem > $item['Limite']) {
                     $valorCustoItem = $item['Limite'];
                 }
             } elseif ($item['PercentualProponente'] == 0) {
