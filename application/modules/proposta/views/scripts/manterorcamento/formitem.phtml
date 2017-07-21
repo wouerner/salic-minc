@@ -109,23 +109,22 @@
                     </div>
                     <?php if (!empty($this->locaisRealizacao) && count($this->locaisRealizacao) > 1) : ?>
                         <div class="row">
-                            <div class="input-field  col s6">
-                                <select id="combo_cidades" multiple="multiple" name="comboOutrasCidades[]"
-                                        class="comboOutrasCidades">
-                                    <option disabled>Selecione as cidades</option>
-                                    <?php foreach ($this->locaisRealizacao as $local) : ?>
-                                        <?php if ($local['idMunicipioIBGE'] != $this->Municipio['idMunicipioIBGE']) : ?>
-                                            <option value="<?= $local['idUF'] ?>:<?= $local['idMunicipioIBGE'] ?>"><?= $local['uf'] ?> - <?= $local['cidade'] ?></option>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </select>
-                                <label>Deseja aplicar este item para outras cidades? (Opcional)</label>
+                            <div class="col s4">
+                                <div class="input-field">
+                                    <select id="combo_cidades" multiple="multiple" name="comboOutrasCidades[]"
+                                            class="comboOutrasCidades">
+                                        <option disabled>Selecione as cidades</option>
+                                        <?php foreach ($this->locaisRealizacao as $local) : ?>
+                                            <?php if ($local['idMunicipioIBGE'] != $this->Municipio['idMunicipioIBGE']) : ?>
+                                                <option value="<?= $local['idUF'] ?>:<?= $local['idMunicipioIBGE'] ?>"><?= $local['uf'] ?> - <?= $local['cidade'] ?></option>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label>Deseja aplicar este item para outras cidades? (Opcional)</label>
+                                </div>
                             </div>
                         </div>
-
-                        <div id="another-cities">
-
-                        </div>
+                        <div id="another-cities"></div>
                     <?php endif; ?>
                     <?php if ($this->isEditavel) : ?>
                         <div class="row">
@@ -298,6 +297,9 @@
             var valor_unitario = $3('#vlunitario');
             var diferenca = [];
 
+            if (typeof(array_combo) == 'undefined')
+                return;
+
            // revalida todos os itens
             if (reiniciar === true)
                 array_cidades = [];
@@ -307,6 +309,7 @@
                 var checkExist = $3.inArray($3(this).attr('localizacao'), array_combo);
                 if (checkExist == -1) {
                     $3(this).remove();
+                    array_cidades = array_combo;
                 }
             });
 
@@ -323,7 +326,7 @@
                 if ($3.inArray(el, array_cidades) == -1) diferenca.push(el);
             });
 
-
+            console.log(array_combo, diferenca);
             // adicionar novos itens marcados
             $3.each(diferenca, function (index, item) {
                 var url_action         = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'buscar-valor-mediana-ajax')); ?>";
