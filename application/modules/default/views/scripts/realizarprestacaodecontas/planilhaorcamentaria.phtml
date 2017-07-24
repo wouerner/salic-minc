@@ -1,7 +1,7 @@
 <?php
     $tpAgente = filter_input(INPUT_GET, 'tpAgente');
     if (empty($tpAgente)) {
-        echo $this->partial("inc/menu.inc.php");
+        echo $this->partial("realizarprestacaodecontas/inc/menu.inc.php", $this);
     }
 ?>
 

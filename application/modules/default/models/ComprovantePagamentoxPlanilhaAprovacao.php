@@ -7,7 +7,6 @@
  */
 class ComprovantePagamentoxPlanilhaAprovacao extends MinC_Db_Table_Abstract
 {
-    protected $_banco   = 'bdcorporativo';
     protected $_name    = 'tbComprovantePagamentoxPlanilhaAprovacao';
     protected $_schema  = 'bdcorporativo.scSAC';
 
@@ -50,7 +49,7 @@ class ComprovantePagamentoxPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 'vlComprovado' => new Zend_Db_Expr('sum(cpxpa.vlComprovado)'),
                 'idPlanilhaAprovacao'
             ),
-            $this->_banco.'.'.$this->_schema
+            $this->_schema
         );
         $select->where('stItemAvaliado = ?', 1);
         $select->group('idPlanilhaAprovacao');
