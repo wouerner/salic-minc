@@ -11,7 +11,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio �s Leis de Incentivo � Cultura"; // t�tulo da p�gina
+        $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // t�tulo da p�gina
         $auth = Zend_Auth::getInstance(); // pega a autentica��o
         $Usuario = new UsuarioDAO(); // objeto usu�rio
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
@@ -26,7 +26,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
             if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) // verifica se o grupo ativo est� no array de permiss�es
             {
-                parent::message("Voc� n�o tem permiss�o para acessar essa �rea do sistema!", "principal/index", "ALERT");
+                parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
             }
 
             // pega as unidades autorizadas, org�os e grupos do usu�rio (pega todos os grupos)
@@ -50,10 +50,10 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
         parent::init();
     }
-
+    
     public function indexAction()
     {
-        return $this->_helper->redirector->goToRoute(array('controller' => 'gerenciarparecer', 'action' => 'listaprojetos'), null, true);
+        return $this->_helper->redirector->goToRoute(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'), null, true);
     }
 
     /*
@@ -324,11 +324,11 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $tipoFiltro = $this->_request->getParam("tipoFiltro");
 
         if (strlen($observacao) < 11) {
-            parent::message("Dados obrigat�rios n&atilde;o informados.", "gerenciarparecer/distribuir/idpronac/" . $idPronac, "ALERT");
+            parent::message("Dados obrigat&aacute;rios n&atilde;o informados.", "gerenciarparecer/distribuir/idpronac/" . $idPronac, "ALERT");
         }
 
         if ((empty($idAgenteParecerista)) && ($tipoescolha == 1)) {
-            parent::message("Dados obrigat�rios n&atilde;o informados.",
+            parent::message("Dados obrigat&aacute;rios n&atilde;o informados.",
                 "gerenciarparecer/encaminhar/idproduto/" . $idProduto . "/tipoanalise/" . $TipoAnalise . "/idpronac/" . $idPronac . "/tipoFiltro/" . $tipoFiltro,
                 "ALERT");
         }
@@ -389,7 +389,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $orgaos = new Orgaos();
                     $orgao = $orgaos->pesquisarNomeOrgao($codOrgao);
 
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an�lise e emiss�o de parecer t�cnico</strong>.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico</strong>.');
                 } else {
                     $msg = "Distribui&ccedil;&atilde;o Realizada com sucesso!";
 
@@ -417,11 +417,11 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
                     $insere = $tbDistribuirParecer->inserir($dadosD);
                     $projetos = new Projetos();
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para o perito para an�lise t�cnica e emiss�o de parecer.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para o perito para an&aacute;lise t&eacute;cnica e emiss&atilde;o de parecer.');
                 }
             }
-
-            parent::message($msg . ' '.$insere, "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+            
+            parent::message($msg . ' '.$insere, "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "CONFIRM");
             /* $db->commit(); */
 
         } catch (Zend_Exception $ex) {
@@ -462,8 +462,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $buscaDadosProjetoS = $tbDistribuirParecer->painelAnaliseTecnica($dadosWhereS, null, null, null, null, $tipoFiltro);
 
         if ((count($buscaDadosProjetoS) == 0) && (count($buscaDadosProjeto) == 0)) {
-            parent::message("Todos os produtos foram distribuidos!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "ALERT");
-            //parent::message("Aguardando as an�lises dos produtos secund�rios!", "gerenciarparecer/listaprojetos" ,"ALERT");
+            parent::message("Todos os produtos foram distribuidos!", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "ALERT");
         }
 
         //Produto Secundario
@@ -474,8 +473,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $buscaDadosProjetoSA = $tbDistribuirParecer->painelAnaliseTecnica($dadosWhereSA, null, null, null, null, $tipoFiltro);
 
         if (count($buscaDadosProjetoSA) > 0 && count($buscaDadosProjetoS) == 0) {
-            parent::message("Todos os produtos foram distribuidos SA!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "ALERT");
-            //parent::message("Aguardando as an�lises dos produtos secund�rios!", "gerenciarparecer/listaprojetos" ,"ALERT");
+            parent::message("Todos os produtos foram distribuidos SA!", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "ALERT");
         }
 
         if (count($buscaDadosProjetoS) != 0) {
@@ -528,7 +526,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $tipoFiltro = $this->_request->getParam("tipoFiltro");
 
         if (strlen($observacao) < 11) {
-            parent::message("O campo observa��o deve ter no m�nimo 11 caracteres!",
+            parent::message("O campo observa&ccedil;&atilde;o deve ter no m&iacute;nimo 11 caracteres!",
                 "gerenciarparecer/encaminhar/idproduto/" . $idProduto . "/idpronac/" . $idPronac, "ALERT");
         }
 
@@ -588,9 +586,9 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $orgaos = new Orgaos();
                     $orgao = $orgaos->pesquisarNomeOrgao($codOrgao);
 
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an�lise e emiss�o de parecer t�cnico</strong>.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico</strong>.');
 
-                    parent::message("Enviado os Produtos/Projeto para a entidade!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+                    parent::message("Enviado os Produtos/Projeto para a entidade!", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "CONFIRM");
                 } else {
                     // DISTRIBUIR OU REDISTRIBUIR ( COORDENADOR DE PARECER )
                     $dadosD = array(
@@ -615,9 +613,9 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $where);
 
                     $insere = $tbDistribuirParecer->inserir($dadosD);
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Produto <strong>' . $dp->Produto . '</strong> encaminhado ao perito para an�lise t�cnica e emiss�o de parecer.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Produto <strong>' . $dp->Produto . '</strong> encaminhado ao perito para an&aacute;lise t&aacute;cnica e emiss&atilde;o de parecer.');
 
-                    parent::message("Distribui&ccedil;&atilde;o Realizada com sucesso!  ", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+                    parent::message("Distribui&ccedil;&atilde;o Realizada com sucesso!  ", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "CONFIRM");
                 }
             }
 
@@ -669,7 +667,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
 
         if (strlen($observacao) < 11) {
-            parent::message("O campo observa&ccedil;&atilde;o deve ter no m�nimo 11 caracteres!",
+            parent::message("O campo observa&ccedil;&atilde;o deve ter no m&iacute;nimo 11 caracteres!",
                 "gerenciarparecer/concluir/idDistribuirParecer/" . $idDistribuirParecer . "/idpronac/" . $idPronac,
                 "ALERT");
         }
@@ -746,17 +744,17 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     // dentro das unidades abaixo
                     if (in_array($dp->idOrgao, array(91, 92, 93, 94, 95, 160, 171, 335))) {
                         if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
-                            $projeto->alterarSituacao($idPronac, null, 'C20', 'An�lise t�cnica conclu�da');
+                            $projeto->alterarSituacao($idPronac, null, 'C20', 'An&aacute;lise t&eacute;cnica conclu&iacute;da');
                         } else if ($tipoFiltro == 'em_validacao') {
-                            $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida��o do parecer t�cnico');
+                            $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida&ccedil;&atilde;o do parecer t&eacute;cnico');
                         }
                     } else {
                         // fora das unidades acima
-                        $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida��o do parecer t�cnico');
+                        $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida&ccedil;&atilde;o do parecer t&eacute;cnico');
                     }
                 } else {
                     // inabilitado
-                    $projeto->alterarSituacao($idPronac, null, 'C09', 'Projeto fora da pauta de reuni�o da CNIC porque o proponente est� inabilitado no Minist�rio da Cultura.');
+                    $projeto->alterarSituacao($idPronac, null, 'C09', 'Projeto fora da pauta de reuni&atilde;o da CNIC porque o proponente est&aacute; inabilitado no Minist&eacute;rio da Cultura.');
                 }
 
                 /****************************************************************************************************************/
@@ -1422,7 +1420,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $this->view->cargoSecretario = $cargoSecretario;
 
         if (empty($idAgente)) {
-            parent::message("Dados obrigat�rios n&atilde;o informados.",
+            parent::message("Dados obrigat&aacute;rios n&atilde;o informados.",
                 "gerenciarparecer/enviarpagamento",
                 "ALERT");
         }
