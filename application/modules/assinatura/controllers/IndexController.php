@@ -21,12 +21,13 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $this->definirModuloDeOrigem();
     }
 
-    private function definirModuloDeOrigem() {
+    private function definirModuloDeOrigem()
+    {
 //        $this->view->module = $this->moduleName;
         $get = Zend_Registry::get('get');
         $post = (object)$this->getRequest()->getPost();
         $this->view->origin = "{$this->moduleName}/index";
-        if(!empty($get->origin) || !empty($post->origin)) {
+        if (!empty($get->origin) || !empty($post->origin)) {
             $this->view->origin = (!empty($post->origin)) ? $post->origin : $get->origin;
         }
     }
@@ -141,7 +142,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
 
         try {
-            if (!filter_input(INPUT_GET, 'IdPRONAC') && (is_array($get->IdPRONAC) && count($get->IdPRONAC) < 1) ) {
+            if (!filter_input(INPUT_GET, 'IdPRONAC') && (is_array($get->IdPRONAC) && count($get->IdPRONAC) < 1)) {
                 throw new Exception("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
 
@@ -183,7 +184,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             if ($post) {
 
-                if($get->isMovimentarAssinatura == 'true') {
+                if ($get->isMovimentarAssinatura == 'true') {
                     $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = true;
                 }
 
@@ -248,7 +249,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 'idDocumentoAssinatura = ?' => $this->view->documentoAssinatura['idDocumentoAssinatura']
             ));
 
-            if($assinaturaExistente->current()) {
+            if ($assinaturaExistente->current()) {
                 throw new Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
             }
 
@@ -269,7 +270,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $this->view->idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
             $this->view->isMovimentarAssinatura = false;
 
-            if($get->isMovimentarAssinatura == 'true') {
+            if ($get->isMovimentarAssinatura == 'true') {
                 $this->view->isMovimentarAssinatura = 'true';
             }
 
@@ -329,13 +330,13 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             parent::message(
                 'Projeto Movimentado com sucesso!'
-                ,"/{$this->view->origin}/gerenciar-assinaturas"
-                ,'CONFIRM'
+                , "/{$this->view->origin}/gerenciar-assinaturas"
+                , 'CONFIRM'
             );
         } catch (Exception $objException) {
             parent::message(
                 $objException->getMessage()
-                ,"/{$this->view->origin}/gerenciar-assinaturas"
+                , "/{$this->view->origin}/gerenciar-assinaturas"
             );
         }
     }
@@ -356,12 +357,17 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $pdf->WriteHTML($cssContents, 1);
         $pdf->charset_in = 'ISO-8859-1';
 
-        if(!mb_check_encoding($html, 'ISO-8859-1')) {
+        if (!mb_check_encoding($html, 'ISO-8859-1')) {
             $pdf->charset_in = 'UTF-8';
         }
 
         $pdf->WriteHTML($html, 2);
         $pdf->Output();
         die;
+    }
+
+    public function gerirAtosAdministrativosAction()
+    {
+
     }
 }
