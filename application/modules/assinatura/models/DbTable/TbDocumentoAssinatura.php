@@ -131,6 +131,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                 'Projetos.Orgao',
                 'tbDocumentoAssinatura.cdSituacao',
                 'tbDocumentoAssinatura.stEstado',
+                'tbDocumentoAssinatura.idDocumentoAssinatura',
                 'possuiAssinatura'=> new Zend_Db_Expr("
                     (select {$this->_schema}.TbAssinatura.idAssinatura 
                        from {$this->_schema}.TbAssinatura
