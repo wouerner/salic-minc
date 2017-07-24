@@ -655,73 +655,66 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $validacao = new stdClass();
         $listaValidacao = array();
 
-        $sp = new Proposta_Model_DbTable_PreProjeto();
+        if (!empty($idPreProjeto)) {
 
-        # verifica se existe alguma pendencia no checklist de proposta
-        $validaProposta = $this->validarEnvioPropostaComSp($idPreProjeto);
+            $tbPreProjeto = new Proposta_Model_DbTable_PreProjeto();
 
-        $pendencias = in_array('PENDENTE', array_column(converterObjetosParaArray($validaProposta), 'Observacao'));
-
-        if ($pendencias) {
-            $this->view->resultado = $validaProposta;
-        } else {
+            if (!$tbPreProjeto->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mssql) {
+                $arrResultado = $this->validarEnvioPropostaSemSp($idPreProjeto);
+            } else {
+                $arrResultado = $this->validarEnvioPropostaComSp($idPreProjeto);
+            }
 
             $tblProjetos = new Projetos();
             $projeto = array_change_key_case($tblProjetos->findBy(array('idprojeto = ?' => $idPreProjeto)));
             $idPronac = $projeto['idpronac'];
 
-            $planilhaproposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
-            $ValorTotalPlanilha = $planilhaproposta->somarPlanilhaProposta($idPreProjeto)->toArray();
+            if ($arrResultado->Observacao === true) {
 
-            # validar valor original e valor total atual da proposta
-            if ($ValorTotalPlanilha['soma'] > $projeto['solicitadoreal']) {
-                $validacao->dsInconsistencia = 'O valor total do projeto n&atilde;o pode ultrapassar o valor anteriormente solicitado!';
-                $validacao->Observacao = 'PENDENTE';
-                $validacao->Url = array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'produtoscadastrados', 'idPreProjeto' => $idPreProjeto);
-                $listaValidacao[] = clone($validacao);
-            }
+                $planilhaproposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+                $ValorTotalPlanilha = $planilhaproposta->somarPlanilhaProposta($idPreProjeto)->toArray();
 
-            $validado = true;
-            foreach ($listaValidacao as $valido) {
-                if ($valido->Observacao == 'PENDENTE') {
-                    $validado = false;
-                    break;
-                }
-            }
-
-            if ($params['confirmarenvioaominc'] == true) {
-                if ($validado) {
-
-                    if ($projeto['area'] == 2) {
-                        $orgaoUsuario = 171; # 171 - SAV/DAP
-                    } else {
-                        $orgaoUsuario = 262; # 262 - SEFIC/DIAAPI
-                    }
-
-                    # verificar se o projeto já possui avaliador
-                    $tbAvaliacao = new Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
-                    $avaliacao = $tbAvaliacao->buscarUltimaAvaliacao($idPronac);
-
-                    if (!empty($avaliacao)) {
-                        $tbAvaliacao->inserirAvaliacao($idPronac, $orgaoUsuario, $avaliacao['idTecnico']);
-                    } else {
-                        $tbAvaliacao->inserirAvaliacao($idPronac, $orgaoUsuario);
-                    }
-
-                    # alterar a situacao do projeto
-                    $codigoSituacao = 'B20'; #B20 - Projeto adequado a realidade de execucao
-                    $providenciaTomada = "Projeto ajustado pelo proponente e encaminhado ao MinC para avalia&ccedil;&atilde;o";
-
-                    $tblProjetos->alterarSituacao($idPronac, '', $codigoSituacao, $providenciaTomada);
-
-                    parent::message("Projeto encaminhado com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/listarprojetos/listarprojetos", "CONFIRM");
+                # validar valor original e valor total atual da proposta
+                if ($ValorTotalPlanilha['soma'] > $projeto['solicitadoreal']) {
+                    $validacao->dsInconsistencia = 'O valor total do projeto n&atilde;o pode ultrapassar o valor anteriormente solicitado!';
+                    $validacao->Observacao = false;
+                    $validacao->Url = array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'produtoscadastrados', 'idPreProjeto' => $idPreProjeto);
+                    $listaValidacao[] = clone($validacao);
                 } else {
-                    parent::message("Alguns erros encontrados no envio do projeto", "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc/idPreProjeto/" . $idPreProjeto, "ERROR");
+                    $listaValidacao = $arrResultado;
+                    $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc";
                 }
             }
-            $this->view->resultado = $listaValidacao;
-            $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc";
+
+
+            if ($params['confirmarenvioaominc'] == true && $arrResultado->Observacao === true) {
+
+                if ($projeto['area'] == 2) {
+                    $orgaoUsuario = 171; # 171 - SAV/DAP
+                } else {
+                    $orgaoUsuario = 262; # 262 - SEFIC/DIAAPI
+                }
+
+                # verificar se o projeto já possui avaliador
+                $tbAvaliacao = new Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
+                $avaliacao = $tbAvaliacao->buscarUltimaAvaliacao($idPronac);
+
+                $avaliador = isset($avaliacao['idTecnico']) ? $avaliacao['idTecnico'] : '';
+
+                $tbAvaliacao->inserirAvaliacao($idPronac, $orgaoUsuario, $avaliador);
+
+                # alterar a situacao do projeto
+                $codigoSituacao = 'B20'; #B20 - Projeto adequado a realidade de execucao
+                $providenciaTomada = "Projeto ajustado pelo proponente e encaminhado ao MinC para avalia&ccedil;&atilde;o";
+
+                $tblProjetos->alterarSituacao($idPronac, '', $codigoSituacao, $providenciaTomada);
+
+                parent::message("Projeto encaminhado com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/listarprojetos/listarprojetos", "CONFIRM");
+            } else {
+                $this->view->resultado = $listaValidacao;
+            }
         }
+
     }
 
 
