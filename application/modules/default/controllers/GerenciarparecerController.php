@@ -884,7 +884,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
         // An�lises em eberto
         $whereAnalise['distribuirParecer.idAgenteParecerista = ?'] = $idAgente;
-        $analiseEmAberto = $projetosDAO->buscaProjetosProdutos($whereAnalise);
+        $analiseEmAberto = $projetosDAO->buscaProjetosProdutosParaAnalise($whereAnalise);
         $situacaoTexto .= '<br /> An&aacute;lise em aberto: ' . count($analiseEmAberto);
 
         $pareceristas[] = array('situacao' => utf8_encode($situacao), 'situacaoTexto' => utf8_encode($situacaoTexto));
@@ -1499,7 +1499,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
             $this->view->dadosParecerista = $arrayParecerista;
             $this->view->dadosProduto = $arrayProdutosProjeto;
             $this->view->dataMemorando = $dataCertaM;
-
+ 
 
         } catch (Exception $e) {
             parent::message("Erro ao enviar pagamentos: " . $e->getMessage(), "gerenciarparecer/enviarpagamento", "ERROR");
