@@ -14,7 +14,7 @@ function mascara($mask,$str){
 ?>
 
 <script type="text/javascript" src="<?php echo $this->baseUrl();?>/public/js/tinymce/js/tinymce/tinymce.min.js"></script>
-<?php echo $this->partial("inc/menu.inc.php"); ?>
+<?php echo $this->partial("realizarprestacaodecontas/inc/menu.inc.php", $this); ?>
 <div id="breadcrumb">
     <ul>
        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
@@ -135,10 +135,13 @@ function mascara($mask,$str){
         </table>
     <?php endif; ?>
 
-    <?php $vlcpTotal=0; foreach ($this->comprovantesPagamento as $valoresComprovados) {
-        $vlUn = $valoresComprovados->vlComprovacao+$vlcpTotal;
-        $vlcpTotal = $vlUn;
-    } ?>
+    <?php 
+        $vlcpTotal=0; 
+        foreach ($this->comprovantesPagamento as $valoresComprovados) {
+            $vlUn = $valoresComprovados->vlComprovacao+$vlcpTotal;
+            $vlcpTotal = $vlUn;
+        } 
+    ?>
 
     <table class="tabela">
         <tbody>
