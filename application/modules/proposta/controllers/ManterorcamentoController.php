@@ -6,8 +6,6 @@
  */
 class Proposta_ManterorcamentoController extends Proposta_GenericController
 {
-    private $idUsuario = null;
-    private $idPreProjeto = null;
 
     /**
      * Reescreve o metodo init()
@@ -17,49 +15,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
      */
     public function init()
     {
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+        parent::init();
 
-        $this->view->title = "Salic - Sistema de Apoio às Leis de Incentivo à Cultura";
-
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
-        $PermissoesGrupo = array();
-        if (!$auth->hasIdentity()) // caso o usuario esteja autenticado
-        {
-            return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
-        }
-
-        //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
-        if (isset($auth->getIdentity()->usu_codigo)) {
-            //Recupera todos os grupos do Usuario
-            $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
-            $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
-            foreach ($grupos as $grupo) {
-                $PermissoesGrupo[] = $grupo->gru_codigo;
-            }
-        }
-
-        isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
-        parent::init(); // chama o init() do pai GenericControllerNew
-
-        //recupera ID do pre projeto (proposta)
-        if (!empty ($idPreProjeto)) {
-            $this->idPreProjeto = $idPreProjeto;
-            $this->view->idPreProjeto = $idPreProjeto;
-
-            //VERIFICA SE A PROPOSTA ESTA COM O MINC
-            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($idPreProjeto);
-            //var_dump($rsStatusAtual);die;
-            $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
-        } else {
-            if ($idPreProjeto != '0') {
-                parent::message("Necessário informar o número da proposta.", "/proposta/manterpropostaincentivofiscal/index", "ERROR");
-            }
-        }
-        $this->idUsuario = !empty($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
-        /* =============================================================================== */
-        /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(true, false, false);
 
     }
@@ -747,8 +704,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             $return['status'] = true;
         }
 
-        //        $this->_helper->json($return); @todo corrigir retorno para o padrão
-        echo json_encode($return);
+        $this->_helper->json($return);
         die;
     }
 

@@ -7,9 +7,9 @@
  */
 class Proposta_MantertabelaitensController extends Proposta_GenericController {
 
-    private $getIdUsuario = 0;
-    private $idUsuario = 0;
-    private $idPreProjeto = 0;
+//    private $getIdUsuario = 0;
+//    private $idUsuario = 0;
+//    private $idPreProjeto = 0;
 
     /**
      * Reescreve o metodo init()
@@ -19,33 +19,11 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      */
     public function init()
     {
-        // autenticac?o e permiss?es zend (AMBIENTE MINC)
-        $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 127; // Coordenador - Geral de Analise (Ministro)
-        $PermissoesGrupo[] = 97;  // Gestor do SALIC
-        $arrAuth = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity()); // instancia da autenticacao
-        isset($arrAuth['usu_codigo']) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
-
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-
-        parent::init(); // chama o init() do pai GenericControllerNew
-
-        if(isset($arrAuth['usu_codigo'])){
-            $this->idUsuario = $arrAuth['usu_codigo'];
-        } else {
-            $this->idUsuario = $arrAuth['idusuario'];
-            $this->verificarPermissaoAcesso(true, false, false);
-        }
+        parent::init();
 
         //recupera ID do pre projeto (proposta)
-        if(!empty ($idPreProjeto)) {
-            $this->idPreProjeto = $idPreProjeto;
-            $this->view->idPreProjeto = $idPreProjeto;
-
-            //VERIFICA SE A PROPOSTA ESTA COM O MINC
-            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($idPreProjeto);
-            $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
+        if(!empty ($this->idPreProjeto)) {
+            $this->view->idPreProjeto = $this->idPreProjeto;
         }
     }
 
