@@ -5,7 +5,7 @@
     /* INICIO DA GUIA DE LINKS */
     $controller = 'analisarprojetoparecer';
     $links = array();
-    $links[] = array('Projetos/Produtos para An&aacute;lise' => array('controller' => 'analisarprojetoparecer', 'action' => 'index'));
+    $links[] = array('Projetos/Produtos para An&aacute;lise' => array('module' => 'parecer' , 'controller' => 'analise-inicial', 'action' => 'index'));
     $links[] = array('An&aacute;lise do Produto' => array());
 
     /* FIM DA GUIA DE LINKS */
@@ -19,7 +19,7 @@
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para P&aacute;gina Inicial">In&iacute;cio</a></li>
         <li class="second">An&aacute;lise T&eacute;cnica Inicial</li>
-        <li class="second"><a href="<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'index'), '', true); ?>" title="Ir para P&aacute;gina Inicial">Projetos/Produtos para An&aacute;lise</a></li>
+        <li class="second"><a href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-inicial', 'action' => 'index'), '', true); ?>" title="Ir para P&aacute;gina Inicial">Projetos/Produtos para An&aacute;lise</a></li>
         <li class="last">An&aacute;lise do Produtos</li>
     </ul>
 </div>
