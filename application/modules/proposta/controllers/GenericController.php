@@ -16,14 +16,6 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
      */
     protected $idUsuario = null;
 
-
-    /**
-     * @todo Falta verificar o sentido do idResponsavel, parece que eh o mesmo do idUsuario
-     * @var int
-     */
-    protected $idResponsavel = null;
-
-
     /**
      * ID do proponente, responsavel pela proposta cultural e projeto no sistema
      * @var int
@@ -32,13 +24,21 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
 
 
     /**
+     * @todo verificar o sentido do idResponsavel, parece que eh o mesmo do idUsuario
      * @var int
+     */
+    protected $idResponsavel = null;
+
+
+    /**
+     * @var int
+     * @todo verificar a diferenca deste id para os outros
      */
     protected $idAgenteProponente = null;
 
 
     /**
-     * @var array
+     * @var object
      */
     protected $usuario = null;
 
@@ -48,8 +48,18 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
      */
     protected $cpfLogado = null;
 
+
+    /**
+     * @var object
+     */
     protected $_proposta;
+
+
+    /**
+     * @var object
+     */
     protected $_proponente;
+
 
     private $_movimentacaoAlterarProposta = '95';
     private $_situacaoAlterarProjeto = Projeto_Model_Situacao::PROJETO_LIBERADO_PARA_AJUSTES;
@@ -77,25 +87,33 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
         $arrAuth = array_change_key_case((array)$auth->getIdentity());
         $this->usuario = $arrAuth;
 
-        /**
-         * Quando eh colaborador do MinC o cpf eh o usu_identificacao da Autenticacao_Model_Usuario
-         */
-        $cpf = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
 
         /**
          * Quando eh colabadordor do MinC (funcionarios e pareceristas)
-         * o idUsuario eh o usu_codigo da Autenticacao_Model_Usuario
+         * O cpf eh o usu_identificacao
+         *
+         */
+        $this->cpfLogado = isset($arrAuth['usu_identificacao']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
+
+
+        /**
+         * Quando eh colabadordor do MinC (funcionarios e pareceristas)
+         * O idUsuario eh o usu_codigo da Autenticacao_Model_Usuario
          */
         $this->idUsuario = !empty($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
 
+
+        /**
+         * @todo verificar a diferenca entre idResponsavel e idUsuario
+         */
         $this->idResponsavel = $auth->getIdentity()->IdUsuario;
+
 
         /**
          * Agentes sao proponentes da proposta ou do projeto
          */
         $tblAgentes = new Agente_Model_DbTable_Agentes();
-        $agente = $tblAgentes->findBy(array('cnpjcpf' => $cpf));
-
+        $agente = $tblAgentes->findBy(array('cnpjcpf' => $this->cpfLogado));
 
         if ($agente) {
             $this->idAgente = $agente['idAgente'];
@@ -147,6 +165,11 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
                 $this->salvarDadosPropostaSerializada($this->idPreProjeto);
             }
             $this->view->layout = $layout;
+
+            # VERIFICA SE A PROPOSTA ESTA COM O MINC
+            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
+            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($this->idPreProjeto);
+            $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
         }
     }
 
