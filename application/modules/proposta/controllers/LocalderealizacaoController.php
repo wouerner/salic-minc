@@ -13,9 +13,6 @@
  */
 class Proposta_LocalderealizacaoController extends Proposta_GenericController
 {
-    private $idPreProjeto = null;
-    private $usuarioLogado = null;
-    private $idUsuario = 0;
 
     /**
      * Reescreve o metodo init()
@@ -26,48 +23,14 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
     public function init()
     {
 
-        $auth = Zend_Auth::getInstance();
-        $arrAuth = array_change_key_case((array)$auth->getIdentity());
-        $PermissoesGrupo = array();
-
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-
-        //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
-        if (isset($auth->getIdentity()->usu_codigo)) {
-            //Recupera todos os grupos do Usuario
-            $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
-            $grupos = $Usuario->buscarUnidades($arrAuth['usu_codigo'], 21);
-            foreach ($grupos as $grupo) {
-                $PermissoesGrupo[] = $grupo->gru_codigo;
-            }
-        }
-
-        isset($arrAuth['usu_codigo']) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
-
-        $this->usuarioLogado = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
         parent::init();
-
-        //recupera ID do pre projeto (proposta)
-        if (!empty ($idPreProjeto)) {
-            $this->idPreProjeto = $idPreProjeto;
-            $this->view->idPreProjeto = $idPreProjeto;
-
-//            //VERIFICA SE A PROPOSTA ESTA COM O MINC
-//            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-//            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($idPreProjeto);
-//            $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
-        } else {
-            parent::message("Necess&aacute;rio informar o n&uacute;mero da proposta.", "/proposta/manterpropostaincentivofiscal/listarproposta", "ERROR");
-        }
-
-        $this->idUsuario = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
 
         //*******************************************
         //VALIDA ITENS DO MENU (Documento pendentes)
         //*******************************************
 //        $model = new Proposta_Model_DbTable_DocumentosExigidos();
 //        //$this->view->documentosPendentes = $model->buscarDocumentoPendente($get->idPreProjeto);
-//        $this->view->documentosPendentes = $model->buscarDocumentoPendente($idPreProjeto);
+//        $this->view->documentosPendentes = $model->buscarDocumentoPendente($this->idPreProjeto);
 //
 //        if (!empty($this->view->documentosPendentes)) {
 //            $verificarmenu = 1;
@@ -89,8 +52,15 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
 //            $this->view->enviado = $enviado;
 //        }
 
-        /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
         $this->verificarPermissaoAcesso(true, false, false);
+
+        //recupera ID do pre projeto (proposta)
+        if (!empty ($this->idPreProjeto)) {
+            $this->view->idPreProjeto = $this->idPreProjeto;
+        } else {
+            parent::message("Necess&aacute;rio informar o n&uacute;mero da proposta.", "/proposta/manterpropostaincentivofiscal/listarproposta", "ERROR");
+        }
+
     }
 
     /**
@@ -250,7 +220,7 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
         for ($i = 1; $i <= count($locais); $i++) {
             $dados = array("idProjeto" => $this->idPreProjeto,
                 "stAbrangencia" => 1,
-                "Usuario" => $this->usuarioLogado,
+                "Usuario" => $this->idUsuario,
                 "idPais" => $locais[$i]["idPais"],
                 "idUF" => ($locais[$i]["idPais"] == 31) ? $locais[$i]["idUF"] : 0,
                 "idMunicipioIBGE" => ($locais[$i]["idPais"] == 31) ? $locais[$i]["idMunicipioIBGE"] : 0);
@@ -438,7 +408,7 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
         $dadosAbrangencia = array(
             "idprojeto" => $this->idPreProjeto,
             "stabrangencia" => 1,
-            "usuario" => $this->usuarioLogado,
+            "usuario" => $this->idUsuario,
             "idpais" => $pais,
             "iduf" => ($pais == 31) ? $estados : 0,
             "idmunicipioibge" => ($pais == 31) ? $cidades : 0
