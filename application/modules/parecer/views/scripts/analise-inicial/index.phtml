@@ -128,19 +128,19 @@ foreach($this->buscar as $d) {
                            'controller' => 'consultardadosprojeto',
                            'action' => 'index'
                            )
-                           ) . "?idPronac=". $d->PRONAC; ?>"><u><?php echo $d->PRONAC; ?></u></a>		  
+                           ) . "?idPronac=". $d->IdPRONAC; ?>"><u><?php echo $d->PRONAC; ?></u></a>		  
 		</td>
 		<td class="center-align"><?php if($d->PRONAC != $rp) { echo $d->NomeProjeto; }else { echo ''; } ?></td>
 		<td class="center-align">
 		  <?php if($this->verificarIN2017($d->IdPRONAC)): ?>
 		  <?php if (!$this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
-		  <a href="<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'produto')); ?>?idPronac=<?php echo $d->IdPRONAC; ?>&idProduto=<?php echo $d->idProduto; ?>&stPrincipal=<?php echo $d->stPrincipal; ?>&idD=<?php echo $d->idDistribuirParecer; ?>" > <?php echo $d->dsProduto; ?></a>
+		  <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'analisarprojetoparecer', 'action' => 'produto')); ?>?idPronac=<?php echo $d->IdPRONAC; ?>&idProduto=<?php echo $d->idProduto; ?>&stPrincipal=<?php echo $d->stPrincipal; ?>&idD=<?php echo $d->idDistribuirParecer; ?>" > <?php echo $d->dsProduto; ?></a>
 		  <?php else: ?>
 		  <?php echo $d->dsProduto; ?>
 		  <?php endif; ?>
 		  
 		  <?php else: ?>
-		  <a href="<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'produto')); ?>?idPronac=<?php echo $d->IdPRONAC; ?>&idProduto=<?php echo $d->idProduto; ?>&stPrincipal=<?php echo $d->stPrincipal; ?>&idD=<?php echo $d->idDistribuirParecer; ?>" > <?php echo $d->dsProduto; ?></a>
+		  <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'analisarprojetoparecer', 'action' => 'produto')); ?>?idPronac=<?php echo $d->IdPRONAC; ?>&idProduto=<?php echo $d->idProduto; ?>&stPrincipal=<?php echo $d->stPrincipal; ?>&idD=<?php echo $d->idDistribuirParecer; ?>" > <?php echo $d->dsProduto; ?></a>
 		  <?php endif; ?>
 		</td>
 		<td class="center-align"><?php if($d->stPrincipal == 1): ?><img src="<?php echo $this->baseUrl(); ?>/public/img/ok_16x16.png" width="20px" style="cursor: pointer;" title="Produto principal" alt="Produto principal" /><?php endif;?></td>
@@ -212,7 +212,7 @@ foreach($this->buscar as $d) {
 		  </a>
 		  <?php endif; ?>
 		  <?php elseif(!$this->verificarIN2017($d->IdPRONAC)): ?>
-		  <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
+		  <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('module' => 'default', 'controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
 		  <?php endif; ?>
 		  <?php endif; ?>
 		</td>
@@ -222,8 +222,7 @@ foreach($this->buscar as $d) {
           $parametrosAssinatura = "?idPronac=". $d->IdPRONAC ."&idProduto=". $d->idProduto . "&situacao=". $d->situacao ."&idD=". $d->idDistribuirParecer;
 		  ?>
                   <a class="btn waves-effect waves-light tooltipped small btn cyan"
-                     href="#modalConfirmacao"
-                     data-redirect-url="<?php echo $this->url(
+                     href="<?php echo $this->url(
 					array(
                                         'module' => 'default',
 					'controller' => 'analisarprojetoparecer',
@@ -237,7 +236,7 @@ foreach($this->buscar as $d) {
 
 		    <?php endif; ?>
 		    <?php elseif (!$this->verificarIN2017($d->IdPRONAC)): ?>
-		    <img id="img_encaminhar_parecer834782" style="cursor:pointer; " title="Declarar impedimento" src="/public/img/table_multiple.png" onclick="redirecionar('<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'devolver-parecer'))?>?idPronac=<?php echo $d->IdPRONAC ?>&idProduto=<?php echo $d->idProduto ;?>&situacao=<?php echo $d->situacao ;?>&idD=<?php echo $d->idDistribuirParecer; ?>')">		
+		    <img id="img_encaminhar_parecer834782" style="cursor:pointer; " title="Declarar impedimento" src="/public/img/table_multiple.png" onclick="redirecionar('<?php echo $this->url(array('module' => 'default', 'controller' => 'analisarprojetoparecer', 'action' => 'devolver-parecer'))?>?idPronac=<?php echo $d->IdPRONAC ?>&idProduto=<?php echo $d->idProduto ;?>&situacao=<?php echo $d->situacao ;?>&idD=<?php echo $d->idDistribuirParecer; ?>')">		
 		      <?php endif; ?>
 		</td>
 	      </tr>
@@ -288,6 +287,7 @@ foreach($this->buscar as $d) {
 	  <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">N&atilde;o</a>
 	</div>
       </div>
+
     </div>
 
     <script>
