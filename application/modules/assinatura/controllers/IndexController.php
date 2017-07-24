@@ -136,13 +136,12 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     public function assinarProjetoAction()
     {
-
         $get = Zend_Registry::get('get');
         $idPronac = $get->IdPRONAC;
         $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
 
         try {
-            if (!filter_input(INPUT_GET, 'IdPRONAC')) {
+            if (!filter_input(INPUT_GET, 'IdPRONAC') && (is_array($get->IdPRONAC) && count($get->IdPRONAC) < 1) ) {
                 throw new Exception("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
 
@@ -169,7 +168,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             if (is_array($get->IdPRONAC)) {
                 $idPronacUnidos = implode(',', $get->IdPRONAC);
-                $this->redirect("/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronacUnidos}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&origin={$this->view->origin}");
+                $this->redirect("/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronacUnidos}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}");
             }
 
             $this->view->IdPRONAC = $get->IdPRONAC;
