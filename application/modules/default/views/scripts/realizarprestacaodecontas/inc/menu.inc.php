@@ -81,11 +81,10 @@
                     'tpDiligencia' => '174',
                 ), null, true
             );
-?>
+        ?>
 
     <!-- ========== FIM AJUSTE DO LAYOUT PARA ACOPLAR MENU LATERAL ========== --> 
     <div id="menuContexto">
-        
         <div class="top"></div>
         <div id="qm0" class="qmmc sanfona">
             
@@ -185,8 +184,6 @@
                     <a class="no_seta"  href="<?php //echo $this->url(array('controller' => 'gerenciarpautareuniao', 'action' => 'gerenciarpresidenteemreuniao')); ?>" title="Ir para Procurar">Procurar</a>
                     <span class="no_seta last">&nbsp;</span>
                 <?php } ?>
-
-
 
             </div>
             <br clear="left" class="br" /> 
