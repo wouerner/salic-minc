@@ -368,6 +368,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     public function gerirAtosAdministrativosAction()
     {
-
+        $objAtosAdministrativos = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $objAtosAdministrativos->obterAtoAdministrativoDetalhado();
+        //$this->view->atosAdministrativos =
     }
 }

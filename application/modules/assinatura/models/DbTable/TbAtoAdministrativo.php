@@ -110,4 +110,40 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
+    public function obterAtoAdministrativoDetalhado() {
+        $objQuery = $this->select();
+        $objQuery->from(
+            $this->_name,
+            '*',
+            $this->_schema
+        );
+//        $objQuery->joinInner(
+//            array("Verificacao" => "Verificacao"),
+//            "{$this->_name}.idTipoDoAto = Verificacao.idVerificacao",
+//            array("dsAtoAdministrativo" =>"Descricao"),
+//            $this->_schema
+//        );
+//        $objQuery->joinInner(
+//            array("Verificacao" => "Verificacao"),
+//            "{$this->_name}.idTipoDoAto = Verificacao.idVerificacao",
+//            array("dsAtoAdministrativo" =>"Descricao"),
+//            $this->_schema
+//        );
+
+//ALTER VIEW dbo.vwAtoAdministrativo
+//AS
+//
+//SELECT a.idAtoAdministrativo,a.idTipoDoAto,,a.idCargoDoAssinante,c.Descricao as dsCargoDoAssinante,
+//       a.idOrgaoDoAssinante,d.Sigla as dsOrgaoDoAssinante,a.idPerfilDoAssinante,e.gru_nome as dsPerfil,
+//	   a.idOrdemDaAssinatura,a.stEstado
+//FROM sac.dbo.tbAtoAdministrativo   a
+//INNER JOIN Agentes.dbo.Verificacao c on (a.idCargoDoAssinante = c.idVerificacao)
+//INNER JOIN sac.dbo.Orgaos          d on (a.idOrgaoDoAssinante = d.Codigo)
+//INNER JOIN tabelas.dbo.Grupos      e on (a.idPerfilDoAssinante = e.gru_codigo)
+
+
+        xd($objQuery->assemble());
+//        xd($this->fetchAll($objQuery)->toArray() );
+    }
+
 }
