@@ -13,107 +13,114 @@
         </div>
         <div class="row">
             <div class="col s12">
-                    <form method="get"
-                          class="materialize"
-                          id="formGerenciamentoPropostas"
-                          action="<?php echo $this->url(
-                              array(
-                                  'module' => 'assinatura',
-                                  'controller' => 'index',
-                                  'action' => 'assinar-projeto'
-                              ),
-                              '',
-                              true);
-                          ?>"
-                          onsubmit="return false;">
-                        <table class="bordered margin0" id="enquadramento">
-                            <thead>
-                            <tr class="">
-                                <th class="center-align" style="padding-left: 20px">
-                                    <input type="checkbox"
-                                           name="marcarDesmarcarCheckbox"
-                                           id="marcarDesmarcarCheckbox"
-                                           class="filled-in"/>
-                                    <label id="marcarDesmarcarCheckboxLabel"
-                                           for="marcarDesmarcarCheckbox"></label>
-                                </th>
-                                <th align="center" width="40" class="center-align">PRONAC</th>
-                                <th class="center-align">Nome do Projeto</th>
-                                <th class="center-align">&Aacute;rea</th>
-                                <th class="center-align">Segmento</th>
-                                <th class="center-align">Dias</th>
-                                <th class="center-align" align="center">Tipo</th>
-                                <th class="center-align" align="center">Ver</th>
-                                <th class="center-align" align="center">Assinar</th>
-                                <th class="center-align" align="center">Movimentar</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach ($this->dados as $dado): ?>
-                                <tr>
-                                    <td class="center-align" style="padding-left: 20px">
+                <form method="get"
+                      class="materialize"
+                      id="formGerenciamentoPropostas"
+                      action="<?php echo $this->url(
+                          array(
+                              'module' => 'assinatura',
+                              'controller' => 'index',
+                              'action' => 'assinar-projeto'
+                          ),
+                          '',
+                          true);
+                      ?>"
+                      onsubmit="return false;">
+                    <input type="hidden" id="idTipoDoAtoAdministrativo" name="idTipoDoAtoAdministrativo" />
+                    <table class="bordered margin0" id="enquadramento">
+                        <thead>
+                        <tr class="">
+                            <th class="center-align" style="padding-left: 20px">
+                                <input type="checkbox"
+                                       name="marcarDesmarcarCheckbox"
+                                       id="marcarDesmarcarCheckbox"
+                                       class="filled-in"/>
+                                <label id="marcarDesmarcarCheckboxLabel"
+                                       for="marcarDesmarcarCheckbox"></label>
+                            </th>
+                            <th align="center" width="40" class="center-align">PRONAC</th>
+                            <th class="center-align">Nome do Projeto</th>
+                            <th class="center-align">&Aacute;rea</th>
+                            <th class="center-align">Segmento</th>
+                            <th class="center-align">Dias</th>
+                            <th class="center-align" align="center">Tipo</th>
+                            <th class="center-align" align="center">Ver</th>
+                            <th class="center-align" align="center">Assinar</th>
+                            <th class="center-align" align="center">Movimentar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($this->dados as $dado): ?>
+                            <tr>
+                                <td class="center-align" style="padding-left: 20px">
+                                    <?php
+                                    if (is_null($dado['possuiAssinatura'])) : ?>
                                         <input type="checkbox"
                                                name="IdPRONAC[]"
                                                id="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"
                                                class="checkbox_legal filled-in"
-                                               value="<?php echo $dado['IdPRONAC'] ?>"/>
+                                               value="<?php echo $dado['IdPRONAC'] ?>"
+                                               data-idtipoatoadministrativo="<?php echo $dado['idTipoDoAtoAdministrativo'] ?>"
+                                        />
                                         <label for="IdPRONAC<?php echo $dado['IdPRONAC'] ?>"></label>
-                                    </td>
-                                    <td class="center-align" align="center">
-                                        <a class="waves-effect waves-dark btn white black-text"
-                                           href="<?php echo $this->url(
-                                                   array(
-                                                       'module' => 'default',
-                                                       'controller' => 'consultardadosprojeto',
-                                                       'action' => 'index'
-                                                   )
-                                               ) . "?idPronac={$dado['IdPRONAC']}"; ?>"><u><?php echo $dado['pronac']; ?></u></a>
-                                    </td>
-                                    <td class="center-align" align="center"><?php echo $dado['nomeProjeto']; ?></td>
-                                    <td class="center-align" align="center"><?php echo $dado['area']; ?></td>
-                                    <td class="center-align" align="center"><?php echo $dado['segmento']; ?></td>
-                                    <td class="center-align" align="center"><?php echo $dado['dias']; ?></td>
-                                    <td class="center-align" align="center"><?php echo $dado['tipoDoAtoAdministrativo']; ?></td>
-                                    <td class="center-align" align="center">
-                                        <?php
-                                        $parametrosVisualicacao = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true";
+                                    <?php endif; ?>
+                                </td>
+                                <td class="center-align" align="center">
+                                    <a class="waves-effect waves-dark btn white black-text"
+                                       href="<?php echo $this->url(
+                                               array(
+                                                   'module' => 'default',
+                                                   'controller' => 'consultardadosprojeto',
+                                                   'action' => 'index'
+                                               )
+                                           ) . "?idPronac={$dado['IdPRONAC']}"; ?>"><u><?php echo $dado['pronac']; ?></u></a>
+                                </td>
+                                <td class="center-align" align="center"><?php echo $dado['nomeProjeto']; ?></td>
+                                <td class="center-align" align="center"><?php echo $dado['area']; ?></td>
+                                <td class="center-align" align="center"><?php echo $dado['segmento']; ?></td>
+                                <td class="center-align" align="center"><?php echo $dado['dias']; ?></td>
+                                <td class="center-align"
+                                    align="center"><?php echo $dado['tipoDoAtoAdministrativo']; ?></td>
+                                <td class="center-align" align="center">
+                                    <?php
+                                    $parametrosVisualicacao = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}";
+                                    ?>
+                                    <a class="btn waves-effect waves-light tooltipped small "
+                                       href="<?php echo $this->url(array(
+                                               'module' => 'assinatura',
+                                               'controller' => 'index',
+                                               'action' => 'visualizar-projeto'
+                                           )) . $parametrosVisualicacao ?>"
+                                       data-position="top"
+                                       data-delay="50"
+                                       data-tooltip="Visualizar">
+                                        <i class="material-icons">search</i>
+                                    </a>
+                                </td>
+                                <td class="center-align" align="center">
+                                    <?php
+                                    $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}";
+                                    if (is_null($dado['possuiAssinatura'])) :
                                         ?>
-                                        <a class="btn waves-effect waves-light tooltipped small "
-                                           href="<?php echo $this->url(array(
-                                                   'module' => 'assinatura',
-                                                   'controller' => 'index',
-                                                   'action' => 'visualizar-projeto'
-                                               )) . $parametrosVisualicacao ?>"
-                                           data-position="top"
-                                           data-delay="50"
-                                           data-tooltip="Visualizar">
-                                            <i class="material-icons">search</i>
-                                        </a>
-                                    </td>
-                                    <td class="center-align" align="center">
-                                        <?php
-                                        $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true";
-                                        if(is_null($dado['possuiAssinatura'])) :
-                                            ?>
-                                            <a class="btn waves-effect waves-light tooltipped small"
-                                               href="<?php echo $this->url(
+                                        <a class="btn waves-effect waves-light tooltipped small"
+                                           href="<?php echo $this->url(
                                                    array(
                                                        'module' => 'assinatura',
                                                        'controller' => 'index',
                                                        'action' => 'assinar-projeto'
                                                    )
                                                ) . $parametrosAssinatura ?>"
-                                               data-position="top"
-                                               data-delay="50"
-                                               data-tooltip="Assinar">
-                                                <i class="material-icons">create</i>
-                                            </a>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td class="center-align" align="center">
-                                        <?php
-                                        $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}&encaminhar=true";
-                                        if(!is_null($dado['possuiProximaAssinatura'])):
+                                           data-position="top"
+                                           data-delay="50"
+                                           data-tooltip="Assinar">
+                                            <i class="material-icons">create</i>
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="center-align" align="center">
+                                    <?php
+                                    $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}";
+                                    if (!is_null($dado['possuiProximaAssinatura'])):
                                         ?>
                                         <a class="btn waves-effect waves-light tooltipped small btn"
                                            href="#modalConfirmacao"
@@ -130,19 +137,19 @@
                                            data-tooltip="Assinar">
                                             <i class="material-icons">arrow_forward</i>
                                         </a>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                        <div class="center-align" id="divAssinaturaEmMassa"
-                             style="display: none;">
-                            <button class="btn waves-effect waves-light" type="submit" name="action">
-                                Assinar em massa <i class="material-icons right">send</i>
-                            </button>
-                        </div>
-                    </form>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <div class="center-align" id="divAssinaturaEmMassa"
+                         style="display: none;">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">
+                            Assinar em massa <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </form>
 
             </div>
         </div>
@@ -162,17 +169,19 @@
         <div id="modalConfirmacao" class="modal modal-fixed-footer">
             <div class="modal-content">
                 <h4>Confirma&ccedil;&atilde;o</h4>
-                <p>Tem certeza que deseja movimentar ao projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
+                <p>Tem certeza que deseja movimentar ao projeto <span class="bold" id="nrPronacConfirmacao"></span> ?
+                </p>
             </div>
             <div class="modal-footer">
-                <a href="#!" id="botaoConfirmacaoEncaminhamento" class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
+                <a href="#!" id="botaoConfirmacaoEncaminhamento"
+                   class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
                 <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">N&atilde;o</a>
             </div>
         </div>
     </div>
 
     <script>
-        $3(document).ready(function(){
+        $3(document).ready(function () {
             $3('.modal').modal({
                     dismissible: true,
                     opacity: .5,
@@ -180,7 +189,7 @@
                     outDuration: 200,
                     startingTop: '4%',
                     endingTop: '10%',
-                    ready: function(modal, trigger) {
+                    ready: function (modal, trigger) {
                         $(modal).find('#nrPronacConfirmacao').html($3(trigger).data('nrpronac'));
                         $(modal).find('#botaoConfirmacaoEncaminhamento').attr('href', $3(trigger).data('redirectUrl'));
                     }
@@ -201,6 +210,7 @@
 
     <script type="text/javascript">
         (function ($) {
+
             $(document).ready(function () {
                 $('#enquadramento').DataTable({
                     "language": {
@@ -233,6 +243,21 @@
                 }
 
                 $3('.checkbox_legal').click(function () {
+
+                    var quantidadeCheckBoxesSelecionados = $('.checkbox_legal').filter(':checked').length;
+                    var isCheckBoxAtualSelecionado = ($(this).filter(':checked').length > 0);
+
+                    if(quantidadeCheckBoxesSelecionados == 1) {
+                        $("#idTipoDoAtoAdministrativo").val($(this).data('idtipoatoadministrativo'))
+                    } else if(quantidadeCheckBoxesSelecionados > 1) {
+                        if(isCheckBoxAtualSelecionado && $(this).data('idtipoatoadministrativo') != $("#idTipoDoAtoAdministrativo").val()) {
+                            Materialize.toast("O Encaminhamento em massa só é permitido para projetos com o mesmo Tipo de Ato Administrativo.", 4000);
+                            $(this).trigger('click');
+                        }
+                    } else {
+                        $("#idTipoDoAtoAdministrativo").val(null);
+                    }
+
                     tratarExibicaoCheckboxChecados('.checkbox_legal', '#divAssinaturaEmMassa');
                 });
 

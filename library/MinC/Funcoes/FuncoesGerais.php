@@ -447,8 +447,11 @@ function converterObjetosParaArray($objects){
 
     if(empty($objects))
         return false;
+    $object = (array)$objects;
 
-    if(count($objects) == 1 && !isset($objects[0])) {
+    xd((array)$objects);
+
+    if(count($objects) == 1) {
         return (array) $objects;
     }
 
