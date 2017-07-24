@@ -104,6 +104,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                 'Projetos.Situacao',
                 'Projetos.DtSituacao',
                 'Projetos.Orgao',
+                'tbDocumentoAssinatura.idDocumentoAssinatura',
                 'tbDocumentoAssinatura.cdSituacao',
                 'tbDocumentoAssinatura.stEstado'
             ),
