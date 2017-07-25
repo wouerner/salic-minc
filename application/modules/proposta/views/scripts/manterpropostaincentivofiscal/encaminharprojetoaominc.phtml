@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid white">
     <div class="row">
         <?php echo $this->partial("inc/menu.phtml", $this); // menu ?>
         <div class="col s10 m12 l10">
@@ -8,7 +8,7 @@
             </div>
 
             <div id="conteudo">
-                <?php if($this->resultado) : ?>
+                <?php if (!$this->resultado->Observacao) : ?>
                     <table class="tabela">
                         <tr>
                             <th colspan="2">Seu projeto possui as pend&ecirc;ncias listadas abaixo</th>
@@ -18,26 +18,19 @@
                             <th>Observa&ccedil;&atilde;o</th>
                         </tr>
                         <?php foreach ($this->resultado as $valor) : ?>
-                            <?php if ($valor->Observacao == 'PENDENTE') { ?>
                             <tr class="fundo">
                                 <td width="90%">
                                     <?php if (is_array($valor->Url)) : ?>
                                         <a href="<?php echo $this->url($valor->Url, null, true); ?>">
-                                            <?php echo $valor->dsInconsistencia; ?>
+                                            <?php echo strip_tags($valor->dsInconsistencia); ?>
                                         </a>
                                     <?php else: ?>
-                                        <?php echo $valor->dsInconsistencia; ?>
+                                        <?php echo strip_tags($valor->dsInconsistencia); ?>
                                     <?php endif; ?>
                                 </td>
-
-                                    <td class="centro" width="10%" nowrap>
-                                        <?php if ($valor->Observacao == 'PENDENTE') { ?>
-                                            <img alt="" src="<?php echo $this->baseUrl(); ?>/public/img/btn_excluir.gif"/>
-                                        <?php } else if ($valor->Observacao == 'OK') { ?>
-                                            <img alt="" src="<?php echo $this->baseUrl(); ?>/public/img/ok_16x16.png"/>
-                                        <?php } ?>
-                                    </td>
-                                <?php } ?>
+                                <td class="centro" width="10%" nowrap>
+                                    <img alt="" src="<?php echo $this->baseUrl(); ?>/public/img/btn_excluir.gif"/>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         <tr>
