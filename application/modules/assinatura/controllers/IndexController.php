@@ -80,7 +80,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
 
 
-            $this->view->idDocumentoAssinatura = $this->view->documentoAssinatura['idDocumentoAssinatura'];
+            $this->view->idDocumentoAssinatura = $idDocumentoAssinatura;
             $this->view->IdPRONAC = $this->view->documentoAssinatura['IdPRONAC'];
             $this->view->idTipoDoAtoAdministrativo = $this->view->documentoAssinatura['idTipoDoAtoAdministrativo'];
 
@@ -114,10 +114,16 @@ class Assinatura_IndexController extends Assinatura_GenericController
             ));
 
             $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
-            $this->view->assinaturas = $objAssinatura->obterAssinaturas($this->view->IdPRONAC, $this->view->idTipoDoAtoAdministrativo);
+            $this->view->assinaturas = $objAssinatura->obterAssinaturas(
+                $this->view->IdPRONAC,
+                $this->view->idTipoDoAtoAdministrativo,
+                $idDocumentoAssinatura
+            );
 
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-            $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas($this->view->idTipoDoAtoAdministrativo);
+            $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
+                $this->view->idTipoDoAtoAdministrativo
+            );
 
             $moduleAndControllerArray = explode('/', $this->view->origin);
             $this->view->moduleOrigin = $moduleAndControllerArray[0];
@@ -203,7 +209,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                     } else {
                         parent::message(
                             "Projeto assinado com sucesso!",
-                            "/{$this->moduleName}/index/visualizar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}",
+                            "/{$this->moduleName}/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}",
                             'CONFIRM'
                         );
                         die;

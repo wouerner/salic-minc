@@ -8,7 +8,11 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 
     const TIPO_ATO_ENQUADRAMENTO = 626;
 
-    public function obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo)
+    public function obterAssinaturas(
+        $idPronac,
+        $idTipoDoAtoAdministrativo,
+        $idDocumentoAssinatura = NULL
+    )
     {
         $query = $this->select();
         $query->setIntegrityCheck(false);
@@ -48,6 +52,9 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         );
         $objQuery->where("IdPRONAC = ?", $idPronac);
         $objQuery->where("tbAtoAdministrativo.idTipoDoAto = ?", $idTipoDoAtoAdministrativo);
+        if(!is_null($idDocumentoAssinatura)) {
+            $objQuery->where("tbAssinatura.idDocumentoAssinatura = ?", $idDocumentoAssinatura);
+        }
         return $this->_db->fetchAll($objQuery);
     }
 
