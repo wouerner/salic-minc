@@ -341,6 +341,21 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $error = "";
         $msg = "Distribui��o Realizada com sucesso!";
 
+        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        
+        $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+        $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
+        if (count($assinaturas) > 0) {
+            $idDocumentoAssinatura = current($assinaturas)['idDocumentoAssinatura'];
+            
+            $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $dadosDocumentoAssinatura = array();
+            $dadosDocumentoAssinatura["stEstado"] = 0;
+            $whereDocumentoAssinatura = "idDocumentoAssinatura = $idDocumentoAssinatura";
+            
+            $objDocumentoAssinatura->update($dadosDocumentoAssinatura, $whereDocumentoAssinatura);
+        }
+        
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
@@ -541,6 +556,22 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $dadosWhere["idDistribuirParecer = ?"] = $idDistribuirParecer;
         $buscaDadosProjeto = $tbDistribuirParecer->painelAnaliseTecnica($dadosWhere, null, null, null, null, $tipoFiltro);
 
+        
+        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        
+        $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+        $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
+        if (count($assinaturas) > 0) {
+            $idDocumentoAssinatura = current($assinaturas)['idDocumentoAssinatura'];
+           
+            $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $dadosDocumentoAssinatura = array();
+            $dadosDocumentoAssinatura["stEstado"] = 0;
+            $whereDocumentoAssinatura = "idDocumentoAssinatura = $idDocumentoAssinatura";
+            
+            $objDocumentoAssinatura->update($dadosDocumentoAssinatura, $whereDocumentoAssinatura);
+        }     
+                
         $error = '';
         $projetos = new Projetos();
 
