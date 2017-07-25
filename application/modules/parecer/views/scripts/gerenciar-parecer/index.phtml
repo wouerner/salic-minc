@@ -326,7 +326,7 @@ $filtros = array(
 		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
 		  ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?IdPRONAC={$dp->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/gerenciar-parecer/index?tipoFiltro=validados"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $dp->idDocumentoAssinatura; ?>"&origin=parecer/gerenciar-parecer/index?tipoFiltro=validados"
 		    data-tooltip="Visualizar documento assinado">
 		    <i class="material-icons white-text">pageview</i>
 		  </a>
