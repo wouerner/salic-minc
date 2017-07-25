@@ -12,100 +12,20 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 {
 
     /**
-     * @var integer (variï¿½vel com o id do usuï¿½rio logado)
+     * @var integer (variavel com o id do usuario logado)
      * @access private
      */
-    private $idResponsavel = 0;
-    private $idAgente = 0;
-    private $idUsuario = 0;
-    private $idPreProjeto = null;
     private $blnPossuiDiligencias = 0;
-    private $idAgenteProponente = 0;
-    private $cpfLogado = null;
-    private $usuarioProponente = "N";
 
     public function init()
     {
-        $auth = Zend_Auth::getInstance();
-        $arrAuth = array_change_key_case((array)$auth->getIdentity());
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-
-        // verifica as permissoes
-        $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 97;  // Gestor do SALIC
-        $PermissoesGrupo[] = 93;  // Coordenador de Parecerista
-        $PermissoesGrupo[] = 94;  // Parecerista
-        $PermissoesGrupo[] = 121; // Tecnico
-        $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
-
-        if (isset($auth->getIdentity()->usu_codigo)) {
-            parent::perfil(1, $PermissoesGrupo);
-        } else {
-            parent::perfil(4, $PermissoesGrupo);
-        }
-
-        $cpf = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
-
-        // Busca na SGCAcesso
-        $sgcAcesso = new Autenticacao_Model_Sgcacesso();
-        $acessos = $sgcAcesso->findBy(array('cpf' => $cpf));
-
-        // Busca na Usuarios
-        $mdlusuario = new Autenticacao_Model_Usuario();
-        $usuario = $mdlusuario->findBy(array('usu_identificacao' => $cpf));
-
-        // Busca na Agentes
-        $tblAgentes = new Agente_Model_DbTable_Agentes();
-        $agente = $tblAgentes->findBy(array('cnpjcpf' => $cpf));
-
-        if ($agente) {
-            $this->idResponsavel = $acessos['IdUsuario'];
-            $this->idAgente = $agente['idAgente'];
-            $this->view->idAgente = $agente['idAgente'];
-        }
-        if ($usuario) {
-            $this->idUsuario = $usuario['usu_codigo'];
-            if ($this->proponente != 0) {
-                $this->usuarioProponente = "S";
-            }
-        }
-
-
-        // Busca na tabela apoio ExecucaoImediata
-        $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
-        $listaExecucaoImediata = $tableVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idTipo' => 23), array('idVerificacao'));
-        $this->view->listaExecucaoImediata = $listaExecucaoImediata;
-        $this->view->listaExecucaoImediata = $listaExecucaoImediata;
-
-        $this->cpfLogado = $cpf;
-        $this->idAgenteProponente = $this->idAgente;
-        $this->usuario = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
-        $this->view->usuarioLogado = isset($arrAuth['usu_codigo']) ? 'func' : 'prop';
-        $this->view->usuarioProponente = $this->usuarioProponente;
-
         parent::init();
 
-        //recupera ID do pre projeto (proposta)
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+        if (!empty($this->idPreProjeto)) {
 
-        if (!empty($idPreProjeto)) {
-            $this->idPreProjeto = $idPreProjeto;
-            $this->view->idPreProjeto = $idPreProjeto;
+            $this->view->idPreProjeto = $this->idPreProjeto;
 
             $this->verificarPermissaoAcesso(true, false, false);
-
-            //VERIFICA SE A PROPOSTA ESTA COM O MINC
-            // @todo criei um metodo separado para verificar a situacao, fazer os testes e retirar esse trecho
-            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($this->idPreProjeto);
-            $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
-
-            //VERIFICA SE A PROPOSTA FOI ENVIADA AO MINC ALGUMA VEZ
-            $arrbusca = array();
-            $arrbusca['idprojeto = ?'] = $this->idPreProjeto;
-            $arrbusca['movimentacao = ?'] = '96';
-            $rsHistMov = $Movimentacao->buscar($arrbusca);
-            $this->view->blnJaEnviadaAoMinc = $rsHistMov->count();
 
             //VERIFICA SE A PROPOSTA TEM DILIGENCIAS
             $PreProjeto = new Proposta_Model_DbTable_PreProjeto();
@@ -115,6 +35,11 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar";
 
         }
+
+        // Busca na tabela apoio ExecucaoImediata
+        $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
+        $listaExecucaoImediata = $tableVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idTipo' => 23), array('idVerificacao'));
+        $this->view->listaExecucaoImediata = $listaExecucaoImediata;
     }
 
     /**
@@ -123,6 +48,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      * @param mixed $idPreProjeto
      * @access public
      * @return void
+     * @deprecated existe o metodo $this->verificarPermissaoAcesso();
      */
     public function verificaPermissaoAcessoProposta($idPreProjeto)
     {
@@ -612,17 +538,14 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
     public function responsabilidadesocialAction()
     {
-
     }
 
     public function detalhestecnicosAction()
     {
-
     }
 
     public function outrasinformacoesAction()
     {
-
     }
 
     /**
@@ -655,73 +578,66 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $validacao = new stdClass();
         $listaValidacao = array();
 
-        $sp = new Proposta_Model_DbTable_PreProjeto();
+        if (!empty($idPreProjeto)) {
 
-        # verifica se existe alguma pendencia no checklist de proposta
-        $validaProposta = $this->validarEnvioPropostaComSp($idPreProjeto);
+            $tbPreProjeto = new Proposta_Model_DbTable_PreProjeto();
 
-        $pendencias = in_array('PENDENTE', array_column(converterObjetosParaArray($validaProposta), 'Observacao'));
-
-        if ($pendencias) {
-            $this->view->resultado = $validaProposta;
-        } else {
+            if (!$tbPreProjeto->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mssql) {
+                $arrResultado = $this->validarEnvioPropostaSemSp($idPreProjeto);
+            } else {
+                $arrResultado = $this->validarEnvioPropostaComSp($idPreProjeto);
+            }
 
             $tblProjetos = new Projetos();
             $projeto = array_change_key_case($tblProjetos->findBy(array('idprojeto = ?' => $idPreProjeto)));
             $idPronac = $projeto['idpronac'];
 
-            $planilhaproposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
-            $ValorTotalPlanilha = $planilhaproposta->somarPlanilhaProposta($idPreProjeto)->toArray();
+            if ($arrResultado->Observacao === true) {
 
-            # validar valor original e valor total atual da proposta
-            if ($ValorTotalPlanilha['soma'] > $projeto['solicitadoreal']) {
-                $validacao->dsInconsistencia = 'O valor total do projeto n&atilde;o pode ultrapassar o valor anteriormente solicitado!';
-                $validacao->Observacao = 'PENDENTE';
-                $validacao->Url = array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'produtoscadastrados', 'idPreProjeto' => $idPreProjeto);
-                $listaValidacao[] = clone($validacao);
-            }
+                $planilhaproposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+                $ValorTotalPlanilha = $planilhaproposta->somarPlanilhaProposta($idPreProjeto)->toArray();
 
-            $validado = true;
-            foreach ($listaValidacao as $valido) {
-                if ($valido->Observacao == 'PENDENTE') {
-                    $validado = false;
-                    break;
-                }
-            }
-
-            if ($params['confirmarenvioaominc'] == true) {
-                if ($validado) {
-
-                    if ($projeto['area'] == 2) {
-                        $orgaoUsuario = 171; # 171 - SAV/DAP
-                    } else {
-                        $orgaoUsuario = 262; # 262 - SEFIC/DIAAPI
-                    }
-
-                    # verificar se o projeto já possui avaliador
-                    $tbAvaliacao = new Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
-                    $avaliacao = $tbAvaliacao->buscarUltimaAvaliacao($idPronac);
-
-                    if (!empty($avaliacao)) {
-                        $tbAvaliacao->inserirAvaliacao($idPronac, $orgaoUsuario, $avaliacao['idTecnico']);
-                    } else {
-                        $tbAvaliacao->inserirAvaliacao($idPronac, $orgaoUsuario);
-                    }
-
-                    # alterar a situacao do projeto
-                    $codigoSituacao = 'B20'; #B20 - Projeto adequado a realidade de execucao
-                    $providenciaTomada = "Projeto ajustado pelo proponente e encaminhado ao MinC para avalia&ccedil;&atilde;o";
-
-                    $tblProjetos->alterarSituacao($idPronac, '', $codigoSituacao, $providenciaTomada);
-
-                    parent::message("Projeto encaminhado com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/listarprojetos/listarprojetos", "CONFIRM");
+                # validar valor original e valor total atual da proposta
+                if ($ValorTotalPlanilha['soma'] > $projeto['solicitadoreal']) {
+                    $validacao->dsInconsistencia = 'O valor total do projeto n&atilde;o pode ultrapassar o valor anteriormente solicitado!';
+                    $validacao->Observacao = false;
+                    $validacao->Url = array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'produtoscadastrados', 'idPreProjeto' => $idPreProjeto);
+                    $listaValidacao[] = clone($validacao);
                 } else {
-                    parent::message("Alguns erros encontrados no envio do projeto", "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc/idPreProjeto/" . $idPreProjeto, "ERROR");
+                    $listaValidacao = $arrResultado;
+                    $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc";
                 }
             }
-            $this->view->resultado = $listaValidacao;
-            $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc";
+
+
+            if ($params['confirmarenvioaominc'] == true && $arrResultado->Observacao === true) {
+
+                if ($projeto['area'] == 2) {
+                    $orgaoUsuario = 171; # 171 - SAV/DAP
+                } else {
+                    $orgaoUsuario = 262; # 262 - SEFIC/DIAAPI
+                }
+
+                # verificar se o projeto já possui avaliador
+                $tbAvaliacao = new Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
+                $avaliacao = $tbAvaliacao->buscarUltimaAvaliacao($idPronac);
+
+                $avaliador = isset($avaliacao['idTecnico']) ? $avaliacao['idTecnico'] : '';
+
+                $tbAvaliacao->inserirAvaliacao($idPronac, $orgaoUsuario, $avaliador);
+
+                # alterar a situacao do projeto
+                $codigoSituacao = 'B20'; #B20 - Projeto adequado a realidade de execucao
+                $providenciaTomada = "Projeto ajustado pelo proponente e encaminhado ao MinC para avalia&ccedil;&atilde;o";
+
+                $tblProjetos->alterarSituacao($idPronac, '', $codigoSituacao, $providenciaTomada);
+
+                parent::message("Projeto encaminhado com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/listarprojetos/listarprojetos", "CONFIRM");
+            } else {
+                $this->view->resultado = $listaValidacao;
+            }
         }
+
     }
 
 
@@ -732,8 +648,6 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      */
     public function excluirAction()
     {
-        /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        $this->verificarPermissaoAcesso(true, false, false);
 
         if ($this->isEditarProjeto) {
             parent::message("N&atilde;o foi possível realizar a opera&ccedil;&atilde;o!", "/proposta/manterpropostaincentivofiscal/listarproposta", "ERROR");
@@ -764,8 +678,6 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
     public function enviarPropostaAction()
     {
         $arrResultado = array();
-
-        $this->verificarPermissaoAcesso(true, false, false);
 
         $params = $this->getRequest()->getParams();
 
@@ -1007,12 +919,13 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $columns = $this->getRequest()->getParam('columns');
         $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : array("idpreprojeto DESC");
 
-        $idAgente = empty($idAgente) ? $this->idAgente : $idAgente;
 
-        if(empty($idAgente)) {
+        $idAgente = ((int)$idAgente == 0) ? $this->idAgente : (int)$idAgente;
+
+        if (empty($idAgente)) {
             $this->_helper->json(array(
-                "data" =>  0,
-                'recordsTotal' =>  0,
+                "data" => 0,
+                'recordsTotal' => 0,
                 'draw' => 0,
                 'recordsFiltered' => 0));
             die;
