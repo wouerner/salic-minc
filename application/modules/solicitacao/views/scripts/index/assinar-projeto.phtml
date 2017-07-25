@@ -1,0 +1,138 @@
+<main>
+    <?php
+    $links = array(
+        array('Gerenciar Projetos' => array(
+            'module' => 'assinatura',
+            'controller' => 'index',
+            'action' => 'gerenciar-assinaturas'
+        )),
+        array('Assinar' => array())
+    );
+    ?>
+    <div class="row">
+        <div class="col s1"></div>
+        <div class="col s10">
+            <?php gerarBreadCrumb($links); ?>
+        </div>
+        <div class="col s1"></div>
+    </div>
+    <div class="content padding20 clearfix">
+        <form action="<?php
+        echo $this->url(
+                array(
+                    'module' => 'assinatura',
+                    'controller' => 'index',
+                    'action' => 'assinar-projeto'
+                )
+            )
+            . "?IdPRONAC={$this->IdPRONAC}&idTipoDoAtoAdministrativo={$this->idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$this->isMovimentarAssinatura}";
+        ?>"
+        method="post">
+            <input type="hidden" name="IdPRONAC" value="<?php echo $this->IdPRONAC ?>" />
+            <input type="hidden" name="origin" value="<?php echo $this->origin ?>" />
+
+            <div class="row">
+                <div class="col s1"></div>
+                <div class="col s10">
+                    <h3>Assinar</h3>
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row">
+                <div class="col s1"></div>
+                <div class="col s2">
+                    <p>
+                        <b>
+                            <label class="black-text">PRONAC</label>
+                        </b>
+                    </p>
+                    <div class="padding20 bordered bold">
+                        <?php foreach($this->projeto as $projeto):  ?>
+                        <?php echo "<div class='margin5'>{$projeto['AnoProjeto']}{$projeto['Sequencial']}</div>"; ?>
+                        <?php endforeach;  ?>
+                    </div>
+                </div>
+                <div class="col s8">
+                    <p>
+                        <b>
+                            <label class="black-text">Nome do Projeto</label>
+                        </b>
+                    </p>
+                    <div class="padding20 bordered bold">
+                        <?php foreach($this->projeto as $projeto):  ?>
+                            <?php echo "<div class='margin5'>{$projeto['NomeProjeto']}</div>"; ?>
+                        <?php endforeach;  ?>
+                    </div>
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row">
+                <div class="col s1"></div>
+                <div class="col s10">
+                    <p>
+                        <b>
+                            <label class="black-text">Tipo Documento</label>
+                        </b>
+                    </p>
+                    <p class="padding20 bordered bold">
+                        <?php echo $this->tipoDocumento['Descricao']; ?>
+                    </p>
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row">
+                <div class="col s1"></div>
+                <div class="col s5">
+                    <p>
+                        <b>
+                            <label class="black-text">Assinante: </label>
+                        </b>
+                    </p>
+                    <div class="padding20 bordered bold">
+                        <?php echo $this->usuario->usu_nome; ?>
+                    </div>
+                </div>
+                <div class="col s5">
+                    <p>
+                        <b>
+                            <label class="black-text">Cargo: </label>
+                        </b>
+                    </p>
+                    <div class="padding20 bordered bold">
+                        <?php echo $this->perfilAssinante['dsCargoAssinante'] ?>
+                    </div>
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <div class="row">
+                <div class="col s1"></div>
+                <div class="col s10">
+                    <p>
+                        <label class="black-text">
+                            <b>
+                                De acordo do assinante
+                            </b>
+                            <font color="#f08080">*</font>
+                        </label>
+                    </p>
+                    <div class="padding20 bordered" style="height: 200px;">
+                        <textarea style="height: 100%; border: 1px solid grey;"
+                                  class="padding20 bordered"
+                                  id="dsManifestacao"
+                                  name="dsManifestacao"><?php echo $this->dsManifestacao ?></textarea>
+                    </div>
+                </div>
+                <div class="col s1"></div>
+            </div>
+            <?php echo $this->templateAutenticacao ?>
+            <div class="margin-bottom30">&nbsp;</div>
+            <div class="row center-align">
+                <a class="btn waves-effect waves-dark"
+                   href="<?php echo "/{$this->moduleOrigin}/{$this->controllerOrigin}/gerenciar-assinaturas"; ?>">Voltar</a>
+                <button type="submit"
+                        class="btn waves-effect waves-dark">Assinar</button>
+            </div>
+        </form>
+    </div>
+    <br clear="all"/>
+</main>
