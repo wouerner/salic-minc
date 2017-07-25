@@ -1,5 +1,307 @@
-<style>
+<div class="container-fluid">
 
+    <div class="row">
+
+        <?php echo $this->partial("inc/menu.phtml", $this); ?>
+
+        <div class="content col s10 m12 l10 planilha-produtos">
+            <?php
+            gerarBreadCrumb(array(
+                array('Lista de Propostas' => array('controller' => 'manterpropostaincentivofiscal', 'action' => 'listarproposta')),
+                array('Or&ccedil;amento' => '')
+            ));
+            ?>
+
+            <div class="clearfix"></div>
+            <h5 class="light">Custo por produto</h5>
+            <?php if (false) : ?>
+                <?php //if( $this->PlanilhaSalvo) : ?>
+                <p class="right-align" style="position: absolute; top: 167px; right: 100px">
+                    <a id="btn-restaurar-planilha" class="btn-floating waves-effect waves-light btn tooltipped btn-info"
+                       data-tooltip="Restaurar planilha"><i class="material-icons left">restore</i></a>
+                </p>
+            <?php endif; ?>
+            <div id="container-list"
+                 data-ajax-render='/proposta/manterorcamento/listarprodutos/idPreProjeto/<?php echo (isset($this->idPreProjeto)) ? $this->idPreProjeto : ''; ?>'></div>
+            <div id="custosvinculados"
+                 data-ajax-render='/proposta/manterorcamento/resumoplanilha/idPreProjeto/<?php echo (isset($this->idPreProjeto)) ? $this->idPreProjeto : ''; ?>'></div>
+        </div>
+    </div>
+</div>
+<div id="msg"></div>
+<div id="rodapeConteudo"><span></span></div>
+<br clear="all"/>
+<div id="modal-pre-loader" class="modal modal-pre-loader">
+    <div class="modal-header center valign"><h5>Aguarde!</h5></div>
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s4">
+                <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-blue-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="msg-pre-loader" class="col s8">
+                <p>Carregando...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        <?php if (!$this->isEditavel) : ?>
+        JSBloquearAlteracaoFormulario();
+        <?php endif; ?>
+    });
+
+    $3(document).ajaxStart(function () {
+        $3('#modal-pre-loader').modal('open');
+    });
+
+    $3(document).ajaxComplete(function () {
+        $3('#modal-pre-loader').modal('close');
+    });
+
+    $3(document).ready(function () {
+
+        $3('.modal-pre-loader').modal();
+
+        window.dispatchEvent(new Event('resize'));
+
+        <?php if(false) : ?>
+        <?php //if( $this->PlanilhaSalvo) : ?>
+        $3('body').on('click', '#btn-restaurar-planilha', function () {
+
+            $3("#msg").html('Tem certeza que deseja restaurar a planilha?\n Esta acao nao podera ser desfeita!');
+
+            $("#msg").dialog
+            ({
+                width: 350,
+                height: 200,
+                modal: true,
+                draggable: false,
+                resizable: false,
+                closeOnEscape: false,
+                buttons: {
+                    'N\xE3o': function () {
+                        $(this).dialog('close');
+                        $(this).dialog('close');
+                    },
+                    'Sim': function () {
+                        var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'restaurarplanilha')); ?>";
+                        var dados = {idPreProjeto: <?php echo isset($this->idPreProjeto) ? $this->idPreProjeto : '' ?>};
+
+                        $.post(urlAction, dados, function (result) {
+                            if (result.status == '1') {
+                                Materialize.toast(result.msg, 4000, 'green white-text');
+
+                                var divRender = $('div[data-ajax-render]');
+
+                                $3.each($3('div[data-ajax-render]'), function () {
+                                    $3.ajaxRender({
+                                        strUrl: $(this).attr('data-ajax-render'),
+                                        strTarget: '#' + $(this).attr('id')
+                                    });
+                                });
+
+                            } else {
+                                Materialize.toast(result.msg, 8000, 'red darken-1 white-text');
+                            }
+                        });
+
+                        $(this).dialog('close');
+                    }
+                }
+            });
+
+            $3(".ui-dialog-titlebar-close").remove();
+
+            return false;
+
+        });
+        <?php endif; ?>
+
+        $3(document).on('click', '#toast-container .toast', function () {
+            $3(this).fadeOut(function () {
+                $(this).remove();
+            });
+
+        });
+    });
+</script>
+
+
+<script>
+    $3(document).ready(function () {
+
+        $3('body').on('click', '.btn-salvar', function () {
+
+            var validar = true;
+            $3('.valida').each(function () {
+                if ($3(this).val() == '') {
+                    validar = false;
+                }
+            });
+
+            if (validar == false) {
+                Materialize.toast("Dados obrigat&oacute;rios n&atilde;o informados!", 4000);
+                return false;
+            } else {
+                if ($3("#qtd").val() == 0) {
+                    Materialize.toast('Quantidade n&atilde;o pode ser igual a zero', 4000);
+                    $3("#qtd").focusin();
+                    return false;
+                }
+
+                if ($3("#ocorrencia").val() == 0) {
+                    Materialize.toast('Ocorr&ecirc;ncia n&atilde;o pode ser igual a zero', 4000);
+                    $3("#ocorrencia").focusin();
+                    return false;
+                }
+
+                var vlunitario = $3("#vlunitario").val();
+                vlunitario = vlunitario.replace(/\D/g, "");
+                vlunitario = vlunitario.replace(/(\d{0})(\d)/, "$1$2");
+
+                if (vlunitario == 0) {
+                    Materialize.toast('Valor unit&aacute;rio n&atilde;o pode ser igual a zero', 4000);
+                    $3("#vlunitario").focusin();
+                    return false;
+                }
+
+                if ($3("#qtdDias").val() == 0) {
+                    Materialize.toast('Quantidade de dias n&atilde;o pode ser igual a zero', 4000);
+                    $3("#qtdDias").focusin();
+                    return false;
+                }
+
+                if ($3("#justificativa.valida").val() == '') {
+                    Materialize.toast('Justificativa neste caso &eacute; obrigat&oacute;ria!', 4000);
+                    $3("#justificativa").focus();
+                    return false;
+                }
+
+
+                $3.post($3('#form').attr('action'), $3('#form').serialize(), function (result) {
+                    event.preventDefault();
+                    $3.each(result, function (index, item) {
+                        console.log(result);
+
+                        var uf = item.dados.UfDespesa;
+                        var mun = item.dados.MunicipioDespesa;
+                        var stringLocalizacao = $3("select option[value='" + uf + ":" + mun + "']").text();
+
+                        if (item.status == '1') {
+                            if (item.action == 'update') {
+                                $("#item-planilha-" + item.idPlanilhaProposta).replaceWith(item.html);
+                            }
+                            else if (item.action == 'insert') {
+
+                                var produto = item.dados.idProduto;
+                                var etapa   = item.dados.idEtapa;
+                                var idEtapa = "#etapa" + produto + "" + etapa + "" + mun;
+
+                                $3(idEtapa + " div.info").hide();
+                                $3(idEtapa + ' table tbody').append(item.html);
+                                $3("#planilhaitem").focus();
+                            }
+
+                            if (item.close == '1')
+                                $3('#modal').modal('close');
+
+                            $3('#form')[0].reset();
+                            Materialize.toast(stringLocalizacao + ' ' + item.msg, 4000, 'green white-text');
+                        } else {
+                            Materialize.toast(stringLocalizacao + ' ' + item.msg, 8000, 'red darken-1 white-text');
+                        }
+                    });
+
+                    $3.each($3('#custosvinculados[data-ajax-render]'), function () {
+                        $3.ajaxRender({
+                            strUrl: $3('#custosvinculados').attr('data-ajax-render'),
+                            strTarget: '#custosvinculados'
+                        });
+                    });
+                });
+            }
+            return false;
+        });
+
+        // verificar mediana do valor unitario
+        $3('body').on('focusout', '#vlunitario, #planilhaitem', function () {
+
+            var msg_pre_loader = $3('#modal-pre-loader #msg-pre-loader p').html();
+            var valor_unitario = $3('#vlunitario');
+            var url_action = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'buscar-valor-mediana-ajax')); ?>";
+            var dados = [];
+
+            if (valor_unitario.val() == 0)
+                return false;
+
+            abrirPreLoader('Verificando valor unitário ...');
+
+            dados = {
+                idproduto: $3("#produto").val(),
+                idplanilhaitem: $3("#planilhaitem").val(),
+                idunidade: $3("#unidade").val(),
+                vlunitario: valor_unitario.val(),
+                idufdespesa: $3("#uf").val(),
+                idmunicipiodespesa: $3("#municipio").val()
+            };
+
+            $3.post(url_action, dados, function (result) {
+
+                if (result.status == '1') {
+                    $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
+                    resetDadosMediana();
+
+                } else {
+                    Materialize.toast(result.msg, 60000, 'mensagem1 orange darken-3 white-text');
+                    $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
+                    $3('#justificativa').addClass('valida');
+                    $3("#vlunitario").parent().addClass("danger");
+                    $3("#justificativa_current_item label").text('Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
+                    $3("#justificativa_current_item .stCustoPraticado").val(1);
+                }
+
+                fecharPreLoader(msg_pre_loader)
+            });
+
+            return false;
+        });
+
+        function resetDadosMediana() {
+            $3('#justificativa').removeClass('valida');
+            $3("#vlunitario").parent().removeClass("danger");
+            $3("#justificativa_current_item label").text('Detalhamento / Justificativa / Observa\xE7\xF5es (Opcional)').parent().removeClass("danger");
+            $3("#justificativa_current_item .stCustoPraticado").val(0);
+        }
+
+        function abrirPreLoader(msg) {
+            $3('#modal-pre-loader #msg-pre-loader p').html(msg);
+            $3('#modal-pre-loader').modal('open');
+        }
+
+        function fecharPreLoader(msg) {
+            $3('#modal-pre-loader').modal('close');
+            $3('#modal-pre-loader #msg-pre-loader p').html(msg);
+        }
+
+    });
+</script>
+
+<style>
     body {
         background: transparent;
     }
@@ -31,14 +333,17 @@
         padding: 0px;
         margin-bottom: 20px;
     }
+
     .collapsible {
         box-shadow: none;
         /*border-right: none;*/
         /*border-left: none;*/
     }
+
     .collapsible-header {
         padding: 8px;
     }
+
     .collapsible-header:hover {
         background: #fdfbfb;
     }
@@ -92,19 +397,19 @@
     }
 
     .tabs .tab {
-        width:20%;
-        float:left;
+        width: 20%;
+        float: left;
     }
 
     /*.tabs .tab:nth-child(5) {*/
-        /*width:24%;*/
-        /*background: red;*/
+    /*width:24%;*/
+    /*background: red;*/
     /*}*/
 
     @media screen and (max-width: 768px) {
         .tabs .tab {
-            width:100%;
-            float:left;
+            width: 100%;
+            float: left;
         }
     }
 
@@ -194,9 +499,9 @@
     }
 
     .modal.bottom-sheet {
-        max-height: 70%;
-        height: 70%;
-        overflow-y: visible; /* select ultrapassa a modal */
+        max-height: 80%;
+        height: 80%;
+        overflow-y: scroll; /* select ultrapassa a modal */
     }
 
     .section {
@@ -206,7 +511,8 @@
     .btn-close-modal {
         margin-right: 10px;
     }
-    .section  span.badge {
+
+    .section span.badge {
         font-size: 1.2rem;
     }
 
@@ -215,7 +521,7 @@
         margin-left: 30px;
     }
 
-    .section  span.badge  i {
+    .section span.badge i {
         /*font-size: 1rem;*/
         position: absolute;
         top: 28px;
@@ -223,7 +529,7 @@
     }
 
     .modal.modal-pre-loader {
-        width: 300px;
+        width: 400px;
         height: 180px;
         padding: 10px;
     }
@@ -263,6 +569,7 @@
         position: relative;
         padding-right: 40px;
     }
+
     #toast-container .toast::after {
         font-family: 'Material Icons';
         content: "close";
@@ -281,287 +588,4 @@
     #custosvinculados .preloader-wrapper {
         display: none;
     }
-
-
 </style>
-
-<div class="container-fluid">
-
-    <div class="row">
-
-        <?php echo $this->partial("inc/menu.phtml", $this); ?>
-
-        <div class="content col s10 m12 l10 planilha-produtos">
-            <?php
-            gerarBreadCrumb(array(
-                array('Lista de Propostas' => array('controller' => 'manterpropostaincentivofiscal', 'action' => 'listarproposta')),
-                array('Or&ccedil;amento' => '')
-            ));
-            ?>
-
-            <div class="clearfix"></div>
-            <h5 class="light">Custo por produto</h5>
-            <?php if( false ) : ?>
-            <?php //if( $this->PlanilhaSalvo) : ?>
-                <p class="right-align" style="position: absolute; top: 167px; right: 100px">
-                    <a id="btn-restaurar-planilha" class="btn-floating waves-effect waves-light btn tooltipped btn-info" data-tooltip="Restaurar planilha"><i class="material-icons left">restore</i></a>
-                </p>
-            <?php endif; ?>
-            <div id="container-list" data-ajax-render='/proposta/manterorcamento/listarprodutos/idPreProjeto/<?php echo( isset($this->idPreProjeto) ) ? $this->idPreProjeto : ''; ?>'></div>
-            <div id="custosvinculados" data-ajax-render='/proposta/manterorcamento/resumoplanilha/idPreProjeto/<?php echo( isset($this->idPreProjeto) ) ? $this->idPreProjeto : ''; ?>'></div>
-        </div>
-    </div>
-</div>
-    <div id="msg"></div>
-    <div id="rodapeConteudo"><span></span></div>
-    <br clear="all" />
-<div id="modal-pre-loader" class="modal modal-pre-loader">
-    <div class="modal-header center valign"><h5>Aguarde!</h5></div>
-    <div class="modal-content">
-        <div class="row">
-            <div class="col s4">
-                <div class="preloader-wrapper small active">
-                    <div class="spinner-layer spinner-blue-only">
-                        <div class="circle-clipper left">
-                            <div class="circle"></div>
-                        </div><div class="gap-patch">
-                            <div class="circle"></div>
-                        </div><div class="circle-clipper right">
-                            <div class="circle"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="msg-pre-loader" class="col s8">
-                <p>Carregando...</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-
-$(document).ready(function(){
-    <?php if (!$this->isEditavel) : ?>
-        JSBloquearAlteracaoFormulario();
-    <?php endif; ?>
-});
-
-$3(document).ajaxStart(function() {
-    $3('#modal-pre-loader').modal('open');
-});
-
-$3(document).ajaxComplete(function () {
-    $3('#modal-pre-loader').modal('close');
-});
-
-$3(document).ready(function () {
-
-    $3('.modal-pre-loader').modal();
-
-    $3('body').on('click', '.btn-salvar', function () {
-
-
-        var validar = true;
-        $3('.valida').each(function () {
-            if ($3(this).val() == '') {
-                validar = false;
-            }
-        });
-
-        if (validar == false) {
-            Materialize.toast("Dados obrigat&oacute;rios n&atilde;o informados!", 4000);
-            return false;
-        } else {
-            if ($3("#qtd").val() == 0) {
-                Materialize.toast('Quantidade n&atilde;o pode ser igual a zero', 4000);
-                $3("#qtd").focusin();
-                return false;
-            }
-
-            if ($3("#ocorrencia").val() == 0) {
-                Materialize.toast('Ocorr&ecirc;ncia n&atilde;o pode ser igual a zero', 4000);
-                $3("#ocorrencia").focusin();
-                return false;
-            }
-
-            var vlunitario = $3("#vlunitario").val();
-            vlunitario = vlunitario.replace(/\D/g, "");
-            vlunitario = vlunitario.replace(/(\d{0})(\d)/, "$1$2");
-
-            if (vlunitario == 0) {
-                Materialize.toast('Valor unit&aacute;rio n&atilde;o pode ser igual a zero', 4000);
-                $3("#vlunitario").focusin();
-                return false;
-            }
-
-            if ($3("#qtdDias").val() == 0) {
-                Materialize.toast('Quantidade de dias n&atilde;o pode ser igual a zero', 4000);
-                $3("#qtdDias").focusin();
-                return false;
-            }
-
-            if ($3("#editor.valida").val() == '') {
-                Materialize.toast('Justificativa neste caso &eacute; obrigat&oacute;ria!', 4000);
-                $3("#editor").focus();
-                return false;
-            }
-
-
-            $3.post($3('#form').attr('action'), $3('#form').serialize(), function (result) {
-
-                $3.each(result, function(index, item) {
-                    if (item.status == '1') {
-                        if( item.action == 'update') {
-                            $("#item-planilha-" +item.idPlanilhaProposta).replaceWith(item.html);
-                        }
-                        else if( item.action == 'insert') {
-
-                            var produto = item.dados.idProduto;
-                            var etapa = item.dados.idEtapa;
-                            var mun = item.dados.MunicipioDespesa;
-
-                            var idEtapa = "#etapa" + produto + "" + etapa + "" + mun;
-
-                            $3(idEtapa + " div.info").hide();
-                            $3(idEtapa + ' table tbody').append(item.html);
-                            $3("#planilhaitem").focus();
-                        }
-
-                        if(item.close == '1' )
-                            $3('#modal').modal('close');
-
-                        $3('#form')[0].reset();
-                        Materialize.toast(item.msg, 4000, 'green white-text');
-                    } else {
-                        Materialize.toast(item.msg, 8000, 'red darken-1 white-text');
-                    }
-                });
-
-                $3.each($('#custosvinculados[data-ajax-render]'), function () {
-                    $3.ajaxRender({
-                        strUrl: $('#custosvinculados').attr('data-ajax-render'),
-                        strTarget: '#custosvinculados'
-                    });
-                });
-            });
-         }
-         return false;
-    });
-    window.dispatchEvent(new Event('resize'));
-
-    <?php if(false) : ?>
-    <?php //if( $this->PlanilhaSalvo) : ?>
-        $3('body').on('click', '#btn-restaurar-planilha', function () {
-
-            $3("#msg").html('Tem certeza que deseja restaurar a planilha?\n Esta acao nao podera ser desfeita!');
-
-            $("#msg").dialog
-            ({
-                width: 350,
-                height: 200,
-                modal: true,
-                draggable: false,
-                resizable: false,
-                closeOnEscape: false,
-                buttons: {
-                    'N\xE3o': function () {
-                        $(this).dialog('close');
-                        $(this).dialog('close');
-                    },
-                    'Sim': function () {
-                        var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'restaurarplanilha')); ?>";
-                        var dados = { idPreProjeto: <?php echo isset($this->idPreProjeto) ? $this->idPreProjeto : '' ?>};
-
-                        $.post(urlAction, dados, function (result) {
-                            if (result.status == '1') {
-                                Materialize.toast(result.msg, 4000, 'green white-text');
-
-                                var divRender = $('div[data-ajax-render]');
-
-                                $3.each($3('div[data-ajax-render]'), function () {
-                                    $3.ajaxRender({strUrl: $(this).attr('data-ajax-render'), strTarget: '#' + $(this).attr('id')});
-                                });
-
-                            } else {
-                                Materialize.toast(result.msg, 8000, 'red darken-1 white-text');
-                            }
-                        });
-
-                        $(this).dialog('close');
-                    }
-                }
-            });
-
-            $3(".ui-dialog-titlebar-close").remove();
-
-            return false;
-
-        });
-    <?php endif; ?>
-
-    $3('body').on('focusout', '#vlunitario', function () {
-        if($3(this).val() == 0)
-            return false;
-
-        var msg_old = $3('#modal-pre-loader #msg-pre-loader p').html();
-        $3('#modal-pre-loader #msg-pre-loader p').html('Verificando valor unitário ...');
-
-        $3('#modal-pre-loader').modal('open');
-
-        $3("#btn-salvar").removeClass('btn-salvar').addClass('disabled');
-        $3('#editor1').addClass('valida');
-
-        var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'buscar-valor-mediana-ajax')); ?>";
-
-        var dados = {
-            idproduto: $3("#produto").val(),
-            idplanilhaitem: $3("#planilhaitem").val(),
-            idunidade: $3("#unidade").val(),
-            idufdespesa: $3("#uf").val(),
-            idmunicipiodespesa: $3("#municipio").val(),
-            vlunitario: $3("#vlunitario").val()
-        };
-
-        $.post(urlAction, dados, function (result) {
-            if (result.status == '1') {
-                $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
-                $3('#editor1').removeClass('valida');
-                $3("#vlunitario").parent().removeClass("danger");
-                $3(".justificativa label").text('Detalhamento / Justificativa / Observa\xE7\xF5es (Opcional)').parent().removeClass("danger");
-                $3("#stCustoPraticado").val(0);
-            } else {
-                $3("#btn-salvar").addClass('disabled').removeClass('btn-salvar ');
-                $3('#editor1').addClass('valida');
-                Materialize.toast(result.msg, 60000, 'mensagem1 orange darken-3 white-text');
-                $3("#vlunitario").parent().addClass("danger");
-                $3(".justificativa label").text('Justificativa para valor unit\xE1rio maior que R$ ' + result.valorMediana + ' (Obrigat\xF3rio)').parent().addClass("danger");
-                $3("#stCustoPraticado").val(1);
-            }
-
-            $3('#modal-pre-loader').modal('close');
-            $3('#modal-pre-loader #msg-pre-loader p').html(msg_old);
-
-        });
-        return false;
-    });
-
-    $3('body').on('keyup', '#editor1', function () {
-        if ($3("#editor1.valida").val() != '') {
-            $3("#btn-salvar").addClass('btn-salvar').removeClass('disabled');
-            $3('.mensagem1').fadeOut(function(){
-                $(this).remove();
-            });
-        }else{
-            $3("#btn-salvar").removeClass('btn-salvar').addClass('disabled');
-        }
-    });
-
-    $3(document).on('click', '#toast-container .toast', function() {
-        $3(this).fadeOut(function(){
-            $(this).remove();
-        });
-
-    });
-});
-</script>
