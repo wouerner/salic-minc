@@ -169,10 +169,10 @@ foreach($this->buscar as $d) {
 		  || (($d->stPrincipal == 0) && ($this->IsProdutosPendentesParecer($d->IdPRONAC, $d->idProduto) == 0)  && ($dilig == 0))
 		  ) :?>
 		  <?php if($this->verificarIN2017($d->IdPRONAC)): ?>
-		  
+          
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?IdPRONAC={$d->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/analise-inicial"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $d->idDocumentoAssinatura; ?>"&origin=parecer/analise-inicial"
 		    data-tooltip="Visualizar documento assinado">
 		    <i class="material-icons white-text">pageview</i>
 		  </a>
