@@ -4823,11 +4823,6 @@ class Projetos extends MinC_Db_Table_Abstract
                 'distribuirParecer.idProduto = produto.Codigo',
                 array('dsProduto' => 'Descricao')
             )
-            ->joinLeft(
-                array('documentoAssinatura' => 'tbDocumentoAssinatura'),
-                'documentoAssinatura.IdPRONAC = distribuirParecer.idPronac',
-                array('idDocumentoAssinatura' => 'idDocumentoAssinatura')
-            )
 //                ->joinLeft(
 //                        array('diligencia' => 'tbDiligencia'),
 //                        'diligencia.idPronac = projeto.idPronac',
@@ -4842,7 +4837,6 @@ class Projetos extends MinC_Db_Table_Abstract
             ->where('distribuirParecer.stEstado = ?', 0)
             ->where('distribuirParecer.TipoAnalise in (?)', array(1, 3))
             ->where('Situacao in (?)', array('B11', 'B14'))
-            ->where('documentoAssinatura.stEstado = ?', 1)
 //                ->where('diligencia.idProduto = produto.Codigo')
 //                ->order('diligencia.DtSolicitacao')
             ->order('projeto.IdPRONAC')
@@ -4852,6 +4846,7 @@ class Projetos extends MinC_Db_Table_Abstract
         foreach ($where as $key => $val) {
             $select->where($key, $val);
         }
+
 
         return $this->fetchAll($select);
     }
