@@ -48,6 +48,29 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
     private $idAtoAdministrativo;
 
     /**
+     * @var array $dadosDocumentoAssinatura
+     */
+    private $dadosDocumentoAssinatura;
+
+    /**
+     * @return array
+     */
+    public function getDadosDocumentoAssinatura()
+    {
+        return $this->dadosDocumentoAssinatura;
+    }
+
+    /**
+     * @param array $dadosDocumentoAssinatura
+     * @return MinC_Assinatura_Model_Assinatura
+     */
+    public function setDadosDocumentoAssinatura($dadosDocumentoAssinatura)
+    {
+        $this->dadosDocumentoAssinatura = $dadosDocumentoAssinatura;
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getIdAtoAdministrativo()
