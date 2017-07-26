@@ -10,6 +10,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA;
         
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
@@ -117,6 +118,9 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             }
         }
         $this->view->checarValidacaoSecundarios = $checarValidacaoSecundarios;
+
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         
         $paginacao = array(
             "pag" => $pag,
