@@ -110,40 +110,47 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
+    /**
+     * Transposição da view "vwAtoAdministrativo".
+     */
     public function obterAtoAdministrativoDetalhado() {
         $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
         $objQuery->from(
             $this->_name,
             '*',
             $this->_schema
         );
-//        $objQuery->joinInner(
-//            array("Verificacao" => "Verificacao"),
-//            "{$this->_name}.idTipoDoAto = Verificacao.idVerificacao",
-//            array("dsAtoAdministrativo" =>"Descricao"),
-//            $this->_schema
-//        );
-//        $objQuery->joinInner(
-//            array("Verificacao" => "Verificacao"),
-//            "{$this->_name}.idTipoDoAto = Verificacao.idVerificacao",
-//            array("dsAtoAdministrativo" =>"Descricao"),
-//            $this->_schema
-//        );
 
-//ALTER VIEW dbo.vwAtoAdministrativo
-//AS
-//
-//SELECT a.idAtoAdministrativo,a.idTipoDoAto,,a.idCargoDoAssinante,c.Descricao as dsCargoDoAssinante,
-//       a.idOrgaoDoAssinante,d.Sigla as dsOrgaoDoAssinante,a.idPerfilDoAssinante,e.gru_nome as dsPerfil,
-//	   a.idOrdemDaAssinatura,a.stEstado
-//FROM sac.dbo.tbAtoAdministrativo   a
-//INNER JOIN Agentes.dbo.Verificacao c on (a.idCargoDoAssinante = c.idVerificacao)
-//INNER JOIN sac.dbo.Orgaos          d on (a.idOrgaoDoAssinante = d.Codigo)
-//INNER JOIN tabelas.dbo.Grupos      e on (a.idPerfilDoAssinante = e.gru_codigo)
+        $objQuery->joinInner(
+            array("Verificacao" => "Verificacao"),
+            "{$this->_name}.idTipoDoAto = Verificacao.idVerificacao",
+            array("dsAtoAdministrativo" => "Descricao"),
+            $this->_schema
+        );
 
+        $objQuery->joinInner(
+            array("Verificacao_Agentes" => "Verificacao"),
+            "{$this->_name}.idCargoDoAssinante = Verificacao_Agentes.idVerificacao",
+            array("dsCargoDoAssinante" => "Descricao"),
+            "Agentes"
+        );
 
-        xd($objQuery->assemble());
-//        xd($this->fetchAll($objQuery)->toArray() );
+        $objQuery->joinInner(
+            array("Orgaos" => "Orgaos"),
+            "{$this->_name}.idOrgaoDoAssinante = Orgaos.Codigo",
+            array("dsOrgaoDoAssinante" => "Sigla"),
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
+            array("Grupos" => "Grupos"),
+            "{$this->_name}.idPerfilDoAssinante = Grupos.gru_codigo",
+            array("dsPerfil" => "gru_nome"),
+            'tabelas'
+        );
+
+        return $this->fetchAll($objQuery)->toArray();
     }
 
 }
