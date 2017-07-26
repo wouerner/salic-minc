@@ -16,54 +16,50 @@
                     <table class="bordered margin0" id="enquadramento">
                         <thead>
                         <tr class="">
-                            <th class="center-align" style="padding-left: 20px">
-                                <input type="checkbox"
-                                       name="marcarDesmarcarCheckbox"
-                                       id="marcarDesmarcarCheckbox"
-                                       class="filled-in"/>
-                                <label id="marcarDesmarcarCheckboxLabel"
-                                       for="marcarDesmarcarCheckbox"></label>
-                            </th>
-                            <th class="center-align">Nome do Projeto</th>
-                            <th class="center-align">&Aacute;rea</th>
-                            <th class="center-align">Segmento</th>
-                            <th class="center-align">Dias</th>
-                            <th class="center-align" align="center">Movimentar</th>
+                            <th class="center-align">Ato Administrativo</th>
+                            <th class="center-align">Cargo</th>
+                            <th class="center-align">Orgao</th>
+                            <th class="center-align">Perfil</th>
+                            <th class="center-align" align="center" colspan="2">A&ccedil;&atilde;o</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php foreach ($this->atosAdministrativos as $dado): ?>
                             <tr>
-                                <td class="center-align" align="center">
-                                    <a class="waves-effect waves-dark btn white black-text"
-                                       href="<?php echo $this->url(
-                                               array(
-                                                   'module' => 'assinatura',
-                                                   'controller' => 'ato-administrativo',
-                                                   'action' => 'visualizar'
-                                               )
-                                           ) . "?idPronac={$dado['IdPRONAC']}"; ?>"><u><?php echo $dado['pronac']; ?></u></a>
-                                </td>
-                                <td class="center-align" align="center"><?php echo $dado['nomeProjeto']; ?></td>
-                                <td class="center-align" align="center"><?php echo $dado['area']; ?></td>
-                                <td class="center-align" align="center"><?php echo $dado['segmento']; ?></td>
-                                <td class="center-align" align="center"><?php echo $dado['dias']; ?></td>
-                                <td class="center-align"
-                                    align="center"><?php echo $dado['tipoDoAtoAdministrativo']; ?></td>
+                                <td class="center-align" align="center"><?php echo $dado['dsAtoAdministrativo']; ?></td>
+                                <td class="center-align" align="center"><?php echo $dado['dsCargoDoAssinante']; ?></td>
+                                <td class="center-align" align="center"><?php echo $dado['dsOrgaoDoAssinante']; ?></td>
+                                <td class="center-align" align="center"><?php echo $dado['dsPerfil']; ?></td>
                                 <td class="center-align" align="center">
                                     <?php
-                                    $parametrosVisualicacao = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}";
+                                    $parametrosVisualicacao = "?idAtoAdministrativo={$dado['idAtoAdministrativo']}";
                                     ?>
                                     <a class="btn waves-effect waves-light tooltipped small "
                                        href="<?php echo $this->url(array(
                                                'module' => 'assinatura',
-                                               'controller' => 'index',
-                                               'action' => 'visualizar-projeto'
+                                               'controller' => 'ato-administrativo',
+                                               'action' => 'alterar'
                                            )) . $parametrosVisualicacao ?>"
                                        data-position="top"
                                        data-delay="50"
-                                       data-tooltip="Visualizar">
-                                        <i class="material-icons">search</i>
+                                       data-tooltip="Alterar">
+                                        <i class="material-icons">border_color</i>
+                                    </a>
+                                </td>
+                                <td class="center-align" align="center">
+                                    <?php
+                                    $parametrosVisualicacao = "?idAtoAdministrativo={$dado['idAtoAdministrativo']}";
+                                    ?>
+                                    <a class="btn waves-effect waves-light tooltipped small "
+                                       href="<?php echo $this->url(array(
+                                               'module' => 'assinatura',
+                                               'controller' => 'ato-administrativo',
+                                               'action' => 'remover'
+                                           )) . $parametrosVisualicacao ?>"
+                                       data-position="top"
+                                       data-delay="50"
+                                       data-tooltip="Remover">
+                                        <i class="material-icons">delete</i>
                                     </a>
                                 </td>
                             </tr>

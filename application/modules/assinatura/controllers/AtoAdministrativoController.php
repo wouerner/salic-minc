@@ -13,8 +13,6 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         parent::perfil();
 
         $this->cod_usuario = $this->auth->getIdentity()->usu_codigo;
-
-        $this->definirModuloDeOrigem();
     }
 
     public function indexAction()
@@ -26,7 +24,16 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
     {
         $objAtosAdministrativos = new Assinatura_Model_DbTable_TbAtoAdministrativo();
         $this->view->atosAdministrativos = $objAtosAdministrativos->obterAtoAdministrativoDetalhado();
-        xd($this->view->atosAdministrativos);
+    }
+
+    public function alterarAction()
+    {
+
+    }
+
+    public function removerAction()
+    {
+        throw new Exception("Ato administrativo já vinculado a um documento");
     }
 
 //    public function visualizarAssinaturasAction()
