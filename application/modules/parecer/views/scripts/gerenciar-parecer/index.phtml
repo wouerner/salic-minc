@@ -101,7 +101,7 @@ $filtros = array(
     <?php endif; ?>
 
     <?php if($this->qtdDocumentos != 0): ?>
-    <table class="bordered margin0 dataTable">
+    <table class="bordered margin0 dataTable no-footer" style="width:100%">
       <thead>
         <th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=nrProjeto&ordem='.$this->paginacao['novaOrdem'];?>">PRONAC</a></th>
         <th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=NomeProjeto&ordem='.$this->paginacao['novaOrdem'];?>">Nome do Projeto</a></th>
@@ -151,7 +151,7 @@ $filtros = array(
 		<?php if ($this->tipoFiltro == 'validados' || $this->tipoFiltro == 'em_validacao' || $this->tipoFiltro == 'devolvida') { ?>
                 <th class="center-align">Concluir</th>
 		<?php } ?>
-            </tr>
+      </thead>
             <?php
                 $nomeProjeto = '';
                 $pronac      = '';
@@ -249,7 +249,7 @@ $filtros = array(
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'historico', 'idPronac'=> $dp->IdPRONAC, 'stPrincipal'=> $dp->stPrincipal, 'idProduto' => $dp->idProduto)); ?>&tipoFiltro=<?php echo $this->tipoFiltro; ?>"
 		    data-tooltip="Hist&oacute;rico">
-		    <i class="material-icons white-text">description</i>
+		    <i class="material-icons white-text">history</i>
 		  </a>		  
 		</td>
 		<?php } ?>
@@ -277,7 +277,7 @@ $filtros = array(
                      data-position="top"
                      data-delay="50"
                      data-tooltip="Concluir">
-                    <i class="material-icons">grade</i>
+                    <i class="material-icons">check_circle</i>
                   </a>
 		  
 		  <?php } ?>
@@ -298,7 +298,7 @@ $filtros = array(
                      data-position="top"
                      data-delay="50"
                      data-tooltip="Concluir">
-                    <i class="material-icons">grade</i>
+                    <i class="material-icons">check_circle</i>
                   </a>
 		  
 		  <?php } ?>
@@ -314,6 +314,7 @@ $filtros = array(
 		  <!-- se retornar true mostra o botão -->
 		  <?php if($this->verificarIN2017($dp->IdPRONAC)): ?>
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
+		  <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
 		  <?php if (!$this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):
 		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
 		  ?>
@@ -326,9 +327,9 @@ $filtros = array(
 		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
 		  ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $dp->idDocumentoAssinatura; ?>"&origin=parecer/gerenciar-parecer/index?tipoFiltro=validados"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/gerenciar-parecer/index?tipoFiltro=validados"
 		    data-tooltip="Visualizar documento assinado">
-		    <i class="material-icons white-text">pageview</i>
+		    <i class="material-icons white-text">remove_red_eye</i>
 		  </a>
 		  &nbsp;&nbsp;
 		  <a class="btn waves-effect waves-light tooltipped small btn cyan"
@@ -343,7 +344,7 @@ $filtros = array(
                      data-position="top"
                      data-delay="50"
                      data-tooltip="Concluir">
-                    <i class="material-icons">grade</i>
+                    <i class="material-icons">check_circle</i>
                   </a>
 	  	  <?php endif; ?>
 		  <?php endif; ?>
@@ -362,7 +363,7 @@ $filtros = array(
                      data-position="top"
                      data-delay="50"
                      data-tooltip="Concluir">
-                    <i class="material-icons">grade</i>
+                    <i class="material-icons">check_circle</i>
                   </a>
 		  <?php endif; ?>
 		  <?php } ?>
@@ -382,7 +383,7 @@ $filtros = array(
                      data-position="top"
                      data-delay="50"
                      data-tooltip="Concluir">
-                    <i class="material-icons">grade</i>
+                    <i class="material-icons">check_circle</i>
                   </a>
 		  <?php } ?>
 		  
