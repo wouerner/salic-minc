@@ -16,7 +16,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
      */
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio ¿s Leis de Incentivo ¿ Cultura"; // t¿tulo da p¿gina
+        $this->view->title = "Salic - Sistema de Apoio ¿s Leis de Incentivo &agrave; Cultura"; // t¿tulo da p¿gina
         $auth = Zend_Auth::getInstance(); // pega a autentica¿¿o
         $Usuario = new UsuarioDAO(); // objeto usu¿rio
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess¿o com o grupo ativo
@@ -1015,6 +1015,83 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         }
     }
 
+    private function validacaoAnteriorIN2017($idPronac)
+    {
+        // Validacao do 20%
+        //valor total do projeto V1
+
+        $planilhaProjeto = new PlanilhaProjeto();
+        $valorProjeto = $planilhaProjeto->somarPlanilhaProjeto($idPronac, 109);
+        //Validacao dos 20%
+        if ($valorProjeto['soma'] > 0 && $stPrincipal == "1") {
+            $this->view->totaldivulgacao = $this->validaRegra20Porcento($idPronac);
+        }
+
+        // Validacao do 15%
+        if ($stPrincipal == "1") //avaliacao da regra dos 15% so deve ser feita quando a analise for do produto principal
+        {
+            $Situacao = false;
+
+            $V1 = '';
+            $V2 = '';
+            $V3 = '';
+            $V4 = '';
+            $V5 = '';
+            $V6 = '';
+
+            $tpPlanilha = 'CO'; // O que eh isso?
+            $planilhaProjeto = new PlanilhaProjeto();
+
+            /* V1 */
+
+            $whereTotalV1['PAP.IdPRONAC = ?'] = $idPronac;
+            $whereTotalV1['PAP.FonteRecurso = ?'] = 109;
+            $whereTotalV1['PAP.idPlanilhaItem <> ? '] = 206;
+
+            $valorProjeto15 = $planilhaProjeto->somaDadosPlanilha($whereTotalV1);
+            
+            $V1 = $valorProjeto15['soma'];
+
+            /* V2 */
+            $whereTotalV2['PAP.IdPRONAC = ?'] = $idPronac;
+            $whereTotalV2['PAP.FonteRecurso = ?'] = 109;
+            $whereTotalV2['PAP.idEtapa = ? '] = 4;
+            $whereTotalV2['PAP.idProduto = ?'] = 0;
+            $whereTotalV2['PAP.idPlanilhaItem not in (?)'] = array(5249, 206, 1238);
+
+            $valoracustosadministrativos = $planilhaProjeto->somaDadosPlanilha($whereTotalV2);
+            $V2 = $valoracustosadministrativos['soma'];
+
+            /* 15% */
+            if ($V1 > 0 and $valoracustosadministrativos['soma'] < $valorProjeto['soma']) {
+                //Calcula os 15% do valor total do projeto V3
+                $quinzecentoprojeto = $V1 * 0.15;
+
+                //Subtrai os custos administrativos pelos 15% do projeto (V2 - V3)
+                $verificacaonegativo = $valoracustosadministrativos['soma'] - $quinzecentoprojeto;
+                //V4
+                if ($verificacaonegativo < 0) {
+                    //x(0);
+                    $this->view->verifica15porcento = 0;
+                } else {
+                    //V1 - V4 = V5
+                    /*V5*/
+                    $valorretirar = /*V1*/
+                        $V1 - /*V4*/
+                        $verificacaonegativo;
+                    /*V6*/
+                    $quinzecentovalorretirar = /*V5*/
+                        $valorretirar * 0.15;
+                    //V2 - V6
+                    $valorretirarplanilha = $valoracustosadministrativos['soma'] - $quinzecentovalorretirar; //(correcao V2 - V6)
+                    $this->view->verifica15porcento = $valorretirarplanilha;
+                }
+            } else {
+                $this->view->verifica15porcento = $valoracustosadministrativos['soma'];
+            }
+        }
+    }
+    
     
     public function fecharparecerAction()
     {
@@ -1032,108 +1109,16 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $stPrincipal = $this->_request->getParam("stPrincipal");
         $this->view->totaldivulgacao = "true";
 
-        // Valida¿¿o do 20%
-        //valor total do projeto V1
-
-        $planilhaProjeto = new PlanilhaProjeto();
-        $valorProjeto = $planilhaProjeto->somarPlanilhaProjeto($idPronac, 109);
-        //Validacao dos 20%
-        if ($valorProjeto['soma'] > 0 && $stPrincipal == "1") {
-            $this->view->totaldivulgacao = $this->validaRegra20Porcento($idPronac);
+        if (!$projetos->verificarIN2017($idPronac)) {
+            $this->validacaoAnteriorIN2017($idPronac);
         }
-
-        // Valida¿¿o do 15%
-        if ($stPrincipal == "1") //avaliacao da regra dos 15% so deve ser feita quando a analise for do produto principal
-        {
-            $Situacao = false;
-
-            $V1 = '';
-            $V2 = '';
-            $V3 = '';
-            $V4 = '';
-            $V5 = '';
-            $V6 = '';
-
-            $tpPlanilha = 'CO'; // O que ¿ isso?
-            $planilhaProjeto = new PlanilhaProjeto();
-
-            /* V1 */
-
-            $whereTotalV1['PAP.IdPRONAC = ?'] = $idPronac;
-            $whereTotalV1['PAP.FonteRecurso = ?'] = 109;
-            $whereTotalV1['PAP.idPlanilhaItem <> ? '] = 206;
-
-            $valorProjeto15 = $planilhaProjeto->somaDadosPlanilha($whereTotalV1);
-            //$this->view->totalsugerido = $valorProjeto['soma'] ? $valorProjeto['soma'] :0;
-            //echo 'Valor Total do Projeto :';
-            $V1 = $valorProjeto15['soma'];
-
-
-            /* V2 */
-            $whereTotalV2['PAP.IdPRONAC = ?'] = $idPronac;
-            $whereTotalV2['PAP.FonteRecurso = ?'] = 109;
-            $whereTotalV2['PAP.idEtapa = ? '] = 4;
-            $whereTotalV2['PAP.idProduto = ?'] = 0;
-            $whereTotalV2['PAP.idPlanilhaItem not in (?)'] = array(5249, 206, 1238);
-
-
-            $valoracustosadministrativos = $planilhaProjeto->somaDadosPlanilha($whereTotalV2);
-            //$this->view->totalsugerido = $valorProjeto['soma'] ? $valorProjeto['soma'] :0;
-            //echo 'Custo Administrativo :';
-            $V2 = $valoracustosadministrativos['soma'];
-
-
-            /* 15% */
-
-            if ($V1 > 0 and $valoracustosadministrativos['soma'] < $valorProjeto['soma']) {
-                //Calcula os 15% do valor total do projeto V3
-                $quinzecentoprojeto = $V1 * 0.15;
-
-                //x('15% = '.$this->formatarReal($quinzecentoprojeto));
-                //$this->view->V3 = $quinzecentoprojeto;
-                //Subtrai os custos administrativos pelos 15% do projeto (V2 - V3)
-                $verificacaonegativo = $valoracustosadministrativos['soma'] - $quinzecentoprojeto;
-                //$this->view->V4 = $verificacaonegativo;
-                //V4
-                if ($verificacaonegativo < 0) {
-                    //x(0);
-                    $this->view->verifica15porcento = 0;
-                } else {
-                    //V1 - V4 = V5
-                    /*V5*/
-                    $valorretirar = /*V1*/
-                        $V1 - /*V4*/
-                        $verificacaonegativo;
-                    //$this->view->V5 = $valorretirar;
-                    /*V6*/
-                    $quinzecentovalorretirar = /*V5*/
-                        $valorretirar * 0.15;
-                    //$this->view->V6 = $quinzecentovalorretirar;
-                    //V2 - V6
-                    //$valorretirarplanilha = $quinzecentoprojeto - $quinzecentovalorretirar; //(codigo antigo V3 - V6)
-                    $valorretirarplanilha = $valoracustosadministrativos['soma'] - $quinzecentovalorretirar; //(correcao V2 - V6)
-                    $this->view->verifica15porcento = $valorretirarplanilha;
-
-                    //x($this->formatarReal($valorretirarplanilha));
-                }
-
-            } else {
-                $this->view->verifica15porcento = $valoracustosadministrativos['soma'];
-                //x($valoracustosadministrativos['soma']);
-            }
-
-            //$this->view->verifica15porcento = 0;
-            //die();
-        }
-
-
+        
         if ($_POST || $this->_request->getParam("concluir") == 1) {
             $justificativa = ($this->_request->getParam("concluir") == 1) ? "" : trim(strip_tags($this->_request->getParam("justificativa")));
             $tbDistribuirParecer = new tbDistribuirParecer();
             $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
             $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
 
-            
             try {
                 $tbDistribuirParecer->getAdapter()->beginTransaction();
                 foreach ($buscaDadosProjeto as $dp):
