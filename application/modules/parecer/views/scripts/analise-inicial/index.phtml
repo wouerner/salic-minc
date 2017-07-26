@@ -156,7 +156,7 @@ foreach($this->buscar as $d) {
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'default', 'controller' => 'analisarprojetoparecer', 'action' => 'historico', 'idPronac'=> $d->IdPRONAC, 'stPrincipal'=> $d->stPrincipal, 'idProduto' => $d->idProduto)); ?>"
 		    data-tooltip="Hist&oacute;rico">
-		    <i class="material-icons white-text">description</i>
+		    <i class="material-icons white-text">history</i>
 		  </a>		  
 		</td>
 		<td class="center-align">
@@ -167,14 +167,14 @@ foreach($this->buscar as $d) {
 		  ($this->IsProjetoEnquadrado($d->IdPRONAC)) &&
 		  ($this->IsProjetoComParecer($d->IdPRONAC)) && ($dilig == 0))
 		  || (($d->stPrincipal == 0) && ($this->IsProdutosPendentesParecer($d->IdPRONAC, $d->idProduto) == 0)  && ($dilig == 0))
-		  ) :?>
+		  ) : ?>
 		  <?php if($this->verificarIN2017($d->IdPRONAC)): ?>         
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>"&origin=parecer/analise-inicial"
-		    data-tooltip="Visualizar documento assinado">
-		    <i class="material-icons white-text">pageview</i>
+		    data-tooltip="Visualizar documento">
+		    <i class="material-icons white-text">remove_red_eye</i>
 		  </a>
 		  &nbsp;&nbsp;
 		  
@@ -193,7 +193,7 @@ foreach($this->buscar as $d) {
                      data-position="top"
                      data-delay="50"
                      data-tooltip="Concluir">
-                    <i class="material-icons">grade</i>
+                    <i class="material-icons">check_circle</i>
                   </a>	
 		  
 		  <?php elseif (!$this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
@@ -208,7 +208,7 @@ foreach($this->buscar as $d) {
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true&origin=parecer/analise-inicial" ?>"
 		    data-tooltip="Gerar documento para assinatura">
-		    <i class="material-icons white-text">pageview</i>
+		    <i class="material-icons white-text">note_add</i>
 		  </a>
 		  <?php endif; ?>
 		  <?php elseif(!$this->verificarIN2017($d->IdPRONAC)): ?>
