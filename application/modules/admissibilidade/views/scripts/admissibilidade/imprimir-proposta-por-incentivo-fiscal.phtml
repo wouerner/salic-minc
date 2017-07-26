@@ -723,23 +723,24 @@
     </script>
     <div id="planilhaOrcamentariaMontada" class="tabela"></div>
 
-    <table class="tabela">
-        <tr id="planoDivulgacao"">
-            <td>
-                <table class="tabela bordered striped responsive-table" >
-                    <tr class="destacar">
-                        <td align="left"><b>Pe&ccedil;a de Divulga&ccedil;&atilde;o</b></td>
-                        <td align="left"><b>Ve&iacute;culo de Divulga&ccedil;&atilde;o</b></td>
-                    </tr>
-                    <?php if(is_array($this->itensPlanoDivulgacao) and count($this->itensPlanoDivulgacao)>0)
-                        foreach ($this->itensPlanoDivulgacao as $divulgacao){ ?>
-                            <tr>
-                                <td align="left"><?php echo $divulgacao->Peca ?></td>
-                                <td align="left"><?php echo $divulgacao->Veiculo ?></td>
-                            </tr>
-                        <?php }?>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <?php if(is_array($this->itensPlanoDivulgacao) and count($this->itensPlanoDivulgacao)>0) : ?>
+        <table class="tabela">
+            <tr id="planoDivulgacao"">
+                <td>
+                    <table class="tabela bordered striped responsive-table" >
+                        <tr class="destacar">
+                            <td align="left"><b>Pe&ccedil;a de Divulga&ccedil;&atilde;o</b></td>
+                            <td align="left"><b>Ve&iacute;culo de Divulga&ccedil;&atilde;o</b></td>
+                        </tr>
+                        <?php foreach ($this->itensPlanoDivulgacao as $divulgacao){ ?>
+                                <tr>
+                                    <td align="left"><?php echo $divulgacao->Peca ?></td>
+                                    <td align="left"><?php echo $divulgacao->Veiculo ?></td>
+                                </tr>
+                            <?php }?>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    <?php endif; ?>
 </div><!-- fecha div de impressao -->
