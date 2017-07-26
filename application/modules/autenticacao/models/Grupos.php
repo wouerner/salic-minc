@@ -13,6 +13,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const TECNICO_ADMISSIBILIDADE = 92;
     const COORDENADOR_ADMISSIBILIDADE = 131;
 
+    const PRESIDENTE_DE_VINCULADA = 154;
     const COORDENADOR_DE_PARECERISTA = 93;
     const PARECERISTA = 94;
 
