@@ -56,8 +56,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
         parent::init();
 
-        if (!empty ($_REQUEST['idPreProjeto'])) {
-            $this->idPreProjeto = $_REQUEST['idPreProjeto'];
+        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+
+        if (!empty ($idPreProjeto)) {
+            $this->idPreProjeto = $idPreProjeto;
         }
 
         isset($auth->getIdentity()->usu_codigo) ? $this->idUsuario = $auth->getIdentity()->usu_codigo : $this->idUsuario = $auth->getIdentity()->IdUsuario;
@@ -756,6 +758,9 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $this->_helper->layout->disableLayout();
 
         $idPreProjeto = $this->idPreProjeto;
+
+        $this->verificarPermissaoAcesso($this->idPreProjeto, false, false);
+
         $dados = Proposta_Model_AnalisarPropostaDAO::buscarGeral($idPreProjeto);
         $this->view->itensGeral = $dados;
 
