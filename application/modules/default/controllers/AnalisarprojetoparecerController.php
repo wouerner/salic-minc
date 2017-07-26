@@ -1108,7 +1108,8 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $idDistribuirParecer = $this->_request->getParam("idD");
         $stPrincipal = $this->_request->getParam("stPrincipal");
         $this->view->totaldivulgacao = "true";
-
+        
+        $projetos = new Projetos();
         if (!$projetos->verificarIN2017($idPronac)) {
             $this->validacaoAnteriorIN2017($idPronac);
         }
@@ -1153,12 +1154,12 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
                 $tbDistribuirParecer->getAdapter()->commit();
 
-                parent::message("An&aacute;lise conclu&iacute;da com sucesso !", "parecer/index/analisar-projeto-parecer", "CONFIRM");
+                parent::message("An&aacute;lise conclu&iacute;da com sucesso !", "parecer/analise-inicial", "CONFIRM");
 
             } catch (Zend_Db_Exception $e) {
 
                 $tbDistribuirParecer->getAdapter()->rollBack();
-                parent::message("Error" . $e->getMessage(), "parecer/index/analisar-projeto-parecer", "ERROR");
+                parent::message("Error" . $e->getMessage(), "parecer/analise-inicial", "ERROR");
             }
 
 
