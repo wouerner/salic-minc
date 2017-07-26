@@ -2,45 +2,20 @@
 
 class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 {
-    private $intTamPag;
-    private $_idPreProjeto = null;
+    private $intTamPag = 10;
 
 	public function init()
 	{
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-            $auth = Zend_Auth::getInstance(); // instancia da autenticacao
-            $PermissoesGrupo = array();
+            parent::init();
 
-            //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
-            if(isset($auth->getIdentity()->usu_codigo)){
-                //Recupera todos os grupos do Usuario
-                $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
-                $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
-                foreach ($grupos as $grupo){
-                    $PermissoesGrupo[] = $grupo->gru_codigo;
-                }
-            }
+            if(!empty ($this->idPreProjeto)){
+                $this->view->idPreProjeto =  $this->idPreProjeto;
 
-            isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
-
-            // inicializando variaveis com valor padrao
-            $this->intTamPag = 10;
-
-            if(!empty ($idPreProjeto)){
-                $this->_idPreProjeto = $idPreProjeto;
-                $this->view->idPreProjeto = $idPreProjeto;
-
-                //VERIFICA SE A PROPOSTA ESTA COM O MINC
-                $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-                $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($idPreProjeto);
-                $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
             }else{
-                if($idPreProjeto != '0'){
+                if( $this->idPreProjeto != '0'){
                     parent::message("Necess&aacute;rio informar o n&uacute;mero da proposta.", "/manterpropostaincentivofiscal/index", "ERROR");
                 }
             }
-
-            parent::init();
 
             /* =============================================================================== */
             /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
@@ -53,7 +28,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $this->view->localRealizacao = true;
 
         $arrBusca = array();
-        $arrBusca['idprojeto'] = $this->_idPreProjeto;
+        $arrBusca['idprojeto'] = $this->idPreProjeto;
         $arrBusca['stabrangencia'] = 1;
         $tblAbrangencia = new Proposta_Model_DbTable_Abrangencia();
         $rsAbrangencia = $tblAbrangencia->buscar($arrBusca);
@@ -69,11 +44,11 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
         $fim = $inicio + $this->intTamPag;
         $tblPlanoDistribuicao = new PlanoDistribuicao();
-        $total = $tblPlanoDistribuicao->pegaTotal(array("a.idProjeto = ?"=>$this->_idPreProjeto, "a.stPlanoDistribuicaoProduto = ?"=>1));
+        $total = $tblPlanoDistribuicao->pegaTotal(array("a.idProjeto = ?"=> $this->idPreProjeto, "a.stPlanoDistribuicaoProduto = ?"=>1));
         $tamanho = (($inicio+$this->intTamPag)<=$total) ? $this->intTamPag : $total - ($inicio) ;
 
         $rsPlanoDistribuicao = $tblPlanoDistribuicao->buscar(
-            array("a.idprojeto = ?" => $this->_idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
+            array("a.idprojeto = ?" => $this->idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
             array("idplanodistribuicao DESC"),
             $tamanho,
             $inicio
@@ -88,13 +63,13 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                         "fim"=>$fim,
                         "totalPag"=>$totalPag,
                         "planosDistribuicao"=>($rsPlanoDistribuicao),
-                        "formulario"=>$this->_urlPadrao."/proposta/plano-distribuicao/frm-plano-distribuicao?idPreProjeto=".$this->_idPreProjeto,
-                        "urlApagar"=>$this->_urlPadrao."/proposta/plano-distribuicao/apagar?idPreProjeto=".$this->_idPreProjeto,
-                        "urlPaginacao"=>$this->_urlPadrao."/prosposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto
+                        "formulario"=>$this->_urlPadrao."/proposta/plano-distribuicao/frm-plano-distribuicao?idPreProjeto=".$this->idPreProjeto,
+                        "urlApagar"=>$this->_urlPadrao."/proposta/plano-distribuicao/apagar?idPreProjeto=".$this->idPreProjeto,
+                        "urlPaginacao"=>$this->_urlPadrao."/prosposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto
                     );
 
-        $this->view->idPreProjeto = $this->_idPreProjeto;
-        $this->view->isEditavel = $this->isEditavel($this->_idPreProjeto);
+//        $this->view->idPreProjeto = $this->idPreProjeto;
+        $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
         $this->montaTela("planodistribuicao/index.phtml", $arrDados);
     }
 
@@ -136,7 +111,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         //BUSCA POR PRODUTO PRINCIPAL CADASTRADO
         $tblPlanoDistribuicao = new PlanoDistribuicao();
         $arrPlanoDistribuicao = $tblPlanoDistribuicao->buscar(array(
-            "a.idprojeto = ?" => $this->_idPreProjeto,
+            "a.idprojeto = ?" => $this->idPreProjeto,
             "a.stprincipal = ?" => 1,
             "a.stplanodistribuicaoproduto = ?" => 1), array("idplanodistribuicao DESC"))
             ->toArray();
@@ -152,9 +127,9 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $manterAgentes = new ManterAgentes();
         $arrDados["comboareasculturais"] = $manterAgentes->listarAreasCulturais();
 
-        $arrDados["acaoSalvar"] = $this->_urlPadrao."/proposta/plano-distribuicao/salvar?idPreProjeto=".$this->_idPreProjeto;
-        $arrDados["urlApagar"] = $this->_urlPadrao."/proposta/plano-distribuicao/apagar?idPreProjeto=".$this->_idPreProjeto;
-        $arrDados["acaoCancelar"] = $this->_urlPadrao."/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto;
+        $arrDados["acaoSalvar"] = $this->_urlPadrao."/proposta/plano-distribuicao/salvar?idPreProjeto=".$this->idPreProjeto;
+        $arrDados["urlApagar"] = $this->_urlPadrao."/proposta/plano-distribuicao/apagar?idPreProjeto=".$this->idPreProjeto;
+        $arrDados["acaoCancelar"] = $this->_urlPadrao."/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto;
         $arrDados["bln_exitePP"] = $bln_exitePP;
         $this->montaTela("planodistribuicao/formplanodistribuicao.phtml", $arrDados);
     }
@@ -163,15 +138,15 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
         $post = Zend_Registry::get("post");
 
-        if (($this->isEditarProjeto($this->_idPreProjeto) && $post->prodprincipal == 1))
-            parent::message("Em alterar projeto, n&atilde;o pode alterar o produto principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+        if (($this->isEditarProjeto($this->idPreProjeto) && $post->prodprincipal == 1))
+            parent::message("Em alterar projeto, n&atilde;o pode alterar o produto principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
 
         $precopromocional = str_replace(",", ".", str_replace(".", "", $post->precopromocional));
         $preconormal = str_replace(",", ".", str_replace(".", "", $post->preconormal));
         $QtdeProduzida = $post->qtdenormal+$post->qtdepromocional+$post->patrocinador+$post->beneficiarios+$post->divulgacao;
         $dados = array(
                  "Area"=>$post->areaCultural,
-                 "idProjeto"=>$this->_idPreProjeto,
+                 "idProjeto"=>$this->idPreProjeto,
                  "idProduto"=>$post->produto,
 //                 "idPosicaoDaLogo"=>$post->logomarca,
                  "Segmento"=>$post->segmentoCultural,
@@ -193,7 +168,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
         //VERIFICA SE JA EXISTE PRODUTO PRINCIPAL JA CADASTRADO
         $arrBusca = array();
-        $arrBusca['a.idProjeto = ?'] = $this->_idPreProjeto;
+        $arrBusca['a.idProjeto = ?'] = $this->idPreProjeto;
         $arrBusca['a.stPrincipal = ?'] = 1;
        !empty( $post->idPlanoDistribuicao ) ? $arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao : '' ;
         //$arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao;
@@ -202,64 +177,64 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
         if( $post->patrocinador!=0 || $post->divulgacao!=0 || $post->beneficiarios!=0 || $post->qtdenormal!=0 || $post->qtdepromocional!=0){
             if(!empty($arrPlanoDistribuicao) && $post->prodprincipal == "1"){
-                parent::message("J&aacute; existe um Produto Principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("J&aacute; existe um Produto Principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
             if( $post->patrocinador > ($QtdeProduzida/10) ){
-                parent::message("A quantidade destinada ao patrocinador n&atilde;o pode ser maior do que 10% do n&uacute;mero Exemplares/Ingressos.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("A quantidade destinada ao patrocinador n&atilde;o pode ser maior do que 10% do n&uacute;mero Exemplares/Ingressos.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
             if( $post->divulgacao > ($QtdeProduzida/10) ){
-                parent::message("A quantidade destinada &agrave; divulga&ccedil;&atilde;o n&atilde;o pode ser maior do que 10% do n&uacute;mero Exemplares/Ingressos.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("A quantidade destinada &agrave; divulga&ccedil;&atilde;o n&atilde;o pode ser maior do que 10% do n&uacute;mero Exemplares/Ingressos.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
             if( $post->beneficiarios < ($QtdeProduzida/10) ){
-                parent::message("A quantidade destinada &agrave; popula&ccedil;&atilde;o de baixa renda n&atilde;o pode ser menor do que 10% do n&uacute;mero Exemplares/Ingressos.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("A quantidade destinada &agrave; popula&ccedil;&atilde;o de baixa renda n&atilde;o pode ser menor do que 10% do n&uacute;mero Exemplares/Ingressos.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
             if( (int)str_replace(".", "",$precopromocional) > (int)str_replace(".", "",$preconormal) ){
-                parent::message("O valor normal n&atilde;o pode ser menor ou igual ao valor promocional!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("O valor normal n&atilde;o pode ser menor ou igual ao valor promocional!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
             if( $post->qtdenormal == null ){
-                parent::message("Favor preencher o campo Normal(Qntd).", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("Favor preencher o campo Normal(Qntd).", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
             if( $post->qtdepromocional == null ){
-                parent::message("Favor preencher o campo Promocional(Qntd).", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("Favor preencher o campo Promocional(Qntd).", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
         }
 
         if(isset($post->produto)){
             //VERIFICA SE PRODUTO JA ESTA CADASTRADO - NAO PODE GRAVAR O MESMO PRODUTO MAIS DE UMA VEZ.
-            $arrBuscaProduto['a.idProjeto = ?'] = $this->_idPreProjeto;
+            $arrBuscaProduto['a.idProjeto = ?'] = $this->idPreProjeto;
             $arrBuscaProduto['a.idProduto = ?'] = $post->produto;
             $objProduto = $tblPlanoDistribuicao->buscar($arrBuscaProduto);
             if($objProduto[0]['idPlanoDistribuicao']){
-                parent::message("Produto j&aacute; cadastrado no plano de distribui&ccedil;&atilde;o desta proposta!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+                parent::message("Produto j&aacute; cadastrado no plano de distribui&ccedil;&atilde;o desta proposta!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
         }
         $retorno = $tblPlanoDistribuicao->salvar($dados);
         if($retorno > 0){
-            parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "CONFIRM");
+            parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
         } else {
-            parent::message("N&atilde;o foi poss&iacute;vel realizar a opera&ccedil;&atilde;o!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+            parent::message("N&atilde;o foi poss&iacute;vel realizar a opera&ccedil;&atilde;o!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
         }
     }
 
     public function apagarAction()
     {
-        if (empty($this->_idPreProjeto))
-            parent::message("Informe o numero da proposta", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+        if (empty($this->idPreProjeto))
+            parent::message("Informe o numero da proposta", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
 
         $get = Zend_Registry::get("get");
 
         $tblPlanoDistribuicao = new PlanoDistribuicao();
         $rsPlanoDistribuicao = $tblPlanoDistribuicao->findBy( array("idplanodistribuicao = ?" => $get->idPlanoDistribuicao));
 
-        if (($this->isEditarProjeto($this->_idPreProjeto) && $rsPlanoDistribuicao['stPrincipal'] == 1))
-            parent::message("Em alterar projeto, n&atilde;o pode excluir o produto principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+        if (($this->isEditarProjeto($this->idPreProjeto) && $rsPlanoDistribuicao['stPrincipal'] == 1))
+            parent::message("Em alterar projeto, n&atilde;o pode excluir o produto principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
 
         $retorno = $tblPlanoDistribuicao->apagar($get->idPlanoDistribuicao);
 
         if($retorno > 0){
-            parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "CONFIRM");
+            parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
         }else{
-            parent::message("N&atilde;o foi poss&iacute;vel realizar a opera&ccedil;&atilde;o!!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+            parent::message("N&atilde;o foi poss&iacute;vel realizar a opera&ccedil;&atilde;o!!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
         }
     }
 
@@ -273,14 +248,14 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
         $fim = $inicio + $this->intTamPag;
         $tblPlanoDistribuicao = new PlanoDistribuicao();
-        $total = $tblPlanoDistribuicao->pegaTotal(array("a.idProjeto = ?"=>$this->_idPreProjeto, "a.stPlanoDistribuicaoProduto = ?"=>1));
+        $total = $tblPlanoDistribuicao->pegaTotal(array("a.idProjeto = ?"=>$this->idPreProjeto, "a.stPlanoDistribuicaoProduto = ?"=>1));
         $tamanho = (($inicio+$this->intTamPag)<=$total) ? $this->intTamPag : $total - ($inicio) ;
 
         if (empty($params['idPlanoDistribuicao']))
-            parent::message("&Eacute; necess&aacute;rio informar o produto do plano de distribui&ccedil;&atilde;o", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto, "ERROR");
+            parent::message("&Eacute; necess&aacute;rio informar o produto do plano de distribui&ccedil;&atilde;o", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
 
         $rsPlanoDistribuicao = $tblPlanoDistribuicao->buscar(
-            array("a.idplanodistribuicao = ?" => $params['idPlanoDistribuicao'], "a.idprojeto = ?" => $this->_idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
+            array("a.idplanodistribuicao = ?" => $params['idPlanoDistribuicao'], "a.idprojeto = ?" => $this->idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
             array("idplanodistribuicao DESC"),
             $tamanho,
             $inicio
@@ -295,20 +270,20 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                         "fim"=>$fim,
                         "totalPag"=>$totalPag,
                         "planosDistribuicao"=>($rsPlanoDistribuicao),
-                        "formulario"=>$this->_urlPadrao."/proposta/plano-distribuicao/frm-plano-distribuicao?idPreProjeto=".$this->_idPreProjeto,
-                        "urlApagar"=>$this->_urlPadrao."/proposta/plano-distribuicao/apagar?idPreProjeto=".$this->_idPreProjeto,
-                        "urlPaginacao"=>$this->_urlPadrao."/prosposta/plano-distribuicao/index?idPreProjeto=".$this->_idPreProjeto
+                        "formulario"=>$this->_urlPadrao."/proposta/plano-distribuicao/frm-plano-distribuicao?idPreProjeto=".$this->idPreProjeto,
+                        "urlApagar"=>$this->_urlPadrao."/proposta/plano-distribuicao/apagar?idPreProjeto=".$this->idPreProjeto,
+                        "urlPaginacao"=>$this->_urlPadrao."/prosposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto
                     );
 
-        $arrBusca['idprojeto'] = $this->_idPreProjeto;
+        $arrBusca['idprojeto'] = $this->idPreProjeto;
         $arrBusca['stabrangencia'] = 1;
         $tblAbrangencia = new Proposta_Model_DbTable_Abrangencia();
         $rsAbrangencia = $tblAbrangencia->buscar($arrBusca);
 
-        $this->view->idPreProjeto = $this->_idPreProjeto;
+//        $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->abrangencias = $rsAbrangencia;
         $this->view->planosDistribuicao=($rsPlanoDistribuicao);
-        $this->view->isEditavel = $this->isEditavel($this->_idPreProjeto);
+        $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
     }
 
     public function detalharSalvarAction()

@@ -13,7 +13,6 @@
  */
 class Proposta_DivulgacaoController extends Proposta_GenericController
 {
-    private $idPreProjeto = null;
     private $idUsuario = null;
 
     /**
@@ -33,38 +32,10 @@ class Proposta_DivulgacaoController extends Proposta_GenericController
      */
     public function init()
     {
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-
         parent::init();
 
         $this->table = new Proposta_Model_DbTable_PlanoDeDivulgacao();
 
-        $arrIdentity = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity());
-
-        # dar permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
-        $arrPermissoesGrupo = array();
-        if (isset($arrIdentity['usu_codigo'])) {
-
-            # recupera todos os grupos do Usuario
-            $usuario = new Autenticacao_Model_Usuario();
-            $grupos = $usuario->buscarUnidades($arrIdentity['usu_codigo'], 21);
-            foreach ($grupos as $grupo) {
-                $arrPermissoesGrupo[] = $grupo->gru_codigo;
-            }
-        }
-
-        isset($arrIdentity['usu_codigo']) ? parent::perfil(1, $arrPermissoesGrupo) : parent::perfil(4, $arrPermissoesGrupo);
-
-        # recupera ID do pre projeto (proposta)
-        if (!empty ($idPreProjeto)) {
-            $this->idPreProjeto = $idPreProjeto;
-            # verifica se a proposta esta com o minc.
-            $movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $rsStatusAtual = $movimentacao->buscarStatusAtualProposta($idPreProjeto);
-            $this->view->movimentacaoAtual = isset($rsStatusAtual['movimentacao']) ? $rsStatusAtual['movimentacao'] : '';
-        }
-
-        $this->idUsuario = isset($arrIdentity['usu_codigo']) ? $arrIdentity['usu_codigo'] : $arrIdentity['idusuario'];
     }
 
     /**
