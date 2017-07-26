@@ -348,12 +348,11 @@ $filtros = array(
 	  	  <?php endif; ?>
 		  <?php endif; ?>
 		  <?php elseif(!$this->verificarIN2017($dp->IdPRONAC)): ?>
-		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
+		  $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/concluir/1/tipoFiltro/" . $this->tipoFiltro;
 		  ?>
 		  <!-- se retornar true mostra o botão -->
                   <a class="btn waves-effect waves-light tooltipped small btn cyan"
-                     href="#modalConfirmacao"
-                     data-redirect-url="<?php echo $this->url(
+                     href="<?php echo $this->url(
                                         array(
                                         'module' => 'default',
                                         'controller' => 'gerenciarparecer',
@@ -369,12 +368,11 @@ $filtros = array(
 		  <?php } ?>
 		  <!-- secundários: sempre exibe botão de concluir -->
 		  <?php } else { 
-		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
+		  $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/concluir/1/tipoFiltro/" . $this->tipoFiltro;
 		  ?>
 		  <!-- se retornar true mostra o botão -->
                   <a class="btn waves-effect waves-light tooltipped small btn cyan"
-                     href="#modalConfirmacao"
-                     data-redirect-url="<?php echo $this->url(
+                     href="<?php echo $this->url(
                                         array(
                                         'module' => 'default',
                                         'controller' => 'gerenciarparecer',
