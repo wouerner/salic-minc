@@ -1817,6 +1817,31 @@ public function analisePorParecerista($where){
 
 		  $from = ' FROM sac.dbo.vwPainelCoordenadorVinculadasValidados';
                 break;
+                
+            case 'presidente_vinculadas':
+
+	        $slct->from(
+			    array('dbo.vwPainelPresidenteVinculadas'),
+			    array('IdPRONAC',
+				  'NrProjeto',
+				  'NomeProjeto',
+                  'idProduto',
+				  'stPrincipal',
+				  'idArea',
+				  'Area',
+				  'idSegmento',
+				  'Segmento',
+				  'idDistribuirParecer',
+				  'Parecerista',
+				  'idOrgao',
+				  'Valor',
+				  'FecharAnalise',
+				  'TecnicoValidador',
+				  'dtValidacao')
+			    );
+
+            $from = ' FROM sac.dbo.vwPainelPresidenteVinculadas';
+                break;                
             case 'devolvida':
 
 	        $slct->from(
@@ -1871,48 +1896,48 @@ public function analisePorParecerista($where){
                     'stPrincipal',
                     'FecharAnalise'
                     )
-			    );
-		$from = 'FROM dbo.vwPainelCoordenadorImpedimentoParecerista';
-                break;            
-	}
-
-	// se for totalizador
-	if ($qtdeTotal) {
-
-	    $db= Zend_Db_Table::getDefaultAdapter();
-	    $db->setFetchMode(Zend_DB::FETCH_OBJ);
-	    $whereSql = '';
-	    if (!empty($where)) {
-	      $whereSql = ' WHERE ';
-	      foreach ($where as $coluna => $valor) {
-		if ($whereSql != ' WHERE ') {
-		  $whereSql .= ' AND ';
-		}
-		$whereSql .= str_replace('?', "'$valor'" , $coluna);
-	      }
-	    }
-            $sql = "SELECT COUNT(IdPRONAC) " . $from . $whereSql;
-	    return $db->fetchOne($sql);
-        } else {
-	  //adiciona quantos filtros foram enviados
-	  foreach ($where as $coluna => $valor) {
-	    $slct->where($coluna, $valor);
-	  }
-
-	  //adicionando linha order ao select
-	  $slct->order($order);
-
-	  //paginacao
-	  if ($tamanho > -1) {
-            $tmpInicio = 0;
-            if ($inicio > -1) {
-	      $tmpInicio = $inicio;
+            );
+            $from = 'FROM dbo.vwPainelCoordenadorImpedimentoParecerista';
+            break;            
+        }
+        
+        // se for totalizador
+        if ($qtdeTotal) {
+            
+            $db= Zend_Db_Table::getDefaultAdapter();
+            $db->setFetchMode(Zend_DB::FETCH_OBJ);
+            $whereSql = '';
+            if (!empty($where)) {
+                $whereSql = ' WHERE ';
+                foreach ($where as $coluna => $valor) {
+                    if ($whereSql != ' WHERE ') {
+                        $whereSql .= ' AND ';
+                    }
+                $whereSql .= str_replace('?', "'$valor'" , $coluna);
+                }
             }
-            $slct->limit($tamanho, $tmpInicio);
-	  }
-
-	  return $this->fetchAll($slct);
-	}
+            $sql = "SELECT COUNT(IdPRONAC) " . $from . $whereSql;
+            return $db->fetchOne($sql);
+        } else {
+            //adiciona quantos filtros foram enviados
+            foreach ($where as $coluna => $valor) {
+                $slct->where($coluna, $valor);
+            }
+            
+            //adicionando linha order ao select
+            $slct->order($order);
+            
+            //paginacao
+            if ($tamanho > -1) {
+                $tmpInicio = 0;
+                if ($inicio > -1) {
+                    $tmpInicio = $inicio;
+                }
+                $slct->limit($tamanho, $tmpInicio);
+            }
+            
+            return $this->fetchAll($slct);
+        }
     }
 
     public function buscarHistoricoEncaminhamento($where=array())

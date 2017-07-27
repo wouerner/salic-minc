@@ -65,7 +65,6 @@
                     &nbsp;Registros por p&aacute;gina:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="submit" class="btn_recarregar" value="">
                     <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
                     <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
-                    <input type="hidden" name="tipoFiltro" value="<?php echo $this->tipoFiltro;?>">
                     <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
                  </form>
                 </td>
@@ -85,14 +84,12 @@
     <?php if($this->qtdDocumentos != 0): ?>
     <table class="bordered margin0 dataTable no-footer" style="width:100%">
       <thead>
-        <th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=nrProjeto&ordem='.$this->paginacao['novaOrdem'];?>">PRONAC</a></th>
-        <th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=NomeProjeto&ordem='.$this->paginacao['novaOrdem'];?>">Nome do Projeto</a></th>
-        <th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=Segmento&ordem='.$this->paginacao['novaOrdem'];?>">Segmento Cultural</a></th>
-        <th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=Valor&ordem='.$this->paginacao['novaOrdem'];?>">Vl.&nbsp;Incentivo<br />(S&oacute; Mecenato)</a></th>
-        <th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=Produto&ordem='.$this->paginacao['novaOrdem'];?>">Produto</a></th>
-	
-	<th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=TecnicoValidador&ordem='.$this->paginacao['novaOrdem'];?>">T&eacute;cnico validador</a></th>
-	<th class="center-align"><a class="white-text" href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?tipoFiltro='.$this->tipoFiltro.'&pag=1&qtde='.$this->paginacao['qtde'].'&campo=DtValidacao&ordem='.$this->paginacao['novaOrdem'];?>">Dt. valida&ccedil;&atilde;o</a></th>
+        <th class="center-align">PRONAC</th>
+        <th class="center-align">Nome do Projeto</th>
+        <th class="center-align">Segmento Cultural</th>
+        <th class="center-align">Vl.&nbsp;Incentivo</th>
+	<th class="center-align">Coordenador</th>
+	<th class="center-align">Dt. valida&ccedil;&atilde;o</th>
 
 	<th class="center-align">Hist&oacute;rico</th>
         <th class="center-align">Concluir</th>
@@ -100,7 +97,6 @@
             <?php
                 $nomeProjeto = '';
                 $pronac      = '';
-                $produto     = '';
                 $tipostatus  = array ('AN&Aacute;LISE CONCLU&Iacute;DA', 'Aguardando distribui&ccedil;&atilde;o');
 
                 foreach($this->dados as $dp):
@@ -121,12 +117,9 @@
                 <td><?php if(($nomeProjeto != $dp->NomeProjeto) || ($pronac != $dp->NrProjeto))echo $dp->NomeProjeto; ?></td>
                 <td><?php echo $dp->Segmento; ?></td>
                 <td align="right" nowrap><?php echo $this->formatarReal($dp->Valor); ?></td>
-                <td>
-                    <a href="<?php echo $this->url(array('module' => 'default', 'controller'=> 'Analisarprojetoparecer','action' =>'produto'));?>?idPronac=<?php echo $dp->IdPRONAC; ?>&idProduto=<?php echo $dp->idProduto; ?>&stPrincipal=<?php echo $dp->stPrincipal;?>"><?php echo $dp->Produto; ?></a>
-                </td>
 		
 		<td class="center-align"><strong><?php echo $dp->TecnicoValidador; ?></strong></td>
-		<td class="center-align"><?php echo Data::tratarDataZend($dp->DtValidacao, 'Brasileira'); ?></td>
+		<td class="center-align"><?php echo Data::tratarDataZend($dp->dtValidacao, 'Brasileira'); ?></td>
 
                 <td class="center-align">
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
@@ -144,7 +137,7 @@
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
 		  <?php if (!$this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):
-		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
+		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC;
 		  ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$dp->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/gerenciar-parecer/finalizar-parecer"
@@ -152,7 +145,7 @@
 		    <i class="material-icons white-text">create</i>
 		  </a>
 		  <?php elseif ($this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):		  
-		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
+		  $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC;
 		  ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/gerenciar-parecer/finalizar-parecer"
@@ -164,9 +157,9 @@
                      href="#modalConfirmacao"
                      data-redirect-url="<?php echo $this->url(
                                         array(
-                                        'module' => 'default',
-                                        'controller' => 'gerenciarparecer',
-                                        'action' => 'concluir'
+                                        'module' => 'parecer',
+                                        'controller' => 'gerenciar-parecer',
+                                        'action' => 'finalizou-parecer'
                                         )
                                         ) . $parametrosAssinatura ?>"
                      data-position="top"
@@ -200,7 +193,6 @@
             <?php 
                 $nomeProjeto = $dp->NomeProjeto;
                 $pronac      = $dp->NrProjeto;
-                $produto     = $dp->Produto;
             ?>
             <?php endforeach; ?>
         </table>
