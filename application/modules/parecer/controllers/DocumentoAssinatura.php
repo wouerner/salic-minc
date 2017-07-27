@@ -81,10 +81,15 @@ class Parecer_DocumentoAssinaturaController implements MinC_Assinatura_Documento
         $view->dadosProducaoProjeto = $objPlanoDistribuicaoProduto->obterProducaoProjeto(array(
             'IdPRONAC = ?' => $this->idPronac
         ));
+
+        $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $codOrgao = $grupoAtivo->codOrgao;
+        $objOrgao = new Orgaos();
+        $view->nomeOrgao =  $objOrgao->pesquisarNomeOrgao($codOrgao)[0]['NomeOrgao'];
         
         $objProjeto = new Projeto_Model_DbTable_Projetos();
         $view->projeto = $objProjeto->findBy(array('IdPRONAC' => $this->idPronac));
-
+        
         $objAgentes = new Agente_Model_DbTable_Agentes();
         $dadosAgente = $objAgentes->buscarFornecedor(array('a.CNPJCPF = ?' => $view->projeto['CgcCpf']));
         $arrayDadosAgente = $dadosAgente->current();
