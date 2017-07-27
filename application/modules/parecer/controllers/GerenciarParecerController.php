@@ -44,8 +44,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
     
     public function indexAction()
     {
-        $auth = Zend_Auth::getInstance();
-        $idusuario = $auth->getIdentity()->usu_codigo;
+        $idusuario = $this->auth->getIdentity()->usu_codigo;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $codOrgao = $GrupoAtivo->codOrgao;
         $this->view->codOrgao = $codOrgao;
@@ -146,11 +145,115 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->dados = $busca;
         $this->view->intTamPag = $this->intTamPag;        
     }
+
+    
+    public function concluiuAction()
+    {
+        //** Usuario Logado ************************************************/
+        $idUsuario = $this->auth->getIdentity()->usu_codigo;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
+        $codOrgao = $GrupoAtivo->codOrgao; //  �rg�o ativo na sess�o
+
+        /******************************************************************/
+
+        $idDistribuirParecer = $this->_request->getParam("idDistribuirParecer");
+        $idPronac = $this->_request->getParam("idpronac");
+        $observacao = $this->_request->getParam("obs");
+        $tipoFiltro = $this->_request->getParam("tipoFiltro");
+        
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+
+        $projetos = new Projetos();
+
+        try {
+            $db->beginTransaction();
+
+            $tbDistribuirParecer = new tbDistribuirParecer();
+            $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
+
+            $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
+
+            foreach ($buscaDadosProjeto as $dp):
+
+                // FECHAR ANALISE ( COORDENADOR DE PARECER )
+                $orgaos = array('91', '92', '93', '94', '95', '160', '171', '335');
+
+                // Caso n�o esteja dentro do array
+                if (!in_array($dp->idOrgao, $orgaos)) {
+                    $idOrgao = 91;
+                    $fecharAnalise = 0;
+                } else {
+                    $idOrgao = $dp->idOrgao;
+
+                    if ($tipoFiltro == 'em_validacao') {
+                        $fecharAnalise = 3;
+                    } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
+                        $fecharAnalise = 1;
+                    }
+                }
+
+                $dados = array(
+                    'DtEnvio' => $dp->DtEnvio,
+                    'idAgenteParecerista' => $dp->idAgenteParecerista,
+                    'DtDistribuicao' => $dp->DtDistribuicao,
+                    'DtDevolucao' => $dp->DtDevolucao,
+                    'DtRetorno' => MinC_Db_Expr::date(),
+                    'Observacao' => $observacao,
+                    'idUsuario' => $idUsuario,
+                    'FecharAnalise' => $fecharAnalise,
+                    'idOrgao' => $idOrgao,
+                    'idPRONAC' => $dp->IdPRONAC,
+                    'idProduto' => $dp->idProduto,
+                    'TipoAnalise' => $dp->TipoAnalise,
+                    'stEstado' => 0,
+                    'stPrincipal' => $dp->stPrincipal,
+                    'stDiligenciado' => null
+                );
+
+                $whereD['idDistribuirParecer = ?'] = $idDistribuirParecer;
+                $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $whereD);
+                $insere = $tbDistribuirParecer->inserir($dados);
+ 
+            endforeach;
+
+            /** Grava o Parecer nas Tabelas tbPlanilhaProjeto e Parecer e altera a situa��o do Projeto para  ***************/
+            $projeto = new Projetos();
+            $wherePro['IdPRONAC = ?'] = $idPronac;
+            $buscaDadosdoProjeto = $projeto->buscar($wherePro);
+
+            // se for produto principal
+            if ($buscaDadosProjeto[0]->stPrincipal == 1) {
+
+                /****************************************************************************************************************/
+                $parecerDAO = new Parecer();
+                $whereParecer['idPRONAC = ?'] = $idPronac;
+                $buscarParecer = $parecerDAO->buscar($whereParecer);
+
+                $analiseDeConteudoDAO = new Analisedeconteudo();
+                $whereADC['idPRONAC = ?'] = $idPronac;
+                $dadosADC = array('idParecer' => $buscarParecer[0]->IdParecer);
+                $alteraADC = $analiseDeConteudoDAO->alterar($dadosADC, $whereADC);
+
+                $planilhaProjetoDAO = new PlanilhaProjeto();
+                $wherePP['idPRONAC = ?'] = $idPronac;
+                $dadosPP = array('idParecer' => $buscarParecer[0]->IdParecer);
+                $alteraPP = $planilhaProjetoDAO->alterar($dadosPP, $wherePP);
+                /****************************************************************************************************************/
+            }
+            $db->commit();
+            parent::message("Conclu&iacute;do com sucesso!", "parecer/gerenciar-parecer?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+
+        } catch (Zend_Exception $ex) {
+            $db->rollBack();
+            parent::message("Erro ao concluir " . $ex->getMessage(), "gerenciarparecer/concluir/idDistribuirParecer/" . $idDistribuirParecer . "/tipoFiltro/" . $tipoFiltro, "ERROR");
+        }
+
+    }
     
     public function finalizarParecerAction()
     {
-        $auth = Zend_Auth::getInstance();
-        $idusuario = $auth->getIdentity()->usu_codigo;
+        $idusuario = $this->auth->getIdentity()->usu_codigo;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $codOrgao = $GrupoAtivo->codOrgao;
         $this->view->codOrgao = $codOrgao;
@@ -187,7 +290,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
         } else {
             $campo = null;
-            $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
+            $order = array('dtValidacao', 'NomeProjeto', 'stPrincipal desc');
             $ordenacao = null;
         }
 
@@ -206,7 +309,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         }
 
         $tbDistribuirParecer = new tbDistribuirParecer();
-        $tipoFiltro  = 'presidente_finalizar';
+        $tipoFiltro  = 'presidente_vinculadas';
         $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
         $fim = $inicio + $this->intTamPag;
         
@@ -246,4 +349,82 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->intTamPag = $this->intTamPag;        
     }
 
+    public function finalizouParecerAction()
+    {
+        $idDistribuirParecer = $this->_request->getParam("idDistribuirParecer");
+        $idPronac = $this->_request->getParam("idpronac");
+        $idUsuario = $this->auth->getIdentity()->usu_codigo;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $codOrgao = $GrupoAtivo->codOrgao;
+        
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+
+        $projetos = new Projetos();
+        
+        try {
+            $db->beginTransaction();
+
+            $tbDistribuirParecer = new tbDistribuirParecer();
+            $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
+
+            $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
+
+            foreach ($buscaDadosProjeto as $dp):
+            
+                $dados = array(
+                    'DtEnvio' => $dp->DtEnvio,
+                    'idAgenteParecerista' => $dp->idAgenteParecerista,
+                    'DtDistribuicao' => $dp->DtDistribuicao,
+                    'DtDevolucao' => $dp->DtDevolucao,
+                    'DtRetorno' => MinC_Db_Expr::date(),
+                    'Observacao' => "",
+                    'idUsuario' => $idusuario,
+                    'FecharAnalise' => 1,
+                    'idOrgao' => $idOrgao,
+                    'idPRONAC' => $dp->IdPRONAC,
+                    'idProduto' => $dp->idProduto,
+                    'TipoAnalise' => $dp->TipoAnalise,
+                    'stEstado' => 0,
+                    'stPrincipal' => $dp->stPrincipal,
+                    'stDiligenciado' => null
+                );
+
+                $whereD['idDistribuirParecer = ?'] = $idDistribuirParecer;
+                $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $whereD);
+                $insere = $tbDistribuirParecer->inserir($dados);
+ 
+            endforeach;
+
+            $projeto = new Projetos();
+            $wherePro['IdPRONAC = ?'] = $idPronac;
+            $buscaDadosdoProjeto = $projeto->buscar($wherePro);
+            
+            /// ALTERAR SITUACAO
+            $inabilitadoDAO = new Inabilitado();
+            $buscaInabilitado = $inabilitadoDAO->BuscarInabilitado($buscaDadosdoProjeto[0]->CgcCpf, $buscaDadosdoProjeto[0]->AnoProjeto, $buscaDadosdoProjeto[0]->Sequencial);
+            
+            if (count($buscaInabilitado == 0)) {
+                // dentro das unidades abaixo
+                if (in_array($dp->idOrgao, array(91, 92, 93, 94, 95, 160, 171, 335))) {
+                    // somente presidente
+                    $projeto->alterarSituacao($idPronac, null, 'C20', 'An&aacute;lise t&eacute;cnica conclu&iacute;da');
+                } else {
+                    // fora das unidades acima
+                    $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida&ccedil;&atilde;o do parecer t&eacute;cnico');
+                }
+            } else {
+                // inabilitado
+                $projeto->alterarSituacao($idPronac, null, 'C09', 'Projeto fora da pauta de reuni&atilde;o da CNIC porque o proponente est&aacute; inabilitado no Minist&eacute;rio da Cultura.');
+            }
+            
+            $db->commit();
+            parent::message("Conclu&iacute;do com sucesso!", "parecer/gerenciar-parecer/finalizar-parecer", "CONFIRM");
+
+        } catch (Zend_Exception $ex) {
+            $db->rollBack();
+            parent::message("Erro ao concluir " . $ex->getMessage(), "parecer/gerenciar-parecer/finalizar-parecer", "ERROR");
+        }
+        
+    }
 }

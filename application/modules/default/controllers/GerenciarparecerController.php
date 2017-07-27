@@ -21,9 +21,10 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
             // verifica as permiss�es
             $PermissoesGrupo = array();
             $PermissoesGrupo[] = 94;
-            $PermissoesGrupo[] = 93;
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
             $PermissoesGrupo[] = 137;
-
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA;            
+            
             if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) // verifica se o grupo ativo est� no array de permiss�es
             {
                 parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
@@ -571,7 +572,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
             
             $objDocumentoAssinatura->update($dadosDocumentoAssinatura, $whereDocumentoAssinatura);
         }     
-                
+        
         $error = '';
         $projetos = new Projetos();
 
@@ -657,6 +658,9 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
     }
 
 
+    /*
+     * DEPRECATED - tela removida / funcionalidades no módulo parecer 
+     */
     public function concluirAction()
     {
 
@@ -680,7 +684,9 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
     }
 
-
+    /*
+     * DEPRECATED - movida para módulo parecer 
+     */
     public function concluiuAction()
     {
         //** Usuario Logado ************************************************/
@@ -695,14 +701,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $idPronac = $this->_request->getParam("idpronac");
         $observacao = $this->_request->getParam("obs");
         $tipoFiltro = $this->_request->getParam("tipoFiltro");
-
-
-        if (strlen($observacao) < 11) {
-            parent::message("O campo observa&ccedil;&atilde;o deve ter no m&iacute;nimo 11 caracteres!",
-                "gerenciarparecer/concluir/idDistribuirParecer/" . $idDistribuirParecer . "/idpronac/" . $idPronac,
-                "ALERT");
-        }
-
+        
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
@@ -756,7 +755,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                 $whereD['idDistribuirParecer = ?'] = $idDistribuirParecer;
                 $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $whereD);
                 $insere = $tbDistribuirParecer->inserir($dados);
-
+ 
             endforeach;
 
             /** Grava o Parecer nas Tabelas tbPlanilhaProjeto e Parecer e altera a situa��o do Projeto para  ***************/
@@ -766,27 +765,6 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
             // se for produto principal
             if ($buscaDadosProjeto[0]->stPrincipal == 1) {
-
-                $inabilitadoDAO = new Inabilitado();
-                $buscaInabilitado = $inabilitadoDAO->BuscarInabilitado($buscaDadosdoProjeto[0]->CgcCpf, $buscaDadosdoProjeto[0]->AnoProjeto, $buscaDadosdoProjeto[0]->Sequencial);
-
-                // nao est� inabilitado
-                if (count($buscaInabilitado == 0)) {
-                    // dentro das unidades abaixo
-                    if (in_array($dp->idOrgao, array(91, 92, 93, 94, 95, 160, 171, 335))) {
-                        if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
-                            $projeto->alterarSituacao($idPronac, null, 'C20', 'An&aacute;lise t&eacute;cnica conclu&iacute;da');
-                        } else if ($tipoFiltro == 'em_validacao') {
-                            $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida&ccedil;&atilde;o do parecer t&eacute;cnico');
-                        }
-                    } else {
-                        // fora das unidades acima
-                        $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida&ccedil;&atilde;o do parecer t&eacute;cnico');
-                    }
-                } else {
-                    // inabilitado
-                    $projeto->alterarSituacao($idPronac, null, 'C09', 'Projeto fora da pauta de reuni&atilde;o da CNIC porque o proponente est&aacute; inabilitado no Minist&eacute;rio da Cultura.');
-                }
 
                 /****************************************************************************************************************/
                 $parecerDAO = new Parecer();
