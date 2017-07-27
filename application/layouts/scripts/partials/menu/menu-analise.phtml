@@ -6,6 +6,7 @@ $arrMenu['analise'] = array(
     'title' => 'Ir para An&aacute;lise',
     'menu' => array(),
     'grupo' => array(
+        Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA,
         Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA,
         Autenticacao_Model_Grupos::PARECERISTA,
         Autenticacao_Model_Grupos::GESTOR_SALIC,
@@ -87,6 +88,10 @@ $arrMenu['analise']['menu'][] = array('label' => 'Calend&aacute;rio CNIC', 'titl
 $arrMenu['analise']['menu'][] = array('label' => 'Gerenciar Pareceres', 'title' => 'Ir para Gerenciar Pareceres',
     'url' => $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'), '', true),
     'grupo' => array(Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA)
+);
+$arrMenu['analise']['menu'][] = array('label' => 'Gerenciar Pareceres', 'title' => 'Ir para Gerenciar Pareceres',
+    'url' => $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'finalizar-parecer'), '', true),
+    'grupo' => array(Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'An&aacute;lise T&eacute;cnica Inicial', 'title' => 'Ir para An&aacute;lise T&eacute;cnica Inicial',
     'url' => $this->url(array('module' => 'parecer', 'controller' => 'analise-inicial', 'action' => 'index'), '', true),
