@@ -6,13 +6,11 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
     private $intTamPag = 10;
 
     private function validarPerfis() {
-        $auth = Zend_Auth::getInstance();
-
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA;
         
-        isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
+        isset($this->auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
 
     public function init()
@@ -21,11 +19,19 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         parent::init();
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $this->validarPerfis();
     }
 
     public function gerenciarAssinaturasAction()
     {
-        $this->redirect("/{$this->moduleName}/gerenciar-parecer/index?tipoFiltro=validados");
+        switch ($this->grupoAtivo->codGrupo) {
+        case Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
+            $this->redirect("/{$this->moduleName}/gerenciar-parecer/finalizar-parecer");
+            break;
+        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA:
+            $this->redirect("/{$this->moduleName}/gerenciar-parecer/index?tipoFiltro=validados");
+            break;
+        }       
     }
 
     public function encaminharAssinaturaAction()
@@ -38,8 +44,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
     
     public function indexAction()
     {
-        $this->validarPerfis();
-        
         $auth = Zend_Auth::getInstance();
         $idusuario = $auth->getIdentity()->usu_codigo;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
@@ -142,4 +146,104 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->dados = $busca;
         $this->view->intTamPag = $this->intTamPag;        
     }
+    
+    public function finalizarParecerAction()
+    {
+        $auth = Zend_Auth::getInstance();
+        $idusuario = $auth->getIdentity()->usu_codigo;
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $codOrgao = $GrupoAtivo->codOrgao;
+        $this->view->codOrgao = $codOrgao;
+        $this->view->idUsuarioLogado = $idusuario;
+
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $this->view->quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas($this->idTipoDoAtoAdministrativo, $idOrgao);
+        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+        $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
+        
+        //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
+        if($this->_request->getParam("qtde")) {
+            $this->intTamPag = $this->_request->getParam("qtde");
+        }
+        $order = array();
+
+        if ($this->_request->getParam("ordem")) {
+            $ordem = $this->_request->getParam("ordem");
+            if ($ordem == "ASC") {
+                $novaOrdem = "DESC";
+            } else {
+                $novaOrdem = "ASC";
+            }
+        } else {
+            $ordem = "ASC";
+            $novaOrdem = "ASC";
+        }
+        
+        if ($this->_request->getParam("campo")) {
+            $campo = $this->_request->getParam("campo");
+            $order = array($campo . " " . $ordem);
+            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
+
+        } else {
+            $campo = null;
+            $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
+            $ordenacao = null;
+        }
+
+        $pag = 1;
+        $get = Zend_Registry::get('get');
+        if (isset($get->pag)) $pag = $get->pag;
+        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
+
+        $where = array();
+        $where["idOrgao = ?"] = $codOrgao;
+
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
+            $pronac = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
+            $where["NrProjeto = ?"] = $pronac;
+            $this->view->pronacProjeto = $pronac;
+        }
+
+        $tbDistribuirParecer = new tbDistribuirParecer();
+        $tipoFiltro  = 'presidente_finalizar';
+        $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
+        $fim = $inicio + $this->intTamPag;
+        
+        $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
+        $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
+        $busca = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, $tamanho, $inicio, false, $tipoFiltro);
+
+        $checarValidacaoSecundarios = array();
+        foreach ($busca as $chave => $item) {
+            if ($item->stPrincipal == 1) {
+                $checarValidacaoSecundarios[$item->IdPRONAC] = $tbDistribuirParecer->checarValidacaoProdutosSecundarios($item->IdPRONAC);
+            }
+        }
+        $this->view->checarValidacaoSecundarios = $checarValidacaoSecundarios;
+
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+        
+        $paginacao = array(
+            "pag" => $pag,
+            "qtde" => $this->intTamPag,
+            "campo" => $campo,
+            "ordem" => $ordem,
+            "ordenacao" => $ordenacao,
+            "novaOrdem" => $novaOrdem,
+            "total" => $total,
+            "inicio" => ($inicio + 1),
+            "fim" => $fim,
+            "totalPag" => $totalPag,
+            "Itenspag" => $this->intTamPag,
+            "tamanho" => $tamanho
+        );
+
+        $this->view->paginacao = $paginacao;
+        $this->view->qtdDocumentos = $total;
+        $this->view->dados = $busca;
+        $this->view->intTamPag = $this->intTamPag;        
+    }
+
 }
