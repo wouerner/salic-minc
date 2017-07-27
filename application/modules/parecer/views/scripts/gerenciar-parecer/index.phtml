@@ -262,16 +262,16 @@ $filtros = array(
 		  <?php if ($dp->stPrincipal == 1) { ?>
 		  <!-- pergunto se tem secundarios abertos -->
 		  <?php if($this->checarValidacaoSecundarios[$dp->IdPRONAC] == 1) {
-		  $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/tipoFiltro/" . $this->tipoFiltro . "?concluir=1";
+                $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/tipoFiltro/" . $this->tipoFiltro;
 		  ?>
 		  <!-- se retornar true mostra o botão -->
                   <a class="btn waves-effect waves-light tooltipped small btn cyan"
                      href="#modalConfirmacao"
                      data-redirect-url="<?php echo $this->url(
                                         array(
-                                        'module' => 'default',
-                                        'controller' => 'gerenciarparecer',
-                                        'action' => 'concluir'
+                                        'module' => 'parecer',
+                                        'controller' => 'gerenciar-parecer',
+                                        'action' => 'concluiu'
                                         )
                                         ) . $parametrosAssinatura ?>"
                      data-position="top"
@@ -283,7 +283,7 @@ $filtros = array(
 		  <?php } ?>
 		  <!-- secundários: sempre exibe botão de concluir -->
 		  <?php } else { 
-		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
+                                             $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/tipoFiltro/" . $this->tipoFiltro;
 		  ?>
 		  <!-- se retornar true mostra o botão -->
                   <a class="btn waves-effect waves-light tooltipped small btn cyan"
@@ -315,17 +315,14 @@ $filtros = array(
 		  <?php if($this->verificarIN2017($dp->IdPRONAC)): ?>
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
-		  <?php if (!$this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):
-		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
-		  ?>
+		  <?php if (!$this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$dp->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/gerenciar-parecer/index?tipoFiltro=validados"
 		    data-tooltip="Assinar documento">
 		    <i class="material-icons white-text">create</i>
 		  </a>
 		  <?php elseif ($this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):		  
-		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC ."&concluir=1" . "/tipoFiltro/" . $this->tipoFiltro;
-		  ?>
+                                             $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/tipoFiltro/" . $this->tipoFiltro; ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
 		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/gerenciar-parecer/index?tipoFiltro=validados"
 		    data-tooltip="Visualizar documento assinado">
@@ -336,9 +333,9 @@ $filtros = array(
                      href="#modalConfirmacao"
                      data-redirect-url="<?php echo $this->url(
                                         array(
-                                        'module' => 'default',
-                                        'controller' => 'gerenciarparecer',
-                                        'action' => 'concluir'
+                                        'module' => 'parecer',
+                                        'controller' => 'gerenciar-parecer',
+                                        'action' => 'concluiu'
                                         )
                                         ) . $parametrosAssinatura ?>"
                      data-position="top"
