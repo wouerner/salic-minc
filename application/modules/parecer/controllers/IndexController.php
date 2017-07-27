@@ -30,12 +30,19 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
 
     public function indexAction()
     {
-        $this->redirect("/{$this->moduleName}/index/encaminhar-assinatura");
+        $this->redirect("/{$this->moduleName}/analise-inicial");
     }
 
     public function gerenciarAssinaturasAction()
     {
-        $this->redirect("/{$this->moduleName}/index/encaminhar-assinatura");
+        switch ($this->grupoAtivo->codGrupo) {
+        case Autenticacao_Model_Grupos::PARECERISTA:
+            $this->redirect("/{$this->moduleName}/analise-inicial");
+            break;
+        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA:
+            $this->redirect("/{$this->moduleName}/gerenciar-parecer/index");
+            break;
+        }               
     }
 
 
@@ -52,7 +59,7 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
                 $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
                 $idDocumentoAssinatura = $this->getIdDocumentoAssinatura($get['IdPRONAC'], $idTipoDoAtoAdministrativo);
                 
-                $this->redirect("/assinatura/index/visualizar-projeto/?idDocumentoAssinatura=" . $idDocumentoAssinatura);
+                $this->redirect("/assinatura/index/visualizar-projeto/?idDocumentoAssinatura=" . $idDocumentoAssinatura . "&origin=" . $get['origin']);
             } elseif(isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
                 // ainda nao implementado o encaminhamento de vários para pareceres
             }
