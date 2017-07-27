@@ -172,7 +172,7 @@ foreach($this->buscar as $d) {
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>"&origin=parecer/analise-inicial"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/analise-inicial"
 		    data-tooltip="Visualizar documento">
 		    <i class="material-icons white-text">remove_red_eye</i>
 		  </a>
