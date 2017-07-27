@@ -145,26 +145,26 @@
 	    
 	    <tr>
 	      <td align="center">vl. Solicitado:</td>
-	      <td>R$<?php echo number_format($this->dadosEnquadramento[0]->VlSolicitado, 2, ',', '.'); ?></td>
+	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlSolicitado, 2, ',', '.'); ?></td>
 	      <td>&nbsp;</td>
 	      <td align="center">Custo do Projeto:</td>
-	      <td>R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>
+	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>
 	    </tr>
 	    
 	    <tr>
 	      <td align="center">vl. Outras Fontes:</td>
-	      <td>R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontes, 2, ',', '.'); ?></td>
+	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontes, 2, ',', '.'); ?></td>
 	      <td>&nbsp;</td>
 	      <td align="center">vl. Outras Fontes</td>
-	      <td>R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontesAprovado, 2, ',', '.'); ?></td>
+	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontesAprovado, 2, ',', '.'); ?></td>
 	    </tr>	      
 	    
 	    <tr>
 	      <td align="center" class="bold">Vl. Projeto:</td>
-	      <td>R$<?php echo number_format($this->dadosEnquadramento[0]->VlProjeto, 2, ',', '.'); ?></td>
+	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlProjeto, 2, ',', '.'); ?></td>
 	      <td>&nbsp;</td>
 	      <td align="center" class="bold">Custo Total</td>
-	      <td>R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>		
+	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>		
 	    </tr>	      
 	    
 	    <tr>
@@ -191,23 +191,23 @@
 		  <?php $ProdutoTotal = 0; ?>
 		  <?php foreach($this->dadosProdutos as $produto): ?>
 		  <tr>
-		    <td align="center"><?php echo $produto->Produto; ?></td>
-		    <td><?php echo $produto->tpProduto; ?></td>		      
-		    <td><?php echo number_format($produto->QtdeProduzida, 0, '', '.'); ?></td>
-		    <td><?php echo number_format($produto->QtdeDistribuicaoGratuita, 0, '', '.') ?></td>
-		    <td><?php echo number_format($produto->QtdeVendaPopular, 0, '', '.'); ?></td>
-		    <td><?php echo number_format($produto->QtdeVendaProponente, 0, '', '.'); ?></td>
-		    <td>R$<?php echo number_format($produto->PrecoMedio, 2, ',', '.'); ?></td>
-		    <td>R$<?php echo number_format($produto->vlProduto, 2, ',', '.'); ?></td>
-		    <td>R$<?php echo number_format($produto->ReceitaTotal, 2, ',', '.'); ?></td>
+		    <td class="right-align"><?php echo $produto->Produto; ?></td>
+		    <td class="right-align"><?php echo $produto->tpProduto; ?></td>		      
+		    <td class="right-align"><?php echo number_format($produto->QtdeProduzida, 0, '', '.'); ?></td>
+		    <td class="right-align"><?php echo number_format($produto->QtdeDistribuicaoGratuita, 0, '', '.') ?></td>
+		    <td class="right-align"><?php echo number_format($produto->QtdeVendaPopular, 0, '', '.'); ?></td>
+		    <td class="right-align"><?php echo number_format($produto->QtdeVendaProponente, 0, '', '.'); ?></td>
+		    <td class="right-align">R$<?php echo number_format($produto->PrecoMedio, 2, ',', '.'); ?></td>
+		    <td class="right-align">R$<?php echo number_format($produto->vlProduto, 2, ',', '.'); ?></td>
+		    <td class="right-align">R$<?php echo number_format($produto->ReceitaTotal, 2, ',', '.'); ?></td>
 		  </tr>
 		  <?php $ReceitaTotal += $produto->ReceitaTotal; ?>
 		  <?php $ProdutoTotal += $produto->vlProduto; ?>
 		  <?php endforeach; ?>
 		  <tr>
 		    <td colspan="7">&nbsp;</td>
-		    <td class="bold">R$<?php echo number_format($ProdutoTotal, 2, ',', '.'); ?></td>
-		    <td class="bold">R$<?php echo number_format($ReceitaTotal, 2, ',', '.'); ?></td>
+		    <td class="right-align bold">R$<?php echo number_format($ProdutoTotal, 2, ',', '.'); ?></td>
+		    <td class="right-align bold">R$<?php echo number_format($ReceitaTotal, 2, ',', '.'); ?></td>
 		  </tr>
 		</table>
           </table>
