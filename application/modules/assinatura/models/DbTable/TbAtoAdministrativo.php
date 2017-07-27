@@ -45,7 +45,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
-    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto)
+    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto, $idOrgaoSuperiorDoAssinante)
     {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
@@ -59,6 +59,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             $this->_schema
         );
         $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
+        $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
         $objQuery->where('stEstado = ?', true);
         $objResultado = $this->fetchRow($objQuery);
         if ($objResultado) {
@@ -70,7 +71,11 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
     /**
      * @return string Código do orgao
      */
-    public function obterProximoOrgaoDeDestino($idTipoDoAto, $idOrdemDaAssinaturaAtual)
+    public function obterProximoOrgaoDeDestino(
+        $idTipoDoAto,
+        $idOrdemDaAssinaturaAtual,
+        $idOrgaoSuperiorDoAssinante
+    )
     {
 
         $objQuery = $this->select();
@@ -82,6 +87,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         );
         $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
         $objQuery->where('idOrdemDaAssinatura > ?', $idOrdemDaAssinaturaAtual);
+        $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
         $objQuery->order('idOrdemDaAssinatura asc');
         $objQuery->limit(1);
 
