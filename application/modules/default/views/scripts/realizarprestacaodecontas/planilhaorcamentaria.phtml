@@ -194,16 +194,16 @@
 	                </table>
 
                 <table id="planilhaItem" class="tabela">
+                    <tr>
+                       <td>
                 <?php
-                    $html = '';
-                    $html .= '<tr>';
-                        $html .= '<td>';
                             $cont=0;
                             $cont2=0;
                             $cont3=0;
-                            foreach($this->incFiscaisA as $titulo => $item) {
-                                $html .= '<div > ';
-                                $html .= "<span class='green'>{$titulo}</span>";
+                            foreach($this->incFiscaisA as $titulo => $item):?> 
+                                <div>
+                             <span class='green'><?php echo $titulo ?></span>
+                            <?php
                                 if(is_array($item) && !empty($item)) {
                                     foreach($item as $titulo => $subItem) {
                                         $html .= '<div class="divfilho'.$cont.'" style="padding-left: 15px;">';
@@ -264,8 +264,9 @@
                                     }
                                 }
                                 $html .= '</div>';
-                                $cont++;
-                            }
+                                $cont++; ?>
+                        <?php endforeach?>
+                            <?php
                         $html .= '</td>';
                         $html .= '</tr>';
                     echo $html;
@@ -320,7 +321,7 @@
                                                         $href .= $itemAvaliadoParam;
                                                         $html .= "<a href='{$href}' class='editarIco'>Analisar item</a>";
                                                         $html .= '</td>';
-                                                        $html .= "<td>".htmlentities($valor[0])."</td>";
+                                                        $html .= "<td>".($valor[0])."</td>";
                                                         $html .= "<td nowrap>{$this->formatarReal($valor[1])}</td>";
                                                         $html .= "<td nowrap>{$this->formatarReal($valor[3])}</td>";
                                                         $html .= "<td nowrap>{$this->formatarReal($valor[7])}</td>";
