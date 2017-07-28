@@ -45,10 +45,14 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             $this->grupoAtivo->codGrupo,
             $this->idTipoDoAtoAdministrativo
         );
+
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
 
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-        $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas($this->idTipoDoAtoAdministrativo);
+        $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
+            $this->idTipoDoAtoAdministrativo,
+            $this->auth->getIdentity()->usu_org_max_superior
+        );
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
     }
 
@@ -70,13 +74,11 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
             $post = $this->getRequest()->getPost();
             if ($post) {
-
                 if (!$post['motivoDevolucao']) {
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' não informado.");
                 }
                 $objTbDepacho = new Proposta_Model_DbTable_TbDespacho();
                 $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura($get->IdPRONAC, $post['motivoDevolucao']);
-
 
                 $objOrgaos = new Orgaos();
                 $orgaoSuperior = $objOrgaos->obterOrgaoSuperior($this->view->projeto['Orgao']);
@@ -104,8 +106,9 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                     'IdPRONAC = ?' => $get->IdPRONAC,
                     'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
                     'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-                    'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+                    'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
                 );
+
                 $objModelDocumentoAssinatura->update($data, $where);
 
                 parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas", 'CONFIRM');
@@ -139,6 +142,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
             $this->view->titulo = "Devolver";
         } catch (Exception $objException) {
+//xd($objException->getMessage());
             parent::message($objException->getMessage(), "/{$this->moduleName}/enquadramento-assinatura/devolver-projeto?IdPRONAC={$get->IdPRONAC}");
         }
     }
