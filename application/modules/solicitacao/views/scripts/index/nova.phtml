@@ -5,8 +5,9 @@
                 <h5>Solicita&ccedil;&atilde;o Proponente</h5>
                 <div class="card padding20 materialize" >
                     <form id="form-mensagem" data-ajax-form="true" method="post" action="<?php echo $this->urlAction ?>" enctype="multipart/form-data">
-                        <input name="idMensagemProjeto" type="hidden" value="<?php echo $this->id; ?>"/>
+                        <input name="idSolicitacao" type="hidden" value="<?= isset($this->dataForm['idSolicitacao']) ? $this->dataForm['idSolicitacao']: ''; ?>"/>
                         <input name="idPronac" type="hidden" value="<?php echo $this->idPronac; ?>"/>
+                        <input name="idPreProjeto" type="hidden" value="<?php echo $this->idProjeto; ?>"/>
 
                         <?php if(!isset($this->arrConfig['dsMensagem']['show']) || $this->arrConfig['dsMensagem']['show'] === true): ?>
                             <?php if (isset($this->arrConfig['dsMensagem']['disabled']) && $this->arrConfig['dsMensagem']['disabled']): ?>
@@ -15,7 +16,7 @@
                                         <h4 for="dsMensagem" class="active">Solicita&ccedil;&atilde;o</h4>
                                     </div>
                                     <div class="col s12">
-                                        <?php if (isset($this->dataForm['dsMensagem'])) echo $this->dataForm['dsMensagem']; ?>
+                                        <?= isset($this->dataForm['dsSolicitacao']) ? $this->dataForm['dsSolicitacao']: ''; ?>
                                     </div>
                                 </div>
                             <?php else: ?>
@@ -35,8 +36,8 @@
                                              class="doc<?php echo $this->arquivoExecucaoImediata[0]['codigodocumento']; ?>">
                                             <label for="arquivo"
                                                    style="width: 50px; "><?php echo $this->arquivoExecucaoImediata[0]['descricao']; ?> </label>
-                                            <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $this->arquivoExecucaoImediata[0]['iddocumentospreprojetos']; ?>">
-                                                <?php echo utf8_decode(htmlentities($this->arquivoExecucaoImediata[0]['noarquivo'])); ?>
+                                            <a href="<?= $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir')); ?>?id=<?= $this->arquivoExecucaoImediata[0]['iddocumentospreprojetos']; ?>">
+                                                <?= utf8_decode(htmlentities($this->arquivoExecucaoImediata[0]['noarquivo'])); ?>
                                             </a>
                                         </div>
                                     <?php else : ?>
@@ -56,7 +57,7 @@
                                         <label for="dsResposta" class="active">Resposta</label>
                                     </div>
                                     <div class="col s12">
-                                        <?php echo ($this->dataForm['dsResposta'])? $this->dataForm['dsResposta'] : '<br />Sem resposta at&eacute; o momento.'; ?>
+                                        <?= ($this->dataForm['dsResposta'])? $this->dataForm['dsResposta'] : '<br />Sem resposta at&eacute; o momento.'; ?>
                                     </div>
                                 </div>
                             <?php elseif (isset($this->dataForm['dsResposta'])): ?>

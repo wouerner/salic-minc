@@ -64,8 +64,20 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
     }
 
     public function novaAction() {
+
         $strActionBack = $this->getRequest()->getParam('actionBack');
         $strActionBack = ($strActionBack) ? $strActionBack : 'index';
+
+        $params = $this->getRequest()->getParams();
+
+        $solicitacao = [];
+        $params['idSolicitacao'] = 1;
+        if(isset($params['idSolicitacao'])) {
+
+
+            $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
+            $dataForm = $tbSolicitacao->findBy(['idSolicitacao' => $params['idSolicitacao']]);
+        }
 
         // Plano de execução imediata #novain
         if ($this->_proposta["stproposta"] == '618') { // proposta execucao imediata edital
