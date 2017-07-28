@@ -16,7 +16,8 @@ $pronac = $this->idpronac;
 <table class="tabela">
 	<tr>
             <th class="<?php if (strstr($this->url(), 'parecerconsolidado')== 'parecerconsolidado') {echo "fundo_linha4";} else { echo "fundo_linha2"; } ?>"><a href="<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'parecerconsolidado'));?>">Parecer T&eacute;cnico Consolidado</a></th>
-            
+
+<?php if (!$this->VerificarIN2017($this->idpronac)) : ?>
             <?php if($this->bln_readequacao == "false"){ ?>
                 <th class="<?php if (strstr($this->url(), 'analisedeconta')    == 'analisedeconta')     {echo "fundo_linha4";} else { echo "fundo_linha2"; } ?>"><a href="<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'analisedeconta'));    ?>">An&aacute;lise de Cortes Sugeridos</a></th>
             <?php }else{ ?>
@@ -24,7 +25,7 @@ $pronac = $this->idpronac;
             <?php } ?>
             
                 <th class="<?php if (strstr($this->url(), 'analisedeconteudo') == 'analisedeconteudo')  {echo "fundo_linha4";} else { echo "fundo_linha2"; } ?>"><a href="<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'analisedeconteudo')); ?>">An&aacute;lise de Conte&uacute;do</a></th>
-            
+<?php endif; ?>            
             <?php if($this->bln_readequacao == "false"){ ?>
                 <th class="<?php if (strstr($this->url(), 'analisedecustos')   == 'analisedecustos')    {echo "fundo_linha4";} else { echo "fundo_linha2"; } ?>"><a href="<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'analisedecustos'));   ?>" id="custos">An&aacute;lise de Custos</a></th>
             <?php }else{ ?>
