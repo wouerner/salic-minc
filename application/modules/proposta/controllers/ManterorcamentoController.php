@@ -504,6 +504,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
     private function salvarItemPlanilha($dados, $idPlanilhaProposta = null, $outraLocalidade = false)
     {
+
         $resultAlterarProjeto = true;
         $idPreProjeto = $dados['idProjeto'];
 
@@ -618,7 +619,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             . '</a>'
             . '</td>'
             . '<td class="action left-align">'
-            . '<a class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item" href="javascript:void(0);" data-tooltip="Excluir" data-ajax="' . $return['idPlanilhaProposta'] . '" ><i class="material-icons">delete</i></a>'
+            . '<a class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item" href="javascript:void(0);" data-tooltip="Excluir" data-ajax="' . $idPlanilhaProposta . '" ><i class="material-icons">delete</i></a>'
             . '</td>'
             . '</tr>';
 
