@@ -37,4 +37,18 @@ class Proposta_Model_DbTable_TbPlanilhaItens extends MinC_Db_Table_Abstract
         $db = Zend_Db_Table::getDefaultAdapter();
         return $db->fetchOne($select);
     }
+
+    public function listarItens() {
+
+        $db= Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+        $sql = $db->select()
+            ->from( $this->_name,
+                array('idplanilhaitens as coditens', 'descricao as Item', 'idusuario'),
+                $this->_schema)
+            ->order('descricao');
+
+        return $db->fetchAll($sql);
+    }
 }

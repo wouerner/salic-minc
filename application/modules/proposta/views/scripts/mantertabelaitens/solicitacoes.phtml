@@ -46,10 +46,10 @@
             <table class="tabela">
                 <tr class="centro">
                     <td colspan="6" >
-                        <input type="button" name="novo" class="btn_novo" value="" onclick="window.location='<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'solicitaritens')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>'">
+                        <input type="button" name="novo" class="btn_novo" value="" onclick="window.location='<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'solicitaritens')); ?>/idPreProjeto/<?= $this->idPreProjeto; ?>'">
                         <!--<input type="button" name="imprimir" class="btn_imprimir" value="" onclick="$('#form').submit();">-->
                         <input  type="button" name="imprimir" class="btn_imprimir" onclick='$("#conteudoImprimir").val($(".conteudoImprimivel").html()); $("#formGerarPdf").submit();'>
-                        <!--<input type="button" name="localizar" class="btn_localizar" value="" onclick="window.location='<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'consultartabelaitens')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>'">-->
+                        <!--<input type="button" name="localizar" class="btn_localizar" value="" onclick="window.location='<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'consultartabelaitens')); ?>?idPreProjeto=<?= $this->idPreProjeto; ?>'">-->
                     </td>
                 </tr>
             </table>
