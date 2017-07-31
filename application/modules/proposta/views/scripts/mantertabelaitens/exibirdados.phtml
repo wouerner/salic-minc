@@ -18,7 +18,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'buscaetapas')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>',
+            url: "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'buscaetapas', 'idPreProjeto' => $this->idPreProjeto)); ?>",
             data:{
                 idProduto: id
             },
@@ -28,7 +28,7 @@
 
             },
             error: function (data){
-                divMsg.html("Falha na recupera&ccedil;&atilde;o dos dados.\nN&atilde;o foi poss&iacute;vel carregar agente!");
+                divMsg.html("Falha na recupera&ccedil;&atilde;o dos dados.\nN&atilde;o foi poss&iacute;vel carregar etapas!");
             }
         });
     }
@@ -43,7 +43,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'buscaitens')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>',
+            url: "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'buscaitens', 'idPreProjeto' => $this->idPreProjeto)); ?>",
             data:{
                 idProduto: idP,
                 idEtapa: idE
@@ -54,7 +54,7 @@
 
             },
             error: function (data){
-                divMsg.html("Falha na recupera&ccedil;&atilde;o dos dados.\nN&atilde;o foi poss&iacute;vel carregar agente!");
+                divMsg.html("Falha na recupera&ccedil;&atilde;o dos dados.\nN&atilde;o foi poss&iacute;vel carregar os itens!");
             }
         });
     }
@@ -116,7 +116,7 @@
                     }?>
                     <br /><br />
 
-                    <form id="frmBusca" method="post" name="frmBusca" action="<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'gerarpdf')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>">
+                    <form id="frmBusca" method="post" name="frmBusca" action="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'gerarpdf', 'idPreProjeto' => $this->idPreProjeto)); ?>">
                         <input type="hidden" name="tipoPesquisa" value="<?php echo $this->tipopesquisa;?>">
                         <input type="hidden" name="produto" value="<?php echo $this->produto;?>">
                         <input type="hidden" name="etapa" value="<?php echo $this->etapa;?>">
@@ -131,7 +131,7 @@
                <!-- <table class="tabela centro">
                     <tr>
                         <td>
-                            <<input type="button" name="voltar" class="btn_voltar" value="" onclick="window.location='<?php echo $this->url(array('controller' => 'mantertabelaitens', 'action' => 'consultartabelaitens')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>'">
+                            <<input type="button" name="voltar" class="btn_voltar" value="" onclick="window.location='<?php echo $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'consultartabelaitens', 'idPreProjeto' => $this->idPreProjeto)); ?>">
                             <input  type="button" name="imprimir" class="btn_imprimir" onclick='$("#conteudoImprimir").val($(".conteudoImprimivel").html()); $("#formGerarPdf").submit();'>
                         </td>
                     </tr>
