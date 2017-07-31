@@ -69,6 +69,7 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
      * @static
      * @access public
      * @return void
+     * @deprecated este metodo foi movido para tbItensPlanilhaProduto
      */
     public function listarProdutoEtapaItem ($item=null, $nomeItem=null, $idEtapa=null, $idProduto=null, $where=array())
     {
@@ -184,6 +185,12 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
         return $db->fetchRow($sql);
     }
 
+    /**
+     * @param null $item
+     * @param null $nomeItem
+     * @return array
+     * @deprecated ja existe o mesmo metodo em tbItensPlanilhaProduto chamado buscaItemProduto
+     */
     public function produtoEtapaItem ($item=null, $nomeItem=null)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -237,6 +244,7 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
      * @param bool $where
      * @access public
      * @return void
+     * @deprecated movido para produto.php
      */
     public function listarProduto($where=null)
     {
@@ -269,6 +277,7 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
      *
      * @access public
      * @return void
+     * @deprecated movido para tbPlanilhaEtapa.php
      */
     public function listarEtapa()
     {
@@ -296,6 +305,7 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
      *
      * @access public
      * @return void
+     * @deprecated movido para TbPlanilhaItens.php metodo listarItens()
      */
     public function listarItem() {
 
@@ -316,7 +326,7 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
      * @static
      * @access public
      * @return void
-     * $todo migrar metodo para $this->solicitacao
+     * @todo migrar metodo para $this->solicitacao
      */
     public function solicitacoes($idagente) {
 
@@ -370,6 +380,7 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
      * @param mixed $idAgente
      * @access public
      * @return void
+     * @deprecated movido para tbSolicitarItem.php, metodo solicitacoes
      */
     public function solicitacao($idAgente)
     {
