@@ -42,7 +42,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $documentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas(
             $this->grupoAtivo->codOrgao,
-            $this->grupoAtivo->codGrupo
+            $this->grupoAtivo->codGrupo,
+            $this->auth->getIdentity()->usu_org_max_superior
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
