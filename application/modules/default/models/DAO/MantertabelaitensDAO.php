@@ -6,8 +6,10 @@
  * @version 1.0
  * @package application
  * @subpackage application.model.DAO
- * @copyright � 2010 - Minist�rio da Cultura - Todos os direitos reservados.
+ * @copyright  2010 - Ministerio da Cultura - Todos os direitos reservados.
  * @link http://www.cultura.gov.br
+ * @deprecated utilizar a Proposta_Model_DbTable_TbSolicitarItem
+ * @todo verificar os metodos e mover para Proposta_Model_DbTable_TbSolicitarItem
  */
 
 class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
@@ -565,7 +567,6 @@ class MantertabelaitensDAO extends  MinC_Db_Table_Abstract
             $sql->orWhere('it.descricao = ?', $nomeItem);
         }
         $sql->order('sol.idsolicitaritem');
-
         return $db->fetchAll($sql);
     }
 }
