@@ -28,14 +28,14 @@
             <!-- ========== FIM TITULO ========== -->
 
             <div id="conteudo">
-                <form name="form" id="form" action="<?php echo $this->url(array('module'=>'proposta', 'controller' => 'mantertabelaitens', 'action' => 'solicitaritens')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>" method="post">
+                <form name="form" id="form" action="<?php echo $this->url(array('module'=>'proposta', 'controller' => 'mantertabelaitens', 'action' => 'salvarsolicitacaoitem')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>" method="post">
                     <table class="tabela">
                         <tr class="titulo_tabela">
                             <th colspan="4">Novo Produto / Etapa / Item </th>
                         </tr>
                         <tr class="centro">
                             <td colspan="4">
-                                <label style="font-weight: normal;"><input name="solicitacao" type="radio" value="produtoetapa" id='produtoetapa' checked/> Associar Item a Produto/Etapa</label>&nbsp; &nbsp;
+                                <label style="font-weight: normal;"><input name="solicitacao" type="radio" value="associacao" id='associacao' checked/> Associar Item a Produto/Etapa</label>&nbsp; &nbsp;
                                 <label style="font-weight: normal;"><input name="solicitacao" type="radio" value="novoitem" id='novoitem' /> Incluir novo Item</label>
                             </td>
                         </tr>
