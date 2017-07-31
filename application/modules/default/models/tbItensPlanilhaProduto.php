@@ -4,7 +4,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
 
     protected $_schema = 'sac';
     protected $_name = 'tbitensplanilhaproduto';
-
+    protected $_primary = 'idItensPlanilhaProduto';
 
     /**
      * Metodo para consultar o Valor Real por ano
