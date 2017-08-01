@@ -444,20 +444,19 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
             $tipoPesquisa = $post->tipoPesquisa;
             $itemBuscado = $post->itemBuscado;
 
-            $idEtapa = $post->etapa;
-            $idProduto = $post->produto;
             $this->view->produto = $post->produto;
             $this->view->etapa = $post->etapa;
             $this->view->itemBuscado = $itemBuscado;
-
             $this->view->tipopesquisa = $post->TipoPesquisa;
-
             $this->view->item = $post->NomeDoItem;
 
-            $termoPesquisa = $this->definirTermoDaPesquisa($tipoPesquisa);
-            $where = null;
+            try {
 
-            if ($itemBuscado) {
+                if(strlen($itemBuscado) < 3)
+                    throw new Exception("Informe uma palavra de menos 3 caracteres na pesquisa!");
+
+
+                $where = null;
                 switch ($tipoPesquisa) {
                     case 1:
                         $where["i.descricao LIKE (?)"] = "%" . $itemBuscado . "%";
@@ -472,48 +471,22 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
                         $where["i.descricao <> ?"] = "%" . $itemBuscado;
                         break;
                 }
-            }
 
-            $tbpretitem = new tbItensPlanilhaProduto();
-            $etapasComTermoPesquisado = $tbpretitem->listarProdutoEtapaItem(null, null, $post->etapa, $post->produto, $where);
+                $tbpretitem = new tbItensPlanilhaProduto();
+                $etapasComTermoPesquisado = $tbpretitem->listarProdutoEtapaItem(null, null, $post->etapa, $post->produto, $where);
 
-            $this->view->pretitem = $etapasComTermoPesquisado;
+                $this->view->pretitem = $etapasComTermoPesquisado;
 
-            try {
+
                 if ($tbpretitem) {
                 } else {
                     throw new Exception("Dados n&atilde;o localizados");
                 }
 
             } catch (Exception $e) {
-                parent::message($e->getMessage(), "proposta/mantertabelaitens/exibirdados/idPreProjeto/" . $this->idPreProjeto, "ERROR");
+                parent::message($e->getMessage(), "proposta/mantertabelaitens/index/idPreProjeto/" . $this->idPreProjeto, "ERROR");
             }
         }
-    }
-
-    public function definirTermoDaPesquisa($tipoPesquisa) {
-
-        if(empty($tipoPesquisa))
-            return false;
-
-        switch ($tipoPesquisa) {
-            case 1:
-                $termo = "i.descricao LIKE (%?%)";
-                break;
-            case 2:
-                $termo = "i.descricao LIKE (%?)";
-                break;
-            case 3:
-                $termo = "i.descricao = ?";
-                break;
-            case 4:
-                $termo = "i.descricao <> %?";
-                break;
-            default:
-                $termo = null;
-        }
-
-        return $termo;
     }
 
     /**
