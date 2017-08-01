@@ -453,8 +453,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
             try {
 
                 if(strlen($itemBuscado) < 3)
-                    throw new Exception("Informe uma palavra de menos 3 caracteres na pesquisa!");
-
+                    throw new Exception("Informe uma palavra de pelo menos 3 caracteres na pesquisa!");
 
                 $where = null;
                 switch ($tipoPesquisa) {
