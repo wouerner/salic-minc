@@ -6,6 +6,8 @@
  * @author wouerner <wouerner@gmail.com>
  * @since 28/04/2010
  * @link http://www.cultura.gov.br
+ * @deprecated Esta forma de imprimir pdf nao sera utilizada, utilize a opcao admissibilidade/admissibilidade/imprimirpropostacultural
+ * @todo Migrar o metodo de imprimir proposta cultural no modumo de admissibilidade para o modulo de proposta
  */
 
 

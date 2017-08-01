@@ -43,7 +43,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $documentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas(
             $this->grupoAtivo->codOrgao,
-            $this->grupoAtivo->codGrupo
+            $this->grupoAtivo->codGrupo,
+            $this->auth->getIdentity()->usu_org_max_superior
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
@@ -54,7 +55,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $this->view->idUsuarioLogado = $this->cod_usuario;
         $documentoAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
         $this->view->dados = $documentoAssinatura->obterProjetosAssinados(
-            $this->grupoAtivo->codOrgao,
+            $this->auth->getIdentity()->usu_org_max_superior,
             $this->cod_usuario
         );
 
@@ -123,7 +124,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
             $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-                $this->view->idTipoDoAtoAdministrativo
+                $this->view->idTipoDoAtoAdministrativo,
+                $this->auth->getIdentity()->usu_org_max_superior
             );
 
             $moduleAndControllerArray = explode('/', $this->view->origin);
@@ -210,7 +212,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             ->setIdPronac($idPronac)
                             ->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo)
                             ->setIdDocumentoAssinatura($idDocumentoAssinatura)
-                            ->setDsManifestacao($post['dsManifestacao']);
+                            ->setDsManifestacao($post['dsManifestacao'])
+                            ->setIdOrgaoSuperiorDoAssinante($this->auth->getIdentity()->usu_org_max_superior);
                         $objAssinatura->assinarProjeto($modelAssinatura);
                     }
 
@@ -331,6 +334,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
             $modelAssinatura->setIdAssinante($this->auth->getIdentity()->usu_codigo);
             $modelAssinatura->setIdDocumentoAssinatura($dadosDocumentoAssinatura['idDocumentoAssinatura']);
+            $modelAssinatura->setIdOrgaoSuperiorDoAssinante($this->auth->getIdentity()->usu_org_max_superior);
             $servicoAssinatura->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
 
             parent::message(
