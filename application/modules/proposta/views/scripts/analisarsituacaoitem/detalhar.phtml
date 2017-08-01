@@ -7,7 +7,7 @@
         } else if(acao == 'rejeitar'){
             vlrAcao = 1;
         } else if(acao == 'cancelar'){
-            location.href="<?php echo $this->baseUrl()."/analisarsituacaoitem"; ?>";
+            location.href="<?php echo $this->baseUrl()."/proposta/analisarsituacaoitem"; ?>";
             return false;
         }
 
@@ -45,8 +45,8 @@
 <!-- ========== INICIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => 'index')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->url(array('controller' => 'analisarsituacaoitem', 'action' => 'index')); ?>" title="Lista de Solitações de Item">Lista de Solitações de Item</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'principal', 'action' => 'index')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
+        <li class="second"><a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'analisarsituacaoitem', 'action' => 'index')); ?>" title="Lista de Solitações de Item">Lista de Solitações de Item</a></li>
         <li class="last">Analisar Solicitação de Item</li>
     </ul>
 </div>
@@ -59,7 +59,7 @@
 
 
 <div id="conteudo">
-    <form id="formularioAnalise" action="<?php echo $this->url(array('controller' => 'analisarsituacaoitem', 'action' => 'avaliar-item')); ?>" method="post">
+    <form id="formularioAnalise" action="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'analisarsituacaoitem', 'action' => 'avaliar-item')); ?>" method="post">
         <table class="tabela tablesorter">
             <?php foreach($this->dados as $dp){ ?>
             <tr>
@@ -75,7 +75,10 @@
             </tr>
             <tr>
                 <td class="destacar bold" align="right">Item</td>
-                <td><?php echo $dp->ItemSolicitado; ?></td>
+                <td>
+                    <?php echo $dp->ItemSolicitado; ?>
+                    (<?= $dp->TipoSolicitacao; ?>)
+                </td>
             </tr>
             <tr>
                 <td class="destacar bold" align="right">Justificativa</td>
