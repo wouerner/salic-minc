@@ -217,11 +217,11 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
                 array(
                     'pr.codigo as idProduto',
                     'pr.descricao as Produto'
-                )
-                , $this->_schema
+                ),
+                $this->_schema
             )
-            ->join(array('i' => 'tbplanilhaitens'), '(p.idplanilhaitens = i.idplanilhaitens)', null, $this->_schema)
-            ->join(array('e' => 'tbplanilhaetapa'), '(p.idplanilhaetapa = e.idplanilhaetapa)', null, $this->_schema)
+            ->join(array('e' => 'tbplanilhaetapa'), '(p.idplanilhaetapa = e.idplanilhaetapa)', array("e.descricao AS Etapa"), $this->_schema)
+            ->join(array('i' => 'tbplanilhaitens'), '(p.idplanilhaitens = i.idplanilhaitens)', array("i.descricao AS Item"), $this->_schema)
         ;
 
         if(!empty($nomeItem)) {
