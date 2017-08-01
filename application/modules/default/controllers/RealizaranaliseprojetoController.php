@@ -1080,18 +1080,22 @@ class RealizarAnaliseProjetoController extends MinC_Controller_Action_Abstract
     public function emitirparecerAction()
     {
         $idPronac = $this->_request->getParam("idpronac");
-        $pa = new paChecarLimitesOrcamentario();
-        $resultadoCheckList = $pa->exec($idPronac, 3);
-        $i = 0;
-        foreach ($resultadoCheckList as $resultado) {
-            if ($resultado->Observacao == 'PENDENTE') {
-                $i++;
+
+        $projetos = new Projetos();
+        if ($projetos->VerificarIN2017($idPronac)) {
+            $pa = new paChecarLimitesOrcamentario();
+            $resultadoCheckList = $pa->exec($idPronac, 3);
+            $i = 0;
+            foreach ($resultadoCheckList as $resultado) {
+                if ($resultado->Observacao == 'PENDENTE') {
+                    $i++;
+                }
             }
+
+            $this->view->qtdErrosCheckList = $i;
+            $this->view->resultadoCheckList = $resultadoCheckList;
         }
-
-        $this->view->qtdErrosCheckList = $i;
-        $this->view->resultadoCheckList = $resultadoCheckList;
-
+        
         $tblParecer = new Parecer();
         $tblPlanilhaAprovacao = new PlanilhaAprovacao();
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
