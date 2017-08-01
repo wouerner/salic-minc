@@ -80,7 +80,10 @@
         <tr>
             <td nowrap><?php echo $dp->Produto; ?></td>
             <td nowrap><?php echo $dp->Etapa; ?></td>
-            <td nowrap><a href="<?php echo $this->url(array('controller' => 'analisarsituacaoitem', 'action' => 'detalhar'));?>?item=<?php echo $dp->idSolicitarItem; ?>"><?php echo $dp->ItemSolicitado; ?></a></td>
+            <td nowrap>
+                <a href="<?php echo $this->url(array('controller' => 'analisarsituacaoitem', 'action' => 'detalhar'));?>?item=<?php echo $dp->idSolicitarItem; ?>">
+                    <?php echo $dp->ItemSolicitado; ?>
+            </td>
             <td><?php echo $dp->Justificativa; ?></td>
             <td><?php echo $dp->TipoSolicitacao; ?></td>
         </tr>
