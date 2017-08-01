@@ -261,4 +261,28 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
         $this->view->codOrgao = $this->grupoAtivo->codOrgao;
     }
+
+    public function visualizarDevolucaoAssinaturaAction() {
+        try {
+
+            $get = $this->getRequest()->getParams();
+
+            if(!$get['IdPRONAC']) {
+                throw new Exception("Identificador do projeto n&atilde;o informado.");
+            }
+
+            $objDespacho = new Proposta_Model_DbTable_TbDespacho();
+            $despacho = $objDespacho->consultarDespachoAtivo($get['IdPRONAC']);
+
+            $this->_helper->json(
+                array(
+                    'status' => 1,
+                    'despacho' => utf8_encode($despacho['Despacho']),
+                    'data' => Data::tratarDataZend($despacho['Data'], 'brasileiro', true)
+                    )
+            );
+        } catch (Exception $objException) {
+            $this->_helper->json(array('status' => 0, 'msg' => $objException->getMessage()));
+        }
+    }
 }
