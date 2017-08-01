@@ -427,54 +427,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
 
     }
 
-    /**
-     * solicitacoesAction
-     *
-     * @access public
-     * @return void
-     */
-    public function solicitacoesAction()
-    {
-        $tbsolicitacao = new MantertabelaitensDAO();
-        $tbsolicitacao = $tbsolicitacao->solicitacao($this->idUsuario);
-
-        $this->view->solicitacao = $tbsolicitacao;
-
-        if ($_POST) {
-            $tbsolicitacaos = MantertabelaitensDAO::solicitacoes($this->idUsuario);
-
-            $html = '<table class="tabela">
-			            <tr>
-			                <th colspan="6" >Minhas Solicita&ccedil;&otilde;es</th>
-			            </tr>
-			            <tr>
-			                <td><b>Produto</b></td>
-			                <td><b>Etapa</b></td>
-			                <td><b>Item Solicitado</b></td>
-			                <td><b>Justificativa</b></td>
-			                <td><b>Estado</b></td>
-			                <td><b>Resposta</b></td>
-			            </tr>';
-
-            foreach ($tbsolicitacaos as $tbsolicitacao):
-                $html .= '<tr>
-			                <td>' . $tbsolicitacao->produto . '</td>
-			                <td>' . $tbsolicitacao->etapa . '</td>
-			                <td>' . $tbsolicitacao->itemsolicitado . '</td>
-			                <td>' . $tbsolicitacao->justificativa . ' </td>
-			                <td>' . $tbsolicitacao->estado . '</td>
-			                <td>' . $tbsolicitacao->resposta . '</td>
-			            </tr>';
-            endforeach;
-            $html .= '</table>';
-
-            $this->_helper->layout->disableLayout();
-            $this->_helper->viewRenderer->setNoRender();
-
-            $pdf = new PDF($html, 'pdf');
-            $pdf->gerarRelatorio();
-        }
-    }
 
     /**
      * exibirdadosAction
@@ -489,35 +441,43 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
 
             // recebe os dados via post
             $post = Zend_Registry::get('post');
-            $tipoPesquisa = $post->TipoPesquisa;
-            $nomeDoItem = $post->NomeDoItem;
-            $etapa = $post->etapa;
-            $produto = $post->produto;
+            $tipoPesquisa = $post->tipoPesquisa;
+            $itemBuscado = $post->itemBuscado;
 
-            $this->view->tipopesquisa = $post->TipoPesquisa;
+            $idEtapa = $post->etapa;
+            $idProduto = $post->produto;
             $this->view->produto = $post->produto;
             $this->view->etapa = $post->etapa;
+            $this->view->itemBuscado = $itemBuscado;
+
+            $this->view->tipopesquisa = $post->TipoPesquisa;
+
             $this->view->item = $post->NomeDoItem;
 
-            //CODIGO ANTIGO
-//            $tbpretitem = MantertabelaitensDAO::exibirprodutoetapaitem($nomeDoItem);
-//            $where = null;
-            if ($nomeDoItem) {
-                if ($tipoPesquisa == 1) {
-                    $where["i.descricao LIKE (?)"] = "%" . $nomeDoItem . "%";
-                } elseif ($tipoPesquisa == 2) {
-                    $where["i.descricao LIKE (?)"] = "%" . $nomeDoItem;
-                } elseif ($tipoPesquisa == 3) {
-                    $where["i.descricao = ?"] = $nomeDoItem;
-                } elseif ($tipoPesquisa == 4) {
-                    $where["i.descricao <> ?"] = "%" . $nomeDoItem;
+            $termoPesquisa = $this->definirTermoDaPesquisa($tipoPesquisa);
+            $where = null;
+
+            if ($itemBuscado) {
+                switch ($tipoPesquisa) {
+                    case 1:
+                        $where["i.descricao LIKE (?)"] = "%" . $itemBuscado . "%";
+                        break;
+                    case 2:
+                        $where["i.descricao LIKE (?)"] = $itemBuscado . "%";
+                        break;
+                    case 3:
+                        $where["i.descricao = ?"] = $itemBuscado;
+                        break;
+                    case 4:
+                        $where["i.descricao <> ?"] = "%" . $itemBuscado;
+                        break;
                 }
             }
 
             $tbpretitem = new tbItensPlanilhaProduto();
-            $tbpretitem = $tbpretitem->listarProdutoEtapaItem(null, null, $post->etapa, $post->produto, $where);
-//            xd($tbpretitem);
-            $this->view->pretitem = $tbpretitem;
+            $etapasComTermoPesquisado = $tbpretitem->listarProdutoEtapaItem(null, null, $post->etapa, $post->produto, $where);
+
+            $this->view->pretitem = $etapasComTermoPesquisado;
 
             try {
                 if ($tbpretitem) {
@@ -531,72 +491,29 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         }
     }
 
-    /**
-     * buscaetapasAction
-     *
-     * @access public
-     * @return void
-     */
-    public function buscaetapasAction()
-    {
-        $this->_helper->layout->disableLayout();
+    public function definirTermoDaPesquisa($tipoPesquisa) {
 
-        $idProduto = $_POST['idProduto'];
+        if(empty($tipoPesquisa))
+            return false;
 
-        $tbItens = new MantertabelaitensDAO();
-        $this->view->etapas = $tbItens->exibirEtapa($idProduto);
+        switch ($tipoPesquisa) {
+            case 1:
+                $termo = "i.descricao LIKE (%?%)";
+                break;
+            case 2:
+                $termo = "i.descricao LIKE (%?)";
+                break;
+            case 3:
+                $termo = "i.descricao = ?";
+                break;
+            case 4:
+                $termo = "i.descricao <> %?";
+                break;
+            default:
+                $termo = null;
+        }
 
-        $this->view->idProduto = $idProduto;
-    }
-
-    /**
-     * buscaitensAction
-     *
-     * @access public
-     * @return void
-     * @author wouerner <wouerner@gmail.com>
-     */
-    public function buscaitensAction()
-    {
-        $this->_helper->layout->disableLayout();
-
-        $idProduto = $_POST['idProduto'];
-        $idEtapa = $_POST['idEtapa'];
-
-        $tbitens = new MantertabelaitensDAO();
-        $this->view->itens = $tbitens->exibirItem($idProduto, $idEtapa);
-
-        $this->view->idProduto = $idProduto;
-        $this->view->idEtapa = $idEtapa;
-    }
-
-    /**
-     * consultartabelaitensAction
-     *
-     * @access public
-     * @return void
-     * @deprecated removido para indexAction
-     */
-    public function consultartabelaitensAction()
-    {
-//        $post = Zend_Registry::get('post');
-//
-//        $item = $post->NomeDoItem;
-//
-//        $tbpretitem = new MantertabelaitensDAO();
-//        $this->view->pretitem = $tbpretitem->listarProdutoEtapaItem($item);;
-//
-//        $tbproduto = new MantertabelaitensDAO();
-//        $this->view->produto = $tbproduto->listarProduto();
-//
-//        $tbetapa = new MantertabelaitensDAO();
-//        $this->view->etapa = $tbetapa->listarEtapa();
-//
-//        $tbitem = new MantertabelaitensDAO();
-//        $this->view->ites = $tbitem->listarItem();
-//
-//        $buscardados = new MantertabelaitensDAO();
-//        $this->view->buscardados = $buscardados->produtoEtapaItem();
+        return $termo;
     }
 
     /**
