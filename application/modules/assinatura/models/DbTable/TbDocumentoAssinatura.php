@@ -109,7 +109,12 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         return $this->_db->fetchAll($query);
     }
 
-    public function obterProjetosComAssinaturasAbertas($idOrgaoDoAssinante, $idPerfilDoAssinante, $idTipoDoAtoAdministrativo = NULL, $ordenacao = array())
+    public function obterProjetosComAssinaturasAbertas(
+        $idOrgaoDoAssinante,
+        $idPerfilDoAssinante,
+        $idOrgaoSuperiorDoAssinante,
+        $idTipoDoAtoAdministrativo = NULL
+    )
     {
         $query = $this->select();
         $query->setIntegrityCheck(false);
@@ -132,13 +137,14 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                 'tbDocumentoAssinatura.cdSituacao',
                 'tbDocumentoAssinatura.stEstado',
                 'tbDocumentoAssinatura.idDocumentoAssinatura',
-                'possuiAssinatura'=> new Zend_Db_Expr("
+                'possuiAssinatura'=> new Zend_Db_Expr(" 
                     (select {$this->_schema}.TbAssinatura.idAssinatura 
                        from {$this->_schema}.TbAssinatura
                       inner join {$this->_schema}.TbAtoAdministrativo 
                          ON {$this->_schema}.TbAtoAdministrativo.idAtoAdministrativo = {$this->_schema}.TbAssinatura.idAtoAdministrativo
                         AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
                         AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
+                        AND {$this->_schema}.TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$idOrgaoSuperiorDoAssinante}
                       WHERE {$this->_schema}.TbAssinatura.idDocumentoAssinatura = {$this->_schema}.tbDocumentoAssinatura.idDocumentoAssinatura
                       AND {$this->_schema}.TbAtoAdministrativo.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo)
                 "),
@@ -156,6 +162,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
                              ON {$this->_schema}.TbAtoAdministrativo.idAtoAdministrativo = {$this->_schema}.TbAssinatura.idAtoAdministrativo
                             AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
                             AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
+                            AND {$this->_schema}.TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$idOrgaoSuperiorDoAssinante}
                           WHERE {$this->_schema}.TbAssinatura.idDocumentoAssinatura = {$this->_schema}.tbDocumentoAssinatura.idDocumentoAssinatura
                           AND {$this->_schema}.TbAtoAdministrativo.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo
                       )
@@ -208,8 +215,17 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
             $this->_schema
         );
 
-        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
+        $query->joinInner(
+            array('TbAtoAdministrativo' => 'TbAtoAdministrativo'),
+            "TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
+             AND TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
+             AND TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$idOrgaoSuperiorDoAssinante}
+             AND TbAtoAdministrativo.idTipoDoAto = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
+            array(),
+            $this->_schema
+        );
 
+        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
         $query->where("tbDocumentoAssinatura.cdSituacao = ?", Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
         $query->where("tbDocumentoAssinatura.stEstado = ?", Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
 
@@ -219,7 +235,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
 
         $ordenacao[] = 'possuiAssinatura asc';
         $query->order($ordenacao);
-
+//xd($query->assemble());
         return $this->_db->fetchAll($query);
     }
 
