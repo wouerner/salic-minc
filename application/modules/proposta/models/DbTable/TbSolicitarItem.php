@@ -2,13 +2,11 @@
 
 /**
  * Modelo que representa a tabela SAC.dbo.tbSolicitarItem
- * @author Jefferson Alessandro
  * @version 1.0 - 08/01/2013
  */
 
 class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
 
-    protected  $_banco  = 'sac';
     protected  $_schema = 'sac';
     protected  $_name   = 'tbsolicitaritem';
     protected  $_primary = 'idSolicitarItem';
@@ -206,7 +204,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         return $db->fetchAll($select);
-    } // fecha m�todo buscaprodutoetapaitem()
+    } // fecha metodo buscaprodutoetapaitem()
 
 
     public  function exibirEtapa($idProduto) {
@@ -286,7 +284,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
 //        var_dump($select->assemble());
 //        exit;
         return $db->fetchRow($select);
-    } // fecha m�todo buscaprodutoetapaitem()
+    } // fecha metodo buscaprodutoetapaitem()
 
 
     public  function buscaproduto($where=null) {
@@ -314,7 +312,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
         return $db->fetchAll($select);
-    } // fecha m�todo buscaprodutoetapaitem()
+    } // fecha metodo buscaprodutoetapaitem()
 
 
 
@@ -336,7 +334,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
         return $db->fetchAll($select);
-    } // fecha m�todo buscaprodutoetapaitem()
+    } // fecha metodo buscaprodutoetapaitem()
 
 
 
@@ -361,7 +359,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
         return $db->fetchAll($select);
-    } // fecha m�todo buscaprodutoetapaitem()
+    } // fecha metodo buscaprodutoetapaitem()
 
 
 
@@ -409,7 +407,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
         return $db->fetchAll($select);
-    } // fecha m�todo buscaprodutoetapaitem()
+    } // fecha metodo buscaprodutoetapaitem()
 
 
 
@@ -436,7 +434,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
 
         /* $resultado = $db->query($sql);
          return $resultado;*/
-    } // fecha m�todo cadastraritem()
+    } // fecha metodo cadastraritem()
 
 
 
@@ -445,7 +443,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_ASSOC);
         return $db->fetchRow($sql);
-    } // fecha m�todo buscarItem()
+    } // fecha metodo buscarItem()
 
 
 
