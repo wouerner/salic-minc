@@ -2748,7 +2748,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         } else {
             $this->view->tipoComprovante = $this->tipoDocumento;
             $this->view->comprovantesPagamento = $planilhaAprovacaoModel->buscarcomprovantepagamento(
-                $idPronac, $idPlanilhaAprovacao
+                $idPronac, $idPlanilhaItem
+                /* $idPronac, $idPlanilhaAprovacao */
             );
         }
 
