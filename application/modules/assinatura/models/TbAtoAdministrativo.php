@@ -9,6 +9,25 @@ class Assinatura_Model_TbAtoAdministrativo extends MinC_Db_Model
     protected $_idPerfilDoAssinante;
     protected $_idOrdemDaAssinatura;
     protected $_stExtado;
+    protected $_idOrgaoSuperiorDoAssinante;
+
+    /**
+     * @return mixed
+     */
+    public function getIdOrgaoSuperiorDoAssinante()
+    {
+        return $this->_idOrgaoSuperiorDoAssinante;
+    }
+
+    /**
+     * @param mixed $idOrgaoSuperiorDoAssinante
+     * @return Assinatura_Model_TbAtoAdministrativo
+     */
+    public function setIdOrgaoSuperiorDoAssinante($idOrgaoSuperiorDoAssinante)
+    {
+        $this->_idOrgaoSuperiorDoAssinante = $idOrgaoSuperiorDoAssinante;
+        return $this;
+    }
 
     /**
      * @return mixed

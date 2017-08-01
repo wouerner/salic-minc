@@ -558,10 +558,12 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
                             'SAC.dbo'
                            );
         $select->where('pAprovacao.IdPRONAC = ?', $idpronac);
-        $select->where('pAprovacao.stAtivo = ?','S');
-        $select->where('pAprovacao.idPlanilhaAprovacao = ?',$idPlanilhaItem);
-        return $this->fetchAll($select);
+        /* $select->where('pAprovacao.stAtivo = ?','S'); */
+        /* $select->where('pAprovacao.idPlanilhaAprovacao = ?',$idPlanilhaItem); */
+        $select->where('pAprovacao.idPlanilhaItem = ?',$idPlanilhaItem);
+        $select->where(' cppa.stItemAvaliado is not null ');
 
+        return $this->fetchAll($select);
     }
 
     public function verificarComprovacao($idpronac){
