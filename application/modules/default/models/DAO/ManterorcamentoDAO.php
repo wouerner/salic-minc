@@ -646,7 +646,10 @@ class ManterorcamentoDAO extends MinC_Db_Table_Abstract {
 //        }
 
         //$sql .= " order by 2 asc";
-		
+		//
+
+
+
         throw new Exception('Método transferido para tbItensPlanilhaProduto');
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
