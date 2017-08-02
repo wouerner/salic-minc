@@ -4,7 +4,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
 
     protected $_schema = 'sac';
     protected $_name = 'tbitensplanilhaproduto';
-
+    protected $_primary = 'idItensPlanilhaProduto';
 
     /**
      * Metodo para consultar o Valor Real por ano
@@ -202,6 +202,50 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         return $db->fetchRow($select);
+    }
+
+    public function listarProdutoEtapaItem ($idplanilhaitens=null, $nomeItem=null, $idEtapa=null, $idProduto=null, $where=array())
+    {
+        $db= Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+        $sql = $db->select()->distinct()
+            ->from(array('p' => 'tbitensplanilhaproduto'), null, $this->_schema)
+            ->join(
+                array('pr' => 'produto'),
+                '(p.idproduto = pr.codigo)',
+                array(
+                    'pr.codigo as idProduto',
+                    'pr.descricao as Produto'
+                ),
+                $this->_schema
+            )
+            ->join(array('e' => 'tbplanilhaetapa'), '(p.idplanilhaetapa = e.idplanilhaetapa)', array("e.descricao AS Etapa"), $this->_schema)
+            ->join(array('i' => 'tbplanilhaitens'), '(p.idplanilhaitens = i.idplanilhaitens)', array("i.descricao AS Item"), $this->_schema)
+        ;
+
+        if(!empty($nomeItem)) {
+            $sql->where('i.descricao = ?', $nomeItem);
+        }
+        if(!empty($item)) {
+            $sql->where('i.idplanilhaitens = ?', $idplanilhaitens);
+        }
+        if(!empty($idEtapa)) {
+            $sql->where('e.idplanilhaetapa = ?', $idEtapa);
+        }
+        if(!empty($idProduto)) {
+            $sql->where('pr.codigo = ?', $idProduto);
+        }
+
+        if(!empty($where)){
+            foreach ($where as $coluna => $valor) {
+                $sql->where($coluna, $valor);
+            }
+        }
+
+        $sql->order('pr.codigo ASC');
+
+        return $db->fetchAll($sql);
     }
 }
 ?>
