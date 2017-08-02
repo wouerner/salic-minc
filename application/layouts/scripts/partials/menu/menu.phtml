@@ -289,7 +289,7 @@ $arrMenu['administrativo']['menu'][] = array('label' => 'Comunicados', 'title' =
     'grupo' => array(97)
 );
 $arrMenu['administrativo']['menu'][] = array('label' => 'Analisar Solicita&ccedil;&atilde;o de Item', 'title' => 'Ir para Analisar Solicita&ccedil;&atilde;o de Item',
-    'url' => $this->url(array('controller' => 'analisarsituacaoitem', 'action' => 'index'), '', true),
+    'url' => $this->url(array('module' => 'proposta', 'controller' => 'analisarsituacaoitem', 'action' => 'index'), '', true),
     'grupo' => array(97)
 );
 // ========== INICIO MENU PROTOCOLO ==========
@@ -324,7 +324,7 @@ $arrMenu['admissibilidade'] = array(
     'label' => 'Admissibilidade',
     'title' => 'Ir para Admissibilidade',
     'menu' => array(),
-    'grupo' => array(92,97,131,147,148,149,151),
+    'grupo' => array(92,97,131,147,148,149,150, 151,152),
 );
 $arrMenu['admissibilidade']['menu'][] = array(
     'grupo' => array(92,97,131),
