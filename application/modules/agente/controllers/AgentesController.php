@@ -183,19 +183,22 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $PermissoesGrupo[] = 103; // Coordenador de Analise
         $PermissoesGrupo[] = 142; // Coordenador de Convenios
 
+        $params = $this->getRequest()->getParams();
+        $params = array_change_key_case($params);
+
         if (isset($arrAuth['cpf']) &&
                 !empty($arrAuth['cpf']) &&
-                isset($_GET['acao']) && $_GET['acao'] == 'cc' &&
-                isset($_GET['cpf']) &&
-                !empty($_GET['cpf'])) { // pega do readequacao
+                isset($params['acao']) && $params['acao'] == 'cc' &&
+                isset($params['cpf']) &&
+                !empty($params['cpf'])) { // pega do readequacao
             parent::perfil(2); // scriptcase
         }
 
         if (isset($arrAuth['cpf']) &&
                 !empty($arrAuth['cpf']) &&
-                !isset($_GET['acao']) &&
-                !isset($_GET['cpf']) &&
-                empty($_GET['cpf'])) { // pega do readequacao
+                !isset($params['acao']) &&
+                !isset($params['cpf']) &&
+                empty($params['cpf'])) { // pega do readequacao
             parent::perfil(4, $PermissoesGrupo); // migracao e novo salic
         } elseif (isset($arrAuth['usu_codigo']) && !empty($arrAuth['usu_codigo'])) {
             parent::perfil(1, $PermissoesGrupo); // migracao e novo salic
@@ -207,7 +210,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $this->getIdUsuario = UsuarioDAO::getIdUsuario($arrAuth['usu_codigo']);
             $this->getIdUsuario = ($this->getIdUsuario) ? $this->getIdUsuario["idAgente"] : 0;
         } else { // autenticacao scriptcase
-            $this->getIdUsuario = (isset($_GET["IdUsuario"])) ? $_GET["IdUsuario"] : 0;
+            $this->getIdUsuario = (isset($params["idusuario"])) ? $params["idusuario"] : 0;
         }
 
         $Cpflogado = $this->getIdUsuario;
@@ -464,12 +467,12 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      */
     public function incluirfornecedorAction() {
         $this->autenticacao();
-
         $modal  = $this->_request->getParam("modal");
         $this->_helper->layout->disableLayout();
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
 
         $this->incluir();
     }
@@ -1835,7 +1838,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                             $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
                             $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
                         }
-                } else if(15 == strlen($cpf)){
+                } else if(14 == strlen($cpf)){
                         $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf);
                         if (count($arrResultado) > 0) {
                             $novos_valores[0]['msgCPF'] = utf8_encode('novo');
