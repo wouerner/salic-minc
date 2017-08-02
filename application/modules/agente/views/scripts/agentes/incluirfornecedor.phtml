@@ -1,12 +1,6 @@
 <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/js/agentes.js"></script>
 <?php $ponto = ''; ?>
-<?php
-if (empty($_GET['acao'])) {
-    $acao = "";
-} else {
-    $acao = $_GET['acao'];
-}
-?>
+
 
 <script type="text/javascript">
 
@@ -174,7 +168,7 @@ if (empty($_GET['acao'])) {
             {
                 // divide a string para colocar cada uma em seu campo
                 var s = ajax.responseText;
-
+                console.log(s);
                 if (s == "") // caso os dados retornem vazios ou o cep não exista
                 {
                     logradouro.value               = " ";
@@ -333,7 +327,7 @@ if (empty($_GET['acao'])) {
         <form name="formCadAgentes" id="formCadAgentes" method="post" action="<?php echo $this->url(array('module'=>'agente', 'controller' => 'agentes', 'action' => 'salvaagentegeral'), null, true); ?>">
 
             <input type="hidden" name="grupologado" id="grupologado" class="input_simples" value="<?php echo $this->grupoativo; ?>" />
-            <input type="hidden" name="acao" id="acao" value="<?php echo $acao; ?>" />
+            <input type="hidden" name="acao" id="acao" value="<?php echo $this->acao; ?>" />
             <input type="hidden" name="idResponsavel" id="idResponsavel" value="<?php echo $this->idResponsavelKeyLog; ?>" />
 
             <input type="hidden" name="movimentacaobancaria" id="movimentacaobancaria" class="input_simples" value="true" />

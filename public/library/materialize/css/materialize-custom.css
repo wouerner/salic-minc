@@ -20,12 +20,39 @@ Paleta de cores by Jamile
 ----------------------------------------------------------------
 
 --------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------
+x - Forms
+--------------------------------------------------------------*/
+fieldset {
+    margin: 10px 2px;
+    padding-top: 0.60em;
+}
+
+legend {
+    color: #545454;
+}
+
+.browser-default {
+    margin-top: 5px;
+
+}
+
+select.browser-default {
+    padding: 5px;
+    width: 100%;
+}
+form .row {
+    margin-bottom: 5px;
+}
+form .select-wrapper input.select-dropdown {
+    margin-bottom: 5px;
+}
+
 /*--------------------------------------------------------------
 x - Elementos básicos
 --------------------------------------------------------------*/
-label {
-    /*width: 100%; tá quebrando os selects com checkbox do materialize*/
-}
 
 .ui-dialog {
     font-size: 14px;
