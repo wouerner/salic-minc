@@ -159,4 +159,74 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         return $this->fetchAll($objQuery)->toArray();
     }
 
+    public function obterTiposDeAtosAdministrativosAtivos()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Verificacao' => 'Verificacao'],
+            array(
+                'codigo' => 'idVerificacao',
+                'descricao' => 'Descricao',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('stEstado = ?', 1);
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterCargosDoAssinante()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Verificacao' => 'Verificacao'],
+            array(
+                'codigo' => 'idVerificacao',
+                'descricao' => 'Descricao',
+            ),
+            'Agentes'
+        );
+        $objQuery->where('Sistema = ?', 21);
+        $objQuery->where('idTipo = ?', 27);
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterOrgaosSuperiores()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Orgaos' => 'Orgaos'],
+            array(
+                'codigo' => 'Codigo',
+                'descricao' => 'Sigla',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('Codigo = idSecretaria');
+        $objQuery->order('Sigla asc');
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterOrgaos($idOrgaoSuperior)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Orgaos' => 'Orgaos'],
+            array(
+                'codigo' => 'Codigo',
+                'descricao' => 'Sigla',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('Codigo = idSecretaria');
+        $objQuery->where('idSecretaria = ?', $idOrgaoSuperior);
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
 }
