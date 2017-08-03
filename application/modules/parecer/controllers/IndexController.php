@@ -55,7 +55,7 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
             if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
                 $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
                 $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
-
+                
                 $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
                 $idDocumentoAssinatura = $this->getIdDocumentoAssinatura($get['IdPRONAC'], $idTipoDoAtoAdministrativo);
                 
@@ -63,9 +63,8 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
             } elseif(isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
                 // ainda nao implementado o encaminhamento de vários para pareceres
             }
-            $this->carregarListaEncaminhamentoAssinatura();
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), '/{$this->moduleName}/index/encaminhar-assinatura');
+            parent::message($objException->getMessage(), "/{$this->moduleName}/index/encaminhar-assinatura");
         }   
     }
 
