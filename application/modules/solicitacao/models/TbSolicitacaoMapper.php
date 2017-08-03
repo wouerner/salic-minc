@@ -44,10 +44,13 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
     {
         $booStatus = false;
         if (!empty($arrData)) {
+
             $arrData['dsMensagem'] = $arrData['dsResposta'];
             $arrData['idMensagemOrigem'] = $arrData['idMensagemProjeto'];
             unset($arrData['idMensagemProjeto']);
+
             $model = new Solicitacao_Model_TbSolicitacao($arrData);
+
             try {
                 $auth = Zend_Auth::getInstance(); // pega a autenticacao
                 $arrAuth = array_change_key_case((array)$auth->getIdentity());
@@ -85,7 +88,7 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
     {
         $booStatus = true;
         $arrData = $model->toArray();
-        if (empty($arrData['idMensagemProjeto'])){
+        if (empty($arrData['idMensagemProjeto'])) {
             $arrRequired = array(
                 'idDestinatarioUnidade',
                 'IdPRONAC',
@@ -108,21 +111,35 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
     public function salvar($arrData)
     {
         $booStatus = false;
+
         if (!empty($arrData)) {
             $model = new Solicitacao_Model_TbSolicitacao($arrData);
             try {
-                $auth = Zend_Auth::getInstance(); // pega a autenticacao
-                $arrAuth = array_change_key_case((array)$auth->getIdentity());
-                $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-                $intUsuOrgao = $grupoAtivo->codOrgao;
-                //$intUsuOrgao = $grupoAtivo->codGrupo;
-                //var_dump($intUsuOrgao, $grupoAtivo->codOrgao);die;
-                $model->setDtMensagem(date('Y-m-d h:i:s'));
-                $model->setIdRemetente($arrAuth['usu_codigo']);
-                $model->setIdRemetenteUnidade($intUsuOrgao);
-//                $model->setIdDestinatario($arrAuth['usu_codigo']);
-                $model->setCdTipoMensagem('E');
-                $model->setStAtivo(1);
+
+                $model->setDtSolicitacao(date('Y-m-d h:i:s'));
+                $model->setIdSolicitante($arrData['idSolicitante']);
+                $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
+
+                $idDocumento = 162;
+
+                if (!empty($idDocumento)) {
+
+                    $arrayFile = array(
+                        'idProjeto' => $arrData['idProjeto'],
+                        'idPRONAC' => $arrData['idPronac'],
+                        'documento' => $idDocumento,
+                        'tipoDocumento' => 2,
+                        'observacao' => ''
+                    );
+
+                    $mapperTbDocumentoPreProjeto = new Proposta_Model_TbDocumentosPreProjetoMapper();
+                    $file = new Zend_File_Transfer();
+                    $mapperTbDocumentoPreProjeto->saveCustom($arrayFile, $file);
+                }
+
+                $model->setIdDocumento('');
+
+
                 if ($intId = parent::save($model)) {
                     $booStatus = 1;
                     $this->setMessage('Solicita&ccedil;&atilde;o enviada com sucesso!');

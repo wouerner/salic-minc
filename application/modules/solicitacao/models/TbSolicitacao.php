@@ -3,7 +3,8 @@
 class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
 {
     protected $_idSolicitacao;
-    protected $_idProposta;
+    protected $_idPronac;
+    protected $_idProjeto;
     protected $_idOrgao;
     protected $_idSolicitante;
     protected $_dtSolicitacao;
@@ -14,6 +15,9 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     protected $_idDocumento;
     protected $_siEncaminhamento;
     protected $_stEstado;
+
+    const SOLICITACAO_CADASTRADA = 12;
+    const SOLICITACAO_ENCAMINHADA = 1;
 
     /**
      * @return mixed
@@ -34,17 +38,33 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     /**
      * @return mixed
      */
-    public function getIdProposta()
+    public function getIdPronac()
     {
-        return $this->_idProposta;
+        return $this->_idPronac;
     }
 
     /**
-     * @param mixed $idProposta
+     * @param mixed $idPronac
      */
-    public function setIdProposta($idProposta)
+    public function setIdPronac($idPronac)
     {
-        $this->_idProposta = $idProposta;
+        $this->_idPronac = $idPronac;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdProjeto()
+    {
+        return $this->_idProjeto;
+    }
+
+    /**
+     * @param mixed $idProjeto
+     */
+    public function setIdProjeto($idProjeto)
+    {
+        $this->_idProjeto = $idProjeto;
     }
 
     /**
@@ -206,6 +226,7 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     {
         $this->_stEstado = $stEstado;
     }
+
 
 
 }

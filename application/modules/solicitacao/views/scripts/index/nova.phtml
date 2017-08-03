@@ -4,10 +4,11 @@
             <div class="col s12 m12 l12">
                 <h5>Solicita&ccedil;&atilde;o Proponente</h5>
                 <div class="card padding20 materialize" >
-                    <form id="form-mensagem" data-ajax-form="true" method="post" action="<?php echo $this->urlAction ?>" enctype="multipart/form-data">
+                    <form id="form-mensagem" method="post" action="<?php echo $this->urlAction ?>" enctype="multipart/form-data">
                         <input name="idSolicitacao" type="hidden" value="<?= isset($this->dataForm['idSolicitacao']) ? $this->dataForm['idSolicitacao']: ''; ?>"/>
-                        <input name="idPronac" type="hidden" value="<?php echo $this->idPronac; ?>"/>
-                        <input name="idPreProjeto" type="hidden" value="<?php echo $this->idProjeto; ?>"/>
+                        <input name="idPronac" type="hidden" value="<?= $this->dataForm['idPronac']; ?>"/>
+                        <input name="idProjeto" type="hidden" value="<?= $this->dataForm['idProjeto']; ?>"/>
+                        <input name="siEncaminhamento" type="hidden" value="<?= $this->dataForm['siEncaminhamento']; ?>"/>
 
                         <?php if(!isset($this->arrConfig['dsMensagem']['show']) || $this->arrConfig['dsMensagem']['show'] === true): ?>
                             <?php if (isset($this->arrConfig['dsMensagem']['disabled']) && $this->arrConfig['dsMensagem']['disabled']): ?>

@@ -21,12 +21,13 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
         $this->definirModuloDeOrigem();
     }
 
-    private function definirModuloDeOrigem() {
+    private function definirModuloDeOrigem()
+    {
 //        $this->view->module = $this->moduleName;
         $get = Zend_Registry::get('get');
         $post = (object)$this->getRequest()->getPost();
         $this->view->origin = "{$this->moduleName}/index";
-        if(!empty($get->origin) || !empty($post->origin)) {
+        if (!empty($get->origin) || !empty($post->origin)) {
             $this->view->origin = (!empty($post->origin)) ? $post->origin : $get->origin;
         }
     }
@@ -42,7 +43,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
         $intIdPronac = $this->getRequest()->getParam('idPronac', null);
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
 
-        $arrAuth = array_change_key_case((array) $auth->getIdentity());
+        $arrAuth = array_change_key_case((array)$auth->getIdentity());
         $intUsuCodigo = $arrAuth['usu_codigo'];
         $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
@@ -63,55 +64,68 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
         $this->view->idPronac = $intIdPronac;
     }
 
-    public function novaAction() {
+    public function novaAction()
+    {
 
         $strActionBack = $this->getRequest()->getParam('actionBack');
         $strActionBack = ($strActionBack) ? $strActionBack : 'index';
 
+        $this->view->urlAction = $this->_urlPadrao . "/solicitacao/index/salvar";
+
         $params = $this->getRequest()->getParams();
+        $anexo = null;
 
-        $solicitacao = [];
-        $params['idSolicitacao'] = 1;
-        if(isset($params['idSolicitacao'])) {
+        try {
 
+            if (empty($this->idPronac) && empty($this->idPreProjeto)) {
+                throw new Exception("Informe o projeto ou proposta para realizar uma solicita&ccedil;&atilde;o");
+            }
 
-            $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
-            $dataForm = $tbSolicitacao->findBy(['idSolicitacao' => $params['idSolicitacao']]);
+            $dataForm = [
+                'idPronac' => $this->idPronac,
+                'idProjeto' => $this->idPreProjeto,
+                'siEncaminhamento' => Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA
+            ];
+
+            if (isset($params['idSolicitacao'])) {
+                $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
+                $dataForm = $tbSolicitacao->findBy(['idSolicitacao' => $params['idSolicitacao']]);
+            }
+
+            if (!empty($dataForm['idDocumento'])) {
+                $tbl = new Proposta_Model_DbTable_TbDocumentosPreProjeto();
+                $anexo = $tbl->buscarDocumentos(array($dataForm['idDocumento']));
+            }
+
+            $this->view->dataForm = $dataForm;
+            $this->view->anexo = $anexo;
+
+        } catch (Exception $objException) {
+            parent::message($objException->getMessage(), "/solicitacao/");
         }
-
-        // Plano de execução imediata #novain
-        if ($this->_proposta["stproposta"] == '618') { // proposta execucao imediata edital
-            $idDocumento = 248;
-        } elseif ($this->_proposta["stproposta"] == '619') { // proposta execucao imediata contrato de patrocínio
-            $idDocumento = 162;
-        }
-
-        $tbl = new Proposta_Model_DbTable_TbDocumentosPreProjeto();
-
-        if (!empty($idDocumento))
-            $arquivoExecucaoImediata = $tbl->buscarDocumentos(array("idprojeto = ?" => $this->idPreProjeto, "CodigoDocumento = ?" => $idDocumento));
-
-        $this->view->arquivoExecucaoImediata = $arquivoExecucaoImediata;
-
     }
 
-    public function salvarAction() {
+    public function salvarAction()
+    {
+        $params = $this->getRequest()->getParams();
 
-        $idProjeto = $this->idProjeto;
-        $idPreProjeto = $this->idPreProjeto;
 
-        if (!empty($idDocumento)) {
+        if ($this->getRequest()->isPost()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
 
-            $arrayFile = array(
-                'idPreProjeto' => $idPreProjeto,
-                'documento' => $idDocumento,
-                'tipoDocumento' => 2,
-                'observacao' => ''
-            );
 
-            $mapperTbDocumentoAgentes = new Proposta_Model_TbDocumentosAgentesMapper();
-            $file = new Zend_File_Transfer();
-            $mapperTbDocumentoAgentes->saveCustom($arrayFile, $file);
+//            $strUrl = '/admissibilidade/mensagem/index';
+//            $strUrl .= ($this->arrProjeto)? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
+//            $arrayForm = $this->getRequest()->getPost();
+
+            $mapper = new Solicitacao_Model_TbSolicitacaoMapper();
+            $mapper->salvar($this->getRequest()->getPost());
+
+//            $this->_helper->json(array('status' => $mapper->salvar($this->getRequest()->getPost()), 'msg' => $mapper->getMessages(), 'redirect' => $strUrl));
+
+
+
         }
     }
 

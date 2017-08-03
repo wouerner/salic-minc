@@ -1,16 +1,6 @@
 <?php
 
-/**
- * DAO tbArquivo
- * @author emanuel.sampaio - Politec
- * @since 19/02/2011
- * @version 1.0
- * @package application
- * @subpackage application.model
- * @copyright  2011 - Ministerio da Cultura - Todos os direitos reservados.
- * @link http://www.cultura.gov.br
- */
-class tbArquivo extends MinC_Db_Table_Abstract
+class Arquivo_Model_DbTable_TbArquivo extends MinC_Db_Table_Abstract
 {
     protected $_schema = "bdcorporativo.scCorp";
     protected $_name = "tbArquivo";
@@ -89,7 +79,7 @@ class tbArquivo extends MinC_Db_Table_Abstract
      * Metodo para cadastrar
      * @access public
      * @param array $dados
-     * @return integer (retorna o �ltimo id cadastrado)
+     * @return integer (retorna o ?ltimo id cadastrado)
      */
     public function cadastrarDados($dados)
     {
@@ -114,7 +104,7 @@ class tbArquivo extends MinC_Db_Table_Abstract
      * Metodo para excluir
      * @access public
      * @param integer $where
-     * @return integer (quantidade de registros exclu�dos)
+     * @return integer (quantidade de registros excluidos)
      */
     public function excluirDados($where)
     {
@@ -145,7 +135,4 @@ class tbArquivo extends MinC_Db_Table_Abstract
     {
         return $this->delete($where);
     }
-
-
-
 }
