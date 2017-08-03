@@ -25,21 +25,21 @@ Paleta de cores by Jamile
 /*--------------------------------------------------------------
 x - Forms
 --------------------------------------------------------------*/
-fieldset {
+form fieldset {
     margin: 10px 2px;
     padding-top: 0.60em;
 }
 
-legend {
+form legend {
     color: #545454;
 }
 
-.browser-default {
+form .browser-default {
     margin-top: 5px;
 
 }
 
-select.browser-default {
+form select.browser-default {
     padding: 5px;
     width: 100%;
 }
