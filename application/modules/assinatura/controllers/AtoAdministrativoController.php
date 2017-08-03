@@ -36,325 +36,88 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         throw new Exception("Ato administrativo já vinculado a um documento");
     }
 
-//    public function visualizarAssinaturasAction()
-//    {
-//        $this->view->idUsuarioLogado = $this->cod_usuario;
-//        $documentoAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
-//        $this->view->dados = $documentoAssinatura->obterProjetosAssinados(
-//            $this->grupoAtivo->codOrgao,
-//            $this->cod_usuario
+    public function obterTiposDeAtosAdministrativosAjaxAction()
+    {
+
+        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterTiposDeAtosAdministrativosAtivos();
+        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
+            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+        }
+
+        $this->_helper->json(
+            array('resultado' => $arrayTiposAtosAdministrativos)
+        );
+    }
+
+    public function obterCargosDoAssinanteAjaxAction()
+    {
+        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterCargosDoAssinante();
+        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
+            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+        }
+
+        $this->_helper->json(
+            array('resultado' => $arrayTiposAtosAdministrativos)
+        );
+    }
+
+    public function obterOrgaosSuperioresAjaxAction()
+    {
+        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterOrgaosSuperiores();
+        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
+            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+        }
+
+        $this->_helper->json(
+            array('resultado' => $arrayTiposAtosAdministrativos)
+        );
+    }
+
+    public function obterOrgaosDoAssinanteAjaxAction()
+    {
+        $arrayTiposAtosAdministrativos = [];
+        $get = $this->getRequest()->getParams();
+        if($get['idOrgaoSuperiorDoAssinante']) {
+xd($get);
+            $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterOrgaos();
+            foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
+                $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+            }
+
+        }
+        $this->_helper->json(
+            array('resultado' => $arrayTiposAtosAdministrativos)
+        );
+    }
+
+    public function obterPerfisDoAssinanteAjaxAction()
+    {
+//        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+//        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterCargosDoAssinante();
+//        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
+//            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+//        }
+//
+//        $this->_helper->json(
+//            array('resultado' => $arrayTiposAtosAdministrativos)
 //        );
-//
-//        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
-//    }
-//
-//    public function visualizarProjetoAction()
-//    {
-//        $get = Zend_Registry::get('get');
-//        $idDocumentoAssinatura = $get->idDocumentoAssinatura;
-//
-//        try {
-//            try {
-//                if (!filter_input(INPUT_GET, 'idDocumentoAssinatura')) {
-//                    throw new Exception("Identificador do Documento &eacute; necess&aacute;rio para acessar essa funcionalidade.");
-//                }
-//            } catch (Exception $objException) {
-//                parent::message($objException->getMessage(), "/{$this->view->origin}/gerenciar-assinaturas");
-//            }
-//
-//            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-//            $this->view->documentoAssinatura = $objModelDocumentoAssinatura->findBy(
-//                array('idDocumentoAssinatura' => $idDocumentoAssinatura)
-//            );
-//
-//
-//            $this->view->idDocumentoAssinatura = $idDocumentoAssinatura;
-//            $this->view->IdPRONAC = $this->view->documentoAssinatura['IdPRONAC'];
-//            $this->view->idTipoDoAtoAdministrativo = $this->view->documentoAssinatura['idTipoDoAtoAdministrativo'];
-//
-//            $objTbProjetos = new Projeto_Model_DbTable_Projetos();
-//            $this->view->projeto = $objTbProjetos->findBy(array(
-//                'IdPRONAC' => $this->view->IdPRONAC
-//            ));
-//
-//            $this->view->valoresProjeto = $objTbProjetos->obterValoresProjeto($this->view->IdPRONAC);
-//            $objAgentes = new Agente_Model_DbTable_Agentes();
-//            $dadosAgente = $objAgentes->buscarFornecedor(array(
-//                'a.CNPJCPF = ?' => $this->view->projeto['CgcCpf']
-//            ));
-//
-//            $arrayDadosAgente = $dadosAgente->current();
-//            $this->view->nomeAgente = $arrayDadosAgente['nome'];
-//
-//            $mapperArea = new Agente_Model_AreaMapper();
-//            $this->view->areaCultural = $mapperArea->findBy(array(
-//                'Codigo' => $this->view->projeto['Area']
-//            ));
-//
-//            $objSegmentocultural = new Segmentocultural();
-//            $this->view->segmentoCultural = $objSegmentocultural->findBy(array(
-//                'Codigo' => $this->view->projeto['Segmento']
-//            ));
-//
-//            $objPlanoDistribuicaoProduto = new Projeto_Model_vwPlanoDeDistribuicaoProduto();
-//            $this->view->dadosProducaoProjeto = $objPlanoDistribuicaoProduto->obterProducaoProjeto(array(
-//                'IdPronac = ?' => $this->view->IdPRONAC
-//            ));
-//
-//            $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
-//            $this->view->assinaturas = $objAssinatura->obterAssinaturas(
-//                $this->view->IdPRONAC,
-//                $this->view->idTipoDoAtoAdministrativo,
-//                $idDocumentoAssinatura
-//            );
-//
-//            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-//            $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-//                $this->view->idTipoDoAtoAdministrativo
-//            );
-//
-//            $moduleAndControllerArray = explode('/', $this->view->origin);
-//            $this->view->moduleOrigin = $moduleAndControllerArray[0];
-//            $this->view->controllerOrigin = $moduleAndControllerArray[1];
-//
-//        } catch (Exception $objException) {
-//            parent::message($objException->getMessage(), "/{$this->moduleName}/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&origin={$this->view->origin}");
-//        }
-//    }
-//
-//    public function assinarProjetoAction()
-//    {
-//        $get = Zend_Registry::get('get');
-//        $idPronac = $get->IdPRONAC;
-//        $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
-//
-//        try {
-//            if (!filter_input(INPUT_GET, 'IdPRONAC') && (is_array($get->IdPRONAC) && count($get->IdPRONAC) < 1)) {
-//                throw new Exception("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
-//            }
-//
-//            if (!filter_input(INPUT_GET, 'idTipoDoAtoAdministrativo')) {
-//                throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
-//            }
-//        } catch (Exception $objException) {
-//            parent::message($objException->getMessage(), "/{$this->view->origin}/gerenciar-assinaturas");
+    }
+
+    public function obterOrdemAssinaturaAjaxAction()
+    {
+//        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+//        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterCargosDoAssinante();
+//        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
+//            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
 //        }
 //
-//
-//        try {
-//            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-//
-//            $this->view->perfilAssinante = $objTbAtoAdministrativo->obterPerfilAssinante(
-//                $this->grupoAtivo->codOrgao,
-//                $this->grupoAtivo->codGrupo,
-//                $idTipoDoAtoAdministrativo
-//            );
-//
-//            if (!$this->view->perfilAssinante) {
-//                throw new Exception ("Usu&aacute;rio sem autoriza&ccedil;&atilde;o para assinar o documento.");
-//            }
-//
-//            if (is_array($get->IdPRONAC)) {
-//                $idPronacUnidos = implode(',', $get->IdPRONAC);
-//                $this->redirect("/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronacUnidos}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}");
-//            }
-//
-//            $this->view->IdPRONAC = $get->IdPRONAC;
-//            $arrayIdPronacs = explode(',', $get->IdPRONAC);
-//            if (count($arrayIdPronacs) < 1) {
-//                throw new Exception ("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
-//            }
-//
-//            $post = $this->getRequest()->getPost();
-//            $objAssinatura = new MinC_Assinatura_Servico_Assinatura($post, $this->auth->getIdentity());
-//            $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = false;
-//
-//            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-//            $this->view->documentoAssinatura = $objModelDocumentoAssinatura->findBy(
-//                array(
-//                    'IdPRONAC' => $idPronac,
-//                    'idTipoDoAtoAdministrativo' => $idTipoDoAtoAdministrativo,
-//                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-//                    'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-//                )
-//            );
-//
-//            $idDocumentoAssinatura = $this->view->documentoAssinatura['idDocumentoAssinatura'];
-//
-//            if ($post) {
-//
-//                if ($get->isMovimentarAssinatura == 'true') {
-//                    $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = true;
-//                }
-//
-//                try {
-//                    $this->view->dsManifestacao = $post['dsManifestacao'];
-//                    foreach ($arrayIdPronacs as $idPronac) {
-//
-//                        $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
-//                        $modelAssinatura->setCodGrupo($this->grupoAtivo->codGrupo)
-//                            ->setCodOrgao($this->grupoAtivo->codOrgao)
-//                            ->setIdPronac($idPronac)
-//                            ->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo)
-//                            ->setIdDocumentoAssinatura($idDocumentoAssinatura)
-//                            ->setDsManifestacao($post['dsManifestacao']);
-//                        $objAssinatura->assinarProjeto($modelAssinatura);
-//                    }
-//
-//                    if (count($arrayIdPronacs) > 1) {
-//                        parent::message(
-//                            "Projetos assinados com sucesso!",
-//                            "/{$this->view->origin}/gerenciar-assinaturas",
-//                            'CONFIRM'
-//                        );
-//                    } else {
-//                        parent::message(
-//                            "Projeto assinado com sucesso!",
-//                            "/{$this->moduleName}/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}",
-//                            'CONFIRM'
-//                        );
-//                        die;
-//                    }
-//                } catch (Exception $objException) {
-//                    parent::message(
-//                        $objException->getMessage(),
-//                        "/{$this->moduleName}/index/assinar-projeto?IdPRONAC={$idPronac}&idTipoDoAtoAdministrativo={$idTipoDoAtoAdministrativo}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}",
-//                        'ERROR'
-//                    );
-//                }
-//            }
-//
-//
-//
-//            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-//            $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
-//                $idTipoDoAtoAdministrativo,
-//                $this->grupoAtivo->codGrupo,
-//                $this->grupoAtivo->codOrgao
-//            );
-//
-//            $objTbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
-//            $assinaturaExistente = $objTbAssinatura->buscar(array(
-//                'idPronac = ?' => $idPronac,
-//                'idAtoAdministrativo = ?' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
-//                'idAssinante = ?' => $this->auth->getIdentity()->usu_codigo,
-//                'idDocumentoAssinatura = ?' => $idDocumentoAssinatura
-//            ));
-//
-//            if ($assinaturaExistente->current()) {
-//                throw new Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
-//            }
-//
-//            $objProjeto = new Projeto_Model_DbTable_Projetos();
-//            $this->view->projeto = array();
-//            foreach ($arrayIdPronacs as $idPronac) {
-//                $this->view->projeto[] = $objProjeto->findBy(array(
-//                    'IdPRONAC' => $idPronac
-//                ));
-//            }
-//
-//            $objVerificacao = new Verificacao();
-//            $this->view->tipoDocumento = $objVerificacao->findBy(array(
-//                'idVerificacao = ?' => $idTipoDoAtoAdministrativo
-//            ));
-//
-//            $this->view->templateAutenticacao = $objAssinatura->obterServicoAutenticacao()->obterMetodoAutenticacao()->obterTemplateAutenticacao();
-//            $this->view->idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
-//            $this->view->isMovimentarAssinatura = false;
-//
-//            if ($get->isMovimentarAssinatura == 'true') {
-//                $this->view->isMovimentarAssinatura = 'true';
-//            }
-//
-//            $moduleAndControllerArray = explode('/', $this->view->origin);
-//            $this->view->moduleOrigin = $moduleAndControllerArray[0];
-//            $this->view->controllerOrigin = $moduleAndControllerArray[1];
-//
-//        } catch (Exception $objException) {
-//
-//            parent::message(
-//                $objException->getMessage(),
-//                "/{$this->view->origin}/gerenciar-assinaturas"
-//            );
-//        }
-//    }
-//
-//    public function movimentarProjetoAction()
-//    {
-//        try {
-//            $get = Zend_Registry::get('get');
-//
-//            if (!filter_input(INPUT_GET, 'IdPRONAC')) {
-//                throw new Exception("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
-//            }
-//
-//            if (!filter_input(INPUT_GET, 'idTipoDoAtoAdministrativo')) {
-//                throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
-//            }
-//            $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
-//            $modelAssinatura->setIdPronac($get->IdPRONAC);
-//            $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
-//
-//            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-//            $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
-//                $modelAssinatura->getIdTipoDoAtoAdministrativo(),
-//                $this->grupoAtivo->codGrupo,
-//                $this->grupoAtivo->codOrgao
-//            );
-//
-//            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-//            $dadosDocumentoAssinatura = $objModelDocumentoAssinatura->findBy(
-//                array(
-//                    'IdPRONAC' => $modelAssinatura->getIdPronac(),
-//                    'idTipoDoAtoAdministrativo' => $modelAssinatura->getIdTipoDoAtoAdministrativo(),
-//                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-//                    'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-//                )
-//            );
-//
-//            $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura();
-//
-//            $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
-//            $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
-//            $modelAssinatura->setIdAssinante($this->auth->getIdentity()->usu_codigo);
-//            $modelAssinatura->setIdDocumentoAssinatura($dadosDocumentoAssinatura['idDocumentoAssinatura']);
-//            $servicoAssinatura->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
-//
-//            parent::message(
-//                'Projeto Movimentado com sucesso!'
-//                , "/{$this->view->origin}/gerenciar-assinaturas"
-//                , 'CONFIRM'
-//            );
-//        } catch (Exception $objException) {
-//            parent::message(
-//                $objException->getMessage()
-//                , "/{$this->view->origin}/gerenciar-assinaturas"
-//            );
-//        }
-//    }
-//
-//    public function gerarPdfAction()
-//    {
-//        ini_set("memory_limit", "5000M");
-//        set_time_limit(30);
-//
-//        $this->_helper->layout->disableLayout();
-//        $this->_helper->viewRenderer->setNoRender();
-//        $cssContents = file_get_contents(APPLICATION_PATH . '/../public/library/materialize/css/materialize.css');
-//        $cssContents .= file_get_contents(APPLICATION_PATH . '/../public/library/materialize/css/materialize-custom.css');
-//        $html = $_POST['html'];
-//
-//        $pdf = new mPDF('pt', 'A4', 12, '', 8, 8, 5, 14, 9, 9, 'P');
-//        $pdf->allow_charset_conversion = true;
-//        $pdf->WriteHTML($cssContents, 1);
-//        $pdf->charset_in = 'ISO-8859-1';
-//
-//        if (!mb_check_encoding($html, 'ISO-8859-1')) {
-//            $pdf->charset_in = 'UTF-8';
-//        }
-//
-//        $pdf->WriteHTML($html, 2);
-//        $pdf->Output();
-//        die;
-//    }
+//        $this->_helper->json(
+//            array('resultado' => $arrayTiposAtosAdministrativos)
+//        );
+    }
+
 }
