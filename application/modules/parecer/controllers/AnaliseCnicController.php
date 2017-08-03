@@ -1,0 +1,767 @@
+<?php
+
+class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract implements MinC_Assinatura_Controller_IDocumentoAssinaturaController
+{
+    private $idPronac;
+
+    private function validarPerfis() {
+        $auth = Zend_Auth::getInstance();
+
+        $PermissoesGrupo = array();
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COMPONENTE_COMISSAO;
+        
+        isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
+    }
+
+    public function init()
+    {
+        parent::perfil();
+        parent::init();
+        $this->auth = Zend_Auth::getInstance();
+        $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+    }
+
+    public function gerenciarAssinaturasAction()
+    {
+        $this->redirect("/{$this->moduleName}/index");
+    }
+
+    public function encaminharAssinaturaAction()
+    {
+    }
+
+    function obterServicoDocumentoAssinatura()
+    {
+    }
+    
+    public function indexAction()
+    {
+        $this->validarPerfis();
+        
+        $auth = Zend_Auth::getInstance();
+        $idusuario = $auth->getIdentity()->usu_codigo;
+
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $idOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o
+
+        $UsuarioDAO = new Autenticacao_Model_Usuario();
+        $agente = $UsuarioDAO->getIdUsuario($idusuario);
+        $idAgenteParecerista = $agente['idagente'];
+
+        $situacao = $this->_request->getParam('situacao');
+        
+        $projeto = new Projetos();
+        $resp = $projeto->buscaProjetosProdutosParaAnalise(
+            array(
+                'distribuirParecer.idAgenteParecerista = ?' => $idAgenteParecerista,
+                'distribuirParecer.idOrgao = ?' => $idOrgao,
+            )
+        );
+
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $this->view->quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
+            $this->idTipoDoAtoAdministrativo,
+            $this->auth->getIdentity()->usu_org_max_superior
+        );
+        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+        $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
+        
+        Zend_Paginator::setDefaultScrollingStyle('Sliding');
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
+        $paginator = Zend_Paginator::factory($resp); // dados a serem paginados
+        $currentPage = $this->_getParam('page', 1);
+        $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina
+        
+        $this->view->qtdRegistro = count($resp);
+        $this->view->situacao = $situacao;
+        $this->view->buscar = $paginator;
+    }
+
+
+    public function emitirparecerAction()
+    {
+        $idPronac = $this->_request->getParam("idpronac");
+        
+        $projetos = new Projetos();
+        if (!$projetos->VerificarIN2017($idPronac)) {
+            $pa = new paChecarLimitesOrcamentario();
+            $resultadoCheckList = $pa->exec($idPronac, 3);
+            $i = 0;
+            foreach ($resultadoCheckList as $resultado) {
+                if ($resultado->Observacao == 'PENDENTE') {
+                    $i++;
+                }
+            }
+
+            $this->view->qtdErrosCheckList = $i;
+            $this->view->resultadoCheckList = $resultadoCheckList;
+        }
+        
+        $tblParecer = new Parecer();
+        $tblPlanilhaAprovacao = new PlanilhaAprovacao();
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $tblProjetos = new Projetos();
+        $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+
+        $ConsultaReuniaoAberta = ReuniaoDAO::buscarReuniaoAberta();
+        $numeroReuniao = $ConsultaReuniaoAberta['NrReuniao'];
+        //CASO O COMPONENTE QUEIRA APENAS SALVAR O SEU PARECER - INICIO
+        if (isset($_POST['usu_codigo'])) {
+            $this->salvarParecerComponente($numeroReuniao);
+        }
+        //CASO O COMPONENTE QUEIRA SALVAR O SEU PARECER - FIM
+
+        if (isset($_POST['idpronac'])) {
+            $this->readequarProjetoAprovadoNaCNIC();
+        }        
+        
+        //FINALIZAR ANALISE - JUSTIFICATIVA DE PLENARIA - INICIO
+        if (isset($_POST['justificativaenvioplenaria'])) {
+
+            /**** CODIGO DE READEQUACAO ****/
+            //SE O PROJETO FOR DE READEQUACAO e a DECISAO FOR DE APROVACAO - INATIVA A ANTIGA PLANILHA 'CO' e ATIVA A 'CO' READEQUADA
+            if ($this->bln_readequacao == "true") {
+                $this->atualizaReadequacao($idPronac);
+                // encerra
+            }
+            /**** FIM CODIGO DE READEQUACAO ****/
+            
+            // revisar variáveis
+            $this->incluirNaPauta();
+            
+        } // fecha if
+        // =================================================================
+        // ========= CARREGANDO TELA DE EMISSAO DE PARECER =================
+        else {
+
+            $this->carregarEmissaoParecer();
+        } // fecha else
+       
+    }
+
+
+    private function atualizaReadequacao($idPronac)
+    {
+        $post = Zend_Registry::get('post');
+        
+        //finaliza readequacao do projeto
+        if (!empty($this->idPedidoAlteracao) && $this->idPedidoAlteracao > 0) {
+            $tbPedidoAlteracao = new tbPedidoAlteracaoProjeto();
+            $rsPedidoAlteracao = $tbPedidoAlteracao->buscar(array('idPedidoAlteracao = ?' => $this->idPedidoAlteracao))->current();
+            $rsPedidoAlteracao->siVerificacao = 2;
+            $rsPedidoAlteracao->save();
+        }
+
+        //troca planilhas apenas se a decisao do componente for de aprovar a readequacao  //Se a planilha atual � SE significa que voltou da plenaria e nao entra na opcao de desativar a antiga e ativar a nova
+        if ($post->decisao = 'AC' && $this->view->tpPlanilha != 'SE') {
+
+            try {
+                //ATIVA PLANILHA CO READEQUADA
+                $tblPlanilhaAprovacao = new PlanilhaAprovacao();
+                $rsPlanilha_Ativa = $tblPlanilhaAprovacao->buscar(array('idPronac = ?' => $idPronac, 'stAtivo = ?' => 'S', 'tpPlanilha=?' => 'CO')); //PLANILHA DA APROVACAO INICIAL
+
+                $arrBuscaPlanilha = array();
+                $arrBuscaPlanilha["idPronac = ? "] = $idPronac;
+                $arrBuscaPlanilha["tpPlanilha = ? "] = 'CO';
+                $arrBuscaPlanilha["stAtivo = ? "] = 'N';
+                $arrBuscaPlanilha["idPedidoAlteracao = (SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')"] = '(?)';
+                $rsPlanilha_Inativa = $tblPlanilhaAprovacao->buscar($arrBuscaPlanilha); //PLANILHA DA READEQUACAO
+                //inativa Planilha Aprovacao Inicial
+                foreach ($rsPlanilha_Ativa as $planilhaI) {
+                    $planilhaI->stAtivo = 'N';
+                    $planilhaI->save();
+                }
+                //ativa Planilha Readequada
+                $planilha = null;
+                foreach ($rsPlanilha_Inativa as $planilhaR) {
+                    $planilhaR->stAtivo = 'S';
+                    $planilhaR->save();
+                }
+
+            }// fecha try
+            catch (Exception $e) {
+
+                parent::message("Erro ao ativar Planilha readequada. " . $e->getMessage(), "arealizaranaliseprojeto/emitirparecer" . $query_string, "ERROR");
+            }
+        }
+    }
+    
+    
+    private function readequarProjetoAprovadoNaCNIC()
+    {
+        $idpronac = $_POST['idpronac'];
+        $tblSituacao = new Situacao();
+        $tblPauta = new Pauta();
+        $buscarnrreuniaoprojeto = $tblPauta->dadosiniciaistermoaprovacao(array($idpronac))->current();
+        $dados = array();
+        //TRATANDO SITUACAO DO PROJETO QUANDO ESTE FOR DE READEQUACAO
+        if ($this->bln_readequacao == "false") {
+            $dados['Situacao'] = 'D03';
+            $buscarsituacao = $tblSituacao->listasituacao(array('D03'))->current();
+        } else {
+            $dados['Situacao'] = 'D02';
+            $buscarsituacao = $tblSituacao->listasituacao(array('D02'))->current();
+        }
+        $dados['DtSituacao'] = date('Y-m-d H:i:s');
+        $dados['ProvidenciaTomada'] = 'PROJETO APROVADO NA CNIC N&ordm ' . $buscarnrreuniaoprojeto->NrReuniao . ' - ' . $buscarsituacao['Descricao'];
+        $dados['Logon'] = $auth->getIdentity()->usu_codigo;
+        $where = "IdPRONAC = " . $idpronac;
+        $tblProjetos->alterar($dados, $where);
+        
+        parent::message("Projeto readequado com sucesso!", "areadetrabalho/index", "CONFIRM");
+        $this->_helper->viewRenderer->setNoRender(TRUE);
+    }
+    
+    private function incluirNaPauta() {
+        try {
+            // busca a reuniao aberta
+            $idReuniao = $ConsultaReuniaoAberta['idNrReuniao'];
+            // verifica se ja esta na pauta
+            $verificaPauta = RealizarAnaliseProjetoDAO::retornaRegistro($idPronac, $idReuniao);
+            if (count($verificaPauta) == 0) {
+                // cadastra o projeto na pauta
+                $dados = array(
+                    'idNrReuniao' => $idReuniao,
+                    'IdPRONAC' => $idPronac,
+                    'dtEnvioPauta' => new Zend_Db_Expr('GETDATE()'),
+                    'stEnvioPlenario' => $stEnvioPlenaria,
+                    'tpPauta' => 1,
+                    'stAnalise' => $TipoAprovacao,
+                        'dsAnalise' => TratarString::escapeString($justificativa),
+                    'stPlanoAnual' => $post->stPlanoAnual
+                );
+                $tblPauta->inserir($dados);
+                $dadosprojeto = array(
+                    'Situacao' => $situacao,
+                    'DtSituacao' => $dtsituacao,
+                    'ProvidenciaTomada' => $providencia
+                    );
+                $tblProjetos->alterar($dadosprojeto, 'IdPRONAC = ' . $idPronac);
+                parent::message("Projeto cadastrado na Pauta com sucesso!", "areadetrabalho/index", "CONFIRM");
+                $this->_helper->viewRenderer->setNoRender(TRUE);
+            } else {
+                // altera o projeto na pauta
+                $dados = array(
+                    'idNrReuniao' => $idReuniao,
+                    'dtEnvioPauta' => new Zend_Db_Expr('GETDATE()'),
+                    'stEnvioPlenario' => $stEnvioPlenaria,
+                    'tpPauta' => 1,
+                    'dsAnalise' => TratarString::escapeString($justificativa),
+                    'stAnalise' => $TipoAprovacao,
+                    'stPlanoAnual' => $post->stPlanoAnual
+                );
+                
+                $dadosprojeto = array(
+                    'Situacao' => $situacao,
+                    'DtSituacao' => $dtsituacao,
+                    'ProvidenciaTomada' => $providencia
+                );
+                
+                $tbRecurso = new tbRecurso();
+                $dadosRecursoAtual = $tbRecurso->buscar(array('IdPRONAC = ?' => $idPronac, 'stAtendimento = ?' => 'N', 'tpSolicitacao =?' => 'EN'));
+                if (count($dadosRecursoAtual) > 0) {
+                    $auth = Zend_Auth::getInstance(); // pega a autentica��o
+                    $this->idUsuario = $auth->getIdentity()->usu_codigo;
+                    //ATUALIZA��O DA TABELA RECURSO//
+                    $dadosNovos = array(
+                        'dtAvaliacao' => new Zend_Db_Expr('GETDATE()'),
+                        'dsAvaliacao' => 'Recurso deferido conforme solicita��o do Proponente.',
+                        'idAgenteAvaliador' => $this->idUsuario
+                    );
+                    $tbRecurso->update($dadosNovos, "idRecurso=" . $dadosRecursoAtual[0]->idRecurso);
+                    
+                    //ATUALIZA��O DA TABELA Enquadramento//
+                    $Enquadramento = new Admissibilidade_Model_Enquadramento();
+                    $dadosEnquadramentoAtual = $Enquadramento->buscarDados($idPronac, null);
+                    if (count($dadosRecursoAtual) > 0) {
+                        $tpEnquadramento = ($dadosEnquadramentoAtual[0]->Enquadramento == 1) ? 2 : 1;
+                        $dadosNovosEnquadramento = array(
+                            'Enquadramento' => $tpEnquadramento,
+                            'dtEnquadramento' => new Zend_Db_Expr('GETDATE()'),
+                            'Observacao' => 'Altera&ccedil;&atilde;o de Enquadramento conforme deferimento de recurso.',
+                            'Logon' => $this->idUsuario
+                        );
+                        $Enquadramento->update($dadosNovosEnquadramento, "IdEnquadramento=" . $dadosEnquadramentoAtual[0]->IdEnquadramento);
+                    }
+                }
+                parent::message("Projeto j&aacute; est&aacute; em Pauta, sendo alterado com sucesso!", "areadetrabalho/index", "CONFIRM");
+                $this->_helper->viewRenderer->setNoRender(TRUE);
+            }
+            
+        } // fecha try
+        catch (Exception $e) {
+            
+            parent::message("Erro ao incluir projeto na Pauta. " . $e->getMessage(), "brealizaranaliseprojeto/emitirparecer" . $query_string, "ERROR");
+        }
+    }
+        
+
+    private function validacao50($idPronac, $projetoAtual)
+    {
+        $planoDistribuicao = new PlanoDistribuicao();
+        $analiseaprovacao = new AnaliseAprovacao();
+        
+        //CALCULO DOS 50%
+        $buscarPlano = $planoDistribuicao->buscar(array('idProjeto = ?' => $projetoAtual['idProjeto'], 'stPrincipal= ?' => 1))->current()->toArray();
+        $buscarAnaliseAp = $analiseaprovacao->buscar(array('IdPRONAC = ?' => $idPronac, 'idProduto = ?' => $buscarPlano['idProduto'], 'tpAnalise = ?' => $this->view->tipoanalise));
+        if ($buscarAnaliseAp->count() > 0) {
+            $buscarAnaliseAp = $buscarAnaliseAp->current()->toArray();
+            if ($buscarAnaliseAp['stAvaliacao'] == 1) {
+                $valoraprovacao = $this->view->fontesincentivo * 0.5;
+                if ($valoraprovacao >= $this->view->totalsugerido) {
+                    $this->view->parecerfavoravel = 'NAO';
+                    $this->view->nrparecerfavoravel = 1;
+                } else {
+                    $this->view->parecerfavoravel = 'SIM';
+                    $this->view->nrparecerfavoravel = 2;
+                }
+            } else {
+                $this->view->parecerfavoravel = 'NAO';
+                $this->view->nrparecerfavoravel = 1;
+            }
+        } else {
+            $this->view->parecerfavoravel = 'NAO';
+            $this->view->nrparecerfavoravel = 1;
+        }
+    }
+    
+    private function validacao1520($idPronac)
+    {
+        $planilhaAprovacao = new PlanilhaAprovacao();
+        
+        $arrWhereSomaPlanilha = array();
+        $arrWhereSomaPlanilha['idPronac = ?'] = $idPronac;
+        $arrWhereSomaPlanilha['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+        $arrWhereSomaPlanilha['tpPlanilha = ? '] = $this->view->tipoplanilha;
+        $arrWhereSomaPlanilha['NrFonteRecurso = ? '] = '109';
+        if ($this->bln_readequacao == "true") {
+            $arrWhereSomaPlanilha["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
+            $arrWhereSomaPlanilha['stAtivo = ? '] = 'N';
+        } else {
+            $arrWhereSomaPlanilha['stAtivo = ? '] = 'S';
+        }        
+        //VALOR TOTAL DO PROJETO - V1
+        $valorProjeto = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
+        
+        /**** FIM CODIGO DE READEQUACAO ****/
+
+        $this->view->totalsugerido = $valorProjeto['soma'] ? $valorProjeto['soma'] : 0; //valor total do projeto (Planilha Aprovacao)
+
+        //CALCULO DOS 20% - ETAPA DIVULGACAO
+        //soma para calculo dos 20% etapada de Divulgacao
+        $arrWhereEtapa = array();
+        $arrWhereEtapa['pa.idPronac = ?'] = $idPronac;
+        $arrWhereEtapa['pa.idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+        $arrWhereEtapa['pa.tpPlanilha = ? '] = $this->view->tipoplanilha;
+        $arrWhereEtapa['pa.NrFonteRecurso = ? '] = '109';
+        $arrWhereEtapa['pa.idEtapa = ?'] = '3';
+        if ($this->bln_readequacao == "true") {
+            $arrWhereEtapa["pa.tpAcao <> ('E') OR pa.tpAcao IS NULL "] = '(?)';
+            $arrWhereEtapa['pa.stAtivo = ? '] = 'N';
+        } else {
+            $arrWhereEtapa['pa.stAtivo = ? '] = 'S';
+        }
+        $arrWhereEtapa['aa.tpAnalise = ?'] = $this->view->tipoplanilha;
+        $arrWhereEtapa['aa.stAvaliacao = ?'] = 1; // 1 = parecer favoravel, 0 = parecer nao favoravel
+        
+        $valorProjetoDivulgacao = $planilhaAprovacao->somarItensPlanilhaAprovacaoProdutosFavoraveis($arrWhereEtapa);
+        
+        //CALCULO DOS 15% - CUSTOS ADMINISTRATIVOS
+        $arrWhereCustoAdm = array();
+        $arrWhereCustoAdm['idPronac = ?'] = $idPronac;
+        $arrWhereCustoAdm['idProduto = ?'] = 0;
+        $arrWhereCustoAdm['idEtapa = ?'] = 4; //custos administrativos
+        $arrWhereCustoAdm['idPlanilhaItem NOT IN (?)'] = array(5249, 206, 1238);//Remuneracao de captacao de recursos
+        $arrWhereCustoAdm['tpPlanilha = ? '] = $this->view->tipoplanilha;
+        $arrWhereCustoAdm['NrFonteRecurso = ? '] = '109';
+        if ($this->bln_readequacao == "true") {
+            $arrWhereCustoAdm["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
+            $arrWhereCustoAdm['stAtivo = ? '] = 'N';
+        } else {
+            $arrWhereCustoAdm['stAtivo = ? '] = 'S';
+        }
+        
+        $valoracustosadministrativos = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereCustoAdm);
+
+        //CALCULO DOS 10% - REMUNERACAO PARA CAPTACAO DE RECURSO
+        $arrWhereItemCaptRecurso = array();
+        $arrWhereItemCaptRecurso['idPronac = ?'] = $idPronac;
+        $arrWhereItemCaptRecurso['idPlanilhaItem = ?'] = '5249'; //Item de Remuneracao de captacao de recursos
+        $arrWhereItemCaptRecurso['tpPlanilha = ? '] = $this->view->tipoplanilha;
+        $arrWhereItemCaptRecurso['NrFonteRecurso = ? '] = '109';
+        if ($this->bln_readequacao == "true") {
+            $arrWhereItemCaptRecurso["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
+            $arrWhereItemCaptRecurso['stAtivo = ? '] = 'N';
+        } else {
+            $arrWhereItemCaptRecurso['stAtivo = ? '] = 'S';
+        }
+        //$this->view->V2.2 = $valorItemCaptacaoRecurso['soma'];
+        $valorItemCaptacaoRecurso = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereItemCaptRecurso);
+
+        //Calcula os 20% do valor total do projeto V3
+        $porcentValorProjeto = ($valorProjeto['soma'] * 0.20);
+
+        //Calcula os 15% do valor total do projeto V3.1
+        $quinzecentoprojeto = ($valorProjeto['soma'] * 0.15);
+
+        //Calcula os 10% do valor total do projeto V3.2
+        $dezPercentValorProjeto = ($valorProjeto['soma'] * 0.10);
+
+        //Calculo do 20% -> V4
+        //Subtrai os custos da etapa divulgacao pelos 20% do projeto (V2 - V3)
+        $verificacaonegativo20porcento = $valorProjetoDivulgacao->soma - $porcentValorProjeto;
+
+        //Calculo do 15% -> V4.1
+        //Subtrai os custos administrativos pelos 15% do projeto (V2.1 - V3.1)
+        $verificacaonegativo = $valoracustosadministrativos['soma'] - $quinzecentoprojeto;
+
+        //Calculo do 10% -> V4.2
+        //Subtrai o item de captacao de recurso pelos 10% do projeto (V2.2 - V3.2)
+        $verificacaonegativo10porcento = $valorItemCaptacaoRecurso['soma'] - $dezPercentValorProjeto;
+
+        //if V4 e V4.1 maior que zero soma os dois V4
+        if ($verificacaonegativo20porcento > 0 && $verificacaonegativo > 0 && $verificacaonegativo10porcento > 0) {
+
+            //V1 - (V4 + V4.1 + V4.2) = V5
+            /*V5*/
+            $novoValorProjeto = /*V1*/
+                $valorProjeto['soma'] - (/*V4*/
+                    $verificacaonegativo20porcento + /*V4.1*/
+                    $verificacaonegativo + /*V4.2*/
+                    $verificacaonegativo10porcento);
+
+            /*V6*/
+            $vinteporcentovalorretirar = /*V5*/
+                $novoValorProjeto * 0.20;
+            //V2 - V6
+            $valorretirarplanilhaEtapaDivulgacao = $valorProjetoDivulgacao->soma - $vinteporcentovalorretirar; //(correcao V2 - V6)
+            //$this->view->verifica15porcento = $valorretirarplanilha;
+            $this->view->valorReadequar20porcento = $valorretirarplanilhaEtapaDivulgacao;
+            $this->view->totaldivulgacao = "true";
+
+            /*V6.1*/
+            $quinzecentovalorretirar = /*V5*/
+                $novoValorProjeto * 0.15;
+            //V2 - V6
+            $valorretirarplanilha = $valoracustosadministrativos['soma'] - $quinzecentovalorretirar; //(correcao V2 - V6)
+            $this->view->verifica15porcento = $valorretirarplanilha;
+
+            /*V6.2*/
+            $dezcentovalorretirar = /*V5*/
+                $novoValorProjeto * 0.10;
+            //V2 - V6
+            $valorretirarplanilhaItemCaptacaoRecurso = $valorItemCaptacaoRecurso['soma'] - $dezcentovalorretirar; //(correcao V2 - V6)
+            $this->view->valorReadequar10porcento = $valorretirarplanilhaItemCaptacaoRecurso;
+            $this->view->totalcaptacaorecurso = "true";
+
+        } elseif ($verificacaonegativo20porcento > 0 || $verificacaonegativo > 0 || $verificacaonegativo10porcento > 0) {
+
+            //Calculo dos 20%
+            if ($verificacaonegativo20porcento <= 0) {
+                $this->view->totaldivulgacao = "false";
+                $this->view->valorReadequar20porcento = 0;
+            } else {
+                //V1 - V4 = V5
+                /*V5*/
+                $valorretirar20porcento = /*V1*/
+                    $valorProjeto['soma'] - /*V4*/
+                    $verificacaonegativo20porcento;
+                /*V6*/
+                $vinteporcentovalorretirar = /*V5*/
+                    $valorretirar20porcento * 0.20;
+                //V2 - V6
+                $valorretirarplanilhaEtapaDivulgacao = $valorProjetoDivulgacao->soma - $vinteporcentovalorretirar; //(correcao V2 - V6)
+                $this->view->valorReadequar20porcento = $valorretirarplanilhaEtapaDivulgacao;
+                $this->view->totaldivulgacao = "true";
+            }
+
+            //Calculo dos 10%
+            if ($verificacaonegativo10porcento <= 0) {
+                $this->view->totalcaptacaorecurso = "false";
+                $this->view->valorReadequar10porcento = 0;
+            } else {
+                //V1 - V4 = V5
+                /*V5*/
+                $valorretirar10porcento = /*V1*/
+                    $valorProjeto['soma'] - /*V4*/
+                    $verificacaonegativo10porcento;
+                /*V6*/
+                $dezcentovalorretirar = /*V5*/
+                    $valorretirar10porcento * 0.10;
+                //V2 - V6
+                $valorretirarplanilhaItemCaptacaoRecurso = $valorItemCaptacaoRecurso['soma'] - $dezcentovalorretirar; //(correcao V2 - V6)
+                $this->view->valorReadequar10porcento = $valorretirarplanilhaItemCaptacaoRecurso;
+                $this->view->totalcaptacaorecurso = "true";
+            }
+
+            //Calculo dos 10% (complemento)
+            $tetoCemMil = (int)'100000.00';
+            if ($valorItemCaptacaoRecurso['soma'] > $tetoCemMil) { //verfica se o valor do item de captacao de recurso � maior que R$100.000,00
+                $this->view->totalcaptacaorecurso = "true";
+                $this->view->valorReadequar10porcento = $valorItemCaptacaoRecurso['soma'] - $tetoCemMil;
+            }
+
+            //Calculo dos 15%
+            if ($valorProjeto['soma'] > 0 and $valoracustosadministrativos['soma'] < $valorProjeto['soma']) {
+                if ($verificacaonegativo <= 0) {
+                    $this->view->verifica15porcento = 0;
+                } else {
+                    //V1 - V4 = V5
+                    /*V5*/
+                    $valorretirar = /*V1*/
+                        $valorProjeto['soma'] - /*V4*/
+                        $verificacaonegativo;
+                    /*V6*/
+                    $quinzecentovalorretirar = /*V5*/
+                        $valorretirar * 0.15;
+                    //V2 - V6
+                    $valorretirarplanilha = $valoracustosadministrativos['soma'] - $quinzecentovalorretirar; //(correcao V2 - V6)
+                    $this->view->verifica15porcento = $valorretirarplanilha;
+                }
+            } else {
+                $this->view->verifica15porcento = $valoracustosadministrativos['soma'];
+            }
+
+        } else {
+            //Calculo dos 20%
+            $this->view->totaldivulgacao = "false";
+            $this->view->valorReadequar20porcento = 0;
+
+            //Calculo dos 10% (complemento)
+            $tetoCemMil = (int)'100000.00';
+            if ($valorItemCaptacaoRecurso['soma'] > $tetoCemMil) { //verfica se o valor do item de captacao de recurso � maior que R$100.000,00
+                $this->view->totalcaptacaorecurso = "true";
+                $this->view->valorReadequar10porcento = $valorItemCaptacaoRecurso['soma'] - $tetoCemMil;
+            } else {
+                $this->view->totalcaptacaorecurso = "false";
+                $this->view->valorReadequar10porcento = 0;
+            }
+            //Calculo dos 15%
+            $this->view->verifica15porcento = 0;
+        }
+        //FIM - DOS CALCULO DOS 20% e 15%
+    }
+
+    
+    private function carregarEmissaoParecer()
+    {      
+        // recebe os dados via get
+        $idpronac = $this->_request->getParam("idpronac");
+        $this->view->idpronac = $idpronac;
+        
+        try {
+            if (empty($idpronac)) {
+                //throw new Exception("Por favor, clique no Pronac Aguardando An&aacute;lise!");
+                parent::message("Erro ao realizar opera&ccedil;&atilde;o.", "crealizaranaliseprojeto/emitirparecer", "ERROR");
+            } else {
+                $idpronac = $this->_request->getParam("idpronac");
+                
+                $projeto = new Projetos();
+                $planilhaproposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+                $planilhaprojeto = new PlanilhaProjeto();
+                $planilhaAprovacao = new PlanilhaAprovacao();
+                $tbPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+                $tblParecer = new Parecer();
+                
+                $rsPlanilhaAtual = $planilhaAprovacao->buscar(array('IdPRONAC = ?' => $idpronac), array('dtPlanilha DESC'))->current();
+                $tipoplanilha = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'SE' : 'CO';
+                
+                if (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') {
+                    $tpPlanilha = "SE";
+                    $tpAnalise = "SE";
+                    $tpAgente = '10';
+                } else {
+                    $tpPlanilha = "CO";
+                    $tpAnalise = "CO";
+                    $tpAgente = '6';
+                }
+                
+                $projetoAtual = $projeto->buscar(array('IdPRONAC = ?' => $idpronac))->current()->toArray();
+                $idprojeto = $projetoAtual['idProjeto'];
+                
+                $rsPreprojeto = $tbPreProjeto->buscar(array('idPreProjeto=?' => $idprojeto))->current();
+                if (!empty($rsPreprojeto)) {
+                    $stPlanoAnual = $rsPreprojeto->stPlanoAnual;
+                } else {
+                    $stPlanoAnual = '0';
+                }
+                $this->view->tipoplanilha = $tpPlanilha;
+                $this->view->tipoagente = $tpAgente;
+                $this->view->stPlanoAnual = $stPlanoAnual;
+                
+                /**** CODIGO DE READEQUACAO ****/
+                
+                $arrWhereSomaPlanilha = array();
+                $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
+                
+                //TRATANDO SOMA DE PROJETO QUANDO ESTE FOR DE READEQUACAO
+                if ($this->bln_readequacao == "false") {
+                    $fonteincentivo = $planilhaproposta->somarPlanilhaProposta($idprojeto, 109);
+                    $outrasfontes = $planilhaproposta->somarPlanilhaProposta($idprojeto, false, 109);
+                } else {
+                    $arrWhereFontesIncentivo = $arrWhereSomaPlanilha;
+                    $arrWhereFontesIncentivo['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+                    $arrWhereFontesIncentivo['tpPlanilha = ? '] = 'SR';
+                    $arrWhereFontesIncentivo['stAtivo = ? '] = 'N';
+                    $arrWhereFontesIncentivo['NrFonteRecurso = ? '] = '109';
+                    $arrWhereFontesIncentivo["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
+                    $fonteincentivo = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereFontesIncentivo);
+                    
+                    $arrWhereOutrasFontes = $arrWhereSomaPlanilha;
+                    $arrWhereOutrasFontes['idPlanilhaItem <> ? '] = '206'; //elaboracao e agenciamento
+                    $arrWhereOutrasFontes['tpPlanilha = ? '] = 'SR';
+                    $arrWhereOutrasFontes['stAtivo = ? '] = 'N';
+                    $arrWhereOutrasFontes['NrFonteRecurso <> ? '] = '109';
+                    $arrWhereOutrasFontes["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
+                    $outrasfontes = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereOutrasFontes);
+                }
+                $this->view->fontesincentivo = $fonteincentivo['soma'];
+                $this->view->outrasfontes = $outrasfontes['soma'];
+                $this->view->valorproposta = $fonteincentivo['soma'] + $outrasfontes['soma'];
+                
+                
+                $projetos = new Projetos();
+                if (!$projetos->VerificarIN2017($idpronac)) {
+                    $this->validacao1520($idpronac);
+                }                    
+                
+                if (!$projetos->VerificarIN2017($idpronac)) {
+                    $this->validacao50($idpronac, $projetoAtual);
+                }                
+                
+                $produtos = RealizarAnaliseProjetoDAO::analiseDeConteudo($idpronac, $tpPlanilha);
+                $this->view->ResultRealizarAnaliseProjeto = RealizarAnaliseProjetoDAO::analiseparecerConsolidado($idpronac);
+                $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, $tpPlanilha);
+                if (isset($verificaEnquadramento[0]->stArtigo18) && $verificaEnquadramento[0]->stArtigo18 == true) {
+                    $this->view->enquadramento = 'Artigo 18';
+                } else if (isset($verificaEnquadramento[0]->stArtigo26) && $verificaEnquadramento[0]->stArtigo26 == true) {
+                    $this->view->enquadramento = 'Artigo 26';
+                } else {
+                        $this->view->enquadramento = 'NAO ENQUADRADO';
+                }
+                $this->view->ResultProduto = $produtos;
+                $this->view->ResultValoresAnaliseProjeto = $produtos;
+                $indeferidos = RealizarAnaliseProjetoDAO::retornaIndeferimento();
+                $this->view->indeferidos = $indeferidos;
+                $this->view->idpronac = $idpronac;
+                
+                /**** CODIGO DE READEQUACAO ****/
+                $arrBuscaParecer = array();
+                $arrBuscaParecer['idPronac = ?'] = $idpronac;
+                $arrBuscaParecer['idTipoAgente = ?'] = $tpAgente;
+                $arrBuscaParecer['TipoParecer = ?'] = ($this->bln_readequacao == "true") ? '2' : '1';
+                $buscarjustificativa = $tblParecer->buscar($arrBuscaParecer);
+                /**** FIM - CODIGO DE READEQUACAO ****/
+                
+                if ($buscarjustificativa->count() > 0) {
+                    $buscarjustificativa = $buscarjustificativa->current()->toArray();
+                    $this->view->valorJustificativa = $buscarjustificativa['ResumoParecer'];
+                } else {
+                    $this->view->valorJustificativa = null;
+                }
+
+                $auth = Zend_Auth::getInstance(); // pega a autenticao
+                $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
+                $idagente = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
+                $idagente = $idagente['idAgente'];
+                //-------------------------------------------------------------------------------------------------------------
+                $reuniao = new Reuniao();
+                //---------------------------------------------------------------------------------------------------------------
+                $ConsultaReuniaoAberta = $reuniao->buscar(array("stEstado = ?" => 0));
+                if ($ConsultaReuniaoAberta->count() > 0) {
+                    $this->view->dadosReuniaoPlenariaAtual = $ConsultaReuniaoAberta;
+                    $this->view->usu_codigo = $auth->getIdentity()->usu_codigo;
+                    $ConsultaReuniaoAberta = $ConsultaReuniaoAberta->current()->toArray();
+                    $this->view->plenariaatual = $ConsultaReuniaoAberta['idNrReuniao'];
+                    $this->view->dadosReuniaoPlenariaAtual = $ConsultaReuniaoAberta;
+                    //---------------------------------------------------------------------------------------------------------------
+                    $votantes = new Votante();
+                    $exibirVotantes = $votantes->selecionarvotantes($ConsultaReuniaoAberta['idNrReuniao']);
+                    if (count($exibirVotantes) > 0) {
+                        foreach ($exibirVotantes as $votantes) {
+                            $dadosVotante[] = $votantes->idAgente;
+                        }
+                        if (count($dadosVotante) > 0) {
+                            if (in_array($idagente, $dadosVotante)) {
+                                $this->view->votante = true;
+                            } else {
+                                $this->view->votante = false;
+                            }
+                        }
+                    }
+                } else {
+                    parent::message("N&atilde;o existe CNIC aberta no momento. Favor aguardar!", "principal/index", "ERROR");
+                }
+            } // fecha else
+        } // fecha try
+        catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+    
+    private function salvarParecerComponente($numeroReuniao)
+    {
+        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
+
+        $tblParecer = new Parecer();
+        
+        $tipoAgente = $_POST['tipoplanilha'];
+        $parecer = $_POST['parecer'];
+
+        $buscarParecer = $tblParecer->buscar(array('IdPRONAC = ?' => $_POST['idpronac'], 'stAtivo = ?' => 1))->current();
+        if (count($buscarParecer) > 0) {
+            $buscarParecer = $buscarParecer->toArray();
+            $dados = array(
+                'idPRONAC' => $_POST['idpronac'],
+                'AnoProjeto' => $buscarParecer['AnoProjeto'],
+                'idEnquadramento' => $buscarParecer['idEnquadramento'],
+                'Sequencial' => $buscarParecer['Sequencial'],
+                'TipoParecer' => $buscarParecer['TipoParecer'],
+                'ParecerFavoravel' => Seguranca::tratarVarAjaxUFT8($parecer),
+                'dtParecer' => date('Y-m-d H:i:s'),
+                'NumeroReuniao' => $numeroReuniao,
+                'ResumoParecer' => utf8_decode($_POST['justificativa']),
+                'SugeridoUfir' => 0,
+                'SugeridoReal' => $_POST['valorreal'],
+                'SugeridoCusteioReal' => 0,
+                'SugeridoCapitalReal' => 0,
+                'Atendimento' => 'S',
+                'Logon' => $_POST['usu_codigo'],
+                'stAtivo' => 1,
+                'idTipoAgente' => $tipoAgente
+            );
+            $idparecer = isset($buscarParecer['IdParecer']) ? $buscarParecer['IdParecer'] : $buscarParecer['idParecer'];
+
+            //se parecer ativo nao � o Componente, inativa os outros e grava o do Componente
+            if (!$buscarParecer or $buscarParecer['idTipoAgente'] != $tipoAgente) {
+                try {
+                    $dadosAtualizar = array('stAtivo' => 0);
+                    $where = "idparecer = " . $idparecer;
+
+                    $update = $tblParecer->alterar($dadosAtualizar, $where);
+                    $inserir = $tblParecer->inserir($dados);
+                    $this->_helper->json(array('error' => false));
+                } catch (Exception $e) {
+                    $this->_helper->json(array('error' => true, 'descricao' => $e->getMessage()));
+                }
+                $this->_helper->viewRenderer->setNoRender(TRUE);
+            } else {
+                try {
+                    $where = "idparecer = " . $idparecer;
+                    $update = $tblParecer->alterar($dados, $where);
+                    $this->_helper->json(array('error' => false));
+
+                } catch (Zend_Exception $e) {
+                    $this->_helper->json(array('error' => true, 'descricao' => $e->getMessage()));
+                }
+                $this->_helper->viewRenderer->setNoRender(TRUE);
+            }
+        } else {
+
+            $this->_helper->json(array('error' => true, 'descricao' => 'N&atilde;o foi encontrado parecer v&aacute;lido da an&aacute;lise t&eacute;cnica.'));
+            $this->_helper->viewRenderer->setNoRender(TRUE);
+        }
+    }
+    
+}
