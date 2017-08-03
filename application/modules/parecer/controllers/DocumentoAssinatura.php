@@ -120,7 +120,6 @@ class Parecer_DocumentoAssinaturaController implements MinC_Assinatura_Documento
         
         if ($view->IN2017) {
             $view->dadosAlcance = $dadosProjeto['alcance'][0];
-            $view->projeto = $dadosProjeto['alcance'][0];
         }
         
         $view->dadosParecer = $dadosProjeto['parecer'];        
