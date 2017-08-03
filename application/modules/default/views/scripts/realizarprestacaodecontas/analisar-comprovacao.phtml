@@ -1,5 +1,4 @@
 <?php
-
 function mascara($mask,$str){
 
     $str = str_replace(" ","",$str);
@@ -7,12 +6,9 @@ function mascara($mask,$str){
     for($i=0;$i<strlen($str);$i++){
         $mask[strpos($mask,"#")] = $str[$i];
     }
-
     return $mask;
-
 }
 ?>
-
 <script type="text/javascript" src="<?php echo $this->baseUrl();?>/public/js/tinymce/js/tinymce/tinymce.min.js"></script>
 <?php echo $this->partial("realizarprestacaodecontas/inc/menu.inc.php", $this); ?>
 <div id="breadcrumb">
@@ -218,8 +214,8 @@ function mascara($mask,$str){
                         <td><?php echo $comprovante->nrSerie;?></td>
                     </tr>
                     <tr>
-                        <td class="destacar" align="right"><b>Dt. do Documento</td>
-                        <td><?php echo $comprovante->dtEmissao;?></td>
+                        <td class="destacar" align="right"><b>Data do Documento</td>
+                        <td><?php echo date_format(new DateTime($comprovante->dtEmissao), "d/m/Y") ?></td>
                         <td class="destacar" align="right"><b>Forma de Pagamento</td>
                         <td>
                             <?php
