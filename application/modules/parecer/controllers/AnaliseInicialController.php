@@ -28,10 +28,49 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
 
     public function encaminharAssinaturaAction()
     {
+        try {
+            $get = $this->getRequest()->getParams();
+            $post = $this->getRequest()->getPost();
+            $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
+            
+            if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
+                $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
+                $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
+                
+                $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+                $idDocumentoAssinatura = $this->getIdDocumentoAssinatura($get['IdPRONAC'], $idTipoDoAtoAdministrativo);
+                
+                $this->redirect("/assinatura/index/visualizar-projeto/?idDocumentoAssinatura=" . $idDocumentoAssinatura . "&origin=" . $get['origin']);
+            } elseif(isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
+                // ainda nao implementado o encaminhamento de vários para pareceres
+            }
+        } catch (Exception $objException) {
+            parent::message($objException->getMessage(), "/{$this->moduleName}/analise-inicial/index");
+        }   
+        
     }
 
     function obterServicoDocumentoAssinatura()
     {
+        if(!isset($this->servicoDocumentoAssinatura)) {
+            require_once __DIR__ . DIRECTORY_SEPARATOR . "AnaliseInicialDocumentoAssinaturaController.php";
+            $this->servicoDocumentoAssinatura = new Parecer_AnaliseInicialDocumentoAssinaturaController($this->getRequest()->getPost());
+        }
+        return $this->servicoDocumentoAssinatura;        
+    }
+
+    private function getIdDocumentoAssinatura($idPronac, $idTipoDoAtoAdministrativo)
+    {
+        $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        
+        $where = array();
+        $where['IdPRONAC = ?'] = $idPronac;
+        $where['idTipoDoAtoAdministrativo = ?'] = $idTipoDoAtoAdministrativo;
+        $where['stEstado = ?'] = 1;
+        
+        $result = $objDocumentoAssinatura->buscar($where);
+        
+        return $result[0]['idDocumentoAssinatura'];
     }
     
     public function indexAction()

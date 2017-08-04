@@ -205,7 +205,7 @@ foreach($this->buscar as $d) {
 		  
 		  <?php elseif(!$this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true&origin=parecer/analise-inicial" ?>"
+		     href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-inicial', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true&origin=parecer/analise-inicial" ?>"
 		    data-tooltip="Gerar documento para assinatura">
 		    <i class="material-icons white-text">note_add</i>
 		  </a>
