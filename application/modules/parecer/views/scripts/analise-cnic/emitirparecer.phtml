@@ -288,7 +288,7 @@
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->baseUrl(); ?>" title="Ir para In&iacute;cio">Incio</a></li>
-        <li><a href="<?php echo $this->url(array('controller' => 'areadetrabalho', 'action' => 'index')); ?>" title="Ir para An&aacute;lise do Membro da Comiss&atilde;o">An&aacute;lise do Membro da Comiss&atilde;o</a></li>
+        <li><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'areadetrabalho', 'action' => 'index')); ?>" title="Ir para An&aacute;lise do Membro da Comiss&atilde;o">An&aacute;lise do Membro da Comiss&atilde;o</a></li>
         <li class="last">Emitir Parecer</li>
     </ul>
 </div>
@@ -562,10 +562,30 @@
             <div class="centro">
                 <br />
                 <p>
-                    <input type="button" class="btn" value=" Salvar " id="salvarparecer"/>
+		  <input type="button" class="btn" value=" Salvar " id="salvarparecer"/>
+		  <?php if(!$this->verificarIN2017($this->idpronac)): ?>
+
                     <?php if($this->qtdErrosCheckList==0) { ?>
                     <input type="button" class="btn" value=" Finalizar " id="finalizarparecer"/>
                     <?php } ?>
+		    <?php elseif($this->verificarIN2017($this->idpronac)): ?>
+
+		    <?php if(!$this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
+		    <a class="btn waves-effect waves-light tooltipped"
+		       href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$this->idpronac}&encaminhar=true&origin=parecer/analise-cnic" ?>"
+		      data-tooltip="Gerar documento para assinatura">
+		      <i class="material-icons white-text">note_add</i>
+		    </a>
+		    <?php elseif($this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
+		    <?php if (!$this->IsProjetoJaAssinado($this->idpronac, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
+		    <a class="btn waves-effect waves-light cyan tooltipped small"
+		       href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$this->idpronac}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/analise-cnic"
+		      data-tooltip="Assinar documento">
+		      <i class="material-icons white-text">create</i>
+		    </a>
+		    <?php endif; ?>
+		    <?php endif; ?>	    
+		    <?php endif; ?> 
                 </p>
                 <br />
             </div>
