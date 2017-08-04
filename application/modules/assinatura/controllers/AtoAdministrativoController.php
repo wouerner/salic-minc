@@ -81,9 +81,8 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         $arrayTiposAtosAdministrativos = [];
         $get = $this->getRequest()->getParams();
         if($get['idOrgaoSuperiorDoAssinante']) {
-xd($get);
             $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-            $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterOrgaos();
+            $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterOrgaos($get['idOrgaoSuperiorDoAssinante']);
             foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
                 $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
             }
@@ -96,15 +95,15 @@ xd($get);
 
     public function obterPerfisDoAssinanteAjaxAction()
     {
-//        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-//        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterCargosDoAssinante();
-//        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
-//            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
-//        }
-//
-//        $this->_helper->json(
-//            array('resultado' => $arrayTiposAtosAdministrativos)
-//        );
+        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterPerfisDoAssinante();
+        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
+            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+        }
+
+        $this->_helper->json(
+            array('resultado' => $arrayTiposAtosAdministrativos)
+        );
     }
 
     public function obterOrdemAssinaturaAjaxAction()

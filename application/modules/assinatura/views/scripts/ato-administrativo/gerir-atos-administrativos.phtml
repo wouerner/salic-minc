@@ -8,28 +8,40 @@
 
         <script type="text/javascript">
             $3(document).ready(function () {
-                carregarOpcoesComboAjax($3('#idTipoDoAto').data('link'), '#idTipoDoAto');
-                carregarOpcoesComboAjax($3('#idCargoDoAssinante').data('link'), '#idCargoDoAssinante');
+                carregarOpcoesComboAjax('#idTipoDoAto');
+                carregarOpcoesComboAjax('#idCargoDoAssinante');
 
                 $3('#idOrgaoSuperiorDoAssinante').change(function() {
-                    var linkOrgaoAssinanteAjax = $3('#idOrgaoDoAssinante').data('link') + '/idOrgaoSuperiorDoAssinante/' + $3('#idOrgaoSuperiorDoAssinante option:selected').val();
-                    carregarOpcoesComboAjax(linkOrgaoAssinanteAjax, '#idOrgaoDoAssinante');
-                })
-                carregarOpcoesComboAjax($3('#idOrgaoSuperiorDoAssinante').data('link'), '#idOrgaoSuperiorDoAssinante');
-                $3("#idOrgaoSuperiorDoAssinante").trigger('change');
-
-//                carregarOpcoesComboAjax($3('#idPerfilDoAssinante').data('link'), '#idPerfilDoAssinante');
+                    callbackOrgaoSuperior();
+                });
+                carregarOpcoesComboAjax('#idOrgaoSuperiorDoAssinante', callbackOrgaoSuperior);
+                carregarOpcoesComboAjax('#idPerfilDoAssinante');
+// PAREI AQUI
 //                carregarOpcoesComboAjax($3('#idOrdemDaAssinatura').data('link'), '#idOrdemDaAssinatura');
             });
-            function carregarOpcoesComboAjax(link, seletorSelect, valorSelecionado) {
+
+            function callbackOrgaoSuperior() {
+                var parametrosOrgaos = {
+                    idOrgaoSuperiorDoAssinante: $3('#idOrgaoSuperiorDoAssinante').find('option:selected').val()
+                };
+                $3('#idOrgaoDoAssinante').data('parametros', parametrosOrgaos);
+                carregarOpcoesComboAjax('#idOrgaoDoAssinante');
+            }
+
+            function carregarOpcoesComboAjax(seletorSelect, callback) {
                 $3('select').material_select('destroy');
+                var parametros = {};
+                if($3(seletorSelect).data('parametros')) {
+                    parametros = $3(seletorSelect).data('parametros');
+                }
+
                 $3.get(
-                    link,
-                    {},
+                    $3(seletorSelect).data('link'),
+                    parametros,
                     function (data) {
-console.log(data);
+                        $3(seletorSelect).html('');
                         for (var indice in data.resultado) {
-                            var itemSelecionao = (data.resultado[indice].codigo == valorSelecionado) ? "selected='selected' " : '';
+                            var itemSelecionao = (data.resultado[indice].codigo == $(seletorSelect).data('valorSelecionado')) ? "selected='selected' " : '';
                             $3(seletorSelect).append(
                                 "<option value='"
                                 + data.resultado[indice].codigo
@@ -41,6 +53,9 @@ console.log(data);
                             );
                         }
                         $3('select').material_select();
+                        if(callback) {
+                            callback.call(this);
+                        }
                     }
                 );
 
