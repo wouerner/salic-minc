@@ -29,6 +29,8 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
 
     public function encaminharAssinaturaAction()
     {
+        $this->validarPerfis();
+        
         try {
             $get = $this->getRequest()->getParams();
             $post = $this->getRequest()->getPost();
@@ -70,8 +72,8 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     function obterServicoDocumentoAssinatura()
     {
         if(!isset($this->servicoDocumentoAssinatura)) {
-            require_once __DIR__ . DIRECTORY_SEPARATOR . "DocumentoAssinatura.php";
-            $this->servicoDocumentoAssinatura = new Parecer_DocumentoAssinaturaController($this->getRequest()->getPost());
+            require_once __DIR__ . DIRECTORY_SEPARATOR . "AnaliseCnicDocumentoAssinaturaController.php";
+            $this->servicoDocumentoAssinatura = new Parecer_AnaliseCnicDocumentoAssinaturaController($this->getRequest()->getPost());
         }
         return $this->servicoDocumentoAssinatura;
     }
