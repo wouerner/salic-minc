@@ -229,4 +229,18 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
 
         return $this->fetchAll($objQuery)->toArray();
     }
+
+    public function obterPerfisDoAssinante() {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Grupos' => 'Grupos'],
+            array(
+                'codigo' => 'gru_codigo',
+                'descricao' => 'gru_nome',
+            ),
+            'tabelas'
+        );
+        return $this->fetchAll($objQuery)->toArray();
+    }
 }
