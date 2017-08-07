@@ -30,6 +30,61 @@ class Arquivo_Model_TbArquivoMapper extends MinC_Db_Mapper
          * INNER JOIN BDCORPORATIVO.scCorp.tbArquivoImagem    b on (a.idArquivo = b.idArquivo)
          * INNER JOIN BDCORPORATIVO.scCorp.tbDocumento        c on (a.idArquivo = c.idArquivo)
          * INNER JOIN BDCORPORATIVO.scCorp.tbDocumentoAgente d on (c.idTipoDocumento = d.idTipoDocumento and c.idDocumento = d.idDocumento)
+         * $db = Zend_Db_Table::getDefaultAdapter();
+         * $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+         *
+         * try {
+         * $db->beginTransaction();
+         *
+         * if (!empty($_FILES['arquivo'])):
+         * $dadosArquivo = array('nmArquivo' => $arquivoNome,
+         * 'sgExtensao' => $arquivoExtensao,
+         * 'stAtivo' => 'A',
+         * 'dsHash' => $arquivoHash,
+         * 'dtEnvio' => $dtAtual
+         * );
+         *
+         * $salvarArquivo = $tbArquivo->cadastrarDados($dadosArquivo);
+         * $idArquivo = $tbArquivo->buscarUltimo();
+         *
+         * $dadosArquivoImagem = array('idArquivo' => $idArquivo['idArquivo'],
+         * 'biArquivo' => $arquivoBinario
+         * );
+         *
+         * $dadosAI = "Insert into BDCORPORATIVO.scCorp.tbArquivoImagem
+         * (idArquivo, biArquivo) values (" . $idArquivo['idArquivo'] . ", " . $arquivoBinario . ") ";
+         *
+         * $salvarArquivoImagem = $tbArquivoImagem->salvarDados($dadosAI);
+         *
+         * $dadosDocumento = array('idTipoDocumento' => 0,
+         * 'idArquivo' => $idArquivo['idArquivo']
+         * );
+         *
+         * $salvarDocumento = $tbDocumento->cadastrarDados($dadosDocumento);
+         * $ultimoDocumento = $tbDocumento->ultimodocumento();
+         *
+         * $idDocumento = $ultimoDocumento['idDocumento'];
+         * endif;
+         *
+         *
+         * $arrayDados = array('idAgente' => $idAgente,
+         * 'idTipoEscolaridade' => $tipoEscolaridade,
+         * 'nmCurso' => $curso,
+         * 'nmInstituicao' => $instituicao,
+         * 'dtInicioCurso' => $dtEntrada,
+         * 'dtFimCurso' => $dtSaida,
+         * 'idDocumento' => $idDocumento,
+         * 'idPais' => $pais
+         * );
+         *
+         * $salvarInfo = $tbEscolaridade->inserirEscolaridade($arrayDados);
+         *
+         * $db->commit();
+         * parent::message("Cadastrado realizado com sucesso!", "agente/agentes/escolaridade/id/" . $idAgente, "CONFIRM");
+         * } catch (Exception $e) {
+         * $db->rollBack();
+         * parent::message("Erro ao cadastrar! " . $e->getMessage(), "agente/agentes/escolaridade/id/" . $idAgente, "ERROR");
+         * }
          */
 
 
@@ -54,6 +109,14 @@ class Arquivo_Model_TbArquivoMapper extends MinC_Db_Mapper
         $idArquivo = 0;
 
         $files = $file->getFileInfo();
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+
+        $objArquivo = new Arquivo_Model_TbArquivo();
+
+        $tbArquivoImagem = new Arquivo_Model_DbTable_TbArquivoImagem();
+        $tbDocumento = new Arquivo_Model_DbTable_TbDocumento();
+        $tableTbArquivo = new Arquivo_Model_DbTable_TbArquivo();
 
         try {
 
@@ -80,75 +143,61 @@ class Arquivo_Model_TbArquivoMapper extends MinC_Db_Mapper
                 throw new Exception("O arquivo n&atilde;o pode ser maior do que 10MB!");
             }
 
-            $dadosTbArquivo = [
-                'idArquivo' => '',
-                'nmArquivo' => $arquivoNome,
-                'sgExtensao' => $arquivoExtensao,
-                'nrTamanho' => $arquivoTamanho,
-                'dtEnvio' => GETDATE(),
-                'stAtivo' => 'I', // @todo verificar se eh isso mesmo
-                'dsHash' => $arquivoHash
-            ];
-
             $dadosTbArquivoImagem = [
-                'idArquivo' => 'tbArquivo.idArquivo = tbArquivoImagem.idArquivo',
-                'biArquivo' => $arquivoBinario
+                'idArquivo' => '',
+                'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
             ];
 
             $dadosTbDocumento = [
-                'c.idDocumento' => '',
-                'c.idTipoDocumento' => $arrData['idTipoDocumento'],
-                'c.dsDocumento' => $arrData['dsDocumento'],
-                'idArquivo' => $idArquivo,
+                'idArquivo' => '',
+                'idTipoDocumento' => $arrData['idTipoDocumento'],
+                'dsDocumento' => $arrData['dsDocumento'],
             ];
-//
-//            $tableTbArquivo = $this;
-//
-//            $objArquivo = new Arquivo_Model_TbArquivo();
-//            $objArquivo->setNmArquivo($arquivoNome);
-//            $objArquivo->setSgExtensao($arquivoExtensao);
-//            $objArquivo->setNrTamanho($arquivoTamanho);
-//            $objArquivo->setDtEnvio(GETDATE());
-//            $objArquivo->setStAtivo('I');
-//            $objArquivo->setDsHash($arquivoHash);
-//
-//            $objArquivoImagem = new Arquivo_Model_TbArquivoImagem();
-//
-////            $objArquivoImagem->setIdArquivo($idArquivo);
-////            $objArquivoImagem->setBiArquivo($arquivoBinario);
-//
-//            $objDocumento = new Arquivo_Model_TbDocumento();
 
 
+            $objArquivo->setNmArquivo($arquivoNome);
+            $objArquivo->setSgExtensao($arquivoExtensao);
+            $objArquivo->setNrTamanho($arquivoTamanho);
+            $objArquivo->setDtEnvio(date('Y-m-d h:i:s'));
+            $objArquivo->setStAtivo('I');
+            $objArquivo->setDsHash($arquivoHash);
+//            $objArquivo->setIdUsuario($this->idUsuario);
 
-//            $objDocumento->setIdArquivo($idArquivo);
-//            $objDocumento->setIdTipoDocumento($arrData['idTipoDocumento']);
-//            $objDocumento->setDsDocumento($arrData['dsDocumento']);
+            $obj=[];
+            $obj['NmArquivo'] = $arquivoNome;
+            $obj['SgExtensao'] = $arquivoExtensao;
+            $obj['NrTamanho'] = $arquivoTamanho;
+            $obj['DtEnvio'] = date('Y-m-d h:i:s');
+            $obj['StAtivo'] = 'I';
+            $obj['DsHash'] = $arquivoHash;
+//            $obj['tIdUsuario'] = $this->idUsuario;
 
-
-            $modelTbArquivo = new Arquivo_Model_TbArquivo();
-
-            $tableTbArquivo = $this;
-            $tbArquivoImagem = new Arquivo_Model_DbTable_TbArquivoImagem();
-            $tbDocumento = new Arquivo_Model_DbTable_TbDocumento();
-
-            //$dadosTbArquivo['imdocumento'] = new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})");
 
             # iniciar transacao
-            $modelTbArquivo->setOptions($dadosTbArquivo);
-            $idArquivo = $tableTbArquivo->save($modelTbArquivo);
+            $this->beginTransaction();
 
-            $dadosTbArquivoImagem['idArquivo'] = $idArquivo;
-            $dadosTbDocumento['idArquivo'] = $idArquivo;
-
-            $tbArquivoImagem->insert($dadosTbArquivoImagem);
-            $tbDocumento->insert($dadosTbDocumento);
-
+            $idArquivo = $this->save($objArquivo);
+//            $idArquivo = $this->insert($objArquivo);
             # commit
+            if ($idArquivo) {
+
+                $dadosTbArquivoImagem['idArquivo'] = $idArquivo;
+                $dadosTbDocumento['idArquivo'] = $idArquivo;
+
+//                $tbArquivoImagem->insert($dadosTbArquivoImagem);
+//                $tbDocumento->insert($dadosTbDocumento);
+
+            }
+
+            $this->rollBack();
+
+
 
         } catch (Exception $e) {
             #rollback
-            $this->setMessage($e->getMessage());
+            $this->rollBack();
+            xd($e, $idArquivo);
+            return false;
         }
 
         return $idArquivo;

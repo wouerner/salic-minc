@@ -2,9 +2,9 @@
 
 class Arquivo_Model_DbTable_TbArquivoImagem extends MinC_Db_Table_Abstract
 {
-    protected $_banco = "BDCORPORATIVO";
     protected $_schema = "BDCORPORATIVO.scCorp";
     protected $_name = "tbArquivoImagem";
+    protected $_primary = "idArquivo";
 
     /**
      * Metodo para buscar um arquivo binario pelo seu id

@@ -132,12 +132,18 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                         'observacao' => ''
                     );
 
-                    $mapperTbDocumentoPreProjeto = new Proposta_Model_TbDocumentosPreProjetoMapper();
+                    $arrDoc = [];
+                    $arrDoc['idTipoDocumento'] = 24;
+                    $arrDoc['dsDocumento'] = 'Anexo solicita&ccedil;&atilde;o';
+
+
+                    $mapperArquivo = new Arquivo_Model_TbArquivoMapper();
                     $file = new Zend_File_Transfer();
-                    $mapperTbDocumentoPreProjeto->saveCustom($arrayFile, $file);
+                    $idArquivo = $mapperArquivo->saveCustom($arrDoc, $file);
+
                 }
 
-                $model->setIdDocumento('');
+                $model->setIdDocumento($idArquivo);
 
 
                 if ($intId = parent::save($model)) {

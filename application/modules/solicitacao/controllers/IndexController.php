@@ -119,8 +119,10 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 //            $strUrl .= ($this->arrProjeto)? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
 //            $arrayForm = $this->getRequest()->getPost();
 
-            $mapper = new Solicitacao_Model_TbSolicitacaoMapper();
-            $mapper->salvar($this->getRequest()->getPost());
+            $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
+            $mapperSolicitacao->salvar($this->getRequest()->getPost());
+
+
 
 //            $this->_helper->json(array('status' => $mapper->salvar($this->getRequest()->getPost()), 'msg' => $mapper->getMessages(), 'redirect' => $strUrl));
 

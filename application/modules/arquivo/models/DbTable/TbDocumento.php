@@ -1,10 +1,10 @@
 <?php
 
-class Arquivo_Model_DbTable_TbArquivo extends MinC_Db_Table_Abstract
+class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
 {
-    protected $_banco = "BDCORPORATIVO";
     protected $_schema = "BDCORPORATIVO.scCorp";
     protected $_name = "tbDocumento";
+    protected $_primary = "idDocumento";
 
 
     /**

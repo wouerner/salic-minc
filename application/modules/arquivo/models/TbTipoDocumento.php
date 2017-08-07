@@ -1,6 +1,6 @@
 <?php
 
-class Arquivo_Model_TbArquivo extends MinC_Db_Model
+class Arquivo_Model_TbTipoDocumento extends MinC_Db_Model
 {
     protected $_idTipoDocumento;
     protected $_dsTipoDocumento;
