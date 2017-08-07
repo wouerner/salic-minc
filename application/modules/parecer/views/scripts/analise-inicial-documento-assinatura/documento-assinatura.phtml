@@ -130,49 +130,57 @@
     </div>
 </div>
 
+<br/><br/>
+<div class="row">
+  <div class="col s1"></div>
+  <div class="col s10">
+    <label style="color: black">Mem&oacute;ria de C&aacute;lculo</label>
+    <div class="bordered padding10">
+      <div class="row">
+	<table class="table margin0" style="width: 100%">
+	  <tr>
+	    <td align="center" class="bold" colspan="2">Proponente</td>
+	    <td>&nbsp;</td>
+	    <td align="center" class="bold" colspan="2">T&eacute;cnico</td>
+	  </tr>
+	  
+	  <tr>
+	    <td align="center">vl. Solicitado:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlSolicitado, 2, ',', '.'); ?></td>
+	    <td>&nbsp;</td>
+	    <td align="center">Custo do Projeto:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>
+	  </tr>
+	  
+	  <tr>
+	    <td align="center">vl. Outras Fontes:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontes, 2, ',', '.'); ?></td>
+	    <td>&nbsp;</td>
+	    <td align="center">vl. Outras Fontes</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontesAprovado, 2, ',', '.'); ?></td>
+	  </tr>	      
+	  
+	  <tr>
+	    <td align="center" class="bold">Vl. Projeto:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlProjeto, 2, ',', '.'); ?></td>
+	    <td>&nbsp;</td>
+	    <td align="center" class="bold">Custo Total</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>		
+	  </tr>	      
+	</table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/><br/>
 <div class="row">
     <div class="col s1"></div>
     <div class="col s10">
-      <label style="color: black">Mem&oacute;ria de C&aacute;lculo</label>
+      <label style="color: black">Produtos do projeto</label>
       <div class="bordered padding10">
         <div class="row">
 	  <table class="table margin0" style="width: 100%">
-	    <tr>
-	      <td align="center" class="bold" colspan="2">Proponente</td>
-	      <td>&nbsp;</td>
-	      <td align="center" class="bold" colspan="2">T&eacute;cnico</td>
-	    </tr>
-	    
-	    <tr>
-	      <td align="center">vl. Solicitado:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlSolicitado, 2, ',', '.'); ?></td>
-	      <td>&nbsp;</td>
-	      <td align="center">Custo do Projeto:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>
-	    </tr>
-	    
-	    <tr>
-	      <td align="center">vl. Outras Fontes:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontes, 2, ',', '.'); ?></td>
-	      <td>&nbsp;</td>
-	      <td align="center">vl. Outras Fontes</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontesAprovado, 2, ',', '.'); ?></td>
-	    </tr>	      
-	    
-	    <tr>
-	      <td align="center" class="bold">Vl. Projeto:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlProjeto, 2, ',', '.'); ?></td>
-	      <td>&nbsp;</td>
-	      <td align="center" class="bold">Custo Total</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>		
-	    </tr>	      
-	    
-	    <tr>
-	      <td colspan="5" class="destacar bold">
-		<strong>Produtos</strong>
-	      </td>
-	    </tr>
-	    
 	    <tr>
 	      <td colspan="5">
 		<table>
@@ -217,20 +225,13 @@
     <div class="col s1"></div>
 </div>
 
+<br/><br/>
 <div class="row">
-  <div class="col s1"></div>
-  <div class="col s10">
-    <h5 style="color: black">Produ&ccedil;&atilde;o do Projeto</h5>
-    <div class="bordered padding10">
-      <div class="row">
-        <table class="table margin0" style="width: 100%">
-	  <tr>
-	    <td colspan="5" class="destacar bold">
-	      <strong>Dilig&ecirc;ncias</strong>
-	    </td>
-	  </tr>	      
-	  <tr>
-	    <td colspan="5">
+    <div class="col s1"></div>
+    <div class="col s10">
+    <label style="color: black">Dilig&ecirc;ncias</label>
+        <p class="bold padding10 bordered">
+	      <?php if (!empty($this->dadosDiligencias)) : ?>
 	      <table>
 		<tr>
 		  <th>Tipo de dilig&ecirc;ncia</th>
@@ -245,32 +246,45 @@
 		</tr>
 		<?php endforeach; ?>
 	      </table>
-	      </td>
-	  </tr>
-	  <?php if ($this->view->IN2017): ?>
-	  <tr>
-	    <td class="destacar bold" colspan="5">
-	      A&ccedil;&otilde;es relevantes para o sucesso do projeto*
-	    </td>
-	  </tr>    
-	  <tr>
-	    <td colspan="5">
-	      <p><?php echo $this->dadosAlcance->dsAcaoAlcanceProduto; ?></p>
-	    </td>
-	  </tr>
-	  <?php endif; ?>
-	  <tr>
-	    <td colspan="5" class="destacar bold">Posicionamento T&eacute;cnico</td>
-	  </tr>
-	  
-	  <tr>
-	    <td>Parecer:</td>
-	    <td colspan="4"><?php echo $this->dadosParecer[0]['p.tpResultado']; ?></td>
-	  </tr>
-	  
-        </table>
-      </div>
+	      <?php else: ?>
+	      N&atilde;o houve dilig&ecirc;ncias para esse projeto.
+	      <?php endif; ?>
+        </p>
+    </div>
+</div>
+
+<?php if ($this->IN2017): ?>
+<br/><br/>
+<div class="row">
+  <div class="col s1"></div>
+  <div class="col s10">
+    <label style="color: black">A&ccedil;&otilde;es relevantes para o sucesso do projeto</label>
+    <div class="bold padding10 bordered">
+      <?php echo $this->dadosAlcance->dsAcaoAlcanceProduto; ?>
     </div>
   </div>
-  <div class="col s1"></div>
 </div>
+<?php endif; ?>
+
+<br/><br/>
+<div class="row">
+  <div class="col s1"></div>
+  <div class="col s10">
+    <label style="color: black">Posicionamento T&eacute;cnico</label>
+    <div class="bold padding10 bordered">
+      <?php echo $this->dadosParecer[0]['ResumoParecer']; ?>
+    </div>
+  </div>
+</div>
+
+<br/><br/>
+<div class="row">
+  <div class="col s1"></div>
+  <div class="col s10">
+    <label style="color: black">Posicionamento T&eacute;cnico</label>
+    <div class="bold padding10 bordered">
+      <?php echo $this->dadosParecer[0]['p.tpResultado']; ?>
+    </div>
+  </div>
+</div>
+<br/><br/>
