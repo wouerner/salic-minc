@@ -1,3 +1,81 @@
+Release 2.2.0
+ * [UPDATE] Proposta/Gerar pdf: novo formato e informacoes para o proponente imprimir a proposta cultural
+ * [FIX] Proposta/Planilha: Bug ao excluir item adicionado via ajax
+ * [REFACTOR] Proposta/Controllers: refatora todas as controllers da proposta removendo codigo duplicado e nao utilizado
+ * [REFACTOR] PROPOSTA: Limpando controllers do modulo proposta
+ * [REFACTOR] PROPOSTA: Renomeia arquivos nao utilizados na proposta para posterior remocao
+ * [ADD] Proposta/Planilha orcamentaria: Permite ao proponente cadastrar um item em varias localidades de uma vez
+ * [ADD] Proposta/Planilha orcamentaria: Nova opcao para duplicar item em outras cidades
+ * [UPDATE] Proposta/Planilha orcamentaria: melhoria no codigo e validacao de itens
+ * [UPDATE] Proposta/Planilha orcamentaria: validando mediana de todos os itens
+ * [UPDATE] Proposta/Planilha orcamentaria: validando itens de outras cidades ao duplicar item na planilha
+ * [UPDATE] Proposta/Planilha orcamentaria: permite que o proponente adicione itens iguais para fonte de recursos diferentes
+ * [FIX] Proposta/Planilha orcamentaria: corrige bug no js quando elemento nao existe
+ * [FIX] Proposta/Cadastrar Proposta: Corrige ajax ao cadastrar proposta
+ * [FIX] Proposta/Inclusão de item: Bug ao carregar menu
+ * [UPDATE] Proposta/Listar propostas: Carrega inicialmente as propostas do proponente logado
+ * [UPDATE] Proposta/Listar propostas: Remove o filtro de todos os agentes
+ * [DEPRECATED] Proposta: Renomeando arquivos e actions que nao sao mais utilizadas no orcamento da proposta
+ * [ADD] Projeto/Clonar projeto - Adiciona funcionalidade de clonar projeto #3
+ * [UPDATE] Projeto/Clonar projeto: Melhorias e ajuste no retorno da mensagem #3
+ * [FIX] Projeto/Alterar projeto: Corrige bug ao reenviar proposta readequada para o MinC
+ * [UPDATE] Projeto/Readequar: Adiciona o campo de plano de execucao imediata
+ * [UPDATE] Recurso/Enquadramento: Define o agente responsavel por analisar o recurso de enquadramento
+ * [UPDATE] Projeto/Check list: Alterando query do checklist e corrigindo charsets
+ * [FIX] Projeto/Permissao de acesso: Corrige bug que verifica permissao de acesso ao projeto
+ * [FIX] RELATORIOS/Editais minc: Bug ao consultar lista de projetos
+ * [FIX] RELATORIOS/Menus: Bug ao carregar menu no modulo de relatorios
+ * [FIX] RELATORIOS/Operacional: Bug ao carregar menu
+ * [UPDATE] Assinatura: Melhoria de performance da funcionalidade de assinar projeto.
+ * [UPDATE] Assinatura: Ajuste de consulta para consiga receber como parametro o identificador do documento gerado.
+ * [UPDATE] Assinatura: Ajuste de todas as chamadas e carregamento de dados para a funcionalidade de Visualizar Documento de assinatura para que ao invés de enviar sempre os parametros "IdPronac" e 	"IdTipoDoAtoAdministrativo", agora envie somente "idDocumentoAssinatura".
+ * [UPDATE] Assinatura: Criação de funcionalidade de encaminhamento em massa para módulo genérico de assinatura, validando a seleção dos mesmos Tipos de Atos Administrativos.
+ * [UPDATE] Adapatação do módulo de assinatura pra permitir o encaminhamento em massa de assinaturas do mesmo Tipo do Ato Administrativo.
+ * [UPDATE] Assinatura: Adição de parametrização do módulo de assinatura para permitir que receba módulo e controller de origem para redirecionamento ou ação do botão voltar.
+ * [UPDATE] Assinatura: Alteração de todas as referências para a action "gerenciar-projeto" para "gerenciar-assinaturas" para que seja possível fazer o redirecionamento por módulo.
+ * [UPDATE] Assinatura: Ajuste de layout na mensagem exibida para quando não há assinaturas para o usuário com o perfil, orgao e cargo atual.
+ * [FIX] Assinatura: Correção da movimentação do projeto quando encaminhado para assinatura para o orgao de destino correto, de acordo com o orgao superior
+ * [UPDATE] Assinatura: Conforme solicitações do Rômulo foram realizadas alteraçãoes na estrutura do documento padrão de assinatura para enquatramento.
+ * [FIX] Assinatura: Ajuste no redirecionamento das assinaturas quando uma falha de preenchimento é apresentada.
+ * [FIX] Assinatura: Correção de consulta carrega documentos já assinados pelo usuário logado.
+ * [UPDATE] Assinatura: Alteração do layout da funcionalidade de visualização do projeto e visualizar assinaturas
+ * [FIX]  Assinatura/Correção do painel : para que sejam exibidos projetos com assinatura finalizada.
+ * [ADD]  Assinatura: Adição de brasão e configuração de folha de estilo para espaçamento de 10.
+ * [UPDATE] Enquadramento/Assinatura : Melhorias de layout e refatoração de código para utilização de constantes que representam valores do banco de dados.
+ * [FIX] Assinatura/Visualizar Assinaturas: Ajuste de cor de labels de acordo com o estado do documento.
+ * [UPDATE] Assinatura/Visualizar Assinaturas: Adição das colunas Situação e Estado
+ * [UPDATE] Assinatura/models/DbTable/TbAssinatura: Ordenação por data de criação no método "obterProjetosAssinados"
+ * [UPDATE] Assinatura/models/DbTable/TbAssinatura: Adição do método "obterProjetosAssinados"
+ * [UPDATE] Assinatura: Adição da funcioalidade "Visualizar Assinaturas" acessada pelo menu "Assinatura".
+ * [UPDATE] Assinatura: Adaptar locais de consulta por documentos abertos para assinatura buscando também por documentos Ativos
+ * [UPDATE] Assinatura: Ajustar a devolução para que altere a situação do Documento da Assinatura para 0 quando devolvido.
+ * [UPDATE] Assinatura/Documentação: Atualizar documentação da Library e Módulo de Assinatura com o intuito de nivelar conhecimento.
+ * [UPDATE] Assinatura/models/TbDocumentoAssinatura:
+ 	- Adição do atributo stEstado com getters e setters na Entidade Assinatura_Model_TbDocumentoAssinatura
+ 	- Adicionar constantes ATIVO(1) e INATIVO(2) na classe Assinatura_Model_TbDocumentoAssinatura
+ * [FIX] Assinatura: Criação de SQL para alterar registros já existentes e com documentos abertos para assinatura para estarem com situação ativa
+ * [UPDATE] Default/Models/Orgaos: Inclusão de novas contantes de Orgaos.
+ * [UPDATE] Projeto/Models/Situação: Adição de novas contantes de situação do projeto.
+ * [FIX] PRESTAÇÃO DE CONTAS: Ajuste de Menu, erro ao tentar analisar projeto.
+ * [UPDATE] Admissibilidade/Enquadramento: Adição de tratamento e legenda para "Projeto Devolvido para Enquadramentro"
+ * [UPDATE] Admissibilidade: Alteração da situação de destino do projeto quando devolvido. [UPDATE] Projetos/Models/Situacao : Inclusão de constante para situação "B05".
+ * [FIX] Admissibilidade/Enquadramento: Correção de bug que não permitia menos que mil caracteres. [UPDATE] Alteração de label "Justificativa" para "Parecer de Enquadramento"
+ * [UPDATE] Admissibilidade/Enquadramento: Alteração as providências tomadas e orgão de destino para quando a situação do projeto for "Enquadrado com Recurso".
+ * [UPDATE] Admissibilidade/Enquadramento: Alteração da situação da finalização do projeto para "Projeto Aprovado Aguardando Análise Documental".
+ * [UPDATE] Admissibilidade/Gerenciamento de assinaturas: Adição de módulo/controller de origem
+ * [UPDATE] Admissibilidade/Gerenciamento de assinaturas : Alteração do título da págine de 'Gerenciar Projetos' para  'Gerenciar Assinaturas'
+ * [UPDATE] Admissibilidade/EnquadramentoAssinatura: Adição de tratamento para que sejam exibidas somente as assinaturas disponíveis de acordo com o módulo selecionado.
+ * [UPDATE] Admissibilidade/EnquadramentoAssinatura: Alteração da action  'gerenciarProjetosAction' para 'gerenciarAssinaturasAction'
+ * [UPDATE] Admissibilidade/Transformar proposta em projeto: Retirando funcionalidade caso a situacao da proposta seja diferente de normal #2
+ * [UPDATE] Admissibilidade/Exibir proposta: Atualiza planilha e plano de distribuicao ao imprimir proposta
+ * [UPDATE] Refatoração de nome incorreto de constantes da entidade 'Orgao' e 'Situacao'.
+ * [FIX] HEADER corrige link da logo para home do  proponente
+ * [UPDATE] Adição de tratamento para o campo "from" utilizando base64_encode para ocultar a última url acessada e sendo informado junto com o método de loggout quando a sessão é perdida
+ * [UPDATE] Adição do campo do tipo hidden e name "from" para tratar redirecionamento de urls.
+ * [UPDATE] Adição de tratamento para quando receber a propriedade "prom" da class ""...Action_Abstract.php"
+ * [FIX] Procuracao/Cadastrar procurador: Corrige bug ao cadastrar um novo procurador
+ * [REMOVE] Remoção do arquivo docker-compose.yml para que essa dependência não seja criada dentro deste repositório
+
 Release 2.1.4
  * [FIX] Analiseprojetoparecer/análise inicial: correção de quebra de tela
 
@@ -63,7 +141,7 @@ Release 2.0.15
  * Fix: [Remanejamento 50%] Corrigindo arredondamento de valor mínimo e valor máximo; puxando valor do item da planilha correta
  * Fix: [Remanejamento 50%] Alterando valor permitido de 20% para 50%
  * Fix: [Remanejamento 50%] Exibindo planilha correta ao realizar remanejamento
- * Update: [Assinatura] Ajustes de situação para definir implicitamente os valores padroes para o documento de assinatura
+ * Update: [Assinatura] Ajustes de situação para definir Adicionando alterações no changelog para versão 2.1.4implicitamente os valores padroes para o documento de assinatura
  * Update: [Custos vinculados] mostrando valores padrões para o usuário
  * Update: [Custos vinculados] salvando os percentuais dos custos vinculados nos novos campos no banco
  * Update: [Planilha orcamentaria] finalizando atualizacoes para os custos vinculados
@@ -84,7 +162,7 @@ Release 2.0.12
  * Fix: Correção do link do botão "Voltar" da a gerência de assinaturas.
  * Fix:  Alteração da situação do documento de assinatura para fechado quando nalizar as assinaturas do enquadramento.
  * Fix: [Gerenciar Parecer] Ajuste para erro ao encaminhar parecer
-
+Adicionando alterações no changelog para versão 2.1.4
 Release 2.0.11
  * Fix: [Proposta] Ajuste na inclusão de itens orçamentarios
  * Fix: [Agente] Erros nas combos de UF e Cidade
