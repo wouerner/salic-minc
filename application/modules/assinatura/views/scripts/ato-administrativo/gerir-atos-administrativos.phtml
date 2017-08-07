@@ -10,26 +10,37 @@
             $3(document).ready(function () {
                 carregarOpcoesComboAjax('#idTipoDoAto', callbackCarregarOrdemAssinatura());
                 carregarOpcoesComboAjax('#idCargoDoAssinante', callbackCarregarOrdemAssinatura());
+                carregarOpcoesComboAjax('#idOrgaoSuperiorDoAssinante', callbackOrgaoSuperior);
+                carregarOpcoesComboAjax('#idPerfilDoAssinante', callbackCarregarOrdemAssinatura());
 
                 $3('#idOrgaoSuperiorDoAssinante').change(function() {
                     callbackOrgaoSuperior();
                 });
-                carregarOpcoesComboAjax('#idOrgaoSuperiorDoAssinante', callbackOrgaoSuperior);
-                carregarOpcoesComboAjax('#idPerfilDoAssinante', callbackCarregarOrdemAssinatura());
+                tratarExibicaoDeCampos();
             });
 
+            function tratarExibicaoDeCampos() {
+                $3("#divOrdemAssinatura").hide('fast');
+                if($3("#acaoAtoAdministrativo").html() == 'Alterar' || $3("#acaoAtoAdministrativo").html() == 'Remover') {
+                    $3("#divOrdemAssinatura").show('fast');
+                    callbackCarregarOrdemAssinatura();
+                }
+            }
+
             function callbackCarregarOrdemAssinatura(){
-                var parametrosOrdem = {
-                    idOrgaoSuperiorDoAssinante: $3('#idOrgaoSuperiorDoAssinante').find('option:selected').val(),
-                    idTipoDoAto: $3('#idTipoDoAto').find('option:selected').val(),
-                    idOrdemDaAssinatura: $3('#idOrdemDaAssinatura').find('option:selected').val()
-                };
-console.log(parametrosOrdem);
-                $3('#idOrdemDaAssinatura').data('parametros', parametrosOrdem);
-                if(parametrosOrdem.idOrgaoSuperiorDoAssinante
-                    && parametrosOrdem.idTipoDoAto
-                ) {
-                    carregarOpcoesComboAjax('#idOrdemDaAssinatura');
+                if($3("#acaoAtoAdministrativo").html() == 'Alterar' || $3("#acaoAtoAdministrativo").html() == 'Remover') {
+                    var parametrosOrdem = {
+                        idOrgaoSuperiorDoAssinante: $3('#idOrgaoSuperiorDoAssinante').find('option:selected').val(),
+                        idTipoDoAto: $3('#idTipoDoAto').find('option:selected').val(),
+                        idOrdemDaAssinatura: $3('#idOrdemDaAssinatura').find('option:selected').val()
+                    };
+
+                    $3('#idOrdemDaAssinatura').data('parametros', parametrosOrdem);
+                    if(parametrosOrdem.idOrgaoSuperiorDoAssinante
+                        && parametrosOrdem.idTipoDoAto
+                    ) {
+                        carregarOpcoesComboAjax('#idOrdemDaAssinatura');
+                    }
                 }
             }
 
@@ -54,12 +65,12 @@ console.log(parametrosOrdem);
                     function (data) {
                         $3(seletorSelect).html('');
                         for (var indice in data.resultado) {
-                            var itemSelecionao = (data.resultado[indice].codigo == $(seletorSelect).data('valorSelecionado')) ? "selected='selected' " : '';
+                            var itemSelecionado = (data.resultado[indice].codigo == $(seletorSelect).data('valorSelecionado')) ? "selected='selected' " : '';
                             $3(seletorSelect).append(
                                 "<option value='"
                                 + data.resultado[indice].codigo
                                 + "'"
-                                + itemSelecionao
+                                + itemSelecionado
                                 + ">"
                                 + data.resultado[indice].descricao
                                 + "</option>"
@@ -74,86 +85,7 @@ console.log(parametrosOrdem);
 
             }
         </script>
-        <div>
-            <div class="row">
-                <form class="col s12">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <h3><span id="acao">Cadastrar</span> Ato Administrativo</h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="hidden" id="idAtoAdministrativo"/>
-                            <select id="idTipoDoAto"
-                                    data-link="<?php echo $this->url(array(
-                                            'module' => 'assinatura',
-                                            'controller' => 'ato-administrativo',
-                                            'action' => 'obter-tipos-de-atos-administrativos-ajax'
-                                        )) ?>">
-                            </select>
-                            <label>Tipo do Ato Administrativo</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select id="idCargoDoAssinante"
-                                    data-link="<?php echo $this->url(array(
-                                        'module' => 'assinatura',
-                                        'controller' => 'ato-administrativo',
-                                        'action' => 'obter-cargos-do-assinante-ajax'
-                                    )) ?>">
-                            </select>
-                            <label>Cargo do Assinante</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select id="idOrgaoSuperiorDoAssinante"
-                                    data-link="<?php echo $this->url(array(
-                                        'module' => 'assinatura',
-                                        'controller' => 'ato-administrativo',
-                                        'action' => 'obter-orgaos-superiores-ajax'
-                                    )) ?>"></select>
-                            <label>Org&atilde;o Superior do Assinante</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select id="idOrgaoDoAssinante"
-                                    data-link="<?php echo $this->url(array(
-                                        'module' => 'assinatura',
-                                        'controller' => 'ato-administrativo',
-                                        'action' => 'obter-orgaos-do-assinante-ajax'
-                                    )) ?>"></select>
-                            <label>Org&atilde;o do Assinante</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select id="idPerfilDoAssinante"
-                                    data-link="<?php echo $this->url(array(
-                                        'module' => 'assinatura',
-                                        'controller' => 'ato-administrativo',
-                                        'action' => 'obter-perfis-do-assinante-ajax'
-                                    )) ?>"></select>
-                            <label>Perfil do Assinante</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select id="idOrdemDaAssinatura"
-                                    data-link="<?php echo $this->url(array(
-                                        'module' => 'assinatura',
-                                        'controller' => 'ato-administrativo',
-                                        'action' => 'obter-ordem-assinatura-ajax'
-                                    )) ?>"></select>
-                            <label>Ordem da Assinatura</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+
 
         <div class="row">
             <div class="col s10">
@@ -163,7 +95,7 @@ console.log(parametrosOrdem);
         <div class="row">
             <div class="col s12">
                 <input type="hidden" id="idTipoDoAtoAdministrativo" name="idTipoDoAtoAdministrativo"/>
-                <table class="bordered margin0" id="enquadramento">
+                <table class="bordered margin0" id="enquadramento" style="width: 100%;">
                     <thead>
                     <tr class="">
                         <th class="center-align">Ato Administrativo</th>
@@ -187,13 +119,22 @@ console.log(parametrosOrdem);
                                 $parametrosVisualicacao = "?idAtoAdministrativo={$dado['idAtoAdministrativo']}";
                                 ?>
                                 <a class="btn waves-effect waves-light tooltipped small "
-                                   href="<?php echo $this->url(array(
+                                   href="#modalConfirmacao"
+                                   data-link="<?php echo $this->url(array(
                                            'module' => 'assinatura',
                                            'controller' => 'ato-administrativo',
                                            'action' => 'alterar'
                                        )) . $parametrosVisualicacao ?>"
                                    data-position="top"
                                    data-delay="50"
+                                   data-acao="Alterar"
+                                   data-idatoadministrativo = "<?php echo $dado['idAtoAdministrativo'] ?>"
+                                   data-idtipodoato = "<?php echo $dado['idTipoDoAto'] ?>"
+                                   data-idcargodoassinante = "<?php echo $dado['idCargoDoAssinante'] ?>"
+                                   data-idorgaosuperiordoassinante = "<?php echo $dado['idOrgaoSuperiorDoAssinante'] ?>"
+                                   data-idorgaodoassinante = "<?php echo $dado['idOrgaoDoAssinante'] ?>"
+                                   data-idperfildoassinante = "<?php echo $dado['idPerfilDoAssinante'] ?>"
+                                   data-idordemdaassinatura = "<?php echo $dado['idOrdemDaAssinatura'] ?>"
                                    data-tooltip="Alterar">
                                     <i class="material-icons">border_color</i>
                                 </a>
@@ -210,6 +151,14 @@ console.log(parametrosOrdem);
                                        )) . $parametrosVisualicacao ?>"
                                    data-position="top"
                                    data-delay="50"
+                                   data-acao="Remover"
+                                   data-idatoadministrativo = "<?php echo $dado['idAtoAdministrativo'] ?>"
+                                   data-idtipodoato = "<?php echo $dado['idTipoDoAto'] ?>"
+                                   data-idcargodoassinante = "<?php echo $dado['idCargoDoAssinante'] ?>"
+                                   data-idorgaosuperiordoassinante = "<?php echo $dado['idOrgaoSuperiorDoAssinante'] ?>"
+                                   data-idorgaodoassinante = "<?php echo $dado['idOrgaoDoAssinante'] ?>"
+                                   data-idperfildoassinante = "<?php echo $dado['idPerfilDoAssinante'] ?>"
+                                   data-idordemdaassinatura = "<?php echo $dado['idOrdemDaAssinatura'] ?>"
                                    data-tooltip="Remover">
                                     <i class="material-icons">delete</i>
                                 </a>
@@ -218,30 +167,99 @@ console.log(parametrosOrdem);
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-                <div class="center-align" id="divAssinaturaEmMassa"
-                     style="display: none;">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">
-                        Assinar em massa <i class="material-icons right">send</i>
-                    </button>
-                </div>
 
             </div>
         </div>
     </div>
 
-    <div id="conteudoDialogoModal">
+    <div id="modalConfirmacao" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <div class="row">
+                <div class="input-field col s12">
+                    <h3><span id="acaoAtoAdministrativo"></span> Ato Administrativo</h3>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input type="hidden" id="idAtoAdministrativo"/>
+                                <select id="idTipoDoAto"
+                                        data-link="<?php echo $this->url(array(
+                                            'module' => 'assinatura',
+                                            'controller' => 'ato-administrativo',
+                                            'action' => 'obter-tipos-de-atos-administrativos-ajax'
+                                        )) ?>">
+                                </select>
+                                <label>Tipo do Ato Administrativo</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <select id="idCargoDoAssinante"
+                                        data-link="<?php echo $this->url(array(
+                                            'module' => 'assinatura',
+                                            'controller' => 'ato-administrativo',
+                                            'action' => 'obter-cargos-do-assinante-ajax'
+                                        )) ?>">
+                                </select>
+                                <label>Cargo do Assinante</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <select id="idOrgaoSuperiorDoAssinante"
+                                        data-link="<?php echo $this->url(array(
+                                            'module' => 'assinatura',
+                                            'controller' => 'ato-administrativo',
+                                            'action' => 'obter-orgaos-superiores-ajax'
+                                        )) ?>"></select>
+                                <label>Org&atilde;o Superior do Assinante</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <select id="idOrgaoDoAssinante"
+                                        data-link="<?php echo $this->url(array(
+                                            'module' => 'assinatura',
+                                            'controller' => 'ato-administrativo',
+                                            'action' => 'obter-orgaos-do-assinante-ajax'
+                                        )) ?>"></select>
+                                <label>Org&atilde;o do Assinante</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <select id="idPerfilDoAssinante"
+                                        data-link="<?php echo $this->url(array(
+                                            'module' => 'assinatura',
+                                            'controller' => 'ato-administrativo',
+                                            'action' => 'obter-perfis-do-assinante-ajax'
+                                        )) ?>"></select>
+                                <label>Perfil do Assinante</label>
+                            </div>
+                        </div>
+                        <div class="row" id="divOrdemAssinatura">
+                            <div class="input-field col s12">
+                                <select id="idOrdemDaAssinatura"
+                                        data-link="<?php echo $this->url(array(
+                                            'module' => 'assinatura',
+                                            'controller' => 'ato-administrativo',
+                                            'action' => 'obter-ordem-assinatura-ajax'
+                                        )) ?>"></select>
+                                <label>Ordem da Assinatura</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-        <div id="modalConfirmacao" class="modal modal-fixed-footer">
-            <div class="modal-content">
-                <h4>Confirma&ccedil;&atilde;o</h4>
-                <p>Tem certeza que deseja movimentar ao projeto <span class="bold" id="nrPronacConfirmacao"></span> ?
-                </p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" id="botaoConfirmacaoEncaminhamento"
-                   class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
-                <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">N&atilde;o</a>
-            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" id="botaoConfirmacaoEncaminhamento"
+               class="modal-action modal-close waves-effect waves-green btn-flat">Armazenar</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">Cancelar</a>
         </div>
     </div>
 
@@ -256,12 +274,61 @@ console.log(parametrosOrdem);
                     startingTop: '4%',
                     endingTop: '10%',
                     ready: function (modal, trigger) {
-                        $(modal).find('#nrPronacConfirmacao').html($3(trigger).data('nrpronac'));
-                        $(modal).find('#botaoConfirmacaoEncaminhamento').attr('href', $3(trigger).data('redirectUrl'));
+                        $("#acaoAtoAdministrativo").html($3(trigger).data('acao'));
+
+                        $3('#idTipoDoAto, ' +
+                            '#idCargoDoAssinante, ' +
+                            '#idOrgaoSuperiorDoAssinante, ' +
+                            '#idPerfilDoAssinante, ' +
+                            '#idOrgaoDoAssinante, ' +
+                            '#idOrdemDaAssinatura').prop('disabled', false);
+                        if($3(trigger).data('acao') == 'Alterar' || $3(trigger).data('acao') == 'Remover') {
+                            $3('select').material_select('destroy');
+                            $3('#idTipoDoAto').val($3(trigger).data("idtipodoato"));
+                            $3('#idCargoDoAssinante').val($3(trigger).data("idcargodoassinante"));
+                            $3('#idOrgaoSuperiorDoAssinante').val($3(trigger).data("idorgaosuperiordoassinante"));
+                            $3('#idPerfilDoAssinante').val($3(trigger).data("idperfildoassinante"));
+                            $3('#idOrgaoDoAssinante').val($3(trigger).data("idorgaodoassinante"));
+                            $3('#idOrdemDaAssinatura').val($3(trigger).data("idordemdaassinatura"));
+                            if($3(trigger).data('acao') == 'Remover') {
+                                $3('#idTipoDoAto, ' +
+                                    '#idCargoDoAssinante, ' +
+                                    '#idOrgaoSuperiorDoAssinante, ' +
+                                    '#idPerfilDoAssinante, ' +
+                                    '#idOrgaoDoAssinante, ' +
+                                    '#idOrdemDaAssinatura').prop('disabled', true);
+                            }
+                            $3('select').material_select();
+                        }
+
+                        $("#idAtoAdministrativo").val($3(trigger).attr('idatoadministrativo'));
+
+                        tratarExibicaoDeCampos();
+//                        $.ajax(
+//                            {
+//                                url: $3(trigger).data('link'),
+//                                data: {},
+//                                type: "post",
+//                                success: function (data) {
+//                                    if(data.status == 1) {
+//                                        $(modal).find('#conteudoDevolucaoAssinatura').html(data.despacho);
+//                                        $(modal).find('#dataDevolucaoAssinatura').html(data.data);
+//                                    } else {
+//                                        Materialize.toast(
+//                                            data.msg,
+//                                            4000,
+//                                            'green darken-1 white-text',
+//                                            function () {
+//                                                window.location = url
+//                                            })
+//                                        ;
+//                                    }
+//                                },
+//                                contentType: false,
+//                                dataType: 'json'
+//                            }
+//                        );
                     }
-//                    ,complete: function() {
-//                        alert('Closed');
-//                    } // Callback for Modal close
                 }
             );
         });
@@ -293,38 +360,6 @@ console.log(parametrosOrdem);
                     "aoColumnDefs": [
                         {'bSortable': false, 'aTargets': [0, 1, 2, 3]}
                     ]
-                });
-                $3("#marcarDesmarcarCheckboxLabel").click(function () {
-                    utilitarios.marcarDesmarcarCheckBoxesMaterialize($3("#marcarDesmarcarCheckbox"), ".checkbox_legal");
-                    tratarExibicaoCheckboxChecados('.checkbox_legal', '#divAssinaturaEmMassa');
-                });
-
-                function tratarExibicaoCheckboxChecados(seletorCheckboxes, seletorExibicao) {
-                    var quantidadeCheckboxChecados = $(seletorCheckboxes).filter(':checked').length;
-                    if (quantidadeCheckboxChecados > 0) {
-                        $3(seletorExibicao).show('fast');
-                    } else {
-                        $3(seletorExibicao).hide('fast');
-                    }
-                }
-
-                $3('.checkbox_legal').click(function () {
-
-                    var quantidadeCheckBoxesSelecionados = $('.checkbox_legal').filter(':checked').length;
-                    var isCheckBoxAtualSelecionado = ($(this).filter(':checked').length > 0);
-
-                    if (quantidadeCheckBoxesSelecionados == 1) {
-                        $("#idTipoDoAtoAdministrativo").val($(this).data('idtipoatoadministrativo'))
-                    } else if (quantidadeCheckBoxesSelecionados > 1) {
-                        if (isCheckBoxAtualSelecionado && $(this).data('idtipoatoadministrativo') != $("#idTipoDoAtoAdministrativo").val()) {
-                            Materialize.toast("O Encaminhamento em massa só é permitido para projetos com o mesmo Tipo de Ato Administrativo.", 4000);
-                            $(this).trigger('click');
-                        }
-                    } else {
-                        $("#idTipoDoAtoAdministrativo").val(null);
-                    }
-
-                    tratarExibicaoCheckboxChecados('.checkbox_legal', '#divAssinaturaEmMassa');
                 });
 
                 $3("#formGerenciamentoPropostas").validate({
