@@ -1,3 +1,20 @@
+Release 2.3.0
+* [FIX] Admissibilidade/Enquadramento : Correção do link "Enquadrar Projeto"
+* [FIX] Readequação: Erro ao acessar a tela
+* [FIX] Prestação de Contas : Ajuste no sql para gerar os dados de itens
+* [UPDATE] Assinatura : Adição de tratamento para gerenciamento de projetos culturais para assinar de acordo com o ato administativo do orgão, perfil e orgão superior do usuário logado.
+* [UPDATE] Assinatura : Adição de tratamento para visualização de itens já assinados
+* [UPDATE] Assinatura : Melhoria nos filtros de Projetos Culturais para assinaturas
+* [UPDATE] Assinatura : Alteração da validação da exibiçaõ do botão Finalizar, de acordo com o Orgao Superior no ato Administrativo [FIX] Correção de falha na validação da situação na funcionalidade de devolução do projeto cultural.
+* [UPDATE] Admissibilidade/Enquadramento : Criação de funcionalidade para visualizar o motivo da devolução dos Projetos Culturais que estão na situação 'B05 - Projeto Devolvido para enquadramento' que estão disponíveis para enquadramento
+* [UPDATE] Admissibilidade/Enquadramento: Adição de grupos de acesso para SAV na assinatura pela admissibilidade de enquadramento.
+* [UPDATE] Proposta : Gestor Salic/Solicitar Itens: Corrige aprovacao e rejeicao dos itens
+* [UPDATE] Proposta : Atualiza README do modulo proposta
+* [UPDATE] Proposta/Solicitar item: Correcao de texto e limitar a quantidade mínima de caracteres para pesquisa
+* [UPDATE] Proposta/Solicitar Item - Corrigindo bug e melhorando o código
+* [UPDATE] Proposta/Solicitar Item - Refatora metodo de salvar e remove consultas nao utilizados
+* [UPDATE] Proposta/Solicitar Itens: Melhoria na pesquisa de itens já existentes
+
 Release 2.2.0
  * [UPDATE] Proposta/Gerar pdf: novo formato e informacoes para o proponente imprimir a proposta cultural
  * [FIX] Proposta/Planilha: Bug ao excluir item adicionado via ajax
