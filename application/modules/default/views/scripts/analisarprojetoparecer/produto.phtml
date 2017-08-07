@@ -262,9 +262,11 @@
                             foreach ($planilha['itens'] as $idPlanilhaProjeto => $valPlanilha) {
                                 $valorprodutosolicitado = 0;
                                 $valorprodutoparecerista = 0;
+                                $estiloCustoPraticado = ($planilha['itens']['Custo praticado'] == 0) ? '' : 'valor_maior_que_praticado';
                                 $trCampo = "<tr>";
-                                $conteudo = "<tr class='item' idPlanilhaProjeto='{$idPlanilhaProjeto}' id='item{$idPlanilhaProjeto}'>";
-
+                                $conteudo = "<tr class='item $estiloCustoPraticado' idPlanilhaProjeto='{$idPlanilhaProjeto}' id='item{$idPlanilhaProjeto}'>";
+                                unset($valPlanilha['Custo praticado']);
+                                
                                 foreach ($valPlanilha as $camp => $cont) {
                                     $trCampo .= "<th>{$camp}</th>";
                                     if ($camp == 'Valor Unitário' || $camp == 'Valor Solicitado' || $camp == 'Valor Sugerido pelo Parecerista') {
@@ -272,7 +274,7 @@
                                             $conteudo .= "<td class='ValorSugerido right-align'>{$this->formatarReal($cont)}</td>";
                                         }
                                         else {
-                                            $conteudo .= "<td  class='right-align'>{$this->formatarReal($cont)}</td>";
+                                            $conteudo .= "<td class='right-align'>{$this->formatarReal($cont)}</td>";
                                         }
                                     }
                                     else {
