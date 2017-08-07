@@ -8,24 +8,37 @@
 
         <script type="text/javascript">
             $3(document).ready(function () {
-                carregarOpcoesComboAjax('#idTipoDoAto');
-                carregarOpcoesComboAjax('#idCargoDoAssinante');
+                carregarOpcoesComboAjax('#idTipoDoAto', callbackCarregarOrdemAssinatura());
+                carregarOpcoesComboAjax('#idCargoDoAssinante', callbackCarregarOrdemAssinatura());
 
                 $3('#idOrgaoSuperiorDoAssinante').change(function() {
                     callbackOrgaoSuperior();
                 });
                 carregarOpcoesComboAjax('#idOrgaoSuperiorDoAssinante', callbackOrgaoSuperior);
-                carregarOpcoesComboAjax('#idPerfilDoAssinante');
-// PAREI AQUI
-//                carregarOpcoesComboAjax($3('#idOrdemDaAssinatura').data('link'), '#idOrdemDaAssinatura');
+                carregarOpcoesComboAjax('#idPerfilDoAssinante', callbackCarregarOrdemAssinatura());
             });
+
+            function callbackCarregarOrdemAssinatura(){
+                var parametrosOrdem = {
+                    idOrgaoSuperiorDoAssinante: $3('#idOrgaoSuperiorDoAssinante').find('option:selected').val(),
+                    idTipoDoAto: $3('#idTipoDoAto').find('option:selected').val(),
+                    idOrdemDaAssinatura: $3('#idOrdemDaAssinatura').find('option:selected').val()
+                };
+console.log(parametrosOrdem);
+                $3('#idOrdemDaAssinatura').data('parametros', parametrosOrdem);
+                if(parametrosOrdem.idOrgaoSuperiorDoAssinante
+                    && parametrosOrdem.idTipoDoAto
+                ) {
+                    carregarOpcoesComboAjax('#idOrdemDaAssinatura');
+                }
+            }
 
             function callbackOrgaoSuperior() {
                 var parametrosOrgaos = {
                     idOrgaoSuperiorDoAssinante: $3('#idOrgaoSuperiorDoAssinante').find('option:selected').val()
                 };
                 $3('#idOrgaoDoAssinante').data('parametros', parametrosOrgaos);
-                carregarOpcoesComboAjax('#idOrgaoDoAssinante');
+                carregarOpcoesComboAjax('#idOrgaoDoAssinante', callbackCarregarOrdemAssinatura());
             }
 
             function carregarOpcoesComboAjax(seletorSelect, callback) {
