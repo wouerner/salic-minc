@@ -1,15 +1,12 @@
 <?php
+
 /**
  * MantertabelaitensController
- * @author wouerner <wouerner@gmail.com>
  * @since 10/12/2010
  * @link http://www.cultura.gov.br
  */
-class Proposta_MantertabelaitensController extends Proposta_GenericController {
-
-//    private $getIdUsuario = 0;
-//    private $idUsuario = 0;
-//    private $idPreProjeto = 0;
+class Proposta_MantertabelaitensController extends Proposta_GenericController
+{
 
     /**
      * Reescreve o metodo init()
@@ -22,7 +19,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
         parent::init();
 
         //recupera ID do pre projeto (proposta)
-        if(!empty ($this->idPreProjeto)) {
+        if (!empty ($this->idPreProjeto)) {
             $this->view->idPreProjeto = $this->idPreProjeto;
         }
     }
@@ -35,7 +32,14 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      */
     public function indexAction()
     {
-        $this->_forward("consultartabelaitens", "mantertabelaitens");
+        $tbproduto = new Produto();
+        $this->view->produto = $tbproduto->listarProdutos();
+
+        $tbetapa = new Proposta_Model_DbTable_TbPlanilhaEtapa();
+        $this->view->etapa = $tbetapa->listarEtapas();
+
+        $tbitem = new Proposta_Model_DbTable_TbPlanilhaItens();
+        $this->view->item = $tbitem->listarItens();
     }
 
     /**
@@ -44,8 +48,8 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      * @access public
      * @return void
      */
-    public function produtosetapasitensAction() {
-
+    public function produtosetapasitensAction()
+    {
 
         $tbproduto = MantertabelaitensDAO::buscaproduto();
         $this->view->produto = $tbproduto;
@@ -66,125 +70,157 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      */
     public function solicitaritensAction()
     {
-        $tbproduto = new MantertabelaitensDAO();
-        $this->view->produto = $tbproduto->listarProduto();
+        $tbproduto = new Produto();
+        $this->view->produto = $tbproduto->listarProdutos();
 
-        $tbetapa = new MantertabelaitensDAO();
-        $this->view->etapa = $tbetapa->listarEtapa();
+        $tbetapa = new Proposta_Model_DbTable_TbPlanilhaEtapa();
+        $this->view->etapa = $tbetapa->listarEtapas();
 
-        $tbitem = new MantertabelaitensDAO();
-        $this->view->item = $tbitem->listarItem();
+        $tbitem = new Proposta_Model_DbTable_TbPlanilhaItens();
+        $this->view->item = $tbitem->listarItens();
 
-        $tbsolicitacao = new MantertabelaitensDAO();
-        $this->view->solicitacao = $tbsolicitacao->solicitacao($this->idUsuario);
+    }
 
-        $buscardados = new MantertabelaitensDAO();
-        $this->view->buscardados = $buscardados->produtoEtapaItem();
+    /**
+     * salvarAssociacaoItemAction
+     *
+     * @access public
+     * @return void
+     */
+    public function salvarsolicitacaoitemAction()
+    {
 
         if ($this->getRequest()->isPost()) {
-            // recebe os dados via post
-            $post = Zend_Registry::get('post');
-            $justificativa = substr(trim($post->justificativa),0,1000);
-            $idAgente = $this->getIdUsuario;
-            $DtSolicitacao = $post->DtSolicitacao;
-            $stEstado = $post->stEstado;
-            $solicitacao = $post->solicitacao;
-            $idPlanilhaItens = $post->idPlanilhaItens;
-            $NomeItem = trim($post->Descricao);
-            $etapa = $post->etapa;
-            $produto = $post->produto;
+
+            $params = $this->getRequest()->getParams();
+
+            $justificativa = substr(trim($params['justificativa']), 0, 1000);
+            $descricaoItem = trim($params['Descricao']);
+
+            $tipoSolicitacao = $params['solicitacao'];
+            $idProduto = $params['produto'];
+            $idEtapa = $params['etapa'];
+            $hoje = MinC_Db_Expr::date();
 
             try {
-                $nomeItem = new MantertabelaitensDAO();
-                $nomeItem = $nomeItem->listarProdutoEtapaItem($idPlanilhaItens);
 
-                $dateFunc = MinC_Db_Expr::date();
-                $dadosassociar = array(
-                    'idplanilhaitens' => $idPlanilhaItens,
-                    'nomedoitem' => $nomeItem[0]->NomeDoItem,
-                    'descricao' => $justificativa,
-                    'idproduto' => $produto,
-                    'idetapa' => $etapa,
-                    'idagente' => $this->idUsuario,
-                    'dtsolicitacao' => new Zend_Db_Expr($dateFunc),
-                    'stestado' => '0'
-                );
-                $dadosincluir = array(
-                    'idplanilhaitens' => 0,
-                    'nomedoitem' => $NomeItem,
-                    'descricao' => $justificativa,
-                    'idproduto' => $produto,
-                    'idetapa' => $etapa,
-                    'idagente' => $this->idUsuario,
-                    'dtsolicitacao' => new Zend_Db_Expr($dateFunc),
-                    'stestado' => '0'
-                );
-
-                if (!empty($idPlanilhaItens) && $idPlanilhaItens!="0") {
-                    $itemNome = $nomeItem[0]->NomeDoItem;
-                } else {
-                    $itemNome = $post->Descricao;
-                }
+                if (empty($justificativa))
+                    throw new Exception("Informe a justificativa!");
 
 
-                $arrBusca = array();
-                $arrBusca['prod.codigo'] = $produto;
-                $arrBusca['et.idplanilhaetapa'] = $etapa;
-
-                //$res = MantertabelaitensDAO::buscarSolicitacoes($arrBusca,$itemNome);
-                $res = new MantertabelaitensDAO();
-                $res = $res->listarSolicitacoes($arrBusca,$itemNome);
-                if(count($res)>0) {
-                    throw new Exception("Cadastro duplicado de Produto na mesma etapa envolvendo o mesmo Item, transa&ccedil;&atilde;o cancelada!");
-                }
-
-                if (empty($justificativa)) {
-                    throw new Exception("Por favor, informe a justificativa!");
-                }
-                else if (strlen($justificativa) > 1000) {
+                if (strlen($justificativa) > 1000)
                     throw new Exception("A justificativa n&atilde;o pode conter mais de 1000 caracteres!");
 
-                }else if ($solicitacao == 'produtoetapa') {
-                    //$associaritem = MantertabelaitensDAO::associaritem($dadosassociar);
-                    $associaritem = new MantertabelaitensDAO();
-                    $associaritem = $associaritem->associarItemObj($dadosassociar);
-                    if ($associaritem) {
-                        parent::message("A solicita&ccedil;&atilde;o foi encaminhada ao Minc. Aguarde a resposta!", "/proposta/mantertabelaitens/solicitacoes?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
-                    }
-                }else if ($solicitacao == 'novoitem');
-                {
-                    $incluiritem = false;
-                    if (empty($NomeItem)) {
-                        throw new Exception("Por favor, informe o nome do Item!");
-                    }
-                    else if (strlen($post->Descricao) > 100) {
+                $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
+
+                $dados = array(
+                    'idplanilhaitens' => 0,
+                    'nomedoitem' => $descricaoItem,
+                    'descricao' => $justificativa,
+                    'idproduto' => $idProduto,
+                    'idetapa' => $idEtapa,
+                    'idagente' => $this->idUsuario,
+                    'dtsolicitacao' => new Zend_Db_Expr($hoje),
+                    'stestado' => '0'
+                );
+
+                if ($tipoSolicitacao == "novoitem") {
+
+                    if (empty($params['Descricao']))
+                        throw new Exception("Descri&ccedil;&atilde;o do item &eacute; obrigat&oacute;ria!");
+
+                    if (strlen($params['Descricao']) > 100)
                         throw new Exception("O nome do Item n&atilde;o pode conter mais de 100 caracteres!");
+
+                    $tbPlanilhaItens = new Proposta_Model_DbTable_TbPlanilhaItens();
+                    $descricao = $tbPlanilhaItens->buscarDescricao($descricaoItem);
+
+                    if (!empty($descricao)) {
+                        throw new Exception("Este item j&aacute; existe na base de dados, solicite associa&ccedil;&atilde;o!, a&ccedil;&atilde;o cancelada!");
                     }
 
-                    //codigo antigo
-                    //$incluiritem = MantertabelaitensDAO::cadastraritem($Descricao, $this->idUsuario);
-                    $incluiritem = new MantertabelaitensDAO();
-                    $incluiritem = $incluiritem->cadastrarItemObj($dadosincluir);
+                    $dados['idplanilhaitens'] = 0;
+                    $dados['nomedoitem'] = $descricaoItem;
 
-                    if ($incluiritem) {
-                        //$NovoItem = MantertabelaitensDAO::buscarItem($this->idUsuario);
-                        //$dadosassociar['idPlanilhaItens'] = $NovoItem['idPlanilhaItens'];
-                        $NovoItem = new MantertabelaitensDAO();
-                        $NovoItem = $NovoItem->listarItem($this->idUsuario);
-                        $dadosassociar['idPlanilhaItens'] = $NovoItem['idPlanilhaItens'];
+                    $resultado = $tbSolicitarItem->insert($dados);
 
-                        parent::message("Cadastro realizado com sucesso!", "proposta/mantertabelaitens/solicitacoes?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
-                        return;
-                    }
-                    else {
-                        throw new Exception("Erro ao cadastrar o Item!");
+                    if ($resultado) {
+                        parent::message(
+                            "A solicita&ccedil;&atilde;o foi encaminhada ao MinC. Aguarde a resposta!",
+                            "/proposta/mantertabelaitens/minhas-solicitacoes/idPreProjeto/" . $this->idPreProjeto . "?tipoFiltro=solicitado",
+                            "CONFIRM"
+                        );
                     }
                 }
-            }catch (Exception $e) {
 
-                parent::message($e->getMessage(), "proposta/mantertabelaitens/solicitaritens?idPreProjeto=".$this->idPreProjeto, "ERROR");
+                if ($tipoSolicitacao == "associacao") {
+
+                    if (empty($params['idPlanilhaItens'])) {
+                        throw new Exception("Item não informado!");
+                    }
+
+                    $itemPesquisa = [];
+                    $itemPesquisa['idProduto'] = $params['produto'];
+                    $itemPesquisa['idPlanilhaEtapa'] = $params['etapa'];
+                    $itemPesquisa['idPlanilhaItens'] = $params['idPlanilhaItens'];
+
+                    $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
+                    $itemProduto = $tbItensPlanilhaProduto->findBy($itemPesquisa);
+
+                    if (count($itemProduto) > 0) {
+                        throw new Exception("Item j&aacute; associado ao produto e  etapa informados. A&ccedil;&atilde;o cancelada!");
+                    }
+
+                    $itemPesquisa['idagente'] = $this->idUsuario;
+
+                    $itemJaSolicitado = $tbSolicitarItem->findBy(
+                        [
+                            'idplanilhaitens' => $params['idPlanilhaItens'],
+                            'idagente' => $this->idUsuario,
+                            'idProduto' => $params['produto'],
+                            'idPlanilhaItens' => $params['idPlanilhaItens']
+                        ]
+                    );
+
+                    if (count($itemJaSolicitado) > 0) {
+                        throw new Exception("Voc&ecirc; j&aacute; solicitou esta associa&ccedil;&atilde;o. A&ccedil;&atilde;o cancelada!");
+                    }
+
+
+                    $tbPlanilhaItens = new Proposta_Model_DbTable_TbPlanilhaItens();
+                    $item = $tbPlanilhaItens->findBy(['idplanilhaitens' => $params['idPlanilhaItens']]);
+
+                    $dados['nomedoitem'] = $item['Descricao'];
+                    $dados['idplanilhaitens'] = $item['idPlanilhaItens'];
+
+                    $resultado = $tbSolicitarItem->insert($dados);
+
+                    if ($resultado) {
+                        parent::message(
+                            "A solicita&ccedil;&atilde;o foi encaminhada ao MinC. Aguarde a resposta!",
+                            "/proposta/mantertabelaitens/minhas-solicitacoes/idPreProjeto/" . $this->idPreProjeto . "?tipoFiltro=solicitado",
+                            "CONFIRM"
+                        );
+                    }
+
+                }
+
+            } catch (Exception $e) {
+
+                parent::message(
+                    $e->getMessage(),
+                    "proposta/mantertabelaitens/solicitaritens/idPreProjeto/" . $this->idPreProjeto,
+                    "ERROR"
+                );
+
                 return;
             }
+        } else {
+            parent::message(
+                "Nada enviado!",
+                "proposta/mantertabelaitens/solicitaritens/idPreProjeto/" . $this->idPreProjeto,
+                "ERROR"
+            );
         }
     }
 
@@ -194,47 +230,48 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      * @access public
      * @return void
      */
-    public function minhasSolicitacoesAction() {
-        $mantertbitens = new MantertabelaitensDAO();
+    public function minhasSolicitacoesAction()
+    {
+        $mantertbitens = new Proposta_Model_DbTable_TbSolicitarItem();
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
         //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
         //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
-            $order = array($campo." ".$ordem);
-            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+            $order = array($campo . " " . $ordem);
+            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
 
         } else {
             $campo = null;
-            $order = array(2,4,6);
+            $order = array(2, 4, 6);
             $ordenacao = null;
         }
 
         $pag = 1;
         $get = Zend_Registry::get('get');
-        $this->view->idPreProjeto = $get->idPreProjeto;
+//        $this->view->idPreProjeto = $this->idPreProjeto;
 
         if (isset($get->pag)) $pag = $get->pag;
-        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
+        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
@@ -242,7 +279,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
         $where['sol.idAgente = ?'] = $auth->getIdentity()->IdUsuario;
         $where['sol.stEstado = ?'] = 1; // Atendido
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
@@ -268,32 +305,32 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
         $total = $tbSolicitarItem->buscarItens($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
-        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
 
         $busca = $tbSolicitarItem->buscarItens($where, $order, $tamanho, $inicio);
         $paginacao = array(
-            "pag"=>$pag,
-            "qtde"=>$this->intTamPag,
-            "campo"=>$campo,
-            "ordem"=>$ordem,
-            "ordenacao"=>$ordenacao,
-            "novaOrdem"=>$novaOrdem,
-            "total"=>$total,
-            "inicio"=>($inicio+1),
-            "fim"=>$fim,
-            "totalPag"=>$totalPag,
-            "Itenspag"=>$this->intTamPag,
-            "tamanho"=>$tamanho
+            "pag" => $pag,
+            "qtde" => $this->intTamPag,
+            "campo" => $campo,
+            "ordem" => $ordem,
+            "ordenacao" => $ordenacao,
+            "novaOrdem" => $novaOrdem,
+            "total" => $total,
+            "inicio" => ($inicio + 1),
+            "fim" => $fim,
+            "totalPag" => $totalPag,
+            "Itenspag" => $this->intTamPag,
+            "tamanho" => $tamanho
         );
 
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitulares();
 
-        $this->view->paginacao     = $paginacao;
-        $this->view->qtdRegistros  = $total;
-        $this->view->dados         = $busca;
-        $this->view->intTamPag     = $this->intTamPag;
+        $this->view->paginacao = $paginacao;
+        $this->view->qtdRegistros = $total;
+        $this->view->dados = $busca;
+        $this->view->intTamPag = $this->intTamPag;
 
         $tbsolicitacao = $mantertbitens->solicitacoes($this->idUsuario);
         $this->view->solicitacao = $tbsolicitacao;
@@ -305,46 +342,47 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      * @access public
      * @return void
      */
-    public function imprimirMinhasSolicitacoesAction() {
+    public function imprimirMinhasSolicitacoesAction()
+    {
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
         //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
         //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
-            $order = array($campo." ".$ordem);
-            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
+            $order = array($campo . " " . $ordem);
+            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
 
         } else {
             $campo = null;
-            $order = array(2,4,6);
+            $order = array(2, 4, 6);
             $ordenacao = null;
         }
 
         $pag = 1;
         $get = Zend_Registry::get('get');
-        $this->view->idPreProjeto = $get->idPreProjeto;
+//        $this->view->idPreProjeto = $get->idPreProjeto;
 
         if (isset($get->pag)) $pag = $get->pag;
-        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
+        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
@@ -352,7 +390,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
         $where['sol.idAgente = ?'] = $auth->getIdentity()->IdUsuario;
         $where['sol.stEstado = ?'] = 1; // Atendido
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
@@ -378,7 +416,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
         $total = $tbSolicitarItem->buscarItens($where, $order, null, null, true);
         $fim = $inicio + $this->intTamPag;
 
-        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
+        $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
 
         $busca = $tbSolicitarItem->buscarItens($where, $order, $tamanho, $inicio);
@@ -389,75 +427,6 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
 
     }
 
-    /**
-     * associaritemAction
-     *
-     * @access public
-     * @return void
-     */
-    public function associaritemAction() {
-
-    }
-
-    /**
-     * cadastraritemAction
-     *
-     * @access public
-     * @return void
-     */
-    public function cadastraritemAction() {
-
-    }
-
-    /**
-     * solicitacoesAction
-     *
-     * @access public
-     * @return void
-     */
-    public function solicitacoesAction()
-    {
-        $tbsolicitacao = new MantertabelaitensDAO();
-        $tbsolicitacao = $tbsolicitacao->solicitacao($this->idUsuario);
-
-        $this->view->solicitacao = $tbsolicitacao;
-
-    	if($_POST)
-        {
-        	$tbsolicitacaos = MantertabelaitensDAO::solicitacoes($this->idUsuario);
-
-        	$html = '<table class="tabela">
-			            <tr>
-			                <th colspan="6" >Minhas Solicita&ccedil;&otilde;es</th>
-			            </tr>
-			            <tr>
-			                <td><b>Produto</b></td>
-			                <td><b>Etapa</b></td>
-			                <td><b>Item Solicitado</b></td>
-			                <td><b>Justificativa</b></td>
-			                <td><b>Estado</b></td>
-			                <td><b>Resposta</b></td>
-			            </tr>';
-
-			            foreach($tbsolicitacaos as $tbsolicitacao):
-			$html .= 	'<tr>
-			                <td>' . $tbsolicitacao->produto . '</td>
-			                <td>' . $tbsolicitacao->etapa . '</td>
-			                <td>' . $tbsolicitacao->itemsolicitado . '</td>
-			                <td>' . $tbsolicitacao->justificativa .' </td>
-			                <td>' . $tbsolicitacao->estado . '</td>
-			                <td>' . $tbsolicitacao->resposta . '</td>
-			            </tr>';
-			            endforeach;
-			$html .= '</table>';
-
-			$this->_helper->layout->disableLayout();
-	        $this->_helper->viewRenderer->setNoRender();
-
-	        $pdf = new PDF($html, 'pdf');
-	        $pdf->gerarRelatorio();
-        }
-    }
 
     /**
      * exibirdadosAction
@@ -465,123 +434,58 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      * @access public
      * @return void
      */
-    public function exibirdadosAction() {
+    public function exibirdadosAction()
+    {
 
         if ($this->getRequest()->isPost()) {
+
             // recebe os dados via post
-            $post   = Zend_Registry::get('post');
-            $tipoPesquisa   = $post->TipoPesquisa;
-            $item           = $post->NomeDoItem;
-            $etapa          = $post->etapa;
-            $produto        = $post->produto;
+            $post = Zend_Registry::get('post');
+            $tipoPesquisa = $post->tipoPesquisa;
+            $itemBuscado = $post->itemBuscado;
 
-            $this->view->tipopesquisa 	= $post->TipoPesquisa;
-            $this->view->produto 		= $post->produto;
-            $this->view->etapa 			= $post->etapa;
-            $this->view->item 			= $post->NomeDoItem;
+            $this->view->produto = $post->produto;
+            $this->view->etapa = $post->etapa;
+            $this->view->itemBuscado = $itemBuscado;
+            $this->view->tipopesquisa = $post->TipoPesquisa;
+            $this->view->item = $post->NomeDoItem;
 
-            //CODIGO ANTIGO
-            //$tbpretitem = MantertabelaitensDAO::exibirprodutoetapaitem($item);
-            $where = null;
-            if ($item){
-                if($tipoPesquisa==1) {
-                    $where["i.descricao LIKE (?)"] = "%" . $item . "%";
-                }elseif($tipoPesquisa==2) {
-                    $where["i.descricao LIKE (?)"] = "%" . $item;
-                }elseif($tipoPesquisa==3) {
-                    $where["i.descricao = ?"] = $item;
-                }elseif($tipoPesquisa==4) {
-                    $where["i.descricao <> ?"] = "%" . $item;
+            try {
+
+                if(strlen($itemBuscado) < 3)
+                    throw new Exception("Informe uma palavra de pelo menos 3 caracteres na pesquisa!");
+
+                $where = null;
+                switch ($tipoPesquisa) {
+                    case 1:
+                        $where["i.descricao LIKE (?)"] = "%" . $itemBuscado . "%";
+                        break;
+                    case 2:
+                        $where["i.descricao LIKE (?)"] = $itemBuscado . "%";
+                        break;
+                    case 3:
+                        $where["i.descricao = ?"] = $itemBuscado;
+                        break;
+                    case 4:
+                        $where["i.descricao <> ?"] = "%" . $itemBuscado;
+                        break;
                 }
-            }
 
-            $tbpretitem = new MantertabelaitensDAO();
-            $tbpretitem = $tbpretitem->listarProdutoEtapaItem($item=null, $nomeitem=null, $etapa, $produto, $where);
+                $tbpretitem = new tbItensPlanilhaProduto();
+                $etapasComTermoPesquisado = $tbpretitem->listarProdutoEtapaItem(null, null, $post->etapa, $post->produto, $where);
 
-            $this->view->pretitem = $tbpretitem;
+                $this->view->pretitem = $etapasComTermoPesquisado;
 
-            try
-            {
-                if($tbpretitem)
-                {
-                }
-                else
-                {
+
+                if ($tbpretitem) {
+                } else {
                     throw new Exception("Dados n&atilde;o localizados");
                 }
 
-            }catch (Exception $e)
-            {
-                parent::message($e->getMessage(), "proposta/mantertabelaitens/exibirdados?idPreProjeto=".$this->idPreProjeto, "ERROR");
+            } catch (Exception $e) {
+                parent::message($e->getMessage(), "proposta/mantertabelaitens/index/idPreProjeto/" . $this->idPreProjeto, "ERROR");
             }
         }
-    }
-
-	/**
-	 * buscaetapasAction
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function buscaetapasAction()
-	{
-		$this->_helper->layout->disableLayout();
-
-		$idProduto = $_POST['idProduto'];
-
-        $tbItens = new MantertabelaitensDAO();
-		$this->view->etapas = $tbItens->exibirEtapa($idProduto);
-
-		$this->view->idProduto = $idProduto;
-	}
-
-    /**
-     * buscaitensAction
-     *
-     * @access public
-     * @return void
-     * @author wouerner <wouerner@gmail.com>
-     */
-    public function buscaitensAction()
-    {
-        $this->_helper->layout->disableLayout();
-
-        $idProduto 	= $_POST['idProduto'];
-        $idEtapa 	= $_POST['idEtapa'];
-
-        $tbitens = new MantertabelaitensDAO();
-        $this->view->itens = $tbitens->exibirItem($idProduto, $idEtapa);
-
-        $this->view->idProduto = $idProduto;
-        $this->view->idEtapa = $idEtapa;
-    }
-
-    /**
-     * consultartabelaitensAction
-     *
-     * @access public
-     * @return void
-     */
-    public function consultartabelaitensAction()
-    {
-        $post = Zend_Registry::get('post');
-
-        $item = $post->NomeDoItem;
-
-        $tbpretitem = new MantertabelaitensDAO();
-        $this->view->pretitem = $tbpretitem->listarProdutoEtapaItem($item);;
-
-        $tbproduto = new MantertabelaitensDAO();
-        $this->view->produto = $tbproduto->listarProduto();
-
-        $tbetapa = new MantertabelaitensDAO();
-        $this->view->etapa = $tbetapa->listarEtapa();
-
-        $tbitem = new MantertabelaitensDAO();
-        $this->view->ites = $tbitem->listarItem();
-
-        $buscardados =  new MantertabelaitensDAO();
-        $this->view->buscardados = $buscardados->produtoEtapaItem();
     }
 
     /**
@@ -590,38 +494,39 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      * @access public
      * @return void
      */
-    public function imprimirAction(){
+    public function imprimirAction()
+    {
 
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
         $post = Zend_Registry::get('post');
 
-        if(empty($post->tipoPesquisa) && empty($post->item) && empty($post->etapa) && empty($post->produto)){
-            $this->_redirect("mantertabelaitens/exibirdados?idPreProjeto=".$this->idPreProjeto);
+        if (empty($post->tipoPesquisa) && empty($post->item) && empty($post->etapa) && empty($post->produto)) {
+            $this->_redirect("mantertabelaitens/exibirdados/idPreProjeto/" . $this->idPreProjeto);
         }
-        $tipoPesquisa   = $post->tipoPesquisa;
-        $item           = $post->item;
-        $etapa          = $post->etapa;
-        $produto        = $post->produto;
+        $tipoPesquisa = $post->tipoPesquisa;
+        $item = $post->item;
+        $etapa = $post->etapa;
+        $produto = $post->produto;
 
         $where = null;
-        if($tipoPesquisa==1) {
+        if ($tipoPesquisa == 1) {
             $where["i.descricao LIKE (?)"] = "%" . $item . "%";
-        }elseif($tipoPesquisa==2) {
+        } elseif ($tipoPesquisa == 2) {
             $where["i.descricao LIKE (?)"] = "%" . $item;
-        }elseif($tipoPesquisa==3) {
+        } elseif ($tipoPesquisa == 3) {
             $where["i.descricao = ?"] = $item;
-        }elseif($tipoPesquisa==4) {
+        } elseif ($tipoPesquisa == 4) {
             $where["i.descricao <> ?"] = "%" . $item;
         }
 
         $tbpretitem = new MantertabelaitensDAO();
-        $tbpretitem = $tbpretitem->listarProdutoEtapaItem($item=null, $nomeitem=null, $etapa, $produto, $where);
+        $tbpretitem = $tbpretitem->listarProdutoEtapaItem($item = null, $nomeitem = null, $etapa, $produto, $where);
 
         $arr = array();
         $arrNomeProduto = array();
-        foreach($tbpretitem as $item){
+        foreach ($tbpretitem as $item) {
             $arr[$item->idProduto][$item->idEtapa][] = $item;
             $arrNomeProduto[$item->idProduto] = $item->Produto;
 
@@ -636,32 +541,32 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
                     </tr>
                 ';
 
-        if(!empty($arr)) {
-            $ct=0;
-            foreach($arr as $chaveProduto=>$Produto) {
+        if (!empty($arr)) {
+            $ct = 0;
+            foreach ($arr as $chaveProduto => $Produto) {
 
                 $html .= '
                             <tr>
                                 <td colspan="3" align="left" style="background-color: #cccccc; font-size:14px; font-weight:bold;">
-                                    Produto : '.$arrNomeProduto[$chaveProduto].'
+                                    Produto : ' . $arrNomeProduto[$chaveProduto] . '
                                 </td>
                             </tr>';
-                foreach($Produto as $chaveEtapa=>$Etapa) {
+                foreach ($Produto as $chaveEtapa => $Etapa) {
                     $html .= '
                                 <tr>
                                     <td width="25px">  </td>
                                     <td colspan="2" align="left" style="background-color: #EFEFEF; font-size:14px; font-weight:bold;">
-                                        Etapa: '.$arr[$chaveProduto][$chaveEtapa][0]->Etapa.'
+                                        Etapa: ' . $arr[$chaveProduto][$chaveEtapa][0]->Etapa . '
                                     </td>
                                 </tr>';
 
-                    foreach($Etapa as $Item) {
+                    foreach ($Etapa as $Item) {
                         $html .= '
                                         <tr>
                                         <td width="25px">  </td>
                                         <td width="25px">  </td>
                                         <td align="left">
-                                                Item: '.$Item->NomeDoItem.'
+                                                Item: ' . $Item->NomeDoItem . '
                                             </td>
                                         </tr>';
                     }
@@ -672,11 +577,11 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
         }
 
 
-        try{
+        try {
             //echo $html; die;
             $pdf = new PDF($html, 'pdf');
             $pdf->gerarRelatorio();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             xd($e->getMessage());
         }
     }
@@ -688,7 +593,8 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
      * @return void
      * @todo retirar html
      */
-    public function gerarpdfAction() {
+    public function gerarpdfAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
@@ -756,7 +662,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController {
         $replaces[] = '';
         $replaces[] = '';
 
-        $output = preg_replace($patterns,$replaces,$output);
+        $output = preg_replace($patterns, $replaces, $output);
 
         $pdf = new PDF($output, 'pdf');
         $pdf->gerarRelatorio('h');
