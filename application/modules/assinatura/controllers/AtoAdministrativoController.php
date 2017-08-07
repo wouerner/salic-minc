@@ -26,11 +26,6 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         $this->view->atosAdministrativos = $objAtosAdministrativos->obterAtoAdministrativoDetalhado();
     }
 
-    public function alterarAction()
-    {
-
-    }
-
     public function removerAction()
     {
         throw new Exception("Ato administrativo já vinculado a um documento");
@@ -46,7 +41,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         }
 
         $this->_helper->json(
-            array('resultado' => $arrayTiposAtosAdministrativos)
+            ['resultado' => $arrayTiposAtosAdministrativos]
         );
     }
 
@@ -59,7 +54,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         }
 
         $this->_helper->json(
-            array('resultado' => $arrayTiposAtosAdministrativos)
+            ['resultado' => $arrayTiposAtosAdministrativos]
         );
     }
 
@@ -72,7 +67,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         }
 
         $this->_helper->json(
-            array('resultado' => $arrayTiposAtosAdministrativos)
+            ['resultado' => $arrayTiposAtosAdministrativos]
         );
     }
 
@@ -89,7 +84,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
 
         }
         $this->_helper->json(
-            array('resultado' => $arrayTiposAtosAdministrativos)
+            ['resultado' => $arrayTiposAtosAdministrativos]
         );
     }
 
@@ -102,7 +97,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         }
 
         $this->_helper->json(
-            array('resultado' => $arrayTiposAtosAdministrativos)
+            ['resultado' => $arrayTiposAtosAdministrativos]
         );
     }
 
@@ -131,8 +126,28 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
             }
         }
         $this->_helper->json(
-            array('resultado' => $arrayResultado)
+            ['resultado' => $arrayResultado]
         );
+    }
+
+    public function alterarAtoAdministrativoAjax()
+    {
+        try {
+            $get = $this->getRequest()->getParams();
+
+            if(!$get['idTipoDoAto'] &&
+               !$get['idOrgaoSuperiorDoAssinante'] &&
+               !$get['idCargoDoAssinante'] &&
+               !$get['idPerfilDoAssinante'] &&
+               !$get['idOrgaoDoAssinante'] &&
+               !$get['idAtoAdministrativo']) {
+
+            }
+        } catch (Exception $objException) {
+            $this->_helper->json(
+                ['status' => 0]
+            );
+        }
     }
 
 }
