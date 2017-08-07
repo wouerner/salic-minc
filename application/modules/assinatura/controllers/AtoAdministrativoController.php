@@ -108,15 +108,31 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
 
     public function obterOrdemAssinaturaAjaxAction()
     {
-//        $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-//        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterCargosDoAssinante();
-//        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
-//            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
-//        }
-//
-//        $this->_helper->json(
-//            array('resultado' => $arrayTiposAtosAdministrativos)
-//        );
+        $arrayResultado = [
+            0 => [
+                'codigo' => null,
+                'descricao' => 1
+            ]
+        ];
+        $get = $this->getRequest()->getParams();
+        if($get['idTipoDoAto'] && $get['idOrgaoSuperiorDoAssinante']) {
+
+            $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo();
+            $objModelAtoAdministrativo->setIdTipoDoAto($get['idTipoDoAto']);
+            $objModelAtoAdministrativo->setIdOrgaoSuperiorDoAssinante($get['idOrgaoSuperiorDoAssinante']);
+
+            if($get['idOrdemDaAssinatura']) {
+                $objModelAtoAdministrativo->setIdOrdemDaAssinatura($get['idOrdemDaAssinatura']);
+            }
+            $arrayResultadoOrdens = $objAtoAdministrativo->obterOrdensAssinaturaDisponiveis($objModelAtoAdministrativo);
+            if(count($arrayResultadoOrdens) > 1) {
+                $arrayResultado = $arrayResultadoOrdens;
+            }
+        }
+        $this->_helper->json(
+            array('resultado' => $arrayResultado)
+        );
     }
 
 }

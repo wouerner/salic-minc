@@ -119,7 +119,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
     /**
      * Transposição da view "vwAtoAdministrativo".
      */
-    public function obterAtoAdministrativoDetalhado() {
+    public function obterAtoAdministrativoDetalhado()
+    {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
@@ -230,7 +231,8 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         return $this->fetchAll($objQuery)->toArray();
     }
 
-    public function obterPerfisDoAssinante() {
+    public function obterPerfisDoAssinante()
+    {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
@@ -241,6 +243,28 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             ),
             'tabelas'
         );
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterOrdensAssinaturaDisponiveis(Assinatura_Model_TbAtoAdministrativo $objModelAtoAdministrativo)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            [$this->_name],
+            array(
+                'codigo' => 'idAtoAdministrativo',
+                'descricao' => 'idOrdemDaAssinatura',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('idTipoDoAto = ?', $objModelAtoAdministrativo->getIdTipoDoAto());
+        $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante());
+
+        if($objModelAtoAdministrativo->getIdOrdemDaAssinatura()) {
+            $objQuery->where('idOrdemDaAssinatura = ?', $objModelAtoAdministrativo->getIdOrdemDaAssinatura());
+        }
+//xd($objQuery->assemble());
         return $this->fetchAll($objQuery)->toArray();
     }
 }
