@@ -85,7 +85,7 @@ $arrMenuProponente['itensorcamentario']['menu'][] = array('label' => 'Solicitar 
     'grupo' => array()
 );
 $arrMenuProponente['itensorcamentario']['menu'][] = array('label' => 'Minhas solicita&ccedil;&otilde;es', 'title' => 'Ir para Minhas solicita&ccedil;&otilde;es',
-    'url' => $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'minhas-solicitacoes')) . '?idPreProjeto=' . $idPreProjeto,
+    'url' => $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'minhas-solicitacoes', 'idPreProjeto' => $idPreProjeto)).'?tipoFiltro=solicitado',
     'grupo' => array()
 );
 
