@@ -204,8 +204,9 @@
                             $cont2=0;
                             $cont3=0;
                         ?>
-                            <?php foreach($this->incFiscaisA as $titulo => $item):?> 
-                                <div class="container-fluid">
+                            <?php //var_dump($this->incFiscaisA ) ?> 
+                            <?php foreach($this->incFiscaisA as $titulo => $item): ?> 
+                                <div class="">
                                 <span class='green-text'><?php echo $titulo ?></span>
                                 <?php if(is_array($item) && !empty($item)): ?>
                                     <?php foreach($item as $titulo => $subItem) :?>
@@ -214,60 +215,62 @@
                                             <?php if(is_array($subItem) && !empty($subItem)):?> 
                                                 <?php foreach($subItem as $titulo => $tabelaItem): ?>
                                                     <div class="divF<?php echo $cont2 ?>"  style="padding:3px; margin-left: 15px;">
-                                                        <span class='black-text'><?php echo $titulo ?></span>
+                                                        <span class='black-text'><button class="waves-effect waves-light btn btn-flat btnToggle " id="dF<?php echo $cont3; ?>"><i class="material-icons left">expand_more</i><?php echo $titulo ?></button></span>
                                                         <?php if(is_array($tabelaItem) && !empty($tabelaItem)): ?>
-                                                            <table style="margin-left:3px; clear:both;" class="bordered striped linhaTabelaItem dF<?php echo $cont3?>">
+                                                            <div class=" hide  dF<?php echo $cont3; ?>">
+                                                            </div>
+                                                            <table style="" class=" hide bordered striped linhaTabelaItem dF<?php echo $cont3; ?>">
                                                                 <thead>
-                                                                <tr>
-                                                                    <?php if ($this->codGrupo == 132 || $this->codGrupo == 125) : ?>
-                                                                        <th>Visualizar An&aacute;lise</th>
-                                                                    <?php else : ?>    
-                                                                        <th>Analisar</th>
-                                                                    <?php endif?>    
-                                                                    <th>Item de Custo</th>
-                                                                    <th>Valor Aprovado</th>
-                                                                    <th>Valor Comprovado</th>
-                                                                    <th>Comprovação Validada</th>
-                                                                    <th>Modalidade Vinculada</th>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <?php if ($this->codGrupo == 132 || $this->codGrupo == 125) : ?>
+                                                                            <th>Visualizar An&aacute;lise</th>
+                                                                        <?php else : ?>    
+                                                                            <th>Analisar</th>
+                                                                        <?php endif?>    
+                                                                        <th>Item de Custo</th>
+                                                                        <th>Valor Aprovado</th>
+                                                                        <th>Valor Comprovado</th>
+                                                                        <th>Comprovação Validada</th>
+                                                                        <th>Modalidade Vinculada</th>
+                                                                    </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                            <?php foreach($tabelaItem as $key=>$valor) : ?>
-                                                                <tr>
-                                                                    <td align="center">
-                                                                        <?php
-                                                                            $href = $this->url(
-                                                                                array(
-                                                                                   'controller' => 'realizarprestacaodecontas',
-                                                                                    'action' => 'analisar-comprovacao',
-                                                                                    'idPronac' => $this->idPronac,
-                                                                                    'idPlanilhaAprovacao' => $key,
-                                                                                    'idPlanilhaItem' => $valor[6],
-                                                                                    'idRelatorio' => $this->idRelatorio, #Alysson - Adicionado
-                                                                                )
-                                                                            );
-                                                                            $itemAvaliadoParam = Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter');
-                                                                            if ($itemAvaliadoParam) {
-                                                                                $itemAvaliadoParam = "?itemAvaliadoFilter=".$itemAvaliadoParam;
-                                                                            }
-                                                                            $href .= $itemAvaliadoParam; 
-                                                                        ?>
-                                                                        <a href='<?php echo $href ?>' class='editarIco'>Analisar item</a>
-                                                                    </td>
-                                                                    <td><?php echo $valor[0] ?></td>
-                                                                    <td nowrap><?php echo $this->formatarReal($valor[1]) ?></td>
-                                                                    <td nowrap><?php echo $this->formatarReal($valor[3]) ?></td>
-                                                                    <td nowrap><?php echo $this->formatarReal($valor[7]) ?></td>
-                                                                    <td><?php echo $valor[4] ?></td>
-                                                                 </tr>
-                                                                <?php endforeach; ?> 
+                                                                <?php foreach($tabelaItem as $key=>$valor) : ?>
+                                                                    <tr>
+                                                                        <td align="center">
+                                                                            <?php
+                                                                                $href = $this->url(
+                                                                                    array(
+                                                                                       'controller' => 'realizarprestacaodecontas',
+                                                                                        'action' => 'analisar-comprovacao',
+                                                                                        'idPronac' => $this->idPronac,
+                                                                                        'idPlanilhaAprovacao' => $key,
+                                                                                        'idPlanilhaItem' => $valor[6],
+                                                                                        'idRelatorio' => $this->idRelatorio, #Alysson - Adicionado
+                                                                                    )
+                                                                                );
+                                                                                $itemAvaliadoParam = Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter');
+                                                                                if ($itemAvaliadoParam) {
+                                                                                    $itemAvaliadoParam = "?itemAvaliadoFilter=".$itemAvaliadoParam;
+                                                                                }
+                                                                                $href .= $itemAvaliadoParam; 
+                                                                            ?>
+                                                                            <a href='<?php echo $href ?>' class='editarIco'>Analisar item</a>
+                                                                        </td>
+                                                                        <td><?php echo $valor[0] ?></td>
+                                                                        <td nowrap><?php echo $this->formatarReal($valor[1]) ?></td>
+                                                                        <td nowrap><?php echo $this->formatarReal($valor[3]) ?></td>
+                                                                        <td nowrap><?php echo $this->formatarReal($valor[7]) ?></td>
+                                                                        <td><?php echo $valor[4] ?></td>
+                                                                     </tr>
+                                                                <?php endforeach; ?>
                                                                 </tbody>
                                                             </table>
                                                             <?php $cont3++; ?>
                                                         <?php endif; ?>
                                                     </div>
-                                                <?php endforeach ?>
-                                            <?php endif?> 
+                                                    <?php endforeach ?>
+                                            <?php endif?>
                                             </div>
                                             <?php $cont2++;?>
                                     <?php endforeach ?>
@@ -277,84 +280,81 @@
                             <?php endforeach?>
                         </td>
                         </tr>
-                <?php>
-                    $html = '';
-                    $cont4=0;
-                    foreach($this->incFiscaisP as $titulo => $incFiscal) {
-                        $html .= '<tr>';
-                        $html .= '<td>';
-                        $html .= "<span class='green-text'>{$titulo}</span>";
-                        if(is_array($incFiscal) && !empty($incFiscal)) {
-                            foreach($incFiscal as $titulo => $item) {
-                                $html .= '<div class="divfilho'.$cont.'" style="padding:3px; margin-left: 15px;" > ';
-                                $html .= "<span class='green-text'>{$titulo}</span>";
-                                if(is_array($item) && !empty($item)) {
-                                    foreach($item as $titulo => $subItem) {
-                                        $html .= '<div class="divF'.$cont2.'" style="padding:3px; margin-left: 15px;"> ';
-                                        $html .= "<span class='orange-text'>{$titulo}</span>";
-                                        if(is_array($subItem) && !empty($subItem)) {
-                                            foreach($subItem as $titulo => $tabelaItem) {
-                                                $html .= '<div class="dF'.$cont3.'" style="padding:3px; margin-left: 15px;">';
-                                                $html .= "<span class='black-text'>{$titulo}</span>";
-                                                if(is_array($tabelaItem) && !empty($tabelaItem)) {
-                                                    $html .= '<table style="margin-left:5px; clear:both;" class=" table-responsive bordered linhaRegistros dFilho'.$cont4.'">';
-                                                    $html .= '<tr>';
-                                                    if($this->codGrupo == 132 || $this->codGrupo == 125)
-                                                        $html .= '<th>Visualizar An&aacute;lise</th>';
-                                                    else
-                                                        $html .= '<th>Analisar</th>';
-                                                    $html .= '<th style="width: 15%">Item de Custo</th>';
-                                                    $html .= '<th>Valor Aprovado</th>';
-                                                    $html .= '<th>Valor Comprovado</th>';
-                                                    $html .= '<th>Comprovação Validada</th>';
-                                                    $html .= '<th>Modalidade Vinculada</th>';
-                                                    $html .= '</tr>';
-                                                    foreach ($tabelaItem as $idPlanilhaAprovacao => $valor) :
-                                                        $html .= '<tr>';
-                                                        $html .= '<td align="center">';
-                                                        $href = $this->url(
-                                                            array(
-                                                                'controller' => 'realizarprestacaodecontas',
-                                                                'action' => 'analisar-comprovacao',
-                                                                'idPronac' => $this->idPronac,
-                                                                'idPlanilhaAprovacao' => $idPlanilhaAprovacao,
-                                                                'idPlanilhaItem' => $valor[6],
-                                                            )
-                                                        );
-  							$itemAvaliadoParam = Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter');
-                                                        if ($itemAvaliadoParam) {
-                                                            $itemAvaliadoParam = "?".$itemAvaliadoParam;
-            						}
-                                                        $href .= $itemAvaliadoParam;
-                                                        $html .= "<a href='{$href}' class='editarIco'>Analisar item</a>";
-                                                        $html .= '</td>';
-                                                        $html .= "<td style=\"width: 15%\" >".($valor[0])."</td>";
-                                                        $html .= "<td nowrap>{$this->formatarReal($valor[1])}</td>";
-                                                        $html .= "<td nowrap>{$this->formatarReal($valor[3])}</td>";
-                                                        $html .= "<td nowrap>{$this->formatarReal($valor[7])}</td>";
-                                                        $html .= "<td>{$valor[4]}</td>";
-                                                        $html .= '</tr>';
-                                                    endforeach;
-                                                    $html .= '</table>';
-                                                }
-                                                $html .= '</div>';
-                                                $cont4++;
-                                            }
-                                            $cont3++;
-                                        }
-                                        $html .= '</div>';
-                                    }
-                                }
-                                $html .= '</div>';
-                                $cont2++;
-                            }
-                        }
-                        $html .= '</td>';
-                        $html .= '</tr>';
-                        $cont++;
-                    }
-                    echo $html;
-                ?>
+                    <?php $cont4=0;
+                    foreach($this->incFiscaisP as $titulo => $incFiscal):  ?>
+                        <tr>
+                            <td>
+                            <span class='green-text'><?php echo $titulo ?></span>
+                            <?php if(is_array($incFiscal) && !empty($incFiscal)) : ?>
+                            <?php foreach($incFiscal as $titulo => $item) : ?>
+                                <div class="divfilho'.$cont.'" style="padding:3px; margin-left: 15px;" >
+                                <span class='green-text'><?php echo $titulo ?></span>
+                                <?php if(is_array($item) && !empty($item)) :  ?>
+                                    <?php foreach($item as $titulo => $subItem) : ?>
+                                    <div class="divF<?php echo $cont2 ?>" style="padding:3px; margin-left: 15px;">
+                                    <span class='orange-text'><?php echo $titulo ?></span>
+                                        <?php if(is_array($subItem) && !empty($subItem)) : ?>
+                                            <?php foreach($subItem as $titulo => $tabelaItem) : ?>
+                                                <div class="dF<?php echo $cont3 ?>" style="padding:3px; margin-left: 15px;">
+                                                <span class='black-text'><button class="waves-effect waves-light btn-flat btn btnToggle " id="dF<?php echo $cont3 ?>"><i class="material-icons left">expand_more</i><?php echo $titulo ?></button></span>
+                                                <?php if(is_array($tabelaItem) && !empty($tabelaItem)) : ?>
+                                                    <table style="margin-left:5px; clear:both;" class=" hide table-responsive bordered linhaRegistros dFilho<?php echo $cont4 ?> dF<?php echo $cont3; ?>">
+                                                    <tr>
+                                                    <?php if($this->codGrupo == 132 || $this->codGrupo == 125): ?>
+                                                        <th>Visualizar An&aacute;lise</th>
+                                                    <?php else: ?>
+                                                        <th>Analisar</th>
+                                                    <?php endif; ?>
+                                                    <th style="width: 15%">Item de Custo</th>
+                                                    <th>Valor Aprovado</th>
+                                                    <th>Valor Comprovado</th>
+                                                    <th>Comprovação Validada</th>
+                                                    <th>Modalidade Vinculada</th>
+                                                    </tr>
+                                                    <?php foreach ($tabelaItem as $idPlanilhaAprovacao => $valor) : ?>
+                                                        <tr>
+                                                        <td align="center">
+                                                            <?php $href = $this->url(
+                                                                array(
+                                                                    'controller' => 'realizarprestacaodecontas',
+                                                                    'action' => 'analisar-comprovacao',
+                                                                    'idPronac' => $this->idPronac,
+                                                                    'idPlanilhaAprovacao' => $idPlanilhaAprovacao,
+                                                                    'idPlanilhaItem' => $valor[6],
+                                                                )
+                                                            );
+                                                            $itemAvaliadoParam = Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter'); ?>
+                                                            <?php if ($itemAvaliadoParam) :  ?>
+                                                                <?php $itemAvaliadoParam = "?".$itemAvaliadoParam; ?>
+                                                            <?php endif;  ?>
+                                                            <?php $href .= $itemAvaliadoParam; ?>
+                                                            <a href='<?php echo $href ?>' class='editarIco'>Analisar item</a>
+                                                        </td>
+                                                        <td style="width: 15%" > <?php echo $valor[0]?></td>
+                                                        <td nowrap><?php echo $this->formatarReal($valor[1]) ?></td>
+                                                        <td nowrap><?php echo $this->formatarReal($valor[3]) ?></td>
+                                                        <td nowrap><?php echo $this->formatarReal($valor[7]) ?></td>
+                                                        <td><?php echo $valor[4] ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                    </table>
+                                                <?php endif; ?>
+                                                </div>
+                                                <?php $cont4++; ?>
+                                            <?php endforeach;  ?>
+                                            <?php $cont3++;?>
+                                        <?php endif;  ?>
+                                        </div>
+                                    <?php endforeach;  ?>
+                                <?php endif;  ?>
+                                </div>
+                                <?php $cont2++; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                        </td>
+                        </tr>
+                        <?php $cont++; ?>
+                    <?php endforeach; ?>
             </table>
             </form>
     </fieldset>
@@ -400,10 +400,6 @@
     <?php } ?>
     </div>
 </div>
-
-<div id="rodapeConteudo"></div>
-<!-- ========== FIM RODAPÉ DO CONTEÚDO ========== -->
-<br clear="all" />
 
 <?php $analisarItemHref   =   $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'analisaritem'));?>
 
@@ -509,7 +505,7 @@
     });
     $('#finalizar').click(function(){
         var este = this;
-       var nomeJanelaAlerta =   janelaObj({
+        var nomeJanelaAlerta =   janelaObj({
             parametros : {
                 width:      400,
                 autoOpen:   false,
@@ -540,6 +536,17 @@
         });
         nomeJanelaAlerta.divConteudo.html('Deseja finalizar a Comprova&ccedil;&atilde;o?');
         nomeJanelaAlerta.abrirJanela();
+    });
+
+    $('.btnToggle').click(function(event){
+        event.preventDefault()
+        btnId = jQuery(this).attr('id');
+        table = jQuery('table.' + jQuery(this).attr('id'));
+        table.toggleClass('hide');
+
+        $.get('/realizarprestacaodecontas/planilha-orcamentaria-custos/idPronac/168849', function(data){
+            console.log(data);
+        });
     });
 </script>
 </div>
