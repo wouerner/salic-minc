@@ -2474,7 +2474,7 @@ class Projetos extends MinC_Db_Table_Abstract
     }
 
 
-    public function assinarParecer($idpronac) {
+    public function assinarParecerTecnico($idpronac) {
         $returnData = array();
 
         $returnData['enquadramento'] = $this->enquadramentoProjeto($idpronac);

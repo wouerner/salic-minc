@@ -111,7 +111,7 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
         
         $projetos = new Projetos();
 
-        $dadosProjeto = $projetos->assinarParecer($this->idPronac);
+        $dadosProjeto = $projetos->assinarParecerTecnico($this->idPronac);
         
         $view->dadosEnquadramento = $dadosProjeto['enquadramento'];
         $view->dadosProdutos = $dadosProjeto['produtos'];
