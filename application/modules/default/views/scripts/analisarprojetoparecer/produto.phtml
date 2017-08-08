@@ -262,9 +262,11 @@
                             foreach ($planilha['itens'] as $idPlanilhaProjeto => $valPlanilha) {
                                 $valorprodutosolicitado = 0;
                                 $valorprodutoparecerista = 0;
+                                $estiloCustoPraticado = ($planilha['itens']['Custo praticado'] == 0) ? '' : 'valor_maior_que_praticado';
                                 $trCampo = "<tr>";
-                                $conteudo = "<tr class='item' idPlanilhaProjeto='{$idPlanilhaProjeto}' id='item{$idPlanilhaProjeto}'>";
-
+                                $conteudo = "<tr class='item $estiloCustoPraticado' idPlanilhaProjeto='{$idPlanilhaProjeto}' id='item{$idPlanilhaProjeto}'>";
+                                unset($valPlanilha['Custo praticado']);
+                                
                                 foreach ($valPlanilha as $camp => $cont) {
                                     $trCampo .= "<th>{$camp}</th>";
                                     if ($camp == 'Valor Unitário' || $camp == 'Valor Solicitado' || $camp == 'Valor Sugerido pelo Parecerista') {
@@ -272,7 +274,7 @@
                                             $conteudo .= "<td class='ValorSugerido right-align'>{$this->formatarReal($cont)}</td>";
                                         }
                                         else {
-                                            $conteudo .= "<td  class='right-align'>{$this->formatarReal($cont)}</td>";
+                                            $conteudo .= "<td class='right-align'>{$this->formatarReal($cont)}</td>";
                                         }
                                     }
                                     else {
@@ -379,7 +381,10 @@
         <input type="hidden" name="sugeridoReal" value="<?php echo $this->itens['totalSugerido']; ?>" />
         <input type="hidden" name="stPrincipal"  value="<?php echo $_GET['stPrincipal']; ?>" />
         <input type="hidden" name="idProduto" 	 value="<?php echo $_GET['idProduto']; ?>" />
-
+	<?php if ($this->IN2017): ?>
+        <input type="hidden" name="dsAcaoAlcanceProduto" id="consolidacaoDsAcaoAlcanceProduto" value="" />
+	<?php endif; ?>
+	
         <table class="tabela sumir" id="consolidacao" style="width:95%" width="95%">
         <?php if($this->Perfil == 94) { //Parecerista ?>
             <tr>
@@ -576,6 +581,10 @@
         });
 
         $('#btSalvarConsolidacao').click(function() {
+	<?php if ($this->IN2017): ?>
+		$('#consolidacaoDsAcaoAlcanceProduto').val($('#dsAcaoAlcanceProduto').val());
+	<?php endif; ?>
+	    
             var i = 0;
             $('.obrigatorio').each(function(){
                 if($.trim($(this).val()) == ''){

@@ -1,6 +1,6 @@
 <?php
 
-class Parecer_DocumentoAssinaturaController implements MinC_Assinatura_Documento_IDocumentoAssinatura
+class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assinatura_Documento_IDocumentoAssinatura
 {
     public $idPronac;
 
@@ -71,7 +71,7 @@ class Parecer_DocumentoAssinaturaController implements MinC_Assinatura_Documento
     function gerarDocumentoAssinatura()
     {
         $view = new Zend_View();
-        $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/documento-assinatura');
+        $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/analise-inicial-documento-assinatura');
 
         $view->titulo = 'Parecer T&eacute;cnico do Projeto';
         
