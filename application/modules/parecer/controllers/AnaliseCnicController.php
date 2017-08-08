@@ -24,7 +24,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     
     public function gerenciarAssinaturasAction()
     {
-        $this->redirect("/{$this->moduleName}/index");
+        $this->redirect("/areadetrabalho");
     }
 
     public function encaminharAssinaturaAction()
@@ -89,6 +89,9 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $idPronac = $this->_request->getParam("idpronac");
         $this->view->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
         
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
+        
         $projetos = new Projetos();
         if (!$projetos->VerificarIN2017($idPronac)) {
             $pa = new paChecarLimitesOrcamentario();
@@ -134,7 +137,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
             /**** FIM CODIGO DE READEQUACAO ****/
             
             // revisar variáveis
-            $this->incluirNaPauta();
+            $this->incluirNaPauta($idPronac, $ConsultaReuniaoAberta);
             
         } // fecha if
         // =================================================================
@@ -188,7 +191,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
             }// fecha try
             catch (Exception $e) {
 
-                parent::message("Erro ao ativar Planilha readequada. " . $e->getMessage(), "arealizaranaliseprojeto/emitirparecer" . $query_string, "ERROR");
+                parent::message("Erro ao ativar Planilha readequada. " . $e->getMessage(), "parecer/analise-cnic/emitirparecer/idpronac/" . $idPronac, "ERROR");
             }
         }
     }
@@ -199,6 +202,8 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $idpronac = $_POST['idpronac'];
         $tblSituacao = new Situacao();
         $tblPauta = new Pauta();
+        $tblProjetos = new Projetos();
+        
         $buscarnrreuniaoprojeto = $tblPauta->dadosiniciaistermoaprovacao(array($idpronac))->current();
         $dados = array();
         //TRATANDO SITUACAO DO PROJETO QUANDO ESTE FOR DE READEQUACAO
@@ -219,13 +224,25 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $this->_helper->viewRenderer->setNoRender(TRUE);
     }
     
-    private function incluirNaPauta() {
+    private function incluirNaPauta($idPronac, $ConsultaReuniaoAberta) {
+        $post = Zend_Registry::get('post');
+
+        $codSituacao = ($this->bln_readequacao == "false") ? 'D03' : 'D02';
+        $stEnvioPlenaria = isset($post->stEnvioPlenaria) ? 'S' : 'N';
+        $justificativa = $post->justificativaenvioplenaria;
+        $TipoAprovacao = $post->decisao;
+        $situacao = $post->situacao == null ? $codSituacao : $post->situacao;
+        $dtsituacao = date('Y-m-d H:i:s');
+        
         try {
             // busca a reuniao aberta
             $idReuniao = $ConsultaReuniaoAberta['idNrReuniao'];
             // verifica se ja esta na pauta
             $verificaPauta = RealizarAnaliseProjetoDAO::retornaRegistro($idPronac, $idReuniao);
             if (count($verificaPauta) == 0) {
+                $tblPauta = new Pauta();
+                $tblProjetos = new Projetos();
+                
                 // cadastra o projeto na pauta
                 $dados = array(
                     'idNrReuniao' => $idReuniao,
@@ -234,9 +251,10 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                     'stEnvioPlenario' => $stEnvioPlenaria,
                     'tpPauta' => 1,
                     'stAnalise' => $TipoAprovacao,
-                        'dsAnalise' => TratarString::escapeString($justificativa),
+                    'dsAnalise' => TratarString::escapeString($justificativa),
                     'stPlanoAnual' => $post->stPlanoAnual
                 );
+                
                 $tblPauta->inserir($dados);
                 $dadosprojeto = array(
                     'Situacao' => $situacao,
@@ -297,8 +315,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
             
         } // fecha try
         catch (Exception $e) {
-            
-            parent::message("Erro ao incluir projeto na Pauta. " . $e->getMessage(), "brealizaranaliseprojeto/emitirparecer" . $query_string, "ERROR");
+            parent::message("Erro ao incluir projeto na Pauta. " . $e->getMessage(), "parecer/analise-cnic/emitirparecer/idpronac/" . $idPronac, "ERROR");
         }
     }
         
@@ -559,7 +576,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         try {
             if (empty($idpronac)) {
                 //throw new Exception("Por favor, clique no Pronac Aguardando An&aacute;lise!");
-                parent::message("Erro ao realizar opera&ccedil;&atilde;o.", "crealizaranaliseprojeto/emitirparecer", "ERROR");
+                parent::message("Erro ao realizar opera&ccedil;&atilde;o.", "parecer/analise-cnic/emitirparecer/idpronac/" . $idPronac, "ERROR");
             } else {
                 $idpronac = $this->_request->getParam("idpronac");
                 
@@ -634,8 +651,6 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 
                 if (!$projetos->VerificarIN2017($idpronac)) {
                     $this->validacao50($idpronac, $projetoAtual);
-                } else {
-                    $this->view->nrparecerfavoravel = 1;
                 }
                 
                 $produtos = RealizarAnaliseProjetoDAO::analiseDeConteudo($idpronac, $tpPlanilha);
