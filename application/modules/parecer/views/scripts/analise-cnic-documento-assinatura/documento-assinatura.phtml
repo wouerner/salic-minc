@@ -20,7 +20,7 @@
         </div>
         <?php else: ?>
         <div class="center-align" style="font-size: 23px;">
-          <?php echo $this->nomeOrgao; ?>
+          Comiss&atilde;o Nacional de Incentivo &agrave; Cultura - CNIC
         </div>
         <?php endif; ?>
     </div>
@@ -130,62 +130,70 @@
     </div>
 </div>
 
+<br/><br/>
+<div class="row">
+  <div class="col s1"></div>
+  <div class="col s10">
+    <label style="color: black">Mem&oacute;ria de C&aacute;lculo</label>
+    <div class="bordered padding10">
+      <div class="row">
+	<table class="table margin0" style="width: 100%">
+	  <tr>
+	    <td align="center" class="bold" colspan="2">Proponente</td>
+	    <td>&nbsp;</td>
+	    <td align="center" class="bold" colspan="2">T&eacute;cnico</td>
+	  </tr>
+	  
+	  <tr>
+	    <td align="center">vl. Solicitado:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlSolicitado, 2, ',', '.'); ?></td>
+	    <td>&nbsp;</td>
+	    <td align="center">Custo do Projeto:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>
+	  </tr>
+	  
+	  <tr>
+	    <td align="center">vl. Outras Fontes:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontes, 2, ',', '.'); ?></td>
+	    <td>&nbsp;</td>
+	    <td align="center">vl. Outras Fontes</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontesAprovado, 2, ',', '.'); ?></td>
+	  </tr>	      
+	  
+	  <tr>
+	    <td align="center" class="bold">Vl. Projeto:</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlProjeto, 2, ',', '.'); ?></td>
+	    <td>&nbsp;</td>
+	    <td align="center" class="bold">Custo Total</td>
+	    <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>		
+	  </tr>	      
+	</table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/><br/>
 <div class="row">
     <div class="col s1"></div>
     <div class="col s10">
-      <label style="color: black">Mem&oacute;ria de C&aacute;lculo</label>
+      <label style="color: black">Produtos do projeto</label>
       <div class="bordered padding10">
         <div class="row">
 	  <table class="table margin0" style="width: 100%">
 	    <tr>
-	      <td align="center" class="bold" colspan="2">Proponente</td>
-	      <td>&nbsp;</td>
-	      <td align="center" class="bold" colspan="2">T&eacute;cnico</td>
-	    </tr>
-	    
-	    <tr>
-	      <td align="center">vl. Solicitado:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlSolicitado, 2, ',', '.'); ?></td>
-	      <td>&nbsp;</td>
-	      <td align="center">Custo do Projeto:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>
-	    </tr>
-	    
-	    <tr>
-	      <td align="center">vl. Outras Fontes:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontes, 2, ',', '.'); ?></td>
-	      <td>&nbsp;</td>
-	      <td align="center">vl. Outras Fontes</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlOutrasFontesAprovado, 2, ',', '.'); ?></td>
-	    </tr>	      
-	    
-	    <tr>
-	      <td align="center" class="bold">Vl. Projeto:</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->VlProjeto, 2, ',', '.'); ?></td>
-	      <td>&nbsp;</td>
-	      <td align="center" class="bold">Custo Total</td>
-	      <td class="right-align">R$<?php echo number_format($this->dadosEnquadramento[0]->CustoProjeto, 2, ',', '.'); ?></td>		
-	    </tr>	      
-	    
-	    <tr>
-	      <td colspan="5" class="destacar bold">
-		<strong>Produtos</strong>
-	      </td>
-	    </tr>
-	    
-	    <tr>
 	      <td colspan="5">
 		<table>
 		  <tr>
-		    <th>Produto</th>
-		    <th>Tipo</th>
-		    <th>Qtde Produzidas</th>
-		    <th>Qtde Distribui&ccedil;&atilde;o gratuita</th>
-		    <th>Qtde Venda Popular</th>
-		    <th>Qtde Venda Proponente</th>
-		    <th>Pre&ccedil;o m&eacute;dio</th>
-		    <th>Vl. Produto</th>
-		    <th>Receita Prevista</th>
+		    <th class="right-align">Produto</th>
+		    <th class="right-align">Tipo</th>
+		    <th class="right-align">Qtde Produzidas</th>
+		    <th class="right-align">Qtde Distribui&ccedil;&atilde;o gratuita</th>
+		    <th class="right-align">Qtde Venda Popular</th>
+		    <th class="right-align">Qtde Venda Proponente</th>
+		    <th class="right-align">Pre&ccedil;o m&eacute;dio</th>
+		    <th class="right-align">Vl. Produto</th>
+		    <th class="right-align">Receita Prevista</th>
 		  </tr>
 		  <?php $ReceitaTotal = 0; ?>
 		  <?php $ProdutoTotal = 0; ?>
@@ -217,60 +225,25 @@
     <div class="col s1"></div>
 </div>
 
+<br/><br/>
 <div class="row">
   <div class="col s1"></div>
   <div class="col s10">
-    <h5 style="color: black">Produ&ccedil;&atilde;o do Projeto</h5>
-    <div class="bordered padding10">
-      <div class="row">
-        <table class="table margin0" style="width: 100%">
-	  <tr>
-	    <td colspan="5" class="destacar bold">
-	      <strong>Dilig&ecirc;ncias</strong>
-	    </td>
-	  </tr>	      
-	  <tr>
-	    <td colspan="5">
-	      <table>
-		<tr>
-		  <th>Tipo de dilig&ecirc;ncia</th>
-		  <th>Data de Envio</th>
-		  <th>Data de Resposta</th>
-		</tr>
-		<?php foreach($this->dadosDiligencias as $diligencia) : ?>
-		<tr>
-		  <td align="center"><a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaanalista'))?>?idPronac=<?php echo $diligencia->IdPRONAC; ?>"><?php echo $diligencia->TipoDiligencia; ?></a>
-		    <td align="center"><?php echo ($diligencia->DtEnvio) ? Data::tratarDataZend($diligencia->DtEnvio, 'Brasileira') : '-'; ?></td>
-		    <td align="center"><?php echo ($diligencia->DtResposta) ? Data::tratarDataZend($diligencia->DtResposta, 'Brasileira') : '-'; ?></td>
-		</tr>
-		<?php endforeach; ?>
-	      </table>
-	      </td>
-	  </tr>
-	  <?php if ($this->view->IN2017): ?>
-	  <tr>
-	    <td class="destacar bold" colspan="5">
-	      A&ccedil;&otilde;es relevantes para o sucesso do projeto*
-	    </td>
-	  </tr>    
-	  <tr>
-	    <td colspan="5">
-	      <p><?php echo $this->dadosAlcance->dsAcaoAlcanceProduto; ?></p>
-	    </td>
-	  </tr>
-	  <?php endif; ?>
-	  <tr>
-	    <td colspan="5" class="destacar bold">Posicionamento T&eacute;cnico</td>
-	  </tr>
-	  
-	  <tr>
-	    <td>Parecer:</td>
-	    <td colspan="4"><?php echo $this->dadosParecer[0]['p.tpResultado']; ?></td>
-	  </tr>
-	  
-        </table>
-      </div>
+    <label style="color: black">Aprecia&ccedil;&atilde;o do Comiss&aacute;rio Relator</label>
+    <div class="bold padding10 bordered">
+      <?php echo $this->dadosParecer[0]['ResumoParecer']; ?>
     </div>
   </div>
-  <div class="col s1"></div>
 </div>
+
+<br/><br/>
+<div class="row">
+  <div class="col s1"></div>
+  <div class="col s10">
+    <label style="color: black">Posicionamento do Comiss&aacute;rio Relator</label>  
+    <div class="bold padding10 bordered">
+      <?php echo $this->dadosParecer[0]['p.tpResultado']; ?>
+    </div>
+  </div>
+</div>
+<br/><br/>
