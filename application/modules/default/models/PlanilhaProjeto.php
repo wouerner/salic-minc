@@ -237,6 +237,7 @@ class PlanilhaProjeto extends MinC_Db_Table_Abstract {
             'PPJ.Ocorrencia AS ocorrenciaparc',
             'PPJ.ValorUnitario AS valorUnitarioparc',
             'PPJ.QtdeDias AS diasparc',
+            'PPJ.stCustoPraticado AS custopraticado',
                 )
         );
         $select->joinInner(
