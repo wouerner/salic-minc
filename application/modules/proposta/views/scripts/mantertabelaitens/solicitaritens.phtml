@@ -28,14 +28,14 @@
             <!-- ========== FIM TITULO ========== -->
 
             <div id="conteudo">
-                <form name="form" id="form" action="<?php echo $this->url(array('module'=>'proposta', 'controller' => 'mantertabelaitens', 'action' => 'solicitaritens')); ?>?idPreProjeto=<?php if(isset($_GET['idPreProjeto']))echo $_GET['idPreProjeto'];?>" method="post">
+                <form name="form" id="form" action="<?php echo $this->url(array('module'=>'proposta', 'controller' => 'mantertabelaitens', 'action' => 'salvarsolicitacaoitem', 'idPreProjeto' => $this->idPreProjeto)); ?>" method="post">
                     <table class="tabela">
                         <tr class="titulo_tabela">
                             <th colspan="4">Novo Produto / Etapa / Item </th>
                         </tr>
                         <tr class="centro">
                             <td colspan="4">
-                                <label style="font-weight: normal;"><input name="solicitacao" type="radio" value="produtoetapa" id='produtoetapa' checked/> Associar Item a Produto/Etapa</label>&nbsp; &nbsp;
+                                <label style="font-weight: normal;"><input name="solicitacao" type="radio" value="associacao" id='associacao' checked/> Associar Item a Produto/Etapa</label>&nbsp; &nbsp;
                                 <label style="font-weight: normal;"><input name="solicitacao" type="radio" value="novoitem" id='novoitem' /> Incluir novo Item</label>
                             </td>
                         </tr>
@@ -163,7 +163,7 @@
                 }
             });
             $("#Descricao").rules("remove");
-        })
+        });
 
         $("#novoitem").change(function(){
             $("#tdprodutoitem").css('display','none');
@@ -176,7 +176,7 @@
                 }
             });
             $("#idPlanilhaItens").rules("remove");
-        })
+        });
 
         $("#idPlanilhaItens").rules("add", {
             required: true,
@@ -188,7 +188,7 @@
         jQuery.validator.addMethod("validarJustificativa", function(value, element) {
             var texto = $('#justificativa').val();
             if (texto.length > 0) {
-                // verifica se o usu�rio clicou no bot�o 'Reintegra��o'
+                // verifica se o usuario clicou no botao 'Reintegracao'
                 $('#justificativa').val();
                 return true;
             } else {

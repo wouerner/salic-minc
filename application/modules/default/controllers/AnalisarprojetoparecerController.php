@@ -415,6 +415,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
             $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Justificativa do Proponente'] = $val->justificitivaproponente;
             $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Valor Sugerido pelo Parecerista'] = $val->VlSugeridoParecerista;
             $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Justificativas do Parecerista'] = $val->dsJustificativaParecerista;
+            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Custo praticado'] = $val->custopraticado;
         }
         foreach ($itensCusto['fonte'] as $key => $value) {
             foreach ($value as $key2 => $value2) {
@@ -845,7 +846,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                         $whereB['idPronac  = ?'] = $idPronac;
                         $whereB['idProduto = ?'] = $idProduto;
                         $buscaAnaliseConteudo = $analisedeConteudoDAO->buscar($whereB);
-
+                        
                         if ($buscaAnaliseConteudo[0]->ParecerFavoravel == 0) {
                             $copiaPlanilha = PlanilhaPropostaDAO::parecerFavoravel($idPronac, $idProduto);                            
                         }
@@ -876,7 +877,11 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                     $where['idProduto = ?'] = $idProduto;
                     $analisedeConteudoDAO->update($dados, $where);
                     
-                    if ($IN2017) {                        
+                    if ($IN2017) {
+                        $analisedeConteudoDAO = new Analisedeconteudo();
+                        $whereB['idPronac  = ?'] = $idPronac;
+                        $whereB['idProduto = ?'] = $idProduto;
+                        $buscaAnaliseConteudo = $analisedeConteudoDAO->buscar($whereB);
                         $idParecer = $buscaAnaliseConteudo[0]->idAnaliseDeConteudo;
                         
                         $tbAcaoAlcanteProjeto = new tbAcaoAlcanceProjeto();
@@ -1225,7 +1230,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
     {
         $auth = Zend_Auth::getInstance();
         $idusuario = $auth->getIdentity()->usu_codigo;
-
+        
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $idOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o
 
@@ -1243,23 +1248,28 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $sugeridoReal = str_replace("R$", "", $sugeridoReal);
 
         $projetos = new Projetos();
-        if ($projetos->verificarIN2017($idPronac)) {
-            $acoesRelevantes = $this->_request->getParam("AcoesRelevantes");
-        }
-        
-        $pa = new paChecarLimitesOrcamentario();
-        $resultadoCheckList = $pa->exec($idPronac, 2);
-        
-        $i = 0;
-        foreach ($resultadoCheckList as $resultado) {
-            if ($resultado->Observacao == 'PENDENTE') {
-                $i++;
-            }
-        }
+        $isIN2017 = $projetos->verificarIN2017($idPronac);
 
-        if ($i > 0) {
-            $this->view->resultadoCheckList = $resultadoCheckList;
-        } else {
+        $error = false;
+        if (!$isIN2017) {
+            $pa = new paChecarLimitesOrcamentario();
+            $resultadoCheckList = $pa->exec($idPronac, 2);
+            
+            $i = 0;
+            foreach ($resultadoCheckList as $resultado) {
+                if ($resultado->Observacao == 'PENDENTE') {
+                    $i++;
+                }
+            }
+            
+            if ($i > 0) {
+                $this->view->resultadoCheckList = $resultadoCheckList;
+                $error = true;
+            }            
+        }
+        
+        if (!$error) 
+         {
             $this->_helper->layout->disableLayout();
 
             try {
@@ -1311,7 +1321,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                     'idTipoAgente' => 1,
                     'Logon' => $idusuario
                 );
-
+                
                 $buscarParecer = $parecerDAO->buscar($whereBuscarDados);
                 if (count($buscarParecer) > 0) {
                     $buscarParecer = $buscarParecer->current();
@@ -1320,11 +1330,8 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                 } else {
                     $insereParecer = $parecerDAO->inserir($dadosParecer);
                 }
-
-                // NOVA IN 2017 -> grava campos adicionais
-                $projetos = new Projetos();
-                if ($projetos->verificarIN2017($idPronac)) {
-                    
+                
+                if ($isIN2017) {
                     $whereB['idPronac  = ?'] = $idPronac;
                     $whereB['idProduto = ?'] = $idProduto;
 
@@ -1337,7 +1344,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                         'idParecer' => $idAnaliseDeConteudo,
                         'tpAnalise' => '1',
                         'dtAnalise' => new Zend_Db_Expr("GETDATE()"),
-                        'dsAcaoAlcanceProduto' => $acoesRelevantes,
+                        'dsAcaoAlcanceProduto' => $this->_request->getParam("dsAcaoAlcanceProduto"),
                         'idUsuario' => $idusuario,
                         'stEstado' => '1',
                     );
@@ -1349,11 +1356,10 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                     } else {
                         $tbAcaoAlcanceProjeto->insert($dadosAlcance);
                     }
-                    
                     $tbAcaoAlcanceProjeto->insert($dadosAlcance);
                 }      
                     
-
+                
                 
                 parent::message("Projeto consolidado com sucesso.", "Analisarprojetoparecer/produto?idPronac=" . $idPronac . "&idProduto=" . $idProduto . "&stPrincipal=" . $stPrincipal, "CONFIRM");
             } catch (Exception $e) {
