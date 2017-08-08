@@ -56,7 +56,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/analise-cnic-documento-assinatura');
 
-        $view->titulo = 'Parecer T&eacute;cnico do Projeto';
+        $view->titulo = 'Aprecia&ccedil;&atilde;o do Comiss&aacute;rio Relator';
         
         $view->IdPRONAC = $this->idPronac;        
 
@@ -68,7 +68,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
         $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $codOrgao = $grupoAtivo->codOrgao;
         $objOrgao = new Orgaos();
-        $view->nomeOrgao =  $objOrgao->pesquisarNomeOrgao($codOrgao)[0]['NomeOrgao'];
+        $view->nomeOrgao =  'Comiss&atilde;o Nacionl de Incentivo &agrave Cultura';
         
         $objProjeto = new Projeto_Model_DbTable_Projetos();
         $view->projeto = $objProjeto->findBy(array('IdPRONAC' => $this->idPronac));
@@ -94,7 +94,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
         
         $projetos = new Projetos();
 
-        $dadosProjeto = $projetos->assinarParecer($this->idPronac);
+        $dadosProjeto = $projetos->assinarApreciacaoCnic($this->idPronac);
         
         $view->dadosEnquadramento = $dadosProjeto['enquadramento'];
         $view->dadosProdutos = $dadosProjeto['produtos'];
