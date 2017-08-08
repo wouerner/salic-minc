@@ -4,7 +4,8 @@ class Arquivo_Model_TbArquivoImagem extends MinC_Db_Model
 {
     protected $_idArquivo;
     protected $_biArquivo;
-
+    protected $_idArquivoImagem;
+    
     /**
      * @return mixed
      */

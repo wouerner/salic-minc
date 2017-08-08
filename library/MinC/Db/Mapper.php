@@ -200,4 +200,21 @@ class MinC_Db_Mapper
         return $this->getDbTable()->fetchPairs($key, $value, $where, $order);
     }
 
+
+    public function insert($model)
+    {
+        if ($this->isValid($model)) {
+
+            $table = $this->getDbTable();
+
+            $data = array_filter($model->toArray(), function($value){return ($value !== null);});
+
+            if ($table->getSequence()) {
+                return $table->insert($data);
+            }
+
+        }
+        return false;
+    }
+
 }

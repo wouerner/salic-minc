@@ -115,7 +115,6 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
         if (!empty($arrData)) {
             $model = new Solicitacao_Model_TbSolicitacao($arrData);
             try {
-
                 $model->setDtSolicitacao(date('Y-m-d h:i:s'));
                 $model->setIdSolicitante($arrData['idSolicitante']);
                 $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
@@ -141,10 +140,10 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                     $file = new Zend_File_Transfer();
                     $idArquivo = $mapperArquivo->saveCustom($arrDoc, $file);
 
+
+
                 }
-
                 $model->setIdDocumento($idArquivo);
-
 
                 if ($intId = parent::save($model)) {
                     $booStatus = 1;
@@ -153,7 +152,7 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                     $this->setMessage('N&atilde;o foi possivel enviar mensagem!');
                 }
             } catch (Exception $e) {
-                $this->setMessage($e->getMessage());
+                throw $e;
             }
         }
         return $booStatus;

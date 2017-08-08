@@ -135,4 +135,37 @@ class Arquivo_Model_DbTable_TbArquivo extends MinC_Db_Table_Abstract
     {
         return $this->delete($where);
     }
+
+    public function inserirArquivo($arquivo, $imagem, $documento)
+    {
+        $schemaTbArquivo = $this->_schema . '.' . $this->_name;
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->beginTransaction();
+
+        try {
+            $db->insert($schemaTbArquivo, $arquivo);
+            $idArquivo = $db->lastInsertId();
+
+            if ($idArquivo) {
+
+                if($imagem) {
+                    $schemaTbArquivoImagem = $this->_schema . '.tbArquivoImagem';
+                    $imagem['idArquivo'] = $idArquivo;
+                    $db->insert($schemaTbArquivoImagem, $imagem);
+                }
+
+                if($arquivo) {
+                    $schemaTbDocumento = $this->_schema . '.tbDocumento';
+                    $documento['idArquivo'] = $idArquivo;
+                    $db->insert($schemaTbDocumento, $documento);
+                }
+            }
+            $db->commit();
+            return $idArquivo;
+        } catch (Zend_Exception_Db $e) {
+            $db->rollBack();
+            return false;
+        }
+    }
 }

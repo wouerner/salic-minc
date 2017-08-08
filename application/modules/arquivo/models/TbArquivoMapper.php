@@ -110,16 +110,7 @@ class Arquivo_Model_TbArquivoMapper extends MinC_Db_Mapper
 
         $files = $file->getFileInfo();
 
-        $db = Zend_Db_Table::getDefaultAdapter();
-
-        $objArquivo = new Arquivo_Model_TbArquivo();
-
-        $tbArquivoImagem = new Arquivo_Model_DbTable_TbArquivoImagem();
-        $tbDocumento = new Arquivo_Model_DbTable_TbDocumento();
-        $tableTbArquivo = new Arquivo_Model_DbTable_TbArquivo();
-
         try {
-
             if (!$file->isUploaded())
                 throw new Exception("Falha ao anexar arquivo! Verifique o documento e tente novamente!");
 
@@ -143,64 +134,53 @@ class Arquivo_Model_TbArquivoMapper extends MinC_Db_Mapper
                 throw new Exception("O arquivo n&atilde;o pode ser maior do que 10MB!");
             }
 
+            $dadosArquivo=[];
+            $dadosArquivo['NmArquivo'] = $arquivoNome;
+            $dadosArquivo['SgExtensao'] = $arquivoExtensao;
+            $dadosArquivo['NrTamanho'] = $arquivoTamanho;
+            $dadosArquivo['DtEnvio'] = date('Y-m-d h:i:s');
+            $dadosArquivo['StAtivo'] = 'I';
+            $dadosArquivo['DsHash'] = $arquivoHash;
+            $dadosArquivo['tIdUsuario'] = $this->idUsuario;
+
             $dadosTbArquivoImagem = [
-                'idArquivo' => '',
                 'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
             ];
 
             $dadosTbDocumento = [
-                'idArquivo' => '',
                 'idTipoDocumento' => $arrData['idTipoDocumento'],
                 'dsDocumento' => $arrData['dsDocumento'],
             ];
 
+            $tbArquivo = new Arquivo_Model_DbTable_TbArquivo();
+            $idArquivo = $tbArquivo->inserirArquivo($dadosArquivo, $dadosTbArquivoImagem, $dadosTbDocumento);
 
-            $objArquivo->setNmArquivo($arquivoNome);
-            $objArquivo->setSgExtensao($arquivoExtensao);
-            $objArquivo->setNrTamanho($arquivoTamanho);
-            $objArquivo->setDtEnvio(date('Y-m-d h:i:s'));
-            $objArquivo->setStAtivo('I');
-            $objArquivo->setDsHash($arquivoHash);
-//            $objArquivo->setIdUsuario($this->idUsuario);
-
-            $obj=[];
-            $obj['NmArquivo'] = $arquivoNome;
-            $obj['SgExtensao'] = $arquivoExtensao;
-            $obj['NrTamanho'] = $arquivoTamanho;
-            $obj['DtEnvio'] = date('Y-m-d h:i:s');
-            $obj['StAtivo'] = 'I';
-            $obj['DsHash'] = $arquivoHash;
-//            $obj['tIdUsuario'] = $this->idUsuario;
-
-
-            # iniciar transacao
-            $this->beginTransaction();
-
-            $idArquivo = $this->save($objArquivo);
-//            $idArquivo = $this->insert($objArquivo);
-            # commit
-            if ($idArquivo) {
-
-                $dadosTbArquivoImagem['idArquivo'] = $idArquivo;
-                $dadosTbDocumento['idArquivo'] = $idArquivo;
-
-//                $tbArquivoImagem->insert($dadosTbArquivoImagem);
-//                $tbDocumento->insert($dadosTbDocumento);
-
-            }
-
-            $this->rollBack();
-
-
-
+           return $idArquivo;
         } catch (Exception $e) {
-            #rollback
-            $this->rollBack();
-            xd($e, $idArquivo);
-            return false;
+            throw $e;
         }
+    }
 
-        return $idArquivo;
+    public function excluirArquivo($idDocumento) {
+
+        if(!empty($idDocumento)){
+            $tbDocumento = new tbDocumento();
+            $dadosArquivo = $tbDocumento->buscar(array('idDocumento =?'=>$idDocumento))->current();
+
+            if($dadosArquivo){
+//                    $vwAnexarComprovantes = new vwAnexarComprovantes();
+//                    $x = $vwAnexarComprovantes->excluirArquivo($dadosArquivo->idArquivo);
+
+                $tbDocumento = new tbDocumento();
+                $tbDocumento->excluir("idArquivo = {$dadosArquivo->idArquivo} and idDocumento= {$idDocumento} ");
+
+                $tbArquivoImagem = new tbArquivoImagem();
+                $tbArquivoImagem->excluir("idArquivo =  {$dadosArquivo->idArquivo} ");
+
+                $tbArquivo = new tbArquivo();
+                $tbArquivo->excluir("idArquivo = {$dadosArquivo->idArquivo} ");
+            }
+        }
     }
 
 }

@@ -109,26 +109,28 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
     {
         $params = $this->getRequest()->getParams();
 
-
-        if ($this->getRequest()->isPost()) {
-            $this->_helper->layout->disableLayout();
-            $this->_helper->viewRenderer->setNoRender(true);
-
-
-//            $strUrl = '/admissibilidade/mensagem/index';
-//            $strUrl .= ($this->arrProjeto)? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
-//            $arrayForm = $this->getRequest()->getPost();
-
-            $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
-            $mapperSolicitacao->salvar($this->getRequest()->getPost());
+        try {
+            if ($this->getRequest()->isPost()) {
+                $this->_helper->layout->disableLayout();
+                $this->_helper->viewRenderer->setNoRender(true);
 
 
+                //            $strUrl = '/admissibilidade/mensagem/index';
+                //            $strUrl .= ($this->arrProjeto)? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
+                //            $arrayForm = $this->getRequest()->getPost();
 
-//            $this->_helper->json(array('status' => $mapper->salvar($this->getRequest()->getPost()), 'msg' => $mapper->getMessages(), 'redirect' => $strUrl));
+                $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
+                $retorno = $mapperSolicitacao->salvar($this->getRequest()->getPost());
+                xd($retorno);
 
+                //            $this->_helper->json(array('status' => $mapper->salvar($this->getRequest()->getPost()), 'msg' => $mapper->getMessages(), 'redirect' => $strUrl));
 
-
+            }
+        } catch (Exception $objException) {
+            parent::message($objException->getMessage(), "/solicitacao/");
         }
+
+
     }
 
 
