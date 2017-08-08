@@ -166,7 +166,6 @@ foreach($this->buscar as $d) {
 		  (!$this->IsProdutosPendentesParecer($d->IdPRONAC, $d->idProduto)) &&
 		  ($this->IsProjetoEnquadrado($d->IdPRONAC)) &&
 		  ($this->IsProjetoComParecer($d->IdPRONAC)) && ($dilig == 0))
-		  || (($d->stPrincipal == 0) && ($this->IsProdutosPendentesParecer($d->IdPRONAC, $d->idProduto) == 0)  && ($dilig == 0))
 		  ) : ?>
 		  <?php if($this->verificarIN2017($d->IdPRONAC)): ?>         
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
@@ -206,7 +205,7 @@ foreach($this->buscar as $d) {
 		  
 		  <?php elseif(!$this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'index', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true&origin=parecer/analise-inicial" ?>"
+		     href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-inicial', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$d->IdPRONAC}&encaminhar=true&origin=parecer/analise-inicial" ?>"
 		    data-tooltip="Gerar documento para assinatura">
 		    <i class="material-icons white-text">note_add</i>
 		  </a>
@@ -215,6 +214,26 @@ foreach($this->buscar as $d) {
 		  <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('module' => 'default', 'controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
 		  <?php endif; ?>
 		  <?php endif; ?>
+
+		  <?php if(($d->stPrincipal == 0) && ($this->IsProdutosPendentesParecer($d->IdPRONAC, $d->idProduto) == 0)  && ($dilig == 0)): ?>
+		  <?php /* fechamento do produto secundário */  ?>
+		  <?php $parametrosAssinatura = "?idPronac=". $d->IdPRONAC ."&idProduto=". $d->idProduto . "&situacao=". $d->situacao ."&idD=". $d->idDistribuirParecer . "&stPrincipal=" . $d->stPrincipal . "&concluir=1"; ?>
+                  <a class="btn waves-effect waves-light tooltipped small btn cyan"
+                     href="#modalConfirmacao"
+                     data-redirect-url="<?php echo $this->url(
+                                        array(
+                                        'module' => 'default',
+                                        'controller' => 'analisarprojetoparecer',
+                                        'action' => 'fecharparecer'
+                                        )
+                                        ) . $parametrosAssinatura ?>"
+                     data-position="top"
+                     data-delay="50"
+                     data-tooltip="Concluir">
+                    <i class="material-icons">check_circle</i>
+		    </a>
+		  <?php endif; ?>
+          
 		</td>
 		<td class="center-align">
 		  <?php if ($this->verificarIN2017($d->IdPRONAC)): ?>

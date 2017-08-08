@@ -43,6 +43,7 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
         $this->view->dados = $documentoAssinatura->obterProjetosComAssinaturasAbertas(
             $this->grupoAtivo->codOrgao,
             $this->grupoAtivo->codGrupo,
+            $this->auth->getIdentity()->usu_org_max_superior,
             $this->idTipoDoAtoAdministrativo
         );
 
