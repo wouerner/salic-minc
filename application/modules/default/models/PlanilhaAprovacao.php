@@ -155,15 +155,13 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
     }
 
     /**
-     * Author: Alysson Vicu�a de Oliveira
-     * Descri��o: Altera��o realizada por pedido da �rea Finalistica em 16/02/2016 as 10:48
      * @param $idpronac
      * @param null $itemAvaliadoFilter
      * @return Zend_Db_Table_Rowset_Abstract
      */
     public function buscarItensPagamento($idpronac, $itemAvaliadoFilter = null)
     {
-        $select = $this->select();
+        $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
         $select->from(
             array('pAprovacao'=>$this->_name),
@@ -277,6 +275,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         } elseif($itemAvaliadoFilter == 3) {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
+        /* echo $select;die; */
         return $this->fetchAll($select);
     }
 
