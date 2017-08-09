@@ -28,7 +28,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
 
     public function removerAction()
     {
-        throw new Exception("Ato administrativo já vinculado a um documento");
+        throw new Exception("Transa&ccedil;&atilde;o cancelada, Ato administrativo j&aacute; vinculado a um documento.");
     }
 
     public function obterTiposDeAtosAdministrativosAjaxAction()
@@ -48,56 +48,56 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
     public function obterCargosDoAssinanteAjaxAction()
     {
         $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterCargosDoAssinante();
-        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
-            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+        $arrayResultado = $objAtoAdministrativo->obterCargosDoAssinante();
+        foreach($arrayResultado as $indice => $tipoAtoAdministrativo) {
+            $arrayResultado[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
         }
 
         $this->_helper->json(
-            ['resultado' => $arrayTiposAtosAdministrativos]
+            ['resultado' => $arrayResultado]
         );
     }
 
     public function obterOrgaosSuperioresAjaxAction()
     {
         $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterOrgaosSuperiores();
-        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
-            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+        $arrayResultado = $objAtoAdministrativo->obterOrgaosSuperiores();
+        foreach($arrayResultado as $indice => $tipoAtoAdministrativo) {
+            $arrayResultado[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
         }
 
         $this->_helper->json(
-            ['resultado' => $arrayTiposAtosAdministrativos]
+            ['resultado' => $arrayResultado]
         );
     }
 
     public function obterOrgaosDoAssinanteAjaxAction()
     {
-        $arrayTiposAtosAdministrativos = [];
+        $arrayResultado = [];
         $get = $this->getRequest()->getParams();
         if($get['idOrgaoSuperiorDoAssinante']) {
             $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-            $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterOrgaos($get['idOrgaoSuperiorDoAssinante']);
-            foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
-                $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+            $arrayResultado = $objAtoAdministrativo->obterOrgaos($get['idOrgaoSuperiorDoAssinante']);
+            foreach($arrayResultado as $indice => $tipoAtoAdministrativo) {
+                $arrayResultado[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
             }
 
         }
         $this->_helper->json(
-            ['resultado' => $arrayTiposAtosAdministrativos]
+            ['resultado' => $arrayResultado]
         );
     }
 
     public function obterPerfisDoAssinanteAjaxAction()
     {
         $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-        $arrayTiposAtosAdministrativos = $objAtoAdministrativo->obterPerfisDoAssinante();
-        foreach($arrayTiposAtosAdministrativos as $indice => $tipoAtoAdministrativo) {
-            $arrayTiposAtosAdministrativos[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
+        $arrayResultado = $objAtoAdministrativo->obterPerfisDoAssinante();
+        foreach($arrayResultado as $indice => $tipoAtoAdministrativo) {
+            $arrayResultado[$indice]['descricao'] = utf8_encode($tipoAtoAdministrativo['descricao']);
         }
 
         $this->_helper->json(
-            ['resultado' => $arrayTiposAtosAdministrativos]
+            ['resultado' => $arrayResultado]
         );
     }
 
@@ -130,18 +130,22 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         );
     }
 
-    public function alterarAtoAdministrativoAjax()
+    public function alterarAjaxAction()
     {
         try {
             $get = $this->getRequest()->getParams();
 
-            if(!$get['idTipoDoAto'] &&
-               !$get['idOrgaoSuperiorDoAssinante'] &&
-               !$get['idCargoDoAssinante'] &&
-               !$get['idPerfilDoAssinante'] &&
-               !$get['idOrgaoDoAssinante'] &&
-               !$get['idAtoAdministrativo']) {
+            if(!$get['idTipoDoAto'] || !$get['idOrgaoSuperiorDoAssinante'] ||
+               !$get['idCargoDoAssinante'] || !$get['idPerfilDoAssinante'] ||
+               !$get['idOrgaoDoAssinante'] || !$get['idAtoAdministrativo']) {
 
+                $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo();
+                $objModelAtoAdministrativo->setIdTipoDoAto($get['idTipoDoAto']);
+                $objModelAtoAdministrativo->setIdOrgaoSuperiorDoAssinante($get['idOrgaoSuperiorDoAssinante']);
+                $objModelAtoAdministrativo->setIdCargoDoAssinante($get['idCargoDoAssinante']);
+                $objModelAtoAdministrativo->setIdPerfilDoAssinante($get['idPerfilDoAssinante']);
+                $objModelAtoAdministrativo->setIdOrgaoDoAssinante($get['idOrgaoDoAssinante']);
+                $objModelAtoAdministrativo->setIdAtoAdministrativo($get['idAtoAdministrativo']);
             }
         } catch (Exception $objException) {
             $this->_helper->json(
@@ -150,4 +154,33 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         }
     }
 
+    public function cadastrarAjaxAction()
+    {
+        try {
+            $post = $this->getRequest()->getPost();
+
+            if(!$post['idTipoDoAto'] || !$post['idOrgaoSuperiorDoAssinante'] || !$post['idCargoDoAssinante'] ||
+                !$post['idPerfilDoAssinante'] || !$post['idOrgaoDoAssinante']) {
+                throw new Exception("Preencha todos os campos.");
+            }
+                $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($post);
+//                $objModelAtoAdministrativo->setIdTipoDoAto($post['idTipoDoAto']);
+//                $objModelAtoAdministrativo->setIdOrgaoSuperiorDoAssinante($post['idOrgaoSuperiorDoAssinante']);
+//                $objModelAtoAdministrativo->setIdCargoDoAssinante($post['idCargoDoAssinante']);
+//                $objModelAtoAdministrativo->setIdPerfilDoAssinante($post['idPerfilDoAssinante']);
+//                $objModelAtoAdministrativo->setIdOrgaoDoAssinante($post['idOrgaoDoAssinante']);
+//                $objModelAtoAdministrativo->setIdAtoAdministrativo($post['idAtoAdministrativo']);
+
+                $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+                $proximaOrdemAssinatura = $objAtoAdministrativo->obterProximaOrdemDeAssinatura($objModelAtoAdministrativo);
+                $objModelAtoAdministrativo->setIdOrdemDaAssinatura($proximaOrdemAssinatura);
+
+                $objAtoAdministrativoMapper = new Assinatura_Model_TbAtoAdministrativoMapper();
+                if(!is_null($objAtoAdministrativoMapper->save($objModelAtoAdministrativo))) {
+                    $this->_helper->json( ['status' => 1]);
+                }
+        } catch (Exception $objException) {
+            $this->_helper->json( ['status' => 0, 'message' => $objException->getMessage()] );
+        }
+    }
 }
