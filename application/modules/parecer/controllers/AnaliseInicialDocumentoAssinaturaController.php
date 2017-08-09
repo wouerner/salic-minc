@@ -6,6 +6,8 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
 
     private $post;
 
+    const ID_TIPO_AGENTE_PARCERISTA = 1;
+    
     function __construct($post)
     {
         $this->post = $post;
@@ -52,7 +54,7 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
 
             $parecer = new Parecer();           
-            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, 1)[0]['idPronac'];
+            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_PARCERISTA)[0]['idPronac'];
             
             $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
