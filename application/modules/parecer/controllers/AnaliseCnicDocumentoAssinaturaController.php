@@ -6,6 +6,8 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
 
     private $post;
 
+    const ID_TIPO_AGENTE_COMPONENTE_CNIC = 6;
+    
     function __construct($post)
     {
         $this->post = $post;
@@ -34,14 +36,18 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
             $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
             
+            $parecer = new Parecer();           
+            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_COMPONENTE_CNIC)[0]['idPronac'];
+            
             $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
             $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
-            $objModelDocumentoAssinatura->setIdAtoDeGestao(NULL);
+            $objModelDocumentoAssinatura->setIdAtoDeGestao($idAtoAdministrativo);
             $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
+            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
 
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
             $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
