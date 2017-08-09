@@ -10,24 +10,37 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 
     protected $_idPronac = null;
 
+    protected $_idUsuario = null;
+
+    protected $_usuario = null;
+
     public function init()
     {
         parent::init();
 
+        $auth = Zend_Auth::getInstance();
+        $arrAuth = array_change_key_case((array)$auth->getIdentity());
+
         $this->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
         $this->idPronac = $this->getRequest()->getParam('idPronac');
+
+        if (!empty($this->idPronac)) {
+            $tbProjetos = new Projeto_Model_DbTable_Projetos();
+            $this->_projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();
+            $this->idPreProjeto = $this->_projeto->idProjeto;
+            $this->view->projeto = $this->_projeto;
+        }
 
         if (!empty($this->idPreProjeto)) {
             $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
             $this->_proposta = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
+            $this->view->proposta = $this->_proposta;
         }
 
-        if (!empty($this->idPronac)) {
+        $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo ']: $arrAuth['idusuario'];
 
-            $tbProjetos = new Projeto_Model_DbTable_Projetos();
-            $this->_projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();
-            $this->idPreProjeto = $this->_projeto->idProjeto;
-        }
-
+        $this->_usuario = $arrAuth;
+        $this->view->usuario = $this->_usuario;
     }
 }
+

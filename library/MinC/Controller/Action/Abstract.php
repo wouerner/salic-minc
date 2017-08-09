@@ -917,19 +917,4 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             return $oauthConfigArray['OAuth'];
         }
     }
-
-    /**
-     * @param $objects
-     * @return array
-     * @deprecated Utilizar funcao com o nome converterObjetosParaArray localizada em FuncoesGerais.php
-     */
-    protected function objectsToArray($objects){
-
-        foreach($objects as $object)
-        {
-            $itens[] = get_object_vars( $object );
-        }
-        return $itens;
-
-    }
 }

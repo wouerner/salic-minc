@@ -45,7 +45,7 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
         return $this->fetchRow($slct);
     }
 
-    public function buscardocumentosrelatorio($idnrdocumento = null)
+    public function buscarDocumento($idDocumento = null)
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -66,7 +66,7 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
                 'a.dtEnvio',
                 'a.nrTamanho'
             ),
-            'BDCORPORATIVO.sccorp'
+            $this->_schema
         );
         $select->joinInner(
             array('td' => 'tbTipoDocumento'),
@@ -74,10 +74,10 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
             array(
                 'td.dsTipoDocumento'
             ),
-            'SAC.dbo'
+            $this->_schema //@todo existe um tbTipoDocumento no esquema sac
         );
-        if ($idnrdocumento) {
-            $select->where('d.idDocumento = ?', $idnrdocumento);
+        if ($idDocumento) {
+            $select->where('d.idDocumento = ?', $idDocumento);
         }
 
         return $this->fetchAll($select);
@@ -86,5 +86,53 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
     public function excluir($where)
     {
         return $this->delete($where);
+    }
+
+    public function inserirDocumento($arquivo, $imagem, $documento)
+    {
+        $schemaTbArquivo = $this->_schema . '.tbArquivo';
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->beginTransaction();
+        $idDocumento = 0;
+
+        try {
+            $db->insert($schemaTbArquivo, $arquivo);
+            $idArquivo = $db->lastInsertId();
+
+            if ($idArquivo) {
+
+                $schemaTbArquivoImagem = $this->_schema . '.tbArquivoImagem';
+                $imagem['idArquivo'] = $idArquivo;
+                $db->insert($schemaTbArquivoImagem, $imagem);
+
+                $schemaTbDocumento =  $this->_schema . '.' . $this->_name;
+                $documento['idArquivo'] = $idArquivo;
+                $db->insert($schemaTbDocumento, $documento);
+                $idDocumento = $db->lastInsertId();
+            }
+            $db->commit();
+            return $idDocumento;
+        } catch (Zend_Exception_Db $e) {
+            $db->rollBack();
+            throw $e;
+        }
+    }
+
+    public function excluirDocumento($idDocumento) {
+
+        $tbDocumento = new Arquivo_Model_DbTable_TbDocumento();
+        $dadosArquivo = $tbDocumento->buscar(array('idDocumento =?'=>$idDocumento))->current();
+
+        if($dadosArquivo){
+
+            $tbDocumento->delete("idArquivo = {$dadosArquivo->idArquivo} and idDocumento= {$idDocumento} ");
+
+            $tbArquivoImagem = new Arquivo_Model_DbTable_TbArquivoImagem();
+            $tbArquivoImagem->delete("idArquivo =  {$dadosArquivo->idArquivo} ");
+
+            $tbArquivo = new Arquivo_Model_DbTable_TbArquivo();
+            $tbArquivo->delete("idArquivo = {$dadosArquivo->idArquivo} ");
+        }
     }
 }

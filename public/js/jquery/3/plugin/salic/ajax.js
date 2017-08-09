@@ -202,6 +202,8 @@
                                 if (elm.length > 0) {
                                     elm.focus();
                                     Materialize.toast('Campo ' + strLabel + ' &eacute; obrigat&oacute;rio!', 8000, 'red accent-1');
+                                }else{
+                                    Materialize.toast(strMsg, 8000, 'red accent-1');
                                 }
                             });
                         } else {
