@@ -451,5 +451,19 @@ class Parecer extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-
+    public function getIdAtoAdministrativoParecerTecnico($idPronac, $idTipoAgente)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('p' => $this->_name),
+            array('p.idParecer'));
+        
+        $select->where('p.idTipoAgente = ?', $idTipoAgente);
+        $select->where('p.idPronac = ?', $idPronac);
+        $select->where('p.stAtivo = ?', 1);
+        $select->where('p.TipoParecer = ?', 1);
+        
+        return $this->fetchAll($select);
+    }
 }
