@@ -1,3 +1,6 @@
+Release 2.4.3
+* [FIX] Parecer/análise inicial: correção na geração do documento para assinatura'
+
 Release 2.4.2
 * [FIX] Parecer/análise inicial: correção de erro na paginação
 * [FIX] Parecer/análise inicial: Passando idAtoAdministrativo e stEstado para gerar documento assinatura
