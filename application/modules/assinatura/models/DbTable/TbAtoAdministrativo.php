@@ -261,10 +261,30 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->where('idTipoDoAto = ?', $objModelAtoAdministrativo->getIdTipoDoAto());
         $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante());
 
-        if($objModelAtoAdministrativo->getIdOrdemDaAssinatura()) {
+        if ($objModelAtoAdministrativo->getIdOrdemDaAssinatura()) {
             $objQuery->where('idOrdemDaAssinatura = ?', $objModelAtoAdministrativo->getIdOrdemDaAssinatura());
         }
 //xd($objQuery->assemble());
         return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterProximaOrdemDeAssinatura(Assinatura_Model_TbAtoAdministrativo $objModelAtoAdministrativo)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            [$this->_name],
+            [new Zend_Db_Expr('coalesce(max(idOrdemDaAssinatura), 0) + 1 as idOrdemDaAssinatura')],
+            $this->_schema
+        );
+        $objQuery->where('idTipoDoAto = ?', $objModelAtoAdministrativo->getIdTipoDoAto());
+        $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante());
+
+//xd($objQuery->assemble());
+        $objResultado = $this->fetchRow($objQuery);
+        if ($objResultado) {
+            $arrayResultado = $objResultado->toArray();
+            return $arrayResultado['idOrdemDaAssinatura'];
+        }
     }
 }
