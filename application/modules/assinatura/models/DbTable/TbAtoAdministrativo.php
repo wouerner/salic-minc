@@ -151,12 +151,25 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         );
 
         $objQuery->joinInner(
+            array("OrgaoSuperior" => "Orgaos"),
+            "{$this->_name}.idOrgaoSuperiorDoAssinante = OrgaoSuperior.Codigo",
+            array("dsOrgaoSuperiorDoAssinante" => "OrgaoSuperior.Sigla"),
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
             array("Grupos" => "Grupos"),
             "{$this->_name}.idPerfilDoAssinante = Grupos.gru_codigo",
             array("dsPerfil" => "gru_nome"),
             'tabelas'
         );
-
+        $objQuery->order([
+            "Verificacao.Descricao asc",
+            "OrgaoSuperior.Sigla asc",
+            "TbAtoAdministrativo.idOrdemDaAssinatura asc",
+            "Orgaos.Sigla asc"
+        ]);
+//xd($objQuery->assemble());
         return $this->fetchAll($objQuery)->toArray();
     }
 
@@ -253,7 +266,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->from(
             [$this->_name],
             array(
-                'codigo' => 'idAtoAdministrativo',
+                'codigo' => 'idOrdemDaAssinatura',
                 'descricao' => 'idOrdemDaAssinatura',
             ),
             $this->_schema
@@ -264,7 +277,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         if ($objModelAtoAdministrativo->getIdOrdemDaAssinatura()) {
             $objQuery->where('idOrdemDaAssinatura = ?', $objModelAtoAdministrativo->getIdOrdemDaAssinatura());
         }
-//xd($objQuery->assemble());
+
         return $this->fetchAll($objQuery)->toArray();
     }
 
@@ -277,14 +290,16 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             [new Zend_Db_Expr('coalesce(max(idOrdemDaAssinatura), 0) + 1 as idOrdemDaAssinatura')],
             $this->_schema
         );
+
         $objQuery->where('idTipoDoAto = ?', $objModelAtoAdministrativo->getIdTipoDoAto());
         $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante());
-
-//xd($objQuery->assemble());
         $objResultado = $this->fetchRow($objQuery);
+
         if ($objResultado) {
             $arrayResultado = $objResultado->toArray();
             return $arrayResultado['idOrdemDaAssinatura'];
         }
     }
+
+
 }

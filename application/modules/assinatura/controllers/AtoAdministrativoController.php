@@ -133,24 +133,37 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
     public function alterarAjaxAction()
     {
         try {
-            $get = $this->getRequest()->getParams();
+            $post = $this->getRequest()->getPost();
 
-            if(!$get['idTipoDoAto'] || !$get['idOrgaoSuperiorDoAssinante'] ||
-               !$get['idCargoDoAssinante'] || !$get['idPerfilDoAssinante'] ||
-               !$get['idOrgaoDoAssinante'] || !$get['idAtoAdministrativo']) {
+            if(!$post['idTipoDoAto'] || !$post['idOrgaoSuperiorDoAssinante'] || !$post['idCargoDoAssinante'] ||
+                !$post['idPerfilDoAssinante'] || !$post['idOrgaoDoAssinante']) {
+                throw new Exception("Preencha todos os campos.");
+            }
 
-                $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo();
-                $objModelAtoAdministrativo->setIdTipoDoAto($get['idTipoDoAto']);
-                $objModelAtoAdministrativo->setIdOrgaoSuperiorDoAssinante($get['idOrgaoSuperiorDoAssinante']);
-                $objModelAtoAdministrativo->setIdCargoDoAssinante($get['idCargoDoAssinante']);
-                $objModelAtoAdministrativo->setIdPerfilDoAssinante($get['idPerfilDoAssinante']);
-                $objModelAtoAdministrativo->setIdOrgaoDoAssinante($get['idOrgaoDoAssinante']);
-                $objModelAtoAdministrativo->setIdAtoAdministrativo($get['idAtoAdministrativo']);
+            $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($post);
+            $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $objAtoAdministrativoMapper = new Assinatura_Model_TbAtoAdministrativoMapper();
+
+            $atoAdministrativoAtual = $objAtoAdministrativo->findBy([
+                'idTipoDoAto' => $objModelAtoAdministrativo->getIdTipoDoAto(),
+                'idOrgaoSuperiorDoAssinante' => $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante(),
+                'idOrdemDaAssinatura' => $objModelAtoAdministrativo->getIdOrdemDaAssinatura()
+            ]);
+            $atoAdministrativoSubstituto = $objAtoAdministrativo->findBy([
+                'idAtoAdministrativo' => $objModelAtoAdministrativo->getIdAtoAdministrativo()
+            ]);
+
+            if($atoAdministrativoAtual) {
+                $objModelAtoAdministrativoAtual = new Assinatura_Model_TbAtoAdministrativo($atoAdministrativoAtual);
+                $objModelAtoAdministrativoAtual->setIdOrdemDaAssinatura($atoAdministrativoSubstituto['idOrdemDaAssinatura']);
+                $objAtoAdministrativoMapper->save($objModelAtoAdministrativoAtual);
+            }
+
+            if(!is_null($objAtoAdministrativoMapper->save($objModelAtoAdministrativo))) {
+                $this->_helper->json( ['status' => 1]);
             }
         } catch (Exception $objException) {
-            $this->_helper->json(
-                ['status' => 0]
-            );
+            $this->_helper->json( ['status' => 0, 'message' => $objException->getMessage()] );
         }
     }
 
@@ -164,13 +177,6 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
                 throw new Exception("Preencha todos os campos.");
             }
                 $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($post);
-//                $objModelAtoAdministrativo->setIdTipoDoAto($post['idTipoDoAto']);
-//                $objModelAtoAdministrativo->setIdOrgaoSuperiorDoAssinante($post['idOrgaoSuperiorDoAssinante']);
-//                $objModelAtoAdministrativo->setIdCargoDoAssinante($post['idCargoDoAssinante']);
-//                $objModelAtoAdministrativo->setIdPerfilDoAssinante($post['idPerfilDoAssinante']);
-//                $objModelAtoAdministrativo->setIdOrgaoDoAssinante($post['idOrgaoDoAssinante']);
-//                $objModelAtoAdministrativo->setIdAtoAdministrativo($post['idAtoAdministrativo']);
-
                 $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
                 $proximaOrdemAssinatura = $objAtoAdministrativo->obterProximaOrdemDeAssinatura($objModelAtoAdministrativo);
                 $objModelAtoAdministrativo->setIdOrdemDaAssinatura($proximaOrdemAssinatura);

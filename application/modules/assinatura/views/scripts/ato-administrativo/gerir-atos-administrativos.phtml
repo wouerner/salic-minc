@@ -25,8 +25,10 @@
                     <thead>
                     <tr class="">
                         <th class="center-align">Ato Administrativo</th>
-                        <th class="center-align">Cargo</th>
+                        <th class="center-align">Ordem</th>
+                        <th class="center-align">Orgao Superior</th>
                         <th class="center-align">Orgao</th>
+                        <th class="center-align">Cargo</th>
                         <th class="center-align">Perfil</th>
                         <th class="center-align" align="center" colspan="2">A&ccedil;&atilde;o</th>
                     </tr>
@@ -37,8 +39,10 @@
                             <td class="center-align" align="center">
                                 <!--                                    --><?php //xd($this->atosAdministrativos); ?>
                                 <?php echo $dado['dsAtoAdministrativo']; ?></td>
-                            <td class="center-align" align="center"><?php echo $dado['dsCargoDoAssinante']; ?></td>
+                            <td class="center-align" align="center"><?php echo $dado['idOrdemDaAssinatura']; ?></td>
+                            <td class="center-align" align="center"><?php echo $dado['dsOrgaoSuperiorDoAssinante']; ?></td>
                             <td class="center-align" align="center"><?php echo $dado['dsOrgaoDoAssinante']; ?></td>
+                            <td class="center-align" align="center"><?php echo $dado['dsCargoDoAssinante']; ?></td>
                             <td class="center-align" align="center"><?php echo $dado['dsPerfil']; ?></td>
                             <td class="center-align" align="center">
                                 <?php
