@@ -1,3 +1,7 @@
+Release 2.4.1
+* [FIX] Parecer/análise inicial: correção no fome da fn e alterando chamada a verificarIN2017 para fn
+* [FIX] Parecer/análise inicial: adicionando tela faltante
+
 Release 2.4.0
 * [ADD] Parecer/análise inicial: Fluxo de aprovação pelo parecerista com assinatura para IN 2017
 * [ADD] Parecer/gerenciar pareceres: Fluxo de aprovação pelo coordenador de parecer com assinatura para IN 2017
