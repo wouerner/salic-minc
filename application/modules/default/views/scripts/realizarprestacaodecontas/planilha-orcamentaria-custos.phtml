@@ -1,0 +1,51 @@
+                        <div style="padding:3px; margin-left: 15px;">
+                            <?php if(is_array($this->incFiscaisA) && !empty($this->incFiscaisA)): ?>
+                                <table class="bordered striped linhaTabelaItem dF<?php echo $cont3; ?>">
+                                    <thead>
+                                        <tr>
+                                            <?php if ($this->codGrupo == 132 || $this->codGrupo == 125) : ?>
+                                                <th>Visualizar An&aacute;lise</th>
+                                            <?php else : ?>    
+                                                <th>Analisar</th>
+                                            <?php endif?>    
+                                            <th>Item de Custo</th>
+                                            <th>Valor Aprovado</th>
+                                            <th>Valor Comprovado</th>
+                                            <th>Comprovação Validada</th>
+                                            <th>Modalidade Vinculada</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach($this->incFiscaisA as $key=>$valor) : ?>
+                                        <tr>
+                                            <td align="center">
+                                                <?php
+                                                    $href = $this->url(
+                                                        array(
+                                                           'controller' => 'realizarprestacaodecontas',
+                                                            'action' => 'analisar-comprovacao',
+                                                            'idPronac' => $this->idPronac,
+                                                            'idPlanilhaAprovacao' => $key,
+                                                            'idPlanilhaItem' => $valor[6],
+                                                            'idRelatorio' => $this->idRelatorio, #Alysson - Adicionado
+                                                        )
+                                                    );
+                                                    $itemAvaliadoParam = Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter');
+                                                    if ($itemAvaliadoParam) {
+                                                        $itemAvaliadoParam = "?itemAvaliadoFilter=".$itemAvaliadoParam;
+                                                    }
+                                                    $href .= $itemAvaliadoParam; 
+                                                ?>
+                                                <a href='<?php echo $href ?>' class='editarIco'>Analisar item</a>
+                                            </td>
+                                            <td><?php echo $valor[0] ?></td>
+                                            <td nowrap><?php echo $this->formatarReal($valor[1]) ?></td>
+                                            <td nowrap><?php echo $this->formatarReal($valor[3]) ?></td>
+                                            <td nowrap><?php echo $this->formatarReal($valor[7]) ?></td>
+                                            <td><?php echo $valor[4] ?></td>
+                                         </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php endif; ?>
+                        </div>

@@ -215,11 +215,10 @@
                                             <?php if(is_array($subItem) && !empty($subItem)):?> 
                                                 <?php foreach($subItem as $titulo => $tabelaItem): ?>
                                                     <div class="divF<?php echo $cont2 ?>"  style="padding:3px; margin-left: 15px;">
-                                                        <span class='black-text'><button class="waves-effect waves-light btn btn-flat btnToggle " id="dF<?php echo $cont3; ?>"><i class="material-icons left">expand_more</i><?php echo $titulo ?></button></span>
+                                                        <span class='black-text'><button class="waves-effect waves-light btn btn-flat btnToggleCustos" id="dF<?php echo $cont3; ?>" uf="<?php echo $tabelaItem['uf']; unset($tabelaItem['uf']) ?>" ><i class="material-icons left">expand_more</i><?php echo $titulo ?></button></span>
                                                         <?php if(is_array($tabelaItem) && !empty($tabelaItem)): ?>
-                                                            <div class=" hide  dF<?php echo $cont3; ?>">
-                                                            </div>
-                                                            <table style="" class=" hide bordered striped linhaTabelaItem dF<?php echo $cont3; ?>">
+                                                            <div class=" dF<?php echo $cont3; ?>"></div>
+                                                            <!--table style="" class=" hide bordered striped linhaTabelaItem dF<?php echo $cont3; ?>">
                                                                 <thead>
                                                                     <tr>
                                                                         <?php if ($this->codGrupo == 132 || $this->codGrupo == 125) : ?>
@@ -265,7 +264,7 @@
                                                                      </tr>
                                                                 <?php endforeach; ?>
                                                                 </tbody>
-                                                            </table>
+                                                            </table-->
                                                             <?php $cont3++; ?>
                                                         <?php endif; ?>
                                                     </div>
@@ -286,19 +285,35 @@
                             <td>
                             <span class='green-text'><?php echo $titulo ?></span>
                             <?php if(is_array($incFiscal) && !empty($incFiscal)) : ?>
+
                             <?php foreach($incFiscal as $titulo => $item) : ?>
                                 <div class="divfilho'.$cont.'" style="padding:3px; margin-left: 15px;" >
                                 <span class='green-text'><?php echo $titulo ?></span>
                                 <?php if(is_array($item) && !empty($item)) :  ?>
                                     <?php foreach($item as $titulo => $subItem) : ?>
+
                                     <div class="divF<?php echo $cont2 ?>" style="padding:3px; margin-left: 15px;">
                                     <span class='orange-text'><?php echo $titulo ?></span>
+                                        <?php $uf = $subItem['uf']; unset($subItem['uf']) ?>
+                                        <?php $idPlanilhaEtapa = $subItem['idPlanilhaEtapa']; unset($subItem['idPlanilhaEtapa']) ?>
+                                        <?php $codigo = $subItem['codigo']; unset($subItem['codigo']) ?>
+
                                         <?php if(is_array($subItem) && !empty($subItem)) : ?>
                                             <?php foreach($subItem as $titulo => $tabelaItem) : ?>
+                                                <?php $id =  rand(); ?>
                                                 <div class="dF<?php echo $cont3 ?>" style="padding:3px; margin-left: 15px;">
-                                                <span class='black-text'><button class="waves-effect waves-light btn-flat btn btnToggle " id="dF<?php echo $cont3 ?>"><i class="material-icons left">expand_more</i><?php echo $titulo ?></button></span>
+                                                <button class="waves-effect waves-light btn-flat btn btnToggle" 
+                                                        id="<?php echo $id; ?>" 
+                                                        uf="<?php echo $uf; ?>" 
+                                                        produto="<?php echo $codigo; ?>" 
+                                                        idPlanilhaEtapa="<?php echo $idPlanilhaEtapa; ?>">
+                                                    <i class="material-icons left">expand_more</i><?php echo $titulo ?>
+                                                </button>
+
+                                                <div id="div<?php echo $id; ?>"></div>
+
                                                 <?php if(is_array($tabelaItem) && !empty($tabelaItem)) : ?>
-                                                    <table style="margin-left:5px; clear:both;" class=" hide table-responsive bordered linhaRegistros dFilho<?php echo $cont4 ?> dF<?php echo $cont3; ?>">
+                                                    <!-- table style="margin-left:5px; clear:both;" class=" hide table-responsive bordered linhaRegistros dFilho<?php echo $cont4 ?> dF<?php echo $cont3; ?>">
                                                     <tr>
                                                     <?php if($this->codGrupo == 132 || $this->codGrupo == 125): ?>
                                                         <th>Visualizar An&aacute;lise</th>
@@ -337,7 +352,7 @@
                                                         <td><?php echo $valor[4] ?></td>
                                                         </tr>
                                                     <?php endforeach; ?>
-                                                    </table>
+                                                    </table-->
                                                 <?php endif; ?>
                                                 </div>
                                                 <?php $cont4++; ?>
@@ -538,15 +553,45 @@
         nomeJanelaAlerta.abrirJanela();
     });
 
-    $('.btnToggle').click(function(event){
+    $('.btnToggleCustos').click(function(event) {
         event.preventDefault()
-        btnId = jQuery(this).attr('id');
-        table = jQuery('table.' + jQuery(this).attr('id'));
-        table.toggleClass('hide');
+        btn = jQuery(this);
+        btnId = btn.attr('id');
+        table = jQuery('table.' + btnId);
 
-        $.get('/realizarprestacaodecontas/planilha-orcamentaria-custos/idPronac/168849', function(data){
-            console.log(data);
-        });
+        idPronac = jQuery('input[name=idPronac]').val();
+
+        if (jQuery('div.'+ btnId).is(':empty')) {
+            $.get('/realizarprestacaodecontas/planilha-orcamentaria-custos/idPronac/'+idPronac+'/uf/' + btn.attr('uf'), function(data){
+                jQuery('div.'+ btnId).html(data);
+            });
+        } else {
+            table = jQuery('div.' + jQuery(this).attr('id'));
+            table.toggleClass('hide');
+        }
+    });
+
+    $('.btnToggle').click(function(event) {
+        event.preventDefault()
+
+        btn = jQuery(this);
+        btnId = btn.attr('id');
+        idPronac = jQuery('input[name=idPronac]').val();
+
+        url = '/realizarprestacaodecontas/planilha-orcamentaria-custos-produto/idPronac/' 
+            + idPronac + '/uf/' + btn.attr('uf')
+            + '/idplanilhaetapa/' + btn.attr('idplanilhaetapa')
+            + '/produto/' + btn.attr('produto');
+
+        if (jQuery('#div'+ btnId).is(':empty')) {
+            $.get(url, function(data){
+                jQuery('#div'+ btnId).html(data);
+                console.log('#div'+ btnId);
+            });
+        } else {
+            table = jQuery('#div'+ btnId);
+            table.toggleClass('hide');
+        }
     });
 </script>
 </div>
