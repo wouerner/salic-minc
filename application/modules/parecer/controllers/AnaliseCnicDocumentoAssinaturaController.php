@@ -37,7 +37,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
             
             $parecer = new Parecer();           
-            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_COMPONENTE_CNIC)[0]['idPronac'];
+            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_COMPONENTE_CNIC)[0]['idParecer'];
             
             $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
