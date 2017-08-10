@@ -28,7 +28,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
         $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $this->idPronac,
-            $this->idTipoDoAtoAdministrativo
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC
         );
 
         if(!$isProjetoDisponivelParaAssinatura) {
