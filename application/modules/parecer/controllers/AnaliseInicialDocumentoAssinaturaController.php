@@ -26,7 +26,7 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
         }
         
         $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();       
-        $IN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($idPronac);
+        $IN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($this->idPronac);
         
         if (!$IN2017) {
             $secundariosAnalisados = $this->verificaSecundariosAnalisados($this->idPronac);
@@ -41,11 +41,11 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
                 throw new Exception("N&atilde;o &eacute; poss&iacute;vel assinar esse projeto!");
             }
         }
-                
+
         $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $this->idPronac,
-            $this->idTipoDoAtoAdministrativo
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL
         );
 
         if(!$isProjetoDisponivelParaAssinatura) {
@@ -124,7 +124,7 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
         $view->dadosDiligencias = $dadosProjeto['diligencias'];
 
         $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();
-        $view->IN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($idPronac);
+        $view->IN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($this->idPronac);
         
         if ($view->IN2017) {
             $view->dadosAlcance = $dadosProjeto['alcance'][0];
