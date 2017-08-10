@@ -46,56 +46,84 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
         $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
 
         $where = [];
-        if($idPronac) {
+        if ($idPronac) {
             $where['idPronac = ?'] = $idPronac;
         }
 
-        if($idPreProjeto) {
+        if ($idPreProjeto) {
             $where['idProjeto = ?'] = $idPreProjeto;
         }
 
-        if($this->usuario['cpf']) {
+        if ($this->usuario['cpf']) {
             $where['idSolicitante = ?'] = $this->_idUsuario;
         }
 
-       $solicitacoes =  $vwSolicitacoes->buscar($where);
+        $solicitacoes = $vwSolicitacoes->buscar($where);
 
         $this->view->arrResult = $solicitacoes;
-
-
-//        $intUsuOrgao = $grupoAtivo->codGrupo;
-        //var_dump($intUsuOrgao, $grupoAtivo->codOrgao);die;
-        $dbTable = new Admissibilidade_Model_DbTable_TbMensagemProjeto();
-//        if (empty($idPronac)) {
-//            $arrWhere = array('tbMensagemProjeto.idMensagemOrigem IS NULL AND tbMensagemProjeto.idDestinatario = ?' => $intUsuCodigo);
-//            $arrOrWhere = array("tbMensagemProjeto.idMensagemOrigem IS NULL AND tbMensagemProjeto.idDestinatario = {$intUsuCodigo} AND tbMensagemProjeto.idDestinatarioUnidade = ?" => $intUsuOrgao);
-//            $this->view->arrResult = $dbTable->getAllBy($arrWhere, $arrOrWhere);
-//        } else {
-//            $arrWhere = array('tbMensagemProjeto.idMensagemOrigem IS NULL' => '');
-//            $arrWhere['tbMensagemProjeto.IdPRONAC'] = $idPronac;
-//            $this->view->arrResult = $dbTable->getAllBy($arrWhere);
-//        }
-//        $this->view->usuCodigo = $this->_idUsuario;
-//        $this->view->usuOrgao = $intUsuOrgao;
         $this->view->idPronac = $idPronac;
 
     }
 
+    /**
+     * Metodo responsavel por preparar o formulario conforme cada acao.
+     *
+     * @name prepareForm
+     * @param array $arrConfig
+     *
+     */
+    public function prepareForm($dataForm = [], $arrConfig = array(), $strUrlAction = '', $strActionBack = 'index')
+    {
+        if ($this->arrProjeto) {
+            $arrConfig['idDestinatario'] = array('show' => true);
+            $arrConfig['idDestinatario'] = array('show' => false);
+        }
+        $intId = $this->getRequest()->getParam('id', null);
+
+        $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+        if ($intId && empty($dataForm)) {
+            $dataForm = $vwSolicitacao->findBy(['idSolicitacao' => $intId]);
+        }
+
+        if (!empty($dataForm['idDocumento'])) {
+            $tbl = new Arquivo_Model_DbTable_TbDocumento();
+            $dataForm['arquivo'] = $tbl->buscarDocumento($dataForm['idDocumento'])->toArray();
+        }
+
+        $dataForm['idPronac'] = $this->idPronac;
+        $dataForm['idProjeto'] = $this->idPreProjeto;
+
+        if( $this->_proposta) {
+            $dataForm['nomeProjeto'] = isset($this->_proposta->NomeProjeto) ? $this->_proposta->NomeProjeto : '';
+        }
+
+        if ($this->_projeto) {
+            $dataForm['pronac'] = $this->_projeto->AnoProjeto . $this->_projeto->Sequencial;
+            $dataForm['nomeProjeto'] = isset($this->_projeto->NomeProjeto) ? $this->_projeto->NomeProjeto : '';
+        }
+
+        $this->view->arrPartial = array(
+            'dataForm' => $dataForm,
+            'arrConfig' => $arrConfig,
+            'id' => $intId,
+            'urlAction' => $strUrlAction,
+            'strActionBack' => $strActionBack,
+            'currentUrl' => Zend_Controller_Front::getInstance()->getRequest()->getRequestUri()
+        );
+    }
+
     public function solicitarAction()
     {
-        $this->view->urlAction = $this->_urlPadrao . "/solicitacao/index/salvar";
 
         $params = $this->getRequest()->getParams();
+        $urlAction = $this->_urlPadrao . "/solicitacao/index/salvar";
 
         try {
 
-            if (empty($this->idPronac) && empty($this->idPreProjeto)) {
+            if (empty($this->idPronac) && empty($this->idPreProjeto))
                 throw new Exception("Informe o projeto ou proposta para realizar uma solicita&ccedil;&atilde;o");
-            }
 
             $dataForm = [
-                'idPronac' => $this->idPronac,
-                'idProjeto' => $this->idPreProjeto,
                 'siEncaminhamento' => Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA
             ];
 
@@ -107,16 +135,11 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 
             if (isset($params['idSolicitacao'])) {
                 $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
-                $dataForm = (array) $tbSolicitacao->findBy(['idSolicitacao' => $params['idSolicitacao']]);
+                $dataForm = (array)$tbSolicitacao->findBy(['idSolicitacao' => $params['idSolicitacao']]);
             }
 
-            if (!empty($dataForm['idDocumento'])) {
-                $tbl = new Arquivo_Model_DbTable_TbDocumento();
-                $anexo = $tbl->buscarDocumento($dataForm['idDocumento']);
-            }
+            self::prepareForm($dataForm, [], $urlAction);
 
-            $this->view->dataForm = $dataForm;
-            $this->view->anexo = $anexo;
 
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/solicitacao/", "ERROR");
@@ -125,6 +148,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 
     public function salvarAction()
     {
+        # verificar permissao de acesso
 
         if ($this->getRequest()->isPost()) {
             $this->_helper->layout->disableLayout();
@@ -135,14 +159,59 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
             $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
 
-            # verificar permissao de acesso
-
-
             $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
             $this->_helper->json(array('status' => $mapperSolicitacao->salvar($arrayForm), 'msg' => $mapperSolicitacao->getMessages(), 'redirect' => $strUrl));
 
         }
     }
 
+    /**
+     * Acao responsavel por responder uma mensagem, no caso cadastrar uma mensagem referenciando outra.
+     *
+     * @name responderAction
+     *
+     */
+    public function responderAction()
+    {
+        $strActionBack = $this->getRequest()->getParam('actionBack');
+        $strActionBack = ($strActionBack) ? $strActionBack : 'index';
 
+        if ($this->getRequest()->isPost()) {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
+            $mapper = new Admissibilidade_Model_TbMensagemProjetoMapper();
+            $strUrl = '/admissibilidade/mensagem/' . $strActionBack;
+            $strUrl .= ($this->arrProjeto) ? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
+            $this->_helper->json(array('status' => $mapper->responder($this->getRequest()->getPost()), 'msg' => $mapper->getMessages(), 'redirect' => $strUrl));
+        } else {
+
+            $arrConfig = [
+                'dsSolicitacao' => ['disabled' => true],
+                'dsResposta' => ['disabled' => false]
+            ];
+
+            self::prepareForm([], $arrConfig, '', $strActionBack);
+
+
+            if ($this->arrProjeto) {
+//                $this->arrBreadCrumb[] = array('url' => '/admissibilidade/enquadramento/listar', 'title' => 'Enquadramentos', 'description' => 'Ir para a tela de enquadramentos');
+//                $arrBreadCrumb[] = array('url' => '', 'title' => "Perguntas: {$this->arrProjeto['AnoProjeto']}{$this->arrProjeto['Sequencial']} - {$this->arrProjeto['NomeProjeto']}", 'description' => 'Ir para a tela de perguntas');
+            } else {
+//                $this->arrBreadCrumb[] = array('url' => '/admissibilidade/mensagem/index', 'title' => 'Perguntas', 'description' => 'Ir para a tela de perguntas');
+            }
+//            $this->arrBreadCrumb[] = array('url' => '', 'title' => 'Responder pergunta', 'description' => 'Tela atual');
+//            $this->view->arrBreadCrumb = $this->arrBreadCrumb;
+        }
+
+        $this->view->arrConfig['dsMensagem'] = ['disabled' => true];
+    }
+
+    public function abrirdocumentosolicitacaoAction()
+    {
+        # verificar se o usuario tem permissao para acessar este documento
+
+        $idDocumento = $this->getRequest()->getParam('id', null);
+
+        parent::abrirDocumento($idDocumento);
+    }
 }

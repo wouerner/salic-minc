@@ -19,7 +19,24 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         parent::init();
 
         $auth = Zend_Auth::getInstance();
+        $PermissoesGrupo = array();
+
+        //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
+        if (isset($auth->getIdentity()->usu_codigo)) {
+            //Recupera todos os grupos do Usuario
+            $Usuario = new Autenticacao_Model_Usuario();
+            $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
+            foreach ($grupos as $grupo) {
+                $PermissoesGrupo[] = $grupo->gru_codigo;
+            }
+        }
+
+        isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
+
         $arrAuth = array_change_key_case((array)$auth->getIdentity());
+
+        $this->usuario = $arrAuth;
+
 
         $this->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
         $this->idPronac = $this->getRequest()->getParam('idPronac');

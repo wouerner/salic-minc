@@ -45,6 +45,47 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
         return $this->fetchRow($slct);
     }
 
+    /**
+     * Metodo para abrir um arquivo
+     * @param $idDocumento
+     * @return array
+     */
+    public function abrir($idDocumento)
+    {
+//        $table = Zend_Db_Table::getDefaultAdapter();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('d' => $this->_name),
+            array(
+                'd.idDocumento',
+                'd.dsDocumento',
+                'd.nmTitulo'
+            )
+        );
+
+        $select->joinInner(
+            'tbArquivoImagem',
+            'tbArquivoImagem.idArquivo = d.idArquivo',
+            array('biArquivo'),
+            $this->_schema
+        );
+
+        $select->joinInner(
+            'tbArquivo',
+            'tbArquivo.idArquivo = d.idArquivo',
+            array('dsTipoPadronizado', 'nmArquivo'),
+            $this->_schema);
+
+        $select->where('d.idDocumento = ?', $idDocumento);
+
+        $db->fetchAll('SET TEXTSIZE 2147483647');
+        return $db->fetchAll($select);
+    }
+
     public function buscarDocumento($idDocumento = null)
     {
         $select = $this->select();
@@ -80,7 +121,7 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
             $select->where('d.idDocumento = ?', $idDocumento);
         }
 
-        return $this->fetchAll($select);
+        return $this->fetchRow($select);
     }
 
     public function excluir($where)
@@ -106,7 +147,7 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
                 $imagem['idArquivo'] = $idArquivo;
                 $db->insert($schemaTbArquivoImagem, $imagem);
 
-                $schemaTbDocumento =  $this->_schema . '.' . $this->_name;
+                $schemaTbDocumento = $this->_schema . '.' . $this->_name;
                 $documento['idArquivo'] = $idArquivo;
                 $db->insert($schemaTbDocumento, $documento);
                 $idDocumento = $db->lastInsertId();
@@ -119,12 +160,13 @@ class Arquivo_Model_DbTable_TbDocumento extends MinC_Db_Table_Abstract
         }
     }
 
-    public function excluirDocumento($idDocumento) {
+    public function excluirDocumento($idDocumento)
+    {
 
         $tbDocumento = new Arquivo_Model_DbTable_TbDocumento();
-        $dadosArquivo = $tbDocumento->buscar(array('idDocumento =?'=>$idDocumento))->current();
+        $dadosArquivo = $tbDocumento->buscar(array('idDocumento =?' => $idDocumento))->current();
 
-        if($dadosArquivo){
+        if ($dadosArquivo) {
 
             $tbDocumento->delete("idArquivo = {$dadosArquivo->idArquivo} and idDocumento= {$idDocumento} ");
 

@@ -131,8 +131,8 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 $model->setIdPronac($arrData['idPronac']);
                 $model->setIdProjeto($arrData['idProjeto']);
 
-                $idTecnico = new Zend_Db_Expr("sac.dbo.fnPegarTecnico(?, {$arrData['idOrgao']}, 3)");
-                $model->setIdTecnico($idTecnico);
+//                $idTecnico = new Zend_Db_Expr("sac.dbo.fnPegarTecnico(?, {$arrData['idOrgao']}, 3)");
+//                $model->setIdTecnico($idTecnico);
 
                 $file = new Zend_File_Transfer();
 
@@ -151,9 +151,9 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
 
                 if ($this->save($model)) {
                     $booStatus = 1;
-                    $this->setMessage('Solicita&ccedil;&atilde;o enviada com sucesso!');
+                    $this->setMessage('Rascunho salvo com sucesso!');
                 } else {
-                    $this->setMessage('N&atilde;o foi poss&iacute;vel enviar a solicita&ccedil;&atilde;o!');
+                    $this->setMessage('N&atilde;o foi poss&iacute;vel salvar o rascunho!');
                 }
             } catch (Exception $e) {
                 $this->setMessage($e->getMessage());
