@@ -4052,7 +4052,7 @@ $pdf->gerarRelatorio();
             ($this->view->itemAvaliadoFilter ? $this->view->itemAvaliadoFilter : null),
             $this->view->uf,
             $this->view->idPlanilhaEtapa,
-            $this->view->codigoProduto
+            $this->view->codigoProduto != 0 ? $this->view->codigoProduto :  null
         );
 
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
