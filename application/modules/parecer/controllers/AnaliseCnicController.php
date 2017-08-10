@@ -30,25 +30,27 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     public function encaminharAssinaturaAction()
     {
         $this->validarPerfis();
+        $idPronac = $this->_request->getParam("idpronac");
+        $origin = $this->_request->getParam("origin");
         
         try {
             $get = $this->getRequest()->getParams();
             $post = $this->getRequest()->getPost();
             $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
             
-            if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
-                $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
+            if (isset($idPronac) && !empty($idPronac) && $get['encaminhar'] == 'true') {
+                $servicoDocumentoAssinatura->idPronac = $idPronac;
                 $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
                 
                 $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
-                $idDocumentoAssinatura = $this->getIdDocumentoAssinatura($get['IdPRONAC'], $idTipoDoAtoAdministrativo);
+                $idDocumentoAssinatura = $this->getIdDocumentoAssinatura($idPronac, $idTipoDoAtoAdministrativo);
                 
-                $this->redirect("/assinatura/index/visualizar-projeto/?idDocumentoAssinatura=" . $idDocumentoAssinatura . "&origin=" . $get['origin']);
+                $this->redirect("/assinatura/index/visualizar-projeto/?idDocumentoAssinatura=" . $idDocumentoAssinatura . "&origin=" . $origin);
             } elseif(isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
                 // ainda nao implementado o encaminhamento de vários para pareceres
             }
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), "/{$this->moduleName}/analise-cnic/encaminhar-assinatura");
+            parent::message($objException->getMessage(), $origin);
         }
     }
 
