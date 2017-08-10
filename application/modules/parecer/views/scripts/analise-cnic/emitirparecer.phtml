@@ -1,4 +1,4 @@
-<?php echo $this->partial('realizaranaliseprojeto/inc/menu.inc.php', $this) ?>
+<?php echo $this->partial('analise-cnic/partials/menu.inc.php', $this) ?>
 
 <script type="text/javascript">
     function openIFF(cont) // abre os incentivos fiscais
@@ -30,20 +30,23 @@
 
     function salvar(tiposalvar,mostrarMsg){
         var parecer = '';
-        if(tiposalvar == null){
-            parecer = <?php echo $this->nrparecerfavoravel; ?>;
-        }
-        else  if(tiposalvar == 'IC' ){
+        if(tiposalvar == 'IC' ){
             parecer = 1;
         }
         else if(tiposalvar == 'AC' ){
             parecer = 2;
         }
+	    <?php if (!$this->VerificarIN2017($this->idpronac)): ?>			
+        else if(tiposalvar == null){
+	    parecer = <?php echo $this->nrparecerfavoravel; ?>;
+        }
+	    <?php endif; ?>
+	
         if($("#justificativa").val().length >= 20){
             $.ajax({
                 async: true,
                 type: "POST",
-                url: "<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'emitirparecer')); ?>",
+                url: "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer')); ?>",
                 data:{
                     idpronac: $("#idPronac").val(),
                     //justificativa : CKEDITOR.instances['justificativa'].getData(),
@@ -119,12 +122,13 @@
 
             var tipoPlanilha = '<?php echo $this->tipoplanilha; ?>';
             if(tipoPlanilha == 'CO')
-            {
+	    {
+		    <?php if (!$this->VerificarIN2017($this->idpronac)): ?>			
                 if (document.getElementById('verificarParecerFavoravel').value != 'sim')
                 {
                     document.getElementById('desAprovar').disabled = true;
                 }
-
+		    <?php endif; ?>
                 $("#formEnviar").each(function(){
                     this.reset();
                 });
@@ -288,7 +292,7 @@
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->baseUrl(); ?>" title="Ir para In&iacute;cio">Incio</a></li>
-        <li><a href="<?php echo $this->url(array('controller' => 'areadetrabalho', 'action' => 'index')); ?>" title="Ir para An&aacute;lise do Membro da Comiss&atilde;o">An&aacute;lise do Membro da Comiss&atilde;o</a></li>
+        <li><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'areadetrabalho', 'action' => 'index')); ?>" title="Ir para An&aacute;lise do Membro da Comiss&atilde;o">An&aacute;lise do Membro da Comiss&atilde;o</a></li>
         <li class="last">Emitir Parecer</li>
     </ul>
 </div>
@@ -309,7 +313,7 @@
     <div id="confirm"></div>
 
     <div id="tela" style="display:none;">
-        <form id="formEnviar" action="<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'emitirparecer')); ?>" method="post">
+        <form id="formEnviar" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer')); ?>" method="post">
             <input type="hidden" name="idPronac" id="idPronac" value="<?php echo $this->idpronac; ?>" />
             <div style="color:red; text-align: justify; font-weight: 600;">
                 Aten&ccedil;&atilde;o! A decis&atilde;o da aprova&ccedil;&atilde;o ou indeferimento neste quadro &eacute; sua! Caso necessite consultar a decis&atilde;o do parecerista consulte a aba 'PARECER T&Eacute;CNICO CONSOLIDADO'
@@ -348,7 +352,7 @@
         </form>
     </div>
     <div id="erro" style="display:none; text-align: center; color: red;"></div>
-    <?php echo $this->partial('realizaranaliseprojeto/inc/menu_abas.inc.php', $this) // menu   ?>
+    <?php echo $this->partial('analise-cnic/partials/menu_abas.inc.php', $this) // menu   ?>
 
         <!-- ========== FIM T?TULO P?GINA ========== -->
         <!-- ========== IN?CIO Parecer Consolidado ========== -->
@@ -515,20 +519,6 @@
     if ($this->tipoplanilha == 'SE') {
         echo "<div style=\"color:red; text-align: center; font-size: 16pt;  padding-bottom: 2em;\">Projeto j&aacute; aprovado pela CNIC. Aberto para ajustes do Componente.</div>";
     } ?>
-    <?php  /*if (($this->verifica15porcento != 0 || $this->totaldivulgacao == "true" || $this->totalcaptacaorecurso == "true") && $this->parecerfavoravel != 'NAO') { ?>
-            <div style="color:red; text-align: center; font-size: 16pt;  padding-bottom: 2em;">Aten&ccedil;&atilde;o! </div>
-            <?php if($this->verifica15porcento != 0 ){ ?>
-                <div style="color:red; text-align: center; font-size: 16pt;  padding-bottom: 2em;">O valor dos custos administrativos do projeto est&aacute;: <?php echo $this->formatarReal($this->verifica15porcento); ?> acima do permitido pela IN n&ordm; 1 de 05/10/2010 Artigo 24 Inciso V.<br /><br />Favor readequar para finalizar sua an&aacute;lise.</div><br>
-            <?php }?>
-            <?php if($this->totaldivulgacao == "true"){ ?>
-                <div style="color:red; text-align: center; font-size: 16pt;  padding-bottom: 2em;">Custo de Divulgação/Comercialização superior a 20% do valor total do projeto.<br><br>Favor readequar os custos em <?php echo $this->formatarReal($this->valorReadequar20porcento); ?> para finalizar sua an&aacute;lise.</div>
-            <?php }?>
-            <?php if($this->totalcaptacaorecurso == "true"){ ?>
-                <div style="color:red; text-align: center; font-size: 16pt;  padding-bottom: 2em;">O Item "Remuneração para captação de recursos" está superior a 10% do valor total do projeto ou acima de R$100.000,00.<br><br>Favor readequar os custos em <?php echo $this->formatarReal($this->valorReadequar10porcento); ?> para finalizar sua an&aacute;lise.</div>
-            <?php }?>
-    <?php //} elseif ( $this->totaldivulgacao == "true" and $this->parecerfavoravel != 'NAO') { ?>
-          <!--  <div style="color:red; text-align: center; font-size: 16pt;  padding-bottom: 2em;">Aten&ccedil;&atilde;o! Custo de Divulgação/Comercialização superior a 20% do valor total do projeto.<br><br>Favor readequar os custos em <?php echo $this->formatarReal($this->valorReadequar20porcento); ?> para finalizar sua an&aacute;lise.</div> -->
-    <?php } else {*/ ?>
             <br>
             <!--<table class="w1000" style="margin:auto;">-->
             <table class="tabela">
@@ -541,7 +531,7 @@
                         <!--<script>
                             //CKEDITOR.replace('justificativa', {	fullPage : true });
                         </script>-->
-                        <form id="formread" action="<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'emitirparecer')); ?>" method="post">
+                        <form id="formread" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer')); ?>" method="post">
                             <input type="hidden" name="idpronac" id="idpronac"/>
                         </form>
                         <br />
@@ -549,7 +539,7 @@
                 </tr>
             </table>
 
-            <?php if (!$this->VerificarIN2017($this->projeto->IdPRONAC)): ?>
+            <?php if (!$this->VerificarIN2017($this->idpronac)): ?>
             <table class="tabela">
                 <tr align="center">
                     <td class="destacar bold" colspan="2">Verificação de Limites Orçamentários</td>
@@ -576,10 +566,45 @@
             <div class="centro">
                 <br />
                 <p>
-                    <input type="button" class="btn" value=" Salvar " id="salvarparecer"/>
+		  <input type="button" class="btn" value=" Salvar " id="salvarparecer"/>
+		  <?php if(!$this->verificarIN2017($this->idpronac)): ?>
+
                     <?php if($this->qtdErrosCheckList==0) { ?>
                     <input type="button" class="btn" value=" Finalizar " id="finalizarparecer"/>
                     <?php } ?>
+		    <?php elseif($this->verificarIN2017($this->idpronac)): ?>
+
+		    <?php if(!$this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
+		    <a class="btn waves-effect waves-light tooltipped"
+		       href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$this->idpronac}&encaminhar=true&origin=parecer/analise-cnic" ?>"
+		      data-tooltip="Gerar documento para assinatura">
+		      <i class="material-icons white-text">note_add</i>
+		    </a>
+		    <?php elseif($this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
+		    <?php if($this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
+		    <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo); ?>
+		    &nbsp;&nbsp;
+		    <a class="btn waves-effect waves-light tooltipped small"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/analise-cnic"
+		    data-tooltip="Visualizar documento">
+		    <i class="material-icons white-text">remove_red_eye</i>
+		    </a>
+		    &nbsp;&nbsp;
+		    <?php endif; ?>
+
+		    <?php if (!$this->IsProjetoJaAssinado($this->idpronac, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
+		    <a class="btn waves-effect waves-light tooltipped small"
+		       href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$this->idpronac}&idTipoDoAtoAdministrativo=" . $this->idTipoDoAtoAdministrativo; ?>&origin=parecer/analise-cnic"
+		      data-tooltip="Assinar documento">
+		      <i class="material-icons white-text">create</i>
+		    </a>
+		    
+		    <?php elseif ($this->IsProjetoJaAssinado($this->idpronac, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
+		    <input type="button" class="btn" value=" Finalizar " id="finalizarparecer"/>
+		    
+		    <?php endif; ?>
+		    <?php endif; ?>	    
+		    <?php endif; ?> 
                 </p>
                 <br />
             </div>
