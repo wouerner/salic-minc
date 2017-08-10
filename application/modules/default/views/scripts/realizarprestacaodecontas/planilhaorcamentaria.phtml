@@ -577,11 +577,16 @@
         btn = jQuery(this);
         btnId = btn.attr('id');
         idPronac = jQuery('input[name=idPronac]').val();
+        produto = btn.attr('produto');
+
+        if ( "" == btn.attr('produto')){
+            produto = 0;
+        }
 
         url = '/realizarprestacaodecontas/planilha-orcamentaria-custos-produto/idPronac/' 
             + idPronac + '/uf/' + btn.attr('uf')
             + '/idplanilhaetapa/' + btn.attr('idplanilhaetapa')
-            + '/produto/' + btn.attr('produto');
+            + '/produto/' + produto;
 
         if (jQuery('#div'+ btnId).is(':empty')) {
             $.get(url, function(data){

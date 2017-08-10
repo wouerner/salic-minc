@@ -204,7 +204,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
             array('pItens.idPlanilhaItens','pItens.Descricao as descItem'),
             'SAC.dbo'
         );
-        $select->join(array('prod'=>'Produto'), 'pAprovacao.idProduto = prod.Codigo', array('prod.Codigo','prod.Descricao'), 'SAC.dbo');
+        $select->joinLeft(array('prod'=>'Produto'), 'pAprovacao.idProduto = prod.Codigo', array('prod.Codigo','prod.Descricao'), 'SAC.dbo');
         $select->joinInner(array('UFT'=>'UF'), 'pAprovacao.idUFDespesa = UFT.idUF', array('uf'=>'UFT.Sigla'), 'AGENTES.dbo');
         $select->joinInner(
             array('CID'=>'Municipios'),
@@ -1872,7 +1872,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
             array('pItens.idPlanilhaItens','pItens.Descricao as descItem'),
             'SAC.dbo'
         );
-        $select->join(array('prod'=>'Produto'), 'pAprovacao.idProduto = prod.Codigo', array('prod.Codigo','prod.Descricao'), 'SAC.dbo');
+        $select->joinLeft(array('prod'=>'Produto'), 'pAprovacao.idProduto = prod.Codigo', array('prod.Codigo','prod.Descricao'), 'SAC.dbo');
         $select->joinInner(array('UFT'=>'UF'), 'pAprovacao.idUFDespesa = UFT.idUF', array('uf'=>'UFT.Sigla'), 'AGENTES.dbo');
         $select->joinInner(
             array('CID'=>'Municipios'),
@@ -1929,7 +1929,9 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $select->where('(pAprovacao.qtItem*pAprovacao.nrOcorrencia*pAprovacao.vlUnitario) > 0');
         $select->where("UFT.Sigla = ?", $uf);
         $select->where("pEtapa.idPlanilhaEtapa = ?", $idPlanilhaEtapa);
-        $select->where("prod.Codigo = ?", $codigoProduto);
+        if ($codigoProduto){
+            $select->where("prod.Codigo = ?", $codigoProduto);
+        }
 
         $select->order('prod.Descricao');
         $select->order('pEtapa.idPlanilhaEtapa');
