@@ -1,3 +1,19 @@
+Release 2.5.0
+* [ADD] Parecer/Análise CNIC: Fluxo de assinatura para CNIC, com finalização de projeto
+* [FIX] CNIC/Realizar análise projeto: retirar verificação de limites orçamentários se nova IN 2017
+* [FIX] CNIC/Realizar análise projeto: removendo links de edição da planilha e reintegrar valores para projetos posteriores a VerificarIN2017
+* [FIX] CNIC/Realizar análise projeto: se nova IN, tirar links para análise de conteúdo e análise de cortes sugeridos
+* [FIX] CNIC/Realizar análise projeto: alterando cor do menu
+* [FIX] Parecer/análise inicial: correção de erro ao gerar documento para assinatura
+* [FIX] Parecer/presidente de vinculada: correção de url
+* [FIX] Parecer/análise inicial: ajustes de estilo no documento para assinatura
+* [REFACTOR] Parecer/análise inicial: alterando nome de função preparatória do documento para assinatura
+* [REFACTOR] Parecer/Análise CNIC: movendo funcionalidade para módulo parecer e redirecionando ação
+* [REFACTOR] Parecer/parecer cnic: trazendo funcionalidades de emissão de parecer para módulo parecer
+* [UPDATE] EXIBIR PROJETO/PLANO DISTRIBUICAO: Ajustando visualizacao do plano de distribuicao
+* [UPDATE] Assinatura/TbAssinatura: adicionando tipo ato para análise CNIC
+* [UPDATE] Autenticação: adicionado permissão para componente da comissão (cnic)
+
 Release 2.4.3
 * [FIX] Parecer/análise inicial: correção na geração do documento para assinatura'
 
