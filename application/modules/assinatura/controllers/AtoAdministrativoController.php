@@ -26,9 +26,33 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
         $this->view->atosAdministrativos = $objAtosAdministrativos->obterAtoAdministrativoDetalhado();
     }
 
-    public function removerAction()
+    public function removerAjaxAction()
     {
-        throw new Exception("Transa&ccedil;&atilde;o cancelada, Ato administrativo j&aacute; vinculado a um documento.");
+        try {
+            $post = $this->getRequest()->getPost();
+
+            $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($post);
+            if(!$objModelAtoAdministrativo->getIdAtoAdministrativo()) {
+                throw new Exception("Identificador do ato administrativo n&atilde;o informado.");
+            }
+
+            $objAssinaturaDbTable = new Assinatura_Model_DbTable_TbAssinatura();
+            $assinaturas = $objAssinaturaDbTable->findBy([
+                'idAtoAdministrativo' => $objModelAtoAdministrativo->getIdAtoAdministrativo()
+            ]);
+
+            if($assinaturas) {
+                throw new Exception("Transa&ccedil;&atilde;o cancelada, Ato administrativo j&aacute; vinculado a um documento.");
+            }
+
+            $objAtoAdministrativoMapper = new Assinatura_Model_TbAtoAdministrativoMapper();
+            if(!is_null($objAtoAdministrativoMapper->delete($objModelAtoAdministrativo->getIdAtoAdministrativo()))) {
+                $this->_helper->json( ['status' => 1]);
+            }
+        } catch (Exception $objException) {
+            $this->_helper->json( ['status' => 0, 'message' => $objException->getMessage()] );
+        }
+
     }
 
     public function obterTiposDeAtosAdministrativosAjaxAction()
@@ -160,7 +184,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
             }
 
             if(!is_null($objAtoAdministrativoMapper->save($objModelAtoAdministrativo))) {
-                $this->_helper->json( ['status' => 1]);
+                $this->_helper->json( ['status' => 1] );
             }
         } catch (Exception $objException) {
             $this->_helper->json( ['status' => 0, 'message' => $objException->getMessage()] );
