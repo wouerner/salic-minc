@@ -152,8 +152,7 @@
                 </tr>
             </table>
             <table class="tabela" style="width: 95%;">
-	      <?php if ($this->IN2017): ?>
-
+              <?php if ($this->IN2017 && $this->stPrincipal): ?>
 	      <tr>
 		<td class="destacar bold" colspan="5">
                   A&ccedil;&otilde;es relevantes para o sucesso do projeto*
@@ -381,7 +380,7 @@
         <input type="hidden" name="sugeridoReal" value="<?php echo $this->itens['totalSugerido']; ?>" />
         <input type="hidden" name="stPrincipal"  value="<?php echo $_GET['stPrincipal']; ?>" />
         <input type="hidden" name="idProduto" 	 value="<?php echo $_GET['idProduto']; ?>" />
-	<?php if ($this->IN2017): ?>
+        <?php if ($this->IN2017 && $this->stPrincipal): ?>
         <input type="hidden" name="dsAcaoAlcanceProduto" id="consolidacaoDsAcaoAlcanceProduto" value="" />
 	<?php endif; ?>
 	
@@ -539,7 +538,7 @@
     }
     function carregarTextAreaCKEditor(){
     CKEDITOR.replace( 'ParecerDeConteudo', { toolbar: [] } );
-	<?php if ($this->IN2017): ?>
+	<?php if ($this->IN2017 && $this->stPrincipal): ?>
 	CKEDITOR.replace( 'dsAcaoAlcanceProduto', { toolbar: [] } );
 	<?php endif; ?>
         <?php if(($this->stPrincipal == 1) && ($this->produtosSecundariosEmAnalise == 0)){ ?>
@@ -553,7 +552,7 @@
         $('#btSalvarAnaliseDeConteudo').click(function(){
             var parecer = CKEDITOR.instances['ParecerDeConteudo'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,''),
 		erros = 0;
-	    <?php if ($this->IN2017): ?>
+	    <?php if ($this->IN2017 && $this->stPrincipal): ?>
 		var acoesRelevantes = CKEDITOR.instances['dsAcaoAlcanceProduto'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
             if( acoesRelevantes.length  < 11){
 		alertar('As a\xE7\xF5es relevantes devem ter no m\xEDnimo 11 caracteres!');
@@ -581,7 +580,7 @@
         });
 
         $('#btSalvarConsolidacao').click(function() {
-	<?php if ($this->IN2017): ?>
+	<?php if ($this->IN2017 && $this->stPrincipal): ?>
 		$('#consolidacaoDsAcaoAlcanceProduto').val($('#dsAcaoAlcanceProduto').val());
 	<?php endif; ?>
 	    

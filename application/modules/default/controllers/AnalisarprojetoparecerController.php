@@ -325,20 +325,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
             $Pareceres['pareceres'][$cont]['Nome do Remetente'] = $val->nmUsuario;
             $Pareceres['pareceres'][$cont]['Nome do Parecerista'] = $val->nmParecerista;
 
-            /*switch ($diligencia) {
-                case 0:
-                    $Pareceres['pareceres'][$cont]['Dilig&ecirc;ncia'] = "<p style='text-align: center;'><img src='". $getBaseUrl ."/public/img/notice1.png' width='30px'/></p>";
-                    break;
-                case 1:
-                    $Pareceres['pareceres'][$cont]['Dilig&ecirc;ncia'] = "<p style='text-align: center;'><img src='". $getBaseUrl ."/public/img/notice.png' width='30px'/></p>";
-                    break;
-                case 2:
-                    $Pareceres['pareceres'][$cont]['Dilig&ecirc;ncia'] = "<p style='text-align: center;'><img src='". $getBaseUrl ."/public/img/notice2.png' width='30px'/></p>";
-                    break;
-                case 3:
-                    $Pareceres['pareceres'][$cont]['Dilig&ecirc;ncia'] = "<p style='text-align: center;'><img src='". $getBaseUrl ."/public/img/notice3.png' width='30px'/></p>";
-                    break;
-            }*/
         }
         $this->view->Pareceres = $Pareceres;
     }
@@ -346,11 +332,11 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
     public function produtoAction()
     {
         $mapperArea = new Agente_Model_AreaMapper();
-        $auth = Zend_Auth::getInstance(); // pega a autentica¿¿o
+        $auth = Zend_Auth::getInstance(); // pega a autenticacai
         $idusuario = $auth->getIdentity()->usu_codigo;
 
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess¿o com o grupo ativo
-        $codOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o
+        $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
         $codGrupo = $GrupoAtivo->codGrupo;
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -369,13 +355,12 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $this->view->dsSegmento = $projeto[0]->dsSegmento;
         $this->view->IN2017 = $projetoDAO->verificarIN2017($idPronac);
         
-        /* Analise de conte¿do */
+        /* Analise de conteudo */
         $analisedeConteudoDAO = new Analisedeconteudo();
         $analisedeConteudo = $analisedeConteudoDAO->dadosAnaliseconteudo(false, array('idPronac = ?' => $idPronac, 'idProduto = ?' => $idProduto));
 
         $PlanilhaDAO = new PlanilhaProjeto();
         if ($stPrincipal == 1) {
-            //$where = array('PPJ.IdPRONAC = ?' => $idPronac);
             $where = array('PPJ.IdPRONAC = ?' => $idPronac, 'PPJ.IdProduto in (0, ?)' => $idProduto);
         } else {
             $where = array('PPJ.IdPRONAC = ?' => $idPronac, 'PPJ.IdProduto = ?' => $idProduto, 'PD.Descricao is not null' => null);
@@ -613,181 +598,11 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * M¿todo produtosecundario()
-     * Lista os detalhes da an¿lise dos produtos secund¿rios
-     * @param idPronac
-     * @param idProduto
-     * @param stPrincipal
-     * @return List
+     * @DEPRECATED
      */
     public function produtosecundarioAction()
     {
-
-        $mapperArea = new Agente_Model_AreaMapper();
-
-        $auth = Zend_Auth::getInstance(); // pega a autentica¿¿o
-        $idusuario = $auth->getIdentity()->usu_codigo;
-
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess¿o com o grupo ativo
-        $codOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o
-        $codGrupo = $GrupoAtivo->codGrupo;
-
-        $idPronac = $this->_request->getParam("idPronac");
-        $idProduto = $this->_request->getParam("idProduto");
-        $stPrincipal = $this->_request->getParam("stPrincipal");
-
-        $projetoDAO = new Projetos();
-
-        $whereProjeto['p.IdPRONAC = ?'] = $idPronac;
-        $whereProjeto['d.idProduto = ?'] = $idProduto;
-        $whereProjeto['d.stPrincipal = ?'] = $stPrincipal;
-
-        $projeto = $projetoDAO->buscaProjetosProdutosAnaliseInicial($whereProjeto);
-        $this->view->projeto = $projeto[0];
-
-        /* Analise de conte¿do */
-        $analisedeConteudoDAO = new Analisedeconteudo();
-        $analisedeConteudo = $analisedeConteudoDAO->dadosAnaliseconteudo(false, array('idPronac = ?' => $idPronac, 'idProduto = ?' => $idProduto));
-
-        $PlanilhaDAO = new PlanilhaProjeto();
-
-        if ($stPrincipal) {
-            $where = array('PPJ.IdPRONAC = ?' => $idPronac, 'PPJ.IdProduto = ?' => $idProduto);
-        } else {
-            $where = array('PPJ.IdPRONAC = ?' => $idPronac, 'PPJ.IdProduto = ?' => $idProduto, 'PD.Descricao is not null' => null);
-        }
-
-        $resp = $PlanilhaDAO->buscarAnaliseCustos($where);
-
-        $itensCusto = array('fonte' => array(), 'totalSolicitado' => 0, 'totalSugerido' => 0);
-        $cont = true;
-
-        foreach ($resp as $key => $val) {
-            $produto = $val->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $val->Produto;
-            if (!isset($itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['qtd'])) {
-                $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade] = array('qtd' => 0, 'totalUfSolicitado' => 0, 'totalUfSugerido' => 0, 'itens' => array(), 'totalSolicitado' => 0, 'totalSugerido' => 0);
-            }
-            $itensCusto['totalSolicitado'] += $val->VlSolicitado;
-            $itensCusto['totalSugerido'] += $val->VlSugeridoParecerista;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['qtd']++;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['totalUfSolicitado'] += $val->VlSolicitado;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['totalUfSugerido'] += $val->VlSugeridoParecerista;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['&nbsp;'] = $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['qtd'];
-
-            //$itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "{$val->Item}";
-
-            // Se etapa for igual a Divulgacao/Comercializacao e tiver ultrapassado os 20% do valor total do projeto, libera para alteracao
-            $bln_regra20Porecento = $this->validaRegra20Porcento($idPronac);
-            if (($analisedeConteudo[0]->ParecerFavoravel == 1) && ($val->NrFonteRecurso == '109') && ($val->idEtapa == 3) && $bln_regra20Porecento == "false") {
-                $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "<a href='javascript:void(0);' onclick='javascript:AlterarItem({$val->idPlanilhaProjeto},{$idPronac},{$idProduto},{$stPrincipal})'>{$val->Item}</a>";
-            } else {
-                $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "{$val->Item}";
-            }
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Dias'] = $val->diasprop;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Unidade'] = $val->UnidadeProposta;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Quantidade'] = number_format($val->quantidadeprop, 0, '.', ',');
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Ocorr¿ncias'] = number_format($val->ocorrenciaprop, 0, '.', ',');
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Valor Unit¿rio'] = $val->valorUnitarioprop;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Valor Solicitado'] = $val->VlSolicitado;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Justificativa do Proponente'] = $val->justificitivaproponente;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Valor Sugerido pelo Parecerista'] = $val->VlSugeridoParecerista;
-            $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Justificativas do Parecerista'] = $val->dsJustificativaParecerista;
-        }
-        foreach ($itensCusto['fonte'] as $key => $value) {
-            foreach ($value as $key2 => $value2) {
-                foreach ($value2 as $key3 => $value3) {
-                    foreach ($value3 as $key4 => $value4) {
-
-                        if ($itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSolicitado'] != 0) {
-                            $itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSolicitado'] = $this->formatarReal($itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSolicitado']);
-                        } else {
-                            $itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSolicitado'] = "R$ 0,00";
-                        }
-
-                        if ($itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSugerido'] != 0) {
-                            $itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSugerido'] = $this->formatarReal($itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSugerido']);
-                        } else {
-                            $itensCusto['fonte'][$key][$key2][$key3][$key4]['totalUfSugerido'] = "R$ 0,00";
-                        }
-                    }
-                }
-            }
-        }
-        $valorPossivel = $itensCusto['totalSolicitado'] - $itensCusto['totalSugerido'];
-        $valorSolicitado = $itensCusto['totalSolicitado'];
-        if ($itensCusto['totalSolicitado'] != 0) {
-            $itensCusto['totalSolicitado'] = $this->formatarReal($itensCusto['totalSolicitado']);
-        } else {
-            $itensCusto['totalSugerido'] = "R$ 0,00";
-        }
-        if ($itensCusto['totalSugerido'] != 0) {
-            $itensCusto['totalSugerido'] = $this->formatarReal($itensCusto['totalSugerido']);
-        } else {
-            $itensCusto['totalSugerido'] = "R$ 0,00";
-        }
-
-        $this->view->itens = $itensCusto;
-        $this->view->stPrincipal = $stPrincipal;
-        $this->view->comboareasculturais = $mapperArea->fetchPairs('codigo', 'descricao');
-        $this->view->valorpossivel = $valorPossivel;
-        $this->view->vlSolicitado = $valorSolicitado;
-
-        /* Se for o produto principal, envia os dados dos secund¿rios junto *******************************/
-        if ($stPrincipal == 1) {
-            $tbDistribuirParecerDAO = new tbDistribuirParecer();
-
-            $dadosWhere["t.stEstado = ?"] = 0;
-            $dadosWhere["t.FecharAnalise = ?"] = 0;
-            $dadosWhere["t.TipoAnalise = ?"] = 3;
-            $dadosWhere["p.Situacao IN ('B11', 'B14')"] = '';
-            $dadosWhere["p.IdPRONAC = ?"] = $idPronac;
-            $dadosWhere["t.stPrincipal = ?"] = 0;
-
-            $Secundarios = $tbDistribuirParecerDAO->dadosParaDistribuir($dadosWhere);
-
-            $dadosWhere["t.DtDevolucao is null"] = '';
-            $SecundariosAtivos = $tbDistribuirParecerDAO->dadosParaDistribuirSecundarios($dadosWhere);
-
-            $pscount = count($SecundariosAtivos);
-
-            $i = 0;
-            foreach ($Secundarios as $ps) {
-                $wherePS['PAP.idPRONAC = ?'] = $ps->IdPRONAC;
-                $wherePS['PAP.idProduto = ?'] = $ps->idProduto;
-                $valorSugerido = $PlanilhaDAO->somaDadosPlanilha($wherePS);
-
-
-                $produtosSecundarios[$i]['IdPRONAC'] = $ps->IdPRONAC;
-                $produtosSecundarios[$i]['idProduto'] = $ps->idProduto;
-                $produtosSecundarios[$i]['stPrincipal'] = $ps->stPrincipal;
-
-                $produtosSecundarios[$i]['Produto'] = $ps->Produto;
-                $produtosSecundarios[$i]['ParecerFavoravel'] = $ps->ParecerFavoravel;
-                $produtosSecundarios[$i]['ValorSugerido'] = $valorSugerido['soma'];
-                $i++;
-            }
-            $this->view->produtosSecundarios = $produtosSecundarios;
-            $this->view->produtosSecundariosEmAnalise = $pscount;
-
-
-            $consolidado = 'N';
-
-            $enquadramentoDAO = new Admissibilidade_Model_Enquadramento();
-            $buscaEnquadramento = $enquadramentoDAO->buscarDados($idPronac, null, false);
-            $countEnquadramentoP = count($buscaEnquadramento);
-
-            $parecerDAO = new Parecer();
-            $whereParecer['idPRONAC = ?'] = $idPronac;
-            //$buscaParecer 			= $parecerDAO->buscarParecer($idPronac);
-            $buscaParecer = $parecerDAO->buscar($whereParecer); //UTILIZANDO METODO GENERICO PARA NAO CONFLITAR COM A CNIC
-            $countParecerP = count($buscaParecer);
-
-            if (($countEnquadramentoP != 0) && ($countParecerP != 0)) {
-                $consolidado = 'S';
-            }
-
-            $this->view->consolidado = $consolidado;
-        }
+        return $this->produtoAction();
     }
 
     public function analisedeconteudoAction()
