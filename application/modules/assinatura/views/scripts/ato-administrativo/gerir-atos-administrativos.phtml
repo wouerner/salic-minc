@@ -276,13 +276,14 @@
                         parametros,
                         function (data) {
                             if(data.status == 1) {
-                                Materialize.toast('Opera&ccedil;&atilde;o realizada com sucesso!', 4000, null, function () {
+                                Materialize.toast('Opera&ccedil;&atilde;o realizada com sucesso!', 1500, null, function () {
                                     window.location.reload();
                                 });
                             } else {
 //                                Materialize.toast(data.message, 4000);
-                                Materialize.toast('Falha ao realizar opera&ccedil;&atilde;o.', 4000);
-                                $('#modalConfirmacao').modal('close');
+                                Materialize.toast('Falha ao realizar opera&ccedil;&atilde;o.', 1500);
+console.log(data);
+                                $3('#modalConfirmacao').modal('close');
                             }
                         }
                 );
