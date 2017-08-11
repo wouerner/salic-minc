@@ -2,14 +2,14 @@
 
     <div class="row">
         <div class="col s12">
-            <?php if (isset($this->dataForm['idPronac'])) : ?>
-                <b>Pronac:</b> <?= $this->dataForm['pronac']; ?> <br>
-            <?php elseif (isset($this->dataForm['idProjeto'])) : ?>
+            <?php if (!empty($this->dataForm['Pronac'])) : ?>
+                <b>Pronac:</b> <?= $this->dataForm['Pronac']; ?> <br>
+            <?php elseif (!empty($this->dataForm['idProjeto'])) : ?>
                 <b>Nº Proposta: </b><?= $this->dataForm['idProjeto']; ?> <br>
             <?php endif; ?>
         </div>
         <div class="col s12">
-            <b>Título: </b><?= $this->dataForm['nomeProjeto']; ?>
+            <b>Título: </b><?= $this->dataForm['NomeProjeto']; ?>
         </div>
     </div>
 

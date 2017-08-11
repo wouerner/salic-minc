@@ -90,16 +90,15 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $dataForm['arquivo'] = $tbl->buscarDocumento($dataForm['idDocumento'])->toArray();
         }
 
-        $dataForm['idPronac'] = $this->idPronac;
-        $dataForm['idProjeto'] = $this->idPreProjeto;
-
         if( $this->_proposta) {
-            $dataForm['nomeProjeto'] = isset($this->_proposta->NomeProjeto) ? $this->_proposta->NomeProjeto : '';
+            $dataForm['idProjeto'] = $this->idPreProjeto;
+            $dataForm['NomeProjeto'] = isset($this->_proposta->NomeProjeto) ? $this->_proposta->NomeProjeto : '';
         }
 
         if ($this->_projeto) {
-            $dataForm['pronac'] = $this->_projeto->AnoProjeto . $this->_projeto->Sequencial;
-            $dataForm['nomeProjeto'] = isset($this->_projeto->NomeProjeto) ? $this->_projeto->NomeProjeto : '';
+            $dataForm['Pronac'] = $this->_projeto->AnoProjeto . $this->_projeto->Sequencial;
+            $dataForm['NomeProjeto'] = isset($this->_projeto->NomeProjeto) ? $this->_projeto->NomeProjeto : '';
+            $dataForm['idPronac'] = $this->idPronac;
         }
 
         $this->view->arrPartial = array(
@@ -166,7 +165,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
     }
 
     /**
-     * Acao responsavel por responder uma mensagem, no caso cadastrar uma mensagem referenciando outra.
+     * Acao responsavel por responder uma mensagem
      *
      * @name responderAction
      *
@@ -179,10 +178,11 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
         if ($this->getRequest()->isPost()) {
             $this->_helper->layout->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
-            $mapper = new Admissibilidade_Model_TbMensagemProjetoMapper();
-            $strUrl = '/admissibilidade/mensagem/' . $strActionBack;
+
+            $strUrl = '/solicitacao/index/' . $strActionBack;
             $strUrl .= ($this->arrProjeto) ? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
-            $this->_helper->json(array('status' => $mapper->responder($this->getRequest()->getPost()), 'msg' => $mapper->getMessages(), 'redirect' => $strUrl));
+            $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
+            $this->_helper->json(array('status' => $mapperSolicitacao->salvar($this->getRequest()->getPost()), 'msg' => $mapperSolicitacao->getMessages(), 'redirect' => $strUrl));
         } else {
 
             $arrConfig = [
@@ -191,16 +191,6 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             ];
 
             self::prepareForm([], $arrConfig, '', $strActionBack);
-
-
-            if ($this->arrProjeto) {
-//                $this->arrBreadCrumb[] = array('url' => '/admissibilidade/enquadramento/listar', 'title' => 'Enquadramentos', 'description' => 'Ir para a tela de enquadramentos');
-//                $arrBreadCrumb[] = array('url' => '', 'title' => "Perguntas: {$this->arrProjeto['AnoProjeto']}{$this->arrProjeto['Sequencial']} - {$this->arrProjeto['NomeProjeto']}", 'description' => 'Ir para a tela de perguntas');
-            } else {
-//                $this->arrBreadCrumb[] = array('url' => '/admissibilidade/mensagem/index', 'title' => 'Perguntas', 'description' => 'Ir para a tela de perguntas');
-            }
-//            $this->arrBreadCrumb[] = array('url' => '', 'title' => 'Responder pergunta', 'description' => 'Tela atual');
-//            $this->view->arrBreadCrumb = $this->arrBreadCrumb;
         }
 
         $this->view->arrConfig['dsMensagem'] = ['disabled' => true];
