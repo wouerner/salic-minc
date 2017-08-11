@@ -30,6 +30,7 @@
                         <th class="center-align">Orgao</th>
                         <th class="center-align">Cargo</th>
                         <th class="center-align">Perfil</th>
+                        <th class="center-align">Situa&ccedil;&atilde;o</th>
                         <th class="center-align" align="center" colspan="2">A&ccedil;&atilde;o</th>
                     </tr>
                     </thead>
@@ -44,6 +45,7 @@
                             <td class="center-align" align="center"><?php echo $dado['dsOrgaoDoAssinante']; ?></td>
                             <td class="center-align" align="center"><?php echo $dado['dsCargoDoAssinante']; ?></td>
                             <td class="center-align" align="center"><?php echo $dado['dsPerfil']; ?></td>
+                            <td class="center-align" align="center"><?php echo ($dado['stEstado'] == Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_ATIVO) ? 'Ativo': 'Inativo' ; ?></td>
                             <td class="center-align" align="center">
                                 <?php
                                 $parametrosVisualicacao = "?idAtoAdministrativo={$dado['idAtoAdministrativo']}";
@@ -65,6 +67,7 @@
                                    data-idorgaodoassinante = "<?php echo $dado['idOrgaoDoAssinante'] ?>"
                                    data-idperfildoassinante = "<?php echo $dado['idPerfilDoAssinante'] ?>"
                                    data-idordemdaassinatura = "<?php echo $dado['idOrdemDaAssinatura'] ?>"
+                                   data-stestado = "<?php echo $dado['stEstado'] ?>"
                                    data-tooltip="Alterar">
                                     <i class="material-icons">border_color</i>
                                 </a>
@@ -85,6 +88,7 @@
                                    data-idorgaodoassinante = "<?php echo $dado['idOrgaoDoAssinante'] ?>"
                                    data-idperfildoassinante = "<?php echo $dado['idPerfilDoAssinante'] ?>"
                                    data-idordemdaassinatura = "<?php echo $dado['idOrdemDaAssinatura'] ?>"
+                                   data-stestado = "<?php echo $dado['stEstado'] ?>"
                                    data-tooltip="Remover">
                                     <i class="material-icons">delete</i>
                                 </a>
@@ -183,6 +187,15 @@
                                 <label>Ordem da Assinatura</label>
                             </div>
                         </div>
+                        <div class="row" id="divOrdemAssinatura">
+                            <div class="input-field col s12">
+                                <select id="stEstado" name="stEstado">
+                                    <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_ATIVO ?>>">Ativo</option>
+                                    <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_INATIVO ?>>">Inativo</option>
+                                </select>
+                                <label>Situa&ccedil;&atilde;o</label>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -229,9 +242,9 @@
                             '#idPerfilDoAssinante, ' +
                             '#idOrgaoDoAssinante, ' +
                             '#idOrdemDaAssinatura').prop('disabled', false);
+                        $3('select').material_select('destroy');
                         $3("#botaoConfirmacaoModal").html('Armazenar');
                         if($3(trigger).data('acao') == 'Alterar' || $3(trigger).data('acao') == 'Remover') {
-                            $3('select').material_select('destroy');
                             $3('#idTipoDoAto').val($3(trigger).data("idtipodoato"));
                             $3('#idCargoDoAssinante').val($3(trigger).data("idcargodoassinante"));
                             $3('#idOrgaoSuperiorDoAssinante').val($3(trigger).data("idorgaosuperiordoassinante"));
@@ -248,11 +261,11 @@
                                     '#idOrdemDaAssinatura').prop('disabled', true);
                                 $3("#botaoConfirmacaoModal").html('Remover');
                             }
-                            $3('select').material_select();
-
                         }
-
+                        $3('#stEstado').val($3(trigger).data("stestado"));
                         $3("#idAtoAdministrativo").val($3(trigger).data('idatoadministrativo'));
+                        $3('select').material_select();
+
                         tratarExibicaoDeCampos();
                     }
                 }

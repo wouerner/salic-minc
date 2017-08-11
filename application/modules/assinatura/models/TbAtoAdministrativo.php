@@ -11,6 +11,9 @@ class Assinatura_Model_TbAtoAdministrativo extends MinC_Db_Model
     protected $_stExtado;
     protected $_idOrgaoSuperiorDoAssinante;
 
+    const ST_ESTADO_ATIVO = 1;
+    const ST_ESTADO_INATIVO = 0;
+
     /**
      * @return mixed
      */
