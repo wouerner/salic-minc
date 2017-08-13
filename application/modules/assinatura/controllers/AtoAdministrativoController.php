@@ -10,7 +10,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
 
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-        parent::perfil();
+        parent::perfil(1, [ 97 ]);
 
         $this->cod_usuario = $this->auth->getIdentity()->usu_codigo;
     }
