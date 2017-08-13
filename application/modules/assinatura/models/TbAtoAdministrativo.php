@@ -8,11 +8,29 @@ class Assinatura_Model_TbAtoAdministrativo extends MinC_Db_Model
     protected $_idOrgaoDoAssinante;
     protected $_idPerfilDoAssinante;
     protected $_idOrdemDaAssinatura;
-    protected $_stExtado;
+    protected $_stEstado;
     protected $_idOrgaoSuperiorDoAssinante;
 
     const ST_ESTADO_ATIVO = 1;
     const ST_ESTADO_INATIVO = 0;
+
+    /**
+     * @return mixed
+     */
+    public function getStEstado()
+    {
+        return $this->_stEstado;
+    }
+
+    /**
+     * @param mixed $stEstado
+     * @return Assinatura_Model_TbAtoAdministrativo
+     */
+    public function setStEstado($stEstado)
+    {
+        $this->_stEstado = $stEstado;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -140,21 +158,4 @@ class Assinatura_Model_TbAtoAdministrativo extends MinC_Db_Model
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getStExtado()
-    {
-        return $this->_stExtado;
-    }
-
-    /**
-     * @param mixed $stExtado
-     * @return Assinatura_Model_TbAtoAdministrativo
-     */
-    public function setStExtado($stExtado)
-    {
-        $this->_stExtado = $stExtado;
-        return $this;
-    }
 }

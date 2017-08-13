@@ -187,11 +187,11 @@
                                 <label>Ordem da Assinatura</label>
                             </div>
                         </div>
-                        <div class="row" id="divOrdemAssinatura">
+                        <div class="row">
                             <div class="input-field col s12">
                                 <select id="stEstado" name="stEstado">
-                                    <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_ATIVO ?>>">Ativo</option>
-                                    <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_INATIVO ?>>">Inativo</option>
+                                    <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_ATIVO ?>">Ativo</option>
+                                    <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_INATIVO ?>">Inativo</option>
                                 </select>
                                 <label>Situa&ccedil;&atilde;o</label>
                             </div>
@@ -216,15 +216,14 @@
     <script type="text/javascript">
         $3(document).ready(function (){
 
-            carregarOpcoesComboAjax('#idTipoDoAto', callbackCarregarOrdemAssinatura());
-            carregarOpcoesComboAjax('#idCargoDoAssinante', callbackCarregarOrdemAssinatura());
+            carregarOpcoesComboAjax('#idTipoDoAto');
+            carregarOpcoesComboAjax('#idCargoDoAssinante');
             carregarOpcoesComboAjax('#idOrgaoSuperiorDoAssinante', callbackOrgaoSuperior);
-            carregarOpcoesComboAjax('#idPerfilDoAssinante', callbackCarregarOrdemAssinatura());
+            carregarOpcoesComboAjax('#idPerfilDoAssinante');
 
             $3('#idOrgaoSuperiorDoAssinante').change(function() {
                 callbackOrgaoSuperior();
             });
-            tratarExibicaoDeCampos();
 
             $3('.modal').modal({
                     dismissible: true,
@@ -242,15 +241,17 @@
                             '#idPerfilDoAssinante, ' +
                             '#idOrgaoDoAssinante, ' +
                             '#idOrdemDaAssinatura').prop('disabled', false);
-                        $3('select').material_select('destroy');
-                        $3("#botaoConfirmacaoModal").html('Armazenar');
+
+                        $3("#botaoConfirmacaoModal").html('Confirmar');
                         if($3(trigger).data('acao') == 'Alterar' || $3(trigger).data('acao') == 'Remover') {
+                            $3('#idOrgaoDoAssinante').data('valorSelecionado', $3(trigger).data("idorgaodoassinante"));
+                            $3('#idOrdemDaAssinatura').data('valorSelecionado', $3(trigger).data("idordemdaassinatura"));
                             $3('#idTipoDoAto').val($3(trigger).data("idtipodoato"));
                             $3('#idCargoDoAssinante').val($3(trigger).data("idcargodoassinante"));
                             $3('#idOrgaoSuperiorDoAssinante').val($3(trigger).data("idorgaosuperiordoassinante"));
                             $3('#idPerfilDoAssinante').val($3(trigger).data("idperfildoassinante"));
                             $3('#idOrgaoDoAssinante').val($3(trigger).data("idorgaodoassinante"));
-                            $3('#idOrdemDaAssinatura').val($3(trigger).data("idordemdaassinatura"));
+//                            $3('#idOrdemDaAssinatura').val($3(trigger).data("idordemdaassinatura"));
 
                             if($3(trigger).data('acao') == 'Remover') {
                                 $3('#idTipoDoAto, ' +
@@ -264,7 +265,6 @@
                         }
                         $3('#stEstado').val($3(trigger).data("stestado"));
                         $3("#idAtoAdministrativo").val($3(trigger).data('idatoadministrativo'));
-                        $3('select').material_select();
 
                         tratarExibicaoDeCampos();
                     }
@@ -272,21 +272,22 @@
             );
             $3("#botaoConfirmacaoModal").click(function() {
                 var link = '/assinatura/ato-administrativo/cadastrar-ajax';
-                var parametros = {};
+//                var parametros = {};
+//
+//                $3("form").serializeArray().map(function(x){
+//                    parametros[x.name] = x.value;
+//                });
 
-                $("#formConfirmacao").serializeArray().map(function(x){
-                    parametros[x.name] = x.value;
-                });
-
-                if($("#acaoAtoAdministrativo").html() == "Alterar") {
+                if($3("#acaoAtoAdministrativo").html() == "Alterar") {
                     link = '/assinatura/ato-administrativo/alterar-ajax';
-                } else if($("#acaoAtoAdministrativo").html() == "Remover") {
+                } else if($3("#acaoAtoAdministrativo").html() == "Remover") {
                     link = '/assinatura/ato-administrativo/remover-ajax';
                 }
+//                link += "?" + $3("form").serialize();
 
                 $3.post(
                     link,
-                        parametros,
+                    $3("form").serialize(),
                         function (data) {
                             if(data.status == 1) {
                                 Materialize.toast('Opera&ccedil;&atilde;o realizada com sucesso!', 1500, null, function () {
@@ -317,14 +318,11 @@ console.log(data);
             if($3("#acaoAtoAdministrativo").html() == 'Alterar' || $3("#acaoAtoAdministrativo").html() == 'Remover') {
                 var parametrosOrdem = {
                     idOrgaoSuperiorDoAssinante: $3('#idOrgaoSuperiorDoAssinante').find('option:selected').val(),
-                    idTipoDoAto: $3('#idTipoDoAto').find('option:selected').val(),
-                    idOrdemDaAssinatura: $3('#idOrdemDaAssinatura').find('option:selected').val()
+                    idTipoDoAto: $3('#idTipoDoAto').find('option:selected').val()
                 };
 
                 $3('#idOrdemDaAssinatura').data('parametros', parametrosOrdem);
-                if(parametrosOrdem.idOrgaoSuperiorDoAssinante
-                    && parametrosOrdem.idTipoDoAto
-                ) {
+                if(parametrosOrdem.idOrgaoSuperiorDoAssinante != "" && parametrosOrdem.idTipoDoAto != "" ) {
                     carregarOpcoesComboAjax('#idOrdemDaAssinatura');
                 }
             }
@@ -334,7 +332,9 @@ console.log(data);
             var parametrosOrgaos = {
                 idOrgaoSuperiorDoAssinante: $3('#idOrgaoSuperiorDoAssinante').find('option:selected').val()
             };
+
             $3('#idOrgaoDoAssinante').data('parametros', parametrosOrgaos);
+//            carregarOpcoesComboAjax('#idOrgaoDoAssinante');
             carregarOpcoesComboAjax('#idOrgaoDoAssinante', callbackCarregarOrdemAssinatura());
         }
 
@@ -351,7 +351,8 @@ console.log(data);
                 function (data) {
                     $3(seletorSelect).html('');
                     for (var indice in data.resultado) {
-                        var itemSelecionado = (data.resultado[indice].codigo == $(seletorSelect).data('valorSelecionado')) ? "selected='selected' " : '';
+console.log("valor selecionado : " + $3(seletorSelect).data('valorSelecionado'));
+                        var itemSelecionado = (data.resultado[indice].codigo == $3(seletorSelect).data('valorSelecionado')) ? "selected='selected' " : '';
                         $3(seletorSelect).append(
                             "<option value='"
                             + data.resultado[indice].codigo
