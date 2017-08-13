@@ -115,6 +115,18 @@ $arrMenu['assinatura']['menu'][] = array(
     'label' => 'Visualizar Assinaturas'
 );
 
+$arrMenu['assinatura']['menu'][] = array(
+    'grupo' => array(97),
+    'url' => $this->url(
+        array(
+            'module' => 'assinatura',
+            'controller' => 'ato-administrativo',
+            'action' => 'gerir-atos-administrativos'
+        ), '', true),
+    'title' => 'Ir para Gerir Atos Administrativos',
+    'label' => 'Gerir Atos Administrativos'
+);
+
 $arrMenu['acompanhamento'] = array(
     'id' => 'acompanhamento',
     'label' => 'Acompanhamento',

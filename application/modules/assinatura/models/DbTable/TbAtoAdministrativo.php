@@ -45,7 +45,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
-    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto, $idOrgaoSuperiorDoAssinante)
+    public function obterQuantidadeMinimaAssinaturas($idTipoDoAto, $idOrgaoSuperiorDoAssinante, $idOrgaoDoAssinante = NULL)
     {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
@@ -64,7 +64,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         if ($idOrgaoDoAssinante) {
             $objQuery->where('idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
         }
-        
+
         $objResultado = $this->fetchRow($objQuery);
         if ($objResultado) {
             $resultadoArray = $objResultado->toArray();
@@ -120,4 +120,188 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         }
     }
 
+    /**
+     * Transposição da view "vwAtoAdministrativo".
+     */
+    public function obterAtoAdministrativoDetalhado()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            $this->_name,
+            '*',
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
+            array("Verificacao" => "Verificacao"),
+            "{$this->_name}.idTipoDoAto = Verificacao.idVerificacao",
+            array("dsAtoAdministrativo" => "Descricao"),
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
+            array("Verificacao_Agentes" => "Verificacao"),
+            "{$this->_name}.idCargoDoAssinante = Verificacao_Agentes.idVerificacao",
+            array("dsCargoDoAssinante" => "Descricao"),
+            "Agentes"
+        );
+
+        $objQuery->joinInner(
+            array("Orgaos" => "Orgaos"),
+            "{$this->_name}.idOrgaoDoAssinante = Orgaos.Codigo",
+            array("dsOrgaoDoAssinante" => "Sigla"),
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
+            array("OrgaoSuperior" => "Orgaos"),
+            "{$this->_name}.idOrgaoSuperiorDoAssinante = OrgaoSuperior.Codigo",
+            array("dsOrgaoSuperiorDoAssinante" => "OrgaoSuperior.Sigla"),
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
+            array("Grupos" => "Grupos"),
+            "{$this->_name}.idPerfilDoAssinante = Grupos.gru_codigo",
+            array("dsPerfil" => "gru_nome"),
+            'tabelas'
+        );
+        $objQuery->order([
+            "Verificacao.Descricao asc",
+            "OrgaoSuperior.Sigla asc",
+            "TbAtoAdministrativo.idOrdemDaAssinatura asc",
+            "Orgaos.Sigla asc"
+        ]);
+//xd($objQuery->assemble());
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterTiposDeAtosAdministrativosAtivos()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Verificacao' => 'Verificacao'],
+            array(
+                'codigo' => 'idVerificacao',
+                'descricao' => 'Descricao',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('stEstado = ?', 1);
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterCargosDoAssinante()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Verificacao' => 'Verificacao'],
+            array(
+                'codigo' => 'idVerificacao',
+                'descricao' => 'Descricao',
+            ),
+            'Agentes'
+        );
+        $objQuery->where('Sistema = ?', 21);
+        $objQuery->where('idTipo = ?', 27);
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterOrgaosSuperiores()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Orgaos' => 'Orgaos'],
+            array(
+                'codigo' => 'Codigo',
+                'descricao' => 'Sigla',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('Codigo = idSecretaria');
+        $objQuery->order('Sigla asc');
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterOrgaos($idOrgaoSuperior)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Orgaos' => 'Orgaos'],
+            array(
+                'codigo' => 'Codigo',
+                'descricao' => 'Sigla',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('Codigo = idSecretaria');
+        $objQuery->where('idSecretaria = ?', $idOrgaoSuperior);
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterPerfisDoAssinante()
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            ['Grupos' => 'Grupos'],
+            array(
+                'codigo' => 'gru_codigo',
+                'descricao' => 'gru_nome',
+            ),
+            'tabelas'
+        );
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterOrdensAssinaturaDisponiveis(Assinatura_Model_TbAtoAdministrativo $objModelAtoAdministrativo)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            [$this->_name],
+            array(
+                'codigo' => 'idOrdemDaAssinatura',
+                'descricao' => 'idOrdemDaAssinatura',
+            ),
+            $this->_schema
+        );
+        $objQuery->where('idTipoDoAto = ?', $objModelAtoAdministrativo->getIdTipoDoAto());
+        $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante());
+
+        if ($objModelAtoAdministrativo->getIdOrdemDaAssinatura()) {
+            $objQuery->where('idOrdemDaAssinatura = ?', $objModelAtoAdministrativo->getIdOrdemDaAssinatura());
+        }
+
+        return $this->fetchAll($objQuery)->toArray();
+    }
+
+    public function obterProximaOrdemDeAssinatura(Assinatura_Model_TbAtoAdministrativo $objModelAtoAdministrativo)
+    {
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
+        $objQuery->from(
+            [$this->_name],
+            [new Zend_Db_Expr('coalesce(max(idOrdemDaAssinatura), 0) + 1 as idOrdemDaAssinatura')],
+            $this->_schema
+        );
+
+        $objQuery->where('idTipoDoAto = ?', $objModelAtoAdministrativo->getIdTipoDoAto());
+        $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante());
+        $objResultado = $this->fetchRow($objQuery);
+
+        if ($objResultado) {
+            $arrayResultado = $objResultado->toArray();
+            return $arrayResultado['idOrdemDaAssinatura'];
+        }
+    }
 }
