@@ -129,7 +129,7 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
     {
         $arrayResultado = [
             0 => [
-                'codigo' => null,
+                'codigo' => 1,
                 'descricao' => 1
             ]
         ];
@@ -158,13 +158,17 @@ class Assinatura_AtoAdministrativoController extends Assinatura_GenericControlle
     {
         try {
             $post = $this->getRequest()->getPost();
+            $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($post);
 
-            if(!$post['idTipoDoAto'] || !$post['idOrgaoSuperiorDoAssinante'] || !$post['idCargoDoAssinante'] ||
-                !$post['idPerfilDoAssinante'] || !$post['idOrgaoDoAssinante']) {
+            if( empty($objModelAtoAdministrativo->getIdTipoDoAto())
+                || empty($objModelAtoAdministrativo->getIdOrgaoSuperiorDoAssinante())
+                || empty($objModelAtoAdministrativo->getIdCargoDoAssinante())
+                || empty($objModelAtoAdministrativo->getIdPerfilDoAssinante())
+                || empty($objModelAtoAdministrativo->getIdOrgaoDoAssinante())
+            ) {
                 throw new Exception("Preencha todos os campos.");
             }
 
-            $objModelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($post);
             $objAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
             $objAtoAdministrativoMapper = new Assinatura_Model_TbAtoAdministrativoMapper();
 
