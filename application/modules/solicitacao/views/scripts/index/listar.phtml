@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col s12">
-        <?php if($this->arrResult) : ?>
+        <?php if (count($this->arrResult) > 0) : ?>
             <table class="bordered striped highlight">
                 <thead class=" green darken-1 white-text">
                 <tr>
@@ -16,17 +16,25 @@
                 <tbody>
                 <?php foreach ($this->arrResult as $int => $arrValue): ?>
                     <tr>
-                        <td><?= $int+1; ?></td>
+                        <td><?= $int + 1; ?></td>
                         <td><?= $arrValue['dtSolicitacao']; ?></td>
                         <td><?= $arrValue['Solicitante']; ?></td>
                         <td><?= $arrValue['dsEncaminhamento']; ?></td>
-                        <td><?= $arrValue['dsSolicitacao']; ?></td>
-                        <td><?= $arrValue['dsResposta']; ?></td>
+                        <td>
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                                <?= $arrValue['dsSolicitacao']; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                                <?= $arrValue['dsResposta']; ?>
+                            </a>
+                        </td>
                         <td>
                             <a
-                                data-ajax-modal="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>"
-                                href="javascript:void(0);"
-                                class="btn small waves-effect waves-light tooltipped" data-position="top" data-delay="50"
+                                href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>"
+                                class="btn small waves-effect waves-light tooltipped" data-position="top"
+                                data-delay="50"
                                 data-tooltip="Visualizar">
                                 <i class="material-icons">zoom_in</i>
                             </a>

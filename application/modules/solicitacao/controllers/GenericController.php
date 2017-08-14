@@ -38,23 +38,22 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         $this->usuario = $arrAuth;
 
 
-        $this->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-        $this->idPronac = $this->getRequest()->getParam('idPronac');
-
-        if (!empty($this->idPronac)) {
+        $this->_idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+        $this->_idPronac = $this->getRequest()->getParam('idPronac');
+        if (!empty($this->_idPronac)) {
             $tbProjetos = new Projeto_Model_DbTable_Projetos();
-            $this->_projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();
-            $this->idPreProjeto = $this->_projeto->idProjeto;
+            $this->_projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->_idPronac))->current();
+            $this->_idPreProjeto = $this->_projeto->idProjeto;
             $this->view->projeto = $this->_projeto;
         }
 
-        if (!empty($this->idPreProjeto)) {
+        if (!empty($this->_idPreProjeto)) {
             $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-            $this->_proposta = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
+            $this->_proposta = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $this->_idPreProjeto))->current();
             $this->view->proposta = $this->_proposta;
         }
 
-        $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo ']: $arrAuth['idusuario'];
+        $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo '] : $arrAuth['idusuario'];
 
         $this->_usuario = $arrAuth;
         $this->view->usuario = $this->_usuario;

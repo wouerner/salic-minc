@@ -18,6 +18,7 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
 
     const SOLICITACAO_CADASTRADA = 12;
     const SOLICITACAO_ENCAMINHADA = 1;
+    const SOLICITACAO_FINALIZADA_MINC = 15;
 
     /**
      * @return mixed
@@ -48,7 +49,8 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
      */
     public function setIdPronac($idPronac)
     {
-        $this->_idPronac = $idPronac;
+        if(!empty($idPronac))
+            $this->_idPronac = $idPronac;
     }
 
     /**
@@ -64,7 +66,9 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
      */
     public function setIdProjeto($idProjeto)
     {
-        $this->_idProjeto = $idProjeto;
+        if(!empty($idProjeto))
+            $this->_idProjeto = $idProjeto;
+
     }
 
     /**

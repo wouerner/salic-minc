@@ -17,78 +17,24 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
         $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
     }
 
-    public function isUniqueCpfCnpj($value)
+    public function existeSolicitacaoNaoRespondida($arrData, $estado = 1)
     {
-        return ($this->findBy(array("cnpjcpf" => $value))) ? true : false;
+        if (isset($arrData['idSolicitacao'])) {
+            $where['idSolicitacao = ?'] = $arrData['idSolicitacao'];
+        }
+
+        if (isset($arrData['idPronac'])) {
+            $where['idPronac = ?'] = $arrData['idPronac'];
+        }
+
+        if (isset($arrData['idProjeto'])) {
+            $where['idProjeto = ?'] = $arrData['idProjeto'];
+        }
+
+        $where['stEstado = ?'] = $estado;
+
+        return ($this->findBy($where)) ? true : false;
     }
-
-//    public function encaminhar($arrData)
-//    {
-//        $booStatus = false;
-//        if (!empty($arrData)) {
-//            unset($arrData['dsMensagem']);
-//            unset($arrData['IdPRONAC']);
-//            $model = new Solicitacao_Model_TbSolicitacao($arrData);
-//            try {
-//                $auth = Zend_Auth::getInstance(); // pega a autenticacao
-//                $arrAuth = array_change_key_case((array)$auth->getIdentity());
-//                $model->setStAtivo(1);
-//                if ($intId = parent::save($model)) {
-//                    $booStatus = 1;
-//                    $this->setMessage('Mensagem encaminhada com sucesso!');
-//                } else {
-//                    $this->setMessage('N&atilde;o foi possivel encaminhar mensagem!');
-//                }
-//            } catch (Exception $e) {
-//                $this->setMessage($e->getMessage());
-//            }
-//        }
-//        return $booStatus;
-//    }
-
-//    public function responder($arrData)
-//    {
-//        $booStatus = false;
-//        if (!empty($arrData)) {
-//
-//            $arrData['dsMensagem'] = $arrData['dsResposta'];
-//            $arrData['idMensagemOrigem'] = $arrData['idMensagemProjeto'];
-//            unset($arrData['idMensagemProjeto']);
-//
-//            $model = new Solicitacao_Model_TbSolicitacao($arrData);
-//
-//            try {
-//                $auth = Zend_Auth::getInstance(); // pega a autenticacao
-//                $arrAuth = array_change_key_case((array)$auth->getIdentity());
-//                $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-//                $intUsuOrgao = $grupoAtivo->codGrupo;
-//                $model->setStAtivo(1);
-//                $model->setDtMensagem(date('Y-m-d h:i:s'));
-//                $model->setIdRemetente($arrAuth['usu_codigo']);
-//                $model->setIdRemetenteUnidade($intUsuOrgao);
-//                $model->setCdTipoMensagem('R');
-//                $arrMensagemOrigem = $this->getDbTable()->findBy($arrData['idMensagemOrigem']);
-//                $model->setIdDestinatario($arrMensagemOrigem['idRemetente']);
-//                $model->setIdDestinatarioUnidade($arrMensagemOrigem['idRemetenteUnidade']);
-//                if (empty($model->getIdPRONAC())) {
-//                    $model->setIdPRONAC($arrMensagemOrigem['IdPRONAC']);
-//                }
-//                if ($intId = parent::save($model)) {
-//                    $booStatus = 1;
-//                    $this->setMessage('Solicita&ccedil;&atilde;o respondida com sucesso!');
-//                } else {
-//                    if (isset($this->getMessages()['dsMensagem'])) {
-//                        $this->setMessage($this->getMessages()['dsMensagem'], 'dsResposta');
-//                        unset($this->arrMessages['dsMensagem']);
-//                    }
-//                    $this->setMessage('N&atilde;o foi possivel responder &agrave; solicita&ccedil;&atilde;o!');
-//                }
-//            } catch (Exception $e) {
-//                $this->setMessage($e->getMessage());
-//            }
-//        }
-//        return $booStatus;
-//    }
 
     public function isValid($model)
     {
@@ -101,7 +47,7 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
             );
         } else {
             $arrRequired = array(
-                'idDestinatarioUnidade',
+                'dsResposta',
             );
         }
         foreach ($arrRequired as $strValue) {
@@ -132,7 +78,7 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 $model->setIdProjeto($arrData['idProjeto']);
 
 //                $idTecnico = new Zend_Db_Expr("sac.dbo.fnPegarTecnico(?, {$arrData['idOrgao']}, 3)");
-//                $model->setIdTecnico($idTecnico);
+//                $model->setIdTecnico(1);
 
                 $file = new Zend_File_Transfer();
 
@@ -143,17 +89,44 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                     $arrDoc['dsDocumento'] = 'Anexo solicita&ccedil;&atilde;o';
 
                     $mapperArquivo = new Arquivo_Model_TbDocumentoMapper();
-
                     $idDocumento = $mapperArquivo->saveCustom($arrDoc, $file);
 
                 }
                 $model->setIdDocumento($idDocumento);
 
-                if ($this->save($model)) {
-                    $booStatus = 1;
+                if ($id = $this->save($model)) {
+                    $booStatus = $id;
                     $this->setMessage('Rascunho salvo com sucesso!');
                 } else {
                     $this->setMessage('N&atilde;o foi poss&iacute;vel salvar o rascunho!');
+                }
+            } catch (Exception $e) {
+                $this->setMessage($e->getMessage());
+            }
+        }
+        return $booStatus;
+    }
+
+    public function responder($arrData)
+    {
+        $booStatus = 0;
+
+        if (!empty($arrData)) {
+
+            try {
+                $model = new Solicitacao_Model_TbSolicitacao();
+                $model->setIdSolicitacao($arrData['idSolicitacao']);
+                $model->setDtResposta(date('Y-m-d h:i:s'));
+                $model->setDsResposta($arrData['dsResposta']);
+                $model->setIdTecnico($this->_idUsuario);
+                $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC);
+                $model->setStEstado(0);
+
+                if ($id = $this->save($model)) {
+                    $booStatus = $id;
+                    $this->setMessage('Solicita&ccedil;&atilde;o respondida com sucesso!');
+                } else {
+                    $this->setMessage('N&atilde;o foi poss&iacute;vel salvar a resposta da solicita&ccedil;&atilde;o!');
                 }
             } catch (Exception $e) {
                 $this->setMessage($e->getMessage());

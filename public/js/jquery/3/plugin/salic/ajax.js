@@ -50,9 +50,22 @@
             });
         });
 
+        elmBody.on('click', 'a[data-ajax-render]', function () {
+            var objTarget = '#' + $(this).attr('id');
+
+            if (typeof $(this).attr('data-ajax-target') !== 'undefined') {
+                objTarget = $(this).attr('data-ajax-target');
+            }
+
+            $.ajaxRender({strUrl: $(this).attr('data-ajax-render'), strTarget: objTarget});
+        });
+
         // Adicionando evento de renderizar automaticamente o ajax no elemento.
         $.each($('div[data-ajax-render]'), function () {
-            $.ajaxRender({strUrl: $(this).attr('data-ajax-render'), strTarget: '#' + $(this).attr('id')});
+
+            var objTarget = '#' + $(this).attr('id');
+
+            $.ajaxRender({strUrl: $(this).attr('data-ajax-render'), strTarget: objTarget});
         });
 
         // Adicionando evento de enviar o formulario via ajax caso tenha a tag data-ajax-form.
