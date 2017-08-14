@@ -276,7 +276,6 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         } elseif($itemAvaliadoFilter == 3) {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
-        /* echo $select;die; */
         return $this->fetchAll($select);
     }
 
@@ -1951,7 +1950,65 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         } elseif($itemAvaliadoFilter == 3) {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
-        /* echo $select;die; */
+
+        return $this->fetchAll($select);
+    }
+
+    public function buscarItensPagamentoDados($idpronac, $itemAvaliadoFilter = null)
+    {
+        $select = $this->select()->distinct();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('pAprovacao'=>$this->_name),
+            array(
+                'pAprovacao.idPlanilhaAprovacao', 'vlUnitario','qtItem','nrOcorrencia',
+                new Zend_Db_Expr('(pAprovacao.qtItem*pAprovacao.nrOcorrencia*pAprovacao.vlUnitario) as Total'),
+            )
+        );
+        $select->joinInner(
+            array('pEtapa'=>'tbPlanilhaEtapa'),
+            'pAprovacao.idEtapa = pEtapa.idPlanilhaEtapa',
+            array('pEtapa.idPlanilhaEtapa', 'pEtapa.tpCusto','pEtapa.Descricao as descEtapa'),
+            'SAC.dbo'
+        );
+        $select->joinInner(
+            array('pItens'=>'tbPlanilhaItens'),
+            'pAprovacao.idPlanilhaItem = pItens.idPlanilhaItens',
+            array('pItens.idPlanilhaItens','pItens.Descricao as descItem'),
+            'SAC.dbo'
+        );
+        $select->joinLeft(array('prod'=>'Produto'), 'pAprovacao.idProduto = prod.Codigo', array('prod.Codigo','prod.Descricao'), 'SAC.dbo');
+        $select->joinInner(array('UFT'=>'UF'), 'pAprovacao.idUFDespesa = UFT.idUF', array('uf'=>'UFT.Sigla'), 'AGENTES.dbo');
+        $select->joinInner(
+            array('CID'=>'Municipios'),
+            'pAprovacao.idMunicipioDespesa = CID.idMunicipioIBGE',
+            array('cidade'=>'CID.Descricao', 'idMunicipio'=>'CID.idMunicipioIBGE'),
+            'AGENTES.dbo'
+        );
+
+        $select->where('pAprovacao.IdPRONAC = ?', $idpronac);
+        $select->where('pAprovacao.stAtivo = ?','S');
+        $select->where('pAprovacao.nrFonteRecurso = ?', 109); //Incentivo Fiscal Federal
+        $select->where('pAprovacao.tpAcao IS NULL OR pAprovacao.tpAcao <> ? ', 'E'); //Adicionado para n�o listar as que ja foram excluidas
+        $select->where('(pAprovacao.qtItem*pAprovacao.nrOcorrencia*pAprovacao.vlUnitario) > 0');
+
+        $select->order('prod.Descricao');
+        $select->order('pEtapa.idPlanilhaEtapa');
+        $select->order('pItens.Descricao');
+        $select->order('UFT.Sigla');
+        $select->order('CID.Descricao');
+        $select->order('pAprovacao.vlUnitario');
+        $select->order('pAprovacao.qtItem');
+        $select->order('pEtapa.tpCusto');
+
+        if ($itemAvaliadoFilter == 1) {
+            $select->where('cppa.stItemAvaliado = ?', 4);
+        } elseif($itemAvaliadoFilter == 2) {
+            $select->where('cppa.stItemAvaliado != ?', 4);
+        } elseif($itemAvaliadoFilter == 3) {
+            $select->where('cppa.stItemAvaliado = ?', 3);
+        }
+
         return $this->fetchAll($select);
     }
 }
