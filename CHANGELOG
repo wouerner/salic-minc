@@ -1,3 +1,85 @@
+Release 2.5.1
+* [FIX] Parecer/Análise inicial e CNIC: correção ao gerar documento
+
+Release 2.5.0
+* [ADD] Parecer/Análise CNIC: Fluxo de assinatura para CNIC, com finalização de projeto
+* [FIX] CNIC/Realizar análise projeto: retirar verificação de limites orçamentários se nova IN 2017
+* [FIX] CNIC/Realizar análise projeto: removendo links de edição da planilha e reintegrar valores para projetos posteriores a VerificarIN2017
+* [FIX] CNIC/Realizar análise projeto: se nova IN, tirar links para análise de conteúdo e análise de cortes sugeridos
+* [FIX] CNIC/Realizar análise projeto: alterando cor do menu
+* [FIX] Parecer/análise inicial: correção de erro ao gerar documento para assinatura
+* [FIX] Parecer/presidente de vinculada: correção de url
+* [FIX] Parecer/análise inicial: ajustes de estilo no documento para assinatura
+* [REFACTOR] Parecer/análise inicial: alterando nome de função preparatória do documento para assinatura
+* [REFACTOR] Parecer/Análise CNIC: movendo funcionalidade para módulo parecer e redirecionando ação
+* [REFACTOR] Parecer/parecer cnic: trazendo funcionalidades de emissão de parecer para módulo parecer
+* [UPDATE] EXIBIR PROJETO/PLANO DISTRIBUICAO: Ajustando visualizacao do plano de distribuicao
+* [UPDATE] Assinatura/TbAssinatura: adicionando tipo ato para análise CNIC
+* [UPDATE] Autenticação: adicionado permissão para componente da comissão (cnic)
+
+Release 2.4.3
+* [FIX] Parecer/análise inicial: correção na geração do documento para assinatura'
+
+Release 2.4.2
+* [FIX] Parecer/análise inicial: correção de erro na paginação
+* [FIX] Parecer/análise inicial: Passando idAtoAdministrativo e stEstado para gerar documento assinatura
+
+Release 2.4.1
+* [FIX] Parecer/análise inicial: correção no fome da fn e alterando chamada a verificarIN2017 para fn
+* [FIX] Parecer/análise inicial: adicionando tela faltante
+
+Release 2.4.0
+* [ADD] Parecer/análise inicial: Fluxo de aprovação pelo parecerista com assinatura para IN 2017
+* [ADD] Parecer/gerenciar pareceres: Fluxo de aprovação pelo coordenador de parecer com assinatura para IN 2017
+* [ADD] Parecer/gerenciar parecer: Fluxo de aprovação pelo presidente de vinculada para IN 2017
+* [ADD] Parecer/análise inicial: Gravando informações sobre ações relevantes para IN 2017
+* [ADD] Parecer: passando sempre o código do órgão superior para obterQuantidadeMinimaAssinaturas()
+* [ADD] Parecer/analisar-projeto-parecer: finalizar projeto pela modal para IN 2017
+* [ADD] Autenticação/grupos: Adicionando perfil de presidente de vinculada
+* [ADD] Parecer/Documento Assinatura: pega nome do órgão para gerar documento para assinatura
+* [ADD] Parecer/analisar-projeto-parecer: trazendo a lógica da análise inicial para módulo de parecer; adicionando restrição de editar produto, acessar diligência e declarar impedimento caso já tenha assinado
+* [ADD] Assinatura/TbAssinatura: adicionando constante para tipo_ato_analise_inicial
+* [ADD] Helper: adicionando helper IsProjetoJaAssinado
+* [FIX] Analisarprojetoparecer: fazendo validações de 15% e 20% apenas para projetos anteriores a 2017
+* [FIX] Default/gerenciarparecer: inativa documentoAssinatura existente quando encaminha/distribui parecer pelo coordenador
+* [FIX] Parecer: atualizando entradas no menu para análise inicial e gerenciar parecer
+* [FIX] Analisarprojetoparecer/análise inicial: correção de encoding
+* [FIX] Analisarprojetoparecer/fechar análise: correção de encoding
+* [FIX] Parecer/HelperIsProjetoJaAssinado: pegando também situação em que retorna objeto
+* [FIX] Analisarprojetoparecer/análise inicial: correção em link de produto secundário e erro ao alterar item
+* [FIX] Analisarprojetoparecer/análise inicial: correção ao alterar item && correção de acentos
+* [FIX] Analise inicial/produto: estilo diferenciado para produto com custo praticado acima da mediana
+* [UPDATE] Parecer/análise inicial: ajuste de estilo dos botões
+* [UPDATE] Parecer/gerenciar pareceres: ajuste de estilo dos botões
+* [UPDATE] Assinatura: adicionando possibilidade de filtrar a obtenção da quantidade de assinaturas por idOrgaoDoAssinante
+* [UPDATE] Analisarprojetoparecer/análise inicial: Alterando devolução ao coordenador para declaração de impedimento
+* [REFACTOR] Parecer/Análise inicial: movendo métodos de parecer/index para parecer/analise-inicial e removendo arquivos desnecessários
+* [REFACTOR] Parecer/gerenciar-parecer: movendo lógica de finalização de parecer para ser feito pelo presidente; presidente assinando, concluindo e enviando de volta para o MinC
+* [UPDATE] Prestação de contas: Mudando formato de data/hora nas telas
+* [FIX] Prestação Contas: Retirando texto rico para teste e validação
+* [FIX] Desistencia Recursal: Ajusta no texto da desistencia recursal
+* [FIX] CSS/SELECT: Corrige tamanho apenas para forms
+* [FIX] PROPOSTA/SOLICITAR ITEM: Corrige acao do botao NOVO
+* [FIX] Prestação de contas/Comprovação financeira: Corrige ao incluir novo fornecedor
+* [FIX] Agentes/Dirigentes: Corrige menu desformatado
+
+Release 2.3.0
+* [FIX] Admissibilidade/Enquadramento : Correção do link "Enquadrar Projeto"
+* [FIX] Readequação: Erro ao acessar a tela
+* [FIX] Prestação de Contas : Ajuste no sql para gerar os dados de itens
+* [UPDATE] Assinatura : Adição de tratamento para gerenciamento de projetos culturais para assinar de acordo com o ato administativo do orgão, perfil e orgão superior do usuário logado.
+* [UPDATE] Assinatura : Adição de tratamento para visualização de itens já assinados
+* [UPDATE] Assinatura : Melhoria nos filtros de Projetos Culturais para assinaturas
+* [UPDATE] Assinatura : Alteração da validação da exibiçaõ do botão Finalizar, de acordo com o Orgao Superior no ato Administrativo [FIX] Correção de falha na validação da situação na funcionalidade de devolução do projeto cultural.
+* [UPDATE] Admissibilidade/Enquadramento : Criação de funcionalidade para visualizar o motivo da devolução dos Projetos Culturais que estão na situação 'B05 - Projeto Devolvido para enquadramento' que estão disponíveis para enquadramento
+* [UPDATE] Admissibilidade/Enquadramento: Adição de grupos de acesso para SAV na assinatura pela admissibilidade de enquadramento.
+* [UPDATE] Proposta : Gestor Salic/Solicitar Itens: Corrige aprovacao e rejeicao dos itens
+* [UPDATE] Proposta : Atualiza README do modulo proposta
+* [UPDATE] Proposta/Solicitar item: Correcao de texto e limitar a quantidade mínima de caracteres para pesquisa
+* [UPDATE] Proposta/Solicitar Item - Corrigindo bug e melhorando o código
+* [UPDATE] Proposta/Solicitar Item - Refatora metodo de salvar e remove consultas nao utilizados
+* [UPDATE] Proposta/Solicitar Itens: Melhoria na pesquisa de itens já existentes
+
 Release 2.2.0
  * [UPDATE] Proposta/Gerar pdf: novo formato e informacoes para o proponente imprimir a proposta cultural
  * [FIX] Proposta/Planilha: Bug ao excluir item adicionado via ajax

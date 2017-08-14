@@ -3,7 +3,7 @@
 class fnVerificarProjetoAprovadoIN2017 extends MinC_Db_Table_Abstract {
 
     protected $_schema = 'SAC';
-    protected $_name = 'fnVerificarProjetoAprovadoIN2017';
+    protected $_name = 'fnVerificar_Projeto_Aprovado_IN2017';
 
     /**
      * @Deprecated 
@@ -21,7 +21,6 @@ class fnVerificarProjetoAprovadoIN2017 extends MinC_Db_Table_Abstract {
 
     /**
      * FUNÇÃO QUE VERIFICA SE PROJETO ESTÁ SOB A IN 2017
-     * @author Fernão Lopes Ginez de Lara <fernao.lara@cultura.gov.br>
      * @param null $idPronac
      * @return bool
      */    

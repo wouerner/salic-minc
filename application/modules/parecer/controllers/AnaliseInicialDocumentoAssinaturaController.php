@@ -6,6 +6,8 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
 
     private $post;
 
+    const ID_TIPO_AGENTE_PARCERISTA = 1;
+    
     function __construct($post)
     {
         $this->post = $post;
@@ -23,8 +25,8 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
             throw new Exception("Projeto n&atilde;o encontrado.");
         }
         
-        $projetos = new Projetos();
-        $IN2017 = $projetos->verificarIN2017($this->idPronac);
+        $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();       
+        $IN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($this->idPronac);
         
         if (!$IN2017) {
             $secundariosAnalisados = $this->verificaSecundariosAnalisados($this->idPronac);
@@ -39,26 +41,30 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
                 throw new Exception("N&atilde;o &eacute; poss&iacute;vel assinar esse projeto!");
             }
         }
-                
+
         $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $this->idPronac,
-            $this->idTipoDoAtoAdministrativo
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL
         );
 
         if(!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
             $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+
+            $parecer = new Parecer();           
+            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_PARCERISTA)[0]['idParecer'];
             
             $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
             $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
-            $objModelDocumentoAssinatura->setIdAtoDeGestao(NULL);
+            $objModelDocumentoAssinatura->setIdAtoDeGestao($idAtoAdministrativo);
             $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
+            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
 
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
             $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
@@ -111,12 +117,14 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
         
         $projetos = new Projetos();
 
-        $dadosProjeto = $projetos->assinarParecer($this->idPronac);
+        $dadosProjeto = $projetos->assinarParecerTecnico($this->idPronac);
         
         $view->dadosEnquadramento = $dadosProjeto['enquadramento'];
         $view->dadosProdutos = $dadosProjeto['produtos'];
         $view->dadosDiligencias = $dadosProjeto['diligencias'];
-        $view->IN2017 = $projetos->verificarIN2017($this->idPronac);
+
+        $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();
+        $view->IN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($this->idPronac);
         
         if ($view->IN2017) {
             $view->dadosAlcance = $dadosProjeto['alcance'][0];

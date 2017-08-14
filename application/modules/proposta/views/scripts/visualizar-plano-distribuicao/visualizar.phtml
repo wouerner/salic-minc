@@ -52,35 +52,35 @@
                         <thead>
                         <tr>
                             <th class="center-align" rowspan="2">Quantidade</th>
-                            <th colspan="3" class="proponente">Proponente</th>
-                            <th colspan="3" class="popular">Pre&ccedil;o Popular</th>
-                            <th colspan="3" class="gratuito">Distribui&ccedil;&atilde;o Gratuita</th>
+                            <th colspan="3" class="center-align gratuito">Distribui&ccedil;&atilde;o Gratuita</th>
+                            <th colspan="3" class="center-align popular">Pre&ccedil;o Popular</th>
+                            <th colspan="3" class="center-align proponente">Proponente</th>
                             <th class="right-align" rowspan="2" width="8%">Receita Prevista total</th>
                         </tr>
                         <tr>
-                            <th class="proponente">Qtd. Inteira</th>
-                            <th class="proponente">Qtd. Meia</th>
-                            <th class="proponente">Valor m&eacute;dio</th>
-                            <th class="popular">Qtd. Inteira</th>
-                            <th class="popular">Qtd. Meia</th>
-                            <th class="popular">Valor m&eacute;dio</th>
-                            <th class="gratuito">Divulga&ccedil;&atilde;o</th>
-                            <th class="gratuito">Patrocinador</th>
-                            <th class="gratuito">Popula&ccedil;&atilde;o</th>
+                            <th class="gratuito right-align">Divulga&ccedil;&atilde;o</th>
+                            <th class="gratuito right-align">Patrocinador</th>
+                            <th class="gratuito right-align">Popula&ccedil;&atilde;o</th>
+                            <th class="popular right-align">Qtd. Inteira</th>
+                            <th class="popular right-align">Qtd. Meia</th>
+                            <th class="popular right-align">Valor m&eacute;dio</th>
+                            <th class="proponente right-align">Qtd. Inteira</th>
+                            <th class="proponente right-align">Qtd. Meia</th>
+                            <th class="proponente right-align">Valor m&eacute;dio</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td class="center-align"><?php echo $planoDistribuicao->QtdeProduzida; ?></td>
-                            <td class="proponente"><?php echo $planoDistribuicao->QtdeVendaNormal; ?></td>
-                            <td class="proponente"><?php echo $planoDistribuicao->QtdeVendaPromocional; ?></td>
-                            <td class="proponente"><?php echo $planoDistribuicao->PrecoUnitarioNormal; ?></td>
-                            <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularNormal; ?></td>
-                            <td class="popular"><?php echo $planoDistribuicao->QtdeVendaPopularPromocional; ?></td>
-                            <td class="popular"><?php echo $planoDistribuicao->ReceitaPopularNormal; ?>	</td>
-                            <td class="gratuito"><?php echo $planoDistribuicao->QtdeProponente;	?></td>
-                            <td class="gratuito"><?php echo $planoDistribuicao->QtdePatrocinador; ?></td>
-                            <td class="gratuito"><?php echo $planoDistribuicao->QtdeOutros; ?></td>
+                            <td class="gratuito right-align"><?php echo $planoDistribuicao->QtdeProponente;	?></td>
+                            <td class="gratuito right-align"><?php echo $planoDistribuicao->QtdePatrocinador; ?></td>
+                            <td class="gratuito right-align"><?php echo $planoDistribuicao->QtdeOutros; ?></td>
+                            <td class="popular right-align"><?php echo $planoDistribuicao->QtdeVendaPopularNormal; ?></td>
+                            <td class="popular right-align"><?php echo $planoDistribuicao->QtdeVendaPopularPromocional; ?></td>
+                            <td class="popular right-align"><?php echo $planoDistribuicao->ReceitaPopularNormal; ?>	</td>
+                            <td class="proponente right-align"><?php echo $planoDistribuicao->QtdeVendaNormal; ?></td>
+                            <td class="proponente right-align"><?php echo $planoDistribuicao->QtdeVendaPromocional; ?></td>
+                            <td class="proponente right-align"><?php echo $planoDistribuicao->PrecoUnitarioNormal; ?></td>
                             <td class="right-align"><?php echo $planoDistribuicao->Receita; ?></td>
                         </tr>
                         </tbody>
@@ -103,7 +103,7 @@
         });
 
         $3('.collapsible-abrangencia').collapsible({
-            accordion: true,
+            accordion: false,
             onOpen: function(el) { el.find('.material-icons:first').html('remove'); },
             onClose: function(el) { el.find('.material-icons:first').html('place'); }
         });
@@ -124,42 +124,46 @@
                         <tr>
                             <th rowspan="2">Categoria</th>
                             <th rowspan="2">Quantidade</th>
-                            <th class="proponente" colspan="3">
-                                Proponente
+                            <th class="center-align gratuito" rowspan="2">
+                                Distribui&ccedil;&atilde;o <br>Gratuita
                             </th>
-                            <th class="popular" colspan="3">
+                            <th class="center-align popular" colspan="3">
                                 Pre&ccedil;o Popular
                             </th>
-                            <th class="gratuito" rowspan="2">
-                                Distribui&ccedil;&atilde;o <br>Gratuita
+                            <th class="center-align proponente" colspan="3">
+                                Proponente
                             </th>
                             <th rowspan="2" class="center-align">Receita <br> Prevista</th>
                         </tr>
                         <tr>
-                            <th class="proponente">Qtd. Inteira</th>
-                            <th class="proponente">Qtd. Meia</th>
-                            <th class="proponente">Pre&ccedil;o <br> Unitario</th>
-                            <th class="popular">Qtd. Inteira</th>
-                            <th class="popular">Qtd. Meia</th>
-                            <th class="popular">Pre&ccedil;o <br> Unitario</th>
+                            <th class="right-align popular">Qtd. Inteira</th>
+                            <th class="right-align popular">Qtd. Meia</th>
+                            <th class="right-align popular">Pre&ccedil;o <br> Unit&aacute;rio</th>
+                            <th class="right-align proponente">Qtd. Inteira</th>
+                            <th class="right-align proponente">Qtd. Meia</th>
+                            <th class="right-align proponente">Pre&ccedil;o <br> Unit&aacute;rio</th>
                         </tr>
                         </thead>
                         <tbody v-if="produtos.length > 0">
                             <tr v-for="( produto, index ) in produtos">
                                 <td>{{ produto.dsProduto }}</td>
-                                <td class="center-align">{{ produto.qtExemplares }}</td>
-                                <!--Preço Proponente -->
-                                <td class="center-align">{{ produto.qtProponenteIntegral }}</td>
-                                <td class="center-align">{{ produto.qtProponenteParcial }}</td>
-                                <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
-                                <!--Preço Popular -->
-                                <td class="center-align">{{ produto.qtPopularIntegral }}</td>
-                                <td class="center-align">{{ produto.qtPopularParcial }}</td>
-                                <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
+                                <td class="right-align">{{ produto.qtExemplares }}</td>
+
                                 <!-- Distribuicao Gratuita-->
-                                <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) +
+                                <td class="right-align">{{ parseInt(produto.qtGratuitaDivulgacao) +
                                     parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}
                                 </td>
+
+                                <!--Preço Popular -->
+                                <td class="right-align">{{ produto.qtPopularIntegral }}</td>
+                                <td class="right-align">{{ produto.qtPopularParcial }}</td>
+                                <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
+
+                                <!--Preço Proponente -->
+                                <td class="right-align">{{ produto.qtProponenteIntegral }}</td>
+                                <td class="right-align">{{ produto.qtProponenteParcial }}</td>
+                                <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
+
                                 <td class="right-align">{{ formatarValor(produto.vlReceitaPrevista) }}</td>
 
                             </tr>
@@ -169,22 +173,24 @@
                                 <td colspan="12" class="center-align">Sem detalhamento</td>
                             </tr>
                         </tbody>
-                        <tfoot v-if="produtos.length > 0" style="opacity: 0.5">
+                        <tfoot v-if="produtos.length > 0" style="opacity: 0.8">
                             <tr>
                                 <td><b>Totais</b></td>
-                                <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
-                                <!--Fim: Preço Popular -->
-                                <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
-                                <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
-                                <td class="right-align"> -</td>
-                                <!--Preço Popular -->
-                                <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
-                                <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
-                                <td class="right-align"> -</td>
-                                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
-                                        parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
+                                <td class="right-align">{{ qtExemplaresTotal }}</td>
+                                <!--Distribuicao gratuita -->
+                                <td class="right-align">{{ parseInt(qtGratuitaDivulgacaoTotal) +
+                                        parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}
                                 </td>
-                                <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
+                                <!--Preço Popular -->
+                                <td class="right-align">{{ qtPopularIntegralTotal }}</td>
+                                <td class="right-align">{{ qtPopularParcialTotal }}</td>
+                                <td class="right-align"> -</td>
+                                <!--Fim: Preço Popular -->
+                                <td class="right-align">{{ qtProponenteIntegralTotal }}</td>
+                                <td class="right-align">{{ qtProponenteParcialTotal }}</td>
+                                <td class="right-align"> -</td>
+
+                                <td class="right-align">{{ receitaPrevistaTotal }}</td>
 
                             </tr>
                         </tfoot>
@@ -411,3 +417,13 @@ var app6 = new Vue({
     el: '#example'
 });
 </script>
+
+
+<style>
+    .plano-distribuicao table,
+    .plano-distribuicao table tr td,
+    .plano-distribuicao table tr th {
+        border: 1px solid black;
+    }
+
+</style>
