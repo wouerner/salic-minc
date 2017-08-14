@@ -13,9 +13,10 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const TECNICO_ADMISSIBILIDADE = 92;
     const COORDENADOR_ADMISSIBILIDADE = 131;
 
+    const PRESIDENTE_DE_VINCULADA = 154;
     const COORDENADOR_DE_PARECERISTA = 93;
     const PARECERISTA = 94;
-
+    
     const CONSULTA = 95;
     const CONSULTA_GERENCIAL = 96;
     const GESTOR_SALIC = 97;
@@ -39,7 +40,8 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const PRESIDENTE_CNIC = 119;
     const COORDENADOR_CNIC = 120;
     const MEMBROS_NATOS_CNIC = 133;
-
+    const COMPONENTE_COMISSAO = 118;
+    
     const COORDENADOR_ATENDIMENTO = 127;
     const TECNICO_PORTARIA = 128;
     const COORDENADOR_ABMISSIBILIDADE = 131;
