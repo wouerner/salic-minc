@@ -846,9 +846,8 @@ x - TABELAS
 
 #conteudo table tfoot td {
     background: #f3f3f3;
-    text-align: center;
     word-spacing: .8em;
-    color: #999;
+    color: #000;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #b0b0b0;
 }
@@ -897,7 +896,7 @@ x - TABELAS
 
 #conteudo .fundo_linha2,
 #conteudo .fundo_linha2 td {
-    background: #e8e8e8 url(../img/bg-celulas2.gif) top left repeat-x;
+    background-color: #4caf50;
 }
 
 #conteudo .fundo_linha3,
