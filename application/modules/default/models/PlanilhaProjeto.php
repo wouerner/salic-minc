@@ -1,15 +1,4 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
- 
-/**
- * Description of PlanilhaProjeto
- *
- * @author augusto
- */
 class PlanilhaProjeto extends MinC_Db_Table_Abstract {
 
     protected $_schema = 'SAC';
@@ -36,7 +25,6 @@ class PlanilhaProjeto extends MinC_Db_Table_Abstract {
                 array(),
                 'SAC.dbo'
         );
-
 
         $buscar->where('idPRONAC = ?', $idpronac);
 
