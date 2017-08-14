@@ -304,8 +304,8 @@ class PlanilhaProjeto extends MinC_Db_Table_Abstract {
         $select->order(
                 array(
                     'PPJ.FonteRecurso',
-                    'PD.Descricao',
-                    'PPJ.idEtapa',
+                    'PD.Descricao DESC',
+                    'E.nrOrdenacao',
                     'FED.Sigla',
                     'CID.Descricao'
                 )
