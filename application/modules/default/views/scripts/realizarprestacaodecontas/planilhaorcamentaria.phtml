@@ -113,27 +113,31 @@
             $finalizadoHref             =   $this->url(array('controller' => 'comprovarexecucaofinanceira', 'action' => 'finalizado')).'?cadastro=1&idpronac='.$this->idpronac;
         ?>
     </div>
-    <div class="col s10">
 
-    <div id="breadcrumb">
-        <ul>
-            <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
-            <?php if($this->codGrupo == 132){ ?>
-                <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
-            <?php }else if($this->codGrupo == 124): ?>
-                <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
-            <?php else: ?>
-            <?php if ($this->grupoAtivo != 121) { //Tecnico de Acompanhamento ?>
-                <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel'));?>">Presta&ccedil;&atilde;o de contas</a></li>
-            <?php } ?>
-            <?php endif; ?>
-            <li class="last">Planilha or&ccedil;ament&aacute;ria comprovada</li>
-        </ul>
-    </div>
+    <div class="col s10">
+        <div class="row">
+            <div class="col s12" id="breadcrumb">
+                <ul>
+                    <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
+                    <?php if($this->codGrupo == 132){ ?>
+                        <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
+                    <?php }else if($this->codGrupo == 124): ?>
+                        <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
+                    <?php else: ?>
+                    <?php if ($this->grupoAtivo != 121) { //Tecnico de Acompanhamento ?>
+                        <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel'));?>">Presta&ccedil;&atilde;o de contas</a></li>
+                    <?php } ?>
+                    <?php endif; ?>
+                    <li class="last">Planilha or&ccedil;ament&aacute;ria comprovada</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
 
     <div>
         <h5 class="left">Planilha or&ccedil;ament&aacute;ria comprovada</h5>
-        <span class="voltar" style="float:right;"><a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a></span>
+        <a class="btn right" href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
     </div>
     <table class="bordered responsive-table">
         <tr>
@@ -204,67 +208,27 @@
                             $cont2=0;
                             $cont3=0;
                         ?>
-                            <?php //var_dump($this->incFiscaisA ) ?> 
                             <?php foreach($this->incFiscaisA as $titulo => $item): ?> 
-                                <div class="">
+                                <div>
                                 <span class='green-text'><?php echo $titulo ?></span>
-                                <?php if(is_array($item) && !empty($item)): ?>
+                                <?php if(!empty($item)): ?>
                                     <?php foreach($item as $titulo => $subItem) :?>
-                                        <div class="divfilho<?php echo $cont ?>" style="padding-left: 15px;">
+                                        <div style="padding-left: 15px;">
                                             <span class='orange-text'><?php echo $titulo ?></span>
-                                            <?php if(is_array($subItem) && !empty($subItem)):?> 
+                                            <?php if(!empty($subItem)):?> 
                                                 <?php foreach($subItem as $titulo => $tabelaItem): ?>
-                                                    <div class="divF<?php echo $cont2 ?>"  style="padding:3px; margin-left: 15px;">
-                                                        <span class='black-text'><button class="waves-effect waves-light btn btn-flat btnToggleCustos" id="dF<?php echo $cont3; ?>" uf="<?php echo $tabelaItem['uf']; unset($tabelaItem['uf']) ?>" ><i class="material-icons left">expand_more</i><?php echo $titulo ?></button></span>
+                                                    <div style="padding:3px; margin-left: 15px;">
+                                                        <?php $id =  rand(); ?>
+                                                        <button class="waves-effect waves-light btn btn-flat btnToggleCustos"  
+                                                            uf="<?php echo $tabelaItem['uf']; unset($tabelaItem['uf']) ?>" 
+                                                            id="<?php echo $id; ?>" 
+                                                        >
+                                                            <i class="material-icons left">chevron_right</i><?php echo $titulo ?>
+                                                        </button>
+                                                        <div id="div<?php echo $id; ?>"></div>
+
                                                         <?php if(is_array($tabelaItem) && !empty($tabelaItem)): ?>
                                                             <div class=" dF<?php echo $cont3; ?>"></div>
-                                                            <!--table style="" class=" hide bordered striped linhaTabelaItem dF<?php echo $cont3; ?>">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <?php if ($this->codGrupo == 132 || $this->codGrupo == 125) : ?>
-                                                                            <th>Visualizar An&aacute;lise</th>
-                                                                        <?php else : ?>    
-                                                                            <th>Analisar</th>
-                                                                        <?php endif?>    
-                                                                        <th>Item de Custo</th>
-                                                                        <th>Valor Aprovado</th>
-                                                                        <th>Valor Comprovado</th>
-                                                                        <th>Comprovação Validada</th>
-                                                                        <th>Modalidade Vinculada</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                <?php foreach($tabelaItem as $key=>$valor) : ?>
-                                                                    <tr>
-                                                                        <td align="center">
-                                                                            <?php
-                                                                                $href = $this->url(
-                                                                                    array(
-                                                                                       'controller' => 'realizarprestacaodecontas',
-                                                                                        'action' => 'analisar-comprovacao',
-                                                                                        'idPronac' => $this->idPronac,
-                                                                                        'idPlanilhaAprovacao' => $key,
-                                                                                        'idPlanilhaItem' => $valor[6],
-                                                                                        'idRelatorio' => $this->idRelatorio, #Alysson - Adicionado
-                                                                                    )
-                                                                                );
-                                                                                $itemAvaliadoParam = Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter');
-                                                                                if ($itemAvaliadoParam) {
-                                                                                    $itemAvaliadoParam = "?itemAvaliadoFilter=".$itemAvaliadoParam;
-                                                                                }
-                                                                                $href .= $itemAvaliadoParam; 
-                                                                            ?>
-                                                                            <a href='<?php echo $href ?>' class='editarIco'>Analisar item</a>
-                                                                        </td>
-                                                                        <td><?php echo $valor[0] ?></td>
-                                                                        <td nowrap><?php echo $this->formatarReal($valor[1]) ?></td>
-                                                                        <td nowrap><?php echo $this->formatarReal($valor[3]) ?></td>
-                                                                        <td nowrap><?php echo $this->formatarReal($valor[7]) ?></td>
-                                                                        <td><?php echo $valor[4] ?></td>
-                                                                     </tr>
-                                                                <?php endforeach; ?>
-                                                                </tbody>
-                                                            </table-->
                                                             <?php $cont3++; ?>
                                                         <?php endif; ?>
                                                     </div>
@@ -279,139 +243,82 @@
                             <?php endforeach?>
                         </td>
                         </tr>
-                    <?php $cont4=0;
-                    foreach($this->incFiscaisP as $titulo => $incFiscal):  ?>
+
+                    <?php foreach($this->incFiscaisP as $titulo => $incFiscal):  ?>
                         <tr>
                             <td>
-                            <span class='green-text'><?php echo $titulo ?></span>
-                            <?php if(is_array($incFiscal) && !empty($incFiscal)) : ?>
-
-                            <?php foreach($incFiscal as $titulo => $item) : ?>
-                                <div class="divfilho'.$cont.'" style="padding:3px; margin-left: 15px;" >
                                 <span class='green-text'><?php echo $titulo ?></span>
-                                <?php if(is_array($item) && !empty($item)) :  ?>
-                                    <?php foreach($item as $titulo => $subItem) : ?>
-
-                                    <div class="divF<?php echo $cont2 ?>" style="padding:3px; margin-left: 15px;">
-                                    <span class='orange-text'><?php echo $titulo ?></span>
-                                        <?php $uf = $subItem['uf']; unset($subItem['uf']) ?>
-                                        <?php $idPlanilhaEtapa = $subItem['idPlanilhaEtapa']; unset($subItem['idPlanilhaEtapa']) ?>
-                                        <?php $codigo = $subItem['codigo']; unset($subItem['codigo']) ?>
-
-                                        <?php if(is_array($subItem) && !empty($subItem)) : ?>
-                                            <?php foreach($subItem as $titulo => $tabelaItem) : ?>
-                                                <?php $id =  rand(); ?>
-                                                <div class="dF<?php echo $cont3 ?>" style="padding:3px; margin-left: 15px;">
-                                                <button class="waves-effect waves-light btn-flat btn btnToggle" 
-                                                        id="<?php echo $id; ?>" 
-                                                        uf="<?php echo $uf; ?>" 
-                                                        produto="<?php echo $codigo; ?>" 
-                                                        idPlanilhaEtapa="<?php echo $idPlanilhaEtapa; ?>">
-                                                    <i class="material-icons left">expand_more</i><?php echo $titulo ?>
-                                                </button>
-
-                                                <div id="div<?php echo $id; ?>"></div>
-
-                                                <?php if(is_array($tabelaItem) && !empty($tabelaItem)) : ?>
-                                                    <!-- table style="margin-left:5px; clear:both;" class=" hide table-responsive bordered linhaRegistros dFilho<?php echo $cont4 ?> dF<?php echo $cont3; ?>">
-                                                    <tr>
-                                                    <?php if($this->codGrupo == 132 || $this->codGrupo == 125): ?>
-                                                        <th>Visualizar An&aacute;lise</th>
-                                                    <?php else: ?>
-                                                        <th>Analisar</th>
-                                                    <?php endif; ?>
-                                                    <th style="width: 15%">Item de Custo</th>
-                                                    <th>Valor Aprovado</th>
-                                                    <th>Valor Comprovado</th>
-                                                    <th>Comprovação Validada</th>
-                                                    <th>Modalidade Vinculada</th>
-                                                    </tr>
-                                                    <?php foreach ($tabelaItem as $idPlanilhaAprovacao => $valor) : ?>
-                                                        <tr>
-                                                        <td align="center">
-                                                            <?php $href = $this->url(
-                                                                array(
-                                                                    'controller' => 'realizarprestacaodecontas',
-                                                                    'action' => 'analisar-comprovacao',
-                                                                    'idPronac' => $this->idPronac,
-                                                                    'idPlanilhaAprovacao' => $idPlanilhaAprovacao,
-                                                                    'idPlanilhaItem' => $valor[6],
-                                                                )
-                                                            );
-                                                            $itemAvaliadoParam = Zend_Controller_Front::getInstance()->getRequest()->getParam('itemAvaliadoFilter'); ?>
-                                                            <?php if ($itemAvaliadoParam) :  ?>
-                                                                <?php $itemAvaliadoParam = "?".$itemAvaliadoParam; ?>
-                                                            <?php endif;  ?>
-                                                            <?php $href .= $itemAvaliadoParam; ?>
-                                                            <a href='<?php echo $href ?>' class='editarIco'>Analisar item</a>
-                                                        </td>
-                                                        <td style="width: 15%" > <?php echo $valor[0]?></td>
-                                                        <td nowrap><?php echo $this->formatarReal($valor[1]) ?></td>
-                                                        <td nowrap><?php echo $this->formatarReal($valor[3]) ?></td>
-                                                        <td nowrap><?php echo $this->formatarReal($valor[7]) ?></td>
-                                                        <td><?php echo $valor[4] ?></td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                    </table-->
-                                                <?php endif; ?>
-                                                </div>
-                                                <?php $cont4++; ?>
-                                            <?php endforeach;  ?>
-                                            <?php $cont3++;?>
-                                        <?php endif;  ?>
+                                <?php if(!empty($incFiscal)): ?>
+                                    <?php foreach($incFiscal as $titulo => $item) : ?>
+                                        <div style="padding:3px; margin-left: 15px;" >
+                                            <span class='green-text'><?php echo $titulo ?></span>
+                                            <?php if(!empty($item)): ?>
+                                                <?php foreach($item as $titulo => $subItem): ?>
+                                                    <div style="padding:3px; margin-left: 15px;">
+                                                        <span class='orange-text'><?php echo $titulo ?></span>
+                                                        <?php if(!empty($subItem)): ?>
+                                                            <?php foreach($subItem as $titulo => $tabelaItem) : ?>
+                                                                <?php $id =  rand(); ?>
+                                                                <div style="padding:3px; margin-left: 15px;">
+                                                                    <button class="waves-effect waves-light btn-flat btn btnToggle" 
+                                                                            id="<?php echo $id; ?>" 
+                                                                            uf="<?php echo $tabelaItem['uf']; ?>" 
+                                                                            idmunicipio="<?php echo $tabelaItem['idMunicipio']; ?>" 
+                                                                            produto="<?php $tabelaItem['codigo']; ?>" 
+                                                                            idPlanilhaEtapa="<?php echo $tabelaItem['idPlanilhaEtapa']; ?>">
+                                                                        <i class="material-icons left">chevron_right</i><?php echo $titulo ?>
+                                                                    </button>
+                                                                    <div id="div<?php echo $id; ?>"></div>
+                                                                </div>
+                                                            <?php endforeach;  ?>
+                                                        <?php endif;  ?>
+                                                    </div>
+                                                <?php endforeach;  ?>
+                                            <?php endif;  ?>
                                         </div>
-                                    <?php endforeach;  ?>
-                                <?php endif;  ?>
-                                </div>
-                                <?php $cont2++; ?>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                        </td>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </td>
                         </tr>
-                        <?php $cont++; ?>
                     <?php endforeach; ?>
             </table>
             </form>
     </fieldset>
     <?php } else { ?>
-
          <fieldset>
             <legend>Comprova&ccedil;&atilde;o de Execu&ccedil;&atilde;o Financeira</legend>
-                <form name="frPagamento" id="frPagamento" >
-                    <input type="hidden" name="idPronac" value="<?php echo $this->idPronac;?>" />
-                    <table class="tabela">
-                        <tr><th colspan="3">Filtro de Pesquisa</th></tr>
-                        <tr class="divFiltroPesquisa">
-                            <td class="destacar bold">Situa&ccedil;&atilde;o</td>
-                            <td>
-                                <select name="itemAvaliadoFilter" style="width: 245px;" class="input_simples">
-                                    <option value="0">Todos</option>
-                                    <?php if ($this->codGrupo != 132 && $this->codGrupo != 125) : ?>
-                                        <option value="1" <?php echo $this->itemAvaliadoFilter == 1 ? 'selected="true"' : null; ?>>Aguardando Análise</option>
-                                        <option value="2" <?php echo $this->itemAvaliadoFilter == 2 ? 'selected="true"' : null; ?>>Analisados</option>
-                                    <?php else : ?>
-                                        <option value="3" <?php echo $this->itemAvaliadoFilter == 3 ? 'selected="true"' : null; ?>>Impugnados</option>
-                                    <?php endif; ?>
-                                </select>
-                            </td>
-                            <td colspan="6" align="center">
-                                <input type="submit" id="btn_pesquisar" class="btn_pesquisar" value="">
-                                <?php if($this->coordenador){ ?>
-                                    <input type="button" name="redistribuir" id="redistribuir" class="btn_devolver_tecnico" value="">
-                                <?php } ?>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-
+            <form name="frPagamento" id="frPagamento" >
+                <input type="hidden" name="idPronac" value="<?php echo $this->idPronac;?>" />
+                <table class="tabela">
+                    <tr><th colspan="3">Filtro de Pesquisa</th></tr>
+                    <tr class="divFiltroPesquisa">
+                        <td class="destacar bold">Situa&ccedil;&atilde;o</td>
+                        <td>
+                            <select name="itemAvaliadoFilter" style="width: 245px;" class="input_simples">
+                                <option value="0">Todos</option>
+                                <?php if ($this->codGrupo != 132 && $this->codGrupo != 125) : ?>
+                                    <option value="1" <?php echo $this->itemAvaliadoFilter == 1 ? 'selected="true"' : null; ?>>Aguardando Análise</option>
+                                    <option value="2" <?php echo $this->itemAvaliadoFilter == 2 ? 'selected="true"' : null; ?>>Analisados</option>
+                                <?php else : ?>
+                                    <option value="3" <?php echo $this->itemAvaliadoFilter == 3 ? 'selected="true"' : null; ?>>Impugnados</option>
+                                <?php endif; ?>
+                            </select>
+                        </td>
+                        <td colspan="6" align="center">
+                            <input type="submit" id="btn_pesquisar" class="btn_pesquisar" value="">
+                            <?php if($this->coordenador){ ?>
+                                <input type="button" name="redistribuir" id="redistribuir" class="btn_devolver_tecnico" value="">
+                            <?php } ?>
+                        </td>
+                    </tr>
+                </table>
+             </form>
              <table class="tabela">
                  <tr>
                      <td align="center">Nenhum registro encontrado.</td>
                  </tr>
              </table>
-
          </fieldset>
-
     <?php } ?>
     </div>
 </div>
@@ -561,14 +468,9 @@
 
         idPronac = jQuery('input[name=idPronac]').val();
 
-        if (jQuery('div.'+ btnId).is(':empty')) {
-            $.get('/realizarprestacaodecontas/planilha-orcamentaria-custos/idPronac/'+idPronac+'/uf/' + btn.attr('uf'), function(data){
-                jQuery('div.'+ btnId).html(data);
-            });
-        } else {
-            table = jQuery('div.' + jQuery(this).attr('id'));
-            table.toggleClass('hide');
-        }
+        url = '/realizarprestacaodecontas/planilha-orcamentaria-custos/idPronac/'+idPronac+'/uf/' + btn.attr('uf');
+
+        btnAjax(url, this);
     });
 
     $('.btnToggle').click(function(event) {
@@ -578,26 +480,48 @@
         btnId = btn.attr('id');
         idPronac = jQuery('input[name=idPronac]').val();
         produto = btn.attr('produto');
+        i = btn.find('i');
 
         if ( "" == btn.attr('produto')){
             produto = 0;
         }
 
-        url = '/realizarprestacaodecontas/planilha-orcamentaria-custos-produto/idPronac/' 
-            + idPronac + '/uf/' + btn.attr('uf')
+        url = '/realizarprestacaodecontas/planilha-orcamentaria-custos-produto' 
+            +'/idPronac/' + idPronac 
+            + '/uf/' + btn.attr('uf')
             + '/idplanilhaetapa/' + btn.attr('idplanilhaetapa')
+            + '/idmunicipio/' + btn.attr('idmunicipio')
             + '/produto/' + produto;
+        console.log(url);
+
+        btnAjax(url, this);
+    });
+
+    function btnAjax(url, btn) 
+    {
+        btn = jQuery(btn);
+        btnId = btn.attr('id');
+        i = btn.find('i');
 
         if (jQuery('#div'+ btnId).is(':empty')) {
+
             $.get(url, function(data){
                 jQuery('#div'+ btnId).html(data);
-                console.log('#div'+ btnId);
+                i.text('expand_more')
             });
+
         } else {
-            table = jQuery('#div'+ btnId);
-            table.toggleClass('hide');
+
+            div = jQuery('#div'+ btnId);
+            div.toggleClass('hide');
+            if (i.text() == 'chevron_right'){
+                i.text('expand_more')
+            } else {
+                i.text('chevron_right')
+            }
         }
-    });
+    }
 </script>
+</div>
 </div>
 </div>
