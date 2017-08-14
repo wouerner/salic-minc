@@ -2094,7 +2094,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->idRelatorio = $this->getRequest()->getParam('relatorio');
 
         $dao = new PlanilhaAprovacao();
-        $resposta = $dao->buscarItensPagamento(
+        $resposta = $dao->buscarItensPagamentoDados(
             $this->view->idPronac,
             ($this->view->itemAvaliadoFilter ? $this->view->itemAvaliadoFilter : null)
         );
@@ -2116,36 +2116,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrComprovantesImpugnados = array();
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
-
-                $modalidade = '';
-                if($val->idCotacao != '') {
-                    $modalidade = 'Cota&ccedil;&atilde;o';
-                    $idmod = 'cot'.$val->idCotacao.'_'.$val->idFornecedorCotacao;
-                }
-
-                if($val->idDispensaLicitacao != '') {
-                    $modalidade = 'Dispensa';
-                    $idmod = 'dis'.$val->idDispensaLicitacao;
-                }
-
-                if($val->idLicitacao != '') {
-                    $modalidade =   'Licita&ccedil;&atilde;o';
-                    $idmod = 'lic'.$val->idLicitacao;
-                }
-
-                if ($val->idContrato != '') {
-                    if ($modalidade != '') {
-                        $modalidade .=   ' /';
-                    }
-                    $modalidade .=   ' Contrato';
-                    $idmod = 'con'.$val->idContrato;
-                }
-
-                if($modalidade == '') {
-                    $modalidade = '-';
-                    $idmod = 'sem';
-                }
-
                 if($val->tpCusto == 'A') {
                     $arrayA[($val->descEtapa)][$val->uf.' '.($val->cidade)] = array(
                         'idMunicipio' => $val->idMunicipio,

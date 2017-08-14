@@ -148,7 +148,7 @@
             <?php } ?>
         </tr>
         <tr>
-            <td align="center"><a href="<?php echo $this->baseUrl().'/consultardadosprojeto/index?idPronac='.$this->idPronac; ?>" target="_blank"><?php echo $this->pronac;?></a></td>
+            <td align="center"><a class="btn waves-effect waves-light white black-text" href="<?php echo $this->baseUrl().'/consultardadosprojeto/index?idPronac='.$this->idPronac; ?>" target="_blank"><?php echo $this->pronac;?></a></td>
             <td align="center"><?php echo $this->nomeProjeto;?></td>
             <?php if($this->itemAvaliadoFilter == 2 || $this->codGrupo == 132){ ?>
                 <td align="center"><?php echo $this->formatarReal($this->vlComprovacaoImpugnado); ?></td>
@@ -192,7 +192,7 @@
 	                            </select>
 	                        </td>
 	                        <td colspan="6" align="center">
-	                            <input type="submit" id="btn_pesquisar" class="btn_pesquisar" value="">
+	                            <button type="submit" id="btn_pesquisar" class="btn" value="">Pesquisar</button>
 	                            <?php if($this->coordenador){ ?>
 	                            <input type="button" name="redistribuir" id="redistribuir" class="btn_devolver_tecnico" value="">
 	                            <?php } ?>
@@ -305,7 +305,7 @@
                             </select>
                         </td>
                         <td colspan="6" align="center">
-                            <input type="submit" id="btn_pesquisar" class="btn_pesquisar" value="">
+                            <button type="submit" id="btn_pesquisar" class="btn" value="">Pesquisar</button>
                             <?php if($this->coordenador){ ?>
                                 <input type="button" name="redistribuir" id="redistribuir" class="btn_devolver_tecnico" value="">
                             <?php } ?>
