@@ -209,7 +209,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $select->joinInner(
             array('CID'=>'Municipios'),
             'pAprovacao.idMunicipioDespesa = CID.idMunicipioIBGE',
-            array('cidade'=>'CID.Descricao'),
+            array('cidade'=>'CID.Descricao', 'idMunicipio'=>'CID.idMunicipioIBGE'),
             'AGENTES.dbo'
         );
         $select->joinLeft(
@@ -1827,7 +1827,8 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
      * @param null $itemAvaliadoFilter
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function buscarItensPagamentoCustoProduto($idpronac, $itemAvaliadoFilter = null, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null)
+	public function buscarItensPagamentoCustoProduto($idpronac, $itemAvaliadoFilter = null, $uf = null, 
+		$idPlanilhaEtapa = null, $codigoProduto = null, $idMunicicpio = null)
     {
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
@@ -1928,6 +1929,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $select->where('pAprovacao.tpAcao IS NULL OR pAprovacao.tpAcao <> ? ', 'E'); //Adicionado para n�o listar as que ja foram excluidas
         $select->where('(pAprovacao.qtItem*pAprovacao.nrOcorrencia*pAprovacao.vlUnitario) > 0');
         $select->where("UFT.Sigla = ?", $uf);
+        $select->where("CID.idMunicipioIBGE = ?", $idMunicicpio);
         $select->where("pEtapa.idPlanilhaEtapa = ?", $idPlanilhaEtapa);
         if ($codigoProduto){
             $select->where("prod.Codigo = ?", $codigoProduto);
