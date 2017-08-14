@@ -100,8 +100,7 @@ class Proposta_Model_DbTable_PlanoDeDivulgacao extends MinC_Db_Table_Abstract{
 	$db->setFetchMode(Zend_DB::FETCH_OBJ);
 	$resultado = $db->fetchAll($sql);
         ///Zend_Debug::dump($resultado);
-        //xd($resultado);
-	return $resultado;
+        return $resultado;
     }
 
 
