@@ -2523,14 +2523,15 @@ class Projetos extends MinC_Db_Table_Abstract
         $select4->from(
             array('p' => 'Parecer'),
             array(
-                'p.tpResultado' => new Zend_Db_Expr("CASE WHEN ParecerFavoravel = 1 THEN 'Desfavor&aacute;vel' WHEN ParecerFavoravel = 2 THEN 'Favor&aacute;vel' END")
+                'p.tpResultado' => new Zend_Db_Expr("CASE WHEN ParecerFavoravel = 1 THEN 'Desfavor&aacute;vel' WHEN ParecerFavoravel = 2 THEN 'Favor&aacute;vel' END"),
+                'p.ResumoParecer'
             ));
         $select4->where("p.stAtivo = ?", 1);
         $select4->where("p.TipoParecer = ?", 1);
         $select4->where("p.idTipoagente = ?", 1);
         $select4->where("p.idPronac = ?", $idpronac);
         $returnData['parecer'] = $this->fetchAll($select4);
-
+        
         return $returnData;
     }
 
@@ -4783,7 +4784,7 @@ class Projetos extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function buscaProjetosProdutos($where)
+    public function buscaProjetosProdutosParaAnalise($where)
     {
         $select = $this
             ->select()
