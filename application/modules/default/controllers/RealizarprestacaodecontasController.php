@@ -2147,36 +2147,22 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 }
 
                 if($val->tpCusto == 'A') {
-                    $arrayA[($val->descEtapa)][$val->uf.' '.($val->cidade)][$val->idPlanilhaAprovacao] = array(
-                        ($val->descItem),
-                        $val->Total,
-                        $val->tpDocumento,
-                        $val->vlComprovado,
-                        $modalidade,
-                        $idmod,
-                        $val->idPlanilhaItens,
-                        $val->ComprovacaoValidada,
-                        
+                    $arrayA[($val->descEtapa)][$val->uf.' '.($val->cidade)] = array(
+                        'idMunicipio' => $val->idMunicipio,
+                        'uf' => $val->uf,
+                        'idPlanilhaEtapa' => $val->idPlanilhaEtapa,
+                        'codigo' => $val->Codigo,
                     );
                     $arrayA[($val->descEtapa)][$val->uf.' '.($val->cidade)]['uf'] = $val->uf;
                 }
 
                 if($val->tpCusto == 'P') {
-                    $arrayP[($val->Descricao)][($val->descEtapa)][$val->uf.' '.($val->cidade)][$val->idPlanilhaAprovacao] = array(
-                        ($val->descItem),
-                        $val->Total,
-                        $val->tpDocumento,
-                        $val->vlComprovado,
-                        $modalidade,
-                        $idmod,
-                        $val->idPlanilhaItens,
-                        $val->ComprovacaoValidada,
+                    $arrayP[($val->Descricao)][($val->descEtapa)][$val->uf.' - '.($val->cidade)] = array(
+                        'idPlanilhaEtapa' => $val->idPlanilhaEtapa,
                         'uf' => $val->uf,
-                        'codigo' => $val->Codigo
+                        'codigo' => $val->Codigo,
+                        'idMunicipio' => $val->idMunicipio
                     );
-                    $arrayP[($val->Descricao)][($val->descEtapa)] ['uf'] = $val->uf;
-                    $arrayP[($val->Descricao)][($val->descEtapa)] ['idPlanilhaEtapa'] = $val->idPlanilhaEtapa;
-                    $arrayP[($val->Descricao)][($val->descEtapa)] ['codigo'] = $val->Codigo;
                 }
 
                 #Pedro - Somatorio dos Itens Impugnados
@@ -2193,6 +2179,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         foreach($arrComprovantesImpugnados as $valorImpugnado){
             $vlTotalImpugnado += $valorImpugnado;
         }
+
         $this->view->vlComprovacaoImpugnado = $vlTotalImpugnado;
         $this->view->incFiscaisA = array(utf8_encode('Administra&ccedil;&atilde;o do Projeto') =>$arrayA);
         $this->view->incFiscaisP = array(utf8_encode('Custo por Produto') =>$arrayP);
@@ -4043,6 +4030,7 @@ $pdf->gerarRelatorio();
         $this->view->itemAvaliadoFilter = $this->getRequest()->getParam('itemAvaliadoFilter');
         $this->view->idRelatorio = $this->getRequest()->getParam('relatorio');
         $this->view->uf = $this->getRequest()->getParam('uf');
+        $this->view->idMunicipio = $this->getRequest()->getParam('idmunicipio');
         $this->view->idPlanilhaEtapa = $this->getRequest()->getParam('idplanilhaetapa');
         $this->view->codigoProduto = $this->getRequest()->getParam('produto');
 
@@ -4052,7 +4040,8 @@ $pdf->gerarRelatorio();
             ($this->view->itemAvaliadoFilter ? $this->view->itemAvaliadoFilter : null),
             $this->view->uf,
             $this->view->idPlanilhaEtapa,
-            $this->view->codigoProduto != 0 ? $this->view->codigoProduto :  null
+            $this->view->codigoProduto != 0 ? $this->view->codigoProduto :  null, 
+            $this->view->idMunicipio
         );
 
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
