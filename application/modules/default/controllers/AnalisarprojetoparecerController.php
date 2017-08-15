@@ -363,7 +363,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
         $this->view->somenteLeitura = false;
         $resultProjeto = $tbDistribuirParecer->buscar($whereProduto)[0];
-        if ($idusuario <> $resultProjeto['idAgenteParecerista']) {
+        if ($idusuario <> $resultProjeto['idUsuario']) {
             $this->view->somenteLeitura = true;
         }
         
