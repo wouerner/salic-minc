@@ -261,7 +261,8 @@
                             foreach ($planilha['itens'] as $idPlanilhaProjeto => $valPlanilha) {
                                 $valorprodutosolicitado = 0;
                                 $valorprodutoparecerista = 0;
-                                $estiloCustoPraticado = ($planilha['itens']['Custo praticado'] == 0) ? '' : 'valor_maior_que_praticado';
+                                $estiloCustoPraticado = ($valPlanilha['Custo praticado'] == 0) ? '' : 'valor_maior_que_praticado';
+                                
                                 $trCampo = "<tr>";
                                 $conteudo = "<tr class='item $estiloCustoPraticado' idPlanilhaProjeto='{$idPlanilhaProjeto}' id='item{$idPlanilhaProjeto}'>";
                                 unset($valPlanilha['Custo praticado']);
