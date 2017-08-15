@@ -182,8 +182,8 @@
               <td colspan="5">
                 <b>Parecer Favor&aacute;vel? *</b>
                 <p style="margin-top: 10px;">
-                  <input type="radio" style="margin-right: 5px;" value="1" class="ParecerFavoravel" name="ParecerFavoravel" checked="checked" />Sim &nbsp;&nbsp;
-                  <input type="radio" style="margin-right: 5px;" value="0" class="ParecerFavoravel" name="ParecerFavoravel" />N&atilde;o
+                  <input type="radio" style="margin-right: 5px;" value="1" class="ParecerFavoravel" id="ParecerFavoravel" name="ParecerFavoravel" checked="checked" />Sim &nbsp;&nbsp;
+                  <input type="radio" style="margin-right: 5px;" value="0" class="ParecerFavoravel" id="ParecerFavoravel" name="ParecerFavoravel" />N&atilde;o
                 </p>
               </td>
             </tr>
@@ -538,7 +538,16 @@
         }
     }
     function carregarTextAreaCKEditor(){
-    CKEDITOR.replace( 'ParecerDeConteudo', { toolbar: [] } );
+<?php if (!$this->somenteLeitura) : ?>
+        CKEDITOR.replace( 'ParecerDeConteudo', { toolbar: [] } );
+<?php else : ?>
+        var parecer = $('#ParecerDeConteudo').val();
+        $('#ParecerDeConteudo').before(parecer).remove();
+        $('#ParecerFavoravel').attr('disabled', 1);
+        $('#btSalvarAnaliseDeConteudo').remove();
+dpi<?php endif; ?>
+
+        
 	<?php if ($this->IN2017 && $this->stPrincipal): ?>
 	CKEDITOR.replace( 'dsAcaoAlcanceProduto', { toolbar: [] } );
 	<?php endif; ?>
@@ -551,7 +560,9 @@
         
         carregarAnaliseDeConteudo();
         $('#btSalvarAnaliseDeConteudo').click(function(){
+            <?php if (!$this->somenteLeitura) : ?>
             var parecer = CKEDITOR.instances['ParecerDeConteudo'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,''),
+<?php endif; ?>
 		erros = 0;
 	    <?php if ($this->IN2017 && $this->stPrincipal): ?>
 		var acoesRelevantes = CKEDITOR.instances['dsAcaoAlcanceProduto'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
