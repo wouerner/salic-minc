@@ -354,11 +354,23 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $this->view->dsArea = $projeto[0]->dsArea;
         $this->view->dsSegmento = $projeto[0]->dsSegmento;
         $this->view->IN2017 = $projetoDAO->verificarIN2017($idPronac);
+
+        $tbDistribuirParecer = new tbDistribuirParecer();
+        $whereProduto = array();
+        $whereProduto['idPRONAC = ?'] = $idPronac;
+        $whereProduto['idProduto = ?'] = $idProduto;
+        $whereProduto["stEstado = ?"] = 0;
+
+        $this->view->somenteLeitura = false;
+        $resultProjeto = $tbDistribuirParecer->buscar($whereProduto)[0];
+        if ($idusuario <> $resultProjeto['idAgenteParecerista']) {
+            $this->view->somenteLeitura = true;
+        }
         
         /* Analise de conteudo */
         $analisedeConteudoDAO = new Analisedeconteudo();
         $analisedeConteudo = $analisedeConteudoDAO->dadosAnaliseconteudo(false, array('idPronac = ?' => $idPronac, 'idProduto = ?' => $idProduto));
-
+        
         $PlanilhaDAO = new PlanilhaProjeto();
         if ($stPrincipal == 1) {
             $where = array('PPJ.IdPRONAC = ?' => $idPronac, 'PPJ.IdProduto in (0, ?)' => $idProduto);
@@ -446,18 +458,16 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
         /* Se for o produto principal, envia os dados dos secund¿rios junto *******************************/
         if ($stPrincipal == 1) {
-            $tbDistribuirParecerDAO = new tbDistribuirParecer();
-
             $dadosWhere["t.stEstado = ?"] = 0;
             $dadosWhere["t.TipoAnalise in (?)"] = array(1, 3);
             $dadosWhere["p.Situacao IN ('B11', 'B14')"] = '';
             $dadosWhere["p.IdPRONAC = ?"] = $idPronac;
             $dadosWhere["t.stPrincipal = ?"] = 0;
-            $Secundarios = $tbDistribuirParecerDAO->dadosParaDistribuirSecundarios($dadosWhere);
+            $Secundarios = $tbDistribuirParecer->dadosParaDistribuirSecundarios($dadosWhere);
 
             $dadosWhere["t.DtDistribuicao is not null"] = '';
             $dadosWhere["t.DtDevolucao is null"] = '';
-            $SecundariosAtivos = $tbDistribuirParecerDAO->dadosParaDistribuir($dadosWhere);
+            $SecundariosAtivos = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
             $pscount = count($SecundariosAtivos);
 
             $i = 1;
@@ -499,7 +509,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
         /****************************************************************************************************/
         // Dados para concluir a an¿lise
-        $tbDistribuirParecerDAO = new tbDistribuirParecer();
         $tbDiligencia = new tbDiligencia();
 
         /* Verifica se tem diligencia para o projeto  */
@@ -517,7 +526,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $dadosWhereSA["t.stPrincipal = ?"] = 0;
         $dadosWhereSA["t.DtDevolucao is null"] = '';
 
-        $SecundariosAtivos = $tbDistribuirParecerDAO->dadosParaDistribuir($dadosWhereSA)->count();
+        $SecundariosAtivos = $tbDistribuirParecer->dadosParaDistribuir($dadosWhereSA)->count();
         $pscount = $SecundariosAtivos;
         /***********************************************************************************/
 
@@ -692,7 +701,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                     $where['idProduto = ?'] = $idProduto;
                     $analisedeConteudoDAO->update($dados, $where);
                     
-                    if ($IN2017) {
+                    if ($IN2017 && $stPrincipal) {
                         $analisedeConteudoDAO = new Analisedeconteudo();
                         $whereB['idPronac  = ?'] = $idPronac;
                         $whereB['idProduto = ?'] = $idProduto;
