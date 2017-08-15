@@ -35,7 +35,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 
         $arrAuth = array_change_key_case((array)$auth->getIdentity());
 
-        $this->usuario = $arrAuth;
+//        $this->usuario = $arrAuth;
 
 
         $this->_idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
@@ -43,7 +43,6 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         if (!empty($this->_idPronac)) {
             $tbProjetos = new Projeto_Model_DbTable_Projetos();
             $this->_projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->_idPronac))->current();
-            $this->_idPreProjeto = $this->_projeto->idProjeto;
             $this->view->projeto = $this->_projeto;
         }
 
@@ -53,10 +52,9 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             $this->view->proposta = $this->_proposta;
         }
 
-        $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo '] : $arrAuth['idusuario'];
-
+        $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
         $this->_usuario = $arrAuth;
-        $this->view->usuario = $this->_usuario;
+        $this->view->usuario = $auth->getIdentity(); //@todo padronizar o usuario no header do layout
     }
 }
 

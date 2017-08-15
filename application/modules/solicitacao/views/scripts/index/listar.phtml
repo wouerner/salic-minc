@@ -1,25 +1,41 @@
 <div class="row">
     <div class="col s12">
         <?php if (count($this->arrResult) > 0) : ?>
-            <table class="bordered striped highlight">
+            <table class="bordered striped highlight" style="width: 100%">
                 <thead class=" green darken-1 white-text">
                 <tr>
                     <th>#</th>
+                    <th data-field="" class="left-align">Nº</th>
+                    <th data-field="" class="left-align">Título</th>
+                    <th data-field="" class="left-align">Proponente</th>
+                    <th data-field="" class="left-align">Solicita&ccedil;&atilde;o</th>
+                    <th data-field="" class="left-align">Situa&ccedil;&atilde;o</th>
                     <th data-field="id" class="center-align">Data</th>
-                    <th data-field="teste" class="center-align">Remetente</th>
-                    <th data-field="teste2" class="center-align">Destinat&aacuterio</th>
-                    <th data-field="teste3" class="center-align">Pergunta</th>
-                    <th data-field="teste3" class="center-align">Resposta</th>
-                    <th data-field="teste3" class="center-align">A&ccedil;&atilde;o</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($this->arrResult as $int => $arrValue): ?>
                     <tr>
                         <td><?= $int + 1; ?></td>
-                        <td><?= $arrValue['dtSolicitacao']; ?></td>
-                        <td><?= $arrValue['Solicitante']; ?></td>
-                        <td><?= $arrValue['dsEncaminhamento']; ?></td>
+                        <td>
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                                <?php if (!empty($arrValue['Pronac'])) {
+                                    echo $arrValue['Pronac'];
+                                } elseif ($arrValue['idProjeto']) {
+                                    echo $arrValue['idProjeto'];
+                                } ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                                <?= $arrValue['NomeProjeto']; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                                <?= $arrValue['Solicitante']; ?>
+                            </a>
+                        </td>
                         <td>
                             <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
                                 <?= $arrValue['dsSolicitacao']; ?>
@@ -27,18 +43,10 @@
                         </td>
                         <td>
                             <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
-                                <?= $arrValue['dsResposta']; ?>
+                                <?= $arrValue['dsEncaminhamento']; ?>
                             </a>
                         </td>
-                        <td>
-                            <a
-                                href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>"
-                                class="btn small waves-effect waves-light tooltipped" data-position="top"
-                                data-delay="50"
-                                data-tooltip="Visualizar">
-                                <i class="material-icons">zoom_in</i>
-                            </a>
-                        </td>
+                        <td class="center-align""><?= date('d/m/Y', strtotime($arrValue['dtSolicitacao'])); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

@@ -6,6 +6,12 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
     public function init()
     {
         parent::init();
+
+        if (!empty($this->_idPreProjeto) || !empty($this->_idPronac)) {
+            parent::verificarPermissaoAcesso(!empty($this->_idPreProjeto), !empty($this->_idPronac), false);
+        }
+
+
     }
 
     public function indexAction()
@@ -24,11 +30,6 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
     {
 
         $intId = $this->getRequest()->getParam('id', null);
-
-        $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-        if ($intId && empty($dataForm)) {
-            $dataForm = $vwSolicitacao->findBy(['idSolicitacao' => $intId]);
-        }
 
         if (!empty($dataForm['idDocumento'])) {
             $tbl = new Arquivo_Model_DbTable_TbDocumento();
@@ -74,8 +75,14 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $where['idProjeto = ?'] = $idPreProjeto;
         }
 
-        if ($this->_usuario['cpf']) {
+        # Proponente
+        if (isset($this->_usuario['cpf'])) {
             $where['idSolicitante = ?'] = $this->_idUsuario;
+        }
+
+        # Funcionario
+        if (isset($this->_usuario['usu_codigo'])) {
+            $where['idTecnico = ?'] = $this->_idUsuario;
         }
 
         $solicitacoes = $vwSolicitacoes->buscar($where);
@@ -96,9 +103,20 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             if (empty($idSolicitacao))
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para visualizar!");
 
+            $where['idSolicitacao'] = $idSolicitacao;
+            if (isset($this->_usuario['cpf'])) {
+                $where['idSolicitante'] = $this->_idUsuario;
+            }
+
+            $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+            $dataForm = $vwSolicitacao->findBy($where);
+
+            if (empty($dataForm))
+                parent::message("Nenhuma solicita&ccedil;&atilde;o encontrada!", "/solicitacao/", "ALERT");
+
             $arrConfig['dsResposta']['show'] = true;
 
-            self::prepareForm([], $arrConfig, $urlAction);
+            self::prepareForm($dataForm, $arrConfig, $urlAction);
 
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/solicitacao/", "ALERT");
@@ -135,7 +153,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 
             $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
 
-            if($mapperSolicitacao->existeSolicitacaoNaoRespondida($dataForm))
+            if ($mapperSolicitacao->existeSolicitacaoNaoRespondida($dataForm))
                 throw new Exception("Voc&ecirc; j&aacute; possui uma solicita&ccedil;&atilde;o aguardando resposta para este projeto!");
 
             self::prepareForm($dataForm, $arrConfig, $urlAction, $urlCallBack);
@@ -148,7 +166,6 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 
     public function salvarAction()
     {
-        # verificar permissao de acesso
         $status = false;
 
         if ($this->getRequest()->isPost()) {
@@ -219,10 +236,28 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 
     public function abrirdocumentosolicitacaoAction()
     {
-        # verificar se o usuario tem permissao para acessar este documento
-
         $idDocumento = $this->getRequest()->getParam('id', null);
 
-        parent::abrirDocumento($idDocumento);
+        try {
+            $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+            $solicitacao = $vwSolicitacao->findBy(['idDocumento' => $idDocumento]);
+
+            if (empty($solicitacao))
+                throw new Exception('Documento n&atilde;o encontrado!');
+
+            $idProjeto = $solicitacao['idProjeto'] ? $solicitacao['idProjeto'] : false;
+            $idPronac = $solicitacao['idPronac'] ? $solicitacao['idPronac'] : false;
+
+            # verificar se o usuario tem permissao para acessar este documento por meio do id do projeto/proposta
+            $permissao = parent::verificarPermissaoAcesso($idProjeto, $idPronac, false, true);
+
+            if ($permissao['status'] === false)
+                throw new Exception('Voc&ecirc; n&atilde;o tem permiss&atilde;o para baixar esse arquivo!');
+
+            parent::abrirDocumento($idDocumento);
+
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }
