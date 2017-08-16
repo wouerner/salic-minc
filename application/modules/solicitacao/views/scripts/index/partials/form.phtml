@@ -18,7 +18,6 @@
                value="<?= isset($this->dataForm['idSolicitacao']) ? $this->dataForm['idSolicitacao'] : ''; ?>"/>
         <input name="idPronac" type="hidden" value="<?= $this->dataForm['idPronac']; ?>"/>
         <input name="idProjeto" type="hidden" value="<?= $this->dataForm['idProjeto']; ?>"/>
-        <input name="idOrgao" type="hidden" value="<?= $this->dataForm['idOrgao']; ?>"/>
 
         <?php if (isset($this->arrConfig['dsSolicitacao']['disabled']) && !$this->arrConfig['dsSolicitacao']['disabled']): ?>
             <div class="row">
@@ -73,7 +72,7 @@
                         <label for="dsResposta" class="active">Resposta</label>
                     </div>
                     <div class="col s12">
-                        <?= ($this->dataForm['dsResposta']) ? $this->dataForm['dsResposta'] : '<br />Sem resposta at&eacute; o momento.'; ?>
+                        <?= ($this->dataForm['dsResposta']) ? $this->dataForm['dsResposta'] : '<br />Sem resposta.'; ?>
                     </div>
                 </div>
             <?php endif; ?>
@@ -86,10 +85,11 @@
                     <a class="btn waves-effect waves-light bt_rascunho">Rascunho</a>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Enviar</button>
                 <?php endif; ?>
-                <a href="javascript:$3.redirect('<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'index', 'idPronac' => $this->dataForm['idPronac'], 'idPreProjeto' => $this->dataForm['idProjeto']), null, true); ?>')"
+                <!--                <a href="javascript:$3.redirect('-->
+                <?php //echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'index', 'idPronac' => $this->dataForm['idPronac'], 'idPreProjeto' => $this->dataForm['idProjeto']), null, true); ?><!--')"-->
+                <!--                   class="modal-action modal-close waves-effect waves-orange orange-text btn-flat">Cancelar</a>-->
+                <a onClick="history.go(-1)" href="javascript:void(0)"
                    class="modal-action modal-close waves-effect waves-orange orange-text btn-flat">Cancelar</a>
-<!--                <a onClick="history.go(-1)" href="javascript:void(0)"-->
-<!--                   class="modal-action modal-close waves-effect waves-orange orange-text btn-flat">Cancelar</a>-->
             </div>
         </div>
 

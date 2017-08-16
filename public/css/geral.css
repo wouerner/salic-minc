@@ -1274,7 +1274,7 @@ x - GRID ANTIGO
 /*--------------------------------------------------------------
 x - CORES
 --------------------------------------------------------------*/
-#conteudo .red,
+#conteudo .red:not(.btn),
 #conteudo .red a, 
 #conteudo table.tabela td.red
 { 
@@ -1282,7 +1282,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .green,
+#conteudo .green:not(.btn),
 #conteudo .green a,
 #conteudo table.tabela td.green
 { 
@@ -1290,7 +1290,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .blue,
+#conteudo .blue:not(.btn),
 #conteudo .blue a ,    
 #conteudo table.tabela td.blue
 { 
@@ -1298,7 +1298,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .orange, 
+#conteudo .orange:not(.btn),
 #conteudo .orange a ,
 #conteudo table.tabela td.orange
 { 
@@ -1306,7 +1306,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .black, 
+#conteudo .black:not(.btn),
 #conteudo .black a,
 #conteudo table.tabela td.black
 { 
@@ -1314,7 +1314,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .white,
+#conteudo .white:not(.btn),
 #conteudo .white a   
 { 
     color:#fff; 

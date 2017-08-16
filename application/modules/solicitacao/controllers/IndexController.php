@@ -26,7 +26,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
      * @param array $arrConfig
      *
      */
-    public function prepareForm($dataForm = [], $arrConfig = array(), $strUrlAction = '', $strActionBack = 'index')
+    public function prepareForm($dataForm = [], $arrConfig = [], $strUrlAction = '', $strActionBack = 'index')
     {
 
         $intId = $this->getRequest()->getParam('id', null);
@@ -39,6 +39,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
         if ($this->_proposta) {
             $dataForm['idProjeto'] = $this->_idPreProjeto;
             $dataForm['NomeProjeto'] = isset($this->_proposta->NomeProjeto) ? $this->_proposta->NomeProjeto : '';
+            $dataForm['idAgente'] = '';
         }
 
         if ($this->_projeto) {
@@ -76,9 +77,9 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
         }
 
         # Proponente
-        if (isset($this->_usuario['cpf'])) {
-            $where['idSolicitante = ?'] = $this->_idUsuario;
-        }
+//        if (isset($this->_usuario['cpf'])) {
+//            $where['idSolicitante = ?'] = $this->_idUsuario;
+//        }
 
         # Funcionario
         if (isset($this->_usuario['usu_codigo'])) {
@@ -104,20 +105,21 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para visualizar!");
 
             $where['idSolicitacao'] = $idSolicitacao;
-            if (isset($this->_usuario['cpf'])) {
-                $where['idSolicitante'] = $this->_idUsuario;
-            }
 
             $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
             $dataForm = $vwSolicitacao->findBy($where);
 
             if (empty($dataForm))
-                parent::message("Nenhuma solicita&ccedil;&atilde;o encontrada!", "/solicitacao/", "ALERT");
+                throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+
+            $permissao = parent::verificarPermissaoAcesso($dataForm['idProjeto'], $dataForm['idPronac'], false, true);
+
+            if ($permissao['status'] === false)
+                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esta solicita&ccedil;&atilde;o");
 
             $arrConfig['dsResposta']['show'] = true;
 
             self::prepareForm($dataForm, $arrConfig, $urlAction);
-
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/solicitacao/", "ALERT");
         }
@@ -142,11 +144,9 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $arrConfig['actions']['show'] = true;
 
             if ($this->_projeto) {
-                $dataForm['idOrgao'] = $this->_projeto->Orgao;
                 $urlCallBack .= '/idPronac/' . $this->_idPronac;
                 $dataForm['idPronac'] = $this->_idPronac;
             } else if ($this->_proposta) {
-                $dataForm['idOrgao'] = $this->_proposta->AreaAbrangencia == 0 ? 171 : 262;
                 $urlCallBack .= '/idPreProjeto/' . $this->_idPreProjeto;
                 $dataForm['idProjeto'] = $this->_idPreProjeto;
             }
@@ -173,12 +173,11 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $this->_helper->viewRenderer->setNoRender(true);
             $arrayForm = $this->getRequest()->getPost();
 
-            $strUrl = '/solicitacao/index/solicitar';
+            $strUrl = '/solicitacao/index/index';
             $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
             $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
 
             $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
-
             $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
 
             if ($idSolicitacao) {

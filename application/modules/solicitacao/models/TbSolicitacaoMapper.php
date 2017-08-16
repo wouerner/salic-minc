@@ -67,18 +67,32 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
         if (!empty($arrData)) {
 
             try {
+
+                $sp = new Solicitacao_Model_SpSelecionarTecnicoSolicitacao();
+                
+                if (!empty($arrData['idPronac'])) {
+                    $tecnico = $sp->exec($arrData['idPronac'], 'projeto');
+
+                } elseif (!empty($arrData['idProjeto'])) {
+                    $tecnico = $sp->exec($arrData['idProjeto'], 'proposta');
+                }
+
+                if (empty($tecnico))
+                    throw new Exeception("Erro ao salvar! T&eacute;cnico n&atilde;o encontrado!");
+
+                $arrData['idOrgao'] = $tecnico['idOrgao'];
+                $arrData['idTecnico'] = $tecnico['idTecnico'];
+                $arrData['idAgente'] = $tecnico['idAgente'];
                 $model = new Solicitacao_Model_TbSolicitacao();
                 $model->setDtSolicitacao(date('Y-m-d h:i:s'));
                 $model->setIdOrgao($arrData['idOrgao']);
-                $model->setIdSolicitante($this->_idUsuario);
+                $model->setIdSolicitante($arrData['idAgente']);
                 $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
                 $model->setDsSolicitacao($arrData['dsSolicitacao']);
                 $model->setStEstado(1);
                 $model->setIdPronac($arrData['idPronac']);
                 $model->setIdProjeto($arrData['idProjeto']);
-
-//                $idTecnico = new Zend_Db_Expr("sac.dbo.fnPegarTecnico(?, {$arrData['idOrgao']}, 3)");
-//                $model->setIdTecnico(1);
+                $model->setIdTecnico($arrData['idTecnico']);
 
                 $file = new Zend_File_Transfer();
 
