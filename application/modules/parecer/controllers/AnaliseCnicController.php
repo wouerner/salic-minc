@@ -93,9 +93,11 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
-        
+
         $projetos = new Projetos();
-        if (!$projetos->VerificarIN2017($idPronac)) {
+        $this->view->IN2017 = $projetos->VerificarIN2017($idPronac);
+        
+        if (!$this->view->IN2017) {
             $pa = new paChecarLimitesOrcamentario();
             $resultadoCheckList = $pa->exec($idPronac, 3);
             $i = 0;
@@ -682,6 +684,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 if ($buscarjustificativa->count() > 0) {
                     $buscarjustificativa = $buscarjustificativa->current()->toArray();
                     $this->view->valorJustificativa = $buscarjustificativa['ResumoParecer'];
+                    $this->view->parecerFavoravel = $buscarjustificativa['ParecerFavoravel'];
                 } else {
                     $this->view->valorJustificativa = null;
                 }
