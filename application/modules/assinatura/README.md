@@ -24,6 +24,20 @@ Na tabela "TbAssinatura" do schema "sac", quando o Projeto Cultural possui todas
 O processo de finalização da assinatura é particular para cada módulo e não fica dentro deste módulo, pois cada módulo apresenta necessidades diferentes tanto para alteração de situações quanto para o acionamento de outras funcionalidades dentro do sistema.
 Portanto cada módulo que necessitar desta funcionalidade precisa implementa-lo de acordo com a necessidade fora deste módulo.
 
+#### Gestão de Atos Administrativos
+
+O Workflow do módulo depente de atos admnistrativos que são armazenados na tabela tbAtoAdministrativo. 
+
+Cada Ato Administrativo possui ligação como : 
+ * Tipo do Ato Administrativo
+ * Cargo
+ * Perfil
+ * Orgão
+ * Ordem de assinatura
+
+Para gerir os itens mencionados acima de um Ato Administrativo basta acessar com o perfil "Gestor Salic" (97) o menu:
+```Assinatura > Gerir Atos Administrativos```
+
 #### Dependências
 
 Este módulo depende da library 'MinC_Assinatura_Assinatura' e utiliza serviços como:
