@@ -249,7 +249,6 @@ class Autenticacao_Model_Sgcacesso extends MinC_Db_Table_Abstract
             }
             $slct->limit($tamanho, $tmpInicio);
         }
-        //xd($slct->__toString());
         return $this->fetchAll($slct);
     }
 
