@@ -78,6 +78,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
      * @require idPronac
      */
     public function indexAction() {
+
         //FUNÇÃO ACESSADA SOMENTE PELO PROPONENTE.
         $this->view->idPerfil = $this->idPerfil;
         if($this->idPerfil != 1111){
@@ -1473,26 +1474,26 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
                 $planosCopiados['vlUnitarioNormal'] = $value->PrecoUnitarioNormal;
                 $planosCopiados['vlUnitarioPromocional'] = $value->PrecoUnitarioPromocional;
                 $planosCopiados['stPrincipal'] = $value->stPrincipal;
-                $planosCopiados['tpSolicitacao'] = 'N';
+                $planosCopiados['tpSolicitacao'] = 'N'; # N - nenhuma, I - inclusao, A - alteracao
                 $planosCopiados['stAtivo'] = 'S';
                 $planosCopiados['idPronac'] = $idPronac;
                 $tbPlanoDistribuicao->inserir($planosCopiados);
             }
         }
 
-        $verificaPlanoRepetido = $tbPlanoDistribuicao->buscar(array('idPronac=?'=>$idPronac, 'stAtivo=?'=>'S', 'idProduto=?'=>$_POST['newPlanoDistribuicao']));
-        if(count($verificaPlanoRepetido)==0){
+        $verificaPlanoRepetido = $tbPlanoDistribuicao->buscar(array('idPronac=?'=>$idPronac, 'stAtivo=?'=>'S', 'idProduto=?'=>$_POST['newPlanoDistribuicao'], 'idReadequacao IS NULL' => ''));
+        if(count($verificaPlanoRepetido)==1){
             $QtdeProduzida = $_POST['newQntdNormal']+$_POST['newQntdPromocional']+$_POST['newQntdPatrocinador']+$_POST['newQntdPopulacaoBaixaRenda']+$_POST['newQntdDivulgacao'];
             $preconormal = str_replace(",", ".", str_replace(".", "", $_POST['newVlNormal']));
             $precopromocional = str_replace(",", ".", str_replace(".", "", $_POST['newVlPromocional']));
 
-            /* DADOS DO PLANO PARA INCLUSÃO DA READEQUAÇÃO */
+            /* DADOS PARA ATUALIZACAO */
             $dadosInclusao = array();
-            $dadosInclusao['idReadequacao'] = NULL;
-            $dadosInclusao['idProduto'] = $_POST['newPlanoDistribuicao'];
-            $dadosInclusao['cdArea'] = $_POST['newArea'];
-            $dadosInclusao['cdSegmento'] = $_POST['newSegmento'];
-            $dadosInclusao['idPosicaoLogo'] = $_POST['newPosicaoLogomarca'];
+//            $dadosInclusao['idReadequacao'] = NULL;
+//            $dadosInclusao['idProduto'] = $_POST['newPlanoDistribuicao'];
+//            $dadosInclusao['cdArea'] = $_POST['newArea'];
+//            $dadosInclusao['cdSegmento'] = $_POST['newSegmento'];
+//            $dadosInclusao['idPosicaoLogo'] = $_POST['newPosicaoLogomarca'];
             $dadosInclusao['qtProduzida'] = $QtdeProduzida;
             $dadosInclusao['qtPatrocinador'] = $_POST['newQntdPatrocinador'];
             $dadosInclusao['qtProponente'] = $_POST['newQntdDivulgacao'];
@@ -1501,20 +1502,21 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
             $dadosInclusao['qtVendaPromocional'] = $_POST['newQntdPromocional'];
             $dadosInclusao['vlUnitarioNormal'] = $preconormal;
             $dadosInclusao['vlUnitarioPromocional'] = $precopromocional;
-            $dadosInclusao['stPrincipal'] = 0;
-            $dadosInclusao['tpSolicitacao'] = 'I';
+//            $dadosInclusao['stPrincipal'] = 0;
+            $dadosInclusao['tpSolicitacao'] = 'A'; # N - nenhuma, I - inclusao, A - alteracao
             $dadosInclusao['stAtivo'] = 'S';
-            $dadosInclusao['idPronac'] = $idPronac;
-            $insert = $tbPlanoDistribuicao->inserir($dadosInclusao);
+//            $dadosInclusao['idPronac'] = $idPronac;
+            $where = ['idPronac = ?' => $idPronac, 'idProduto = ?' => $_POST['newPlanoDistribuicao']];
+            $update = $tbPlanoDistribuicao->update($dadosInclusao, $where);
 
-            if($insert){
+            if($update){
                 //$jsonEncode = json_encode($dadosPlanilha);
                 $this->_helper->json(array('resposta'=>true));
             } else {
-                $this->_helper->json(array('resposta'=>false));
+                $this->_helper->json(array('resposta'=>false, 'msg' => "Erro ao salvar!"));
             }
         } else {
-            $msg = utf8_encode('Esse plano de distribuição já foi cadastrado!');
+            $msg = utf8_encode('N&atilde;o foi poss&iacute;vel salvar sua solicita&ccedil;&atilde;o, delete a readequa&ccedil;&atilde;o antes de alterar!');
             $this->_helper->json(array('resposta'=>false, 'msg'=>$msg));
         }
         $this->_helper->viewRenderer->setNoRender(TRUE);
@@ -1603,6 +1605,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
      * Essa função para incluir uma solicitação de readequação.
      */
     public function incluirSolicitacaoReadequacaoAction() {
+        $acaoErro = '';
+
         //FUNÇÃO ACESSADA SOMENTE PELO PROPONENTE.
         if($this->idPerfil != 1111){
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
@@ -1742,6 +1746,12 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract {
                 $dadosPlanilha['idReadequacao'] = $idReadequacao;
                 $wherePlanilha = "IdPRONAC = $idPronac AND tpPlanilha = 'SR' AND idReadequacao is null";
                 $tbPlanilhaAprovacao->update($dadosPlanilha, $wherePlanilha);
+
+                if(!empty($idReadequacao) && $idTipoReadequacao == 11) { //Planos de Distribuição
+                    $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+                    $whereDistribuicao = "idPronac = {$idPronac} AND tpSolicitacao = 'A' AND idReadequacao IS NULL";
+                    $tbPlanoDistribuicao->update(['idReadequacao' => $idReadequacao], $whereDistribuicao);
+                }
             }
 
             if ($idReadequacao && $idTipoReadequacao != 2) {
