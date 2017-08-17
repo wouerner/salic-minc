@@ -73,7 +73,6 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
             $select->limit($tamanho, $tmpInicio);
         }
 
-        //xd($select->assemble());
         return $this->fetchAll($select);
     }
 
@@ -85,7 +84,6 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         );
         $select->where('idSolicitarItem = ?', $idItem);
 
-        //xd($select->assemble());
         return $this->fetchRow($select);
     }
 
@@ -277,7 +275,6 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
             $select->where('i.Descricao = ?', $nomeItem);
         }
 
-        //XD($sql);
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 //        echo '<pre>';
