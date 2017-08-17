@@ -6,7 +6,7 @@ php_flag register_globals off
 php_value upload_max_filesize 20M
 php_value post_max_size 20M
 php_value session.gc_maxlifetime 1800
-php_value session.cookie_lifetime 1800
+php_value session.cookie_lifetime 86400
 
 Header always set Access-Control-Allow-Origin "*"
 Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, HEAD, PUT"
