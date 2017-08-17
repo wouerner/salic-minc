@@ -1,3 +1,6 @@
+Release 2.5.2
+* [FIX] Gerenciar Responsaveis/Novo responsavel: correção ao vincular novo responsável
+
 Release 2.5.1
 * [FIX] Parecer/Análise inicial e CNIC: correção ao gerar documento
 
