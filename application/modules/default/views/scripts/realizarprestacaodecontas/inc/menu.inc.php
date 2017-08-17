@@ -191,6 +191,7 @@
             <div id="space_menu"></div>
         </div>
     </div>
+    </div>
 <script type="text/javascript">
     $(document).ready(function(){
         $('.ancoraPrestacaoContas').click(function(){
