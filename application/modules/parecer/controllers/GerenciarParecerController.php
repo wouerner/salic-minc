@@ -4,7 +4,9 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 {
     private $idPronac;
     private $intTamPag = 10;
-
+    
+    const ID_TIPO_AGENTE_PARCERISTA = 1;
+    
     private function validarPerfis() {
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
@@ -19,6 +21,8 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         parent::init();
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        
         $this->validarPerfis();
     }
 
@@ -49,8 +53,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $codOrgao = $GrupoAtivo->codOrgao;
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
-
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
         $this->view->quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
             $this->idTipoDoAtoAdministrativo,
@@ -124,8 +127,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             }
         }
         $this->view->checarValidacaoSecundarios = $checarValidacaoSecundarios;
-
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         
         $paginacao = array(
@@ -262,7 +263,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
 
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
         $this->view->quantidadeMinimaAssinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
             $this->idTipoDoAtoAdministrativo,
@@ -330,8 +330,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             }
         }
         $this->view->checarValidacaoSecundarios = $checarValidacaoSecundarios;
-
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         
         $paginacao = array(
@@ -355,6 +353,10 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->intTamPag = $this->intTamPag;        
     }
 
+    
+    /*
+     * Finalização de presidente de vinculada 
+     */
     public function finalizouParecerAction()
     {
         $idDistribuirParecer = $this->_request->getParam("idDistribuirParecer");
@@ -371,6 +373,23 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         try {
             $db->beginTransaction();
 
+            $parecer = new Parecer();
+            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
+            
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $data = array(
+                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+            );
+            $where = array(
+                'IdPRONAC = ?' => $idPronac,
+                'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
+                'idAtoDeGestao = ?' => $idAtoAdministrativo,
+                'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+                'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+            );
+            $objModelDocumentoAssinatura->update($data, $where);
+            
+            
             $tbDistribuirParecer = new tbDistribuirParecer();
             $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
 
