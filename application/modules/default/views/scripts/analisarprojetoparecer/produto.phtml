@@ -183,7 +183,7 @@
                 <b>Parecer Favor&aacute;vel? *</b>
                 <p style="margin-top: 10px;">
                   <input type="radio" style="margin-right: 5px;" value="1" class="ParecerFavoravel" id="ParecerFavoravel" name="ParecerFavoravel" checked="checked" />Sim &nbsp;&nbsp;
-                  <input type="radio" style="margin-right: 5px;" value="0" class="ParecerFavoravel" id="ParecerFavoravel" name="ParecerFavoravel" />N&atilde;o
+                  <input type="radio" style="margin-right: 5px;" value="0" class="ParecerFavoravel" id="ParecerDesfavoravel" name="ParecerFavoravel" />N&atilde;o
                 </p>
               </td>
             </tr>
@@ -544,6 +544,7 @@
         var parecer = $('#ParecerDeConteudo').val();
         $('#ParecerDeConteudo').before(parecer).remove();
         $('#ParecerFavoravel').attr('disabled', 1);
+        $('#ParecerDesfavoravel').attr('disabled', 1);
         $('#btSalvarAnaliseDeConteudo').remove();
 dpi<?php endif; ?>
 
