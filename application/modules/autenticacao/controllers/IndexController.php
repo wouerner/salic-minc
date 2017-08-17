@@ -63,7 +63,6 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                     $this->orgaoAtivo = $GrupoAtivo->codOrgao;
 
 //                    return $this->_helper->redirector->goToRoute(array('controller' => 'principal'), null, true);
-                    //xd(base64_decode());
                     $from = $this->getParam('from', '/principal');
                     $this->_helper->json(array('status' => 1, 'msg' => 'Login realizado com sucesso!', 'redirect' => $from));
                 } else {

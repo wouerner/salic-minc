@@ -83,7 +83,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 //        $objQuery->where('idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
 ////        $objQuery->where('idPerfilDoAssinante = ?', $idPerfilDoAssinante);
 //        $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
-////xd($objQuery->assemble());
 //        $result = $this->fetchAll($objQuery);
 //        if ($result) {
 //            return $result->toArray();
@@ -181,8 +180,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         $objQuery->where("{$this->_schema}.tbAtoAdministrativo.idOrgaoSuperiorDoAssinante = ?", $idOrgaoSuperiorDoAssinante);
         $ordenacao[] = 'tbDocumentoAssinatura.dt_criacao desc';
         $objQuery->order($ordenacao);
-//xd($idOrgaoSuperiorDoAssinante);
-//xd($query->assemble());
         return $this->_db->fetchAll($objQuery);
     }
 }

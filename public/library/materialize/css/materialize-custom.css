@@ -264,10 +264,6 @@ x - Botões
     line-height: 32px;
 }
 
-.z-depth-1, nav, .card-panel, .card, .toast, .btn, .btn-large, .btn-floating, .dropdown-content, .collapsible, .side-nav {
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
-}
-
 .btn.loading {
     background-image: url(../../../img/loader-mini.gif);
     background-position: 50% 50%;
