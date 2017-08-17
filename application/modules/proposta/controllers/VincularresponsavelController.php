@@ -117,14 +117,14 @@ class Proposta_VincularresponsavelController extends Proposta_GenericController
                 $where['idusuarioresponsavel = ?'] = $idUsuarioResponsavel;
                 $vinculocadastrado = $v->buscar($where);
 
-                if (count($vinculocadastrado) > 0) {
-                    $v->alterar($dados, $where);
-                } else {
-                    $v->inserir($dados);
-                }
+//                if (count($vinculocadastrado) > 0) {
+//                    $v->alterar($dados, $where);
+//                } else {
+//                    $v->inserir($dados);
+//                }
 
                 $enviarEmail = $emailDAO->enviarEmail($emailProponente, $assunto, $texto);
-
+                xd($enviarEmail);
                 $this->_helper->json(array('error' => false));
             } catch (Zend_Exception $e) {
                 echo '<pre>';
