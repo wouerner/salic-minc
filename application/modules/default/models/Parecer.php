@@ -451,7 +451,7 @@ class Parecer extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function getIdAtoAdministrativoParecerTecnico($idPronac, $idTipoAgente)
+    public function getIdAtoAdministrativoParecerTecnico($idPronac, $idTipoAgente, $stAtivo = 1)
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -461,7 +461,7 @@ class Parecer extends MinC_Db_Table_Abstract
         
         $select->where('p.idTipoAgente = ?', $idTipoAgente);
         $select->where('p.idPronac = ?', $idPronac);
-        $select->where('p.stAtivo = ?', 1);
+        $select->where('p.stAtivo = ?', $stAtivo);
         $select->where('p.TipoParecer = ?', 1);
         
         return $this->fetchAll($select);
