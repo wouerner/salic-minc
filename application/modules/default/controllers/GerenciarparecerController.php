@@ -361,7 +361,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
         $projetos = new Projetos();
-
+        
         try {
             /* $db->beginTransaction(); */
 
@@ -386,7 +386,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                         'DtDistribuicao' => null,
                         'DtDevolucao' => null,
                         'DtRetorno' => null,
-                        'FecharAnalise' => $dp->FecharAnalise,
+                        'FecharAnalise' => 0,
                         'Observacao' => $observacao,
                         'idUsuario' => $idusuario,
                         'idPRONAC' => $dp->IdPRONAC,
@@ -409,6 +409,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                 } else {
                     $msg = "Distribui&ccedil;&atilde;o Realizada com sucesso!";
 
+                    $fecharAnalise = ($dp->FecharAnalise == 3) ? '0' : $dp->FecharAnalise;
                     // DISTRIBUIR OU REDISTRIBUIR ( COORDENADOR DE PARECER )
                     $dadosD = array(
                         'idOrgao' => $dp->idOrgao,
@@ -417,7 +418,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                         'DtDistribuicao' => MinC_Db_Expr::date(),
                         'DtDevolucao' => null,
                         'DtRetorno' => null,
-                        'FecharAnalise' => $dp->FecharAnalise,
+                        'FecharAnalise' => $fecharAnalise,
                         'Observacao' => $observacao,
                         'idUsuario' => $idusuario,
                         'idPRONAC' => $dp->IdPRONAC,
@@ -427,7 +428,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                         'stPrincipal' => $dp->stPrincipal,
                         'stDiligenciado' => null
                     );
-
+                    
                     $where['idDistribuirParecer = ?'] = $dp->idDistribuirParecer;
                     $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $where);
 
