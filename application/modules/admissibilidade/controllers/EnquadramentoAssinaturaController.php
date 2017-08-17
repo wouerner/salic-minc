@@ -143,7 +143,6 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
 
             $this->view->titulo = "Devolver";
         } catch (Exception $objException) {
-//xd($objException->getMessage());
             parent::message($objException->getMessage(), "/{$this->moduleName}/enquadramento-assinatura/devolver-projeto?IdPRONAC={$get->IdPRONAC}");
         }
     }

@@ -173,7 +173,6 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             "TbAtoAdministrativo.idOrdemDaAssinatura asc",
             "Orgaos.Sigla asc"
         ]);
-//xd($objQuery->assemble());
         return $this->fetchAll($objQuery)->toArray();
     }
 

@@ -182,7 +182,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
             // pegamos o zend_auth
             $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
 
-            //xd($this->getName('usuarios'));
             $authAdapter->setTableName($this->getTableName(null, null, false))// TABElLAS.dbo.Usuarios
             ->setIdentityColumn('usu_identificacao')
                 ->setCredentialColumn('usu_senha');
@@ -331,7 +330,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
         $senha->where('usu_senha = ?', $password);
 
         $criptSenha = $this->fetchRow($senha);
-        //xd($criptSenha);
         $sql = $this->select();
         $sql->setIntegrityCheck(false);
         $sql->from($this,
@@ -345,7 +343,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
         $sql->where('usu_identificacao = ?', $username);
         $sql->where('usu_status  = ?', 1);
         $sql->where("usu_senha  = ?", $criptSenha['usu_senha']);
-        //xd($sql->__toString());
         $buscar = $this->fetchRow($sql);
 
         if ($buscar) // realiza a autentica??o
@@ -578,7 +575,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
         $sql->where('gru_codigo <> ?', 129);
         $sql->order('org_siglaautorizado ASC');
         $sql->order('gru_nome ASC');
-        //xd($sql->__toString());
         return $this->fetchAll($sql);
     } // fecha metodo buscarUnidades()
 
