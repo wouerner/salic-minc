@@ -45,25 +45,25 @@
                 $('#campoAdicionadoPorTipoReadequacao').removeClass('sumir');
                 
                 if(valor == 3){
-                    $('#txAuxilio').html('a altera��o de raz�o social');
+                    $('#txAuxilio').html('a altera&ccedil;&atilde;o de raz&atilde;o social');
                 } else if(valor == 4){
-                    $('#txAuxilio').html('a ag�ncia banc�ria');
+                    $('#txAuxilio').html('a ag&acirc;ncia banc&aacute;ria');
                 } else if(valor == 5){
                     $('#txAuxilio').html('a sinopse da obra');
                 } else if(valor == 6){
                     $('#txAuxilio').html('o impacto ambiental');
                 } else if(valor == 7){
-                    $('#txAuxilio').html('a especifica��o t�cnica');
+                    $('#txAuxilio').html('a especifica&ccedil;&atilde;o t&eacute;cnica');
                 } else if(valor == 8){
-                    $('#txAuxilio').html('a estrat�gia de execu��o');
+                    $('#txAuxilio').html('a estrat&eacute;gia de execu&ccedil;&atilde;o');
                 } else if(valor == 10){
-                    $('#txAuxilio').html('a altera��o de proponente');
+                    $('#txAuxilio').html('a altera&ccedil;&atilde;o de proponente');
                 } else if(valor == 12){
                     $('#txAuxilio').html('o nome do projeto');
                 } else if(valor == 13){
-                    $('#txAuxilio').html('o per�odo de execu��o');
+                    $('#txAuxilio').html('o per&iacute;odo de execu&ccedil;&atilde;o');
                 } else if(valor == 15){
-                    $('#txAuxilio').html('a s�ntese do projeto');
+                    $('#txAuxilio').html('a s&iacute;ntese do projeto');
                 } else if(valor == 16){
                     $('#txAuxilio').html('os objetivos');
                 } else if(valor == 17){
@@ -71,11 +71,11 @@
                 } else if(valor == 18){
                     $('#txAuxilio').html('a acessibilidade');
                 } else if(valor == 19){
-                    $('#txAuxilio').html('a democratiza��o de acesso');
+                    $('#txAuxilio').html('a democratiza&ccedil;&atilde;o de acesso');
                 } else if(valor == 20){
                     $('#txAuxilio').html('as etapas de trabalho');
                 } else if(valor == 21){
-                    $('#txAuxilio').html('a ficha t�cnica');
+                    $('#txAuxilio').html('a ficha t&eacute;cnica');
                 }
                 criarCampoTipoReadequacao(valor);
             }
@@ -108,7 +108,7 @@
             var descJustificativa = CKEDITOR.instances['descJustificativa'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,''),
                 texto = CKEDITOR.instances['descJustificativa'].getData(),
                 erro = 0,
-                msg = 'Favor preencher os dados obrigat�rios!',
+                msg = 'Favor preencher os dados obrigat&oacute;rios!',
                 tipoRead = $('#tipoReadequacao').val(),
                 solicitacoesSimples = new Array(3,4,5,6,7,8,10,11,12,13,15,16,17,18,19,20,21),
                 solicitacoesSimplesCKEditor = new Array(5,6,7,8,16,17,18,19,20,21),
@@ -210,7 +210,7 @@
 		    enviarformulario();
 		} else {
                     $("#msgAlerta").dialog("destroy");
-                    $("#msgAlerta").html('Deseja incluir essa solicita��o de readequa��o?');
+                    $("#msgAlerta").html('Deseja incluir essa solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o?');
                     $("#msgAlerta").dialog({
 			resizable: false,
 			title: 'Alerta!',
@@ -244,14 +244,14 @@
         $('.btn_exclusao').click(function(){
             var idReadequacao = $(this).attr('readequacao');
             $("#msgAlerta").dialog("destroy");
-            $("#msgAlerta").html('Deseja excluir a solicita��o de readequa��o?');
+            $("#msgAlerta").html('Deseja excluir a solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o?');
             $("#msgAlerta").dialog({
                 resizable: false,
                 title: 'Alerta!',
                 width:360,
                 modal: true,
                 buttons : {
-                    'N�o' : function(){
+                    'N\xE3o' : function(){
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
@@ -328,7 +328,7 @@
         
         $('.btn_finalizar').click(function(){
             $("#msgAlerta").dialog("destroy");
-            $("#msgAlerta").html('Deseja realmente finalizar as solicita��es de readequa��o cadastradas?<br /><br />Ao finalizar, todas as solicita��es ser�o encaminhadas ao MinC.');
+            $("#msgAlerta").html('Deseja realmente finalizar as solicita&ccedil;&otilde;es de readequa&ccedil;&atilde;o cadastradas?<br /><br />Ao finalizar, todas as solicita&ccedil;&otilde;es ser�o encaminhadas ao MinC.');
             $("#msgAlerta").dialog({
                 resizable: false,
                 title: 'Alerta!',
@@ -573,7 +573,7 @@
                 height:170,
                 modal: true,
                 buttons : {
-                    'N�o' : function(){
+                    'N\xE3o' : function(){
                         itemClicado.parent().parent().removeClass('fundo_linha4');
                         $(this).dialog('close');
                     },
@@ -758,7 +758,7 @@
     
     function atualizarDadosPlanosDeDistribuicao(){
         jqAjaxLinkSemLoading('<?php echo $this->Url(array('controller' => 'readequacoes', 'action' => 'carregar-planos-de-distribuicao'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'planosDeDistribuicao');
-	// adicionar verifica��o da readequacao
+	// adicionar verificao da readequacao
         $.ajax({
             url : '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'consultar-readequacao'), '', true); ?>',
             type: "POST",
@@ -833,7 +833,7 @@
                     <select class="select_simples comboReadequacoes" style="width: 200px;" name="tipoReadequacao" id="tipoReadequacao">
                         <option value="0"> - Selecione - </option>
                         <?php foreach ($this->TiposReadequacao as $tipos){ ?>
-                        <?php if($tipos->idTipoReadequacao != 1 && $tipos->idTipoReadequacao != 2){ //Retirando o Tipo de Readequa��o de Remanejamento 20% ?>
+                        <?php if($tipos->idTipoReadequacao != 1 && $tipos->idTipoReadequacao != 2){ //Retirando o Tipo de Readequacao de Remanejamento 20% ?>
                         <option value="<?php echo $tipos->idTipoReadequacao; ?>"><?php echo $tipos->dsReadequacao; ?></option>
                         <?php } ?>
                         <?php } ?>
@@ -872,8 +872,8 @@
         <table class="tabela sumir" id="campoAdicionadoPorTipoReadequacao">
             <tr>
                 <td class="destacar">
-                    <p class="bold" style="font-size: 13px;">Apresente abaixo <span id="txAuxilio"></span> que ir� substituir a informa��o atual. <span class="red-text">*</span></p>
-                    <p class="red-text">Aten��o: O texto apresentado deve estar completo, inclusive com as partes que n�o ser�o alteradas, uma vez que as informa��es apresentadas ir�o substituir integralmente as aprovadas contidas no SALIC.</p>
+                    <p class="bold" style="font-size: 13px;">Apresente abaixo <span id="txAuxilio"></span> que ir&aacute; substituir a informa&ccedil;&atilde;o atual. <span class="red-text">*</span></p>
+                    <p class="red-text">Aten&ccedil;&atilde;o: O texto apresentado deve estar completo, inclusive com as partes que n&atilde;o ser&atilde;o alteradas, uma vez que as informa&ccedil;&otilde;es apresentadas ir&atilde;o substituir integralmente as aprovadas contidas no SALIC.</p>
                 </td>
             </tr>
             <tr>
@@ -890,7 +890,7 @@
                 <td><textarea cols="80" id="descJustificativa" name="descJustificativa" rows="10"></textarea></td>
             </tr>
             <tr>
-                <td><span class="red-text">* Campo obrigat�rio e permite o m�ximo de 5.000 caracteres</span></td>
+                <td><span class="red-text">* Campo obrigat&oacute;rio e permite o m&aacute;ximo de 5.000 caracteres</span></td>
             </tr>
         </table>
         
@@ -913,15 +913,15 @@
         
         <?php if(count($this->readequacoesCadastradas)>0){ ?>
         <fieldset>
-            <legend>Readequa��es cadastradas</legend>
+            <legend>Readequa&ccedil;&otilde;es cadastradas</legend>
             <table class="tabela">
                 <tr>
-                    <th>Tipo Readequa��o</th>
-                    <th>Dt. Solicita��o</th>
-                    <th>Descri��o</th>
+                    <th>Tipo Readequa&ccedil;&atilde;o</th>
+                    <th>Dt. Solicita&ccedil;&atilde;o</th>
+                    <th>Descri&ccedil;&atilde;o</th>
                     <th>Justificativa</th>
                     <th>Arquivo</th>
-                    <th>A��o</th>
+                    <th>A&ccedil;&atilde;o</th>
                 </tr>
                 <?php foreach ($this->readequacoesCadastradas as $rc){ ?>
                 <tr>
@@ -984,8 +984,8 @@
             <tr class="centro">
                 <td class="destacar bold">Unidade</td>
                 <td class="destacar bold">Qtd</td>
-                <td class="destacar bold">Ocorr�ncia</td>
-                <td class="destacar bold">Vl. Unit�rio</td>
+                <td class="destacar bold">Ocorr&ecirc;ncia</td>
+                <td class="destacar bold">Vl. Unit&aacute;rio</td>
                 <td class="destacar bold">Dias</td>
                 <td class="destacar bold">Total</td>
                 <!--<td class="destacar bold" style="width: 1px;">Reintegrar</td>-->
@@ -1005,13 +1005,13 @@
         
         <table class="tabela">
             <tr>
-                <th colspan="6">Dados para a readequa��o</th>
+                <th colspan="6">Dados para a readequa&ccedil;&atilde;o</th>
             </tr>
             <tr class="centro">
                 <td class="destacar bold">Unidade</td>
                 <td class="destacar bold">Qtd</td>
-                <td class="destacar bold">Ocorr�ncia</td>
-                <td class="destacar bold">Vl. Unit�rio</td>
+                <td class="destacar bold">Ocorr&ecirc;ncia</td>
+                <td class="destacar bold">Vl. Unit&aacute;rio</td>
                 <td class="destacar bold">Dias</td>
                 <td class="destacar bold">Total</td>
             </tr>
@@ -1031,7 +1031,7 @@
                 <td id="TotalCalculado" class="direita" style="width: 125px;"></td>
             </tr>
             <tr>
-                <td colspan="6" class="destacar bold centro">Justificativa da Readequa��o <span class="red-text">*</span> <span id="textoErroValores" style="float:right; color: red;"></span></td>
+                <td colspan="6" class="destacar bold centro">Justificativa da Readequa&ccedil;&atilde;o <span class="red-text">*</span> <span id="textoErroValores" style="float:right; color: red;"></span></td>
             </tr>
             <tr>
                 <td colspan="6" class="centro">
@@ -1048,7 +1048,7 @@
             <tr>
                 <td class="destacar bold" style="width: 33%">Recursos</td>
                 <td class="destacar bold" style="width: 33%">UF</td>
-                <td class="destacar bold" style="width: 33%">Munic�pio</td>
+                <td class="destacar bold" style="width: 33%">Munic&iacute;pio</td>
             </tr>
             <tr>
                 <td>
@@ -1110,8 +1110,8 @@
             <tr class="centro">
                 <td class="destacar bold w150">Unidade</td>
                 <td class="destacar bold">Qtd</td>
-                <td class="destacar bold">Ocorr�ncia</td>
-                <td class="destacar bold">Vl. Unit�rio</td>
+                <td class="destacar bold">Ocorr&ecirc;ncia</td>
+                <td class="destacar bold">Vl. Unit&aacute;rio</td>
                 <td class="destacar bold">Dias</td>
                 <td class="destacar bold">Total</td>
             </tr>
