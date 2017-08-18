@@ -266,11 +266,12 @@ class tbPlanoDistribuicao extends MinC_Db_Table_Abstract
                         (b.qtVendaNormal+b.qtVendaPromocional+b.qtPatrocinador+b.qtOutros+b.qtProponente) as QtdeProduzida,
                         b.qtPatrocinador as QtdePatrocinador, b.qtProponente as QtdeProponente, b.qtOutros as QtdeOutros, b.qtVendaNormal as QtdeVendaNormal,
                         b.qtVendaPromocional as QtdeVendaPromocional, b.vlUnitarioNormal as PrecoUnitarioNormal, b.vlUnitarioPromocional as PrecoUnitarioPromocional,
-                        b.stPrincipal, '0' as Usuario, b.tpSolicitacao, c.Descricao as Produto
+                        b.stPrincipal, '0' as Usuario, b.tpSolicitacao, b.idProduto
                     ")
                 ) ,'SAC.dbo'
             );
         }
+
         $select->joinInner(
             array('c' => 'Produto'), 'c.Codigo = b.idProduto',
             array('c.Descricao as Produto'), 'SAC.dbo'
@@ -298,6 +299,7 @@ class tbPlanoDistribuicao extends MinC_Db_Table_Abstract
         }
 
         $select->where('a.IdPRONAC = ?', $idPronac);
+
 
         
         return $this->fetchAll($select);
