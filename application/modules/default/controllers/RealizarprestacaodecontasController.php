@@ -27,7 +27,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     private $situcaoEncaminhamentoAtual = null;
 
-
     public function init()
     {
         $arrSituacoesGrids = implode(',',$this->arrSituacoesAguardandoAnalise).','.implode(',',$this->arrSituacoesDevolvidosAposAnalise).','.implode(',',$this->arrSituacoesDiligenciados).','.implode(',',$this->arrSituacoesTCE);
@@ -923,9 +922,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->totalProjetosOS = $total;
     }
 
-    public function historicoencaminhamentoAction(){
-
-        // desabilita o Zend_Layout
+    public function historicoencaminhamentoAction()
+    {
         $this->_helper->layout->disableLayout ();
 
         $post     = Zend_Registry::get("get");
