@@ -306,17 +306,16 @@
 
     }
 
-
     function visualizarPagamentos(id){
-        $('.pagamentos').hide();
-        $('#t_'+id).show();
+        $('tr.pagamento').addClass('sumir');
+        $('#t_'+id).toggleClass('sumir');
 
         $('#btnAbrir_'+id).hide();
         $('#btnFechar_'+id).show();
     }
 
     function esconderPagamentos(id){
-        $('#t_'+id).hide();
+        $('#t_'+id).toggleClass('sumir');
         $('#btnAbrir_'+id).show();
         $('#btnFechar_'+id).hide();
     }
