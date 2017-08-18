@@ -235,7 +235,6 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
 
         $ordenacao[] = 'possuiAssinatura asc';
         $query->order($ordenacao);
-//xd($query->assemble());
         return $this->_db->fetchAll($query);
     }
 

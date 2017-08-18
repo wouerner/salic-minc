@@ -8,7 +8,7 @@ class ArquivoPagamentoParecerista extends MinC_Db_Table_Abstract {
 
     protected $_name = 'tbPagamentoPareceristaXArquivo';
     protected $_schema = 'SAC';
-    protected $_banco = 'SAC';
+//    protected $_banco = 'SAC';
     protected $_primary = 'idArquivo';
 
     public function inserirArquivodePagamento($idGerarPagamentoParecerista, $idArquivo, $siArquivo){
@@ -36,7 +36,9 @@ class ArquivoPagamentoParecerista extends MinC_Db_Table_Abstract {
                                   'arq.nmArquivo',
                                   'arq.sgExtensao',
                                   'arq.dtEnvio',
-                                  'nrTamanho'),'BDCORPORATIVO.scCorp'
+                                  'nrTamanho',
+                                  'arq.dsTipoPadronizado'),
+            'BDCORPORATIVO.scCorp'
         );
 
         $select->joinInner(array('aim'=>'tbArquivoImagem'), "arq.idArquivo = aim.idArquivo",
@@ -49,8 +51,10 @@ class ArquivoPagamentoParecerista extends MinC_Db_Table_Abstract {
 
         $select->order('arq.dtEnvio');
 
-
-        return $this->fetchAll($select);
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+        $db->fetchAll('SET TEXTSIZE 2147483647');
+        return $db->fetchAll($select);
     }
 }
 

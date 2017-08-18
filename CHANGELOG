@@ -1,3 +1,42 @@
+Release 2.5.4
+* [Fix] Tempo da sessão: aumenta o tempo da sessão para 24horas
+
+Release 2.5.3
+* [FIX] Solicitar vínculo: corrige ao solicitar vínculo
+
+Release 2.5.2
+* [FIX] Gerenciar Responsaveis/Novo responsável: correção ao vincular novo responsável
+
+Release 2.5.1
+* [FIX] Parecer/Análise inicial e CNIC: correção ao gerar documento
+
+Release 2.5.0
+* [ADD] Parecer/Análise CNIC: Fluxo de assinatura para CNIC, com finalização de projeto
+* [FIX] CNIC/Realizar análise projeto: retirar verificação de limites orçamentários se nova IN 2017
+* [FIX] CNIC/Realizar análise projeto: removendo links de edição da planilha e reintegrar valores para projetos posteriores a VerificarIN2017
+* [FIX] CNIC/Realizar análise projeto: se nova IN, tirar links para análise de conteúdo e análise de cortes sugeridos
+* [FIX] CNIC/Realizar análise projeto: alterando cor do menu
+* [FIX] Parecer/análise inicial: correção de erro ao gerar documento para assinatura
+* [FIX] Parecer/presidente de vinculada: correção de url
+* [FIX] Parecer/análise inicial: ajustes de estilo no documento para assinatura
+* [REFACTOR] Parecer/análise inicial: alterando nome de função preparatória do documento para assinatura
+* [REFACTOR] Parecer/Análise CNIC: movendo funcionalidade para módulo parecer e redirecionando ação
+* [REFACTOR] Parecer/parecer cnic: trazendo funcionalidades de emissão de parecer para módulo parecer
+* [UPDATE] EXIBIR PROJETO/PLANO DISTRIBUICAO: Ajustando visualizacao do plano de distribuicao
+* [UPDATE] Assinatura/TbAssinatura: adicionando tipo ato para análise CNIC
+* [UPDATE] Autenticação: adicionado permissão para componente da comissão (cnic)
+
+Release 2.4.3
+* [FIX] Parecer/análise inicial: correção na geração do documento para assinatura'
+
+Release 2.4.2
+* [FIX] Parecer/análise inicial: correção de erro na paginação
+* [FIX] Parecer/análise inicial: Passando idAtoAdministrativo e stEstado para gerar documento assinatura
+
+Release 2.4.1
+* [FIX] Parecer/análise inicial: correção no fome da fn e alterando chamada a verificarIN2017 para fn
+* [FIX] Parecer/análise inicial: adicionando tela faltante
+
 Release 2.4.0
 * [ADD] Parecer/análise inicial: Fluxo de aprovação pelo parecerista com assinatura para IN 2017
 * [ADD] Parecer/gerenciar pareceres: Fluxo de aprovação pelo coordenador de parecer com assinatura para IN 2017

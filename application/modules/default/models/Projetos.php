@@ -2474,7 +2474,7 @@ class Projetos extends MinC_Db_Table_Abstract
     }
 
 
-    public function assinarParecer($idpronac) {
+    public function assinarParecerTecnico($idpronac) {
         $returnData = array();
 
         $returnData['enquadramento'] = $this->enquadramentoProjeto($idpronac);
@@ -2535,6 +2535,49 @@ class Projetos extends MinC_Db_Table_Abstract
         return $returnData;
     }
 
+
+    public function assinarApreciacaoCnic($idpronac) {
+        $returnData = array();
+
+        $returnData['enquadramento'] = $this->enquadramentoProjeto($idpronac);
+
+        $select2 = $this->select();
+        $select2->setIntegrityCheck(false);
+        $select2->from(
+            array('p' => 'vwPlanoDeDistribuicaoProduto'),
+            array(
+                'p.idProjeto',
+                'p.IdPRONAC',
+                'p.idProduto',
+                'p.Produto',
+                'p.tpProduto',
+                'p.QtdeProduzida',
+                'p.QtdeDistribuicaoGratuita',
+                'p.QtdeVendaPopular',
+                'p.QtdeVendaProponente',
+                'p.PrecoMedio',
+                'p.ReceitaTotal',
+                'p.vlProduto'
+            ));
+        $select2->where("p.idPronac = ?", $idpronac);
+        $returnData['produtos'] = $this->fetchAll($select2);
+
+        $select3 = $this->select();
+        $select3->setIntegrityCheck(false);
+        $select3->from(
+            array('p' => 'Parecer'),
+            array(
+                'p.tpResultado' => new Zend_Db_Expr("CASE WHEN ParecerFavoravel = 1 THEN 'Desfavor&aacute;vel' WHEN ParecerFavoravel = 2 THEN 'Favor&aacute;vel' END"),
+                'p.ResumoParecer'
+            ));
+        $select3->where("p.stAtivo = ?", 1);
+        $select3->where("p.TipoParecer = ?", 1);
+        $select3->where("p.idTipoagente = ?", 6);
+        $select3->where("p.idPronac = ?", $idpronac);
+        $returnData['parecer'] = $this->fetchAll($select3);
+        
+        return $returnData;
+    }    
 
     public function dadosFechar($usu_Codigo, $idpronac, $idDistribuirParecer)
     {

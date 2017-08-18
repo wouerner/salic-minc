@@ -386,7 +386,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $cont = true;
 
         foreach ($resp as $key => $val) {
-            $produto = $val->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $val->Produto;
+            $produto = $val->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $val->Produto;
             if (!isset($itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['qtd'])) {
                 $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade] = array('qtd' => 0, 'totalUfSolicitado' => 0, 'totalUfSugerido' => 0, 'itens' => array(), 'totalSolicitado' => 0, 'totalSugerido' => 0);
             }
@@ -663,7 +663,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $cont = true;
 
         foreach ($resp as $key => $val) {
-            $produto = $val->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $val->Produto;
+            $produto = $val->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $val->Produto;
             if (!isset($itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['qtd'])) {
                 $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade] = array('qtd' => 0, 'totalUfSolicitado' => 0, 'totalUfSugerido' => 0, 'itens' => array(), 'totalSolicitado' => 0, 'totalSugerido' => 0);
             }

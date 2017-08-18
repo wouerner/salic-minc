@@ -896,7 +896,7 @@ x - TABELAS
 
 #conteudo .fundo_linha2,
 #conteudo .fundo_linha2 td {
-    background: #e8e8e8 url(../img/bg-celulas2.gif) top left repeat-x;
+    background-color: #4caf50;
 }
 
 #conteudo .fundo_linha3,

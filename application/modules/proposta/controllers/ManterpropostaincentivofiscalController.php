@@ -1010,7 +1010,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         }
 
         //ADICIONA AO ARRAY O IDAGENTE DO USUARIO LOGADO
-        $dadosIdAgentes = array($this->idAgenteProponente);
+        $dadosIdAgentes = array($this->idAgente);
 
         //VERIFICA SE O USUARIO LOGADO EH DIRIGENTE DE ALGUMA EMPRESA
         $Vinculacao = new Agente_Model_DbTable_Vinculacao();
@@ -1026,7 +1026,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         //PROCURA AS PROPOSTAS DE TODOS OS IDAGENTE'S
         $listaPropostas = $propostas->buscarVinculadosProponenteDirigentes($dadosIdAgentes);
 
-        $wherePropostaD['pp.idagente = ?'] = $this->idAgenteProponente;
+        $wherePropostaD['pp.idagente = ?'] = $this->idAgente;
         $wherePropostaD['pr.idprojeto IS NULL'] = '';
         $wherePropostaD['pp.idusuario <> ?'] = $this->idResponsavel;
         $listaPropostasD = $propostas->buscarPropostaProjetos($wherePropostaD);
@@ -1048,7 +1048,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $tbVinculo = new Agente_Model_DbTable_TbVinculo();
         $propostas = new Proposta_Model_DbTable_PreProjeto();
 
-        $whereProjetos['pp.idAgente = ?'] = $this->idAgenteProponente;
+        $whereProjetos['pp.idAgente = ?'] = $this->idAgente;
         $whereProjetos['pp.idUsuario <> ?'] = $this->idResponsavel;
         $whereProjetos['pr.idProjeto IS NOT NULL'] = '';
         $listaProjetos = $propostas->buscarPropostaProjetos($whereProjetos);
@@ -1090,7 +1090,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         if ((empty($cnpjcpf)) && (empty($nome))) {
             echo "<table class='tabela'>
 					<tr>
-					    <td class='red' align='center'>Voc&eacute; deve preencher pelo menos um campo!</td>
+					    <td class='red' align='center'>Voc&ecirc; deve preencher pelo menos um campo!</td>
 					</tr>
 				</table>";
             $this->_helper->viewRenderer->setNoRender(TRUE);
@@ -1100,11 +1100,11 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             $where['SGA.Nome like (?)'] = "%" . $nome . "%";
         }
 
-        $busca = $tbVinculo->buscarResponsaveis($where, $this->idAgenteProponente);
+        $busca = $tbVinculo->buscarResponsaveis($where, $this->idAgente);
 
         $this->view->dados = $busca;
         $this->view->dadoscount = count($busca);
-        $this->view->idAgenteProponente = $this->idAgenteProponente;
+        $this->view->idAgenteProponente = $this->idAgente;
     }
 
     /**
