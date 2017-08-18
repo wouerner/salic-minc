@@ -7,7 +7,7 @@
             <style>
                 .tabela p { font: 12px/14pt "Trebuchet MS",Georgia,"Times New Roman",Times,serif; }
             </style>
-            <script language="JavaScript" type="text/javascript">
+            <script language="javascript" type="text/javascript">
                 $(document).ready(function() {
                     $('.btn_cancelar').click(function(){
                         window.location = "<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'index')); ?>";
@@ -174,7 +174,10 @@
                     </tr>
                     <tr>
                         <td colspan="1">
-                            <textarea readonly class="materialize-textarea" id="parecerdotecnico" style="width: 99%" rows="15" name="parecerDoTecnico"><?php if(!empty($this->parecerTecnico)):echo $this->parecerTecnico->meRelatorio;endif;?></textarea>
+                            <?php echo (!empty($this->parecerTecnico)) ? $this->parecerTecnico->meRelatorio : '' ?>
+                            <textarea readonly class=" hide materialize-textarea" id="parecerdotecnico" rows="15" name="parecerDoTecnico">
+                                <?php echo (!empty($this->parecerTecnico)) ? $this->parecerTecnico->meRelatorio : '' ?>
+                            </textarea>
                             <?php
                             if ($this->parecerTecnico) :
                                 $parecerTecnico = $this->parecerTecnico->siManifestacao == 0 ? 'Irregular' : 'Regular';
@@ -205,7 +208,10 @@
                     </tr>
                     <tr>
                         <td colspan="1">
-                            <textarea readonly class="materialize-textarea" id="parecerchefe" style="width: 99%" rows="15" name="parecerDoChefeDeDivisao"><?php if(!empty($this->parecerChefe)):echo $this->parecerChefe->meRelatorio;endif;?></textarea>
+                            <?php echo (!empty($this->parecerChefe))? $this->parecerChefe->meRelatorio : '';?>
+                            <textarea readonly class=" hide materialize-textarea" id="parecerchefe" style="width: 99%" rows="15" name="parecerDoChefeDeDivisao">
+                                <?php if(!empty($this->parecerChefe)):echo $this->parecerChefe->meRelatorio;endif;?>
+                            </textarea>
                             <?php
                                 if ($this->parecerChefe) :
                                     $parecerDoChefeDeDivisao = $this->parecerChefe->siManifestacao ? 'Regular' : 'Irregular';
@@ -222,7 +228,6 @@
             </table>
         </div>
 
-        <?php //if(!empty($this->parecerCoord)) : ?>
         <?php if(!empty($this->parecerCoord)) : ?>
         <input type="hidden" name="IN" value="reprovado" />
         <table cellspacing="1" class="bordered">
