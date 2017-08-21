@@ -518,7 +518,9 @@ $filtros = array(
         });
 
         $('.comboFiltro').change(function(){
-            var url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?tipoFiltro="+$(this).val();
+            var pronac = $('#pronac').val(),
+                filtro = $('.comboFiltro').val(),
+                url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?tipoFiltro="+$(this).val()+"&pronac="+pronac;
             window.location = url;
         });
     });
