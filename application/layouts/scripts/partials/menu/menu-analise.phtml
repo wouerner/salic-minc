@@ -7,6 +7,7 @@ $arrMenu['analise'] = array(
     'menu' => array(),
     'grupo' => array(
         Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA,
+        Autenticacao_Model_Grupos::SUPERINTENDENTE_DE_VINCULADA,
         Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA,
         Autenticacao_Model_Grupos::PARECERISTA,
         Autenticacao_Model_Grupos::GESTOR_SALIC,
@@ -92,6 +93,10 @@ $arrMenu['analise']['menu'][] = array('label' => 'Gerenciar Pareceres', 'title' 
 $arrMenu['analise']['menu'][] = array('label' => 'Gerenciar Pareceres', 'title' => 'Ir para Gerenciar Pareceres',
     'url' => $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'finalizar-parecer'), '', true),
     'grupo' => array(Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA)
+);
+$arrMenu['analise']['menu'][] = array('label' => 'Gerenciar Pareceres', 'title' => 'Ir para Gerenciar Pareceres',
+    'url' => $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'finalizar-parecer'), '', true),
+    'grupo' => array(Autenticacao_Model_Grupos::SUPERINTENDENTE_DE_VINCULADA)
 );
 $arrMenu['analise']['menu'][] = array('label' => 'An&aacute;lise T&eacute;cnica Inicial', 'title' => 'Ir para An&aacute;lise T&eacute;cnica Inicial',
     'url' => $this->url(array('module' => 'parecer', 'controller' => 'analise-inicial', 'action' => 'index'), '', true),

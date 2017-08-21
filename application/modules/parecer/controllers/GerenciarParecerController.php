@@ -11,6 +11,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::SUPERINTENDENTE_DE_VINCULADA;
         
         isset($this->auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
@@ -178,25 +179,20 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
 
-            foreach ($buscaDadosProjeto as $dp):
-
-                // FECHAR ANALISE ( COORDENADOR DE PARECER )
+            foreach ($buscaDadosProjeto as $dp) {
+            
+                $idOrgao = $dp->idOrgao;
                 $orgaos = array('91', '92', '93', '94', '95', '160', '171', '335');
-
-                // Caso n�o esteja dentro do array
                 if (!in_array($dp->idOrgao, $orgaos)) {
-                    $idOrgao = 91;
-                    $fecharAnalise = 0;
+                    $fecharAnalise = 3;
                 } else {
-                    $idOrgao = $dp->idOrgao;
-
                     if ($tipoFiltro == 'em_validacao') {
                         $fecharAnalise = 3;
                     } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
                         $fecharAnalise = 1;
                     }
                 }
-
+            
                 $dados = array(
                     'DtEnvio' => $dp->DtEnvio,
                     'idAgenteParecerista' => $dp->idAgenteParecerista,
@@ -219,7 +215,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $whereD);
                 $insere = $tbDistribuirParecer->inserir($dados);
  
-            endforeach;
+            }
 
             /** Grava o Parecer nas Tabelas tbPlanilhaProjeto e Parecer e altera a situa��o do Projeto para  ***************/
             $projeto = new Projetos();
@@ -395,8 +391,15 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
 
-            foreach ($buscaDadosProjeto as $dp):
-            
+            foreach ($buscaDadosProjeto as $dp) {
+                
+                $orgaos = array('91', '92', '93', '94', '95', '160', '171', '335');
+                if (!in_array($dp->idOrgao, $orgaos)) {
+                    $idOrgao = 91;
+                } else {
+                    $idOrgao = $dp->idOrgao;
+                }
+                
                 $dados = array(
                     'DtEnvio' => $dp->DtEnvio,
                     'idAgenteParecerista' => $dp->idAgenteParecerista,
@@ -419,7 +422,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $whereD);
                 $insere = $tbDistribuirParecer->inserir($dados);
  
-            endforeach;
+            }
 
             $projeto = new Projetos();
             $wherePro['IdPRONAC = ?'] = $idPronac;
