@@ -1,3 +1,15 @@
+Release 2.5.4
+* [Fix] Tempo da sessão: aumenta o tempo da sessão para 24horas
+
+Release 2.5.3
+* [FIX] Solicitar vínculo: corrige ao solicitar vínculo
+
+Release 2.5.2
+* [FIX] Gerenciar Responsaveis/Novo responsável: correção ao vincular novo responsável
+
+Release 2.5.1
+* [FIX] Parecer/Análise inicial e CNIC: correção ao gerar documento
+
 Release 2.5.0
 * [ADD] Parecer/Análise CNIC: Fluxo de assinatura para CNIC, com finalização de projeto
 * [FIX] CNIC/Realizar análise projeto: retirar verificação de limites orçamentários se nova IN 2017
