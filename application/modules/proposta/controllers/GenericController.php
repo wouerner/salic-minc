@@ -108,7 +108,6 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
          */
         $this->idResponsavel = $auth->getIdentity()->IdUsuario;
 
-
         /**
          * Agentes sao proponentes da proposta ou do projeto
          */
