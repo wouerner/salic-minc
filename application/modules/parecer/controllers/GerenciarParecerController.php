@@ -116,7 +116,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $tbDistribuirParecer = new tbDistribuirParecer();
         $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
         $fim = $inicio + $this->intTamPag;
-
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, $tamanho, $inicio, false, $tipoFiltro);
@@ -180,16 +179,15 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
 
             foreach ($buscaDadosProjeto as $dp) {
-            
                 $idOrgao = $dp->idOrgao;
-                $orgaos = array('91', '92', '93', '94', '95', '160', '171', '335');
-                if (!in_array($dp->idOrgao, $orgaos)) {
+                
+                if ($tipoFiltro == 'em_validacao') {
                     $fecharAnalise = 3;
-                } else {
-                    if ($tipoFiltro == 'em_validacao') {
-                        $fecharAnalise = 3;
-                    } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
-                        $fecharAnalise = 1;
+                } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
+                    $fecharAnalise = 1;
+                    
+                    if ($this->isIphan($dp->idOrgao)) {
+                        $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
                     }
                 }
             
@@ -368,23 +366,24 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         
         try {
             $db->beginTransaction();
-
-            $parecer = new Parecer();
-            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
             
-            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-            $data = array(
-                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
-            );
-            $where = array(
-                'IdPRONAC = ?' => $idPronac,
-                'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-                'idAtoDeGestao = ?' => $idAtoAdministrativo,
-                'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-                'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-            );
-            $objModelDocumentoAssinatura->update($data, $where);
-            
+            if (!$this->isIphan($dp->idOrgao)) {
+                $parecer = new Parecer();
+                $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
+                
+                $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+                $data = array(
+                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+                );
+                $where = array(
+                    'IdPRONAC = ?' => $idPronac,
+                    'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
+                    'idAtoDeGestao = ?' => $idAtoAdministrativo,
+                    'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+                    'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+                );
+                $objModelDocumentoAssinatura->update($data, $where);
+            }
             
             $tbDistribuirParecer = new tbDistribuirParecer();
             $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
@@ -393,11 +392,13 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             foreach ($buscaDadosProjeto as $dp) {
                 
-                $orgaos = array('91', '92', '93', '94', '95', '160', '171', '335');
-                if (!in_array($dp->idOrgao, $orgaos)) {
-                    $idOrgao = 91;
+                if ($this->isIphan($dp->idOrgao)) {                
+
+                    $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
+                    $fecharAnalise = 3;
                 } else {
                     $idOrgao = $dp->idOrgao;
+                    $fecharAnalise = 1;
                 }
                 
                 $dados = array(
@@ -407,8 +408,8 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                     'DtDevolucao' => $dp->DtDevolucao,
                     'DtRetorno' => MinC_Db_Expr::date(),
                     'Observacao' => "",
-                    'idUsuario' => $idusuario,
-                    'FecharAnalise' => 1,
+                    'idUsuario' => $idUsuario,
+                    'FecharAnalise' => $fecharAnalise,
                     'idOrgao' => $idOrgao,
                     'idPRONAC' => $dp->IdPRONAC,
                     'idProduto' => $dp->idProduto,
@@ -433,12 +434,10 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             $buscaInabilitado = $inabilitadoDAO->BuscarInabilitado($buscaDadosdoProjeto[0]->CgcCpf, $buscaDadosdoProjeto[0]->AnoProjeto, $buscaDadosdoProjeto[0]->Sequencial);
             
             if (count($buscaInabilitado == 0)) {
-                // dentro das unidades abaixo
-                if (in_array($dp->idOrgao, array(91, 92, 93, 94, 95, 160, 171, 335))) {
+                if (!$this->isIphan($dp->idOrgao)) {
                     // somente presidente
                     $projeto->alterarSituacao($idPronac, null, 'C20', 'An&aacute;lise t&eacute;cnica conclu&iacute;da');
                 } else {
-                    // fora das unidades acima
                     $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida&ccedil;&atilde;o do parecer t&eacute;cnico');
                 }
             } else {
@@ -454,5 +453,22 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             parent::message("Erro ao concluir " . $ex->getMessage(), "parecer/gerenciar-parecer/finalizar-parecer", "ERROR");
         }
         
+    }
+
+    public function isIphan($idOrgao)
+    {
+        $orgaos = array(
+            Orgaos::ORGAO_IPHAN_PRONAC,
+            Orgaos::ORGAO_IPHAN_PRONAC,
+            Orgaos::ORGAO_FUNARTE,
+            Orgaos::ORGAO_FBN,
+            Orgaos::ORGAO_FCP,
+            Orgaos::ORGAO_FCRB,
+            Orgaos::ORGAO_IBRAM,
+            Orgaos::ORGAO_SUPERIOR_SAV,
+            Orgaos::ORGAO_SAV_DAP
+        );
+
+        return (!in_array($dp->idOrgao, $orgaos)) ? true : false;
     }
 }
