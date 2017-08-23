@@ -1512,30 +1512,30 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $partials = array(
             $this->view->partial("{$partialPath}/{$folder}/laudo.phtml"),
             /* $this->view->partial("{$partialPath}/{$folder}/comunicado.phtml"), */
-            /* $this->view->partial("{$partialPath}/parecer-tecnico.phtml"), */
+            $this->view->partial("{$partialPath}/parecer-tecnico.phtml"),
         );
 
         $html = implode('<div style="page-break-before: always;">', $partials);
 
         $html .= '<script language="javascript" type="text/javascript" src="/minc/salic/public/js/jquery-1.4.2.min.js"></script><script type="text/javascript">$(document).ready(function(){window.print();});</script>';
-        /* $html .= $this->view->partial("{$partialPath}/parecer-chefe-de-divisao.phtml"); */
+        $html .= $this->view->partial("{$partialPath}/parecer-chefe-de-divisao.phtml");
 
         foreach ($dados as $key => $value) {
             $html = str_replace("{{$key}}", utf8_encode($value), $html);
         }
 
-        /* foreach ($resultados as $key => $value) { */
-        /*     if($value->cdGrupo == 124){ */
-        /*         $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular'; */
-        /*         $html = str_replace("{manifestacaoParecerTecnico}", $manifestacao, $html); */
-        /*         $html = str_replace("{parecerDoTecnico}", $value['meRelatorio'], $html); */
+        foreach ($resultados as $key => $value) {
+            if($value->cdGrupo == 124){
+                $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular';
+                $html = str_replace("{manifestacaoParecerTecnico}", utf8_encode($manifestacao), $html);
+                $html = str_replace("{parecerDoTecnico}", utf8_encode($value['meRelatorio']), $html);
 
-        /*     } else if($value->cdGrupo == 132){ */
-        /*         $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular'; */
-        /*         $html = str_replace("{manifestacaoChefeDeDivisao}", $manifestacao, $html); */
-        /*         $html = str_replace("{parecerDoChefeDeDivisao}", $value['meRelatorio'], $html); */
-        /*     } */
-        /* } */
+            } else if($value->cdGrupo == 132){
+                $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular';
+                $html = str_replace("{manifestacaoChefeDeDivisao}", utf8_encode($manifestacao), $html);
+                $html = str_replace("{parecerDoChefeDeDivisao}", utf8_encode($value['meRelatorio']), $html);
+            }
+        }
 
         $tbLaudoFinal = new tbLaudoFinal();
         $dadosLaudo = $tbLaudoFinal->buscar(array('idPronac=?'=>$dados->IdPRONAC));
