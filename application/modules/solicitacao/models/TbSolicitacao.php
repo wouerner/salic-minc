@@ -6,7 +6,7 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     protected $_idPronac;
     protected $_idProjeto;
     protected $_idOrgao;
-    protected $_idSolicitante;
+    protected $_idAgente;
     protected $_dtSolicitacao;
     protected $_dsSolicitacao;
     protected $_idTecnico;
@@ -14,6 +14,7 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     protected $_dsResposta;
     protected $_idDocumento;
     protected $_siEncaminhamento;
+    protected $_idSolicitante;
     protected $_stEstado;
 
     const SOLICITACAO_CADASTRADA = 12;
@@ -86,6 +87,23 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     {
         $this->_idOrgao = $idOrgao;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIdAgente()
+    {
+        return $this->_idAgente;
+    }
+
+    /**
+     * @param mixed $idAgente
+     */
+    public function setIdAgente($idAgente)
+    {
+        $this->_idAgente = $idAgente;
+    }
+
 
     /**
      * @return mixed

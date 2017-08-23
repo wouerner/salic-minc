@@ -31,6 +31,10 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
             $where['idProjeto = ?'] = $arrData['idProjeto'];
         }
 
+
+        $where['idSolicitante = ?'] = $this->_idUsuario;
+
+
         $where['stEstado = ?'] = $estado;
 
         return ($this->findBy($where)) ? true : false;
@@ -86,13 +90,14 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 $model = new Solicitacao_Model_TbSolicitacao();
                 $model->setDtSolicitacao(date('Y-m-d h:i:s'));
                 $model->setIdOrgao($arrData['idOrgao']);
-                $model->setIdSolicitante($arrData['idAgente']);
+                $model->setIdAgente($arrData['idAgente']);
                 $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
                 $model->setDsSolicitacao($arrData['dsSolicitacao']);
                 $model->setStEstado(1);
                 $model->setIdPronac($arrData['idPronac']);
                 $model->setIdProjeto($arrData['idProjeto']);
                 $model->setIdTecnico($arrData['idTecnico']);
+                $model->setIdSolicitante($arrData['idUsuario']);
 
                 $file = new Zend_File_Transfer();
 

@@ -18,7 +18,7 @@
                     <tr>
                         <td><?= $int + 1; ?></td>
                         <td>
-                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
                                 <?php if (!empty($arrValue['Pronac'])) {
                                     echo $arrValue['Pronac'];
                                 } elseif ($arrValue['idProjeto']) {
@@ -27,22 +27,22 @@
                             </a>
                         </td>
                         <td>
-                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
                                 <?= $arrValue['NomeProjeto']; ?>
                             </a>
                         </td>
                         <td>
-                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
                                 <?= $arrValue['Solicitante']; ?>
                             </a>
                         </td>
                         <td>
-                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
                                 <?= $arrValue['dsSolicitacao']; ?>
                             </a>
                         </td>
                         <td>
-                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
+                            <a href="<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao'], 'idPronac' => $this->idPronac), null, true); ?>">
                                 <?= $arrValue['dsEncaminhamento']; ?>
                             </a>
                         </td>

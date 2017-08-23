@@ -1,6 +1,6 @@
 <?php
 
-class Solicitacao_IndexController extends Solicitacao_GenericController
+class Solicitacao_MensagemController extends Solicitacao_GenericController
 {
 
     public function init()
@@ -95,7 +95,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 
     public function visualizarAction()
     {
-        $urlAction = $this->_urlPadrao . "/solicitacao/index/salvar";
+        $urlAction = $this->_urlPadrao . "/solicitacao/mensagem/salvar";
 
         try {
 
@@ -128,8 +128,8 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
 
     public function solicitarAction()
     {
-        $urlAction = $this->_urlPadrao . "/solicitacao/index/salvar";
-        $urlCallBack = $this->_urlPadrao . "/solicitacao/index/index";
+        $urlAction = $this->_urlPadrao . "/solicitacao/mensagem/salvar";
+        $urlCallBack = $this->_urlPadrao . "/solicitacao/mensagem/index";
 
         try {
 
@@ -173,7 +173,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $this->_helper->viewRenderer->setNoRender(true);
             $arrayForm = $this->getRequest()->getPost();
 
-            $strUrl = '/solicitacao/index/index';
+            $strUrl = '/solicitacao/mensagem/index';
             $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
             $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
             $arrayForm['idUsuario'] = $this->_idUsuario;
@@ -182,7 +182,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
 
             if ($idSolicitacao) {
-                $strUrl = '/solicitacao/index/visualizar/id/' . $idSolicitacao;
+                $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao;
                 $status = true;
             }
 
@@ -208,7 +208,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
                 $this->_helper->layout->disableLayout();
                 $this->_helper->viewRenderer->setNoRender(true);
 
-                $strUrl = '/solicitacao/index/' . $strActionBack;
+                $strUrl = '/solicitacao/mensagem/' . $strActionBack;
                 $strUrl .= ($this->arrProjeto) ? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
                 $this->_helper->json(array('status' => $mapperSolicitacao->responder($this->getRequest()->getPost()), 'msg' => $mapperSolicitacao->getMessages(), 'redirect' => $strUrl));
