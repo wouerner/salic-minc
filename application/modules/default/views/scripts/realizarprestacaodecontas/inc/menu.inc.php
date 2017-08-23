@@ -74,6 +74,7 @@
             # urls
             $diligenciaUrl = $this->url(
                 array(
+                    'module' => 'proposta',
                     'controller' => 'diligenciar',
                     'action' => 'listardiligenciaanalista',
                     'idPronac' => $this->idPronac,
