@@ -176,6 +176,7 @@ class Solicitacao_IndexController extends Solicitacao_GenericController
             $strUrl = '/solicitacao/index/index';
             $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
             $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
+            $arrayForm['idUsuario'] = $this->_idUsuario;
 
             $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
             $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
