@@ -186,7 +186,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
                     $fecharAnalise = 1;
                     
-                    if ($this->isIphan($dp->idOrgao)) {
+                    if ($this->isVinculadaIphan($dp->idOrgao)) {
                         $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
                     }
                 }
@@ -367,7 +367,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         try {
             $db->beginTransaction();
             
-            if (!$this->isIphan($dp->idOrgao)) {
+            if (!$this->isVinculadaIphan($dp->idOrgao)) {
                 $parecer = new Parecer();
                 $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
                 
@@ -392,7 +392,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             foreach ($buscaDadosProjeto as $dp) {
                 
-                if ($this->isIphan($dp->idOrgao)) {                
+                if ($this->isVinculadaIphan($dp->idOrgao)) {                
 
                     $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
                     $fecharAnalise = 3;
@@ -434,7 +434,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             $buscaInabilitado = $inabilitadoDAO->BuscarInabilitado($buscaDadosdoProjeto[0]->CgcCpf, $buscaDadosdoProjeto[0]->AnoProjeto, $buscaDadosdoProjeto[0]->Sequencial);
             
             if (count($buscaInabilitado == 0)) {
-                if (!$this->isIphan($dp->idOrgao)) {
+                if (!$this->isVinculadaIphan($dp->idOrgao)) {
                     // somente presidente
                     $projeto->alterarSituacao($idPronac, null, 'C20', 'An&aacute;lise t&eacute;cnica conclu&iacute;da');
                 } else {
@@ -455,7 +455,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         
     }
 
-    public function isIphan($idOrgao)
+    public function isVinculadaIphan($idOrgao)
     {
         $orgaos = array(
             Orgaos::ORGAO_IPHAN_PRONAC,
