@@ -10,8 +10,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if (!empty($this->_idPreProjeto) || !empty($this->_idPronac)) {
             parent::verificarPermissaoAcesso(!empty($this->_idPreProjeto), !empty($this->_idPronac), false);
         }
-
-
     }
 
     public function indexAction()
@@ -77,13 +75,24 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
 
         # Proponente
-//        if (isset($this->_usuario['cpf'])) {
-//            $where['idSolicitante = ?'] = $this->_idUsuario;
-//        }
+        if (isset($this->_usuario['cpf'])) {
+            $where["(idAgente = {$this->_idAgente} OR idSolicitante = {$this->_idUsuario})"] = '' ;
+        }
+
+        $grupos = new Autenticacao_Model_Grupos();
+        $tecnicos = $grupos->buscarTecnicosPorOrgao($this->_grupoAtivo->codOrgao)->toArray();
+
+        # Filtrar os técnicos
+        if(in_array($this->_grupoAtivo->codGrupo, array_column($tecnicos,'gru_codigo'))) {
+
+            if (isset($this->_usuario['usu_codigo'])) {
+                $where['idTecnico = ?'] = $this->_idUsuario;
+            }
+        }
 
         # Funcionario
-        if (isset($this->_usuario['usu_codigo'])) {
-            $where['idTecnico = ?'] = $this->_idUsuario;
+        if(isset($this->_grupoAtivo->codOrgao)) {
+            $where['idOrgao = ?'] = $this->_grupoAtivo->codOrgao;
         }
 
         $solicitacoes = $vwSolicitacoes->buscar($where);
@@ -121,7 +130,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             self::prepareForm($dataForm, $arrConfig, $urlAction);
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), "/solicitacao/", "ALERT");
+            parent::message($objException->getMessage(), "/solicitacao/mensagem", "ALERT");
         }
     }
 

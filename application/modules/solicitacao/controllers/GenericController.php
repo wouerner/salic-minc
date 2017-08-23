@@ -12,7 +12,11 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 
     protected $_idUsuario = null;
 
+    protected $_idAgente = null;
+
     protected $_usuario = null;
+
+    protected $_grupoAtivo = null;
 
     public function init()
     {
@@ -29,7 +33,12 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             foreach ($grupos as $grupo) {
                 $PermissoesGrupo[] = $grupo->gru_codigo;
             }
+
+            if(empty($this->_grupoAtivo)) {
+                $this->_grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+            }
         }
+
 
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
 
@@ -53,6 +62,21 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         }
 
         $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
+
+
+        if($arrAuth['cpf']) {
+            /**
+             * Agentes sao proponentes da proposta ou do projeto
+             */
+
+            $tblAgentes = new Agente_Model_DbTable_Agentes();
+            $agente = $tblAgentes->findBy(array('cnpjcpf' => $arrAuth['cpf']));
+
+            if ($agente) {
+                $this->_idAgente = $agente['idAgente'];
+            }
+        }
+
         $this->_usuario = $arrAuth;
         $this->view->usuario = $auth->getIdentity(); //@todo padronizar o usuario no header do layout
     }
