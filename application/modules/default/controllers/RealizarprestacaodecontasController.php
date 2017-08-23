@@ -27,7 +27,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     private $situcaoEncaminhamentoAtual = null;
 
-
     public function init()
     {
         $arrSituacoesGrids = implode(',',$this->arrSituacoesAguardandoAnalise).','.implode(',',$this->arrSituacoesDevolvidosAposAnalise).','.implode(',',$this->arrSituacoesDiligenciados).','.implode(',',$this->arrSituacoesTCE);
@@ -923,9 +922,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->totalProjetosOS = $total;
     }
 
-    public function historicoencaminhamentoAction(){
-
-        // desabilita o Zend_Layout
+    public function historicoencaminhamentoAction()
+    {
         $this->_helper->layout->disableLayout ();
 
         $post     = Zend_Registry::get("get");
@@ -1513,39 +1511,42 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $partialPath = "realizarprestacaodecontas/partial/laudo-final/";
         $partials = array(
             $this->view->partial("{$partialPath}/{$folder}/laudo.phtml"),
-            $this->view->partial("{$partialPath}/{$folder}/comunicado.phtml"),
-            $this->view->partial("{$partialPath}/parecer-tecnico.phtml"),
+            /* $this->view->partial("{$partialPath}/{$folder}/comunicado.phtml"), */
+            /* $this->view->partial("{$partialPath}/parecer-tecnico.phtml"), */
         );
 
         $html = implode('<div style="page-break-before: always;">', $partials);
+
         $html .= '<script language="javascript" type="text/javascript" src="/minc/salic/public/js/jquery-1.4.2.min.js"></script><script type="text/javascript">$(document).ready(function(){window.print();});</script>';
-        $html .= $this->view->partial("{$partialPath}/parecer-chefe-de-divisao.phtml");
+        /* $html .= $this->view->partial("{$partialPath}/parecer-chefe-de-divisao.phtml"); */
 
         foreach ($dados as $key => $value) {
-            $html = str_replace("{{$key}}", $value, $html);
+            $html = str_replace("{{$key}}", utf8_encode($value), $html);
         }
 
-        foreach ($resultados as $key => $value) {
-            if($value->cdGrupo == 124){
-                $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular';
-                $html = str_replace("{manifestacaoParecerTecnico}", $manifestacao, $html);
-                $html = str_replace("{parecerDoTecnico}", $value['meRelatorio'], $html);
+        /* foreach ($resultados as $key => $value) { */
+        /*     if($value->cdGrupo == 124){ */
+        /*         $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular'; */
+        /*         $html = str_replace("{manifestacaoParecerTecnico}", $manifestacao, $html); */
+        /*         $html = str_replace("{parecerDoTecnico}", $value['meRelatorio'], $html); */
 
-            } else if($value->cdGrupo == 132){
-                $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular';
-                $html = str_replace("{manifestacaoChefeDeDivisao}", $manifestacao, $html);
-                $html = str_replace("{parecerDoChefeDeDivisao}", $value['meRelatorio'], $html);
-            }
-        }
+        /*     } else if($value->cdGrupo == 132){ */
+        /*         $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular'; */
+        /*         $html = str_replace("{manifestacaoChefeDeDivisao}", $manifestacao, $html); */
+        /*         $html = str_replace("{parecerDoChefeDeDivisao}", $value['meRelatorio'], $html); */
+        /*     } */
+        /* } */
+
         $tbLaudoFinal = new tbLaudoFinal();
         $dadosLaudo = $tbLaudoFinal->buscar(array('idPronac=?'=>$dados->IdPRONAC));
-        foreach ($dadosLaudo as $key => $value) {
-            $html = str_replace("{coordenadorIncentivoFiscal}", $value->nmCoordIncentivos, $html);
-            $html = str_replace("{coordenadorPrestacaoDeContas}", $value->nmCoordPrestacao, $html);
-            $html = str_replace("{diretorIncentivoACultura}", $value->nmDiretor, $html);
-            $html = str_replace("{coordenadorIncentivoACultura}", $value->nmSecretario, $html);
-        }
+        /* foreach ($dadosLaudo as $key => $value) { */
+        /*     $html = str_replace("{coordenadorIncentivoFiscal}", $value->nmCoordIncentivos, $html); */
+        /*     $html = str_replace("{coordenadorPrestacaoDeContas}", $value->nmCoordPrestacao, $html); */
+        /*     $html = str_replace("{diretorIncentivoACultura}", $value->nmDiretor, $html); */
+        /*     $html = str_replace("{coordenadorIncentivoACultura}", $value->nmSecretario, $html); */
+        /* } */
 
+        header('Content-Type: text/html; charset=utf-8');
         echo $html;
     }
 
