@@ -161,28 +161,21 @@ header("Pragma: no-cache");
             ocorrencia = $('#ocorrencia' + cont).val(),
             valor      = $('#vlunitario' + cont).val(),
             resultado  = '';
-        /* console.log(valor); */
-        valor = parseFloat(valor).toFixed(2) + "";
-        /* console.log(valor); */
-
+        
         // retira os pontos e as vírgulas, deixando somente números
         valor = valor.replace(/\D/g, "")
         .replace(/(\d{0})(\d)/, "$1$2")
         // adiciona o ponto na casa decimal
         .replace(/(\d)(\d{2})$/, "$1.$2");
-        /* console.log(valor); */
-
+        
         // converte para float e adiciona precisão decimal
         qtd        = parseFloat(qtd).toFixed(2);
         ocorrencia = parseFloat(ocorrencia).toFixed(2);
         valor      = parseFloat(valor).toFixed(2);
-        /* console.log(valor* qtd *ocorrencia); */
 
         // variável com o resultado
         resultado = parseFloat(qtd * ocorrencia * valor).toFixed(2); // armazena o resultado
-        /* console.log('resultado:', resultado, valor); */
-
-        // se não for número
+        
         if (isNaN(resultado))
         {
             resultado = '';
