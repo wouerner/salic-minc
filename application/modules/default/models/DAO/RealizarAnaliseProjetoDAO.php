@@ -27,28 +27,48 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
      * @param integer $idPronac
      * @return object
      */
-    public static function verificaEnquadramento($idpronac=null, $tpAnalise=null )
+    public static function verificaEnquadramento($idpronac=null, $tpAnalise=null, $IN2017=false)
     {
 
         $table = Zend_Db_Table::getDefaultAdapter();
 
-        $select = $table->select()
-            ->from(array('taa' =>'tbAnaliseAprovacao'),
-                array('stArtigo18','stArtigo26'),
-                'SAC.dbo')
-            ->joinInner(array('pr' => 'projetos'),
-                'pr.idpronac = taa.idpronac',
-                array(''),
-                'SAC.dbo')
-            ->joinInner(array('pdp' => 'PlanoDistribuicaoProduto'),
-                'pdp.idproduto=taa.idproduto and pdp.idprojeto = pr.idprojeto',
-                array(''),
-                'SAC.dbo')
-            ->where('taa.idpronac = ?', $idpronac)
-            ->where('pdp.stPrincipal = 1')
-            ->where('taa.tpanalise = ?', $tpAnalise)
-            ->where('pdp.stPlanoDistribuicaoProduto = 1');
-
+        if ($IN2017) {
+            $select = $table->select()
+                            ->from(array('e' =>'Enquadramento'),
+                            array('stArtigo' => new Zend_Db_Expr(
+                                "CASE WHEN Enquadramento = 1 
+			                       THEN 'Artigo 26' 
+				                 WHEN Enquadramento = 2 
+				                   THEN 'Artigo 18' 
+                                 ELSE 'Não enquadrado'
+                                 END"
+                            )),
+                            'SAC.dbo')
+                            ->joinInner(array('p' => 'projetos'),
+                            'p.idpronac = e.idpronac',
+                            array(''),
+                            'SAC.dbo')
+                            ->where('e.idpronac = ?', $idpronac);
+			    
+        } else {
+            // LEGADO - MANTENDO PARA FINS DE COMPATIBILIDADE
+            $select = $table->select()
+                            ->from(array('taa' =>'tbAnaliseAprovacao'),
+                            array('stArtigo18','stArtigo26'),
+                            'SAC.dbo')
+                            ->joinInner(array('pr' => 'projetos'),
+                            'pr.idpronac = taa.idpronac',
+                            array(''),
+                            'SAC.dbo')
+                            ->joinInner(array('pdp' => 'PlanoDistribuicaoProduto'),
+                            'pdp.idproduto=taa.idproduto and pdp.idprojeto = pr.idprojeto',
+                            array(''),
+                            'SAC.dbo')
+                            ->where('taa.idpronac = ?', $idpronac)
+                            ->where('pdp.stPrincipal = 1')
+                            ->where('taa.tpanalise = ?', $tpAnalise)
+                            ->where('pdp.stPlanoDistribuicaoProduto = 1');
+        }
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         return $db->fetchAll($select);

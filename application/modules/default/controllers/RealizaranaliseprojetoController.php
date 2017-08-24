@@ -96,33 +96,22 @@ class RealizarAnaliseProjetoController extends MinC_Controller_Action_Abstract
         $buscarPronac = $projeto->buscar(array('IdPRONAC = ?' => $idpronac))->current()->toArray();
         $idprojeto = $buscarPronac['idProjeto'];
 
+        $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();
+        $this->view->IN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($idpronac);
+        
         $this->view->idpronac = $idpronac;
         $this->view->projeto = $buscarPronac;
         //define tipo de planilha a ser utilizada baseado na ultima planilha criada
         $rsPlanilhaAtual = $planilhaAprovacao->buscar(array('IdPRONAC = ?' => $idpronac), array('dtPlanilha DESC'))->current();
         $tpPlanilha = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'SE' : 'CO';
-        //antiga busca
-        //$analiseparecer = $parecer->buscarParecer(array(1), $idpronac )->current()->toArray();
-        //nova busca
+
         $parecerAtivo = $tblParecer->buscar(array('idPronac=?' => $idpronac, 'stAtivo=?' => '1'))->current();
         $analiseparecer = $tblParecer->buscar(array('idTipoAgente in (?)' => array('1', '6'), 'TipoParecer=?' => $parecerAtivo->TipoParecer, 'idPronac=?' => $idpronac))->current()->toArray();
 
         $this->view->ResultRealizarAnaliseProjeto = $analiseparecer;
         $produtos = $analiseaprovacao->buscarAnaliseProduto($tpPlanilha, $idpronac);
 
-        /**** MODO ANTIGO ************/
-        //$fonteincentivo = $planilhaproposta->somarPlanilhaProposta($idprojeto, 109);
-        //$outrasfontes   = $planilhaproposta->somarPlanilhaProposta($idprojeto, false, 109);
-        //$parecerista = $planilhaprojeto->somarPlanilhaProjeto($idpronac, 109);
-        //$this->view->fontesincentivo  = $fonteincentivo['soma'];
-        //$this->view->outrasfontes  = $outrasfontes['soma'];
-        //$this->view->valorproposta = $fonteincentivo['soma'] + $outrasfontes['soma'];
-        //$this->view->valorparecerista = $parecerista['soma'];
-        /***** FIM - MODO ANTIGO ******/
-
         /**** CODIGO DE READEQUACAO ****/
-        /********** MODO NOVO ***************/
-        //TRATANDO SOMA DE PROJETO QUANDO ESTE FOR DE READEQUACAO
         $arrWhereSomaPlanilha = array();
         $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
         if ($this->bln_readequacao == "false") {
@@ -165,19 +154,8 @@ class RealizarAnaliseProjetoController extends MinC_Controller_Action_Abstract
         /**** FIM -CODIGO DE READEQUACAO ****/
 
         $this->view->ResultProduto = $produtos;
-        $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, $tpPlanilha);
-        if (count($verificaEnquadramento) > 0) {
-            if ($verificaEnquadramento[0]->stArtigo18 == true) {
-                $this->view->enquadramento = 'Artigo 18';
-            } else if ($verificaEnquadramento[0]->stArtigo26 == true) {
-                $this->view->enquadramento = 'Artigo 26';
-            } else {
-                $this->view->enquadramento = 'NAO ENQUADRADO';
-            }
-        } else {
-            $this->view->enquadramento = 'NAO ENQUADRADO';
-        }
-
+        $this->view->enquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, $tpPlanilha, true);
+        
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $idagente = GerenciarPautaReuniaoDAO::consultaAgenteUsuario($auth->getIdentity()->usu_codigo);
         $idagente = $idagente['idAgente'];
@@ -1497,7 +1475,7 @@ class RealizarAnaliseProjetoController extends MinC_Controller_Action_Abstract
             $count = 0;
             $fonterecurso = null;
             foreach ($buscarplanilhaCO as $resuplanilha) {
-                $produto = $resuplanilha->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['idPlanilhaAprovacao'] = $resuplanilha->idPlanilhaAprovacao;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['idUnidade'] = $resuplanilha->idUnidade;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['nrFonteRecurso'] = $resuplanilha->nrFonteRecurso;
@@ -1540,7 +1518,7 @@ class RealizarAnaliseProjetoController extends MinC_Controller_Action_Abstract
             $buscarplanilhaSR = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'SR', $arrBuscaPlanilha);
 
             foreach ($buscarplanilhaSR as $resuplanilha) {
-                $produto = $resuplanilha->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
 
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['diasprop'] = $resuplanilha->qtDias;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['quantidadeprop'] = $resuplanilha->qtItem;
@@ -1567,7 +1545,7 @@ class RealizarAnaliseProjetoController extends MinC_Controller_Action_Abstract
             $buscarplanilhaPA = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'PA', $arrBuscaPlanilha);
 
             foreach ($buscarplanilhaPA as $resuplanilha) {
-                $produto = $resuplanilha->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['UnidadeProjeto'] = $resuplanilha->Unidade;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['quantidadeparc'] = $resuplanilha->qtItem;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['ocorrenciaparc'] = $resuplanilha->nrOcorrencia;
