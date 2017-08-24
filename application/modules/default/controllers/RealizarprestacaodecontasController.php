@@ -33,7 +33,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrSituacoesGrids = explode(',',$arrSituacoesGrids);
         $this->arrSituacoesGrids = $arrSituacoesGrids;
 
-
         $PermissoesGrupo [] = 124;
         $PermissoesGrupo [] = 121;
         $PermissoesGrupo [] = 125;
@@ -52,7 +51,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         // cria a sessao com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
-        // pega a autenticacao
         $auth 		  = Zend_Auth::getInstance ();
         $GrupoUsuario = $GrupoAtivo->codGrupo;
 
@@ -91,7 +89,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $this->view->cdGruposDestinoAtual       = $this->cdGruposDestinoAtual;
             }
         }
-    } // fecha metodo init()
+    }
 
     /**
      * Nao deletar essa action pois eh usada para renderizar a view.
@@ -99,10 +97,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * Acessa o menu 'Presta&ccedil;&atilde;o de Contas' -> 'Imprimir Laudo Final' e clicar
      * em 'Cancelar' vem para essa action
      */
-    public function indexAction()
-    {
-
-    }
+    public function indexAction() { }
 
     public function montaArrBuscaCoincidentes($post)
     {
@@ -118,7 +113,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             }else if($post->tipoPesqNomeProjeto == 'IIG'){
                 if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
             }
-            //if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
         }
 
         //UF
@@ -155,7 +149,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 if ( isset($post->dtExecucao_Final) && !empty($post->dtExecucao_Final)) {$arrBusca['p.DtFimExecucao <= ?'] = Data::dataAmericana($post->dtExecucao_Final) . " 23:59:59.999";}
             }
         }
-        //$arrBusca = MinC_Controller_Action_Abstract::montaBuscaData($post, "tpPeriodoExecucao", "dtExecucao", "p.DtInicioExecucao", "dtExecucao_Final", $arrBusca);
 
         if(!empty($post->area)){
             if($post->tipoPesqArea == 'EIG'){
@@ -192,8 +185,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $arrBusca['e.cdGruposDestino IN (?)']= array('125','126'); //grupo de coordenador de prestacao de contas
             $arrBusca['e.cdGruposOrigem = ?']= array('132'); //grupo do chefe de divisao
             $arrBusca['e.stAtivo = ?']= 1;
-            //$arrBusca['d.DtSolicitacao = (SELECT top 1 d2.DtSolicitacao FROM SAC..tbDiligencia d2 WHERE d2.idPronac = d.idPronac ORDER BY d2.DtSolicitacao DESC)'] = '(?)'; //seleciona a ultima diligencia realizada
-            //$arrBusca['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
         }
 
         //CONDICOES DE PROJETOS em TCE
@@ -208,7 +199,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function projetosAguardandoAnaliseAction()
     {
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();        
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -262,7 +253,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $arrBusca['p.Situacao <> ?']                    = 'E17'; //exclui projetos diligenciados
             $arrBusca['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
             $arrBusca['e.cdGruposDestino = ?']             = 132; //grupo do chefe de divisao
-            //$arrBusca['e.idAgenteDestino = ?']             = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
             $arrBusca['e.stAtivo = ?']                     = 1;
             $bln_encaminhamento = true;
         }
@@ -291,8 +281,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function projetosDevolvidosAposAnaliseAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();        
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -301,7 +290,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_encaminhamento = true;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
         if (isset($post->pagDA)) $pag = $post->pagDA;
         if (isset($post->tamPagDA)) $this->intTamPag = $post->tamPagDA;
 
@@ -311,16 +299,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
-        //SITUACAO
-            /*if ( isset($post->situacao) && !empty($post->situacao)){
-                //$arrBusca['p.Situacao = ?'] = $post->situacao;
-                $arrBusca["p.Situacao = '".$post->situacao."' AND p.Situacao not in ('E24','E68','E67','G43','G24','E17','E22','L05','L06') "] = '(?)';
-                if($post->situacao != 'E18'){
-                    $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
-                }
-            }else{
-                $arrBusca['p.Situacao = ?']='E18';
-            }*/
         $arrBusca['p.Situacao in (?)']= $this->arrSituacoesDevolvidosAposAnalise;
         if(isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E18'){
             $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
@@ -367,16 +345,13 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function projetosDiligenciadosAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();        
         $idPronac = $this->_request->getParam("idPronac");
-        //$codPerfil = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
         $this->intTamPag = 10;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
         if (isset($post->pagDI)) $pag = $post->pagDI;
         if (isset($post->tamPagDI)) $this->intTamPag = $post->tamPagDI;
 
@@ -457,8 +432,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function projetosTceAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();        
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -468,7 +442,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_dadosDiligencia = false;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
         if (isset($post->pagTCE)) $pag = $post->pagTCE;
         if (isset($post->tamPagTCE)) $this->intTamPag = $post->tamPagTCE;
 
@@ -478,14 +451,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
-        //SITUACAO
-            /*if ( isset($post->situacao) && !empty($post->situacao)){
-                $arrBusca["p.Situacao = '".$post->situacao."' AND p.Situacao not in ('E24','E68','E67','G43','G24') "] = '(?)';
-                $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
-            }else{
-        //$arrBusca['p.Situacao = ?']='E22';
-                $arrBusca['p.Situacao in (?)']= array('E22','L05','L06');
-            }*/
         $arrBusca['p.Situacao in (?)'] = $this->arrSituacoesTCE;
         if ( isset($post->situacao) && !empty($post->situacao)){
             $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
@@ -532,8 +497,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function projetosOutrasSituacoesAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();        
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -542,7 +506,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_dadosDiligencia = false;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
         if (isset($post->pagOS)) $pag = $post->pagOS;
         if (isset($post->tamPagOS)) $this->intTamPag = $post->tamPagOS;
 
@@ -560,9 +523,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         //SITUACAO
         if ( isset($post->situacao) && !empty($post->situacao)){
-            //$situacoesGrids = implode('\',\'',$this->arrSituacoesGrids);
-            //$situacoesGrids = "'".$situacoesGrids."'";
-            //$arrBusca["p.Situacao = '".$post->situacao."' AND p.Situacao NOT IN ({$situacoesGrids}) "] = '(?)';
             $arrBusca = $this->incluiRegrasGridsPrincipais($arrBusca,$post);
             $arrBusca["p.Situacao = ? "] = $post->situacao;
             if(in_array($post->situacao,$this->arrSituacoesDevolvidosAposAnalise) || in_array($post->situacao,$this->arrSituacoesDiligenciados)  || in_array($post->situacao,$this->arrSituacoesTCE) ){
@@ -577,7 +537,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $situacoesDePrestacaoContasMenosGrid = implode('\',\'',$this->arrSituacoesDePrestacaoContasMenosGrid);
                 $situacoesDePrestacaoContasMenosGrid = "'".$situacoesDePrestacaoContasMenosGrid."'";
                 $arrBusca["p.Situacao IN ({$situacoesDePrestacaoContasMenosGrid}) "] = '(?)';
-                //$arrBusca["p.Situacao IN ('".implode(',',$this->arrSituacoesDePrestacaoContasMenosGrid)."') AND p.Situacao NOT IN ('".implode(',',$this->arrSituacoesGrids)."') "] = '(?)';
             }
         }
 
@@ -614,7 +573,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_envioufiltro = 'false';
         $this->view->parametroPesquisado = 'OUTRAS SITUA&Ccedil;&Otilde;ES';
 
-        // cria a sess�o com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace ( 'GrupoAtivo' );
         $this->view->Grupo = $GrupoAtivo->codGrupo;
 
@@ -652,7 +610,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         //IF - RECUPERA ORGAOS PARA POPULAR COMBO AO ENCAMINHAR PROJETO
         if (isset ( $_POST ['verifica'] ) and $_POST ['verifica'] == 'a') {
             $idOrgaoDestino = $_POST ['idorgao'];
-            // desabilita o Zend_Layout
             $this->_helper->layout->disableLayout ();
 
             $tblProjetos  = new Projetos();
@@ -671,7 +628,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 $jsonEncode = json_encode($dadosAgente);
 
-                //echo $jsonEncode;
                 $this->_helper->json(array ('resposta' => true, 'conteudo' => $dadosAgente) );
             } else {
                 $this->_helper->json(array ('resposta' => false) );
@@ -683,7 +639,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         if (isset ( $_POST ['verifica2'] ) and $_POST ['verifica2'] == 'x') {
             $idagente = $_POST ['idagente'];
             if ($idagente != '') {
-                $this->_helper->layout->disableLayout (); // desabilita o Zend_Layout
+                $this->_helper->layout->disableLayout (); 
                 $AgentesPerfil = ReadequacaoProjetos::dadosAgentesPerfil ( $idagente );
                 $AgentesPerfil = $db->fetchAll ( $AgentesPerfil );
                 $idperfil      = $AgentesPerfil [0]->idVerificacao;
@@ -698,9 +654,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $listaEntidades             = $db->fetchAll ( $sqllistasDeEntidadesVinculadas );
         $this->view->listaEntidades = $listaEntidades;
 
-        /*=====================================================*/
         /*============== TOTAL AGUARDANDO ANALISE =============*/
-        /*=====================================================*/
         $bln_dadosDiligencia = false;
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
@@ -715,7 +669,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             }else if($post->tipoPesqNomeProjeto == 'IIG'){
                 if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
             }
-            //if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
         }
         $arrBusca['p.Situacao in (?)']= $this->arrSituacoesAguardandoAnalise;
 
@@ -730,7 +683,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         $total = 0;
         $tblProjetos = new Projetos ();
-        //$total = $tbl->buscarProjetosVotoAlterado($arrBusca, array(), null, null, true);
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, false, $bln_dadosDiligencia);
         $this->view->totalAguardandoAnalise = $total;
 
@@ -739,9 +691,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         $this->view->bln_envioufiltro = $bln_envioufiltro;
 
-        /*=====================================================*/
         /*============= TOTAL DEVOLVIDOS APOS ANALISE =========*/
-        /*=====================================================*/
 
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
@@ -783,9 +733,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, true, true);
         $this->view->totalDevolvidosAposAnalise = $total;
 
-        /*=====================================================*/
         /*============= TOTAL DILIGENCIADOS ===================*/
-        /*=====================================================*/
 
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
@@ -828,10 +776,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $total = $tblProjetos->buscaProjetoDiligenciadosPrestacaoContas($arrBusca, array(), null, null, true);
         $this->view->totalDiligenciados = $total;
 
-
-        /*=====================================================*/
         /*============= TOTAL PROJETOS TCE ====================*/
-        /*=====================================================*/
 
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
@@ -871,9 +816,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, true);
         $this->view->totalProjetosTCE = $total;
 
-        /*=====================================================*/
         /*============== OUTRAS SITUACOES =====================*/
-        /*=====================================================*/
         $bln_encaminhamento = false;
         $bln_dadosDiligencia = false;
 
@@ -950,9 +893,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * @param void
      * @return void
      */
-    public function laudofinalAction(){
-
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+    public function laudofinalAction()
+    {
+        $auth = Zend_Auth::getInstance(); 
         $get = Zend_Registry::get ('get');
         $idpronac = $this->getRequest()->getParam('idPronac');
         $nomeProponente = null;
@@ -1000,7 +943,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->parecerChefe   = array();
             $this->view->parecerCoord   = array();
         }
-        /*********************************************************************************/
 
         $this->view->dadosInabilitado   = array();
         $this->view->resultadoParecer   = null;
@@ -1076,9 +1018,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     }
 
     /*Laudo Final*/
-    public function laudofinalInabilitadoAction(){
-
-        $get      = Zend_Registry::get ('get');
+    public function laudofinalInabilitadoAction()
+    {
+        $get = Zend_Registry::get ('get');
         $idpronac = $get->idPronac;
 
         $projetosDAO = new Projetos ();
@@ -1196,10 +1138,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             }
 
             $this->_forward('gerarpdf');
-            //            parent::message('Laudo final da prestacao de contas emitido com sucesso!', "realizarprestacaodecontas/laudofinal?idPronac={$idPronac}&gerarGuia=true", 'CONFIRM');
         } catch (Exception $e) {
             parent::message('Erro ao gravar laudo final!', "realizarprestacaodecontas/laudofinal?idPronac=" . $idPronac, 'ERROR');
-            //$this->_redirect("realizarprestacaodecontas/laudofinal?idPronac=".$idPronac."&tipoMsg=ERROR&msg=Erro ao gravar laudo final! ");
             return;
         }
     }
@@ -1208,10 +1148,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * Consultar Laudo Final
      * Perfis: Coord. de Presta&ccedil;&atilde;o de Contas, Tec. de Presta&ccedil;&atilde;o de Contas e Chefe de Divis�o
      */
-    public function consultarLaudoFinalAction()
-    {
-
-    }
+    public function consultarLaudoFinalAction() { }
 
     /*
      * Analisar Laudo Final
@@ -1219,7 +1156,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      */
     public function analisarLaudoFinalAction()
     {
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); 
         $GrupoUsuario = $GrupoAtivo->codGrupo;
 
         if($GrupoUsuario != 126 && $GrupoUsuario != 151 && $GrupoUsuario != 148){ //Se o perfil for diferente de Coord. Geral de Presta&ccedil;&atilde;o de Contas, n�o permite o acesso dessa funcionalidade.
@@ -1234,7 +1171,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -1247,7 +1183,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -1326,7 +1261,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function imprimirAnalisesLaudoFinalAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout(); 
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
@@ -1335,7 +1270,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -1348,7 +1282,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -1556,13 +1489,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * @param void
      * @return void
      */
-    public function avaliacaoFinalDoLaudoAction() {
+    public function avaliacaoFinalDoLaudoAction() 
+    {
         $get = Zend_Registry::get('get');
 
-        // cria a sess�o com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
-        //  �rg�o ativo na sess�o
         $codOrgao = $GrupoAtivo->codOrgao;
 
         $tblProjeto = new Projetos ();
@@ -1618,11 +1550,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * @param void
      * @return void
      */
-    public function encaminharprestacaodecontasAction() {
+    public function encaminharprestacaodecontasAction() 
+    {
         $tipoFiltro = $this->_request->getParam('tipoFiltro');
         $this->view->pag = 1; //Se tirar isso, nao funciona. Por isso nao foi retirado!
 
-        /** Usuario Logado *********************************************** */
         // caso o formulario seja enviado via post
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $auth               = Zend_Auth::getInstance();
@@ -1705,7 +1637,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 parent::message('Erro ao tentar salvar os dados!', "principal", 'ERROR');
             }
         } else {
-            // desabilita o Zend_Layout
             $this->_helper->layout->disableLayout();
 
             $post = Zend_Registry::get("post");
@@ -1724,7 +1655,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->consultoriasResp = $rsEncResp;
 
             if (!empty($idPronac)) {
-                //$idPronac = 130978;
                 $tblProjeto = new Projetos();
                 $rsProjeto = $tblProjeto->find($idPronac)->current();
 
@@ -1766,7 +1696,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $idOrgaoDestino  = $_POST ['idorgao'];
             $idPerfilDestino = $_POST['idPerfilDestino'];
 
-            // desabilita o Zend_Layout
             $this->_helper->layout->disableLayout ();
 
             $tblProjetos  = new Projetos();
@@ -1784,7 +1713,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 $jsonEncode = json_encode($dadosAgente);
 
-                //echo $jsonEncode;
                 $this->_helper->json(array ('resposta' => true, 'conteudo' => $dadosAgente) );
             } else {
                 $this->_helper->json(array ('resposta' => false) );
@@ -1793,12 +1721,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    // fecha metodo encaminharprestacaodecontasAction()
-
-
     /*Emcaminhamento para o Chefe de Divisao*/
-    public function encaminharchefedivisaoAction() {
-
+    public function encaminharchefedivisaoAction() 
+    {
         // caso o formulario seja enviado via post
         // cria a sessao com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
@@ -1839,12 +1764,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             } else {
                 parent::message ( "Desculpe ocorreu um erro!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "ERROR" );
             }
-        } // fecha $_POST
-    } // fecha metodo encaminharprestacaodecontasAction()
+        } 
+    } 
 
     /*Buscar Projeto do Coordenados Geral e Coordenador de Presta&ccedil;&atilde;o de Contas*/
-    public function coordenadorprestacaocontasAction() {
-
+    public function coordenadorprestacaocontasAction() 
+    {
         $prescontas                  = new Projetos ();
         $dados                       = $prescontas->BuscarPrestacaoContas ( 'E24' );
         $this->view->CoordPresContas = $dados;
@@ -1862,7 +1787,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -1875,7 +1799,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -1937,7 +1860,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function imprimirTecnicoPrestacaoDeContasAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout(); 
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
         if($this->_request->getParam("qtde")) {
@@ -1945,7 +1868,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -1958,7 +1880,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -2075,7 +1996,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     }
 
     /*PLANILHA Orcamentaria COMPROVADA*/
-    public function dadosProjeto() {
+    public function dadosProjeto() 
+    {
         $idpronac = $this->getRequest()->getParam('idPronac');
         $projetosDAO = new Projetos ();
         $resposta    = $projetosDAO->buscar ( array ('IdPRONAC = ? ' => "{$idpronac}" ) );
@@ -2085,7 +2007,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function planilhaorcamentariaAction()
     {
-        // pega a autenticacao
         $auth = Zend_Auth::getInstance ();
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
 
@@ -2187,8 +2108,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    public function existeparecerAction() {
-
+    public function existeparecerAction() 
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -2204,7 +2125,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->_helper->json(array('retorno'=>$retorno));
     }
 
-    public function parecertecnicoAction() {
+    public function parecertecnicoAction() 
+    {
         $auth             = Zend_Auth::getInstance();
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -2249,8 +2171,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    public function respostaconsultoriaAction() {
-
+    public function respostaconsultoriaAction() 
+    {
         $idEncPrestContas = $this->_request->getParam('idEncPrestContas');
 
         if (!empty ($idEncPrestContas)) {
@@ -2271,8 +2193,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->idEncPrestContas = $idEncPrestContas;
     }
 
-    public function gravarrespostaconsultoriaAction(){
-
+    public function gravarrespostaconsultoriaAction()
+    {
         $idEncPrestContas   =   $this->_request->getParam('idEncPrestContas');
         $dsresposta         =   $this->_request->getParam('dsresposta');
 
@@ -2333,7 +2255,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    public function cadastrarrelatoriotecnicoAction() {
+    public function cadastrarrelatoriotecnicoAction() 
+    {
         $this->_helper->layout->disableLayout ();
 
         $valido       = true;
@@ -2349,8 +2272,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method tecnicoprestacaocontas
-     * @since 11/02/2011
-     * @version 1.0
      * @access Tecnico Presta&ccedil;&atilde;o de Contas
      */
     public function tecnicoprestacaocontassAction() {
@@ -2365,12 +2286,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method chefedivisaoprestacaocontas
-     * @since 18/02/2011
-     * @version 1.0
      * @access Chefe de Divis�o
      */
-    public function chefedivisaoprestacaocontasAction() {
-
+    public function chefedivisaoprestacaocontasAction() 
+    {
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
         if($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
@@ -2473,7 +2392,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function imprimirChefeDivisaoPrestacaoDeContasAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout(); 
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
         if($this->_request->getParam("qtde")) {
@@ -2481,7 +2400,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -2494,7 +2412,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -2609,12 +2526,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method aeciprestacaocontasAction
-     * @since 11/02/2011
-     * @version 1.0
      * @access AECI
      */
-    public function aeciprestacaocontasAction() {
-
+    public function aeciprestacaocontasAction() 
+    {
         $auth = Zend_Auth::getInstance ();
 
         $Usuario = new Autenticacao_Model_Usuario();
@@ -2631,13 +2546,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method conjurprestacaocontasAction
-     * @since 11/02/2011
-     * @version 1.0
      * @access Conjur
      */
-    public function conjurprestacaocontasAction() {
-
-
+    public function conjurprestacaocontasAction() 
+    {
         $auth = Zend_Auth::getInstance ();
         $auth->getIdentity();
 
@@ -2655,14 +2567,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method pareceristaprestacaocontasAction
-     * @since 12/01/2011
-     * @version 1.0
      * @access Parecerista
      */
-    public function pareceristaprestacaocontasAction() {
-
+    public function pareceristaprestacaocontasAction() 
+    {
         $Usuario        = new Autenticacao_Model_Usuario();
-        $auth           = Zend_Auth::getInstance (); // pega a autenticacao
+        $auth           = Zend_Auth::getInstance (); 
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
 
@@ -2675,15 +2585,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method coordenadorpareceristaprestacaocontasAction
-     * @since 13/02/2011
-     * @author Emerson Silva
-     * @version 1.0
      * @access Coordenador Parecerista
      */
-    public function coordenadorpareceristaprestacaocontasAction() {
-
+    public function coordenadorpareceristaprestacaocontasAction() 
+    {
         $Usuario        = new Autenticacao_Model_Usuario();
-        $auth           = Zend_Auth::getInstance (); // pega a autenticacao
+        $auth           = Zend_Auth::getInstance (); 
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
 
@@ -2702,7 +2609,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $this->view->projeto = $planilhaAprovacaoModel
             ->dadosdoitem($this->_request->getParam("idPlanilhaAprovacao"), $idPronac)
-            /* ->current() */
             ;
         $this->view->projeto = $this->view->projeto[0];
 
@@ -2726,12 +2632,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method analisaritemAction
-     * @since 14/02/2011
-     * @version 1.0
      * @access AECI
      */
-    public function analisaritemAction() {
-
+    public function analisaritemAction() 
+    {
         $idPronac            = $this->_request->getParam("idPronac");
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilhaAprovacao");
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
@@ -2757,10 +2661,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$idPronac}&tipoMsg=ALERT&msg=N&atilde;o houve comprova&ccedil;&atilde;o para este item.");
         }
     }
+
     // @todo: avaliar este try catch com transacao
     public function validaritemAction()
     {
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $auth = Zend_Auth::getInstance(); 
 
         $idPronac = $this->_request->getParam("idPronac");
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
@@ -2829,9 +2734,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $redirector->redirectAndExit();
     }
 
-    public function dadosprojetoAction() {
-
-        if (isset($_REQUEST['idPronac'])) {
+    public function dadosprojetoAction() 
+    {
+       if (isset($_REQUEST['idPronac'])) {
             $dados = array();
             $dados['idPronac'] = (int) $_REQUEST['idPronac'];
             if (is_numeric($dados['idPronac'])) {
@@ -2860,8 +2765,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    public function enviarcoordenadorAction(){
-
+    public function enviarcoordenadorAction()
+    {
         $get = Zend_Registry::get("get");
         $auth               = Zend_Auth::getInstance();
 
@@ -2917,7 +2822,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    public function enviarchefedivisaoAction(){
+    public function enviarchefedivisaoAction()
+    {
         $auth               = Zend_Auth::getInstance();
 
         $get = Zend_Registry::get("get");
@@ -2971,8 +2877,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    public function alterarstatusprojetoAction(){
-
+    public function alterarstatusprojetoAction()
+    {
         $get = Zend_Registry::get("get");
 
         $auth = Zend_Auth::getInstance (); // pega a autenticacao
@@ -3015,9 +2921,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    public function recuperardataultimasituacaoAction() {
-
-        $this->_helper->layout->disableLayout (); // desabilita o Zend_Layout
+    public function recuperardataultimasituacaoAction() 
+    {
+        $this->_helper->layout->disableLayout (); 
         $this->_helper->viewRenderer->setNoRender(true);
 
         $NrPronac = $this->_request->getParam("NrPronac");
@@ -3088,17 +2994,13 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     }
 
     /*Buscar Situa&ccedil;&atilde;o PC*/
-    public function buscarsituacaoAction()
-    {
-    }
+    public function buscarsituacaoAction() { }
 
     /*Fim Situa&ccedil;&atilde;o PC*/
     public function imprimirguiaarquivoAction()
     {
-        //** Usuario Logado ************************************************/
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $auth = Zend_Auth::getInstance();
 
-        /******************************************************************/
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
@@ -3111,8 +3013,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $docs         = TramitarprojetosDAO::buscaProjetoPDF($idpronac);
         foreach ($docs as $d):
 
-            //$idDocumento = $d->idDocumento;
-            $Processo      = Mascara::addMaskProcesso($d->Processo);
+        $Processo      = Mascara::addMaskProcesso($d->Processo);
         $Orgao         = $d->Sigla;
         $OrgaoOrigem   = $d->OrgaoOrigem;
         $NomeProjeto   = $d->NomeProjeto;
@@ -3265,8 +3166,8 @@ $pdf->gerarRelatorio();
         }
     }
 
-    public function painelAction(){
-
+    public function painelAction()
+    {
         if(isset($_GET['msg']) && $_GET['msg'] == 'sucessoLaudoFinal'){
             parent::message('Laudo final da presta&ccedil;&atilde;o de contas emitido com sucesso!', "realizarprestacaodecontas/painel?pag=1&tipoFiltro=devolvidos", 'CONFIRM');
         }
@@ -3283,7 +3184,6 @@ $pdf->gerarRelatorio();
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -3296,7 +3196,6 @@ $pdf->gerarRelatorio();
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -3354,7 +3253,6 @@ $pdf->gerarRelatorio();
                 $where['p.Orgao = ?'] = $this->codOrgao;
                 $where['p.Situacao in (?)'] = array('E22');
                 $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                //                        $where['e.cdGruposDestino in (?)'] = array('125','126');
                 $where['e.stAtivo = ?'] = 1;
                 $where['d.idTipoDiligencia = ?'] = 174;
                 $where['d.stEstado = ?'] = 0;
@@ -3407,7 +3305,7 @@ $pdf->gerarRelatorio();
 
     public function imprimirPainelAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout(); 
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
@@ -3416,7 +3314,6 @@ $pdf->gerarRelatorio();
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -3429,7 +3326,6 @@ $pdf->gerarRelatorio();
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -3608,8 +3504,9 @@ $pdf->gerarRelatorio();
         }
     }
 
-    public function cancelamentoDoEncaminhamentoAction(){
-        $get  = Zend_Registry::get('get');
+    public function cancelamentoDoEncaminhamentoAction()
+    {
+       $get  = Zend_Registry::get('get');
 
         try {
             $tbEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
@@ -3626,8 +3523,8 @@ $pdf->gerarRelatorio();
         }
     }
 
-    public function manterAssinantesAction(){
-
+    public function manterAssinantesAction()
+    {
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
@@ -3636,7 +3533,6 @@ $pdf->gerarRelatorio();
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -3649,7 +3545,6 @@ $pdf->gerarRelatorio();
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -3719,9 +3614,9 @@ $pdf->gerarRelatorio();
         $this->view->intTamPag     = $this->intTamPag;
     }
 
-    public function imprimirManterAssinantesAction(){
-
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+    public function imprimirManterAssinantesAction()
+    {
+        $this->_helper->layout->disableLayout(); 
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
@@ -3730,7 +3625,6 @@ $pdf->gerarRelatorio();
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
         if($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if($ordem == "ASC") {
@@ -3743,7 +3637,6 @@ $pdf->gerarRelatorio();
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
         if($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
@@ -3854,7 +3747,8 @@ $pdf->gerarRelatorio();
         }
     }
 
-    public function incluirAssinantesPrestacaoAction(){
+    public function incluirAssinantesPrestacaoAction()
+    {
         $post = Zend_Registry::get('post');
         $tbAssinantesPrestacao = new tbAssinantesPrestacao();
 
@@ -3883,7 +3777,8 @@ $pdf->gerarRelatorio();
         }
     }
 
-    public function editarAssinantesPrestacaoAction(){
+    public function editarAssinantesPrestacaoAction()
+    {
         $post = Zend_Registry::get('post');
         $tbAssinantesPrestacao = new tbAssinantesPrestacao();
 
@@ -3913,7 +3808,6 @@ $pdf->gerarRelatorio();
 
     public function planilhaOrcamentariaCustosAction()
     {
-        // pega a autenticacao
         $auth = Zend_Auth::getInstance ();
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
 
@@ -3986,13 +3880,12 @@ $pdf->gerarRelatorio();
                 }
             }
         }
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();        
         $this->view->incFiscaisA = $arrayA;
     }
 
     public function planilhaOrcamentariaCustosProdutoAction()
     {
-        // pega a autenticacao
         $auth = Zend_Auth::getInstance ();
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
 
@@ -4076,7 +3969,7 @@ $pdf->gerarRelatorio();
                 }
             }
         }
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();        
         $this->view->incFiscaisP = $arrayP;
     }
 }
