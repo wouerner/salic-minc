@@ -2,21 +2,21 @@
 
 abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abstract
 {
-    protected $_proposta = null;
+    protected $proposta = null;
 
-    protected $_projeto = null;
+    protected $projeto = null;
 
-    protected $_idPreProjeto = null;
+    protected $idPreProjeto = null;
 
-    protected $_idPronac = null;
+    protected $idPronac = null;
 
-    protected $_idUsuario = null;
+    protected $idUsuario = null;
 
-    protected $_idAgente = null;
+    protected $idAgente = null;
 
-    protected $_usuario = null;
+    protected $usuario = null;
 
-    protected $_grupoAtivo = null;
+    protected $grupoAtivo = null;
 
     public function init()
     {
@@ -34,8 +34,8 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
                 $PermissoesGrupo[] = $grupo->gru_codigo;
             }
 
-            if(empty($this->_grupoAtivo)) {
-                $this->_grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+            if(empty($this->grupoAtivo)) {
+                $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
             }
         }
 
@@ -47,21 +47,23 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 //        $this->usuario = $arrAuth;
 
 
-        $this->_idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-        $this->_idPronac = $this->getRequest()->getParam('idPronac');
-        if (!empty($this->_idPronac)) {
+        $this->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+        $this->view->idPreProjeto = $this->idPreProjeto;
+
+        $this->idPronac = $this->getRequest()->getParam('idPronac');
+        if (!empty($this->idPronac)) {
             $tbProjetos = new Projeto_Model_DbTable_Projetos();
-            $this->_projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->_idPronac))->current();
-            $this->view->projeto = $this->_projeto;
+            $this->projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();
+            $this->view->projeto = $this->projeto;
         }
 
         if (!empty($this->_idPreProjeto)) {
             $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-            $this->_proposta = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $this->_idPreProjeto))->current();
-            $this->view->proposta = $this->_proposta;
+            $this->proposta = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
+            $this->view->proposta = $this->proposta;
         }
 
-        $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
+        $this->idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
 
 
         if($arrAuth['cpf']) {
@@ -73,11 +75,11 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             $agente = $tblAgentes->findBy(array('cnpjcpf' => $arrAuth['cpf']));
 
             if ($agente) {
-                $this->_idAgente = $agente['idAgente'];
+                $this->idAgente = $agente['idAgente'];
             }
         }
 
-        $this->_usuario = $arrAuth;
+        $this->usuario = $arrAuth;
         $this->view->usuario = $auth->getIdentity(); //@todo padronizar o usuario no header do layout
     }
 }

@@ -135,6 +135,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             $this->view->isEditarProjeto = $this->isEditarProjeto($this->idPreProjeto);
             $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
 
+
             $layout = array(
                 'titleShort' => 'Proposta',
                 'titleFull' => 'Proposta Cultural',

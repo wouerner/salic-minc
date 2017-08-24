@@ -7,8 +7,8 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
     {
         parent::init();
 
-        if (!empty($this->_idPreProjeto) || !empty($this->_idPronac)) {
-            parent::verificarPermissaoAcesso(!empty($this->_idPreProjeto), !empty($this->_idPronac), false);
+        if (!empty($this->idPreProjeto) || !empty($this->idPronac)) {
+            parent::verificarPermissaoAcesso(!empty($this->idPreProjeto), !empty($this->idPronac), false);
         }
     }
 
@@ -33,17 +33,16 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $tbl = new Arquivo_Model_DbTable_TbDocumento();
             $dataForm['arquivo'] = $tbl->buscarDocumento($dataForm['idDocumento'])->toArray();
         }
-
-        if ($this->_proposta) {
-            $dataForm['idProjeto'] = $this->_idPreProjeto;
-            $dataForm['NomeProjeto'] = isset($this->_proposta->NomeProjeto) ? $this->_proposta->NomeProjeto : '';
+        if ($this->proposta) {
+            $dataForm['idProjeto'] = $this->idPreProjeto;
+            $dataForm['NomeProjeto'] = isset($this->proposta->NomeProjeto) ? $this->proposta->NomeProjeto : '';
             $dataForm['idAgente'] = '';
         }
 
-        if ($this->_projeto) {
-            $dataForm['Pronac'] = $this->_projeto->AnoProjeto . $this->_projeto->Sequencial;
-            $dataForm['NomeProjeto'] = isset($this->_projeto->NomeProjeto) ? $this->_projeto->NomeProjeto : '';
-            $dataForm['idPronac'] = $this->_idPronac;
+        if ($this->projeto) {
+            $dataForm['Pronac'] = $this->projeto->AnoProjeto . $this->projeto->Sequencial;
+            $dataForm['NomeProjeto'] = isset($this->projeto->NomeProjeto) ? $this->projeto->NomeProjeto : '';
+            $dataForm['idPronac'] = $this->idPronac;
         }
 
         $this->view->arrPartial = array(
@@ -75,24 +74,25 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
 
         # Proponente
-        if (isset($this->_usuario['cpf'])) {
-            $where["(idAgente = {$this->_idAgente} OR idSolicitante = {$this->_idUsuario})"] = '' ;
+        if (isset($this->usuario['cpf'])) {
+            $where["(idAgente = {$this->idAgente} OR idSolicitante = {$this->idUsuario})"] = '';
         }
 
-        $grupos = new Autenticacao_Model_Grupos();
-        $tecnicos = $grupos->buscarTecnicosPorOrgao($this->_grupoAtivo->codOrgao)->toArray();
+        if (isset($this->usuario['usu_codigo'])) {
 
-        # Filtrar os técnicos
-        if(in_array($this->_grupoAtivo->codGrupo, array_column($tecnicos,'gru_codigo'))) {
+            $grupos = new Autenticacao_Model_Grupos();
+            $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
 
-            if (isset($this->_usuario['usu_codigo'])) {
-                $where['idTecnico = ?'] = $this->_idUsuario;
+
+            if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
+
+
+                    $where['idTecnico = ?'] = $this->idUsuario;
             }
-        }
 
-        # Funcionario
-        if(isset($this->_grupoAtivo->codOrgao)) {
-            $where['idOrgao = ?'] = $this->_grupoAtivo->codOrgao;
+            if (isset($this->grupoAtivo->codOrgao)) {
+                $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
+            }
         }
 
         $solicitacoes = $vwSolicitacoes->buscar($where);
@@ -142,7 +142,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         try {
 
-            if (empty($this->_idPronac) && empty($this->_idPreProjeto))
+            if (empty($this->idPronac) && empty($this->idPreProjeto))
                 throw new Exception("Informe o projeto ou proposta para realizar uma solicita&ccedil;&atilde;o");
 
             $dataForm = [
@@ -152,12 +152,12 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $arrConfig['dsSolicitacao']['disabled'] = false;
             $arrConfig['actions']['show'] = true;
 
-            if ($this->_projeto) {
-                $urlCallBack .= '/idPronac/' . $this->_idPronac;
-                $dataForm['idPronac'] = $this->_idPronac;
-            } else if ($this->_proposta) {
-                $urlCallBack .= '/idPreProjeto/' . $this->_idPreProjeto;
-                $dataForm['idProjeto'] = $this->_idPreProjeto;
+            if ($this->projeto) {
+                $urlCallBack .= '/idPronac/' . $this->idPronac;
+                $dataForm['idPronac'] = $this->idPronac;
+            } else if ($this->proposta) {
+                $urlCallBack .= '/idPreProjeto/' . $this->idPreProjeto;
+                $dataForm['idProjeto'] = $this->idPreProjeto;
             }
 
             $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
@@ -185,7 +185,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $strUrl = '/solicitacao/mensagem/index';
             $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
             $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
-            $arrayForm['idUsuario'] = $this->_idUsuario;
+            $arrayForm['idUsuario'] = $this->idUsuario;
 
             $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
             $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
