@@ -93,7 +93,7 @@ class VerificarSolicitacaoDeReadequacoesController extends MinC_Controller_Actio
 			$planAP = array();
 			$cont = 0;
 			foreach ($buscarAP as $r) :
-				$produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+				$produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
 				$planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
 				$planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
 				$planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;

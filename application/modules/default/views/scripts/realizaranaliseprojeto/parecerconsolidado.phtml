@@ -61,7 +61,7 @@ echo $this->partial('realizaranaliseprojeto/inc/menu.inc.php', $this) // menu
         <th>Sugerido</th>
     </tr>
     <tr>
-        <td><?php echo $this->escape($this->enquadramento); ?></td>
+<td><?php echo $this->enquadramento[0]->stArtigo; ?></td>
         <td><?php if($this->ResultRealizarAnaliseProjeto['TipoParecer'] == '2'){
                         echo 'COMPLEMENTAÇÃO';
                    }elseif($this->ResultRealizarAnaliseProjeto['TipoParecer'] == '4'){
@@ -133,6 +133,8 @@ echo $this->partial('realizaranaliseprojeto/inc/menu.inc.php', $this) // menu
         </td>
     </tr>
 </table>
+
+<?php if (!$this->IN2017): ?>
 <table class="tabela">
     <tr>
         <th colspan="6">Outras Informa&ccedil;&otilde;es</th>
@@ -175,6 +177,7 @@ echo $this->partial('realizaranaliseprojeto/inc/menu.inc.php', $this) // menu
    </tr>
    <?php } ?>
     </table>
+<?php endif; ?>
     <table class="tabela">
         <tr>
             <th>Parecer T&eacute;cnico</th>
