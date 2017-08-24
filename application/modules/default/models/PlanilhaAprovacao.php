@@ -1950,6 +1950,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         } elseif($itemAvaliadoFilter == 3) {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
+        /* echo $select;die; */
 
         return $this->fetchAll($select);
     }
@@ -2008,6 +2009,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         } elseif($itemAvaliadoFilter == 3) {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
+        /* echo $select;die; */
 
         return $this->fetchAll($select);
     }
