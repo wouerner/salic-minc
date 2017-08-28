@@ -117,4 +117,94 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         $this->view->buscar = $paginator;
     }
 
+
+    public function fecharParecerAction()
+    {
+        $auth = Zend_Auth::getInstance(); // pega a autentica¿¿o
+        $idusuario = $auth->getIdentity()->usu_codigo;
+        $dtAtual = Date("Y/m/d h:i:s");
+
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess¿o com o grupo ativo
+        $codOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o
+
+        $idPronac = $this->_request->getParam("idPronac");
+        $idProduto = $this->_request->getParam("idProduto");
+        $idDistribuirParecer = $this->_request->getParam("idD");
+        $stPrincipal = $this->_request->getParam("stPrincipal");
+        $this->view->totaldivulgacao = "true";
+        
+        $projetos = new Projetos();
+        $orgaos = new Orgaos();
+        
+        if (!$projetos->verificarIN2017($idPronac)) {
+            $this->validacaoAnteriorIN2017($idPronac);
+        }
+        
+        if ($_POST || $this->_request->getParam("concluir") == 1) {
+            $justificativa = ($this->_request->getParam("concluir") == 1) ? "" : trim(strip_tags($this->_request->getParam("justificativa")));
+            $tbDistribuirParecer = new tbDistribuirParecer();
+            $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
+            $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
+
+            try {
+                $tbDistribuirParecer->getAdapter()->beginTransaction();
+                foreach ($buscaDadosProjeto as $dp):
+                
+                    // DEVOLVER PARA O COORDENADOR ( PARECERISTA )
+                    if (!$orgaos->isVinculadaIphan($dp->idOrgao)) {
+                        $fecharAnalise = 3;
+                    } else if ($orgaos->isVinculadaIphan($dp->idOrgao)) {
+                        $fecharAnalise = 0;
+                    }
+                    
+                    $dados = array(
+                        'idOrgao' => $dp->idOrgao,
+                        'DtEnvio' => $dp->DtEnvio,
+                        'idAgenteParecerista' => $dp->idAgenteParecerista,
+                        'DtDistribuicao' => $dp->DtDistribuicao,
+                        'DtDevolucao' => MinC_Db_Expr::date(),
+                        'DtRetorno' => null,
+                        'FecharAnalise' => $fecharAnalise,
+                        'Observacao' => $justificativa,
+                        'idUsuario' => $idusuario,
+                        'idPRONAC' => $dp->IdPRONAC,
+                        'idProduto' => $dp->idProduto,
+                        'TipoAnalise' => $dp->TipoAnalise,
+                        'stEstado' => 0,
+                        'stPrincipal' => $dp->stPrincipal,
+                        'stDiligenciado' => null
+                    );
+
+                    $where['idDistribuirParecer = ?'] = $idDistribuirParecer;
+
+                    $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $where);
+
+                    $insere = $tbDistribuirParecer->inserir($dados);
+
+                endforeach;
+
+                $tbDistribuirParecer->getAdapter()->commit();
+
+                parent::message("An&aacute;lise conclu&iacute;da com sucesso !", "parecer/analise-inicial", "CONFIRM");
+
+            } catch (Zend_Db_Exception $e) {
+
+                $tbDistribuirParecer->getAdapter()->rollBack();
+                parent::message("Error" . $e->getMessage(), "parecer/analise-inicial", "ERROR");
+            }
+
+
+        } else {
+            $idPronac = $this->_request->getParam("idPronac");
+            $idProduto = $this->_request->getParam("idProduto");
+        }
+
+        $projetos = new Projetos();
+        $dadosProjetoProduto = $projetos->dadosFechar($this->getIdUsuario, $idPronac, $idDistribuirParecer);
+        $this->view->dados = $dadosProjetoProduto;
+        
+        $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
+        
+        $this->view->idpronac = $idPronac;        
+    }
 }
