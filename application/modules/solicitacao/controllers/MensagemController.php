@@ -36,7 +36,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if ($this->proposta) {
             $dataForm['idProjeto'] = $this->idPreProjeto;
             $dataForm['NomeProjeto'] = isset($this->proposta->NomeProjeto) ? $this->proposta->NomeProjeto : '';
-            $dataForm['idAgente'] = '';
+//            $dataForm['idAgente'] = '';
         }
 
         if ($this->projeto) {
@@ -60,6 +60,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $this->_helper->layout->disableLayout();
         $idPronac = $this->getRequest()->getParam('idPronac', null);
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
+        $this->view->ehTecnico = false;
 
         $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
 
@@ -82,11 +83,9 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $grupos = new Autenticacao_Model_Grupos();
             $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
 
-
             if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
-
-
                 $where['idTecnico = ?'] = $this->idUsuario;
+                $this->view->ehTecnico = true;
             }
 
             if (isset($this->grupoAtivo->codOrgao)) {
@@ -128,6 +127,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $arrConfig['dsResposta']['show'] = true;
 
             self::prepareForm($dataForm, $arrConfig, $urlAction);
+
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/solicitacao/mensagem", "ALERT");
         }
@@ -207,7 +207,11 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
      */
     public function responderAction()
     {
-        $idSolicitacao = $this->getRequest()->getParam('id');
+        $idSolicitacao = $this->getRequest()->getParam('id', null);
+
+        if (empty($idSolicitacao))
+            throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
+
         $strActionBack = $this->getRequest()->getParam('actionBack');
         $strActionBack = ($strActionBack) ? $strActionBack : 'solicitacao';
         try {
@@ -215,24 +219,36 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if ($this->getRequest()->isPost()) {
                 $this->_helper->layout->disableLayout();
                 $this->_helper->viewRenderer->setNoRender(true);
+                $arrayForm = $this->getRequest()->getPost();
 
-                $strUrl = '/solicitacao/mensagem/' . $strActionBack;
-                $strUrl .= ($this->arrProjeto) ? '?idPronac=' . $this->arrProjeto['IdPRONAC'] : '';
+                $strUrl = '/solicitacao/mensagem/index';
+                $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
+                $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
-                $this->_helper->json(array('status' => $mapperSolicitacao->responder($this->getRequest()->getPost()), 'msg' => $mapperSolicitacao->getMessages(), 'redirect' => $strUrl));
+
+                $this->_helper->json(
+                    array(
+                        'status' => $mapperSolicitacao->responder($this->getRequest()->getPost()),
+                        'msg' => $mapperSolicitacao->getMessages(),
+                        'redirect' => $strUrl
+                    )
+                );
+
             } else {
+
+                $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+                $dataForm = $vwSolicitacao->findBy(['idSolicitacao' => $idSolicitacao ]);
+
+                if (empty($dataForm))
+                    throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
 
                 $arrConfig = [
                     'dsSolicitacao' => ['disabled' => true],
-                    'dsResposta' => ['disabled' => false]
+                    'dsResposta' => ['show' => true, 'disabled' => false],
+                    'actions' => ['show' => true]
                 ];
 
-                $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
-
-                if ($mapperSolicitacao->existeSolicitacaoNaoRespondida($dataForm['idSolicitacao'] = $idSolicitacao))
-                    throw new Exception("Voc&ecirc; j&aacute; possui uma solicita&ccedil;&atilde;o aguardando resposta para este projeto!");
-
-                self::prepareForm([], $arrConfig, '', $strActionBack);
+                self::prepareForm($dataForm, $arrConfig, '', $strActionBack);
             }
 
             $this->view->arrConfig['dsMensagem'] = ['disabled' => true];
@@ -274,7 +290,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $this->_helper->layout->disableLayout();
         $idPronac = $this->getRequest()->getParam('idPronac', null);
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
-
+        $this->view->ehTecnico = false;
 
         $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
 
@@ -301,14 +317,14 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
                 $where['idTecnico = ?'] = $this->idUsuario;
                 $where['dsResposta IS NULL'] = '';
+                $this->view->ehTecnico = true;
             }
 
             if (isset($this->grupoAtivo->codOrgao)) {
                 $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
             }
         }
-
-        $solicitacoes = $vwSolicitacoes->buscar($where);
+        $solicitacoes = $vwSolicitacoes->buscar($where, ['dtResposta DESC','dtSolicitacao DESC'] );
 
         $this->view->arrResult = $solicitacoes;
         $this->view->idPronac = $idPronac;

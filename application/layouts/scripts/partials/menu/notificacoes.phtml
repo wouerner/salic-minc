@@ -1,36 +1,3 @@
-<?php
-
-$dbTable = new Admissibilidade_Model_DbTable_TbMensagemProjeto();
-$auth = Zend_Auth::getInstance();
-$arrAuth = $auth->getIdentity();
-$intQtd = 0;
-//$arrResult = $dbTable->getAllBy(array(
-//    'tbMensagemProjeto.idDestinatario' => $arrAuth->usu_codigo,
-//    'tbMensagemProjeto.idMensagemOrigem IS NULL' => '',
-//    'dsMensagem IS NULL' => '',
-//));
-
-$grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-if (isset($arrAuth->usu_codigo) && isset($arrAuth->usu_orgao)) {
-    $dbTable = new Admissibilidade_Model_DbTable_VwPainelDeMensagens();
-    $arrResult = $dbTable->carregarPerguntasSemResposta($arrAuth->usu_codigo, $grupoAtivo->codOrgao);
-
-    if (isset($arrAuth->usu_codigo)) {
-        $intQtd = count($arrResult);
-    }
-//$intQtd = count($dbTable->getAllBy(array('idDestinatario' => $arrAuth->usu_codigo, 'tbMensagemProjeto.idUnidade => $arrAuth->usu_orgao')));
-    if ($intQtd > 99) {
-        $cssPadding = '1';
-        $intQtd = '99+';
-    } elseif ($intQtd > 9) {
-        $cssPadding = '4';
-    } else {
-        $cssPadding = '6';
-    }
-}
-
-?>
-
 <li id="btn-solicitacoes" class="btn-notificacao" style="position: relative">
     <a class="white-text tooltipped" data-activates="header_notificacoes"
        data-position="left"

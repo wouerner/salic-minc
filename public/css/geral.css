@@ -480,6 +480,7 @@ header #header_notificacoes .mensagem-content {
 header #header_notificacoes .mensagem {
     padding: 10px 5px;
     margin: 4px 0;
+    border-bottom: 1px solid #e2e2e2;
 }
 
 header #header_notificacoes .mensagem.not-read {
