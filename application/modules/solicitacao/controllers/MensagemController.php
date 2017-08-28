@@ -213,7 +213,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
 
         $strActionBack = $this->getRequest()->getParam('actionBack');
-        $strActionBack = ($strActionBack) ? $strActionBack : 'solicitacao';
+        $strActionBack = "/solicitacao/mensagem/index";
         try {
 
             if ($this->getRequest()->isPost()) {
@@ -241,6 +241,10 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 if (empty($dataForm))
                     throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+
+
+                if ($dataForm['idTecnico'] != $this->idUsuario)
+                    throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para responder esta solicita&ccedil;&atilde;o!");
 
                 $arrConfig = [
                     'dsSolicitacao' => ['disabled' => true],
