@@ -57,7 +57,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             $this->view->projeto = $this->projeto;
         }
 
-        if (!empty($this->_idPreProjeto)) {
+        if (!empty($this->idPreProjeto)) {
             $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
             $this->proposta = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
             $this->view->proposta = $this->proposta;

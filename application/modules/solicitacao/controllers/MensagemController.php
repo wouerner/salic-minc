@@ -61,7 +61,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $idPronac = $this->getRequest()->getParam('idPronac', null);
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
 
-
         $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
 
         $where = [];
@@ -87,7 +86,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
 
 
-                    $where['idTecnico = ?'] = $this->idUsuario;
+                $where['idTecnico = ?'] = $this->idUsuario;
             }
 
             if (isset($this->grupoAtivo->codOrgao)) {
@@ -268,5 +267,68 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public function listarAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->getRequest()->getParam('idPronac', null);
+        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
+
+
+        $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+
+        $where = [];
+        if ($idPronac) {
+            $where['idPronac = ?'] = $idPronac;
+        }
+
+        if ($idPreProjeto) {
+            $where['idProjeto = ?'] = $idPreProjeto;
+        }
+
+        # Proponente
+        if (isset($this->usuario['cpf'])) {
+            $where["(idAgente = {$this->idAgente} OR idSolicitante = {$this->idUsuario})"] = '';
+        }
+
+        if (isset($this->usuario['usu_codigo'])) {
+
+            $grupos = new Autenticacao_Model_Grupos();
+            $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
+
+
+            if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
+                $where['idTecnico = ?'] = $this->idUsuario;
+                $where['dsResposta IS NULL'] = '';
+            }
+
+            if (isset($this->grupoAtivo->codOrgao)) {
+                $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
+            }
+        }
+
+        $solicitacoes = $vwSolicitacoes->buscar($where);
+
+        $this->view->arrResult = $solicitacoes;
+        $this->view->idPronac = $idPronac;
+    }
+
+    public function contarSolicitacoesNaoLidasAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $resultado = 0;
+
+        $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+
+        if ($this->usuario['usu_codigo']) {
+            $resultado = $vwSolicitacoes->contarSolicitacoesNaoRespondidasTecnico($this->idUsuario, $this->grupoAtivo->codOrgao);
+        } else {
+            $resultado = $vwSolicitacoes->contarSolicitacoesNaoLidasUsuario($this->idUsuario, $this->idAgente);
+        }
+
+        $this->_helper->json(array('status' => true, 'msg' => $resultado));
     }
 }
