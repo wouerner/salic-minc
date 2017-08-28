@@ -141,7 +141,7 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'minhassolicitacoes',
             'label' => 'Minhas solicita&ccedil;&otilde;es',
             'title' => '',
-            'link' => array('module' => 'solicitacao', 'controller' => 'index', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
+            'link' => array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
             'menu' => array(),
             'grupo' => array()
         );
