@@ -169,6 +169,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
         $projetos = new Projetos();
+        $orgaos = new Orgaos();
 
         try {
             $db->beginTransaction();
@@ -180,17 +181,18 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             foreach ($buscaDadosProjeto as $dp) {
                 $idOrgao = $dp->idOrgao;
-                
+
                 if ($tipoFiltro == 'em_validacao') {
-                    $fecharAnalise = 3;
-                } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
                     $fecharAnalise = 1;
                     
-                    if ($this->isVinculadaIphan($dp->idOrgao)) {
+                    if ($orgaos->isVinculadaIphan($dp->idOrgao)) {
                         $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
+                        $fecharAnalise = 3;
                     }
+                } else if ($tipoFiltro == 'devolvida') {
+                    $fecharAnalise = 0;
                 }
-            
+                
                 $dados = array(
                     'DtEnvio' => $dp->DtEnvio,
                     'idAgenteParecerista' => $dp->idAgenteParecerista,
@@ -363,11 +365,13 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
         $projetos = new Projetos();
+        $orgaos = new Orgaos();
         
         try {
             $db->beginTransaction();
-            
-            if (!$this->isVinculadaIphan($dp->idOrgao)) {
+
+            // IPHAN possui fluxo de 5 passos e finaliza somente pelo presidente
+            if (!$orgaos->isVinculadaIphan($dp->idOrgao)) {
                 $parecer = new Parecer();
                 $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
                 
@@ -392,7 +396,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             foreach ($buscaDadosProjeto as $dp) {
                 
-                if ($this->isVinculadaIphan($dp->idOrgao)) {                
+                if ($orgaos->isVinculadaIphan($dp->idOrgao)) {                
 
                     $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
                     $fecharAnalise = 3;
@@ -425,16 +429,15 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
  
             }
 
-            $projeto = new Projetos();
             $wherePro['IdPRONAC = ?'] = $idPronac;
-            $buscaDadosdoProjeto = $projeto->buscar($wherePro);
+            $buscaDadosdoProjeto = $projetos->buscar($wherePro);
             
             /// ALTERAR SITUACAO
             $inabilitadoDAO = new Inabilitado();
             $buscaInabilitado = $inabilitadoDAO->BuscarInabilitado($buscaDadosdoProjeto[0]->CgcCpf, $buscaDadosdoProjeto[0]->AnoProjeto, $buscaDadosdoProjeto[0]->Sequencial);
             
             if (count($buscaInabilitado == 0)) {
-                if (!$this->isVinculadaIphan($dp->idOrgao)) {
+                if (!$orgaos->isVinculadaIphan($dp->idOrgao)) {
                     // somente presidente
                     $projeto->alterarSituacao($idPronac, null, 'C20', 'An&aacute;lise t&eacute;cnica conclu&iacute;da');
                 } else {
@@ -455,20 +458,4 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         
     }
 
-    public function isVinculadaIphan($idOrgao)
-    {
-        $orgaos = array(
-            Orgaos::ORGAO_IPHAN_PRONAC,
-            Orgaos::ORGAO_IPHAN_PRONAC,
-            Orgaos::ORGAO_FUNARTE,
-            Orgaos::ORGAO_FBN,
-            Orgaos::ORGAO_FCP,
-            Orgaos::ORGAO_FCRB,
-            Orgaos::ORGAO_IBRAM,
-            Orgaos::ORGAO_SUPERIOR_SAV,
-            Orgaos::ORGAO_SAV_DAP
-        );
-
-        return (!in_array($dp->idOrgao, $orgaos)) ? true : false;
-    }
 }
