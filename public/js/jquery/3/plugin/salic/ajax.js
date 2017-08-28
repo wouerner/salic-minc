@@ -53,6 +53,7 @@
         elmBody.on('click', 'a[data-ajax-render]', function () {
             var objTarget = '#' + $(this).attr('id');
 
+
             if (typeof $(this).attr('data-ajax-target') !== 'undefined') {
                 objTarget = $(this).attr('data-ajax-target');
             }
@@ -134,7 +135,7 @@
         var time = true;
         setTimeout(function(){
             if (time) {
-                elmRender.hide().html('<div class="center-align" style="height: 100%;"><div class="preloader-wrapper big active valign ">' + elmProgress.html() + '</div></div>').fadeIn();
+                elmRender.hide().html('<div class="center-align padding10" style="height: 100%;"><div class="preloader-wrapper big active valign ">' + elmProgress.html() + '</div></div>').fadeIn();
             }
         }, 250);
         $.ajax({url: objSettings.strUrl}).done(function (result) {

@@ -21,7 +21,7 @@ if (isset($arrAuth->usu_codigo) && isset($arrAuth->usu_orgao)) {
 //$intQtd = count($dbTable->getAllBy(array('idDestinatario' => $arrAuth->usu_codigo, 'tbMensagemProjeto.idUnidade => $arrAuth->usu_orgao')));
     if ($intQtd > 99) {
         $cssPadding = '1';
-        $intQtd =  '99+';
+        $intQtd = '99+';
     } elseif ($intQtd > 9) {
         $cssPadding = '4';
     } else {
@@ -30,54 +30,46 @@ if (isset($arrAuth->usu_codigo) && isset($arrAuth->usu_orgao)) {
 }
 
 ?>
-<style>
-    .notificacao {
-        /*margin-left: 15px;*/
-        /*margin-top: 5px;*/
 
-        /*display: inline;*/
-    }
-    .notificacao a {
-        position: relative;
-        padding: 0 !important;
-        padding-top: 5px;
-    }
-    .notificacao .btn-floating {
-        /*background-color: rgb(76, 175, 80);*/
-        border-radius: 50%;
-        color: #fff;
-        cursor: pointer;
-        height: 20px !important;
-        width: 20px !important;
-        line-height: 21px;
-        /*overflow: hidden;*/
-        /*padding: 0;*/
-        position: absolute;
-        left: 11px;
-        top: 27px;
-        display: block;
-        text-align: center;
-        /*transition: all 0.3s ease 0s;*/
-        vertical-align: middle;
-        z-index: 1;
-        font-size: 9px !important;
-    }
-
-    .notificacao .btn-floating p {
-/*        display: block;*/
-/*        text-align: center;*/
-/*        left: */<?php //echo $cssPadding ?>/*px;*/
-/*        line-height: 5pt;*/
-/*        padding: 0 0 10px;*/
-/*        position: absolute;*/
-    }
-</style>
-<?php if ($intQtd > 0): ?>
-<li class="notificacao">
-    <a class="white-text tooltipped" data-position="left" data-delay="50" data-tooltip="Ir para mensagens" href="/admissibilidade/mensagem/perguntas-usuario">
-        <i class="material-icons left">mail</i>
-        <span class="btn-floating waves-effect waves-light orange darken-1"><?php echo $intQtd ?></span>
+<li id="btn-solicitacoes" class="btn-notificacao" style="position: relative">
+    <a class="white-text tooltipped" data-activates="header_notificacoes"
+       data-position="left"
+       data-delay="50"
+       data-tooltip="Ir para Notifica&ccedil;&otilde;es" href="javascript:void(0)"
+       data-ajax-render='/solicitacao/mensagem/listar-ajax<?= $this->params; ?>'
+       data-ajax-target='#header_notificacoes'
+    >
+        <i class="material-icons left">notifications</i>
     </a>
+    <div id="header_notificacoes" class="dropdown-content dropdown-media active black-text" style="opacity: 1"></div>
 </li>
-<?php endif; ?>
+
+<script>
+    // quando clicar fora do elemento fechar os icones
+    $3(document).on("click", function (e) {
+        if (!$3(e.target).closest('#header_notificacoes').length) {
+            if ($3('#header_notificacoes').is(":visible")) {
+                $3('#header_notificacoes').hide();
+            }
+        }
+
+    });
+
+    $3(document).ready(function () {
+        contarSolicitacoesNaoLidas();
+    });
+
+    function contarSolicitacoesNaoLidas() {
+        $3.ajax({
+            type: "post",
+            url: "<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'contar-solicitacoes-nao-lidas-ajax'), null, true); ?>",
+            success: function (data) {
+                if (data.status == true && data.msg > 0) {
+                    $3("#btn-solicitacoes a").append('<span class="btn-floating waves-effect waves-light orange darken-1">' + data.msg + '</span>');
+                }
+            },
+            dataType: 'json'
+        });
+    }
+</script>
 
