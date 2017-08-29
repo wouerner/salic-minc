@@ -361,10 +361,18 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $whereProduto['idProduto = ?'] = $idProduto;
         $whereProduto["stEstado = ?"] = 0;
 
-        $this->view->somenteLeitura = false;
-        $resultProjeto = $tbDistribuirParecer->buscar($whereProduto)[0];
-        if ($idusuario <> $resultProjeto['idUsuario']) {
-            $this->view->somenteLeitura = true;
+        $pareceristaAtivo = ($idAgenteParecerista == $produto['idAgenteParecerista']) ? true : false;
+        
+        if (count($analisedeConteudo) > 0) {
+            if (($codGrupo == Autenticacao_Model_Grupos::PARECERISTA) && ($pareceristaAtivo)) {
+                $this->view->somenteLeitura = false;
+            } else if (($codGrupo == Autenticacao_Model_Grupos::PARECERISTA) && (!$pareceristaAtivo)) {
+                $this->view->somenteLeitura = true;
+            } else if ($codGrupo <> Autenticacao_Model_Grupos::PARECERISTA) {
+                $this->view->somenteLeitura = true;
+            }
+        } else {
+            $this->view->somenteLeitura = false;
         }
         
         /* Analise de conteudo */
