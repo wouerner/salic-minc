@@ -110,10 +110,14 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             $tipoFiltro = 'aguardando_distribuicao';
         } else {
             $tipoFiltro = $this->_request->getParam("tipoFiltro");
+            if (strpos($tipoFiltro, '/') > -1) {
+                $tipoFiltro = explode('/', $tipoFiltro)[0];
+            }
         }
         $this->view->tipoFiltro = $tipoFiltro;
         
         $tbDistribuirParecer = new tbDistribuirParecer();
+        
         $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
         $fim = $inicio + $this->intTamPag;
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
@@ -157,6 +161,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $idUsuario = $this->auth->getIdentity()->usu_codigo;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
         $codOrgao = $GrupoAtivo->codOrgao; //  �rg�o ativo na sess�o
+        $codGrupo = $GrupoAtivo->codGrupo; //  �rg�o ativo na sess�o
 
         /******************************************************************/
 
@@ -186,7 +191,9 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                     $fecharAnalise = 1;
                     
                     if ($orgaos->isVinculadaIphan($dp->idOrgao)) {
-                        $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
+                        if ($codGrupo == Autenticacao_Model_Grupos::SUPERINTENDENTE_DE_VINCULADA) {
+                            $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
+                        }
                         $fecharAnalise = 3;
                     }
                 } else if ($tipoFiltro == 'devolvida') {
@@ -302,7 +309,11 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         $where = array();
-        $where["idOrgao = ?"] = $codOrgao;
+        if (Orgaos::isVinculadaIphan($dp->idOrgao)) {
+            $where["idOrgao = ?"] = Orgaos::ORGAO_IPHAN_PRONAC;
+        } else {
+            $where["idOrgao = ?"] = $codOrgao;
+        }
 
         if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $pronac = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
@@ -312,6 +323,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
         $tbDistribuirParecer = new tbDistribuirParecer();
         $tipoFiltro  = 'presidente_vinculadas';
+        
         $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
         $fim = $inicio + $this->intTamPag;
         
@@ -399,7 +411,11 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 if ($orgaos->isVinculadaIphan($dp->idOrgao)) {                
 
                     $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
-                    $fecharAnalise = 3;
+                    if ($dp->stPrincipal == 1) {
+                        $fecharAnalise = 3;
+                    } else {
+                        $fecharAnalise = 1;
+                    }
                 } else {
                     $idOrgao = $dp->idOrgao;
                     $fecharAnalise = 1;
