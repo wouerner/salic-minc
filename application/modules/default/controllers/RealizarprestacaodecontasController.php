@@ -3316,41 +3316,41 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
-            case 'emanalise': //Em an&aacute;lise
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                $where['e.stAtivo = ?'] = 1;
-                break;
-            case 'analisados': // Analisados
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E14','E18', 'E27', 'E46', 'G08', 'G21', 'G22');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('3');
-                $where['e.cdGruposDestino in (?)'] = array('125', '126');
-                $where['e.stAtivo = ?'] = 1;
-                break;
-            case 'diligenciados': //Projetos diligenciados
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E17', 'E20', 'E30');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                $where['e.cdGruposDestino in (?)'] = array('125','126');
-                $where['e.cdGruposOrigem = ?'] = 132;
-                $where['e.stAtivo = ?'] = 1;
-                $where['d.stEstado = ?'] = 0;
-                $where['d.idTipoDiligencia = ?'] = 174;
-                break;
-            case 'tce': //Projetos em TCE
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E22');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                $where['e.stAtivo = ?'] = 1;
-                $where['d.idTipoDiligencia = ?'] = 174;
-                $where['d.stEstado = ?'] = 0;
-                break;
-            default: //Aguardando An&aacute;lise
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
-                break;
+                case 'emanalise': //Em an&aacute;lise
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
+                    $where['e.stAtivo = ?'] = 1;
+                    break;
+                case 'analisados': // Analisados
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E14','E18', 'E27', 'E46', 'G08', 'G21', 'G22');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('3');
+                    $where['e.cdGruposDestino in (?)'] = array('125', '126');
+                    $where['e.stAtivo = ?'] = 1;
+                    break;
+                case 'diligenciados': //Projetos diligenciados
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E17', 'E20', 'E30');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
+                    $where['e.cdGruposDestino in (?)'] = array('125','126');
+                    $where['e.cdGruposOrigem = ?'] = 132;
+                    $where['e.stAtivo = ?'] = 1;
+                    $where['d.stEstado = ?'] = 0;
+                    $where['d.idTipoDiligencia = ?'] = 174;
+                    break;
+                case 'tce': //Projetos em TCE
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E22');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
+                    $where['e.stAtivo = ?'] = 1;
+                    $where['d.idTipoDiligencia = ?'] = 174;
+                    $where['d.stEstado = ?'] = 0;
+                    break;
+                default: //Aguardando An&aacute;lise
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+                    break;
             }
         } else { //Aguardando An&aacute;lise
             $filtro = '';
@@ -3358,7 +3358,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
         }
 
-        if ((isset($_POST['situacao']) && !empty($_POST['situacao'])) || (isset($_GET['situacao']) && !empty($_GET['situacao']))) {
+        if ((!empty($_POST['situacao'])) || (!empty($_GET['situacao']))) {
             $where["p.Situacao in (?)"] = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
             $this->view->situacao = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
         }
