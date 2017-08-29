@@ -1841,6 +1841,31 @@ public function analisePorParecerista($where){
 			    );
 
             $from = ' FROM sac.dbo.vwPainelPresidenteVinculadas';
+                break;
+
+            case 'superintendente_vinculadas':
+
+	        $slct->from(
+			    array('dbo.vwPainelSuperintendenteVinculadas'),
+			    array('IdPRONAC',
+				  'NrProjeto',
+				  'NomeProjeto',
+                  'idProduto',
+				  'stPrincipal',
+				  'idArea',
+				  'Area',
+				  'idSegmento',
+				  'Segmento',
+				  'idDistribuirParecer',
+				  'Parecerista',
+				  'idOrgao',
+				  'Valor',
+				  'FecharAnalise',
+				  'TecnicoValidador',
+				  'dtValidacao')
+			    );
+
+            $from = ' FROM sac.dbo.vwPainelSuperintendenteVinculadas';
                 break;                
             case 'devolvida':
 
