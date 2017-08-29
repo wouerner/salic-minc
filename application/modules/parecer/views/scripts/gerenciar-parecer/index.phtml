@@ -18,6 +18,10 @@ $filtros = array(
 		 'devolvida' => 'Devolvidas para análise',
 		 'impedimento_parecerista' => 'Impedimento do parecerista'
 );
+if ($this->codOrgao == Orgaos::ORGAO_IPHAN_PRONAC) {
+    $filtros['analisado_superintendencia'] = 'Analisado pela superintendência';
+}
+
 ?>
     <div>Gerenciar Pareceres - <?php echo $filtros[$this->tipoFiltro]; ?><span class="voltar"><a href="#" onclick="voltar();">Voltar</a></span></div>
 </div>
@@ -30,13 +34,16 @@ $filtros = array(
     <table class="tabela">
 	<tr>
             <td class="destacar bold" width="1" align="center">PRONAC</td>
-            <td width="435" align="center">
+            <td width="465" align="center">
                 <input type="text" class="input_simples" name="pronac" id="pronac" maxlength="7" style="width: 90px;" value="<?php echo $this->pronacProjeto;?>">
                 <input type="button" name="btn_pesquisar" id="btn_pesquisar" class="btn_pesquisar" value="">
-                <select name="tipoFiltro" style="width: 220px;" class="input_simples comboFiltro white">
+                <select name="tipoFiltro" style="width: 250px;" class="input_simples comboFiltro white">
                     <option value="aguardando_distribuicao" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'aguardando_distribuicao' ? 'selected="selected"':''; ?>>Aguardando distribui&ccedil;&atilde;o</option>
                     <option value="em_analise" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_analise' ? 'selected="selected"':''; ?>>Em an&aacute;lise</option>
                     <option value="em_validacao" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_validacao' ? 'selected="selected"':''; ?>>Em valida&ccedil;&atilde;o</option>
+<?php if ($this->codOrgao == Orgaos::ORGAO_IPHAN_PRONAC) : ?>
+<option value="analisado_superintendencia" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisado_superintendencia' ? 'selected="selected"':''; ?>>Analisado pela superintend&ecirc;ncia</option>
+<?php endif; ?>
                     <option value="devolvida" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'devolvida' ? 'selected="selected"':''; ?>>Devolvidas para nova an&aacute;lise</option>
 		    <option value="impedimento_parecerista" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'impedimento_parecerista' ? 'selected="selected"':''; ?>>Impedimento do parecerista</option>
                 </select>
