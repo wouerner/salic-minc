@@ -311,8 +311,10 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $where = array();
         if (Orgaos::isVinculadaIphan($dp->idOrgao)) {
             $where["idOrgao = ?"] = Orgaos::ORGAO_IPHAN_PRONAC;
+            $tipoFiltro  = 'superintendente_vinculadas';            
         } else {
             $where["idOrgao = ?"] = $codOrgao;
+            $tipoFiltro  = 'presidente_vinculadas';
         }
 
         if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
@@ -322,7 +324,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         }
 
         $tbDistribuirParecer = new tbDistribuirParecer();
-        $tipoFiltro  = 'presidente_vinculadas';
         
         $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
         $fim = $inicio + $this->intTamPag;
