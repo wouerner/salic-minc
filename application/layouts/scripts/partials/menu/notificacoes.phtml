@@ -1,26 +1,27 @@
 <li id="btn-solicitacoes" class="btn-notificacao" style="position: relative">
-    <a class="white-text tooltipped" data-activates="header_notificacoes"
+    <a class="dropdown-button white-text tooltipped" data-activates="header_notificacoes"
        data-position="left"
        data-delay="50"
        data-tooltip="Ir para Notifica&ccedil;&otilde;es" href="javascript:void(0)"
        data-ajax-render='/solicitacao/mensagem/listar-ajax<?= $this->params; ?>'
-       data-ajax-target='#header_notificacoes'
+       data-ajax-target='#mensagem_content'
     >
         <i class="material-icons left">notifications</i>
     </a>
-    <div id="header_notificacoes" class="dropdown-content dropdown-media active black-text" style="opacity: 1"></div>
+    <div id="header_notificacoes" class="dropdown-content black-text">
+        <div class="card-panel">
+            <div class="mensagem-heading">Notifica&ccedil;&otilde;es</div>
+            <div class="mensagem-footer">
+                <a href="<?= $this->url(['module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index'], null, true); ?>">
+                    Ver todas
+                </a>
+            </div>
+            <div id="mensagem_content" class="mensagem-content"></div>
+        </div>
+    </div>
 </li>
 
 <script>
-    // quando clicar fora do elemento fechar os icones
-    $3(document).on("click", function (e) {
-        if (!$3(e.target).closest('#header_notificacoes').length) {
-            if ($3('#header_notificacoes').is(":visible")) {
-                $3('#header_notificacoes').hide();
-            }
-        }
-
-    });
 
     $3(document).ready(function () {
         contarSolicitacoesNaoLidas();
@@ -32,7 +33,7 @@
             url: "<?php echo $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'contar-solicitacoes-nao-lidas-ajax'), null, true); ?>",
             success: function (data) {
                 if (data.status == true && data.msg > 0) {
-                    $3("#btn-solicitacoes a").append('<span class="btn-floating waves-effect waves-light orange darken-1">' + data.msg + '</span>');
+                    $3("#btn-solicitacoes > a").append('<span class="btn-floating waves-effect waves-light orange darken-1">' + data.msg + '</span>');
                 }
             },
             dataType: 'json'

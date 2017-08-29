@@ -18,6 +18,10 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 
     protected $grupoAtivo = null;
 
+    protected $cpfLogado = null;
+
+    protected $ehProponente = false;
+
     public function init()
     {
         parent::init();
@@ -55,6 +59,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             $tbProjetos = new Projeto_Model_DbTable_Projetos();
             $this->projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();
             $this->view->projeto = $this->projeto;
+            $this->view->idPronac = $this->idPronac;
         }
 
         if (!empty($this->idPreProjeto)) {
@@ -64,7 +69,9 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         }
 
         $this->idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
+        $this->cpfLogado = isset($arrAuth['usu_identificacao']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
 
+        $this->view->arrayMenu = self::gerarArrayMenu();
 
         if($arrAuth['cpf']) {
             /**
@@ -77,10 +84,48 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             if ($agente) {
                 $this->idAgente = $agente['idAgente'];
             }
+
+            $this->ehProponente = true;
+            $this->view->arrayMenu = self::gerarArrayMenuProponente();
         }
 
         $this->usuario = $arrAuth;
         $this->view->usuario = $auth->getIdentity(); //@todo padronizar o usuario no header do layout
+        $this->view->ehProponente = $this->ehProponente;
+    }
+
+    private function gerarArrayMenuProponente($idPreProjeto = null)
+    {
+        $arrMenuProponente = array();
+
+        $arrMenuProponente['solicitacoes'] = array(
+            'id' => 'minhassolicitacoes',
+            'label' => 'Minhas solicita&ccedil;&otilde;es',
+            'title' => '',
+            'link' => array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
+            'menu' => array(),
+            'grupo' => array()
+        );
+
+
+        return $arrMenuProponente;
+    }
+
+    private function gerarArrayMenu()
+    {
+        $arrMenu = array();
+
+        $arrMenu['solicitacoes'] = array(
+            'id' => 'minhassolicitacoes',
+            'label' => 'Minhas solicita&ccedil;&otilde;es',
+            'title' => '',
+            'link' => array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index'),
+            'menu' => array(),
+            'grupo' => array()
+        );
+
+
+        return $arrMenu;
     }
 }
 

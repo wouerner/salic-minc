@@ -91,6 +91,8 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (isset($this->grupoAtivo->codOrgao)) {
                 $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
             }
+
+            $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA;
         }
 
         $solicitacoes = $vwSolicitacoes->buscar($where);
@@ -102,6 +104,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
     public function visualizarAction()
     {
+
         $urlAction = $this->_urlPadrao . "/solicitacao/mensagem/salvar";
 
         try {
@@ -118,6 +121,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             if (empty($dataForm))
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+
 
             $permissao = parent::verificarPermissaoAcesso($dataForm['idProjeto'], $dataForm['idPronac'], false, true);
 
@@ -237,7 +241,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             } else {
 
                 $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-                $dataForm = $vwSolicitacao->findBy(['idSolicitacao' => $idSolicitacao ]);
+                $dataForm = $vwSolicitacao->findBy(['idSolicitacao' => $idSolicitacao]);
 
                 if (empty($dataForm))
                     throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
@@ -310,6 +314,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         # Proponente
         if (isset($this->usuario['cpf'])) {
             $where["(idAgente = {$this->idAgente} OR idSolicitante = {$this->idUsuario})"] = '';
+            $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC;
         }
 
         if (isset($this->usuario['usu_codigo'])) {
@@ -327,8 +332,10 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (isset($this->grupoAtivo->codOrgao)) {
                 $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
             }
+
+            $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA;
         }
-        $solicitacoes = $vwSolicitacoes->buscar($where, ['dtResposta DESC','dtSolicitacao DESC'] );
+        $solicitacoes = $vwSolicitacoes->buscar($where, ['dtResposta DESC', 'dtSolicitacao DESC']);
 
         $this->view->arrResult = $solicitacoes;
         $this->view->idPronac = $idPronac;

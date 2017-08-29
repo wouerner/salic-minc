@@ -1,0 +1,28 @@
+<?php $currentUri = Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(); ?>
+<?php $link = !empty($this->link) ? $this->url($this->link) : ''; ?>
+
+<li class="<?php echo ($this->menu) ? 'no-padding' : 'bold'; ?>">
+    <?php if (!$this->menu) : ?>
+        <a id="<?php echo $this->id; ?>"
+           class="<?php echo ($currentUri == $link) ? 'active' : '' ?>"
+           href="<?php echo ($link) ? $link : 'javascript:void(0);'; ?>"
+           title="Ir para <?php echo($this->label); ?>"><?php echo trim($this->label); ?></a>
+    <?php else : ?>
+        <ul class="collapsible collapsible-accordion">
+            <li class="bold">
+                <a id="<?php echo $this->id; ?>"
+                   class="collapsible-header waves-effect waves-cyan <?php echo (in_array($currentUri, array_column($this->menu, 'url'))) ? 'active' : '' ?>"
+                   href="<?php echo ($link) ? $link : 'javascript:void(0);'; ?>"><?php echo $this->label; ?>
+                    <?php if (!empty($this->icon)) : ?>
+                        <i class="mdi-action-view-carousel"></i>
+                    <?php endif; ?>
+                </a>
+                <div class="collapsible-body">
+                    <ul>
+                        <?php echo (isset($this->menu)) ? $this->partialLoop('/menu/partials/subitem.phtml', 'solicitacao', $this->menu) : ''; ?>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    <?php endif; ?>
+</li>

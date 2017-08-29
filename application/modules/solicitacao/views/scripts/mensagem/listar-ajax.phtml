@@ -1,42 +1,28 @@
-<div class="card-panel">
-    <div class="mensagem-heading">Solicita&ccedil;&otilde;es</div>
-    <div class="mensagem-footer">
-        <a href="<?= $this->url(['module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index'], null, true); ?>">
-            Ver todas
-        </a>
-    </div>
-    <div class="mensagem-content">
-        <?php if (count($this->arrResult) > 0) : ?>
-            <?php foreach ($this->arrResult as $int => $arrValue): ?>
-                <?php
-                $arrayUrl = ['module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao']];
 
-                if (!empty($arrValue['idPronac'])) {
-                    $arrayUrl['idPronac'] = $arrValue['idPronac'];
-                } elseif (!empty($arrValue['idProjeto'])) {
-                    $arrayUrl['idPreProjeto'] = $arrValue['idProjeto'];
-                }
 
-                if($this->ehTecnico) {
-                    $arrayUrl['action'] = 'responder';
-                }
-                ?>
-                <div class="mensagem <?= ($arrValue['stLeitura'] == 0 && !empty($arrValue['dtResposta'])) ? 'not-read' : '';?>">
-                    <span class="mensagem-date"><?= date('d/m/Y', strtotime($arrValue['dtSolicitacao'])); ?></span>
-                    <a href="<?= $this->url($arrayUrl, null, true); ?>"
-                       class="mensagem-title"><?= $arrValue['NomeProjeto']; ?>
-                        (<?= empty($arrValue['Pronac']) ? $arrValue['idProjeto'] : $arrValue['Pronac']; ?>) </a>
-                    <a href="<?= $this->url($arrayUrl, null, true); ?>">
-                    <span><?= $arrValue['dsEncaminhamento']; ?></br></span>
-                    </a>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <div class="row">
-                <div class="col s12">
-                    <div class="padding20 center-align black-text">Sem solicita&ccedil;&otilde;es.</div>
-                </div>
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
+<?php if (count($this->arrResult) > 0) : ?>
+    <?php foreach ($this->arrResult as $int => $arrValue): ?>
+        <?php
+        $arrayUrl = ['module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'visualizar', 'id' => $arrValue['idSolicitacao']];
+
+        if (!empty($arrValue['idPronac'])) {
+            $arrayUrl['idPronac'] = $arrValue['idPronac'];
+        } elseif (!empty($arrValue['idProjeto'])) {
+            $arrayUrl['idPreProjeto'] = $arrValue['idProjeto'];
+        }
+
+        if($this->ehTecnico) {
+            $arrayUrl['action'] = 'responder';
+        }
+        ?>
+        <div class="mensagem-body <?= ($arrValue['stLeitura'] == 0 && !empty($arrValue['dtResposta'])) ? 'not-read' : '';?>">
+            <a href="<?= $this->url($arrayUrl, null, true); ?>" class="mensagem-title">
+                <?= $arrValue['dsEncaminhamento']; ?></br>
+                <?= $arrValue['NomeProjeto']; ?> (<?= empty($arrValue['Pronac']) ? $arrValue['idProjeto'] : $arrValue['Pronac']; ?>)
+                <span class="mensagem-date"><?= date('d/m/Y', strtotime($arrValue['dtSolicitacao'])); ?></span>
+            </a>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <div class="padding10 center-align black-text">Sem solicita&ccedil;&otilde;es.</div>
+<?php endif; ?>
