@@ -361,10 +361,18 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $whereProduto['idProduto = ?'] = $idProduto;
         $whereProduto["stEstado = ?"] = 0;
 
-        $this->view->somenteLeitura = false;
-        $resultProjeto = $tbDistribuirParecer->buscar($whereProduto)[0];
-        if ($idusuario <> $resultProjeto['idUsuario']) {
-            $this->view->somenteLeitura = true;
+        $pareceristaAtivo = ($idAgenteParecerista == $produto['idAgenteParecerista']) ? true : false;
+        
+        if (count($analisedeConteudo) > 0) {
+            if (($codGrupo == Autenticacao_Model_Grupos::PARECERISTA) && ($pareceristaAtivo)) {
+                $this->view->somenteLeitura = false;
+            } else if (($codGrupo == Autenticacao_Model_Grupos::PARECERISTA) && (!$pareceristaAtivo)) {
+                $this->view->somenteLeitura = true;
+            } else if ($codGrupo <> Autenticacao_Model_Grupos::PARECERISTA) {
+                $this->view->somenteLeitura = true;
+            }
+        } else {
+            $this->view->somenteLeitura = false;
         }
         
         /* Analise de conteudo */
@@ -383,7 +391,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $cont = true;
 
         foreach ($resp as $key => $val) {
-            $produto = $val->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $val->Produto;
+            $produto = $val->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $val->Produto;
             if (!isset($itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['qtd'])) {
                 $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade] = array('qtd' => 0, 'totalUfSolicitado' => 0, 'totalUfSugerido' => 0, 'itens' => array(), 'totalSolicitado' => 0, 'totalSugerido' => 0);
             }
@@ -611,7 +619,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
      */
     public function produtosecundarioAction()
     {
-        return $this->produtoAction();
     }
 
     public function analisedeconteudoAction()
