@@ -1,12 +1,12 @@
 <?php
-class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstract 
+class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstract
 {
     private $getIdUsuario = 0;
     private $getIdAgenteLogado = 0;
-    private $codGrupo 	   = null;
-    private $codOrgao 	   = null;
-    public  $intTamPag     = 15;
-    private $modalidade    = array('Selecione','Convite','Tomada de Pre&ccedil;os','Concorr&ecirc;ncia','Concurso','Preg&atilde;o');
+    private $codGrupo = null;
+    private $codOrgao = null;
+    public $intTamPag = 15;
+    private $modalidade = array('Selecione','Convite','Tomada de Pre&ccedil;os','Concorr&ecirc;ncia','Concurso','Preg&atilde;o');
     private $tipoDocumento = array('Selecione','Boleto Banc&aacute;rio','Cupom Fiscal','Nota Fiscal/Fatura','Recibo de Pagamento','Aut&ocirc;nomo', 'Guia De Recolhimento');
     private $tipoSituacao  = array('1'=>'Executado integralmente','2'=>'Executado parcialmente','3'=>'N&atilde;o Executado','4'=>'Sem informa&ccedil;&atilde;o');
     private $cdGruposDestinoAtual  = null;
@@ -27,13 +27,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     private $situcaoEncaminhamentoAtual = null;
 
-
     public function init()
     {
-        $arrSituacoesGrids = implode(',',$this->arrSituacoesAguardandoAnalise).','.implode(',',$this->arrSituacoesDevolvidosAposAnalise).','.implode(',',$this->arrSituacoesDiligenciados).','.implode(',',$this->arrSituacoesTCE);
-        $arrSituacoesGrids = explode(',',$arrSituacoesGrids);
+        $arrSituacoesGrids = implode(',', $this->arrSituacoesAguardandoAnalise).','.implode(',', $this->arrSituacoesDevolvidosAposAnalise).','.implode(',', $this->arrSituacoesDiligenciados).','.implode(',', $this->arrSituacoesTCE);
+        $arrSituacoesGrids = explode(',', $arrSituacoesGrids);
         $this->arrSituacoesGrids = $arrSituacoesGrids;
-
 
         $PermissoesGrupo [] = 124;
         $PermissoesGrupo [] = 121;
@@ -48,13 +46,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $PermissoesGrupo [] = 148;
         $PermissoesGrupo [] = 151;
 
-        parent::perfil ( 1, $PermissoesGrupo );
+        parent::perfil(1, $PermissoesGrupo);
 
         // cria a sessao com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
-        // pega a autenticacao
-        $auth 		  = Zend_Auth::getInstance ();
+        $auth          = Zend_Auth::getInstance();
         $GrupoUsuario = $GrupoAtivo->codGrupo;
 
         // instancia da autenticacao
@@ -62,17 +59,17 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->getIdUsuario = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
         $tblAgente = new Agente_Model_DbTable_Agentes();
         $rsAgente = $tblAgente->buscar(array('CNPJCPF = ?'=>$auth->getIdentity()->usu_identificacao))->current();
-        if(!empty($rsAgente)){
+        if (!empty($rsAgente)) {
             $this->getIdAgenteLogado = $rsAgente->idAgente;
         }
-        parent::init (); // chama o init() do pai GenericControllerNew
+        parent::init(); // chama o init() do pai GenericControllerNew
 
         //situacao do projeto (Executado integralmente','Executado parcialmente','N&atilde;o Executado','Sem informa&ccedil;&atilde;o)
         $this->view->tipoSituacao = $this->tipoSituacao;
 
         //guarda o grupo do usuario logado
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
-        $this->codGrupo 	  = $_SESSION['GrupoAtivo']['codGrupo'];
+        $this->codGrupo      = $_SESSION['GrupoAtivo']['codGrupo'];
         $this->codOrgao       = $_SESSION['GrupoAtivo']['codOrgao'];
         $this->view->codOrgao = $_SESSION['GrupoAtivo']['codOrgao'];
 
@@ -81,10 +78,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->comboestados = $buscaEstados->buscar();
 
         $idpronac = $this->_request->getParam("idPronac");
-        if(!empty($idpronac)){
+        if (!empty($idpronac)) {
             $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
             $rsEPC = $tblEncaminhamentoPrestacaoContas->buscar(array("idPronac = ? " => $idpronac, 'stAtivo= ? ' => 1))->current();
-            if(!empty($rsEPC)){
+            if (!empty($rsEPC)) {
                 $this->situcaoEncaminhamentoAtual = $rsEPC->idSituacaoEncPrestContas;
                 $this->cdGruposDestinoAtual       = $rsEPC->cdGruposDestino;
 
@@ -92,7 +89,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $this->view->cdGruposDestinoAtual       = $this->cdGruposDestinoAtual;
             }
         }
-    } // fecha metodo init()
+    }
 
     /**
      * Nao deletar essa action pois eh usada para renderizar a view.
@@ -102,7 +99,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      */
     public function indexAction()
     {
-
     }
 
     public function montaArrBuscaCoincidentes($post)
@@ -110,64 +106,76 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca=array();
 
         //NOME PROJETO
-        if(!empty($post->NomeProjeto)){
+        if (!empty($post->NomeProjeto)) {
             $projeto = utf8_decode($post->NomeProjeto);
-            if($post->tipoPesqNomeProjeto == 'QC'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
-            }else if($post->tipoPesqNomeProjeto == 'EIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto = ?"] = "{$projeto}"; }
-            }else if($post->tipoPesqNomeProjeto == 'IIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
+            if ($post->tipoPesqNomeProjeto == 'QC') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'EIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto = ?"] = "{$projeto}";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'IIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%";
+                }
             }
-            //if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
         }
 
         //UF
-        if(!empty($post->uf)){
+        if (!empty($post->uf)) {
             $arrBusca["p.UfProjeto = ?"] = $post->uf;
-            if(isset($post->cidade) && !empty($post->cidade)){
+            if (isset($post->cidade) && !empty($post->cidade)) {
                 $arrBusca["ab.idMunicipioIBGE = ?"] = $post->cidade;
             }
         }
 
         //PERIODO EXECUCAO
-        if (isset($post->tpPeriodoExecucao) && !empty($post->tpPeriodoExecucao)){
-            if ($post->tpPeriodoExecucao == 1){ // exatamente igual
+        if (isset($post->tpPeriodoExecucao) && !empty($post->tpPeriodoExecucao)) {
+            if ($post->tpPeriodoExecucao == 1) { // exatamente igual
 
                 if (isset($post->dtExecucao) && !empty($post->dtExecucao)) {
                     $arrBusca["p.DtInicioExecucao >= '". Data::dataAmericana($post->dtExecucao) . " 00:00:00.000' AND p.DtInicioExecucao <= '". Data::dataAmericana($post->dtExecucao) . " 23:59:59.999'" ] = '?';
                 }
-                if ( isset($post->dtExecucao_Final) && !empty($post->dtExecucao_Final)) {
+                if (isset($post->dtExecucao_Final) && !empty($post->dtExecucao_Final)) {
                     $arrBusca["p.DtFimExecucao >= '". Data::dataAmericana($post->dtExecucao_Final) . " 00:00:00.000' AND p.DtFimExecucao <= '". Data::dataAmericana($post->dtExecucao_Final) . " 23:59:59.999'" ] = '?';
                 }
-            } else if ($post->tpPeriodoExecucao == 2) { // que inicia
-                if ( isset($post->dtExecucao) && !empty($post->dtExecucao)) {
+            } elseif ($post->tpPeriodoExecucao == 2) { // que inicia
+                if (isset($post->dtExecucao) && !empty($post->dtExecucao)) {
                     //$arrBusca['p.DtInicioExecucao >= ?'] = Data::dataAmericana($post->dtExecucao) . " 00:00:00.000";
                     $arrBusca["p.DtInicioExecucao >= '". Data::dataAmericana($post->dtExecucao) . " 00:00:00.000' AND p.DtInicioExecucao <= '". Data::dataAmericana($post->dtExecucao) . " 23:59:59.999'" ] = '?';
                 }
-            } else if ($post->tpPeriodoExecucao == 3) { // que finaliza
-                if ( isset($post->dtExecucao_Final) && !empty($post->dtExecucao_Final)) {
+            } elseif ($post->tpPeriodoExecucao == 3) { // que finaliza
+                if (isset($post->dtExecucao_Final) && !empty($post->dtExecucao_Final)) {
                     //$arrBusca['p.DtFimExecucao = ?'] = Data::dataAmericana($post->dtExecucao_Final) . " 00:00:00.000";
                     $arrBusca["p.DtFimExecucao >= '". Data::dataAmericana($post->dtExecucao_Final) . " 00:00:00.000' AND p.DtFimExecucao <= '". Data::dataAmericana($post->dtExecucao_Final) . " 23:59:59.999'" ] = '?';
                 }
-            } else if ($post->tpPeriodoExecucao == 4) { // entre
+            } elseif ($post->tpPeriodoExecucao == 4) { // entre
 
-                if ( isset($post->dtExecucao) && !empty($post->dtExecucao)) {$arrBusca['p.DtInicioExecucao >= ?'] = Data::dataAmericana($post->dtExecucao) . " 00:00:00.000";}
-                if ( isset($post->dtExecucao_Final) && !empty($post->dtExecucao_Final)) {$arrBusca['p.DtFimExecucao <= ?'] = Data::dataAmericana($post->dtExecucao_Final) . " 23:59:59.999";}
+                if (isset($post->dtExecucao) && !empty($post->dtExecucao)) {
+                    $arrBusca['p.DtInicioExecucao >= ?'] = Data::dataAmericana($post->dtExecucao) . " 00:00:00.000";
+                }
+                if (isset($post->dtExecucao_Final) && !empty($post->dtExecucao_Final)) {
+                    $arrBusca['p.DtFimExecucao <= ?'] = Data::dataAmericana($post->dtExecucao_Final) . " 23:59:59.999";
+                }
             }
         }
-        //$arrBusca = MinC_Controller_Action_Abstract::montaBuscaData($post, "tpPeriodoExecucao", "dtExecucao", "p.DtInicioExecucao", "dtExecucao_Final", $arrBusca);
 
-        if(!empty($post->area)){
-            if($post->tipoPesqArea == 'EIG'){
-                if(!empty($post->area)){ $arrBusca["a.Codigo = ?"] = $post->area; }
-            }else if($post->tipoPesqArea == 'DI'){
-                if(!empty($post->area)){ $arrBusca["a.Codigo <> ?"] = $post->area; }
+        if (!empty($post->area)) {
+            if ($post->tipoPesqArea == 'EIG') {
+                if (!empty($post->area)) {
+                    $arrBusca["a.Codigo = ?"] = $post->area;
+                }
+            } elseif ($post->tipoPesqArea == 'DI') {
+                if (!empty($post->area)) {
+                    $arrBusca["a.Codigo <> ?"] = $post->area;
+                }
             }
         }
 
         //MECANISMO
-        if (isset($post->mecanismo) && !empty($post->mecanismo)){
+        if (isset($post->mecanismo) && !empty($post->mecanismo)) {
             $arrBusca['p.Mecanismo = ?'] =$post->mecanismo;
         }
 
@@ -177,10 +185,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         return $arrBusca;
     }
 
-    public function incluiRegrasGridsPrincipais($arrBusca,$post)
+    public function incluiRegrasGridsPrincipais($arrBusca, $post)
     {
         //CONDICOES DE PROJETOS DEVOLVIDO APOS ANALISE
-        if(isset($post->situacao) && !empty($post->situacao) && in_array($post->situacao,$this->arrSituacoesDevolvidosAposAnalise)){
+        if (isset($post->situacao) && !empty($post->situacao) && in_array($post->situacao, $this->arrSituacoesDevolvidosAposAnalise)) {
             $arrBusca['e.idSituacaoEncPrestContas in (?)']= array('1','2'); //Status Aguardando analise OU Em analise
             $arrBusca['e.cdGruposDestino IN (?)']= array('125','126'); //grupo de coordenador de prestacao de contas
             $arrBusca['e.cdGruposOrigem = ?']= array('132'); //grupo do chefe de divisao
@@ -188,17 +196,15 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
 
         //CONDICOES DE PROJETOS DILIGENCIADOS
-        if(isset($post->situacao) && !empty($post->situacao) && in_array($post->situacao,$this->arrSituacoesDiligenciados)){
+        if (isset($post->situacao) && !empty($post->situacao) && in_array($post->situacao, $this->arrSituacoesDiligenciados)) {
             $arrBusca['e.idSituacaoEncPrestContas in (?)']= array('1','2'); //Status Aguardando analise OU Em analise
             $arrBusca['e.cdGruposDestino IN (?)']= array('125','126'); //grupo de coordenador de prestacao de contas
             $arrBusca['e.cdGruposOrigem = ?']= array('132'); //grupo do chefe de divisao
             $arrBusca['e.stAtivo = ?']= 1;
-            //$arrBusca['d.DtSolicitacao = (SELECT top 1 d2.DtSolicitacao FROM SAC..tbDiligencia d2 WHERE d2.idPronac = d.idPronac ORDER BY d2.DtSolicitacao DESC)'] = '(?)'; //seleciona a ultima diligencia realizada
-            //$arrBusca['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
         }
 
         //CONDICOES DE PROJETOS em TCE
-        if(isset($post->situacao) && !empty($post->situacao) && in_array($post->situacao,$this->arrSituacoesTCE)){
+        if (isset($post->situacao) && !empty($post->situacao) && in_array($post->situacao, $this->arrSituacoesTCE)) {
             $arrBusca['e.idSituacaoEncPrestContas in (?)']= array('1','2'); //Status Aguardando analise, e Em analise
             $arrBusca['e.cdGruposDestino IN (?)']= array('125','126'); //grupo de coordenador de prestacao de contas
             $arrBusca['e.cdGruposOrigem = ?']= array('132'); //grupo do chefe de divisao
@@ -209,7 +215,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function projetosAguardandoAnaliseAction()
     {
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -219,25 +225,29 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_dadosDiligencia = false;
 
         $pag = 1;
-        if (isset($post->pagAG)) $pag = $post->pagAG;
-        if (isset($post->tamPagAG)) $this->intTamPag = $post->tamPagAG;
+        if (isset($post->pagAG)) {
+            $pag = $post->pagAG;
+        }
+
+        if (isset($post->tamPagAG)) {
+            $this->intTamPag = $post->tamPagAG;
+        }
 
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
         $fim = $inicio + $this->intTamPag;
 
         // ======= CONDICOES DE COORD. DE PRESTACAO DE CONTAS ==============
-        if($this->codGrupo == '125' || $this->codGrupo == '126')
-        {
+        if ($this->codGrupo == '125' || $this->codGrupo == '126') {
             //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
             $arrBusca = $this->montaArrBuscaCoincidentes($post);
             $arrBusca['p.Situacao in (?)']= $this->arrSituacoesAguardandoAnalise;
             $bln_encaminhamento = false;
 
             //DILIGENCIA
-            if(!empty($post->diligencia)){
-                if($post->diligencia == "abertas"){
+            if (!empty($post->diligencia)) {
+                if ($post->diligencia == "abertas") {
                     $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-                }elseif($post->diligencia == "respondidas"){
+                } elseif ($post->diligencia == "respondidas") {
                     $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
                 }
                 $bln_dadosDiligencia = true;
@@ -245,8 +255,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
 
         // ======= CONDICOES DE TECNICO DE PRESTACAO DE CONTAS =============
-        if($this->codGrupo == '124')
-        {
+        if ($this->codGrupo == '124') {
             $arrBusca = array();
             $arrBusca['p.Situacao = ?']                    = 'E27';
             $arrBusca['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
@@ -257,43 +266,46 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
 
         // ======= CONDICOES DE CHEFE DE DIVISAO ===========================
-        if($this->codGrupo == '132')
-        {
+        if ($this->codGrupo == '132') {
             $arrBusca = array();
             $arrBusca['p.Situacao <> ?']                    = 'E17'; //exclui projetos diligenciados
             $arrBusca['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
             $arrBusca['e.cdGruposDestino = ?']             = 132; //grupo do chefe de divisao
-            //$arrBusca['e.idAgenteDestino = ?']             = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
             $arrBusca['e.stAtivo = ?']                     = 1;
             $bln_encaminhamento = true;
         }
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, $bln_encaminhamento, $bln_dadosDiligencia);
 
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        if ($fim>$total) $fim = $total;
+        if ($fim>$total) {
+            $fim = $total;
+        }
 
         $ordem = array();
-        if(!empty($post->ordenacaoAG)){ $ordem[] = "{$post->ordenacaoAG} {$post->tipoOrdenacaoAG}"; }else{$ordem = array('1 ASC');}
+        if (!empty($post->ordenacaoAG)) {
+            $ordem[] = "{$post->ordenacaoAG} {$post->tipoOrdenacaoAG}";
+        } else {
+            $ordem = array('1 ASC');
+        }
 
         $rs = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, $ordem, $tamanho, $inicio, false, $bln_encaminhamento, $bln_dadosDiligencia);
 
-        $this->view->registrosAG 	  = $rs;
-        $this->view->pagAG 		  = $pag;
-        $this->view->totalAG 	  = $total;
-        $this->view->inicioAG 	  = ++$inicio;
-        $this->view->fimAG 		  = $fim;
-        $this->view->totalPagAG 	  = $totalPag;
-        $this->view->parametrosBuscaAG= $_POST;
+        $this->view->registrosAG = $rs;
+        $this->view->pagAG = $pag;
+        $this->view->totalAG = $total;
+        $this->view->inicioAG = ++$inicio;
+        $this->view->fimAG = $fim;
+        $this->view->totalPagAG = $totalPag;
+        $this->view->parametrosBuscaAG = $_POST;
     }
 
     public function projetosDevolvidosAposAnaliseAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -302,9 +314,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_encaminhamento = true;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
-        if (isset($post->pagDA)) $pag = $post->pagDA;
-        if (isset($post->tamPagDA)) $this->intTamPag = $post->tamPagDA;
+        if (isset($post->pagDA)) {
+            $pag = $post->pagDA;
+        }
+        if (isset($post->tamPagDA)) {
+            $this->intTamPag = $post->tamPagDA;
+        }
 
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
         $fim = $inicio + $this->intTamPag;
@@ -312,26 +327,16 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
-        //SITUACAO
-            /*if ( isset($post->situacao) && !empty($post->situacao)){
-                //$arrBusca['p.Situacao = ?'] = $post->situacao;
-                $arrBusca["p.Situacao = '".$post->situacao."' AND p.Situacao not in ('E24','E68','E67','G43','G24','E17','E22','L05','L06') "] = '(?)';
-                if($post->situacao != 'E18'){
-                    $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
-                }
-            }else{
-                $arrBusca['p.Situacao = ?']='E18';
-            }*/
         $arrBusca['p.Situacao in (?)']= $this->arrSituacoesDevolvidosAposAnalise;
-        if(isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E18'){
+        if (isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E18') {
             $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
         }
 
         //DILIGENCIA
-        if(!empty($post->diligencia)){
-            if($post->diligencia == "abertas"){
+        if (!empty($post->diligencia)) {
+            if ($post->diligencia == "abertas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-            }elseif($post->diligencia == "respondidas"){
+            } elseif ($post->diligencia == "respondidas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
             }
         }
@@ -343,62 +348,67 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca['e.stAtivo = ?']= 1;
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, $bln_encaminhamento, true);
 
 
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        if ($fim>$total) $fim = $total;
+        if ($fim>$total) {
+            $fim = $total;
+        }
 
         $ordem = array();
-        if(!empty($post->ordenacaoDA)){ $ordem[] = "{$post->ordenacaoDA} {$post->tipoOrdenacaoDA}"; }else{$ordem = array('1 ASC');}
+        if (!empty($post->ordenacaoDA)) {
+            $ordem[] = "{$post->ordenacaoDA} {$post->tipoOrdenacaoDA}";
+        } else {
+            $ordem = array('1 ASC');
+        }
 
         $rs = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, $ordem, $tamanho, $inicio, null, $bln_encaminhamento, true);
 
-        $this->view->registrosDA 	  = $rs;
-        $this->view->pagDA 		  = $pag;
+        $this->view->registrosDA      = $rs;
+        $this->view->pagDA          = $pag;
         $this->view->totalDA          = $total;
-        $this->view->inicioDA 	  = ($inicio+1);
-        $this->view->fimDA		  = $fim;
-        $this->view->totalPagDA 	  = $totalPag;
+        $this->view->inicioDA      = ($inicio+1);
+        $this->view->fimDA          = $fim;
+        $this->view->totalPagDA      = $totalPag;
         $this->view->parametrosBuscaDA = $_POST;
-
     }
 
     public function projetosDiligenciadosAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
-        //$codPerfil = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
         $this->intTamPag = 10;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
-        if (isset($post->pagDI)) $pag = $post->pagDI;
-        if (isset($post->tamPagDI)) $this->intTamPag = $post->tamPagDI;
+        if (isset($post->pagDI)) {
+            $pag = $post->pagDI;
+        }
+        if (isset($post->tamPagDI)) {
+            $this->intTamPag = $post->tamPagDI;
+        }
 
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
         $fim = $inicio + $this->intTamPag;
 
         // ======= CONDICOES DE COORD. DE PRESTACAO DE CONTAS ==============
-        if($this->codGrupo == '125' || $this->codGrupo == '126')
-        {
+        if ($this->codGrupo == '125' || $this->codGrupo == '126') {
             //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
             $arrBusca = $this->montaArrBuscaCoincidentes($post);
             $arrBusca['p.Situacao in (?)']= $this->arrSituacoesDiligenciados;
-            if(isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E17'){
+            if (isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E17') {
                 $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
             }
 
             //DILIGENCIA
-            if(!empty($post->diligencia)){
-                if($post->diligencia == "abertas"){
+            if (!empty($post->diligencia)) {
+                if ($post->diligencia == "abertas") {
                     $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-                }elseif($post->diligencia == "respondidas"){
+                } elseif ($post->diligencia == "respondidas") {
                     $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
                 }
             }
@@ -413,8 +423,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
 
         // ======= CONDICOES DE TECNICO DE PRESTACAO DE CONTAS =============
-        if($this->codGrupo == '124')
-        {
+        if ($this->codGrupo == '124') {
             $arrBusca = array();
             $arrBusca['p.Situacao in (?)']                 = $this->arrSituacoesDiligenciados;
             $arrBusca['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
@@ -425,8 +434,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
 
         // ======= CONDICOES DE CHEFE DE DIVISAO ===========================
-        if($this->codGrupo == '132')
-        {
+        if ($this->codGrupo == '132') {
             $arrBusca = array();
             $arrBusca['p.Situacao = ?']                    = 'E17';
             $arrBusca['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
@@ -436,30 +444,35 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscaProjetoDiligenciadosPrestacaoContas($arrBusca, array(), null, null, true);
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        if ($fim>$total) $fim = $total;
+        if ($fim>$total) {
+            $fim = $total;
+        }
 
         $ordem = array();
-        if(!empty($post->ordenacaoDI)){ $ordem[] = "{$post->ordenacaoDI} {$post->tipoOrdenacaoDI}"; }else{$ordem = array('1 ASC');}
+        if (!empty($post->ordenacaoDI)) {
+            $ordem[] = "{$post->ordenacaoDI} {$post->tipoOrdenacaoDI}";
+        } else {
+            $ordem = array('1 ASC');
+        }
 
         $rs = $tblProjetos->buscaProjetoDiligenciadosPrestacaoContas($arrBusca, $ordem, $tamanho, $inicio);
 
-        $this->view->registrosDI 	  = $rs;
-        $this->view->pagDI 		  = $pag;
+        $this->view->registrosDI      = $rs;
+        $this->view->pagDI          = $pag;
         $this->view->totalDI          = $total;
-        $this->view->inicioDI 	  = ($inicio+1);
-        $this->view->fimDI		  = $fim;
-        $this->view->totalPagDI 	  = $totalPag;
+        $this->view->inicioDI      = ($inicio+1);
+        $this->view->fimDI          = $fim;
+        $this->view->totalPagDI      = $totalPag;
         $this->view->parametrosBuscaDI = $_POST;
     }
 
     public function projetosTceAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -469,9 +482,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_dadosDiligencia = false;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
-        if (isset($post->pagTCE)) $pag = $post->pagTCE;
-        if (isset($post->tamPagTCE)) $this->intTamPag = $post->tamPagTCE;
+        if (isset($post->pagTCE)) {
+            $pag = $post->pagTCE;
+        }
+        if (isset($post->tamPagTCE)) {
+            $this->intTamPag = $post->tamPagTCE;
+        }
 
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
         $fim = $inicio + $this->intTamPag;
@@ -479,24 +495,16 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
-        //SITUACAO
-            /*if ( isset($post->situacao) && !empty($post->situacao)){
-                $arrBusca["p.Situacao = '".$post->situacao."' AND p.Situacao not in ('E24','E68','E67','G43','G24') "] = '(?)';
-                $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
-            }else{
-        //$arrBusca['p.Situacao = ?']='E22';
-                $arrBusca['p.Situacao in (?)']= array('E22','L05','L06');
-            }*/
         $arrBusca['p.Situacao in (?)'] = $this->arrSituacoesTCE;
-        if ( isset($post->situacao) && !empty($post->situacao)){
+        if (isset($post->situacao) && !empty($post->situacao)) {
             $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
         }
 
         //DILIGENCIA
-        if(!empty($post->diligencia)){
-            if($post->diligencia == "abertas"){
+        if (!empty($post->diligencia)) {
+            if ($post->diligencia == "abertas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-            }elseif($post->diligencia == "respondidas"){
+            } elseif ($post->diligencia == "respondidas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
             }
         }
@@ -508,33 +516,37 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca['e.stAtivo = ?']= 1;
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, $bln_encaminhamento, $bln_dadosDiligencia);
 
 
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        if ($fim>$total) $fim = $total;
+        if ($fim>$total) {
+            $fim = $total;
+        }
 
         $ordem = array();
-        if(!empty($post->ordenacaoTCE)){ $ordem[] = "{$post->ordenacaoTCE} {$post->tipoOrdenacaoTCE}"; }else{$ordem = array('1 ASC');}
+        if (!empty($post->ordenacaoTCE)) {
+            $ordem[] = "{$post->ordenacaoTCE} {$post->tipoOrdenacaoTCE}";
+        } else {
+            $ordem = array('1 ASC');
+        }
 
         $rs = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, $ordem, $tamanho, $inicio, null, $bln_encaminhamento, $bln_dadosDiligencia);
 
-        $this->view->registrosTCE 	    = $rs;
+        $this->view->registrosTCE        = $rs;
         $this->view->pagTCE             = $pag;
         $this->view->totalTCE           = $total;
-        $this->view->inicioTCE 	    = ($inicio+1);
-        $this->view->fimTCE		    = $fim;
-        $this->view->totalPagTCE 	    = $totalPag;
+        $this->view->inicioTCE        = ($inicio+1);
+        $this->view->fimTCE            = $fim;
+        $this->view->totalPagTCE        = $totalPag;
         $this->view->parametrosBuscaTCE = $_POST;
-
     }
 
     public function projetosOutrasSituacoesAction()
     {
-
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
 
         $post   = Zend_Registry::get('post');
@@ -543,9 +555,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_dadosDiligencia = false;
 
         $pag = 1;
-        //$get = Zend_Registry::get('get');
-        if (isset($post->pagOS)) $pag = $post->pagOS;
-        if (isset($post->tamPagOS)) $this->intTamPag = $post->tamPagOS;
+        if (isset($post->pagOS)) {
+            $pag = $post->pagOS;
+        }
+        if (isset($post->tamPagOS)) {
+            $this->intTamPag = $post->tamPagOS;
+        }
 
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
         $fim = $inicio + $this->intTamPag;
@@ -554,55 +569,56 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
         //PRONAC
-        if(!empty($post->pronac)){
+        if (!empty($post->pronac)) {
             $arrBusca["p.AnoProjeto + p.Sequencial = ?"] = trim($post->pronac);
             $arrBusca["p.Situacao IN (?) "] = $this->arrSituacoesDePrestacaoContas;
         }
 
         //SITUACAO
-        if ( isset($post->situacao) && !empty($post->situacao)){
-            //$situacoesGrids = implode('\',\'',$this->arrSituacoesGrids);
-            //$situacoesGrids = "'".$situacoesGrids."'";
-            //$arrBusca["p.Situacao = '".$post->situacao."' AND p.Situacao NOT IN ({$situacoesGrids}) "] = '(?)';
-            $arrBusca = $this->incluiRegrasGridsPrincipais($arrBusca,$post);
+        if (isset($post->situacao) && !empty($post->situacao)) {
+            $arrBusca = $this->incluiRegrasGridsPrincipais($arrBusca, $post);
             $arrBusca["p.Situacao = ? "] = $post->situacao;
-            if(in_array($post->situacao,$this->arrSituacoesDevolvidosAposAnalise) || in_array($post->situacao,$this->arrSituacoesDiligenciados)  || in_array($post->situacao,$this->arrSituacoesTCE) ){
+            if (in_array($post->situacao, $this->arrSituacoesDevolvidosAposAnalise) || in_array($post->situacao, $this->arrSituacoesDiligenciados)  || in_array($post->situacao, $this->arrSituacoesTCE)) {
                 $bln_encaminhamento = true;
             }
-            if(in_array($post->situacao,$this->arrSituacoesDiligenciados)){
+            if (in_array($post->situacao, $this->arrSituacoesDiligenciados)) {
                 $bln_dadosDiligencia = true;
             }
-        }else{
+        } else {
             //deve fazer este filtro apenas de nao for enviado o PRONAC na pesquisa
-            if(empty($post->pronac)){
-                $situacoesDePrestacaoContasMenosGrid = implode('\',\'',$this->arrSituacoesDePrestacaoContasMenosGrid);
+            if (empty($post->pronac)) {
+                $situacoesDePrestacaoContasMenosGrid = implode('\',\'', $this->arrSituacoesDePrestacaoContasMenosGrid);
                 $situacoesDePrestacaoContasMenosGrid = "'".$situacoesDePrestacaoContasMenosGrid."'";
                 $arrBusca["p.Situacao IN ({$situacoesDePrestacaoContasMenosGrid}) "] = '(?)';
-                //$arrBusca["p.Situacao IN ('".implode(',',$this->arrSituacoesDePrestacaoContasMenosGrid)."') AND p.Situacao NOT IN ('".implode(',',$this->arrSituacoesGrids)."') "] = '(?)';
             }
         }
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, $bln_encaminhamento, $bln_dadosDiligencia);
 
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        if ($fim>$total) $fim = $total;
+        if ($fim>$total) {
+            $fim = $total;
+        }
 
         $ordem = array();
-        if(!empty($post->ordenacaoOS)){ $ordem[] = "{$post->ordenacaoOS} {$post->tipoOrdenacaoOS}"; }else{$ordem = array('1 ASC');}
+        if (!empty($post->ordenacaoOS)) {
+            $ordem[] = "{$post->ordenacaoOS} {$post->tipoOrdenacaoOS}";
+        } else {
+            $ordem = array('1 ASC');
+        }
 
         $rs = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, $ordem, $tamanho, $inicio, null, $bln_encaminhamento, $bln_dadosDiligencia);
 
-        $this->view->registrosOS 	  = $rs;
-        $this->view->pagOS 		  = $pag;
+        $this->view->registrosOS      = $rs;
+        $this->view->pagOS          = $pag;
         $this->view->totalOS          = $total;
-        $this->view->inicioOS 	  = ($inicio+1);
-        $this->view->fimOS		  = $fim;
-        $this->view->totalPagOS 	  = $totalPag;
+        $this->view->inicioOS      = ($inicio+1);
+        $this->view->fimOS          = $fim;
+        $this->view->totalPagOS      = $totalPag;
         $this->view->parametrosBuscaOS = $_POST;
-
     }
 
     /**
@@ -615,12 +631,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $bln_envioufiltro = 'false';
         $this->view->parametroPesquisado = 'OUTRAS SITUA&Ccedil;&Otilde;ES';
 
-        // cria a sess�o com o grupo ativo
-        $GrupoAtivo = new Zend_Session_Namespace ( 'GrupoAtivo' );
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $this->view->Grupo = $GrupoAtivo->codGrupo;
 
-        $db = Zend_Registry::get ( 'db' );
-        $db->setFetchMode ( Zend_DB::FETCH_OBJ );
+        $db = Zend_Registry::get('db');
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
         //manteM os parametros de pesquisa enviados da tela anterior para ser capturado pelo ajax na hora de abrir o painel
         $this->view->parametrosBuscaPrestacaoContas  = $_POST;
@@ -636,140 +651,146 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $rsSituacao   = $tblSituacao->buscar(array("Codigo IN (?)"=>$situacoes));
 
         //se pesquisou pela SITUACAO do projeto
-        if (isset($post->situacao) && !empty($post->situacao)){
+        if (isset($post->situacao) && !empty($post->situacao)) {
             $descricaoSituacao  = $tblSituacao->buscar(array("Codigo = ?"=>$post->situacao))->current();
         }
-        if(isset($descricaoSituacao) && !empty($descricaoSituacao)){
+        if (isset($descricaoSituacao) && !empty($descricaoSituacao)) {
             $this->view->parametroPesquisado = $descricaoSituacao->Codigo.' - '.$descricaoSituacao->Descricao;
         }
         //se pesquisou pelo PRONAC
-        if (isset($post->pronac) && !empty($post->pronac)){
+        if (isset($post->pronac) && !empty($post->pronac)) {
             $rsProjeto = $tblProjeto->buscar(array("AnoProjeto+Sequencial = ?" => $post->pronac))->current();
-            if(empty($rsProjeto)){ $this->view->bln_pronacValido = "false"; }
+            if (empty($rsProjeto)) {
+                $this->view->bln_pronacValido = "false";
+            }
         }
-        if(isset($rsProjeto) && !empty($rsProjeto)){
+        if (isset($rsProjeto) && !empty($rsProjeto)) {
             $this->view->parametroPesquisado = 'PRONAC: '.$post->pronac.' - '.$rsProjeto->NomeProjeto;
         }
         //IF - RECUPERA ORGAOS PARA POPULAR COMBO AO ENCAMINHAR PROJETO
-        if (isset ( $_POST ['verifica'] ) and $_POST ['verifica'] == 'a') {
+        if (isset($_POST ['verifica']) and $_POST ['verifica'] == 'a') {
             $idOrgaoDestino = $_POST ['idorgao'];
-            // desabilita o Zend_Layout
-            $this->_helper->layout->disableLayout ();
+            $this->_helper->layout->disableLayout();
 
             $tblProjetos  = new Projetos();
             $AgentesOrgao = $tblProjetos->buscarComboOrgaos($idOrgaoDestino, 125);
 
             $a = 0;
             if (count($AgentesOrgao)>0) {
-                foreach($AgentesOrgao as $agentes) {
+                foreach ($AgentesOrgao as $agentes) {
                     $dadosAgente[$a]['usu_codigo'] = $agentes->usu_codigo;
-                    $dadosAgente[$a]['usu_nome']   = utf8_encode ( $agentes->usu_nome );
-                    $dadosAgente[$a]['Perfil']     = utf8_encode ( $agentes->gru_nome );
+                    $dadosAgente[$a]['usu_nome']   = utf8_encode($agentes->usu_nome);
+                    $dadosAgente[$a]['Perfil']     = utf8_encode($agentes->gru_nome);
                     $dadosAgente[$a]['idperfil']   = $agentes->gru_codigo;
-                    $dadosAgente[$a]['idAgente']   = utf8_encode ( $agentes->idAgente );
+                    $dadosAgente[$a]['idAgente']   = utf8_encode($agentes->idAgente);
                     $a ++;
                 }
 
                 $jsonEncode = json_encode($dadosAgente);
 
-                //echo $jsonEncode;
-                $this->_helper->json(array ('resposta' => true, 'conteudo' => $dadosAgente) );
+                $this->_helper->json(array('resposta' => true, 'conteudo' => $dadosAgente));
             } else {
-                $this->_helper->json(array ('resposta' => false) );
+                $this->_helper->json(array('resposta' => false));
             }
-            $this->_helper->viewRenderer->setNoRender(TRUE);
+            $this->_helper->viewRenderer->setNoRender(true);
         }
 
         //IF - BUSCA NOMES DOS TECNICOS QUANDO ENVIA O ORGAO PARA ENCAMINHAR PROJETO
-        if (isset ( $_POST ['verifica2'] ) and $_POST ['verifica2'] == 'x') {
+        if (isset($_POST ['verifica2']) and $_POST ['verifica2'] == 'x') {
             $idagente = $_POST ['idagente'];
             if ($idagente != '') {
-                $this->_helper->layout->disableLayout (); // desabilita o Zend_Layout
-                $AgentesPerfil = ReadequacaoProjetos::dadosAgentesPerfil ( $idagente );
-                $AgentesPerfil = $db->fetchAll ( $AgentesPerfil );
+                $this->_helper->layout->disableLayout();
+                $AgentesPerfil = ReadequacaoProjetos::dadosAgentesPerfil($idagente);
+                $AgentesPerfil = $db->fetchAll($AgentesPerfil);
                 $idperfil      = $AgentesPerfil [0]->idVerificacao;
                 echo $idperfil;
             } else {
                 echo "";
             }
-            $this->_helper->viewRenderer->setNoRender(TRUE);
+            $this->_helper->viewRenderer->setNoRender(true);
         }
 
-        $sqllistasDeEntidadesVinculadas = ReadequacaoProjetos::retornaSQLlista ( "listasDeEntidadesVinculadas", NULL );
-        $listaEntidades             = $db->fetchAll ( $sqllistasDeEntidadesVinculadas );
+        $sqllistasDeEntidadesVinculadas = ReadequacaoProjetos::retornaSQLlista("listasDeEntidadesVinculadas", null);
+        $listaEntidades             = $db->fetchAll($sqllistasDeEntidadesVinculadas);
         $this->view->listaEntidades = $listaEntidades;
 
-        /*=====================================================*/
         /*============== TOTAL AGUARDANDO ANALISE =============*/
-        /*=====================================================*/
         $bln_dadosDiligencia = false;
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
         //NOME PROJETO
-        if(!empty($post->NomeProjeto)){
+        if (!empty($post->NomeProjeto)) {
             $projeto = ($post->NomeProjeto);
-            if($post->tipoPesqNomeProjeto == 'QC'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
-            }else if($post->tipoPesqNomeProjeto == 'EIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto = ?"] = "{$projeto}"; }
-            }else if($post->tipoPesqNomeProjeto == 'IIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
+            if ($post->tipoPesqNomeProjeto == 'QC') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'EIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto = ?"] = "{$projeto}";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'IIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%";
+                }
             }
-            //if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
         }
         $arrBusca['p.Situacao in (?)']= $this->arrSituacoesAguardandoAnalise;
 
         //DILIGENCIA
-        if(!empty($post->diligencia)){
-            if($post->diligencia == "abertas"){
+        if (!empty($post->diligencia)) {
+            if ($post->diligencia == "abertas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-            }elseif($post->diligencia == "respondidas"){
+            } elseif ($post->diligencia == "respondidas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
             }
             $bln_dadosDiligencia = true;
         }
         $total = 0;
-        $tblProjetos = new Projetos ();
-        //$total = $tbl->buscarProjetosVotoAlterado($arrBusca, array(), null, null, true);
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, false, $bln_dadosDiligencia);
         $this->view->totalAguardandoAnalise = $total;
 
-        if ( (isset($post->tpPeriodoExecucao) && !empty($post->tpPeriodoExecucao)) || !empty($post->pronac) || !empty($post->NomeProjeto) || !empty($post->uf) || !empty($post->mecanismo) || !empty($post->situacao) || !empty($post->diligencia)){
+        if ((isset($post->tpPeriodoExecucao) && !empty($post->tpPeriodoExecucao)) || !empty($post->pronac) || !empty($post->NomeProjeto) || !empty($post->uf) || !empty($post->mecanismo) || !empty($post->situacao) || !empty($post->diligencia)) {
             $bln_envioufiltro='true';
         }
         $this->view->bln_envioufiltro = $bln_envioufiltro;
 
-        /*=====================================================*/
         /*============= TOTAL DEVOLVIDOS APOS ANALISE =========*/
-        /*=====================================================*/
 
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
         //NOME PROJETO
-        if(!empty($post->NomeProjeto)){
+        if (!empty($post->NomeProjeto)) {
             $projeto = ($post->NomeProjeto);
-            if($post->tipoPesqNomeProjeto == 'QC'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
-            }else if($post->tipoPesqNomeProjeto == 'EIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto = ?"] = "{$projeto}"; }
-            }else if($post->tipoPesqNomeProjeto == 'IIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
+            if ($post->tipoPesqNomeProjeto == 'QC') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'EIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto = ?"] = "{$projeto}";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'IIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%";
+                }
             }
         }
 
         //SITUACAO
         $arrBusca['p.Situacao in (?)']= $this->arrSituacoesDevolvidosAposAnalise;
-        if(isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E18'){
+        if (isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E18') {
             $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
         }
 
         //DILIGENCIA
-        if(!empty($post->diligencia)){
-            if($post->diligencia == "abertas"){
+        if (!empty($post->diligencia)) {
+            if ($post->diligencia == "abertas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-            }elseif($post->diligencia == "respondidas"){
+            } elseif ($post->diligencia == "respondidas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
             }
         }
@@ -780,39 +801,43 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca['e.stAtivo = ?']= 1;
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, true, true);
         $this->view->totalDevolvidosAposAnalise = $total;
 
-        /*=====================================================*/
         /*============= TOTAL DILIGENCIADOS ===================*/
-        /*=====================================================*/
 
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
         //NOME PROJETO
-        if(!empty($post->NomeProjeto)){
+        if (!empty($post->NomeProjeto)) {
             $projeto = ($post->NomeProjeto);
-            if($post->tipoPesqNomeProjeto == 'QC'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
-            }else if($post->tipoPesqNomeProjeto == 'EIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto = ?"] = "{$projeto}"; }
-            }else if($post->tipoPesqNomeProjeto == 'IIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
+            if ($post->tipoPesqNomeProjeto == 'QC') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'EIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto = ?"] = "{$projeto}";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'IIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%";
+                }
             }
         }
         //SITUACAO
         $arrBusca['p.Situacao in (?)']= $this->arrSituacoesDiligenciados;
-        if(isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E17'){
+        if (isset($post->situacao) && !empty($post->situacao) && $post->situacao != 'E17') {
             $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
         }
 
         //DILIGENCIA
-        if(!empty($post->diligencia)){
-            if($post->diligencia == "abertas"){
+        if (!empty($post->diligencia)) {
+            if ($post->diligencia == "abertas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-            }elseif($post->diligencia == "respondidas"){
+            } elseif ($post->diligencia == "respondidas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
             }
         }
@@ -825,39 +850,42 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscaProjetoDiligenciadosPrestacaoContas($arrBusca, array(), null, null, true);
         $this->view->totalDiligenciados = $total;
 
-
-        /*=====================================================*/
         /*============= TOTAL PROJETOS TCE ====================*/
-        /*=====================================================*/
 
         //MONTA ARRAY BUSCA COM PARAMETROS COINCIDENTES PARA TODOS OS GRIDS DO COORD.
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
         //NOME PROJETO
-        if(!empty($post->NomeProjeto)){
+        if (!empty($post->NomeProjeto)) {
             $projeto = ($post->NomeProjeto);
-            if($post->tipoPesqNomeProjeto == 'QC'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
-            }else if($post->tipoPesqNomeProjeto == 'EIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto = ?"] = "{$projeto}"; }
-            }else if($post->tipoPesqNomeProjeto == 'IIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
+            if ($post->tipoPesqNomeProjeto == 'QC') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'EIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto = ?"] = "{$projeto}";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'IIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%";
+                }
             }
         }
 
         $arrBusca['p.Situacao in (?)'] = $this->arrSituacoesTCE;
-        if ( isset($post->situacao) && !empty($post->situacao)){
+        if (isset($post->situacao) && !empty($post->situacao)) {
             $arrBusca["NOT EXISTS(SELECT TOP 1 * FROM BDCORPORATIVO.scSAC.tbEncaminhamentoPrestacaoContas where idOrgaoDestino in ('177','12')and stAtivo=1)"] = '(?)'; //eliminando projetos que estao em consultoria
         }
         //DILIGENCIA
-        if(!empty($post->diligencia)){
-            if($post->diligencia == "abertas"){
+        if (!empty($post->diligencia)) {
+            if ($post->diligencia == "abertas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NULL AND idTipoDiligencia = '174')"] = '(?)';
-            }elseif($post->diligencia == "respondidas"){
+            } elseif ($post->diligencia == "respondidas") {
                 $arrBusca["EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia d where d.idPronac = p.idPronac AND d.DtSolicitacao IS NOT NULL AND d.DtResposta IS NOT NULL AND stEnviado = 'S' AND idTipoDiligencia = '174')"] = '(?)';
             }
         }
@@ -868,13 +896,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca['e.stAtivo = ?']= 1;
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, true);
         $this->view->totalProjetosTCE = $total;
 
-        /*=====================================================*/
         /*============== OUTRAS SITUACOES =====================*/
-        /*=====================================================*/
         $bln_encaminhamento = false;
         $bln_dadosDiligencia = false;
 
@@ -882,58 +908,63 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrBusca = $this->montaArrBuscaCoincidentes($post);
 
         //NOME PROJETO
-        if(!empty($post->NomeProjeto)){
+        if (!empty($post->NomeProjeto)) {
             $projeto = ($post->NomeProjeto);
-            if($post->tipoPesqNomeProjeto == 'QC'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%"; }
-            }else if($post->tipoPesqNomeProjeto == 'EIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto = ?"] = "{$projeto}"; }
-            }else if($post->tipoPesqNomeProjeto == 'IIG'){
-                if(!empty($post->NomeProjeto)){ $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%"; }
+            if ($post->tipoPesqNomeProjeto == 'QC') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "%{$projeto}%";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'EIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto = ?"] = "{$projeto}";
+                }
+            } elseif ($post->tipoPesqNomeProjeto == 'IIG') {
+                if (!empty($post->NomeProjeto)) {
+                    $arrBusca["p.NomeProjeto like (?)"] = "{$projeto}%";
+                }
             }
         }
 
         //PRONAC
-        if(!empty($post->pronac)){
+        if (!empty($post->pronac)) {
             $arrBusca["p.AnoProjeto + p.Sequencial = ?"] = trim($post->pronac);
             $arrBusca["p.Situacao IN (?) "] = $this->arrSituacoesDePrestacaoContas;
         }
         //SITUACAO
-        if ( isset($post->situacao) && !empty($post->situacao)){
-            $arrBusca = $this->incluiRegrasGridsPrincipais($arrBusca,$post);
+        if (isset($post->situacao) && !empty($post->situacao)) {
+            $arrBusca = $this->incluiRegrasGridsPrincipais($arrBusca, $post);
             $arrBusca["p.Situacao = ? "] = $post->situacao;
-            if(in_array($post->situacao,$this->arrSituacoesDevolvidosAposAnalise) || in_array($post->situacao,$this->arrSituacoesDiligenciados)  || in_array($post->situacao,$this->arrSituacoesTCE) ){
+            if (in_array($post->situacao, $this->arrSituacoesDevolvidosAposAnalise) || in_array($post->situacao, $this->arrSituacoesDiligenciados)  || in_array($post->situacao, $this->arrSituacoesTCE)) {
                 $bln_encaminhamento = true;
             }
-            if(in_array($post->situacao,$this->arrSituacoesDiligenciados)){
+            if (in_array($post->situacao, $this->arrSituacoesDiligenciados)) {
                 $bln_dadosDiligencia = true;
             }
-        }else{
+        } else {
             //deve fazer este filtro apenas se nao for enviado o PRONAC na pesquisa
-            if(empty($post->pronac)){
-                $situacoesDePrestacaoContasMenosGrid = implode('\',\'',$this->arrSituacoesDePrestacaoContasMenosGrid);
+            if (empty($post->pronac)) {
+                $situacoesDePrestacaoContasMenosGrid = implode('\',\'', $this->arrSituacoesDePrestacaoContasMenosGrid);
                 $situacoesDePrestacaoContasMenosGrid = "'".$situacoesDePrestacaoContasMenosGrid."'";
                 $arrBusca["p.Situacao IN ({$situacoesDePrestacaoContasMenosGrid}) "] = '(?)';
             }
         }
 
         $total = 0;
-        $tblProjetos = new Projetos ();
+        $tblProjetos = new Projetos();
         $total = $tblProjetos->buscarProjetosPrestacaoContas($arrBusca, array(), null, null, true, $bln_encaminhamento, $bln_dadosDiligencia, true);
         $this->view->totalProjetosOS = $total;
     }
 
-    public function historicoencaminhamentoAction(){
-
-        // desabilita o Zend_Layout
-        $this->_helper->layout->disableLayout ();
+    public function historicoencaminhamentoAction()
+    {
+        $this->_helper->layout->disableLayout();
 
         $post     = Zend_Registry::get("get");
         $idPronac = $post->idPronac;
 
         $this->view->Historico = array();
 
-        if (!empty ($idPronac)) {
+        if (!empty($idPronac)) {
             $tblProjeto = new Projetos();
             $rsProjeto  =  $tblProjeto->find($idPronac)->current();
 
@@ -952,26 +983,26 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * @param void
      * @return void
      */
-    public function laudofinalAction(){
-
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
-        $get = Zend_Registry::get ('get');
+    public function laudofinalAction()
+    {
+        $auth = Zend_Auth::getInstance();
+        $get = Zend_Registry::get('get');
         $idpronac = $this->getRequest()->getParam('idPronac');
         $nomeProponente = null;
 
-        $projetosDAO = new Projetos ();
+        $projetosDAO = new Projetos();
         $tblAgente = new Agente_Model_DbTable_Agentes();
 
-        $rsProjeto = $projetosDAO->buscar(array ('IdPRONAC = ? '=> "{$idpronac}"));
+        $rsProjeto = $projetosDAO->buscar(array('IdPRONAC = ? '=> "{$idpronac}"));
         $pronac = $rsProjeto[0]->AnoProjeto . $rsProjeto[0]->Sequencial;
 
         //Recuperando nome do proponente
         $rsAgente = $tblAgente->buscar(array("CNPJCPF = ? "=>$rsProjeto[0]->CgcCpf))->current();
 
-        if(!empty($rsAgente)){
+        if (!empty($rsAgente)) {
             $nomeProponente = $tblAgente->buscarAgenteENome(array("a.idAgente = ?"=>$rsAgente->idAgente))->current();
         }
-        if(!empty($nomeProponente)){
+        if (!empty($nomeProponente)) {
             $nomeProponente = $nomeProponente->Descricao;
         }
 
@@ -989,7 +1020,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $nomeChefe   = (!empty($rsParecerChefe)) ? $tblAgente->buscarAgenteENome(array("a.idAgente = ?"=>$rsParecerChefe->idAgente))->current() : '';
         $nomeCoord   = (!empty($rsParecerCoord)) ? $tblAgente->buscarAgenteENome(array("a.idAgente = ?"=>$rsParecerCoord->idAgente))->current() : '';
 
-        if(is_object($rsParecerTecnico)){
+        if (is_object($rsParecerTecnico)) {
             $this->view->parecerTecnico = $rsParecerTecnico;
             $this->view->parecerChefe   = $rsParecerChefe;
             $this->view->parecerCoord   = $rsParecerCoord;
@@ -997,25 +1028,24 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->nomeTecnico = $nomeTecnico;
             $this->view->nomeChefe   = $nomeChefe;
             $this->view->nomeCoord   = $nomeCoord;
-        }else{
+        } else {
             $this->view->parecerTecnico = array();
             $this->view->parecerChefe   = array();
             $this->view->parecerCoord   = array();
         }
-        /*********************************************************************************/
 
         $this->view->dadosInabilitado   = array();
         $this->view->resultadoParecer   = null;
         $this->view->tipoInabilitacao   = null;
 
         //resultado parecer
-        if($rsProjeto[0]->Situacao == 'E19'){
+        if ($rsProjeto[0]->Situacao == 'E19') {
             $this->view->resultadoParecer = 'Aprovado Integralmente';
         }
-        if($rsProjeto[0]->Situacao == 'E22'){
+        if ($rsProjeto[0]->Situacao == 'E22') {
             $this->view->resultadoParecer = 'Indeferido';
         }
-        if($rsProjeto[0]->Situacao == 'L03'){
+        if ($rsProjeto[0]->Situacao == 'L03') {
             $this->view->resultadoParecer = 'Aprovado com Ressalvas';
         }
 
@@ -1023,10 +1053,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $rsInabilitado = $tblInabilitado->buscar(array('AnoProjeto+Sequencial=?'=>$pronac))->current();
         $this->view->dadosInabilitado = $rsInabilitado;
 
-        if(is_object($rsInabilitado) && isset($rsInabilitado->idTipoInabilitado) && !empty($rsInabilitado->idTipoInabilitado)){
+        if (is_object($rsInabilitado) && isset($rsInabilitado->idTipoInabilitado) && !empty($rsInabilitado->idTipoInabilitado)) {
             $tbTipoInabilitado =  new tbTipoInabilitado();
             $rsTipoInabilitado = $tbTipoInabilitado->buscar(array('idTipoInabilitado=?'=>$rsInabilitado->idTipoInabilitado))->current();
-            if(is_object($rsTipoInabilitado)){
+            if (is_object($rsTipoInabilitado)) {
                 $this->view->tipoInabilitacao = $rsTipoInabilitado->dsTipoInabilitado;
             }
         }
@@ -1036,7 +1066,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $siglaOrgaoGuia = null;
         $docs = TramitarprojetosDAO::buscaProjetoPDF($idpronac);
 
-        foreach ($docs as $d){
+        foreach ($docs as $d) {
             //$idDocumento = $d->idDocumento;
             $processo = Mascara::addMaskProcesso($d->Processo);
             $siglaOrgaoGuia = $d->Sigla;
@@ -1055,20 +1085,20 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $Secretarios = array();
         foreach ($assinantes as $ass) {
             switch ($ass->tpCargo) {
-            case '1':
-                $CoordIncFisc[] = $ass;
-                break;
-            case '2':
-                $CoordGeral[] = $ass;
-                break;
-            case '3':
-                $Diretores[] = $ass;
-                break;
-            case '4':
-                $Secretarios[] = $ass;
-                break;
-            default:
-                break;
+                case '1':
+                    $CoordIncFisc[] = $ass;
+                    break;
+                case '2':
+                    $CoordGeral[] = $ass;
+                    break;
+                case '3':
+                    $Diretores[] = $ass;
+                    break;
+                case '4':
+                    $Secretarios[] = $ass;
+                    break;
+                default:
+                    break;
             }
         }
         $this->view->CoordIncFisc = $CoordIncFisc;
@@ -1078,13 +1108,13 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     }
 
     /*Laudo Final*/
-    public function laudofinalInabilitadoAction(){
-
-        $get      = Zend_Registry::get ('get');
+    public function laudofinalInabilitadoAction()
+    {
+        $get = Zend_Registry::get('get');
         $idpronac = $get->idPronac;
 
-        $projetosDAO = new Projetos ();
-        $resposta    = $projetosDAO->buscar(array ('IdPRONAC = ? '=> "{$idpronac}"));
+        $projetosDAO = new Projetos();
+        $resposta    = $projetosDAO->buscar(array('IdPRONAC = ? '=> "{$idpronac}"));
 
         $this->view->pronac      = $resposta [0]->AnoProjeto . $resposta [0]->Sequencial;
         $this->view->nomeProjeto = $resposta[0]->NomeProjeto;
@@ -1094,10 +1124,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $rsParecerTecnico = $RelatorioTecnico->buscar(array('IdPRONAC=?'=>$idpronac,'cdGrupo=?'=>124))->current();
         $rsParecerChefe   = $RelatorioTecnico->buscar(array('IdPRONAC=?'=>$idpronac,'cdGrupo=?'=>132))->current();
 
-        if(is_object($rsParecerTecnico)){
+        if (is_object($rsParecerTecnico)) {
             $this->view->parecerTecnico = $rsParecerTecnico;
             $this->view->parecerChefe   = $rsParecerChefe;
-        }else{
+        } else {
             $this->view->parecerTecnico = array();
             $this->view->parecerChefe   = array();
         }
@@ -1106,9 +1136,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /*Laudo Final - Final*/
     public function gravarlaudofinalAction()
     {
-        $post = Zend_Registry::get ('post');
+        $post = Zend_Registry::get('post');
         $idPronac = $post->idPronac;
-        $parecer = NULL;
+        $parecer = null;
 
         $idTipoInabilitado = null;
         $arrOpcaoEscolhida = array();
@@ -1159,7 +1189,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $tbLaudoFinal->inserir($dadosLaudoFinal);
 
             //alteracao projeto
-            $tblProjeto = new Projetos ();
+            $tblProjeto = new Projetos();
             $rsProjeto = $tblProjeto->find($idPronac)->current();
 
             $cpfCnpj = $rsProjeto->CgcCpf;
@@ -1198,10 +1228,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             }
 
             $this->_forward('gerarpdf');
-            //            parent::message('Laudo final da prestacao de contas emitido com sucesso!', "realizarprestacaodecontas/laudofinal?idPronac={$idPronac}&gerarGuia=true", 'CONFIRM');
         } catch (Exception $e) {
             parent::message('Erro ao gravar laudo final!', "realizarprestacaodecontas/laudofinal?idPronac=" . $idPronac, 'ERROR');
-            //$this->_redirect("realizarprestacaodecontas/laudofinal?idPronac=".$idPronac."&tipoMsg=ERROR&msg=Erro ao gravar laudo final! ");
             return;
         }
     }
@@ -1212,7 +1240,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      */
     public function consultarLaudoFinalAction()
     {
-
     }
 
     /*
@@ -1221,40 +1248,37 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      */
     public function analisarLaudoFinalAction()
     {
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $GrupoUsuario = $GrupoAtivo->codGrupo;
 
-        if($GrupoUsuario != 126 && $GrupoUsuario != 151 && $GrupoUsuario != 148){ //Se o perfil for diferente de Coord. Geral de Presta&ccedil;&atilde;o de Contas, n�o permite o acesso dessa funcionalidade.
+        if ($GrupoUsuario != 126 && $GrupoUsuario != 151 && $GrupoUsuario != 148) { //Se o perfil for diferente de Coord. Geral de Presta&ccedil;&atilde;o de Contas, n�o permite o acesso dessa funcionalidade.
             parent::message('Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa funcionalidade.', "principal", 'ALERT');
         }
 
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -1263,7 +1287,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $pag = 1;
         $post  = Zend_Registry::get('get');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
@@ -1276,23 +1302,23 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $where['e.stAtivo = ?'] = 1;
         $where['rt.cdGrupo in (?)'] = array(125,126);
 
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
-            case 'aprovado': //Aprovados
-                $where['rt.siManifestacao = ?'] = 1;
-                break;
-            case 'reprovado': //Reprovados
-                $where['rt.siManifestacao = ?'] = 0;
-                break;
-            default: //Aguardando Analise
-                break;
+                case 'aprovado': //Aprovados
+                    $where['rt.siManifestacao = ?'] = 1;
+                    break;
+                case 'reprovado': //Reprovados
+                    $where['rt.siManifestacao = ?'] = 0;
+                    break;
+                default: //Aguardando Analise
+                    break;
             }
         }
 
@@ -1323,39 +1349,35 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->qtdRegistros  = $total;
         $this->view->dados         = $busca;
         $this->view->intTamPag     = $this->intTamPag;
-
     }
 
     public function imprimirAnalisesLaudoFinalAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -1364,7 +1386,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $pag = 1;
         $post  = Zend_Registry::get('post');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
@@ -1377,23 +1401,23 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $where['e.stAtivo = ?'] = 1;
         $where['rt.cdGrupo in (?)'] = array(125,126);
 
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
-            case 'aprovado': //Aprovados
-                $where['rt.siManifestacao = ?'] = 1;
-                break;
-            case 'reprovado': //Reprovados
-                $where['rt.siManifestacao = ?'] = 0;
-                break;
-            default: //Aguardando Analise
-                break;
+                case 'aprovado': //Aprovados
+                    $where['rt.siManifestacao = ?'] = 1;
+                    break;
+                case 'reprovado': //Reprovados
+                    $where['rt.siManifestacao = ?'] = 0;
+                    break;
+                default: //Aguardando Analise
+                    break;
             }
         }
 
@@ -1405,8 +1429,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $Projetos->buscarPainelCoordGeralPrestDeContas($where, $order, $tamanho, $inicio, false, $filtro);
 
-        if(isset($post->xls) && $post->xls){
-
+        if (isset($post->xls) && $post->xls) {
             $html = '';
             $html .= '<table style="border: 1px">';
             $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="9">Analisar Laudo Final</td></tr>';
@@ -1426,15 +1449,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $html .= '</tr>';
 
             $i=1;
-            foreach ($busca as $projeto){
-
+            foreach ($busca as $projeto) {
                 $mecanismo = $projeto->Mecanismo;
-                if($mecanismo == 'Mecenato'){
+                if ($mecanismo == 'Mecenato') {
                     $mecanismo = "Incentivo Fiscal";
                 }
 
                 $siManifestacao = 'Reprovado';
-                if($projeto->siManifestacao == 1){
+                if ($projeto->siManifestacao == 1) {
                     $siManifestacao = 'Aprovado';
                 }
 
@@ -1457,8 +1479,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
             header("Content-Type: application/vnd.ms-excel");
             header("Content-Disposition: inline; filename=Painel_Analisar_Laudo_Final.ods;");
-            echo $html; $this->_helper->viewRenderer->setNoRender(TRUE);
-
+            echo $html;
+            $this->_helper->viewRenderer->setNoRender(true);
         } else {
             $this->view->dados = $busca;
         }
@@ -1490,7 +1512,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $isAprovado = '';
         foreach ($resultados as $r) {
-            if($r->cdGrupo == 125 || $r->cdGrupo == 126){
+            if ($r->cdGrupo == 125 || $r->cdGrupo == 126) {
                 $isAprovado = $r->siManifestacao == 1 ? 'aprovado' : 'reprovado';
             }
         }
@@ -1513,39 +1535,41 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $partialPath = "realizarprestacaodecontas/partial/laudo-final/";
         $partials = array(
             $this->view->partial("{$partialPath}/{$folder}/laudo.phtml"),
-            $this->view->partial("{$partialPath}/{$folder}/comunicado.phtml"),
+            /* $this->view->partial("{$partialPath}/{$folder}/comunicado.phtml"), */
             $this->view->partial("{$partialPath}/parecer-tecnico.phtml"),
         );
 
         $html = implode('<div style="page-break-before: always;">', $partials);
+
         $html .= '<script language="javascript" type="text/javascript" src="/minc/salic/public/js/jquery-1.4.2.min.js"></script><script type="text/javascript">$(document).ready(function(){window.print();});</script>';
         $html .= $this->view->partial("{$partialPath}/parecer-chefe-de-divisao.phtml");
 
         foreach ($dados as $key => $value) {
-            $html = str_replace("{{$key}}", $value, $html);
+            $html = str_replace("{{$key}}", utf8_encode($value), $html);
         }
 
         foreach ($resultados as $key => $value) {
-            if($value->cdGrupo == 124){
+            if ($value->cdGrupo == 124) {
                 $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular';
-                $html = str_replace("{manifestacaoParecerTecnico}", $manifestacao, $html);
-                $html = str_replace("{parecerDoTecnico}", $value['meRelatorio'], $html);
-
-            } else if($value->cdGrupo == 132){
+                $html = str_replace("{manifestacaoParecerTecnico}", utf8_encode($manifestacao), $html);
+                $html = str_replace("{parecerDoTecnico}", utf8_encode($value['meRelatorio']), $html);
+            } elseif ($value->cdGrupo == 132) {
                 $manifestacao = $value['siManifestacao'] == 1 ? 'Regular' : 'Irregular';
-                $html = str_replace("{manifestacaoChefeDeDivisao}", $manifestacao, $html);
-                $html = str_replace("{parecerDoChefeDeDivisao}", $value['meRelatorio'], $html);
+                $html = str_replace("{manifestacaoChefeDeDivisao}", utf8_encode($manifestacao), $html);
+                $html = str_replace("{parecerDoChefeDeDivisao}", utf8_encode($value['meRelatorio']), $html);
             }
         }
+
         $tbLaudoFinal = new tbLaudoFinal();
         $dadosLaudo = $tbLaudoFinal->buscar(array('idPronac=?'=>$dados->IdPRONAC));
-        foreach ($dadosLaudo as $key => $value) {
-            $html = str_replace("{coordenadorIncentivoFiscal}", $value->nmCoordIncentivos, $html);
-            $html = str_replace("{coordenadorPrestacaoDeContas}", $value->nmCoordPrestacao, $html);
-            $html = str_replace("{diretorIncentivoACultura}", $value->nmDiretor, $html);
-            $html = str_replace("{coordenadorIncentivoACultura}", $value->nmSecretario, $html);
-        }
+        /* foreach ($dadosLaudo as $key => $value) { */
+        /*     $html = str_replace("{coordenadorIncentivoFiscal}", $value->nmCoordIncentivos, $html); */
+        /*     $html = str_replace("{coordenadorPrestacaoDeContas}", $value->nmCoordPrestacao, $html); */
+        /*     $html = str_replace("{diretorIncentivoACultura}", $value->nmDiretor, $html); */
+        /*     $html = str_replace("{coordenadorIncentivoACultura}", $value->nmSecretario, $html); */
+        /* } */
 
+        header('Content-Type: text/html; charset=utf-8');
         echo $html;
     }
 
@@ -1555,21 +1579,19 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * @param void
      * @return void
      */
-    public function avaliacaoFinalDoLaudoAction() {
+    public function avaliacaoFinalDoLaudoAction()
+    {
         $get = Zend_Registry::get('get');
 
-        // cria a sess�o com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
-        //  �rg�o ativo na sess�o
         $codOrgao = $GrupoAtivo->codOrgao;
 
-        $tblProjeto = new Projetos ();
+        $tblProjeto = new Projetos();
         $rsProjeto = $tblProjeto->find($get->idPronac)->current();
 
         try {
-
-            if($get->avaliacao == 'aprovado') {
+            if ($get->avaliacao == 'aprovado') {
                 // Aprovado
                 $situacao = 'D42';
                 $ProvidenciaTomada = 'Aguardando Publica&ccedil;&atilde;o de Portaria da Presta&ccedil;&atilde;o de Contas';
@@ -1604,7 +1626,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             );
             $Aprovacao->inserir($dadosAprovacao);
             parent::message('Projeto encaminhado para publica&ccedil;&atilde;o do Di&aacute;rio Oficial com sucesso.', "realizarprestacaodecontas/analisar-laudo-final", 'CONFIRM');
-
         } catch (Exception $e) {
             parent::message('Erro ao encaminhar o projeto para publica&ccedil;&atilde;o do Di&aacute;rio Oficial.', "realizarprestacaodecontas/analisar-laudo-final", 'ERROR');
         }
@@ -1617,11 +1638,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      * @param void
      * @return void
      */
-    public function encaminharprestacaodecontasAction() {
+    public function encaminharprestacaodecontasAction()
+    {
         $tipoFiltro = $this->_request->getParam('tipoFiltro');
         $this->view->pag = 1; //Se tirar isso, nao funciona. Por isso nao foi retirado!
 
-        /** Usuario Logado *********************************************** */
         // caso o formulario seja enviado via post
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $auth               = Zend_Auth::getInstance();
@@ -1635,7 +1656,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         // recebe os dados via post
         $post = Zend_Registry::get('post');
         if ($this->getRequest()->isPost() && !empty($post->dsjustificativa)) {
-
             $idPronac               = $post->idPronac;
             $dtInicioEncaminhamento = new Zend_Db_Expr('GETDATE()');
             $dsJustificativa        = $post->dsjustificativa;
@@ -1653,11 +1673,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 //100: 12 CONJUR
                 //SE O ENCAMINHAMENTO FOR DO COORDENADOR PARA O TECNICO - ALTERA SITUACAO DO PROJETO
 
-                if ( ($this->codGrupo == 125 || $this->codGrupo == 126 || $this->codGrupo == 132) && $idGrupoDestino == 124) {
+                if (($this->codGrupo == 125 || $this->codGrupo == 126 || $this->codGrupo == 132) && $idGrupoDestino == 124) {
                     // altera a situacao do projeto AO ENCAMINHAR PARA O TECNICO
                     $tblProjeto = new Projetos();
                     $tblProjeto->alterarSituacao($idPronac, '', 'E27', 'Comprova&ccedil;&atilde;o Financeira do Projeto em Análise');
-                } else if ($this->codGrupo == 124 && $idGrupoDestino == 132) {
+                } elseif ($this->codGrupo == 124 && $idGrupoDestino == 132) {
                     // SE O ENCAMINHAMENTO FOR DO TECNICO PARA O CHEFE/COORDENADOR (DEVOLUCAO) - ALTERAR SITUACAO DO PROJETO
                     $tblProjeto = new Projetos();
                     $tblProjeto->alterarSituacao($idPronac, '', 'E68', 'Projeto devolvido para o Chefe de Divis&atilde;o - Aguarda an&aacute;lise financeira');
@@ -1690,12 +1710,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 if ($idTblEncaminhamento) {
                     // altera todos os encaminhamentos anteriores para stAtivo = 0
-                    $tblEncaminhamento->update(array('stAtivo'=>0),array('idPronac = ?'=>$idPronac, 'idEncPrestContas != ?' => $idTblEncaminhamento));
+                    $tblEncaminhamento->update(array('stAtivo'=>0), array('idPronac = ?'=>$idPronac, 'idEncPrestContas != ?' => $idTblEncaminhamento));
                 }
 
-                if($this->codGrupo == 132){
+                if ($this->codGrupo == 132) {
                     parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
-                } else if($this->codGrupo == 124){
+                } elseif ($this->codGrupo == 124) {
                     parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "realizarprestacaodecontas/tecnicoprestacaocontas?tipoFiltro=".$tipoFiltro, 'CONFIRM');
                 } else {
                     parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "realizarprestacaodecontas/painel?tipoFiltro=".$tipoFiltro, 'CONFIRM');
@@ -1704,7 +1724,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 parent::message('Erro ao tentar salvar os dados!', "principal", 'ERROR');
             }
         } else {
-            // desabilita o Zend_Layout
             $this->_helper->layout->disableLayout();
 
             $post = Zend_Registry::get("post");
@@ -1723,7 +1742,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->consultoriasResp = $rsEncResp;
 
             if (!empty($idPronac)) {
-                //$idPronac = 130978;
                 $tblProjeto = new Projetos();
                 $rsProjeto = $tblProjeto->find($idPronac)->current();
 
@@ -1761,21 +1779,20 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     public function carregarDestinatariosAction()
     {
         //IF - RECUPERA ORGAOS PARA POPULAR COMBO AO ENCAMINHAR PROJETO
-        if (isset ( $_POST ['verifica'] ) and $_POST ['verifica'] == 'a') {
+        if (isset($_POST ['verifica']) and $_POST ['verifica'] == 'a') {
             $idOrgaoDestino  = $_POST ['idorgao'];
             $idPerfilDestino = $_POST['idPerfilDestino'];
 
-            // desabilita o Zend_Layout
-            $this->_helper->layout->disableLayout ();
+            $this->_helper->layout->disableLayout();
 
             $tblProjetos  = new Projetos();
             $AgentesOrgao = $tblProjetos->buscarComboOrgaos($idOrgaoDestino, $idPerfilDestino);
 
             $a = 0;
             if (count($AgentesOrgao)>0) {
-                foreach($AgentesOrgao as $agentes) {
+                foreach ($AgentesOrgao as $agentes) {
                     $dadosAgente[$a]['usu_codigo'] = $agentes->usu_codigo;
-                    $dadosAgente[$a]['usu_nome']   = utf8_encode ( $agentes->usu_nome );
+                    $dadosAgente[$a]['usu_nome']   = utf8_encode($agentes->usu_nome);
                     $dadosAgente[$a]['idperfil']   = $idPerfilDestino;
                     $dadosAgente[$a]['idAgente']   = $agentes->usu_codigo;
                     $a ++;
@@ -1783,72 +1800,68 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 $jsonEncode = json_encode($dadosAgente);
 
-                //echo $jsonEncode;
-                $this->_helper->json(array ('resposta' => true, 'conteudo' => $dadosAgente) );
+                $this->_helper->json(array('resposta' => true, 'conteudo' => $dadosAgente));
             } else {
-                $this->_helper->json(array ('resposta' => false) );
+                $this->_helper->json(array('resposta' => false));
             }
-            $this->_helper->viewRenderer->setNoRender(TRUE);
+            $this->_helper->viewRenderer->setNoRender(true);
         }
     }
 
-    // fecha metodo encaminharprestacaodecontasAction()
-
-
     /*Emcaminhamento para o Chefe de Divisao*/
-    public function encaminharchefedivisaoAction() {
-
+    public function encaminharchefedivisaoAction()
+    {
         // caso o formulario seja enviado via post
         // cria a sessao com o grupo ativo
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
         // pega a autenticacao
-        $auth         = Zend_Auth::getInstance ();
+        $auth         = Zend_Auth::getInstance();
         $GrupoUsuario = $GrupoAtivo->codGrupo;
-        if ($this->getRequest ()->isPost ()) {
+        if ($this->getRequest()->isPost()) {
             // recebe os dados via post
-            $post = Zend_Registry::get ( 'post' );
+            $post = Zend_Registry::get('post');
 
             $idPronac               = $post->idPronac;
             $idAgenteOrigem         = $this->getIdAgenteLogado;
-            $dtInicioEncaminhamento = new Zend_Db_Expr ( 'GETDATE()' );
+            $dtInicioEncaminhamento = new Zend_Db_Expr('GETDATE()');
             $dsJustificativa        = $post->dsjustificativa;
             $idOrgaoDestino         = $post->passaValor;
-            $idAgenteDestino        = explode ( "/", $post->recebeValor );
+            $idAgenteDestino        = explode("/", $post->recebeValor);
             $idAgenteDestino        = $idAgenteDestino [0];
             $idGrupo                = $idAgenteDestino [1];
             $gru_codigo             = $GrupoUsuario;
             $stSituacao             = 1;
 
             // monta o array de dados para cadastro
-            $dados = array ('idPronac' => $idPronac, 'idAgenteOrigem' => $idAgenteOrigem, 'dtInicioEncaminhamento' => $dtInicioEncaminhamento, 'dsJustificativa' => $dsJustificativa, 'idOrgaoDestino' => $idOrgaoDestino, 'idAgenteDestino' => $idAgenteDestino, 'cdGruposDestino' => $GrupoUsuario, 'dtFimEncaminhamento' => new Zend_Db_Expr ( 'GETDATE()' ), 'idSituacaoEncPrestContas' => $idSituacaoEncPrestContas, 'idSituacao' => "E27" );
+            $dados = array('idPronac' => $idPronac, 'idAgenteOrigem' => $idAgenteOrigem, 'dtInicioEncaminhamento' => $dtInicioEncaminhamento, 'dsJustificativa' => $dsJustificativa, 'idOrgaoDestino' => $idOrgaoDestino, 'idAgenteDestino' => $idAgenteDestino, 'cdGruposDestino' => $GrupoUsuario, 'dtFimEncaminhamento' => new Zend_Db_Expr('GETDATE()'), 'idSituacaoEncPrestContas' => $idSituacaoEncPrestContas, 'idSituacao' => "E27" );
 
             // cadastra
-            $EncaminhamentoPrestacaoContas = new EncaminhamentoPrestacaoContas ( $idPronac );
-            $cadastrar                     = $EncaminhamentoPrestacaoContas->cadastrar ( $dados );
+            $EncaminhamentoPrestacaoContas = new EncaminhamentoPrestacaoContas($idPronac);
+            $cadastrar                     = $EncaminhamentoPrestacaoContas->cadastrar($dados);
 
             // altera a situa��o do projeto
-            $alterar_situacao = ProjetoDAO::alterarSituacao ( $idPronac, 'E27' );
+            $alterar_situacao = ProjetoDAO::alterarSituacao($idPronac, 'E27');
 
-            $updateprojetos = new Projetos ();
-            $updateprojetos->alterarSituacao($idPronac,NULL,'E27','Encaminhado');
+            $updateprojetos = new Projetos();
+            $updateprojetos->alterarSituacao($idPronac, null, 'E27', 'Encaminhado');
 
             if ($cadastrar) {
-                parent::message ( "Cadastrado com sucesso!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "CONFIRM" );
+                parent::message("Cadastrado com sucesso!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "CONFIRM");
             } else {
-                parent::message ( "Desculpe ocorreu um erro!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "ERROR" );
+                parent::message("Desculpe ocorreu um erro!", "realizarprestacaodecontas/coordenadorgeralprestacaocontas", "ERROR");
             }
-        } // fecha $_POST
-    } // fecha metodo encaminharprestacaodecontasAction()
+        }
+    }
 
     /*Buscar Projeto do Coordenados Geral e Coordenador de Presta&ccedil;&atilde;o de Contas*/
-    public function coordenadorprestacaocontasAction() {
-
-        $prescontas                  = new Projetos ();
-        $dados                       = $prescontas->BuscarPrestacaoContas ( 'E24' );
+    public function coordenadorprestacaocontasAction()
+    {
+        $prescontas                  = new Projetos();
+        $dados                       = $prescontas->BuscarPrestacaoContas('E24');
         $this->view->CoordPresContas = $dados;
 
-        $dados                                    = $prescontas->BuscarPrestacaoContas ( 'E17' );
+        $dados                                    = $prescontas->BuscarPrestacaoContas('E17');
         $this->view->CoordPresContasDiligenciados = $dados;
     }
 
@@ -1856,30 +1869,27 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     public function tecnicoprestacaocontasAction()
     {
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -1888,12 +1898,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $pag = 1;
         $post  = Zend_Registry::get('get');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
@@ -1936,33 +1948,30 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function imprimirTecnicoPrestacaoDeContasAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -1971,39 +1980,40 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $pag = 1;
         $post  = Zend_Registry::get('post');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($filtro) {
-            case 'diligenciados': //Projetos diligenciados
-                $this->view->tituloPag = 'Projetos diligenciados';
-                $where['p.Situacao in (?)'] = array('E17', 'E30');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-                $where['e.cdGruposOrigem IN (?)'] = array('125','126'); //grupo de coordenador de prestacao de contas
-                $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
-                $where['e.stAtivo = ?'] = 1;
-                $where['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
-                break;
-            default: //Aguardando An&aacute;lise
-                $this->view->tituloPag = 'Aguardando An&aacute;lise';
-                $where['p.Situacao = ?'] = 'E27';
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
-                $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
-                $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
-                $where['e.stAtivo = ?'] = 1;
-                break;
+                case 'diligenciados': //Projetos diligenciados
+                    $this->view->tituloPag = 'Projetos diligenciados';
+                    $where['p.Situacao in (?)'] = array('E17', 'E30');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
+                    $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
+                    $where['e.cdGruposOrigem IN (?)'] = array('125','126'); //grupo de coordenador de prestacao de contas
+                    $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
+                    $where['e.stAtivo = ?'] = 1;
+                    $where['d.idTipoDiligencia = ?'] = 174; //Diligencia na Prestacao de contas
+                    break;
+                default: //Aguardando An&aacute;lise
+                    $this->view->tituloPag = 'Aguardando An&aacute;lise';
+                    $where['p.Situacao = ?'] = 'E27';
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('1','2'); //Situacao Aguardando analise, e Em analise
+                    $where['e.cdGruposDestino = ?'] = 124; //grupo do tecnico de prestacao de contas
+                    $where['e.idAgenteDestino = ?'] = $this->getIdAgenteLogado; //id Tecnico de Presta&ccedil;&atilde;o de Contas
+                    $where['e.stAtivo = ?'] = 1;
+                    break;
             }
-
         } else { //Aguardando An&aacute;lise
             $this->view->tituloPag = 'Aguardando An&aacute;lise';
             $filtro = '';
@@ -2023,7 +2033,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
 
-        if(isset($post->xls) && $post->xls){
+        if (isset($post->xls) && $post->xls) {
             $html = '';
             $html .= '<table style="border: 1px">';
             $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="8">Analisar presta&ccedil;&atilde;o de contas - '.$this->view->tituloPag.'</td></tr>';
@@ -2042,10 +2052,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $html .= '</tr>';
 
             $i=1;
-            foreach ($busca as $projeto){
-
+            foreach ($busca as $projeto) {
                 $mecanismo = $projeto->Mecanismo;
-                if($mecanismo == 'Mecenato'){
+                if ($mecanismo == 'Mecenato') {
                     $mecanismo = "Incentivo Fiscal";
                 }
                 $dtSituacao = Data::tratarDataZend($projeto->DtSituacao, 'brasileira');
@@ -2066,26 +2075,26 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
             header("Content-Type: application/vnd.ms-excel");
             header("Content-Disposition: inline; filename=Analisar_Prestacao_de_Contas.ods;");
-            echo $html; $this->_helper->viewRenderer->setNoRender(TRUE);
-
+            echo $html;
+            $this->_helper->viewRenderer->setNoRender(true);
         } else {
             $this->view->dados = $busca;
         }
     }
 
     /*PLANILHA Orcamentaria COMPROVADA*/
-    public function dadosProjeto() {
+    public function dadosProjeto()
+    {
         $idpronac = $this->getRequest()->getParam('idPronac');
-        $projetosDAO = new Projetos ();
-        $resposta    = $projetosDAO->buscar ( array ('IdPRONAC = ? ' => "{$idpronac}" ) );
+        $projetosDAO = new Projetos();
+        $resposta    = $projetosDAO->buscar(array('IdPRONAC = ? ' => "{$idpronac}" ));
         $this->view->pronac      = $resposta [0]->AnoProjeto . $resposta [0]->Sequencial;
         $this->view->nomeProjeto = $resposta [0]->NomeProjeto;
     }
 
     public function planilhaorcamentariaAction()
     {
-        // pega a autenticacao
-        $auth = Zend_Auth::getInstance ();
+        $auth = Zend_Auth::getInstance();
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
 
         $this->dadosProjeto();
@@ -2102,10 +2111,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
         $rsEncaminhamento = $tblEncaminhamento->buscar(array('idPronac=?'=>$this->view->idPronac,'stAtivo=?'=>1))->current();
 
-        if(is_object($rsEncaminhamento))
+        if (is_object($rsEncaminhamento)) {
             $this->view->situacaoAtual = $rsEncaminhamento->idSituacaoEncPrestContas;
-        else
+        } else {
             $this->view->situacaoAtual = 1;
+        }
 
         $arrayA = array();
         $arrayP = array();
@@ -2116,7 +2126,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $arrComprovantesImpugnados = array();
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
-                if($val->tpCusto == 'A') {
+                if ($val->tpCusto == 'A') {
                     $arrayA[($val->descEtapa)][$val->uf.' '.($val->cidade)] = array(
                         'idMunicipio' => $val->idMunicipio,
                         'uf' => $val->uf,
@@ -2126,7 +2136,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     $arrayA[($val->descEtapa)][$val->uf.' '.($val->cidade)]['uf'] = $val->uf;
                 }
 
-                if($val->tpCusto == 'P') {
+                if ($val->tpCusto == 'P') {
                     $arrayP[($val->Descricao)][($val->descEtapa)][$val->uf.' - '.($val->cidade)] = array(
                         'idPlanilhaEtapa' => $val->idPlanilhaEtapa,
                         'uf' => $val->uf,
@@ -2137,8 +2147,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 #Pedro - Somatorio dos Itens Impugnados
                 $obComprovantesPagamento = $planilhaAprovacaoModel->buscarcomprovantepagamento($this->view->idPronac, $val->idPlanilhaAprovacao);
-                foreach($obComprovantesPagamento as $index => $comprovante){
-                    if($comprovante->stItemAvaliado == 3) { //Prestacao de Contas Inpugnada
+                foreach ($obComprovantesPagamento as $index => $comprovante) {
+                    if ($comprovante->stItemAvaliado == 3) { //Prestacao de Contas Inpugnada
                         $arrComprovantesImpugnados[$comprovante->idComprovantePagamento] = $comprovante->vlComprovacao;
                     }
                 }
@@ -2146,7 +2156,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         }
         #Realiza a soma dos itens
         $vlTotalImpugnado = 0;
-        foreach($arrComprovantesImpugnados as $valorImpugnado){
+        foreach ($arrComprovantesImpugnados as $valorImpugnado) {
             $vlTotalImpugnado += $valorImpugnado;
         }
 
@@ -2155,11 +2165,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->incFiscaisP = array(utf8_encode('Custo por Produto') =>$arrayP);
     }
 
-    public function emitirparecertecnicoAction() 
+    public function emitirparecertecnicoAction()
     {
         $idpronac    = $this->getRequest()->getParam('idPronac');
         $projetosDAO = new Projetos();
-        $resposta    = $projetosDAO->buscar(array ('IdPRONAC = ? '=> "{$idpronac}"));
+        $resposta    = $projetosDAO->buscar(array('IdPRONAC = ? '=> "{$idpronac}"));
 
         $this->view->pronac      = $resposta [0]->AnoProjeto . $resposta [0]->Sequencial;
         $this->view->nomeProjeto = $resposta[0]->NomeProjeto;
@@ -2168,47 +2178,50 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
         $rsEncaminhamento  = $tblEncaminhamento->buscar(array('idPronac=?'=>$idpronac,'stAtivo=?'=>1))->current();
 
-        if(is_object($rsEncaminhamento))
+        if (is_object($rsEncaminhamento)) {
             $this->view->situacaoAtual = $rsEncaminhamento->idSituacaoEncPrestContas;
-        else
+        } else {
             $this->view->situacaoAtual = 1;
+        }
 
         $RelatorioTecnico = new tbRelatorioTecnico();
         $rsParecerTecnico = $RelatorioTecnico->buscar(array('IdPRONAC=?'=>$idpronac,'cdGrupo=?'=>124))->current();
         $rsParecerChefe   = $RelatorioTecnico->buscar(array('IdPRONAC=?'=>$idpronac,'cdGrupo=?'=>132))->current();
 
-        if(is_object($rsParecerTecnico)){
+        if (is_object($rsParecerTecnico)) {
             $this->view->parecerTecnico = $rsParecerTecnico;
             $this->view->parecerChefe   = $rsParecerChefe;
-        }else{
+        } else {
             $this->view->parecerTecnico = array();
             $this->view->parecerChefe   = array();
         }
     }
 
-    public function existeparecerAction() {
-
+    public function existeparecerAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $post     = Zend_Registry::get ('post');
+        $post     = Zend_Registry::get('post');
         $idpronac = $post->idPronac;
 
         $RelatorioTecnico = new tbRelatorioTecnico();
         $rsParecer        = $RelatorioTecnico->buscar(array('IdPRONAC=?'=>$idpronac,'cdGrupo=?'=>$this->codGrupo))->current();
 
         $retorno = false;
-        if(!empty ($rsParecer))
+        if (!empty($rsParecer)) {
             $retorno = true;
+        }
         $this->_helper->json(array('retorno'=>$retorno));
     }
 
-    public function parecertecnicoAction() {
+    public function parecertecnicoAction()
+    {
         $auth             = Zend_Auth::getInstance();
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
-        $post             = Zend_Registry::get ( 'post' );
+        $post             = Zend_Registry::get('post');
 
         $idPronac         = $post->idPronac;
         $parecer          = $this->getRequest()->getParam('ParecerTecnico');
@@ -2225,16 +2238,15 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $dados ['cdGrupo']      =   $this->codGrupo;
         $dados ['siManifestacao'] = $this->getRequest()->getParam('manifestacao');
 
-        try{
-            if(!empty ($rsParecer)){
+        try {
+            if (!empty($rsParecer)) {
                 $where = array(
                     'IdPRONAC = ?'  =>  $idPronac,
                     'idRelatorioTecnico = ?'   =>  $rsParecer['idRelatorioTecnico'],
                 );
 
-                $relatorioTecnico->update($dados,$where);
-            }
-            else{
+                $relatorioTecnico->update($dados, $where);
+            } else {
                 //inlcui parecer
                 $relatorioTecnico->inserir($dados);
             }
@@ -2242,20 +2254,19 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->_helper->flashMessenger->addMessage('Parecer salvo com sucesso!');
             $this->_helper->flashMessengerType->addMessage('CONFIRM');
             $this->_redirect("realizarprestacaodecontas/emitirparecertecnico/idPronac/{$idPronac}");
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $this->_redirect("realizarprestacaodecontas/dadosprojeto?idPronac=".$idPronac."&tipoMsg=ERROR&msg=Erro ao gravar Parecer t�cnico!");
             return;
         }
     }
 
-    public function respostaconsultoriaAction() {
-
+    public function respostaconsultoriaAction()
+    {
         $idEncPrestContas = $this->_request->getParam('idEncPrestContas');
 
-        if (!empty ($idEncPrestContas)) {
-
+        if (!empty($idEncPrestContas)) {
             $tblEncaminhamento          = new tbEncaminhamentoPrestacaoContas();
-            $rsEnc                      = $tblEncaminhamento->buscar(array('idEncPrestContas = ?'=>$idEncPrestContas,'idOrgaoDestino=?'=>$this->codOrgao,'idSituacaoEncPrestContas=?'=>1),array('dtFimEncaminhamento DESC'))->current();
+            $rsEnc                      = $tblEncaminhamento->buscar(array('idEncPrestContas = ?'=>$idEncPrestContas,'idOrgaoDestino=?'=>$this->codOrgao,'idSituacaoEncPrestContas=?'=>1), array('dtFimEncaminhamento DESC'))->current();
             $this->view->solicitacao    =   utf8_decode(htmlentities($rsEnc->dsJustificativa));
             $idPronac                   =   $rsEnc->idPronac;
 
@@ -2264,20 +2275,19 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
             $this->view->PRONAC      = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
             $this->view->NomeProjeto = $rsProjeto->NomeProjeto;
-
         }
         $this->view->idOrgao          = $this->codOrgao;
         $this->view->idEncPrestContas = $idEncPrestContas;
     }
 
-    public function gravarrespostaconsultoriaAction(){
-
+    public function gravarrespostaconsultoriaAction()
+    {
         $idEncPrestContas   =   $this->_request->getParam('idEncPrestContas');
         $dsresposta         =   $this->_request->getParam('dsresposta');
 
         if (!empty($dsresposta)) {
             $tblEncaminhamento = new tbEncaminhamentoPrestacaoContas();
-            $rsEnc             = $tblEncaminhamento->buscar(array('idEncPrestContas = ?'=>$idEncPrestContas,'idOrgaoDestino=?'=>$this->codOrgao,'idSituacaoEncPrestContas=?'=>1),array('dtFimEncaminhamento DESC'))->current();
+            $rsEnc             = $tblEncaminhamento->buscar(array('idEncPrestContas = ?'=>$idEncPrestContas,'idOrgaoDestino=?'=>$this->codOrgao,'idSituacaoEncPrestContas=?'=>1), array('dtFimEncaminhamento DESC'))->current();
 
             $idPronac                   = $rsEnc->idPronac;
             $idAgenteOrigem             = $rsEnc->idAgenteDestino;
@@ -2290,17 +2300,17 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $idSituacaoEncPrestContas   = 3;
             $idSituacao                 = $rsEnc->idSituacao;
 
-            $tblEncaminhamento->update(array('idSituacaoEncPrestContas'=>2),array('idEncPrestContas = ?'=>$idEncPrestContas,'idOrgaoDestino=?'=>$this->codOrgao,'idSituacaoEncPrestContas=?'=>1));
+            $tblEncaminhamento->update(array('idSituacaoEncPrestContas'=>2), array('idEncPrestContas = ?'=>$idEncPrestContas,'idOrgaoDestino=?'=>$this->codOrgao,'idSituacaoEncPrestContas=?'=>1));
 
-            try{
+            try {
                 //GRUPO : ORGAO
                 //100: 177 AECI
                 //100: 12 CONJUR
                 // monta o array de dados para cadastro
-                $dados = array ('idPronac'                  =>  $idPronac,
-                    'dtInicioEncaminhamento'    =>  new Zend_Db_Expr ( 'GETDATE()' ),
+                $dados = array('idPronac'                  =>  $idPronac,
+                    'dtInicioEncaminhamento'    =>  new Zend_Db_Expr('GETDATE()'),
                     'dsJustificativa'           =>  $dsJustificativa,
-                    'dtFimEncaminhamento'       =>  new Zend_Db_Expr ( 'GETDATE()' ),
+                    'dtFimEncaminhamento'       =>  new Zend_Db_Expr('GETDATE()'),
                     'idSituacaoEncPrestContas'  =>  $idSituacaoEncPrestContas,
                     'idSituacao'                =>  $idSituacao,
                     'idAgenteDestino'           =>  $idAgenteDestino,
@@ -2313,34 +2323,35 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $EncaminhamentoPrestacaoContas = new EncaminhamentoPrestacaoContas();
                 $cadastrar                     = $EncaminhamentoPrestacaoContas->inserir($dados);
 
-                if($this->codOrgao == 177) {
+                if ($this->codOrgao == 177) {
                     $this->_redirect("realizarprestacaodecontas/aeciprestacaocontas?tipoMsg=CONFIRM&msg=Consultoria enviada com sucesso!");
-                }else if($this->codOrgao == 12){
+                } elseif ($this->codOrgao == 12) {
                     $this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=CONFIRM&msg=Consultoria enviada com sucesso!");
                 }
                 return;
-            }catch (Exception $e){
-                if($this->codOrgao == 177) {
+            } catch (Exception $e) {
+                if ($this->codOrgao == 177) {
                     $this->_redirect("realizarprestacaodecontas/aeciprestacaocontas?tipoMsg=ERROR&msg=Erro ao enviar o Projeto.");
-                }else if($this->codOrgao == 12){
+                } elseif ($this->codOrgao == 12) {
                     $this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Erro ao enviar o Projeto.");
                 }
                 return;
             }
-        }else{
+        } else {
             $this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Dados obrigat&oacute;rios n&atilde;o informados");
         }
     }
 
-    public function cadastrarrelatoriotecnicoAction() {
-        $this->_helper->layout->disableLayout ();
+    public function cadastrarrelatoriotecnicoAction()
+    {
+        $this->_helper->layout->disableLayout();
 
         $valido       = true;
-        $licitacaoDAO = new Licitacao ();
-        $post         = Zend_Registry::get ( 'post' );
+        $licitacaoDAO = new Licitacao();
+        $post         = Zend_Registry::get('post');
 
-        $cadastro ['meRelatorio'] = utf8_decode ( $post->ParecerTecnico );
-        $cadastro ['dtRelatorio'] = data::dataAmericana ( $post->dataPublicacaoEdital );
+        $cadastro ['meRelatorio'] = utf8_decode($post->ParecerTecnico);
+        $cadastro ['dtRelatorio'] = data::dataAmericana($post->dataPublicacaoEdital);
         $cadastro ['IdPRONAC']    = $post->IdPRONAC;
         $cadastro ['idAgente']    = $post->idAgente;
     }
@@ -2348,53 +2359,48 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method tecnicoprestacaocontas
-     * @since 11/02/2011
-     * @version 1.0
      * @access Tecnico Presta&ccedil;&atilde;o de Contas
      */
-    public function tecnicoprestacaocontassAction() {
+    public function tecnicoprestacaocontassAction()
+    {
+        $auth = Zend_Auth::getInstance();
 
-        $auth = Zend_Auth::getInstance ();
-
-        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas ();
-        $rs                               = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas ( "E27", $auth->getIdentity ()->usu_orgao, "E27" );
+        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
+        $rs                               = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas("E27", $auth->getIdentity()->usu_orgao, "E27");
         $this->view->TecPresContas        = $rs;
     }
 
     /**
      * Controller RealizarPrestacaoDeContas
      * @method chefedivisaoprestacaocontas
-     * @since 18/02/2011
-     * @version 1.0
      * @access Chefe de Divis�o
      */
-    public function chefedivisaoprestacaocontasAction() {
-
+    public function chefedivisaoprestacaocontasAction()
+    {
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
         //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
         //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -2403,17 +2409,19 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $pag = 1;
         $post  = Zend_Registry::get('get');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($filtro) {
             case 'analisados': //Analisados
@@ -2432,7 +2440,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $where['p.Orgao = ?'] = $_SESSION['GrupoAtivo']['codOrgao'];
                 break;
             }
-
         } else { //Aguardando An&aacute;lise
             $filtro = '';
             $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
@@ -2472,33 +2479,30 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function imprimirChefeDivisaoPrestacaoDeContasAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -2507,17 +2511,19 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $pag = 1;
         $post  = Zend_Registry::get('post');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($filtro) {
             case 'diligenciados': //Projetos diligenciados
@@ -2536,7 +2542,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $where['e.stAtivo = ?'] = 1;
                 break;
             }
-
         } else { //Aguardando An&aacute;lise
             $this->view->tituloPag = 'Aguardando An&aacute;lise';
             $filtro = '';
@@ -2555,7 +2560,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
 
-        if(isset($post->xls) && $post->xls){
+        if (isset($post->xls) && $post->xls) {
             $html = '';
             $html .= '<table style="border: 1px">';
             $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16; font-weight: bold;" colspan="8">Analisar presta&ccedil;&atilde;o de contas - '.$this->view->tituloPag.'</td></tr>';
@@ -2574,10 +2579,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $html .= '</tr>';
 
             $i=1;
-            foreach ($busca as $projeto){
-
+            foreach ($busca as $projeto) {
                 $mecanismo = $projeto->Mecanismo;
-                if($mecanismo == 'Mecenato'){
+                if ($mecanismo == 'Mecenato') {
                     $mecanismo = "Incentivo Fiscal";
                 }
                 $dtSituacao = Data::tratarDataZend($projeto->DtSituacao, 'brasileira');
@@ -2598,8 +2602,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
             header("Content-Type: application/vnd.ms-excel");
             header("Content-Disposition: inline; filename=Analisar_Prestacao_de_Contas.ods;");
-            echo $html; $this->_helper->viewRenderer->setNoRender(TRUE);
-
+            echo $html;
+            $this->_helper->viewRenderer->setNoRender(true);
         } else {
             $this->view->dados = $busca;
         }
@@ -2608,21 +2612,19 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method aeciprestacaocontasAction
-     * @since 11/02/2011
-     * @version 1.0
      * @access AECI
      */
-    public function aeciprestacaocontasAction() {
-
-        $auth = Zend_Auth::getInstance ();
+    public function aeciprestacaocontasAction()
+    {
+        $auth = Zend_Auth::getInstance();
 
         $Usuario = new Autenticacao_Model_Usuario();
 
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
 
-        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas ();
-        $rs 							  = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas ($this->codOrgao,"1",$idAgenteOrigem );
+        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
+        $rs                              = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas($this->codOrgao, "1", $idAgenteOrigem);
 
         $this->view->AeciPresContas = $rs;
     }
@@ -2630,14 +2632,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method conjurprestacaocontasAction
-     * @since 11/02/2011
-     * @version 1.0
      * @access Conjur
      */
-    public function conjurprestacaocontasAction() {
-
-
-        $auth = Zend_Auth::getInstance ();
+    public function conjurprestacaocontasAction()
+    {
+        $auth = Zend_Auth::getInstance();
         $auth->getIdentity();
 
         $Usuario = new Autenticacao_Model_Usuario();
@@ -2645,8 +2644,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
 
-        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas ();
-        $rs 							  = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas ( $this->codOrgao, "1", $idAgenteOrigem);
+        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
+        $rs                              = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas($this->codOrgao, "1", $idAgenteOrigem);
 
         $this->view->ConjurPresContas = $rs;
     }
@@ -2654,19 +2653,17 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method pareceristaprestacaocontasAction
-     * @since 12/01/2011
-     * @version 1.0
      * @access Parecerista
      */
-    public function pareceristaprestacaocontasAction() {
-
+    public function pareceristaprestacaocontasAction()
+    {
         $Usuario        = new Autenticacao_Model_Usuario();
-        $auth           = Zend_Auth::getInstance (); // pega a autenticacao
+        $auth           = Zend_Auth::getInstance();
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
 
-        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas ();
-        $rs                               = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas ( $this->codOrgao, "1", $idAgenteOrigem );
+        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
+        $rs                               = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas($this->codOrgao, "1", $idAgenteOrigem);
 
         $this->view->PareceristaPresContas = $rs;
     }
@@ -2674,20 +2671,17 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method coordenadorpareceristaprestacaocontasAction
-     * @since 13/02/2011
-     * @author Emerson Silva
-     * @version 1.0
      * @access Coordenador Parecerista
      */
-    public function coordenadorpareceristaprestacaocontasAction() {
-
+    public function coordenadorpareceristaprestacaocontasAction()
+    {
         $Usuario        = new Autenticacao_Model_Usuario();
-        $auth           = Zend_Auth::getInstance (); // pega a autenticacao
+        $auth           = Zend_Auth::getInstance();
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
 
-        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas ();
-        $rs = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas ( $this->codOrgao, "1", $idAgenteOrigem );
+        $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
+        $rs = $tblEncaminhamentoPrestacaoContas->BuscaEncaminhamentoPrestacaoContas($this->codOrgao, "1", $idAgenteOrigem);
 
         $this->view->CoordParecerPresContas = $rs;
     }
@@ -2701,7 +2695,6 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $this->view->projeto = $planilhaAprovacaoModel
             ->dadosdoitem($this->_request->getParam("idPlanilhaAprovacao"), $idPronac)
-            /* ->current() */
             ;
         $this->view->projeto = $this->view->projeto[0];
 
@@ -2712,8 +2705,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         } else {
             $this->view->tipoComprovante = $this->tipoDocumento;
             $this->view->comprovantesPagamento = $planilhaAprovacaoModel->buscarcomprovantepagamento(
-                $idPronac, $idPlanilhaItem
-                /* $idPronac, $idPlanilhaAprovacao */
+                /* $idPronac, $idPlanilhaItem */
+                $idPronac,
+                $idPlanilhaAprovacao
             );
         }
 
@@ -2725,41 +2719,39 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /**
      * Controller RealizarPrestacaoDeContas
      * @method analisaritemAction
-     * @since 14/02/2011
-     * @version 1.0
      * @access AECI
      */
-    public function analisaritemAction() {
-
+    public function analisaritemAction()
+    {
         $idPronac            = $this->_request->getParam("idPronac");
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilhaAprovacao");
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
 
         $tblPlanilhaAprovacao = new PlanilhaAprovacao();
-        $rsPlanilha           = $tblPlanilhaAprovacao->dadosdoitem($idPlanilhaAprovacao,$idPronac)->current();
+        $rsPlanilha           = $tblPlanilhaAprovacao->dadosdoitem($idPlanilhaAprovacao, $idPronac)->current();
 
-        if (!empty ($rsPlanilha->modalidadeLicitacao)) {
+        if (!empty($rsPlanilha->modalidadeLicitacao)) {
             $rsPlanilha->modalidadeLicitacao = $this->modalidade[$rsPlanilha->modalidadeLicitacao];
         }
         $this->view->AnalisarItem = $rsPlanilha;
 
-        if(count($rsPlanilha)> 0)
-        {
+        if (count($rsPlanilha)> 0) {
             $planilhaAprovacaoDao             = new PlanilhaAprovacao();
-            $this->view->ComprovantePagamento = $planilhaAprovacaoDao->buscarcomprovantepagamento($rsPlanilha->IdPRONAC,$idPlanilhaItem);
+            $this->view->ComprovantePagamento = $planilhaAprovacaoDao->buscarcomprovantepagamento($rsPlanilha->IdPRONAC, $idPlanilhaItem);
 
             $this->view->idPronac              = $rsPlanilha->IdPRONAC;
             $this->view->tipoDocumentoConteudo = $this->tipoDocumento;
             $this->view->idPlanilhaAprovacao   = $idPlanilhaAprovacao;
             $this->view->idPlanilhaItem        = $idPlanilhaItem;
-        }else{
+        } else {
             $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$idPronac}&tipoMsg=ALERT&msg=N&atilde;o houve comprova&ccedil;&atilde;o para este item.");
         }
     }
+
     // @todo: avaliar este try catch com transacao
     public function validaritemAction()
     {
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $auth = Zend_Auth::getInstance();
 
         $idPronac = $this->_request->getParam("idPronac");
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
@@ -2789,7 +2781,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tblComprovantePag->getAdapter()->beginTransaction();
         foreach ($this->getRequest()->getParam('comprovantePagamento') as $comprovantePagamento) {
             try {
-                if (!isset($comprovantePagamento['situacao'])) { continue; }
+                if (!isset($comprovantePagamento['situacao'])) {
+                    continue;
+                }
                 $rsComprovantePag = $tblComprovantePag
                     ->buscar(
                         array(
@@ -2828,39 +2822,38 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $redirector->redirectAndExit();
     }
 
-    public function dadosprojetoAction() {
-
+    public function dadosprojetoAction()
+    {
         if (isset($_REQUEST['idPronac'])) {
             $dados = array();
             $dados['idPronac'] = (int) $_REQUEST['idPronac'];
             if (is_numeric($dados['idPronac'])) {
-                if (isset($dados['idPronac']))
-                {
+                if (isset($dados['idPronac'])) {
                     $idPronac = $dados['idPronac'];
                     //UC 13 - MANTER MENSAGENS (Habilitar o menu superior)
                     $this->view->idPronac = $idPronac;
                     $this->view->menumsg  = 'true';
                 }
                 $rst = ConsultarDadosProjetoDAO::obterDadosProjeto($dados);
-                if(count($rst)>0){
+                if (count($rst)>0) {
                     $this->view->projeto  = $rst[0];
                     $this->view->idpronac = $_REQUEST['idPronac'];
-                }else{
+                } else {
                     parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
                     return;
                 }
-            }else{
+            } else {
                 parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
                 return;
             }
-        }else{
+        } else {
             parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
             return;
         }
     }
 
-    public function enviarcoordenadorAction(){
-
+    public function enviarcoordenadorAction()
+    {
         $get = Zend_Registry::get("get");
         $auth               = Zend_Auth::getInstance();
 
@@ -2873,28 +2866,28 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tblRelatorio = new tbRelatorioTecnico();
         $rsRelatorio  = $tblRelatorio->buscar(array('IdPRONAC = ?'=>$idPronac,'idAgente=?'=>$auth->getIdentity()->usu_codigo,'cdGrupo=?'=>132));
 
-        if($rsRelatorio->count() > 0){
+        if ($rsRelatorio->count() > 0) {
 
             //DESLIGA STATUS ATUAL
             $rsEPC->stAtivo = 0;
             $rsEPC->save();
 
-            try{
+            try {
                 //SE O ENCAMINHAMENTO FOR DO CHEFE DE DIVISAO PARA O COORDENADOR - ALTERA SITUACAO DO PROJETO
                 $tblProjeto = new Projetos();
-                $tblProjeto->alterarSituacao($idPronac,'','E27');
+                $tblProjeto->alterarSituacao($idPronac, '', 'E27');
 
-                $tblEncaminhamento->update(array('stAtivo'=>0),array('idPronac = ?'=>$idPronac, 'idEncPrestContas != ?' => $rsEPC->idEncPrestContas));
+                $tblEncaminhamento->update(array('stAtivo'=>0), array('idPronac = ?'=>$idPronac, 'idEncPrestContas != ?' => $rsEPC->idEncPrestContas));
 
                 //ENCAMINHA PROJETO PARA COORDENADOR
-                $dados = array ('idPronac'          => $idPronac,
+                $dados = array('idPronac'          => $idPronac,
                     'idAgenteOrigem'    => $rsEPC->idAgenteOrigem,
                     'idAgenteDestino'   => $rsEPC->idAgenteDestino,
                     'idOrgaoOrigem'     => $rsEPC->idOrgaoOrigem,
                     'idOrgaoDestino'    => $rsEPC->idOrgaoDestino,
 
-                    'dtInicioEncaminhamento' => new Zend_Db_Expr ( 'GETDATE()' ),
-                    'dtFimEncaminhamento'    => new Zend_Db_Expr ( 'GETDATE()' ),
+                    'dtInicioEncaminhamento' => new Zend_Db_Expr('GETDATE()'),
+                    'dtFimEncaminhamento'    => new Zend_Db_Expr('GETDATE()'),
 
                     'dsJustificativa'   => $rsEPC->dsJustificativa,
                     'cdGruposOrigem'    => $rsEPC->cdGruposDestino,
@@ -2907,16 +2900,17 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $tblEncaminhamento->inserir($dados);
                 $this->_redirect("realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
                 return;
-            }catch (Exception $e){
+            } catch (Exception $e) {
                 $this->_redirect("realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoMsg=ERROR&msg={$e->getMessage()}");
                 return;
             }
-        }else{
+        } else {
             $this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
         }
     }
 
-    public function enviarchefedivisaoAction(){
+    public function enviarchefedivisaoAction()
+    {
         $auth               = Zend_Auth::getInstance();
 
         $get = Zend_Registry::get("get");
@@ -2930,24 +2924,24 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $tblRelatorio = new tbRelatorioTecnico();
         $rsRelatorio  = $tblRelatorio->buscar(array('IdPRONAC = ?'=>$pronac,'idAgente=?'=>$auth->getIdentity()->usu_codigo,'cdGrupo=?'=>124));
 
-        if($rsRelatorio->count() > 0){
+        if ($rsRelatorio->count() > 0) {
             //DESLIGA STATUS ATUAL
             $rsEPC->stAtivo = 0;
             $rsEPC->save();
 
-            try{
+            try {
                 //GRUPO : ORGAO
                 //100: 177 AECI
                 //100: 12 CONJUR
                 //GRAVA REGISTRO FINALIZADO PELO TECNICO
-                $dados = array ('idPronac'          => $pronac,
+                $dados = array('idPronac'          => $pronac,
                     'idAgenteOrigem'    => $rsEPC->idAgenteOrigem,
                     'idAgenteDestino'   => $rsEPC->idAgenteDestino,
                     'idOrgaoOrigem'     => $rsEPC->idOrgaoOrigem,
                     'idOrgaoDestino'    => $rsEPC->idOrgaoDestino,
 
-                    'dtInicioEncaminhamento' => new Zend_Db_Expr ( 'GETDATE()' ),
-                    'dtFimEncaminhamento'    => new Zend_Db_Expr ( 'GETDATE()' ),
+                    'dtInicioEncaminhamento' => new Zend_Db_Expr('GETDATE()'),
+                    'dtFimEncaminhamento'    => new Zend_Db_Expr('GETDATE()'),
 
                     'dsJustificativa'   => $rsEPC->dsJustificativa,
                     'cdGruposOrigem'    => $rsEPC->cdGruposDestino,
@@ -2961,40 +2955,40 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 $this->_redirect("realizarprestacaodecontas/tecnicoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
                 return;
-            }catch (Exception $e){
+            } catch (Exception $e) {
                 $this->_redirect("realizarprestacaodecontas/tecnicoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
                 return;
             }
-        }else{
+        } else {
             $this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
         }
     }
 
-    public function alterarstatusprojetoAction(){
-
+    public function alterarstatusprojetoAction()
+    {
         $get = Zend_Registry::get("get");
 
-        $auth = Zend_Auth::getInstance (); // pega a autenticacao
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
 
         $pronac   = $get->idPronac;
         $situacao = $get->situacao;
 
         $tblEncaminhamentoPrestacaoContas = new tbEncaminhamentoPrestacaoContas();
         $rsEPC = $tblEncaminhamentoPrestacaoContas->buscar(array("idPronac = ?"=>$pronac, 'stAtivo=?'=>1))->current();
-        if(count($rsEPC)>0){
+        if (count($rsEPC)>0) {
             //DESLIGA STATUS ATUAL
             $rsEPC->stAtivo = 0;
             $rsEPC->save();
 
             //GRAVA REGISTRO COM NOVO STATUS
-            $dados = array ('idPronac'          => $pronac,
+            $dados = array('idPronac'          => $pronac,
                 'idAgenteOrigem'    => $rsEPC->idAgenteOrigem,
                 'idAgenteDestino'   => $rsEPC->idAgenteDestino,
                 'idOrgaoOrigem'     => $rsEPC->idOrgaoOrigem,
                 'idOrgaoDestino'    => $rsEPC->idOrgaoDestino,
 
-                'dtInicioEncaminhamento' => new Zend_Db_Expr ( 'GETDATE()' ),
-                'dtFimEncaminhamento'    => new Zend_Db_Expr ( 'GETDATE()' ),
+                'dtInicioEncaminhamento' => new Zend_Db_Expr('GETDATE()'),
+                'dtFimEncaminhamento'    => new Zend_Db_Expr('GETDATE()'),
 
                 'dsJustificativa'   => $rsEPC->dsJustificativa,
                 'cdGruposOrigem'    => $rsEPC->cdGruposOrigem,
@@ -3004,37 +2998,37 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
                 'idSituacao'        => $rsEPC->idSituacao);
 
-            if($tblEncaminhamentoPrestacaoContas->inserir($dados)){
+            if ($tblEncaminhamentoPrestacaoContas->inserir($dados)) {
                 $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=CONFIRM&msg=Projeto em an&aacute;lise!");
-            }else{
+            } else {
                 $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=ERROR&msg=Falha ao alterar status do Projeto!");
             }
-        }else{
+        } else {
             $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=ALERT&msg=PRONAC inexistente!");
         }
     }
 
-    public function recuperardataultimasituacaoAction() {
-
-        $this->_helper->layout->disableLayout (); // desabilita o Zend_Layout
+    public function recuperardataultimasituacaoAction()
+    {
+        $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
         $NrPronac = $this->_request->getParam("NrPronac");
 
-        if(!empty($NrPronac)){
+        if (!empty($NrPronac)) {
             $tblHistoricoSituacao = new HistoricoSituacao();
             $rsHitorico           = $tblHistoricoSituacao->buscarSituacaoAnterior($NrPronac);
-            if(count($rsHitorico)>0){
-                $data = date('d/m/Y',strtotime($rsHitorico->DtSituacao));
+            if (count($rsHitorico)>0) {
+                $data = date('d/m/Y', strtotime($rsHitorico->DtSituacao));
                 $dias = data::CompararDatas($rsHitorico->DtSituacao);
                 $dias = (round($dias));
-            }else{
+            } else {
                 $data = "00/00/0000";
                 $dias = "0";
             }
             $this->_helper->json(array('dataImpressao'=>$data,'dias'=>$dias));
             return;
-        }else{
+        } else {
             $data = "00/00/0000";
             $dias = "0";
             $this->_helper->json(array('dataImpressao'=>$data,'dias'=>$dias));
@@ -3094,10 +3088,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     /*Fim Situa&ccedil;&atilde;o PC*/
     public function imprimirguiaarquivoAction()
     {
-        //** Usuario Logado ************************************************/
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $auth = Zend_Auth::getInstance();
 
-        /******************************************************************/
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
@@ -3110,8 +3102,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $docs         = TramitarprojetosDAO::buscaProjetoPDF($idpronac);
         foreach ($docs as $d):
 
-            //$idDocumento = $d->idDocumento;
-            $Processo      = Mascara::addMaskProcesso($d->Processo);
+        $Processo      = Mascara::addMaskProcesso($d->Processo);
         $Orgao         = $d->Sigla;
         $OrgaoOrigem   = $d->OrgaoOrigem;
         $NomeProjeto   = $d->NomeProjeto;
@@ -3124,8 +3115,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             <td align='left'>".$NomeProjeto."</td>
             <td align='left'>".$data."</td>
             </tr>";
-endforeach;
-$html = "<html><head></head>
+        endforeach;
+        $html = "<html><head></head>
 <body>
 <br /><br />
 <center>
@@ -3156,9 +3147,9 @@ $html = "<html><head></head>
 <th align='left'>Dt.Envio</th>
 </tr>";
 
-$html .= $htmlDinamico;
+        $html .= $htmlDinamico;
 
-$html .="
+        $html .="
                                                 <tr>
                                                     <td colspan='4'>
                                                     Recebi os documentos acima relacionados <br>
@@ -3169,15 +3160,14 @@ $html .="
                         </center>
                          </body></html>";
 
-$pdf = new PDF($html, 'pdf', 'Guia_Prestacao');
-$pdf->gerarRelatorio();
+        $pdf = new PDF($html, 'pdf', 'Guia_Prestacao');
+        $pdf->gerarRelatorio();
     }
 
     public function relatorioFinalAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
-        if(!empty($idPronac))
-        {
+        if (!empty($idPronac)) {
             $this->view->projeto = array();
             $this->view->relatorio = array();
             $this->view->relatorioConsolidado = array();
@@ -3197,14 +3187,14 @@ $pdf->gerarRelatorio();
             $rsProjeto = $tblProjeto->buscar(array("idPronac = ?"=>$idPronac))->current();
             $this->view->projeto = $rsProjeto;
 
-            if(count($rsProjeto) > 0) {
+            if (count($rsProjeto) > 0) {
                 $tblRelatorio = new tbRelatorio();
                 $rsRelatorio = $tblRelatorio->buscar(array("idPRONAC = ?"=>$idPronac,"tpRelatorio = ?"=>'C',"idAgenteAvaliador > ?"=>0))->current();
                 $this->view->relatorio = $rsRelatorio;
             }
 
             $rsRelatorioConsolidado = array();
-            if(isset($rsRelatorio) && count($rsRelatorio) > 0) {
+            if (isset($rsRelatorio) && count($rsRelatorio) > 0) {
                 $tblRelatorioConsolidado = new tbRelatorioConsolidado();
                 $rsRelatorioConsolidado = $tblRelatorioConsolidado->consultarDados(array("idRelatorio = ?"=>$rsRelatorio->idRelatorio))->current();
                 $this->view->relatorioConsolidado = $rsRelatorioConsolidado;
@@ -3213,13 +3203,13 @@ $pdf->gerarRelatorio();
                 $rsBeneficiario = $tblBeneficiario->buscar(array("idRelatorio = ?"=>$rsRelatorio->idRelatorio))->current();
                 $this->view->beneficiario = $rsBeneficiario;
 
-                if(isset($rsRelatorio->idDistribuicaoProduto) && $rsRelatorio->idDistribuicaoProduto) {
+                if (isset($rsRelatorio->idDistribuicaoProduto) && $rsRelatorio->idDistribuicaoProduto) {
                     $tblDistribuicaoProduto = new tbDistribuicaoProduto();
                     $rsDistribuicaoProduto = $tblDistribuicaoProduto->buscarDistribuicaoProduto($rsRelatorio->idDistribuicaoProduto);
                     $this->view->movel = $rsDistribuicaoProduto;
                 }
 
-                if(!empty($rsDistribuicaoProduto->current()->idDocumento)) {
+                if (!empty($rsDistribuicaoProduto->current()->idDocumento)) {
                     $tblDocumento = new tbDocumento();
                     $rsDocumento = $tblDocumento->buscardocumentosrelatorio($rsDistribuicaoProduto->current()->idDocumento);
                     $this->view->guiaFNC = $rsDocumento;
@@ -3231,13 +3221,13 @@ $pdf->gerarRelatorio();
                 $this->view->comprovantesExecucao = $rsTbComprovanteExecucao;
             }
 
-            if(isset($rsRelatorioConsolidado) && count($rsRelatorioConsolidado) > 0) {
+            if (isset($rsRelatorioConsolidado) && count($rsRelatorioConsolidado) > 0) {
                 $tblImovel = new tbImovel();
                 $rsImovel = $tblImovel->buscar(array("idImovel = ?"=>$rsRelatorioConsolidado->idImovel))->current();
                 $this->view->imovel = $rsImovel;
             }
 
-            if(isset($rsImovel) && count($rsImovel) > 0) {
+            if (isset($rsImovel) && count($rsImovel) > 0) {
                 $tblDocumento = new tbDocumento();
                 $rsDocumentoImovel = $tblDocumento->buscardocumentosrelatorio($rsImovel['idDocumento']);
                 $this->view->ComprovanteCotacao = $rsDocumentoImovel;
@@ -3245,7 +3235,7 @@ $pdf->gerarRelatorio();
 
             $tblAcesso = new Acesso();
             $rsAcesso = $tblAcesso->consultarAcessoPronac($idPronac, 1);  // Acessibilidade
-            if(isset($rsAcesso[0]->idAcesso)){
+            if (isset($rsAcesso[0]->idAcesso)) {
                 $this->view->idAcessoA = $rsAcesso[0]->idAcesso;
                 $rsAcesso2 = $tblAcesso->consultarAcessoPronac($idPronac, 2);  // Democratizacao
                 $this->view->idAcessoB = $rsAcesso2[0]->idAcesso;
@@ -3254,8 +3244,9 @@ $pdf->gerarRelatorio();
             if (isset($rsAcesso2) && count($rsAcesso2) > 0) {
                 $tbRelConsolidado = new tbRelatorioConsolidado();
                 $rsRel = $tbRelConsolidado->consultarDados2($rsAcesso2[0]->idRelatorioConsolidado);
-                if( is_object($rsRel) )
+                if (is_object($rsRel)) {
                     $this->view->idRelatorioConsolidado = $rsRel[0]->idRelatorioConsolidado;
+                }
 
                 $this->view->acessibilidade = $rsAcesso->current();
                 $this->view->democratizacao = $rsAcesso2->current();
@@ -3264,9 +3255,9 @@ $pdf->gerarRelatorio();
         }
     }
 
-    public function painelAction(){
-
-        if(isset($_GET['msg']) && $_GET['msg'] == 'sucessoLaudoFinal'){
+    public function painelAction()
+    {
+        if (isset($_GET['msg']) && $_GET['msg'] == 'sucessoLaudoFinal') {
             parent::message('Laudo final da presta&ccedil;&atilde;o de contas emitido com sucesso!', "realizarprestacaodecontas/painel?pag=1&tipoFiltro=devolvidos", 'CONFIRM');
         }
 
@@ -3277,33 +3268,30 @@ $pdf->gerarRelatorio();
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
-            if($campo == 6){
+            if ($campo == 6) {
                 $order = array("6 ".$ordem,"7 ".$ordem);
             }
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -3312,65 +3300,65 @@ $pdf->gerarRelatorio();
 
         $pag = 1;
         $post  = Zend_Registry::get('get');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
-            case 'emanalise': //Em an&aacute;lise
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                $where['e.stAtivo = ?'] = 1;
-                break;
-            case 'analisados': // Analisados
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E14','E18', 'E27', 'E46', 'G08', 'G21', 'G22');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('3');
-                $where['e.cdGruposDestino in (?)'] = array('125', '126');
-                $where['e.stAtivo = ?'] = 1;
-                break;
-            case 'diligenciados': //Projetos diligenciados
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E17', 'E20', 'E30');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                $where['e.cdGruposDestino in (?)'] = array('125','126');
-                $where['e.cdGruposOrigem = ?'] = 132;
-                $where['e.stAtivo = ?'] = 1;
-                $where['d.stEstado = ?'] = 0;
-                $where['d.idTipoDiligencia = ?'] = 174;
-                break;
-            case 'tce': //Projetos em TCE
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('E22');
-                $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                //                        $where['e.cdGruposDestino in (?)'] = array('125','126');
-                $where['e.stAtivo = ?'] = 1;
-                $where['d.idTipoDiligencia = ?'] = 174;
-                $where['d.stEstado = ?'] = 0;
-                break;
-            default: //Aguardando An&aacute;lise
-                $where['p.Orgao = ?'] = $this->codOrgao;
-                $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
-                break;
+                case 'emanalise': //Em an&aacute;lise
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
+                    $where['e.stAtivo = ?'] = 1;
+                    break;
+                case 'analisados': // Analisados
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E14','E18', 'E27', 'E46', 'G08', 'G21', 'G22');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('3');
+                    $where['e.cdGruposDestino in (?)'] = array('125', '126');
+                    $where['e.stAtivo = ?'] = 1;
+                    break;
+                case 'diligenciados': //Projetos diligenciados
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E17', 'E20', 'E30');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
+                    $where['e.cdGruposDestino in (?)'] = array('125','126');
+                    $where['e.cdGruposOrigem = ?'] = 132;
+                    $where['e.stAtivo = ?'] = 1;
+                    $where['d.stEstado = ?'] = 0;
+                    $where['d.idTipoDiligencia = ?'] = 174;
+                    break;
+                case 'tce': //Projetos em TCE
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('E22');
+                    $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
+                    $where['e.stAtivo = ?'] = 1;
+                    $where['d.idTipoDiligencia = ?'] = 174;
+                    $where['d.stEstado = ?'] = 0;
+                    break;
+                default: //Aguardando An&aacute;lise
+                    $where['p.Orgao = ?'] = $this->codOrgao;
+                    $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+                    break;
             }
-
         } else { //Aguardando An&aacute;lise
             $filtro = '';
             $where['p.Orgao = ?'] = $this->codOrgao;
             $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
         }
 
-        if((isset($_POST['situacao']) && !empty($_POST['situacao'])) || (isset($_GET['situacao']) && !empty($_GET['situacao']))){
+        if ((!empty($_POST['situacao'])) || (!empty($_GET['situacao']))) {
             $where["p.Situacao in (?)"] = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
             $this->view->situacao = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
         }
@@ -3406,34 +3394,31 @@ $pdf->gerarRelatorio();
 
     public function imprimirPainelAction()
     {
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-
         } else {
             $campo = null;
             $order = array(2); //Pronac
@@ -3442,25 +3427,27 @@ $pdf->gerarRelatorio();
 
         $post  = Zend_Registry::get('post');
 
-        if($this->_request->getParam("pag")){
+        if ($this->_request->getParam("pag")) {
             $pag = $this->_request->getParam("pag");
-        }else{
+        } else {
             $pag = 1;
         }
 
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
 
         $where = array();
 
-        if((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))){
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
@@ -3505,7 +3492,6 @@ $pdf->gerarRelatorio();
                 $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
                 break;
             }
-
         } else { //Aguardando An&aacute;lise
             $this->view->tituloPag = 'Aguardando An&aacute;lise';
             $filtro = '';
@@ -3513,7 +3499,7 @@ $pdf->gerarRelatorio();
             $where['p.Situacao in (?)'] = array('E68', 'E77');
         }
 
-        if((isset($_POST['situacao']) && !empty($_POST['situacao'])) || (isset($_GET['situacao']) && !empty($_GET['situacao']))){
+        if ((isset($_POST['situacao']) && !empty($_POST['situacao'])) || (isset($_GET['situacao']) && !empty($_GET['situacao']))) {
             $where["p.Situacao in (?)"] = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
             $this->view->situacao = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
         }
@@ -3527,14 +3513,14 @@ $pdf->gerarRelatorio();
         $busca = $Projetos->buscarPainelPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
 
 
-        if(isset($post->xls) && $post->xls){
-            if(!isset($filtro) || (isset($filtro) && $filtro != 'devolvidos')){
+        if (isset($post->xls) && $post->xls) {
+            if (!isset($filtro) || (isset($filtro) && $filtro != 'devolvidos')) {
                 $colspan = 8;
             } else {
                 $colspan = 9;
             }
 
-            if(isset($filtro) && $filtro == 'emanalise'){
+            if (isset($filtro) && $filtro == 'emanalise') {
                 $colspan = 9;
             }
 
@@ -3544,7 +3530,7 @@ $pdf->gerarRelatorio();
             $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 10" colspan="'.$colspan.'">Data do Arquivo: '. Data::mostraData() .'</td></tr>';
             $html .='<tr><td colspan="'.$colspan.'"></td></tr>';
 
-            if(isset($filtro) && $filtro == 'emanalise'){
+            if (isset($filtro) && $filtro == 'emanalise') {
                 $addTec = '<th style="border: 1px dotted black; background-color: #9BBB59;">T�cnico</th>';
                 $addDataEnvio = '<th style="border: 1px dotted black; background-color: #9BBB59;">Dt. Envio</th>';
                 $addDiasAnalise = '<th style="border: 1px dotted black; background-color: #9BBB59;">Dias em An&aacute;lise</th>';
@@ -3557,7 +3543,7 @@ $pdf->gerarRelatorio();
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Situa&ccedil;&atilde;o</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">&Aacute;rea / Segmento</th>';
             $html .= '<th style="border: 1px dotted black; background-color: #9BBB59;">Mecanismo</th>';
-            if(isset($filtro) && $filtro == 'emanalise'){
+            if (isset($filtro) && $filtro == 'emanalise') {
                 $html .= $addTec;
                 $html .= $addDataEnvio;
                 $html .= $addDiasAnalise;
@@ -3565,17 +3551,16 @@ $pdf->gerarRelatorio();
             $html .= '</tr>';
 
             $i=1;
-            foreach ($busca as $projeto){
-
+            foreach ($busca as $projeto) {
                 $mecanismo = $projeto->Mecanismo;
-                if($mecanismo == 'Mecenato'){
+                if ($mecanismo == 'Mecenato') {
                     $mecanismo = "Incentivo Fiscal";
                 }
 
 
 
                 $addValTec = '';
-                if(isset($filtro) && $filtro == 'emanalise'){
+                if (isset($filtro) && $filtro == 'emanalise') {
                     $addValTec = '<td style="border: 1px dotted black;">'.$projeto->usu_nome.'</td>';
                     $addValDiasAnalise = '<td style="border: 1px dotted black;">'.$projeto->qtDiasAnalise.'</td>';
                     $addValDataEnvio = '<td style="border: 1px dotted black;">'.Data::tratarDataZend($projeto->dtInicioEncaminhamento, 'brasileira').'</td>';
@@ -3588,7 +3573,7 @@ $pdf->gerarRelatorio();
                 $html .= '<td style="border: 1px dotted black;">'.$projeto->Situacao.'</td>';
                 $html .= '<td style="border: 1px dotted black;">'.$projeto->Area.' / '.$projeto->Segmento.'</td>';
                 $html .= '<td style="border: 1px dotted black;">'.$mecanismo.'</td>';
-                if(isset($filtro) && $filtro == 'emanalise'){
+                if (isset($filtro) && $filtro == 'emanalise') {
                     $html .= $addValTec;
                     $html .= $addValDataEnvio;
                     $html .= $addValDiasAnalise;
@@ -3600,14 +3585,15 @@ $pdf->gerarRelatorio();
 
             header("Content-Type: application/vnd.ms-excel");
             header("Content-Disposition: inline; filename=Painel_Analisar_Prestacao_de_Contas.ods;");
-            echo $html; $this->_helper->viewRenderer->setNoRender(TRUE);
-
+            echo $html;
+            $this->_helper->viewRenderer->setNoRender(true);
         } else {
             $this->view->dados = $busca;
         }
     }
 
-    public function cancelamentoDoEncaminhamentoAction(){
+    public function cancelamentoDoEncaminhamentoAction()
+    {
         $get  = Zend_Registry::get('get');
 
         try {
@@ -3618,38 +3604,35 @@ $pdf->gerarRelatorio();
             $tblProjeto = new Projetos();
             $tblProjeto->alterarSituacao($get->idPronac, '', 'E68', 'Presta&ccedil;&atilde;o de Contas apresentada - Aguardando An&aacute;lise');
             parent::message('Projeto devolvido com sucesso!', "realizarprestacaodecontas/painel?tipoFiltro=emanalise", 'CONFIRM');
-
         } catch (Exception $e) {
             parent::message('Erro ao devolver o projeto!', "realizarprestacaodecontas/painel?tipoFiltro=emanalise", 'ERROR');
             return;
         }
     }
 
-    public function manterAssinantesAction(){
-
+    public function manterAssinantesAction()
+    {
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
@@ -3661,14 +3644,16 @@ $pdf->gerarRelatorio();
 
         $pag = 1;
         $post  = Zend_Registry::get('post');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
 
         $filtro = '';
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($filtro) {
             case 'coordIncFiscTec': //Coordenador (a) de Incentivos Fiscais e Apoio T�cnico
@@ -3718,32 +3703,30 @@ $pdf->gerarRelatorio();
         $this->view->intTamPag     = $this->intTamPag;
     }
 
-    public function imprimirManterAssinantesAction(){
-
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+    public function imprimirManterAssinantesAction()
+    {
+        $this->_helper->layout->disableLayout();
         $this->intTamPag = 10;
 
         //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
+        if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
         $order = array();
 
-        //==== parametro de ordenacao  ======//
-        if($this->_request->getParam("ordem")) {
+        if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
-            if($ordem == "ASC") {
+            if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            }else {
+            } else {
                 $novaOrdem = "ASC";
             }
-        }else {
+        } else {
             $ordem = "ASC";
             $novaOrdem = "ASC";
         }
 
-        //==== campo de ordenacao  ======//
-        if($this->_request->getParam("campo")) {
+        if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo." ".$ordem);
             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
@@ -3755,14 +3738,16 @@ $pdf->gerarRelatorio();
 
         $pag = 1;
         $post  = Zend_Registry::get('post');
-        if (isset($post->pag)) $pag = $post->pag;
+        if (isset($post->pag)) {
+            $pag = $post->pag;
+        }
         $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
 
         /* ================== PAGINACAO ======================*/
         $where = array();
 
         $filtro = '';
-        if(isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])){
+        if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             switch ($filtro) {
             case 'coordIncFiscTec': //Coordenador (a) de Incentivos Fiscais e Apoio Tecnico
@@ -3791,7 +3776,7 @@ $pdf->gerarRelatorio();
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $tbAssinantesPrestacao->buscarAssinantesPrestacaoDeContas($where, $order, $tamanho, $inicio, false);
 
-        if(isset($post->xls) && $post->xls){
+        if (isset($post->xls) && $post->xls) {
             $html = '';
             $html .= '<table style="border: 1px">';
             $html .='<tr><td style="border: 1px dotted black; background-color: #EAF1DD; font-size: 16px; font-weight: bold;" colspan="5">Manter Assinantes</td></tr>';
@@ -3807,8 +3792,7 @@ $pdf->gerarRelatorio();
             $html .= '</tr>';
 
             $i=1;
-            foreach ($busca as $d){
-
+            foreach ($busca as $d) {
                 switch ($d->tpCargo) {
                 case '1':
                     $tpCargo = 'Coordenador (a) de Incentivos Fiscais e Apoio T&eacute;cnico';
@@ -3829,7 +3813,7 @@ $pdf->gerarRelatorio();
 
                 $dtCadastro = Data::tratarDataZend($d->dtCadastro, 'brasileira');
                 $stAtivo = 'Ativo';
-                if($d->stAtivo == 0){
+                if ($d->stAtivo == 0) {
                     $stAtivo = 'Inativo';
                 }
 
@@ -3846,14 +3830,15 @@ $pdf->gerarRelatorio();
 
             header("Content-Type: application/vnd.ms-excel");
             header("Content-Disposition: inline; filename=Manter_Assinantes.ods;");
-            echo $html; $this->_helper->viewRenderer->setNoRender(TRUE);
-
+            echo $html;
+            $this->_helper->viewRenderer->setNoRender(true);
         } else {
             $this->view->dados = $busca;
         }
     }
 
-    public function incluirAssinantesPrestacaoAction(){
+    public function incluirAssinantesPrestacaoAction()
+    {
         $post = Zend_Registry::get('post');
         $tbAssinantesPrestacao = new tbAssinantesPrestacao();
 
@@ -3875,14 +3860,14 @@ $pdf->gerarRelatorio();
             $tbAssinantesPrestacao->inserir($dados);
             $db->commit();
             parent::message("Assinante cadastrado com sucesso!", "realizarprestacaodecontas/manter-assinantes", "CONFIRM");
-        }
-        catch(Zend_Exception $e) {
+        } catch (Zend_Exception $e) {
             $db->rollBack();
             parent::message("Erro ao realizar cadastro do asssinante.", "realizarprestacaodecontas/manter-assinantes", "ERROR");
         }
     }
 
-    public function editarAssinantesPrestacaoAction(){
+    public function editarAssinantesPrestacaoAction()
+    {
         $post = Zend_Registry::get('post');
         $tbAssinantesPrestacao = new tbAssinantesPrestacao();
 
@@ -3903,8 +3888,7 @@ $pdf->gerarRelatorio();
 
             $db->commit();
             parent::message("Assinante alterado com sucesso!", "realizarprestacaodecontas/manter-assinantes", "CONFIRM");
-        }
-        catch(Zend_Exception $e) {
+        } catch (Zend_Exception $e) {
             $db->rollBack();
             parent::message("Erro ao tentar atualizar os dados do asssinante.", "realizarprestacaodecontas/manter-assinantes", "ERROR");
         }
@@ -3912,8 +3896,7 @@ $pdf->gerarRelatorio();
 
     public function planilhaOrcamentariaCustosAction()
     {
-        // pega a autenticacao
-        $auth = Zend_Auth::getInstance ();
+        $auth = Zend_Auth::getInstance();
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
 
         $this->dadosProjeto();
@@ -3931,28 +3914,28 @@ $pdf->gerarRelatorio();
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
         $rsEncaminhamento = $tblEncaminhamento->buscar(array('idPronac=?'=>$this->view->idPronac,'stAtivo=?'=>1))->current();
 
-        if(is_object($rsEncaminhamento))
+        if (is_object($rsEncaminhamento)) {
             $this->view->situacaoAtual = $rsEncaminhamento->idSituacaoEncPrestContas;
-        else
+        } else {
             $this->view->situacaoAtual = 1;
+        }
 
         $arrayA = array();
 
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
-
                 $modalidade = '';
-                if($val->idCotacao != '') {
+                if ($val->idCotacao != '') {
                     $modalidade = 'Cota&ccedil;&atilde;o';
                     $idmod = 'cot'.$val->idCotacao.'_'.$val->idFornecedorCotacao;
                 }
 
-                if($val->idDispensaLicitacao != '') {
+                if ($val->idDispensaLicitacao != '') {
                     $modalidade = 'Dispensa';
                     $idmod = 'dis'.$val->idDispensaLicitacao;
                 }
 
-                if($val->idLicitacao != '') {
+                if ($val->idLicitacao != '') {
                     $modalidade =   'Licita&ccedil;&atilde;o';
                     $idmod = 'lic'.$val->idLicitacao;
                 }
@@ -3965,12 +3948,12 @@ $pdf->gerarRelatorio();
                     $idmod = 'con'.$val->idContrato;
                 }
 
-                if($modalidade == '') {
+                if ($modalidade == '') {
                     $modalidade = '-';
                     $idmod = 'sem';
                 }
 
-                if($val->tpCusto == 'A') {
+                if ($val->tpCusto == 'A') {
                     $arrayA[utf8_encode($val->idPlanilhaAprovacao)] = array(
                         utf8_encode($val->descItem),
                         $val->Total,
@@ -3985,14 +3968,13 @@ $pdf->gerarRelatorio();
                 }
             }
         }
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $this->view->incFiscaisA = $arrayA;
     }
 
     public function planilhaOrcamentariaCustosProdutoAction()
     {
-        // pega a autenticacao
-        $auth = Zend_Auth::getInstance ();
+        $auth = Zend_Auth::getInstance();
         $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
 
         $this->dadosProjeto();
@@ -4010,17 +3992,18 @@ $pdf->gerarRelatorio();
             ($this->view->itemAvaliadoFilter ? $this->view->itemAvaliadoFilter : null),
             $this->view->uf,
             $this->view->idPlanilhaEtapa,
-            $this->view->codigoProduto != 0 ? $this->view->codigoProduto :  null, 
+            $this->view->codigoProduto != 0 ? $this->view->codigoProduto :  null,
             $this->view->idMunicipio
         );
 
         $tblEncaminhamento = new EncaminhamentoPrestacaoContas();
         $rsEncaminhamento = $tblEncaminhamento->buscar(array('idPronac=?'=>$this->view->idPronac,'stAtivo=?'=>1))->current();
 
-        if(is_object($rsEncaminhamento))
+        if (is_object($rsEncaminhamento)) {
             $this->view->situacaoAtual = $rsEncaminhamento->idSituacaoEncPrestContas;
-        else
+        } else {
             $this->view->situacaoAtual = 1;
+        }
 
         $arrayA = array();
         $arrayP = array();
@@ -4031,19 +4014,18 @@ $pdf->gerarRelatorio();
         $arrComprovantesImpugnados = array();
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
-
                 $modalidade = '';
-                if($val->idCotacao != '') {
+                if ($val->idCotacao != '') {
                     $modalidade = 'Cota&ccedil;&atilde;o';
                     $idmod = 'cot'.$val->idCotacao.'_'.$val->idFornecedorCotacao;
                 }
 
-                if($val->idDispensaLicitacao != '') {
+                if ($val->idDispensaLicitacao != '') {
                     $modalidade = 'Dispensa';
                     $idmod = 'dis'.$val->idDispensaLicitacao;
                 }
 
-                if($val->idLicitacao != '') {
+                if ($val->idLicitacao != '') {
                     $modalidade =   'Licita&ccedil;&atilde;o';
                     $idmod = 'lic'.$val->idLicitacao;
                 }
@@ -4056,12 +4038,12 @@ $pdf->gerarRelatorio();
                     $idmod = 'con'.$val->idContrato;
                 }
 
-                if($modalidade == '') {
+                if ($modalidade == '') {
                     $modalidade = '-';
                     $idmod = 'sem';
                 }
 
-                if($val->tpCusto == 'P') {
+                if ($val->tpCusto == 'P') {
                     $arrayP[$val->idPlanilhaAprovacao] = array(
                         ($val->descItem),
                         $val->Total,
@@ -4075,7 +4057,7 @@ $pdf->gerarRelatorio();
                 }
             }
         }
-        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->layout->disableLayout();
         $this->view->incFiscaisP = $arrayP;
     }
 }

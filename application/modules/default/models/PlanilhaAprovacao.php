@@ -557,10 +557,10 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
                             'SAC.dbo'
                            );
         $select->where('pAprovacao.IdPRONAC = ?', $idpronac);
-        /* $select->where('pAprovacao.stAtivo = ?','S'); */
-        /* $select->where('pAprovacao.idPlanilhaAprovacao = ?',$idPlanilhaItem); */
-        $select->where('pAprovacao.idPlanilhaItem = ?',$idPlanilhaItem);
-        $select->where(' cppa.stItemAvaliado is not null ');
+        $select->where('pAprovacao.stAtivo = ?','S');
+        $select->where('pAprovacao.idPlanilhaAprovacao = ?',$idPlanilhaItem);
+        /* $select->where('pAprovacao.idPlanilhaItem = ?',$idPlanilhaItem); */
+        /* $select->where(' cppa.stItemAvaliado is not null '); */
 
         return $this->fetchAll($select);
     }
@@ -1950,6 +1950,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         } elseif($itemAvaliadoFilter == 3) {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
+        /* echo $select;die; */
 
         return $this->fetchAll($select);
     }
@@ -2008,6 +2009,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         } elseif($itemAvaliadoFilter == 3) {
             $select->where('cppa.stItemAvaliado = ?', 3);
         }
+        /* echo $select;die; */
 
         return $this->fetchAll($select);
     }
