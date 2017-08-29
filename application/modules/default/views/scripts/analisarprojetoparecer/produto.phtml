@@ -544,9 +544,9 @@
         var parecer = $('#ParecerDeConteudo').val();
         $('#ParecerDeConteudo').before(parecer).remove();
         $('#ParecerFavoravel').attr('disabled', 1);
-        $('#ParecerDesFavoravel').attr('disabled', 1);
+        $('#ParecerDesfavoravel').attr('disabled', 1);
         $('#btSalvarAnaliseDeConteudo').remove();
-<?php endif; ?>
+dpi<?php endif; ?>
 
         
 	<?php if ($this->IN2017 && $this->stPrincipal): ?>
@@ -564,22 +564,22 @@
             <?php if (!$this->somenteLeitura) : ?>
             var parecer = CKEDITOR.instances['ParecerDeConteudo'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,''),
 <?php endif; ?>
-                erros = 0;
+		erros = 0;
 	    <?php if ($this->IN2017 && $this->stPrincipal): ?>
-                var acoesRelevantes = CKEDITOR.instances['dsAcaoAlcanceProduto'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
-                if( acoesRelevantes.length  < 11){
-                    alertar('As a\xE7\xF5es relevantes devem ter no m\xEDnimo 11 caracteres!');
-                    erros ++;
-                }	    
+		var acoesRelevantes = CKEDITOR.instances['dsAcaoAlcanceProduto'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
+            if( acoesRelevantes.length  < 11){
+		alertar('As a\xE7\xF5es relevantes devem ter no m\xEDnimo 11 caracteres!');
+		erros ++;
+	    }	    
 	    <?php endif; ?>
-                if( parecer.length  < 11){
-                    alertar('O parecer t&eacute;cnico deve ter no m\xEDnimo 11 caracteres!');
-                    erros ++;
-                }
-                if (!erros) {
-                    $('#formAnaliseConteudo').submit();
-                }
-                return false;
+            if( parecer.length  < 11){
+		alertar('O parecer t&eacute;cnico deve ter no m\xEDnimo 11 caracteres!');
+		erros ++;
+	    }
+            if (!erros) {
+                $('#formAnaliseConteudo').submit();
+            }
+            return false;
         });
 
         window.setTimeout('carregarTextAreaCKEditor()', 1000);
@@ -956,11 +956,16 @@
                             }
                         }else{
                             btSalvar = true;
-                            $(object).val(data[$(object).attr('name')]);
+//                            if($(object).attr('type') == 'textarea'){
+//                                console.debug(object);
+//                            } else {
+                                $(object).val(data[$(object).attr('name')]);
+//                            }
                         }
                     }
                 });
                 $('#stAcao').val(2);
+                // desabilitaFormConteudo(false);
             }else{
                 $('#stAcao').val(3);
             }
