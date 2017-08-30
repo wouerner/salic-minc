@@ -1,142 +1,144 @@
-<?php echo $this->partial("inc/menu.inc.php"); ?>
-<style>
-    .tabela p { font: 12px/14pt "Trebuchet MS",Georgia,"Times New Roman",Times,serif; }
-</style>
-<script language="JavaScript" type="text/javascript">
-    $(document).ready(function() {
-        $('.btn_cancelar').click(function(){
-            window.location = "<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'index')); ?>";
-        });
+<div class="container-fluid">
+    <div class="row">
+        <div class="col s2">
+            <?php echo $this->partial("realizarprestacaodecontas/inc/menu.inc.php", $this); ?>
+        </div>
+        <div class="col s10">
+            <style>
+                .tabela p { font: 12px/14pt "Trebuchet MS",Georgia,"Times New Roman",Times,serif; }
+            </style>
+            <script language="javascript" type="text/javascript">
+                $(document).ready(function() {
+                    $('.btn_cancelar').click(function(){
+                        window.location = "<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'index')); ?>";
+                    });
 
-        $("#btn_salvar").click(function() {
-            isLaudoAprovado = $("[name=IN]:checked").val();
+                    $("#btn_salvar").click(function() {
+                        isLaudoAprovado = $("[name=IN]:checked").val();
 
-            if (!$("input[type='checkbox']:checked").length) {
-                JSJanela();
-                return false;
-            }
-
-            if($("#parecerdotecnico").val() == "" || isLaudoAprovado == undefined) {
-                $("#obrigatorio").html("Dados obrigat&oacute;rios n&atilde;o informados!");
-                $("#obrigatorio").dialog("destroy");
-                $("#obrigatorio").dialog
-                ({
-                    width: 350,
-                    height: 180,
-                    resizable: true,
-                    EscClose:false,
-                    modal:true,
-                    buttons: {
-                        'OK' : function(){
-                            $(this).dialog('close');
+                        if (!$("input[type='checkbox']:checked").length) {
+                            JSJanela();
+                            return false;
                         }
-                    }
+
+                        if($("#parecerdotecnico").val() == "" || isLaudoAprovado == undefined) {
+                            $("#obrigatorio").html("Dados obrigat&oacute;rios n&atilde;o informados!");
+                            $("#obrigatorio").dialog("destroy");
+                            $("#obrigatorio").dialog
+                            ({
+                                width: 350,
+                                height: 180,
+                                resizable: true,
+                                EscClose:false,
+                                modal:true,
+                                buttons: {
+                                    'OK' : function(){
+                                        $(this).dialog('close');
+                                    }
+                                }
+                            });
+                            return false;
+                        } else {
+                            var mensagem = 'Tem certeza que deseja salvar e finalizar a análise do projeto?';
+                            if (isLaudoAprovado == 'aprovado') {
+                                mensagem + '<br>Será gerado a guia de arquivamento para seu projeto.';
+                            }
+                            $("#enviar-confirm").html(mensagem);
+                            $("#enviar").dialog("destroy");
+                            $("#enviar-confirm").dialog
+                            ({
+                                height: 210,
+                                width: 450,
+                                modal: true,
+                                draggable: false,
+                                resizable: true,
+                                closeOnEscape: false,
+                                buttons: {
+                                    'Não': function(){
+                                        $(this).dialog('close');
+                                    },
+                                    'Sim': function() {
+                                        $('#formLaudoFinal').attr('action', '<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'gravarlaudofinal'), null, true); ?>');
+                                        $("#formLaudoFinal").submit();
+                                        window.setTimeout('retornarTela()', 1000);
+                                    }
+                                }
+                            });
+                        }
+                        return false;
+                    });
+
+                    $("#btn_imprimir, #btn_imprimir_guia").click(function() {
+                        console.log('btn_imprimir_guia');
+                        if (
+                                'btn_imprimir' == $(this).attr('id') &&
+                                !$("input[type='checkbox']:checked").length
+                        ) {
+                            JSJanela();
+                            return false;
+                        }
+                        $('#formLaudoFinal').attr('action', '<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'gerarpdf'), null, true); ?>');
+                        $("#formLaudoFinal").submit();
+                    });
+
+                    <?php if(isset($_GET['gerarGuia']) && $_GET['gerarGuia'] == "true"): ?>
+                    //GERA GUIA ATUOMATICO
+                    $('#formLaudoFinal').attr('action', '<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'gerarpdf'), null, true); ?>');
+                    $('#formLaudoFinal').removeAttr('target');
+                    $("#formLaudoFinal").submit();
+                    <?php endif; ?>
                 });
-                return false;
-            } else {
-                var mensagem = 'Tem certeza que deseja salvar e finalizar a análise do projeto?';
-                if (isLaudoAprovado == 'aprovado') {
-                    mensagem + '<br>Será gerado a guia de arquivamento para seu projeto.';
+
+                function retornarTela(){
+                    window.location = "<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')); ?>?msg=sucessoLaudoFinal";
                 }
-                $("#enviar-confirm").html(mensagem);
-                $("#enviar").dialog("destroy");
-                $("#enviar-confirm").dialog
-                ({
-                    height: 210,
-                    width: 450,
-                    modal: true,
-                    draggable: false,
-                    resizable: true,
-                    closeOnEscape: false,
-                    buttons: {
-                        'Não': function(){
-                            $(this).dialog('close');
-                        },
-                        'Sim': function() {
-                            $('#formLaudoFinal').attr('action', '<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'gravarlaudofinal'), null, true); ?>');
-                            $("#formLaudoFinal").submit();
-                            window.setTimeout('retornarTela()', 1000);
-                        }
-                    }
-                });
-            }
-            return false;
-        });
 
-        $("#btn_imprimir, #btn_imprimir_guia").click(function() {
-            console.log('btn_imprimir_guia');
-            if (
-                    'btn_imprimir' == $(this).attr('id') &&
-                    !$("input[type='checkbox']:checked").length
-            ) {
-                JSJanela();
-                return false;
-            }
-            $('#formLaudoFinal').attr('action', '<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'gerarpdf'), null, true); ?>');
-            $("#formLaudoFinal").submit();
-        });
-
-        <?php if(isset($_GET['gerarGuia']) && $_GET['gerarGuia'] == "true"): ?>
-        //GERA GUIA ATUOMATICO
-        $('#formLaudoFinal').attr('action', '<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'gerarpdf'), null, true); ?>');
-        $('#formLaudoFinal').removeAttr('target');
-        $("#formLaudoFinal").submit();
-        <?php endif; ?>
-    });
-
-    function retornarTela(){
-        window.location = "<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')); ?>?msg=sucessoLaudoFinal";
-    }
-
-    function JSJanela() {
-        $("body").append("<div id='divDinamica'></div>");
-        $('#divDinamica')
-                .css('overflow', 'hidden')
-                .html("É necessário informar ao menos um parecer para impressão.")
-                .dialog({
-                    resizable: true,
-                    width:320,
-//                    height:180,
-                    modal: true,
-                    autoOpen:true,
-                    draggable:false,
-                    title: 'Alerta',
-                    buttons: {
-                        'OK': function() {
-                            $("#divDinamica").remove();
-                            $(this).dialog('close');
-                            $('html').css('overflow', 'auto');
-                        }
-                    },
-                    close: function() {
-                        $("#divDinamica").remove();
-                        $(this).dialog('close');
-                        $('html').css('overflow', 'auto');
-                    }
-                });
-    }
-</script>
+                function JSJanela() {
+                    $("body").append("<div id='divDinamica'></div>");
+                    $('#divDinamica')
+                            .css('overflow', 'hidden')
+                            .html("É necessário informar ao menos um parecer para impressão.")
+                            .dialog({
+                                resizable: true,
+                                width:320,
+            //                    height:180,
+                                modal: true,
+                                autoOpen:true,
+                                draggable:false,
+                                title: 'Alerta',
+                                buttons: {
+                                    'OK': function() {
+                                        $("#divDinamica").remove();
+                                        $(this).dialog('close');
+                                        $('html').css('overflow', 'auto');
+                                    }
+                                },
+                                close: function() {
+                                    $("#divDinamica").remove();
+                                    $(this).dialog('close');
+                                    $('html').css('overflow', 'auto');
+                                }
+                            });
+                }
+            </script>
 
 <div id="enviar-confirm" class="sumir" title="Envio de Projeto"></div>
 <div id="obrigatorio"></div>
 <div id="conteudoParaImpressao"></div>
 <div id="total">
-<div id="breadcrumb">
+
+<div class="col s12" id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
         <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel'));?>">Presta&ccedil;&atilde;o de contas</a></li>
         <li class="last">Laudo final de presta&ccedil;&atilde;o de contas</li>
     </ul>
 </div>
-<div id="titulo">
-    <div>
-        Laudo final de presta&ccedil;&atilde;o de contas
-        <span class="voltar" style="float:right;">
-            <a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria'),'',true) , "?idPronac={$this->idPronac}"; ?>" title="Ir para p&aacute;gina anterior">Voltar</a>
-        </span>
-    </div>
-</div>
-<div id="conteudo">
+
+<h5 class="left">Laudo final de presta&ccedil;&atilde;o de contas</h5>
+<a class="btn right" href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'planilhaorcamentaria'),'',true) , "?idPronac={$this->idPronac}"; ?>" title="Ir para p&aacute;gina anterior">Voltar</a>
+
+<div>
     <form id="formLaudoFinal" method="post" target="_blank">
         <input type="hidden" name="idPronac" id="idPronac" value="<?php echo $this->idPronac;?>" />
         <input type="hidden" name="processo" value="<?php echo $this->processo;?>" />
@@ -144,7 +146,7 @@
         <input type="hidden" name="nomeProjeto" value="<?php echo $this->nomeProjeto;?>" />
         <input type="hidden" name="nomeProponente" value="<?php echo $this->nomeProponente;?>" />
         <div id="conteudoPDF">
-            <table cellspacing="1" class="tabela" id="cabecalho" class="checks">
+            <table cellspacing="1" id="cabecalho" class="bordered">
                 <tr>
                     <th width="30%">PRONAC</th>
                     <th width="70%">NOME DO PROJETO</th>
@@ -157,8 +159,8 @@
             <table cellspacing="1" class="tabela">
                     <div id="divParecerTecnico">
                     <tr>
-                        <th style="text-align:left" colspan="1">
-                            <input type="checkbox" name="pt" id="pt" value="1" class="checks" />
+                        <th style="" colspan="1">
+                            <input type="checkbox" name="pt" id="pt" value="1" class="" />
                             <label for="pt">Parecer Técnico</label>
                             <br/>
                         </th>
@@ -172,7 +174,10 @@
                     </tr>
                     <tr>
                         <td colspan="1">
-                            <textarea readonly class="input_simples" id="parecerdotecnico" style="width: 99%" rows="15" name="parecerDoTecnico"><?php if(!empty($this->parecerTecnico)):echo $this->parecerTecnico->meRelatorio;endif;?></textarea>
+                            <?php echo (!empty($this->parecerTecnico)) ? $this->parecerTecnico->meRelatorio : '' ?>
+                            <textarea readonly class=" hide materialize-textarea" id="parecerdotecnico" rows="15" name="parecerDoTecnico">
+                                <?php echo (!empty($this->parecerTecnico)) ? $this->parecerTecnico->meRelatorio : '' ?>
+                            </textarea>
                             <?php
                             if ($this->parecerTecnico) :
                                 $parecerTecnico = $this->parecerTecnico->siManifestacao == 0 ? 'Irregular' : 'Regular';
@@ -203,7 +208,10 @@
                     </tr>
                     <tr>
                         <td colspan="1">
-                            <textarea readonly class="input_simples" id="parecerchefe" style="width: 99%" rows="15" name="parecerDoChefeDeDivisao"><?php if(!empty($this->parecerChefe)):echo $this->parecerChefe->meRelatorio;endif;?></textarea>
+                            <?php echo (!empty($this->parecerChefe))? $this->parecerChefe->meRelatorio : '';?>
+                            <textarea readonly class=" hide materialize-textarea" id="parecerchefe" style="width: 99%" rows="15" name="parecerDoChefeDeDivisao">
+                                <?php if(!empty($this->parecerChefe)):echo $this->parecerChefe->meRelatorio;endif;?>
+                            </textarea>
                             <?php
                                 if ($this->parecerChefe) :
                                     $parecerDoChefeDeDivisao = $this->parecerChefe->siManifestacao ? 'Regular' : 'Irregular';
@@ -222,7 +230,7 @@
 
         <?php if(!empty($this->parecerCoord)) : ?>
         <input type="hidden" name="IN" value="reprovado" />
-        <table cellspacing="1" class="tabela">
+        <table cellspacing="1" class="bordered">
             <tr>
                 <th style="text-align: left" <?php echo (!empty($this->tipoInabilitacao)) ? '' : 'colspan="2"'; ?> class="" align="center" width="50%"><b>Conforme IN nº 1 de 05/10/2010.&nbsp;&nbsp;Seção III Art. 76 a Art. 80</b></th>
                 <?php if(!empty($this->tipoInabilitacao)) { ?>
@@ -305,8 +313,6 @@
         </table>
     </form>
 </div>
-
-<!--            <INPUT TYPE="RADIO" NAME="OPCAO" VALUE="op1"> opção1 -->
-<div id="rodapeConteudo"><span></span></div>
-<!-- ========== FIM RODAPÉ DO CONTEÚDO ========== --> <br clear="all" />
+</div>
+</div>
 </div>

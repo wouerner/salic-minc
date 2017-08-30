@@ -1114,9 +1114,8 @@ x - TABELAS
 
 #conteudo table tfoot td {
     background: #f3f3f3;
-    text-align: center;
     word-spacing: .8em;
-    color: #999;
+    color: #000;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #b0b0b0;
 }
@@ -1165,7 +1164,7 @@ x - TABELAS
 
 #conteudo .fundo_linha2,
 #conteudo .fundo_linha2 td {
-    background: #e8e8e8 url(../img/bg-celulas2.gif) top left repeat-x;
+    background-color: #4caf50;
 }
 
 #conteudo .fundo_linha3,
@@ -1543,7 +1542,7 @@ x - GRID ANTIGO
 /*--------------------------------------------------------------
 x - CORES
 --------------------------------------------------------------*/
-#conteudo .red,
+#conteudo .red:not(.btn),
 #conteudo .red a,
 #conteudo table.tabela td.red
 {
@@ -1551,7 +1550,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .green,
+#conteudo .green:not(.btn),
 #conteudo .green a,
 #conteudo table.tabela td.green
 {
@@ -1559,7 +1558,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .blue,
+#conteudo .blue:not(.btn),
 #conteudo .blue a ,
 #conteudo table.tabela td.blue
 {
@@ -1567,7 +1566,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .orange,
+#conteudo .orange:not(.btn),
 #conteudo .orange a ,
 #conteudo table.tabela td.orange
 {
@@ -1575,7 +1574,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .black,
+#conteudo .black:not(.btn),
 #conteudo .black a,
 #conteudo table.tabela td.black
 {
@@ -1647,7 +1646,8 @@ div.plan span {
 	cursor:auto;
 }
 
-.valor_maior_que_praticado {
+.valor_maior_que_praticado,
+#conteudo table .valor_maior_que_praticado > td {
     background-color: #ff9100;
     color: #000;
 }
@@ -3540,6 +3540,13 @@ table.tabela td.destacar span,
     background: transparent !important;
 }
 
+.assinar_parecer .produtos td {
+    text-align: right;
+}
+
+input#stEnvioPlenaria {
+    display: none;
+}
 /*--------------------------------------------------------------
 x - FOOTER
 --------------------------------------------------------------*/

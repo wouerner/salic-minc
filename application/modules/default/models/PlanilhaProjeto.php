@@ -1,15 +1,4 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
- 
-/**
- * Description of PlanilhaProjeto
- *
- * @author augusto
- */
 class PlanilhaProjeto extends MinC_Db_Table_Abstract {
 
     protected $_schema = 'SAC';
@@ -36,7 +25,6 @@ class PlanilhaProjeto extends MinC_Db_Table_Abstract {
                 array(),
                 'SAC.dbo'
         );
-
 
         $buscar->where('idPRONAC = ?', $idpronac);
 
@@ -237,6 +225,7 @@ class PlanilhaProjeto extends MinC_Db_Table_Abstract {
             'PPJ.Ocorrencia AS ocorrenciaparc',
             'PPJ.ValorUnitario AS valorUnitarioparc',
             'PPJ.QtdeDias AS diasparc',
+            'PPJ.stCustoPraticado AS custopraticado',
                 )
         );
         $select->joinInner(
@@ -303,8 +292,8 @@ class PlanilhaProjeto extends MinC_Db_Table_Abstract {
         $select->order(
                 array(
                     'PPJ.FonteRecurso',
-                    'PD.Descricao',
-                    'PPJ.idEtapa',
+                    'PD.Descricao DESC',
+                    'E.nrOrdenacao',
                     'FED.Sigla',
                     'CID.Descricao'
                 )

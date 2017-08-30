@@ -7,8 +7,14 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     protected $_primary = 'idAssinatura';
 
     const TIPO_ATO_ENQUADRAMENTO = 626;
+    const TIPO_ATO_ANALISE_INICIAL = 630;
+    const TIPO_ATO_ANALISE_CNIC = 631;
 
-    public function obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo)
+    public function obterAssinaturas(
+        $idPronac,
+        $idTipoDoAtoAdministrativo,
+        $idDocumentoAssinatura = NULL
+    )
     {
         $query = $this->select();
         $query->setIntegrityCheck(false);
@@ -48,6 +54,9 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         );
         $objQuery->where("IdPRONAC = ?", $idPronac);
         $objQuery->where("tbAtoAdministrativo.idTipoDoAto = ?", $idTipoDoAtoAdministrativo);
+        if(!is_null($idDocumentoAssinatura)) {
+            $objQuery->where("tbAssinatura.idDocumentoAssinatura = ?", $idDocumentoAssinatura);
+        }
         return $this->_db->fetchAll($objQuery);
     }
 
@@ -74,7 +83,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 //        $objQuery->where('idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
 ////        $objQuery->where('idPerfilDoAssinante = ?', $idPerfilDoAssinante);
 //        $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
-////xd($objQuery->assemble());
 //        $result = $this->fetchAll($objQuery);
 //        if ($result) {
 //            return $result->toArray();
@@ -82,14 +90,14 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 //    }
 
     public function obterProjetosAssinados(
-        $idOrgaoDoAssinante,
+        $idOrgaoSuperiorDoAssinante,
         $idAssinante = null
     )
     {
-        $query = $this->select();
-        $query->setIntegrityCheck(false);
+        $objQuery = $this->select();
+        $objQuery->setIntegrityCheck(false);
 
-        $query->from(
+        $objQuery->from(
             array("Projetos" => "Projetos"),
             array(
                 'pronac' => New Zend_Db_Expr('Projetos.AnoProjeto + Projetos.Sequencial'),
@@ -104,20 +112,21 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                 'Projetos.Situacao',
                 'Projetos.DtSituacao',
                 'Projetos.Orgao',
+                'tbDocumentoAssinatura.idDocumentoAssinatura',
                 'tbDocumentoAssinatura.cdSituacao',
                 'tbDocumentoAssinatura.stEstado'
             ),
             $this->_schema
         );
 
-        $query->joinInner(
+        $objQuery->joinInner(
             array('Area' => 'Area'),
             "Area.Codigo = Projetos.Area",
             "Area.Descricao as area",
             $this->_schema
         );
 
-        $query->joinInner(
+        $objQuery->joinInner(
             array('Segmento' => 'Segmento'),
             "Segmento.Codigo = Projetos.Segmento",
             array(
@@ -127,7 +136,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             $this->_schema
         );
 
-        $query->joinInner(
+        $objQuery->joinInner(
             array('tbDocumentoAssinatura' => 'tbDocumentoAssinatura'),
             "tbDocumentoAssinatura.IdPRONAC = Projetos.IdPRONAC",
             array(
@@ -136,7 +145,21 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             $this->_schema
         );
 
-        $query->joinInner(
+        $objQuery->joinInner(
+            array('tbAssinatura' => 'tbAssinatura'),
+            "tbAssinatura.idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura",
+            "",
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
+            array('tbAtoAdministrativo' => 'tbAtoAdministrativo'),
+            "tbAtoAdministrativo.idAtoAdministrativo = tbAssinatura.idAtoAdministrativo",
+            "",
+            $this->_schema
+        );
+
+        $objQuery->joinInner(
             array('Verificacao' => 'Verificacao'),
             "Verificacao.idVerificacao = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
             'Verificacao.Descricao as tipoDoAtoAdministrativo',
@@ -146,7 +169,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 //        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
 
         if($idAssinante) {
-            $query->where(new Zend_Db_Expr(
+            $objQuery->where(new Zend_Db_Expr(
 
             'tbDocumentoAssinatura.idDocumentoAssinatura IN (
                 SELECT distinct idDocumentoAssinatura from "sac"."dbo"."tbAssinatura"
@@ -154,9 +177,9 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
              )'
             ));
         }
+        $objQuery->where("{$this->_schema}.tbAtoAdministrativo.idOrgaoSuperiorDoAssinante = ?", $idOrgaoSuperiorDoAssinante);
         $ordenacao[] = 'tbDocumentoAssinatura.dt_criacao desc';
-        $query->order($ordenacao);
-//xd($query->assemble());
-        return $this->_db->fetchAll($query);
+        $objQuery->order($ordenacao);
+        return $this->_db->fetchAll($objQuery);
     }
 }

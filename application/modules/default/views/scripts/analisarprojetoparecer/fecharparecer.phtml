@@ -1,4 +1,3 @@
-<?php //xd($this->totaldivulgacao) ?>
 <script type="text/javascript">
 
     $(document).ready(function() {
@@ -9,11 +8,11 @@
         var texto = CKEDITOR.instances['justificativa'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
 
         if (texto.length <= 11){
-            alertar('O campo justificativa deve ter no m�nimo 11 caracteres!');
+            alertar('O campo justificativa deve ter no m\xEDnimo 11 caracteres!');
             return false;
         } else {
             
-            $("#modal").html('Deseja concluir an�lise e devolver para o Coordenador?');
+            $("#modal").html('Deseja concluir an\xE1lise e devolver para o Coordenador?');
             $("#modal").dialog({
                 title : 'Alerta',
                 resizable: false,
@@ -46,8 +45,8 @@
 <div id="total">
     <div id="breadcrumb">
         <ul>
-            <li><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para P�gina Inicial">In�cio</a></li>
-			<li><a href="<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'index'), '', true); ?>" title="Ir para P�gina Inicial">Projetos/Produtos para An�lise</a></li>
+        <li><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para P&aacute;gina Inicial">In&iacute;cio</a></li>
+<li><a href="<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'index'), '', true); ?>" title="Ir para P&aacute;gina Inicial">Projetos/Produtos para An&aacute;lise</a></li>
 			<li class="last">Concluir Parecer</li>
         </ul>
     </div>
@@ -58,7 +57,7 @@
     <!-- ==========INA� CIO TA� TULO========== -->
 
     <div id="titulo">
-        <div>Concluir An�lise e devolver para o Coordenador <span class="voltar"><a href="javascript:voltar();">Voltar</a></span></div>
+        <div>Concluir An&aacute;lise e devolver para o Coordenador <span class="voltar"><a href="javascript:voltar();">Voltar</a></span></div>
 
     </div>
 
@@ -73,7 +72,7 @@
         <?php if ($this->totaldivulgacao != "true") { ?>
             <div class="msgERROR">
                 <div class="float_right"></div>
-                <div>Aten��o! Custo de Divulga��o/Comercializa��o superior a 20% do valor total do projeto. Favor readequar os custos em <b><?php echo $this->formatarReal($this->valorRetirar); ?></b> para finalizar sua an�lise. <br> Favor verificar em todos os produtos que possuem esta etapa!</div>
+                <div>Aten&ccedil;&atilde;o! Custo de Divulga&ccedil;&atilde;o/Comercializa&ccedil;&atilde;o superior a 20% do valor total do projeto. Favor readequar os custos em <b><?php echo $this->formatarReal($this->valorRetirar); ?></b> para finalizar sua an&aacute;lise. <br> Favor verificar em todos os produtos que possuem esta etapa!</div>
             </div>
             <table class="tabela">
 	            <tr>
@@ -131,7 +130,7 @@
 
         <div class="msgALERT">
 			<div class="float_right"></div>
-			<div>O acerto dos custos administrativos s�o maiores que 15% do valor total do projeto.<br /> Favor ajustar <?php echo $this->formatarReal($this->verifica15porcento); ?>.</div>
+			<div>O acerto dos custos administrativos s&atilde;o maiores que 15% do valor total do projeto.<br /> Favor ajustar <?php echo $this->formatarReal($this->verifica15porcento); ?>.</div>
 		</div>
 		<table class="tabela">
             <tr>

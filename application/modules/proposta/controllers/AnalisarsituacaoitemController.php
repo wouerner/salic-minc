@@ -8,9 +8,9 @@
  * @package application
  * @subpackage application.controller
  * @link http://www.cultura.gov.br
- * @copyright 2010 - Minist�rio da Cultura - Todos os direitos reservados.
+ * @copyright 2010 - Ministerio da Cultura - Todos os direitos reservados.
  */
-class AnalisarsituacaoitemController extends MinC_Controller_Action_Abstract {
+class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abstract {
 
     private $getIdAgente  = 0;
     private $getIdGrupo   = 0;
@@ -18,19 +18,19 @@ class AnalisarsituacaoitemController extends MinC_Controller_Action_Abstract {
     private $getIdUsuario = 0;
     private $intTamPag = 10;
     /**
-     * Reescreve o m�todo init()
+     * Reescreve o metodo init()
      * @access public
      * @param void
      * @return void
      */
     public function init() {
-        // verifica as permiss�es
+        // verifica as permissoes
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 97;  // Gestor do SALIC
         parent::perfil(1, $PermissoesGrupo);
 
-        $Usuario = new Autenticacao_Model_Usuario(); // objeto usu�rio
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
+        $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $idagente = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
         $this->getIdAgente = $idagente['idAgente'];
@@ -116,7 +116,7 @@ class AnalisarsituacaoitemController extends MinC_Controller_Action_Abstract {
         if($this->_request->getParam("item")) {
             $item = $this->_request->getParam("item");
         } else {
-            parent::message("Item n&atilde;o encontrado!", "analisarsituacaoitem", "ERROR");
+            parent::message("Item n&atilde;o encontrado!", "/proposta/analisarsituacaoitem", "ERROR");
         }
 
         $where = array();
@@ -136,16 +136,15 @@ class AnalisarsituacaoitemController extends MinC_Controller_Action_Abstract {
         $busca->stEstado = $_POST['avaliacao'];
         $busca->save();
 
-        $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
         if($_POST['avaliacao']){
             $msg = 'rejeitado';
         } else {
             $msg = 'aprovado';
         }
 
-        $pa = new paIncluirRecusarItem();
-        $pa->incluirRecusarItem($_POST['idItem'], $this->getIdUsuario, $_POST['idItem'], $_POST['avaliacao']);
-        parent::message("Item $msg com sucesso!", "analisarsituacaoitem", "CONFIRM");
+        $pa = new Proposta_Model_PaIncluirRecusarItem();
+        $pa->incluirRecusarItem($_POST['idItem'], $this->getIdUsuario, $_POST['avaliacao']);
+        parent::message("Item $msg com sucesso!", "/proposta/analisarsituacaoitem", "CONFIRM");
     }
 
 }

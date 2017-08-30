@@ -1,0 +1,332 @@
+<!-- ========== INÍCIO BREADCRUMB (LINKS TOPO) ========== -->
+<div id="breadcrumb">
+    <ul>
+        <li class="first"><a href="<?php echo $this->url(array('controller' => 'gerenciarparecer', 'action' => 'index'),'',true); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
+        <li><a href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'),'',true); ?>" title="Localizar Parecer">Gerenciar Pareceres</a></li>
+    </ul>
+</div>
+<!-- ========== FIM BREADCRUMB (LINKS TOPO) ========== -->
+
+
+<!-- ========== INÍCIO TÍTULO ========== -->
+<div id="titulo">
+    <div>Gerenciar Pareceres<span class="voltar"><a href="#" onclick="voltar();">Voltar</a></span></div>
+</div>
+
+
+<!-- ========== INÍCIO CONTEÚDO ========== -->
+<div class="content padding20 clearfix">
+  <div class="row">
+    <div class="col s12">
+    <table class="tabela">
+	<tr>
+            <td class="destacar bold" width="1" align="center">PRONAC</td>
+            <td width="435" align="center">
+                <input type="text" class="input_simples" name="pronac" id="pronac" maxlength="7" style="width: 90px;" value="<?php echo $this->pronacProjeto;?>">
+                <input type="button" name="btn_pesquisar" id="btn_pesquisar" class="btn_pesquisar" value="">
+            </td>
+            <td class="center-align"><?php if($this->qtdDocumentos != 0){echo $this->qtdDocumentos.' Projetos listados';}else{ echo 'Nenhum Registro encontrado!';}?></td>
+        </tr>
+    </table>
+    
+    <?php if(count($this->dados)>0): ?>
+    <!-- ============ PAGINAÇÃO ============ -->
+    <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr>
+                <td class="center-align">
+                <form name="form1" id="form1" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'));?>" method="get">
+                    <?php if($this->paginacao['pag']>1) { ?>
+                    <input class="btn_inicio" id="btn_inicio" type="button" class="btn_inicio"
+                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
+                    <?php } ?>
+                    <input id="btn_p_anterior" type="button"
+                    <?php if($this->paginacao['pag']<=1) { ?> class="btn_p_anterior-off"
+                    <?php }else { ?>
+                           class="btn_p_anterior"
+                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
+                    <?php } ?>>
+                    <input id="btn_p_proximo" type="button"
+                           <?php if($this->paginacao['pag']+1 > $this->paginacao['totalPag']) { ?>
+                           class="btn_p_proximo-off"
+                    <?php }else { ?>
+                           class="btn_p_proximo"
+                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
+                    <?php } ?>>
+                    <?php if($this->paginacao['pag'] < $this->paginacao['totalPag']) { ?>
+                    <input class="btn_ultimo" id="btn_ultimo" type="button"
+                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
+                    <?php } ?>
+                    P&aacute;g.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
+                        <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
+                        <option value="<?php echo $i;?>" <?php if($this->paginacao['pag'] == $i) echo "selected";?>><?php echo $i;?>&nbsp;</option>
+                        <?php endfor; ?>
+                    </select>
+                    &nbsp;Registros por p&aacute;gina:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="submit" class="btn_recarregar" value="">
+                    <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
+                    <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
+                    <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
+                 </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <center>
+        <?php
+            echo $this->paginacao['inicio']." a ";
+            echo ($this->paginacao['pag']-1)*$this->paginacao['Itenspag'] + $this->paginacao['tamanho'];
+            echo " de ". $this->paginacao['total'];
+        ?>
+    </center>
+    <!-- ========== FIM PAGINAÇÃO ========== -->
+    <?php endif; ?>
+
+    <?php if($this->qtdDocumentos != 0): ?>
+    <table class="bordered margin0 dataTable no-footer" style="width:100%">
+      <thead>
+        <th class="center-align">PRONAC</th>
+        <th class="center-align">Nome do Projeto</th>
+        <th class="center-align">Segmento Cultural</th>
+        <th class="center-align">Vl.&nbsp;Incentivo</th>
+	<th class="center-align">Coordenador</th>
+	<th class="center-align">Dt. valida&ccedil;&atilde;o</th>
+
+	<th class="center-align">Hist&oacute;rico</th>
+        <th class="center-align" style="width: 10%">Concluir</th>
+      </thead>
+            <?php
+                $nomeProjeto = '';
+                $pronac      = '';
+                $tipostatus  = array ('AN&Aacute;LISE CONCLU&Iacute;DA', 'Aguardando distribui&ccedil;&atilde;o');
+
+                foreach($this->dados as $dp):
+	    
+                ?>
+            <tr class="<?php if($dp->FecharAnalise == 2) { echo 'red'; }?>" >
+                <td class="center-align">
+                  <a class="waves-effect waves-dark btn white black-text"
+                     href="<?php echo $this->url(
+                           array(
+                           'module' => 'default',
+                           'controller' => 'consultardadosprojeto',
+                           'action' => 'index'
+                           )
+                           ) . "?idPronac=". $dp->IdPRONAC; ?>"><u><?php echo $dp->NrProjeto; ?></u>
+		  </a>
+                </td>
+                <td><?php if(($nomeProjeto != $dp->NomeProjeto) || ($pronac != $dp->NrProjeto))echo $dp->NomeProjeto; ?></td>
+                <td><?php echo $dp->Segmento; ?></td>
+                <td align="right" nowrap><?php echo $this->formatarReal($dp->Valor); ?></td>
+		
+		<td class="center-align"><strong><?php echo $dp->TecnicoValidador; ?></strong></td>
+		<td class="center-align"><?php echo Data::tratarDataZend($dp->dtValidacao, 'Brasileira'); ?></td>
+
+                <td class="center-align">
+		  <a class="btn waves-effect waves-light cyan tooltipped small"
+		     href="<?php echo $this->url(array('module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'historico', 'idPronac'=> $dp->IdPRONAC, 'stPrincipal'=> $dp->stPrincipal, 'idProduto' => $dp->idProduto)); ?>"
+		    data-tooltip="Hist&oacute;rico">
+		    <i class="material-icons white-text">history</i>
+		  </a>		  
+		</td>
+
+		<td class="center-align">
+		  <!-- pergunto se tem secundarios abertos -->
+		  <?php if($this->checarValidacaoSecundarios[$dp->IdPRONAC] == 1) { ?>
+		  <!-- se retornar true mostra o botão -->
+		  <?php if($this->verificarIN2017($dp->IdPRONAC)): ?>
+		  <?php if($this->IsProjetoDisponivelParaAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
+		  <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
+		  <?php if (!$this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):
+		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC;
+		  ?>
+		  <a class="btn waves-effect waves-light cyan tooltipped small"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'assinar-projeto')) . "?IdPRONAC={$dp->IdPRONAC}&idTipoDoAtoAdministrativo=" . Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL; ?>&origin=parecer/gerenciar-parecer/finalizar-parecer"
+		    data-tooltip="Assinar documento">
+		    <i class="material-icons white-text">create</i>
+		  </a>
+		  <?php elseif ($this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):		  
+		  $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC;
+		  ?>
+		  <a class="btn waves-effect waves-light cyan tooltipped small"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/gerenciar-parecer/finalizar-parecer"
+		    data-tooltip="Visualizar documento assinado">
+		    <i class="material-icons white-text">remove_red_eye</i>
+		  </a>
+		  &nbsp;&nbsp;
+		  <a class="btn waves-effect waves-light tooltipped small btn cyan"
+                     href="#modalConfirmacao"
+                     data-redirect-url="<?php echo $this->url(
+                                        array(
+                                        'module' => 'parecer',
+                                        'controller' => 'gerenciar-parecer',
+                                        'action' => 'finalizou-parecer'
+                                        )
+                                        ) . $parametrosAssinatura ?>"
+                     data-position="top"
+                     data-delay="50"
+                     data-tooltip="Concluir">
+                    <i class="material-icons">check_circle</i>
+                  </a>
+	  	  <?php endif; ?>
+		  <?php endif; ?>
+		  <?php elseif(!$this->verificarIN2017($dp->IdPRONAC)): 
+		  $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/concluir/1";
+		  ?>
+		  <!-- se retornar true mostra o botão -->
+                  <a class="btn waves-effect waves-light tooltipped small btn cyan"
+                     href="<?php echo $this->url(
+                                        array(
+                                        'module' => 'default',
+                                        'controller' => 'gerenciarparecer',
+                                        'action' => 'concluir'
+                                        )
+                                        ) . $parametrosAssinatura ?>"
+                     data-position="top"
+                     data-delay="50"
+                     data-tooltip="Concluir">
+                    <i class="material-icons">check_circle</i>
+                  </a>
+		  <?php endif; ?>
+		  <?php } ?>
+		</td>
+            </tr>
+            <?php 
+                $nomeProjeto = $dp->NomeProjeto;
+                $pronac      = $dp->NrProjeto;
+            ?>
+            <?php endforeach; ?>
+        </table>
+
+        <?php if(count($this->dados) > 0): ?>
+
+            <!-- ============ PAGINAÇÃO ============ -->
+            <center>
+                <?php
+                    echo $this->paginacao['inicio']." a ";
+                    echo ($this->paginacao['pag']-1)*$this->paginacao['Itenspag'] + $this->paginacao['tamanho'];
+                    echo " de ". $this->paginacao['total'];
+                ?>
+            </center>
+
+            <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td class="center-align">
+                        <form name="form2" id="form2" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'));?>" method="get">
+                            <?php if($this->paginacao['pag']>1) { ?>
+                            <input class="btn_inicio" id="btn_inicio" type="button" class="btn_inicio"
+                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
+                            <?php } ?>
+                            <input id="btn_p_anterior" type="button"
+                            <?php if($this->paginacao['pag']<=1) { ?> class="btn_p_anterior-off"
+                            <?php }else { ?>
+                                   class="btn_p_anterior"
+                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
+                            <?php } ?>>
+                            <input id="btn_p_proximo" type="button"
+                                   <?php if($this->paginacao['pag']+1 > $this->paginacao['totalPag']) { ?>
+                                   class="btn_p_proximo-off"
+                            <?php }else { ?>
+                                   class="btn_p_proximo"
+                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
+                            <?php } ?>>
+                            <?php if($this->paginacao['pag'] < $this->paginacao['totalPag']) { ?>
+                            <input class="btn_ultimo" id="btn_ultimo" type="button"
+                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
+                            <?php } ?>
+                            P&aacute;g.:<select name="pag" id="pag" onchange="$('#form2').submit()" class="input_simples">
+                                <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
+                                <option value="<?php echo $i;?>" <?php if($this->paginacao['pag'] == $i) echo "selected";?>><?php echo $i;?>&nbsp;</option>
+                                <?php endfor; ?>
+                            </select>
+                            &nbsp;Registros por p&aacute;gina: <input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="submit" class="btn_recarregar" value="">
+                            <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
+                            <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
+                            <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
+                         </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- ========== FIM PAGINAÇÃO ========== -->
+</div>
+</div>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <br clear="all" />
+
+</div>
+<!-- ========== INÍCIO RODAPÉ DO CONTEÚDO ========== -->
+<div id="rodapeConteudo"><span></span></div>
+<!-- ========== FIM RODAPÉ DO CONTEÚDO ========== -->
+<br clear="all" />
+
+<div id="conteudoDialogoModal">
+  
+  <div id="modalConfirmacao" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Confirma&ccedil;&atilde;o</h4>
+      <p>Tem certeza que deseja concluir a an&aacute;lise do projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" id="botaoConfirmacaoEncaminhamento" class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">N&atilde;o</a>
+    </div>
+  </div>
+</div>
+
+<script>
+    $3(document).ready(function(){
+	$3('.modal').modal({
+	    dismissible: true,
+	    opacity: .5,
+	    inDuration: 300,
+	    outDuration: 200,
+	    startingTop: '4%',
+	    endingTop: '10%',
+	    ready: function(modal, trigger) {
+		$(modal).find('#botaoConfirmacaoEncaminhamento').attr('href', $3(trigger).data('redirectUrl'));
+	    }
+	});;
+    });
+</script>
+
+<script type="text/javascript">
+    function areadetrabalho(){
+        
+        $('#pinicial').click(function(){
+            $('#analiseinicial').toggle('slow');
+        });
+        
+        $('#preadequacao').click(function(){
+            $('#readequacao').toggle('slow');
+        });
+    }
+
+    $(document).ready(function(){
+	$("#pronac").keypress(function(e) {
+	    if (e.which == 13) {
+		var pronac = $('#pronac').val(),
+                    filtro = $('.comboFiltro').val();
+		window.location = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?pag=1&pronac="+pronac;
+	    }
+	});
+	
+        $("#btn_pesquisar").click(function(){
+            var pronac = $('#pronac').val(),
+                filtro = $('.comboFiltro').val();
+            window.location = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?pag=1&pronac="+pronac;
+        });
+
+        $('.comboFiltro').change(function(){
+            var url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>";
+            window.location = url;
+        });
+    });
+
+    window.onload = function(){
+        areadetrabalho();
+    };
+    
+</script>

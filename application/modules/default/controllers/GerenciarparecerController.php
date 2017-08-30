@@ -11,7 +11,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio �s Leis de Incentivo � Cultura"; // t�tulo da p�gina
+        $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // t�tulo da p�gina
         $auth = Zend_Auth::getInstance(); // pega a autentica��o
         $Usuario = new UsuarioDAO(); // objeto usu�rio
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
@@ -21,12 +21,13 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
             // verifica as permiss�es
             $PermissoesGrupo = array();
             $PermissoesGrupo[] = 94;
-            $PermissoesGrupo[] = 93;
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
             $PermissoesGrupo[] = 137;
-
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA;            
+            
             if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) // verifica se o grupo ativo est� no array de permiss�es
             {
-                parent::message("Voc� n�o tem permiss�o para acessar essa �rea do sistema!", "principal/index", "ALERT");
+                parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
             }
 
             // pega as unidades autorizadas, org�os e grupos do usu�rio (pega todos os grupos)
@@ -50,12 +51,16 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
         parent::init();
     }
-
+    
     public function indexAction()
     {
-        return $this->_helper->redirector->goToRoute(array('controller' => 'gerenciarparecer', 'action' => 'listaprojetos'), null, true);
+        return $this->_helper->redirector->goToRoute(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'), null, true);
     }
 
+    /*
+     * Deprecated
+     *  - movida para parecer/controller/GerenciarParecerController->index()
+     */
     public function listaprojetosAction()
     {
         $auth = Zend_Auth::getInstance();
@@ -320,11 +325,11 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $tipoFiltro = $this->_request->getParam("tipoFiltro");
 
         if (strlen($observacao) < 11) {
-            parent::message("Dados obrigat�rios n&atilde;o informados.", "gerenciarparecer/distribuir/idpronac/" . $idPronac, "ALERT");
+            parent::message("Dados obrigat&aacute;rios n&atilde;o informados.", "gerenciarparecer/distribuir/idpronac/" . $idPronac, "ALERT");
         }
 
         if ((empty($idAgenteParecerista)) && ($tipoescolha == 1)) {
-            parent::message("Dados obrigat�rios n&atilde;o informados.",
+            parent::message("Dados obrigat&aacute;rios n&atilde;o informados.",
                 "gerenciarparecer/encaminhar/idproduto/" . $idProduto . "/tipoanalise/" . $TipoAnalise . "/idpronac/" . $idPronac . "/tipoFiltro/" . $tipoFiltro,
                 "ALERT");
         }
@@ -337,11 +342,26 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $error = "";
         $msg = "Distribui��o Realizada com sucesso!";
 
+        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        
+        $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+        $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
+        if (count($assinaturas) > 0) {
+            $idDocumentoAssinatura = current($assinaturas)['idDocumentoAssinatura'];
+            
+            $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $dadosDocumentoAssinatura = array();
+            $dadosDocumentoAssinatura["stEstado"] = 0;
+            $whereDocumentoAssinatura = "idDocumentoAssinatura = $idDocumentoAssinatura";
+            
+            $objDocumentoAssinatura->update($dadosDocumentoAssinatura, $whereDocumentoAssinatura);
+        }
+        
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
         $projetos = new Projetos();
-
+        
         try {
             /* $db->beginTransaction(); */
 
@@ -366,7 +386,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                         'DtDistribuicao' => null,
                         'DtDevolucao' => null,
                         'DtRetorno' => null,
-                        'FecharAnalise' => $dp->FecharAnalise,
+                        'FecharAnalise' => 0,
                         'Observacao' => $observacao,
                         'idUsuario' => $idusuario,
                         'idPRONAC' => $dp->IdPRONAC,
@@ -385,10 +405,11 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $orgaos = new Orgaos();
                     $orgao = $orgaos->pesquisarNomeOrgao($codOrgao);
 
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an�lise e emiss�o de parecer t�cnico</strong>.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico</strong>.');
                 } else {
                     $msg = "Distribui&ccedil;&atilde;o Realizada com sucesso!";
 
+                    $fecharAnalise = ($dp->FecharAnalise == 3) ? '0' : $dp->FecharAnalise;
                     // DISTRIBUIR OU REDISTRIBUIR ( COORDENADOR DE PARECER )
                     $dadosD = array(
                         'idOrgao' => $dp->idOrgao,
@@ -397,7 +418,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                         'DtDistribuicao' => MinC_Db_Expr::date(),
                         'DtDevolucao' => null,
                         'DtRetorno' => null,
-                        'FecharAnalise' => $dp->FecharAnalise,
+                        'FecharAnalise' => $fecharAnalise,
                         'Observacao' => $observacao,
                         'idUsuario' => $idusuario,
                         'idPRONAC' => $dp->IdPRONAC,
@@ -407,17 +428,17 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                         'stPrincipal' => $dp->stPrincipal,
                         'stDiligenciado' => null
                     );
-
+                    
                     $where['idDistribuirParecer = ?'] = $dp->idDistribuirParecer;
                     $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $where);
 
                     $insere = $tbDistribuirParecer->inserir($dadosD);
                     $projetos = new Projetos();
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para o perito para an�lise t�cnica e emiss�o de parecer.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para o perito para an&aacute;lise t&eacute;cnica e emiss&atilde;o de parecer.');
                 }
             }
-
-            parent::message($msg . ' '.$insere, "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+            
+            parent::message($msg . ' '.$insere, "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "CONFIRM");
             /* $db->commit(); */
 
         } catch (Zend_Exception $ex) {
@@ -458,8 +479,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $buscaDadosProjetoS = $tbDistribuirParecer->painelAnaliseTecnica($dadosWhereS, null, null, null, null, $tipoFiltro);
 
         if ((count($buscaDadosProjetoS) == 0) && (count($buscaDadosProjeto) == 0)) {
-            parent::message("Todos os produtos foram distribuidos!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "ALERT");
-            //parent::message("Aguardando as an�lises dos produtos secund�rios!", "gerenciarparecer/listaprojetos" ,"ALERT");
+            parent::message("Todos os produtos foram distribuidos!", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "ALERT");
         }
 
         //Produto Secundario
@@ -470,8 +490,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $buscaDadosProjetoSA = $tbDistribuirParecer->painelAnaliseTecnica($dadosWhereSA, null, null, null, null, $tipoFiltro);
 
         if (count($buscaDadosProjetoSA) > 0 && count($buscaDadosProjetoS) == 0) {
-            parent::message("Todos os produtos foram distribuidos SA!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "ALERT");
-            //parent::message("Aguardando as an�lises dos produtos secund�rios!", "gerenciarparecer/listaprojetos" ,"ALERT");
+            parent::message("Todos os produtos foram distribuidos SA!", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "ALERT");
         }
 
         if (count($buscaDadosProjetoS) != 0) {
@@ -524,7 +543,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $tipoFiltro = $this->_request->getParam("tipoFiltro");
 
         if (strlen($observacao) < 11) {
-            parent::message("O campo observa��o deve ter no m�nimo 11 caracteres!",
+            parent::message("O campo observa&ccedil;&atilde;o deve ter no m&iacute;nimo 11 caracteres!",
                 "gerenciarparecer/encaminhar/idproduto/" . $idProduto . "/idpronac/" . $idPronac, "ALERT");
         }
 
@@ -539,6 +558,22 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $dadosWhere["idDistribuirParecer = ?"] = $idDistribuirParecer;
         $buscaDadosProjeto = $tbDistribuirParecer->painelAnaliseTecnica($dadosWhere, null, null, null, null, $tipoFiltro);
 
+        
+        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+        
+        $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+        $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
+        if (count($assinaturas) > 0) {
+            $idDocumentoAssinatura = current($assinaturas)['idDocumentoAssinatura'];
+           
+            $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $dadosDocumentoAssinatura = array();
+            $dadosDocumentoAssinatura["stEstado"] = 0;
+            $whereDocumentoAssinatura = "idDocumentoAssinatura = $idDocumentoAssinatura";
+            
+            $objDocumentoAssinatura->update($dadosDocumentoAssinatura, $whereDocumentoAssinatura);
+        }     
+        
         $error = '';
         $projetos = new Projetos();
 
@@ -584,9 +619,9 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $orgaos = new Orgaos();
                     $orgao = $orgaos->pesquisarNomeOrgao($codOrgao);
 
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an�lise e emiss�o de parecer t�cnico</strong>.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Encaminhado para <strong>' . $orgao[0]->NomeOrgao . ' para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico</strong>.');
 
-                    parent::message("Enviado os Produtos/Projeto para a entidade!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+                    parent::message("Enviado os Produtos/Projeto para a entidade!", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "CONFIRM");
                 } else {
                     // DISTRIBUIR OU REDISTRIBUIR ( COORDENADOR DE PARECER )
                     $dadosD = array(
@@ -611,9 +646,9 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                     $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $where);
 
                     $insere = $tbDistribuirParecer->inserir($dadosD);
-                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Produto <strong>' . $dp->Produto . '</strong> encaminhado ao perito para an�lise t�cnica e emiss�o de parecer.');
+                    $projetos->alterarSituacao($dp->IdPRONAC, null, 'B11', 'Produto <strong>' . $dp->Produto . '</strong> encaminhado ao perito para an&aacute;lise t&aacute;cnica e emiss&atilde;o de parecer.');
 
-                    parent::message("Distribui��o Realizada com sucesso!  ", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
+                    parent::message("Distribui&ccedil;&atilde;o Realizada com sucesso!  ", "parecer/gerenciar-parecer/index?tipoFiltro=" . $tipoFiltro, "CONFIRM");
                 }
             }
 
@@ -624,6 +659,9 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
     }
 
 
+    /*
+     * DEPRECATED - tela removida / funcionalidades no módulo parecer 
+     */
     public function concluirAction()
     {
 
@@ -647,138 +685,12 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
     }
 
-
+    /*
+     * DEPRECATED - movida para módulo parecer 
+     */
     public function concluiuAction()
     {
-        //** Usuario Logado ************************************************/
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
-        $idusuario = $auth->getIdentity()->usu_codigo;
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
-        $codOrgao = $GrupoAtivo->codOrgao; //  �rg�o ativo na sess�o
-
-        /******************************************************************/
-
-        $idDistribuirParecer = $this->_request->getParam("idDistribuirParecer");
-        $idPronac = $this->_request->getParam("idpronac");
-        $observacao = $this->_request->getParam("obs");
-        $tipoFiltro = $this->_request->getParam("tipoFiltro");
-
-
-        if (strlen($observacao) < 11) {
-            parent::message("O campo observa��o deve ter no m�nimo 11 caracteres!",
-                "gerenciarparecer/concluir/idDistribuirParecer/" . $idDistribuirParecer . "/idpronac/" . $idPronac,
-                "ALERT");
-        }
-
-        $db = Zend_Db_Table::getDefaultAdapter();
-        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
-
-        $projetos = new Projetos();
-
-        try {
-            $db->beginTransaction();
-
-            $tbDistribuirParecer = new tbDistribuirParecer();
-            $dadosWhere["t.idDistribuirParecer = ?"] = $idDistribuirParecer;
-
-            $buscaDadosProjeto = $tbDistribuirParecer->dadosParaDistribuir($dadosWhere);
-
-            foreach ($buscaDadosProjeto as $dp):
-
-                // FECHAR ANALISE ( COORDENADOR DE PARECER )
-                $orgaos = array('91', '92', '93', '94', '95', '160', '171', '335');
-
-                // Caso n�o esteja dentro do array
-                if (!in_array($dp->idOrgao, $orgaos)) {
-                    $idOrgao = 91;
-                    $fecharAnalise = 0;
-                } else {
-                    $idOrgao = $dp->idOrgao;
-
-                    if ($tipoFiltro == 'em_validacao') {
-                        $fecharAnalise = 3;
-                    } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
-                        $fecharAnalise = 1;
-                    }
-                }
-
-                $dados = array(
-                    'DtEnvio' => $dp->DtEnvio,
-                    'idAgenteParecerista' => $dp->idAgenteParecerista,
-                    'DtDistribuicao' => $dp->DtDistribuicao,
-                    'DtDevolucao' => $dp->DtDevolucao,
-                    'DtRetorno' => MinC_Db_Expr::date(),
-                    'Observacao' => $observacao,
-                    'idUsuario' => $idusuario,
-                    'FecharAnalise' => $fecharAnalise,
-                    'idOrgao' => $idOrgao,
-                    'idPRONAC' => $dp->IdPRONAC,
-                    'idProduto' => $dp->idProduto,
-                    'TipoAnalise' => $dp->TipoAnalise,
-                    'stEstado' => 0,
-                    'stPrincipal' => $dp->stPrincipal,
-                    'stDiligenciado' => null
-                );
-
-                $whereD['idDistribuirParecer = ?'] = $idDistribuirParecer;
-                $salvar = $tbDistribuirParecer->alterar(array('stEstado' => 1), $whereD);
-                $insere = $tbDistribuirParecer->inserir($dados);
-
-            endforeach;
-
-            /** Grava o Parecer nas Tabelas tbPlanilhaProjeto e Parecer e altera a situa��o do Projeto para  ***************/
-            $projeto = new Projetos();
-            $wherePro['IdPRONAC = ?'] = $idPronac;
-            $buscaDadosdoProjeto = $projeto->buscar($wherePro);
-
-            // se for produto principal
-            if ($buscaDadosProjeto[0]->stPrincipal == 1) {
-
-                $inabilitadoDAO = new Inabilitado();
-                $buscaInabilitado = $inabilitadoDAO->BuscarInabilitado($buscaDadosdoProjeto[0]->CgcCpf, $buscaDadosdoProjeto[0]->AnoProjeto, $buscaDadosdoProjeto[0]->Sequencial);
-
-                // nao est� inabilitado
-                if (count($buscaInabilitado == 0)) {
-                    // dentro das unidades abaixo
-                    if (in_array($dp->idOrgao, array(91, 92, 93, 94, 95, 160, 171, 335))) {
-                        if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
-                            $projeto->alterarSituacao($idPronac, null, 'C20', 'An�lise t�cnica conclu�da');
-                        } else if ($tipoFiltro == 'em_validacao') {
-                            $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida��o do parecer t�cnico');
-                        }
-                    } else {
-                        // fora das unidades acima
-                        $projeto->alterarSituacao($idPronac, null, 'B11', 'Aguardando valida��o do parecer t�cnico');
-                    }
-                } else {
-                    // inabilitado
-                    $projeto->alterarSituacao($idPronac, null, 'C09', 'Projeto fora da pauta de reuni�o da CNIC porque o proponente est� inabilitado no Minist�rio da Cultura.');
-                }
-
-                /****************************************************************************************************************/
-                $parecerDAO = new Parecer();
-                $whereParecer['idPRONAC = ?'] = $idPronac;
-                $buscarParecer = $parecerDAO->buscar($whereParecer);
-
-                $analiseDeConteudoDAO = new Analisedeconteudo();
-                $whereADC['idPRONAC = ?'] = $idPronac;
-                $dadosADC = array('idParecer' => $buscarParecer[0]->IdParecer);
-                $alteraADC = $analiseDeConteudoDAO->alterar($dadosADC, $whereADC);
-
-                $planilhaProjetoDAO = new PlanilhaProjeto();
-                $wherePP['idPRONAC = ?'] = $idPronac;
-                $dadosPP = array('idParecer' => $buscarParecer[0]->IdParecer);
-                $alteraPP = $planilhaProjetoDAO->alterar($dadosPP, $wherePP);
-                /****************************************************************************************************************/
-            }
-            $db->commit();
-            parent::message("Conclu&iacute;do com sucesso!", "gerenciarparecer/listaprojetos?tipoFiltro=" . $tipoFiltro, "CONFIRM");
-
-        } catch (Zend_Exception $ex) {
-            $db->rollBack();
-            parent::message("Erro ao concluir " . $ex->getMessage(), "gerenciarparecer/concluir/idDistribuirParecer/" . $idDistribuirParecer . "/tipoFiltro/" . $tipoFiltro, "ERROR");
-        }
-
+        $this->redirector->goToRoute(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'));
     }
 
     public function visualizaranalisedeconteudoAction()
@@ -882,7 +794,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
 
         // An�lises em eberto
         $whereAnalise['distribuirParecer.idAgenteParecerista = ?'] = $idAgente;
-        $analiseEmAberto = $projetosDAO->buscaProjetosProdutos($whereAnalise);
+        $analiseEmAberto = $projetosDAO->buscaProjetosProdutosParaAnalise($whereAnalise);
         $situacaoTexto .= '<br /> An&aacute;lise em aberto: ' . count($analiseEmAberto);
 
         $pareceristas[] = array('situacao' => utf8_encode($situacao), 'situacaoTexto' => utf8_encode($situacaoTexto));
@@ -1418,7 +1330,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $this->view->cargoSecretario = $cargoSecretario;
 
         if (empty($idAgente)) {
-            parent::message("Dados obrigat�rios n&atilde;o informados.",
+            parent::message("Dados obrigat&aacute;rios n&atilde;o informados.",
                 "gerenciarparecer/enviarpagamento",
                 "ALERT");
         }
@@ -1497,7 +1409,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
             $this->view->dadosParecerista = $arrayParecerista;
             $this->view->dadosProduto = $arrayProdutosProjeto;
             $this->view->dataMemorando = $dataCertaM;
-
+ 
 
         } catch (Exception $e) {
             parent::message("Erro ao enviar pagamentos: " . $e->getMessage(), "gerenciarparecer/enviarpagamento", "ERROR");
