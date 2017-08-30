@@ -58,20 +58,24 @@
                                         <td><?php echo $localizacao['uf']; ?></td>
                                         <td><?php echo $localizacao['cidade']; ?></td>
                                         <td nowrap>
-                                            <a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'form-local-de-realizacao')); ?>?cod=<?php echo $localizacao['idAbrangencia']; ?>&idPreProjeto=<?php echo $this->idPreProjeto; ?>&edit=1" class="btn white-text">Editar</a>
-                                            <button type="button"
-                                                   class=" btn white-text red"
-                                                   onclick="excluir(<?php echo $localizacao['idAbrangencia']; ?>);">Excluir</button></td>
+                                            <?php if ($this->isEditavel) : ?>
+                                                <a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'form-local-de-realizacao')); ?>?cod=<?php echo $localizacao['idAbrangencia']; ?>&idPreProjeto=<?php echo $this->idPreProjeto; ?>&edit=1" class="btn white-text">Editar</a>
+                                                <button type="button"
+                                                       class=" btn white-text red"
+                                                       onclick="excluir(<?php echo $localizacao['idAbrangencia']; ?>);">Excluir</button></td>
+                                            <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             </table>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s12 center">
-                        <a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'form-inserir', 'idPreProjeto' => $this->idPreProjeto)); ?>" class="btn white-text">Novo</a>
+                    <?php if ($this->isEditavel) : ?>
+                        <div class="row">
+                            <div class="col s12 center">
+                            <a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'form-inserir', 'idPreProjeto' => $this->idPreProjeto)); ?>" class="btn white-text">Novo</a>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
                 <div id="deslocamento" class="sumir"></div>
                 <div title="Confirma&ccedil;&atilde;o" id="modalConfirmaExclusao"></div>
@@ -87,7 +91,7 @@
 
         <?php if (!$this->isEditavel) : ?>
         //DESABILITA ALTERACOES NOS DADOS DO FORMULARIO (INCLUIR/ALTERAR/EXCLUIR)
-        JSBloquearAlteracaoFormulario();
+            JSBloquearAlteracaoFormulario();
         <?php endif; ?>
 
         $('#btn_novo').click(function () {
@@ -96,30 +100,32 @@
 
     });
 
-    function excluir(cod) {
-        $("#modalConfirmaExclusao").html("Se voc&ecirc; excluir um local de realiza&ccedil;&atilde;o com planilha cadastrada, todos os itens da planilha ser&atilde;o apagados. \nTem certeza que deseja excluir o registro?");
-        // modal com os ddos do dirigente
-        $("#modalConfirmaExclusao").dialog("destroy");
-        $("#modalConfirmaExclusao").dialog
-        ({
-            width: 400,
-            height: 180,
-            EscClose: false,
-            modal: true
-            , buttons: {
-                'Cancelar': function () {
-                    $(this).dialog('close'); // fecha a modal
-                },
-                'Confirmar': function () {
-                    window.location.href = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'excluir')); ?>?cod=" + cod + "&idPreProjeto=<?php echo $this->idPreProjeto;?>";
-                    $(this).dialog('close'); // fecha a modal
+    <?php if ($this->isEditavel) : ?>
+        function excluir(cod) {
+            $("#modalConfirmaExclusao").html("Se voc&ecirc; excluir um local de realiza&ccedil;&atilde;o com planilha cadastrada, todos os itens da planilha ser&atilde;o apagados. \nTem certeza que deseja excluir o registro?");
+            // modal com os ddos do dirigente
+            $("#modalConfirmaExclusao").dialog("destroy");
+            $("#modalConfirmaExclusao").dialog
+            ({
+                width: 400,
+                height: 180,
+                EscClose: false,
+                modal: true
+                , buttons: {
+                    'Cancelar': function () {
+                        $(this).dialog('close'); // fecha a modal
+                    },
+                    'Confirmar': function () {
+                        window.location.href = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'excluir')); ?>?cod=" + cod + "&idPreProjeto=<?php echo $this->idPreProjeto;?>";
+                        $(this).dialog('close'); // fecha a modal
+                    }
                 }
-            }
-        });
-        return false;
+            });
+            return false;
 
 
-    }
+        }
+    <?php endif; ?>
 
     function trocatela(obj) {
         if (obj == 1) {
