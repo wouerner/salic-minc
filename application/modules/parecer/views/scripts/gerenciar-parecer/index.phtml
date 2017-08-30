@@ -149,7 +149,7 @@ $filtros = array(
 		<?php } ?>
 
 		<?php if ($this->tipoFiltro == 'validados' || $this->tipoFiltro == 'em_validacao' || $this->tipoFiltro == 'devolvida') { ?>
-                <th class="center-align">Concluir</th>
+                <th class="center-align" style="width: 10%">Concluir</th>
 		<?php } ?>
       </thead>
             <?php
@@ -247,7 +247,7 @@ $filtros = array(
 		<?php if ($this->tipoFiltro != 'aguardando_distribuicao' && $this->tipoFiltro != '') { ?>
                 <td class="center-align">
 		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'historico', 'idPronac'=> $dp->IdPRONAC, 'stPrincipal'=> $dp->stPrincipal, 'idProduto' => $dp->idProduto)); ?>&tipoFiltro=<?php echo $this->tipoFiltro; ?>"
+		     href="<?php echo $this->url(array('module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'historico', 'idPronac'=> $dp->IdPRONAC, 'stPrincipal'=> $dp->stPrincipal, 'idProduto' => $dp->idProduto)); ?>"
 		    data-tooltip="Hist&oacute;rico">
 		    <i class="material-icons white-text">history</i>
 		  </a>		  
@@ -518,7 +518,9 @@ $filtros = array(
         });
 
         $('.comboFiltro').change(function(){
-            var url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?tipoFiltro="+$(this).val();
+            var pronac = $('#pronac').val(),
+                filtro = $('.comboFiltro').val(),
+                url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?tipoFiltro="+$(this).val()+"&pronac="+pronac;
             window.location = url;
         });
     });

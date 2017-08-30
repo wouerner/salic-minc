@@ -1,3 +1,51 @@
+Release 2.6.1
+* [FIX] Parecer/análise inicial de produto: correção na edição de parecer quando já existe parecer
+
+Release 2.6.0
+* [ADD] Assinatura / Models / Atos administrativos : Criação de mapper para AtoAdministrativo.
+* [UPDATE]Adição da opção "Gerir Atos Administrativos" para o grupo "Gestor Salic"
+* [UPDATE] Adição de validação que permite que somente usuários que façam parte do grupo "Gestor Salic" atuem nas funcionalidades do controller AtoAdministrativo.
+* [FIX] Assinatura/Gerenciar Atos administrativos : Correção de envio e carregamento do Orgãdo do Assinante e Ordem de assinaturas do Ato Administrativo.
+* [UPDATE] Assinatura / Gerenciamento de Atos administrativos : Criação da funcionalidade de remover ato administrativo.
+* [UPDATE] Prestação de contas: Novos metodos para buscar produtos
+* [UPDATE] Prestação de contas: Ajuste para novo layout
+* [UPDATE] Prestação de contas: ajusta para sinalizar se está regular o laudo
+* [UPDATE] Prestação de contas: ajuste no laudo final, adicionando laudos tecnico e chefe
+* [UPDATE] Prestação de contas: ajuste no laudo final, para utf8
+* [UPDATE] Prestação de contas: Ajuste no fluxo para poder emitir parecer
+* [UPDATE] Prestação de contas: Ajuste no SQL retirando colunas não usadas
+* [UPDATE] Prestação de contas: ajusta no layout
+* [UPDATE] Prestação de contas: erro ao tentar recuperar os custos
+* [UPDATE] Prestação de contas: Ajax na tela principal
+* [UPDATE] Prestação de contas: ajuste de link e historico reformulado
+* [ADD] Novo papel: superintendente de vinculada (IPHAN) e ajustes no fluxo do IPHAN
+* [FIX] Gerenciar parecer: corrigindo link de concluir parecer
+* [FIX] Parecer/gerenciar parecer: mantém idPronac buscado quando altera tipo do filtro
+* [FIX] Default/Gerenciar parecer coordenador: correção no link para página de histórico
+* [FIX] Parecer/gerenciar parecer coordenador: corrigindo valor de FecharAnalise na distribuição quando redistribui um projeto impedido por parecerista
+* [FIX] Parecer/Análise inicial: alterando link de redirecionamento quando declara impedimento
+* [FIX] Parecer/análise inicial: somente exibe botão de impedimento enquanto parecerista ainda não iniciou a análise
+* [FIX] Parecer/gerenciar parecer presidente: ao finalizar projeto, fecha assinatura
+* [FIX] Parecer/gerenciar parecer coordenador: correção no alinhamento dos botões
+* [FIX] Analise inicial/produto secundário: desabilitando botão de parecer desfavorável quando somente leitura
+* [FIX] Parecer/Emitir parecer CNIC: componente da comissão define parecer e só então libera botão de gerar assinatura; assinatura reflete parecer do componente da commissão
+* [FIX] Analise inicial/produto secundário: desabilitando edição do produto secundário se não for o parecerista atribuído para realizar parecer
+* [FIX] CNIC/Parecer consolidado: correções na exibição do enquadramento e removendo campos caso nova IN
+* [FIX] Parecer/gerenciar parecer presidente: correção no alinhamento dos botões
+* [FIX] Analisar parecer/análise de custos: exibindo linhas com valores maiores que os praticados
+* [FIX] Analisar parecer/análise de custos: correção na exibição de números com ponto flutuante
+* [FIX] Análise inicial: ajuste na ordenação da planilha orçamentária
+* [FIX][REFACTOR] Parecer/análise inicial: removendo ações relevantes do produto principal && removendo funções não mais usadas
+* [REFACTOR] Parecer/gerenciar parecer: alterando nome da função isIphan para isVinculadaIphan
+* [REFACTOR] Parecer/gerenciar parecer: criando função isVinculadaIphan & ajuste no fluxo do IPHAN
+* [DEPRECATED] Gerenciar parecer: removendo funcionalidade de conclusão movida para outro módulo
+* [FIX] Parecerista: Corrige charset
+* [FIX] Parecerista: Corrige visualizacao das tabelas ao abrir e fechar
+* [FIX] Parecerista/Comprovante de RPA: Corrige erro ao baixar arquivo .pdf
+* [FIX] Planilhas orçamentárias: corrige texto da etapa de Administração do Projeto
+* [Fix] Projeto/Readequacao do Plano de Distribuicao: corrige ao salvar plano de distribuicao da antiga IN
+* [REFACTOR] Remoção de todas os códigos comentados de xd
+
 Release 2.5.4
 * [Fix] Tempo da sessão: aumenta o tempo da sessão para 24horas
 
