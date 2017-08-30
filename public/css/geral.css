@@ -390,6 +390,10 @@ header #navglobal ul li a.home {
     padding: 2px;
 }
 
+header .menu-apoio {
+    margin-right: 30px;
+}
+
 header#navglobal ul li a.home span {
     visibility: hidden;
 }
@@ -418,7 +422,6 @@ header .btn-notificacao .btn-floating {
 header .btn-notificacao a.dropdown-button i {
     margin-right: 5px;
 }
-
 
 
 header #header_notificacoes {
