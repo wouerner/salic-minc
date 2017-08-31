@@ -89,9 +89,10 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         } else {
             $campo = null;
             $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
+            
             $ordenacao = null;
         }
-
+        
         $pag = 1;
         $get = Zend_Registry::get('get');
         if (isset($get->pag)) $pag = $get->pag;
@@ -114,6 +115,11 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 $tipoFiltro = explode('/', $tipoFiltro)[0];
             }
         }
+        
+        if ($tipoFiltro == 'analisado_superintendencia') {
+            $order = array('NomeProjeto', 'stPrincipal desc');
+        }
+        
         $this->view->tipoFiltro = $tipoFiltro;
         
         $tbDistribuirParecer = new tbDistribuirParecer();
@@ -186,7 +192,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             foreach ($buscaDadosProjeto as $dp) {
                 $idOrgao = $dp->idOrgao;
-
+                
                 if ($tipoFiltro == 'em_validacao') {
                     $fecharAnalise = 1;
                     
@@ -198,6 +204,8 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                     }
                 } else if ($tipoFiltro == 'devolvida') {
                     $fecharAnalise = 0;
+                } else {
+                    $fecharAnalise = $dp->FecharAnalise;
                 }
                 
                 $dados = array(
@@ -310,13 +318,12 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
         $where = array();
         if (Orgaos::isVinculadaIphan($dp->idOrgao)) {
-            $where["idOrgao = ?"] = Orgaos::ORGAO_IPHAN_PRONAC;
             $tipoFiltro  = 'superintendente_vinculadas';            
         } else {
-            $where["idOrgao = ?"] = $codOrgao;
             $tipoFiltro  = 'presidente_vinculadas';
         }
-
+        $where["idOrgao = ?"] = $codOrgao;
+        
         if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $pronac = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $where["NrProjeto = ?"] = $pronac;
@@ -377,7 +384,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
-        $projetos = new Projetos();
+        $projeto = new Projetos();
         $orgaos = new Orgaos();
         
         try {
@@ -410,7 +417,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             foreach ($buscaDadosProjeto as $dp) {
                 
                 if ($orgaos->isVinculadaIphan($dp->idOrgao)) {                
-
                     $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
                     if ($dp->stPrincipal == 1) {
                         $fecharAnalise = 3;
@@ -447,7 +453,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             }
 
             $wherePro['IdPRONAC = ?'] = $idPronac;
-            $buscaDadosdoProjeto = $projetos->buscar($wherePro);
+            $buscaDadosdoProjeto = $projeto->buscar($wherePro);
             
             /// ALTERAR SITUACAO
             $inabilitadoDAO = new Inabilitado();

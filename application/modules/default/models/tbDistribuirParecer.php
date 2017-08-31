@@ -1868,10 +1868,10 @@ public function analisePorParecerista($where){
             $from = ' FROM sac.dbo.vwPainelSuperintendenteVinculadas';
                 break;
 
-            case 'analisado_superintendente':
+            case 'analisado_superintendencia':
 
 	        $slct->from(
-			    array('dbo.vwPainelAnalisadoSuperintendente'),
+			    array('dbo.vwPainelAnalisadoSuperintendencia'),
 			    array('IdPRONAC',
 				  'NrProjeto',
 				  'NomeProjeto',
@@ -1890,7 +1890,7 @@ public function analisePorParecerista($where){
 				  'dtValidacao')
 			    );
 
-            $from = ' FROM sac.dbo.vwPainelAnalisadoSuperintendente';
+            $from = ' FROM sac.dbo.vwPainelAnalisadoSuperintendencia';
                 break;
                 
             case 'devolvida':
