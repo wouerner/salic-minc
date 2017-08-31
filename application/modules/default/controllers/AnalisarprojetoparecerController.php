@@ -500,7 +500,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
             $enquadramentoDAO = new Admissibilidade_Model_Enquadramento();
             $buscaEnquadramento = $enquadramentoDAO->buscarDados($idPronac, null, false);
             $countEnquadramentoP = count($buscaEnquadramento);
-
+            
             $parecerDAO = new Parecer();
             $whereParecer['idPRONAC = ?'] = $idPronac;
             $buscaParecer = $parecerDAO->buscar($whereParecer);
@@ -1111,27 +1111,30 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                     $where['IdPRONAC = ?'] = $idPronac;
                     $alteraProjeto = $projetoDAO->update($dadosProjeto, $where);
                 }
-                
-                /** Gravando as informa¿¿es do enquadramento do Projeto ***************************************/
-                $enquadramentoDAO = new Admissibilidade_Model_Enquadramento();
-                $dadosEnquadramento = array(
-                    'IdPRONAC' => $idPronac,
-                    'AnoProjeto' => $anoProjeto,
-                    'Sequencial' => $sequencial,
-                    'Enquadramento' => $enquadramentoProjeto,
-                    'DtEnquadramento' => MinC_Db_Expr::date(),
-                    'Observacao' => '',
-                    'Logon' => $idusuario
-                );
-                
-                $whereBuscarDados = array('IdPRONAC = ?' => $idPronac, 'AnoProjeto = ?' => $anoProjeto, 'Sequencial = ?' => $sequencial);
-                $buscarEnquadramento = $enquadramentoDAO->buscar($whereBuscarDados);
-                if (count($buscarEnquadramento) > 0) {
-                    $buscarEnquadramento = $buscarEnquadramento->current();
-                    $whereUpdate = 'idEnquadramento = ' . $buscarEnquadramento->IdEnquadramento;
-                    $alteraEnquadramento = $enquadramentoDAO->alterar($dadosEnquadramento, $whereUpdate);
-                } else {
-                    $insereEnquadramento = $enquadramentoDAO->inserir($dadosEnquadramento);
+
+                if (!$isIN2017) {
+                    /** Gravando as informacoes do enquadramento do Projeto ***************************************/
+                    $enquadramentoDAO = new Admissibilidade_Model_Enquadramento();
+                    $dadosEnquadramento = array(
+                        'IdPRONAC' => $idPronac,
+                        'AnoProjeto' => $anoProjeto,
+                        'Sequencial' => $sequencial,
+                        'Enquadramento' => $enquadramentoProjeto,
+                        'DtEnquadramento' => MinC_Db_Expr::date(),
+                        'Observacao' => '',
+                        'Logon' => $idusuario
+                    );
+                    
+                    $whereBuscarDados = array('IdPRONAC = ?' => $idPronac, 'AnoProjeto = ?' => $anoProjeto, 'Sequencial = ?' => $sequencial);
+                    $buscarEnquadramento = $enquadramentoDAO->buscar($whereBuscarDados);
+                    
+                    if (count($buscarEnquadramento) > 0) {
+                        $buscarEnquadramento = $buscarEnquadramento->current();
+                        $whereUpdate = 'idEnquadramento = ' . $buscarEnquadramento->IdEnquadramento;
+                        $alteraEnquadramento = $enquadramentoDAO->alterar($dadosEnquadramento, $whereUpdate);
+                    } else {
+                        $insereEnquadramento = $enquadramentoDAO->inserir($dadosEnquadramento);
+                    }
                 }
                 $buscaEnquadramento = $enquadramentoDAO->buscarDados($idPronac, null, false);
                 
