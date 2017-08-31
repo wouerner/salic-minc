@@ -1,6 +1,11 @@
 <div class="container-fluid white">
     <div class="row">
-        <?php echo $this->partial("/mensagem/partials/menu.phtml", $this); ?>
+        <?php if ($this->idPreProjeto && $this->ehProponente) : ?>
+            <?= $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
+        <?php else: ?>
+            <?= $this->partial('/mensagem/partials/menu.phtml', $this); ?>
+        <?php endif; ?>
+
         <div class="col s10 m12 l10">
             <h5>Solicita&ccedil;&atilde;o Proponente</h5>
             <?= $this->partial('/mensagem/partials/form.phtml', $this->arrPartial); ?>

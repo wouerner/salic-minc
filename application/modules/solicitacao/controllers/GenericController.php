@@ -71,7 +71,13 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         $this->idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
         $this->cpfLogado = isset($arrAuth['usu_identificacao']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
 
-        $this->view->arrayMenu = self::gerarArrayMenu();
+        $this->view->arrayMenu =  self::gerarArrayMenu();
+        if($this->idPronac) {
+            $this->view->arrayMenu = self::gerarArrayMenuProjeto($this->idPronac);
+        }
+        elseif($this->idPreProjeto) {
+            $this->view->arrayMenu = self::gerarArrayMenuProposta($this->idPreProjeto);
+        }
 
         if ($arrAuth['cpf']) {
             /**
@@ -87,8 +93,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 
             $this->ehProponente = true;
 
-            if($this->idPronac)
-                $this->view->arrayMenu = self::gerarArrayMenuProponenteProjeto($this->idPronac);
+
         }
 
         $this->usuario = $arrAuth;
@@ -96,11 +101,44 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         $this->view->ehProponente = $this->ehProponente;
     }
 
-    private function gerarArrayMenuProponenteProjeto($idPronac)
+    private function gerarArrayMenuProjeto($idPronac)
     {
-        $arrMenuProponente = self::gerarArrayMenu();
+        $arrMenu = self::gerarArrayMenu();
 
-        return $arrMenuProponente;
+        $arrMenu['exibirprojeto'] = [
+            'label' => 'Exibir projeto',
+            'title' => '',
+            'link' => [
+                'module' => 'default',
+                'controller' => 'consultardadosprojeto',
+                'action' => 'index',
+                'idPronac' => Seguranca::encrypt($idPronac)
+            ],
+            'menu' => [],
+            'grupo' => []
+        ];
+
+        return $arrMenu;
+    }
+
+    private function gerarArrayMenuProposta($idPreProjeto)
+    {
+        $arrMenu = self::gerarArrayMenu();
+
+        $arrMenu['exibirproposta'] = [
+            'label' => 'Exibir proposta',
+            'title' => '',
+            'link' => [
+                'module' => 'admissibilidade',
+                'controller' => 'admissibilidade',
+                'action' => 'exibirpropostacultural',
+                'idPreProjeto' => $idPreProjeto
+            ],
+            'menu' => [],
+            'grupo' => []
+        ];
+
+        return $arrMenu;
     }
 
     private function gerarArrayMenu()
