@@ -38,7 +38,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
                 $PermissoesGrupo[] = $grupo->gru_codigo;
             }
 
-            if(empty($this->grupoAtivo)) {
+            if (empty($this->grupoAtivo)) {
                 $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
             }
         }
@@ -73,7 +73,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 
         $this->view->arrayMenu = self::gerarArrayMenu();
 
-        if($arrAuth['cpf']) {
+        if ($arrAuth['cpf']) {
             /**
              * Agentes sao proponentes da proposta ou do projeto
              */
@@ -86,7 +86,9 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             }
 
             $this->ehProponente = true;
-            $this->view->arrayMenu = self::gerarArrayMenuProponente();
+
+            if($this->idPronac)
+                $this->view->arrayMenu = self::gerarArrayMenuProponenteProjeto($this->idPronac);
         }
 
         $this->usuario = $arrAuth;
@@ -94,36 +96,36 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         $this->view->ehProponente = $this->ehProponente;
     }
 
-    private function gerarArrayMenuProponente($idPreProjeto = null)
+    private function gerarArrayMenuProponenteProjeto($idPronac)
     {
-        $arrMenuProponente = array();
-
-        $arrMenuProponente['solicitacoes'] = array(
-            'id' => 'minhassolicitacoes',
-            'label' => 'Minhas solicita&ccedil;&otilde;es',
-            'title' => '',
-            'link' => array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
-            'menu' => array(),
-            'grupo' => array()
-        );
-
+        $arrMenuProponente = self::gerarArrayMenu();
 
         return $arrMenuProponente;
     }
 
     private function gerarArrayMenu()
     {
-        $arrMenu = array();
 
-        $arrMenu['solicitacoes'] = array(
-            'id' => 'minhassolicitacoes',
-            'label' => 'Minhas solicita&ccedil;&otilde;es',
+        $arrMenu = [];
+        $arrMenu['solicitacoes'] = [
+            'id' => 'solicitacoes',
+            'label' => 'Solicita&ccedil;&otilde;es',
             'title' => '',
-            'link' => array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index'),
-            'menu' => array(),
-            'grupo' => array()
-        );
+            'link' => '',
+            'menu' => [],
+            'grupo' => []
+        ];
 
+        $arrMenu['solicitacoes']['menu'][] = [
+            'label' => 'Listar todas',
+            'title' => '',
+            'link' => [
+                'module' => 'solicitacao',
+                'controller' => 'mensagem',
+                'action' => 'index'
+            ],
+            'grupo' => []
+        ];
 
         return $arrMenu;
     }
