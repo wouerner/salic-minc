@@ -386,7 +386,7 @@
 	<?php endif; ?>
 	
         <table class="tabela sumir" id="consolidacao" style="width:95%" width="95%">
-        <?php if($this->Perfil == 94) { //Parecerista ?>
+<?php if($this->Perfil == Autenticacao_Model_Grupos::PARECERISTA) { ?>
             <tr>
                 <th colspan="5">Consolida&ccedil;&atilde;o do Parecer T&eacute;cnico</th>
             </tr>
@@ -465,7 +465,7 @@
                 <input type="button" id="btSalvarConsolidacao" value=" " class="btn_salvar"/>
             </td>
 
-        <?php } else { ?>
+<?php } else if ($this->Perfil != Autenticacao_Model_Grupos::PARECERISTA) { ?>
 
             <tr>
                 <th colspan="2">Parecer</th>
@@ -481,10 +481,12 @@
                 <th align="left">Enquadramentos</th>
                 <td><?php echo $this->enquadramento['Enquadramento'] == '1' ? 'Artigo 26' : 'Artigo 18'; ?></td>
             </tr>
+	    <?php if (!$this->IN2017) { ?>
             <tr>
                 <th align="left">&Aacute;rea / Segmento do Projeto</th>
                 <td><?php echo $this->dsArea.' - '.$this->dsSegmento; ?></td>
             </tr>
+	    <?php } ?>
             <tr align="left">
                 <th>Parecer favor&aacute;vel</th>
                 <td><?php echo isset($this->consolidacao[0]->ParecerFavoravel) ? $this->consolidacao[0]->ParecerFavoravel == '2' ? 'SIM' : 'N&Atilde;O' : ''; ?></td>
