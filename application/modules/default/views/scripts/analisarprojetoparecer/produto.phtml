@@ -547,7 +547,11 @@
         $('#ParecerDeConteudo').before(parecer).remove();
         $('#ParecerFavoravel').attr('disabled', 1);
         $('#ParecerDesfavoravel').attr('disabled', 1);
-        $('#btSalvarAnaliseDeConteudo').remove();
+	$('#btSalvarAnaliseDeConteudo').remove();
+	    <?php if ($this->IN2017 && $this->stPrincipal): ?>
+	    var dsAcaoAlcanceProduto = $('#dsAcaoAlcanceProduto').val();
+        $('#dsAcaoAlcanceProduto').before(dsAcaoAlcanceProduto).remove();
+	    <?php endif; ?>
 dpi<?php endif; ?>
 
         
