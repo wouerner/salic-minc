@@ -167,7 +167,7 @@ if ($this->codOrgao == Orgaos::ORGAO_IPHAN_PRONAC) {
                 foreach($this->dados as $dp):
 	    
                 ?>
-            <tr class="<?php if($dp->FecharAnalise == 2) { echo 'red'; }?>" >
+            <tr class="<?php if($dp->FecharAnalise == 2) { echo 'red lighten-4'; }?>" >
                 <td class="center-align">
                   <a class="waves-effect waves-dark btn white black-text"
                      href="<?php echo $this->url(
