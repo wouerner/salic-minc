@@ -149,12 +149,9 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
             try {
                 $tbDistribuirParecer->getAdapter()->beginTransaction();
                 foreach ($buscaDadosProjeto as $dp):
-                
-                    // DEVOLVER PARA O COORDENADOR ( PARECERISTA )
+                    $fecharAnalise = 0;
                     if (!$orgaos->isVinculadaIphan($dp->idOrgao)) {
                         $fecharAnalise = 3;
-                    } else if ($orgaos->isVinculadaIphan($dp->idOrgao)) {
-                        $fecharAnalise = 0;
                     }
                     
                     $dados = array(
