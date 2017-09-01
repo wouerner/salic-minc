@@ -3312,6 +3312,11 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
         }
 
+        $Projetos = new Projetos();
+
+        $projetosAguardandoAnalise = null;
+        $projetosEmAnalise = null;
+        $projetosAnalisados = null;
         if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
@@ -3321,6 +3326,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
                     $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
                     $where['e.stAtivo = ?'] = 1;
+                    $projetosEmAnalise = $Projetos->painelPrestacaoDeContasEmAnalise($where, $order, $tamanho, $inicio, false, $filtro);
                     break;
                 case 'analisados': // Analisados
                     $where['p.Orgao = ?'] = $this->codOrgao;
@@ -3328,6 +3334,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     $where['e.idSituacaoEncPrestContas in (?)'] = array('3');
                     $where['e.cdGruposDestino in (?)'] = array('125', '126');
                     $where['e.stAtivo = ?'] = 1;
+                    $projetosAnalisados = $Projetos->painelPrestacaoDeContasAnalisados($where, $order, $tamanho, $inicio, false, $filtro);
+
                     break;
                 case 'diligenciados': //Projetos diligenciados
                     $where['p.Orgao = ?'] = $this->codOrgao;
@@ -3350,12 +3358,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 default: //Aguardando An&aacute;lise
                     $where['p.Orgao = ?'] = $this->codOrgao;
                     $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+                    $projetosAguardandoAnalise = $Projetos->painelPrestacaoDeContasAguardandoAnalise($where);
                     break;
             }
         } else { //Aguardando An&aacute;lise
             $filtro = '';
             $where['p.Orgao = ?'] = $this->codOrgao;
             $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+            $projetosAguardandoAnalise = $Projetos->painelPrestacaoDeContasAguardandoAnalise($where);
         }
 
         if ((!empty($_POST['situacao'])) || (!empty($_GET['situacao']))) {
@@ -3363,13 +3373,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->situacao = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
         }
 
-        $Projetos = new Projetos();
         $total = $Projetos->buscarPainelPrestacaoDeContas($where, $order, null, null, true, $filtro);
         $fim = $inicio + $this->intTamPag;
 
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
+
         $busca = $Projetos->buscarPainelPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
+
 
         $paginacao = array(
             "pag"=>$pag,
@@ -3386,10 +3397,16 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             "tamanho"=>$tamanho
         );
 
-        $this->view->paginacao     = $paginacao;
-        $this->view->qtdRegistros  = $total;
-        $this->view->dados         = $busca;
-        $this->view->intTamPag     = $this->intTamPag;
+        $this->view->paginacao = $paginacao;
+        $this->view->qtdRegistros = $total;
+
+        $this->view->dados = $busca;
+
+        $this->view->projetosAguardandoAnalise = $projetosAguardandoAnalise;
+        $this->view->projetosEmAnalise = $projetosEmAnalise;
+        $this->view->projetosAnalisados = $projetosAnalisados;
+        
+        $this->view->intTamPag = $this->intTamPag;
     }
 
     public function imprimirPainelAction()
