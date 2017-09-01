@@ -1111,10 +1111,9 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                     $where['IdPRONAC = ?'] = $idPronac;
                     $alteraProjeto = $projetoDAO->update($dadosProjeto, $where);
                 }
-
+                $enquadramentoDAO = new Admissibilidade_Model_Enquadramento();
                 if (!$isIN2017) {
                     /** Gravando as informacoes do enquadramento do Projeto ***************************************/
-                    $enquadramentoDAO = new Admissibilidade_Model_Enquadramento();
                     $dadosEnquadramento = array(
                         'IdPRONAC' => $idPronac,
                         'AnoProjeto' => $anoProjeto,
