@@ -79,6 +79,7 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         
         $auth = Zend_Auth::getInstance();
         $idusuario = $auth->getIdentity()->usu_codigo;
+        $this->view->idUsuario = $idusuario;
 
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $idOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o
