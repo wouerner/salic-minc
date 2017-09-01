@@ -212,6 +212,15 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if (empty($idSolicitacao))
             throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
 
+        $where['idSolicitacao'] = $idSolicitacao;
+        $where['dsResposta IS NOT NULL'] = '';
+
+        $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+        $jaRespondida = $vwSolicitacao->findBy($where, true);
+
+        if ($jaRespondida)
+            $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
+
         $strActionBack = "/solicitacao/mensagem/index";
         try {
 
