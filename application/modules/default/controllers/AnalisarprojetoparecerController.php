@@ -363,6 +363,10 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
         $pareceristaAtivo = ($idAgenteParecerista == $produto['idAgenteParecerista']) ? true : false;
         
+        /* Analise de conteudo */
+        $analisedeConteudoDAO = new Analisedeconteudo();
+        $analisedeConteudo = $analisedeConteudoDAO->dadosAnaliseconteudo(false, array('idPronac = ?' => $idPronac, 'idProduto = ?' => $idProduto));
+
         if (count($analisedeConteudo) > 0) {
             if (($codGrupo == Autenticacao_Model_Grupos::PARECERISTA) && ($pareceristaAtivo)) {
                 $this->view->somenteLeitura = false;
@@ -374,10 +378,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         } else {
             $this->view->somenteLeitura = false;
         }
-        
-        /* Analise de conteudo */
-        $analisedeConteudoDAO = new Analisedeconteudo();
-        $analisedeConteudo = $analisedeConteudoDAO->dadosAnaliseconteudo(false, array('idPronac = ?' => $idPronac, 'idProduto = ?' => $idProduto));
         
         $PlanilhaDAO = new PlanilhaProjeto();
         if ($stPrincipal == 1) {
