@@ -204,10 +204,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
     }
 
     /**
-     * Acao responsavel por responder uma mensagem
-     *
-     * @name responderAction
-     *
      */
     public function responderAction()
     {
@@ -216,11 +212,13 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if (empty($idSolicitacao))
             throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
 
-        $strActionBack = $this->getRequest()->getParam('actionBack');
         $strActionBack = "/solicitacao/mensagem/index";
         try {
 
             if ($this->getRequest()->isPost()) {
+
+                $status = false;
+
                 $this->_helper->layout->disableLayout();
                 $this->_helper->viewRenderer->setNoRender(true);
                 $arrayForm = $this->getRequest()->getPost();
@@ -230,9 +228,16 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
 
+                $idSolicitacao = $mapperSolicitacao->responder($this->getRequest()->getPost());
+
+                if ($idSolicitacao) {
+                    $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao;
+                    $status = true;
+                }
+
                 $this->_helper->json(
                     array(
-                        'status' => $mapperSolicitacao->responder($this->getRequest()->getPost()),
+                        'status' => $status,
                         'msg' => $mapperSolicitacao->getMessages(),
                         'redirect' => $strUrl
                     )
