@@ -165,7 +165,7 @@ foreach($this->buscar as $d) {
 		  ($d->stPrincipal == 1) &&
 		  (!$this->IsProdutosPendentesParecer($d->IdPRONAC, $d->idProduto)) &&
 		  ($this->IsProjetoEnquadrado($d->IdPRONAC)) &&
-            ($this->IsProjetoComParecer($d->IdPRONAC, $this->idUsuario)) && ($dilig == 0))
+            ($this->IsProjetoComParecer($d->IdPRONAC)) && ($dilig == 0))
 		  ) : ?>
 		  <?php if($this->verificarIN2017($d->IdPRONAC)): ?>         
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
