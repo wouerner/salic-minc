@@ -25,7 +25,12 @@
                         $arrayUrl['idPreProjeto'] = $arrValue['idProjeto'];
                     }
 
-                    if($this->ehTecnico) {
+                    if ($arrValue['siEncaminhamento'] == 12) {
+                        $arrayUrl['action'] = 'solicitar';
+                        unset($arrayUrl['id']);
+                    }
+
+                    if ($this->ehTecnico) {
                         $arrayUrl['action'] = 'responder';
                     }
                     ?>
@@ -66,7 +71,7 @@
                 </tbody>
             </table>
         <?php else: ?>
-                <div class="padding20 green white-text">Sem solicita&ccedil;&otilde;es.</div>
+            <div class="padding20 green white-text">Sem solicita&ccedil;&otilde;es.</div>
         <?php endif; ?>
     </div>
 </div>

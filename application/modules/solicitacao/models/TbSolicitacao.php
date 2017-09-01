@@ -15,10 +15,11 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     protected $_idDocumento;
     protected $_siEncaminhamento;
     protected $_idSolicitante;
+    protected $_stLeitura;
     protected $_stEstado;
 
     const SOLICITACAO_CADASTRADA = 12;
-    const SOLICITACAO_ENCAMINHADA = 1;
+    const SOLICITACAO_ENCAMINHADA_AO_MINC = 1;
     const SOLICITACAO_FINALIZADA_MINC = 15;
 
     /**
@@ -34,7 +35,8 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
      */
     public function setIdSolicitacao($idSolicitacao)
     {
-        $this->_idSolicitacao = $idSolicitacao;
+        if(!empty($idSolicitacao))
+            $this->_idSolicitacao = $idSolicitacao;
     }
 
     /**
@@ -232,6 +234,23 @@ class Solicitacao_Model_TbSolicitacao extends MinC_Db_Model
     {
         $this->_siEncaminhamento = $siEncaminhamento;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStLeitura()
+    {
+        return $this->_stLeitura;
+    }
+
+    /**
+     * @param mixed $stLeitura
+     */
+    public function setStLeitura($stLeitura)
+    {
+        $this->_stLeitura = $stLeitura;
+    }
+
 
     /**
      * @return mixed

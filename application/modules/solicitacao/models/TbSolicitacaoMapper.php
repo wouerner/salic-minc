@@ -17,34 +17,28 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
         $this->_idUsuario = !empty($arrAuth['usu_codigo']) ? $arrAuth['usu_codigo'] : $arrAuth['idusuario'];
     }
 
-    public function existeSolicitacaoNaoRespondida($arrData, $estado = 1)
+    public function existeSolicitacaoNaoRespondida($arrData)
     {
-        if (isset($arrData['idSolicitacao'])) {
-            $where['idSolicitacao = ?'] = $arrData['idSolicitacao'];
-        }
-
-        if (isset($arrData['idPronac'])) {
+        if (isset($arrData['idPronac']) && !empty($arrData['idPronac'])) {
             $where['idPronac = ?'] = $arrData['idPronac'];
         }
 
-        if (isset($arrData['idProjeto'])) {
+        if (isset($arrData['idProjeto']) && !empty($arrData['idProjeto'])) {
             $where['idProjeto = ?'] = $arrData['idProjeto'];
         }
 
-
         $where['idSolicitante = ?'] = $this->_idUsuario;
+        $where['stEstado = ?'] = 1;
 
-
-        $where['stEstado = ?'] = $estado;
-
-        return ($this->findBy($where)) ? true : false;
+        return $this->findBy($where);
     }
 
     public function isValid($model)
     {
         $booStatus = true;
         $arrData = $model->toArray();
-        if (empty($arrData['idSolicitacao'])) {
+        if ($arrData['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA
+            || $arrData['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC) {
             $arrRequired = array(
                 'idOrgao',
                 'dsSolicitacao',
@@ -73,7 +67,7 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
             try {
 
                 $sp = new Solicitacao_Model_SpSelecionarTecnicoSolicitacao();
-                
+
                 if (!empty($arrData['idPronac'])) {
                     $tecnico = $sp->exec($arrData['idPronac'], 'projeto');
 
@@ -88,16 +82,25 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 $arrData['idTecnico'] = $tecnico['idTecnico'];
                 $arrData['idAgente'] = $tecnico['idAgente'];
                 $model = new Solicitacao_Model_TbSolicitacao();
+                $model->setIdSolicitacao($arrData['idSolicitacao']);
                 $model->setDtSolicitacao(date('Y-m-d h:i:s'));
                 $model->setIdOrgao($arrData['idOrgao']);
                 $model->setIdAgente($arrData['idAgente']);
-                $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
                 $model->setDsSolicitacao($arrData['dsSolicitacao']);
                 $model->setStEstado(1);
                 $model->setIdPronac($arrData['idPronac']);
                 $model->setIdProjeto($arrData['idProjeto']);
                 $model->setIdTecnico($arrData['idTecnico']);
                 $model->setIdSolicitante($arrData['idUsuario']);
+
+                $mensagemSucesso = "Solicita&ccedil;&atilde;o enviada com sucesso!";
+                $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC);
+
+                # define se eh para salvar ou enviar ao minc
+                if ($arrData['siEncaminhamento'] == 0) {
+                    $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
+                    $mensagemSucesso = "Rascunho salvo com sucesso!";
+                }
 
                 $file = new Zend_File_Transfer();
 
@@ -115,9 +118,9 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
 
                 if ($id = $this->save($model)) {
                     $booStatus = $id;
-                    $this->setMessage('Rascunho salvo com sucesso!');
+                    $this->setMessage($mensagemSucesso);
                 } else {
-                    $this->setMessage('N&atilde;o foi poss&iacute;vel salvar o rascunho!');
+                    $this->setMessage('N&atilde;o foi poss&iacute;vel efetuar a opera&ccedil;&atilde;o!');
                 }
             } catch (Exception $e) {
                 $this->setMessage($e->getMessage());

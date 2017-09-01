@@ -44,6 +44,8 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const COMPONENTE_COMISSAO = 118;
 
     const COORDENADOR_ATENDIMENTO = 127;
+    const TECNICO_DE_ATENDIMENTO = 155;
+
     const TECNICO_PORTARIA = 128;
     const COORDENADOR_ABMISSIBILIDADE = 131;
 

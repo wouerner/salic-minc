@@ -127,6 +127,27 @@ $arrMenu['assinatura']['menu'][] = array(
     'label' => 'Gerir Atos Administrativos'
 );
 
+// ========== INICIO MENU ATENDIMENTO ==========
+$arrMenu['atendimento'] = array(
+    'id' => 'atendimento',
+    'label' => 'Atendimento',
+    'title' => 'Ir para Assinatura',
+    'menu' => array(),
+    'grupo' => [Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO]
+);
+
+$arrMenu['atendimento']['menu'][] = array(
+    'url' => $this->url(
+        array(
+            'module' => 'solicitacao',
+            'controller' => 'mensagem',
+            'action' => 'index'
+        ), '', true),
+    'title' => 'Ir para Solicita&ccedil;&otilde;es',
+    'label' => 'Solicita&ccedil;&otilde;es Proponente',
+    'grupo' => [Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO]
+);
+
 $arrMenu['acompanhamento'] = array(
     'id' => 'acompanhamento',
     'label' => 'Acompanhamento',
