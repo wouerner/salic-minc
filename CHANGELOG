@@ -1,3 +1,6 @@
+Release 2.6.4
+[FIX] Parecer/análise inicial: parecerista gravando parecer inicial e impedindo coordenador de editar parecer
+
 Release 2.6.3
 [FIX] Cadastro Proponente: corrige erro quando não existe informações adicionais
 
