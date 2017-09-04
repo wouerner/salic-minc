@@ -1,3 +1,16 @@
+Release 2.6.4
+[FIX] Parecer/análise inicial: parecerista gravando parecer inicial e impedindo coordenador de editar parecer
+
+Release 2.6.3
+[FIX] Cadastro Proponente: corrige erro quando não existe informações adicionais
+
+Release 2.6.2
+[Fix] Proposta: corrige bug que deixava proponente excluir arquivo de proposta enviada
+[Fix] Alterar projeto/Avaliacao: corrige bug ao salvar avaliacao
+
+Release 2.6.1
+* [FIX] Parecer/análise inicial de produto: correção na edição de parecer quando já existe parecer
+
 Release 2.6.0
 * [ADD] Assinatura / Models / Atos administrativos : Criação de mapper para AtoAdministrativo.
 * [UPDATE]Adição da opção "Gerir Atos Administrativos" para o grupo "Gestor Salic"
