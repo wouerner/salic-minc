@@ -43,17 +43,15 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 'idOrgao',
                 'dsSolicitacao',
             );
-        } else {
-            $arrRequired = array(
-                'dsResposta',
-            );
-        }
-        foreach ($arrRequired as $strValue) {
-            if (!isset($arrData[$strValue]) || empty($arrData[$strValue])) {
-                $this->setMessage('Campo obrigat&oacute;rio!', $strValue);
-                $booStatus = false;
+
+            foreach ($arrRequired as $strValue) {
+                if (!isset($arrData[$strValue]) || empty($arrData[$strValue])) {
+                    $this->setMessage('Campo obrigat&oacute;rio!', $strValue);
+                    $booStatus = false;
+                }
             }
         }
+
         return $booStatus;
     }
 
@@ -149,6 +147,27 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                     $this->setMessage('Solicita&ccedil;&atilde;o respondida com sucesso!');
                 } else {
                     $this->setMessage('N&atilde;o foi poss&iacute;vel salvar a resposta da solicita&ccedil;&atilde;o!');
+                }
+            } catch (Exception $e) {
+                $this->setMessage($e->getMessage());
+            }
+        }
+        return $booStatus;
+    }
+
+    public function atualizarSolicitacao($model)
+    {
+        $booStatus = 0;
+
+        if (!empty($model)) {
+
+            try {
+
+                if ($id = $this->save($model)) {
+                    $booStatus = $id;
+                    $this->setMessage('Solicita&ccedil;&atilde;o atualizada com sucesso!');
+                } else {
+                    $this->setMessage('N&atilde;o foi poss&iacute;vel atualizar a solicita&ccedil;&atilde;o!');
                 }
             } catch (Exception $e) {
                 $this->setMessage($e->getMessage());

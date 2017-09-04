@@ -167,7 +167,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $dataForm = $mapperSolicitacao->existeSolicitacaoNaoRespondida($dataForm);
 
             if ($dataForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC) {
-                $this->redirect($this->_urlPadrao .'/solicitacao/mensagem/visualizar/id/' . $dataForm['idSolicitacao']);
+                $this->redirect($this->_urlPadrao . '/solicitacao/mensagem/visualizar/id/' . $dataForm['idSolicitacao']);
 //                throw new Exception("Voc&ecirc; j&aacute; possui uma solicita&ccedil;&atilde;o aguardando resposta para este projeto!");
             }
 
@@ -235,15 +235,21 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
 
         $where['idSolicitacao'] = $idSolicitacao;
-        $where['dsResposta IS NOT NULL'] = '';
+//        $where['dsResposta IS NOT NULL'] = '';
 
         $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-        $jaRespondida = $vwSolicitacao->findBy($where, true);
+        $solicitacao = $vwSolicitacao->findBy($where, true);
 
-        if ($jaRespondida)
+        if (empty($solicitacao))
+            throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+
+        if ($solicitacao['idTecnico'] != $this->idUsuario)
+            throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para responder esta solicita&ccedil;&atilde;o!");
+
+        if (!empty($solicitacao['dsResposta']))
             $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
 
-        $strActionBack = "/solicitacao/mensagem/index";
+
         try {
 
             if ($this->getRequest()->isPost()) {
@@ -276,29 +282,62 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             } else {
 
-                $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-                $dataForm = $vwSolicitacao->findBy(['idSolicitacao' => $idSolicitacao]);
-
-                if (empty($dataForm))
-                    throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
-
-
-                if ($dataForm['idTecnico'] != $this->idUsuario)
-                    throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para responder esta solicita&ccedil;&atilde;o!");
+                $vwGrupos = new vwUsuariosOrgaosGrupos();
 
                 $arrConfig = [
                     'dsSolicitacao' => ['disabled' => true],
                     'dsResposta' => ['show' => true, 'disabled' => false],
-                    'actions' => ['show' => true]
+                    'actions' => ['show' => true],
+                    'actionredistribuirSolicitacao' => $this->_urlPadrao . "/solicitacao/mensagem/redistribuir-solicitacao",
+                    'redistribuirTecnicos' => $vwGrupos->carregarTecnicosPorUnidade($solicitacao['idOrgao'])
                 ];
 
-                self::prepareForm($dataForm, $arrConfig, '', $strActionBack);
+                $strActionBack = "/solicitacao/mensagem/index";
+                self::prepareForm($solicitacao, $arrConfig, '', $strActionBack);
             }
 
             $this->view->arrConfig['dsMensagem'] = ['disabled' => true];
 
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), $strActionBack, "ALERT");
+        }
+    }
+
+    public function redistribuirSolicitacaoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        if ($this->getRequest()->isPost()) {
+
+            try {
+
+                $arrayForm = $this->getRequest()->getPost();
+
+                if (empty($arrayForm['idTecnico']))
+                    throw new Exception("T&eacute;cnico &eacute; obrigat&oacute;rio!");
+
+                if (empty($arrayForm['idSolicitacao']))
+                    throw new Exception("Solicita&ccedil;&atilde;o &eacute; obrigat&oacute;rio!");
+
+                $strUrl = '/solicitacao/mensagem/index';
+                $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
+                $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
+
+                $model = new Solicitacao_Model_TbSolicitacao();
+                $model->setIdSolicitacao($arrayForm['idSolicitacao']);
+                $model->setIdTecnico($arrayForm['idTecnico']);
+
+                $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
+                $idSolicitacao = $mapperSolicitacao->atualizarSolicitacao($model);
+
+                if ($idSolicitacao) {
+                    $this->_helper->json(array('status' => true, 'msg' => 'Encaminhamento realizado com sucesso!', 'redirect' => $strUrl));
+                }
+
+            } catch (Exception $objException) {
+                $this->_helper->json(array('status' => false, 'msg' => $objException->getMessage(), 'redirect' => $strUrl));
+            }
         }
     }
 
