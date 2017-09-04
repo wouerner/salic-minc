@@ -317,7 +317,8 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         $where = array();
-        if (Orgaos::isVinculadaIphan($dp->idOrgao)) {
+        
+        if (Orgaos::isVinculadaIphan($codOrgao)) {
             $tipoFiltro  = 'superintendente_vinculadas';            
         } else {
             $tipoFiltro  = 'presidente_vinculadas';
@@ -418,15 +419,10 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 
                 if ($orgaos->isVinculadaIphan($dp->idOrgao)) {                
                     $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
-                    if ($dp->stPrincipal == 1) {
-                        $fecharAnalise = 3;
-                    } else {
-                        $fecharAnalise = 1;
-                    }
                 } else {
                     $idOrgao = $dp->idOrgao;
-                    $fecharAnalise = 1;
                 }
+                $fecharAnalise = 1;
                 
                 $dados = array(
                     'DtEnvio' => $dp->DtEnvio,
