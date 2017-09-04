@@ -12,7 +12,7 @@ $edital='';
 ?>
 <div class="container-fluid">
     <div class="row">
-        <?php echo $this->partial("inc/menu.phtml", $this); ?>
+        <?= $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
         <div class="content col s10 m12 l10 planilha-produtos">
             <div id="msgExclusaoArq" class="sumir">Deseja realmente efetuar a exclus&atilde;o?</div>
             <h4>Anexar Documentos</h4>

@@ -31,12 +31,10 @@
 
 <div class="<?php echo isset($this->proposta['idpreprojeto']) ? 'container-fluid ' : 'container' ?>">
     <div class="row">
-        <?php
-        if (isset($this->proposta['idpreprojeto'])) {
-            echo $this->partial("inc/menu.phtml", $this); // menu
-        }
+        <?php if (isset($this->proposta['idpreprojeto'])) : ?>
+            <?= $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
+        <?php endif; ?>
 
-        ?>
 
         <div class="col <?php echo isset($this->proposta['idpreprojeto']) ? 's10 m12 l10 ' : 's12 m12 l12' ?>">
             <?php if (isset($this->proposta['idpreprojeto'])) {

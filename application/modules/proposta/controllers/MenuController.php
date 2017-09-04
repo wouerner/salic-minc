@@ -28,6 +28,7 @@ class Proposta_MenuController extends Proposta_GenericController
 
     private function gerarArrayMenu($idPreProjeto)
     {
+
         $arrMenuProponente = array();
         $arrMenuProponente['principal'] = array(
             'id' => 'informacaoinicial',
