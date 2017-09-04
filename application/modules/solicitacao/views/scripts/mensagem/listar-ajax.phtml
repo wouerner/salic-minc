@@ -11,7 +11,7 @@
             $arrayUrl['idPreProjeto'] = $arrValue['idProjeto'];
         }
 
-        if($this->ehTecnico) {
+        if($arrValue['idTecnico'] == $this->idUsuario) {
             $arrayUrl['action'] = 'responder';
         }
         ?>

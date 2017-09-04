@@ -99,6 +99,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         $this->usuario = $arrAuth;
         $this->view->usuario = $auth->getIdentity(); //@todo padronizar o usuario no header do layout
         $this->view->ehProponente = $this->ehProponente;
+        $this->view->idUsuario = $this->idUsuario;
     }
 
     private function gerarArrayMenuProjeto($idPronac)

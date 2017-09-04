@@ -80,12 +80,21 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         if (isset($this->usuario['usu_codigo'])) {
 
-            $grupos = new Autenticacao_Model_Grupos();
-            $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
+//            if(Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO) {
+//                $where['idTecnico = ?'] = $this->idUsuario;
+//            }
 
-            if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
-                $where['idTecnico = ?'] = $this->idUsuario;
-                $this->view->ehTecnico = true;
+            if (isset($this->grupoAtivo->codOrgao)) {
+
+                $grupos = new Autenticacao_Model_Grupos();
+                $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
+
+                if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
+                    $where['idTecnico = ?'] = $this->idUsuario;
+                }
+
+                $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
+
             }
 
             if (isset($this->grupoAtivo->codOrgao)) {
@@ -100,6 +109,55 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $this->view->arrResult = $solicitacoes;
         $this->view->idPronac = $idPronac;
 
+    }
+
+    /**
+     * utilizado nas notificações
+     */
+    public function listarAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->getRequest()->getParam('idPronac', null);
+        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
+        $this->view->ehTecnico = false;
+
+        $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+
+        $where = [];
+        if ($idPronac) {
+            $where['idPronac = ?'] = $idPronac;
+        }
+
+        if ($idPreProjeto) {
+            $where['idProjeto = ?'] = $idPreProjeto;
+        }
+
+        # Proponente
+        if (isset($this->usuario['cpf'])) {
+            $where["(idAgente = {$this->idAgente} OR idSolicitante = {$this->idUsuario})"] = '';
+            $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC;
+        }
+
+        if (isset($this->usuario['usu_codigo'])) {
+
+//            $grupos = new Autenticacao_Model_Grupos();
+//            $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
+
+            $where['idTecnico = ?'] = $this->idUsuario;
+            $where['dsResposta IS NULL'] = '';
+
+            if (isset($this->grupoAtivo->codOrgao)) {
+                $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
+            }
+
+            $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC;
+        }
+
+
+        $solicitacoes = $vwSolicitacoes->buscar($where, ['dtResposta DESC', 'dtSolicitacao DESC']);
+
+        $this->view->arrResult = $solicitacoes;
+        $this->view->idPronac = $idPronac;
     }
 
     public function visualizarAction()
@@ -368,53 +426,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
     }
 
-    public function listarAjaxAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $idPronac = $this->getRequest()->getParam('idPronac', null);
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
-        $this->view->ehTecnico = false;
-
-        $vwSolicitacoes = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-
-        $where = [];
-        if ($idPronac) {
-            $where['idPronac = ?'] = $idPronac;
-        }
-
-        if ($idPreProjeto) {
-            $where['idProjeto = ?'] = $idPreProjeto;
-        }
-
-        # Proponente
-        if (isset($this->usuario['cpf'])) {
-            $where["(idAgente = {$this->idAgente} OR idSolicitante = {$this->idUsuario})"] = '';
-            $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC;
-        }
-
-        if (isset($this->usuario['usu_codigo'])) {
-
-            $grupos = new Autenticacao_Model_Grupos();
-            $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
-
-
-            if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
-                $where['idTecnico = ?'] = $this->idUsuario;
-                $where['dsResposta IS NULL'] = '';
-                $this->view->ehTecnico = true;
-            }
-
-            if (isset($this->grupoAtivo->codOrgao)) {
-                $where['idOrgao = ?'] = $this->grupoAtivo->codOrgao;
-            }
-
-            $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC;
-        }
-        $solicitacoes = $vwSolicitacoes->buscar($where, ['dtResposta DESC', 'dtSolicitacao DESC']);
-
-        $this->view->arrResult = $solicitacoes;
-        $this->view->idPronac = $idPronac;
-    }
 
     public function contarSolicitacoesNaoLidasAjaxAction()
     {

@@ -9,6 +9,9 @@
                     <th data-field="" class="left-align">Título</th>
                     <th data-field="" class="left-align">Proponente</th>
                     <th data-field="" class="left-align">Solicita&ccedil;&atilde;o</th>
+                    <?php if (!$this->ehProponente)  : ?>
+                        <th data-field="" class="left-align">T&eacute;cnico</th>
+                    <?php endif; ?>
                     <th data-field="" class="left-align">Situa&ccedil;&atilde;o</th>
                     <th data-field="id" class="center-align">Data</th>
                 </tr>
@@ -30,7 +33,7 @@
                         unset($arrayUrl['id']);
                     }
 
-                    if ($this->ehTecnico) {
+                    if ($arrValue['idTecnico'] == $this->idUsuario) {
                         $arrayUrl['action'] = 'responder';
                     }
                     ?>
@@ -60,6 +63,13 @@
                                 <?= $arrValue['dsSolicitacao']; ?>
                             </a>
                         </td>
+                        <?php if (!$this->ehProponente) : ?>
+                            <td>
+                                <a href="<?php echo $this->url($arrayUrl, null, true); ?>">
+                                    <?= $arrValue['Tecnico']; ?>
+                                </a>
+                            </td>
+                        <?php endif; ?>
                         <td>
                             <a href="<?php echo $this->url($arrayUrl, null, true); ?>">
                                 <?= $arrValue['dsEncaminhamento']; ?>

@@ -60,21 +60,21 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const TECNICO_ADMISSIBILIDADE_EDITAL = 140;
 
     //verificar se eh tecnico
-
     public function buscarTecnicosPorOrgao($idOrgao)
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
-        $select->distinct('gru_codigo');
         $select->from(
             array('g' => $this->_name), ['gru_codigo', 'gru_nome'], $this->_schema
         );
 
         $select->joinInner(['u' => 'UsuariosXOrgaosXGrupos'], 'u.uog_grupo = g.gru_codigo', ['uog_orgao'], $this->_schema );
 
-        $select->where('g.gru_nome like ?', "%Técnico%");
+        $select->where('g.gru_nome like ?', "Técnico%");
         $select->where('g.gru_status = ?', 1);
-        $select->where('u.uog_orgao = ?', 171);
+        $select->where('u.uog_orgao = ?', $idOrgao);
+        $select->group(['gru_codigo', 'gru_nome','uog_orgao']);
+
         return $this->fetchAll($select);
     }
 }
