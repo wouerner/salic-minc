@@ -248,6 +248,7 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         $queryDesistenciaRecursal->where("tpSolicitacao = ?", "DR");
         $queryDesistenciaRecursal->where("siRecurso = ?", 15);
         $queryDesistenciaRecursal->where("stEstado = ?", 1);
+        $queryDesistenciaRecursal->where("siFaseProjeto = ?", 1);
         $queryDesistenciaRecursal->where("IdPRONAC = ?", $idPronac);
         
         return ($this->_db->fetchOne($queryDesistenciaRecursal)) ? $this->_db->fetchOne($queryDesistenciaRecursal) : false;
