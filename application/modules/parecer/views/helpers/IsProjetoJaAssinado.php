@@ -17,18 +17,37 @@ class Zend_View_Helper_IsProjetoJaAssinado
 	{
         $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
         $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
+        // verificar quantidade de assinaturas, verificar se idOrdemAssinatura
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $idOrgaoDoAssinante = $GrupoAtivo->codOrgao;
+        $idPerfilDoAssinante = $GrupoAtivo->codGrupo;
         
-        foreach($assinaturas as $assinatura) {
-            if (is_array($assinatura)) {
-                if ($assinatura['idPerfilDoAssinante'] == $idPerfilDoAssinante) {
-                    return true;
-                }
-            } else if (is_object($assinatura)) {
-                if ($assinatura->idPerfilDoAssinante == $idPerfilDoAssinante) {
-                    return true;
-                }                
-            }
+        $orgao = new Orgaos();
+        $codOrgaoSuperior = $orgao->obterOrgaoSuperior($idOrgaoDoAssinante)['Codigo'];
+        
+        $tbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $assinaturasNecessarias = $tbAtoAdministrativo->buscar(
+            array(
+                'idTipoDoAto = ?' => Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL,
+                'idOrgaoSuperiorDoAssinante = ?' => $codOrgaoSuperior
+            )
+        );
+        
+        $idUltimaAssinatura = (end($assinaturas)->idOrdemDaAssinatura) ? end($assinaturas)->idOrdemDaAssinatura : 0;
+        
+        if ($idUltimaAssinatura <= count($assinaturasNecessarias)) {
+            $idProximaAssinatura = $idUltimaAssinatura + 1;
+        } else {
+            return true;
         }
-        return false;
+        
+        $dadosAssinaturaAtual = $assinaturasNecessarias[$idUltimaAssinatura];
+        
+        if ($dadosAssinaturaAtual['idOrgaoDoAssinante'] == $idOrgaoDoAssinante
+            && $dadosAssinaturaAtual['idPerfilDoAssinante'] == $idPerfilDoAssinante) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
