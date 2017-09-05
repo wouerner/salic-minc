@@ -152,22 +152,6 @@
                 </tr>
             </table>
             <table class="tabela" style="width: 95%;">
-              <?php if ($this->IN2017 && $this->stPrincipal): ?>
-	      <tr>
-		<td class="destacar bold" colspan="5">
-                  A&ccedil;&otilde;es relevantes para o sucesso do projeto*
-		</td>
-	      </tr>    
-              <tr>
-		<td colspan="5">
-                  <p>
-                    <center>
-                      <textarea class="textarea_simples" id="dsAcaoAlcanceProduto" name="dsAcaoAlcanceProduto" rows="10" style="width: 98%;"></textarea>
-                    </center>
-		</td>
-	      </tr>
-	      <?php endif; ?>
-	      
             <tr>
               <td colspan="5">
                 <b>Parecer de Conteúdo do Produto*</b>
@@ -386,7 +370,7 @@
 	<?php endif; ?>
 	
         <table class="tabela sumir" id="consolidacao" style="width:95%" width="95%">
-        <?php if($this->Perfil == 94) { //Parecerista ?>
+<?php if($this->Perfil == Autenticacao_Model_Grupos::PARECERISTA) { ?>
             <tr>
                 <th colspan="5">Consolida&ccedil;&atilde;o do Parecer T&eacute;cnico</th>
             </tr>
@@ -448,6 +432,23 @@
                 <td align="left" class="destacar bold">Sugerido</td>
                 <td align="left" colspan="2"><?php echo $this->itens['totalSugerido']; ?></td>
             </tr>
+
+            <?php if ($this->IN2017 && $this->stPrincipal): ?>
+	    <tr>
+	      <td class="destacar bold" colspan="5">
+                A&ccedil;&otilde;es relevantes para o sucesso do projeto*
+	      </td>
+	    </tr>    
+            <tr>
+	      <td colspan="5">
+                <p>
+                  <center>
+								    <textarea class="textarea_simples" id="dsAcaoAlcanceProduto" name="dsAcaoAlcanceProduto" rows="10" style="width: 98%;"><?php echo $this->AcoesRelevantes; ?></textarea>
+                  </center>
+	      </td>
+	    </tr>
+	    <?php endif; ?>      
+	    
 	    <tr>
 	      <td class="destacar bold" colspan="5">
                 Parecer t&eacute;cnico*
@@ -465,7 +466,7 @@
                 <input type="button" id="btSalvarConsolidacao" value=" " class="btn_salvar"/>
             </td>
 
-        <?php } else { ?>
+<?php } else if ($this->Perfil != Autenticacao_Model_Grupos::PARECERISTA) { ?>
 
             <tr>
                 <th colspan="2">Parecer</th>
@@ -481,10 +482,12 @@
                 <th align="left">Enquadramentos</th>
                 <td><?php echo $this->enquadramento['Enquadramento'] == '1' ? 'Artigo 26' : 'Artigo 18'; ?></td>
             </tr>
+	    <?php if (!$this->IN2017) { ?>
             <tr>
                 <th align="left">&Aacute;rea / Segmento do Projeto</th>
                 <td><?php echo $this->dsArea.' - '.$this->dsSegmento; ?></td>
             </tr>
+	    <?php } ?>
             <tr align="left">
                 <th>Parecer favor&aacute;vel</th>
                 <td><?php echo isset($this->consolidacao[0]->ParecerFavoravel) ? $this->consolidacao[0]->ParecerFavoravel == '2' ? 'SIM' : 'N&Atilde;O' : ''; ?></td>
@@ -545,7 +548,11 @@
         $('#ParecerDeConteudo').before(parecer).remove();
         $('#ParecerFavoravel').attr('disabled', 1);
         $('#ParecerDesfavoravel').attr('disabled', 1);
-        $('#btSalvarAnaliseDeConteudo').remove();
+	$('#btSalvarAnaliseDeConteudo').remove();
+	    <?php if ($this->IN2017 && $this->stPrincipal): ?>
+	    var dsAcaoAlcanceProduto = $('#dsAcaoAlcanceProduto').val();
+        $('#dsAcaoAlcanceProduto').before(dsAcaoAlcanceProduto).remove();
+	    <?php endif; ?>
 dpi<?php endif; ?>
 
         
