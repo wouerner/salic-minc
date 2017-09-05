@@ -1,5 +1,3 @@
-
-
 <?php if (count($this->arrResult) > 0) : ?>
     <?php foreach ($this->arrResult as $int => $arrValue): ?>
         <?php
@@ -11,18 +9,20 @@
             $arrayUrl['idPreProjeto'] = $arrValue['idProjeto'];
         }
 
-        if($arrValue['idTecnico'] == $this->idUsuario) {
+        if ($arrValue['idTecnico'] == $this->idUsuario) {
             $arrayUrl['action'] = 'responder';
         }
         ?>
-        <div class="mensagem-body <?= ($arrValue['stLeitura'] == 0 && !empty($arrValue['dtResposta'])) ? 'not-read' : '';?>">
+        <div
+            class="mensagem-body <?= ($arrValue['stLeitura'] == 0 && !empty($arrValue['dtResposta'])) ? 'not-read' : ''; ?>">
             <a href="<?= $this->url($arrayUrl, null, true); ?>" class="mensagem-title">
                 <?= $arrValue['dsEncaminhamento']; ?></br>
-                <?= $arrValue['NomeProjeto']; ?> (<?= empty($arrValue['Pronac']) ? $arrValue['idProjeto'] : $arrValue['Pronac']; ?>)
+                <?= $arrValue['NomeProjeto']; ?>
+                (<?= empty($arrValue['Pronac']) ? $arrValue['idProjeto'] : $arrValue['Pronac']; ?>)
                 <span class="mensagem-date"><?= date('d/m/Y', strtotime($arrValue['dtSolicitacao'])); ?></span>
             </a>
         </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="padding10 center-align black-text">Sem solicita&ccedil;&otilde;es.</div>
+    <div class="padding10 center-align black-text">Sem notifica&ccedil;&atilde;o de solicita&ccedil;&otilde;es.</div>
 <?php endif; ?>

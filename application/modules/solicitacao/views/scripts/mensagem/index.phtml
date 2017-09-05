@@ -8,15 +8,14 @@ if (isset($this->projeto->IdPRONAC))
 
 <div class="container-fluid">
     <div class="row">
-
         <?php if ($this->idPreProjeto && $this->ehProponente) : ?>
             <?= $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
         <?php else: ?>
             <?= $this->partial('/mensagem/partials/menu.phtml', $this); ?>
         <?php endif; ?>
 
-        <div class="col s10 m10 l10">
-            <div id="container-list" class="container" style="width: 100%;max-width:100%;padding: 0 0.75rem;"
+        <div class="col s12 m12 l10">
+            <div id="container-list" class="container" style="width: 100%"
                  data-ajax-render='/solicitacao/mensagem/listar<?= $params; ?>'>
             </div>
 
