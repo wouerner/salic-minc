@@ -165,7 +165,7 @@ foreach($this->buscar as $d) {
 		  ($d->stPrincipal == 1) &&
 		  (!$this->IsProdutosPendentesParecer($d->IdPRONAC, $d->idProduto)) &&
 		  ($this->IsProjetoEnquadrado($d->IdPRONAC)) &&
-		  ($this->IsProjetoComParecer($d->IdPRONAC)) && ($dilig == 0))
+            ($this->IsProjetoComParecer($d->IdPRONAC)) && ($dilig == 0))
 		  ) : ?>
 		  <?php if($this->verificarIN2017($d->IdPRONAC)): ?>         
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($d->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
@@ -184,9 +184,9 @@ foreach($this->buscar as $d) {
                      href="#modalConfirmacao"
                      data-redirect-url="<?php echo $this->url(
                                         array(
-                                        'module' => 'default',
-                                        'controller' => 'analisarprojetoparecer',
-                                        'action' => 'fecharparecer'
+                                        'module' => 'parecer',
+                                        'controller' => 'analise-inicial',
+                                        'action' => 'fechar-parecer'
                                         )
                                         ) . $parametrosAssinatura ?>"
                      data-position="top"
@@ -211,7 +211,7 @@ foreach($this->buscar as $d) {
 		  </a>
 		  <?php endif; ?>
 		  <?php elseif(!$this->verificarIN2017($d->IdPRONAC)): ?>
-		  <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('module' => 'default', 'controller' => 'Analisarprojetoparecer', 'action' => 'fecharparecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
+		  <img src="<?php echo $this->baseUrl(); ?>/public/img/save.gif" onclick="redirecionar('<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-inicial', 'action' => 'fechar-parecer', 'idPronac'=> $d->IdPRONAC, 'idD'=> $d->idDistribuirParecer, 'idProduto' => $d->idProduto, 'stPrincipal' => $d->stPrincipal)); ?>')" style="cursor: pointer;" title="Concluir An&aacute;lise" alt="Concluir An&aacute;lise" />
 		  <?php endif; ?>
 		  <?php endif; ?>
 
@@ -221,10 +221,10 @@ foreach($this->buscar as $d) {
                   <a class="btn waves-effect waves-light tooltipped small btn cyan"
                      href="#modalConfirmacao"
                      data-redirect-url="<?php echo $this->url(
-                                        array(
-                                        'module' => 'default',
-                                        'controller' => 'analisarprojetoparecer',
-                                        'action' => 'fecharparecer'
+                              array(
+                                        'module' => 'parecer',
+                                        'controller' => 'analise-inicial',
+                                        'action' => 'fechar-parecer'
                                         )
                                         ) . $parametrosAssinatura ?>"
                      data-position="top"
