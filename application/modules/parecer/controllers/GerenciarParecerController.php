@@ -391,23 +391,8 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         try {
             $db->beginTransaction();
 
-            // IPHAN possui fluxo de 5 passos e finaliza somente pelo presidente
-            if (!$orgaos->isVinculadaIphan($dp->idOrgao)) {
-                $parecer = new Parecer();
-                $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
-                
-                $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-                $data = array(
-                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
-                );
-                $where = array(
-                    'IdPRONAC = ?' => $idPronac,
-                    'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-                    'idAtoDeGestao = ?' => $idAtoAdministrativo,
-                    'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-                    'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-                );
-                $objModelDocumentoAssinatura->update($data, $where);
+            if (!$orgaos->isVinculadaIphan($codOrgao)) {
+                $this->fecharAssinatura($idPronac);
             }
             
             $tbDistribuirParecer = new tbDistribuirParecer();
@@ -477,4 +462,26 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         
     }
 
+    private function fecharAssinatura($idPronac)
+    {
+        try {
+            $parecer = new Parecer();
+            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
+            
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $data = array(
+                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+            );
+            $where = array(
+                'IdPRONAC = ?' => $idPronac,
+                'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
+                'idAtoDeGestao = ?' => $idAtoAdministrativo,
+                'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+                'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+            );
+            $objModelDocumentoAssinatura->update($data, $where);
+        } catch (Zend_Exception $ex) {
+            parent::message("Erro ao concluir " . $ex->getMessage(), "parecer/gerenciar-parecer/finalizar-parecer", "ERROR");
+        }
+    }
 }
