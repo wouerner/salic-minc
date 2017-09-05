@@ -1,3 +1,7 @@
+Release 2.6.5
+[ CLEAN ] Prestação de contas: Ajustes para PSR2 na controller
+[ FIX ] Prestação de contas: Duplicidade de linhas ao fazer a analise do projeto.
+
 Release 2.6.4
 [FIX] Parecer/análise inicial: parecerista gravando parecer inicial e impedindo coordenador de editar parecer
 
