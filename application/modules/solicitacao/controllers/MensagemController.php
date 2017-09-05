@@ -136,6 +136,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if (isset($this->usuario['cpf'])) {
             $where["(idAgente = {$this->idAgente} OR idSolicitante = {$this->idUsuario})"] = '';
             $where['siEncaminhamento = ?'] = Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC;
+            $where['stLeitura = ?'] = 0;
         }
 
         if (isset($this->usuario['usu_codigo'])) {
@@ -185,6 +186,20 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             if ($permissao['status'] === false)
                 throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esta solicita&ccedil;&atilde;o");
+
+            # marcar como mensagem lida pelo proponente
+            if($dataForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC ) {
+                if ($dataForm['idAgente'] == $this->idAgente || $dataForm['idSolicitante'] == $this->idUsuario) {
+
+                    $model = new Solicitacao_Model_TbSolicitacao();
+                    $model->setIdSolicitacao($dataForm['idSolicitacao']);
+                    $model->setStLeitura(1);
+                    $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
+                    $mapperSolicitacao->atualizarSolicitacao($model);
+
+                }
+            }
+
 
             $arrConfig['dsResposta']['show'] = true;
 
