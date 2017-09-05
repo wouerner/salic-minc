@@ -7521,7 +7521,7 @@ class Projetos extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function painelPrestacaoDeContasEmAnalise($where = array(), $order = array(), $tamanho = -1, $inicio = -1, $qtdeTotal = false, $filtro = '')
+    public function painelPrestacaoDeContasEmAnalise($where = array())
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -7576,60 +7576,28 @@ class Projetos extends MinC_Db_Table_Abstract
             $select->where($coluna, $valor);
         }
 
-        if ($qtdeTotal) {
-
-            return $this->fetchAll($select)->count();
-        }
-
         //adicionando linha order ao select
         $select->order($order);
-
-        // paginacao
-        if ($tamanho > -1) {
-            $tmpInicio = 0;
-            if ($inicio > -1) {
-                $tmpInicio = $inicio;
-            }
-            $select->limit($tamanho, $tmpInicio);
-        }
-
 
         return $this->fetchAll($select);
     }
 
-    public function painelPrestacaoDeContasAnalisados($where = array(), $order = array(), $tamanho = -1, $inicio = -1, $qtdeTotal = false, $filtro = '')
+    public function painelPrestacaoDeContasAnalisados($where = array())
     {
-
         $select = $this->select();
         $select->setIntegrityCheck(false);
 
-        if ($filtro == 'emanalise') {
-            $select->from(
-                array('p' => $this->_name),
-                array(
-                    new Zend_Db_Expr("
-                        p.IdPRONAC AS idPronac,
-                        (p.AnoProjeto+p.Sequencial) AS Pronac,
-                        p.NomeProjeto,
-                        p.Situacao,
-                        e.dtInicioEncaminhamento,
-                        DATEDIFF(day, e.dtInicioEncaminhamento, GETDATE()) AS qtDiasAnalise
-                    ")
-                )
-            );
-        } else {
-            $select->from(
-                array('p' => $this->_name),
-                array(
-                    new Zend_Db_Expr("
-                        p.IdPRONAC AS idPronac,
-                        (p.AnoProjeto+p.Sequencial) AS Pronac,
-                        p.NomeProjeto,
-                        p.Situacao
-                    ")
-                )
-            );
-        }
+        $select->from(
+            array('p' => $this->_name),
+            array(
+                new Zend_Db_Expr("
+                    p.IdPRONAC AS idPronac,
+                    (p.AnoProjeto+p.Sequencial) AS Pronac,
+                    p.NomeProjeto,
+                    p.Situacao
+                ")
+            )
+        );
 
         $select->joinInner(
             array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
@@ -7652,61 +7620,18 @@ class Projetos extends MinC_Db_Table_Abstract
             array(''), 'SAC.dbo'
         );
 
-        if ($filtro == 'devolvidos' || $filtro == 'tce' || $filtro == 'diligenciados' || $filtro == 'emanalise') {
-            $select->joinLeft(
-                array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac',
-                array('e.dtInicioEncaminhamento', 'e.dtFimEncaminhamento', 'e.idEncPrestContas'), 'BDCORPORATIVO.scSAC'
-            );
-        }
-
-        if ($filtro == 'diligenciados') {
-            $select->joinInner(
-                array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC',
-                array(''), 'SAC.dbo'
-            );
-        }
-
-        if ($filtro == 'emanalise') {
-            $select->joinInner(
-                array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
-                array('usu_nome'), 'TABELAS.dbo'
-            );
-        }
-        if ($filtro == 'analisados') {
-            $select->joinInner(
-                array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
-                array('e.idSituacaoEncPrestContas'), 'BDCORPORATIVO.scSAC'
-            );
-        }
-        if ($filtro == 'tce') {
-            $select->joinInner(
-                array('d' => 'tbDiligencia'), 'p.IdPRONAC = d.IdPRONAC',
-                array(''), 'SAC.dbo'
-            );
-        }
+        $select->joinInner(
+            array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
+            array('e.idSituacaoEncPrestContas'), 'BDCORPORATIVO.scSAC'
+        );
 
         //adiciona quantos filtros foram enviados
         foreach ($where as $coluna => $valor) {
             $select->where($coluna, $valor);
         }
 
-        if ($qtdeTotal) {
-
-            return $this->fetchAll($select)->count();
-        }
-
         //adicionando linha order ao select
         $select->order($order);
-
-        // paginacao
-        if ($tamanho > -1) {
-            $tmpInicio = 0;
-            if ($inicio > -1) {
-                $tmpInicio = $inicio;
-            }
-            $select->limit($tamanho, $tmpInicio);
-        }
-
 
         return $this->fetchAll($select);
     }

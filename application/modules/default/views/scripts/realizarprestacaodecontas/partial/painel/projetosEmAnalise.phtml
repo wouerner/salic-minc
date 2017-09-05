@@ -1,75 +1,40 @@
-<?php if($this->projetosAnalisados > 0): ?>
+<?php if($this->projetosEmAnalise > 0): ?>
     <table class="bordered striped">
         <thead>
             <tr>
-                <th>#</th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=2&ordem='.$this->paginacao['novaOrdem'];?>">PRONAC</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=3&ordem='.$this->paginacao['novaOrdem'];?>">Nome do Projeto</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=4&ordem='.$this->paginacao['novaOrdem'];?>">Situação</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=5&ordem='.$this->paginacao['novaOrdem'];?>">Área / Segmento</a></th>
-                <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=7&ordem='.$this->paginacao['novaOrdem'];?>">Mecanismo</a></th>
-                <?php if(isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados') : ?>
-                    <th>Laudo final</th>
-                <?php endif ?>
-                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == '' || $_GET['tipoFiltro'] == 'analisados'): ?>
-                    <th>Encaminhar para Análise</th>
-                <?php endif ?>
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'analisados')): ?>
-                    <th>Consultoria AECI</th>
-                    <th>Consultoria CONJUR</th>
-                <?php endif ?>
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise')): ?>
-                    <th><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel')).'?pag=1&qtde='.$this->paginacao['qtde'].'&tipoFiltro='.$this->filtro.'&campo=13&ordem='.$this->paginacao['novaOrdem'];?>">Técnico</a></th>
-                    <th>Dt. Envio</th>
-                    <th>Dias em análise</th>
-                <?php endif ?>
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise' || $_GET['tipoFiltro'] == 'analisados')): ?>
-                    <th>Hist&oacute;rico</th>
-                <?php endif ?>
+                <th>PRONAC</a></th>
+                <th>Nome do Projeto</a></th>
+                <th>Situação</a></th>
+                <th>Área / Segmento</a></th>
+                <th>Mecanismo</a></th>
+                <th>Técnico</a></th>
+                <th>Dt. Envio</th>
+                <th>Dias em análise</th>
+                <th>Hist&oacute;rico</th>
             </tr>
         </thead>
         <tbody>
-            <?php $x=1; foreach($this->projetosAnalisados as $projeto){ ?>
-            <tr>
-                <td align="center"><?php echo $x; ?></td>
-                <td align="center">
-                    <a class="btn" href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo ($projeto->idPronac); ?>" target="_blank">
-                        <?php echo $projeto->Pronac; ?>
-                    </a>
-                </td>
-                <td><?php echo $projeto->NomeProjeto; ?></td>
-                <td align="center"><?php echo $projeto->Situacao; ?></td>
-                <td><?php echo $projeto->Area.' / '.$projeto->Segmento; ?></td>
-                <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
-
-                <?php if(isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisados'){ ?>
-                <td align="center"><img style="cursor: pointer;" src="../public/img/table_multiple.png" onclick="window.location='<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'laudofinal') ) . '?idPronac=' . $projeto->idPronac; ?>'" alt="Analisar" /></td>
-                <?php } ?>
-
-                <?php if(!isset($_GET['tipoFiltro']) || $_GET['tipoFiltro'] == '' || $_GET['tipoFiltro'] == 'analisados'){ ?>
+            <?php foreach($this->projetosEmAnalise as $projeto): ?>
+                <tr>
                     <td align="center">
-                        <button class="btn" onclick="return JSEncaminharParaAnalise('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>',true)" alt="Encaminhar">
-                            <i class=" tiny material-icons">assignment_ind</i> 
-                        </button>
+                        <a class="btn" href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo ($projeto->idPronac); ?>" target="_blank">
+                            <?php echo $projeto->Pronac; ?>
+                        </a>
                     </td>
-                <?php } ?>
-
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'analisados')){ ?>
-                    <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoria('<?php echo $projeto->idPronac;?>','177','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>')" alt="Encaminhar" /></td>
-                    <td align="center"><img style="cursor: pointer;" src="../public/img/user_gray.png" onclick="return JSEncaminharParaConsultoria('<?php echo $projeto->idPronac;?>','12','<?php echo (isset($_GET['tipoFiltro']) && !empty($_GET['tipoFiltro'])) ? $_GET['tipoFiltro'] : 0; ?>')" alt="Encaminhar" /></td>
-                <?php } ?>
-
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise')){ ?>
+                    <td><?php echo $projeto->NomeProjeto; ?></td>
+                    <td align="center"><?php echo $projeto->Situacao; ?></td>
+                    <td><?php echo $projeto->Area.' / '.$projeto->Segmento; ?></td>
+                    <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
                     <td align="center"><?php echo $projeto->usu_nome; ?></td>
                     <td align="center"><?php echo Data::tratarDataZend($projeto->dtInicioEncaminhamento, 'brasileira'); ?></td>
                     <td align="center"><?php echo $projeto->qtDiasAnalise; ?></td>
-                <?php } ?>
-
-                <?php if(isset($_GET['tipoFiltro']) && ($_GET['tipoFiltro'] == 'emanalise' || $_GET['tipoFiltro'] == 'analisados')){ ?>
-                    <td align="center"><img style="cursor: pointer;" src="../public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamento('<?php echo $projeto->idPronac; ?>')" alt="Encaminhar" /></td>
-                <?php } ?>
-            </tr>
-            <?php $x++; } ?>
+                    <td align="center">
+                        <button class="btn" onclick="return JShistoricoEncaminhamento('<?php echo $projeto->idPronac; ?>')" alt="Encaminhar">
+                            <i class=" tiny material-icons">history</i> 
+                        </button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 <?php else: ?>
