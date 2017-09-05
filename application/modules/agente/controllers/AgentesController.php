@@ -571,8 +571,9 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $tbAusencia = new Agente_Model_DbTable_TbAusencia();
         $dados = $tbAusencia->carregarAusencia($idAgente, $ano, 2, $mes);
         $totalDias = 0;
+
         foreach ($dados as $d) {
-            if (($d['siausencia'] == 0) OR ($d['siausencia'] == 1)) {
+            if (($d['siAusencia'] == 0) OR ($d['siAusencia'] == 1)) {
                 $totalDias = $totalDias + $d['qtddias'];
             }
         }
