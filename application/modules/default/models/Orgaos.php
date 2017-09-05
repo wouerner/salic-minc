@@ -186,6 +186,23 @@ class Orgaos extends MinC_Db_Table_Abstract{
         $query->order('Sigla');
         
         return $this->fetchAll($query);
+
+    }
+
+    public function isVinculadaIphan($idOrgao)
+    {
+        $orgaos = array(
+            self::ORGAO_IPHAN_PRONAC,
+            self::ORGAO_FUNARTE,
+            self::ORGAO_FBN,
+            self::ORGAO_FCP,
+            self::ORGAO_FCRB,
+            self::ORGAO_IBRAM,
+            self::ORGAO_SUPERIOR_SAV,
+            self::ORGAO_SAV_DAP
+        );
+        
+        return (!in_array($idOrgao, $orgaos)) ? true : false;
     }
 }
 ?>
