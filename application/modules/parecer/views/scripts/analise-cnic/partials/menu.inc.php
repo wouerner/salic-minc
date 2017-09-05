@@ -29,7 +29,7 @@
         var stplenariaatual  = stplenaria;
         $.ajax({
             type: "POST",
-            url: "<?php echo $this->url(array('controller' => 'gerenciarpautareuniao', 'action' => 'verificarcnic')) ?>",
+            url: "<?php echo $this->url(array('module' => 'default', 'controller' => 'gerenciarpautareuniao', 'action' => 'verificarcnic')) ?>",
             data:{
                 verificacnic : true,
                 stPlenaria : stplenariaatual
@@ -168,26 +168,12 @@
     <div id="menuContexto">
         <div class="top"></div>
         <div id="qm0" class="qmmc sanfona">
-            <a class="no_seta" href="<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'parecerconsolidado')); ?>" title="Ir para Consultar Projetos">Parecer Consolidado </a>
-            <a class="no_seta" id="consultarprojetos" href="<?php echo $this->url(array('controller' => 'dadosprojeto', 'action' => 'index')); ?>" target="_new" title="Ir para Consultar Projeto">Consultar Projeto</a>
-            <a class="no_seta" href="<?php echo $this->url(array('controller' => 'proponente', 'action' => 'index')); ?>" target="_new" title="Ir para Dados do Proponente">Dados do Proponente</a>
-            <!--<a class="no_seta" href="<?php //echo $this->url(array('controller' => 'anexardocumentos', 'action' => 'index')); ?>" title="Ir para Documentos Anexados">Documentos Anexados</a>-->
-            <a class="no_seta" href="<?php echo $this->url(array('controller' => 'anexardocumentos', 'action' => 'index')); ?>" title="Ir para Documentos anexados">Documentos anexados</a>
-            <!--<a class="no_seta" href='#' onclick="carregaDados('<?php //echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'documentos-anexados')); ?>?idPronac=<?php //echo $this->idpronac;?>','conteudo'); return false" title="Ir para Documentos anexados">Documentos anexados</a>-->
-            <?php /*if ( $this->grupoAtivo == 118  ) {?>
-                <a class="no_seta" target="_blank" href="<?php echo $this->url(array('controller' => 'mantermensagens', 'action' => 'consultarmensagem')); ?>" title="Ir para Mensagens">Mensagens</a>
-            <?php }*/ ?>
-            <?php
-            /* link diligencia antigo
-            <a class="no_seta" href="<?php echo $this->url(array('controller' => 'diligenciarproponente', 'action' => 'index')); ?>" title="Ir para Diligenciar Proponente">Dilig&ecirc;ncias</a>
-             */
-            ?>
-            <a class="no_seta last" target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaanalista'), '', true); ?>?idPronac=<?php echo $this->idpronac;?>&situacao=C30&tpDiligencia=126" title="Ir para Diligenciar Proponente">Dilig&ecirc;ncias</a>
-            <!--<a class="no_seta" href="<?php //echo $this->url(array('controller' => 'recurso', 'action' => 'detalhar-recurso'), '', true); ?>?idPronac=<?php //echo $this->idpronac;?>" title="Ir para Recurso">Recurso</a>-->
+            <a class="no_seta" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'realizaranaliseprojeto', 'action' => 'parecerconsolidado')); ?>" title="Ir para Consultar Projetos">Parecer Consolidado </a>
+            <a class="no_seta" id="consultarprojetos" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'dadosprojeto', 'action' => 'index')); ?>" title="Ir para Consultar Projeto">Consultar Projeto</a>
+            <a class="no_seta" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'proponente', 'action' => 'index')); ?>" title="Ir para Dados do Proponente">Dados do Proponente</a>
+            <a class="no_seta" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'anexardocumentos', 'action' => 'index')); ?>" title="Ir para Documentos anexados">Documentos anexados</a>
+            <a class="no_seta last" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaanalista'), '', true); ?>?idPronac=<?php echo $this->idpronac;?>&situacao=C30&tpDiligencia=126" title="Ir para Diligenciar Proponente">Dilig&ecirc;ncias</a>
             
-            <?php /* ?>
-            <a class="no_seta" target="_blank" href="<?php echo $this->url(array('controller' => 'cidadao', 'action' => 'visualizar-opinioes'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idpronac); ?>" title="Ir para Participa&ccedil;&atilde;o Social">Participa&ccedil;&atilde;o Social</a>
-            */ ?>
         </div>
         <div class="bottom">
         </div>
