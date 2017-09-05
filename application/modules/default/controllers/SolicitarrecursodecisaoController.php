@@ -382,11 +382,11 @@ class SolicitarRecursoDecisaoController extends MinC_Controller_Action_Abstract 
                 'idAgenteSolicitante'   => $auth->getIdentity()->IdUsuario,
                 'stAtendimento'         => 'N',
                 'siFaseProjeto'         => 1,
-                'siRecurso'             => 0,
+                'siRecurso'             => TbTipoEncaminhamento::SOLICITACAO_FINALIZADA_PELO_MINC,
                 'tpSolicitacao'         => 'DR',
                 'tpRecurso'             => 1,
                 'stAnalise'             => null,
-                'stEstado'              => 0
+                'stEstado'              => 1
             );
 
             $tbRecurso = new tbRecurso();
