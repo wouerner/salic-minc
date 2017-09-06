@@ -382,7 +382,7 @@ class SolicitarRecursoDecisaoController extends MinC_Controller_Action_Abstract 
                 'idAgenteSolicitante'   => $auth->getIdentity()->IdUsuario,
                 'stAtendimento'         => 'N',
                 'siFaseProjeto'         => 1,
-                'siRecurso'             => TbTipoEncaminhamento::SOLICITACAO_FINALIZADA_PELO_MINC,
+                'siRecurso'             => TbTipoEncaminhamento::DESISTENCIA_DO_PRAZO_RECURSAL,
                 'tpSolicitacao'         => 'DR',
                 'tpRecurso'             => 1,
                 'stAnalise'             => null,
