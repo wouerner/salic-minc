@@ -51,10 +51,63 @@
 			</tbody>
 		</table>
 
-		<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
-				crossorigin="anonymous"></script>
-		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
+<!-- Visualizar codigos-->
+<pre><code class="language-markup">
+    &lt;table id="table1" class="display table table-bordered table-striped table-hover">
+        &lt;thead>
+        &lt;tr>
+            &lt;th>Name&lt;/th>
+            &lt;th>Position&lt;/th>
+            &lt;th>Office&lt;/th>
+            &lt;th>Age&lt;/th>
+            &lt;th>Start date&lt;/th>
+            &lt;th>Salary&lt;/th>
+        &lt;/tr>
+        &lt;/thead>
+        &lt;tbody>
+        &lt;tr>
+            &lt;td>Tiger Nixon&lt;/td>
+            &lt;td>System Architect&lt;/td>
+            &lt;td>Edinburgh&lt;/td>
+            &lt;td>61&lt;/td>
+            &lt;td>2011/04/25&lt;/td>
+            &lt;td>$320,800&lt;/td>
+        &lt;/tr>
+        &lt;tr>
+            &lt;td>Garrett Winters&lt;/td>
+            &lt;td>Accountant&lt;/td>
+            &lt;td>Tokyo&lt;/td>
+            &lt;td>63&lt;/td>
+            &lt;td>2011/07/25&lt;/td>
+            &lt;td>$170,750&lt;/td>
+        &lt;/tr>
+        &lt;/tbody>
+    &lt;/table>
+</code></pre>
+
+<code class="language-php"><pre>
+    &lt;script src="&lt;?php echo $this->baseUrl() ?>/public/scripts/layout/datatables.min.js">&lt;/script>
+    &lt;link rel="stylesheet" type="text/css" href="&lt;?php echo $this->baseUrl() ?>/public/css/layout/datatables.min.css"/>
+</code></pre>
+
+<code class="language-javascript"><pre>
+    &lt;script>
+        $('#table1').DataTable({
+            "bLengthChange": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json"
+            },
+            "iDisplayLength": 5,
+            "filter": false
+        });
+    &lt;/script>
+</code></pre>
+<!-- Visualizar codigos-->
+
+		<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+
+		<script src="<?php echo $this->baseUrl() . '/public/scripts/layout/datatables.min.js'; ?>"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl() . '/public/css/layout/datatables.min.css'; ?>"/>
 
 		<script>
 			$('#table1').DataTable({
@@ -69,3 +122,5 @@
 	</div>
 </div>
 
+<link href="<?php echo $this->baseUrl() . '/public/css/layout/prism.css'; ?>" media="all" rel="stylesheet" type="text/css" />
+<script src="<?php echo $this->baseUrl(); ?>/public/scripts/layout/prism.js" ></script>
