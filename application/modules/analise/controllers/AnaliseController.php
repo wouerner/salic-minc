@@ -321,7 +321,12 @@ class Analise_AnaliseController extends Analise_GenericController
 
                     $providenciaTomada = "O Projeto aguardar&aacute; o percentual m&iacute;nimo de capta&ccedil;&atilde;o e depois ser&aacute; encaminhado para unidade vinculada!";
 
-                    if ($percentualCaptado >= self::PERCENTUAL_MINIMO_CAPTACAO_PARA_ANALISE) {
+                    $preProjeto = new Proposta_Model_DbTable_PreProjeto();
+                    $dadosPreProjeto = $preProjeto->findBy(array('idPreProjeto' => $idPreProjeto));
+
+
+                    if (($percentualCaptado >= self::PERCENTUAL_MINIMO_CAPTACAO_PARA_ANALISE)
+                        OR (!empty($dadosPreProjeto['stProposta']) && $dadosPreProjeto['stProposta'] != 610)) {
 
                         # alterar a situacao do projeto
                         $situacao = Projeto_Model_Situacao::ENCAMINHADO_PARA_ANALISE_TECNICA;
