@@ -351,7 +351,7 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
             
             $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $dadosDocumentoAssinatura = array();
-            $dadosDocumentoAssinatura["stEstado"] = 0;
+            $dadosDocumentoAssinatura["stEstado"] = 1;
             $whereDocumentoAssinatura = "idDocumentoAssinatura = $idDocumentoAssinatura";
             
             $objDocumentoAssinatura->update($dadosDocumentoAssinatura, $whereDocumentoAssinatura);
