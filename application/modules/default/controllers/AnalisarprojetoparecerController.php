@@ -25,8 +25,8 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
             // verifica as permiss¿es
             $PermissoesGrupo = array();
-            $PermissoesGrupo[] = 93;
-            $PermissoesGrupo[] = 94; // parecerista
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
+            $PermissoesGrupo[] = Autenticacao_Model_Grupos::PARECERISTA;
             parent::perfil(1, $PermissoesGrupo);
             if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo est¿ no array de permiss¿es
                 parent::message("Voc&ecirc; no tem permiss&atilde;o para acessar essa ¿rea do sistema!", "principal/index", "ALERT");
@@ -404,9 +404,18 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
             // So pode alterar se for incentivo fiscal - FonteRecurso = 109
             if (($analisedeConteudo[0]->ParecerFavoravel == 1) && ($val->idEtapa != 4)) {
-                $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "<a href='javascript:void(0);' onclick='javascript:AlterarItem({$val->idPlanilhaProjeto},{$idPronac},{$idProduto},{$stPrincipal})'>{$val->Item}</a>";
+                if ($codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
+                    $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "<a href='javascript:void(0);' onclick='javascript:AlterarItem({$val->idPlanilhaProjeto},{$idPronac},{$idProduto},{$stPrincipal})'>{$val->Item}</a>";
+                } else if ($codGrupo == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
+                    $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = $val->Item;
+                }                
             } else if (($analisedeConteudo[0]->ParecerFavoravel == 1) && ($stPrincipal == 1)) {
-                $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "<a href='javascript:void(0);' onclick='javascript:AlterarItem({$val->idPlanilhaProjeto},{$idPronac},{$idProduto},{$stPrincipal})'>{$val->Item}</a>";
+                if ($codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
+                    $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "<a href='javascript:void(0);' onclick='javascript:AlterarItem({$val->idPlanilhaProjeto},{$idPronac},{$idProduto},{$stPrincipal})'>{$val->Item}</a>";
+                } else if ($codGrupo == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
+                    $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = $val->Item;
+                }                
+
             } else {
                 $itensCusto['fonte'][$val->FonteRecurso][$produto][$val->idEtapa . ' - ' . $val->Etapa][$val->UF . ' - ' . $val->Cidade]['itens'][$val->idPlanilhaProjeto]['Item'] = "{$val->Item}";
             }
