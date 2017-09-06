@@ -772,7 +772,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         }
     }
 
-    public function alterarintemsolicitadoAction()
+    public function alteraritemsolicitadoAction()
     {
         $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
