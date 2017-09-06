@@ -824,9 +824,10 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
             $htmlGerado .= "</tr>";
 
             //<!-- ========== FIM TOTAL GERAL ========== -->
-         $htmlGerado .= "</table>";
-       // <!-- ========== FIM PLANILHA ========== -->
+            $htmlGerado .= "</table>";
+            // <!-- ========== FIM PLANILHA ========== -->
+            echo utf8_encode($htmlGerado);
+            $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
-          echo utf8_encode($htmlGerado); $this->_helper->viewRenderer->setNoRender(TRUE); 
         }
     }// fecha class
