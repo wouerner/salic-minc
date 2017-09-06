@@ -97,6 +97,23 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $projetos = new Projetos();
         $this->view->IN2017 = $projetos->VerificarIN2017($idPronac);
         
+        $this->view->bln_readequacao = "false";
+        
+        if (!empty($idPronac)) {
+            $tbPedidoAlteracao = new tbPedidoAlteracaoProjeto();
+            $arrBusca = array();
+            $arrBusca['pa.idPronac = ?'] = $idPronac;
+            $arrBusca['pa.stPedidoAlteracao = ?'] = 'I'; //pedido enviado pelo proponente
+            $arrBusca['pa.siVerificacao = ?'] = '1';
+            $arrBusca['paxta.tpAlteracaoProjeto = ?'] = '10'; //tipo Readequacao de Itens de Custo
+            $rsPedidoAlteraco = $tbPedidoAlteracao->buscarPedidoAlteracaoPorTipoAlteracao($arrBusca, array('dtSolicitacao DESC'))->current();
+            if (!empty($rsPedidoAlteraco)) {
+                $this->bln_readequacao = "true";
+                $this->view->bln_readequacao = "true";
+                $this->idPedidoAlteracao = $rsPedidoAlteraco->idPedidoAlteracao;
+            }
+        }
+        
         if (!$this->view->IN2017) {
             $pa = new paChecarLimitesOrcamentario();
             $resultadoCheckList = $pa->exec($idPronac, 3);
@@ -626,6 +643,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                     $arrWhereOutrasFontes["tpAcao <> ('E') OR tpAcao IS NULL "] = '(?)';
                     $outrasfontes = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereOutrasFontes);
                 }
+                
                 $this->view->fontesincentivo = $fonteincentivo['soma'];
                 $this->view->outrasfontes = $outrasfontes['soma'];
                 $this->view->valorproposta = $fonteincentivo['soma'] + $outrasfontes['soma'];
@@ -657,13 +675,17 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 
                 $produtos = RealizarAnaliseProjetoDAO::analiseDeConteudo($idpronac, $tpPlanilha);
                 $this->view->ResultRealizarAnaliseProjeto = RealizarAnaliseProjetoDAO::analiseparecerConsolidado($idpronac);
-                $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, $tpPlanilha);
-                if (isset($verificaEnquadramento[0]->stArtigo18) && $verificaEnquadramento[0]->stArtigo18 == true) {
-                    $this->view->enquadramento = 'Artigo 18';
-                } else if (isset($verificaEnquadramento[0]->stArtigo26) && $verificaEnquadramento[0]->stArtigo26 == true) {
-                    $this->view->enquadramento = 'Artigo 26';
-                } else {
-                    $this->view->enquadramento = 'NAO ENQUADRADO';
+                $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, $tpPlanilha, $IN2017);
+                if ($IN2017) {
+                    $this->view->enquadramento = $verificaEnquadramento[0]->stArtigo;
+                } else if (!$IN2017) {
+                    if (isset($verificaEnquadramento[0]->stArtigo18) && $verificaEnquadramento[0]->stArtigo18 == true) {
+                        $this->view->enquadramento = 'Artigo 18';
+                    } else if (isset($verificaEnquadramento[0]->stArtigo26) && $verificaEnquadramento[0]->stArtigo26 == true) {
+                        $this->view->enquadramento = 'Artigo 26';
+                    } else {
+                        $this->view->enquadramento = 'NAO ENQUADRADO';
+                    }
                 }
                 $this->view->ResultProduto = $produtos;
                 $this->view->ResultValoresAnaliseProjeto = $produtos;

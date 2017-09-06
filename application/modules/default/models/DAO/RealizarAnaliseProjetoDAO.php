@@ -44,12 +44,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
                                  END"
                             )),
                             'SAC.dbo')
-                            ->joinInner(array('p' => 'projetos'),
-                            'p.idpronac = e.idpronac',
-                            array(''),
-                            'SAC.dbo')
                             ->where('e.idpronac = ?', $idpronac);
-			    
         } else {
             // LEGADO - MANTENDO PARA FINS DE COMPATIBILIDADE
             $select = $table->select()
