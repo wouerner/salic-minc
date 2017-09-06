@@ -205,19 +205,20 @@ header("Pragma: no-cache");
     function validar_val_parec_relat(i)
     {
         //recuperar valores originais 
-        qtd_parec_relat        = $('#qtdOrig' + i).val();
-        ocorrencia_parec_relat = $('#ocorrenciaOrig' + i).val();
-        valor_parec_relat      = $('#vlunitarioOrig' + i).val();
-        calcular_total_parec_relat = $('#totalcalculosOrig' + i).val();
-            
-        // pega o valor total do relator
-        var calcular_total = $("#calcular_total"+i).html();
-        calcular_total = calcular_total.replace('R$ ', '');
-
+        var qtd_parec_relat        = $('#qtdOrig' + i).val(),
+            ocorrencia_parec_relat = $('#ocorrenciaOrig' + i).val(),
+            valor_parec_relat      = $('#vlunitarioOrig' + i).val(),
+            calcular_total_parec_relat = $('#totalcalculosOrig' + i).val(),
+            calcular_total = $("#calcular_total"+i).html(),        // pega o valor total do relator
+            calcular_total = calcular_total.replace('R$ ', ''),
+            totalcalculos = null,
+            valormaximo  = null,
+            somatotal = null;
+        
         // retira os pontos e as virgulas, deixando somente numeros
         calcular_total = calcular_total.replace(/\D/g, "");
         calcular_total = calcular_total.replace(/(\d{0})(\d)/, "$1$2");
-
+        
         // adiciona o ponto na casa decimal
         calcular_total = calcular_total.replace(/(\d)(\d{2})$/, "$1.$2");
 
@@ -236,7 +237,8 @@ header("Pragma: no-cache");
             $('#ocorrencia' + i). val(ocorrencia_parec_relat);
             $('#vlunitario' + i). val(valor_parec_relat);
             $('#calcular_total' + i).html(calcular_total_parec_relat);
-            
+            $('#valorpossivelApresentacao').html($('#calcular_total' + i).html());
+                
             // abre o modal com a mensagem de erro
             $("#dialog-valor").dialog("destroy");
             $("#dialog-valor").dialog

@@ -1,6 +1,6 @@
 <?php
     $hrefAnalisedeconteudo = $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'analisedeconteudo'));
-    $hrefAlterarintemsolicitado = $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'alterarintemsolicitado'));
+    $hrefAlteraritemsolicitado = $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'alteraritemsolicitado'));
 
     /* INICIO DA GUIA DE LINKS */
     $controller = 'analisarprojetoparecer';
@@ -498,7 +498,7 @@
     <?php } ?>
 
     <!-- MODAL -->
-    <div id="alteraritemsolicitado" link="<?php echo $hrefAlterarintemsolicitado; ?>" style="display: none;"></div>
+    <div id="alteraritemsolicitado" link="<?php echo $hrefAlteraritemsolicitado; ?>" style="display: none;"></div>
     <div id="confirmacao" style="display: none;"></div>
     <!-- FIM MODAL -->
 </div>
@@ -837,7 +837,7 @@ dpi<?php endif; ?>
                                         var vlSolicitado = '<?php echo $this->vlSolicitado;?>';
                                         var vlTotalSugerido = recuperaTotalSugerido();
                                         var valorpossivel = vlSolicitado - vlTotalSugerido;
-
+                                        
                                         $("#valorpossivel").val(valorpossivel);
 
                                         //atualiza campo de apresentacao do novo valor possivel de remanejamento
