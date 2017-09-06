@@ -136,6 +136,11 @@
 		  <?php if($this->verificarIN2017($dp->IdPRONAC)): ?>
 		  <?php if($this->IsProjetoDisponivelParaAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
 		  <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
+		  <a class="btn waves-effect waves-light cyan tooltipped small"
+		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/gerenciar-parecer/finalizar-parecer"
+		    data-tooltip="Visualizar documento assinado">
+		    <i class="material-icons white-text">remove_red_eye</i>
+		  </a>             
 		  <?php if (!$this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):
 		  $parametrosAssinatura = "?idpronac=". $dp->IdPRONAC;
 		  ?>
@@ -147,11 +152,6 @@
 		  <?php elseif ($this->IsProjetoJaAssinado($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)):		  
 		  $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC;
 		  ?>
-		  <a class="btn waves-effect waves-light cyan tooltipped small"
-		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/gerenciar-parecer/finalizar-parecer"
-		    data-tooltip="Visualizar documento assinado">
-		    <i class="material-icons white-text">remove_red_eye</i>
-		  </a>
 		  &nbsp;&nbsp;
 		  <a class="btn waves-effect waves-light tooltipped small btn cyan"
                      href="#modalConfirmacao"
