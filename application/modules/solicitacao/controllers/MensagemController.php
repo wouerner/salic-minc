@@ -112,7 +112,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
     }
 
     /**
-     * utilizado nas notificações
+     * utilizado nas notificacoes
      */
     public function listarAjaxAction()
     {
@@ -181,7 +181,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (empty($dataForm))
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
 
-
             $permissao = parent::verificarPermissaoAcesso($dataForm['idProjeto'], $dataForm['idPronac'], false, true);
 
             if ($permissao['status'] === false)
@@ -199,7 +198,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 }
             }
-
 
             $arrConfig['dsResposta']['show'] = true;
 
@@ -304,26 +302,26 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
     {
         $idSolicitacao = $this->getRequest()->getParam('id', null);
 
-        if (empty($idSolicitacao))
-            throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
-
-        $where['idSolicitacao'] = $idSolicitacao;
-//        $where['dsResposta IS NOT NULL'] = '';
-
-        $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-        $solicitacao = $vwSolicitacao->findBy($where, true);
-
-        if (empty($solicitacao))
-            throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
-
-        if ($solicitacao['idTecnico'] != $this->idUsuario)
-            throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para responder esta solicita&ccedil;&atilde;o!");
-
-        if (!empty($solicitacao['dsResposta']))
-            $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
-
-
         try {
+
+            if (empty($idSolicitacao))
+                throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
+
+            $where['idSolicitacao'] = $idSolicitacao;
+    //        $where['dsResposta IS NOT NULL'] = '';
+
+            $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
+            $solicitacao = $vwSolicitacao->findBy($where, true);
+
+            if (empty($solicitacao))
+                throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+
+            if ($solicitacao['idTecnico'] != $this->idUsuario)
+                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para responder esta solicita&ccedil;&atilde;o!");
+
+            if (!empty($solicitacao['dsResposta']))
+                $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
+
 
             if ($this->getRequest()->isPost()) {
 
@@ -365,7 +363,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                     'redistribuirTecnicos' => $vwGrupos->carregarTecnicosPorUnidade($solicitacao['idOrgao'])
                 ];
 
-                $strActionBack = "/solicitacao/mensagem/index";
+                $strActionBack = "solicitacao/mensagem/index";
                 self::prepareForm($solicitacao, $arrConfig, '', $strActionBack);
             }
 

@@ -265,13 +265,14 @@ gerarBreadCrumb($links);
                             <tr class="mostraProposta_<?php echo $projeto["idAgente"]; ?>">
                             <td>
                             <table class="tabela">
+                            <thead
                             <tr>
                                 <th>Pronac</th>
                                 <th>Nome do Projeto</th>
                                 <th>Situa&ccedil;&atilde;o do Projeto</th>
                                 <th>Per&iacute;odo de Execu&ccedil;&atilde;o</th>
                                 <th>Mecanismo</th>
-                                <th>A&ccedil;&otilde;es</th>
+                                <th width="70px">A&ccedil;&otilde;es</th>
                             </tr>
 
                         <?php endif; ?>
@@ -302,8 +303,8 @@ gerarBreadCrumb($links);
                                 <p>
                                 <div style="position: relative; height: 50px;">
                                     <div class="fixed-action-btn horizontal"
-                                         style="position: absolute; top: -5px; right: 0; padding: 15px 0 0 15px; z-index: 996;">
-                                        <a class="btn btn-primary small">
+                                         style="position: absolute; top: -10px; right: 0; padding: 15px 0 15px 15px; z-index: 996;">
+                                        <a class="btn btn-primary small" style="margin-left: 15px;">
                                             <i class="material-icons">more_vert</i>
                                         </a>
                                         <ul>
