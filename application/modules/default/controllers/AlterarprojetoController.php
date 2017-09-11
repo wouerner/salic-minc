@@ -348,7 +348,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
             $segmentoCultural = $this->_request->getParam("segmentoCultural");
 
             // so salva area e segmento para a visao de Componente da Comissao e se os campos titular e areaCultural forem informados
-            if ((int) $Visao == 210 && ((int) $titular == 0 || (int) $titular == 1) && !empty($areaCultural)) {
+            if ((int)$Visao == 210 && ((int)$titular == 0 || (int)$titular == 1) && !empty($areaCultural)) {
                 $GravarComponente = array(// insert
                     'idAgente' => $idAgente,
                     'cdArea' => $areaCultural,
@@ -377,7 +377,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                 }
             }
 
-        // ============================= FIM SALVAR TITULACAO (AREA/SEGMENTO DO COMPONENTE DA COMISSAO) ===========================
+            // ============================= FIM SALVAR TITULACAO (AREA/SEGMENTO DO COMPONENTE DA COMISSAO) ===========================
 
         endif; // Fecha o if da regra do componente da comissao
         // =========================================== INICIO SALVAR ENDERECOS ====================================================
@@ -1947,6 +1947,92 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
             $cadastrarBinario = ArquivoImagemDAO::cadastrar($dadosBinario);
         }
         return $idUltimoArquivo;
+    }
+
+    public function execucaoImediataAction()
+    {
+
+        $this->view->menu = isset($params['menu']) ? $params['menu'] : '';
+
+        $pronac = $this->_request->getParam("pronac");
+        $pronac = Seguranca::dencrypt($pronac);
+        $ano = addslashes(substr($pronac, 0, 2));
+        $sequencial = addslashes(substr($pronac, 2, strlen($pronac)));
+
+        $arrBusca = array(
+            'tbr.anoprojeto =?' => $ano,
+            'tbr.sequencial =?' => $sequencial,
+        );
+
+        $tbProjetos = new Projetos();
+        $projeto = $tbProjetos->VerificaPronac($arrBusca)->current();
+
+        if (count($projeto) > 0) {
+            $dadosprojeto = $tbProjetos->buscarTodosDadosProjeto($projeto->IdPRONAC)->current();
+
+            $this->view->parecer = $dadosprojeto;
+            $this->view->pronac = $pronac;
+            $this->view->pronac = Seguranca::encrypt($dadosprojeto->pronac);
+            $this->view->idPronac = $projeto->IdPRONAC;
+
+            $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+            $this->view->proposta = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $dadosprojeto->idProjeto))->current();
+
+            $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
+            $this->view->listaExecucaoImediata = $tableVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idTipo' => 23), array('idVerificacao'));
+
+        } else {
+            parent::message("Dados obrigat&oacute;rios n&atilde;o informados", "alterarprojeto/consultarprojeto", "ERROR");
+        }
+        if ($dadosprojeto->Orgao != $this->codOrgao && $this->codGrupo != 125 && $this->codGrupo != 126) {
+            parent::message("Usu&aacute;rio sem autoriza&ccedil;&atilde;o no org&atilde;o do projeto", "alterarprojeto/consultarprojeto", "ERROR");
+        }
+    }
+
+    public function salvarExecucaoImediataAction()
+    {
+
+        if ($this->getRequest()->isPost()) {
+
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
+            $post = $this->getRequest()->getPost();
+
+            try {
+
+                if (empty($post['idPreProjeto']) || empty($post['idPronac']))
+                    throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados!");
+
+                $arrBusca = array(
+                    'tbr.idPronac =?' => $post['idPronac'],
+                    'tbr.idProjeto =?' => $post['idPreProjeto'],
+                );
+
+                $tbProjetos = new Projetos();
+                $projeto = $tbProjetos->VerificaPronac($arrBusca)->current();
+
+                if (empty($projeto))
+                    throw new Exception("Dados informados inválidos");
+
+                //persiste os dados do Pre Projeto
+                $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+                $where['idPreProjeto = ?'] = $post['idPreProjeto'];
+                $dados['stProposta'] = $post['stProposta'];
+                $resultado = $tblPreProjeto->update($dados, $where);
+
+                # alterar a situacao do projeto
+                $codigoSituacao = 'D60';
+                $providenciaTomada = "Lan&ccedil;amento de contrato de patroc&iacute;nio, aprova&ccedil;&atilde;o em edital ou outra exce&ccedil;&atilde;o disposta na Instru&ccedil;&atilde;o Normativa.";
+
+                $tbProjetos->alterarSituacao($post['idPronac'], '', $codigoSituacao, $providenciaTomada);
+
+                if ($resultado) {
+                    parent::message("Altera&ccedil;&atilde;o realizada com sucesso!", "alterarprojeto/execucao-imediata/?pronac=" . $post['pronac'], "CONFIRM");
+                }
+            } catch (Zend_Exception $ex) {
+                parent::message($ex->getMessage(), "alterarprojeto/consultarprojeto", "ERROR");
+            }
+        }
     }
 
 }

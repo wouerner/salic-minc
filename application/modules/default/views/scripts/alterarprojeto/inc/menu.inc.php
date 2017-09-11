@@ -285,6 +285,10 @@ if($menu != 0){ ?>
                 <?php if(in_array($this->grupoAtivo, array(92,97,103,110,114,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143)) && $this->pj == "true"){ ?>
                 <a class="last no_seta" href="<?php echo $this->url(array('controller' => 'alterarprojeto', 'action' => 'dirigentes', 'pronac' => $this->pronac)); ?>" title="Ir para incluir dirigente">Dirigentes</a>
                 <?php } ?>
+                <?php if(in_array($this->grupoAtivo, array(92,93,97,103,104,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143))){ ?>
+                    <a class="no_seta" href="<?php echo $this->url(array('controller' => 'alterarprojeto', 'action' => 'execucao-imediata'), '', true); ?>?pronac=<?php echo $this->pronac ?>" title="Ir para alterar plano de execu&ccedil;&atilde;o imediata">Execu&ccedil;&atilde;o imediata</a>
+                <?php } ?>
+
             </div>
 
             <div class="bottom"></div>
