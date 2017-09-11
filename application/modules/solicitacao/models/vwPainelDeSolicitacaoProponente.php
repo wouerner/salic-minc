@@ -46,4 +46,39 @@ class Solicitacao_Model_vwPainelDeSolicitacaoProponente extends MinC_Db_Table_Ab
         $db = Zend_Db_Table::getDefaultAdapter();
         return $db->fetchOne($select);
     }
+
+    public function buscar($where=array(), $order=array(), $tamanho=-1, $inicio=-1)
+    {
+        $slct = $this->select();
+        $slct->setIntegrityCheck(false);
+
+        $slct->from(
+            $this,
+            array(
+                "*",
+                "CAST(dsSolicitacao as TEXT) as dsSolicitacao",
+                "CAST(dsResposta as TEXT) as dsResposta"
+            )
+        );
+
+        foreach ($where as $coluna=>$valor)
+        {
+            $slct->where($coluna, $valor);
+        }
+
+        $slct->order($order);
+
+        if ($tamanho > -1)
+        {
+            $tmpInicio = 0;
+            if ($inicio > -1)
+            {
+                $tmpInicio = $inicio;
+            }
+            $slct->limit($tamanho, $tmpInicio);
+        }
+        return $this->fetchAll($slct);
+    }
+
+
 }

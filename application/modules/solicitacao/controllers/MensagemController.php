@@ -165,10 +165,10 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (empty($idSolicitacao))
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para visualizar!");
 
-            $where['idSolicitacao'] = $idSolicitacao;
+            $where['idSolicitacao = ?'] = $idSolicitacao;
 
             $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-            $dataForm = $vwSolicitacao->findBy($where);
+            $dataForm = $vwSolicitacao->buscar($where)->current()->toArray();
 
             if (empty($dataForm))
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
@@ -290,16 +290,17 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
     public function responderAction()
     {
         $idSolicitacao = $this->getRequest()->getParam('id', null);
+        $strActionBack = "solicitacao/mensagem/index";
 
         try {
 
             if (empty($idSolicitacao))
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
 
-            $where['idSolicitacao'] = $idSolicitacao;
+            $where['idSolicitacao = ?'] = $idSolicitacao;
 
             $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-            $solicitacao = $vwSolicitacao->findBy($where, true);
+            $solicitacao = $vwSolicitacao->buscar($where)->current()->toArray();
 
             if (empty($solicitacao))
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
@@ -351,7 +352,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                     'redistribuirTecnicos' => $vwGrupos->carregarTecnicosPorUnidade($solicitacao['idOrgao'])
                 ];
 
-                $strActionBack = "solicitacao/mensagem/index";
+
                 self::prepareForm($solicitacao, $arrConfig, '', $strActionBack);
             }
 
@@ -406,7 +407,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         try {
             $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-            $solicitacao = $vwSolicitacao->findBy(['idDocumento' => $idDocumento]);
+            $solicitacao = $vwSolicitacao->buscar(['idDocumento = ?' => $idDocumento]);
 
             if (empty($solicitacao))
                 throw new Exception('Documento n&atilde;o encontrado!');
