@@ -200,7 +200,9 @@ echo $this->partial('realizaranaliseprojeto/inc/menu.inc.php', $this) // menu
 </table></div>
         <p class="centro">
 
+<?php if (!$this->IN2017) : ?>
             <input type="button" class="btn_p_proximo" value=" " onkeypress="redirecionar('<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'analisedeconta')); ?>')" onclick="redirecionar('<?php echo $this->url(array('controller' => 'realizaranaliseprojeto', 'action' => 'analisedeconta')); ?>');" />
+<?php endif; ?>
         <input type="button" class="btn_imprimir" value=" "  onkeypress="imprimir()" onclick="imprimir();" />
     </p>
     <br />
