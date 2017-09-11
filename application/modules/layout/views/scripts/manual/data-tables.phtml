@@ -1,5 +1,4 @@
 <?php echo $this->partial('manual/inc/menu.inc.phtml', $this); ?>
-
 <div class="container-fluid">
 	<div class="page-title">
 		<div class="row">
@@ -55,32 +54,32 @@
 <pre><code class="language-markup">
     &lt;table id="table1" class="display table table-bordered table-striped table-hover">
         &lt;thead>
-        &lt;tr>
-            &lt;th>Name&lt;/th>
-            &lt;th>Position&lt;/th>
-            &lt;th>Office&lt;/th>
-            &lt;th>Age&lt;/th>
-            &lt;th>Start date&lt;/th>
-            &lt;th>Salary&lt;/th>
-        &lt;/tr>
+            &lt;tr>
+                &lt;th>Name&lt;/th>
+                &lt;th>Position&lt;/th>
+                &lt;th>Office&lt;/th>
+                &lt;th>Age&lt;/th>
+                &lt;th>Start date&lt;/th>
+                &lt;th>Salary&lt;/th>
+            &lt;/tr>
         &lt;/thead>
         &lt;tbody>
-        &lt;tr>
-            &lt;td>Tiger Nixon&lt;/td>
-            &lt;td>System Architect&lt;/td>
-            &lt;td>Edinburgh&lt;/td>
-            &lt;td>61&lt;/td>
-            &lt;td>2011/04/25&lt;/td>
-            &lt;td>$320,800&lt;/td>
-        &lt;/tr>
-        &lt;tr>
-            &lt;td>Garrett Winters&lt;/td>
-            &lt;td>Accountant&lt;/td>
-            &lt;td>Tokyo&lt;/td>
-            &lt;td>63&lt;/td>
-            &lt;td>2011/07/25&lt;/td>
-            &lt;td>$170,750&lt;/td>
-        &lt;/tr>
+            &lt;tr>
+                &lt;td>Tiger Nixon&lt;/td>
+                &lt;td>System Architect&lt;/td>
+                &lt;td>Edinburgh&lt;/td>
+                &lt;td>61&lt;/td>
+                &lt;td>2011/04/25&lt;/td>
+                &lt;td>$320,800&lt;/td>
+            &lt;/tr>
+            &lt;tr>
+                &lt;td>Garrett Winters&lt;/td>
+                &lt;td>Accountant&lt;/td>
+                &lt;td>Tokyo&lt;/td>
+                &lt;td>63&lt;/td>
+                &lt;td>2011/07/25&lt;/td>
+                &lt;td>$170,750&lt;/td>
+            &lt;/tr>
         &lt;/tbody>
     &lt;/table>
 </code></pre>
@@ -95,7 +94,7 @@
         $('#table1').DataTable({
             "bLengthChange": false,
             "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json"
+                "url": "/public/scripts/layout/Portuguese-Brasil.json"
             },
             "iDisplayLength": 5,
             "filter": false
@@ -113,7 +112,7 @@
 			$('#table1').DataTable({
 				"bLengthChange": false,
 				"language": {
-					"url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json"
+					"url": "/public/scripts/layout/Portuguese-Brasil.json"
 				},
 				"iDisplayLength": 5,
 				"filter": false
