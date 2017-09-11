@@ -14,7 +14,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
     public function indexAction()
     {
-
     }
 
     /**
@@ -36,7 +35,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if ($this->proposta) {
             $dataForm['idProjeto'] = $this->idPreProjeto;
             $dataForm['NomeProjeto'] = isset($this->proposta->NomeProjeto) ? $this->proposta->NomeProjeto : '';
-//            $dataForm['idAgente'] = '';
         }
 
         if ($this->projeto) {
