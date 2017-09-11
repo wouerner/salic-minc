@@ -5,7 +5,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
     public function init()
     {
-        parent::init();s
+        parent::init();
 
         if (!empty($this->idPreProjeto) || !empty($this->idPronac)) {
             parent::verificarPermissaoAcesso(!empty($this->idPreProjeto), !empty($this->idPronac), false);

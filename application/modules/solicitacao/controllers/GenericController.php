@@ -48,9 +48,6 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
 
         $arrAuth = array_change_key_case((array)$auth->getIdentity());
 
-//        $this->usuario = $arrAuth;
-
-
         $this->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
         $this->view->idPreProjeto = $this->idPreProjeto;
 
@@ -119,6 +116,18 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             'grupo' => []
         ];
 
+        $arrMenu['solicitacoes']['menu'][] = [
+            'label' => 'Deste projeto',
+            'title' => '',
+            'link' => [
+                'module' => 'solicitacao',
+                'controller' => 'mensagem',
+                'action' => 'index',
+                'idPronac' => $idPronac
+            ],
+            'grupo' => []
+        ];
+
         return $arrMenu;
     }
 
@@ -139,6 +148,18 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
             'grupo' => []
         ];
 
+        $arrMenu['solicitacoes']['menu'][] = [
+            'label' => 'Desta proposta',
+            'title' => '',
+            'link' => [
+                'module' => 'solicitacao',
+                'controller' => 'mensagem',
+                'action' => 'index',
+                'idPreProjeto' => $idPreProjeto
+            ],
+            'grupo' => []
+        ];
+
         return $arrMenu;
     }
 
@@ -156,7 +177,7 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         ];
 
         $arrMenu['solicitacoes']['menu'][] = [
-            'label' => 'Listar todas',
+            'label' => 'Todas',
             'title' => '',
             'link' => [
                 'module' => 'solicitacao',
