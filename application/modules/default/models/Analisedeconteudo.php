@@ -16,35 +16,6 @@ class Analisedeconteudo extends MinC_Db_Table_Abstract {
     protected $_schema = 'sac';
     protected $_name = 'tbAnaliseDeConteudo';
 
-    /*public function dadosAnaliseconteudo($idpronac) {
-        $select = $this->select();
-        $select->setIntegrityCheck(false);
-        $select->from(
-                $this,
-                array(
-                    'idAnaliseDeConteudo',
-                    'idProduto',
-                    'Lei8313',
-                    'Artigo3',
-                    'IncisoArtigo3',
-                    'AlineaArtigo3',
-                    'Artigo18',
-                    'AlineaArtigo18',
-                    'Artigo26',
-                    'Lei5761',
-                    'Artigo27',
-                    'IncisoArtigo27_I',
-                    'IncisoArtigo27_II',
-                    'IncisoArtigo27_III',
-                    'IncisoArtigo27_IV',
-                    'ParecerFavoravel',
-                    'cast(ParecerDeConteudo as TEXT) as ParecerDeConteudo'
-                    )
-                );
-        $select->where('IdPRONAC = ?',$idpronac );
-        return $this->fetchAll($select);
-    }*/
-
     public function dadosAnaliseconteudo($idpronac, $where = array()) {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -78,7 +49,6 @@ class Analisedeconteudo extends MinC_Db_Table_Abstract {
                 $select->where($key,$val);
             }
         }
-
         return $this->fetchAll($select);
     }
 
