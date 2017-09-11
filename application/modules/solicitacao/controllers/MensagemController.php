@@ -254,8 +254,10 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 $arrayForm = $this->getRequest()->getPost();
 
                 $strUrl = '/solicitacao/mensagem/index';
-                $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
-                $strUrl .= ($arrayForm['idProposta']) ? '/idproposta/' . $arrayForm['idproposta'] : '';
+                $strParams = '';
+                $strParams .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
+                $strParams .= ($arrayForm['idProjeto']) ? '/idPreProjeto/' . $arrayForm['idProjeto'] : '';
+                $strUrl = $strUrl . $strParams;
                 $arrayForm['idUsuario'] = $this->idUsuario;
 
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
@@ -274,7 +276,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
 
                 if ($idSolicitacao) {
-                    $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao;
+                    $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao . $strParams;
                     $status = true;
                 }
 
