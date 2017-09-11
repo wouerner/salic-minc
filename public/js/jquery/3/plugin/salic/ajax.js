@@ -15,6 +15,10 @@
             if ($(this).attr('data-ajax-modal-height') !== '') {
                 objConfig.strHeight = $(this).attr('data-ajax-modal-height');
             }
+
+            if ($(this).attr('data-ajax-modal-width') !== '') {
+                objConfig.strWidth = $(this).attr('data-ajax-modal-width');
+            }
             $.ajaxModal(objConfig);
         });
 
@@ -97,12 +101,12 @@
      * @since 28/12/2016
      */
     $.ajaxModal = function (objOption, callback) {
-        var objDefaults = {strUrl: '', strIdModal: 'modal', strType: 'modal-fixed-footer', strHeight: ''},
+        var objDefaults = {strUrl: '', strIdModal: 'modal', strType: 'modal-fixed-footer', strHeight: '', strWidth: ''},
             objSettings = $.extend({}, objDefaults, objOption),
             strIdModal = '#' + objSettings.strIdModal;
         // Removendo e criando elemento div para o modal.
         $(strIdModal).remove();
-        $('body').append('<div id="' + objSettings.strIdModal + '" class="modal ' + objSettings.strType + '" style="height: '+ objSettings.strHeight +'"></div>');
+        $('body').append('<div id="' + objSettings.strIdModal + '" class="modal ' + objSettings.strType + '" style="height: '+ objSettings.strHeight +'; width: '+ objSettings.strWidth +'"></div>');
         $(strIdModal).modal();
 
         // Renderizando ajax e abrindo a modal por callback.
