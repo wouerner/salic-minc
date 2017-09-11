@@ -80,17 +80,7 @@
     }
 
     $(document).ready(function () {
-        <?php if (!$this->isEditavel) : ?>
-        //DESABILITA ALTERACOES NOS DADOS DO FORMULARIO (INCLUIR/ALTERAR/EXCLUIR)
-        JSBloquearAlteracaoFormulario();
 
-        $("textarea.editor").each(function () {
-            $(this).editorRico({
-                isDesabilitarEdicao: 1
-            });
-        });
-
-        <?php endif; ?>
         $('.planilha').click(function () {
             $(this).next().toggle('fast');
         });
