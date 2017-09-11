@@ -89,9 +89,10 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         } else {
             $campo = null;
             $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
+            
             $ordenacao = null;
         }
-
+        
         $pag = 1;
         $get = Zend_Registry::get('get');
         if (isset($get->pag)) $pag = $get->pag;
@@ -110,10 +111,19 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             $tipoFiltro = 'aguardando_distribuicao';
         } else {
             $tipoFiltro = $this->_request->getParam("tipoFiltro");
+            if (strpos($tipoFiltro, '/') > -1) {
+                $tipoFiltro = explode('/', $tipoFiltro)[0];
+            }
         }
+        
+        if ($tipoFiltro == 'analisado_superintendencia') {
+            $order = array('NomeProjeto', 'stPrincipal desc');
+        }
+        
         $this->view->tipoFiltro = $tipoFiltro;
         
         $tbDistribuirParecer = new tbDistribuirParecer();
+        
         $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
         $fim = $inicio + $this->intTamPag;
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
@@ -157,6 +167,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $idUsuario = $this->auth->getIdentity()->usu_codigo;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
         $codOrgao = $GrupoAtivo->codOrgao; //  �rg�o ativo na sess�o
+        $codGrupo = $GrupoAtivo->codGrupo; //  �rg�o ativo na sess�o
 
         /******************************************************************/
 
@@ -169,6 +180,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
         $projetos = new Projetos();
+        $orgaos = new Orgaos();
 
         try {
             $db->beginTransaction();
@@ -182,15 +194,20 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 $idOrgao = $dp->idOrgao;
                 
                 if ($tipoFiltro == 'em_validacao') {
-                    $fecharAnalise = 3;
-                } else if ($tipoFiltro == 'validados' || $tipoFiltro == 'devolvida') {
                     $fecharAnalise = 1;
                     
-                    if ($this->isVinculadaIphan($dp->idOrgao)) {
-                        $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
+                    if ($orgaos->isVinculadaIphan($dp->idOrgao)) {
+                        if ($codGrupo == Autenticacao_Model_Grupos::SUPERINTENDENTE_DE_VINCULADA) {
+                            $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
+                        }
+                        $fecharAnalise = 3;
                     }
+                } else if ($tipoFiltro == 'devolvida') {
+                    $fecharAnalise = 0;
+                } else {
+                    $fecharAnalise = $dp->FecharAnalise;
                 }
-            
+                
                 $dados = array(
                     'DtEnvio' => $dp->DtEnvio,
                     'idAgenteParecerista' => $dp->idAgenteParecerista,
@@ -300,8 +317,14 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
 
         $where = array();
+        
+        if (Orgaos::isVinculadaIphan($codOrgao)) {
+            $tipoFiltro  = 'superintendente_vinculadas';            
+        } else {
+            $tipoFiltro  = 'presidente_vinculadas';
+        }
         $where["idOrgao = ?"] = $codOrgao;
-
+        
         if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
             $pronac = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
             $where["NrProjeto = ?"] = $pronac;
@@ -309,7 +332,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         }
 
         $tbDistribuirParecer = new tbDistribuirParecer();
-        $tipoFiltro  = 'presidente_vinculadas';
+        
         $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
         $fim = $inicio + $this->intTamPag;
         
@@ -362,27 +385,14 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
-        $projetos = new Projetos();
+        $projeto = new Projetos();
+        $orgaos = new Orgaos();
         
         try {
             $db->beginTransaction();
-            
-            if (!$this->isVinculadaIphan($dp->idOrgao)) {
-                $parecer = new Parecer();
-                $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
-                
-                $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-                $data = array(
-                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
-                );
-                $where = array(
-                    'IdPRONAC = ?' => $idPronac,
-                    'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-                    'idAtoDeGestao = ?' => $idAtoAdministrativo,
-                    'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-                    'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-                );
-                $objModelDocumentoAssinatura->update($data, $where);
+
+            if (!$orgaos->isVinculadaIphan($codOrgao)) {
+                $this->fecharAssinatura($idPronac);
             }
             
             $tbDistribuirParecer = new tbDistribuirParecer();
@@ -392,14 +402,12 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 
             foreach ($buscaDadosProjeto as $dp) {
                 
-                if ($this->isVinculadaIphan($dp->idOrgao)) {                
-
+                if ($orgaos->isVinculadaIphan($dp->idOrgao)) {                
                     $idOrgao = Orgaos::ORGAO_IPHAN_PRONAC;
-                    $fecharAnalise = 3;
                 } else {
                     $idOrgao = $dp->idOrgao;
-                    $fecharAnalise = 1;
                 }
+                $fecharAnalise = 1;
                 
                 $dados = array(
                     'DtEnvio' => $dp->DtEnvio,
@@ -425,7 +433,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
  
             }
 
-            $projeto = new Projetos();
             $wherePro['IdPRONAC = ?'] = $idPronac;
             $buscaDadosdoProjeto = $projeto->buscar($wherePro);
             
@@ -434,7 +441,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
             $buscaInabilitado = $inabilitadoDAO->BuscarInabilitado($buscaDadosdoProjeto[0]->CgcCpf, $buscaDadosdoProjeto[0]->AnoProjeto, $buscaDadosdoProjeto[0]->Sequencial);
             
             if (count($buscaInabilitado == 0)) {
-                if (!$this->isVinculadaIphan($dp->idOrgao)) {
+                if (!$orgaos->isVinculadaIphan($dp->idOrgao)) {
                     // somente presidente
                     $projeto->alterarSituacao($idPronac, null, 'C20', 'An&aacute;lise t&eacute;cnica conclu&iacute;da');
                 } else {
@@ -455,20 +462,26 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         
     }
 
-    public function isVinculadaIphan($idOrgao)
+    private function fecharAssinatura($idPronac)
     {
-        $orgaos = array(
-            Orgaos::ORGAO_IPHAN_PRONAC,
-            Orgaos::ORGAO_IPHAN_PRONAC,
-            Orgaos::ORGAO_FUNARTE,
-            Orgaos::ORGAO_FBN,
-            Orgaos::ORGAO_FCP,
-            Orgaos::ORGAO_FCRB,
-            Orgaos::ORGAO_IBRAM,
-            Orgaos::ORGAO_SUPERIOR_SAV,
-            Orgaos::ORGAO_SAV_DAP
-        );
-
-        return (!in_array($dp->idOrgao, $orgaos)) ? true : false;
+        try {
+            $parecer = new Parecer();
+            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
+            
+            $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $data = array(
+                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+            );
+            $where = array(
+                'IdPRONAC = ?' => $idPronac,
+                'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
+                'idAtoDeGestao = ?' => $idAtoAdministrativo,
+                'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+                'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+            );
+            $objModelDocumentoAssinatura->update($data, $where);
+        } catch (Zend_Exception $ex) {
+            parent::message("Erro ao concluir " . $ex->getMessage(), "parecer/gerenciar-parecer/finalizar-parecer", "ERROR");
+        }
     }
 }
