@@ -47,6 +47,11 @@
                         <div id="anexarDocumento">
                             <label for="arquivo" style="width: 100px; ">Anexar arquivo: </label>
                             <input type="file" name="arquivo" id="arquivo" class="input_simples">
+                            <?php if ($this->dataForm['arquivo']['idDocumento']): ?>
+                                <a href="<?= $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'abrirdocumentosolicitacao'), null, true); ?>?id=<?= $this->dataForm['arquivo']['idDocumento']; ?>">
+                                    <?= utf8_decode(htmlentities($this->dataForm['arquivo']['nmArquivo'])); ?>
+                                </a>
+                            <?php endif; ?>
                             <div id="arquivoinvalido" style="color:#FF0000"></div>
                         </div>
                     </div>
