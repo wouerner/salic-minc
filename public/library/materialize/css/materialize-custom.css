@@ -682,7 +682,9 @@ div.dataTables_length .select-wrapper {
 }
 div.dataTables_length select {
     height: 30px;
+    display: inline;
 }
+
 /*--------------------------------------------------------------
 x - FOOTER
 --------------------------------------------------------------*/
