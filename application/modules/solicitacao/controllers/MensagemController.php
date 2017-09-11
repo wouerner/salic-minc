@@ -5,7 +5,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
     public function init()
     {
-        parent::init();
+        parent::init();s
 
         if (!empty($this->idPreProjeto) || !empty($this->idPronac)) {
             parent::verificarPermissaoAcesso(!empty($this->idPreProjeto), !empty($this->idPronac), false);
@@ -51,7 +51,8 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             'id' => $intId,
             'urlAction' => $strUrlAction,
             'strActionBack' => $strActionBack,
-            'currentUrl' => Zend_Controller_Front::getInstance()->getRequest()->getRequestUri()
+            'currentUrl' => Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(),
+            'ehProponente' => $this->ehProponente
         );
     }
 
@@ -79,10 +80,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
 
         if (isset($this->usuario['usu_codigo'])) {
-
-//            if(Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO) {
-//                $where['idTecnico = ?'] = $this->idUsuario;
-//            }
 
             if (isset($this->grupoAtivo->codOrgao)) {
 
@@ -141,9 +138,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         if (isset($this->usuario['usu_codigo'])) {
 
-//            $grupos = new Autenticacao_Model_Grupos();
-//            $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
-
             $where['idTecnico = ?'] = $this->idUsuario;
             $where['dsResposta IS NULL'] = '';
 
@@ -187,7 +181,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esta solicita&ccedil;&atilde;o");
 
             # marcar como mensagem lida pelo proponente
-            if($dataForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC ) {
+            if ($dataForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_FINALIZADA_MINC) {
                 if ($dataForm['idAgente'] == $this->idAgente || $dataForm['idSolicitante'] == $this->idUsuario) {
 
                     $model = new Solicitacao_Model_TbSolicitacao();
@@ -239,7 +233,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             if ($dataForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC) {
                 $this->redirect($this->_urlPadrao . '/solicitacao/mensagem/visualizar/id/' . $dataForm['idSolicitacao']);
-//                throw new Exception("Voc&ecirc; j&aacute; possui uma solicita&ccedil;&atilde;o aguardando resposta para este projeto!");
             }
 
             self::prepareForm($dataForm, $arrConfig, $urlAction, $urlCallBack);
@@ -277,7 +270,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                     }
 
                     $arrayForm['idSolicitacao'] = $solicitacao['idSolicitacao'];
-
                 }
 
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
@@ -296,8 +288,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
     }
 
-    /**
-     */
+
     public function responderAction()
     {
         $idSolicitacao = $this->getRequest()->getParam('id', null);
@@ -308,7 +299,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
 
             $where['idSolicitacao'] = $idSolicitacao;
-    //        $where['dsResposta IS NOT NULL'] = '';
 
             $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
             $solicitacao = $vwSolicitacao->findBy($where, true);

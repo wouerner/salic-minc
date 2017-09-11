@@ -38,7 +38,8 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
         $booStatus = true;
         $arrData = $model->toArray();
         if ($arrData['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA
-            || $arrData['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC) {
+            || $arrData['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC
+        ) {
             $arrRequired = array(
                 'idOrgao',
                 'dsSolicitacao',
@@ -63,7 +64,6 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
         if (!empty($arrData)) {
 
             try {
-
                 $sp = new Solicitacao_Model_SpSelecionarTecnicoSolicitacao();
 
                 if (!empty($arrData['idPronac'])) {
