@@ -114,8 +114,15 @@ class Layout_ManualController extends MinC_Controller_Action_Abstract
 	 */
 	public function formulariosAction()
 	{
-	} // fecha método formulariosAction()
+	}
 
+    public function formularioPadraoAction()
+    {
+    }
+
+    public function formularioMaterializeAction()
+    {
+    }
 
 
 	/**

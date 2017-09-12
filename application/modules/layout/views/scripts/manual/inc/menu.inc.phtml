@@ -81,12 +81,35 @@
                 <i class="material-icons left">chat_bubble</i>
                 Mensagens <span class="badge new" data-badge-caption="">2</span></a>
         </li>
-        <li>
-            <a id="imprimir"
-               href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'formularios'), '', true); ?>"
-               title="Ir para Formul&aacute;rios">
-                <i class="material-icons left">assignment</i>
-                Formul&aacute;rios</a>
+<!--        <li>-->
+<!--            <a id="imprimir"-->
+<!--               href="--><?php //echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'formularios'), '', true); ?><!--"-->
+<!--               title="Ir para Formul&aacute;rios">-->
+<!--                <i class="material-icons left">assignment</i>-->
+<!--                Formul&aacute;rios</a>-->
+<!--        </li>-->
+        <li class="no-padding">
+            <ul class="collapsible collapsible-accordion">
+                <li>
+                    <a class="collapsible-header waves-effect waves-cyan" href="javascript:void(0);">
+                        <i class="material-icons left">assignment</i>
+                        Formul&aacute;rios</a>
+                    <div class="collapsible-body">
+                        <ul>
+                            <li>
+                                <a class="waves-effect waves-cyan"
+                                   href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'formulario-padrao'), '', true); ?>"
+                                   title="Ir para formulario padr&atilde;o">Padr&atilde;o</a>
+                            </li>
+                            <li>
+                                <a class="waves-effect waves-cyan "
+                                   href="<?php echo $this->url(array('module' => 'layout', 'controller' => 'manual', 'action' => 'formulario-materialize'), '', true); ?>"
+                                   title="Ir para formul&aacute;rio materialize">Materialize</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </li>
         <li class="no-padding">
             <ul class="collapsible collapsible-accordion">
