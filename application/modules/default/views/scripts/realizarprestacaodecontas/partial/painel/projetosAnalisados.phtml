@@ -17,8 +17,8 @@
         <tbody>
             <?php foreach($this->projetosAnalisados as $projeto): ?>
             <tr>
-                <td align="center">
-                    <a class="btn" href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo ($projeto->idPronac); ?>" target="_blank">
+                <td>
+                    <a class="btn modal-trigger pre-visualizar" data-idpronac="<?php echo ($projeto->idPronac); ?>" href="#abrirModal" >
                         <?php echo $projeto->Pronac; ?>
                     </a>
                 </td>
