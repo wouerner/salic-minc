@@ -2021,10 +2021,10 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                 $resultado = $tblPreProjeto->update($dados, $where);
 
                 # alterar a situacao do projeto
-                $codigoSituacao = 'D60';
-                $providenciaTomada = "Lan&ccedil;amento de contrato de patroc&iacute;nio, aprova&ccedil;&atilde;o em edital ou outra exce&ccedil;&atilde;o disposta na Instru&ccedil;&atilde;o Normativa.";
-
-                $tbProjetos->alterarSituacao($post['idPronac'], '', $codigoSituacao, $providenciaTomada);
+//                $codigoSituacao = 'D60';
+//                $providenciaTomada = "Lan&ccedil;amento de contrato de patroc&iacute;nio, aprova&ccedil;&atilde;o em edital ou outra exce&ccedil;&atilde;o disposta na Instru&ccedil;&atilde;o Normativa.";
+//
+//                $tbProjetos->alterarSituacao($post['idPronac'], '', $codigoSituacao, $providenciaTomada);
 
                 if ($resultado) {
                     parent::message("Altera&ccedil;&atilde;o realizada com sucesso!", "alterarprojeto/execucao-imediata/?pronac=" . $post['pronac'], "CONFIRM");
