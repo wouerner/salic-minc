@@ -549,17 +549,17 @@
         $('#ParecerFavoravel').attr('disabled', 1);
         $('#ParecerDesfavoravel').attr('disabled', 1);
 	$('#btSalvarAnaliseDeConteudo').remove();
-	    <?php if ($this->IN2017 && $this->stPrincipal): ?>
+	    <?php if ($this->IN2017 && $this->stPrincipal && ($this->produtosSecundariosEmAnalise == 0)): ?>
 	    var dsAcaoAlcanceProduto = $('#dsAcaoAlcanceProduto').val();
         $('#dsAcaoAlcanceProduto').before(dsAcaoAlcanceProduto).remove();
 	    <?php endif; ?>
 dpi<?php endif; ?>
-
-        
-	<?php if ($this->IN2017 && $this->stPrincipal): ?>
+       
+            <?php if(($this->stPrincipal == 1) && ($this->produtosSecundariosEmAnalise == 0)){ ?>
+	<?Php if ($this->IN2017 && $this->stPrincipal): ?>
 	CKEDITOR.replace( 'dsAcaoAlcanceProduto', { toolbar: [] } );
 	<?php endif; ?>
-        <?php if(($this->stPrincipal == 1) && ($this->produtosSecundariosEmAnalise == 0)){ ?>
+	    
         CKEDITOR.replace( 'dsConsolidacao', { toolbar: [] } );
         <?php } ?>
     }
@@ -572,7 +572,7 @@ dpi<?php endif; ?>
             var parecer = CKEDITOR.instances['ParecerDeConteudo'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,''),
 <?php endif; ?>
 		erros = 0;
-	    <?php if ($this->IN2017 && $this->stPrincipal): ?>
+	    <?php if ($this->IN2017 && $this->stPrincipal && ($this->produtosSecundariosEmAnalise == 0)): ?>
 		var acoesRelevantes = CKEDITOR.instances['dsAcaoAlcanceProduto'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,'');
             if( acoesRelevantes.length  < 11){
 		alertar('As a\xE7\xF5es relevantes devem ter no m\xEDnimo 11 caracteres!');
@@ -600,7 +600,7 @@ dpi<?php endif; ?>
         });
 
         $('#btSalvarConsolidacao').click(function() {
-	<?php if ($this->IN2017 && $this->stPrincipal): ?>
+	<?php if ($this->IN2017 && $this->stPrincipal && ($this->produtosSecundariosEmAnalise == 0)) : ?>
 		$('#consolidacaoDsAcaoAlcanceProduto').val($('#dsAcaoAlcanceProduto').val());
 	<?php endif; ?>
 	    
