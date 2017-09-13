@@ -97,8 +97,18 @@
         </table>
     </form>
 
+    <?php if($this->jaCadastrado) : ?>
+        <p class="center-align">
+            <div class="msgALERT">
+                <div>Não é possível aprovar esta solicitação, item já cadastrado!</div>
+            </div>
+        </p>
+    <?php endif; ?>
+
     <p align="center" style="letter-spacing: 10px;">
-        <a href="#" onclick="acaoBtn('aprovar');" class="visualizarObs"><img src="<?php echo $this->baseUrl(); ?>/public/img/buttons/aprovar.gif" /></a>
+        <?php if(!$this->jaCadastrado) : ?>
+            <a href="#" onclick="acaoBtn('aprovar');" class="visualizarObs"><img src="<?php echo $this->baseUrl(); ?>/public/img/buttons/aprovar.gif" /></a>
+        <?php endif; ?>
         <a href="#" onclick="acaoBtn('rejeitar');" class="visualizarObs"><img src="<?php echo $this->baseUrl(); ?>/public/img/buttons/rejeitar.gif" /></a>
         <a href="#" onclick="acaoBtn('cancelar');" class="visualizarObs"><img src="<?php echo $this->baseUrl(); ?>/public/img/buttons/cancelar.gif" /></a>
     </p>
