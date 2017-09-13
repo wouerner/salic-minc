@@ -1,3 +1,38 @@
+Release 2.7.1
+* [FIX] Readequações: removendo debug no painel de projetos em análise
+
+Release 2.7.0
+* [ADD] Alterar Projeto/Execução imediata: nova opção de atualizar Plano de Execução Imediata do Projeto por Técnicos e Coordenadores
+* [ADD] Parecer/gerenciar parecer: fluxo de assinaturas do IPHAN com 5 passos - parecerista, coordenador regional, superintendente regional, coordenador PRONAC e presidente
+* [ADD] Parecer/gerenciar parecer: IPHAN: adicionando tela de superintendente com view nova
+* [ADD] Parecer/gerenciar parecer: fluxo do IPHAN com novo painel para coordenador IPHAN Brasília (analisado pela superintendência)
+* [UPDATE] Recurso enquadramento: altera o tipo do recurso ao salvar recurso
+* [UPDATE] TipoEncaminhamento: define constantes na model Tipo Encaminhamento
+* [UPDATE] Analise/Avaliar Adequacao de projeto: altera situacao quando execucao imediata diferente de normal
+* [FIX] Recurso Enquadramento: corrige dados ao salvar novo recurso
+* [FIX] Parecer/análise CNIC: removendo duplicidade nas caixas de conteúdo em Dados do Projeto
+* [FIX] Parecer/análise CNIC: removendo botão de próximo
+* [FIX] Parecer/análise CNIC: puxando valores corretos do enquadramento e valores
+* [FIX] Parecer/análise CNIC: puxando valor total sugerido corretamente
+* [FIX] Parecer/análise CNIC: correção nos links
+* [FIX] Parecer/coordenador: removendo caixa de texto quando somente leitura
+* [FIX] Parecer: corrigindo quebra de tela na análise do produto
+* [FIX] Parecer/análise inicial consolidação: não exibe dados de área/segmento para IN2017 e melhorias gerais de código
+* [FIX] Parecer/análise inicial: não grava enquadramento novo se for IN2017
+* [FIX] Parecer/análise inicial: movendo ações relevantes para seção de consolidação do parecer técnico
+* [FIX] Parecer/análise inicial: verifica se já existe parecer do parecerista corrente
+* [FIX] Parecer/análise inicial: correção ao alterar valor editando item orçamentário
+* [FIX] Parecer/análise inicial: removendo permissão de edição da planilha pelo coordenador de parecer
+* [FIX] Parecer/gerenciar parecer: setando corretamente fecharParecer no caso padrão (não iphan)
+* [FIX] Parecer/gerenciar parecer: produto apenas leitura para coordenador de parecer
+* [FIX] Parecer/gerenciar parecer devolvidas: ajuste na cor de fundo
+* [FIX] Parecer: melhoria na função para determinar projeto assinado
+* [UPDATE] Parecer/gerenciar parecer: exibindo botão de visualizar documento assinado mesmo quando não assinado no passo atual
+* [REMOVE] Parecer/gerenciar parecer: removendo arquivo desnecessário
+* [REFACTOR] Parecer/gerenciar parecer: movendo função isVinculadaIphan para model Orgaos
+* [REFACTOR] Parecer/análise inicial: movendo função fecharanalise para módulo de parecer
+* [REFACTOR] Análise de conteúdo: removendo código comentado
+
 Release 2.6.6
 [FIX] Gerenciar parecer/distribuir parecer: desativando documento assinatura quando distribui projeto
 
