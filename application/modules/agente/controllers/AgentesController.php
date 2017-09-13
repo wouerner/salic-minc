@@ -450,7 +450,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         if (!empty($modal)) {
             $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
             $this->view->modal = "s";
-            $this->view->cpf = $this->_request->getParam("cpfCnpj");
+            $this->view->cpf = $this->_request->getParam("cpf");
             $this->view->caminho = $this->_request->getParam("caminho");
         } else {
             $this->view->modal = "n";
@@ -492,6 +492,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
 
         $this->incluir();
     }
@@ -511,6 +512,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
 
         $this->incluir();
     }
