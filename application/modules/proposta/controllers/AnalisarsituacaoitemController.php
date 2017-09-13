@@ -32,7 +32,7 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
         $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $idagente = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $this->getIdAgente = $idagente['idAgente'];
         $this->getIdGrupo = $GrupoAtivo->codGrupo;
         $this->getIdOrgao = $GrupoAtivo->codOrgao;
@@ -69,7 +69,7 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
 
         }else {
             $campo = null;
-            $order = array(4);
+            $order = array('Produto', 'Estado');
             $ordenacao = null;
         }
 
@@ -122,28 +122,46 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
         $where = array();
         $where['s.idSolicitarItem = ?'] = $item;
 
+        $this->view->jaCadastrado  = false;
+
         $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
-        $busca = $tbSolicitarItem->listaSolicitacoesItens($where, array(), null, null);
-        $this->view->dados = $busca;
+        $solicitacao = $tbSolicitarItem->listaSolicitacoesItens($where, array(), null, null);
+
+        # Associacao
+        if($solicitacao[0]->idPlanilhaItens > 0) {
+            $itemPesquisa = [];
+            $itemPesquisa['idProduto'] = $solicitacao[0]->idProduto;
+            $itemPesquisa['idPlanilhaEtapa'] = $solicitacao[0]->idPlanilhaEtapa;
+            $itemPesquisa['idPlanilhaItens'] = $solicitacao[0]->idPlanilhaItens;
+
+            $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
+            $itemProduto = $tbItensPlanilhaProduto->findBy($itemPesquisa);
+            $this->view->jaCadastrado = empty($itemProduto) ? false : true;
+        }
+
+        $this->view->dados = $solicitacao;
     }
 
     public function avaliarItemAction() {
-        $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
-        $busca = $tbSolicitarItem->buscarDadosItem($_POST['idItem']);
 
-        $busca->Resposta = $_POST['resposta'];
+        $params = $this->getRequest()->getParams();
+
+        $tbSolicitarItem = new Proposta_Model_DbTable_TbSolicitarItem();
+        $busca = $tbSolicitarItem->buscarDadosItem($params['idItem']);
+
+        $busca->Resposta = $params['resposta'];
         $busca->DtResposta = new Zend_Db_Expr('GETDATE()');
-        $busca->stEstado = $_POST['avaliacao'];
+        $busca->stEstado = $params['avaliacao'];
         $busca->save();
 
-        if($_POST['avaliacao']){
+        if($params['avaliacao']){
             $msg = 'rejeitado';
         } else {
             $msg = 'aprovado';
         }
 
         $pa = new Proposta_Model_PaIncluirRecusarItem();
-        $pa->incluirRecusarItem($_POST['idItem'], $this->getIdUsuario, $_POST['avaliacao']);
+        $pa->incluirRecusarItem($params['idItem'], $this->getIdUsuario, $params['avaliacao']);
         parent::message("Item $msg com sucesso!", "/proposta/analisarsituacaoitem", "CONFIRM");
     }
 

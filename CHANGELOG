@@ -1,3 +1,11 @@
+Release 2.7.5
+* [FIX] Parecer/gerenciar parecer: correção na listagem de projetos
+
+Release 2.7.4
+* [FIX] Parecer/presidente de vinculada: removendo busca e paginação
+* [FIX] Parecer/CNIC: ajustes de estilo ao emitir parecer
+* [FIX] Parecer/CNIC: ajustes de estilo na análise
+
 Release 2.7.3
 * [FIX] Parecer/análise do produto: correção ao gravar produto IN2017 antes de finalizar produtos secundários
 * [FIX] Parecer/distribuir parecer: inativando documento assinatura quando redistribui o projeto caso já tenha sido assinado
