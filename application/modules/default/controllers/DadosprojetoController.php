@@ -254,7 +254,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
 
@@ -275,7 +275,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             }
 
@@ -296,7 +296,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
 
@@ -317,7 +317,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             }
             if(isset($_POST['tipo']) and $_POST['tipo'] == 'etapa')
@@ -337,7 +337,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             }
 
@@ -358,7 +358,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             }
 
@@ -379,7 +379,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             }
 
@@ -400,7 +400,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             }
 
@@ -421,7 +421,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
 
@@ -442,7 +442,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 $htmlGerado .= "</td></tr>";
                 }
                 $htmlGerado .= "</table>";
-                echo utf8_encode($htmlGerado);
+                echo $htmlGerado;
                 $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
 
@@ -479,7 +479,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                         }
                     }
                $htmlGerado .= "</table>";
-               echo utf8_encode($htmlGerado);
+               echo $htmlGerado;
                $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
 
@@ -520,7 +520,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                 }
                $htmlGerado .= "</table>";
 
-               echo utf8_encode($htmlGerado);
+               echo $htmlGerado;
                $this->_helper->viewRenderer->setNoRender(TRUE); 
 
             }
@@ -552,7 +552,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                     }
                 }
                $htmlGerado .= "</table>";
-               echo utf8_encode($htmlGerado);
+               echo $htmlGerado;
                $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
 
@@ -667,7 +667,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
                }
                $htmlGerado .= "</table>";
                $htmlGerado .= "</td>";
-               echo utf8_encode($htmlGerado);
+               echo $htmlGerado;
                $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
 
@@ -826,7 +826,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract {
             //<!-- ========== FIM TOTAL GERAL ========== -->
             $htmlGerado .= "</table>";
             // <!-- ========== FIM PLANILHA ========== -->
-            echo utf8_encode($htmlGerado);
+            echo $htmlGerado;
             $this->_helper->viewRenderer->setNoRender(TRUE); 
             }
         }
