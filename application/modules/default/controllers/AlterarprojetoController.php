@@ -2010,7 +2010,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
 
                 $tbProjetos = new Projetos();
                 $projeto = $tbProjetos->VerificaPronac($arrBusca)->current();
-
                 if (empty($projeto))
                     throw new Exception("Dados informados inválidos");
 
@@ -2020,11 +2019,10 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                 $dados['stProposta'] = $post['stProposta'];
                 $resultado = $tblPreProjeto->update($dados, $where);
 
-                # alterar a situacao do projeto
-//                $codigoSituacao = 'D60';
-//                $providenciaTomada = "Lan&ccedil;amento de contrato de patroc&iacute;nio, aprova&ccedil;&atilde;o em edital ou outra exce&ccedil;&atilde;o disposta na Instru&ccedil;&atilde;o Normativa.";
-//
-//                $tbProjetos->alterarSituacao($post['idPronac'], '', $codigoSituacao, $providenciaTomada);
+                # Mantem a situacao do projeto e atualiza DtSituacao, Providencia tomada e logon
+                $codigoSituacao = $projeto->Situacao;
+                $providenciaTomada = "Lan&ccedil;amento de contrato de patroc&iacute;nio, aprova&ccedil;&atilde;o em edital ou outra exce&ccedil;&atilde;o disposta na Instru&ccedil;&atilde;o Normativa.";
+                $tbProjetos->alterarSituacao($post['idPronac'], '', $codigoSituacao, $providenciaTomada);
 
                 if ($resultado) {
                     parent::message("Altera&ccedil;&atilde;o realizada com sucesso!", "alterarprojeto/execucao-imediata/?pronac=" . $post['pronac'], "CONFIRM");
