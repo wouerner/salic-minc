@@ -69,7 +69,7 @@ class Proposta_AnalisarsituacaoitemController extends MinC_Controller_Action_Abs
 
         }else {
             $campo = null;
-            $order = array(4);
+            $order = array('Produto', 'Estado');
             $ordenacao = null;
         }
 
