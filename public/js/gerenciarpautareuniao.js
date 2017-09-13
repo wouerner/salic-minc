@@ -38,14 +38,6 @@ function abrirdados(count, idpronac, tipoagente, envioplenaria){
             tr += "</fieldset>";
             tr += "<div id='parecerconsolidado"+count+"' aberto='false'></div>";
             tr += "<fieldset>";
-            tr += "<input type='button' view='analisedeconta' idprojeto='analisedeconta"+count+"' class='btn_adicionar' onClick='dadosprojetos("+idpronac+", this)'/>An&aacute;lise de Corte Sugerido";
-            tr += "</fieldset>";
-            tr += "<div id='analisedeconta"+count+"' aberto='false'></div>";
-            tr += "<fieldset>";
-            tr += "<input type='button' view='analisedeconteudo' idprojeto='analisedeconteudo"+count+"' class='btn_adicionar' onClick='dadosprojetos("+idpronac+", this)'/>An&aacute;lise de Conte&uacute;do";
-            tr += "</fieldset>";
-            tr += "<div id='analisedeconteudo"+count+"' aberto='false'></div>";
-            tr += "<fieldset>";
             tr += "<input type='button' view='analisedecustos' idprojeto='analisedecustos"+count+"' class='btn_adicionar' onClick='dadosprojetos("+idpronac+", this)'/>An&aacute;lise de Custos";
             tr += "</fieldset>";
             tr += "<div id='analisedecustos"+count+"' aberto='false'></div>";

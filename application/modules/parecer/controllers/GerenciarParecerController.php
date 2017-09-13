@@ -63,11 +63,50 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
         
-        $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
+        //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
+        if($this->_request->getParam("qtde")) {
+            $this->intTamPag = $this->_request->getParam("qtde");
+        }
+        $order = array();
+
+        if ($this->_request->getParam("ordem")) {
+            $ordem = $this->_request->getParam("ordem");
+            if ($ordem == "ASC") {
+                $novaOrdem = "DESC";
+            } else {
+                $novaOrdem = "ASC";
+            }
+        } else {
+            $ordem = "ASC";
+            $novaOrdem = "ASC";
+        }
         
+        if ($this->_request->getParam("campo")) {
+            $campo = $this->_request->getParam("campo");
+            $order = array($campo . " " . $ordem);
+            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
+
+        } else {
+            $campo = null;
+            $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
+            
+            $ordenacao = null;
+        }
+        
+        $pag = 1;
+        $get = Zend_Registry::get('get');
+        if (isset($get->pag)) $pag = $get->pag;
+        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
+
         $where = array();
         $where["idOrgao = ?"] = $codOrgao;
-        
+
+        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
+            $pronac = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
+            $where["NrProjeto = ?"] = $pronac;
+            $this->view->pronacProjeto = $pronac;
+        }
+
         if(!$this->_request->getParam("tipoFiltro")){
             $tipoFiltro = 'aguardando_distribuicao';
         } else {
@@ -85,7 +124,11 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         
         $tbDistribuirParecer = new tbDistribuirParecer();
         
-        $busca = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, false, $tipoFiltro);
+        $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
+        $fim = $inicio + $this->intTamPag;
+        $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
+        $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
+        $busca = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, $tamanho, $inicio, false, $tipoFiltro);
 
         $checarValidacaoSecundarios = array();
         foreach ($busca as $chave => $item) {
@@ -96,6 +139,22 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->checarValidacaoSecundarios = $checarValidacaoSecundarios;
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         
+        $paginacao = array(
+            "pag" => $pag,
+            "qtde" => $this->intTamPag,
+            "campo" => $campo,
+            "ordem" => $ordem,
+            "ordenacao" => $ordenacao,
+            "novaOrdem" => $novaOrdem,
+            "total" => $total,
+            "inicio" => ($inicio + 1),
+            "fim" => $fim,
+            "totalPag" => $totalPag,
+            "Itenspag" => $this->intTamPag,
+            "tamanho" => $tamanho
+        );
+
+        $this->view->paginacao = $paginacao;
         $this->view->qtdDocumentos = $total;
         $this->view->dados = $busca;
         $this->view->intTamPag = $this->intTamPag;        
@@ -223,40 +282,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
         
-        //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if($this->_request->getParam("qtde")) {
-            $this->intTamPag = $this->_request->getParam("qtde");
-        }
         $order = array();
-
-        if ($this->_request->getParam("ordem")) {
-            $ordem = $this->_request->getParam("ordem");
-            if ($ordem == "ASC") {
-                $novaOrdem = "DESC";
-            } else {
-                $novaOrdem = "ASC";
-            }
-        } else {
-            $ordem = "ASC";
-            $novaOrdem = "ASC";
-        }
-        
-        if ($this->_request->getParam("campo")) {
-            $campo = $this->_request->getParam("campo");
-            $order = array($campo . " " . $ordem);
-            $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
-
-        } else {
-            $campo = null;
-            $order = array('dtValidacao', 'NomeProjeto', 'stPrincipal desc');
-            $ordenacao = null;
-        }
-
-        $pag = 1;
-        $get = Zend_Registry::get('get');
-        if (isset($get->pag)) $pag = $get->pag;
-        $inicio = ($pag > 1) ? ($pag - 1) * $this->intTamPag : 0;
-
         $where = array();
         
         if (Orgaos::isVinculadaIphan($codOrgao)) {
@@ -266,20 +292,11 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         }
         $where["idOrgao = ?"] = $codOrgao;
         
-        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
-            $pronac = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
-            $where["NrProjeto = ?"] = $pronac;
-            $this->view->pronacProjeto = $pronac;
-        }
-
         $tbDistribuirParecer = new tbDistribuirParecer();
-        
-        $total = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, true, $tipoFiltro);
-        $fim = $inicio + $this->intTamPag;
         
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        $busca = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, $tamanho, $inicio, false, $tipoFiltro);
+        $busca = $tbDistribuirParecer->painelAnaliseTecnica($where, $order, null, null, false, $tipoFiltro);
 
         $checarValidacaoSecundarios = array();
         foreach ($busca as $chave => $item) {
@@ -290,23 +307,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         $this->view->checarValidacaoSecundarios = $checarValidacaoSecundarios;
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         
-        $paginacao = array(
-            "pag" => $pag,
-            "qtde" => $this->intTamPag,
-            "campo" => $campo,
-            "ordem" => $ordem,
-            "ordenacao" => $ordenacao,
-            "novaOrdem" => $novaOrdem,
-            "total" => $total,
-            "inicio" => ($inicio + 1),
-            "fim" => $fim,
-            "totalPag" => $totalPag,
-            "Itenspag" => $this->intTamPag,
-            "tamanho" => $tamanho
-        );
-
-        $this->view->paginacao = $paginacao;
-        $this->view->qtdDocumentos = $total;
+        $this->view->qtdDocumentos = count($busca);
         $this->view->dados = $busca;
         $this->view->intTamPag = $this->intTamPag;        
     }
