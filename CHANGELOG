@@ -1,3 +1,6 @@
+Release 2.7.5
+* [FIX] Parecer/gerenciar parecer: correção na listagem de projetos
+
 Release 2.7.4
 * [FIX] Parecer/presidente de vinculada: removendo busca e paginação
 * [FIX] Parecer/CNIC: ajustes de estilo ao emitir parecer
