@@ -280,8 +280,14 @@
 		var parecer = null;
 		    <?php if ($this->IN2017) : ?>
 		    parecer = $("input:radio[name='decisao']:checked").val();
+            if (!parecer) {
+                $('#confirm').dialog('open');
+                $('#confirm').html('<font color="red">Defina seu posicionamento para salvar o Parecer!</font>');
+                $('#alert').dialog('close');                
+                return false;
+            }
+            
 		    <?php endif; ?>
-		    document.title= parecer;
                 salvar(parecer);
                     $("#alert").html('Aguarde, salvando informa&ccedil;&otilde;es...');
                 },
@@ -396,7 +402,7 @@
 		</tr>
                 <tr>
                     <td class="center-align"><?php echo $this->escape($this->ResultRealizarAnaliseProjeto[0]->pronac); ?></td>
-                    <td colspan="2" class="center-align"><?php echo $this->escape($this->ResultRealizarAnaliseProjeto[0]->NomeProjeto); ?></td>
+                    <td colspan="2" class="center-align"><?php echo $this->ResultRealizarAnaliseProjeto[0]->NomeProjeto; ?></td>
                     <td class="center-align"><?php echo $this->escape($this->enquadramento); ?></td>
 		    <?php if (!$this->IN2017): ?>
                     <td class="center-align">
