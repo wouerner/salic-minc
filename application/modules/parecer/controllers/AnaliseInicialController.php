@@ -87,7 +87,8 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         $UsuarioDAO = new Autenticacao_Model_Usuario();
         $agente = $UsuarioDAO->getIdUsuario($idusuario);
         $idAgenteParecerista = $agente['idagente'];
-
+        $this->view->idAgenteParecerista = $idAgenteParecerista;
+        
         $situacao = $this->_request->getParam('situacao');
         
         $projeto = new Projetos();
