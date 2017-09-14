@@ -1,10 +1,8 @@
 <div class="row">
     <?php if ($this->modulo != "movimentacaobancaria") : ?>
-        <?php $ponto = ''; ?>
-
-        <?php $ponto = '*'; ?>
         <?= $this->partial("agentes/inc/menu.inc.php", $this); ?>
     <?php endif; ?>
-
-    <?= $this->partial("agentes/partials/form-incluir-agente.phtml", $this); ?>
+    <div class="col s12 m10 l10">
+        <?= $this->partial("agentes/partials/form-incluir-agente.phtml", $this); ?>
+    </div>
 </div>
