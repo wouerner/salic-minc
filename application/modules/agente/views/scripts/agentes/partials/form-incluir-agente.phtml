@@ -13,7 +13,7 @@
     </table>
 </div>
 
-<div id="novocadastro" class="col s10">
+<div id="novocadastro" class="col s12 m10 l10">
     <h4 id="novo">Novo cadastro</h4>
     <form name="formCadAgentes"
           id="formCadAgentes"
@@ -43,7 +43,7 @@
         <fieldset>
             <legend>DADOS PRINCIPAIS</legend>
             <div class="row">
-                <div class="input-field col s2">
+                <div class="col s12 m3 l3">
                     <input type="radio" name="Tipo" id="0" value="0"
                            class="with-gap"
                            checked="checked"
@@ -55,9 +55,6 @@
                            onclick="filtroCNPJ();"
                            onkeypress="filtroCNPJ();"/>
                     <label for="1">CNPJ</label>
-                </div>
-                <div class="col s3">
-                    <label for="cpf"> </label>
                     <input class="browser-default"
                            type="text"
                            name="cpf"
@@ -73,7 +70,7 @@
                     <span id="erroCpf" class="spanError"></span>
                     <input type="hidden" id="idAgente" name="idAgente"/>
                 </div>
-                <div class="col s4">
+                <div class="col s12 m6 l6">
                     <label for="nome">Nome *</label>
                     <input class="browser-default"
                            type="text"
@@ -88,9 +85,9 @@
                     <input type="hidden" id="idPessoa" name="idPessoa"/>
                     <span id="erroNome" class="spanError"></span>
                 </div>
-                <div class="col s3">
+                <div class="col s12 m3 l3">
                     <?php if (!$this->ehProponente) : ?>
-                        <label for="visao"> Informe a vis&atilde;o do Agente: </label>
+                        <label for="visao">Vis&atilde;o do Agente: </label>
                         <select name="visao" id="visao"
                                 onchange="verificarVisao(this.value, <?= $this->grupoAtivo; ?>);"
                                 class="browser-default">
@@ -107,12 +104,11 @@
                         <span id="erroVisao" class="spanError"></span>
                         <span id="spanVisao"></span>
                     <?php else : ?>
-                        <label for="visao"> Informe a vis&atilde;o do Agente: </label>
+                        <label for="visao">Vis&atilde;o do Agente: </label>
                         <select name="visao" id="visao"
                                 onchange="verificarVisao(this.value, <?= $this->grupoAtivo; ?>);"
                                 class="browser-default">
-                            <option
-                                value="<?= $this->combovisoes[0]['idVerificacao']; ?>"> <?= $this->combovisoes[0]['Descricao']; ?> </option>
+                            <option value="<?= $this->combovisoes[0]['idVerificacao']; ?>"> <?= $this->combovisoes[0]['Descricao']; ?> </option>
                         </select>
                     <?php endif; ?>
                 </div>
@@ -146,7 +142,7 @@
                         <label for="areaCultural">&Aacute;rea Cultural *</label>
                         <select name="areaCultural" id="areaCultural"
                                 onchange="carregar_combo(this.value, 'segmentoCultural', '<?= $this->url(array('controller' => 'segmentocultural', 'action' => 'combo')); ?>', ' - Selecione uma &Aacute;rea Cultural - '), buscarareasegmento();"
-                                class="input_simples" style="width: 200px;">
+                                class=" style="width: 200px;">
 
                             <?php if (!isset($this->areaCultural) || empty($this->areaCultural)): ?>
                                 <option value="0"> - Selecione -</option>
@@ -171,7 +167,7 @@
                     <td colspan="2" valign="top">
                         <label for="segmentoCultural">Segmento Cultural</label>
                         <select name="segmentoCultural" id="segmentoCultural" onchange="buscarareasegmento();"
-                                class="input_simples" style="width: 200px;">
+                                class=" style="width: 200px;">
 
                             <?php if (!isset($this->areaCultural) || empty($this->areaCultural)) : ?>
                                 <option value="0"> - Selecione uma &Aacute;rea Cultural -</option>
@@ -202,135 +198,137 @@
         <div class="row">
             <fieldset>
                 <legend>Novo Endere&ccedil;o</legend>
-                <div class="col s3">
-                    <label for="cep">CEP *</label><br/>
-                    <input
-                        class="browser-default"
-                        type="text"
-                        name="cep"
-                        id="cep"
-                        maxlength="10"
-                        onkeyup="mascara(this, format_cep);"
-                        onblur="buscarcep(this.value);"
-                        onclick="limpar_campo(this, '');" onkeypress="limpar_campo(this, '');"
-                        onblur="restaurar_campo(this, '');" onmouseout="restaurar_campo(this, '');" value=""/>
-                    <span id="erroCep" class="spanError"></span>
-                </div>
-                <div class="col s2">
-                    <label class="" for="uf">UF *</label> <br/>
-                    <select name="uf" id="uf"
-                            class="browser-default input-simples"
-                            disabled="disabled"
-                            onchange="carregar_combo(this.value,'cidade','<?= $this->url(array('module' => 'default', 'controller' => 'cidade', 'action' => 'combo')); ?>',' - Selecione primeiro o UF - ');">
+                <div class="row">
+                    <div class="col s12 m3 l3">
+                        <label for="cep">CEP *</label><br/>
+                        <input
+                            class="browser-default"
+                            type="text"
+                            name="cep"
+                            id="cep"
+                            maxlength="10"
+                            onkeyup="mascara(this, format_cep);"
+                            onblur="buscarcep(this.value);"
+                            onclick="limpar_campo(this, '');" onkeypress="limpar_campo(this, '');"
+                            onblur="restaurar_campo(this, '');" onmouseout="restaurar_campo(this, '');" value=""/>
+                        <span id="erroCep" class="spanError"></span>
+                    </div>
+                    <div class="col s12 m3 l3">
+                        <label for="tipoLogradouro">Tipo*</label> <br/>
+                        <select name="tipoLogradouro"
+                                id="tipoLogradouro"
+                                class="browser-default >
 
-                        <?php if (!isset($this->uf) || empty($this->uf)) : ?>
-                            <option value="0"> --</option>
-                        <?php endif; ?>
+                            <?php if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) : ?>
+                                <option value="0"> - Selecione -</option>
+                            <?php endif; ?>
 
-                        <?php foreach ($this->comboestados as $key => $comboestado): ?>
-                            <option value="<?= $key; ?>"
-                                <?php if ($this->uf == $key) echo "selected=\"selected\""; ?> >
-                                <?= $comboestado; ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span id="erroUf" class="spanError"></span>
-                </div>
-                <div class="col s2">
-                    <label for="cidade">Cidade *</label>
-                    <select name="cidade"
-                            id="cidade"
-                            disabled="disabled"
-                            class="browser-default input_simples"
-                            style="width: 250px;">
-                        <option value="0"> - Selecione -</option>
-                        <?php if ($this->combocidades): ?>
-                            <?php foreach ($this->combocidades as $key => $combocidade): ?>
-                                <option value="<?= $key; ?>" id="<?= $combocidade->idUF; ?>"
-                                    <?php if ($this->cidade == $key) echo "selected=\"selected\""; ?>>
-                                    <?= $combocidade; ?>
+                            <?php foreach ($this->combotiposlogradouros as $key => $combotipologradouro): ?>
+                                <option value="<?= $key; ?>"
+                                    <?php if ($this->tipoLogradouro == $key) echo "selected=\"selected\""; ?>>
+                                    <?= ($combotipologradouro); ?>
                                 </option>
                             <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                    <span id="erroCidade" class="spanError"></span>
+                        </select>
+
+                        <span id="erroTipoLogradouro" class="spanError"></span>
+                    </div>
                 </div>
-                <div class="col s2">
-                    <label for="tipoEndereco">Tipo de Endere&ccedil;o *</label> <br/>
-                    <select
-                        name="tipoEndereco"
-                        id="tipoEndereco"
-                        class="browser-default input_simples" style="width: 250px;">
-                        <?php if (!isset($this->tipoEndereco) || empty($this->tipoEndereco)) : ?>
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <label for="logradouro">Logradouro *</label> <br/>
+                        <input class="browser-default" type="text" disabled="disabled" name="logradouro" id="logradouro"
+                               maxlength="50" size="30"/>
+
+                        <span id="erroLogradouro" class="spanError"></span>
+                    </div>
+                    <div class="col s12 m6 l6">
+                        <label for="numero">N&uacute;mero *</label> <br/>
+                        <input class="browser-default" type="text" name="numero" id="numero" maxlength="10" size="30"/>
+
+                        <span id="erroNumero" class="spanError"></span>
+                    </div>
+                    <div class="col s12 m6 l6">
+                        <label for="complemento">Complemento</label> <br/>
+                        <input class="browser-default" type="text" name="complemento" id="complemento" maxlength="70"
+                               size="50"/>
+                        <span id="erroComplemento" class="spanError"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4 l4">
+                        <label class="" for="uf">UF *</label> <br/>
+                        <select name="uf" id="uf"
+                                class="browser-default input-simples"
+                                disabled="disabled"
+                                onchange="carregar_combo(this.value,'cidade','<?= $this->url(array('module' => 'default', 'controller' => 'cidade', 'action' => 'combo')); ?>',' - Selecione primeiro o UF - ');">
+
+                            <?php if (!isset($this->uf) || empty($this->uf)) : ?>
+                                <option value="0"> --</option>
+                            <?php endif; ?>
+
+                            <?php foreach ($this->comboestados as $key => $comboestado): ?>
+                                <option value="<?= $key; ?>"
+                                    <?php if ($this->uf == $key) echo "selected=\"selected\""; ?> >
+                                    <?= $comboestado; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span id="erroUf" class="spanError"></span>
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <label for="cidade">Cidade *</label>
+                        <select name="cidade"
+                                id="cidade"
+                                disabled="disabled"
+                                class="browser-default">
                             <option value="0"> - Selecione -</option>
-                        <?php endif; ?>
-                        <?php foreach ($this->combotiposenderecos as $key => $combotipoendereco): ?>
-                            <option value="<?= $key; ?>"
-                                <?php if ($this->tipoEndereco == $key) echo "selected=\"selected\""; ?>>
-                                <?= $combotipoendereco; ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span id="erroTipoEndereco" class="spanError"></span>
+                            <?php if ($this->combocidades): ?>
+                                <?php foreach ($this->combocidades as $key => $combocidade): ?>
+                                    <option value="<?= $key; ?>" id="<?= $combocidade->idUF; ?>"
+                                        <?php if ($this->cidade == $key) echo "selected=\"selected\""; ?>>
+                                        <?= $combocidade; ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                        <span id="erroCidade" class="spanError"></span>
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <label for="bairro">Bairro *</label>
+                        <input class="browser-default" type="text" disabled="disabled" name="bairro" id="bairro"
+                               maxlength="70" />
+                        <span id="erroBairro" class="spanError"></span>
+                    </div>
                 </div>
-                <div class="col s2">
-                    <label for="tipoLogradouro">Tipo de Logradouro *</label> <br/>
-                    <select name="tipoLogradouro"
-                            id="tipoLogradouro"
-                            class="browser-default input_simples">
-
-                        <?php if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) : ?>
-                            <option value="0"> - Selecione -</option>
-                        <?php endif; ?>
-
-                        <?php foreach ($this->combotiposlogradouros as $key => $combotipologradouro): ?>
-                            <option value="<?= $key; ?>"
-                                <?php if ($this->tipoLogradouro == $key) echo "selected=\"selected\""; ?>>
-                                <?= ($combotipologradouro); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-
-                    <span id="erroTipoLogradouro" class="spanError"></span>
-                </div>
-                <div class="col s2">
-                    <label for="logradouro">Logradouro *</label> <br/>
-                    <input class="input_simples browser-default" type="text" disabled="disabled" name="logradouro" id="logradouro"
-                           maxlength="50" size="30"/>
-
-                    <span id="erroLogradouro" class="spanError"></span>
-                </div>
-                <div class="col s2">
-                    <label for="numero">N&uacute;mero *</label> <br/>
-                    <input class="input_simples browser-default" type="text" name="numero" id="numero" maxlength="10" size="30"/>
-
-                    <span id="erroNumero" class="spanError"></span>
-                </div>
-                <div class="col s2">
-                    <label for="complemento">Complemento</label> <br/>
-                    <input class="input_simples browser-default" type="text" name="complemento" id="complemento" maxlength="70"
-                           size="50"/>
-                    <span id="erroComplemento" class="spanError"></span>
-                </div>
-                <div class="col s2">
-                    <input class="input_simples browser-default" type="text" disabled="disabled" name="bairro" id="bairro"
-                           maxlength="70" size="40"/>
-                    <label for="bairro">Bairro *</label> <br/>
-                    <span id="erroBairro" class="spanError"></span>
-                </div>
-                <div class="col s3">
-                    <p>Autorizo divulgar o endere&ccedil;o?</p>
-                    <p>
-                        <input type="radio" name="divulgarEndereco" id="divulgarEnderecoS" value="1"
-                               class="checkradio with-gap"
-                               style="background: none; border: none; float:none; display:inline;"/>
-                        <label for="divulgarEnderecoS"> Sim </label>
-                        <input type="radio" name="divulgarEndereco" id="divulgarEnderecoN" value="0"
-                               class="checkradio with-gap"
-                               checked="checked"
-                               style="background: none; border: none; float:none; display:inline;"/>
-                        <label for="divulgarEnderecoN">N&atilde;o</label>
-                    </p>
+                <div class="row">
+                    <div class="col s12 m4 l4">
+                        <label for="tipoEndereco">Tipo de Endere&ccedil;o *</label> <br/>
+                        <select
+                            name="tipoEndereco"
+                            id="tipoEndereco"
+                            class="browser-default  style="width: 250px;">
+                            <?php if (!isset($this->tipoEndereco) || empty($this->tipoEndereco)) : ?>
+                                <option value="0"> - Selecione -</option>
+                            <?php endif; ?>
+                            <?php foreach ($this->combotiposenderecos as $key => $combotipoendereco): ?>
+                                <option value="<?= $key; ?>"
+                                    <?php if ($this->tipoEndereco == $key) echo "selected=\"selected\""; ?>>
+                                    <?= $combotipoendereco; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span id="erroTipoEndereco" class="spanError"></span>
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <p>Autoriza divulgar?</p>
+                        <p>
+                            <input type="radio" name="divulgarEndereco" id="divulgarEnderecoS" value="1" class="with-gap"/>
+                            <label for="divulgarEnderecoS"> Sim </label>
+                            <input type="radio" name="divulgarEndereco" id="divulgarEnderecoN" value="0" class="with-gap" checked="checked"/>
+                            <label for="divulgarEnderecoN">N&atilde;o</label>
+                        </p>
+                    </div>
                 </div>
             </fieldset>
         </div>
@@ -340,9 +338,9 @@
             <div class="row">
                 <fieldset>
                     <legend>TELEFONE</legend>
-                    <div class="col s2">
+                    <div class="col s12 m2 l2">
                         <label for="tipoFone">Tipo *</label>
-                        <select name="tipoFone" id="tipoFone" class="input_simples browser-default">
+                        <select name="tipoFone" id="tipoFone" class="browser-default">
                             <option value=""> - Selecione -</option>
                             <?php foreach ($this->combotipostelefones as $key => $combotipotelefone) : ?>
                                 <option value="<?= $key; ?>"><?= $combotipotelefone; ?></option>
@@ -350,9 +348,9 @@
                         </select>
                         <span id="erroTipoFone" class="spanError"></span>
                     </div>
-                    <div class="col s1">
+                    <div class="col s12 m1 l1">
                         <label for="ufFone">UF *</label>
-                        <select name="ufFone" id="ufFone" class="input_simples browser-default"
+                        <select name="ufFone" id="ufFone" class="browser-default"
                                 onchange="carregar_combo(this.value,'dddFone','<?= $this->url(array('controller' => 'ddd', 'action' => 'combo')); ?>');">
                             <option value="0"> --</option>
 
@@ -362,39 +360,37 @@
                         </select>
                         <span id="erroUfFone" class="spanError"></span>
                     </div>
-                    <div class="col s3">
+                    <div class="col s12 m1 l1">
                         <label for="dddFone">DDD *</label>
-                        <select name="dddFone" id="dddFone" class="input_simples browser-default">
+                        <select name="dddFone" id="dddFone" class="browser-default">
                             <option value=""> --</option>
                         </select>
                         <span id="erroDddFone" class="spanError"></span>
                     </div>
-                    <div class="col s3">
+                    <div class="col s12 m3 l3">
                         <label for="fone">Telefone *</label>
                         <input type="text" name="fone" id="fone" maxlength="10"
-                               class="input_simples browser-default"
+                               class="browser-default"
                                onkeyup="mascara(this, format_tel);"
                                onclick="limpar_campo(this, '');" onkeypress="limpar_campo(this, '');"
                                onblur="restaurar_campo(this, '');" onmouseout="restaurar_campo(this, '');"
                                value=""/>
                         <span id="erroFone" class="spanError"></span>
                     </div>
-                    <div class="input-field col s3">
-                        <p>Divulgar? *</p>
+                    <div class="col s12 m4 l4">
+                        <p>Autoriza Divulgar? *</p>
                         <p>
-                            <input type="radio" name="divulgarFone" id="divulgarFoneS" value="1"
-                                   class="checkradio with-gap"/>
+                            <input type="radio" name="divulgarFone" id="divulgarFoneS" value="1" class="with-gap"/>
                             <label for="divulgarFoneS">Sim</label>
-                            <input type="radio" name="divulgarFone" id="divulgarFoneN" value="0"
-                                   class="checkradio with-gap" checked="checked"/>
+                            <input type="radio" name="divulgarFone" id="divulgarFoneN" value="0" class="with-gap" checked="checked"/>
                             <label for="divulgarFoneN">N&atilde;o</label>
                         </p>
                 </fieldset>
                 <fieldset>
                     <legend>E-MAIL</legend>
-                    <div class="col s3">
+                    <div class="col s12 m2 l2">
                         <label for="tipoEmail">Tipo *</label>
-                        <select name="tipoEmail" id="tipoEmail" class="input_simples browser-default">
+                        <select name="tipoEmail" id="tipoEmail" class="browser-default">
                             <option value="0">- Selecione -</option>
 
                             <?php foreach ($this->combotiposemails as $key => $combotipoemail) : ?>
@@ -403,38 +399,34 @@
                         </select>
                         <span id="erroTipoEmail" class="spanError"></span>
                     </div>
-                    <div class="col s4">
+                    <div class="col s12 m6 l6">
                         <label for="email">E-mail *</label>
-                        <input type="text" name="email" id="email" class="input_simples browser-default" size="50"
+                        <input type="text" name="email" id="email" class="browser-default" size="50"
                                maxlength="70"
                                onclick="limpar_campo(this, '');"
                                onkeypress="limpar_campo(this, '');"
                                onblur="restaurar_campo(this, '');"
                                onmouseout="restaurar_campo(this, '');"
                                value=""/>
-
-
-                        &nbsp; <span id="erroEmail" class="spanError"></span>
+                        <span id="erroEmail" class="spanError"></span>
                     </div>
-                    <div class="input-field col s2">
-                        <p>Posso Divulgar? *</p>
+                    <div class="col s12 m4 l4">
+                        <p>Autoriza Divulgar? *</p>
                         <p>
-                            <input type="radio" name="divulgarEmail" id="divulgarEmailS" value="1"
-                                   style="background: none; border: none; float:none; display:inline;"
-                                   class="with-gap"/>
+                            <input type="radio" name="divulgarEmail" id="divulgarEmailS" value="1" class="with-gap"/>
                             <label for="divulgarEmailS">Sim </label>
-                            <input type="radio" name="divulgarEmail" id="divulgarEmailN" value="0"
-                                   class="checkradio with-gap"
-                                   checked="checked"
-                                   style="background: none; border: none; float:none; display:inline;"/>
+                            <input type="radio" name="divulgarEmail" id="divulgarEmailN" value="0" class="with-gap" checked="checked"/>
                             <label for="divulgarEmailN">N&atilde;o</label>
                         </p>
                     </div>
+
+                </fieldset>
             </div>
-            </fieldset>
             <!-- ========== FIM FORMULARIO E-MAIL ========== -->
         <?php } ?>
-        <button type="button" class="btn" value=" " onclick="validaAgenteNovo();">salvar</button>
+        <div class="row center-align">
+            <button type="button" class="btn" value=" " onclick="validaAgenteNovo();">salvar</button>
+        </div>
     </form>
 </div>
 
@@ -449,13 +441,12 @@
             $('#cep').val('');
             $('#msgAjax').hide();
             $('#imgPF').show();
-            //$('#erroCpf').html("<img src='/public/img/ajax.gif' alt='' /> Aguarde...");
             $('#erroCpf').html("<img src='<?= $this->baseUrl(); ?>/public/img/ajax.gif' alt='' /> Aguarde...");
 
             $.ajax({
                 type: "POST",
                 url: '<?= $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'busca-pessoa')); ?>',
-                data: {cpf: $(this).val(), teste: 'xxxx', tipoPessoa: 'fisica'},
+                data: {cpf: $(this).val(), tipoPessoa: 'fisica'},
                 dataType: 'json',
                 success: function (data) {
                     if (data != null && data.error != '') {
@@ -762,8 +753,7 @@
 
         if ($("#cpf").val().length > 0) {
             $("#cpf").blur();
+            buscaragente($("#cpf").val());
         }
-
-        buscaragente($("#cpf").val());
     });
 </script>
