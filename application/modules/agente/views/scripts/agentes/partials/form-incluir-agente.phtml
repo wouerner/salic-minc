@@ -13,7 +13,7 @@
     </table>
 </div>
 
-<div id="novocadastro" class="col s12 m10 l10">
+<div id="novocadastro">
     <h4 id="novo">Novo cadastro</h4>
     <form name="formCadAgentes"
           id="formCadAgentes"
@@ -34,8 +34,9 @@
         <?php endif; ?>
 
         <div class="center-align">
-            <div id="cadDirigente" class="msgALERT sumir" style="width: 96%;">
-                <div style="float: left;">Voc&ecirc; deve incluir pelo menos um dirigente ao finalizar seu cadastro!
+            <div id="cadDirigente" class="msgALERT sumir" style="width: 99%;">
+                <div>
+                    Voc&ecirc; deve incluir pelo menos um dirigente ao finalizar seu cadastro!
                 </div>
             </div>
         </div>
@@ -108,7 +109,8 @@
                         <select name="visao" id="visao"
                                 onchange="verificarVisao(this.value, <?= $this->grupoAtivo; ?>);"
                                 class="browser-default">
-                            <option value="<?= $this->combovisoes[0]['idVerificacao']; ?>"> <?= $this->combovisoes[0]['Descricao']; ?> </option>
+                            <option
+                                value="<?= $this->combovisoes[0]['idVerificacao']; ?>"> <?= $this->combovisoes[0]['Descricao']; ?> </option>
                         </select>
                     <?php endif; ?>
                 </div>
@@ -124,15 +126,10 @@
                     <td colspan="4" align="center">
                         <input type="radio" name="titular" id="titularS" value="1"
                                class="checkradio with-gap"
-                               checked="checked"
-                               style="background: none; border: none; float:none; display:inline;"/>
+                               checked="checked"/>
                         Titular
                         <input type="radio" name="titular" id="titularN" value="0"
-                               class="checkradio with-gap"
-                               style="background: none;
-                               border: none;
-                               float:none;
-                               display:inline;"/>
+                               class="checkradio with-gap"/>
                         Suplente
                         &nbsp; <span id="erroTitular" class="spanError"></span>
                     </td>
@@ -141,8 +138,7 @@
                     <td colspan="2" valign="top">
                         <label for="areaCultural">&Aacute;rea Cultural *</label>
                         <select name="areaCultural" id="areaCultural"
-                                onchange="carregar_combo(this.value, 'segmentoCultural', '<?= $this->url(array('controller' => 'segmentocultural', 'action' => 'combo')); ?>', ' - Selecione uma &Aacute;rea Cultural - '), buscarareasegmento();"
-                                class=" style="width: 200px;">
+                                onchange="carregar_combo(this.value, 'segmentoCultural', '<?= $this->url(array('controller' => 'segmentocultural', 'action' => 'combo')); ?>', ' - Selecione uma &Aacute;rea Cultural - '), buscarareasegmento();">
 
                             <?php if (!isset($this->areaCultural) || empty($this->areaCultural)): ?>
                                 <option value="0"> - Selecione -</option>
@@ -166,8 +162,7 @@
                     </td>
                     <td colspan="2" valign="top">
                         <label for="segmentoCultural">Segmento Cultural</label>
-                        <select name="segmentoCultural" id="segmentoCultural" onchange="buscarareasegmento();"
-                                class=" style="width: 200px;">
+                        <select name="segmentoCultural" id="segmentoCultural" onchange="buscarareasegmento();">
 
                             <?php if (!isset($this->areaCultural) || empty($this->areaCultural)) : ?>
                                 <option value="0"> - Selecione uma &Aacute;rea Cultural -</option>
@@ -220,8 +215,8 @@
                                 class="browser-default">
 
                             <?php // if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) : ?>
-                                <option> - Selecione -</option>
-                            <?php// endif; ?>
+                            <option value="0"> - Selecione -</option>
+                            <?php // endif; ?>
 
                             <?php foreach ($this->combotiposlogradouros as $key => $combotipologradouro): ?>
                                 <option value="<?= $key; ?>"
@@ -244,7 +239,8 @@
                     </div>
                     <div class="col s12 m6 l6">
                         <label for="numero">N&uacute;mero *</label> <br/>
-                        <input class="browser-default" type="number" name="numero" id="numero" maxlength="10" size="30"/>
+                        <input class="browser-default" type="number" name="numero" id="numero" maxlength="10"
+                               size="30"/>
 
                         <span id="erroNumero" class="spanError"></span>
                     </div>
@@ -259,7 +255,7 @@
                     <div class="col s12 m4 l4">
                         <label class="" for="uf">UF *</label> <br/>
                         <select name="uf" id="uf"
-                                class="browser-default input-simples"
+                                class="browser-default"
                                 onchange="carregar_combo(this.value,'cidade','<?= $this->url(array('module' => 'default', 'controller' => 'cidade', 'action' => 'combo')); ?>',' - Selecione primeiro o UF - ');">
 
                             <?php if (!isset($this->uf) || empty($this->uf)) : ?>
@@ -295,7 +291,7 @@
                     <div class="col s12 m4 l4">
                         <label for="bairro">Bairro *</label>
                         <input class="browser-default" type="text" name="bairro" id="bairro"
-                               maxlength="70" />
+                               maxlength="70"/>
                         <span id="erroBairro" class="spanError"></span>
                     </div>
                 </div>
@@ -305,7 +301,7 @@
                         <select
                             name="tipoEndereco"
                             id="tipoEndereco"
-                            class="browser-default  style="width: 250px;">
+                            class="browser-default">
                             <?php if (!isset($this->tipoEndereco) || empty($this->tipoEndereco)) : ?>
                                 <option value="0"> - Selecione -</option>
                             <?php endif; ?>
@@ -321,9 +317,11 @@
                     <div class="col s12 m4 l4">
                         <p>Autoriza divulgar?</p>
                         <p>
-                            <input type="radio" name="divulgarEndereco" id="divulgarEnderecoS" value="1" class="with-gap"/>
+                            <input type="radio" name="divulgarEndereco" id="divulgarEnderecoS" value="1"
+                                   class="with-gap"/>
                             <label for="divulgarEnderecoS"> Sim </label>
-                            <input type="radio" name="divulgarEndereco" id="divulgarEnderecoN" value="0" class="with-gap" checked="checked"/>
+                            <input type="radio" name="divulgarEndereco" id="divulgarEnderecoN" value="0"
+                                   class="with-gap" checked="checked"/>
                             <label for="divulgarEnderecoN">N&atilde;o</label>
                         </p>
                     </div>
@@ -331,7 +329,7 @@
             </fieldset>
         </div>
         <!-- ========== FIM FORMULARIO ENDERECO ========== -->
-        <?php if ($this->modulo != "movimentacaobancaria") { ?>
+        <?php if ($this->exibirTelefone) : ?>
             <!-- ========== INICIO FORMULARIO FONE ========== -->
             <div class="row">
                 <fieldset>
@@ -380,10 +378,15 @@
                         <p>
                             <input type="radio" name="divulgarFone" id="divulgarFoneS" value="1" class="with-gap"/>
                             <label for="divulgarFoneS">Sim</label>
-                            <input type="radio" name="divulgarFone" id="divulgarFoneN" value="0" class="with-gap" checked="checked"/>
+                            <input type="radio" name="divulgarFone" id="divulgarFoneN" value="0" class="with-gap"
+                                   checked="checked"/>
                             <label for="divulgarFoneN">N&atilde;o</label>
                         </p>
                 </fieldset>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->exibirEmail) : ?>
+            <div class="row">
                 <fieldset>
                     <legend>E-MAIL</legend>
                     <div class="col s12 m2 l2">
@@ -413,7 +416,8 @@
                         <p>
                             <input type="radio" name="divulgarEmail" id="divulgarEmailS" value="1" class="with-gap"/>
                             <label for="divulgarEmailS">Sim </label>
-                            <input type="radio" name="divulgarEmail" id="divulgarEmailN" value="0" class="with-gap" checked="checked"/>
+                            <input type="radio" name="divulgarEmail" id="divulgarEmailN" value="0" class="with-gap"
+                                   checked="checked"/>
                             <label for="divulgarEmailN">N&atilde;o</label>
                         </p>
                     </div>
@@ -421,7 +425,7 @@
                 </fieldset>
             </div>
             <!-- ========== FIM FORMULARIO E-MAIL ========== -->
-        <?php } ?>
+        <?php endif; ?>
         <div class="row center-align">
             <button type="button" class="btn" value=" " onclick="validaAgenteNovo();">salvar</button>
         </div>
@@ -544,8 +548,8 @@
             value = value.replace(".", "");
             value = value.replace("/", "");
             cpf = value.replace("-", "");
-
             // faz a verificacao do agente via post
+
             $.ajax({
                 type: "POST",
                 dataType: 'json',
@@ -553,7 +557,6 @@
                     cpf: cpf
                 },
                 url: '<?= $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentecadastrado")); ?>',
-
                 success: function (data) {
                     if (data.length > 0) {
                         if (data[0].msgCPF == 'cadastrado') {
@@ -611,9 +614,9 @@
                 $("#cidade").attr("disabled", "disabled");
                 $("#uf").attr("disabled", "disabled");
 
-                $("#logradouro").attr("placeholder", "carregando...");
+                logradouro.value = "carregando...";
                 tipoLogradouro.options[0].text = "carregando...";
-                $("#bairro").attr("placeholder", "carregando...");
+                bairro.value = "carregando...";
                 cidade.options[0].text = "carregando...";
                 uf.options[0].text = "...";
 
@@ -759,7 +762,8 @@
 
         if ($("#cpf").val().length > 0) {
             $("#cpf").blur();
-            buscaragente($("#cpf").val());
         }
+
+//        buscaragente($("#cpf").val());
     });
 </script>

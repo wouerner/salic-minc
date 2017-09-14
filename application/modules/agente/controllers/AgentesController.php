@@ -455,7 +455,27 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         } else {
             $this->view->modal = "n";
             $this->view->caminho = "";
+            $this->view->exibirTelefone = true;
+            $this->view->exibirEmail = true;
         }
+        $this->incluir();
+    }
+
+    public function incluirIncentivadorModalAction() {
+        $this->autenticacao();
+
+        $this->_helper->layout->disableLayout();
+
+        $modulo = $this->_request->getParam("modulo");
+        $this->view->modulo = $modulo;
+
+        $this->view->modal = "s";
+        $this->view->cpf = $this->_request->getParam("cpf");
+        $this->view->caminho = $this->_request->getParam("caminho");
+
+        $this->view->exibirTelefone = false;
+        $this->view->exibirEmail = false;
+
         $this->incluir();
     }
 
