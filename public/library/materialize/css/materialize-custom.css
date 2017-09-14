@@ -52,6 +52,7 @@ form label {
     color: #212529;
 }
 
+form input[type="text"].browser-default,
 form .browser-default {
     display: block;
     width: 100%;
@@ -71,7 +72,7 @@ form input.browser-default:active,
 form input.browser-default:focus {
     box-shadow: none !important;
 }
-
+form input[type="text"]:disabled,
 form .browser-default:disabled,
 form .browser-default[readonly] {
     border: 1px dotted rgba(0, 0, 0, 0.57);

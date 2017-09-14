@@ -214,14 +214,14 @@
                         <span id="erroCep" class="spanError"></span>
                     </div>
                     <div class="col s12 m3 l3">
-                        <label for="tipoLogradouro">Tipo*</label> <br/>
+                        <label for="tipoLogradouro">Tipo *</label> <br/>
                         <select name="tipoLogradouro"
                                 id="tipoLogradouro"
-                                class="browser-default >
+                                class="browser-default">
 
-                            <?php if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) : ?>
-                                <option value="0"> - Selecione -</option>
-                            <?php endif; ?>
+                            <?php // if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) : ?>
+                                <option> - Selecione -</option>
+                            <?php// endif; ?>
 
                             <?php foreach ($this->combotiposlogradouros as $key => $combotipologradouro): ?>
                                 <option value="<?= $key; ?>"
@@ -237,14 +237,14 @@
                 <div class="row">
                     <div class="col s12 m12 l12">
                         <label for="logradouro">Logradouro *</label> <br/>
-                        <input class="browser-default" type="text" disabled="disabled" name="logradouro" id="logradouro"
+                        <input class="browser-default" type="text" name="logradouro" id="logradouro"
                                maxlength="50" size="30"/>
 
                         <span id="erroLogradouro" class="spanError"></span>
                     </div>
                     <div class="col s12 m6 l6">
                         <label for="numero">N&uacute;mero *</label> <br/>
-                        <input class="browser-default" type="text" name="numero" id="numero" maxlength="10" size="30"/>
+                        <input class="browser-default" type="number" name="numero" id="numero" maxlength="10" size="30"/>
 
                         <span id="erroNumero" class="spanError"></span>
                     </div>
@@ -260,7 +260,6 @@
                         <label class="" for="uf">UF *</label> <br/>
                         <select name="uf" id="uf"
                                 class="browser-default input-simples"
-                                disabled="disabled"
                                 onchange="carregar_combo(this.value,'cidade','<?= $this->url(array('module' => 'default', 'controller' => 'cidade', 'action' => 'combo')); ?>',' - Selecione primeiro o UF - ');">
 
                             <?php if (!isset($this->uf) || empty($this->uf)) : ?>
@@ -280,7 +279,6 @@
                         <label for="cidade">Cidade *</label>
                         <select name="cidade"
                                 id="cidade"
-                                disabled="disabled"
                                 class="browser-default">
                             <option value="0"> - Selecione -</option>
                             <?php if ($this->combocidades): ?>
@@ -296,7 +294,7 @@
                     </div>
                     <div class="col s12 m4 l4">
                         <label for="bairro">Bairro *</label>
-                        <input class="browser-default" type="text" disabled="disabled" name="bairro" id="bairro"
+                        <input class="browser-default" type="text" name="bairro" id="bairro"
                                maxlength="70" />
                         <span id="erroBairro" class="spanError"></span>
                     </div>
@@ -613,9 +611,9 @@
                 $("#cidade").attr("disabled", "disabled");
                 $("#uf").attr("disabled", "disabled");
 
-                logradouro.value = "carregando...";
+                $("#logradouro").attr("placeholder", "carregando...");
                 tipoLogradouro.options[0].text = "carregando...";
-                bairro.value = "carregando...";
+                $("#bairro").attr("placeholder", "carregando...");
                 cidade.options[0].text = "carregando...";
                 uf.options[0].text = "...";
 
@@ -632,7 +630,15 @@
                     bairro.value = " ";
                     cidade.options[0].text = " - Selecione - ";
                     uf.options[0].text = " -- ";
-                    $('#erroCep').html("O CEP informado é inv&aacute;lido!");
+
+                    $("#logradouro").removeAttr("disabled");
+                    $("#tipoLogradouro").removeAttr("disabled");
+                    $("#bairro").removeAttr("disabled");
+                    $("#cidade").removeAttr("disabled");
+                    $("#uf").removeAttr("disabled");
+
+
+                    $('#erroCep').html("CEP n&atilde;o encontrado!");
                 }
                 else // caso o cep exista
                 {

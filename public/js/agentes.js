@@ -99,9 +99,6 @@ function confirmaExclusao(msg, dados)
  */
 function validaAgenteNovo()
 {
-	
-	
-	
     cpf              = document.getElementById('cpf').value;
     nome             = document.getElementById('nome').value;
     visao            = document.getElementById('visao').options[document.getElementById('visao').selectedIndex].value;
@@ -119,7 +116,7 @@ function validaAgenteNovo()
     complemento     = document.getElementById('complemento').value;
     bairro          = document.getElementById('bairro').value;
     
-    if ( document.getElementById('movimentacaobancaria').value == '' ){
+    if ( document.getElementById('movimentacaobancaria').value == '' ) {
         tipoFone 		= document.getElementById('tipoFone').value;
         ufFone   		= document.getElementById('ufFone').value;
         dddFone  		= document.getElementById('dddFone').value;
@@ -127,7 +124,7 @@ function validaAgenteNovo()
 
         tipoEmail     	= document.getElementById('tipoEmail').value;
         email         	= document.getElementById('email').value;
-    }else{
+    } else{
         tipoFone 	= "";
         ufFone   	= "";
         dddFone  	= "";
@@ -150,9 +147,7 @@ function validaAgenteNovo()
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o nome!", "nome");
         exibirMsgErro('nome','erroNome');
-    }
-
-    // valida&ccedil;&atilde;o da vis&atilde;o
+    } // validacao da visao
     else if ((visao == '0') && (grupologado != '118'))
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe a vis&atilde;o!", "visao");
