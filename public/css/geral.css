@@ -705,27 +705,27 @@ x - CONTEÚDO
     color: #435f20;
 }
 
-#conteudo h1 {
+h1 {
     font-size: 28px;
 }
 
-#conteudo h2 {
+h2 {
     font-size: 26px;
 }
 
-#conteudo h3 {
+h3 {
     font-size: 10px;
 }
 
-#conteudo h4 {
+h4 {
     font-size: 18px;
 }
 
-#conteudo h5 {
+h5 {
     font-size: 16px;
 }
 
-#conteudo h6 {
+h6 {
     font-size: 14px;
 }
 
@@ -2140,6 +2140,9 @@ x - DATE PICKER
     background-color: transparent !important;
     color: #4CAF50;
     font-weight: bold;
+}
+.ui-widget-content {
+    background: #f8f8f8 !important;
 }
 
 .ui-dialog  .ui-widget-content {
