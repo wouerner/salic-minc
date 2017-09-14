@@ -129,7 +129,9 @@
         $("#finalizarparecer").click(function()
         {
             //atualiza no banco de dados o parecer digitado pelo componente
-            salvar(null,0);
+            var parecer = $("input:radio[name='decisao']:checked").val();
+            
+            salvar(parecer,0);
 
             var tipoPlanilha = '<?php echo $this->tipoplanilha; ?>';
             if(tipoPlanilha == 'CO')
@@ -146,61 +148,36 @@
                 if($("#justificativa").val().length <= 20){
                     $("#erro").html("Campos Obrigat&oacute;rios n&atilde;o preenchidos ou justificativa com menos de 20 caracteres!");
                     $("#erro").dialog('open');
-                }
-                else{
-
-                    $("#tela").dialog({
-                        title: "Finalizar An&aacute;lise",
+                } else{
+                    $('#alert').html('Deseja finalizar sua aprecia&ccedil;&atilde;o?');
+                    $("#alert").dialog({
+			title: "Alerta!",
                         resizable: false,
-                        width:800,
-                        height:550,
+                        width:400,
+                        height:200,
                         modal: true,
-                        autoOpen:false,
-                        buttons: {
-                            'Cancelar': function() {
-                                $('#formEnviar').each(function(){
-                                    this.reset();
-                                })
-                                $(this).dialog('close');
-                                $('html').css('overflow', 'auto');
-                            },
-                            'OK': function() {
-                                clearInterval(verificarReuniao);
-                                var n = $("input:radio[name='decisao']:checked").length;
-                                if(n <=0 ){
-                                    $("#erro").html("Campos Obrig&oacute;torios n&atilde;o preenchidos!");
-                                    $("#erro").dialog('open');
-                                }
-                                else
-                                {
-                                    salvar($("input:radio[name='decisao']:checked").val(),0);
-
-                                    if($('#desIndeferir').attr("checked"))
-                                    {
-                                        if($('#situacao').val()==''){
-                                            $("#erro").html("Campos Obrig&oacute;torios n&atilde;o preenchidos!");
-                                            $("#erro").dialog('open');
-                                        }
-                                        else{
-                                            $("#formEnviar").submit();
-                                            $("#tela").html("<br><br><br><br><br><center>Salvando informações, aguarde...<br><img src='<?php echo $this->baseUrl(); ?>/public/img/ajax.gif' /></center><br>");
-                                        }
-                                    }
-                                    else{
-                                        $("#formEnviar").submit();
-                                        $("#tela").html("<br><br><br><br><br><center>Salvando informações, aguarde...<br><img src='<?php echo $this->baseUrl(); ?>/public/img/ajax.gif' /></center><br>");
-                                    }
-                                }
-                                $('html').css('overflow', 'auto');
-                            }
-                        }
-                    });
-                    $("#tela").dialog('open');
-
-                    //recupera o parecer atual, caso ele tenha sido alterado para atualiza-lo na finalizacao da analise
-                    var parecer = $('#justificativa').val();
-                    $('#pareceratualizado').val(parecer);
-
+			buttons: {
+			    'Não': function(){
+				$("#alert").dialog('close');
+			    },
+			    'Sim': function(){
+                                var url = '<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer', 'idpronac' => null)); ?>',
+				    parecer = $("input:radio[name='decisao']:checked").val(),
+				    justificativa = $('#justificativa').val(),
+				    situacao = $('#situacao').val(),
+				    stEnvioPlenaria = $('#stEnvioPlenaria').val(),
+				    justificativaenvioplenaria = $('#justificativaenvioplenaria').val();
+				
+				document.forms.formEnviar.decisao.value = parecer;
+				document.forms.formEnviar.situacao.value = situacao;
+				document.forms.formEnviar.stEnvioPlenaria.value = stEnvioPlenaria;
+				document.forms.formEnviar.justificativaenvioplenaria.value = justificativaenvioplenaria;
+				
+				$('#formEnviar').attr('action', url);
+				$('#formEnviar').submit();
+			    }
+			}
+		    });
                 }
             }
             else{
@@ -361,7 +338,18 @@
             </div>
             <textarea class="input_simples" style="display: none; width: 42em; height: 30em;" name="pareceratualizado" id="pareceratualizado"></textarea>
         </form>
-    <?php endif; ?>
+	<?php elseif ($this->IN2017) : ?>
+        <form id="formEnviar" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer')); ?>" method="post">
+            <input type="hidden" name="idpronac" value="<?php echo $this->idpronac; ?>" />
+            <input type="hidden" id="desAprovar" name="decisao" value=""/>
+<input type="hidden" name="situacao" value="" />
+            <input name="reuniaoaberta" type="hidden" value="<?php echo $this->plenariaatual; ?>"/>
+            <input name="stEnvioPlenaria" type="hidden" value="" />
+            <input name="stPlanoAnual" type="hidden" value="<?php echo $this->stPlanoAnual; ?>" />
+            <input name="justificativaenvioplenaria" type="hidden" value="" />
+            <input type="hidden" name="pareceratualizado" value="" />
+        </form>    
+<?php endif; ?>
     </div>
     <div id="erro" style="display:none; text-align: center; color: red;"></div>
     <?php echo $this->partial('analise-cnic/partials/menu_abas.inc.php', $this) // menu   ?>
