@@ -1,3 +1,6 @@
+Release 2.7.7
+* [FIX] Parecer/CNIC: correção ao finalizar parecer
+
 Release 2.7.6
 * [FIX] Parecer/CNIC: removendo blocos desnecessários em "projetos não submetidos - análise inicial"
 * [FIX] Parecer/CNIC: ajustes de estilo na análise do projeto & removendo informações desnecessárias caso IN2017
