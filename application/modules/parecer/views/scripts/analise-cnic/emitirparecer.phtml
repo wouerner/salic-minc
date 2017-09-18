@@ -129,7 +129,9 @@
         $("#finalizarparecer").click(function()
         {
             //atualiza no banco de dados o parecer digitado pelo componente
-            salvar(null,0);
+            var parecer = $("input:radio[name='decisao']:checked").val();
+            
+            salvar(parecer,0);
 
             var tipoPlanilha = '<?php echo $this->tipoplanilha; ?>';
             if(tipoPlanilha == 'CO')
@@ -146,61 +148,36 @@
                 if($("#justificativa").val().length <= 20){
                     $("#erro").html("Campos Obrigat&oacute;rios n&atilde;o preenchidos ou justificativa com menos de 20 caracteres!");
                     $("#erro").dialog('open');
-                }
-                else{
-
-                    $("#tela").dialog({
-                        title: "Finalizar An&aacute;lise",
+                } else{
+                    $('#alert').html('Deseja finalizar sua aprecia&ccedil;&atilde;o?');
+                    $("#alert").dialog({
+			title: "Alerta!",
                         resizable: false,
-                        width:800,
-                        height:550,
+                        width:400,
+                        height:200,
                         modal: true,
-                        autoOpen:false,
-                        buttons: {
-                            'Cancelar': function() {
-                                $('#formEnviar').each(function(){
-                                    this.reset();
-                                })
-                                $(this).dialog('close');
-                                $('html').css('overflow', 'auto');
-                            },
-                            'OK': function() {
-                                clearInterval(verificarReuniao);
-                                var n = $("input:radio[name='decisao']:checked").length;
-                                if(n <=0 ){
-                                    $("#erro").html("Campos Obrig&oacute;torios n&atilde;o preenchidos!");
-                                    $("#erro").dialog('open');
-                                }
-                                else
-                                {
-                                    salvar($("input:radio[name='decisao']:checked").val(),0);
-
-                                    if($('#desIndeferir').attr("checked"))
-                                    {
-                                        if($('#situacao').val()==''){
-                                            $("#erro").html("Campos Obrig&oacute;torios n&atilde;o preenchidos!");
-                                            $("#erro").dialog('open');
-                                        }
-                                        else{
-                                            $("#formEnviar").submit();
-                                            $("#tela").html("<br><br><br><br><br><center>Salvando informações, aguarde...<br><img src='<?php echo $this->baseUrl(); ?>/public/img/ajax.gif' /></center><br>");
-                                        }
-                                    }
-                                    else{
-                                        $("#formEnviar").submit();
-                                        $("#tela").html("<br><br><br><br><br><center>Salvando informações, aguarde...<br><img src='<?php echo $this->baseUrl(); ?>/public/img/ajax.gif' /></center><br>");
-                                    }
-                                }
-                                $('html').css('overflow', 'auto');
-                            }
-                        }
-                    });
-                    $("#tela").dialog('open');
-
-                    //recupera o parecer atual, caso ele tenha sido alterado para atualiza-lo na finalizacao da analise
-                    var parecer = $('#justificativa').val();
-                    $('#pareceratualizado').val(parecer);
-
+			buttons: {
+			    'Não': function(){
+				$("#alert").dialog('close');
+			    },
+			    'Sim': function(){
+                                var url = '<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer', 'idpronac' => null)); ?>',
+				    parecer = $("input:radio[name='decisao']:checked").val(),
+				    justificativa = $('#justificativa').val(),
+				    situacao = $('#situacao').val(),
+				    stEnvioPlenaria = $('#stEnvioPlenaria').val(),
+				    justificativaenvioplenaria = $('#justificativaenvioplenaria').val();
+				
+				document.forms.formEnviar.decisao.value = parecer;
+				document.forms.formEnviar.situacao.value = situacao;
+				document.forms.formEnviar.stEnvioPlenaria.value = stEnvioPlenaria;
+				document.forms.formEnviar.justificativaenvioplenaria.value = justificativaenvioplenaria;
+				
+				$('#formEnviar').attr('action', url);
+				$('#formEnviar').submit();
+			    }
+			}
+		    });
                 }
             }
             else{
@@ -280,8 +257,14 @@
 		var parecer = null;
 		    <?php if ($this->IN2017) : ?>
 		    parecer = $("input:radio[name='decisao']:checked").val();
+            if (!parecer) {
+                $('#confirm').dialog('open');
+                $('#confirm').html('<font color="red">Defina seu posicionamento para salvar o Parecer!</font>');
+                $('#alert').dialog('close');                
+                return false;
+            }
+            
 		    <?php endif; ?>
-		    document.title= parecer;
                 salvar(parecer);
                     $("#alert").html('Aguarde, salvando informa&ccedil;&otilde;es...');
                 },
@@ -323,11 +306,8 @@
     <?php if (!$this->IN2017) : ?>
         <form id="formEnviar" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer')); ?>" method="post">
             <input type="hidden" name="idPronac" id="idPronac" value="<?php echo $this->idpronac; ?>" />
-            <div style="color:red; text-align: justify; font-weight: 600;">
-                Aten&ccedil;&atilde;o! A decis&atilde;o da aprova&ccedil;&atilde;o ou indeferimento neste quadro &eacute; sua! Caso necessite consultar a decis&atilde;o do parecerista consulte a aba 'PARECER T&Eacute;CNICO CONSOLIDADO'
-            </div>
             <div style="margin-top: 2.8em ;margin-left: 3em;">
-                <p style="font-weight: 600; font-size:1.3em; float: left; ">Tipo de Decis&atilde;o:</p>
+                <p style="font-weight: 600; font-size:1.3em; float: left; ">Posicionamento:</p>
     <p style="font-weight: 600; text-align: center; font-size: 1.1em; text-align: left; margin-left: 15em;"><input type="radio" id="desAprovar" name="decisao" value="AC"/><label for="desAprovar"> Aprovar</label></p>
                 <p style="font-weight: 600; font-size: 1.1em; margin-left: 15em"><input type="radio" id="desIndeferir" name="decisao" value="IC"/><label for="desIndeferir"> Indeferir</label></p>
                 <p style="font-weight: 600; text-align: center;">
@@ -358,7 +338,18 @@
             </div>
             <textarea class="input_simples" style="display: none; width: 42em; height: 30em;" name="pareceratualizado" id="pareceratualizado"></textarea>
         </form>
-    <?php endif; ?>
+	<?php elseif ($this->IN2017) : ?>
+        <form id="formEnviar" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer')); ?>" method="post">
+            <input type="hidden" name="idpronac" value="<?php echo $this->idpronac; ?>" />
+            <input type="hidden" id="desAprovar" name="decisao" value=""/>
+<input type="hidden" name="situacao" value="" />
+            <input name="reuniaoaberta" type="hidden" value="<?php echo $this->plenariaatual; ?>"/>
+            <input name="stEnvioPlenaria" type="hidden" value="" />
+            <input name="stPlanoAnual" type="hidden" value="<?php echo $this->stPlanoAnual; ?>" />
+            <input name="justificativaenvioplenaria" type="hidden" value="" />
+            <input type="hidden" name="pareceratualizado" value="" />
+        </form>    
+<?php endif; ?>
     </div>
     <div id="erro" style="display:none; text-align: center; color: red;"></div>
     <?php echo $this->partial('analise-cnic/partials/menu_abas.inc.php', $this) // menu   ?>
@@ -393,25 +384,21 @@
                 <tr>
                     <th>PRONAC</th>
                     <th colspan="2">Nome do Projeto</th>
-                </tr>
-                <tr>
-                <tr>
-                    <td><?php echo $this->escape($this->ResultRealizarAnaliseProjeto[0]->pronac); ?></td>
-                    <td colspan="2"><?php echo $this->escape($this->ResultRealizarAnaliseProjeto[0]->NomeProjeto); ?></td>
-                </tr>
-                </tr>
-                <tr>
                     <th>Enquadramento</th>
-                    <th>Parecer Favor&aacute;vel?</th>
+                    <?php if (!$this->IN2017) : ?><th>Parecer Favor&aacute;vel?</th><?php endif; ?>
                     <th>Sugerido</th>
-                </tr>
+		</tr>
                 <tr>
-                    <td><?php echo $this->escape($this->enquadramento); ?></td>
-                    <td>
+                    <td class="center-align"><?php echo $this->escape($this->ResultRealizarAnaliseProjeto[0]->pronac); ?></td>
+                    <td colspan="2" class="center-align"><?php echo $this->ResultRealizarAnaliseProjeto[0]->NomeProjeto; ?></td>
+                    <td class="center-align"><?php echo $this->escape($this->enquadramento); ?></td>
+		    <?php if (!$this->IN2017): ?>
+                    <td class="center-align">
                         <?php echo $this->escape($this->parecerfavoravel); ?>
                         <input type="hidden" name="verificarParecerFavoravel" id="verificarParecerFavoravel" value="<?php echo trim(strtolower($this->parecerfavoravel)); ?>" />
                     </td>
-                    <td>
+		    <?php endif; ?>
+                    <td class="center-align">
                     <?php
                         if (isset($this->totalsugerido)) {
                             echo $this->escape($this->formatarReal($this->totalsugerido));
@@ -423,13 +410,14 @@
                     </td>
                 </tr>
             </table>
+	    <?php if (!$this->IN2017) : ?>
             <table class="tabela">
                 <tr>
                     <th colspan="2">Mem&oacute;ria de C&aacute;lculo</th>
                 </tr>
                 <tr>
                     <td>Valor Solicitado(A)</td>
-                    <td>
+                    <td class="right-align">
                     <?php
                         if (isset($this->fontesincentivo)) {
                             echo $this->escape($this->formatarReal($this->fontesincentivo));
@@ -442,7 +430,7 @@
                 </tr>
                 <tr>
                     <td>Valor de outras fontes(B)</td>
-                    <td>
+                    <td class="right-align">
                     <?php
                         if (isset($this->outrasfontes)) {
                             echo $this->escape($this->formatarReal($this->outrasfontes));
@@ -454,7 +442,7 @@
                 </tr>
                 <tr>
                     <td>Valor da Proposta(C=A+B)</td>
-                    <td>
+                    <td class="right-align">
                     <?php
                         if (isset($this->valorproposta)) {
                             echo $this->escape($this->formatarReal($this->valorproposta));
@@ -467,7 +455,7 @@
                 </tr>
                 <tr>
                     <td>Valor do componente da comiss&atilde;o</td>
-                    <td>
+                    <td class="right-align">
                     <?php
                         if (isset($this->totalsugerido)) {
                             echo $this->escape($this->formatarReal($this->totalsugerido));
@@ -521,9 +509,10 @@
                 </tr>
                 <?php } ?>
                 </table>
+	    <?php endif; ?>
                 <!-- ========== Fim Parecer Consolidado ========== -->
             </div>
-            <br><br>
+	
     <?php
     if ($this->tipoplanilha == 'SE') {
         echo "<div style=\"color:red; text-align: center; font-size: 16pt;  padding-bottom: 2em;\">Projeto j&aacute; aprovado pela CNIC. Aberto para ajustes do Componente.</div>";
@@ -533,18 +522,18 @@
 	      <?php if ($this->IN2017) : ?>
             <table class="tabela">
                 <tr>
-                    <th>Decis&atilde;o</th>
+                    <th>Posicionamento</th>
                 </tr>
 		<tr>
 		  <td>
 		    <input type="hidden" name="idPronac" id="idPronac" value="<?php echo $this->idpronac; ?>" />
-		    <div style="color:red; text-align: justify; font-weight: 600;">
-                      Aten&ccedil;&atilde;o! A decis&atilde;o da aprova&ccedil;&atilde;o ou indeferimento neste quadro &eacute; sua! Caso necessite consultar a decis&atilde;o do parecerista consulte a aba 'PARECER T&Eacute;CNICO CONSOLIDADO'
-		    </div>
-		    <div style="margin-top: 2.8em ;margin-left: 3em;">
-                      <p style="font-weight: 600; font-size:1.3em; float: left; ">Tipo de Decis&atilde;o:</p>
-                      <p style="font-weight: 600; text-align: center; font-size: 1.1em; text-align: left; margin-left: 15em;"><input type="radio" id="desAprovar" name="decisao" value="AC"<?php if ($this->parecerFavoravel == 2) { echo 'checked'; }; ?>/><label for="desAprovar"> Aprovar</label></p>
-                      <p style="font-weight: 600; font-size: 1.1em; margin-left: 15em"><input type="radio" id="desIndeferir" name="decisao" value="IC" <?php if ($this->parecerFavoravel == 1) { echo 'checked'; }; ?>/><label for="desIndeferir"> Indeferir</label></p>
+		    <div style="margin-left: 3em;">
+                      <p style="font-weight: 600; font-size:1.3em; float: left; ">Posicionamento:</p>
+                      <p style="font-weight: 600; text-align: center; font-size: 1.1em; text-align: left; margin-left: 15em;">
+			<span style="margin-right: 100px"><input type="radio" id="desAprovar" name="decisao" value="AC"<?php if ($this->parecerFavoravel == 2) { echo 'checked'; }; ?>/><label for="desAprovar"> Aprovar</label></span>
+			<span style="">
+			<input type="radio" id="desIndeferir" name="decisao" value="IC" <?php if ($this->parecerFavoravel == 1) { echo 'checked'; }; ?>/><label for="desIndeferir"> Indeferir</label>
+		      </p>
                       <p style="font-weight: 600; text-align: center;">
 			<select class="input_simples" name="situacao" id="situacao" style="display: none;">
                           <option value="">Selecione</option>
@@ -580,7 +569,7 @@
 	    
             <table class="tabela">
                 <tr>
-                    <th>Justificativa do Enquadramento</th>
+                    <th>Aprecia&ccedil;&atilde;o do comiss&aacute;rio relator</th>
                 </tr>
                 <tr>
                     <td>

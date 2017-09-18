@@ -136,7 +136,11 @@ foreach($this->buscar as $d) {
 		  <?php if (!$this->IsProjetoJaAssinado($d->IdPRONAC, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
 		  <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'analisarprojetoparecer', 'action' => 'produto')); ?>?idPronac=<?php echo $d->IdPRONAC; ?>&idProduto=<?php echo $d->idProduto; ?>&stPrincipal=<?php echo $d->stPrincipal; ?>&idD=<?php echo $d->idDistribuirParecer; ?>" > <?php echo $d->dsProduto; ?></a>
 		  <?php else: ?>
+		  <?php if ($d->idAgenteParecerista == $this->idAgenteParecerista): ?>
+		  <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'analisarprojetoparecer', 'action' => 'produto')); ?>?idPronac=<?php echo $d->IdPRONAC; ?>&idProduto=<?php echo $d->idProduto; ?>&stPrincipal=<?php echo $d->stPrincipal; ?>&idD=<?php echo $d->idDistribuirParecer; ?>" > <?php echo $d->dsProduto; ?></a>
+		  <?php else: ?>
 		  <?php echo $d->dsProduto; ?>
+		  <?php endif; ?>
 		  <?php endif; ?>
 		  
 		  <?php else: ?>

@@ -450,12 +450,32 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         if (!empty($modal)) {
             $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
             $this->view->modal = "s";
-            $this->view->cpf = $this->_request->getParam("cpfCnpj");
+            $this->view->cpf = $this->_request->getParam("cpf");
             $this->view->caminho = $this->_request->getParam("caminho");
         } else {
             $this->view->modal = "n";
             $this->view->caminho = "";
+            $this->view->exibirTelefone = true;
+            $this->view->exibirEmail = true;
         }
+        $this->incluir();
+    }
+
+    public function incluirIncentivadorModalAction() {
+        $this->autenticacao();
+
+        $this->_helper->layout->disableLayout();
+
+        $modulo = $this->_request->getParam("modulo");
+        $this->view->modulo = $modulo;
+
+        $this->view->modal = "s";
+        $this->view->cpf = $this->_request->getParam("cpf");
+        $this->view->caminho = $this->_request->getParam("caminho");
+
+        $this->view->exibirTelefone = false;
+        $this->view->exibirEmail = false;
+
         $this->incluir();
     }
 
@@ -492,6 +512,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
 
         $this->incluir();
     }
@@ -511,6 +532,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
 
         $this->incluir();
     }
