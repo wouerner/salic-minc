@@ -579,13 +579,13 @@ class Projetos extends MinC_Db_Table_Abstract
             'en.Observacao',
             'enquadramento' => New Zend_Db_Expr("case when en.Enquadramento = 1 then '26' when en.Enquadramento = 2 then '18' end ")), "SAC.dbo"
         );
-        $slct->joinInner(
+        $slct->joinLeft(
             array("tp" => "tbPauta"), "tp.IdPRONAC = pr.IdPRONAC AND tp.dtEnvioPauta IN (SELECT TOP 1 Max(dtEnvioPauta) FROM BDCORPORATIVO.scSAC.tbPauta WHERE  IdPRONAC = pr.IdPRONAC)", array(), "BDCORPORATIVO.scSAC"
         );
-        $slct->joinInner(
+        $slct->joinLeft(
             array("tr" => "tbReuniao"), "tr.idNrReuniao = tp.idNrReuniao", array('tr.NrReuniao'), "SAC.dbo"
         );
-        $slct->joinInner(
+        $slct->joinLeft(
             array("ag" => "Agentes"), "ag.CNPJCPF = pr.CgcCpf", array(), "AGENTES.dbo"
         );
         $slct->joinInner(
@@ -595,10 +595,10 @@ class Projetos extends MinC_Db_Table_Abstract
             array("vp" => "tbVerificaProjeto"), "vp.IdPRONAC = pr.IdPRONAC", array('vp.idUsuario',
             'NomeTecnico' => new Zend_Db_Expr('(SELECT top 1 usu_nome FROM TABELAS.dbo.Usuarios tecnico WHERE tecnico.usu_codigo = vp.idUsuario)'),
             'vp.stAnaliseProjeto',
-            'status' => New Zend_Db_Expr("CASE WHEN vp.stAnaliseProjeto IS NULL THEN 'Aguardando An�lise'
-                                                                 WHEN vp.stAnaliseProjeto = '1' THEN 'Aguardando An�lise'
-                                                                 WHEN vp.stAnaliseProjeto = '2' THEN 'Em An�lise'
-                                                                 WHEN vp.stAnaliseProjeto = '3' THEN 'An�lise Finalizada'
+            'status' => New Zend_Db_Expr("CASE WHEN vp.stAnaliseProjeto IS NULL THEN 'Aguardando An&aacute;lise'
+                                                                 WHEN vp.stAnaliseProjeto = '1' THEN 'Aguardando An&aacute;lise'
+                                                                 WHEN vp.stAnaliseProjeto = '2' THEN 'Em An&aacute;lise'
+                                                                 WHEN vp.stAnaliseProjeto = '3' THEN 'An&aacute;lise Finalizada'
                                                                  WHEN vp.stAnaliseProjeto = '4' THEN 'Encaminhado para portaria'
                                                                  END "),
             "DATEDIFF(day, vp.DtRecebido, GETDATE()) AS tempoAnalise",
