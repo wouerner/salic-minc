@@ -101,10 +101,10 @@
         </div>
     </div>
 
-    <div id="modalConfirmacao" class="modal modal-fixed-footer">
+    <div id="modalConfirmacao" class="modal modal-fixed-footer" style="height: 80%; max-height: 80%">
         <div class="modal-content">
             <div class="row">
-                <div class="input-field col s12">
+                <div class=" col s12">
                     <h3><span id="acaoAtoAdministrativo"></span> Ato Administrativo</h3>
                 </div>
             </div>
@@ -112,87 +112,100 @@
                 <div class="row">
                     <form id="formConfirmacao" class="col s12">
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class=" col s12">
                                 <input type="hidden" id="idAtoAdministrativo" name="idAtoAdministrativo" />
+                                <label>Tipo do Ato Administrativo</label>
                                 <select id="idTipoDoAto"
                                         name="idTipoDoAto"
+                                        class="browser-default"
                                         data-link="<?php echo $this->url(array(
                                             'module' => 'assinatura',
                                             'controller' => 'ato-administrativo',
                                             'action' => 'obter-tipos-de-atos-administrativos-ajax'
                                         )) ?>">
                                 </select>
-                                <label>Tipo do Ato Administrativo</label>
+
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class=" col s12">
+                                <label>Cargo do Assinante</label>
                                 <select id="idCargoDoAssinante"
                                         name="idCargoDoAssinante"
+                                        class="browser-default"
                                         data-link="<?php echo $this->url(array(
                                             'module' => 'assinatura',
                                             'controller' => 'ato-administrativo',
                                             'action' => 'obter-cargos-do-assinante-ajax'
                                         )) ?>">
                                 </select>
-                                <label>Cargo do Assinante</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class=" col s12">
+                                <label>Org&atilde;o Superior do Assinante</label>
                                 <select id="idOrgaoSuperiorDoAssinante"
                                         name="idOrgaoSuperiorDoAssinante"
+                                        class="browser-default"
                                         data-link="<?php echo $this->url(array(
                                             'module' => 'assinatura',
                                             'controller' => 'ato-administrativo',
                                             'action' => 'obter-orgaos-superiores-ajax'
                                         )) ?>"></select>
-                                <label>Org&atilde;o Superior do Assinante</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class=" col s12">
+                                <label>Org&atilde;o do Assinante</label>
                                 <select id="idOrgaoDoAssinante"
+                                        class="browser-default"
                                         name="idOrgaoDoAssinante"
                                         data-link="<?php echo $this->url(array(
                                             'module' => 'assinatura',
                                             'controller' => 'ato-administrativo',
                                             'action' => 'obter-orgaos-do-assinante-ajax'
                                         )) ?>"></select>
-                                <label>Org&atilde;o do Assinante</label>
+
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s12">
+                            <div class=" col s12">
+                                <label>Perfil do Assinante</label>
                                 <select id="idPerfilDoAssinante"
                                         name="idPerfilDoAssinante"
+                                        class="browser-default"
                                         data-link="<?php echo $this->url(array(
                                             'module' => 'assinatura',
                                             'controller' => 'ato-administrativo',
                                             'action' => 'obter-perfis-do-assinante-ajax'
                                         )) ?>"></select>
-                                <label>Perfil do Assinante</label>
+
                             </div>
                         </div>
                         <div class="row" id="divOrdemAssinatura">
-                            <div class="input-field col s12">
+                            <div class=" col s12">
+                                <label>Ordem da Assinatura</label>
                                 <select id="idOrdemDaAssinatura"
                                         name="idOrdemDaAssinatura"
+                                        class="browser-default"
                                         data-link="<?php echo $this->url(array(
                                             'module' => 'assinatura',
                                             'controller' => 'ato-administrativo',
                                             'action' => 'obter-ordem-assinatura-ajax'
                                         )) ?>"></select>
-                                <label>Ordem da Assinatura</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s12">
-                                <select id="stEstado" name="stEstado">
+                            <div class=" col s12">
+                                <label>Situa&ccedil;&atilde;o</label>
+                                <select
+                                    id="stEstado"
+                                    class="browser-default"
+                                    name="stEstado">
                                     <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_ATIVO ?>">Ativo</option>
                                     <option value="<?php echo Assinatura_Model_TbAtoAdministrativo::ST_ESTADO_INATIVO ?>">Inativo</option>
                                 </select>
-                                <label>Situa&ccedil;&atilde;o</label>
+
                             </div>
                         </div>
                     </form>
