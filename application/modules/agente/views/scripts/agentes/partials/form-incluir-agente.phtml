@@ -435,55 +435,6 @@
 <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/js/agentes.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        // Vamos buscar os dados do CPF Agora!
-        $('#cpf').focusout(function () {
-            //alert( 'cxdcdcd' );
-            $('#nome').val('');
-            $('#cep').val('');
-            $('#msgAjax').hide();
-            $('#imgPF').show();
-            $('#erroCpf').html("<img src='<?= $this->baseUrl(); ?>/public/img/ajax.gif' alt='' /> Aguarde...");
-
-            $.ajax({
-                type: "POST",
-                url: '<?= $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'busca-pessoa')); ?>',
-                data: {cpf: $(this).val(), tipoPessoa: 'fisica'},
-                dataType: 'json',
-                success: function (data) {
-                    if (data != null && data.error != '') {
-                        $('#msgAjax').html(data.error);
-                        $('#msgAjax').show();
-                        $('#imgPF').hide();
-                        $('#erroCpf').html("Pessoa n&atilde;o encontrada...");
-                    } else {
-                        // Preenche os dados
-                        $('#idPessoa').val(data.dados.idPessoa);
-                        $('#nome').val(data.dados.nome);
-                        $('#cep').val(format_cep(data.dados.cep));
-                        $('#erroCpf').html("");
-                        //$('#RESPONSAVEL_CARGO').focus();
-                        $('#imgPF').hide();
-                        /* $('#cep').blur(); */
-                        $('#cep').trigger('blur');
-                    }
-
-                }, error: function (data) {
-                    $('#msgAjax').html(data.error);
-                    $('#msgAjax').show();
-                    $('#erroCpf').html(data.error);
-                    $('#imgPF').hide();
-                }
-            });
-            //}
-
-        });
-
-    });
-
-</script>
-
-<script type="text/javascript">
 
     function filtroCPF() {
         document.getElementById('0').checked = true;
@@ -574,6 +525,7 @@
                         else if (data[0].msgCPF == 'novo') {
                             $('#novo').html('Preencha os dados abaixo!');
                             $('.novo').show();
+                            buscarDadosParaNovoAgente();
                         }
                     }
                 },
@@ -581,8 +533,51 @@
                     alert("Falha na recupera\xE7\xE3o dos dados.\nN\xE3o foi poss\xEDvel carregar agente!");
                 }
             });
-
         }
+    }
+
+    function buscarDadosParaNovoAgente() {
+
+        var elmCPF = $('#cpf');
+
+        $('#nome').val('');
+        $('#cep').val('');
+        $('#msgAjax').hide();
+        $('#imgPF').show();
+        $('#erroCpf').html("<img src='<?= $this->baseUrl(); ?>/public/img/ajax.gif' alt='' /> Aguarde...");
+
+        $.ajax({
+            type: "POST",
+            url: '<?= $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'busca-pessoa')); ?>',
+            data: {
+                cpf: elmCPF.val(),
+                tipoPessoa: 'fisica'
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data != null && data.error != '') {
+                    $('#msgAjax').html(data.error);
+                    $('#msgAjax').show();
+                    $('#imgPF').hide();
+                    $('#erroCpf').html("Pessoa n&atilde;o encontrada...");
+                } else {
+                    // Preenche os dados
+                    $('#idPessoa').val(data.dados.idPessoa);
+                    $('#nome').val(data.dados.nome);
+                    $('#cep').val(format_cep(data.dados.cep));
+                    $('#erroCpf').html("");
+                    //$('#RESPONSAVEL_CARGO').focus();
+                    $('#imgPF').hide();
+                    $('#cep').trigger('blur');
+                }
+
+            }, error: function (data) {
+                $('#msgAjax').html(data.error);
+                $('#msgAjax').show();
+                $('#erroCpf').html(data.error);
+                $('#imgPF').hide();
+            }
+        });
     }
 
     function buscarcep(cep) {
@@ -760,10 +755,5 @@
 
         $("#cpf").val(cpf);
 
-        if ($("#cpf").val().length > 0) {
-            $("#cpf").blur();
-        }
-
-//        buscaragente($("#cpf").val());
     });
 </script>
