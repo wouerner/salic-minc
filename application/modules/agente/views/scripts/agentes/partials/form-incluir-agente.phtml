@@ -590,6 +590,12 @@
         cidade = document.getElementById("cidade");
         uf = document.getElementById("uf");
 
+        var elmLogradouro = $("#logradouro");
+        var elmTipoLogradouro = $("#tipoLogradouro");
+        var elmBairro = $("#bairro");
+        var elmCidade = $("#cidade");
+        var elmUF = $("#uf");
+
         ajax = xmlhttp(); // instancia ajax
         ajax.open("GET", "<?= $this->url(array('module' => 'default', 'controller' => 'cep', 'action' => 'cep')); ?>?cep=" + cep, true);
         ajax.onreadystatechange = function () {
@@ -603,11 +609,11 @@
             // enquanto estiver processando bloqueia os campos
             if (ajax.readyState > 0 && ajax.readyState <= 3 && cep.length == 10) {
 
-                $("#logradouro").attr("disabled", "disabled");
-                $("#tipoLogradouro").attr("disabled", "disabled");
-                $("#bairro").attr("disabled", "disabled");
-                $("#cidade").attr("disabled", "disabled");
-                $("#uf").attr("disabled", "disabled");
+                elmLogradouro.attr("disabled", "disabled");
+                elmTipoLogradouro.attr("disabled", "disabled");
+                elmBairro.attr("disabled", "disabled");
+                elmCidade.attr("disabled", "disabled");
+                elmUF.attr("disabled", "disabled");
 
                 logradouro.value = "carregando...";
                 tipoLogradouro.options[0].text = "carregando...";
@@ -629,12 +635,11 @@
                     cidade.options[0].text = " - Selecione - ";
                     uf.options[0].text = " -- ";
 
-                    $("#logradouro").removeAttr("disabled");
-                    $("#tipoLogradouro").removeAttr("disabled");
-                    $("#bairro").removeAttr("disabled");
-                    $("#cidade").removeAttr("disabled");
-                    $("#uf").removeAttr("disabled");
-
+                    elmLogradouro.removeAttr("disabled");
+                    elmTipoLogradouro.removeAttr("disabled");
+                    elmBairro.removeAttr("disabled");
+                    elmCidade.removeAttr("disabled");
+                    elmUF.removeAttr("disabled");
 
                     $('#erroCep').html("CEP n&atilde;o encontrado!");
                 }
@@ -663,13 +668,12 @@
                         cidade.options[0].text = " - Selecione primeiro o UF - ";
                     }
 
-
                     // logradouro
                     logradouro.value = txtLogradouro;
-                    if (txtLogradouro == "") {
-                        logradouro.disabled = false; // habilita para preenchimento
+                    if (elmLogradouro.length < 2) {
+//                        logradouro.disabled = false; // habilita para preenchimento
+                        elmLogradouro.removeAttr("disabled");
                     }
-
 
                     // tipoLogradouro
                     // seleciona o combo de acordo com a lista existente no formulario
@@ -679,20 +683,19 @@
                             tipoLogradouro.options[i].selected = true;
                         }
                     }
+
                     if (tipoLogradouro.options[tipoLogradouro.selectedIndex].value == "" ||
                         tipoLogradouro.options[tipoLogradouro.selectedIndex].text != txtTipoLogradouro) {
                         tipoLogradouro.options[0].selected = true; // seleciona o primeiro option
-                        tipoLogradouro.disabled = false; // habilita para preenchimento
+//                        tipoLogradouro.disabled = false; // habilita para preenchimento
+                        elmTipoLogradouro.removeAttr("disabled");
                     }
-
 
                     // bairro
                     bairro.value = txtBairro;
-
-                    if (txtBairro == "") {
-                        bairro.disabled = false; // habilita para preenchimento
+                    if (elmBairro.length < 2) {
+                        elmBairro.removeAttr("disabled");
                     }
-
 
                     // uf
                     // seleciona o combo de acordo com a lista existente no formulario
@@ -706,8 +709,8 @@
                         uf.options[uf.selectedIndex].text != txtUF) {
                         uf.options[0].selected = true; // seleciona o primeiro option
                         uf.disabled = false; // habilita para preenchimento
+                        elmUF.removeAttr("disabled");
                     }
-
 
                     // cidade
                     // verifica se a cidade veio vazia
@@ -727,7 +730,6 @@
                         novo.text = txtCidade; // atribui um texto ao option
                         document.getElementById("cidade").options.add(novo);
                     }
-
 
                     $3('select').material_select();
                     Materialize.updateTextFields()
