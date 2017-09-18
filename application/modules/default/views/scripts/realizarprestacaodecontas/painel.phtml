@@ -48,7 +48,15 @@
     </form>
 </div>
 <script type="text/javascript">
+
+    $3.fn.extend(
+        {
+            dialog: $.fn.dialog
+        }
+    );
+
     function JSEncaminharParaAnalise(idPronac,idOrgaoDestino,tipoFiltro,ocultarJustificativa){
+        console.log('teste');
         $('html').css('overflow', 'hidden');
         $("body").append("<div id='divDinamica'></div>");
         $("#divDinamica").html("");
@@ -70,7 +78,7 @@
         });
 
         var title = 'Encaminhar Projeto para Análise';
-        $("#divDinamica").dialog({
+        $3("#divDinamica").dialog({
             resizable: true,
             width:750,
             height:550,
@@ -233,16 +241,9 @@
     });
 </script>
 
-<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
 <script type="text/javascript" >
-    /* (function ($) { */
-    $3.fn.extend(
-        {
-            DataTable: $.fn.DataTale
-        }
-    );
         $(document).ready(function () {
             $('table').DataTable(
                 {
@@ -252,7 +253,6 @@
                 }
             );
         });
-    /* }($.noConflict(true))); */
 </script>
 
 <!-- Modal Structure -->
