@@ -45,4 +45,18 @@ Para cadastrar um beneficiário:
     - Menu Lateral -> Plano de Distribuição
     - Preencher o campo CNPJ/CPF
  
- 
+#### Outras visões
+O sistema permite que o Gestor do sistema cadastre um agente com outras visões
+ - Perfil Gestor do SALIC
+ - Caminho: Menu Principal -> Administrativo -> Manter Agentes
+ - Visões disponíveis para cadastro pelo Gestor:
+     - Proponente
+    - Incentivador
+    - Servidor
+    - Dirigente de Instituição 
+    - Parecerista de projeto cultural
+    - Componente da Comissão
+    - Votantes da Cnic
+    - Procurador
+    - Fornecedor
+    - Servidor Comissionado
