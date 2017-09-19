@@ -163,8 +163,11 @@
 var resolverInconsistencia = function (event) {
     var idTmpCaptacao = $('body').attr('currentIdTmpCaptacao');
     $.ajax({
-	url: '<?php echo $this->url(array('controller' => 'resolver-inconsistencia', 'action' => 'incentivador-proponente-iguais')); ?>/idInconsistencia/' + idTmpCaptacao,
-        data: {cnpjcpf: event.detail.cnpjcpf},
+	url: '<?php echo $this->url(array('controller' => 'resolver-inconsistencia', 'action' => 'incentivador-proponente-iguais')); ?>',
+        data: {
+	        cnpjcpf: event.detail.cnpjcpf,
+            idInconsistencia: idTmpCaptacao
+	    },
         success: function (data) {
                 if (0 == $("#carregando").length) {
                     $('#divDinamicaAgentes').html('<div id="carregando">\n\
@@ -180,7 +183,6 @@ var resolverInconsistencia = function (event) {
                 $("#carregando table tbody tr td").append(
                     $('<p>Inconsistência resolvida com sucesso.</p>')
                 );
-
             $('#row-' + idTmpCaptacao + ' .nomeIncentivador').html(event.detail.nome);
             $('#row-' + idTmpCaptacao + ' .cpfcnpjIncentivador').html( format_cnpj(event.detail.cnpjcpf));
             $("[data-id-tmp-captacao=" + idTmpCaptacao + "]").replaceWith("<font color='green'>[Correção enviada]</font>");
