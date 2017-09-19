@@ -29,20 +29,20 @@ $(document).ready(function() {
         });
 
         function JSDevolverParaChefeDivisao(idPronac,idOrgaoDestino,ocultarJustificativa){
+            console.log('teste');
             $('html').css('overflow', 'hidden');
             $("body").append("<div id='divDinamica'></div>");
             $("#divDinamica").html("");
             $('#divDinamica').html("<br><br><center>Carregando dados...</center>");
             $.ajax({
-                url : 'realizarprestacaodecontas/encaminharprestacaodecontas',
+                url : '/realizarprestacaodecontas/encaminharprestacaodecontas',
                 data : {
                     idPronac : idPronac,
                     idOrgaoDestino : idOrgaoDestino,
                     idSituacaoPrestContas : 1,
                     tipoFiltro : '',
                     ocultarJustificativa : true,
-            idPerfilDestino: 132,
-
+                    idPerfilDestino: 132,
                 },
                 success: function(data){
                     $('#divDinamica').html(data);
