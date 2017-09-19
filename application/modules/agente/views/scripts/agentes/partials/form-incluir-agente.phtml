@@ -435,55 +435,6 @@
 <script type="text/javascript" src="<?= $this->baseUrl(); ?>/public/js/agentes.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        // Vamos buscar os dados do CPF Agora!
-        $('#cpf').focusout(function () {
-            //alert( 'cxdcdcd' );
-            $('#nome').val('');
-            $('#cep').val('');
-            $('#msgAjax').hide();
-            $('#imgPF').show();
-            $('#erroCpf').html("<img src='<?= $this->baseUrl(); ?>/public/img/ajax.gif' alt='' /> Aguarde...");
-
-            $.ajax({
-                type: "POST",
-                url: '<?= $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'busca-pessoa')); ?>',
-                data: {cpf: $(this).val(), tipoPessoa: 'fisica'},
-                dataType: 'json',
-                success: function (data) {
-                    if (data != null && data.error != '') {
-                        $('#msgAjax').html(data.error);
-                        $('#msgAjax').show();
-                        $('#imgPF').hide();
-                        $('#erroCpf').html("Pessoa n&atilde;o encontrada...");
-                    } else {
-                        // Preenche os dados
-                        $('#idPessoa').val(data.dados.idPessoa);
-                        $('#nome').val(data.dados.nome);
-                        $('#cep').val(format_cep(data.dados.cep));
-                        $('#erroCpf').html("");
-                        //$('#RESPONSAVEL_CARGO').focus();
-                        $('#imgPF').hide();
-                        /* $('#cep').blur(); */
-                        $('#cep').trigger('blur');
-                    }
-
-                }, error: function (data) {
-                    $('#msgAjax').html(data.error);
-                    $('#msgAjax').show();
-                    $('#erroCpf').html(data.error);
-                    $('#imgPF').hide();
-                }
-            });
-            //}
-
-        });
-
-    });
-
-</script>
-
-<script type="text/javascript">
 
     function filtroCPF() {
         document.getElementById('0').checked = true;
@@ -574,6 +525,7 @@
                         else if (data[0].msgCPF == 'novo') {
                             $('#novo').html('Preencha os dados abaixo!');
                             $('.novo').show();
+                            buscarDadosParaNovoAgente();
                         }
                     }
                 },
@@ -581,8 +533,51 @@
                     alert("Falha na recupera\xE7\xE3o dos dados.\nN\xE3o foi poss\xEDvel carregar agente!");
                 }
             });
-
         }
+    }
+
+    function buscarDadosParaNovoAgente() {
+
+        var elmCPF = $('#cpf');
+
+        $('#nome').val('');
+        $('#cep').val('');
+        $('#msgAjax').hide();
+        $('#imgPF').show();
+        $('#erroCpf').html("<img src='<?= $this->baseUrl(); ?>/public/img/ajax.gif' alt='' /> Aguarde...");
+
+        $.ajax({
+            type: "POST",
+            url: '<?= $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'busca-pessoa')); ?>',
+            data: {
+                cpf: elmCPF.val(),
+                tipoPessoa: 'fisica'
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data != null && data.error != '') {
+                    $('#msgAjax').html(data.error);
+                    $('#msgAjax').show();
+                    $('#imgPF').hide();
+                    $('#erroCpf').html("Pessoa n&atilde;o encontrada...");
+                } else {
+                    // Preenche os dados
+                    $('#idPessoa').val(data.dados.idPessoa);
+                    $('#nome').val(data.dados.nome);
+                    $('#cep').val(format_cep(data.dados.cep));
+                    $('#erroCpf').html("");
+                    //$('#RESPONSAVEL_CARGO').focus();
+                    $('#imgPF').hide();
+                    $('#cep').trigger('blur');
+                }
+
+            }, error: function (data) {
+                $('#msgAjax').html(data.error);
+                $('#msgAjax').show();
+                $('#erroCpf').html(data.error);
+                $('#imgPF').hide();
+            }
+        });
     }
 
     function buscarcep(cep) {
@@ -594,6 +589,12 @@
         bairro = document.getElementById("bairro");
         cidade = document.getElementById("cidade");
         uf = document.getElementById("uf");
+
+        var elmLogradouro = $("#logradouro");
+        var elmTipoLogradouro = $("#tipoLogradouro");
+        var elmBairro = $("#bairro");
+        var elmCidade = $("#cidade");
+        var elmUF = $("#uf");
 
         ajax = xmlhttp(); // instancia ajax
         ajax.open("GET", "<?= $this->url(array('module' => 'default', 'controller' => 'cep', 'action' => 'cep')); ?>?cep=" + cep, true);
@@ -608,11 +609,11 @@
             // enquanto estiver processando bloqueia os campos
             if (ajax.readyState > 0 && ajax.readyState <= 3 && cep.length == 10) {
 
-                $("#logradouro").attr("disabled", "disabled");
-                $("#tipoLogradouro").attr("disabled", "disabled");
-                $("#bairro").attr("disabled", "disabled");
-                $("#cidade").attr("disabled", "disabled");
-                $("#uf").attr("disabled", "disabled");
+                elmLogradouro.attr("disabled", "disabled");
+                elmTipoLogradouro.attr("disabled", "disabled");
+                elmBairro.attr("disabled", "disabled");
+                elmCidade.attr("disabled", "disabled");
+                elmUF.attr("disabled", "disabled");
 
                 logradouro.value = "carregando...";
                 tipoLogradouro.options[0].text = "carregando...";
@@ -634,12 +635,11 @@
                     cidade.options[0].text = " - Selecione - ";
                     uf.options[0].text = " -- ";
 
-                    $("#logradouro").removeAttr("disabled");
-                    $("#tipoLogradouro").removeAttr("disabled");
-                    $("#bairro").removeAttr("disabled");
-                    $("#cidade").removeAttr("disabled");
-                    $("#uf").removeAttr("disabled");
-
+                    elmLogradouro.removeAttr("disabled");
+                    elmTipoLogradouro.removeAttr("disabled");
+                    elmBairro.removeAttr("disabled");
+                    elmCidade.removeAttr("disabled");
+                    elmUF.removeAttr("disabled");
 
                     $('#erroCep').html("CEP n&atilde;o encontrado!");
                 }
@@ -668,13 +668,12 @@
                         cidade.options[0].text = " - Selecione primeiro o UF - ";
                     }
 
-
                     // logradouro
                     logradouro.value = txtLogradouro;
-                    if (txtLogradouro == "") {
-                        logradouro.disabled = false; // habilita para preenchimento
+                    if (elmLogradouro.length < 2) {
+//                        logradouro.disabled = false; // habilita para preenchimento
+                        elmLogradouro.removeAttr("disabled");
                     }
-
 
                     // tipoLogradouro
                     // seleciona o combo de acordo com a lista existente no formulario
@@ -684,20 +683,19 @@
                             tipoLogradouro.options[i].selected = true;
                         }
                     }
+
                     if (tipoLogradouro.options[tipoLogradouro.selectedIndex].value == "" ||
                         tipoLogradouro.options[tipoLogradouro.selectedIndex].text != txtTipoLogradouro) {
                         tipoLogradouro.options[0].selected = true; // seleciona o primeiro option
-                        tipoLogradouro.disabled = false; // habilita para preenchimento
+//                        tipoLogradouro.disabled = false; // habilita para preenchimento
+                        elmTipoLogradouro.removeAttr("disabled");
                     }
-
 
                     // bairro
                     bairro.value = txtBairro;
-
-                    if (txtBairro == "") {
-                        bairro.disabled = false; // habilita para preenchimento
+                    if (elmBairro.length < 2) {
+                        elmBairro.removeAttr("disabled");
                     }
-
 
                     // uf
                     // seleciona o combo de acordo com a lista existente no formulario
@@ -711,8 +709,8 @@
                         uf.options[uf.selectedIndex].text != txtUF) {
                         uf.options[0].selected = true; // seleciona o primeiro option
                         uf.disabled = false; // habilita para preenchimento
+                        elmUF.removeAttr("disabled");
                     }
-
 
                     // cidade
                     // verifica se a cidade veio vazia
@@ -732,7 +730,6 @@
                         novo.text = txtCidade; // atribui um texto ao option
                         document.getElementById("cidade").options.add(novo);
                     }
-
 
                     $3('select').material_select();
                     Materialize.updateTextFields()
@@ -760,10 +757,5 @@
 
         $("#cpf").val(cpf);
 
-        if ($("#cpf").val().length > 0) {
-            $("#cpf").blur();
-        }
-
-//        buscaragente($("#cpf").val());
     });
 </script>

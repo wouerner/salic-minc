@@ -2102,17 +2102,17 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             endif;
         }
         //================ FIM VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO ========================
-    if (isset($acao) && $acao != '') {
-        // Retorna para o listar propostas
-        $tbVinculo = new Agente_Model_DbTable_TbVinculo();
-        $dadosVinculo = array(
-                'idAgenteProponente' => $idAgente,
-                'dtVinculo' => new Zend_Db_Expr('GETDATE()'),
-                'siVinculo' => 0,
-                'idUsuarioResponsavel' => $arrAuth['IdUsuario']
-        );
-        $tbVinculo->inserir($dadosVinculo);
-    }
+        if (isset($acao) && $acao != '') {
+            // Retorna para o listar propostas
+            $tbVinculo = new Agente_Model_DbTable_TbVinculo();
+            $dadosVinculo = array(
+                    'idAgenteProponente' => $idAgente,
+                    'dtVinculo' => new Zend_Db_Expr('GETDATE()'),
+                    'siVinculo' => 0,
+                    'idUsuarioResponsavel' => $arrAuth['IdUsuario']
+            );
+            $tbVinculo->inserir($dadosVinculo);
+        }
 
         // Se vim do UC 10 - solicitar alteracao no Projeto
         // Chega aqui com o idpronac
@@ -2123,9 +2123,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         # tratamento para disparar "js custom event" no dispatch
         $agente = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
         $agente = $agente[0];
-        $agente->id = $agente->idAgente;
-        $agente->nome = $agente->Nome;
-        $agente->cpfCnpj = $agente->CNPJCPF;
+        $agente->id = $agente->idagente;
+        $agente->cpfCnpj = $agente->cnpjcpf;
 
         $agenteArray = (array) $agente;
         array_walk($agenteArray, function($value, $key) use ($agente){
@@ -2186,18 +2185,19 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 );
             }
             echo '<script>';
-            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' , json_encode(utf8_encode($agente)) , ' });';
+            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' . json_encode($agente) . ' });';
             echo 'document.dispatchEvent(event)';
             echo '</script>';
-            echo '<br/><br/><br/><br/><center><font color="green">Cadastrado com sucesso!</font></center>';
+            echo '<div class="center-align">Cadastrado com sucesso!</div>';
         } else if (!empty($movimentacacaobancaria)) {
             echo '<script>';
-            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' , json_encode(utf8_encode($agente)) , ' });';
+            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' . json_encode($agente) . ' });';
             echo 'document.dispatchEvent(event)';
             echo '</script>';
-            echo '<br/><br/><br/><br/><center><font color="green">Cadastrado com sucesso!</font></center>';
+            echo '<div class="center-align">Cadastrado com sucesso!</div>';
             // Retorna para a url anterior do UC116
-            parent::message("Cadastro realizado com sucesso.", "cadastrar-projeto", "CONFIRM");
+            //@todo aqui ele retorna para a modal de cadastrar incentivador, esse retorno só funciona se o gatilho acima nao funcionar
+            //parent::message("Cadastro realizado com sucesso.", "cadastrar-projeto", "CONFIRM");
         } else if (($acao != '')) {
             parent::message(
                 'Proponente cadastrado com sucesso. Uma solicita&ccedil;&atilde;o de v&iacute;nculo foi enviada a ele.',
@@ -2555,13 +2555,13 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             try {
                 // validacao dos campos
                 if (empty($cpf) && empty($nome)) {
-                    throw new Exception("Dados obrigatórios n&atilde;o informados:<br /><br />é necessário informar o CPF/CNPJ ou o Nome!");
+                    throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados:<br /><br />&eacute; necess&aacute;rio informar o CPF/CNPJ ou o Nome!");
                 } else if (!empty($cpf) && strlen($cpf) != 11 && strlen($cpf) != 14) { // valida cnpj/cpf
-                    throw new Exception("O CPF/CNPJ informado é inválido!");
+                    throw new Exception("O CPF/CNPJ informado &eacute; inv&aacute;lido!");
                 } else if (!empty($cpf) && strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) { // valida cpf
-                    throw new Exception("O CPF informado é inválido!");
+                    throw new Exception("O CPF informado &eacute; inv&aacute;lido!");
                 } else if (!empty($cpf) && strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf)) { // valida cnpj
-                    throw new Exception("O CNPJ informado é inválido!");
+                    throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
                     $this->_redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
