@@ -57,4 +57,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
 
     const TECNICO_ADMISSIBILIDADE_EDITAL = 140;
 
+    const COORDENADOR_DO_PRONAC = 137;
+    const COORDENADOR_DE_CONVENIO = 142;
+
 }

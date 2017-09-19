@@ -24,6 +24,10 @@
         <input type="hidden" name="grupologado" id="grupologado" value="<?= $this->grupoativo; ?>"/>
         <input type="hidden" name="idResponsavel" id="idResponsavel" value="<?= $this->idResponsavelKeyLog; ?>"/>
         <input type="hidden" name="idpronac" id="idpronac" value="<?= $this->idpronac; ?>"/>
+        <input type="hidden" name="exibirTelefone" id="exibirTelefone" value="<?= $this->exibirTelefone; ?>"/>
+        <input type="hidden" name="exibirEmail" id="exibirEmail" value="<?= $this->exibirEmail; ?>"/>
+        <input type="hidden" id="autoCarregarDadosCPF" value="<?= $this->autoCarregarDadosCPF; ?>"/>
+        <input type="hidden" name="modal" id="modal" class="input_simples" value="<?php echo $this->modal; ?>" />
 
         <?php if ($this->modulo != "movimentacaobancaria") : ?>
             <input type="hidden" name="movimentacaobancaria" id="movimentacaobancaria" value=""/>
@@ -87,15 +91,16 @@
                     <span id="erroNome" class="spanError"></span>
                 </div>
                 <div class="col s12 m3 l3">
-                    <?php if (!$this->ehProponente) : ?>
                         <label for="visao">Vis&atilde;o do Agente: </label>
                         <select name="visao" id="visao"
                                 onchange="verificarVisao(this.value, <?= $this->grupoAtivo; ?>);"
                                 class="browser-default">
-                            <?php if ($this->modulo != "movimentacaobancaria"): ?>
-                                <option value="0" selected="selected"> - Selecione -</option>
-                            <?php endif; ?>
                             <?php if ($this->combovisoes): ?>
+
+                                <?php if (count($this->combovisoes) > 1) : ?>
+                                    <option value="0" selected="selected"> - Selecione -</option>
+                                <?php endif; ?>
+
                                 <?php foreach ($this->combovisoes as $combovisoes): ?>
                                     <option
                                         value="<?= $combovisoes['idVerificacao']; ?>"> <?= $combovisoes['Descricao']; ?> </option>
@@ -104,15 +109,6 @@
                         </select>
                         <span id="erroVisao" class="spanError"></span>
                         <span id="spanVisao"></span>
-                    <?php else : ?>
-                        <label for="visao">Vis&atilde;o do Agente: </label>
-                        <select name="visao" id="visao"
-                                onchange="verificarVisao(this.value, <?= $this->grupoAtivo; ?>);"
-                                class="browser-default">
-                            <option
-                                value="<?= $this->combovisoes[0]['idVerificacao']; ?>"> <?= $this->combovisoes[0]['Descricao']; ?> </option>
-                        </select>
-                    <?php endif; ?>
                 </div>
             </div>
         </fieldset>
@@ -214,10 +210,7 @@
                                 id="tipoLogradouro"
                                 class="browser-default">
 
-                            <?php // if (!isset($this->tipoLogradouro) || empty($this->tipoLogradouro)) : ?>
                             <option value="0"> - Selecione -</option>
-                            <?php // endif; ?>
-
                             <?php foreach ($this->combotiposlogradouros as $key => $combotipologradouro): ?>
                                 <option value="<?= $key; ?>"
                                     <?php if ($this->tipoLogradouro == $key) echo "selected=\"selected\""; ?>>
@@ -329,7 +322,7 @@
             </fieldset>
         </div>
         <!-- ========== FIM FORMULARIO ENDERECO ========== -->
-        <?php if ($this->exibirTelefone) : ?>
+        <?php if ($this->exibirTelefone == 's') : ?>
             <!-- ========== INICIO FORMULARIO FONE ========== -->
             <div class="row">
                 <fieldset>
@@ -385,7 +378,7 @@
                 </fieldset>
             </div>
         <?php endif; ?>
-        <?php if ($this->exibirEmail) : ?>
+        <?php if ($this->exibirEmail == 's') : ?>
             <div class="row">
                 <fieldset>
                     <legend>E-MAIL</legend>
@@ -511,13 +504,15 @@
                 success: function (data) {
                     if (data.length > 0) {
                         if (data[0].msgCPF == 'cadastrado') {
+
                             $('#novocadastro').hide();
                             $('#carregando').show();
+
                             var event = new CustomEvent("agenteJaCadastrado", {"detail": data[0].agente});
                             document.dispatchEvent(event);
-                            <?php if ($this->modulo != "movimentacaobancaria") : ?>
-                            window.location = '<?= $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data[0].idAgente;
-                            <?php endif; ?>
+                            if($("#modal").val() != 's') {
+                                window.location = '<?= $this->url(array('module' => 'agente', "controller" => "agentes", "action" => "agentes")); ?>/id/' + data[0].idAgente;
+                            }
                         }
                         else if (data[0].msgCPF == 'invalido') {
                             $('#erroCpf').html('CPF/CNPJ Inv&aacute;lido');
@@ -670,7 +665,7 @@
 
                     // logradouro
                     logradouro.value = txtLogradouro;
-                    if (elmLogradouro.length < 2) {
+                    if (txtLogradouro == "") {
 //                        logradouro.disabled = false; // habilita para preenchimento
                         elmLogradouro.removeAttr("disabled");
                     }
@@ -757,5 +752,8 @@
 
         $("#cpf").val(cpf);
 
+        if(cpf.length > 1 && $("#autoCarregarDadosCPF").val() == true ) {
+            $("#cpf").blur();
+        }
     });
 </script>
