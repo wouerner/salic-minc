@@ -40,18 +40,17 @@
                 <?php $cont = 0; ?>
                 <?php $idAgente = 0; ?>
                 <?php foreach ($this->buscar as $b) : ?>
-                    <?php if ($b->idAgente != $idAgente): ?>
+                    <?php if ($b->idagente != $idAgente): ?>
                         <tr onmouseover="over_tr(this);" onfocus="over_tr(this);" onmouseout="out_tr(this);"
                             onblur="out_tr(this);" onclick="click_tr(this);" onkeypress="click_tr(this);"
                             class="<?php //echo $this->corLinha($cont); ?>">
-                            <td class="centro"><?php echo Validacao::mascaraCPFCNPJ($b->CNPJCPF); ?></td>
-                            <td><?php echo $b->Nome; ?></td>
+                            <td class="center-align"><?php echo Validacao::mascaraCPFCNPJ($b->cnpjcpf); ?></td>
+                            <td><?php echo $b->nome; ?></td>
                             <td>
                                 <?php
                                 $visaoTable = new Agente_Model_DbTable_Visao();
-                                $visao = $visaoTable->buscarVisao($b->idAgente); // visao
+                                $visao = $visaoTable->buscarVisao($b->idagente); // visao
                                 $i = 0; // contador
-
                                 foreach ($visao as $v) :
                                     if ($i > 0) echo " / "; // separa por barra caso tenha mais de uma visao
                                     echo $v->Descricao;
@@ -59,13 +58,13 @@
                                 endforeach;
                                 ?>
                             </td>
-                            <td class="centro">
+                            <td class="center-align">
                                 <input type="button" class="btn_ver" title=" Alterar Vis&atilde;o " value=" "
-                                       onclick="redirecionar('<?php echo $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'agentes', 'id' => $b->idAgente), '', true); ?>');"/>
+                                       onclick="redirecionar('<?php echo $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'agentes', 'id' => $b->idagente), '', true); ?>');"/>
                             </td>
                         </tr>
                     <?php endif; ?>
-                    <?php $idAgente = $b->idAgente; ?>
+                    <?php $idAgente = $b->idagente; ?>
                     <?php $cont++; ?>
                 <?php endforeach; ?>
             </table>
