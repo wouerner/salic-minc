@@ -17,6 +17,7 @@ class VisaoModel implements ModelInterface
     const DIRIGENTE_DE_INSTITUICAO = 198;
     const PARECERISTA_DE_PROJETO_CULTURAL = 209;
     const COMPONENTE_DA_COMISSAO = 210;
+    const TECNICO = 216;
     const VOTANTES_DA_CNIC = 217;
     const PROCURADOR  = 247;
     const FORNECEDOR = 248;
