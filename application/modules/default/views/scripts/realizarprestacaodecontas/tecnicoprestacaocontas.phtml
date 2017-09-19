@@ -14,36 +14,32 @@
     </div>
     <div class="row">
         <div class="col s12">
-            <h5>Analisar presta&ccedil;&atilde;o de contas - Em análise</h5>
-            <span class="voltar" style="float: right;">
-                <a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
-            </span>
+            <h5 class="left">Analisar presta&ccedil;&atilde;o de contas - Em análise</h5>
+            <a class="btn right" href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
         </div>
     </div>
-    <script src="/public/scripts/prestacao-contas/tecnicoprestacaocontas.js" type="text/javascript"></script>
-    <div style="display: none;" id="historicoEncaminhamento" title="Encaminhar projeto para análise"></div>
     <div class="row">
         <div class="col s12">
             <table id="tabela">
                 <thead>
                     <tr>
-                    <th>#</th>
-                    <th>PRONAC</th>
-                    <th>Nome do Projeto</th>
-                    <th>Situação</th>
-                    <th>Área / Segmento</th>
-                    <th>Estado</th>
-                    <th>Mecanismo</th>
-                    <th>Dt. Recebimento</th>
-                    <th>Analisar Prestação de Contas</th>
-                    <th>Devolver para Chefe de Divis&aacute;o</th>
-                    <?php if($this->filtro == 'diligenciados'): ?>
-                        <th>Consultoria AECI</th>
-                        <th>Consultoria CONJUR</th>
-                        <th>Visualizar Hist&oacute;rico</th>
-                    <?php endif; ?>
-                    <th>Dilig&ecirc;ncia</th>
-                    <th>Hist&oacute;rico</th>
+                        <th>#</th>
+                        <th>PRONAC</th>
+                        <th>Nome do Projeto</th>
+                        <th>Situação</th>
+                        <th>Área / Segmento</th>
+                        <th>Estado</th>
+                        <th>Mecanismo</th>
+                        <th>Dt. Recebimento</th>
+                        <th>Analisar Prestação de Contas</th>
+                        <th>Devolver para Chefe de Divis&aacute;o</th>
+                        <?php if($this->filtro == 'diligenciados'): ?>
+                            <th>Consultoria AECI</th>
+                            <th>Consultoria CONJUR</th>
+                            <th>Visualizar Hist&oacute;rico</th>
+                        <?php endif; ?>
+                        <th>Dilig&ecirc;ncia</th>
+                        <th>Hist&oacute;rico</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,9 +47,9 @@
                     <tr>
                         <td><?php echo $x; ?></td>
                         <td>
-                            <a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo ($projeto->idPronac); ?>" target="_blank">
+                            <button class="btn pre-visualizar" data-idpronac="<?php echo ($projeto->idPronac); ?>">
                                 <?php echo $projeto->Pronac; ?>
-                            </a>
+                            </button>
                         </td>
                         <td><?php echo $projeto->NomeProjeto; ?></td>
                         <td><?php echo $projeto->Situacao; ?></td>
@@ -98,6 +94,7 @@
     </form>
 </div>
 
+
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
 <script type="text/javascript">
@@ -113,3 +110,8 @@
         );
     });
 </script>
+
+<script src="/public/scripts/prestacao-contas/tecnicoprestacaocontas.js" type="text/javascript"></script>
+<div style="display: none;" id="historicoEncaminhamento" title="Encaminhar projeto para análise"></div>
+
+<?php echo $this->partial('/consultardadosprojeto/partial/consultar-ajax.phtml')?>
