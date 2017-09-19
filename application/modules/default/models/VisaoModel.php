@@ -22,6 +22,7 @@ class VisaoModel implements ModelInterface
     const PROCURADOR  = 247;
     const FORNECEDOR = 248;
     const SERVIDOR_COMISSIONADO = 266;
+    const BENEFICIARIO_DE_PRODUTOS = 199;
 
     private $table = null;
 
