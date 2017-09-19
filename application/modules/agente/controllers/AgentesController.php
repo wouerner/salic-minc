@@ -1,5 +1,5 @@
 <?php
-class Agente_AgentesController extends MinC_Controller_Action_Abstract 
+class Agente_AgentesController extends MinC_Controller_Action_Abstract
 {
     /**
      * @var integer (variavel com o id do usuario logado)
@@ -52,7 +52,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo',  'Descricao');
         $this->view->combotipostelefones = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 3));
         $this->view->combotiposemails = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 4, 'idverificacao' => array(28, 29)));
-        
+
         //Monta o combo das visoes disponiveis
         $visaoTable = new Agente_Model_DbTable_Visao();
         $visoes = $visaoTable->buscarVisao(null, null, true);
@@ -72,51 +72,68 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $this->view->ehProponente = false;
 
             foreach ($visoes as $key => $visaoGrupo) {
-                if ($GrupoAtivo == 93 and ($visaoGrupo->idVerificacao == 209 or $visaoGrupo->idVerificacao == 216)) {
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA
+                    AND ($visaoGrupo->idVerificacao == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+                        OR $visaoGrupo->idVerificacao == VisaoModel::TECNICO)
+                ) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
-                if ($GrupoAtivo == 94 and $visaoGrupo->idVerificacao == 209) {
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::PARECERISTA
+                    AND $visaoGrupo->idVerificacao == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+                ) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
-                if ($GrupoAtivo == 137 and $visaoGrupo->idVerificacao == 209) {
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DO_PRONAC
+                    AND $visaoGrupo->idVerificacao == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+                ) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
-                if ($GrupoAtivo == 97) {
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::GESTOR_SALIC) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
-                if ($GrupoAtivo == 120 and $visaoGrupo->idVerificacao == 210) {
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_CNIC
+                    AND $visaoGrupo->idVerificacao == VisaoModel::COMPONENTE_DA_COMISSAO) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
-                if ($GrupoAtivo == 121 and $visaoGrupo->idVerificacao == 145) {
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO
+                    AND $visaoGrupo->idVerificacao == VisaoModel::INCENTIVADOR) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
-                if ($GrupoAtivo == 123 and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-
-                if ($GrupoAtivo == 118 and $visaoGrupo->idVerificacao == 210) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if (($GrupoAtivo == 122 or $GrupoAtivo == 123) and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-                if (($GrupoAtivo == 103 || $GrupoAtivo == 142) and $visaoGrupo->idVerificacao == 144) {
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
+                    AND $visaoGrupo->idVerificacao == VisaoModel::INCENTIVADOR) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
 
-                if (($GrupoAtivo == 97 || $GrupoAtivo == 120) and $visaoGrupo->idVerificacao == 217) {
+
+                if ($GrupoAtivo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO
+                    AND $visaoGrupo->idVerificacao == VisaoModel::COMPONENTE_DA_COMISSAO) {
+                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
+                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
+                }
+                if (($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO
+                        OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO)
+                    AND $visaoGrupo->idVerificacao == VisaoModel::INCENTIVADOR) {
+                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
+                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
+                }
+
+                if (($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_ANALISE
+                        OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DE_CONVENIO)
+                    AND $visaoGrupo->idVerificacao == VisaoModel::PROPONENTE) {
+                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
+                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
+                }
+
+                if (($GrupoAtivo == Autenticacao_Model_Grupos::GESTOR_SALIC
+                        OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_CNIC)
+                    AND $visaoGrupo->idVerificacao == VisaoModel::VOTANTES_DA_CNIC) {
                     $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
                     $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
                 }
@@ -243,7 +260,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
         $idAgente = $this->_request->getParam("id");
 
-        if (($GrupoAtivo->codGrupo == 94) || ($GrupoAtivo->codGrupo == 118)) {
+        if (($GrupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) || ($GrupoAtivo->codGrupo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO)) {
             $idAgente = $this->getIdUsuario;
         }
 
@@ -281,6 +298,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
             $this->view->id = $idAgente;
         }
+
     }
 
     /**
@@ -308,6 +326,12 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->tipocpf = $tipoCpf;
         $this->view->idpronac = $this->_request->getParam('idpronac');
     }
+
+    private function visao($visao) {
+        $this->view->visaoo = $visao;
+        //@todo parei aqui
+    }
+
 
     /**
      * vincular Metodo responsavel por vincular o Responsavel logado a seu proprio perfil de Proponente
@@ -494,6 +518,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->caminho = $this->_request->getParam("caminho");
         $this->view->acao = $this->_request->getParam("acao");
 
+        $this->visao(VisaoModel::FORNECEDOR);
         $this->incluir();
     }
 
@@ -1383,7 +1408,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $dados = $tbAusencia->carregarAusencia($idAgente, $ano, 2, null);
 
         $totalDias = 0;
-        
+
         foreach ($dados as $d) {
             if (($d->siAusencia == 0) OR ($d->siAusencia == 1)) {
                 $totalDias = $totalDias + $d->qtddias;
@@ -1635,7 +1660,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
             $salvarArquivo = $tbArquivo->cadastrarDados($dadosArquivo);
             $idArquivo = $tbArquivo->buscarUltimo();
-            
+
             $dadosArquivoImagem = array('idArquivo' => $idArquivo['idArquivo'],
                 'biArquivo' => $arquivoBinario
             );
@@ -1686,14 +1711,14 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 $tbDistribuirParecer = new tbDistribuirParecer();
                 $projetoDAO = new Projetos();
                 $projetos = $projetoDAO->buscaProjetosProdutosAnaliseInicial(array('idAgenteParecerista = ?' => $idAgente, 'DtDistribuicao >= ?' => '' . $dtInicio . '', 'DtDistribuicao <= ?' => '' . $dtFim . ''));
-                
+
                 foreach ($projetos as $p) {
                     $dados = array('Observacao' => 'Devolvido por motivo de atestado m&eacute;dico.',
                             'idUsuario' => $this->getIdUsuario,
                             'DtDevolucao' => $dtAtual
                     );
                     $salvar = $tbDistribuirParecer->atualizarParecer($dados, $p->idDistribuirParecer);
-                    
+
                 }
             }
             /* ********************************************************************************************** */
@@ -1826,8 +1851,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      * @param void
      * @return void
      */
-    public function agentecadastradoAction() 
-    { 
+    public function agentecadastradoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o layout
         $this->_helper->viewRenderer->setNoRender(true);
         $cpf = preg_replace('/\.|-|\//','',$_REQUEST['cpf']);
@@ -1888,6 +1913,19 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      */
     private function salvaragente()
     {
+        $params = $this->_request->getParams();
+        xd($params);
+//        $agente = Agente_Model_ManterAgentesDAO::buscarAgentes('01995192180');
+//        $agente = $agente[0];
+//        $agente->id = $agente->idagente;
+//        $agente->cpfCnpj = $agente->cnpjcpf;
+//
+//        $agenteArray = (array) $agente;
+//        array_walk($agenteArray, function($value, $key) use ($agente){
+//            $agente->$key = utf8_encode($value);
+//        });
+//        $this->salvarAgenteRedirect($agente, null, null, true, null);
+//        die;
         $arrAuth = (array) Zend_Auth::getInstance()->getIdentity();
         $usuario = isset($arrAuth['IdUsuario']) ? $arrAuth['IdUsuario'] : $arrAuth['usu_codigo'];
         $arrayAgente = array(
@@ -1934,7 +1972,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
          * Validacao - Se for componente da comissao ele nao salva a visao
          * Regra o componente da comissao nao pode alterar sua visao.
          */
-        if ($grupologado != 118):
+        if ($grupologado != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO):
             $GravarVisao = array(// insert
                 'idagente' => $idAgente,
                 'visao' => $Visao,
@@ -1956,7 +1994,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $segmentoCultural = $this->_request->getParam("segmentoCultural");
 
             // só salva area e segmento para a visao de Componente da Comissao e se os campos titular e areaCultural forem informados
-            if ((int) $Visao == 210 && ((int) $titular == 0 || (int) $titular == 1) && !empty($areaCultural)) {
+            if ((int) $Visao == VisaoModel::COMPONENTE_DA_COMISSAO && ((int) $titular == 0 || (int) $titular == 1) && !empty($areaCultural)) {
                 $GravarComponente = array(// insert
                     'idAgente' => $idAgente,
                     'cdArea' => $areaCultural,
