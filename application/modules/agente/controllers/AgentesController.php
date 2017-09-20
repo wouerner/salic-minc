@@ -1906,19 +1906,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      */
     private function salvaragente()
     {
-//        $params = $this->_request->getParams();
-//        xd($params);
-        $agente = Agente_Model_ManterAgentesDAO::buscarAgentes('01995192180');
-        $agente = $agente[0];
-        $agente->id = $agente->idagente;
-        $agente->cpfCnpj = $agente->cnpjcpf;
-
-        $agenteArray = (array) $agente;
-        array_walk($agenteArray, function($value, $key) use ($agente){
-            $agente->$key = utf8_encode($value);
-        });
-        $this->salvarAgenteRedirect($agente, null, null, true, null);
-        die;
         $arrAuth = (array) Zend_Auth::getInstance()->getIdentity();
         $usuario = isset($arrAuth['IdUsuario']) ? $arrAuth['IdUsuario'] : $arrAuth['usu_codigo'];
         $arrayAgente = array(
