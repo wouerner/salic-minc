@@ -1,5 +1,5 @@
 <?php
-class Agente_AgentesController extends MinC_Controller_Action_Abstract 
+class Agente_AgentesController extends MinC_Controller_Action_Abstract
 {
     /**
      * @var integer (variavel com o id do usuario logado)
@@ -52,88 +52,33 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo',  'Descricao');
         $this->view->combotipostelefones = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 3));
         $this->view->combotiposemails = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 4, 'idverificacao' => array(28, 29)));
-        
-        //Monta o combo das visoes disponiveis
-        $visaoTable = new Agente_Model_DbTable_Visao();
-        $visoes = $visaoTable->buscarVisao(null, null, true);
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $GrupoAtivo = $GrupoAtivo->codGrupo;
 
-        $visoesNew = null;
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $authIdentity = array_change_key_case((array) $auth->getIdentity());
 
         if (isset($authIdentity['cpf'])) {
-            $visoesNew[0]['idVerificacao'] = 144; //PROPONENTE
-            $visoesNew[0]['Descricao'] = 'Proponente';
-
+            $this->view->combovisoes = self::visoes(null, true);
             $this->view->ehProponente = true;
         } else {
+            $this->view->combovisoes = self::visoes(null, false);
             $this->view->ehProponente = false;
-
-            foreach ($visoes as $key => $visaoGrupo) {
-                if ($GrupoAtivo == 93 and ($visaoGrupo->idVerificacao == 209 or $visaoGrupo->idVerificacao == 216)) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 94 and $visaoGrupo->idVerificacao == 209) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 137 and $visaoGrupo->idVerificacao == 209) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 97) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 120 and $visaoGrupo->idVerificacao == 210) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 121 and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 123 and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-
-                if ($GrupoAtivo == 118 and $visaoGrupo->idVerificacao == 210) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if (($GrupoAtivo == 122 or $GrupoAtivo == 123) and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-                if (($GrupoAtivo == 103 || $GrupoAtivo == 142) and $visaoGrupo->idVerificacao == 144) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-                if (($GrupoAtivo == 97 || $GrupoAtivo == 120) and $visaoGrupo->idVerificacao == 217) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-            }
         }
-
-        $this->view->combovisoes = $visoesNew;
 
         //verifica se a funcionadade devera abrir em modal
         if ($this->_request->getParam("modal") == "s") {
             $this->_helper->layout->disableLayout();
             $this->modal = "s";
             $this->view->modal = "s";
+            $this->view->exibirTelefone = 'n';
+            $this->view->exibirEmail = 'n';
         } else {
             $this->modal = "n";
             $this->view->modal = "n";
+            $this->view->exibirTelefone = 's';
+            $this->view->exibirEmail = 's';
         }
+
+        $this->view->autoCarregarDadosCPF = false;
 
         parent::init();
     }
@@ -218,16 +163,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->cpfLogado = $Cpflogado;
         $this->view->grupoativo = $GrupoAtivo->codGrupo;
 
-
-
-        /*         * ****************************************************************************************************** */
         $this->GrupoAtivoSalic = $GrupoAtivo->codGrupo; // Grava o Id do Grupo Ativo
-        /*         * ****************************************************************************************************** */
-
-
-
-        /*         * ****************************************************************************************************** */
-        // Controle para carregar o menu lateral ou nao
 
         $menuLateral = $this->_request->getParam("menuLateral");
 
@@ -236,17 +172,13 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         } else {
             $this->view->menuLateral = 'false';
         }
-        /*         * ****************************************************************************************************** */
-
 
         /* Monta os dados do Agente */
-
         $idAgente = $this->_request->getParam("id");
 
-        if (($GrupoAtivo->codGrupo == 94) || ($GrupoAtivo->codGrupo == 118)) {
+        if (($GrupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) || ($GrupoAtivo->codGrupo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO)) {
             $idAgente = $this->getIdUsuario;
         }
-
 
         $qtdDirigentes = '';
         if (isset($idAgente)) {
@@ -281,6 +213,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
             $this->view->id = $idAgente;
         }
+
     }
 
     /**
@@ -307,6 +240,103 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->cpf = $cpfMask;
         $this->view->tipocpf = $tipoCpf;
         $this->view->idpronac = $this->_request->getParam('idpronac');
+    }
+
+    private function visoes($visao = null, $ehProponente = false)
+    {
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $GrupoAtivo = $GrupoAtivo->codGrupo;
+
+        $visaoTable = new Agente_Model_DbTable_Visao();
+        $visoes = $visaoTable->buscarVisoes($visao);
+
+        $visoesNew = null;
+
+        foreach ($visoes as $key => $visaoGrupo) {
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA
+                AND ($visaoGrupo->idVerificacao == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+                    OR $visaoGrupo->idVerificacao == VisaoModel::TECNICO)
+            ) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::PARECERISTA
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+            ) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DO_PRONAC
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+            ) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::GESTOR_SALIC) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_CNIC
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::COMPONENTE_DA_COMISSAO) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::INCENTIVADOR) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::INCENTIVADOR) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::COMPONENTE_DA_COMISSAO) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if (($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO
+                    OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO)
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::INCENTIVADOR) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if (($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_ANALISE
+                    OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DE_CONVENIO)
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::PROPONENTE) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if (($GrupoAtivo == Autenticacao_Model_Grupos::GESTOR_SALIC
+                    OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_CNIC)
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::VOTANTES_DA_CNIC) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+        }
+
+        if ($ehProponente) {
+            $visoesNew[0]['idVerificacao'] = VisaoModel::PROPONENTE;
+            $visoesNew[0]['Descricao'] = 'Proponente';
+        }
+
+        if(!empty($visao)) {
+            $visoesNew = $visoes;
+        }
+
+        return $visoesNew;
     }
 
     /**
@@ -348,17 +378,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             endif;
 
         endif;
-    }
-
-    /**
-     * Metodo index()
-     * @access public
-     * @param void
-     * @return void
-     * @todo Verificar necessidade dessa action
-     */
-    public function indexAction() {
-
     }
 
     /**
@@ -455,8 +474,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         } else {
             $this->view->modal = "n";
             $this->view->caminho = "";
-            $this->view->exibirTelefone = true;
-            $this->view->exibirEmail = true;
+            $this->view->exibirTelefone = 's';
+            $this->view->exibirEmail = 's';
         }
         $this->incluir();
     }
@@ -472,9 +491,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpf");
         $this->view->caminho = $this->_request->getParam("caminho");
-
-        $this->view->exibirTelefone = false;
-        $this->view->exibirEmail = false;
 
         $this->incluir();
     }
@@ -494,6 +510,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->caminho = $this->_request->getParam("caminho");
         $this->view->acao = $this->_request->getParam("acao");
 
+        $this->view->autoCarregarDadosCPF = true;
+        $this->view->combovisoes = self::visoes(VisaoModel::FORNECEDOR);
         $this->incluir();
     }
 
@@ -1383,7 +1401,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $dados = $tbAusencia->carregarAusencia($idAgente, $ano, 2, null);
 
         $totalDias = 0;
-        
+
         foreach ($dados as $d) {
             if (($d->siAusencia == 0) OR ($d->siAusencia == 1)) {
                 $totalDias = $totalDias + $d->qtddias;
@@ -1635,7 +1653,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
             $salvarArquivo = $tbArquivo->cadastrarDados($dadosArquivo);
             $idArquivo = $tbArquivo->buscarUltimo();
-            
+
             $dadosArquivoImagem = array('idArquivo' => $idArquivo['idArquivo'],
                 'biArquivo' => $arquivoBinario
             );
@@ -1686,14 +1704,14 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 $tbDistribuirParecer = new tbDistribuirParecer();
                 $projetoDAO = new Projetos();
                 $projetos = $projetoDAO->buscaProjetosProdutosAnaliseInicial(array('idAgenteParecerista = ?' => $idAgente, 'DtDistribuicao >= ?' => '' . $dtInicio . '', 'DtDistribuicao <= ?' => '' . $dtFim . ''));
-                
+
                 foreach ($projetos as $p) {
                     $dados = array('Observacao' => 'Devolvido por motivo de atestado m&eacute;dico.',
                             'idUsuario' => $this->getIdUsuario,
                             'DtDevolucao' => $dtAtual
                     );
                     $salvar = $tbDistribuirParecer->atualizarParecer($dados, $p->idDistribuirParecer);
-                    
+
                 }
             }
             /* ********************************************************************************************** */
@@ -1826,8 +1844,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      * @param void
      * @return void
      */
-    public function agentecadastradoAction() 
-    { 
+    public function agentecadastradoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o layout
         $this->_helper->viewRenderer->setNoRender(true);
         $cpf = preg_replace('/\.|-|\//','',$_REQUEST['cpf']);
@@ -1934,7 +1952,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
          * Validacao - Se for componente da comissao ele nao salva a visao
          * Regra o componente da comissao nao pode alterar sua visao.
          */
-        if ($grupologado != 118):
+        if ($grupologado != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) :
             $GravarVisao = array(// insert
                 'idagente' => $idAgente,
                 'visao' => $Visao,
@@ -1956,7 +1974,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $segmentoCultural = $this->_request->getParam("segmentoCultural");
 
             // só salva area e segmento para a visao de Componente da Comissao e se os campos titular e areaCultural forem informados
-            if ((int) $Visao == 210 && ((int) $titular == 0 || (int) $titular == 1) && !empty($areaCultural)) {
+            if ((int) $Visao == VisaoModel::COMPONENTE_DA_COMISSAO && ((int) $titular == 0 || (int) $titular == 1) && !empty($areaCultural)) {
                 $GravarComponente = array(// insert
                     'idAgente' => $idAgente,
                     'cdArea' => $areaCultural,
@@ -2025,8 +2043,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         }
         // ============================================= FIM SALVAR ENDERECOS ====================================================
         // =========================================== INICIO SALVAR TELEFONES ====================================================
-        $movimentacacaobancaria = $this->_request->getParam('movimentacaobancaria');
-        if (empty($movimentacacaobancaria)) {
+        $exibirTelefone = $this->_request->getParam("exibirTelefone");
+        if ($exibirTelefone == 's') {
             $tipoFone = $this->_request->getParam("tipoFone");
             $ufFone = $this->_request->getParam("ufFone");
             $dddFone = $this->_request->getParam("dddFone");
@@ -2053,7 +2071,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         }
         // =========================================== FIM SALVAR TELEFONES ====================================================
         // =========================================== INICIO SALVAR EMAILS ====================================================
-        if (empty($movimentacacaobancaria)) {
+        $exibirEmail = $this->_request->getParam("exibirEmail");
+        if ($exibirEmail == 's') {
             $tipoEmail = $this->_request->getParam("tipoEmail");
             $Email = $this->_request->getParam("email");
             $divulgarEmail = $this->_request->getParam("divulgarEmail");
@@ -2077,12 +2096,13 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         }
         // =========================================== FIM SALVAR EMAILS ====================================================
         // ================ INICIO SALVAR VINCULO DO RESPONSAVEL COM ELE MESMO (PROPONENTE) ================
+        $movimentacacaobancaria = $this->_request->getParam('movimentacaobancaria');
         $acao = null;
         if (empty($movimentacacaobancaria)) {
             try {
                 $this->vincular($cpf, $idAgente);
             } catch (Exception $e) {
-                parent::message("Erro ao salvar o e-mail: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
+                parent::message("Erro ao vincular agente: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
             }
             // ================ FIM SALVAR VINCULO DO RESPONSAVEL COM ELE MESMO (PROPONENTE) ================
             // Caso venha do UC 89 Solicitar Vinculo
@@ -2101,6 +2121,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 $tbVinculo->inserir($dadosVinculo);
             endif;
         }
+
         //================ FIM VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO ========================
         if (isset($acao) && $acao != '') {
             // Retorna para o listar propostas
@@ -2170,34 +2191,28 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         // Se vim do UC38 - Movimentacao bancaria - Captacao
         $projetofnc = $this->_request->getParam('cadastrarprojeto');
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
+        if ($this->getRequest()->isXmlHttpRequest() ||
+            (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' ) ) {
             $this->_helper->layout->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
+
+            echo '<script>';
+            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' . json_encode($agente) . ' });';
+            echo 'document.dispatchEvent(event)';
+            echo '</script>';
+            echo '<div class="center-align">Cadastrado com sucesso!</div>';
+            return;
         }
 
         if (!empty($idpronac)) {
-            if (!$this->getRequest()->isXmlHttpRequest()) {
-                // Retorna para a url anterior do UC10
-                parent::message(
-                    'Cadastro realizado com sucesso!',
-                    "solicitaralteracao/acaoprojeto?idpronac={$idpronac}&cpf={$agente->cpfCnpj}",
-                    'CONFIRM'
-                );
-            }
-            echo '<script>';
-            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' . json_encode($agente) . ' });';
-            echo 'document.dispatchEvent(event)';
-            echo '</script>';
-            echo '<div class="center-align">Cadastrado com sucesso!</div>';
+            parent::message(
+                'Cadastro realizado com sucesso!',
+                "solicitaralteracao/acaoprojeto?idpronac={$idpronac}&cpf={$agente->cpfCnpj}",
+                'CONFIRM'
+            );
+
         } else if (!empty($movimentacacaobancaria)) {
-            echo '<script>';
-            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' . json_encode($agente) . ' });';
-            echo 'document.dispatchEvent(event)';
-            echo '</script>';
-            echo '<div class="center-align">Cadastrado com sucesso!</div>';
-            // Retorna para a url anterior do UC116
-            //@todo aqui ele retorna para a modal de cadastrar incentivador, esse retorno só funciona se o gatilho acima nao funcionar
-            //parent::message("Cadastro realizado com sucesso.", "cadastrar-projeto", "CONFIRM");
+            parent::message("Cadastro realizado com sucesso.", "cadastrar-projeto", "CONFIRM");
         } else if (($acao != '')) {
             parent::message(
                 'Proponente cadastrado com sucesso. Uma solicita&ccedil;&atilde;o de v&iacute;nculo foi enviada a ele.',
