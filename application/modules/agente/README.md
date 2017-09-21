@@ -7,7 +7,7 @@ Modulo responsavel por manter agentes e os cadastros de contato.
 @todo : Complementar esse arquivo com mais informações do módulo.
 ```
 
-## Tipos de Agentes
+## Tipos de Agentes (Visões)
 
 No sistema um Agente pode ter uma ou várias visões, em um projeto um agente pode desempenhar diversos papeis. 
 Um exemplo, pela mecanismo de Incentivo Fiscal, obrigatoriamente vai existir Proponente e Incentivador,
@@ -30,7 +30,6 @@ Para cadastrar um Incentivador:
 #### Fornecedor
 Para cadastrar Fornecedor: 
  - Perfil de Proponente
- - Acessar um projeto nas seguintes situações: E12 (completar lista)
  - Caminho: Menu Lateral -> Realizar Comprovação Financeira
  - Acessar um link da coluna `Item de Custo`
  - Na próxima tela preencher o campo CNPJ/CPF
@@ -38,7 +37,6 @@ Para cadastrar Fornecedor:
 #### Beneficiário
 Para cadastrar um beneficiário: 
  - Perfil de Proponente
- - Acessar um projeto nas seguintes situações: E12 (completar lista)
  - Caminho: 
     - Menu Lateral -> Realizar Comprovação Física -> Relatório Trimestral
     - Na tela clicar no link da coluna `Status`

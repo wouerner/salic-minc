@@ -2694,8 +2694,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $this->view->projeto = $planilhaAprovacaoModel
-            ->dadosdoitem($this->_request->getParam("idPlanilhaAprovacao"), $idPronac)
+            ->dadosdoitem($idPlanilhaAprovacao, $idPronac)
             ;
+        /* var_dump($this->view->projeto);die; */
         $this->view->projeto = $this->view->projeto[0];
 
         if (!$this->view->projeto) {
@@ -2704,11 +2705,15 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria/idPronac/{$idPronac}");
         } else {
             $this->view->tipoComprovante = $this->tipoDocumento;
-            $this->view->comprovantesPagamento = $planilhaAprovacaoModel->buscarcomprovantepagamento(
-                /* $idPronac, $idPlanilhaItem */
-                $idPronac,
-                $idPlanilhaAprovacao
-            );
+            /* $this->view->comprovantesPagamento = $planilhaAprovacaoModel->buscarcomprovantepagamento( */
+            /*     /1* $idPronac, $idPlanilhaItem *1/ */
+            /*     $idPronac, */
+            /*     $idPlanilhaAprovacao */
+            /* ); */
+            $this->view->comprovantesPagamento = $planilhaAprovacaoModel
+                ->dadosdoitemPorItem($idPlanilhaItem, $idPronac)
+                ;
+            /* var_dump($this->view->comprovantesPagamento);die; */
         }
 
         $this->view->idPronac = $idPronac;
