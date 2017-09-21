@@ -6800,4 +6800,262 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $this->view->intTamPag = $this->intTamPag;
         }
     }
+
+    public function consultarAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        if (isset($_REQUEST['idPronac'])) {
+
+            $idPronac = $_GET['idPronac'];
+            if (strlen($idPronac) > 7) {
+                $idPronac = Seguranca::dencrypt($idPronac);
+            }
+
+            $dados = array();
+            $dados['idPronac'] = (int) $idPronac;
+            if (is_numeric($dados['idPronac'])) {
+
+                if (isset($dados['idPronac'])) {
+                    $idPronac = $dados['idPronac'];
+                    //UC 13 - MANTER MENSAGENS (Habilitar o menu superior)
+                    $this->view->idPronac = $idPronac;
+                    $this->view->menumsg = 'true';
+                }
+
+                $tblProjetos = new Projetos();
+                $rst = $tblProjetos->buscarDadosUC75($idPronac);
+
+                //DEFINIE LINK PARA PLANILHA DE VALOR APROVADO
+                $pp = new PlanilhaProjeto();
+                $pa = new PlanilhaAprovacao();
+                $buscarsomaprojeto = $pp->somarPlanilhaProjeto($idPronac);
+                $buscarsomaaprovacaoC = $pa->somarPlanilhaAprovacao($idPronac, 206, "CO");
+                $buscarsomaaprovacaoP = $pa->somarPlanilhaAprovacao($idPronac, 206, "SE");
+
+                if(isset($buscarsomaaprovacaoP['soma']) && $buscarsomaaprovacaoP['soma']>0){
+                    $this->view->linkplanilha = "plenaria";
+                } elseif (isset($buscarsomaaprovacaoC['soma']) && $buscarsomaaprovacaoC['soma']>0){
+                    $this->view->linkplanilha = "cnic";
+                } else {
+                    $this->view->linkplanilha = "inicial";
+                }
+
+                if(count($rst) > 0){
+                    $this->view->projeto = $rst[0];
+                    $this->view->idpronac = $idPronac;
+                    $this->view->idprojeto = $rst[0]->idProjeto;
+                    $this->view->codSituacao = $rst[0]->codSituacao;
+                    if ($rst[0]->codSituacao == 'E12' || $rst[0]->codSituacao == 'E13' || $rst[0]->codSituacao == 'E15' || $rst[0]->codSituacao == 'E50' || $rst[0]->codSituacao == 'E59' || $rst[0]->codSituacao == 'E61' || $rst[0]->codSituacao == 'E62') {
+                        $this->view->menuCompExec = 'true';
+                    }
+                    $this->view->situacaoProjeto = $rst[0]->codSituacao;
+
+                    $geral = new ProponenteDAO();
+
+                    $arrBusca['IdPronac = ?']=$idPronac;
+                    $rsProjeto = $tblProjetos->buscar($arrBusca)->current();
+                    $idPreProjeto = 0;
+
+                    if(!empty($rsProjeto->idProjeto)){
+                        $idPreProjeto = $rsProjeto->idProjeto;
+                    }
+
+                    $this->view->pronac = $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
+                    $dadosProjeto = $geral->execPaProponente($idPronac);
+                    $this->view->dados = $dadosProjeto;
+                    $this->view->dadosProjeto = $rsProjeto;
+
+
+                    //VERIFICA SE O PROJETO ESTA NA CNIC //
+                    $Parecer = new Parecer();
+                    $dadosCNIC = $Parecer->verificaProjSituacaoCNIC($pronac);
+
+                    $msgCNIC = 0;
+                    if(count($dadosCNIC)){
+                        $msgCNIC = 1;
+                    }
+                    $this->view->msgCNIC = $msgCNIC;
+                    // FIM - VERIFICA SE O PROJETO EST� NA CNIC //
+
+
+                    //VERIFICA OS DADOS DE ARQUIVAMENTO, CASO EXISTA //
+                    $ArquivamentoProjeto = array();
+                    $tbArquivamento = new tbArquivamento();
+                    $dadosArquivamentoProjeto = $tbArquivamento->conferirArquivamentoProjeto($pronac);
+                    if(count($dadosArquivamentoProjeto)){
+                        $ArquivamentoProjeto = $dadosArquivamentoProjeto;
+                    }
+                    $this->view->dadosArquivamentoProjeto = $ArquivamentoProjeto;
+                    // FIM - VERIFICA OS DADOS DE ARQUIVAMENTO, CASO EXISTA //
+
+
+                    $verificarHabilitado = $geral->verificarHabilitado($rst[0]->CgcCPf);
+                    if(count($verificarHabilitado)>0){
+                        $this->view->ProponenteInabilitado = 1;
+                    }
+
+                    //VALORES DO PROJETO
+                    $planilhaproposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+                    $planilhaprojeto = new PlanilhaProjeto();
+                    $planilhaAprovacao = new PlanilhaAprovacao();
+
+                    $rsPlanilhaAtual = $planilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idPronac), array('dtPlanilha DESC'))->current();
+                    $tpPlanilha = (!empty($rsPlanilhaAtual) && $rsPlanilhaAtual->tpPlanilha == 'SE') ? 'SE' : 'CO';
+
+                    $arrWhereSomaPlanilha = array();
+                    $arrWhereSomaPlanilha['idPronac = ?']=$idPronac;
+                    if($this->bln_readequacao == "false"){
+                        $fonteincentivo = $planilhaproposta->somarPlanilhaProposta($idPreProjeto, 109);
+                        $outrasfontes   = $planilhaproposta->somarPlanilhaProposta($idPreProjeto, false, 109);
+                        $parecerista    = $planilhaprojeto->somarPlanilhaProjeto($idPreProjeto, 109);
+                    }else{
+                        $arrWhereFontesIncentivo = $arrWhereSomaPlanilha;
+                        $arrWhereFontesIncentivo['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
+                        $arrWhereFontesIncentivo['tpPlanilha = ? ']='SR';
+                        $arrWhereFontesIncentivo['stAtivo = ? ']='N';
+                        $arrWhereFontesIncentivo['NrFonteRecurso = ? ']='109';
+                        $arrWhereFontesIncentivo["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')");
+                        $arrWhereFontesIncentivo["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+                        $fonteincentivo = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereFontesIncentivo);
+
+                        $arrWhereOutrasFontes = $arrWhereSomaPlanilha;
+                        $arrWhereOutrasFontes['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
+                        $arrWhereOutrasFontes['tpPlanilha = ? ']='SR';
+                        $arrWhereOutrasFontes['stAtivo = ? ']='N';
+                        $arrWhereOutrasFontes['NrFonteRecurso <> ? ']='109';
+                        $arrWhereOutrasFontes["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')");
+                        $arrWhereOutrasFontes["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+                        $outrasfontes = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereOutrasFontes);
+
+                        $arrWherePlanilhaPA = $arrWhereSomaPlanilha;
+                        $arrWherePlanilhaPA['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
+                        $arrWherePlanilhaPA['tpPlanilha = ? ']='PA';
+                        $arrWherePlanilhaPA['stAtivo = ? ']='N';
+                        $arrWherePlanilhaPA['NrFonteRecurso = ? ']='109';
+                        $arrWherePlanilhaPA["idPedidoAlteracao = (?)"] = new Zend_Db_Expr("(SELECT TOP 1 max(idPedidoAlteracao) from SAC.dbo.tbPlanilhaAprovacao where IdPRONAC = '{$idPronac}')");
+                        $arrWherePlanilhaPA["tpAcao <> ('E') OR tpAcao IS NULL "]   = '(?)';
+                        $parecerista = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWherePlanilhaPA);
+                    }
+                    //valor do componetne
+                    $arrWhereSomaPlanilha = array();
+                    $arrWhereSomaPlanilha['idPronac = ?']=$idPronac;
+                    $arrWhereSomaPlanilha['idPlanilhaItem <> ? ']='206'; //elaboracao e agenciamento
+                    $arrWhereSomaPlanilha['tpPlanilha = ? ']=$tpPlanilha;
+                    $arrWhereSomaPlanilha['NrFonteRecurso = ? ']='109';
+                    $arrWhereSomaPlanilha['stAtivo = ? ']='S';
+                    $componente = $planilhaAprovacao->somarItensPlanilhaAprovacao($arrWhereSomaPlanilha);
+
+                    $valoresProjeto = new ArrayObject();
+                    $valoresProjeto['fontesincentivo']  = $fonteincentivo['soma'];
+                    $valoresProjeto['outrasfontes']     = $outrasfontes['soma'];
+                    $valoresProjeto['valorproposta']    = $fonteincentivo['soma'] + $outrasfontes['soma'];
+                    $valoresProjeto['valorparecerista'] = $parecerista['soma'];
+                    $valoresProjeto['valorcomponente']  = $componente['soma'];
+                    $this->view->valoresDoProjeto = $valoresProjeto;
+
+                    $tblCaptacao = new Captacao();
+                    $rsCount = $tblCaptacao->buscaCompleta(array('idPronac = ?'=>$idPronac), array(), null, null, true);
+                    $this->view->totalGeralCaptado = $rsCount->totalGeralCaptado;
+                    /***************** FIM  - MODO NOVO ********************/
+
+                    /*** Validacao do Proponente Inabilitado ************************************/
+
+                    $cpfLogado 		= $this->cpfLogado;
+                    $cpfProponente 	= !empty($dadosProjeto[0]->CNPJCPF) ? $dadosProjeto[0]->CNPJCPF : '';
+                    $respProponente     = 'R';
+                    $inabilitado 	= 'N';
+
+                    // Verificando se o Proponente est� inabilitado
+	                $inabilitadoDAO = new Inabilitado();
+                        $where['CgcCpf 		= ?'] = $cpfProponente;
+                        $where['Habilitado 	= ?'] = 'N';
+                        $busca = $inabilitadoDAO->Localizar($where)->count();
+
+                        if($busca > 0)
+                        {
+                                $inabilitado 	= 'S';
+                        }
+
+                        if(!empty($idPreProjeto))
+                        {
+
+                                // Se for Respons�vel verificar se tem Procura��o
+                                $procuracaoDAO = new Procuracao();
+                                $procuracaoValida 	= 'N';
+
+                                $wherePro['vprp.idPreProjeto = ?'] 		= $idPreProjeto;
+                                $wherePro['v.idUsuarioResponsavel = ?'] = $this->idResponsavel;
+                                $wherePro['p.siProcuracao = ?'] 		= 1;
+                                $buscaProcuracao = $procuracaoDAO->buscarProcuracaoProjeto($wherePro)->count();
+
+                                if($buscaProcuracao > 0)
+                                {
+                                        $procuracaoValida 	= 'S';
+                                }
+                        }
+                        else
+                        {
+                                $procuracaoValida 	= 'S';
+                        }
+
+                        $this->view->procuracaoValida = $procuracaoValida;
+                        $this->view->respProponente = $respProponente;
+                        $this->view->inabilitado 	= $inabilitado;
+
+                    /****************************************************************************/
+
+                    $tbemail = $geral->buscarEmail($idPronac);
+                    $this->view->email = $tbemail;
+
+                    $tbtelefone = $geral->buscarTelefone($idPronac);
+                    $this->view->telefone = $tbtelefone;
+
+                    $tblAgente = new Agente_Model_DbTable_Agentes();
+                    if(isset($dadosProjeto[0]->CNPJCPF) && !empty($dadosProjeto[0]->CNPJCPF)){
+                        $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$dadosProjeto[0]->CNPJCPF))->current();
+                        $this->view->CgcCpf = $dadosProjeto[0]->CNPJCPF;
+                    }
+
+                    $rsIdAgente = (isset($rsAgente->idAgente) && !empty($rsAgente->idAgente)) ? $rsAgente->idAgente : 0;
+
+                    $rsDirigentes = $tblAgente->buscarDirigentes(array('v.idVinculoPrincipal =?'=>$rsIdAgente,'n.Status =?'=>0), array('n.Descricao ASC'));
+//                    $tbDirigentes = $geral->buscarDirigentes($idPronac);
+                    $this->view->dirigentes = $rsDirigentes;
+
+                    //========== inicio codigo mandato dirigente ================
+                    /*==================================================*/
+                    $arrMandatos = array();
+
+                    if(!empty($this->idPreProjeto)){
+                        $preProjeto = new Proposta_Model_DbTable_PreProjeto();
+                        $Empresa = $preProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
+                        $idEmpresa = $Empresa->idAgente;
+
+                        $tbDirigenteMandato = new tbAgentesxVerificacao();
+                        foreach($rsDirigentes as $dirigente){
+                            $rsMandato = $tbDirigenteMandato->listarMandato(array('idEmpresa = ?' => $idEmpresa, 'idDirigente = ?' => $dirigente->idAgente,'stMandato = ?' => 0));
+                            $arrMandatos[$dirigente->NomeDirigente] = $rsMandato;
+                        }
+                    }
+                    $this->view->mandatos = $arrMandatos;
+
+                    //============== fim codigo dirigente ================
+                    /*==================================================*/
+
+                    if(!empty ($idPreProjeto)){
+                        //OUTROS DADOS PROPONENTE
+                        $this->view->itensGeral = Proposta_Model_AnalisarPropostaDAO::buscarGeral($idPreProjeto);
+                    }
+
+                } else {
+                    parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
+                }
+            } else {
+                parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
+            }
+        } else {
+            parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
+        }
+    }
 }
+
