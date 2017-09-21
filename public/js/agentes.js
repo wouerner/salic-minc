@@ -116,22 +116,28 @@ function validaAgenteNovo()
     complemento     = document.getElementById('complemento').value;
     bairro          = document.getElementById('bairro').value;
     
-    if ( document.getElementById('movimentacaobancaria').value == '' ) {
+    if ( document.getElementById('exibirTelefone').value == 's' ) {
         tipoFone 		= document.getElementById('tipoFone').value;
         ufFone   		= document.getElementById('ufFone').value;
         dddFone  		= document.getElementById('dddFone').value;
         fone     		= document.getElementById('fone').value;
 
-        tipoEmail     	= document.getElementById('tipoEmail').value;
-        email         	= document.getElementById('email').value;
-    } else{
+    } else {
         tipoFone 	= "";
         ufFone   	= "";
         dddFone  	= "";
         fone     	= "";
+    }
+
+    if (document.getElementById('exibirEmail').value == 's' ) {
+        tipoEmail     	= document.getElementById('tipoEmail').value;
+        email         	= document.getElementById('email').value;
+    }else {
         tipoEmail     	= "";
-        email         	= "";  
-    }  
+        email         	= "";
+    }
+
+
     var verifica = false;
     $('[name=titular]').each(function(){
         if(!$(this).attr('disabled'))
@@ -204,22 +210,22 @@ function validaAgenteNovo()
     }
    
     // valida&ccedil;&atilde;o para telefones
-    else if (tipoFone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (tipoFone == "" && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de Telefone!", "tipoFone");
         exibirMsgErro('tipoFone','erroTipoFone');
     }
-    else if (ufFone == 0 && document.getElementById('movimentacaobancaria').value == '')
+    else if (ufFone == 0 && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione a UF!", "ufFone");
         exibirMsgErro('ufFone','erroUfFone');
     }
-    else if (dddFone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (dddFone == "" && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o DDD do telefone!", "dddFone");
         exibirMsgErro('dddFone','erroDddFone');
     }
-    else if (fone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (fone == "" && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o Telefone!", "fone");
         exibirMsgErro('fone','erroFone');
@@ -227,24 +233,24 @@ function validaAgenteNovo()
     else if ((fone.length < 9 || !(/\d{4}\-\d{4}/.test(fone)) || fone == "0000-0000" ||
         fone == "1111-1111" || fone == "2222-2222" || fone == "3333-3333" ||
         fone == "4444-4444" || fone == "5555-5555" || fone == "6666-6666" ||
-        fone == "7777-7777" || fone == "8888-8888" || fone == "9999-9999") && document.getElementById('movimentacaobancaria').value == '')
+        fone == "7777-7777" || fone == "8888-8888" || fone == "9999-9999") && document.getElementById('exibirTelefone').value == 's')
         {
         alertar("O n&uacute;mero do Telefone &eacute; inv&aacute;lido!", "fone");
         exibirMsgErro('fone','erroFone');
     }
     
     // valida&ccedil;&atilde;o para emails
-    else if (tipoEmail == 0 && document.getElementById('movimentacaobancaria').value == '')
+    else if (tipoEmail == 0 && document.getElementById('exibirEmail').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de E-mail!", "tipoEmail");
         exibirMsgErro('tipoEmail','erroTipoEmail');
     }
-    else if (email == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (email == "" && document.getElementById('exibirEmail').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
         exibirMsgErro('email','erroEmail');
     }
-    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) && document.getElementById('movimentacaobancaria').value == '')
+    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) && document.getElementById('exibirEmail').value == 's')
     {
         alertar("E-mail inv&aacute;lido!", "email");
         exibirMsgErro('email','erroEmail');
@@ -257,10 +263,10 @@ function validaAgenteNovo()
         $("#cidade").attr("disabled" , "");
         $("#uf").attr("disabled" , "");
 	
-        if( document.getElementById('movimentacaobancaria').value != '' ){
+        if( document.getElementById('modal').value == 's' ){
             jqAjaxForm( document.getElementById('formCadAgentes'), "divDinamicaAgentes");
         }else{
-            $("#formCadAgentes").submit();
+           $("#formCadAgentes").submit();
         }
 
     }
@@ -346,17 +352,17 @@ function validaDirigenteNovo()
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de Telefone!", "tipoFone");
         exibirMsgErro('tipoFone','erroTipoFone');
     }
-    else if (ufFone == 0 && document.getElementById('movimentacaobancaria').value == '')
+    else if (ufFone == 0 && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione a UF!", "ufFone");
         exibirMsgErro('ufFone','erroUfFone');
     }
-    else if (dddFone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (dddFone == "" && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o DDD do telefone!", "dddFone");
         exibirMsgErro('dddFone','erroDddFone');
     }
-    else if (fone == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (fone == "" && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o Telefone!", "fone");
         exibirMsgErro('fone','erroFone');
@@ -364,7 +370,7 @@ function validaDirigenteNovo()
     else if ((fone.length < 9 || !(/\d{4}\-\d{4}/.test(fone)) || fone == "0000-0000" ||
         fone == "1111-1111" || fone == "2222-2222" || fone == "3333-3333" ||
         fone == "4444-4444" || fone == "5555-5555" || fone == "6666-6666" ||
-        fone == "7777-7777" || fone == "8888-8888" || fone == "9999-9999") && document.getElementById('movimentacaobancaria').value == '')
+        fone == "7777-7777" || fone == "8888-8888" || fone == "9999-9999") && document.getElementById('exibirTelefone').value == 's')
         {
         alertar("O n&uacute;mero do Telefone &eacute; inv&aacute;lido!", "fone");
         exibirMsgErro('fone','erroFone');
@@ -376,12 +382,12 @@ function validaDirigenteNovo()
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de E-mail!", "tipoEmail");
         exibirMsgErro('tipoEmail','erroTipoEmail');
     }
-    else if (email == "" && document.getElementById('movimentacaobancaria').value == '')
+    else if (email == "" && document.getElementById('exibirEmail').value == 's')
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
         exibirMsgErro('email','erroEmail');
     }
-    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) && document.getElementById('movimentacaobancaria').value == '')
+    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("E-mail inv&aacute;lido!", "email");
         exibirMsgErro('email','erroEmail');
