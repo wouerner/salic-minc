@@ -1,0 +1,46 @@
+<?php if($this->projetosEmAnalise > 0): ?>
+    <table class="bordered striped">
+        <thead>
+            <tr>
+                <th>PRONAC</a></th>
+                <th>Nome do Projeto</a></th>
+                <th>Situação</a></th>
+                <th>Área / Segmento</a></th>
+                <th>Mecanismo</a></th>
+                <th>Técnico</a></th>
+                <th>Dt. Envio</th>
+                <th>Dias em análise</th>
+                <th>Hist&oacute;rico</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->projetosEmAnalise as $projeto): ?>
+                <tr>
+                    <td align="center">
+                        <a class="btn modal-trigger pre-visualizar"  data-idpronac="<?php echo ($projeto->idPronac); ?>" >
+                            <?php echo $projeto->Pronac; ?>
+                        </a>
+                    </td>
+                    <td><?php echo $projeto->NomeProjeto; ?></td>
+                    <td align="center"><?php echo $projeto->Situacao; ?></td>
+                    <td><?php echo $projeto->Area.' / '.$projeto->Segmento; ?></td>
+                    <td align="center"><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
+                    <td align="center"><?php echo $projeto->usu_nome; ?></td>
+                    <td align="center"><?php echo Data::tratarDataZend($projeto->dtInicioEncaminhamento, 'brasileira'); ?></td>
+                    <td align="center"><?php echo $projeto->qtDiasAnalise; ?></td>
+                    <td align="center">
+                        <button class="btn" onclick="return JShistoricoEncaminhamento('<?php echo $projeto->idPronac; ?>')" alt="Encaminhar">
+                            <i class=" tiny material-icons">history</i> 
+                        </button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <table class="tabela">
+        <tr>
+            <td align="center">Nenhum registro encontrado.</td>
+        </tr>
+    </table>
+<?php endif ?>
