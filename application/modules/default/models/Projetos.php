@@ -2623,7 +2623,8 @@ class Projetos extends MinC_Db_Table_Abstract
             'd.DtDistribuicao IS NOT NULL',
             'd.DtDevolucao IS NULL',
             '(p.Situacao = \'B11\') OR (p.Situacao = \'B14\')',
-            'a.idAgente = ' . $usu_Codigo,
+            /* 'a.idAgente = ' . $usu_Codigo, */
+            'u.usu_codigo = ' . $usu_Codigo,
             'p.IdPRONAC = ' . $idpronac,
             'd.idDistribuirParecer = ' . $idDistribuirParecer
         );
@@ -2634,6 +2635,7 @@ class Projetos extends MinC_Db_Table_Abstract
         }
 
         $select->order('d.DtDistribuicao');
+        /* echo $select;die; */
 
         return $this->fetchAll($select);
     }
