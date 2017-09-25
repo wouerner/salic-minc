@@ -109,11 +109,11 @@ class Agente_Model_DbTable_Visao extends MinC_Db_Table_Abstract
             $this->getSchema('agentes')
         );
 
-        $objSelect->where('idtipo = ? ', 16);
-        $objSelect->where('sistema = ? ', 21);
-
         if (!empty($visao)) {
             $objSelect->where('idVerificacao = ? ', $visao);
+        } else {
+            $objSelect->where('idtipo = ? ', 16);
+            $objSelect->where('sistema = ? ', 21);
         }
 
         $objSelect->limit(100);
