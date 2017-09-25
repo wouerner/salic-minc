@@ -595,7 +595,13 @@
         ajax.open("GET", "<?= $this->url(array('module' => 'default', 'controller' => 'cep', 'action' => 'cep')); ?>?cep=" + cep, true);
         ajax.onreadystatechange = function () {
             if (cep.length != 10) {
-                $('#erroCep').html("O CEP informado é inv&aacute;lido!");
+                $('#erroCep').html("CEP inv&aacute;lido ou n&atilde;o encontrado!");
+
+                elmLogradouro.removeAttr("disabled").val('');
+                elmTipoLogradouro.removeAttr("disabled").val('');
+                elmBairro.removeAttr("disabled").val('');
+                elmCidade.removeAttr("disabled").val(0);
+                elmUF.removeAttr("disabled").val(0);
             }
             else {
                 $('#erroCep').html("");
@@ -688,7 +694,7 @@
 
                     // bairro
                     bairro.value = txtBairro;
-                    if (elmBairro.length < 2) {
+                    if (elmBairro.length > 2) {
                         elmBairro.removeAttr("disabled");
                     }
 
