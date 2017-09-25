@@ -2623,7 +2623,8 @@ class Projetos extends MinC_Db_Table_Abstract
             'd.DtDistribuicao IS NOT NULL',
             'd.DtDevolucao IS NULL',
             '(p.Situacao = \'B11\') OR (p.Situacao = \'B14\')',
-            'a.idAgente = ' . $usu_Codigo,
+            /* 'a.idAgente = ' . $usu_Codigo, */
+            'u.usu_codigo = ' . $usu_Codigo,
             'p.IdPRONAC = ' . $idpronac,
             'd.idDistribuirParecer = ' . $idDistribuirParecer
         );
@@ -2634,6 +2635,7 @@ class Projetos extends MinC_Db_Table_Abstract
         }
 
         $select->order('d.DtDistribuicao');
+        /* echo $select;die; */
 
         return $this->fetchAll($select);
     }
@@ -7473,5 +7475,166 @@ class Projetos extends MinC_Db_Table_Abstract
         $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();
         
         return $fnVerificarProjetoAprovadoIN2017->verificar($idPronac);
+    }
+
+    public function painelPrestacaoDeContasAguardandoAnalise($where = array())
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('p' => $this->_name),
+            array(
+                new Zend_Db_Expr("
+                    p.IdPRONAC AS idPronac,
+                    (p.AnoProjeto+p.Sequencial) AS Pronac,
+                    p.NomeProjeto,
+                    p.Situacao
+                ")
+            )
+        );
+
+        $select->joinInner(
+            array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
+            array(''), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('a' => 'Area'), 'p.Area = a.Codigo',
+            array('a.Descricao AS Area'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('s' => 'Segmento'), 'p.Segmento = s.Codigo',
+            array('s.Descricao AS Segmento'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('m' => 'Mecanismo'), 'p.Mecanismo = m.Codigo',
+            array('m.Descricao AS Mecanismo'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('sit' => 'Situacao'), 'sit.Codigo = p.Situacao',
+            array(''), 'SAC.dbo'
+        );
+
+        //adiciona quantos filtros foram enviados
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
+        return $this->fetchAll($select);
+    }
+
+    public function painelPrestacaoDeContasEmAnalise($where = array())
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('p' => $this->_name),
+            array(
+                new Zend_Db_Expr("
+                    p.IdPRONAC AS idPronac,
+                    (p.AnoProjeto+p.Sequencial) AS Pronac,
+                    p.NomeProjeto,
+                    p.Situacao,
+                    e.dtInicioEncaminhamento,
+                    DATEDIFF(day, e.dtInicioEncaminhamento, GETDATE()) AS qtDiasAnalise
+                ")
+            )
+        );
+
+        $select->joinInner(
+            array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
+            array(''), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('a' => 'Area'), 'p.Area = a.Codigo',
+            array('a.Descricao AS Area'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('s' => 'Segmento'), 'p.Segmento = s.Codigo',
+            array('s.Descricao AS Segmento'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('m' => 'Mecanismo'), 'p.Mecanismo = m.Codigo',
+            array('m.Descricao AS Mecanismo'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('sit' => 'Situacao'), 'sit.Codigo = p.Situacao',
+            array(''), 'SAC.dbo'
+        );
+
+        $select->joinLeft(
+            array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac',
+            array('e.dtInicioEncaminhamento', 'e.dtFimEncaminhamento', 'e.idEncPrestContas'), 'BDCORPORATIVO.scSAC'
+        );
+
+        $select->joinInner(
+            array('u' => 'Usuarios'), 'e.idAgenteDestino = u.usu_codigo',
+            array('usu_nome'), 'TABELAS.dbo'
+        );
+
+        //adiciona quantos filtros foram enviados
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
+        //adicionando linha order ao select
+        $select->order($order);
+
+        return $this->fetchAll($select);
+    }
+
+    public function painelPrestacaoDeContasAnalisados($where = array())
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('p' => $this->_name),
+            array(
+                new Zend_Db_Expr("
+                    p.IdPRONAC AS idPronac,
+                    (p.AnoProjeto+p.Sequencial) AS Pronac,
+                    p.NomeProjeto,
+                    p.Situacao
+                ")
+            )
+        );
+
+        $select->joinInner(
+            array('i' => 'Interessado'), 'p.CgcCPf = i.CgcCPf',
+            array(''), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('a' => 'Area'), 'p.Area = a.Codigo',
+            array('a.Descricao AS Area'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('s' => 'Segmento'), 'p.Segmento = s.Codigo',
+            array('s.Descricao AS Segmento'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('m' => 'Mecanismo'), 'p.Mecanismo = m.Codigo',
+            array('m.Descricao AS Mecanismo'), 'SAC.dbo'
+        );
+        $select->joinInner(
+            array('sit' => 'Situacao'), 'sit.Codigo = p.Situacao',
+            array(''), 'SAC.dbo'
+        );
+
+        $select->joinInner(
+            array('e' => 'tbEncaminhamentoPrestacaoContas'), 'p.IdPRONAC = e.idPronac AND e.stAtivo = 1',
+            array('e.idSituacaoEncPrestContas'), 'BDCORPORATIVO.scSAC'
+        );
+
+        //adiciona quantos filtros foram enviados
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
+        //adicionando linha order ao select
+        $select->order($order);
+
+        return $this->fetchAll($select);
     }
 }

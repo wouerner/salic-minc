@@ -3270,69 +3270,25 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $rsSitucao = $tblSituacao->listasituacao(array("Codigo IN (?)"=>array('C08', 'E16', 'E17', 'E18', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54','E30')));
 
         $this->view->situacoes = $rsSitucao;
-        $this->intTamPag = 10;
 
-        //DEFINE PARAMETROS DE ORDENACAO / QTDE. REG POR PAG. / PAGINACAO
-        if ($this->_request->getParam("qtde")) {
-            $this->intTamPag = $this->_request->getParam("qtde");
-        }
-        $order = array();
+        $Projetos = new Projetos();
 
-        if ($this->_request->getParam("ordem")) {
-            $ordem = $this->_request->getParam("ordem");
-            if ($ordem == "ASC") {
-                $novaOrdem = "DESC";
-            } else {
-                $novaOrdem = "ASC";
-            }
-        } else {
-            $ordem = "ASC";
-            $novaOrdem = "ASC";
-        }
-
-        if ($this->_request->getParam("campo")) {
-            $campo = $this->_request->getParam("campo");
-            $order = array($campo." ".$ordem);
-            if ($campo == 6) {
-                $order = array("6 ".$ordem,"7 ".$ordem);
-            }
-            $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-        } else {
-            $campo = null;
-            $order = array(2); //Pronac
-            $ordenacao = null;
-        }
-
-        $pag = 1;
-        $post  = Zend_Registry::get('get');
-        if (isset($post->pag)) {
-            $pag = $post->pag;
-        }
-        $inicio = ($pag>1) ? ($pag-1)*$this->intTamPag : 0;
-
-        /* ================== PAGINACAO ======================*/
-        $where = array();
-        if ((isset($_POST['pronac']) && !empty($_POST['pronac'])) || (isset($_GET['pronac']) && !empty($_GET['pronac']))) {
-            $where["p.AnoProjeto+p.Sequencial = ?"] = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
-            $this->view->pronacProjeto = isset($_POST['pronac']) ? $_POST['pronac'] : $_GET['pronac'];
-        }
+        $projetosAguardandoAnalise = null;
+        $projetosEmAnalise = null;
+        $projetosAnalisados = null;
 
         if (isset($_POST['tipoFiltro']) || isset($_GET['tipoFiltro'])) {
             $filtro = isset($_POST['tipoFiltro']) ? $_POST['tipoFiltro'] : $_GET['tipoFiltro'];
             $this->view->filtro = $filtro;
             switch ($filtro) {
-                case 'emanalise': //Em an&aacute;lise
-                    $where['p.Orgao = ?'] = $this->codOrgao;
-                    $where['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
-                    $where['e.idSituacaoEncPrestContas in (?)'] = array('2');
-                    $where['e.stAtivo = ?'] = 1;
-                    break;
                 case 'analisados': // Analisados
                     $where['p.Orgao = ?'] = $this->codOrgao;
                     $where['p.Situacao in (?)'] = array('E14','E18', 'E27', 'E46', 'G08', 'G21', 'G22');
                     $where['e.idSituacaoEncPrestContas in (?)'] = array('3');
                     $where['e.cdGruposDestino in (?)'] = array('125', '126');
                     $where['e.stAtivo = ?'] = 1;
+                    $projetosAnalisados = $Projetos->painelPrestacaoDeContasAnalisados($where, $order, $tamanho, $inicio, false, $filtro);
+
                     break;
                 case 'diligenciados': //Projetos diligenciados
                     $where['p.Orgao = ?'] = $this->codOrgao;
@@ -3352,49 +3308,31 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     $where['d.idTipoDiligencia = ?'] = 174;
                     $where['d.stEstado = ?'] = 0;
                     break;
-                default: //Aguardando An&aacute;lise
-                    $where['p.Orgao = ?'] = $this->codOrgao;
-                    $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
-                    break;
             }
-        } else { //Aguardando An&aacute;lise
-            $filtro = '';
-            $where['p.Orgao = ?'] = $this->codOrgao;
-            $where['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
-        }
+        } 
 
-        if ((!empty($_POST['situacao'])) || (!empty($_GET['situacao']))) {
-            $where["p.Situacao in (?)"] = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
-            $this->view->situacao = isset($_POST['situacao']) ? $_POST['situacao'] : $_GET['situacao'];
-        }
+        // Aguardando a Analise
+        $whereAguardandoAnalise['p.Orgao = ?'] = $this->codOrgao;
+        $whereAguardandoAnalise['p.Situacao in (?)'] = array('C08', 'E16', 'E17', 'E20', 'E24', 'E25', 'E62', 'E66', 'E68', 'E72', 'E77', 'G15', 'G17', 'G18', 'G20', 'G24', 'G43', 'G54');
+        $projetosAguardandoAnalise = $Projetos->painelPrestacaoDeContasAguardandoAnalise($whereAguardandoAnalise);
+        $this->view->projetosAguardandoAnalise = $projetosAguardandoAnalise;
 
-        $Projetos = new Projetos();
-        $total = $Projetos->buscarPainelPrestacaoDeContas($where, $order, null, null, true, $filtro);
-        $fim = $inicio + $this->intTamPag;
+        // Em analise
+        $whereEmAnalise['p.Orgao = ?'] = $this->codOrgao;
+        $whereEmAnalise['p.Situacao in (?)'] = array('E17','E18', 'E20', 'E27', 'E30', 'E46', 'G08', 'G21', 'G22');
+        $whereEmAnalise['e.idSituacaoEncPrestContas in (?)'] = array('2');
+        $whereEmAnalise['e.stAtivo = ?'] = 1;
+        $projetosEmAnalise = $Projetos->painelPrestacaoDeContasEmAnalise($whereEmAnalise);
+        $this->view->projetosEmAnalise = $projetosEmAnalise;
 
-        $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
-        $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
-        $busca = $Projetos->buscarPainelPrestacaoDeContas($where, $order, $tamanho, $inicio, false, $filtro);
-
-        $paginacao = array(
-            "pag"=>$pag,
-            "qtde"=>$this->intTamPag,
-            "campo"=>$campo,
-            "ordem"=>$ordem,
-            "ordenacao"=>$ordenacao,
-            "novaOrdem"=>$novaOrdem,
-            "total"=>$total,
-            "inicio"=>($inicio+1),
-            "fim"=>$fim,
-            "totalPag"=>$totalPag,
-            "Itenspag"=>$this->intTamPag,
-            "tamanho"=>$tamanho
-        );
-
-        $this->view->paginacao     = $paginacao;
-        $this->view->qtdRegistros  = $total;
-        $this->view->dados         = $busca;
-        $this->view->intTamPag     = $this->intTamPag;
+        // Analisados
+        $whereAnalisados['p.Orgao = ?'] = $this->codOrgao;
+        $whereAnalisados['p.Situacao in (?)'] = array('E14','E18', 'E27', 'E46', 'G08', 'G21', 'G22');
+        $whereAnalisados['e.idSituacaoEncPrestContas in (?)'] = array('3');
+        $whereAnalisados['e.cdGruposDestino in (?)'] = array('125', '126');
+        $whereAnalisados['e.stAtivo = ?'] = 1;
+        $projetosAnalisados = $Projetos->painelPrestacaoDeContasAnalisados($whereAnalisados);
+        $this->view->projetosAnalisados = $projetosAnalisados;
     }
 
     public function imprimirPainelAction()

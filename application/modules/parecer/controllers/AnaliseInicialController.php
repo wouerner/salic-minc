@@ -9,8 +9,10 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
 
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::PARECERISTA;
-        
+
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
+
+
     }
 
     public function init()
@@ -19,6 +21,7 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         parent::init();
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $this->idUsuario = $this->auth->getIdentity()->usu_codigo;
     }
 
     public function gerenciarAssinaturasAction()
@@ -32,22 +35,22 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
             $get = $this->getRequest()->getParams();
             $post = $this->getRequest()->getPost();
             $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
-            
+
             if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
                 $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
                 $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
-                
+
                 $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
                 $idDocumentoAssinatura = $this->getIdDocumentoAssinatura($get['IdPRONAC'], $idTipoDoAtoAdministrativo);
-                
+
                 $this->redirect("/assinatura/index/visualizar-projeto/?idDocumentoAssinatura=" . $idDocumentoAssinatura . "&origin=" . $get['origin']);
             } elseif(isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
                 // ainda nao implementado o encaminhamento de vários para pareceres
             }
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/{$this->moduleName}/analise-inicial/index");
-        }   
-        
+        }
+
     }
 
     function obterServicoDocumentoAssinatura()
@@ -56,27 +59,27 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
             require_once __DIR__ . DIRECTORY_SEPARATOR . "AnaliseInicialDocumentoAssinaturaController.php";
             $this->servicoDocumentoAssinatura = new Parecer_AnaliseInicialDocumentoAssinaturaController($this->getRequest()->getPost());
         }
-        return $this->servicoDocumentoAssinatura;        
+        return $this->servicoDocumentoAssinatura;
     }
 
     private function getIdDocumentoAssinatura($idPronac, $idTipoDoAtoAdministrativo)
     {
         $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        
+
         $where = array();
         $where['IdPRONAC = ?'] = $idPronac;
         $where['idTipoDoAtoAdministrativo = ?'] = $idTipoDoAtoAdministrativo;
         $where['stEstado = ?'] = 1;
-        
+
         $result = $objDocumentoAssinatura->buscar($where);
-        
+
         return $result[0]['idDocumentoAssinatura'];
     }
-    
+
     public function indexAction()
     {
         $this->validarPerfis();
-        
+
         $auth = Zend_Auth::getInstance();
         $idusuario = $auth->getIdentity()->usu_codigo;
         $this->view->idUsuario = $idusuario;
@@ -88,9 +91,9 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         $agente = $UsuarioDAO->getIdUsuario($idusuario);
         $idAgenteParecerista = $agente['idagente'];
         $this->view->idAgenteParecerista = $idAgenteParecerista;
-        
+
         $situacao = $this->_request->getParam('situacao');
-        
+
         $projeto = new Projetos();
         $resp = $projeto->buscaProjetosProdutosParaAnalise(
             array(
@@ -107,13 +110,13 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         );
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
-        
+
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
         $paginator = Zend_Paginator::factory($resp); // dados a serem paginados
         $currentPage = $this->_getParam('page', 1);
         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina
-        
+
         $this->view->qtdRegistro = count($resp);
         $this->view->situacao = $situacao;
         $this->view->buscar = $paginator;
@@ -134,14 +137,14 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         $idDistribuirParecer = $this->_request->getParam("idD");
         $stPrincipal = $this->_request->getParam("stPrincipal");
         $this->view->totaldivulgacao = "true";
-        
+
         $projetos = new Projetos();
         $orgaos = new Orgaos();
-        
+
         if (!$projetos->verificarIN2017($idPronac)) {
             $this->validacaoAnteriorIN2017($idPronac);
         }
-        
+
         if ($_POST || $this->_request->getParam("concluir") == 1) {
             $justificativa = ($this->_request->getParam("concluir") == 1) ? "" : trim(strip_tags($this->_request->getParam("justificativa")));
             $tbDistribuirParecer = new tbDistribuirParecer();
@@ -151,9 +154,9 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
             try {
                 $tbDistribuirParecer->getAdapter()->beginTransaction();
                 foreach ($buscaDadosProjeto as $dp):
-                
+
                 $fecharAnalise = 0;
-                    
+
                     $dados = array(
                         'idOrgao' => $dp->idOrgao,
                         'DtEnvio' => $dp->DtEnvio,
@@ -197,11 +200,90 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         }
 
         $projetos = new Projetos();
-        $dadosProjetoProduto = $projetos->dadosFechar($this->getIdUsuario, $idPronac, $idDistribuirParecer);
+        /* $dadosProjetoProduto = $projetos->dadosFechar($this->getIdUsuario, $idPronac, $idDistribuirParecer); */
+        $dadosProjetoProduto = $projetos->dadosFechar($this->idUsuario, $idPronac, $idDistribuirParecer);
         $this->view->dados = $dadosProjetoProduto;
-        
+        /* var_dump($dadosProjetoProduto); */
+
         $this->view->IN2017 = $projetos->verificarIN2017($idPronac);
-        
-        $this->view->idpronac = $idPronac;        
+
+        $this->view->idpronac = $idPronac;
+    }
+
+    private function validacaoAnteriorIN2017($idPronac)
+    {
+        // Validacao do 20%
+        //valor total do projeto V1
+
+        $planilhaProjeto = new PlanilhaProjeto();
+        $valorProjeto = $planilhaProjeto->somarPlanilhaProjeto($idPronac, 109);
+        //Validacao dos 20%
+        if ($valorProjeto['soma'] > 0 && $stPrincipal == "1") {
+            $this->view->totaldivulgacao = $this->validaRegra20Porcento($idPronac);
+        }
+
+        // Validacao do 15%
+        if ($stPrincipal == "1") //avaliacao da regra dos 15% so deve ser feita quando a analise for do produto principal
+        {
+            $Situacao = false;
+
+            $V1 = '';
+            $V2 = '';
+            $V3 = '';
+            $V4 = '';
+            $V5 = '';
+            $V6 = '';
+
+            $tpPlanilha = 'CO'; // O que eh isso?
+            $planilhaProjeto = new PlanilhaProjeto();
+
+            /* V1 */
+
+            $whereTotalV1['PAP.IdPRONAC = ?'] = $idPronac;
+            $whereTotalV1['PAP.FonteRecurso = ?'] = 109;
+            $whereTotalV1['PAP.idPlanilhaItem <> ? '] = 206;
+
+            $valorProjeto15 = $planilhaProjeto->somaDadosPlanilha($whereTotalV1);
+
+            $V1 = $valorProjeto15['soma'];
+
+            /* V2 */
+            $whereTotalV2['PAP.IdPRONAC = ?'] = $idPronac;
+            $whereTotalV2['PAP.FonteRecurso = ?'] = 109;
+            $whereTotalV2['PAP.idEtapa = ? '] = 4;
+            $whereTotalV2['PAP.idProduto = ?'] = 0;
+            $whereTotalV2['PAP.idPlanilhaItem not in (?)'] = array(5249, 206, 1238);
+
+            $valoracustosadministrativos = $planilhaProjeto->somaDadosPlanilha($whereTotalV2);
+            $V2 = $valoracustosadministrativos['soma'];
+
+            /* 15% */
+            if ($V1 > 0 and $valoracustosadministrativos['soma'] < $valorProjeto['soma']) {
+                //Calcula os 15% do valor total do projeto V3
+                $quinzecentoprojeto = $V1 * 0.15;
+
+                //Subtrai os custos administrativos pelos 15% do projeto (V2 - V3)
+                $verificacaonegativo = $valoracustosadministrativos['soma'] - $quinzecentoprojeto;
+                //V4
+                if ($verificacaonegativo < 0) {
+                    //x(0);
+                    $this->view->verifica15porcento = 0;
+                } else {
+                    //V1 - V4 = V5
+                    /*V5*/
+                    $valorretirar = /*V1*/
+                        $V1 - /*V4*/
+                        $verificacaonegativo;
+                    /*V6*/
+                    $quinzecentovalorretirar = /*V5*/
+                        $valorretirar * 0.15;
+                    //V2 - V6
+                    $valorretirarplanilha = $valoracustosadministrativos['soma'] - $quinzecentovalorretirar; //(correcao V2 - V6)
+                    $this->view->verifica15porcento = $valorretirarplanilha;
+                }
+            } else {
+                $this->view->verifica15porcento = $valoracustosadministrativos['soma'];
+            }
+        }
     }
 }

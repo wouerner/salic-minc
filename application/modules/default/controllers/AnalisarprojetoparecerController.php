@@ -907,7 +907,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
     
     public function fecharparecerAction()
     {
-
         $auth = Zend_Auth::getInstance(); // pega a autentica¿¿o
         $idusuario = $auth->getIdentity()->usu_codigo;
         $dtAtual = Date("Y/m/d h:i:s");

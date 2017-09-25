@@ -257,11 +257,11 @@ function validaAgenteNovo()
     }
     else
     {
-        $("#logradouro").attr("disabled" , "");
-        $("#tipoLogradouro").attr("disabled" , "");
-        $("#bairro").attr("disabled" , "");
-        $("#cidade").attr("disabled" , "");
-        $("#uf").attr("disabled" , "");
+        $("#logradouro").removeAttr("disabled");
+        $("#tipoLogradouro").removeAttr("disabled");
+        $("#bairro").removeAttr("disabled");
+        $("#cidade").removeAttr("disabled");
+        $("#uf").removeAttr("disabled");
 	
         if( document.getElementById('modal').value == 's' ){
             jqAjaxForm( document.getElementById('formCadAgentes'), "divDinamicaAgentes");
@@ -394,11 +394,11 @@ function validaDirigenteNovo()
     }
     else
     {
-        $("#logradouro").attr("disabled" , "");
-        $("#tipoLogradouro").attr("disabled" , "");
-        $("#bairro").attr("disabled" , "");
-        $("#cidade").attr("disabled" , "");
-        $("#uf").attr("disabled" , "");
+        $("#logradouro").removeAttr("disabled");
+        $("#tipoLogradouro").removeAttr("disabled");
+        $("#bairro").removeAttr("disabled");
+        $("#cidade").removeAttr("disabled");
+        $("#uf").removeAttr("disabled");
                 
         $("#formCadAgentes").submit();
 

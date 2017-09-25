@@ -194,7 +194,14 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
                 $idOrgao = $dp->idOrgao;
                 
                 if ($tipoFiltro == 'em_validacao') {
+                    //colocar IN2017 fecharanalise = 1 , caso caontrario 3
                     $fecharAnalise = 1;
+                    //colocar IN2017 fecharanalise = 1 , caso caontrario 3
+                    if ($projetos->verificarIN2017($idPronac)) {
+                        $fecharAnalise = 1;
+                    } else {
+                        $fecharAnalise = 3;
+                    }
                     
                     if ($orgaos->isVinculadaIphan($dp->idOrgao)) {
                         if ($codGrupo == Autenticacao_Model_Grupos::SUPERINTENDENTE_DE_VINCULADA) {
