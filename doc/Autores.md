@@ -23,7 +23,7 @@ Guilherme Adler                   | guiadler@hotmail.com             | Estagiár
 Paulo Henrique                    | paulo.mendes00@hotmail.com       | Estagiário - Desenvolvimento | 01/11/2016      | Atuando        | Estagiário do MINC
 Pedro Philipe                     | pedrophilipe.ti@gmail.com        | Estagiário - Desenvolvimento | 20/10/2015      | Atuando        | Estagiário do MINC
 Fernão Lopes Ginez de Lara        | fernao@gmail.com                 | Desenvolvedor Sênior         | 05/01/2016      | Atuando        | HEPTA - Sustentação
-Rafael ?                          |           ?                      | Desenvolvedor Sênior         | ?               | Atuando        | HEPTA - Sustentação
+Rafael José da Costa Gloria | rafaeljcg20@gmail.com                      | Analista de Dados e Sistemas         | 01/03/2016               | Atuando        | HEPTA - Sustentação
 Cleber Costa dos Santos           | oclebersantos@gmail.com          | Desenvolvedor Pleno          | 03/10/2016      | Atuando        | UFABC - LABLIVRE
 Jorge Luiz Jr.                    | juninhoecb@gmail.com             | SubCoordenador de Projetos   | 15/06/2016      | Atuando        | UFABC - LABLIVRE
 Ruy Junior Ferreira Silva         | ruyjfs@gmail.com                 | Desenvolvedor Sênior         | 01/08/2016      | Atuando        | UFABC - LABLIVRE
