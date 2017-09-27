@@ -111,15 +111,16 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract i
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
         $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
 
-        Zend_Paginator::setDefaultScrollingStyle('Sliding');
-        Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
-        $paginator = Zend_Paginator::factory($resp); // dados a serem paginados
-        $currentPage = $this->_getParam('page', 1);
-        $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina
+        /* Zend_Paginator::setDefaultScrollingStyle('Sliding'); */
+        /* Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml'); */
+        /* $paginator = Zend_Paginator::factory($resp); // dados a serem paginados */
+        /* $currentPage = $this->_getParam('page', 1); */
+        /* $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(10); // 10 por p¿gina */
 
         $this->view->qtdRegistro = count($resp);
         $this->view->situacao = $situacao;
-        $this->view->buscar = $paginator;
+        /* $this->view->buscar = $paginator; */
+        $this->view->buscar = $resp;
     }
 
 
