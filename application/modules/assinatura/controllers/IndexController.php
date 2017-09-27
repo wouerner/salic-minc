@@ -62,6 +62,22 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
     }
 
+    public function visualizarDocumentosAssinaturaAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->_request->getParam("idPronac");
+        $idPronac = isset($idPronac) ? $idPronac : null;
+
+        $this->view->idUsuarioLogado = $this->cod_usuario;
+
+        $documentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $this->view->dados = $documentoAssinatura->obterDocumentosAssinadosPorProjeto(
+            $idPronac
+        );
+
+        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
+    }
+
     public function visualizarProjetoAction()
     {
         $get = Zend_Registry::get('get');
