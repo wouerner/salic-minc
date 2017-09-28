@@ -151,6 +151,8 @@
                 </div>
                 <!-- ==================== FIM - Outras Informações  =======================   -->
 
+                <a href='#' class="no_seta" onclick="carregaDados('<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-documentos-assinatura-ajax', 'idPronac' => $this->idPronac)); ?>','conteudo'); return false" title="Ir para Documentos assinados">Documentos assinados</a>
+
                 <?php if(($this->fnLiberarLinks['Analise'] && in_array($this->fnLiberarLinks['FaseDoProjeto'],array('2','3','4'))) || $this->usuarioInterno){ ?>
                 <!-- ======================= Análise e Aprovação  =======================   -->
                 <div class="sanfonaDiv" style="display:none;"></div>
