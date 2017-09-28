@@ -251,7 +251,8 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
     }
 
 
-    public function obterDocumentosAssinadosPorProjeto($idPronac) {
+    public function obterDocumentosAssinadosPorProjeto($idPronac)
+    {
 
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
@@ -290,7 +291,5 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $objQuery->where('tbDocumentoAssinatura.IdPRONAC = ?', $idPronac);
 
         return $this->_db->fetchAll($objQuery);
-
-
     }
 }
