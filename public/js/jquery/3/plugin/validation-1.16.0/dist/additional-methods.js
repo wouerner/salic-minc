@@ -93,7 +93,7 @@ $.validator.addMethod( "alphanumeric", function( value, element ) {
  * Dutch bank account numbers (not 'giro' numbers) have 9 digits
  * and pass the '11 check'.
  * We accept the notation with spaces, as that is common.
- * acceptable: ***REMOVED***789 or 12 34 56 789
+ * acceptable: 123456789 or 12 34 56 789
  */
 $.validator.addMethod( "bankaccountNL", function( value, element ) {
 	if ( this.optional( element ) ) {
@@ -654,7 +654,7 @@ $.validator.addMethod( "iban", function( value, element ) {
 			leadingZeroes = false;
 		}
 		if ( !leadingZeroes ) {
-			ibancheckdigits += "0***REMOVED***789ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf( charAt );
+			ibancheckdigits += "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf( charAt );
 		}
 	}
 

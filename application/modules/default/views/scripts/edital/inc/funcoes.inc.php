@@ -320,7 +320,7 @@ function limparCampo(valor, validos) {
 
 function formataValorMonetario(campo,maxlenght,event,qtdCasasDecimais) {
     var tecla = event.keyCode;
-    vr = limparCampo(campo.value,"0***REMOVED***789");
+    vr = limparCampo(campo.value,"0123456789");
     tam = vr.length;
     dec=qtdCasasDecimais
 
