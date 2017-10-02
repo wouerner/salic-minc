@@ -826,7 +826,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
                 if($_FILES['arquivo']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se nï¿½o houver novo upload
+                    // nao atualiza arquivo se não houver novo upload
                     $comprovantePagamentoModel->atualizar(4);                               
                 } 
 
@@ -862,7 +862,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
                 if($_FILES['arquivoInternacional']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se nï¿½o houver novo upload
+                    // nao atualiza arquivo se não houver novo upload
                     $comprovantePagamentoModel->atualizar(4);                               
                 } 
             }
@@ -2211,9 +2211,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->idpronac    = $post->idpronac;
 
         if($this->view->iditemcusto != ''){
-            $this->view->numLicitacao               = ***REMOVED***;
+            $this->view->numLicitacao               = 123456;
             $this->view->modalidade                 = utf8_encode('Pregï¿½o');
-            $this->view->numProcesso                = ***REMOVED***;
+            $this->view->numProcesso                = 123456;
             $this->view->dataPubliEdital            = '44/44/1988';
             $this->view->objeto                     = utf8_encode('Aquisiï¿½ï¿½o de material de informatica');
             $this->view->fundamentoLegal            = utf8_encode('Lei 11123');
@@ -2634,8 +2634,8 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
  
      /**
-      * Funï¿½ï¿½o criada a pedido da ï¿½rea Finalistica em 13/04/2016
-      * @author: Fernï¿½o Lopes Ginez de Lara
+      * Função criada a pedido da Área Finalistica em 13/04/2016
+      * @author: Fernão Lopes Ginez de Lara
       * @access public
       * @param void
       * @return void
@@ -2666,7 +2666,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } catch (Exception $e) {
             $message = $e->getMessage();
             if (strpos($e->getMessage(), 'DateTime::__construct()') !== false) {
-                $message = 'Nï¿½o foi possï¿½vel enviar os comprovantes de pagamento!';
+                $message = 'Não foi possível enviar os comprovantes de pagamento!';
             }
             $this->view->message = $message;
             $this->view->message_type = 'ERROR';

@@ -216,7 +216,7 @@ class Zend_Locale_Format
                 throw new Zend_Locale_Exception("Unknown script '$to'. Use 'Latn' for digits 0,1,2,3,4,5,6,7,8,9.");
             }
         } else {
-            $target = '0***REMOVED***789';
+            $target = '0123456789';
         }
 
         for ($x = 0; $x < 10; ++$x) {

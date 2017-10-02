@@ -233,15 +233,15 @@ class Zend_Pdf_Element_String extends Zend_Pdf_Element
                         break;
 
                     default:
-                        if (strpos('0***REMOVED***789', $str[$offset]) !== false) {
+                        if (strpos('0123456789', $str[$offset]) !== false) {
                             // Character in octal representation
                             // '\\xxx'
                             $nextCode = '0' . $str[$offset];
 
-                            if (strpos('0***REMOVED***789', $str[$offset + 1]) !== false) {
+                            if (strpos('0123456789', $str[$offset + 1]) !== false) {
                                 $nextCode .= $str[++$offset];
 
-                                if (strpos('0***REMOVED***789', $str[$offset + 1]) !== false) {
+                                if (strpos('0123456789', $str[$offset + 1]) !== false) {
                                     $nextCode .= $str[++$offset];
                                 }
                             }

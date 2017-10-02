@@ -63,7 +63,7 @@ class Zend_Search_Lucene_Search_QueryLexer extends Zend_Search_Lucene_FSM
     const QUERY_MUTABLE_CHARS          = '+-';
     const QUERY_DOUBLECHARLEXEME_CHARS = '|&';
     const QUERY_LEXEMEMODIFIER_CHARS   = '~^';
-    const QUERY_ASCIIDIGITS_CHARS      = '0***REMOVED***789';
+    const QUERY_ASCIIDIGITS_CHARS      = '0123456789';
 
     /**
      * List of recognized lexemes

@@ -10,7 +10,7 @@ class Gerarsenha extends MinC_Controller_Action_Abstract {
     {
         $lemin="abcdefghijklmnopqrstuvwxyz";
         $lemai="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $nmeros="0***REMOVED***789";
+        $nmeros="0123456789";
         $simbolos="^~`&()";
         $senha="";
         $caracteres="";

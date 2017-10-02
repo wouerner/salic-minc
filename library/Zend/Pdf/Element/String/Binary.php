@@ -68,12 +68,12 @@ class Zend_Pdf_Element_String_Binary extends Zend_Pdf_Element_String
         while ($offset < strlen($inStr)) {
             // Collect hexadecimal characters
             $start = $offset;
-            $offset += strspn($inStr, "0***REMOVED***789abcdefABCDEF", $offset);
+            $offset += strspn($inStr, "0123456789abcdefABCDEF", $offset);
             $chunks[] = substr($inStr, $start, $offset - $start);
             $length += strlen(end($chunks));
 
             // Skip non-hexadecimal characters
-            $offset += strcspn($inStr, "0***REMOVED***789abcdefABCDEF", $offset);
+            $offset += strcspn($inStr, "0123456789abcdefABCDEF", $offset);
         }
         if ($length % 2 != 0) {
             // We have odd number of digits.

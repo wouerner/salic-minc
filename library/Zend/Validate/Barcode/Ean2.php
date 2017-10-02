@@ -42,7 +42,7 @@ class Zend_Validate_Barcode_Ean2 extends Zend_Validate_Barcode_AdapterAbstract
      * Allowed barcode characters
      * @var string
      */
-    protected $_characters = '0***REMOVED***789';
+    protected $_characters = '0123456789';
 
     /**
      * Constructor

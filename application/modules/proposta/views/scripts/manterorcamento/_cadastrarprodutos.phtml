@@ -249,7 +249,7 @@ $SalvarProduto = $this->url(array('module'=>'proposta', 'controller' => 'mantero
 
     function Formata(campo,tammax,teclapres,decimal) {
         var tecla = teclapres.keyCode;
-        vr = Limpar(campo.value,"0***REMOVED***789");
+        vr = Limpar(campo.value,"0123456789");
         tam = vr.length;
         dec=decimal
 

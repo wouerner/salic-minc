@@ -135,7 +135,7 @@ class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_B
      * Test if a cache is available or not (for the given id)
      *
      * For this test backend only, if $id == 'false', then the method will return false
-     * (***REMOVED*** else)
+     * (123456 else)
      *
      * @param  string $id Cache id
      * @return mixed|false false (a cache is not available) or "last modified" timestamp (int) of the available cache record
@@ -149,7 +149,7 @@ class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_B
         if (($id=='3c439c922209e2cb0b54d6deffccd75a')) {
             return false;
         }
-        return ***REMOVED***;
+        return 123456;
     }
 
     /**

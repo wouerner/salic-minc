@@ -42,7 +42,7 @@ For terms of use, see http://www.unicode.org/copyright.html
         <numberingSystem id="lana" type="numeric" digits="᪀᪁᪂᪃᪄᪅᪆᪇᪈᪉"/>
         <numberingSystem id="lanatham" type="numeric" digits="᪐᪑᪒᪓᪔᪕᪖᪗᪘᪙"/>
         <numberingSystem id="laoo" type="numeric" digits="໐໑໒໓໔໕໖໗໘໙"/>
-        <numberingSystem id="latn" type="numeric" digits="0***REMOVED***789"/>
+        <numberingSystem id="latn" type="numeric" digits="0123456789"/>
         <numberingSystem id="lepc" type="numeric" digits="᱀᱁᱂᱃᱄᱅᱆᱇᱈᱉"/>
         <numberingSystem id="limb" type="numeric" digits="᥆᥇᥈᥉᥊᥋᥌᥍᥎᥏"/>
         <numberingSystem id="mlym" type="numeric" digits="൦൧൨൩൪൫൬൭൮൯"/>
