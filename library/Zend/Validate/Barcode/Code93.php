@@ -42,7 +42,7 @@ class Zend_Validate_Barcode_Code93 extends Zend_Validate_Barcode_AdapterAbstract
      * Allowed barcode characters
      * @var string
      */
-    protected $_characters = '0***REMOVED***789ABCDEFGHIJKLMNOPQRSTUVWXYZ -.$/+%';
+    protected $_characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ -.$/+%';
 
     /**
      * Checksum function

@@ -42,7 +42,7 @@ class Zend_Validate_Barcode_Royalmail extends Zend_Validate_Barcode_AdapterAbstr
      * Allowed barcode characters
      * @var string
      */
-    protected $_characters = '0***REMOVED***789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    protected $_characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     protected $_rows = array(
         '0' => 1, '1' => 1, '2' => 1, '3' => 1, '4' => 1, '5' => 1,

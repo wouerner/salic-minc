@@ -405,7 +405,7 @@ class Zend_Pdf_StringParser
     {
         $start = $this->offset;
 
-        $this->offset += strspn($this->data, "\x00\t\n\f\r 0***REMOVED***789abcdefABCDEF", $this->offset);
+        $this->offset += strspn($this->data, "\x00\t\n\f\r 0123456789abcdefABCDEF", $this->offset);
 
         if ($this->offset >= strlen($this->data) - 1) {
             require_once 'Zend/Pdf/Exception.php';

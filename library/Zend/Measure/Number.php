@@ -222,27 +222,27 @@ class Zend_Measure_Number extends Zend_Measure_Abstract
                 break;
 
             case 'SEPTENARY':
-                preg_match('/[0***REMOVED***]+/', $value, $ergebnis);
+                preg_match('/[0123456]+/', $value, $ergebnis);
                 $value = $ergebnis[0];
                 break;
 
             case 'OCTAL':
-                preg_match('/[0***REMOVED***7]+/', $value, $ergebnis);
+                preg_match('/[01234567]+/', $value, $ergebnis);
                 $value = $ergebnis[0];
                 break;
 
             case 'NONARY':
-                preg_match('/[0***REMOVED***78]+/', $value, $ergebnis);
+                preg_match('/[012345678]+/', $value, $ergebnis);
                 $value = $ergebnis[0];
                 break;
 
             case 'DUODECIMAL':
-                preg_match('/[0***REMOVED***789AB]+/', strtoupper($value), $ergebnis);
+                preg_match('/[0123456789AB]+/', strtoupper($value), $ergebnis);
                 $value = $ergebnis[0];
                 break;
 
             case 'HEXADECIMAL':
-                preg_match('/[0***REMOVED***789ABCDEF]+/', strtoupper($value), $ergebnis);
+                preg_match('/[0123456789ABCDEF]+/', strtoupper($value), $ergebnis);
                 $value = $ergebnis[0];
                 break;
 
