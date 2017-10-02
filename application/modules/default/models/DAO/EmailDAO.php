@@ -28,7 +28,7 @@ class EmailDAO extends Zend_Db_Table
         $mail = new Zend_Mail();
 
         $mail->setBodyHtml($texto);
-        $mail->setFrom('***REMOVED***@cultura.gov.br', 'Salic BR');
+        $mail->setFrom('srv_salic@cultura.gov.br', 'Salic BR');
         $mail->addTo($email);
         $mail->setSubject($assunto);
         return $mail->send($transport);

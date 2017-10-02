@@ -9,14 +9,19 @@ class fnVerificarProjetoAprovadoIN2017 extends MinC_Db_Table_Abstract {
      * @Deprecated 
      */
     public function verificarProjetoAprovadoIN2017($idPronac) {
-        $select = new Zend_Db_Expr("SELECT sac.dbo.fnVerificar_Projeto_Aprovado_IN2017()");
+        $select = new Zend_Db_Expr("SELECT sac.dbo.fnVerificar_Projeto_Aprovado_IN2017({$idPronac})");
         try {
             $db= Zend_Db_Table::getDefaultAdapter();
             $db->setFetchMode(Zend_DB::FETCH_OBJ);
         } catch (Zend_Exception_Db $e) {
             $this->view->message = $e->getMessage();
         }
-        return $db->fetchRow($select);
+
+        if($db->fetchOne($select)) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     /**

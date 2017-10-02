@@ -882,6 +882,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         );
 
         $select->where('pa.idPlanilhaAprovacao = ?', $idPlanilhaAprovacao);
+         /* echo $select;die; */ 
         return $db->fetchAll($select);
     }
 
@@ -2012,5 +2013,98 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         /* echo $select;die; */
 
         return $this->fetchAll($select);
+    }
+
+    public function dadosdoitemPorItem($idPlanilhaItem, $idpronac)
+    {
+        $cpxpaDAO = new ComprovantePagamentoxPlanilhaAprovacao();
+        $selectAux = $cpxpaDAO->valorComprovadoItem(true);
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+        $select = $db->select();
+
+        $cols = [
+            'cppa.idComprovantePagamento',
+            'cppa.stItemAvaliado',
+            'CAST( cppa.dsJustificativa AS TEXT) AS ocorrencia',
+            'CONVERT(
+                    CHAR(23),
+                    cppa.dtValidacao,
+                        120
+                        ) AS dtValidacao',
+            'cppa.vlComprovado AS vlComprovadoPlanilhaAprovacao',
+            'cppa.idPlanilhaAprovacao',
+            'cp.tpDocumento',
+            'cp.nrSerie',
+            'CONVERT( CHAR(23), cp.dtEmissao, 120) AS dtEmissao',
+            'cp.nrComprovante',
+            'cp.idArquivo',
+            'cp.tpFormaDePagamento',
+            'cp.nrDocumentoDePagamento',
+            'CAST(cp.dsJustificativa AS TEXT) AS dsJustificativa',
+            'cp.vlComprovacao',
+            'ag.CNPJCPF',
+            'nm.Descricao',
+            'arq.nmArquivo',
+            'pi.idPlanilhaItens',
+            'pi.Descricao AS NomeItem',
+            'pAprovacao.stAtivo'
+        ];
+
+        $select->from(
+            array('pAprovacao' => 'tbplanilhaaprovacao'),
+            $cols,
+            'SAC.dbo'
+        );
+
+        $select->join(
+            array('cppa' => 'tbComprovantePagamentoxPlanilhaAprovacao'),
+            'cppa.idPlanilhaAprovacao = pAprovacao.idPlanilhaAprovacao',
+            [],
+            'BDCORPORATIVO.scSAC'
+        );
+
+        $select->join(
+            array('cp' => 'tbComprovantePagamento'),
+            'cp.idComprovantePagamento = cppa.idComprovantePagamento',
+            [],
+            'BDCORPORATIVO.scSAC'
+        );
+
+        $select->join(
+            array('ag'=>'Agentes'),
+            'ag.idAgente = cp.idFornecedor',
+            [],
+            'AGENTES.dbo'
+        );
+
+        $select->joinLeft(
+            array('nm'=>'Nomes'),
+            'nm.idAgente = ag.idAgente',
+            [],
+            'AGENTES.dbo'
+        );
+
+        $select->join(
+            array('arq' => 'tbArquivo'),
+            'arq.idArquivo = cp.idArquivo',
+            [],
+            'BDCORPORATIVO.scCorp'
+        );
+
+        $select->join(
+            array('pi'=>'tbPlanilhaItens'),
+            'pAprovacao.idPlanilhaItem = pi.idPlanilhaItens',
+            [ ],
+            'SAC.dbo'
+        );
+
+        $select->where('pAprovacao.IdPRONAC = ?', $idpronac);
+        $select->where('pAprovacao.idPlanilhaItem = ?', $idPlanilhaItem);
+        $select->where('cppa.stItemAvaliado is not null');
+        /* echo $select;die; */ 
+
+        return $db->fetchAll($select);
     }
 }

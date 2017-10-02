@@ -11,18 +11,6 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
     protected $_schema = 'sac';
     protected $_name  = 'spPlanilhaOrcamentaria';
 
-    /**
-     * exec
-     *
-     * @name exec
-     * @param $idPronac
-     * @param $tipoPlanilha
-     * @return mixed
-     *
-     * @author Ruy Junior Ferreira Silva <ruyjfs@gmail.com>
-     * @author wouerner <wouerner@gmail.com>
-     * @since  17/08/2016
-     */
     public function exec($idPronac, $tipoPlanilha)
     {
         // tipoPlanilha = 0 : Planilha Orcamentaria da Proposta
@@ -35,46 +23,54 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
 
         $fnVerificarProjetoAprovadoIN2017 = new fnVerificarProjetoAprovadoIN2017();
         $projetoIN2017 = $fnVerificarProjetoAprovadoIN2017->verificar($idPronac);
-        
+
         if ($tipoPlanilha == 3 && $projetoIN2017) {
             $db = Zend_Db_Table::getDefaultAdapter();
             $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
             $sql = $db->select()
-                      ->from('tbPlanilhaAprovacao',
-                      array(new Zend_Db_Expr("TOP 1 IdPRONAC")),
-                      $this->_schema)
-                      ->where('tpPlanilha = ? ', 'CO')
-                      ->where('IdPRONAC = ? ', $idPronac);
-            
-            if($db->fetchRow($sql)) {
+                ->from('tbPlanilhaAprovacao',
+                    array(new Zend_Db_Expr("TOP 1 IdPRONAC")),
+                    $this->_schema)
+                ->where('tpPlanilha = ? ', 'CO')
+                ->where('IdPRONAC = ? ', $idPronac);
+
+            if ($db->fetchRow($sql)) {
                 $tipoPlanilha = 0;
             }
         }
-        
-        switch($tipoPlanilha){
-        case 0:
-            return $this->planilhaOrcamentariaProposta($idPronac);
-            break;
-        case 1:
-            return $this->orcamentariaProponente($idPronac);
-            break;
-        case 2:
-            return $this->orcamentariaParecerista($idPronac);
-            break;
-        case 3:
-            return $this->orcamentariaAprovadaAtiva($idPronac);
-            break;
-        case 4:
-            return $this->cortesOrcamentariosAprovados($idPronac);
-            break;
-        case 5:
-            return $this->remanejamentoMenor20($idPronac);
-            break;
-        case 6:
-            return $this->readequacao($idPronac);
-            break;
-        default:
+
+        switch ($tipoPlanilha) {
+            case 0:
+                return $this->planilhaOrcamentariaProposta($idPronac);
+                break;
+            case 1:
+                return $this->orcamentariaProponente($idPronac);
+                break;
+            case 2:
+                return $this->orcamentariaParecerista($idPronac);
+                break;
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            default:
+                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
+                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel
+                break;
+// @todo: nao apagar, migrar a sp VisualizarPlanilha  para o codigo, atualizando os metodos abaixo
+//            case 3:
+//                return $this->orcamentariaAprovadaAtiva($idPronac);
+//                break;
+//            case 4:
+//                return $this->cortesOrcamentariosAprovados($idPronac);
+//                break;
+//            case 5:
+//                return $this->remanejamentoMenor20($idPronac);
+//                break;
+//            case 6:
+//                return $this->readequacao($idPronac);
+//                break;
         }
     }
 
