@@ -194,7 +194,7 @@ static void output_block()
 
 static void output_byte(byte b)
 {
-  static char *hexchar = "0***REMOVED***789ABCDEF";
+  static char *hexchar = "0123456789ABCDEF";
   static int hexcol = 0;
 
   if (pfb) {

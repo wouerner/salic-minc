@@ -9,7 +9,7 @@ LINUX
 1 - Criar a pasta "tmpPDF" dentro de "/public" e dar permissão de escrita na pasta
 2 - Instalar OpenOffice
 3 - Criar macro definida no fim deste arquivo
-4 - Criar usuário "httpd" com senha ***REMOVED*** por exemplo
+4 - Criar usuário "httpd" com senha 123456 por exemplo
 5 - Abrir o arquivo "/etc/apache2/envvars" e substituir a linha "export APACHE_RUN_USER=www-data" por "export APACHE_RUN_USER=httpd" e então salvar o arquivo.
 6 - Reiniciar o servidor Apache
 

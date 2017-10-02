@@ -251,7 +251,7 @@ class Mascara
         
         public static function delMaskProcesso($processo)
 	{
-            // 01400.***REMOVED***/2014-77
+            // 01400.123456/2014-77
             $processo = str_replace(" ", "", $processo);
             $processo = str_replace(".", "", $processo);
             $processo = str_replace("/", "", $processo);
