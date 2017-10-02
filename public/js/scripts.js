@@ -730,7 +730,7 @@ function validaDigito(e)
 
     //Verifica se o caractere n�o est� entre 0-9, se foi utilizada a sequ�ncia Ctrl+c ou Ctrl+v e se a tecla Shift estava pressionada
     //Se verdadeiro, n�o permite a digita��o do caractere.
-    if(((("0***REMOVED***789".indexOf(caracter) == -1) && !controle)) || e.shiftKey)
+    if(((("0123456789".indexOf(caracter) == -1) && !controle)) || e.shiftKey)
     {
         if (window.event){ //IE
             window.event.returnValue = null;

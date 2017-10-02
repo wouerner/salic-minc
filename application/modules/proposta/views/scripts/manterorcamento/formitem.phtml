@@ -225,7 +225,7 @@
     //Formata numero tipo moeda usando o evento onKeyDown
     function Formata(campo, tammax, teclapres, decimal) {
         var tecla = teclapres.keyCode;
-        vr = Limpar(campo.value, "0***REMOVED***789");
+        vr = Limpar(campo.value, "0123456789");
         tam = vr.length;
         dec = decimal
 
@@ -352,7 +352,7 @@
                     var msg_pre_loader = $3('#modal-pre-loader #msg-pre-loader p').html();
                     var $klon = '';
 
-                    abrirPreLoader('Verificando valor unitï¿½rio ...');
+                    abrirPreLoader('Verificando valor unitário ...');
 
                     if (result.status == '1') {
                         $3('#another-cities').find('#justificativa-wraper-' + id_item_local).remove();
