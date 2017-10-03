@@ -23,7 +23,9 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
     {
         if(!isset($this->servicoDocumentoAssinatura)) {
             require_once __DIR__ . DIRECTORY_SEPARATOR . "EnquadramentoDocumentoAssinatura.php";
-            $this->servicoDocumentoAssinatura = new Admissibilidade_EnquadramentoDocumentoAssinaturaController($this->getRequest()->getPost());
+            $this->servicoDocumentoAssinatura = new Admissibilidade_EnquadramentoDocumentoAssinaturaController(
+                $this->getRequest()->getPost()
+            );
         }
         return $this->servicoDocumentoAssinatura;
     }
@@ -129,12 +131,16 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
 
             $situacaoFinalProjeto = 'B02';
             $orgaoDestino = null;
+            $providenciaTomada = 'Projeto enquadrado ap&oacute;s avalia&ccedil;&atilde;o t&eacute;cnica.';
             if($projeto['Situacao'] == 'B03') {
-                $situacaoFinalProjeto = 'D27';
-                $orgaoDestino = 272;
-                if($projeto['Area'] == 2) {
-                    $orgaoDestino = 166;
+                $situacaoFinalProjeto = Projeto_Model_Situacao::PROJETO_ENQUADRADO_COM_RECURSO;
+                $objOrgaos = new Orgaos();
+                $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($projeto['Orgao']);
+                $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
+                if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
+                    $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
                 }
+                $providenciaTomada = 'Projeto enquadrado ap&oacute;s avalia&ccedil;&atilde;o t&eacute;cnica do recurso.';
             }
 
             $objPlanoDistribuicaoProduto = new PlanoDistribuicao();
@@ -144,7 +150,7 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
             $arrayDadosProjeto = array(
                 'Situacao' => $situacaoFinalProjeto,
                 'DtSituacao' => $objProjeto->getExpressionDate(),
-                'ProvidenciaTomada' => 'Projeto enquadrado após avaliação técnica.',
+                'ProvidenciaTomada' => $providenciaTomada,
                 'Area' => $post['areaCultural'],
                 'Segmento' => $post['segmentoCultural'],
                 'logon' => $authIdentity['usu_codigo']
@@ -254,5 +260,29 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
         $this->view->codOrgao = $this->grupoAtivo->codOrgao;
+    }
+
+    public function visualizarDevolucaoAssinaturaAction() {
+        try {
+
+            $get = $this->getRequest()->getParams();
+
+            if(!$get['IdPRONAC']) {
+                throw new Exception("Identificador do projeto n&atilde;o informado.");
+            }
+
+            $objDespacho = new Proposta_Model_DbTable_TbDespacho();
+            $despacho = $objDespacho->consultarDespachoAtivo($get['IdPRONAC']);
+
+            $this->_helper->json(
+                array(
+                    'status' => 1,
+                    'despacho' => utf8_encode($despacho['Despacho']),
+                    'data' => Data::tratarDataZend($despacho['Data'], 'brasileiro', true)
+                    )
+            );
+        } catch (Exception $objException) {
+            $this->_helper->json(array('status' => 0, 'msg' => $objException->getMessage()));
+        }
     }
 }

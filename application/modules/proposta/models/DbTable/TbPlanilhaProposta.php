@@ -119,8 +119,9 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         if($idItem){
             $sql->where('pp.idplanilhaitem = ?', $idItem);
         }
+
         if($idPlanilhaProposta){
-            $sql->where('pre.idpreprojeto  = ?', $idPreProjeto);
+            $sql->where('pp.idplanilhaproposta  = ?', $idPlanilhaProposta);
         }
 
         if($idUf){
@@ -255,7 +256,6 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
-        //xd($sql);
         return $db->fetchAll($sql);
     }
 
@@ -369,7 +369,6 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         if ($outras) {
             $somar->where('FonteRecurso <> ?', $outras);
         }
-        //xd($somar->assemble());
         return $this->fetchRow($somar);
     }
 
@@ -676,6 +675,7 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
 
         try {
             $db= Zend_Db_Table::getDefaultAdapter();
+            $db->setFetchMode(Zend_DB::FETCH_ASSOC);
         } catch (Zend_Exception_Db $e) {
             $this->view->message = $e->getMessage();
         }

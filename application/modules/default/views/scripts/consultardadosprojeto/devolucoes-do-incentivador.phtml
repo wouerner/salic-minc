@@ -73,17 +73,7 @@
 				?>
 		            <tr>
 		                <td>
-		                	<a href="
-		                		<?php
-		                			echo $this->url(array(
-		                				'controller' => 'agentes',
-										'action' => 'agentes',
-										'id' => $d->idAgente
-		                			), null, true);
-		                		?>" target="blank"
-		                	>
-		                		<?php echo $d->Nome;  ?>
-		                	</a>
+                            <?php echo $d->Nome;  ?>
 		                </td>
 		                <td align="center"><?php echo Data::tratarDataZend($d->dtCredito, 'Brasileira'); ?></td>
 		                <td align="center"><?php echo Data::tratarDataZend($d->dtLote, 'Brasileira'); ?></td>

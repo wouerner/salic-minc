@@ -1,9 +1,9 @@
 <?php echo $this->partial('parecerista/inc/menu-coordenador.inc.php', $this); ?>
 
-<!-- ========== IN�CIO BREADCRUMB (LINKS TOPO) ========== -->
+<!-- ========== INICIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => 'index'),'',true); ?>" title="Ir para In�cio">In&iacute;cio</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => 'index'),'',true); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
         <li class="last">Configurar Despacho</li>
     </ul>
 </div>
@@ -12,11 +12,11 @@
 <div id="modal"></div>
 <div id="confirma"></div>
 
-<!-- ========== IN�CIO T�TULO ========== -->
+<!-- ========== INICIO TITULO ========== -->
 <div id="titulo">
-    <div>Configurar Despacho <span class="voltar"><a href="javascript:voltar();" title="P�gina Anterior">Voltar</a></span></div>
+    <div>Configurar Despacho <span class="voltar"><a href="javascript:voltar();" title="P&aacute;gina Anterior">Voltar</a></span></div>
 </div>
-<!-- ========== IN�CIO CONTE�DO ========== -->
+<!-- ========== INICIO CONTEUDO ========== -->
 
 <div id="conteudo">
 
@@ -33,14 +33,14 @@
                 <td colspan="3" class="titulo_tabela"></td>
             </tr>
             <tr>
-                <td colspan="3" class=""><?php echo $this->ultimoDespachoDoAno == '' ? 'Nenhum despacho gerado at� o momento!': '�ltimo despacho gerado: '.$this->ultimoDespachoDoAno; ?></td>
+                <td colspan="3" class=""><?php echo $this->ultimoDespachoDoAno == '' ? 'Nenhum despacho gerado at&eacute; o momento!': '&Uacute;ltimo despacho gerado: '.$this->ultimoDespachoDoAno; ?></td>
             </tr>
             <tr>
-                <td width="160">N�mero despacho inicial:</td>
+                <td width="160">N&uacute;mero despacho inicial:</td>
                 <td colspan="2"><input type="text" class="input_simples" id="nrDespachoInicial" name="nrDespachoInicial" value="<?php echo $this->ultimoDespachoDoAno == '' ? '1': $this->ultimoDespachoDoAno+1; ?>" maxlength="4" onblur="contarNumeracao();" onkeyup="contarNumeracao();" onkeypress="mascara(this, format_num);" /></td>
             </tr>
             <tr>
-                <td>N�mero despacho Final:</td>
+                <td>N&uacute;mero despacho Final:</td>
                 <td colspan="2" id="lbnrDespachoFinal"><?php echo $this->ultimoDespachoDoAno+$this->qtdDePagamentos; ?></td>
             </tr>
             <tr>
@@ -125,7 +125,7 @@
             <th width="300">Produto</th>
             <th>Vinculada</th>
             <th width="130">Valor a ser Pago</th>
-            <th width="1">A��o</th>
+            <th width="1">A&ccedil;&atilde;o</th>
         </tr>
         <?php $i = 1;?>
         <?php $total = 0;?>
@@ -169,10 +169,10 @@
     <?php endif; ?>
 
 </div>
-<!-- ========== FIM CONTE�DO ========== -->
+<!-- ========== FIM CONTEUDO ========== -->
 
 <div id="confirmacao-exclusao" class="sumir">
-    Tem certeza que deseja excluir o registro?<br />Se sim, informe o n�mero do Pronac antes de confirmar a a��o.
+    Tem certeza que deseja excluir o registro?<br />Se sim, informe o n&uacute;mero do Pronac antes de confirmar a a&ccedil;&atilde;o.
     <br clear="all" /><br clear="all" />
     <form id="formExcluirRegistroPagamento" action="<?php echo $this->url(array('controller' => 'parecerista', 'action' => 'excluir-registro-pagamento')); ?>" method="POST">
         <table class="tabela">
@@ -187,9 +187,9 @@
 </div>
 
 <div id="dialog"></div>
-<!-- ========== IN�CIO RODAP� DO CONTE�DO ========== -->
+<!-- ========== INICIO RODAPE DO CONTEUDO ========== -->
 <div id="rodapeConteudo"><span></span></div>
-<!-- ========== FIM RODAP� DO CONTE�DO ========== -->
+<!-- ========== FIM RODAPE DO CONTEUDO ========== -->
 <br clear="all" />
 
 <script>
@@ -207,7 +207,7 @@
 //        var i = 0;
 //        // Percorre todas as linhas da tabela
 //        $("#sortable tbody").each(function(i){
-//        // Adiciona uma com o n�mero corrente
+//        // Adiciona uma com o numero corrente
 //            $(this).append(" " + (++i) + "");
 //        });
     });
@@ -225,7 +225,7 @@
                 draggable: false,
                 resizable: false,
                 closeOnEscape: false,
-                title: 'Confirma��o',
+                title: 'Confirma&ccedil;&atilde;o',
                 buttons: {
                     Cancelar:function() {
                         $(this).dialog('close');
@@ -254,7 +254,7 @@
                 draggable: false,
                 resizable: false,
                 closeOnEscape: false,
-                title: 'Confirma��o',
+                title: 'Confirma&ccedil;&atilde;o',
                 buttons: {
                     Cancelar:function() {
                         $(this).dialog('close');
@@ -267,7 +267,7 @@
                             $("#formExcluirRegistroPagamento").submit();
                         } else {
                             $('#campoNrConfirmacao').val('');
-                            $('#campoTxtConfirmacao').html('O n�mero do Pronac n�o confere.');
+                            $('#campoTxtConfirmacao').html('O n&uacute;mero do Pronac n&atilde;o confere.');
                         }
                     }
                 }
@@ -288,7 +288,7 @@
             draggable: false,
             resizable: false,
             closeOnEscape: false,
-            title: 'Confirma��o',
+            title: 'Confirma&ccedil;&atilde;o',
             buttons: {
                 Cancelar:function() {
                     $(this).dialog('close');
@@ -306,17 +306,16 @@
 
     }
 
-
     function visualizarPagamentos(id){
-        $('.pagamentos').hide();
-        $('#t_'+id).show();
+        $('tr.pagamento').addClass('sumir');
+        $('#t_'+id).toggleClass('sumir');
 
         $('#btnAbrir_'+id).hide();
         $('#btnFechar_'+id).show();
     }
 
     function esconderPagamentos(id){
-        $('#t_'+id).hide();
+        $('#t_'+id).toggleClass('sumir');
         $('#btnAbrir_'+id).show();
         $('#btnFechar_'+id).hide();
     }
@@ -341,7 +340,7 @@
         var nrDespachoInicial   = parseInt($('#nrDespachoInicial').val());
 
         if(nrDespachoInicial <= ultimoDespachoDoAno){
-            $("#dialog").html('N�mero despacho inicial n�o pode ser menor ou igual ao �ltimo despacho gerado!');
+            $("#dialog").html('N&uacute;mero despacho inicial n&atilde;o pode ser menor ou igual ao &uacute;ltimo despacho gerado!');
 
             $("#dialog").dialog("destroy");
             $("#dialog").dialog({
@@ -371,9 +370,9 @@
             draggable: false,
             resizable: false,
             closeOnEscape: false,
-            title: 'Confirma��o',
+            title: 'Confirma&ccedil;&atilde;o',
             buttons: {
-                N�o:function() {
+                Nao:function() {
                     $(this).dialog('close');
                 },
                 Sim:function() {

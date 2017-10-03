@@ -1754,7 +1754,7 @@ class PareceristaController extends MinC_Controller_Action_Abstract {
 
         $id = $this->_request->getParam("id");
 
-        // Configuração o php.ini para 10MB
+        // Configuracao o php.ini para 10MB
         @ini_set("mssql.textsize", 10485760);
         @ini_set("mssql.textlimit", 10485760);
         @ini_set("upload_max_filesize", "10M");
@@ -1767,6 +1767,7 @@ class PareceristaController extends MinC_Controller_Action_Abstract {
         if (!$resultado) {
             $this->view->message = 'Não foi possível abrir o arquivo!';
             $this->view->message_type = 'ERROR';
+            die("N&atilde;o existe o arquivo especificado");
         } else {
             // lê os cabeçalhos formatado
             foreach ($resultado as $r) {
@@ -1777,13 +1778,12 @@ class PareceristaController extends MinC_Controller_Action_Abstract {
                 $this->_response->clearHeaders();               // Limpa os headers do Zend
 
                 $this->getResponse()
-                        ->setHeader('Content-Type', 'application/pdf')
-                        ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
-                        ->setHeader("Connection", "close")
-                        ->setHeader("Content-transfer-encoding", "binary")
-                        ->setHeader("Cache-control", "private");
-
-                $this->getResponse()->setBody($r->biArquivo);
+                    ->setHeader('Content-Type', $r->dsTipoPadronizado)
+                    ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
+                    ->setHeader("Connection", "close")
+                    ->setHeader("Content-transfer-encoding", "binary")
+                    ->setHeader("Cache-control", "private")
+                    ->setBody($r->biArquivo);
             }
         }
     }

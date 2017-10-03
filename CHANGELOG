@@ -1,3 +1,363 @@
+Release 2.7.6
+* [FIX] Parecer/CNIC: removendo blocos desnecessários em "projetos não submetidos - análise inicial"
+* [FIX] Parecer/CNIC: ajustes de estilo na análise do projeto & removendo informações desnecessárias caso IN2017
+* [FIX] Parecer/CNIC: bloqueia gravação de parecer enquanto não selecionar posicionamento
+
+Release 2.7.5
+* [FIX] Parecer/gerenciar parecer: correção na listagem de projetos
+
+Release 2.7.4
+* [FIX] Parecer/presidente de vinculada: removendo busca e paginação
+* [FIX] Parecer/CNIC: ajustes de estilo ao emitir parecer
+* [FIX] Parecer/CNIC: ajustes de estilo na análise
+
+Release 2.7.3
+* [FIX] Parecer/análise do produto: correção ao gravar produto IN2017 antes de finalizar produtos secundários
+* [FIX] Parecer/distribuir parecer: inativando documento assinatura quando redistribui o projeto caso já tenha sido assinado
+* [FIX] CNIC/Dados do projeto: corrigindo charset
+
+Release 2.7.2
+* [FIX] Parecer/análise inicial: libera botão de analisar produto quando uma análise é devolvida pelo coordenador ao parecerista
+
+Release 2.7.1
+* [FIX] Readequações: removendo debug no painel de projetos em análise
+
+Release 2.7.0
+* [ADD] Alterar Projeto/Execução imediata: nova opção de atualizar Plano de Execução Imediata do Projeto por Técnicos e Coordenadores
+* [ADD] Parecer/gerenciar parecer: fluxo de assinaturas do IPHAN com 5 passos - parecerista, coordenador regional, superintendente regional, coordenador PRONAC e presidente
+* [ADD] Parecer/gerenciar parecer: IPHAN: adicionando tela de superintendente com view nova
+* [ADD] Parecer/gerenciar parecer: fluxo do IPHAN com novo painel para coordenador IPHAN Brasília (analisado pela superintendência)
+* [UPDATE] Recurso enquadramento: altera o tipo do recurso ao salvar recurso
+* [UPDATE] TipoEncaminhamento: define constantes na model Tipo Encaminhamento
+* [UPDATE] Analise/Avaliar Adequacao de projeto: altera situacao quando execucao imediata diferente de normal
+* [FIX] Recurso Enquadramento: corrige dados ao salvar novo recurso
+* [FIX] Parecer/análise CNIC: removendo duplicidade nas caixas de conteúdo em Dados do Projeto
+* [FIX] Parecer/análise CNIC: removendo botão de próximo
+* [FIX] Parecer/análise CNIC: puxando valores corretos do enquadramento e valores
+* [FIX] Parecer/análise CNIC: puxando valor total sugerido corretamente
+* [FIX] Parecer/análise CNIC: correção nos links
+* [FIX] Parecer/coordenador: removendo caixa de texto quando somente leitura
+* [FIX] Parecer: corrigindo quebra de tela na análise do produto
+* [FIX] Parecer/análise inicial consolidação: não exibe dados de área/segmento para IN2017 e melhorias gerais de código
+* [FIX] Parecer/análise inicial: não grava enquadramento novo se for IN2017
+* [FIX] Parecer/análise inicial: movendo ações relevantes para seção de consolidação do parecer técnico
+* [FIX] Parecer/análise inicial: verifica se já existe parecer do parecerista corrente
+* [FIX] Parecer/análise inicial: correção ao alterar valor editando item orçamentário
+* [FIX] Parecer/análise inicial: removendo permissão de edição da planilha pelo coordenador de parecer
+* [FIX] Parecer/gerenciar parecer: setando corretamente fecharParecer no caso padrão (não iphan)
+* [FIX] Parecer/gerenciar parecer: produto apenas leitura para coordenador de parecer
+* [FIX] Parecer/gerenciar parecer devolvidas: ajuste na cor de fundo
+* [FIX] Parecer: melhoria na função para determinar projeto assinado
+* [UPDATE] Parecer/gerenciar parecer: exibindo botão de visualizar documento assinado mesmo quando não assinado no passo atual
+* [REMOVE] Parecer/gerenciar parecer: removendo arquivo desnecessário
+* [REFACTOR] Parecer/gerenciar parecer: movendo função isVinculadaIphan para model Orgaos
+* [REFACTOR] Parecer/análise inicial: movendo função fecharanalise para módulo de parecer
+* [REFACTOR] Análise de conteúdo: removendo código comentado
+
+Release 2.6.6
+[FIX] Gerenciar parecer/distribuir parecer: desativando documento assinatura quando distribui projeto
+
+Release 2.6.5
+[ CLEAN ] Prestação de contas: Ajustes para PSR2 na controller
+[ FIX ] Prestação de contas: Duplicidade de linhas ao fazer a analise do projeto.
+
+Release 2.6.4
+[FIX] Parecer/análise inicial: parecerista gravando parecer inicial e impedindo coordenador de editar parecer
+
+Release 2.6.3
+[FIX] Cadastro Proponente: corrige erro quando não existe informações adicionais
+
+Release 2.6.2
+[Fix] Proposta: corrige bug que deixava proponente excluir arquivo de proposta enviada
+[Fix] Alterar projeto/Avaliacao: corrige bug ao salvar avaliacao
+
+Release 2.6.1
+* [FIX] Parecer/análise inicial de produto: correção na edição de parecer quando já existe parecer
+
+Release 2.6.0
+* [ADD] Assinatura / Models / Atos administrativos : Criação de mapper para AtoAdministrativo.
+* [UPDATE]Adição da opção "Gerir Atos Administrativos" para o grupo "Gestor Salic"
+* [UPDATE] Adição de validação que permite que somente usuários que façam parte do grupo "Gestor Salic" atuem nas funcionalidades do controller AtoAdministrativo.
+* [FIX] Assinatura/Gerenciar Atos administrativos : Correção de envio e carregamento do Orgãdo do Assinante e Ordem de assinaturas do Ato Administrativo.
+* [UPDATE] Assinatura / Gerenciamento de Atos administrativos : Criação da funcionalidade de remover ato administrativo.
+* [UPDATE] Prestação de contas: Novos metodos para buscar produtos
+* [UPDATE] Prestação de contas: Ajuste para novo layout
+* [UPDATE] Prestação de contas: ajusta para sinalizar se está regular o laudo
+* [UPDATE] Prestação de contas: ajuste no laudo final, adicionando laudos tecnico e chefe
+* [UPDATE] Prestação de contas: ajuste no laudo final, para utf8
+* [UPDATE] Prestação de contas: Ajuste no fluxo para poder emitir parecer
+* [UPDATE] Prestação de contas: Ajuste no SQL retirando colunas não usadas
+* [UPDATE] Prestação de contas: ajusta no layout
+* [UPDATE] Prestação de contas: erro ao tentar recuperar os custos
+* [UPDATE] Prestação de contas: Ajax na tela principal
+* [UPDATE] Prestação de contas: ajuste de link e historico reformulado
+* [ADD] Novo papel: superintendente de vinculada (IPHAN) e ajustes no fluxo do IPHAN
+* [FIX] Gerenciar parecer: corrigindo link de concluir parecer
+* [FIX] Parecer/gerenciar parecer: mantém idPronac buscado quando altera tipo do filtro
+* [FIX] Default/Gerenciar parecer coordenador: correção no link para página de histórico
+* [FIX] Parecer/gerenciar parecer coordenador: corrigindo valor de FecharAnalise na distribuição quando redistribui um projeto impedido por parecerista
+* [FIX] Parecer/Análise inicial: alterando link de redirecionamento quando declara impedimento
+* [FIX] Parecer/análise inicial: somente exibe botão de impedimento enquanto parecerista ainda não iniciou a análise
+* [FIX] Parecer/gerenciar parecer presidente: ao finalizar projeto, fecha assinatura
+* [FIX] Parecer/gerenciar parecer coordenador: correção no alinhamento dos botões
+* [FIX] Analise inicial/produto secundário: desabilitando botão de parecer desfavorável quando somente leitura
+* [FIX] Parecer/Emitir parecer CNIC: componente da comissão define parecer e só então libera botão de gerar assinatura; assinatura reflete parecer do componente da commissão
+* [FIX] Analise inicial/produto secundário: desabilitando edição do produto secundário se não for o parecerista atribuído para realizar parecer
+* [FIX] CNIC/Parecer consolidado: correções na exibição do enquadramento e removendo campos caso nova IN
+* [FIX] Parecer/gerenciar parecer presidente: correção no alinhamento dos botões
+* [FIX] Analisar parecer/análise de custos: exibindo linhas com valores maiores que os praticados
+* [FIX] Analisar parecer/análise de custos: correção na exibição de números com ponto flutuante
+* [FIX] Análise inicial: ajuste na ordenação da planilha orçamentária
+* [FIX][REFACTOR] Parecer/análise inicial: removendo ações relevantes do produto principal && removendo funções não mais usadas
+* [REFACTOR] Parecer/gerenciar parecer: alterando nome da função isIphan para isVinculadaIphan
+* [REFACTOR] Parecer/gerenciar parecer: criando função isVinculadaIphan & ajuste no fluxo do IPHAN
+* [DEPRECATED] Gerenciar parecer: removendo funcionalidade de conclusão movida para outro módulo
+* [FIX] Parecerista: Corrige charset
+* [FIX] Parecerista: Corrige visualizacao das tabelas ao abrir e fechar
+* [FIX] Parecerista/Comprovante de RPA: Corrige erro ao baixar arquivo .pdf
+* [FIX] Planilhas orçamentárias: corrige texto da etapa de Administração do Projeto
+* [Fix] Projeto/Readequacao do Plano de Distribuicao: corrige ao salvar plano de distribuicao da antiga IN
+* [REFACTOR] Remoção de todas os códigos comentados de xd
+
+Release 2.5.4
+* [Fix] Tempo da sessão: aumenta o tempo da sessão para 24horas
+
+Release 2.5.3
+* [FIX] Solicitar vínculo: corrige ao solicitar vínculo
+
+Release 2.5.2
+* [FIX] Gerenciar Responsaveis/Novo responsável: correção ao vincular novo responsável
+
+Release 2.5.1
+* [FIX] Parecer/Análise inicial e CNIC: correção ao gerar documento
+
+Release 2.5.0
+* [ADD] Parecer/Análise CNIC: Fluxo de assinatura para CNIC, com finalização de projeto
+* [FIX] CNIC/Realizar análise projeto: retirar verificação de limites orçamentários se nova IN 2017
+* [FIX] CNIC/Realizar análise projeto: removendo links de edição da planilha e reintegrar valores para projetos posteriores a VerificarIN2017
+* [FIX] CNIC/Realizar análise projeto: se nova IN, tirar links para análise de conteúdo e análise de cortes sugeridos
+* [FIX] CNIC/Realizar análise projeto: alterando cor do menu
+* [FIX] Parecer/análise inicial: correção de erro ao gerar documento para assinatura
+* [FIX] Parecer/presidente de vinculada: correção de url
+* [FIX] Parecer/análise inicial: ajustes de estilo no documento para assinatura
+* [REFACTOR] Parecer/análise inicial: alterando nome de função preparatória do documento para assinatura
+* [REFACTOR] Parecer/Análise CNIC: movendo funcionalidade para módulo parecer e redirecionando ação
+* [REFACTOR] Parecer/parecer cnic: trazendo funcionalidades de emissão de parecer para módulo parecer
+* [UPDATE] EXIBIR PROJETO/PLANO DISTRIBUICAO: Ajustando visualizacao do plano de distribuicao
+* [UPDATE] Assinatura/TbAssinatura: adicionando tipo ato para análise CNIC
+* [UPDATE] Autenticação: adicionado permissão para componente da comissão (cnic)
+
+Release 2.4.3
+* [FIX] Parecer/análise inicial: correção na geração do documento para assinatura'
+
+Release 2.4.2
+* [FIX] Parecer/análise inicial: correção de erro na paginação
+* [FIX] Parecer/análise inicial: Passando idAtoAdministrativo e stEstado para gerar documento assinatura
+
+Release 2.4.1
+* [FIX] Parecer/análise inicial: correção no fome da fn e alterando chamada a verificarIN2017 para fn
+* [FIX] Parecer/análise inicial: adicionando tela faltante
+
+Release 2.4.0
+* [ADD] Parecer/análise inicial: Fluxo de aprovação pelo parecerista com assinatura para IN 2017
+* [ADD] Parecer/gerenciar pareceres: Fluxo de aprovação pelo coordenador de parecer com assinatura para IN 2017
+* [ADD] Parecer/gerenciar parecer: Fluxo de aprovação pelo presidente de vinculada para IN 2017
+* [ADD] Parecer/análise inicial: Gravando informações sobre ações relevantes para IN 2017
+* [ADD] Parecer: passando sempre o código do órgão superior para obterQuantidadeMinimaAssinaturas()
+* [ADD] Parecer/analisar-projeto-parecer: finalizar projeto pela modal para IN 2017
+* [ADD] Autenticação/grupos: Adicionando perfil de presidente de vinculada
+* [ADD] Parecer/Documento Assinatura: pega nome do órgão para gerar documento para assinatura
+* [ADD] Parecer/analisar-projeto-parecer: trazendo a lógica da análise inicial para módulo de parecer; adicionando restrição de editar produto, acessar diligência e declarar impedimento caso já tenha assinado
+* [ADD] Assinatura/TbAssinatura: adicionando constante para tipo_ato_analise_inicial
+* [ADD] Helper: adicionando helper IsProjetoJaAssinado
+* [FIX] Analisarprojetoparecer: fazendo validações de 15% e 20% apenas para projetos anteriores a 2017
+* [FIX] Default/gerenciarparecer: inativa documentoAssinatura existente quando encaminha/distribui parecer pelo coordenador
+* [FIX] Parecer: atualizando entradas no menu para análise inicial e gerenciar parecer
+* [FIX] Analisarprojetoparecer/análise inicial: correção de encoding
+* [FIX] Analisarprojetoparecer/fechar análise: correção de encoding
+* [FIX] Parecer/HelperIsProjetoJaAssinado: pegando também situação em que retorna objeto
+* [FIX] Analisarprojetoparecer/análise inicial: correção em link de produto secundário e erro ao alterar item
+* [FIX] Analisarprojetoparecer/análise inicial: correção ao alterar item && correção de acentos
+* [FIX] Analise inicial/produto: estilo diferenciado para produto com custo praticado acima da mediana
+* [UPDATE] Parecer/análise inicial: ajuste de estilo dos botões
+* [UPDATE] Parecer/gerenciar pareceres: ajuste de estilo dos botões
+* [UPDATE] Assinatura: adicionando possibilidade de filtrar a obtenção da quantidade de assinaturas por idOrgaoDoAssinante
+* [UPDATE] Analisarprojetoparecer/análise inicial: Alterando devolução ao coordenador para declaração de impedimento
+* [REFACTOR] Parecer/Análise inicial: movendo métodos de parecer/index para parecer/analise-inicial e removendo arquivos desnecessários
+* [REFACTOR] Parecer/gerenciar-parecer: movendo lógica de finalização de parecer para ser feito pelo presidente; presidente assinando, concluindo e enviando de volta para o MinC
+* [UPDATE] Prestação de contas: Mudando formato de data/hora nas telas
+* [FIX] Prestação Contas: Retirando texto rico para teste e validação
+* [FIX] Desistencia Recursal: Ajusta no texto da desistencia recursal
+* [FIX] CSS/SELECT: Corrige tamanho apenas para forms
+* [FIX] PROPOSTA/SOLICITAR ITEM: Corrige acao do botao NOVO
+* [FIX] Prestação de contas/Comprovação financeira: Corrige ao incluir novo fornecedor
+* [FIX] Agentes/Dirigentes: Corrige menu desformatado
+
+Release 2.3.0
+* [FIX] Admissibilidade/Enquadramento : Correção do link "Enquadrar Projeto"
+* [FIX] Readequação: Erro ao acessar a tela
+* [FIX] Prestação de Contas : Ajuste no sql para gerar os dados de itens
+* [UPDATE] Assinatura : Adição de tratamento para gerenciamento de projetos culturais para assinar de acordo com o ato administativo do orgão, perfil e orgão superior do usuário logado.
+* [UPDATE] Assinatura : Adição de tratamento para visualização de itens já assinados
+* [UPDATE] Assinatura : Melhoria nos filtros de Projetos Culturais para assinaturas
+* [UPDATE] Assinatura : Alteração da validação da exibiçaõ do botão Finalizar, de acordo com o Orgao Superior no ato Administrativo [FIX] Correção de falha na validação da situação na funcionalidade de devolução do projeto cultural.
+* [UPDATE] Admissibilidade/Enquadramento : Criação de funcionalidade para visualizar o motivo da devolução dos Projetos Culturais que estão na situação 'B05 - Projeto Devolvido para enquadramento' que estão disponíveis para enquadramento
+* [UPDATE] Admissibilidade/Enquadramento: Adição de grupos de acesso para SAV na assinatura pela admissibilidade de enquadramento.
+* [UPDATE] Proposta : Gestor Salic/Solicitar Itens: Corrige aprovacao e rejeicao dos itens
+* [UPDATE] Proposta : Atualiza README do modulo proposta
+* [UPDATE] Proposta/Solicitar item: Correcao de texto e limitar a quantidade mínima de caracteres para pesquisa
+* [UPDATE] Proposta/Solicitar Item - Corrigindo bug e melhorando o código
+* [UPDATE] Proposta/Solicitar Item - Refatora metodo de salvar e remove consultas nao utilizados
+* [UPDATE] Proposta/Solicitar Itens: Melhoria na pesquisa de itens já existentes
+
+Release 2.2.0
+ * [UPDATE] Proposta/Gerar pdf: novo formato e informacoes para o proponente imprimir a proposta cultural
+ * [FIX] Proposta/Planilha: Bug ao excluir item adicionado via ajax
+ * [REFACTOR] Proposta/Controllers: refatora todas as controllers da proposta removendo codigo duplicado e nao utilizado
+ * [REFACTOR] PROPOSTA: Limpando controllers do modulo proposta
+ * [REFACTOR] PROPOSTA: Renomeia arquivos nao utilizados na proposta para posterior remocao
+ * [ADD] Proposta/Planilha orcamentaria: Permite ao proponente cadastrar um item em varias localidades de uma vez
+ * [ADD] Proposta/Planilha orcamentaria: Nova opcao para duplicar item em outras cidades
+ * [UPDATE] Proposta/Planilha orcamentaria: melhoria no codigo e validacao de itens
+ * [UPDATE] Proposta/Planilha orcamentaria: validando mediana de todos os itens
+ * [UPDATE] Proposta/Planilha orcamentaria: validando itens de outras cidades ao duplicar item na planilha
+ * [UPDATE] Proposta/Planilha orcamentaria: permite que o proponente adicione itens iguais para fonte de recursos diferentes
+ * [FIX] Proposta/Planilha orcamentaria: corrige bug no js quando elemento nao existe
+ * [FIX] Proposta/Cadastrar Proposta: Corrige ajax ao cadastrar proposta
+ * [FIX] Proposta/Inclusão de item: Bug ao carregar menu
+ * [UPDATE] Proposta/Listar propostas: Carrega inicialmente as propostas do proponente logado
+ * [UPDATE] Proposta/Listar propostas: Remove o filtro de todos os agentes
+ * [DEPRECATED] Proposta: Renomeando arquivos e actions que nao sao mais utilizadas no orcamento da proposta
+ * [ADD] Projeto/Clonar projeto - Adiciona funcionalidade de clonar projeto #3
+ * [UPDATE] Projeto/Clonar projeto: Melhorias e ajuste no retorno da mensagem #3
+ * [FIX] Projeto/Alterar projeto: Corrige bug ao reenviar proposta readequada para o MinC
+ * [UPDATE] Projeto/Readequar: Adiciona o campo de plano de execucao imediata
+ * [UPDATE] Recurso/Enquadramento: Define o agente responsavel por analisar o recurso de enquadramento
+ * [UPDATE] Projeto/Check list: Alterando query do checklist e corrigindo charsets
+ * [FIX] Projeto/Permissao de acesso: Corrige bug que verifica permissao de acesso ao projeto
+ * [FIX] RELATORIOS/Editais minc: Bug ao consultar lista de projetos
+ * [FIX] RELATORIOS/Menus: Bug ao carregar menu no modulo de relatorios
+ * [FIX] RELATORIOS/Operacional: Bug ao carregar menu
+ * [UPDATE] Assinatura: Melhoria de performance da funcionalidade de assinar projeto.
+ * [UPDATE] Assinatura: Ajuste de consulta para consiga receber como parametro o identificador do documento gerado.
+ * [UPDATE] Assinatura: Ajuste de todas as chamadas e carregamento de dados para a funcionalidade de Visualizar Documento de assinatura para que ao invés de enviar sempre os parametros "IdPronac" e 	"IdTipoDoAtoAdministrativo", agora envie somente "idDocumentoAssinatura".
+ * [UPDATE] Assinatura: Criação de funcionalidade de encaminhamento em massa para módulo genérico de assinatura, validando a seleção dos mesmos Tipos de Atos Administrativos.
+ * [UPDATE] Adapatação do módulo de assinatura pra permitir o encaminhamento em massa de assinaturas do mesmo Tipo do Ato Administrativo.
+ * [UPDATE] Assinatura: Adição de parametrização do módulo de assinatura para permitir que receba módulo e controller de origem para redirecionamento ou ação do botão voltar.
+ * [UPDATE] Assinatura: Alteração de todas as referências para a action "gerenciar-projeto" para "gerenciar-assinaturas" para que seja possível fazer o redirecionamento por módulo.
+ * [UPDATE] Assinatura: Ajuste de layout na mensagem exibida para quando não há assinaturas para o usuário com o perfil, orgao e cargo atual.
+ * [FIX] Assinatura: Correção da movimentação do projeto quando encaminhado para assinatura para o orgao de destino correto, de acordo com o orgao superior
+ * [UPDATE] Assinatura: Conforme solicitações do Rômulo foram realizadas alteraçãoes na estrutura do documento padrão de assinatura para enquatramento.
+ * [FIX] Assinatura: Ajuste no redirecionamento das assinaturas quando uma falha de preenchimento é apresentada.
+ * [FIX] Assinatura: Correção de consulta carrega documentos já assinados pelo usuário logado.
+ * [UPDATE] Assinatura: Alteração do layout da funcionalidade de visualização do projeto e visualizar assinaturas
+ * [FIX]  Assinatura/Correção do painel : para que sejam exibidos projetos com assinatura finalizada.
+ * [ADD]  Assinatura: Adição de brasão e configuração de folha de estilo para espaçamento de 10.
+ * [UPDATE] Enquadramento/Assinatura : Melhorias de layout e refatoração de código para utilização de constantes que representam valores do banco de dados.
+ * [FIX] Assinatura/Visualizar Assinaturas: Ajuste de cor de labels de acordo com o estado do documento.
+ * [UPDATE] Assinatura/Visualizar Assinaturas: Adição das colunas Situação e Estado
+ * [UPDATE] Assinatura/models/DbTable/TbAssinatura: Ordenação por data de criação no método "obterProjetosAssinados"
+ * [UPDATE] Assinatura/models/DbTable/TbAssinatura: Adição do método "obterProjetosAssinados"
+ * [UPDATE] Assinatura: Adição da funcioalidade "Visualizar Assinaturas" acessada pelo menu "Assinatura".
+ * [UPDATE] Assinatura: Adaptar locais de consulta por documentos abertos para assinatura buscando também por documentos Ativos
+ * [UPDATE] Assinatura: Ajustar a devolução para que altere a situação do Documento da Assinatura para 0 quando devolvido.
+ * [UPDATE] Assinatura/Documentação: Atualizar documentação da Library e Módulo de Assinatura com o intuito de nivelar conhecimento.
+ * [UPDATE] Assinatura/models/TbDocumentoAssinatura:
+ 	- Adição do atributo stEstado com getters e setters na Entidade Assinatura_Model_TbDocumentoAssinatura
+ 	- Adicionar constantes ATIVO(1) e INATIVO(2) na classe Assinatura_Model_TbDocumentoAssinatura
+ * [FIX] Assinatura: Criação de SQL para alterar registros já existentes e com documentos abertos para assinatura para estarem com situação ativa
+ * [UPDATE] Default/Models/Orgaos: Inclusão de novas contantes de Orgaos.
+ * [UPDATE] Projeto/Models/Situação: Adição de novas contantes de situação do projeto.
+ * [FIX] PRESTAÇÃO DE CONTAS: Ajuste de Menu, erro ao tentar analisar projeto.
+ * [UPDATE] Admissibilidade/Enquadramento: Adição de tratamento e legenda para "Projeto Devolvido para Enquadramentro"
+ * [UPDATE] Admissibilidade: Alteração da situação de destino do projeto quando devolvido. [UPDATE] Projetos/Models/Situacao : Inclusão de constante para situação "B05".
+ * [FIX] Admissibilidade/Enquadramento: Correção de bug que não permitia menos que mil caracteres. [UPDATE] Alteração de label "Justificativa" para "Parecer de Enquadramento"
+ * [UPDATE] Admissibilidade/Enquadramento: Alteração as providências tomadas e orgão de destino para quando a situação do projeto for "Enquadrado com Recurso".
+ * [UPDATE] Admissibilidade/Enquadramento: Alteração da situação da finalização do projeto para "Projeto Aprovado Aguardando Análise Documental".
+ * [UPDATE] Admissibilidade/Gerenciamento de assinaturas: Adição de módulo/controller de origem
+ * [UPDATE] Admissibilidade/Gerenciamento de assinaturas : Alteração do título da págine de 'Gerenciar Projetos' para  'Gerenciar Assinaturas'
+ * [UPDATE] Admissibilidade/EnquadramentoAssinatura: Adição de tratamento para que sejam exibidas somente as assinaturas disponíveis de acordo com o módulo selecionado.
+ * [UPDATE] Admissibilidade/EnquadramentoAssinatura: Alteração da action  'gerenciarProjetosAction' para 'gerenciarAssinaturasAction'
+ * [UPDATE] Admissibilidade/Transformar proposta em projeto: Retirando funcionalidade caso a situacao da proposta seja diferente de normal #2
+ * [UPDATE] Admissibilidade/Exibir proposta: Atualiza planilha e plano de distribuicao ao imprimir proposta
+ * [UPDATE] Refatoração de nome incorreto de constantes da entidade 'Orgao' e 'Situacao'.
+ * [FIX] HEADER corrige link da logo para home do  proponente
+ * [UPDATE] Adição de tratamento para o campo "from" utilizando base64_encode para ocultar a última url acessada e sendo informado junto com o método de loggout quando a sessão é perdida
+ * [UPDATE] Adição do campo do tipo hidden e name "from" para tratar redirecionamento de urls.
+ * [UPDATE] Adição de tratamento para quando receber a propriedade "prom" da class ""...Action_Abstract.php"
+ * [FIX] Procuracao/Cadastrar procurador: Corrige bug ao cadastrar um novo procurador
+ * [REMOVE] Remoção do arquivo docker-compose.yml para que essa dependência não seja criada dentro deste repositório
+
+Release 2.1.4
+ * [FIX] Analiseprojetoparecer/análise inicial: correção de quebra de tela
+
+Release 2.1.3
+ * [UPDATE] PlanilhaOrcamentaria: Adicionando alteração da IN2017 para planilha orçamentária tipo 3
+ * [ADD] Consultardadosprojeto/Remanejamento 50%: correções ao fazer readequação de 50% quando já tem uma readequação SR
+
+Release 2.1.2
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Melhoria nas mensagens, adiciona toast do materialize
+ * [FIX] PROPOSTA:PLANO DE DISTRIBUICAO Corrige ao salvar receita total prevista
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Mostrando categoria quando for exemplar
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Melhoria na visualizacao do plano de distribuicao na admissibilidade
+ * [UPDATE] PROPOSTA:PLANO DE DISTRIBUICAO Visualizando plano de distribuicao detalhado em outras partes do sistema
+
+Release 2.1.1
+ * [Fix] Projeto/Readequação orçamentária: ajuste da lista de etapas conforme a IN 2017 ao incluir novo item
+
+Release 2.1.0
+ * [Novo] Documentação: novo formato de arquivo CHANGELOG
+ * [Novo] Proposta/Plano de distribuição: Novo funcionamento, totalmente reescrito
+ * [Novo] Proposta/Plano distribuicão: acrescentando novos campos e removando tabelas dos formularios
+ * [Novo] Projeto/Remanejamento 50%: Grupo A pode receber saldo dos grupos B, C ou D
+ * [Update] Proposta/Plano de Distribuição: Salvando media ponderada no resumo do plano de distribuicao
+ * [Update] Proposta/Plano de Distribuição: Validando regras de negocio no front-end
+ * [Update] Proposta/Plano de Distribuição: Adiciona novo campo de vlReceitaTotalPrevista no plano de distribuicao
+ * [Update] Proposta/Plano de Distribuição: Salvando o valor medio no plano de distribuicao
+ * [Update] Proposta/Plano de Distribuição: ocultando campos quando for do tipo de venda Exemplar
+ * [Update] Proposta/Plano de Distribuição: Melhorando as conversoes e ocultando calculos parciais quando eh do tipo Exemplar
+ * [Update] Proposta/Plano de Distribuição: Salva valores corretamente e mostra de mensagem quando carrega
+ * [Update] Proposta/Planilha Orçamentária: Aumenta quantidade de caracteres no valor unitario
+ * [Update] Proposta/Plano de Distribuição: formatando valores para salvar
+ * [Update] Proposta/Plano de Distribuição: Ajustando combos no vuejs
+ * [Update] Proposta/Plano de Distribuição: ajustando componentes
+ * [Fix] Assinatura/Gerenciamento de assinaturas : Correção de validação que verifica quantidade minima de assinaturas para exibir a listagem.
+ * [Fix] Consultardadosprojeto:remanejamento_menor correção nas mensagens ao usuário
+ * [Fix] Consultardadosprojeto/remanetamento_menor: correção na cor na totalização dos valores remanejados
+ * [Fix] Consultardadosprojeto/remanejamento menor: correção na totalização da readequação e ao enviar projeto sem valor remanejado
+ * [Fix] Consultardadosprojeto/remanejamento menor: correção de encoding em mensagem de erro
+ * [Fix] Mediana: Rollback no retorno da mensagem
+ * [Fix] Proposta/Plano de Distribuição: Ajuste ao mostrar resumo do plano de distribuicao
+ * [Fix] Custos vinculados: Corrige limite para alguns itens dos custos vinculados
+ * [Fix] Projeto/Remanejamento 50%] correções para funcionar remanejamento de saldo entre grupos A, B, C e D; correção para buscar dados corretos quando planilha RP ainda não foi criada
+ * [Fix] Projeto/Remanejamento 50%: bug de alterar item que altera valor de referência na exibição
+ * [Fix] Proposta/Plano de distribuicao: alterando formato da moeda e atualizando form 2
+ * [Fix] Proposta/Local de realizacao: Botao de excluir
+ * [Update] Ambiente/Docker: Atualização das informações utilizada para funcionamento do docker no salic.
+ * [Update] Ambiente/Docker: Melhoria no docker-compose.yml para que as configurações de volumem utilizem o diretório atual como referência e somente logs definidos como a pasta /var/www/log/apache2
+ * [Update] Proposta/Plano de distribuicao: alterando formato da moeda e atualizando form
+ * [Add] Ambiente/Docker: Adição do docker-compose.yml para carregamento automático das configurações necessárias e ambiente para que o Salic seja executado. [ REMOVE ] Remoção de arquivos legados que não são mais utilizados
+ * [Refactor] Proposta/Plano distribuicão: Trabalhando no novo formato para detalhamento do plano distribuicao
+ * [Refactor] Proposta/Plano distribuicão: Atualizando layout e disponibilizacao de botoes do plano de distribuicao
+
+Release 2.0.16
+ * Fix: Correção da funcionalidade de links incorretos para gerenciamento de assinaturas.
+
+Release 2.0.15
+ * Fix: [Analisar Parecer] Erros com pop-up de erro aparecendo em todo instante.
+ * Fix: [Custos vinculados] corrigindo local de realizacao na consulta dos custos vinculados
+ * Fix: [Index] Correção da funcionalidade de regerar senha
+ * Fix: [Remanejamento 50%] Removendo soma dos grupo a, b, c d
+ * Fix: [Remanejamento 50%] Alterando texto do menu lateral
+ * Fix: [Remanejamento 50%] Somando grupo a, b, c d - em andamento
+ * Fix: [Remanejamento 50%] Corrigindo arredondamento de valor mínimo e valor máximo; puxando valor do item da planilha correta
+ * Fix: [Remanejamento 50%] Alterando valor permitido de 20% para 50%
+ * Fix: [Remanejamento 50%] Exibindo planilha correta ao realizar remanejamento
+ * Update: [Assinatura] Ajustes de situação para definir Adicionando alterações no changelog para versão 2.1.4implicitamente os valores padroes para o documento de assinatura
+ * Update: [Custos vinculados] mostrando valores padrões para o usuário
+ * Update: [Custos vinculados] salvando os percentuais dos custos vinculados nos novos campos no banco
+ * Update: [Planilha orcamentaria] finalizando atualizacoes para os custos vinculados
+
 Release 2.0.14
  * Fix: [Recursos] Exibindo combo de área cultural corretamente; correção no checkbox da finalização
 
@@ -10,11 +370,11 @@ Release 2.0.12
  * Fix: [Readequações] Erros no acesso a tela de Avaliar readequações.
  * Update: adição de funcionalidade de encaminhar assinatura
  * Fix: [Agente] Erro na combo de UF
- * Update: Criação do método "movimentarProjeto" [ UPDATE ] Adição da propriedade $idOrdemDaAssinatura na classe "MinC_Assinatura_Model_Assinatura" com getters e setters.
+ * Update: Criação do método "movimentarProjeto" [ Update ] Adição da propriedade $idOrdemDaAssinatura na classe "MinC_Assinatura_Model_Assinatura" com getters e setters.
  * Fix: Correção do link do botão "Voltar" da a gerência de assinaturas.
  * Fix:  Alteração da situação do documento de assinatura para fechado quando nalizar as assinaturas do enquadramento.
  * Fix: [Gerenciar Parecer] Ajuste para erro ao encaminhar parecer
-
+Adicionando alterações no changelog para versão 2.1.4
 Release 2.0.11
  * Fix: [Proposta] Ajuste na inclusão de itens orçamentarios
  * Fix: [Agente] Erros nas combos de UF e Cidade
@@ -95,7 +455,7 @@ Release 2.0.5
   * Fix: [Proponente] Corrige charset nas certidões negativas
   * Fix: [Coordenador CNIC] ajustes ao abrir tabela de diligencias
   * Fix: [Proponente] corrige erro ao acessar proposta de proponente vinculado
-  * FIX: Erro geral de sql quando vai fazer algumas consultar e retorna como objeto
+  * Fix: Erro geral de sql quando vai fazer algumas consultar e retorna como objeto
   * Fix: [CNIC] Votantes: exibindo membros natos
   * Update: [Projeto] Consultar dados do projeto para IN2017 e IN2016 para consultar os dados de plano de distribuição
   * Fix: [Proponente] Tela de natureza ao cadastrar agente

@@ -85,7 +85,7 @@ $edital='';
                                 <?php echo $arquivosProposta['noarquivo']; ?>
                             </a>
                         </td>
-                        <?php if( !$this->isEditarProjeto) : ?>
+                        <?php if ($this->isEditavel) : ?>
                             <td align="center">
                                 <button type="button" class="btn red white-text"
                                     onclick="excluirAnexos(<?php echo $arquivosProposta['iddocumentospreprojetos']; ?>, <?php echo trim($_GET['idPreProjeto']); ?>, 'proposta');" >
@@ -115,14 +115,16 @@ $edital='';
                         <td><?php echo $arquivosProponente['Descricao']; ?></td>
                         <td align="center"><?php echo Data::tratarDataZend($arquivosProponente['Data'], 'Brasileira'); ?></td>
                         <td><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir-documentos-agentes')); ?>?id=<?php echo $arquivosProponente['idDocumentosAgentes']; ?>"><?php echo $arquivosProponente['NoArquivo']; ?></a></td>
-                        <?php if( !$this->isEditarProjeto) : ?>
+
                             <td align="center">
-                                <button type="button"
-                                    class="btn red white-text"
-                                    onclick="excluirAnexos(<?php echo $arquivosProponente['idDocumentosAgentes']; ?>, <?php echo trim($_GET['idPreProjeto']); ?>, 'proponente');" />
-                                excluir</button>
+                                <?php if ($this->isEditavel) : ?>
+                                    <button type="button"
+                                        class="btn red white-text"
+                                        onclick="excluirAnexos(<?php echo $arquivosProponente['idDocumentosAgentes']; ?>, <?php echo trim($_GET['idPreProjeto']); ?>, 'proponente');" />
+                                    excluir</button>
+                                <?php endif; ?>
                             </td>
-                        <?php endif; ?>
+
 
                     <?php } ?>
                 </table>
@@ -199,11 +201,13 @@ $edital='';
         }
     }
 
-    // funcao para excluir os anexos
-    function excluirAnexos(idArquivo, idPreProjeto, tipoDocumento)
-    {
-        url = '<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaedital', 'action' => 'excluiranexo')) ?>?idArquivo=' + idArquivo + '&idPreProjeto=' + idPreProjeto + '&tipoDocumento=' + tipoDocumento;
-        confirmModal('CONFIRMA&Ccedil;&Atilde;O', 'msgExclusaoArq', 320, 200, null, url);
-    }
+    <?php if ($this->isEditavel) : ?>
+        // funcao para excluir os anexos
+        function excluirAnexos(idArquivo, idPreProjeto, tipoDocumento)
+        {
+            url = '<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaedital', 'action' => 'excluiranexo')) ?>?idArquivo=' + idArquivo + '&idPreProjeto=' + idPreProjeto + '&tipoDocumento=' + tipoDocumento;
+            confirmModal('CONFIRMA&Ccedil;&Atilde;O', 'msgExclusaoArq', 320, 200, null, url);
+        }
+    <?php endif; ?>
 </script>
 

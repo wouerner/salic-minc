@@ -1,9 +1,9 @@
 <script type="text/javascript">
     /**
-     * Funções que são chamadas após a página ser carregada
+     * Funï¿½ï¿½es que sï¿½o chamadas apï¿½s a pï¿½gina ser carregada
      */
     $(document).ready(function(){
-        // máscaras dos campos
+        // mï¿½scaras dos campos
         $('#dtInicio, #dtFim').keyup(function(){
             mascara(this, format_data); // data
         });
@@ -18,7 +18,7 @@
             }
         });
 
-        // calendário
+        // calendï¿½rio
         $.datepicker.regional['pt-BR'] =
             {
             closeText: 'Fechar',
@@ -39,20 +39,20 @@
         };
         $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
 
-        // id dos campos que utilizarão o calendário
+        // id dos campos que utilizarï¿½o o calendï¿½rio
         $('#dtInicio, #dtFim').datepicker($.datepicker.regional['pt-BR']);
     }); // fim $(document).ready()
 
 
     /**
-     * Função responsável pela correção das inconsistências
+     * Funï¿½ï¿½o responsï¿½vel pela correï¿½ï¿½o das inconsistï¿½ncias
      */
     function corrigirInconsistenciaExecucaoNaoVigente(item, tipo, dtInicioExecucao, dtFimExecucao)
     {
         if (tipo != '')
         {
-            inconsistencia = $('#execucao_nao_vigente' + item).find('option').filter(':selected').text(); // pega a inconsistência
-            $('#inconsistenciaExecucaoNaoVigente').text(inconsistencia); // ajusta o texto da inconsistência na modal
+            inconsistencia = $('#execucao_nao_vigente' + item).find('option').filter(':selected').text(); // pega a inconsistï¿½ncia
+            $('#inconsistenciaExecucaoNaoVigente').text(inconsistencia); // ajusta o texto da inconsistï¿½ncia na modal
             $('#dtInicio, #dtFim').val(''); // limpa os campos com a nova data
             $('#dtInicioExecucao').val(dtInicioExecucao);
             $('#dtFimExecucao').val(dtFimExecucao);
@@ -64,10 +64,10 @@
                 resizable: false,
                 width: 700,
                 height: 370,
-                title: 'Corrigir Inconsistência',
+                title: 'Corrigir Inconsistï¿½ncia',
                 buttons:
                     {
-                    Não: function()
+                    Nï¿½o: function()
                     {
                         $(this).dialog('close');
                         $('#execucao_nao_vigente' + item).find('option[value=""]').attr('selected',true);
@@ -81,13 +81,13 @@
             });
             $('.ui-dialog-titlebar-close').remove();
         }
-    } // fecha função corrigirInconsistenciaExecucaoNaoVigente()
+    } // fecha funï¿½ï¿½o corrigirInconsistenciaExecucaoNaoVigente()
 </script>
 
 
 
 <div id="modalExecucaoNaoVigente" class="sumir">
-    <p align="center">Deseja corrigir a inconsistência como: <strong id="inconsistenciaExecucaoNaoVigente"></strong>?</p>
+    <p align="center">Deseja corrigir a inconsistï¿½ncia como: <strong id="inconsistenciaExecucaoNaoVigente"></strong>?</p>
     <form name="formExecucaoNaoVigente" id="formExecucaoNaoVigente" action="<?php echo $this->url(array("controller" => "movimentacaodeconta", "action" => "corrigir-inconsistencias")); ?>" method="post">
         <input type="hidden" name="tpInconsistencia" id="tpInconsistencia" value="1" />
         <table class="tabela">
@@ -116,13 +116,13 @@
 <table class="tabela">
     <?php if ($this->registros->count() <= 0) : ?>
     <tr>
-        <td align="center" ><em>Consulta efetuada com sucesso, por&eacute;m, n&atilde;o existem contas com captações identificadas para o filtro solicitado!</em></td>
+        <td align="center" ><em>Consulta efetuada com sucesso, por&eacute;m, n&atilde;o existem contas com captaï¿½ï¿½es identificadas para o filtro solicitado!</em></td>
     </tr>
     <?php else: ?>
         <?php $ct=1;
         $arrProjeto =array();
         $arrIncentivador =array();
-    foreach($this->registros as $projeto): //xd($projeto);?>
+    foreach($this->registros as $projeto): ?>
     <?php if($ct==1) { ?>
     <thead>
         <tr class="">
@@ -158,8 +158,8 @@
             <?php } ?>
             </td>
             <td align="center"><?php echo Validacao::mascaraCPFCNPJ($projeto->nrCpfCnpjProponente); ?></td>
-            <td align="center"><?php echo !empty($projeto->Agencia) ? $projeto->Agencia : '<em>Não informada</em>'; ?></td>
-            <td align="center"><?php echo !empty($projeto->ContaBloqueada) ? $projeto->ContaBloqueada : '<em>Não informada</em>'; ?></td>
+            <td align="center"><?php echo !empty($projeto->Agencia) ? $projeto->Agencia : '<em>Nï¿½o informada</em>'; ?></td>
+            <td align="center"><?php echo !empty($projeto->ContaBloqueada) ? $projeto->ContaBloqueada : '<em>Nï¿½o informada</em>'; ?></td>
             <td align="center"><?php echo Validacao::mascaraCPFCNPJ($projeto->nrCpfCnpjIncentivador); ?></td>
             <td align="center"><?php echo $projeto->dtCredito; ?></td>
             <td align="right" class="<?php echo ($projeto->vlValorCredito == 'D') ? 'red' : 'blue' ; ?>"><?php echo $this->formatarReal($projeto->vlValorCredito); ?></td>
@@ -172,12 +172,12 @@
             <td class="centro" id="coluna_<?php echo $projeto->tpValidacao."_".$ct; ?>">
                 <?php /*<select class="input_simples" name="execucao_nao_vigente" id="execucao_nao_vigente<?php echo $ct; ?>" onchange="corrigirInconsistenciaExecucaoNaoVigente('<?php echo $ct; ?>', this.value, '<?php echo Data::tratarDataZend($projeto->DtInicioExecucao, 'Brasileira'); ?>', '<?php echo Data::tratarDataZend($projeto->DtFimExecucao, 'Brasileira'); ?>');"> */?>
                 <select class="input_simples updateTmpCaptacao" idTmpCaptacao="<?php echo $projeto->idTmpCaptacao; ?>">
-                    <option value="0">- Selecione a correção -</option>
-                        <option value="1" <?php echo $projeto->cdPatrocinio == 1 ? 'selected="selected"' : ''; ?>>Patrocínio</option>
-                        <option value="2" <?php echo $projeto->cdPatrocinio == 2 ? 'selected="selected"' : ''; ?>>Doação</option>
-                        <option value="3" <?php echo $projeto->cdPatrocinio == 3 ? 'selected="selected"' : ''; ?>>Devolução Judicial</option>
-                        <option value="5" <?php echo $projeto->cdPatrocinio == 5 ? 'selected="selected"' : ''; ?>>Devolução FNC</option>
-                        <option value="4" <?php echo $projeto->cdPatrocinio == 4 ? 'selected="selected"' : ''; ?>>Outras devoluções</option>
+                    <option value="0">- Selecione a correï¿½ï¿½o -</option>
+                        <option value="1" <?php echo $projeto->cdPatrocinio == 1 ? 'selected="selected"' : ''; ?>>Patrocï¿½nio</option>
+                        <option value="2" <?php echo $projeto->cdPatrocinio == 2 ? 'selected="selected"' : ''; ?>>Doaï¿½ï¿½o</option>
+                        <option value="3" <?php echo $projeto->cdPatrocinio == 3 ? 'selected="selected"' : ''; ?>>Devoluï¿½ï¿½o Judicial</option>
+                        <option value="5" <?php echo $projeto->cdPatrocinio == 5 ? 'selected="selected"' : ''; ?>>Devoluï¿½ï¿½o FNC</option>
+                        <option value="4" <?php echo $projeto->cdPatrocinio == 4 ? 'selected="selected"' : ''; ?>>Outras devoluï¿½ï¿½es</option>
                 </select>
             </td>
         </tr>

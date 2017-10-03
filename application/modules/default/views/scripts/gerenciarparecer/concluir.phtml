@@ -75,7 +75,7 @@
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'gerenciarparecer', 'action' => 'index'),'',true); ?>" title="Ir para Início">Início</a></li>
-        <li><a href="<?php echo $this->url(array('controller' => 'gerenciarparecer', 'action' => 'listaprojetos'),'',true); ?>" title="Localizar Parecer">Gerenciar Pareceres</a></li>
+        <li><a href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'),'',true); ?>" title="Localizar Parecer">Gerenciar Pareceres</a></li>
         <li class="last">Concluir</li>
     </ul>
 </div>
@@ -92,7 +92,7 @@
 <!-- ========== INÍCIO CONTEÚDO ========== -->
 <div id="conteudo">
     <div id="modalConfirm" style="display: none;"><label id="msgmodal"></label></div>
-    <form id="form" name="form" action="<?php echo $this->url(array('controller' => 'gerenciarparecer', 'action' => 'concluiu')); ?>" method="POST">
+    <form id="form" name="form" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'concluiu')); ?>" method="POST">
         <input name="idpronac" type="hidden" value="<?php echo $this->idpronac; ?>" />
         <input name="idDistribuirParecer" type="hidden" value="<?php echo $this->idDistribuirParecer; ?>" />
         <table class="tabela">

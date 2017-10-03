@@ -169,9 +169,7 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
                 array(), $this->_schema)
             ->where('usu_identificacao = ?', $username)
             ->where('usu_status  = ?', 1);
-        if (md5($password) != MinC_Controller_Action_Abstract::validarSenhaInicial()) {
             $select->where("usu_senha  = ?", $auxSenha);
-        }
 
         $buscar = $this->fetchRow($select);
 
@@ -182,7 +180,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
             // pegamos o zend_auth
             $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
 
-            //xd($this->getName('usuarios'));
             $authAdapter->setTableName($this->getTableName(null, null, false))// TABElLAS.dbo.Usuarios
             ->setIdentityColumn('usu_identificacao')
                 ->setCredentialColumn('usu_senha');
@@ -212,114 +209,7 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
                 return true;
             }
         }
-    } // fecha metodo login()
-
-
-    /**
-     * Metodo para buscar os dados do usuario de acordo com login e senha
-     *
-     * @access public
-     * @static
-     * @param @username (cpf ou cnpj do usuario)
-     * @param @password (senha do usuario criptografada)
-     * @return bool
-     */
-//    public function login($username, $password)
-//    {
-//
-//        // busca o usuario de acordo com o login e a senha
-////        $select = $this->select();
-////        $select->from($this->_name,
-//////            array("dbo.fnEncriptaSenha('" . $username . "', '" . $password . "') as senha")
-////            array('"' . self::encriptaSenha($username, $password) . '" as senha'),
-////            $this->_schema
-////        );
-//
-////        $select->where('usu_identificacao = ?', $username);
-////        $criptSenha = $this->fetchRow($select);
-////        echo '<pre>';
-////        var_dump($criptSenha);
-////        var_dump($select->assemble());
-////        exit;
-////
-////        $auxSenha = "";
-////        if (!empty($criptSenha['senha'])) {
-////            $auxSenha = $criptSenha['senha'];
-//            $auxSenha = self::encriptaSenha($username, $password);
-//
-////        $auxSenha = EncriptaSenhaDAO::encriptaSenha($username, $password);
-////        }
-//
-//        $select = $this->select();
-//        $select->setIntegrityCheck(false);
-//        $select->from($this,
-//            array
-//            (
-//                'usu_codigo',
-//                'usu_nome',
-//                'usu_identificacao',
-//                'usu_senha',
-//                'usu_orgao'
-//            )
-//        );
-
-//        $select->joinInner(
-//            array("uog" => "usuariosxorgaosxgrupos"),
-//            "uog.uog_usuario = usu_codigo AND uog_status = 1",
-//            array(),
-//            parent::getSchema('tabelas')
-//        );
-//        $select->where('usu_identificacao = ?', $username);
-//        $select->where('usu_status  = ?', 1);
-//        if (md5($password) != MinC_Controller_Action_Abstract::validarSenhaInicial()) {
-//            $select->where("usu_senha  = ?", $auxSenha);
-//        }
-//        $buscar = $this->fetchRow($select);
-//
-//        if ($buscar) // realiza a autenticacao
-//        {
-//            // configuracoes do banco
-//            $dbAdapter = Zend_Db_Table::getDefaultAdapter();
-//            // pegamos o zend_auth
-//
-//            $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
-//            $authAdapter->setTableName($this->_name)// TABELAS.dbo.Usuarios
-//            ->setIdentityColumn('usu_identificacao')
-//                ->setCredentialColumn('usu_senha');
-//
-//            // seta as credenciais informada pelo usuario
-//            $authAdapter
-//                ->setIdentity($buscar['usu_identificacao'])
-//                ->setCredential($buscar['usu_senha']);
-//
-//            // tenta autenticar o usu?rio
-//            $auth = Zend_Auth::getInstance();
-//            $acesso = $auth->authenticate($authAdapter);
-//
-//            // verifica se o acesso foi permitido
-//            if ($acesso->isValid()) {
-//                // pega os dados do usuario com excecao da senha
-//                $authData = $authAdapter->getResultRowObject(null, 'usu_senha');
-//
-//                $orgao_maximo_superior = $this->recuperarOrgaoMaxSuperior($buscar['usu_orgao']);
-//
-//                // armazena os dados do usuario
-//                $objAuth = $auth->getStorage()->write($authData);
-//                //Grava o orgao superior na sessao do usuario
-//                $_SESSION['Zend_Auth']['storage']->usu_org_max_superior = $orgao_maximo_superior;
-//
-//                return true;
-//            } // fecha if
-//            else // caso nao tenha sido validado
-//            {
-//                return false;
-//            }
-//        } // fecha if
-//        else {
-//            return false;
-//        }
-//    } // fecha metodo login()
-
+    }
 
     public function loginSemCript($username, $password)
     {
@@ -331,7 +221,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
         $senha->where('usu_senha = ?', $password);
 
         $criptSenha = $this->fetchRow($senha);
-        //xd($criptSenha);
         $sql = $this->select();
         $sql->setIntegrityCheck(false);
         $sql->from($this,
@@ -345,7 +234,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
         $sql->where('usu_identificacao = ?', $username);
         $sql->where('usu_status  = ?', 1);
         $sql->where("usu_senha  = ?", $criptSenha['usu_senha']);
-        //xd($sql->__toString());
         $buscar = $this->fetchRow($sql);
 
         if ($buscar) // realiza a autentica??o
@@ -578,7 +466,6 @@ class Autenticacao_Model_Usuario extends MinC_Db_Table_Abstract
         $sql->where('gru_codigo <> ?', 129);
         $sql->order('org_siglaautorizado ASC');
         $sql->order('gru_nome ASC');
-        //xd($sql->__toString());
         return $this->fetchAll($sql);
     } // fecha metodo buscarUnidades()
 

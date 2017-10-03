@@ -324,6 +324,10 @@ class SolicitarRecursoDecisaoController extends MinC_Controller_Action_Abstract 
 
             try {
 
+                # busca o usuario que fez o enquadramento para encaminhar o recurso para o mesmo
+                $ModelEnquadramento = new Admissibilidade_Model_Enquadramento();
+                $dadosEnquadramento = $ModelEnquadramento->buscarDados($idPronac, null, false);
+
                 $dados = array(
                     'IdPRONAC'              => $_POST['idPronac'],
                     'dtSolicitacaoRecurso'  => new Zend_Db_Expr('GETDATE()'),
@@ -333,7 +337,8 @@ class SolicitarRecursoDecisaoController extends MinC_Controller_Action_Abstract 
                     'tpSolicitacao'         => 'EN',
                     'siFaseProjeto'         =>  1,
                     'siRecurso'             =>  1,
-                    'stEstado'              =>  0
+                    'stEstado'              =>  0,
+                    'idAgenteAvaliador' => isset($dadosEnquadramento->Logon) ? $dadosEnquadramento->Logon : '',
                 );
 
                 $tbRecurso = new tbRecurso();
@@ -377,11 +382,11 @@ class SolicitarRecursoDecisaoController extends MinC_Controller_Action_Abstract 
                 'idAgenteSolicitante'   => $auth->getIdentity()->IdUsuario,
                 'stAtendimento'         => 'N',
                 'siFaseProjeto'         => 1,
-                'siRecurso'             => 0,
+                'siRecurso'             => TbTipoEncaminhamento::DESISTENCIA_DO_PRAZO_RECURSAL,
                 'tpSolicitacao'         => 'DR',
                 'tpRecurso'             => 1,
                 'stAnalise'             => null,
-                'stEstado'              => 0
+                'stEstado'              => 1
             );
 
             $tbRecurso = new tbRecurso();

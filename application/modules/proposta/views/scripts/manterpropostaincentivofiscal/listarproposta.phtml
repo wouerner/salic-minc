@@ -35,14 +35,17 @@
                             </select>
                             &nbsp;&nbsp;&nbsp;CPF Proponente:&nbsp;
 
-                            <select name="propronente" id="propronente" class="input_simples">
-                                <option value="">- Todos -</option>
+                            <select name="proponente" id="proponente" class="input_simples">
+                                <option>- Selecione -</option>
                                 <?php if (!empty($this->dadosCombo)): ?>
-                                    <?php $idProponente = ''; ?>
+                                    <?php $idProponente = '' ?>
                                     <?php foreach ($this->dadosCombo as $dc): ?>
                                         <?php if ($dc['idAgenteProponente'] != $idProponente): ?>
-                                            <option value="<?php echo $dc['idAgenteProponente']; ?>">[<?php echo $dc['CPF']; ?>]
-                                                - <?php echo $dc['Nome']; ?></option>
+                                            <option
+                                                <?= ($dc['idAgenteProponente'] == $this->idAgente) ? 'selected' : '' ?>
+                                                value="<?php echo $dc['idAgenteProponente']; ?>">[<?php echo $dc['CPF']; ?>]
+                                                - <?php echo $dc['Nome']; ?>
+                                            </option>
                                         <?php endif; ?>
                                         <?php $idProponente = $dc['idAgenteProponente']; ?>
                                     <?php endforeach; ?>
@@ -119,7 +122,7 @@
             var elemento = $(this),
                 idAgente = elemento.attr('idAgente');
 
-            $('.mostraProposta_' + idAgente).toggle()
+            $('.mostraProposta_' + idAgente).toggle();
             if (elemento.hasClass('btn_adicionar')) {
                 elemento.addClass('btn_remover');
                 elemento.removeClass('btn_adicionar');
@@ -132,16 +135,16 @@
         $("#frmNovaProposta").validate({
             rules: {
                 mecanismo: {required: true},
-                propronente: {required: true}
+                proponente: {required: true}
             },
             messages: {
                 mecanismo: {required: " Obrigat&oacute;rio"},
-                propronente: {required: " Obrigat&oacute;rio"}
+                proponente: {required: " Obrigat&oacute;rio"}
             },
             submitHandler: function (form) {
                 //form.submit();
                 $("#msgValidaProponente").html("");
-                var nomeProponente = $('#propronente option:selected').text();
+                var nomeProponente = $('#proponente option:selected').text();
                 if (nomeProponente == "- TODOS -") {
                     $("#msgValidaProponente").html("<font color='red'>Informe o nome de um Proponente.</font>");
                     return false;
@@ -170,7 +173,7 @@
                     , "ajax": {
                         url: "/proposta/manterpropostaincentivofiscal/listar-propostas-ajax",
                         data: {"idagente": function (d) {
-                            return $('#propronente').val();
+                            return $('#proponente').val();
                         }},
                         type: "POST"
                 },

@@ -864,7 +864,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planAP = array();
             $cont = 0;
             foreach ($buscarAP as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -903,7 +903,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planSR = array();
             $cont = 0;
             foreach ($buscarSR as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -985,7 +985,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planAP = array();
             $cont = 0;
             foreach ($buscarAP as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1024,7 +1024,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planSR = array();
             $cont = 0;
             foreach ($buscarSR as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1175,7 +1175,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planAP = array();
             $cont = 0;
             foreach ($buscarAP as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1214,7 +1214,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planSR = array();
             $cont = 0;
             foreach ($buscarSR as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1624,7 +1624,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planAP = array();
             $cont = 0;
             foreach ($buscarAP as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1661,7 +1661,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planSR = array();
             $cont = 0;
             foreach ($buscarSR as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1825,7 +1825,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planAP = array();
             $cont = 0;
             foreach ($buscarAP as $r) :
-                $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                 $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                 $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                 $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1862,7 +1862,7 @@ class VerificarReadequacaoDeProjetoController extends MinC_Controller_Action_Abs
             $planSR = array();
             $cont = 0;
             foreach ($buscarSR as $r) :
-                $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                 $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                 $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                 $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;

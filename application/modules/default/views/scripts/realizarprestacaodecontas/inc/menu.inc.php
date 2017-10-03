@@ -74,6 +74,7 @@
             # urls
             $diligenciaUrl = $this->url(
                 array(
+                    'module' => 'proposta',
                     'controller' => 'diligenciar',
                     'action' => 'listardiligenciaanalista',
                     'idPronac' => $this->idPronac,
@@ -81,11 +82,10 @@
                     'tpDiligencia' => '174',
                 ), null, true
             );
-?>
+        ?>
 
     <!-- ========== FIM AJUSTE DO LAYOUT PARA ACOPLAR MENU LATERAL ========== --> 
     <div id="menuContexto">
-        
         <div class="top"></div>
         <div id="qm0" class="qmmc sanfona">
             
@@ -186,13 +186,12 @@
                     <span class="no_seta last">&nbsp;</span>
                 <?php } ?>
 
-
-
             </div>
             <br clear="left" class="br" /> 
             <div class="bottom"></div>
             <div id="space_menu"></div>
         </div>
+    </div>
     </div>
 <script type="text/javascript">
     $(document).ready(function(){

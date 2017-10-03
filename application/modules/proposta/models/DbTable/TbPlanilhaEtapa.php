@@ -33,6 +33,21 @@ class Proposta_Model_DbTable_TbPlanilhaEtapa extends MinC_Db_Table_Abstract
         return $db->fetchAll($sql);
     }
 
+    public function listarEtapas()
+    {
+        $db= Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+        $sql = $db->select()
+            ->from(
+                array($this->_name),
+                array('idplanilhaetapa as codetapa', 'descricao as Etapa'),
+                $this->_schema)
+        ;
+
+        return $db->fetchAll($sql);
+    }
+
     public function buscarEtapas($tipoEtapa, $fetchMode = Zend_DB::FETCH_OBJ)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -98,7 +113,6 @@ class Proposta_Model_DbTable_TbPlanilhaEtapa extends MinC_Db_Table_Abstract
             $this->view->message = "Erro ao buscar Etapas: " . $e->getMessage();
         }
 
-        //xd($sql);
         return $db->fetchAll($select);
     }
 

@@ -23,3 +23,10 @@ ALTER TABLE sac.dbo.TbAssinatura DROP COLUMN idAtoDeGestao;
  * Adição da coluna "idAtoDeGestao" na tabela "sac.dbo.tbDocumentoAssinatura"
  */
 ALTER TABLE sac.dbo.tbDocumentoAssinatura ADD idAtoDeGestao INT NULL;
+
+
+
+---------------------------------
+-- > Criação de SQL para alterar registros já existentes e com documentos abertos pra assinatura para estarem com situação ativa." ---
+---------------------------------
+update sac.dbo.tbDocumentoAssinatura set stEstado = 1 where cdSituacao = 1

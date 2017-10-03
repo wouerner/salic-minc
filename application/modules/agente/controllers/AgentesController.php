@@ -1,5 +1,5 @@
 <?php
-class Agente_AgentesController extends MinC_Controller_Action_Abstract 
+class Agente_AgentesController extends MinC_Controller_Action_Abstract
 {
     /**
      * @var integer (variavel com o id do usuario logado)
@@ -52,88 +52,33 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo',  'Descricao');
         $this->view->combotipostelefones = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 3));
         $this->view->combotiposemails = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 4, 'idverificacao' => array(28, 29)));
-        
-        //Monta o combo das visoes disponiveis
-        $visaoTable = new Agente_Model_DbTable_Visao();
-        $visoes = $visaoTable->buscarVisao(null, null, true);
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $GrupoAtivo = $GrupoAtivo->codGrupo;
 
-        $visoesNew = null;
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $authIdentity = array_change_key_case((array) $auth->getIdentity());
 
         if (isset($authIdentity['cpf'])) {
-            $visoesNew[0]['idVerificacao'] = 144; //PROPONENTE
-            $visoesNew[0]['Descricao'] = 'Proponente';
-
+            $this->view->combovisoes = self::visoes(null, true);
             $this->view->ehProponente = true;
         } else {
+            $this->view->combovisoes = self::visoes(null, false);
             $this->view->ehProponente = false;
-
-            foreach ($visoes as $key => $visaoGrupo) {
-                if ($GrupoAtivo == 93 and ($visaoGrupo->idVerificacao == 209 or $visaoGrupo->idVerificacao == 216)) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 94 and $visaoGrupo->idVerificacao == 209) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 137 and $visaoGrupo->idVerificacao == 209) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 97) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 120 and $visaoGrupo->idVerificacao == 210) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 121 and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if ($GrupoAtivo == 123 and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-
-                if ($GrupoAtivo == 118 and $visaoGrupo->idVerificacao == 210) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-                if (($GrupoAtivo == 122 or $GrupoAtivo == 123) and $visaoGrupo->idVerificacao == 145) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-                if (($GrupoAtivo == 103 || $GrupoAtivo == 142) and $visaoGrupo->idVerificacao == 144) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-
-                if (($GrupoAtivo == 97 || $GrupoAtivo == 120) and $visaoGrupo->idVerificacao == 217) {
-                    $visoesNew[$key]['idVerificacao'] = $visaoGrupo->idVerificacao;
-                    $visoesNew[$key]['Descricao'] = $visaoGrupo->Descricao;
-                }
-            }
         }
-
-        $this->view->combovisoes = $visoesNew;
 
         //verifica se a funcionadade devera abrir em modal
         if ($this->_request->getParam("modal") == "s") {
             $this->_helper->layout->disableLayout();
             $this->modal = "s";
             $this->view->modal = "s";
+            $this->view->exibirTelefone = 'n';
+            $this->view->exibirEmail = 'n';
         } else {
             $this->modal = "n";
             $this->view->modal = "n";
+            $this->view->exibirTelefone = 's';
+            $this->view->exibirEmail = 's';
         }
+
+        $this->view->autoCarregarDadosCPF = false;
 
         parent::init();
     }
@@ -183,19 +128,22 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $PermissoesGrupo[] = 103; // Coordenador de Analise
         $PermissoesGrupo[] = 142; // Coordenador de Convenios
 
+        $params = $this->getRequest()->getParams();
+        $params = array_change_key_case($params);
+
         if (isset($arrAuth['cpf']) &&
                 !empty($arrAuth['cpf']) &&
-                isset($_GET['acao']) && $_GET['acao'] == 'cc' &&
-                isset($_GET['cpf']) &&
-                !empty($_GET['cpf'])) { // pega do readequacao
+                isset($params['acao']) && $params['acao'] == 'cc' &&
+                isset($params['cpf']) &&
+                !empty($params['cpf'])) { // pega do readequacao
             parent::perfil(2); // scriptcase
         }
 
         if (isset($arrAuth['cpf']) &&
                 !empty($arrAuth['cpf']) &&
-                !isset($_GET['acao']) &&
-                !isset($_GET['cpf']) &&
-                empty($_GET['cpf'])) { // pega do readequacao
+                !isset($params['acao']) &&
+                !isset($params['cpf']) &&
+                empty($params['cpf'])) { // pega do readequacao
             parent::perfil(4, $PermissoesGrupo); // migracao e novo salic
         } elseif (isset($arrAuth['usu_codigo']) && !empty($arrAuth['usu_codigo'])) {
             parent::perfil(1, $PermissoesGrupo); // migracao e novo salic
@@ -207,7 +155,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $this->getIdUsuario = UsuarioDAO::getIdUsuario($arrAuth['usu_codigo']);
             $this->getIdUsuario = ($this->getIdUsuario) ? $this->getIdUsuario["idAgente"] : 0;
         } else { // autenticacao scriptcase
-            $this->getIdUsuario = (isset($_GET["IdUsuario"])) ? $_GET["IdUsuario"] : 0;
+            $this->getIdUsuario = (isset($params["idusuario"])) ? $params["idusuario"] : 0;
         }
 
         $Cpflogado = $this->getIdUsuario;
@@ -215,16 +163,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->cpfLogado = $Cpflogado;
         $this->view->grupoativo = $GrupoAtivo->codGrupo;
 
-
-
-        /*         * ****************************************************************************************************** */
         $this->GrupoAtivoSalic = $GrupoAtivo->codGrupo; // Grava o Id do Grupo Ativo
-        /*         * ****************************************************************************************************** */
-
-
-
-        /*         * ****************************************************************************************************** */
-        // Controle para carregar o menu lateral ou nao
 
         $menuLateral = $this->_request->getParam("menuLateral");
 
@@ -233,17 +172,13 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         } else {
             $this->view->menuLateral = 'false';
         }
-        /*         * ****************************************************************************************************** */
-
 
         /* Monta os dados do Agente */
-
         $idAgente = $this->_request->getParam("id");
 
-        if (($GrupoAtivo->codGrupo == 94) || ($GrupoAtivo->codGrupo == 118)) {
+        if (($GrupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) || ($GrupoAtivo->codGrupo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO)) {
             $idAgente = $this->getIdUsuario;
         }
-
 
         $qtdDirigentes = '';
         if (isset($idAgente)) {
@@ -278,6 +213,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
             $this->view->id = $idAgente;
         }
+
     }
 
     /**
@@ -304,6 +240,103 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->cpf = $cpfMask;
         $this->view->tipocpf = $tipoCpf;
         $this->view->idpronac = $this->_request->getParam('idpronac');
+    }
+
+    private function visoes($visao = null, $ehProponente = false)
+    {
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $GrupoAtivo = $GrupoAtivo->codGrupo;
+
+        $visaoTable = new Agente_Model_DbTable_Visao();
+        $visoes = $visaoTable->buscarVisoes($visao);
+
+        $visoesNew = null;
+
+        foreach ($visoes as $key => $visaoGrupo) {
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA
+                AND ($visaoGrupo->idVerificacao == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+                    OR $visaoGrupo->idVerificacao == VisaoModel::TECNICO)
+            ) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::PARECERISTA
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+            ) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DO_PRONAC
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::PARECERISTA_DE_PROJETO_CULTURAL
+            ) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::GESTOR_SALIC) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_CNIC
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::COMPONENTE_DA_COMISSAO) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::INCENTIVADOR) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::INCENTIVADOR) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if ($GrupoAtivo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::COMPONENTE_DA_COMISSAO) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if (($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO
+                    OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO)
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::INCENTIVADOR) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if (($GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_ANALISE
+                    OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_DE_CONVENIO)
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::PROPONENTE) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+
+            if (($GrupoAtivo == Autenticacao_Model_Grupos::GESTOR_SALIC
+                    OR $GrupoAtivo == Autenticacao_Model_Grupos::COORDENADOR_CNIC)
+                AND $visaoGrupo['idVerificacao'] == VisaoModel::VOTANTES_DA_CNIC) {
+                $visoesNew[$key]['idVerificacao'] = $visaoGrupo['idVerificacao'];
+                $visoesNew[$key]['Descricao'] = $visaoGrupo['Descricao'];
+            }
+        }
+
+        if ($ehProponente) {
+            $visoesNew[0]['idVerificacao'] = VisaoModel::PROPONENTE;
+            $visoesNew[0]['Descricao'] = 'Proponente';
+        }
+
+        if(!empty($visao)) {
+            $visoesNew = $visoes;
+        }
+
+        return $visoesNew;
     }
 
     /**
@@ -345,17 +378,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             endif;
 
         endif;
-    }
-
-    /**
-     * Metodo index()
-     * @access public
-     * @param void
-     * @return void
-     * @todo Verificar necessidade dessa action
-     */
-    public function indexAction() {
-
     }
 
     /**
@@ -447,12 +469,29 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         if (!empty($modal)) {
             $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
             $this->view->modal = "s";
-            $this->view->cpf = $this->_request->getParam("cpfCnpj");
+            $this->view->cpf = $this->_request->getParam("cpf");
             $this->view->caminho = $this->_request->getParam("caminho");
         } else {
             $this->view->modal = "n";
             $this->view->caminho = "";
+            $this->view->exibirTelefone = 's';
+            $this->view->exibirEmail = 's';
         }
+        $this->incluir();
+    }
+
+    public function incluirIncentivadorModalAction() {
+        $this->autenticacao();
+
+        $this->_helper->layout->disableLayout();
+
+        $modulo = $this->_request->getParam("modulo");
+        $this->view->modulo = $modulo;
+
+        $this->view->modal = "s";
+        $this->view->cpf = $this->_request->getParam("cpf");
+        $this->view->caminho = $this->_request->getParam("caminho");
+
         $this->incluir();
     }
 
@@ -464,13 +503,15 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      */
     public function incluirfornecedorAction() {
         $this->autenticacao();
-
         $modal  = $this->_request->getParam("modal");
         $this->_helper->layout->disableLayout();
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
 
+        $this->view->autoCarregarDadosCPF = true;
+        $this->view->combovisoes = self::visoes(VisaoModel::FORNECEDOR);
         $this->incluir();
     }
 
@@ -489,6 +530,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
 
         $this->incluir();
     }
@@ -502,12 +544,12 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
     public function incluirbeneficiarioAction() {
         $this->autenticacao();
 
-        $modal  = $this->_request->getParam("modal");
-
-        $this->_helper->layout->disableLayout();
-        $this->view->modal = "s";
         $this->view->cpf = $this->_request->getParam("cpfCnpj");
         $this->view->caminho = $this->_request->getParam("caminho");
+        $this->view->acao = $this->_request->getParam("acao");
+
+        $this->view->autoCarregarDadosCPF = true;
+        $this->view->combovisoes = self::visoes(VisaoModel::BENEFICIARIO_DE_PRODUTOS);
 
         $this->incluir();
     }
@@ -568,8 +610,9 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $tbAusencia = new Agente_Model_DbTable_TbAusencia();
         $dados = $tbAusencia->carregarAusencia($idAgente, $ano, 2, $mes);
         $totalDias = 0;
+
         foreach ($dados as $d) {
-            if (($d['siausencia'] == 0) OR ($d['siausencia'] == 1)) {
+            if (($d['siAusencia'] == 0) OR ($d['siAusencia'] == 1)) {
                 $totalDias = $totalDias + $d['qtddias'];
             }
         }
@@ -1357,7 +1400,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $dados = $tbAusencia->carregarAusencia($idAgente, $ano, 2, null);
 
         $totalDias = 0;
-        
+
         foreach ($dados as $d) {
             if (($d->siAusencia == 0) OR ($d->siAusencia == 1)) {
                 $totalDias = $totalDias + $d->qtddias;
@@ -1609,7 +1652,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
             $salvarArquivo = $tbArquivo->cadastrarDados($dadosArquivo);
             $idArquivo = $tbArquivo->buscarUltimo();
-            
+
             $dadosArquivoImagem = array('idArquivo' => $idArquivo['idArquivo'],
                 'biArquivo' => $arquivoBinario
             );
@@ -1660,14 +1703,14 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 $tbDistribuirParecer = new tbDistribuirParecer();
                 $projetoDAO = new Projetos();
                 $projetos = $projetoDAO->buscaProjetosProdutosAnaliseInicial(array('idAgenteParecerista = ?' => $idAgente, 'DtDistribuicao >= ?' => '' . $dtInicio . '', 'DtDistribuicao <= ?' => '' . $dtFim . ''));
-                
+
                 foreach ($projetos as $p) {
                     $dados = array('Observacao' => 'Devolvido por motivo de atestado m&eacute;dico.',
                             'idUsuario' => $this->getIdUsuario,
                             'DtDevolucao' => $dtAtual
                     );
                     $salvar = $tbDistribuirParecer->atualizarParecer($dados, $p->idDistribuirParecer);
-                    
+
                 }
             }
             /* ********************************************************************************************** */
@@ -1800,8 +1843,8 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      * @param void
      * @return void
      */
-    public function agentecadastradoAction() 
-    { 
+    public function agentecadastradoAction()
+    {
         $this->_helper->layout->disableLayout(); // desabilita o layout
         $this->_helper->viewRenderer->setNoRender(true);
         $cpf = preg_replace('/\.|-|\//','',$_REQUEST['cpf']);
@@ -1835,7 +1878,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                             $novos_valores[0]['Nome'] = utf8_encode($arrResultado['nmPessoaFisica']);
                             $novos_valores[0]['Cep'] = isset($arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep']) && $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] ? $arrResultado['pessoa']['enderecos'][0]['logradouro']['nrCep'] : '';
                         }
-                } else if(15 == strlen($cpf)){
+                } else if(14 == strlen($cpf)){
                         $arrResultado = $wsServico->consultarPessoaJuridicaReceitaFederal($cpf);
                         if (count($arrResultado) > 0) {
                             $novos_valores[0]['msgCPF'] = utf8_encode('novo');
@@ -1862,7 +1905,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      */
     private function salvaragente()
     {
-        $arrAuth = (array) Zend_Auth::getInstance()->getIdentity();
+        $arrAuth = (array)Zend_Auth::getInstance()->getIdentity();
         $usuario = isset($arrAuth['IdUsuario']) ? $arrAuth['IdUsuario'] : $arrAuth['usu_codigo'];
         $arrayAgente = array(
             'cnpjcpf' => $this->_request->getParam("cpf"),
@@ -1871,242 +1914,263 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             'usuario' => $usuario
         );
 
-        $mprAgentes = new Agente_Model_AgentesMapper();
-        $mprNomes = new Agente_Model_NomesMapper();
-        $mdlAgente = new Agente_Model_Agentes($arrayAgente);
-        $mprAgentes->save($mdlAgente);
-
-        $agente = $mprAgentes->findBy(array('cnpjcpf' => $mdlAgente->getCnpjcpf()));
-        $cpf = preg_replace('/\.|-|\//','',$_REQUEST['cpf']);
-        $idAgente = $agente['idAgente'];
-        $nome = $this->_request->getParam("nome");
-        $TipoNome = (strlen($mdlAgente->getCnpjcpf()) == 11 ? 18 : 19); // 18 = pessoa fisica e 19 = pessoa juridica
-        if($this->modal == "s"){
-            $nome = Seguranca::tratarVarAjaxUFT8($nome);
-        }
-        $nome = preg_replace('/[^A-Za-zZ0-9\ ]/', '', $nome);
-
         try {
-            $arrNome = array(
-                'idagente' => $idAgente,
-                'tiponome' => $TipoNome,
-                'descricao' => $nome,
-                'status' => 0,
-                'usuario' => $usuario
-            );
 
-            $mprNomes->save(new Agente_Model_Nomes($arrNome));
+            $mprAgentes = new Agente_Model_AgentesMapper();
+            $mprNomes = new Agente_Model_NomesMapper();
+            $mdlAgente = new Agente_Model_Agentes($arrayAgente);
+            $mprAgentes->save($mdlAgente);
 
-        } catch (Exception $e) {
-            parent::message("Erro ao salvar o nome: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
-        }
-        // ================================================ FIM SALVAR NOME ======================================================
-        // ================================================ INICIO SALVAR VISAO ======================================================
-        $Visao = $this->_request->getParam("visao");
-        $grupologado = $this->_request->getParam("grupologado");
-        /*
-         * Validacao - Se for componente da comissao ele nao salva a visao
-         * Regra o componente da comissao nao pode alterar sua visao.
-         */
-        if ($grupologado != 118):
-            $GravarVisao = array(// insert
-                'idagente' => $idAgente,
-                'visao' => $Visao,
-                'usuario' => $usuario,
-                'stativo' => 'A');
-            try {
-                $visaoTable = new Agente_Model_DbTable_Visao();
-                $busca = $visaoTable->buscarVisao($idAgente, $Visao);
-                if (!$busca) {
-                    $i = $visaoTable->cadastrarVisao($GravarVisao);
-                }
-            } catch (Exception $e) {
-                parent::message("Erro ao salvar a vis&atilde;o: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
+            $agente = $mprAgentes->findBy(array('cnpjcpf' => $mdlAgente->getCnpjcpf()));
+            $cpf = preg_replace('/\.|-|\//', '', $this->_request->getParam("cpf"));
+            $idAgente = $agente['idAgente'];
+            $nome = $this->_request->getParam("nome");
+            $TipoNome = (strlen($mdlAgente->getCnpjcpf()) == 11 ? 18 : 19); // 18 = pessoa fisica e 19 = pessoa juridica
+
+            if ($this->modal == "s") {
+                $nome = Seguranca::tratarVarAjaxUFT8($nome);
             }
-            // ================================================ FIM SALVAR visao ======================================================
-            // ===================== INICIO SALVAR TITULACAO (area/SEGMENTO DO COMPONENTE DA COMISSAO) ================================
-            $titular = $this->_request->getParam("titular");
-            $areaCultural = $this->_request->getParam("areaCultural");
-            $segmentoCultural = $this->_request->getParam("segmentoCultural");
+            $nome = preg_replace('/[^A-Za-zZ0-9\ ]/', '', $nome);
 
-            // só salva area e segmento para a visao de Componente da Comissao e se os campos titular e areaCultural forem informados
-            if ((int) $Visao == 210 && ((int) $titular == 0 || (int) $titular == 1) && !empty($areaCultural)) {
-                $GravarComponente = array(// insert
-                    'idAgente' => $idAgente,
-                    'cdArea' => $areaCultural,
-                    'cdSegmento' => $segmentoCultural,
-                    'stTitular' => $titular,
-                    'stConselheiro' => 'A');
-
-                $AtualizarComponente = array(// update
-                    'cdArea' => $areaCultural,
-                    'cdSegmento' => $segmentoCultural,
-                    'stTitular' => $titular
+            try {
+                $arrNome = array(
+                    'idagente' => $idAgente,
+                    'tiponome' => $TipoNome,
+                    'descricao' => $nome,
+                    'status' => 0,
+                    'usuario' => $usuario
                 );
+
+                $mprNomes->save(new Agente_Model_Nomes($arrNome));
+
+            } catch (Exception $e) {
+                throw new Exception("Erro ao salvar o nome: " . $e->getMessage());
+            }
+
+            // ================================================ INICIO VISAO ======================================================
+            $Visao = $this->_request->getParam("visao");
+            $grupologado = $this->_request->getParam("grupologado");
+            /*
+             * Validacao - Se for componente da comissao ele nao salva a visao
+             * Regra o componente da comissao nao pode alterar sua visao.
+             */
+            if ($grupologado != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) :
+
+                $GravarVisao = array(
+                    'idagente' => $idAgente,
+                    'visao' => $Visao,
+                    'usuario' => $usuario,
+                    'stativo' => 'A');
 
                 try {
-                    // busca a titulacao do agente (titular/suplente de area cultural)
-                    $busca = TitulacaoConselheiroDAO::buscarComponente($idAgente, $Visao);
-
+                    $visaoTable = new Agente_Model_DbTable_Visao();
+                    $busca = $visaoTable->buscarVisao($idAgente, $Visao);
                     if (!$busca) {
-                        $i = TitulacaoConselheiroDAO::gravarComponente($GravarComponente);
-                    } else {
-                        $i = TitulacaoConselheiroDAO::atualizaComponente($idAgente, $AtualizarComponente);
+                        $i = $visaoTable->cadastrarVisao($GravarVisao);
                     }
                 } catch (Exception $e) {
-                    parent::message("Erro ao salvar a &aacute;rea e segmento: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
+                    throw new Exception("Erro ao salvar a vis&atilde;o: " . $e->getMessage());
+                }
+                // ================================================ FIM VISAO ======================================================
+
+                // ===================== INICIO SALVAR TITULACAO (AREA/SEGMENTO DO COMPONENTE DA COMISSAO) ================================
+                $titular = $this->_request->getParam("titular");
+                $areaCultural = $this->_request->getParam("areaCultural");
+                $segmentoCultural = $this->_request->getParam("segmentoCultural");
+
+                // só salva area e segmento para a visao de Componente da Comissao e se os campos titular e areaCultural forem informados
+                if ((int)$Visao == VisaoModel::COMPONENTE_DA_COMISSAO && ((int)$titular == 0 || (int)$titular == 1) && !empty($areaCultural)) {
+                    $GravarComponente = array(// insert
+                        'idAgente' => $idAgente,
+                        'cdArea' => $areaCultural,
+                        'cdSegmento' => $segmentoCultural,
+                        'stTitular' => $titular,
+                        'stConselheiro' => 'A');
+
+                    $AtualizarComponente = array(// update
+                        'cdArea' => $areaCultural,
+                        'cdSegmento' => $segmentoCultural,
+                        'stTitular' => $titular
+                    );
+
+                    try {
+                        // busca a titulacao do agente (titular/suplente de area cultural)
+                        $busca = TitulacaoConselheiroDAO::buscarComponente($idAgente, $Visao);
+
+                        if (!$busca) {
+                            $i = TitulacaoConselheiroDAO::gravarComponente($GravarComponente);
+                        } else {
+                            $i = TitulacaoConselheiroDAO::atualizaComponente($idAgente, $AtualizarComponente);
+                        }
+                    } catch (Exception $e) {
+                        throw new Exception("Erro ao salvar a &aacute;rea e segmento: " . $e->getMessage());
+                    }
+                }
+
+                // ============================= FIM SALVAR TITULACAO (area/SEGMENTO DO COMPONENTE DA COMISSAO) ===========================
+
+            endif;
+
+            // =========================================== INICIO SALVAR ENDERECOS ====================================================
+            $cepEndereco = $this->_request->getParam("cep");
+            $tipoEndereco = $this->_request->getParam("tipoEndereco");
+            $ufEndereco = $this->_request->getParam("uf");
+            $CidadeEndereco = $this->_request->getParam("cidade");
+            $Endereco = $this->_request->getParam("logradouro");
+            $divulgarEndereco = $this->_request->getParam("divulgarEndereco");
+            $tipoLogradouro = $this->_request->getParam("tipoLogradouro");
+            $numero = $this->_request->getParam("numero");
+            $complemento = $this->_request->getParam("complemento");
+            $bairro = $this->_request->getParam("bairro");
+            $enderecoCorrespodencia = 1;
+
+            try {
+                $arrayEnderecos = array(
+                    'idagente' => $idAgente,
+                    'cep' => str_replace(".", "", str_replace("-", "", $cepEndereco)),
+                    'tipoendereco' => $tipoEndereco,
+                    'uf' => $ufEndereco,
+                    'cidade' => $CidadeEndereco,
+                    'logradouro' => $Endereco,
+                    'divulgar' => $divulgarEndereco,
+                    'tipologradouro' => $tipoLogradouro,
+                    'numero' => $numero,
+                    'complemento' => $complemento,
+                    'bairro' => $bairro,
+                    'status' => $enderecoCorrespodencia,
+                    'usuario' => $usuario
+                );
+
+                $enderecoDAO = new Agente_Model_EnderecoNacionalDAO();
+                $insere = $enderecoDAO->inserir($arrayEnderecos);
+            } catch (Exception $e) {
+                throw new Exception("Erro ao salvar o endere&ccedil;o: " . $e->getMessage());
+            }
+            // ============================================= FIM SALVAR ENDERECOS ====================================================
+
+            // =========================================== INICIO SALVAR TELEFONES ====================================================
+            $exibirTelefone = $this->_request->getParam("exibirTelefone");
+            if ($exibirTelefone == 's') {
+                $tipoFone = $this->_request->getParam("tipoFone");
+                $ufFone = $this->_request->getParam("ufFone");
+                $dddFone = $this->_request->getParam("dddFone");
+                $Fone = $this->_request->getParam("fone");
+                $divulgarFone = $this->_request->getParam("divulgarFone");
+
+                try {
+                    $arrayTelefones = array(
+                        'idagente' => $idAgente,
+                        'tipotelefone' => $tipoFone,
+                        'uf' => $ufFone,
+                        'ddd' => $dddFone,
+                        'numero' => $Fone,
+                        'divulgar' => $divulgarFone,
+                        'usuario' => $usuario
+                    );
+
+                    $insereTelefone = new Agente_Model_DbTable_Telefones();
+                    $insere = $insereTelefone->insert($arrayTelefones);
+
+                } catch (Exception $e) {
+                    throw new Exception("Erro ao salvar o telefone: " . $e->getMessage());
                 }
             }
+            // =========================================== FIM SALVAR TELEFONES ====================================================
 
-        // ============================= FIM SALVAR TITULACAO (area/SEGMENTO DO COMPONENTE DA COMISSAO) ===========================
+            // =========================================== INICIO SALVAR EMAILS ====================================================
+            $exibirEmail = $this->_request->getParam("exibirEmail");
+            if ($exibirEmail == 's') {
+                $tipoEmail = $this->_request->getParam("tipoEmail");
+                $Email = $this->_request->getParam("email");
+                $divulgarEmail = $this->_request->getParam("divulgarEmail");
+                $enviarEmail = 1;
 
-        endif; // Fecha o if da regra do componente da comissao
-        // =========================================== INICIO SALVAR ENDERECOS ====================================================
+                try {
+                    $arrayEmail = array(
+                        'idagente' => $idAgente,
+                        'tipointernet' => $tipoEmail,
+                        'descricao' => $Email,
+                        'status' => $enviarEmail,
+                        'divulgar' => $divulgarEmail,
+                        'usuario' => $usuario
+                    );
 
-        $cepEndereco = $this->_request->getParam("cep");
-        $tipoEndereco = $this->_request->getParam("tipoEndereco");
-        $ufEndereco = $this->_request->getParam("uf");
-        $CidadeEndereco = $this->_request->getParam("cidade");
-        $Endereco = $this->_request->getParam("logradouro");
-        $divulgarEndereco = $this->_request->getParam("divulgarEndereco");
-        $tipoLogradouro = $this->_request->getParam("tipoLogradouro");
-        $numero = $this->_request->getParam("numero");
-        $complemento = $this->_request->getParam("complemento");
-        $bairro = $this->_request->getParam("bairro");
-        $enderecoCorrespodencia = 1;
-
-        try {
-            $arrayEnderecos = array(
-                'idagente' => $idAgente,
-                'cep' => str_replace(".", "", str_replace("-", "", $cepEndereco)),
-                'tipoendereco' => $tipoEndereco,
-                'uf' => $ufEndereco,
-                'cidade' => $CidadeEndereco,
-                'logradouro' => $Endereco,
-                'divulgar' => $divulgarEndereco,
-                'tipologradouro' => $tipoLogradouro,
-                'numero' => $numero,
-                'complemento' => $complemento,
-                'bairro' => $bairro,
-                'status' => $enderecoCorrespodencia,
-                'usuario' => $usuario
-            );
-
-            $enderecoDAO = new Agente_Model_EnderecoNacionalDAO();
-            $insere = $enderecoDAO->inserir($arrayEnderecos);
-        } catch (Exception $e) {
-            parent::message("Erro ao salvar o endere&ccedil;o: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
-        }
-        // ============================================= FIM SALVAR ENDERECOS ====================================================
-        // =========================================== INICIO SALVAR TELEFONES ====================================================
-        $movimentacacaobancaria = $this->_request->getParam('movimentacaobancaria');
-        if (empty($movimentacacaobancaria)) {
-            $tipoFone = $this->_request->getParam("tipoFone");
-            $ufFone = $this->_request->getParam("ufFone");
-            $dddFone = $this->_request->getParam("dddFone");
-            $Fone = $this->_request->getParam("fone");
-            $divulgarFone = $this->_request->getParam("divulgarFone");
-
-            try {
-                $arrayTelefones = array(
-                    'idagente' => $idAgente,
-                    'tipotelefone' => $tipoFone,
-                    'uf' => $ufFone,
-                    'ddd' => $dddFone,
-                    'numero' => $Fone,
-                    'divulgar' => $divulgarFone,
-                    'usuario' => $usuario
-                );
-
-                $insereTelefone = new Agente_Model_DbTable_Telefones();
-                $insere = $insereTelefone->insert($arrayTelefones);
-
-            } catch (Exception $e) {
-                parent::message("Erro ao salvar o telefone: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
+                    $insere = new Agente_Model_Email();
+                    $insere = $insere->inserir($arrayEmail);
+                } catch (Exception $e) {
+                    throw new Exception("Erro ao salvar o e-mail: " . $e->getMessage());
+                }
             }
-        }
-        // =========================================== FIM SALVAR TELEFONES ====================================================
-        // =========================================== INICIO SALVAR EMAILS ====================================================
-        if (empty($movimentacacaobancaria)) {
-            $tipoEmail = $this->_request->getParam("tipoEmail");
-            $Email = $this->_request->getParam("email");
-            $divulgarEmail = $this->_request->getParam("divulgarEmail");
-            $enviarEmail = 1;
+            // =========================================== FIM SALVAR EMAILS ====================================================
 
-            try {
-                $arrayEmail = array(
-                    'idagente' => $idAgente,
-                    'tipointernet' => $tipoEmail,
-                    'descricao' => $Email,
-                    'status' => $enviarEmail,
-                    'divulgar' => $divulgarEmail,
-                    'usuario' => $usuario
-                );
+            // ================ INICIO SALVAR VINCULO DO RESPONSAVEL COM ELE MESMO (PROPONENTE) ================
+            $movimentacacaobancaria = $this->_request->getParam('movimentacaobancaria');
+            $acao = null;
+            if (empty($movimentacacaobancaria)) {
+                try {
+                    $this->vincular($cpf, $idAgente);
+                } catch (Exception $e) {
+                    throw new Exception("Erro ao vincular agente: " . $e->getMessage());
+                }
+                // ================ FIM SALVAR VINCULO DO RESPONSAVEL COM ELE MESMO (PROPONENTE) ================
 
-                $insere = new Agente_Model_Email();
-                $insere = $insere->inserir($arrayEmail);
-            } catch (Exception $e) {
-                parent::message("Erro ao salvar o e-mail: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
+                // Caso venha do UC 89 Solicitar Vinculo
+                $acao = $this->_request->getParam('acao');
+                #$idResponsavel = $this->idResponsavel;
+                $idResponsavel = 0;
+
+                // ============== VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO =============================
+                if ((!empty($acao)) && (!empty($idResponsavel))):
+                    $tbVinculo = new Agente_Model_DbTable_TbVinculo();
+                    $dadosVinculo = array(
+                        'idAgenteProponente' => $idAgente,
+                        'dtVinculo' => new Zend_Db_Expr('GETDATE()'),
+                        'siVinculo' => 0,
+                        'idUsuarioResponsavel' => $idResponsavel
+                    );
+                    $tbVinculo->inserir($dadosVinculo);
+                endif;
             }
-        }
-        // =========================================== FIM SALVAR EMAILS ====================================================
-        // ================ INICIO SALVAR VINCULO DO RESPONSAVEL COM ELE MESMO (PROPONENTE) ================
-        $acao = null;
-        if (empty($movimentacacaobancaria)) {
-            try {
-                $this->vincular($cpf, $idAgente);
-            } catch (Exception $e) {
-                parent::message("Erro ao salvar o e-mail: " . $e->getMessage(), "agente/agentes/incluiragente", "ERROR");
-            }
-            // ================ FIM SALVAR VINCULO DO RESPONSAVEL COM ELE MESMO (PROPONENTE) ================
-            // Caso venha do UC 89 Solicitar Vinculo
-            $acao = $this->_request->getParam('acao');
-            #$idResponsavel = $this->idResponsavel;
-            $idResponsavel = 0;
-            // ============== VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO =============================
-            if ((!empty($acao)) && (!empty($idResponsavel))):
+
+            //================ FIM VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO ========================
+            if (isset($acao) && $acao != '') {
+                // Retorna para o listar propostas
                 $tbVinculo = new Agente_Model_DbTable_TbVinculo();
                 $dadosVinculo = array(
                     'idAgenteProponente' => $idAgente,
                     'dtVinculo' => new Zend_Db_Expr('GETDATE()'),
                     'siVinculo' => 0,
-                    'idUsuarioResponsavel' => $idResponsavel
+                    'idUsuarioResponsavel' => $arrAuth['IdUsuario']
                 );
                 $tbVinculo->inserir($dadosVinculo);
-            endif;
+            }
+
+            // Se vim do UC 10 - solicitar alteracao no Projeto
+            // Chega aqui com o idpronac
+            $idpronac = $this->_request->getParam('idpronac');
+            // Se vim do UC38 - Movimentacao bancaria - Captacao
+            $projetofnc = $this->_request->getParam('cadastrarprojeto');
+
+            # tratamento para disparar "js custom event" no dispatch
+            $agente = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
+            $agente = $agente[0];
+            $agente->id = $agente->idagente;
+            $agente->cpfCnpj = $agente->cnpjcpf;
+
+            $agenteArray = (array)$agente;
+            array_walk($agenteArray, function ($value, $key) use ($agente) {
+                $agente->$key = utf8_encode($value);
+            });
+
+            $this->salvarAgenteRedirect($agente, $idpronac, $projetofnc, $movimentacacaobancaria, $acao);
+        } catch (Exception $e) {
+
+            if ($this->modal == 's') {
+                $this->_helper->json(['status' => 'error', 'msg' => $e->getMessage()]);
+            } else {
+                parent::message($e->getMessage(), "agente/agentes/incluiragente", "ERROR");
+            }
         }
-        //================ FIM VINCULA O RESPONSAVEL COM O PROPONENTE CADASTRADO ========================
-    if (isset($acao) && $acao != '') {
-        // Retorna para o listar propostas
-        $tbVinculo = new Agente_Model_DbTable_TbVinculo();
-        $dadosVinculo = array(
-                'idAgenteProponente' => $idAgente,
-                'dtVinculo' => new Zend_Db_Expr('GETDATE()'),
-                'siVinculo' => 0,
-                'idUsuarioResponsavel' => $arrAuth['IdUsuario']
-        );
-        $tbVinculo->inserir($dadosVinculo);
-    }
-
-        // Se vim do UC 10 - solicitar alteracao no Projeto
-        // Chega aqui com o idpronac
-        $idpronac = $this->_request->getParam('idpronac');
-        // Se vim do UC38 - Movimentacao bancaria - Captacao
-        $projetofnc = $this->_request->getParam('cadastrarprojeto');
-
-        # tratamento para disparar "js custom event" no dispatch
-        $agente = Agente_Model_ManterAgentesDAO::buscarAgentes($cpf);
-        $agente = $agente[0];
-        $agente->id = $agente->idAgente;
-        $agente->nome = $agente->Nome;
-        $agente->cpfCnpj = $agente->CNPJCPF;
-
-        $agenteArray = (array) $agente;
-        array_walk($agenteArray, function($value, $key) use ($agente){
-            $agente->$key = utf8_encode($value);
-        });
-
-        $this->salvarAgenteRedirect($agente, $idpronac, $projetofnc, $movimentacacaobancaria, $acao);
     }
 
     /**
@@ -2145,32 +2209,27 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         // Se vim do UC38 - Movimentacao bancaria - Captacao
         $projetofnc = $this->_request->getParam('cadastrarprojeto');
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
+        if ($this->getRequest()->isXmlHttpRequest() ||
+            (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' ) ) {
             $this->_helper->layout->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
+
+            echo '<script>';
+            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' . json_encode($agente) . ' });';
+            echo 'document.dispatchEvent(event)';
+            echo '</script>';
+            echo '<div class="center-align">Cadastrado com sucesso!</div>';
+            return;
         }
 
         if (!empty($idpronac)) {
-            if (!$this->getRequest()->isXmlHttpRequest()) {
-                // Retorna para a url anterior do UC10
-                parent::message(
-                    'Cadastro realizado com sucesso!',
-                    "solicitaralteracao/acaoprojeto?idpronac={$idpronac}&cpf={$agente->cpfCnpj}",
-                    'CONFIRM'
-                );
-            }
-            echo '<script>';
-            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' , json_encode(utf8_encode($agente)) , ' });';
-            echo 'document.dispatchEvent(event)';
-            echo '</script>';
-            echo '<br/><br/><br/><br/><center><font color="green">Cadastrado com sucesso!</font></center>';
+            parent::message(
+                'Cadastro realizado com sucesso!',
+                "solicitaralteracao/acaoprojeto?idpronac={$idpronac}&cpf={$agente->cpfCnpj}",
+                'CONFIRM'
+            );
+
         } else if (!empty($movimentacacaobancaria)) {
-            echo '<script>';
-            echo 'var event = new CustomEvent("agenteCadastrar_POST", { "detail": ' , json_encode(utf8_encode($agente)) , ' });';
-            echo 'document.dispatchEvent(event)';
-            echo '</script>';
-            echo '<br/><br/><br/><br/><center><font color="green">Cadastrado com sucesso!</font></center>';
-            // Retorna para a url anterior do UC116
             parent::message("Cadastro realizado com sucesso.", "cadastrar-projeto", "CONFIRM");
         } else if (($acao != '')) {
             parent::message(
@@ -2529,13 +2588,13 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             try {
                 // validacao dos campos
                 if (empty($cpf) && empty($nome)) {
-                    throw new Exception("Dados obrigatórios n&atilde;o informados:<br /><br />é necessário informar o CPF/CNPJ ou o Nome!");
+                    throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados:<br /><br />&eacute; necess&aacute;rio informar o CPF/CNPJ ou o Nome!");
                 } else if (!empty($cpf) && strlen($cpf) != 11 && strlen($cpf) != 14) { // valida cnpj/cpf
-                    throw new Exception("O CPF/CNPJ informado é inválido!");
+                    throw new Exception("O CPF/CNPJ informado &eacute; inv&aacute;lido!");
                 } else if (!empty($cpf) && strlen($cpf) == 11 && !Validacao::validarCPF($cpf)) { // valida cpf
-                    throw new Exception("O CPF informado é inválido!");
+                    throw new Exception("O CPF informado &eacute; inv&aacute;lido!");
                 } else if (!empty($cpf) && strlen($cpf) == 14 && !Validacao::validarCNPJ($cpf)) { // valida cnpj
-                    throw new Exception("O CNPJ informado é inválido!");
+                    throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
                     $this->_redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);

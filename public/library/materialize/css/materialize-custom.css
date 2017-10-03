@@ -20,12 +20,100 @@ Paleta de cores by Jamile
 ----------------------------------------------------------------
 
 --------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------
+x - Forms
+--------------------------------------------------------------*/
+form fieldset {
+    margin: 10px 2px;
+    padding-top: 0.60em;
+}
+
+form legend {
+    color: #545454;
+    text-transform: uppercase;
+}
+
+form input.browser-default {
+    overflow: visible;
+    margin: 0;
+}
+
+form select.browser-default {
+    /*padding: 5px;*/
+    /*width: 100%;*/
+}
+
+
+form label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    color: #212529;
+}
+
+form input[type="text"].browser-default,
+form .browser-default {
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #495057;
+    background-color: #fff;
+    background-image: none;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .15rem;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+form input.browser-default:active,
+form input.browser-default:focus {
+    box-shadow: none !important;
+}
+form input[type="text"]:disabled,
+form .browser-default:disabled,
+form .browser-default[readonly] {
+    border: 1px dotted rgba(0, 0, 0, 0.57);
+    background-color: #e9ecef;
+    opacity: 1;
+    color: #495057;
+}
+
+form small {
+    color: #868e96;
+    font-size: 80%;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+form span.spanError,
+form span.error {
+    color: #f44336;
+    font-size: 85%;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 0px 5px;
+}
+
+form input[type="radio"] {
+   background: none;
+    border: none;
+    float:none;
+    display:inline;
+}
+
+form .row {
+    margin-bottom: 5px;
+}
+form .select-wrapper input.select-dropdown {
+    margin-bottom: 5px;
+}
+
 /*--------------------------------------------------------------
 x - Elementos básicos
 --------------------------------------------------------------*/
-label {
-    width: 100%;
-}
 
 .ui-dialog {
     font-size: 14px;
@@ -33,6 +121,7 @@ label {
 
 .no-border { border: 0px; }
 .padding20 { padding: 20px; }
+.padding10 { padding: 10px; }
 .no-margin { margin: 0px !important; }
 .margin0 { margin: 0px; }
 .margin5 { margin: 5px; }
@@ -236,10 +325,6 @@ x - Botões
     line-height: 32px;
 }
 
-.z-depth-1, nav, .card-panel, .card, .toast, .btn, .btn-large, .btn-floating, .dropdown-content, .collapsible, .side-nav {
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
-}
-
 .btn.loading {
     background-image: url(../../../img/loader-mini.gif);
     background-position: 50% 50%;
@@ -327,9 +412,6 @@ textarea.materialize-textarea:focus.invalid {
     color: #F44336;
 }
 
-label {
-    width: 100%;
-}
 
 /* label color */
 .input-field label {
@@ -430,7 +512,7 @@ x - Tabelas
 }
 
 table > tbody > tr:nth-child(odd) {
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
 }
 
 table > tbody > tr {
@@ -438,7 +520,7 @@ table > tbody > tr {
 }
 
 table > tbody > tr:hover {
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
 }
 
 /*--------------------------------------------------------------

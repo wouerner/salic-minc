@@ -549,6 +549,7 @@
                 </tr>
             </table>
 
+            <?php if (!$this->VerificarIN2017($this->projeto->IdPRONAC)): ?>
             <table class="tabela">
                 <tr align="center">
                     <td class="destacar bold" colspan="2">Verificação de Limites Orçamentários</td>
@@ -570,6 +571,7 @@
                 </tr>
                 <?php } ?>
             </table>
+	    <?php endif; ?>
 
             <div class="centro">
                 <br />

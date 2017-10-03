@@ -1,5 +1,4 @@
 <?php
-
 function mascara($mask,$str){
 
     $str = str_replace(" ","",$str);
@@ -7,14 +6,11 @@ function mascara($mask,$str){
     for($i=0;$i<strlen($str);$i++){
         $mask[strpos($mask,"#")] = $str[$i];
     }
-
     return $mask;
-
 }
 ?>
-
 <script type="text/javascript" src="<?php echo $this->baseUrl();?>/public/js/tinymce/js/tinymce/tinymce.min.js"></script>
-<?php echo $this->partial("inc/menu.inc.php"); ?>
+<?php echo $this->partial("realizarprestacaodecontas/inc/menu.inc.php", $this); ?>
 <div id="breadcrumb">
     <ul>
        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
@@ -135,10 +131,13 @@ function mascara($mask,$str){
         </table>
     <?php endif; ?>
 
-    <?php $vlcpTotal=0; foreach ($this->comprovantesPagamento as $valoresComprovados) {
-        $vlUn = $valoresComprovados->vlComprovacao+$vlcpTotal;
-        $vlcpTotal = $vlUn;
-    } ?>
+    <?php 
+        $vlcpTotal=0; 
+        foreach ($this->comprovantesPagamento as $valoresComprovados) {
+            $vlUn = $valoresComprovados->vlComprovacao+$vlcpTotal;
+            $vlcpTotal = $vlUn;
+        } 
+    ?>
 
     <table class="tabela">
         <tbody>
@@ -215,8 +214,8 @@ function mascara($mask,$str){
                         <td><?php echo $comprovante->nrSerie;?></td>
                     </tr>
                     <tr>
-                        <td class="destacar" align="right"><b>Dt. do Documento</td>
-                        <td><?php echo $comprovante->dtEmissao;?></td>
+                        <td class="destacar" align="right"><b>Data do Documento</td>
+                        <td><?php echo date_format(new DateTime($comprovante->dtEmissao), "d/m/Y") ?></td>
                         <td class="destacar" align="right"><b>Forma de Pagamento</td>
                         <td>
                             <?php
@@ -288,17 +287,17 @@ function mascara($mask,$str){
         </form>
 
 	<script type="text/javascript">
-	 $(document).ready(function(){
-	     tinymce.init({
-		 plugins:"paste,textcolor",
-		 language: "pt_BR",
-		 paste_as_text: true,
-		 selector: '#comprovantePagamento_<?php echo $comprovante->idPlanilhaAprovacao; ?>_observacao',
-		 height: 200,
-		 toolbar : "bold,italic,underline,color,forecolor backcolor,fontsizeselect",
-		 menubar:""
-             });
-	 });
+	 /* $(document).ready(function(){ */
+	 /*     tinymce.init({ */
+		 /* plugins:"paste,textcolor", */
+		 /* language: "pt_BR", */
+		 /* paste_as_text: true, */
+		 /* selector: '#comprovantePagamento_<?php echo $comprovante->idPlanilhaAprovacao; ?>_observacao', */
+		 /* height: 200, */
+		 /* toolbar : "bold,italic,underline,color,forecolor backcolor,fontsizeselect", */
+		 /* menubar:"" */
+             /* }); */
+	 /* }); */
 	</script>
 
         <?php endforeach; ?>

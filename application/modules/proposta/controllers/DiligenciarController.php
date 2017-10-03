@@ -10,11 +10,9 @@
 class Proposta_DiligenciarController extends Proposta_GenericController {
 
     private $idPronac = null;
-    private $idPreProjeto = null;
     private $idProduto = null;
     private $situacao = null;
     private $tpDiligencia = null;
-    private $usuarioLogado = null;
     private $idDiligencia = null;
     private $idAvaliacaoProposta = null;
     private $btnVoltar = null;// ajusta o link de voltar de acordo com o tipo de dilignecia
@@ -25,33 +23,17 @@ class Proposta_DiligenciarController extends Proposta_GenericController {
      * @access public
      * @return void
      */
-    public function init() {
-        $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // titulo da pagina
+    public function init()
+    {
+        parent::init();
 
-        $auth = Zend_Auth::getInstance(); // instancia da autenticacao
-        $PermissoesGrupo = array();
-
-        //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
-        if (isset($auth->getIdentity()->usu_codigo) ) {
-            //Recupera todos os grupos do Usuario
-            $Usuario    = new Autenticacao_Model_Usuario(); // objeto usuario
-            $grupos     = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
-            foreach ($grupos as $grupo) {
-                $PermissoesGrupo[] = $grupo->gru_codigo;
-            }
-        }
-
-        isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
-        $this->usuarioLogado = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
-
-        //recupera ID do pre projeto (proposta)
         $this->idPronac = $this->getRequest()->getParam('idPronac');
         $this->idDiligencia = $this->getRequest()->getParam('idDiligencia');
         $this->idAvaliacaoProposta = $this->getRequest()->getParam('idAvaliacaoProposta');
         $this->situacao = $this->getRequest()->getParam('situacao');
         $this->tpDiligencia = $this->getRequest()->getParam('tpDiligencia');
         $this->idProduto = $this->getRequest()->getParam('idProduto');
-        $this->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+
         if ($this->tpDiligencia) {
             $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
             $urlArray = array('controller' => 'verificarreadequacaodeprojeto');
@@ -68,9 +50,9 @@ class Proposta_DiligenciarController extends Proposta_GenericController {
             }
         }
 
-        $this->view->btnVoltar = $this->btnVoltar; // bot�o voltar dinamico
+        $this->view->btnVoltar = $this->btnVoltar; // botao voltar dinamico
 
-        parent::init(); // chama o init() do pai GenericControllerNew
+
     }
 
     /**
@@ -318,7 +300,7 @@ class Proposta_DiligenciarController extends Proposta_GenericController {
             $dados = array(
                 'DtResposta' => new Zend_Db_Expr('GETDATE()'),
                 'Resposta' => $_POST['dsResposta'],
-                'idProponente' => $this->usuarioLogado,
+                'idProponente' => $this->idUsuario,
                 'stEnviado' => 'N'
             );
             $where = "idDiligencia = $post->idDiligencia";
@@ -331,7 +313,6 @@ class Proposta_DiligenciarController extends Proposta_GenericController {
         $PreProjetodao          = new Proposta_Model_DbTable_PreProjeto();
         $DocumentosExigidosDao  = new DocumentosExigidos();
 
-        //xd($post);
         $this->view->idPronac               = $this->idPronac;
         $this->view->idPreProjeto           = $this->idPreProjeto;
         $this->view->idProduto              = $this->idProduto;
@@ -605,7 +586,7 @@ class Proposta_DiligenciarController extends Proposta_GenericController {
             $dados = array(
                 'DtResposta' => new Zend_Db_Expr('GETDATE()'),
                 'Resposta' => $_POST['resposta'],
-                'idProponente' => $this->usuarioLogado,
+                'idProponente' => $this->idUsuario,
                 'stEnviado' => $post->verificaEnviado
             );
             $where = "idDiligencia = $post->idDiligencia";
@@ -758,7 +739,6 @@ class Proposta_DiligenciarController extends Proposta_GenericController {
             ->setListParameters(array('projeto' => $projeto->idPronac))
             ->send()
         ;
-//xd($notification->getResponse());
     }
 
     public function salvardiligenciaAction() {

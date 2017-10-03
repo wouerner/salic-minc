@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller Disvincular Agentes
+ * Controller Proposta_ManterpropostaeditalController
  * @author wouerner <wouerner@gmail.com>
  * @since 07/06/2010
  * @version 1.0
@@ -11,64 +11,19 @@
 
 class Proposta_ManterpropostaeditalController extends Proposta_GenericController {
 
-    private $getIdUsuario   = 0;
-    private $idResponsavel  = 0;
-    private $idAgente       = 0;
-    private $idUsuario      = 0;
-    private $cpfLogado      = null;
-
-
     /**
      * Reescreve o metodo init()
      */
     public function init()
     {
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-
-        $arrIdentity = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity());
-        $GrupoAtivo   = new Zend_Session_Namespace('GrupoAtivo');
-
-	    // verifica as permissoes
-        $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 97;  // Gestor do SALIC
-        $PermissoesGrupo[] = 93;  // Coordenador de Parecerista
-        if (isset($arrIdentity['usu_codigo'])) {
-            parent::perfil(1, $PermissoesGrupo);
-        } else {
-            parent::perfil(4, $PermissoesGrupo);
-        }
-
-        /*********************************************************************************************************/
-
-        $cpf = isset($arrIdentity['usu_codigo']) ? $arrIdentity['usu_identificacao'] : $arrIdentity['cpf'];
-
-        // Busca na SGCAcesso
-        $modelSgcAcesso 	 = new Autenticacao_Model_Sgcacesso();
-        $arrAcesso = $modelSgcAcesso->findBy(array('cpf' => $cpf));
-
-        // Busca na Usuarios
-        //Excluir ProposteExcluir Proposto
-        $usuarioDAO   = new Autenticacao_Model_Usuario();
-        $arrUsuario = $usuarioDAO->findBy(array('usu_identificacao' => $cpf));
-
-        // Busca na Agentes
-        $tableAgentes  = new Agente_Model_DbTable_Agentes();
-        $arrAgente = $tableAgentes->findBy(array('cnpjcpf' => trim($cpf)));
-
-        if ($arrAcesso)  $this->idResponsavel = $arrAcesso['idusuario'];
-        if ($arrAgente)  $this->idAgente 	  = $arrAgente['idagente'];
-        if ($arrUsuario) $this->idUsuario     = $arrUsuario['usu_codigo'];
-        if ($this->idAgente != 0) $this->usuarioProponente = "S";
-        $this->cpfLogado = $cpf;
         parent::init();
 
         //VALIDA ITENS DO MENU (Documento pendentes)
-        if (!empty($idPreProjeto)) {
-            $this->view->idPreProjeto = $idPreProjeto;
+        if (!empty($this->idPreProjeto)) {
+            $this->view->idPreProjeto = $this->idPreProjeto;
 
             $tableDocumentosExigidos = new Proposta_Model_DbTable_DocumentosExigidos();
-            $this->view->documentosPendentes = $tableDocumentosExigidos->buscarDocumentoPendente($idPreProjeto);
+            $this->view->documentosPendentes = $tableDocumentosExigidos->buscarDocumentoPendente($this->idPreProjeto);
 
             if (!empty($this->view->documentosPendentes)) {
                 $verificarmenu = 1;
@@ -80,7 +35,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
 
             //(Enviar Proposta ao MinC , Excluir Proposta)
             $mov = new Proposta_Model_DbTable_TbMovimentacao();
-            $movBuscar = $mov->buscar(array('idProjeto = ?' => $idPreProjeto), array('idMovimentacao desc'), 1, 0)->current();
+            $movBuscar = $mov->buscar(array('idProjeto = ?' => $this->idPreProjeto), array('idMovimentacao desc'), 1, 0)->current();
 
             if (isset($movBuscar->Movimentacao) && $movBuscar->Movimentacao != 95) {
                 $enviado = 'true';
@@ -89,23 +44,9 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
                 $enviado = 'false';
                 $this->view->enviado = $enviado;
             }
-
-            //VERIFICA SE A PROPOSTA ESTA COM O MINC
-            $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $rsStatusAtual = $Movimentacao->buscarStatusAtualProposta($idPreProjeto);
-            if (count($rsStatusAtual) > 0) {
-                $this->view->movimentacaoAtual = isset($rsStatusAtual['Movimentacao']) ? $rsStatusAtual['Movimentacao'] : '';
-            } else {
-                $this->view->movimentacaoAtual = null;
-            }
-
-            //VERIFICA SE A PROPOSTA FOI ENVIADA AO MINC ALGUMA VEZ
-            $arrbusca = array();
-            $arrbusca['idProjeto = ?'] = $idPreProjeto;
-            $arrbusca['Movimentacao = ?']= '96';
-            $rsHistMov = $Movimentacao->buscar($arrbusca);
-            $this->view->blnJaEnviadaAoMinc = $rsHistMov->count();
         }
+
+        $this->verificarPermissaoAcesso(true, false, false);
     }
 
     /**
@@ -156,6 +97,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function dadospropostaeditalAction()
     {
@@ -266,6 +208,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function inserirdadospropostaeditalAction()
     {
@@ -367,6 +310,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function localderealizacaoeditalAction() {}
 
@@ -375,6 +319,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function responderquestionarioeditalAction()
     {
@@ -594,6 +539,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function enviarpropostaaominceditalAction() {
 
@@ -604,6 +550,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function manteragentesAction() {
 
@@ -614,6 +561,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function dadosproponenteenderecoeditalAction() {
 
@@ -652,6 +600,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function msnenviadasaominceditalAction() {
 
@@ -662,6 +611,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function acompanhesuapropostaeditalAction() {
 
@@ -672,6 +622,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function alterardtnascimentoeditalAction() {
 
@@ -682,6 +633,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function dadosenderecoeditalAction() {
 
@@ -692,6 +644,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function novodadosenderecoeditalAction() {
 
@@ -702,6 +655,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo mover para o lugar correto, inicialmente seria em manterpropostaincentivofiscal
      */
     public function exluirpropostaAction() {
 
@@ -731,6 +685,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function editallocalizarAction() {
         $this->view->idAgente = $_REQUEST['idAgente'];
@@ -741,6 +696,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function editalconfirmarAction() {
 
@@ -778,6 +734,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function editalconfirmarlocalizarAction() {
         if ($_REQUEST['idEdital']) {
@@ -795,6 +752,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function editalnovoAction() {
 
@@ -815,6 +773,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function editalresumoAction() {
         $array = array();
@@ -908,6 +867,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function enviarPropostaAction() {
 
@@ -946,6 +906,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      * @param mixed $idPreProjeto
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function validarEnvioPropostaAoMinc($idPreProjeto) {
 
@@ -1120,6 +1081,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
      *
      * @access public
      * @return void
+     * @todo nao utilizado no salic atual
      */
     public function confirmarEnvioPropostaAoMincAction() {
 

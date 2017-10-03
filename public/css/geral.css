@@ -55,10 +55,12 @@ html {
 }
 
 body {
+    position: relative;
     margin: 0;
     background: #f8f8f8;
     color: #000;
     line-height: 14pt;
+    font-size: 1rem;
 }
 
 p {
@@ -186,29 +188,15 @@ x - LOADER
     word-wrap: break-word;
 }
 
-/*--------------------------------------------------------------
-x - BARRA GOVERNO
---------------------------------------------------------------*/
-
-.barra_governo, .barra_governo div.fl {
-    width: 100%;
-    /*height:36px;*/
-    /*background:url(../img/gov/bg_barra_governo.gif) 0 0 repeat-x;*/
+.modal.modal-pre-loader {
+    width: 300px !important;
+    height: 180px !important;
+    padding: 10px;
+    z-index: 1002 !important;
 }
 
-.barra_governo div.fl {
-    background: url(../img/gov/barra_governo.gif) 0 0 no-repeat;
-}
-
-.barra_governo div.fr {
-    float: right;
-    width: 125px;
-    height: 36px;
-    background: url(../img/gov/aba_direita_barra_gov.gif) 0 0 no-repeat;
-}
-
-.barra_governo div.fr p {
-    margin-top: 5px;
+.modal.modal-pre-loader .modal-content {
+    padding: 10px;
 }
 
 /*--------------------------------------------------------------
@@ -690,32 +678,31 @@ x - CONTEÚDO
 
 #conteudo h1, h2, h3, h4, h5, h6 {
     margin-bottom: 14px;
-    font-weight: normal;
     color: #435f20;
 }
 
-#conteudo h1 {
-    font-size: 28px;
+h1 {
+    font-size: 2.5rem;
 }
 
-#conteudo h2 {
-    font-size: 26px;
+h2 {
+    font-size: 2rem;
 }
 
-#conteudo h3 {
-    font-size: 10px;
+h3 {
+    font-size: 1.75rem;
 }
 
-#conteudo h4 {
-    font-size: 18px;
+h4 {
+    font-size: 1.5rem;
 }
 
-#conteudo h5 {
-    font-size: 16px;
+h5 {
+    font-size: 1.25rem;
 }
 
-#conteudo h6 {
-    font-size: 14px;
+h6 {
+    font-size: 1rem;
 }
 
 #conteudo select {
@@ -835,9 +822,8 @@ x - TABELAS
 
 #conteudo table tfoot td {
     background: #f3f3f3;
-    text-align: center;
     word-spacing: .8em;
-    color: #999;
+    color: #000;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #b0b0b0;
 }
@@ -886,7 +872,7 @@ x - TABELAS
 
 #conteudo .fundo_linha2,
 #conteudo .fundo_linha2 td {
-    background: #e8e8e8 url(../img/bg-celulas2.gif) top left repeat-x;
+    background-color: #4caf50;
 }
 
 #conteudo .fundo_linha3,
@@ -1264,7 +1250,7 @@ x - GRID ANTIGO
 /*--------------------------------------------------------------
 x - CORES
 --------------------------------------------------------------*/
-#conteudo .red,
+#conteudo .red:not(.btn),
 #conteudo .red a, 
 #conteudo table.tabela td.red
 { 
@@ -1272,7 +1258,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .green,
+#conteudo .green:not(.btn),
 #conteudo .green a,
 #conteudo table.tabela td.green
 { 
@@ -1280,7 +1266,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .blue,
+#conteudo .blue:not(.btn),
 #conteudo .blue a ,    
 #conteudo table.tabela td.blue
 { 
@@ -1288,7 +1274,7 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .orange, 
+#conteudo .orange:not(.btn),
 #conteudo .orange a ,
 #conteudo table.tabela td.orange
 { 
@@ -1296,9 +1282,9 @@ x - CORES
     background: white !important;
 }
 
-#conteudo .black, 
+#conteudo .black:not(.btn),
 #conteudo .black a,
-#conteudo table.tabela td.black,
+#conteudo table.tabela td.black
 { 
     color:#000; 
     background: white !important;
@@ -1368,7 +1354,8 @@ div.plan span {
 	cursor:auto;
 }
 
-.valor_maior_que_praticado {
+.valor_maior_que_praticado,
+#conteudo table .valor_maior_que_praticado > td {
     background-color: #ff9100;
     color: #000;
 }
@@ -1709,7 +1696,7 @@ x - BOTOES
 .btn_enviar_para_pagamento:hover,
 .btn_registrar_ordem_bancaria:hover,
 .btn_visualizar2:hover,
-.btn_historico:hover,
+.btn_historico:hover
 {
 	background-color:#fff;
 	border-top:1px solid #aaa;
@@ -2130,6 +2117,9 @@ x - DATE PICKER
     color: #4CAF50;
     font-weight: bold;
 }
+.ui-widget-content {
+    background: #f8f8f8 !important;
+}
 
 .ui-dialog  .ui-widget-content {
     /*height: 100% !important;*/
@@ -2218,7 +2208,26 @@ x - RESET - Ajustes para compatibilidade com materialize
 .conteudoImprimir table th,
 #conteudo table.tabela th {
     border-radius: 0px;
-    padding: 5px 10px;
+    padding: 10px 10px;
+
+}
+
+.exibir-proposta-cultural .collapsible > li > .collapsible-header {
+    background: #e8ebef;
+}
+
+.exibir-proposta-cultural .collapsible .collapsible li > .collapsible-header,
+.exibir-proposta-cultural table tr th {
+    background-color: #f2f2f2;
+
+}
+.exibir-proposta-cultural table > tbody > tr > th {
+    background: #dee2e7;
+    border: 1px solid #ddd;
+}
+
+.exibir-proposta-cultural .collapsible > .collapsible-header.active {
+    border-bottom: none;
 }
 
 .conteudoImprimir table td,
@@ -2361,4 +2370,12 @@ table.tabela td.destacar span,
 #planilhaOrcamentaria .tabela tr td span.green,
 #planilhaOrcamentaria .tabela tr td.green {
     background: transparent !important;
+}
+
+.assinar_parecer .produtos td {
+    text-align: right;
+}
+
+input#stEnvioPlenaria {
+    display: none;
 }

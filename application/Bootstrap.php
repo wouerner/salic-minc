@@ -4,12 +4,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     protected $_cache;
 
-    /**
-     * @name _initCoreCache
-     *
-     * @author Ruy Junior Ferreira Silva <ruyjfs@gmail.com>
-     * @since  10/01/2016
-     */
     protected function _initCoreCache()
     {
         $frontendOptions = array(
@@ -30,9 +24,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
     /**
-     * @name _initConfig
      * @return Zend_Config
-     * @author  Ruy Junior Ferreira Silva <ruyjfs@gmail.com>
      */
     public function _initConfig()
     {
@@ -66,12 +58,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $config;
     }
 
-    /**
-     * _initPath
-     *
-     * @access public
-     * @return void
-     */
     public function _initPath()
     {
 //        $strBancoAmbiente      = "bancos_treinamento";
@@ -96,12 +82,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         require_once "MinC/Loader.php";
     }
 
-    /**
-     * _initLocal
-     *
-     * @access public
-     * @return void
-     */
     public function _initLocal()
     {
         /* formato, idioma e localizacao */
@@ -113,12 +93,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('Zend_Currency', new Zend_Currency('pt_BR'));
     }
 
-    /**
-     * _initSession
-     *
-     * @access public
-     * @return void
-     */
     public function _initSession()
     {
         /* manipulacao de sessao */
@@ -127,12 +101,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     }
 
-    /**
-     * _initFilter
-     *
-     * @access public
-     * @return void
-     */
     public function _initFilter()
     {
         /* varicveis para pegar dados vindos via get e post */
@@ -146,14 +114,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('get',  new Zend_Filter_Input(NULL, NULL, $_GET,  $options));
     }
 
-    /**
-     * _initView
-     *
-     * @access public
-     * @return void
-     *
-     * @todo verificar uma forma de nao adicionar o path de helper na mao e sim utilizando apenas o application.ini.
-     */
     public function _initView()
     {
         /* configuraççes do layout padrão do sistema */
@@ -198,10 +158,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $controller->getRouter()->addRoute('rest', $restRoute);
     }
 
-    /**
-     * @author Vinícius Feitosa da Silva <viniciusfesil@mail.com>
-     * @return void
-     */
     public function _initCarregarDependenciasComposer()
     {
         if(file_exists('vendor/autoload.php')) {
@@ -209,12 +165,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
 
-    /**
-     * _initRoutes Texto de descri��o do m�todo.
-     *
-     * @access public
-     * @return void
-     */
     public function _initRoutes()
     {
         $controllerFront = Zend_Controller_Front::getInstance();
@@ -236,9 +186,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $controllerFront->getRouter()->addRoute('rest', $restRoute);
     }
 
-    /**
-     * Adiciona os helpers a controller
-     */
     protected function _initController()
     {
         // Add helpers prefixed with Helper in Plugins/Helpers/

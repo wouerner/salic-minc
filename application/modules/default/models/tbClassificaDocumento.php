@@ -13,7 +13,7 @@ class tbClassificaDocumento extends MinC_Db_Table_Abstract
 {
 
     protected $_banco  = "BDCORPORATIVO";
-    protected $_schema = "scSAC";
+    protected $_schema = "BDCORPORATIVO.scSAC";
     protected $_name   = "tbClassificaDocumento";
 
 

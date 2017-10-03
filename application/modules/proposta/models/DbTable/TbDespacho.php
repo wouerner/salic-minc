@@ -31,4 +31,23 @@ class Proposta_Model_DbTable_TbDespacho extends MinC_Db_Table_Abstract
 
         return $this->inserir($dadosInclusao);
     }
+
+    public function consultarDespachoAtivo($idPronac)
+    {
+        $objQuery = $this->select();
+        $objQuery->from($this->_name, '*', $this->_schema);
+        $objQuery->joinInner(
+            "Projetos",
+            "Projetos.IdProjeto = TbDespacho.idProposta",
+            '',
+            $this->_schema
+        );
+
+        $objQuery->where('Projetos.idPronac = ?', $idPronac);
+        $objQuery->where('TbDespacho.stEstado = ?', 0);
+        $result = $this->fetchRow($objQuery);
+        if($result) {
+            return $result->toArray();
+        }
+    }
 }

@@ -243,17 +243,17 @@
         $('.ui-dialog-titlebar-close').remove();
         
     }
-    
+
     function visualizarPagamentos(id){
-        $('.pagamentos').hide();
-        $('#tr_'+id).show();
-        
+        $('tr.pagamento').addClass('sumir');
+        $('#tr_'+id).toggleClass('sumir');
+
         $('#btnAbrir_'+id).hide();
         $('#btnFechar_'+id).show();
     }
 
     function esconderPagamentos(id){
-        $('#tr_'+id).hide();
+        $('#tr_'+id).toggleClass('sumir');
         $('#btnAbrir_'+id).show();
         $('#btnFechar_'+id).hide();
     }

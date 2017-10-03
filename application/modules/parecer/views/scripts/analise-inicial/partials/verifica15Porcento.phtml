@@ -1,0 +1,21 @@
+<div class="msgALERT">
+     <div class="float_right"></div>
+     <div>O acerto dos custos administrativos s&atilde;o maiores que 15% do valor total do projeto.<br /> Favor ajustar <?php echo $this->formatarReal($this->verifica15porcento); ?>.</div>
+</div>
+<table class="tabela">
+  <tr>
+    <th width="100"><span><b>Pronac</b></span></th>
+    <th width="350"><span><b>Nome do Projeto</b></span></th>
+    <th><span><b>Produto</b></span></th>
+  </tr>
+  <tr>
+    <td align="center"><?php echo $this->dados[0]->PRONAC; ?></td>
+    <td align="center"><?php echo $this->dados[0]->NomeProjeto; ?></td>
+    <td align="center"><?php echo $this->dados[0]->Produto; ?></td>
+  </tr>
+</table>
+<table class="tabela">
+  <tr>
+    <td align="center"><input type="button" class="btn_voltar" style="width: 85px;" onclick="redirecionar('<?php echo $this->url(array('controller' => 'analisarprojetoparecer', 'action' => 'index'), '', true); ?>');" /></td>
+  </tr>
+</table>

@@ -82,7 +82,9 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
                 "FORMAT( a.ReceitaPopularPromocional, 'N','pt-br') AS ReceitaPopularPromocional",
                 "FORMAT( a.PrecoUnitarioPromocional, 'N','pt-br') AS PrecoUnitarioPromocional",
                 "FORMAT( a.PrecoUnitarioNormal, 'N', 'pt-br') AS PrecoUnitarioNormal",
-                "FORMAT(( ReceitaPopularPromocional ) + ( ReceitaPopularNormal )+ ( PrecoUnitarioNormal )+ ( PrecoUnitarioPromocional ),'N','pt-br') AS Receita"
+                "FORMAT( a.vlReceitaTotalPrevista, 'N', 'pt-br') AS Receita",
+                "FORMAT( a.ReceitaPopularNormal, 'N', 'pt-br') AS ValorMedioPopular",
+                "FORMAT( a.ReceitaPopularPromocional, 'N', 'pt-br') AS ValorMedioProponente"
             ));
 
             $slct->from(array("a"=> $this->_name), $cols, $this->_schema);
@@ -118,7 +120,7 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
                     }
                     $slct->limit($tamanho, $tmpInicio);
             }
-            //echo $slct;die;
+//            echo $slct;die;
 
             //SETANDO A QUANTIDADE DE REGISTROS
             $this->_totalRegistros = $this->pegaTotal($where);
@@ -292,24 +294,30 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
         }
     }
 
+    /**
+     * Faz medias e soma valores para salvar o resumo na tabela plano de distribuicao
+     * Tem que salvar a media ponderada do preço popular(receitaPopularNormal) e do proponente(PrecoUnitarioNormal)
+     * por isso, os campos receitaPopularParcial e precoUnitarioParcial devem ficar vazios.
+     *
+     * @param $idPlanoDistribuicao
+     */
     public function updateConsolidacaoPlanoDeDistribuicao($idPlanoDistribuicao)
     {
+
         $cols = array(
-            'sum(qtExemplares) as QtdeProduzida',
-            'sum(qtGratuitaDivulgacao) as QtdeProponente',
-            'sum(qtGratuitaPatrocinador) as QtdePatrocinador',
-            'sum(qtGratuitaPopulacao) as QtdeOutros',
-            'sum(qtPopularIntegral) as QtdeVendaPopularNormal',
-            'sum(qtPopularParcial) as QtdeVendaPopularPromocional',
-            'sum(vlUnitarioPopularIntegral) as vlUnitarioPopularNormal',
-            'sum(vlReceitaPopularIntegral) ReceitaPopularNormal',
-            'sum(vlReceitaPopularParcial) as ReceitaPopularPromocional',
-            'sum(qtProponenteIntegral) as QtdeVendaNormal',
-            'sum(qtProponenteParcial) as QtdeVendaPromocional',
-            'avg(vlUnitarioProponenteIntegral) vlUnitarioNormal',
-            'sum(vlReceitaProponenteIntegral) as PrecoUnitarioNormal',
-            'sum(vlReceitaProponenteParcial) as PrecoUnitarioPromocional',
-            //'(sum(vlReceitaPopularParcial) + sum(vlReceitaPopularIntegral)+  sum(vlReceitaProponenteIntegral)+ sum(vlReceitaProponenteParcial)) as  PrecoUnitarioPromocional'
+            'COALESCE(sum(qtExemplares),0) as QtdeProduzida',
+            'COALESCE(sum(qtGratuitaDivulgacao), 0) as QtdeProponente',
+            'COALESCE(sum(qtGratuitaPatrocinador), 0) as QtdePatrocinador',
+            'COALESCE(sum(qtGratuitaPopulacao), 0) as QtdeOutros',
+            'COALESCE(sum(qtPopularIntegral), 0) as QtdeVendaPopularNormal',
+            'COALESCE(sum(qtPopularParcial), 0) as QtdeVendaPopularPromocional',
+            'COALESCE(avg(vlUnitarioPopularIntegral), 0) as vlUnitarioPopularNormal',
+            'COALESCE(sum(vlReceitaPopularIntegral + vlReceitaPopularParcial) / nullif((sum(qtPopularIntegral + qtPopularParcial)), 0), 0) AS ReceitaPopularNormal', #valor médio ponderado do preco popular
+            'COALESCE(sum(vlReceitaProponenteIntegral + vlReceitaProponenteParcial) / nullif((sum(qtProponenteIntegral + qtProponenteParcial)), 0), 0) AS PrecoUnitarioNormal', # valor médio ponderado do proponente
+            'COALESCE(sum(qtProponenteIntegral), 0) as QtdeVendaNormal',
+            'COALESCE(sum(qtProponenteParcial), 0) as QtdeVendaPromocional',
+            'COALESCE(avg(vlUnitarioProponenteIntegral),0) as vlUnitarioNormal',
+            'COALESCE(sum(vlReceitaPrevista), 0) as  vlReceitaTotalPrevista'
         );
 
         $sql = $this->select()
@@ -320,6 +328,7 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
                 $this->_schema
             )
             ->where('idPlanoDistribuicao = ?', $idPlanoDistribuicao);
+
         $dados =  $this->fetchRow($sql);
         $dados = $dados->toArray();
 

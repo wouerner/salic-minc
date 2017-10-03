@@ -9,59 +9,9 @@
 class Proposta_VincularresponsavelController extends Proposta_GenericController
 {
 
-    private $emailResponsavel = null;
-    private $idResponsavel = 0;
-    private $idAgente = 0;
-    private $idUsuario = 0;
-
     public function init()
     {
-
-        // verifica as permissoes
-        $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 97;  // Gestor Salic
-
-        $auth = Zend_Auth::getInstance();
-        $arrAuth = array_change_key_case((array) $auth->getIdentity());
-
-        if (isset($arrAuth['usu_codigo'])) {
-            parent::perfil(1, $PermissoesGrupo);
-        } else {
-            parent::perfil(4, $PermissoesGrupo);
-        }
-
-        /*********************************************************************************************************/
-
-        $cpf = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
-
-        /*********************************************************************************************************/
-
-        // Busca na SGCAcesso
-        $sgcAcesso = new Autenticacao_Model_Sgcacesso();
-        $acesso = $sgcAcesso->findBy(array('cpf' => $cpf));
-
-        // Busca na Usuarios
-        $mdlUsuario = new Autenticacao_Model_Usuario();
-        $usuario = $mdlUsuario->findBy(array('usu_identificacao' => $cpf));
-
-        // Busca na Agentes
-        $tblAgentes = new Agente_Model_DbTable_Agentes();
-        $agente = $tblAgentes->findBy(array('cnpjcpf' => $cpf));
-
-        if ($acesso) {
-            $this->idResponsavel = $acesso['IdUsuario'];
-            $this->emailResponsavel = $acesso['Email'];
-        }
-        if ($agente) {
-            $this->idAgente = $agente['idAgente'];
-        }
-        if ($usuario) {
-            $this->idUsuario = $usuario['usu_codigo'];
-        }
-
-        $this->view->idAgenteLogado = $this->idAgente;
         parent::init();
-        // chama o init() do pai GenericControllerNew
     }
 
     public function indexAction()

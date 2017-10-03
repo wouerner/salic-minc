@@ -109,12 +109,12 @@ class RecursoController extends MinC_Controller_Action_Abstract
                     $where['c.stFecharAnalise = ?'] = '0';
                     $where['c.stEstado = ?'] = '0';
                     $where['a.stEstado = ?'] = 0; // 0=Atual; 1=Historico
-                    $where['a.siRecurso in (?)'] = array(3,4); // // 3=Encaminhado do MinC para a  Unidade de An�lise; 4=Encaminhado para Parecerista
+                    $where['a.siRecurso in (?)'] = array(3,4); // // 3=Encaminhado do MinC para a  Unidade de Analise; 4=Encaminhado para Parecerista
                     $this->view->nmPagina = 'Em An&aacute;lise';
                     break;
                 case 'analisados':
                     $where['a.stEstado = ?'] = '0'; // 0=Atual; 1=Historico
-                    $where['a.siRecurso in (?)'] = array(6, 7); // 6=Devolvido da Unidade de Analise para o MinC; T�cnico; 7=Encaminhado para o Componente da Comiss�o
+                    $where['a.siRecurso in (?)'] = array(6, 7); // 6=Devolvido da Unidade de Analise para o MinC; Tecnico; 7=Encaminhado para o Componente da Comissao
                     $this->view->nmPagina = 'Analisados';
                     break;
                 case 'analisados_cnic':
@@ -336,7 +336,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
                 } else {
                     $r->siRecurso = 3; //3=Enviado para o coordenador de parecer
 
-                    //ATUALIZA A SITUA��O DO PROJETO
+                    //ATUALIZA A SITUACAO DO PROJETO
                     $w = array();
                     $w['situacao'] = 'B11';
                     $w['ProvidenciaTomada'] = 'Recurso encaminhado para avalia&ccedil;&atildeo da unidade vinculada.';
@@ -587,7 +587,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 
             //Atualiza a tabela tbRecurso
             $dados = array();
-            $dados['siRecurso'] = 4; // Enviado para an�lise t�cnica
+            $dados['siRecurso'] = 4; // Enviado para analise tecnica
             $where = array();
             $where['idRecurso = ?'] = $idRecurso;
             $tbRecurso = new tbRecurso();
@@ -793,7 +793,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 	{
         //ESSA FUNCAO TAMBEM E UTILIZADA A MESMA FUNCAO PARA AVALIAR O ENQUADRAMENTO DO PROJETO.
         if($this->idPerfil != 94 && $this->idPerfil != 110){
-            parent::message("Voc� n�o tem permiss�o para acessar essa �rea do sistema!", "principal", "ALERT");
+            parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
         $auth = Zend_Auth::getInstance();
@@ -807,7 +807,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
         $dsParecer = $this->_request->getParam('dsParecer');
 
         try {
-            //ATUALIAZA A �REA E SEGMENTO DO PROJETO
+            //ATUALIAZA A AREA E SEGMENTO DO PROJETO
             $d = array();
             if(null !== $this->_request->getParam('areaCultural')){
                 $d['Area'] = $areaCultural;
@@ -904,7 +904,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
                     $tbDistribuirProjeto = new tbDistribuirProjeto();
                     $x = $tbDistribuirProjeto->update($dadosDP, $whereDP);
 
-                    $siRecurso = 5; //Devolvido da an�lise t�cnica
+                    $siRecurso = 5; //Devolvido da analise tecnica
                     if($this->idPerfil == 110){
                         $siRecurso = 10; //Devolver para Coordenador do MinC
                     }
@@ -942,7 +942,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
         $parecerProjeto = $_POST['parecerProjeto'];
         $dsParecer = $_POST['dsParecer'];
 
-        if($parecerProjeto == 1){ //1=N�o; 2=Sim
+        if($parecerProjeto == 1){ //1=Nao; 2=Sim
             $situacaoProjeto = 'D14';
             $providenciaProjeto = 'Recurso indeferido na CNIC pelo componente da comiss&atilde;o.';
             $stAnalise = 'IC';
@@ -953,7 +953,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
         }
 
         try {
-            //ATUALIAZA A SITUA��O, �REA E SEGMENTO DO PROJETO
+            //ATUALIAZA A SITUACAO, AREA E SEGMENTO DO PROJETO
             $d = array();
             $d['situacao'] = $situacaoProjeto;
             $d['ProvidenciaTomada'] = $providenciaProjeto;
@@ -1048,14 +1048,14 @@ class RecursoController extends MinC_Controller_Action_Abstract
                     $idNrReuniao = $raberta['idNrReuniao'];
 
                     if($_POST['plenaria']){
-                        $campoSiRecurso = 8; // 8=Enviado � Plen�ria
+                        $campoSiRecurso = 8; // 8=Enviado a Plenaria
                     } else {
-                        $campoSiRecurso = 9; // 9=Enviado para Checklist Publica��o
+                        $campoSiRecurso = 9; // 9=Enviado para Checklist Publicacao
                     }
 
                     //ATUALIZA A TABELA tbRecurso
                     $dados = array();
-                    $dados['siRecurso'] = $campoSiRecurso; // Devolvido da an�lise t�cnica
+                    $dados['siRecurso'] = $campoSiRecurso; // Devolvido da analise tecnica
                     $dados['idNrReuniao'] = $idNrReuniao;
                     $dados['stAnalise'] = $stAnalise;
                     $where = "idRecurso = $idRecurso";
@@ -1080,7 +1080,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
         $idDistribuirProjeto = $this->_request->getParam("idDistProj");
 
         // Se estiver com vinculada do IPHAN, volta para sede IPHAN
-        $outrasVinculadas = array(92, 93, 94, 95, 335); // Vinculadas exceto superintend�ncias IPHAN
+        $outrasVinculadas = array(92, 93, 94, 95, 335); // Vinculadas exceto superintendencias IPHAN
 
         if (!in_array($this->idOrgao, $outrasVinculadas)) {
             // retorna para o iphan e mantem siRecurso = 5
@@ -1092,7 +1092,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             $dadosDP['idUnidade'] = 91; // retorna para IPHAN
             $return = $tbDistribuirProjeto->update($dadosDP, $whereDP);
 
-            if($return && $return2){
+            if($return){
                 $this->_helper->json(array('resposta'=>true));
             } else {
                 $this->_helper->json(array('resposta'=>false));
@@ -1108,7 +1108,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 
             //Atualiza a tabela tbRecurso
             $dados = array();
-            $dados['siRecurso'] = 6; // Devolvido para o coordenador geral de an�lise
+            $dados['siRecurso'] = 6; // Devolvido para o coordenador geral de analise
             $where = "idRecurso = $idRecurso";
             $tbRecurso = new tbRecurso();
             $return2 = $tbRecurso->update($dados, $where);
@@ -1137,13 +1137,13 @@ class RecursoController extends MinC_Controller_Action_Abstract
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $tbAnaliseAprovacao = new tbAnaliseAprovacao();
 
-        //VERIFICA SE J� POSSUI AS PLANILHA DO TIPO 'CO'. SE N�O, INSERE FAZENDO A C�PIA DOS DADOS
+        //VERIFICA SE JA POSSUI AS PLANILHA DO TIPO 'CO'. SE NAO, INSERE FAZENDO A COPIA DOS DADOS
         $verificaPlanilhaAprovacao = $tbPlanilhaAprovacao->buscar(array('tpPlanilha=?'=>'CO', 'stAtivo=?'=>'S', 'IdPRONAC=?'=>$idPronac));
         if(count($verificaPlanilhaAprovacao)==0){
             $tbPlanilhaAprovacao->copiandoPlanilhaRecurso($idPronac);
         }
 
-        //VERIFICA SE J� POSSUI AS PLANILHA DO TIPO 'CO'. SE N�O, INSERE FAZENDO A C�PIA DOS DADOS
+        //VERIFICA SE JA POSSUI AS PLANILHA DO TIPO 'CO'. SE NAO, INSERE FAZENDO A COPIA DOS DADOS
         $verificaAnaliseAprovacao = $tbAnaliseAprovacao->buscar(array('tpAnalise=?'=>'CO', 'IdPRONAC=?'=>$idPronac));
         if(count($verificaAnaliseAprovacao)==0){
             $tbAnaliseAprovacao->copiandoPlanilhaRecurso($idPronac);
@@ -1163,7 +1163,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             $tbDistribuirProjeto->update($dadosDP, $whereDP);
         }
 
-        //ATUALIZA A SITUA��O DO PROJETO
+        //ATUALIZA A SITUACAO DO PROJETO
         $Projetos = new Projetos();
         $w = array();
         $w['situacao'] = 'D20';
@@ -1204,10 +1204,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
         //RECURSOS TRATADOS POR PARECERISTA
         if($siRecurso == 6){
             //Atualiza a tabela tbRecurso
-            $dados['siRecurso'] = 3; // Encaminhado do MinC para Unidade de An�lise
+            $dados['siRecurso'] = 3; // Encaminhado do MinC para Unidade de Analise
             $where = "idRecurso = $idRecurso";
         } else {
-            $dados['siRecurso'] = 4; // Encaminhado para o T�cnico
+            $dados['siRecurso'] = 4; // Encaminhado para o Tecnico
             $where = "idRecurso = $idRecurso";
         }
         $return = $tbRecurso->update($dados, $where);
@@ -1390,7 +1390,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
         $dsParecer = $_POST['dsParecer'];
 
         try {
-            //ATUALIAZA A SITUA��O, �REA E SEGMENTO DO PROJETO
+            //ATUALIAZA A SITUACAO, AREA E SEGMENTO DO PROJETO
             $d = array();
             $d['situacao'] = 'D20';
             $d['ProvidenciaTomada'] = 'Recurso em an&aacute;lise pela Comiss&atilde;o Nacional de Incentivo &agrave; Cultura - CNIC.';
@@ -1556,7 +1556,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             $analisedeConteudoDAO = new Analisedeconteudo();
             $where['idPRONAC = ?']  = $idPronac;
 
-            // Quando o parecer do produto principal � desfavor�vel, o parecer dos produtos secund�rios tamb�m devem ser desfavor�veis.
+            // Quando o parecer do produto principal eh desfavoravel, o parecer dos produtos secundarios tambem devem ser desfavoraveis.
             if( (!$_POST['stPrincipal']) || ($_POST['stPrincipal'] && $_POST['ParecerFavoravel_'.$idProduto])){
                 $where['idProduto = ?'] = $idProduto;
             }
@@ -1630,7 +1630,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 	}
 
     /**
-     * M�todo alterarItem()
+     * Metodo alterarItem()
      * Altera os itens da planilha
      * @param idPlanilha
      * @return void
@@ -1693,7 +1693,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * M�todo alterarItem()
+     * Metodo alterarItem()
      * Altera os itens da planilha
      * @param idPronac
      * @param idProduto
@@ -1770,7 +1770,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
     public function salvarAvaliacaoDoItemAction() {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
 
         $dados = array();
         $dados['idUnidade'] = $_POST['Unidade'];
@@ -1832,7 +1832,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
     }
 
 	/**
-	 * M�todo com a Solicita��o de Recurso
+	 * Metodo com a Solicita��o de Recurso
 	 * @access public
 	 * @param void
 	 * @return void
@@ -1850,10 +1850,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
 
 		$tbreenquadramento = RecursoDAO::buscarRecursoReenquadramento();
 		$this->view->recursoreenquadramento = $tbreenquadramento;
-	} // fecha m�todo recursoAction()
+	} // fecha metodo recursoAction()
 
 	/**
-	 * M�todo com os Projetos Indeferidos
+	 * Metodo com os Projetos Indeferidos
 	 * @access public
 	 * @param void
 	 * @return void
@@ -1907,7 +1907,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 				}
 				else
 				{
-					if ($stAtendimento == 'D') // cadastra a reitegra��o (planilha de aprovacao)
+					if ($stAtendimento == 'D') // cadastra a reitegracao (planilha de aprovacao)
 					{
 						$msg = "Deferir";
 					}
@@ -1932,10 +1932,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
 			}
 		} // fecha if
 
-	} // fecha m�todo indeferidosAction()
+	} // fecha metodo indeferidosAction()
 
 	/**
-	 * M�todo com os Projetos Deferidos - Reenquadramento
+	 * Metodo com os Projetos Deferidos - Reenquadramento
 	 * @access public
 	 * @param void
 	 * @return void
@@ -1999,7 +1999,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 				}
 				else
 				{
-					if ($stAtendimento == 'D') // cadastra a reitegra��o (planilha de aprovacao)
+					if ($stAtendimento == 'D') // cadastra a reitegracao (planilha de aprovacao)
 					{
 						$msg = "Deferir";
 					}
@@ -2016,7 +2016,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 
 					if ($alterarAtendimento && $alterarEnquadramento) // caso tenha sido alterado com sucesso
 					{
-						parent::message("Solicita��o enviada com sucesso!", "recurso", "CONFIRM");
+						parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "recurso", "CONFIRM");
 					}
 					else
 					{
@@ -2038,17 +2038,17 @@ class RecursoController extends MinC_Controller_Action_Abstract
 			$this->view->recursoreenquadramento = $tbreenquadramento;
 		}
 
-	}// fecha m�todo reenquadramentoAction()
+	}// fecha metodo reenquadramentoAction()
 
 	/**
-	 * M�todo com os Projetos Deferidos - Or&ccedil;amento
+	 * Metodo com os Projetos Deferidos - Or&ccedil;amento
 	 * @access public
 	 * @param void
 	 * @return void
 	 */
 
 	/**
-	 * M�todo com os Projetos Deferidos - Or&ccedil;amento (Parecer Consolidado)
+	 * Metodo com os Projetos Deferidos - Or&ccedil;amento (Parecer Consolidado)
 	 * @access public
 	 * @param void
 	 * @return void
@@ -2057,10 +2057,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
 	{
 		$tborcamento = RecursoDAO::buscarRecursoProjetosDeferidos();
 		$this->view->deferido = $tbdeferido;
-	} // fecha m�todo deferidosAction()
+	} // fecha metodo deferidosAction()
 
 	/**
-	 * M�todo com os Projetos Deferidos com Solicitação de Reenquadramento - Orçamento (Parecer Consolidado)
+	 * Metodo com os Projetos Deferidos com Solicitação de Reenquadramento - Orçamento (Parecer Consolidado)
 	 * @access public
 	 * @param void
 	 * @return void
@@ -2071,18 +2071,18 @@ class RecursoController extends MinC_Controller_Action_Abstract
 		$idPronac = $get->idPronac;
 		$idRecurso = $get->idRecurso;
 
-		// caso o formul�rio seja enviado via post
+		// caso o formulario seja enviado via post
 		if ($this->getRequest()->isPost())
 		{
 			// pega o pronac
 			$pronac = ProjetoDAO::buscarPronac($idPronac);
 			$pronac = $pronac['pronac'];
 
-			// pega a pen�ltima situa��o do projeto
+			// pega a penultima situacao do projeto
 			$situacoes = ProjetoDAO::buscarSituacoesProjeto($pronac);
 			$situacao  = $situacoes[1]->Situacao;
 
-			// altera a situa��o do projeto
+			// altera a situacao do projeto
 			$alterarSituacao = ProjetoDAO::alterarSituacao($idPronac, $situacao);
 
 			parent::message("Projeto consolidado com sucesso!", "recurso", "CONFIRM");
@@ -2096,7 +2096,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 			$this->view->parecer = $buscarParecer;
 		} // feche else
 
-	} // fecha m�todo parecerAction()
+	} // fecha metodo parecerAction()
 
 	public function orcamentoAction()
 	{
@@ -2236,7 +2236,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
 				parent::message($e->getMessage(), "solicitarrecursodecisao/planilhaorcamentoaprovada?idPronac=".$idPronac."&idRecurso=".$idRecurso, "ERROR");
 			}
 		} // fecha else
-	} // fecha m�todo planilhaorcamentoaprovadaAction()
+	} // fecha metodo planilhaorcamentoaprovadaAction()
 
     public function detalharRecursoAction() {
         $idPronac = $this->_request->getParam("idPronac");
@@ -2324,9 +2324,9 @@ class RecursoController extends MinC_Controller_Action_Abstract
 
     public function recursoEnquadramentoAction()
     {
-        //FUN��O ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE AN�LISE E COORD. DE AN�LISE.Coordenado Admissibilidade
+        //FUNCAO ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE ANALISE E COORD. DE ANALISE.Coordenado Admissibilidade
         if($this->idPerfil != 103 && $this->idPerfil != 127 && $this->idPerfil != 131 && $this->idPerfil != 92){
-            parent::message("Você não tem permissão para acessar essa área do sistema!", "principal", "ALERT");
+            parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa área do sistema!", "principal", "ALERT");
         }
 
         $where = array();
@@ -2364,10 +2364,11 @@ class RecursoController extends MinC_Controller_Action_Abstract
             $where['a.siRecurso = ?'] = 1; // 1=Solicitado pelo proponente
             $where['a.stAtendimento = ?'] = 'N'; // Não atendimento
             $where['a.tpRecurso = ?'] = 1; // 1=Solicitado pelo proponente
+            $where['a.idAgenteAvaliador = null OR a.idAgenteAvaliador = ?'] = $this->idUsuario;
         }
 
 
-        $dados = $tbRecurso->painelRecursosEnquadramento($where, $order, $tamanho, $inicio);
+        $dados = $tbRecurso->painelRecursosEnquadramento($where);
 
         $this->view->idPerfil = $this->idPerfil;
         $this->view->dados = $dados;

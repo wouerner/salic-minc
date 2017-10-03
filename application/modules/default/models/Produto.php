@@ -27,6 +27,24 @@ class Produto extends MinC_Db_Table_Abstract
         return $rowset;
     }
 
+    public function listarProdutos($where = null)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+        $sql = $db->select()
+            ->from(
+                array($this->_name),
+                array('codigo as codproduto', 'descricao as Produto'),
+                $this->_schema
+            )
+            ->where('stestado = 0')
+            ->order('produto')
+        ;
+
+        return $db->fetchAll($sql);
+    }
+
     public function buscarProdutosContrato($idpronac){
         $select = $this->select();
         $select->setIntegrityCheck(false);

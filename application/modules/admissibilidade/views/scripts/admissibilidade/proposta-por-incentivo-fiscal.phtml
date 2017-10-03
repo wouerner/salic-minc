@@ -1,3 +1,6 @@
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+
 <!--div id="titulo">
     <div><?php if(!$this->tituloTopo){?>Admissibilidade de propostas - Proposta cultural<?php } else { echo $this->tituloTopo;} ?>
         <span class="voltar">
@@ -9,6 +12,21 @@
         </span>
     </div>
 </div-->
+<script>
+    function carregaDados(url,divRetorno){
+        $("#conteudo").html('<br><br><center>Aguarde, carregando dados...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br><br>');
+        $.ajax({
+            url : url,
+            success: function(data){
+                $("#"+divRetorno).html(data);
+            },
+            type : 'post'
+        });
+    }
+
+    carregaDados('<?php echo $this->url(['module' => 'proposta', 'controller' => 'visualizar-plano-distribuicao', 'action' => 'visualizar', 'idPreProjeto' => $this->idPreProjeto]); ?>','plano-distribuicao');
+
+</script>
 
 <div class="row">
     <?php
@@ -145,7 +163,7 @@
                 </a>
             <?php endif ?>
         </div>
-        <div class="conteudoImprimir">
+        <div class="conteudoImprimir exibir-proposta-cultural">
             <br>
             <div><h5 class="center">Proposta Cultural - <?php echo $this->itensGeral[0]->NomeProjeto ?></h5></div>
                 <?php if(isset($this->itensGeral[0]->stEstado) && $this->itensGeral[0]->stEstado == 0){ ?>
@@ -582,7 +600,21 @@
                         </td>
                     </tr>
                 </table>
-                <?php echo $this->partial('admissibilidade/inc/planoDistribuicaoProduto.phtml', $this) ?>
+
+                <table>
+                    <tr onclick="abrirDinamico('#tdPlanoDistribuicao', $(this));" style="cursor:pointer">
+                        <th>
+                            <img src="<?php echo $this->baseUrl();?>/public/img/navigation-right.png" id="imgDinamica" align="left"/>
+                            Plano de Distribui&ccedil;&atilde;o do Produto
+                        </th>
+                    </tr>
+                    <tr id="tdPlanoDistribuicao" style="display: none;">
+                        <td style="margin: 0px; padding: 0px">
+                            <div id="plano-distribuicao"></div>
+                        </td>
+                    </tr>
+                </table>
+
                 <table>
                     <tr onclick="abrirDinamico('#tdFonteRecurso', $(this));" style="cursor:pointer">
                         <th>

@@ -69,16 +69,6 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
         $usuario = $metodoAutenticacao->obterInformacoesAssinante();
         $modelAssinatura->setIdAssinante($usuario['usu_codigo']);
 
-        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $dadosDocumentoAssinatura = $objModelDocumentoAssinatura->findBy(
-            array(
-                'IdPRONAC' => $modelAssinatura->getIdPronac(),
-                'idTipoDoAtoAdministrativo' => $modelAssinatura->getIdTipoDoAtoAdministrativo(),
-                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
-            )
-        );
-
-        $modelAssinatura->setIdDocumentoAssinatura($dadosDocumentoAssinatura['idDocumentoAssinatura']);
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
         $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modelAssinatura->getIdTipoDoAtoAdministrativo(),
@@ -107,7 +97,11 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
 
         $objTbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
         $objTbAssinatura->inserir($dadosInclusaoAssinatura);
-        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino($modelAssinatura->getIdTipoDoAtoAdministrativo(), $modelAssinatura->getIdOrdemDaAssinatura());
+        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
+            $modelAssinatura->getIdTipoDoAtoAdministrativo(),
+            $modelAssinatura->getIdOrdemDaAssinatura(),
+            $modelAssinatura->getIdOrgaoSuperiorDoAssinante()
+        );
 
         if($this->isMovimentarProjetoPorOrdemAssinatura && $codigoOrgaoDestino) {
             $this->movimentarProjetoAssinadoPorOrdemDeAssinatura($modelAssinatura);
@@ -125,7 +119,11 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
         }
 
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino($modelAssinatura->getIdTipoDoAtoAdministrativo(), $modelAssinatura->getIdOrdemDaAssinatura());
+        $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
+            $modelAssinatura->getIdTipoDoAtoAdministrativo(),
+            $modelAssinatura->getIdOrdemDaAssinatura(),
+            $modelAssinatura->getIdOrgaoSuperiorDoAssinante()
+        );
         if (!$codigoOrgaoDestino) {
             throw new Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
         }

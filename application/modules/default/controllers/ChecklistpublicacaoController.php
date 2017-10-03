@@ -9,21 +9,21 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
     private $blnCoordenador = "false";
     private $intTamPag = 10;
     /**
-     * Reescreve o m�todo init()
+     * Reescreve o metodo init()
      * @access public
      * @param void
      * @return void
      */
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio �s Leis de Incentivo � Cultura"; // t�tulo da p�gina
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
-        $Usuario = new UsuarioDAO(); // objeto usu�rio
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
+        $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // titulo da pagina
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
+        $Usuario = new UsuarioDAO(); // objeto usuario
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
 
-        if ($auth->hasIdentity()) // caso o usu�rio esteja autenticado
+        if ($auth->hasIdentity()) // caso o usuario esteja autenticado
         {
-            // verifica as permiss�es
+            // verifica as permissoes
             $PermissoesGrupo = array();
             $PermissoesGrupo[] = 103;
             $PermissoesGrupo[] = 127;
@@ -35,9 +35,9 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
             $PermissoesGrupo[] = 151;
             $PermissoesGrupo[] = 148;
 
-            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) // verifica se o grupo ativo est� no array de permiss�es
+            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) // verifica se o grupo ativo esta no array de permissoes
             {
-                parent::message("Voc� n�o tem permiss�o para acessar essa �rea do sistema!", "principal/index", "ALERT");
+                parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
             }
 
             if ( $GrupoAtivo->codGrupo == 103 || $GrupoAtivo->codGrupo == 122 || $GrupoAtivo->codGrupo == 127  || $GrupoAtivo->codGrupo == 123 )
@@ -45,14 +45,14 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
                  $this->view->coordenador = "true";
             }
 
-            // pega as unidades autorizadas, org�os e grupos do usu�rio (pega todos os grupos)
+            // pega as unidades autorizadas, orgaos e grupos do usuario (pega todos os grupos)
             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
 
             // manda os dados para a vis�o
-            $this->view->usuario = $auth->getIdentity(); // manda os dados do usu�rio para a vis�o
-            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usu�rio para a vis�o
-            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usu�rio para a vis�o
-            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o �rg�o ativo do usu�rio para a vis�o
+            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuario para a visao
+            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuario para a visao
+            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuario para a visao
+            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o orgao ativo do usuario para a visao
 
             $this->getIdUsuario = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;
 
@@ -180,7 +180,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
                     $where['pr.Situacao = ?'] = 'D20';
                     break;
                 case 'readequacoes':
-                    $this->view->nmPagina = 'Projetos Readequa��es';
+                    $this->view->nmPagina = 'Projetos Readequa&ccedil;&otilde;es';
                     $where['EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbReadequacao WHERE idPronac = pr.idPronac AND siEncaminhamento = ?)'] = 9;
 //                    $where['pr.Situacao = ?'] = 'D20';
                     break;
@@ -343,7 +343,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
         $projetos = New Projetos();
         $diligencia = New tbDiligencia();
 
-        /* ============== AGUARDANDO AN�LISE DOCUMENTAL - D03 =============================*/
+        /* ============== AGUARDANDO ANALISE DOCUMENTAL - D03 =============================*/
         if($tipoAnalise == "inicial"){
 
             $arrBusca = array();
@@ -358,7 +358,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
             $this->view->codDiligencia = 181;
         }
 
-        /* ============== AGUARDANDO AN�LISE DOCUMENTAL - D02 =============================*/
+        /* ============== AGUARDANDO ANALISE DOCUMENTAL - D02 =============================*/
         if($tipoAnalise == "readequados"){
 
             $arrBusca = array();
@@ -387,7 +387,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
         $projetos = New Projetos();
 
         /* ================================================================================*/
-        /* ============== AGUARDANDO AN�LISE DOCUMENTAL - D02 =============================*/
+        /* ============== AGUARDANDO ANALISE DOCUMENTAL - D02 =============================*/
         /* ================================================================================*/
 
         $arrBusca = array();
@@ -451,7 +451,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
         $projetos = New Projetos();
 
         /* ================================================================================*/
-        /* ============== AGUARDANDO AN�LISE DOCUMENTAL - D03 =============================*/
+        /* ============== AGUARDANDO ANALISE DOCUMENTAL - D03 =============================*/
         /* ================================================================================*/
 
         $arrBusca = array();
@@ -610,27 +610,8 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
         $this->view->parametrosBuscaPI = $_POST;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * M�todo com a grid de readequa��o
+     * Metodo com a grid de readequacao
      */
     public function solicitacaoReadequacaoAction()
     {
@@ -655,7 +636,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
             $arrProponente = $rsProponente->toArray();
             $this->view->proponenteR      = $arrProponente;
             $this->view->parametrosBuscaR = $_POST;
-    } // fecha m�todo solicitacaoReadequacaoAction()
+    } // fecha metodo solicitacaoReadequacaoAction()
 
 
     function gravarEncaminhamentoPortariaAction()
@@ -678,7 +659,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
                 if(!empty($rsSituacao)){
                     $providencia = $rsSituacao->Descricao;
                 }
-                // altera a situa��o do projeto
+                // altera a situacao do projeto
                 $tblProjeto = new Projetos();
                 $rsProjeto = $tblProjeto->buscar(array('IdPRONAC=?'=>$idpronac))->current();
                 $nrPronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
@@ -706,14 +687,14 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
                 parent::message("Projeto encaminhando com sucesso!", "checklistpublicacao/listas?tipoFiltro=finalizados", "CONFIRM");
 
             } catch (Exception $e) {
-                parent::message("O Projeto {$nrPronac} n�o pode ser encaminhado para Portaria, pois o proponente est� irregular.", "checklistpublicacao/listas?tipoFiltro=finalizados", "ERROR");
+                parent::message("O Projeto {$nrPronac} n&atilde;o pode ser encaminhado para Portaria, pois o proponente est&aacute; irregular.", "checklistpublicacao/listas?tipoFiltro=finalizados", "ERROR");
             }
         }
-        parent::message("O Projeto {$nrPronac} n�o pode ser encaminhado para Portaria, pois o proponente est� irregular.", "checklistpublicacao/listas?tipoFiltro=finalizados", "ERROR");
+        parent::message("O Projeto {$nrPronac} n&atilde;o pode ser encaminhado para Portaria, pois o proponente est&aacute; irregular.", "checklistpublicacao/listas?tipoFiltro=finalizados", "ERROR");
     }
 
     function assinaturasImprimirChecklistAction() {
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $nomeUsuario = $auth->getIdentity()->usu_nome;
         $this->view->nomeUsuario = $nomeUsuario;
         $this->view->idPronac = $this->_request->getParam("idPronac");
@@ -729,7 +710,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
     }
 
     function gravarFinalizacaoAnaliseAction() {
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $usuario = $auth->getIdentity()->usu_codigo;
 
         $idpronac = $this->_request->getParam("idpronac");
@@ -774,20 +755,20 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
                     $rsVP->dtFinalizado = new Zend_Db_Expr('GETDATE()');
                     $rsVP->save();
                 }
-                parent::message("An�lise finalizada com sucesso!", "checklistpublicacao/listas", "CONFIRM");
+                parent::message("An&aacute;lise finalizada com sucesso!", "checklistpublicacao/listas", "CONFIRM");
 
             } catch (Exception $e){
-                parent::message("Erro ao atualizar informa��es! Opera��o n�o realizada.", "checklistpublicacao/listas", "ERROR");
+                parent::message("Erro ao atualizar informa&ccedil;&otilde;es! Opera&ccedil;&atilde;o n&atilde;o realizada.", "checklistpublicacao/listas", "ERROR");
             }
         }
-        parent::message("Erro ao atualizar informa��es! Pronac n�o encontrado.", "checklistpublicacao/listas", "ERROR");
+        parent::message("Erro ao atualizar informa&ccedil;&otilde;es! Pronac n&atilde;o encontrado.", "checklistpublicacao/listas", "ERROR");
     }
 
     function gravarAlteracaoProjetoAction()
     {
         $this->_helper->layout->disableLayout();
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
-        $auth = Zend_Auth::getInstance(); // pega a autentica��o
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+        $auth = Zend_Auth::getInstance(); // pega a autenticacao
 
         $post = Zend_Registry::get('post');
         $idpronac = $post->idpronac;
@@ -865,7 +846,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
         {
             $this->_helper->json(array('error' => true, "msg" => "Erro ao atualizar informa&ccedil;&otilde;es! As altera&ccedil;&otilde;es n&atilde;o foram salvas. ".$e->getMessage()));
             $this->_helper->viewRenderer->setNoRender(TRUE);
-            //parent::message("Erro ao atualizar informa��es! Opera��o n�o realizada. ".$e->getMessage(), "checklistpublicacao/", "ERROR");
+            //parent::message("Erro ao atualizar informacoes! Operacao nao realizada. ".$e->getMessage(), "checklistpublicacao/", "ERROR");
         }
     }
 
@@ -947,14 +928,14 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
 
             if (count($tipoaprovacaoComplementacao) > 0)
             {
-                $dadosReadequacao['Tipo'] = ('Valor Complementa��o (R$):');
+                $dadosReadequacao['Tipo'] = ('Valor Complementa&ccedil;&atilde;o (R$):');
                 $dadosReadequacao['ReadCompl'] = number_format($tipoaprovacaoComplementacao['soma'], '2', ',', '.');
             }
             else
             {
                 if (count($tipoaprovacaoReadequacao) > 0)
                 {
-                    $dadosReadequacao['Tipo'] = ('Valor Readequa��o (R$):');
+                    $dadosReadequacao['Tipo'] = ('Valor Readequa&ccedil;&atilde;o (R$):');
                     $dadosReadequacao['ReadCompl'] = number_format($tipoaprovacaoReadequacao['soma'], '2', ',', '.');
                 }
             }
@@ -989,14 +970,14 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
 
         if (count($tipoaprovacaoComplementacao) > 0)
         {
-            $dadosReadequacao['Tipo'] = ('Valor Complementa��o (R$):');
+            $dadosReadequacao['Tipo'] = ('Valor Complementa&ccedil;&atilde;o (R$):');
             $dadosReadequacao['ReadCompl'] = number_format($tipoaprovacaoComplementacao['soma'], '2', ',', '.');
         }
         else
         {
             if (count($tipoaprovacaoReadequacao) > 0)
             {
-                $dadosReadequacao['Tipo'] = ('Valor Readequa��o (R$):');
+                $dadosReadequacao['Tipo'] = ('Valor Readequa&ccedil;&atilde;o (R$):');
                 $dadosReadequacao['ReadCompl'] = number_format($tipoaprovacaoReadequacao['soma'], '2', ',', '.');
             }
         }
@@ -1114,7 +1095,7 @@ class ChecklistPublicacaoController extends MinC_Controller_Action_Abstract
                     $rsVerificaProjeto->save();
                 }
             }
-            parent::message("Projeto(s) redistribu�do(s) com sucesso!", "checklistpublicacao/listas" , "CONFIRM");
+            parent::message("Projeto(s) redistribu&iacute;do(s) com sucesso!", "checklistpublicacao/listas" , "CONFIRM");
             return;
 
         } // fecha try

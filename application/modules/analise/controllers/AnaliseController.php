@@ -9,6 +9,8 @@ class Analise_AnaliseController extends Analise_GenericController
     private $codGrupo = null;
     private $codOrgao = null;
 
+    const PERCENTUAL_MINIMO_CAPTACAO_PARA_ANALISE = 10;
+
     public function init()
     {
         parent::init();
@@ -277,7 +279,7 @@ class Analise_AnaliseController extends Analise_GenericController
                 $this->enviarEmail($idPronac, $params['observacao']);
 
                 $situacao = Projeto_Model_Situacao::PROJETO_LIBERADO_PARA_AJUSTES;
-                $providenciaTomada = 'Projeto liberado para o proponente adequar &agrave; realidade de execu&ccedil;&atilde;o,n&atilde;o podendo representar aumento de custo e observando as veda&ccedil;&otilde;es do Art. 42, conforme o Art. 72 da Instru&ccedil;&atilde;o Normativa.';
+                $providenciaTomada = 'Projeto liberado para o proponente adequar &agrave; realidade de execu&ccedil;&atilde;o, n&atilde;o podendo representar aumento de custo e observando as veda&ccedil;&otilde;es do Art. 42, conforme o Art. 72 da Instru&ccedil;&atilde;o Normativa.';
 
                 $tbProjetos->alterarSituacao($params['idpronac'], '', $situacao, $providenciaTomada);
 
@@ -319,11 +321,16 @@ class Analise_AnaliseController extends Analise_GenericController
 
                     $providenciaTomada = "O Projeto aguardar&aacute; o percentual m&iacute;nimo de capta&ccedil;&atilde;o e depois ser&aacute; encaminhado para unidade vinculada!";
 
-                    if ($percentualCaptado >= 10) {
+                    $preProjeto = new Proposta_Model_DbTable_PreProjeto();
+                    $dadosPreProjeto = $preProjeto->findBy(array('idPreProjeto' => $idPreProjeto));
+
+
+                    if (($percentualCaptado >= self::PERCENTUAL_MINIMO_CAPTACAO_PARA_ANALISE)
+                        OR (!empty($dadosPreProjeto['stProposta']) && $dadosPreProjeto['stProposta'] != 610)) {
 
                         # alterar a situacao do projeto
                         $situacao = Projeto_Model_Situacao::ENCAMINHADO_PARA_ANALISE_TECNICA;
-                        $providenciaTomada = 'Projeto encamihado a unidade vinculada para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico';
+                        $providenciaTomada = 'Projeto encamihado &agrave; unidade vinculada para an&aacute;lise e emiss&atilde;o de parecer t&eacute;cnico';
 
                         $tbProjetos->alterarSituacao($idPronac, '', $situacao, $providenciaTomada);
                     }
@@ -338,7 +345,7 @@ class Analise_AnaliseController extends Analise_GenericController
                     $dados = array(
                         'DtInicioExecucao' => $proposta['DtInicioDeExecucao'],
                         'DtFimExecucao' => $proposta['DtFinalDeExecucao'],
-                        'SolicitadoReal' => $proposta->valorTotalSolicitadoNaProposta($idPreProjeto),
+                        'SolicitadoReal' => $tbProposta->valorTotalSolicitadoNaProposta($idPreProjeto),
                         'Logon' => $Logon
                     );
 
@@ -374,6 +381,7 @@ class Analise_AnaliseController extends Analise_GenericController
             $email = trim(strtolower($d->Email));
             $mens = '<b>Pronac: ' . $d->pronac . ' - ' . $d->NomeProjeto . '<br>Proponente: ' . $d->Destinatario . '<br> </b>' . $Mensagem;
             $assunto = 'Pronac:  ' . $d->pronac . ' - Avaliação adequação do projeto';
+            $assunto = utf8_decode($assunto);
 
             $enviaEmail = EmailDAO::enviarEmail($email, $assunto, $mens);
 

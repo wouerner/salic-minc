@@ -1160,7 +1160,7 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
     public function atualizacaoAction() {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $idpronac = $_POST['idpronac'];
-
+        $IN2017 = $projeto->VerificarIN2017($idpronac);
         $reuniao = new Reuniao();
         $buscareuniao = $reuniao->buscarReuniaoAberta();
         $reuniaoaberta = $buscareuniao['idNrReuniao'];
@@ -1206,9 +1206,10 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
         $analiseaprovacao = new AnaliseAprovacao();
         $buscarPronac = $projeto->buscar(array('IdPRONAC = ?' => $idpronac))->current()->toArray();
         $idprojeto = $buscarPronac['idProjeto'];
-        //antiga busca
-        //$analiseparecer = $parecer->buscarParecer(array(1, 6), $idpronac);
-        //nova busca
+
+        $IN2017 = $projeto->VerificarIN2017($idpronac);
+        $this->view->IN2017 = $IN2017;
+        
         $parecerAtivo = $tblParecer->buscar(array('idPronac=?'=>$idpronac,'stAtivo=?'=>'1'))->current();
         $analiseparecer = $tblParecer->buscar(array('idTipoAgente in (?)'=>array('1','6'), 'TipoParecer=?'=>$parecerAtivo->TipoParecer, 'idPronac=?'=>$idpronac));
 
@@ -1301,8 +1302,11 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
         /**** FIM - CODIGO DE READEQUACAO ****/
 
         $this->view->ResultProduto = $produtos;
-        $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, 'CO');
-        if (count($verificaEnquadramento) > 0) {
+        
+        $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, 'CO', $IN2017);
+        if ($IN2017) {
+            $this->view->enquadramento = $verificaEnquadramento[0]->stArtigo;
+        } else if (!$IN2017) {           
             if ($verificaEnquadramento[0]->stArtigo18 == true) {
                 $this->view->enquadramento = 'Artigo 18';
             } else if ($verificaEnquadramento[0]->stArtigo26 == true) {
@@ -1310,8 +1314,6 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
             } else {
                 $this->view->enquadramento = 'NAO ENQUADRADO';
             }
-        } else {
-            $this->view->enquadramento = 'NAO ENQUADRADO';
         }
         $tbArea = new Area();
         $rsArea = $tbArea->buscar(array('Codigo=?'=>$buscarPronac['Area']))->current();
@@ -1807,7 +1809,7 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
             $count = 0;
             $fonterecurso = null;
             foreach ($buscarplanilha as $resuplanilha) {
-                $produto = $resuplanilha->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['idPlanilhaAprovacao'] = $resuplanilha->idPlanilhaAprovacao;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['idUnidade'] = $resuplanilha->idUnidade;
                 $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Cidade][$count]['nrFonteRecurso'] = $resuplanilha->nrFonteRecurso;
@@ -1855,7 +1857,7 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
             $count = 0;
             $fonterecurso = null;
             foreach($buscarplanilhaCO as $resuplanilha){
-                    $produto = $resuplanilha->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                    $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['idPlanilhaAprovacao'] = $resuplanilha->idPlanilhaAprovacao;
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['idUnidade'] = $resuplanilha->idUnidade;
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['nrFonteRecurso'] = $resuplanilha->nrFonteRecurso;
@@ -1881,7 +1883,7 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
             $resuplanilha = null; $count = 0;
             $buscarplanilhaSR = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'SR', $arrBuscaPlanilha);
             foreach($buscarplanilhaSR as $resuplanilha){
-                    $produto = $resuplanilha->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                    $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
 
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['diasprop'] = $resuplanilha->qtDias;
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['quantidadeprop'] = $resuplanilha->qtItem;
@@ -1902,7 +1904,7 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
             $resuplanilha = null; $count = 0;
             $buscarplanilhaPA = $tblPlanilhaAprovacao->buscarAnaliseCustosPlanilhaAprovacao($idpronac, 'PA', $arrBuscaPlanilha);
             foreach($buscarplanilhaPA as $resuplanilha){
-                    $produto = $resuplanilha->Produto == null ? 'Adminitra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
+                    $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['UnidadeProjeto'] = $resuplanilha->Unidade;
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['quantidadeparc'] = $resuplanilha->qtItem;
                     $planilhaaprovacao[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa.' - '.$resuplanilha->Etapa][$resuplanilha->UF.' - '.$resuplanilha->Cidade][$count]['ocorrenciaparc'] = $resuplanilha->nrOcorrencia;

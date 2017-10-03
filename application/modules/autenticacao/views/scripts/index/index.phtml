@@ -40,6 +40,7 @@
                               method="POST"
                               action="<?php echo $this->url(array('module' => 'autenticacao', 'controller' => 'index', 'action' => 'login'), null, true); ?>">
                             <div class="row">
+                                <input type="hidden" name="from" value="<?php echo $this->from; ?>" />
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix">account_circle</i>
                                     <!--                                <input id="email" type="password" class="validate">-->

@@ -1483,13 +1483,15 @@
             <?php if($this->dadosRecurso->tpSolicitacao == 'EN' || $this->dadosRecurso->tpSolicitacao == 'EO' || $this->dadosRecurso->tpSolicitacao == 'OR' || $this->dadosRecurso->tpSolicitacao == 'PI'){ ?>
 
             <?php $habilitarAnaliseDeCusto = false; ?>
-            <?php foreach ($this->produtosRecurso as $produto){
-                if($produto->stPrincipal){ //Verifica se é o produto principal
-                    if($produto->ParecerFavoravel){ //Verifica se o parecer desse produto principal é favorável
-                        $habilitarAnaliseDeCusto = true;
+            <?php if(isset($this->produtosRecurso)) : ?>
+                <?php foreach ($this->produtosRecurso as $produto){
+                    if($produto->stPrincipal){ //Verifica se é o produto principal
+                        if($produto->ParecerFavoravel){ //Verifica se o parecer desse produto principal é favorável
+                            $habilitarAnaliseDeCusto = true;
+                        }
                     }
-                }
-            } ?>
+                } ?>
+            <?php endif; ?>
             
             <script type="text/javascript">
                 $(document).ready(function(){

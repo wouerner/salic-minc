@@ -1844,7 +1844,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
 
                 // atribui o nome do produto
                 $nomeProduto = isset($buscarProdutoSR[0]['dsProduto']) ? $buscarProdutoSR[0]['dsProduto'] : $buscarProdutoAP[0]['dsProduto'];
-                $nomeProduto = !empty($nomeProduto) ? $nomeProduto : 'Adminitra&ccedil;&atilde;o do Projeto';
+                $nomeProduto = !empty($nomeProduto) ? $nomeProduto : 'Administra&ccedil;&atilde;o do Projeto';
 
                 // pega a planilha aprovada e a planilha solicitada com os itens de custo do produto
                 $orderPlanilha = array('PAP.NrFonteRecurso ASC', 'PAP.idProduto ASC', 'PAP.idEtapa ASC', 'FED.Sigla ASC', 'CID.Descricao ASC', 'I.Descricao ASC');
@@ -1863,7 +1863,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
                 $planAP = array();
                 $cont = 0;
                 foreach ($buscarAP as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planAP[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -1890,7 +1890,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
                 $planSR = array();
                 $cont = 0;
                 foreach ($buscarSR as $r) :
-                    $produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+                    $produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
                     $planSR[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -2640,7 +2640,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
 		$plan = array();
 		$cont = 0;
 		foreach ($buscar as $r) :
-			$produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+			$produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
 			$plan[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
 			$plan[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
 			$plan[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;
@@ -2700,7 +2700,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
 		$plan = array();
 		$cont = 0;
 		foreach ($buscar as $r) :
-			$produto = empty($r->Produto) ? 'Adminitra&ccedil;&atilde;o do Projeto' : $r->Produto;
+			$produto = empty($r->Produto) ? 'Administra&ccedil;&atilde;o do Projeto' : $r->Produto;
 			$plan[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['idPlanilhaAprovacao'] = $r->idPlanilhaAprovacao;
 			$plan[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['nrFonteRecurso']      = $r->nrFonteRecurso;
 			$plan[$r->FonteRecurso][$produto][$r->idEtapa . ' - ' . $r->Etapa][$r->UF . ' - ' . $r->Cidade][$cont]['FonteRecurso']        = $r->FonteRecurso;

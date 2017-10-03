@@ -5,7 +5,7 @@
     </tr>
     <tr>
         <td id="HPronac"><?php echo $this->PRONAC; ?></td>
-        <td id="HnomeProjeto"><?php echo utf8_decode(htmlentities($this->NomeProjeto)); ?></td>
+        <td id="HnomeProjeto"><?php echo $this->NomeProjeto; ?></td>
     </tr>
 </table>
 <br />
@@ -21,9 +21,9 @@
                 foreach ($this->Historico as $chave => $dadosHis ) { ?>
                 <tr>
                     <td id="Pronac"><?php if ($dadosHis->dtInicioEncaminhamento == '') { echo '---'; } else { echo Data::tratarDataZend($dadosHis->dtInicioEncaminhamento, 'Brasileira'); } ?></td>
-                    <td id="nomeProjeto"><?php echo utf8_decode(htmlentities($dadosHis->NomeOrigem)); ?></td>
-                    <td id="remetente"><?php echo utf8_decode(htmlentities($dadosHis->NomeDestino)); ?></td>
-                    <td id="destinatario"><?php echo utf8_decode(htmlentities($dadosHis->dsJustificativa)); ?></td>
+                    <td id="nomeProjeto"><?php echo $dadosHis->NomeOrigem ?></td>
+                    <td id="remetente"><?php echo $dadosHis->NomeDestino ?></td>
+                    <td id="destinatario"><?php echo $dadosHis->dsJustificativa ?></td>
                 </tr>
         <?php   } ?>
         <?php }else{ ?>

@@ -1,0 +1,117 @@
+<?php
+
+$menuX = !empty($_GET['menu']) ? $_GET['menu'] : 0;
+if ($menuX != 1) {
+    echo $this->partial('alterarprojeto/inc/menu.inc.php', $this);
+}
+?>
+
+<!-- ========== INÍCIO BREADCRUMB (LINKS TOPO) ========== -->
+<div id="breadcrumb">
+    <ul>
+        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>"
+                             title="Ir para p&aacute;gina inicial">Início</a></li>
+        <li><!--a href="<?php echo $this->baseUrl(); ?>" title="Início"-->Manuten&ccedil;&atilde;o<!--/a--></li>
+        <li><a href="<?php echo $this->url(array('controller' => 'alterarprojeto', 'action' => 'consultarprojeto')); ?>"
+               title="Ir para alterar projeto">Alterar projeto</a></li>
+        <li class="last">Alterar plano de execu&ccedil;&atilde;o imediata</li>
+    </ul>
+</div>
+<!-- ========== FIM BREADCRUMB (LINKS TOPO) ========== -->
+
+
+<!-- ========== BUTTON VOLTAR ========== -->
+<div id="titulo">
+    <div>Alterar plano de execu&ccedil;&atilde;o imediata <span class="voltar"><a href="javascript:voltar();"
+                                                                                  title="Ir para p&aacute;gina anterior">Voltar</a></span>
+    </div>
+</div>
+<!-- ========== FIM TÍTULO ========== -->
+
+
+<!-- ========== GRID NOME DA PROPOSTA ========== -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#formularioAtualiza").validate({
+            // Define as regras
+            rules: {
+                stProposta: {
+                    required: true
+                }
+            },
+            // Define as mensagens de erro para cada regra
+            messages: {
+                stProposta: {
+                    required: "Dados obrigat&oacute;rios n&atilde;o informados"
+                }
+            }
+        });
+    });
+
+    function abrir_fechar(id_div) {
+        $('#' + id_div).slideToggle(400);
+        $('#maiss' + id_div).toggle().focus();
+        $('#menoss' + id_div).toggle().focus();
+    }
+</script>
+
+<div id="conteudo">
+    <form name="formularioAtualiza"
+          id="formularioAtualiza"
+          method="post"
+          action="<?= $this->url(array('controller' => 'alterarprojeto', 'action' => 'salvar-execucao-imediata')); ?>">
+        <input type="hidden" name="pronac" value="<?= $this->pronac ?>"/>
+        <input type="hidden" name="idPronac" value="<?= $this->idPronac?>"/>
+        <input type="hidden" name="idPreProjeto" value="<?= $this->proposta->idPreProjeto; ?>"/>
+        <input type="hidden" name="pagina" value="situacao"/>
+        <table class="tabela">
+            <tr>
+                <th colspan="2" class="centro">Identifica&ccedil;&atilde;o</th>
+            </tr>
+            <tr class="destacar centro bold">
+                <td width="200">PRONAC</td>
+                <td>Nome do Projeto</td>
+            </tr>
+            <tr>
+                <td align="left-align"><?php echo $this->parecer->pronac; ?></td>
+                <td align="left-align"><?php echo $this->parecer->NomeProjeto; ?></td>
+            </tr>
+            <tr class="destacar centro bold">
+                <td>Data Situa&ccedil;&atilde;o Atual</td>
+                <td>Situa&ccedil;&atilde;o Atual</td>
+            </tr>
+            <tr>
+                <td align="left-align"><?php echo ConverteData(strtotime($this->parecer->DtSituacao), 5) ?></td>
+                <td align="left-align"><?php echo $this->parecer->Situacao . " - " . $this->parecer->dsSituacao ?></td>
+            </tr>
+        </table>
+
+        <table class="tabela">
+            <tr>
+                <td width="200" class="destacar bold" align="right">Plano de Execu&ccedil;&atilde;o imediata</td>
+                <td>
+                    <select class="select_simples" obrigatorio="1" name="stProposta" id="stProposta">
+                        <?php foreach ($this->listaExecucaoImediata as $key => $execucao) : ?>
+                            <option value="<?php echo $key; ?>"
+                                <?= ($this->proposta->stProposta == $key) ? "selected" : ''; ?>>
+                                <?= $execucao; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <table class="tabela">
+            <tr>
+                <td class="centro">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Salvar
+                        <i class="material-icons right">send</i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+    </form>
+</div>
+

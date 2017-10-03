@@ -11,6 +11,29 @@ class Assinatura_Model_TbAssinatura extends MinC_Db_Model
     protected $_IdCargo;
 
     /**
+     * @var int $_idAtoAdministrativo
+     */
+    protected $_idAtoAdministrativo;
+
+    /**
+     * @return int
+     */
+    public function getIdAtoAdministrativo()
+    {
+        return $this->_idAtoAdministrativo;
+    }
+
+    /**
+     * @param int $idAtoAdministrativo
+     * @return Assinatura_Model_TbAssinatura
+     */
+    public function setIdAtoAdministrativo($idAtoAdministrativo)
+    {
+        $this->_idAtoAdministrativo = $idAtoAdministrativo;
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getIdAssintura()

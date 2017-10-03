@@ -455,7 +455,7 @@ endif;
                         <td>
                             <div>
                                 <div tipo="etapa" fonte="<?php echo $nrfonte;?>" produto="<?php echo $nrproduto; ?>" etapa="<?php echo $nretapa; ?>" aberto="true" class="icn_menos" style="width:80%; margin-left:4%; "><span class="orange del_link" style="font-size: 14pt; font-weight: 800;"><?php echo $etapa; ?></span></div>
-                                <?php if(array_key_exists($produto,$this->produtosFavoraveis)): ?>
+                                <?php if(array_key_exists($produto,$this->produtosFavoraveis) && !$this->VerificarIN2017($this->projeto->IdPRONAC)): ?>
                                     <div id="icnReintegrarEtapa" style="float: right;"><input type="button" class="btn_reintegrar reintegrarEtapa" value=" " onclick="JSReintegrarEtapa('<?php echo $nrproduto;?>','<?php echo $nretapa;?>')"></div>
                                 <?php endif; ?>
                             </div>
@@ -502,7 +502,7 @@ endif;
                                             <tr class="item" <?php echo $planilha['reducao'] == 1 ? "style='color : red;'" : 0; ?> id="scroll<?php echo $planilha['idPlanilhaAprovacao']; ?>">
                                                 <td><?php echo $item; ?></td>
                                                 <td>
-                                                    <?php if(array_key_exists($produto,$this->produtosFavoraveis)): ?>
+						  <?php if(array_key_exists($produto,$this->produtosFavoraveis) && !$this->VerificarIN2017($this->projeto->IdPRONAC)): ?>
                                                         <a <?php echo $planilha['nrFonteRecurso'] == 109 ? "class='linkplanilha' valor='".$planilha['idPlanilhaAprovacao']."' style='text-decoration: underline; cursor:pointer;'" : '' ?> idPlanilhaAprovacao ="<?php echo $planilha['idPlanilhaAprovacao']; ?>"  idProduto="<?php echo $planilha['idProduto']; ?>"  idEtapa="<?php echo $planilha['idEtapa']; ?>" idPlanilhaItem="<?php echo $planilha['idPlanilhaItem']; ?>" etapa="<?php echo $etapa; ?>"  name="<?php echo $planilha['idPlanilhaAprovacao']; ?>" ><?php echo $planilha['item']; ?></a>
                                                     <?php else: ?>
                                                         <?php echo $planilha['item']; ?>

@@ -124,7 +124,13 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
 //        $select->joinInner(array('PreProjeto' => 'PreProjeto'), 'PreProjeto.idPreProjeto = Projetos.idProjeto', array(), $this->_schema);
         $select->joinInner(array('Area' => 'Area'), 'Area.Codigo = Projetos.Area', array('Area.Descricao AS area'), $this->_schema);
         $select->joinLeft(array('Segmento' => 'Segmento'), 'Segmento.Codigo = Projetos.Segmento', array('Segmento.Descricao AS segmento'), $this->_schema);
-        $select->where("Projetos.situacao in ( ? )", array('B01', 'B03'));
+        $select->where("Projetos.situacao in ( ? )",
+            array(
+                'B01',
+                'B03',
+                Projeto_Model_Situacao::PROJETO_DEVOLVIDO_PARA_ENQUADRAMENTO
+            )
+        );
         $select->where("Projetos.Orgao in ( ? )", $codOrgao);
 //        $select->where("( PreProjeto.AreaAbrangencia = 0 AND 251 = {$codOrgaoSuperior} OR PreProjeto.AreaAbrangencia = 1 AND 160 = {$codOrgaoSuperior} )");
 
@@ -215,7 +221,13 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         $select->joinInner(array('Area' => 'Area'), 'Area.Codigo = Projetos.Area', array('Area.Descricao AS area'), $this->_schema);
         $select->joinLeft(array('Segmento' => 'Segmento'), 'Segmento.Codigo = Projetos.Segmento', array('Segmento.Descricao AS segmento'), $this->_schema);
 
-        $select->where("Projetos.situacao in ( ? )", array('B01', 'B03'));
+        $select->where("Projetos.situacao in ( ? )",
+            array(
+                'B01',
+                'B03',
+                Projeto_Model_Situacao::PROJETO_DEVOLVIDO_PARA_ENQUADRAMENTO
+            )
+        );
         $select->where("Projetos.Orgao = ?", $codOrgao);
         $select->where("tbAvaliacaoProposta.stEstado = ?", array('0'));
         $select->where("tbAvaliacaoProposta.idTecnico = ?", array($id_usuario));
@@ -234,8 +246,9 @@ class Admissibilidade_Model_Enquadramento extends MinC_Db_Table_Abstract
         $queryDesistenciaRecursal->setIntegrityCheck(false);
         $queryDesistenciaRecursal->from(array('tbRecurso' => 'tbRecurso'), array('idRecurso'), $this->getSchema("SAC.dbo"));
         $queryDesistenciaRecursal->where("tpSolicitacao = ?", "DR");
-        $queryDesistenciaRecursal->where("siRecurso = ?", 15);
+        $queryDesistenciaRecursal->where("siRecurso = ?", TbTipoEncaminhamento::DESISTENCIA_DO_PRAZO_RECURSAL);
         $queryDesistenciaRecursal->where("stEstado = ?", 1);
+        $queryDesistenciaRecursal->where("siFaseProjeto = ?", 1);
         $queryDesistenciaRecursal->where("IdPRONAC = ?", $idPronac);
         
         return ($this->_db->fetchOne($queryDesistenciaRecursal)) ? $this->_db->fetchOne($queryDesistenciaRecursal) : false;

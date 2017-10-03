@@ -1,12 +1,6 @@
 <?php
 
-/**
- * AgentesControllerTest
- *
- * @author wouerner <woeurner@gmail.como>
- * @author anderson <anderson.asp.si@gmail.com>
- */
-class MensagemControllerTest extends MinC_Test_ControllerActionTestCase
+class RecursoCoordenadorControllerTest extends MinC_Test_ControllerActionTestCase
 {
 
     /**

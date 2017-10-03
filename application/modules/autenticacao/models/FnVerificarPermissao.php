@@ -22,7 +22,7 @@ class Autenticacao_Model_FnVerificarPermissao extends MinC_Db_Table_Abstract {
      * @param mixed $idPreProjeto
      * @param mixed $idUsuarioLogado
      * @access public
-     * @return void
+     * @return mixed
      * @todo Verificar local para metodo.
      * SAC.dbo.fnVerificarPermissao --> SP removida
      */
@@ -114,47 +114,48 @@ class Autenticacao_Model_FnVerificarPermissao extends MinC_Db_Table_Abstract {
                     $permissao = 0;
                 }
             } else {
-                $sql = $db->select()
-                    ->from(array('a' => 'vinculacao'), null, $this->getSchema('agentes'))
-                    ->join(array('b' => 'agentes'), '(a.idagente = b.idagente)', 'b.cnpjcpf', $this->getSchema('agentes'))
-                    ->join(array('c' => 'agentes'), '(a.idvinculoprincipal = c.idagente)', null, $this->getSchema('agentes'))
-                    ->join(array('d' => 'visao'), '(d.idagente = a.idagente)', null, $this->getSchema('agentes'))
-                    ->where('b.cnpjcpf = ?', $cpfLogado )
-                    ->where('c.cnpjcpf = ?', $cpfCnpjProponente)
-                    ->where('d.visao = 198')
-                    ;
 
+                if (!empty($cpfCnpjProponente)) {
+                    $sql = $db->select()
+                        ->from(array('a' => 'vinculacao'), null, $this->getSchema('agentes'))
+                        ->join(array('b' => 'agentes'), '(a.idagente = b.idagente)', 'b.cnpjcpf', $this->getSchema('agentes'))
+                        ->join(array('c' => 'agentes'), '(a.idvinculoprincipal = c.idagente)', null, $this->getSchema('agentes'))
+                        ->join(array('d' => 'visao'), '(d.idagente = a.idagente)', null, $this->getSchema('agentes'))
+                        ->where('b.cnpjcpf = ?', $cpfLogado)
+                        ->where('c.cnpjcpf = ?', $cpfCnpjProponente)
+                        ->where('d.visao = 198');
                     $dirigenteCpf = $db->fetchOne($sql);
+                }
 
-                    if (!empty($dirigenteCpf)) {
-                       //IF @CPF_Logado = @CPF_Dirigente or @idUsuario_Responsavel = @idUsuario_Logado
-                        if ($cpfLogado == $dirigenteCpf || $agente['idusuario'] == $idUsuarioLogado) {
-                            $permissao = 1;
-                        } else {
-                            $permissao = 0;
-                        }
+                if (!empty($dirigenteCpf)) {
+                   //IF @CPF_Logado = @CPF_Dirigente or @idUsuario_Responsavel = @idUsuario_Logado
+                    if ($cpfLogado == $dirigenteCpf || $agente['idusuario'] == $idUsuarioLogado) {
+                        $permissao = 1;
                     } else {
                         $permissao = 0;
                     }
+                } else {
+                    $permissao = 0;
+                }
 
-                    if ($permissao == 0) {
-                        $sql = $db->select()
-                            ->from(array('a' => 'preprojeto'), 'a.idAgente', $this->getSchema('sac'))
-                            ->join(array('b' => 'agentes'), '(a.idAgente = b.idAgente)', null, $this->getSchema('agentes'))
-                            ->join(array('c' => 'tbvinculoproposta'), '(a.idPreProjeto = c.idPreProjeto)', null, $this->getSchema('agentes'))
-                            ->join(array('d' => 'tbvinculo'), '(c.idVinculo = d.idVinculo)', null, $this->getSchema('agentes'))
-                            ->join(array('e' => 'sgcacesso'), '(d.idUsuarioResponsavel = e.idUsuario)', null, $this->getSchema('controledeacesso'))
-                            ->where('c.siVinculoProposta = 2')
-                            ->where('e.IdUsuario = ?', $idUsuarioLogado)
-                            ->where('a.idPreProjeto = ?', $idPreProjeto)
-                        ;
+                if ($permissao == 0) {
+                    $sql = $db->select()
+                        ->from(array('a' => 'preprojeto'), 'a.idAgente', $this->getSchema('sac'))
+                        ->join(array('b' => 'agentes'), '(a.idAgente = b.idAgente)', null, $this->getSchema('agentes'))
+                        ->join(array('c' => 'tbvinculoproposta'), '(a.idPreProjeto = c.idPreProjeto)', null, $this->getSchema('agentes'))
+                        ->join(array('d' => 'tbvinculo'), '(c.idVinculo = d.idVinculo)', null, $this->getSchema('agentes'))
+                        ->join(array('e' => 'sgcacesso'), '(d.idUsuarioResponsavel = e.idUsuario)', null, $this->getSchema('controledeacesso'))
+                        ->where('c.siVinculoProposta = 2')
+                        ->where('e.IdUsuario = ?', $idUsuarioLogado)
+                        ->where('a.idPreProjeto = ?', $idPreProjeto)
+                    ;
 
-                        $idAgente = $db->fetchRow($sql);
+                    $idAgente = $db->fetchRow($sql);
 
-                        if (!empty($idAgente)) {
-                            $permissao = 1;
-                        }
+                    if (!empty($idAgente)) {
+                        $permissao = 1;
                     }
+                }
             }
             break;
         case 2 :
@@ -225,11 +226,12 @@ class Autenticacao_Model_FnVerificarPermissao extends MinC_Db_Table_Abstract {
                 $permissao = 0;
             }
             break;
+        default:
+            $permissao = 0;
+            break;
         }
-        $perm = new stdClass();
-        $perm->Permissao = ($permissao == 0) ? 0 : 1;
 
-        return  $perm;
+        return $permissao;
     }
 
     public function verificarPermissaoAdministrativo($idUsuarioLogado) {
