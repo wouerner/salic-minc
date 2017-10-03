@@ -237,7 +237,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         }
         $dados['DtSituacao'] = date('Y-m-d H:i:s');
         $dados['ProvidenciaTomada'] = 'PROJETO APROVADO NA CNIC N&ordm ' . $buscarnrreuniaoprojeto->NrReuniao . ' - ' . $buscarsituacao['Descricao'];
-        $dados['Logon'] = $auth->getIdentity()->usu_codigo;
+        $dados['Logon'] = $this->auth->getIdentity()->usu_codigo;
         $where = "IdPRONAC = " . $idpronac;
         $tblProjetos->alterar($dados, $where);
         
