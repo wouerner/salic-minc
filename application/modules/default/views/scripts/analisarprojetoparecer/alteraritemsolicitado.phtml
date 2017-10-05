@@ -65,12 +65,15 @@ header("Pragma: no-cache");
         </tr>
         <tr valign="top">
             <td>
-                <label for="unidade"><strong>Unidade:</strong></label><br />
+            <label for="unidade"><strong>Unidade:</strong></label><br />
                 <select class="input_simples" name="idUnidade" id="unidade">
                     <?php foreach ($this->planilhaUnidade as $unidade) : ?>
-                        <option value="<?php echo $unidade->idUnidade; ?>" <?php if ($unidade->idUnidade == $this->dadosItem['idUnidade'])
-                            echo "selected=\"selected\""; ?>>
-                                    <?php echo ($unidade->Descricao); ?>
+                        <option value="<?php echo $unidade->idUnidade; ?>" 
+                            <?php if ($unidade->idUnidade == $this->dadosItem['idUnidade']): ?>
+                                 selected="selected"
+                            <?php endif; ?>
+                        >
+                            <?php echo ($unidade->Descricao); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
