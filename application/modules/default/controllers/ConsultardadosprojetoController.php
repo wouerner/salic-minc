@@ -2304,7 +2304,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $spVisualizarPlanilhaOrcamentaria = new spVisualizarPlanilhaOrcamentaria();
             $planilhaOrcamentaria = $spVisualizarPlanilhaOrcamentaria->exec($idPronac);
         }
-        //print_r($planilhaOrcamentaria);die;
+        
         $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, self::TIPO_PLANILHA_REMANEJADA);
         
         $this->view->planilha = $planilha;
@@ -2431,10 +2431,19 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $dadosReadequacao['dsJustificativa'] = utf8_decode('Readequação até 50%');
             $dadosReadequacao['stAtendimento'] = 'D';
             $dadosReadequacao['siEncaminhamento'] = 11;
-            $dadosReadequacao['stEstado'] = 1;
-            $idReadequacao = $tbReadequacao->inserir($dadosReadequacao);
-
-            if($idReadequacao > 0){
+            $dadosReadequacao['stEstado'] = 0;
+            $update = $tbReadequacao->update(
+                $dadosReadequacao,
+                array(
+                    'idPronac=?' => $idPronac,
+                    'idTipoReadequacao=?' => self::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                    'stAtendimento=?' => 'D',
+                    'siEncaminhamento=?' => 11,
+                    'stEstado=?' => 1
+                )
+            );
+            
+            if($update > 0){
                 $d = array('stAtivo' => 'S');
                 $w = array('IdPRONAC = ?' => $idPronac, 'tpPlanilha = ?' => 'RP', 'stAtivo = ?' => 'N');
                 $update = $tbPlanilhaAprovacao->update($d, $w);
