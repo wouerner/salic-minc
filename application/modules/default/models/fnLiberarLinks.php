@@ -294,7 +294,6 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract {
                 ->where('a.stEstado = ?', 1);
             
             $vReadequacao = $db->fetchAll($vReadequacao);
-            print_r($vReadequacao);die;
             if(!$vReadequacao->idPronac){
                 $Readequacao_50 = 1;
             } else {
