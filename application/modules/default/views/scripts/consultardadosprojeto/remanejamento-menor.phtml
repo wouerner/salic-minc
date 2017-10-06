@@ -340,12 +340,12 @@
                                         erros++;
                                         var vlComp = parseInt(vlComprovadoDoItemValidacao+'00');
                                         if(vlComp < data.dadosPlanilhaAtiva.ValorMinimoProItemValidacao){
-                                            mensagem += '- O valor total do item n&atilde;o pode ser menor que '+data.dadosPlanilhaAtiva.ValorMinimoProItem+'.<br/>';
+                                            mensagem += '- O valor total do item n&atilde;o pode ser menor que '+data.dadosPlanilhaAtiva.ValorMinimoProItemValidacao+'.<br/>';
                                         }
                                     }
                                     
                                     if(parseInt($('#TotalCalculado').html().replace(/[^\d]/g, "")) > parseInt(valorMaximoValidacao)){
-                                        mensagem += '- O valor total do item n&atilde;o pode ser maior que '+data.dadosPlanilhaAtiva.ValorMaximoProItem+'.<br/>';
+                                        mensagem += '- O valor total do item n&atilde;o pode ser maior que '+data.dadosPlanilhaAtiva.ValorMaximoProItemValidacao+'.<br/>';
                                         erros++;
                                     }
 
