@@ -106,7 +106,7 @@
         
         $('#finalizarRemanejamento').click(function(){
             $("#alerta").dialog("destroy");
-            $("#alerta").html('Deseja realmente finalizar o remanejamento?<br /><br />Ap&oacute;s a confirma&ccedil;&atilde;o, voc&ecirc; n&atilde;o ter&aacute; mais acesso a essa funcionalidade.');
+            $("#alerta").html('Deseja realmente finalizar o remanejamento?<br /><br />');
             $("#alerta").dialog({
                 resizable: false,
                 title: 'Alerta!',
@@ -191,6 +191,9 @@
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
+                        $("#alerta").dialog("destroy");
+                        $("#alerta").html("Aguarde, reintegrando a planilha...");
+                        
                         $.ajax({
                             type: 'POST',
                             url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-reintegrar-planilha'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
