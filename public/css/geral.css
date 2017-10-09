@@ -60,6 +60,7 @@ body {
     background: #f8f8f8;
     color: #000;
     line-height: 14pt;
+    font-size: 1rem;
 }
 
 p {
@@ -196,30 +197,6 @@ x - LOADER
 
 .modal.modal-pre-loader .modal-content {
     padding: 10px;
-}
-/*--------------------------------------------------------------
-x - BARRA GOVERNO
---------------------------------------------------------------*/
-
-.barra_governo, .barra_governo div.fl {
-    width: 100%;
-    /*height:36px;*/
-    /*background:url(../img/gov/bg_barra_governo.gif) 0 0 repeat-x;*/
-}
-
-.barra_governo div.fl {
-    background: url(../img/gov/barra_governo.gif) 0 0 no-repeat;
-}
-
-.barra_governo div.fr {
-    float: right;
-    width: 125px;
-    height: 36px;
-    background: url(../img/gov/aba_direita_barra_gov.gif) 0 0 no-repeat;
-}
-
-.barra_governo div.fr p {
-    margin-top: 5px;
 }
 
 /*--------------------------------------------------------------
@@ -701,32 +678,31 @@ x - CONTEÚDO
 
 #conteudo h1, h2, h3, h4, h5, h6 {
     margin-bottom: 14px;
-    font-weight: normal;
     color: #435f20;
 }
 
-#conteudo h1 {
-    font-size: 28px;
+h1 {
+    font-size: 2.5rem;
 }
 
-#conteudo h2 {
-    font-size: 26px;
+h2 {
+    font-size: 2rem;
 }
 
-#conteudo h3 {
-    font-size: 10px;
+h3 {
+    font-size: 1.75rem;
 }
 
-#conteudo h4 {
-    font-size: 18px;
+h4 {
+    font-size: 1.5rem;
 }
 
-#conteudo h5 {
-    font-size: 16px;
+h5 {
+    font-size: 1.25rem;
 }
 
-#conteudo h6 {
-    font-size: 14px;
+h6 {
+    font-size: 1rem;
 }
 
 #conteudo select {
@@ -2140,6 +2116,9 @@ x - DATE PICKER
     background-color: transparent !important;
     color: #4CAF50;
     font-weight: bold;
+}
+.ui-widget-content {
+    background: #f8f8f8 !important;
 }
 
 .ui-dialog  .ui-widget-content {

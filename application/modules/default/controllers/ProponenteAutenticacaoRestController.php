@@ -41,12 +41,8 @@ class ProponenteAutenticacaoRestController extends Minc_Controller_AbstractRest{
             }
 
             if ($verificaSituacao != 1) {
-                if(md5($password) != $this->validarSenhaInicial()){
-                    $SenhaFinal = EncriptaSenhaDAO::encriptaSenha($username, $password);
-                    $buscar = $Usuario->loginSemCript($username, $SenhaFinal);
-                } else {
-                    $buscar = $Usuario->loginSemCript($username, md5($password));
-                }
+                $SenhaFinal = EncriptaSenhaDAO::encriptaSenha($username, $password);
+                $buscar = $Usuario->loginSemCript($username, $SenhaFinal);
 
                 if(!$buscar){
                     $result->msg = 'CPF ou Senha inv&aacute;lidos!';
@@ -91,15 +87,6 @@ class ProponenteAutenticacaoRestController extends Minc_Controller_AbstractRest{
         $authorization = Seguranca::encrypt($this->publicKey. $usuario->Cpf. $this->publicKey, $this->encryptHash);
 
         return $authorization;
-    }
-
-    /**
-     * Define senha inicial para cadastros incompletos.
-     *
-     * @return string
-     */
-    public static function validarSenhaInicial(){
-        return MinC_Controller_Action_Abstract::validarSenhaInicial();
     }
 
     public function indexAction(){}

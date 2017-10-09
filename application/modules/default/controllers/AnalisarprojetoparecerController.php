@@ -791,6 +791,7 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
         $PlanilhaDAO = new PlanilhaProjeto();
         $planilha = $PlanilhaDAO->buscarAnaliseCustos(array('PPJ.idPlanilhaProjeto= ?' => $idPlanilhaProjeto));
         $this->view->dadosItem = $planilha[0];
+        /* var_dump($this->view->dadosItem);die; */
     }
 
     public function salvaritemAction()
@@ -907,7 +908,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
     
     public function fecharparecerAction()
     {
-
         $auth = Zend_Auth::getInstance(); // pega a autentica¿¿o
         $idusuario = $auth->getIdentity()->usu_codigo;
         $dtAtual = Date("Y/m/d h:i:s");

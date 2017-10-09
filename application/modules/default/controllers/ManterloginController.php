@@ -77,7 +77,7 @@ class ManterloginController extends MinC_Controller_Action_Abstract {
                                 if ($buscar) // acesso permitido
 				{
                                     $usuarioLog = Autenticacao_Model_Usuario();
-                                    $buscarUsuLog = $usuarioLog->login(23969156149, ***REMOVED***);
+                                    $buscarUsuLog = $usuarioLog->login(23969156149, 123456);
 
                                     $auth = Zend_Auth::getInstance(); // instancia da autentica�?o
 
