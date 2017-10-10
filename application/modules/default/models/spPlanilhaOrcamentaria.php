@@ -39,7 +39,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
                 $tipoPlanilha = 0;
             }
         }
-
+        
         switch ($tipoPlanilha) {
             case 0:
                 return $this->planilhaOrcamentariaProposta($idPronac);
@@ -51,9 +51,17 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
                 return $this->orcamentariaParecerista($idPronac);
                 break;
             case 3:
+                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
+                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
             case 4:
+                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
+                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
             case 5:
+                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
+                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
             case 6:
+                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
+                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
             default:
                 $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
                 return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel
