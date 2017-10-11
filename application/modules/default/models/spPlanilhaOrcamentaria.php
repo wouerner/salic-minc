@@ -51,17 +51,13 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
                 return $this->orcamentariaParecerista($idPronac);
                 break;
             case 3:
-                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
-                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
+                return $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
             case 4:
-                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
-                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
+                return $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
             case 5:
-                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
-                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
+                return $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
             case 6:
-                $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
-                return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel                
+                return $this->execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha);
             default:
                 $spVisualizarPlanilha = new Projeto_Model_spVisualizarPlanilhaOrcamentaria();
                 return $spVisualizarPlanilha->exec($idPronac); // @todo: atualmente o codigo migrado apresenta algumas divergencias, usar a sp agora e migrar assim que possivel
@@ -746,5 +742,11 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
             ;
         }
         return $db->fetchAll($sql);
+    }
+
+    public function execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha)
+    {
+        $sql = "exec ".$this->_schema.".".$this->_name." $idPronac, $tipoPlanilha";
+        return $this->getAdapter()->fetchAll($sql);
     }
 }
