@@ -11,6 +11,10 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
     protected $_schema = 'SAC';
     protected $_banco = 'SAC';
 
+    const TIPO_PLANILHA_APROVADA = 3;
+    const TIPO_PLANILHA_REMANEJADA = 5;
+    const TIPO_PLANILHA_COMPLEMENTACAO_REDUCAO = 6;
+    
     public function somarPlanilhaAprovacao($idpronac, $elaboracao=null, $tpPlanilha=null, $where=array()) {
         $somar = $this->select();
         $somar->from(array('PAP' => $this->_name), array(
@@ -2122,6 +2126,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         
         $select->where('idPronac = ?', $idPronac);
         $select->where( 'tpPlanilha = ?', 'RP');
+        $select->where( 'stAtivo = ?', 'N');
         
         return $this->fetchAll($select);
     }

@@ -191,7 +191,7 @@
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
-                        $("#alerta").dialog("destroy");
+                        $(".ui-dialog-buttonpane button").html('');                            
                         $("#alerta").html("Aguarde, reintegrando a planilha...");
                         
                         $.ajax({
