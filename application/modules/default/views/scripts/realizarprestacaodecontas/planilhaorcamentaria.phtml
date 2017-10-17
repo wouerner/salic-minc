@@ -272,7 +272,6 @@
                                         <td class="destacar bold">Situa&ccedil;&atilde;o</td>
                                         <td>
                                             <select name="itemAvaliadoFilter" style="width: 245px;" class="input_simples">
-                                                <option value="0">Todos</option>
                                                 <?php if ($this->codGrupo != 132 && $this->codGrupo != 125) : ?>
                                                     <option value="1" <?php echo $this->itemAvaliadoFilter == 1 ? 'selected="true"' : null; ?>>Aguardando Análise</option>
                                                     <option value="2" <?php echo $this->itemAvaliadoFilter == 2 ? 'selected="true"' : null; ?>>Analisados</option>
