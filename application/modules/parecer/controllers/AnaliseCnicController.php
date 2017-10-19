@@ -248,7 +248,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     private function incluirNaPauta($idPronac, $ConsultaReuniaoAberta) {
         $post = Zend_Registry::get('post');
 
-        $codSituacao = ($this->bln_readequacao == "false") ? 'D03' : 'D02';
+        $codSituacao = ($this->bln_readequacao == "false") ? 'D50' : 'D02';
         $stEnvioPlenaria = isset($post->stEnvioPlenaria) ? 'S' : 'N';
         $justificativa = $post->justificativaenvioplenaria;
         $TipoAprovacao = $post->decisao;
@@ -277,12 +277,9 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 );
                 
                 $tblPauta->inserir($dados);
-                $dadosprojeto = array(
-                    'Situacao' => $situacao,
-                    'DtSituacao' => $dtsituacao,
-                    'ProvidenciaTomada' => $providencia
-                    );
-                $tblProjetos->alterar($dadosprojeto, 'IdPRONAC = ' . $idPronac);
+                
+                $ProvidenciaTomada = 'Projeto apreciado pela Comissão Nacional de Incentivo à Cultura - ';
+                $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada)
                 parent::message("Projeto cadastrado na Pauta com sucesso!", "areadetrabalho/index", "CONFIRM");
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             } else {
