@@ -97,6 +97,30 @@ class Agente_Model_DbTable_Visao extends MinC_Db_Table_Abstract
         return $insert ? true : false;
     }
 
+    public function buscarVisoes($visao = null) {
+
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_ASSOC);
+
+        $objSelect = $db->select();
+        $objSelect->from(
+            array('ver' => 'verificacao'),
+            array('idVerificacao', 'Descricao'),
+            $this->getSchema('agentes')
+        );
+
+        if (!empty($visao)) {
+            $objSelect->where('idVerificacao = ? ', $visao);
+        } else {
+            $objSelect->where('idtipo = ? ', 16);
+            $objSelect->where('sistema = ? ', 21);
+        }
+
+        $objSelect->limit(100);
+
+        return $db->fetchAll($objSelect);
+    }
+
     /**
      * @param integer $idAgente
      * @param array $dados

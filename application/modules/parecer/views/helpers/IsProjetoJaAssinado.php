@@ -16,6 +16,14 @@ class Zend_View_Helper_IsProjetoJaAssinado
 	public function IsProjetoJaAssinado($idPronac, $idTipoDoAtoAdministrativo, $idPerfilDoAssinante)
 	{
         $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+        $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+
+        $documentoAssinatura = $objDocumentoAssinatura->isProjetoDisponivelParaAssinatura($idPronac, $idTipoDoAtoAdministrativo);
+        
+        if (!$documentoAssinatura) {
+            return false;
+        }
+        
         $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
         // verificar quantidade de assinaturas, verificar se idOrdemAssinatura
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');

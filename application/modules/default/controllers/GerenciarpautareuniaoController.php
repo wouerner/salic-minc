@@ -1160,7 +1160,7 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
     public function atualizacaoAction() {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $idpronac = $_POST['idpronac'];
-
+        $IN2017 = $projeto->VerificarIN2017($idpronac);
         $reuniao = new Reuniao();
         $buscareuniao = $reuniao->buscarReuniaoAberta();
         $reuniaoaberta = $buscareuniao['idNrReuniao'];
@@ -1206,9 +1206,10 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
         $analiseaprovacao = new AnaliseAprovacao();
         $buscarPronac = $projeto->buscar(array('IdPRONAC = ?' => $idpronac))->current()->toArray();
         $idprojeto = $buscarPronac['idProjeto'];
-        //antiga busca
-        //$analiseparecer = $parecer->buscarParecer(array(1, 6), $idpronac);
-        //nova busca
+
+        $IN2017 = $projeto->VerificarIN2017($idpronac);
+        $this->view->IN2017 = $IN2017;
+        
         $parecerAtivo = $tblParecer->buscar(array('idPronac=?'=>$idpronac,'stAtivo=?'=>'1'))->current();
         $analiseparecer = $tblParecer->buscar(array('idTipoAgente in (?)'=>array('1','6'), 'TipoParecer=?'=>$parecerAtivo->TipoParecer, 'idPronac=?'=>$idpronac));
 
@@ -1301,8 +1302,11 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
         /**** FIM - CODIGO DE READEQUACAO ****/
 
         $this->view->ResultProduto = $produtos;
-        $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, 'CO');
-        if (count($verificaEnquadramento) > 0) {
+        
+        $verificaEnquadramento = RealizarAnaliseProjetoDAO::verificaEnquadramento($idpronac, 'CO', $IN2017);
+        if ($IN2017) {
+            $this->view->enquadramento = $verificaEnquadramento[0]->stArtigo;
+        } else if (!$IN2017) {           
             if ($verificaEnquadramento[0]->stArtigo18 == true) {
                 $this->view->enquadramento = 'Artigo 18';
             } else if ($verificaEnquadramento[0]->stArtigo26 == true) {
@@ -1310,8 +1314,6 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract {
             } else {
                 $this->view->enquadramento = 'NAO ENQUADRADO';
             }
-        } else {
-            $this->view->enquadramento = 'NAO ENQUADRADO';
         }
         $tbArea = new Area();
         $rsArea = $tbArea->buscar(array('Codigo=?'=>$buscarPronac['Area']))->current();

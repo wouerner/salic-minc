@@ -17,7 +17,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const PRESIDENTE_DE_VINCULADA = 154;
     const COORDENADOR_DE_PARECERISTA = 93;
     const PARECERISTA = 94;
-
+    
     const CONSULTA = 95;
     const CONSULTA_GERENCIAL = 96;
     const GESTOR_SALIC = 97;
@@ -42,7 +42,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const COORDENADOR_CNIC = 120;
     const MEMBROS_NATOS_CNIC = 133;
     const COMPONENTE_COMISSAO = 118;
-
+    
     const COORDENADOR_ATENDIMENTO = 127;
     const TECNICO_DE_ATENDIMENTO = 155;
 
@@ -58,6 +58,9 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const TECNICO_AVALIACAO = 139;
 
     const TECNICO_ADMISSIBILIDADE_EDITAL = 140;
+
+    const COORDENADOR_DO_PRONAC = 137;
+    const COORDENADOR_DE_CONVENIO = 142;
 
     //verificar se eh tecnico
     public function buscarTecnicosPorOrgao($idOrgao)
