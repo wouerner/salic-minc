@@ -409,7 +409,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         try {
             $vwSolicitacao = new Solicitacao_Model_vwPainelDeSolicitacaoProponente();
-            $solicitacao = $vwSolicitacao->buscar(['idDocumento = ?' => $idDocumento]);
+            $solicitacao = $vwSolicitacao->buscar(['idDocumento = ?' => $idDocumento])->current();
 
             if (empty($solicitacao))
                 throw new Exception('Documento n&atilde;o encontrado!');
