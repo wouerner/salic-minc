@@ -2290,6 +2290,18 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         if ($existeRemanejamento50EmAndamento) {
             $tbPlanilhaAprovacao = new PlanilhaAprovacao();
             $planilhaOrcamentaria = $tbPlanilhaAprovacao->visualizarPlanilhaEmRemanejamento($idPronac);
+
+            $tbReadequacao = new tbReadequacao();
+            $readequacaoAtiva = $tbReadequacao->buscar(
+                array(
+                    'idPronac = ?' => $idPronac,
+                    'stEstado =?' => 1
+                )
+            );
+            if (count($readequacaoAtiva)>0) {
+                $this->view->idReadequacao = $readequacaoAtiva[0]['idReadequacao'];
+            }
+                
         } else if (!$existeRemanejamento50EmAndamento) {
             $db = Zend_Db_Table::getDefaultAdapter();
             $db->setFetchMode(Zend_DB :: FETCH_OBJ);
@@ -2705,9 +2717,17 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $planilhaAtiva = $tbPlanilhaAprovacao->buscar($where)->current();
         
         try {
-            /* DADOS DO ITEM PARA EDICAO DO REMANEJAMENTO */
+            $tbReadequacao = new tbReadequacao();
+            $readequacaoAtiva = $tbReadequacao->buscar(
+                array(
+                    'idPronac = ?' => $idPronac,
+                    'stEstado =?' => 1
+                )
+            );
+            
             $where = array();
             $where['idPlanilhaAprovacaoPai = ?'] = $idPlanilhaAprovacaoPai;
+            $where['idReadequacao = ?'] = $idReadequacao;            
             $where['tpPlanilha = ?'] = 'RP';
             $where['stAtivo = ?'] = 'N';
             $item = $tbPlanilhaAprovacao->buscar($where)->current();
@@ -2723,7 +2743,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $dadosPlanilhaEditavel['ValorUnitario'] = utf8_encode('R$ '.number_format($planilhaAtiva->vlUnitario, 2, ',', '.'));
             $dadosPlanilhaEditavel['TotalSolicitado'] = utf8_encode('R$ '.number_format(($planilhaAtiva->qtItem*$planilhaAtiva->nrOcorrencia*$planilhaAtiva->vlUnitario), 2, ',', '.'));
             $dadosPlanilhaEditavel['Justificativa'] = '';
-
+            
             $x = $item->save();
             $this->_helper->json(array('resposta'=>true, 'dadosPlanilhaEditavel'=>$dadosPlanilhaEditavel));
 
@@ -2855,6 +2875,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         } else {
             $where['stAtivo = ?'] = 'S';
         }
+        
         $planilhaEditaval = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
         
         $dadosPlanilhaAtiva = array();
