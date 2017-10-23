@@ -2274,6 +2274,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
 
     public function remanejamentoMenorAction()
     {
+        if (!$this->blnProponente) {
+            parent::message("Sem permiss&atilde;o para remanejar o projeto!", "listarprojetos/listarprojetos", "ERROR");
+        }
+        
         //REMANEJAMENTO MENOR OU IGUAL A 50%
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
