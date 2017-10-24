@@ -2027,7 +2027,8 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $select = $db->select();
-
+        $select->setIntegrityCheck(false);
+        
         $cols = [
             'cppa.idComprovantePagamento',
             'cppa.stItemAvaliado',
@@ -2115,7 +2116,8 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
     public function countPlanilhaRemanejamento($idPronac)
     {
         $select = $this->select();
-
+        $select->setIntegrityCheck(false);
+        
         $select->from(
             array($this->_name),
             array(
@@ -2134,6 +2136,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
     public function visualizarPlanilhaEmRemanejamento($idPronac)
     {
         $select = $this->select();
+        $select->setIntegrityCheck(false);
         
         $select->from(
             array('v' => 'vwVisualizarPlanilhaEmRemanejamento'),
