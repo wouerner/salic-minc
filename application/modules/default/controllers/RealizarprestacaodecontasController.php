@@ -2703,7 +2703,8 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->idPronac = $idPronac;
         $this->view->idPlanilhaItem = $idPlanilhaItem;
         $this->view->idPlanilhaAprovacao = $idPlanilhaAprovacao;
-        $this->view->projeto = $projeto;
+        $this->view->projeto = $projeto[0];
+/* var_dump($this->view->projeto);die; */
         $this->view->comprovantesPagamento = $comprovantes;
     }
 

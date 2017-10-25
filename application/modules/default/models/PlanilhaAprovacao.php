@@ -2139,7 +2139,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $select->setIntegrityCheck(false);
         $select->from(
             array('vwComprovacaoFinanceiraProjeto'),
-            ['*'],
+            ['*', 'Pronac as PRONAC', 'Item as NomeItem'],
             $this->_schema
         );
 
@@ -2265,7 +2265,8 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $select->from(
             array('vwComprovacaoFinanceiraProjetoPorItemOrcamentario'),
             [
-                '*','nmFornecedor as Descricao',
+                '*',
+                'nmFornecedor as Descricao',
                 'nrCNPJCPF as CNPJCPF',
                 'dtPagamento as dtEmissao' ,
                 'dsJustificativaProponente as dsJustificativa',
