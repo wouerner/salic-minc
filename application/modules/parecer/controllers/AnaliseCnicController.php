@@ -24,7 +24,34 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     
     public function gerenciarAssinaturasAction()
     {
-        $this->redirect("/areadetrabalho");
+        $url = Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_REFERER');
+        $url_get_idpronac = preg_split('/\/([0-9]{6,7})/', $url, -1, PREG_SPLIT_DELIM_CAPTURE);
+        
+        if (is_numeric($url_get_idpronac[1])) {
+            $idPronac = $url_get_idpronac[1];
+        } else {
+            $url_get_iddocumentoassinatura = preg_split('/\=([0-9]*)\&/', $url, -1, PREG_SPLIT_DELIM_CAPTURE);
+            if (is_numeric($url_get_iddocumentoassinatura[1])) {
+                $idDocumentoAssinatura = $url_get_iddocumentoassinatura[1];
+                $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();                
+                
+                $result = $objModelDocumentoAssinatura->find(
+                    array(
+                        'idDocumentoAssinatura = ?', $idDocumentoAssinatura
+                    )
+                );
+                if (count($result) > 0) {
+                    $idPronac = $result[0]['IdPRONAC'];
+                    print $idPronac;
+                }
+            }
+        }
+        
+        if ($idPronac) {
+            $this->redirect("/parecer/analise-cnic/emitirparecer/idpronac/$idPronac");
+        } else {
+                $this->redirect("/areadetrabalho");
+        }        
     }
 
     public function encaminharAssinaturaAction()
@@ -279,7 +306,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 $tblPauta->inserir($dados);
                 
                 $ProvidenciaTomada = 'Projeto apreciado pela Comissão Nacional de Incentivo à Cultura - ';
-                $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada)
+                $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada);
                 parent::message("Projeto cadastrado na Pauta com sucesso!", "areadetrabalho/index", "CONFIRM");
                 $this->_helper->viewRenderer->setNoRender(TRUE);
             } else {
