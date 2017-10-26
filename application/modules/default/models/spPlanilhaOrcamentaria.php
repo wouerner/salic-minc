@@ -726,7 +726,10 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
 
     public function execSpPlanilhaOrcamentaria($idPronac, $tipoPlanilha)
     {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
         $sql = "exec ".$this->_schema.".".$this->_name." $idPronac, $tipoPlanilha";
-        return $this->getAdapter()->fetchAll($sql);
+        return $db->fetchAll($sql);
     }
 }
