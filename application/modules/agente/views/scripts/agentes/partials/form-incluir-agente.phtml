@@ -444,6 +444,8 @@
     }
 
     function filtroCNPJ() {
+        var proponente = 144;
+
         document.getElementById('0').checked = false;
         document.getElementById('1').checked = true;
 
@@ -453,9 +455,10 @@
             mascara(document.formCadAgentes.cpf, format_cnpj);
         };
         document.getElementById('cpf').focus();
-        <?php if($this->modulo != "movimentacaobancaria"): ?>
-        $('#cadDirigente').show(); // mostra a aba com os dirigentes
-        <?php endif; ?>
+
+        if($("#visao").val() == proponente) {
+            $('#cadDirigente').show(); // mostra a aba com os dirigentes
+        }
     }
 
     function buscaragente(cpf) {
