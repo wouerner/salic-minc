@@ -2133,7 +2133,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         return $this->fetchAll($select);
     }
 
-	public function vwComprovacaoFinanceiraProjeto($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null)
+	public function vwComprovacaoFinanceiraProjeto($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null, $tpCusto = null)
     {
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
@@ -2157,6 +2157,10 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
             $select->where('cdEtapa = ?', $idPlanilhaEtapa);
         }
 
+        if($tpCusto){
+            $select->where('tpCusto = ?', $tpCusto);
+        }
+
         $select->order('tpCusto desc');
         $select->order('Produto');
         $select->order('cdEtapa');
@@ -2167,7 +2171,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
     }
 
 
-	public function vwComprovacaoProjetoSemAnalise($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null)
+	public function vwComprovacaoProjetoSemAnalise($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null, $tpCusto=null)
     {
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
@@ -2190,6 +2194,9 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         if($idPlanilhaEtapa){
             $select->where('cdEtapa = ?', $idPlanilhaEtapa);
         }
+        if($tpCusto){
+            $select->where('tpCusto = ?', $tpCusto);
+        }
 
         $select->order('tpCusto desc');
         $select->order('Produto');
@@ -2200,7 +2207,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         return $this->fetchAll($select);
     }
 
-	public function vwComprovacaoProjetoAvaliada($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null)
+	public function vwComprovacaoProjetoAvaliada($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null, $tpCusto=null)
     {
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
@@ -2219,6 +2226,9 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         if($idMunicipio){
             $select->where('cdCidade = ?', $idMunicipio);
         }
+        if($tpCusto){
+            $select->where('tpCusto = ?', $tpCusto);
+        }
 
         $select->order('tpCusto desc');
         $select->order('Produto');
@@ -2229,7 +2239,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         return $this->fetchAll($select);
     }
 
-	public function vwComprovacaoProjetoRecusada($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null)
+	public function vwComprovacaoProjetoRecusada($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null, $tpCusto = null)
     {
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
@@ -2247,6 +2257,9 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
 
         if($idMunicipio){
             $select->where('cdCidade = ?', $idMunicipio);
+        }
+        if($tpCusto){
+            $select->where('tpCusto = ?', $tpCusto);
         }
 
         $select->order('tpCusto desc');
