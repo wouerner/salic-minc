@@ -340,20 +340,20 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         $buscaDadosProjeto = $tbDistribuirParecer->painelAnaliseTecnica($dadosWhere, null, null, null, null, $tipoFiltro);
 
         $error = "";
-        $msg = "Distribui��o Realizada com sucesso!";
-
+        $msg = "Distribui&ccedil;&atilde;o realizada com sucesso!";
+        
         $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
         
         $objAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
         $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
+        
         if (count($assinaturas) > 0) {
             $idDocumentoAssinatura = current($assinaturas)['idDocumentoAssinatura'];
             
             $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $dadosDocumentoAssinatura = array();
-            $dadosDocumentoAssinatura["stEstado"] = 1;
+            $dadosDocumentoAssinatura["stEstado"] = Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO;
             $whereDocumentoAssinatura = "idDocumentoAssinatura = $idDocumentoAssinatura";
-            
             $objDocumentoAssinatura->update($dadosDocumentoAssinatura, $whereDocumentoAssinatura);
         }
         

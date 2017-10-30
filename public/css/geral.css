@@ -60,6 +60,7 @@ body {
     background: #f8f8f8;
     color: #000;
     line-height: 14pt;
+    font-size: 1rem;
 }
 
 p {
@@ -199,6 +200,7 @@ x - LOADER
 /*--------------------------------------------------------------
 x - HEADER
 --------------------------------------------------------------*/
+
 /*--------------------------------------------------------------
 x - Logo
 --------------------------------------------------------------*/
@@ -732,32 +734,31 @@ x - CONTEÚDO (legado)
 
 #conteudo h1, h2, h3, h4, h5, h6 {
     margin-bottom: 14px;
-    font-weight: normal;
     color: #435f20;
 }
 
-#conteudo h1 {
-    font-size: 28px;
+h1 {
+    font-size: 2.5rem;
 }
 
-#conteudo h2 {
-    font-size: 26px;
+h2 {
+    font-size: 2rem;
 }
 
-#conteudo h3 {
-    font-size: 10px;
+h3 {
+    font-size: 1.75rem;
 }
 
-#conteudo h4 {
-    font-size: 18px;
+h4 {
+    font-size: 1.5rem;
 }
 
-#conteudo h5 {
-    font-size: 16px;
+h5 {
+    font-size: 1.25rem;
 }
 
-#conteudo h6 {
-    font-size: 14px;
+h6 {
+    font-size: 1rem;
 }
 
 #conteudo select {
@@ -1907,36 +1908,36 @@ x - BOTOES
 }
 .btn_analise_projeto, .btn_enviar_solicitacao
 {
-    width:121px;
+	width:121px;
 }
 .btn_devolver_tecnico,
 .btn_devolver_tecnico-off
 {
-    width:127px;
+	width:127px;
 }
 .btn_redistribuir_projetos,
 .btn_redistribuir_projetos
 {
-    width:127px;
+	width:127px;
 }
 .btn_cadastrar_proponente
 {
-    width:130px;
+	width:130px;
 }
 .btn_comprovar_pagamento
 {
-    width:144px;
+	width:144px;
 }
 .btn_devolver_vinculada {
-    width:145px;
+	width:145px;
 }
 .btn_visualizar_comprovacao
 {
-    width:147px;
+	width:147px;
 }
 .btn_finalizar_recurso, .btn_cancelar_solicitacao, .btn_cancelar_retirar_pauta
 {
-    width:160px;
+	width:160px;
 }
 .btn_gerar_despachos{
     width: 120px;
@@ -1949,29 +1950,29 @@ x - BOTOES
 .btn_pesquisar_projeto,
 .btn_pesquisar_projeto-off
 {
-    width:180px;
+	width:180px;
 }
 #btn_down, #btn_up {
-    width:12px;
-    height:15px;
-    float:left;
+	width:12px;
+	height:15px;
+	float:left;
 }
 .btn_validarItem {
-    width:100px;
-    cursor:pointer;
-    background:url(../img/validarItem.png) 86px 4px no-repeat;
+	width:100px;
+	cursor:pointer;
+	background:url(../img/validarItem.png) 86px 4px no-repeat;
 }
 .btn_calendario, .btn_calendario:hover, .btn_calendario-off, .btn_relogio {
-    width:100px;
-    cursor:pointer;
-    background:#f8f8f8 url(../img/data.png) 86px 4px no-repeat;
+	width:100px;
+	cursor:pointer;
+	background:#f8f8f8 url(../img/data.png) 86px 4px no-repeat;
 }
 .btn_relogio {
-    background:#f8f8f8 url(../img/hour.gif) 86px 4px no-repeat;
+	background:#f8f8f8 url(../img/hour.gif) 86px 4px no-repeat;
 }
 .btn_calendario-off, .btn_calendario-off:hover {
-    cursor:auto;
-    background:#dfdfdf url(../img/data.png) 86px 4px no-repeat;
+	cursor:auto;
+	background:#dfdfdf url(../img/data.png) 86px 4px no-repeat;
 }
 .btn_validarItem                                { background:url(../img/validarItem.png) center center no-repeat; }
 .btn_aprovar                                    { background:url(../img/aprovar.gif) center center no-repeat; }
@@ -3112,6 +3113,9 @@ x - DATE PICKER
     background-color: transparent !important;
     color: #4CAF50;
     font-weight: bold;
+}
+.ui-widget-content {
+    background: #f8f8f8 !important;
 }
 
 .ui-dialog  .ui-widget-content {

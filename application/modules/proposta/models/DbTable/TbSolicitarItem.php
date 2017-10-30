@@ -17,7 +17,7 @@ class Proposta_Model_DbTable_TbSolicitarItem extends MinC_Db_Table_Abstract {
         $select->setIntegrityCheck(false);
         $select->from(
             array('s' => $this->_name),
-            array('idSolicitarItem', 'Descricao as Justificativa',
+            array('idSolicitarItem', 'Descricao as Justificativa', 'idPlanilhaItens',
                     new Zend_Db_Expr('
                         CASE
                             WHEN  s.IdPlanilhaItens > 0 THEN i.Descricao

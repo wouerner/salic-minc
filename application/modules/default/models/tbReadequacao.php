@@ -962,7 +962,6 @@ class tbReadequacao extends MinC_Db_Table_Abstract
             return $db->fetchAll($select);
 
         } catch (Exception $objException) {
-            xd($objException->getMessage());
             throw new Exception($objException->getMessage(), 0, $objException);
         }
     }

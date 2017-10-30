@@ -118,12 +118,9 @@ class Autenticacao_IndexController extends MinC_Controller_Action_Abstract
                     $IdUsuario = $verificaStatus['IdUsuario'];
                     $verificaSituacao = $verificaStatus['Situacao'];
 
-                    if (md5($password) != $this->validarSenhaInicial()) {
-                        $SenhaFinal = EncriptaSenhaDAO::encriptaSenha($username, $password);
-                        $buscar = $Usuario->loginSemCript($username, $SenhaFinal);
-                    } else {
-                        $buscar = $Usuario->loginSemCript($username, md5($password));
-                    }
+                    $SenhaFinal = EncriptaSenhaDAO::encriptaSenha($username, $password);
+                    $buscar = $Usuario->loginSemCript($username, $SenhaFinal);
+
                     if (!$buscar) {
                         throw new Exception("Login ou Senha inv&aacute;lidos!");
                     }

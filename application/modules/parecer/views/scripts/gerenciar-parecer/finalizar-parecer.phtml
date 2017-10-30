@@ -20,67 +20,10 @@
     <div class="col s12">
     <table class="tabela">
 	<tr>
-            <td class="destacar bold" width="1" align="center">PRONAC</td>
-            <td width="435" align="center">
-                <input type="text" class="input_simples" name="pronac" id="pronac" maxlength="7" style="width: 90px;" value="<?php echo $this->pronacProjeto;?>">
-                <input type="button" name="btn_pesquisar" id="btn_pesquisar" class="btn_pesquisar" value="">
-            </td>
-            <td class="center-align"><?php if($this->qtdDocumentos != 0){echo $this->qtdDocumentos.' Projetos listados';}else{ echo 'Nenhum Registro encontrado!';}?></td>
+          <td class="center-align"><?php if($this->qtdDocumentos != 0){echo $this->qtdDocumentos.' Projetos listados';}else{ echo 'Nenhum Registro encontrado!';}?></td>
         </tr>
     </table>
     
-    <?php if(count($this->dados)>0): ?>
-    <!-- ============ PAGINA플O ============ -->
-    <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
-        <tbody>
-            <tr>
-                <td class="center-align">
-                <form name="form1" id="form1" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'));?>" method="get">
-                    <?php if($this->paginacao['pag']>1) { ?>
-                    <input class="btn_inicio" id="btn_inicio" type="button" class="btn_inicio"
-                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
-                    <?php } ?>
-                    <input id="btn_p_anterior" type="button"
-                    <?php if($this->paginacao['pag']<=1) { ?> class="btn_p_anterior-off"
-                    <?php }else { ?>
-                           class="btn_p_anterior"
-                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
-                    <?php } ?>>
-                    <input id="btn_p_proximo" type="button"
-                           <?php if($this->paginacao['pag']+1 > $this->paginacao['totalPag']) { ?>
-                           class="btn_p_proximo-off"
-                    <?php }else { ?>
-                           class="btn_p_proximo"
-                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
-                    <?php } ?>>
-                    <?php if($this->paginacao['pag'] < $this->paginacao['totalPag']) { ?>
-                    <input class="btn_ultimo" id="btn_ultimo" type="button"
-                           onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
-                    <?php } ?>
-                    P&aacute;g.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
-                        <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
-                        <option value="<?php echo $i;?>" <?php if($this->paginacao['pag'] == $i) echo "selected";?>><?php echo $i;?>&nbsp;</option>
-                        <?php endfor; ?>
-                    </select>
-                    &nbsp;Registros por p&aacute;gina:<input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="submit" class="btn_recarregar" value="">
-                    <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
-                    <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
-                    <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
-                 </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <center>
-        <?php
-            echo $this->paginacao['inicio']." a ";
-            echo ($this->paginacao['pag']-1)*$this->paginacao['Itenspag'] + $this->paginacao['tamanho'];
-            echo " de ". $this->paginacao['total'];
-        ?>
-    </center>
-    <!-- ========== FIM PAGINA플O ========== -->
-    <?php endif; ?>
-
     <?php if($this->qtdDocumentos != 0): ?>
     <table class="bordered margin0 dataTable no-footer" style="width:100%">
       <thead>
@@ -197,61 +140,6 @@
             <?php endforeach; ?>
         </table>
 
-        <?php if(count($this->dados) > 0): ?>
-
-            <!-- ============ PAGINA플O ============ -->
-            <center>
-                <?php
-                    echo $this->paginacao['inicio']." a ";
-                    echo ($this->paginacao['pag']-1)*$this->paginacao['Itenspag'] + $this->paginacao['tamanho'];
-                    echo " de ". $this->paginacao['total'];
-                ?>
-            </center>
-
-            <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
-                <tbody>
-                    <tr>
-                        <td class="center-align">
-                        <form name="form2" id="form2" action="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index'));?>" method="get">
-                            <?php if($this->paginacao['pag']>1) { ?>
-                            <input class="btn_inicio" id="btn_inicio" type="button" class="btn_inicio"
-                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
-                            <?php } ?>
-                            <input id="btn_p_anterior" type="button"
-                            <?php if($this->paginacao['pag']<=1) { ?> class="btn_p_anterior-off"
-                            <?php }else { ?>
-                                   class="btn_p_anterior"
-                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
-                            <?php } ?>>
-                            <input id="btn_p_proximo" type="button"
-                                   <?php if($this->paginacao['pag']+1 > $this->paginacao['totalPag']) { ?>
-                                   class="btn_p_proximo-off"
-                            <?php }else { ?>
-                                   class="btn_p_proximo"
-                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'"
-                            <?php } ?>>
-                            <?php if($this->paginacao['pag'] < $this->paginacao['totalPag']) { ?>
-                            <input class="btn_ultimo" id="btn_ultimo" type="button"
-                                   onclick="location.href='<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&pronac='.$this->pronacProjeto; ?>'">
-                            <?php } ?>
-                            P&aacute;g.:<select name="pag" id="pag" onchange="$('#form2').submit()" class="input_simples">
-                                <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
-                                <option value="<?php echo $i;?>" <?php if($this->paginacao['pag'] == $i) echo "selected";?>><?php echo $i;?>&nbsp;</option>
-                                <?php endfor; ?>
-                            </select>
-                            &nbsp;Registros por p&aacute;gina: <input type="text" size="1" name="qtde" id="qtde" class="input_simples" value="<?php echo $this->intTamPag;?>"><input type="submit" class="btn_recarregar" value="">
-                            <input type="hidden" name="campo" value="<?php echo $this->paginacao['campo'];?>">
-                            <input type="hidden" name="ordem" value="<?php echo $this->paginacao['ordem'];?>">
-                            <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
-                         </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- ========== FIM PAGINA플O ========== -->
-</div>
-</div>
-        <?php endif; ?>
     <?php endif; ?>
 
     <br clear="all" />

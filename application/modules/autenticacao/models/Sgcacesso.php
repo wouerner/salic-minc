@@ -153,9 +153,9 @@ class Autenticacao_Model_Sgcacesso extends MinC_Db_Table_Abstract
             )
         );
         $select->where('cpf = ?', $username);
-        if ($password != MinC_Controller_Action_Abstract::validarSenhaInicial()) {
+        /* if ($password != MinC_Controller_Action_Abstract::validarSenhaInicial()) { */
             $select->where("senha  = ?", $password);
-        }
+        /* } */
 
         $buscar = $this->fetchRow($select);
 
