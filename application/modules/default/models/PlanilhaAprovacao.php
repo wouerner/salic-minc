@@ -2215,7 +2215,6 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
 
 	public function vwComprovacaoProjetoAvaliada($idpronac, $uf = null, $idPlanilhaEtapa = null, $codigoProduto = null, $idMunicipio = null, $tpCusto=null)
     {
-        /* var_dump($idpronac, $uf, $idPlanilhaEtapa, $codigoProduto, $idMunicipio, $tpCusto);die; */
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -2250,7 +2249,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $select->order('cdEtapa');
         $select->order('Uf');
         $select->order('Cidade');
-        /* echo $select;die; */
+
         return $this->fetchAll($select);
     }
 
