@@ -2983,8 +2983,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $tbReadequacao = new tbReadequacao();
         $existeRemanejamento50EmAndamento = $tbReadequacao->existeRemanejamento50EmAndamento($idPronac);
-        //print_r($existeRemanejamento50EmAndamento);die;
-
+        
         //BUSCA OS DADOS DO ITEM ORIGINAL PARA VALIDA��O DE VALORES           
         if (!$existeRemanejamento50EmAndamento && !$idPlanilhaAprovacaoPai) {
             $valoresItem = $tbPlanilhaAprovacao->buscar(
@@ -3029,7 +3028,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         
         //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO
         if($vlTotal < $vlAtualMin || $vlTotal > $vlAtualMax){
-            $this->_helper->json(array('resposta'=>false, 'msg'=>'O valor total do item desejado ultrapassou a margem de ' . tbReadequacao::PERCENTUAL_REMANEJAMENTO . '.',
+            $mensagem = ($vlTotal < $vlAtualMin) ? "O valor total do item desejado é menor que o mínimo de " . tbReadequacao::PERCENTUAL_REMANEJAMENTO . "% do valor." : "O valor total do item ultrapassou a margem de ". tbReadequacao::PERCENTUAL_REMANEJAMENTO . ".";
+            
+            $this->_helper->json(array('resposta'=>false, 'msg'=> $mensagem,
             'qtItem' => $valoresItem['qtItem'],
             'nrOcorrencia' => $valoresItem['nrOcorrencia'],
             'vlUnitario' => $valoresItem['vlUnitario'],
