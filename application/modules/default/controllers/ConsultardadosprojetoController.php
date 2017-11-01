@@ -2434,7 +2434,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         
         $id = Seguranca::encrypt($idPronac);
         if($erros > 0){
-            parent::message("<b>A T E N &Ccedil; &Atilde;; O !!!</b> Para finalizar a opera&ccedil;&atilde;o de remanejamento os valores da coluna 'Valor da Planilha Remanejada' devem ser igual a R$0,00 (zero real) e os Grupos B, C e D n&atilde;o poder&atilde;o conter valores negativos!.", "consultardadosprojeto/remanejamento-menor?idPronac=$id", "ERROR");
+            parent::message("<b>A T E N &Ccedil; &Atilde;; O !!!</b> Para finalizar a opera&ccedil;&atilde;o de remanejamento os valores da coluna 'Valor da Planilha Remanejada' devem ser igual a R$0,00 (zero real).", "consultardadosprojeto/remanejamento-menor?idPronac=$id", "ERROR");
         } else {
 
             $auth = Zend_Auth::getInstance(); // pega a autentica��o
