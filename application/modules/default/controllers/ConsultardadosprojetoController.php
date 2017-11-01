@@ -2299,7 +2299,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $readequacaoAtiva = $tbReadequacao->buscar(
                 array(
                     'idPronac = ?' => $idPronac,
-                    'stEstado =?' => 1
+                    'stEstado =?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                    'idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
                 )
             );
             if (count($readequacaoAtiva)>0) {
@@ -2356,7 +2357,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $readequacaoAtiva = $tbReadequacao->buscar(
             array(
                 'idPronac = ?' => $idPronac,
-                'stEstado =?' => 1
+                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
             )
         );
         $idReadequacao = $readequacaoAtiva[0]['idReadequacao'];
@@ -2447,7 +2449,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $dadosReadequacao['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
             $dadosReadequacao['idSolicitante'] = $rsAgente->idAgente;
             $dadosReadequacao['dsJustificativa'] = utf8_decode('Readequação até 50%');
-            $dadosReadequacao['stEstado'] = 0;
+            $dadosReadequacao['stEstado'] = tbReadequacao::ST_ESTADO_FINALIZADO;
             $update = $tbReadequacao->update(
                 $dadosReadequacao,
                 array(
@@ -2455,7 +2457,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                     'idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
                     'stAtendimento=?' => 'D',
                     'siEncaminhamento=?' => 11,
-                    'stEstado=?' => 1,
+                    'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                     'idReadequacao=?' => $idReadequacao
                 )
             );
@@ -2519,7 +2521,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $readequacaoAtiva = $tbReadequacao->buscar(
                 array(
                     'idPronac = ?'=> $idPronac,
-                    'stEstado = ?'=> 1
+                    'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                    'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
                 )
             );
             
@@ -2662,7 +2665,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $readequacaoAtiva = $tbReadequacao->buscar(
             array(
                 'idPronac = ?'=> $idPronac,
-                'stEstado = ?'=> 1
+                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
             )
         );
         
@@ -2725,7 +2729,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             $readequacaoAtiva = $tbReadequacao->buscar(
                 array(
                     'idPronac = ?' => $idPronac,
-                    'stEstado =?' => 1
+                    'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                    'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
                 )
             );
             
@@ -2769,7 +2774,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $readequacaoAtiva = $tbReadequacao->buscar(
             array(
                 'idPronac = ?' => $idPronac,
-                'stEstado =?' => 1
+                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
             )
         );
         
@@ -2793,7 +2799,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                         array(
                             'idPronac=?' => $idPronac,
                             'idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                            'stEstado=?' => 1,
+                            'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                             'stAtendimento=?' => 'D',
                             'siEncaminhamento=?' => 11,
                             'idReadequacao = ?' => $idReadequacao
@@ -2890,7 +2896,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
         $readequacaoAtiva = $tbReadequacao->buscar(
             array(
                 'idPronac = ?' => $idPronac,
-                'stEstado =?' => 1
+                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
             )
         );
         
@@ -3071,7 +3078,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
             array(
                 'a.idPronac=?' => $idPronac,
                 'a.idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                'a.stEstado=?' => 1,
+                'a.stEstado=?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                 'a.stAtendimento=?' => 'D',
                 'a.siEncaminhamento=?' => 11
             )
@@ -3141,7 +3148,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract {
                     array(
                         'a.idPronac=?' => $idPronac,
                         'a.idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                        'a.stEstado=?' => 1,
+                        'a.stEstado=?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                         'a.stAtendimento=?' => 'D',
                         'a.siEncaminhamento=?' => 11
                     )
