@@ -275,8 +275,11 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
                 $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
 
-                if ($idSolicitacao) {
+                if ($arrayForm['siEncaminhamento'] == 1 && $idSolicitacao) {
                     $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao . $strParams;
+                    $status = true;
+                } else {
+                    $strUrl = '/solicitacao/mensagem/solicitar' . $strParams;
                     $status = true;
                 }
 

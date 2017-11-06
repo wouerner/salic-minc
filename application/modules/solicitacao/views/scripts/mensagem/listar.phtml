@@ -11,9 +11,7 @@
                 <?php endif; ?>
                 <th data-field="" class="mensagem-situacao left-align">Situa&ccedil;&atilde;o</th>
                 <th data-field="id" class="mensagem-data center-align">Data</th>
-                <?php if (!$this->ehProponente) : ?>
-                    <th class="center-align">#</th>
-                <?php endif; ?>
+                <th class="center-align">#</th>
             </tr>
             </thead>
             <tbody>
@@ -65,7 +63,7 @@
                     </td>
                     <td>
                         <a href="<?php echo $this->url($arrayUrl, null, true); ?>">
-                            <?= $arrValue['dsSolicitacao']; ?>
+                            <?= substr(strip_tags($arrValue['dsSolicitacao']), 0 , 150); ?> ...
                         </a>
                     </td>
                     <?php if (!$this->ehProponente) : ?>
@@ -81,16 +79,14 @@
                         </a>
                     </td>
                     <td class="center-align"><?= date('d/m/Y', strtotime($arrValue['dtSolicitacao'])); ?></td>
-                    <?php if (!$this->ehProponente) : ?>
-                        <td>
-                            <a class="btn blue small white-text tooltipped"
-                               data-tooltip="Responder solicita&ccedil;&atilde;o"
-                               href="<?php echo $this->url($arrayUrl, null, true); ?>">
-                                <i class="material-icons">visibility</i>
-                            </a>
-                        </td>
-                    <?php endif; ?>
 
+                    <td>
+                        <a class="btn blue small white-text tooltipped"
+                           data-tooltip="Responder solicita&ccedil;&atilde;o"
+                           href="<?php echo $this->url($arrayUrl, null, true); ?>">
+                            <i class="material-icons">visibility</i>
+                        </a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
