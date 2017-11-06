@@ -25,21 +25,22 @@ if (isset($this->projeto->IdPRONAC))
             </div>
 
             <?php if (isset($this->projeto->IdPRONAC) || $this->proposta->idPreProjeto): ?>
+                <?php if ($this->ehProponente) : ?>
+                    <div class="center-align padding20">
+                        <a id="btn_enviar"
+                           href="<?= $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'solicitar', 'idPronac' => $this->projeto->IdPRONAC, 'idPreProjeto' => $this->proposta->idPreProjeto)); ?>"
+                           class="btn waves-effect waves-light bt_rascunho">Nova</a>
+                    </div>
 
-                <div class="center-align padding20">
-                    <a id="btn_enviar"
-                       href="<?= $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'solicitar', 'idPronac' => $this->projeto->IdPRONAC, 'idPreProjeto' => $this->proposta->idPreProjeto)); ?>"
-                       class="btn waves-effect waves-light bt_rascunho">Nova</a>
-                </div>
-
-                <div class="fixed-action-btn animated bounceInUp">
-                    <a href="javascript:$3.redirect('<?= $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'solicitar', 'idPronac' => $this->projeto->IdPRONAC, 'idPreProjeto' => $this->proposta->idPreProjeto)); ?>');"
-                       class="btn-floating btn-large tooltipped waves-effect waves-light" data-position="left"
-                       data-delay="50"
-                       data-tooltip="Escrever uma solicita&ccedil;&atilde;o">
-                        <i class="large material-icons">create</i>
-                    </a>
-                </div>
+                    <div class="fixed-action-btn animated bounceInUp">
+                        <a href="javascript:$3.redirect('<?= $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'solicitar', 'idPronac' => $this->projeto->IdPRONAC, 'idPreProjeto' => $this->proposta->idPreProjeto)); ?>');"
+                           class="btn-floating btn-large tooltipped waves-effect waves-light" data-position="left"
+                           data-delay="50"
+                           data-tooltip="Escrever uma solicita&ccedil;&atilde;o">
+                            <i class="large material-icons">create</i>
+                        </a>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>
