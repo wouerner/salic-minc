@@ -17,10 +17,27 @@ if (isset($this->projeto->IdPRONAC))
         <div class="col s12 m12 l10">
             <h5>
                 Solicita&ccedil;&otilde;es
-
-                <?= ($this->proposta) ? '(Proposta: '.$this->proposta->NomeProjeto.')' : ''; ?>
-                <?= ($this->projeto) ? '(Projeto: '.$this->projeto->NomeProjeto.')' : ''; ?>
             </h5>
+            <?php if($this->idPronac) :  ?>
+                <div class="row">
+                    <div class="col s12">
+                        <b>Pronac: </b><?= $this->projeto->AnoProjeto . $this->projeto->Sequencial; ?><br>
+                    </div>
+                    <div class="col s12">
+                        <b>Título: </b><?= $this->projeto->NomeProjeto; ?>
+                    </div>
+                </div>
+            <?php elseif($this->idPreProjeto) : ?>
+                <div class="row">
+                    <div class="col s12">
+                        <b>Nº Proposta: </b><?= $this->proposta->idPreProjeto; ?><br>
+                    </div>
+                    <div class="col s12">
+                        <b>Título: </b><?= $this->proposta->NomeProjeto; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div id="container-list" class="container" style="width: 100%"
                  data-ajax-render='/solicitacao/mensagem/listar<?= $params; ?>'>
             </div>
