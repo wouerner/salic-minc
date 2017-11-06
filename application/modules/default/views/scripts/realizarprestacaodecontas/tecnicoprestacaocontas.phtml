@@ -44,42 +44,41 @@
                 </thead>
                 <tbody>
                     <?php $x=1; foreach($this->dados as $projeto){ ?>
-                    <tr>
-                        <td><?php echo $x; ?></td>
-                        <td>
-                            <a href="/consultardadosprojeto?idPronac=<?php echo ($projeto->idPronac); ?>" class="btn">
-                                 <?php echo $projeto->Pronac; ?>
-                            </a>
-                          </a>
-                        </td>
-                        <td><?php echo $projeto->NomeProjeto; ?></td>
-                        <td><?php echo $projeto->Situacao; ?></td>
-                        <td><?php echo $projeto->Area.' / '.$projeto->Segmento; ?></td>
-                        <td><?php echo $projeto->UfProjeto; ?></td>
-                        <td><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
-                        <td><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
-                        <td><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
-                        <td>
-                            <?php if ($projeto->RelatorioTecnico == "False") { ?>
-                                <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSDevolverParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>',true)" alt="Devolver para chefe de divisão" />
-                            <?php } else { ?>
-                                <em>Análise j&aacute; iniciada</em>
-                            <?php } ?>
-                        </td>
-                        <td background="" align="center">
-                            <?php
-                                $arrPrazo = $this->prazoRespostaDiligencia($projeto->idPronac, 174);
-                                $icone = $arrPrazo['iconeDiligencia']['icone'];
-                                $title = $arrPrazo['iconeDiligencia']['title'];
-                            ?>
-                            <?php if($this->filtro == 'diligenciados'){ ?>
-                                <a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' =>'listardiligenciaanalista')).'?idPronac=' . $projeto->idPronac . '&situacao=E17&tpDiligencia=174';?>" ><img src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>" title="<?php echo $title; ?>" width="30px"/></a><br>
-                            <?php } else { ?>
-                                <a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' =>'listardiligenciaanalista')).'?idPronac=' . $projeto->idPronac . '&situacao=E27&tpDiligencia=174';?>" ><img src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>" title="<?php echo $title; ?>" width="30px"/></a><br>
-                            <?php } ?>
-                        </td>
-                        <td align="center"><img style="cursor: pointer;" src="../public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamento('<?php echo $projeto->idPronac; ?>')" alt="Encaminhar" /></td>
-                    </tr>
+                        <tr>
+                            <td><?php echo $x; ?></td>
+                            <td>
+                                <button  value="<?php echo $projeto->idPronac; ?>" class="btn pre-visualizar">
+                                    <?php echo $projeto->Pronac; ?>
+                                </button>
+                            </td>
+                            <td><?php echo $projeto->NomeProjeto; ?></td>
+                            <td><?php echo $projeto->Situacao; ?></td>
+                            <td><?php echo $projeto->Area.' / '.$projeto->Segmento; ?></td>
+                            <td><?php echo $projeto->UfProjeto; ?></td>
+                            <td><?php $mecanismo = $projeto->Mecanismo; if ($mecanismo == 'Mecenato'){ echo "Incentivo Fiscal"; }else{ echo $projeto->Mecanismo;}?></td>
+                            <td><?php echo Data::tratarDataZend($projeto->DtSituacao, 'brasileira');?></td>
+                            <td><img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/table_multiple.png" onclick="window.location='<?php echo $this->baseUrl(); ?>/realizarprestacaodecontas/planilhaorcamentaria/idPronac/<?php echo ($projeto->idPronac); ?>'" alt="Analisar"></td>
+                            <td>
+                                <?php if ($projeto->RelatorioTecnico == "False") { ?>
+                                    <img style="cursor: pointer;" src="<?php echo $this->baseUrl(); ?>/public/img/user_gray.png" onclick="return JSDevolverParaChefeDivisao('<?php echo $projeto->idPronac; ?>','<?php echo $this->codOrgao; ?>',true)" alt="Devolver para chefe de divisão" />
+                                <?php } else { ?>
+                                    <em>Análise j&aacute; iniciada</em>
+                                <?php } ?>
+                            </td>
+                            <td background="" align="center">
+                                <?php
+                                    $arrPrazo = $this->prazoRespostaDiligencia($projeto->idPronac, 174);
+                                    $icone = $arrPrazo['iconeDiligencia']['icone'];
+                                    $title = $arrPrazo['iconeDiligencia']['title'];
+                                ?>
+                                <?php if($this->filtro == 'diligenciados'){ ?>
+                                    <a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' =>'listardiligenciaanalista')).'?idPronac=' . $projeto->idPronac . '&situacao=E17&tpDiligencia=174';?>" ><img src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>" title="<?php echo $title; ?>" width="30px"/></a><br>
+                                <?php } else { ?>
+                                    <a target="_blank" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' =>'listardiligenciaanalista')).'?idPronac=' . $projeto->idPronac . '&situacao=E27&tpDiligencia=174';?>" ><img src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>" title="<?php echo $title; ?>" width="30px"/></a><br>
+                                <?php } ?>
+                            </td>
+                            <td><img style="cursor: pointer;" src="../public/img/btn_busca.jpg" onclick="return JShistoricoEncaminhamento('<?php echo $projeto->idPronac; ?>')" alt="Encaminhar"/></td>
+                        </tr>
                     <?php $x++; } ?>
                 </tbody>
             </table>
@@ -94,7 +93,6 @@
         <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
     </form>
 </div>
-
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
@@ -112,7 +110,8 @@
     });
 </script>
 
+<script src="/public/js/vue.js" type="text/javascript"></script>
 <script src="/public/scripts/prestacao-contas/tecnicoprestacaocontas.js" type="text/javascript"></script>
 <div style="display: none;" id="historicoEncaminhamento" title="Encaminhar projeto para análise"></div>
 
-<?php echo $this->partial('/consultardadosprojeto/partial/consultar-ajax.phtml')?>
+<?php echo $this->partial('visualizar-projeto/index.phtml', 'prestacao-contas')?>

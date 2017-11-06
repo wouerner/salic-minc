@@ -1,0 +1,81 @@
+<!-- Modal Structure -->
+<div id="abrirModal" class="modal modal-fixed-footer">
+    <div class="modal-content" id="pre-visualizar">
+        <visualizar>
+        </visualizar>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+    </div>
+</div>
+
+<script type="text/x-template" id="visualizar">
+    <div>
+        <table>
+            <thead class="bordered">
+                <th>
+                    dados
+                </th>
+            </thead>
+            <tbody>
+                <tr v-for="( produto, index ) in dados">
+                    <td>
+                        {{ produto.nome}} 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script type="text/javascript">
+    Vue.component('visualizar', {
+        template: '#visualizar',
+        data: function() {
+            return {
+                dados:[]
+            }
+        },
+        /* props: ['idpronac'], */
+        mounted: function() {
+            console.log(this.$root.$data.idpronac);
+            console.log(this.teste2);
+            this.dados = [{ nome: 'teste' }, { nome: 'teste1' }]
+
+        },
+        computed:{
+            qtExemplaresTotal: function() {
+            }
+        }
+    });
+    app6 = null;
+
+    $3('.pre-visualizar').on('click',
+        function(event) {
+            event.preventDefault();
+            /* $3(".modal-content").empty().load('/prestacao-contas/visualizar-projeto?idPronac=' + $3(this).val()) */
+            $3('#abrirModal').modal();
+            $3('#abrirModal').modal('open');
+
+            app6 = new Vue({
+                el: '#pre-visualizar',
+                data: {
+                    idpronac: $3(this).val(),
+                }
+            });
+            app6.$destroy();
+
+        }
+    );
+    console.log(app6);
+
+</script>
+<style>
+eidpronac ce
+  #abrirModal.modal{
+       height: 90%; 
+       max-height: 96%;
+       width: 98%;
+    }
+</style>
+<!-- Modal Structure -->
