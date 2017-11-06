@@ -1,9 +1,15 @@
 <?php
-if (isset($this->proposta->idPreProjeto))
-    $params = "/idPreProjeto/" . $this->proposta->idPreProjeto;
+$params = '';
+if (isset($this->idPreProjeto))
+    $params = "/idPreProjeto/" . $this->idPreProjeto;
 
-if (isset($this->projeto->IdPRONAC))
-    $params = "/idPronac/" . $this->projeto->IdPRONAC;
+if (isset($this->idPronac))
+    $params = "/idPronac/" . $this->idPronac;
+
+if($this->listarTudo == true) {
+    $params .= "/listarTudo/1";
+}
+
 ?>
 
 <div class="container-fluid">
@@ -15,9 +21,9 @@ if (isset($this->projeto->IdPRONAC))
         <?php endif; ?>
 
         <div class="col s12 m12 l10">
-            <h5>
+            <h4>
                 Solicita&ccedil;&otilde;es
-            </h5>
+            </h4>
             <?php if($this->idPronac) :  ?>
                 <div class="row">
                     <div class="col s12">
