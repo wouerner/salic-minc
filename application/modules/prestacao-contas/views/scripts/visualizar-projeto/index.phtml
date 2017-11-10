@@ -1,30 +1,52 @@
-<!-- Modal Structure -->
-<div id="abrirModal" class="modal modal-fixed-footer">
-    <div class="modal-content" id="pre-visualizar">
-        <visualizar>
-        </visualizar>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
-    </div>
-</div>
-
 <script type="text/x-template" id="visualizar">
     <div>
-        <table>
-            <thead class="bordered">
-                <th>
-                    dados
-                </th>
-            </thead>
-            <tbody>
-                <tr v-for="( produto, index ) in dados">
-                    <td>
-                        {{ produto.nome}} 
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <button class="btn" v-on:click="modal()">
+            {{pronac}}
+        </button>
+    </div>
+</script>
+
+<script type="text/x-template" id="dados">
+    <div>
+          <ul class="collapsible" data-collapsible="accordion">
+            <li>
+              <div class="collapsible-header">COMPROVAÇÃO CONSOLIDADA POR PRODUTO</div>
+              <div class="collapsible-body">
+                <table class="bordered">
+                    <thead>
+                        <th>Produto</th>
+                        <th>Qtd. Comprovantes</th>
+                        <th>Valor Comprovado</th>
+                        <th>% Comprovado</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="dado in dados['comprovacao']">
+                            <td>
+                                {{dado.dsProduto}}
+                            </td>
+                            <td>
+                                {{dado.qtComprovantes}}
+                            </td>
+                            <td>
+                                {{dado.vlComprovado}}
+                            </td>
+                            <td>
+                                {{dado.PercComprovado}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </div>
+            </li>
+            <li>
+              <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+            <li>
+              <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+            </li>
+          </ul>
     </div>
 </script>
 
@@ -36,44 +58,65 @@
                 dados:[]
             }
         },
-        /* props: ['idpronac'], */
+        props: ['idpronac', 'pronac'],
         mounted: function() {
-            console.log(this.$root.$data.idpronac);
-            console.log(this.teste2);
             this.dados = [{ nome: 'teste' }, { nome: 'teste1' }]
-
         },
-        computed:{
-            qtExemplaresTotal: function() {
+        methods: {
+            modal: function() {
+                bus.$emit('id-selected', this.idpronac)
+                $3('#abrirModal').modal();
+                $3('#abrirModal').modal('open');
             }
         }
     });
-    app6 = null;
 
-    $3('.pre-visualizar').on('click',
-        function(event) {
-            event.preventDefault();
-            /* $3(".modal-content").empty().load('/prestacao-contas/visualizar-projeto?idPronac=' + $3(this).val()) */
-            $3('#abrirModal').modal();
-            $3('#abrirModal').modal('open');
-
-            app6 = new Vue({
-                el: '#pre-visualizar',
-                data: {
-                    idpronac: $3(this).val(),
-                }
+    Vue.component('dados', {
+        template: '#dados',
+        data: function() {
+            return {
+                dados:[]
+            }
+        },
+        created: function() {
+            vue = this;
+            bus.$on('id-selected', function (id) {
+                vue.idpronac = id;
+                vue.alerta();
             });
-            app6.$destroy();
-
+        },
+        props: ['idpronac'],
+        mounted: function() {
+            /* vue = this; */
+            /* $3.ajax({ */
+            /*     url: '/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=' + vue.idpronac */
+            /* }) */
+            /* .done( function(data) { */
+            /*     vue.dados = data; */
+            /* }); */
+        },
+        methods: {
+            alerta: function() {
+                vue = this;
+                $3.ajax({
+                    url: '/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=' + vue.idpronac
+                })
+                .done( function(data) {
+                    console.info(data);
+                    vue.dados = data; 
+                });
+            }
         }
-    );
-    console.log(app6);
+    });
 
+    var bus = new Vue({});
+    var app = new Vue({
+        el: '#container'
+    });
 </script>
 <style>
-eidpronac ce
   #abrirModal.modal{
-       height: 90%; 
+       height: 90%;
        max-height: 96%;
        width: 98%;
     }

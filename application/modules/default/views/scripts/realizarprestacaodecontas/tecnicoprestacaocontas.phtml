@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" id="container">
     <div class="row">
         <div class="col s12">
             <div id="breadcrumb">
@@ -47,9 +47,10 @@
                         <tr>
                             <td><?php echo $x; ?></td>
                             <td>
-                                <button  value="<?php echo $projeto->idPronac; ?>" class="btn pre-visualizar">
+                                <visualizar idpronac="<?php echo $projeto->idPronac; ?>" pronac="<?php echo $projeto->Pronac; ?>"></visualizar>
+                                <!--button  value="<?php echo $projeto->idPronac; ?>" class="btn pre-visualizar">
                                     <?php echo $projeto->Pronac; ?>
-                                </button>
+                                </button-->
                             </td>
                             <td><?php echo $projeto->NomeProjeto; ?></td>
                             <td><?php echo $projeto->Situacao; ?></td>
@@ -92,6 +93,15 @@
         <input type="hidden" name="tipoFiltro" value="<?php echo $this->filtro;?>">
         <input type="hidden" name="pronac" value="<?php echo $this->pronacProjeto;?>">
     </form>
+    <!-- Modal Structure -->
+    <div id="abrirModal" class="modal modal-fixed-footer">
+        <div class="modal-content" id="pre-visualizar">
+           <dados> </dados> 
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -104,7 +114,8 @@
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json"
                 },
-                paging: true
+                paging: true,
+                pageLength: 5
             }
         );
     });
