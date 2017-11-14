@@ -11,12 +11,12 @@ Vue.component('sl-btn-visualizar', {
             dados:[]
         }
     },
-    props: ['idpronac', 'pronac'],
+    props: ['idpronac', 'pronac', 'nome'],
     mounted: function() {
     },
     methods: {
         modal: function() {
-            bus.$emit('id-selected', this.idpronac)
+            bus.$emit('id-selected', {idpronac: this.idpronac, pronac: this.pronac, nome: this.nome});
             $3('#abrirModal').modal();
             $3('#abrirModal').modal('open');
         }

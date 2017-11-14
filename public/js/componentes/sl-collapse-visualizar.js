@@ -1,14 +1,16 @@
-Vue.component('dados', {
+Vue.component('sl-collapse-visualizar', {
     template:`
         <div>
-              <ul class="collapsible" data-collapsible="accordion">
+            <h4>{{pronac}} - {{nome}}</h4>
+            <ul v-if="dados" class="collapsible" data-collapsible="accordion">
                 <li v-for="dado in dados">
                   <div class="collapsible-header">{{dado.title}}</div>
                   <div class="collapsible-body">
                     <sl-table-visualizar v-bind:dados="dado"></sl-table-visualizar>
                   </div>
                 </li>
-              </ul>
+            </ul>
+            <>
         </div>
     `,
     data: function() {
@@ -18,16 +20,19 @@ Vue.component('dados', {
     },
     created: function() {
         vue = this;
-        bus.$on('id-selected', function (id) {
-            vue.idpronac = id;
+        bus.$on('id-selected', function (obj) {
+            vue.idpronac = obj.idpronac;
+            vue.nome = obj.nome;
+            vue.pronac = obj.pronac;
             vue.alerta();
         });
     },
-    props: ['idpronac'],
+    props: ['idpronac', 'pronac', 'nome'],
     mounted: function() { },
     methods: {
         alerta: function() {
             vue = this;
+            vue.dados = ''; 
             $3.ajax({
                 url: '/prestacao-contas/visualizar-projeto/dados-projeto?idPronac=' + vue.idpronac
             })
