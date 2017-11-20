@@ -1,27 +1,23 @@
-Vue.component('salic-table-easy', {
-    template:`
-    <div>
-        <table class="bordered">
-            <thead>
-                <th v-html="cab" v-for="cab in table.cols">
-                </th>
-            </thead>
-            <tbody>
-                <tr v-for="dado in table.lines">
-                    <td v-html="d" v-for="d in dado">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    `,
-    data: function() {
-        return {
-            table:[]
-        }
-    },
-    props: ['dados'],
-    mounted: function() {
-        this.table = this.dados;
+Vue.component(
+    'salic-table-easy',
+    {
+        template:`
+            <table class="">
+                <thead v-show="thead">
+                    <th v-html="cab" v-for="cab in dados.cols"></th>
+                </thead>
+                <tbody>
+                    <tr v-for="dado in dados.lines">
+                        <td v-html="d" v-for="d in dado"></td>
+                    </tr>
+                </tbody>
+                <tfoot v-if="tfoot">
+                    <tr>
+                        <td v-html="foot" v-for="foot in dados.foot"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        `,
+        props: {dados : null, thead: { default: true}, tfoot: { default: false}
     }
 });
