@@ -9,6 +9,7 @@ Vue.component('sl-collapse-visualizar', {
                     <salic-table-easy 
                         v-bind:dados="dado" 
                         v-bind:thead="true"
+                        v-bind:tfoot="true"
                         class="bordered"
                     >
                     </salic-table-easy>

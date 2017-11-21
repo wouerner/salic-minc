@@ -40,16 +40,26 @@ class PrestacaoContas_VisualizarProjetoController extends  MinC_Controller_Actio
 
         $consolidacaoPorProduto = $itens->consolidacaoPorProduto($idPronac);
         $itensAux = [];
+        $totalAux = [];
         $json = [];
         foreach($consolidacaoPorProduto as $k => $item){
             $itensAux[$k]['dsProduto'] = utf8_encode($item->dsProduto);
             $itensAux[$k]['qtComprovantes'] = $item->qtComprovantes;
             $itensAux[$k]['vlComprovado'] = number_format($item->vlComprovado, 2, ',', '.');
             $itensAux[$k]['PercComprovado'] = number_format($item->PercComprovado, 2, ',', '.');
+            $totalAux['qtComprovantes'] += $item->qtComprovantes;
+            $totalAux['vlComprovado'] += $item->vlComprovado;
         }
+
         $json['consolidacaoPorProduto']['lines'] =  $itensAux;
-        $json['consolidacaoPorProduto']['cols'] = ['Produto', 'Qtd. Comprovantes', 'Valor Comprovado', '% Comprovado'];
+        $json['consolidacaoPorProduto']['cols'] = [
+            'dsProduto' => ['name'=> 'Produto', 'class' => ''],
+            'qtComprovantes' => ['name'=> 'Qtd. Comprovantes', 'class' => 'right-align'],
+            'vlComprovado' => ['name'=> 'Valor Comprovado', 'class' => 'right-align'],
+            'PercComprovado' => ['name'=> '% Comprovado', 'class' => 'right-align']
+        ];
         $json['consolidacaoPorProduto']['title'] = 'COMPROVAÇÃO CONSOLIDADA POR PRODUTO';
+        $json['consolidacaoPorProduto']['tfoot'] = $totalAux;
 
         $consolidadoPorEtapa = $itens->consolidadoPorEtapa($idPronac);
         $itensAux = [];
@@ -60,8 +70,16 @@ class PrestacaoContas_VisualizarProjetoController extends  MinC_Controller_Actio
             $itensAux[$k]['PercComprovado'] = number_format($item->PercComprovado, 2, ',', '.');
         }
         $json['consolidadoPorEtapa']['lines'] = $itensAux;
-        $json['consolidadoPorEtapa']['cols'] = ['Descricao', 'Qtd. Comprovantes', 'Valor Comprovado', '% Comprovado'];
+        $json['consolidadoPorEtapa']['cols'] = [
+            'Descricao' => [ 'name'=> 'Descrição', 'class' => 'left-align'], 
+            'qtComprovantes' => [ 'name'=> 'Qtd. Comprovantes', 'class' => 'right-align'], 
+            'vlComprovado' => [ 'name'=> 'Valor Comprovado', 'class' => 'right-align'], 
+            'PercComprovado'=> [ 'name'=> '% Comprovado', 'class' => 'right-align']
+        ];
         $json['consolidadoPorEtapa']['title'] = 'COMPROVAÇÃO CONSOLIDADA POR ETAPA';
+        $json['consolidadoPorEtapa']['tfoot'] = $totalAux;
+
+        /* $this->_helper->json($json); */
 
         $maioresItensComprovados = $itens->maioresItensComprovados($idPronac);
         $itensAux = [];
