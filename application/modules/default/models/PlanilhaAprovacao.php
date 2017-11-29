@@ -2120,25 +2120,6 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         return $db->fetchAll($select);
     }
 
-    public function countPlanilhaRemanejamento($idPronac)
-    {
-        $select = $this->select();
-        $select->setIntegrityCheck(false);
-        
-        $select->from(
-            array($this->_name),
-            array(
-                'total' => New Zend_Db_Expr('count(idPlanilhaAprovacao)'),
-            ),
-            $this->_schema
-        );
-        
-        $select->where('idPronac = ?', $idPronac);
-        $select->where( 'tpPlanilha = ?', 'RP');
-        $select->where( 'stAtivo = ?', 'N');
-        
-        return $this->fetchAll($select);
-    }
 
     public function visualizarPlanilhaEmRemanejamento($idPronac)
     {
@@ -2388,6 +2369,26 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract {
         $select->where('IdPRONAC = ?', $idpronac);
         $select->where('idPlanilhaItem = ?', $idPlanilhaItem);
 
+        return $this->fetchAll($select);
+    }
+        
+    public function countPlanilhaRemanejamento($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        
+        $select->from(
+            array($this->_name),
+            array(
+                'total' => New Zend_Db_Expr('count(idPlanilhaAprovacao)'),
+            ),
+            $this->_schema
+        );
+        
+        $select->where('idPronac = ?', $idPronac);
+        $select->where( 'tpPlanilha = ?', 'RP');
+        $select->where( 'stAtivo = ?', 'N');
+        
         return $this->fetchAll($select);
     }
 }
