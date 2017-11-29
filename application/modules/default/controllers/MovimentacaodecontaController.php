@@ -1697,7 +1697,7 @@ class MovimentacaodecontaController extends MinC_Controller_Action_Abstract
 
                                                 // verifica se o arquivo j&aacute; esta cadastrado no banco de dados
                                                 $buscarArquivoCadastrado = $this->tbTmpDepositoIdentificado->buscar(array('dtGeracao = ?' => $data_geracao));
-                                                ;
+
                                                 if (count($buscarArquivoCadastrado) > 0) {
                                                     // fecha o arquivo
                                                     fclose($abrir_arquivo_header);
