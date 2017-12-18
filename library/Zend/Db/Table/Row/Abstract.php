@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Table
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 22230 2010-05-21 20:59:18Z ralph $
+ * @version    $Id$
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'Zend/Db.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Table
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggregate
@@ -518,6 +518,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
          * based on the primary key value(s).
          */
         $where = $this->_getWhereQuery(false);
+
         /**
          * Run pre-UPDATE logic
          */
@@ -645,7 +646,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
     {
         return new ArrayIterator((array) $this->_data);
     }
-    
+
     /**
      * Returns the column/value data as an array.
      *
@@ -709,6 +710,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
             require_once 'Zend/Db/Table/Row/Exception.php';
             throw new Zend_Db_Table_Row_Exception("The primary key must be set as an array");
         }
+
         $primary = array_flip($this->_primary);
         if ($useDirty) {
             $array = array_intersect_key($this->_data, $primary);
@@ -720,6 +722,17 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
             throw new Zend_Db_Table_Row_Exception("The specified Table '$this->_tableClass' does not have the same primary key as the Row");
         }
         return $array;
+    }
+
+    /**
+     * Retrieves an associative array of primary keys.
+     *
+     * @param bool $useDirty
+     * @return array
+     */
+    public function getPrimaryKey($useDirty = true)
+    {
+        return $this->_getPrimaryKey($useDirty);
     }
 
     /**
@@ -735,6 +748,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
         $primaryKey = $this->_getPrimaryKey($useDirty);
         $info = $this->_getTable()->info();
         $metadata = $info[Zend_Db_Table_Abstract::METADATA];
+
         // retrieve recently updated row using primary keys
         $where = array();
         foreach ($primaryKey as $column => $value) {
@@ -1164,37 +1178,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
      */
     protected function _getTableFromString($tableName)
     {
-
-        if ($this->_table instanceof Zend_Db_Table_Abstract) {
-            $tableDefinition = $this->_table->getDefinition();
-
-            if ($tableDefinition !== null && $tableDefinition->hasTableConfig($tableName)) {
-                return new Zend_Db_Table($tableName, $tableDefinition);
-            }
-        }
-
-        // assume the tableName is the class name
-        if (!class_exists($tableName)) {
-            try {
-                require_once 'Zend/Loader.php';
-                Zend_Loader::loadClass($tableName);
-            } catch (Zend_Exception $e) {
-                require_once 'Zend/Db/Table/Row/Exception.php';
-                throw new Zend_Db_Table_Row_Exception($e->getMessage(), $e->getCode(), $e);
-            }
-        }
-
-        $options = array();
-
-        if (($table = $this->_getTable())) {
-            $options['db'] = $table->getAdapter();
-        }
-
-        if (isset($tableDefinition) && $tableDefinition !== null) {
-            $options[Zend_Db_Table_Abstract::DEFINITION] = $tableDefinition;
-        }
-
-        return new $tableName($options);
+        return Zend_Db_Table_Abstract::getTableFromString($tableName, $this->_table);
     }
 
 }
