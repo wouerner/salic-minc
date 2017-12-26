@@ -1,12 +1,12 @@
 <?php 
 /**
- * 
+ *
  * @author Caio Lucena
  */
 class FornecedorController extends MinC_Controller_Action_Abstract
 {
     /**
-     * 
+     *
      */
     public function init()
     {
@@ -19,7 +19,7 @@ class FornecedorController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * 
+     *
      */
     public function pesquisarFornecedorItemAction()
     {

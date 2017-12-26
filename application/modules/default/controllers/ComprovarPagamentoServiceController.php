@@ -16,5 +16,4 @@ class ComprovarPagamentoServiceController extends ServicoController
     {
         $this->setServiceClass('ComprovantePagamentoService');
     }
-
 }

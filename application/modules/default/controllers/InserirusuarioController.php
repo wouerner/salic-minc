@@ -4,9 +4,10 @@
  *
  * @author augusto
  */
-class InserirusuarioController extends MinC_Controller_Action_Abstract {
-
-    public function indexAction() {
+class InserirusuarioController extends MinC_Controller_Action_Abstract
+{
+    public function indexAction()
+    {
         $cpf = $this->_request->getParam("cpf");
         $agente = new Agente_Model_DbTable_Agentes();
         $usuario = new Autenticacao_Model_Usuario();
@@ -44,9 +45,9 @@ class InserirusuarioController extends MinC_Controller_Action_Abstract {
             'usu_telefone' => 0,
         );
 
-        $senha = substr($cpf, 0,6);
+        $senha = substr($cpf, 0, 6);
         $inserir = $usuario->inserirUsuarios($dados);
         $alterarSenha = $usuario->alterarSenha($cpf, $senha);
-       die('OK');
+        die('OK');
     }
 }

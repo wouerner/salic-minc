@@ -1,6 +1,7 @@
 <?php
 
-class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
+class AreadetrabalhoController extends MinC_Controller_Action_Abstract
+{
     private $idAgente = 0;
 
     /**
@@ -9,7 +10,8 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
      * @param void
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // titulo da pagina
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
@@ -45,7 +47,8 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
         parent::init();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // titulo da pagina
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
@@ -112,8 +115,7 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
         foreach ($tbanalise as $result) {
             if ($result->idTipoAgente == 6) {
                 $analisados++;
-            } else
-            if ($result->idTipoAgente == 1) {
+            } elseif ($result->idTipoAgente == 1) {
                 $naoanalisados++;
             }
         }
@@ -143,7 +145,7 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
         $diligenciados = 0;
         $pronac=0;
         foreach ($diligenciado as $result) {
-            if($pronac != $result->PRONAC) {
+            if ($pronac != $result->PRONAC) {
                 $diligenciados++;
             }
             $pronac = $result->PRONAC;
@@ -153,7 +155,7 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
         $respondidos = 0;
         $pronac=0;
         foreach ($diligenciadoresposta as $result) {
-            if($pronac != $result->PRONAC) {
+            if ($pronac != $result->PRONAC) {
                 $respondidos++;
             }
             $pronac = $result->PRONAC;
@@ -175,8 +177,7 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
         foreach ($tbanalisereadequacao as $result) {
             if ($result->idTipoAgente == 6) {
                 $analisados++;
-            } else
-            if ($result->idTipoAgente == 1) {
+            } elseif ($result->idTipoAgente == 1) {
                 $naoanalisados++;
             }
         }
@@ -189,7 +190,8 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
     /**
      * Metodo para efetuar a retirada de pauta
      */
-    public function retirarDePautaAction() {
+    public function retirarDePautaAction()
+    {
         //$this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
 
         // recebe os dados do formulario
@@ -214,18 +216,15 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
                     //$this->view->msg  = 'Solicita&ccedil;&atilde;o enviada com sucesso!';
                     //$this->view->type = 'CONFIRM';
                     parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "areadetrabalho/index", "CONFIRM");
-                }
-                else {
+                } else {
                     //$this->view->msg  = 'Erro ao efetuar solicita&ccedil;&atilde;o!';
                     //$this->view->type = 'ERROR';
                     throw new Exception("Erro ao efetuar solicita&ccedil;&atilde;o!");
                 }
-            }
-            else {
+            } else {
                 throw new Exception("Todos os campos s&atilde;o de preenchimento obrigat&oacute;rio!");
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             //$this->view->msg  = $e->getMessage();
             //$this->view->type = 'ERROR';
             parent::message($e->getMessage(), "areadetrabalho/index", "ERROR");
@@ -237,7 +236,8 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
     /**
      * Metodo para efetuar o cancelamento da retirada de pauta
      */
-    public function cancelarRetirarDePautaAction() {
+    public function cancelarRetirarDePautaAction()
+    {
         //$this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
 
         // recebe os dados do formulario
@@ -258,18 +258,15 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract {
                     //$this->view->msg  = 'Solicita&ccedil;&atilde;o enviada com sucesso!';
                     //$this->view->type = 'CONFIRM';
                     parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "areadetrabalho/index", "CONFIRM");
-                }
-                else {
+                } else {
                     //$this->view->msg  = 'Erro ao efetuar solicita&ccedil;&atilde;o!';
                     //$this->view->type = 'ERROR';
                     throw new Exception("Erro ao efetuar cancelamento de solicita&ccedil;&atilde;o!");
                 }
-            }
-            else {
+            } else {
                 throw new Exception("Erro ao efetuar cancelamento de solicita&ccedil;&atilde;o!");
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             //$this->view->msg  = $e->getMessage();
             //$this->view->type = 'ERROR';
             parent::message($e->getMessage(), "areadetrabalho/index", "ERROR");

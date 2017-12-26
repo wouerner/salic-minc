@@ -4,9 +4,10 @@
  *
  * @author 01373930160
  */
-class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract {
-
-    public function init() {
+class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract
+{
+    public function init()
+    {
         $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // tï¿½tulo da pï¿½gina
         $auth = Zend_Auth::getInstance(); // pega a autenticação
         $Usuario = new UsuarioDAO(); // objeto usuï¿½rio
@@ -65,7 +66,8 @@ class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract {
     }
 
 
-    public function gerarrelatorioreuniaoAction() {
+    public function gerarrelatorioreuniaoAction()
+    {
         $reuniao = new Reuniao();
         $pauta = new Pauta();
         $tblPauta = new tbPauta();
@@ -95,8 +97,8 @@ class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract {
             //$buscarPauta = $pauta->PautaAprovada($idReuniao, $idpronac);
             $arrBusca = array();
             $arrBusca['r.idNrReuniao = ?'] = $idReuniao;
-            if(!empty($idpronac)){
-                        $arrBusca['pr.idPronac = ?'] = $idpronac;
+            if (!empty($idpronac)) {
+                $arrBusca['pr.idPronac = ?'] = $idpronac;
             }
             $buscarPauta = $tblPauta->buscarProjetosTermoAprovacao($arrBusca, array('a.Descricao ASC','pr.NomeProjeto ASC'));
             $projetos = array();
@@ -111,7 +113,7 @@ class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract {
                 $projetos[$projetosCNIC->Area][$num]['dsConselheiro'] = $projetosCNIC->ResumoParecer;
                 if ($projetosCNIC->stAnalise == 'AS') {
                     $projetos[$projetosCNIC->Area][$num]['stAnalisePlenaria'] = 'Aprovar';
-                } else if ($projetosCNIC->stAnalise == 'IS') {
+                } elseif ($projetosCNIC->stAnalise == 'IS') {
                     $projetos[$projetosCNIC->Area][$num]['stAnalisePlenaria'] = 'Indeferir';
                 } else {
                     $projetos[$projetosCNIC->Area][$num]['stAnalisePlenaria'] = '';
@@ -128,9 +130,9 @@ class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract {
         }
     }
 
-    public function gerarpdfAction() {
+    public function gerarpdfAction()
+    {
         $this->_helper->layout->disableLayout();
         $this->view->dadosprojetos = $_POST['dadospdf'];
     }
-
 }

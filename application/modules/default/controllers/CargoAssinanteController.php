@@ -7,7 +7,7 @@ class CargoAssinanteController extends Zend_Controller_Action
 {
 
     /**
-     * 
+     *
      */
     public function incluirAction()
     {
@@ -31,5 +31,4 @@ class CargoAssinanteController extends Zend_Controller_Action
         $this->_helper->flashMessengerType->addMessage($tipo);
         $this->_redirect("realizarprestacaodecontas/manter-assinantes?tipoFiltro={$this->getRequest()->getParam('tipoFiltro')}");
     }
-
 }

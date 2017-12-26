@@ -1,12 +1,12 @@
 <?php 
 /**
- * 
+ *
  * @author Caio Lucena
  */
 class ComprovarPagamentoController extends MinC_Controller_Action_Abstract
 {
     /**
-     * 
+     *
      */
     public function init()
     {
@@ -20,7 +20,7 @@ class ComprovarPagamentoController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * 
+     *
      */
     public function deletarAction()
     {
@@ -30,13 +30,13 @@ class ComprovarPagamentoController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * 
+     *
      */
     public function pesquisarAction()
     {
         $comprovanteParamentoModel = new ComprovantePagamento();
         $this->view->comprovantes = $comprovanteParamentoModel->pesquisarComprovantePorItem($this->getRequest()->getParam('item'));
-        array_walk($this->view->comprovantes, function(&$value){
+        array_walk($this->view->comprovantes, function (&$value) {
             $value = array_map('utf8_encode', $value);
         });
     }

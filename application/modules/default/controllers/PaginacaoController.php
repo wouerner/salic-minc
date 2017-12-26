@@ -12,13 +12,13 @@
 
 class PaginacaoController extends Zend_Controller_Action
 {
-	/**
-	 * Método da paginação
-	 * @access public
-	 * @param void
-	 * @return void
-	 */
-	public function paginacaoAction()
-	{
-	}
+    /**
+     * Método da paginação
+     * @access public
+     * @param void
+     * @return void
+     */
+    public function paginacaoAction()
+    {
+    }
 } // fecha class

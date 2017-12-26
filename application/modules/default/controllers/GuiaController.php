@@ -8,7 +8,8 @@ class GuiaController extends MinC_Controller_Action_Abstract
      * (non-PHPdoc)
      * @see GenericControllerNew::init()
      */
-    public function init() {
+    public function init()
+    {
         /** /
         $auth = Zend_Auth::getInstance(); // instancia da autenticacao;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
@@ -44,10 +45,13 @@ class GuiaController extends MinC_Controller_Action_Abstract
      * (non-PHPdoc)
      * @see GenericControllerNew::postDispatch()
      */
-    public function postDispatch(){;}
+    public function postDispatch()
+    {
+        ;
+    }
 
     /**
-     * 
+     *
      */
     public function cadastrarAction()
     {
@@ -60,14 +64,14 @@ class GuiaController extends MinC_Controller_Action_Abstract
             );
             $guia->cadastrar();
             $this->view->guia = $guia->toStdClass();
-        } catch(Exception $e) {
-        	xd($e);
+        } catch (Exception $e) {
+            xd($e);
             $this->view->error = $e->getMessage();
         }
     }
 
     /**
-     * 
+     *
      */
     public function atualizarAction()
     {
@@ -91,7 +95,7 @@ class GuiaController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * 
+     *
      */
     public function pesquisarAction()
     {
