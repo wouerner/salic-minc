@@ -4,8 +4,8 @@
  *
  * @author augusto
  */
-class Diligencia extends MinC_Db_Table_Abstract {
-
+class Diligencia extends MinC_Db_Table_Abstract
+{
     protected $_banco = 'SAC';
     protected $_name = 'tbDiligencia';
     protected $_schema = "SAC";
@@ -19,7 +19,8 @@ class Diligencia extends MinC_Db_Table_Abstract {
      * @param int $inicio - offset
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function buscar($where=array(), $order=array(), $tamanho=-1, $inicio=-1 , $idProduto = null) {
+    public function buscar($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $idProduto = null)
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -32,7 +33,7 @@ class Diligencia extends MinC_Db_Table_Abstract {
             $slct->where($coluna, $valor);
         }
 
-        if($idProduto){
+        if ($idProduto) {
             $slct->where('idProduto = ?', $idProduto);
         }
 
@@ -59,7 +60,8 @@ class Diligencia extends MinC_Db_Table_Abstract {
      * @param int $inicio - offset
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function buscarUltDiligencia($where=array(), $order=array(), $tamanho=-1, $inicio=-1) {
+    public function buscarUltDiligencia($where=array(), $order=array(), $tamanho=-1, $inicio=-1)
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -95,7 +97,8 @@ class Diligencia extends MinC_Db_Table_Abstract {
      * @param string ou array $situacao - situacao, ou um array de situacoes
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function buscarDiligencia($idagente, $idpronac=null,  $resposta=null, $situacao=null) {
+    public function buscarDiligencia($idagente, $idpronac=null, $resposta=null, $situacao=null)
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -132,56 +135,58 @@ class Diligencia extends MinC_Db_Table_Abstract {
         $select->where('D.idSolicitante = ?', $idagente);
         if (!empty($situacao) && !is_array($situacao)) {
             $select->where('Pr.Situacao = ?', $situacao);
-        }elseif(!empty($situacao) && is_array($situacao)){
+        } elseif (!empty($situacao) && is_array($situacao)) {
             $select->where('Pr.Situacao in (?)', $situacao);
         }
         if ($idpronac) {
-            $select->where('Pr.IdPRONAC = ?',$idpronac );
+            $select->where('Pr.IdPRONAC = ?', $idpronac);
         }
 
         if ($resposta) {
             $select->where('D.DtResposta is not null');
-        }
-        else{
+        } else {
             $select->where('D.DtResposta is null');
         }
-        $select->where(New Zend_Db_Expr('D.DtSolicitacao = (SELECT TOP 1 max(DtSolicitacao) from SAC..tbDiligencia WHERE idPronac = Pr.IdPRONAC)'));
+        $select->where(new Zend_Db_Expr('D.DtSolicitacao = (SELECT TOP 1 max(DtSolicitacao) from SAC..tbDiligencia WHERE idPronac = Pr.IdPRONAC)'));
 
         return $this->fetchAll($select);
     }
 
-    public function inserirDiligencia($dados) {
+    public function inserirDiligencia($dados)
+    {
         $insert = $this->insert($dados);
     }
 
-    public function diligenciasNaoRespondidas($retornaSelect = false){
-
+    public function diligenciasNaoRespondidas($retornaSelect = false)
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
                 array($this->_name),
                 array(
                     'idPronac'
-                    )
-                ,"SAC.dbo"
+                    ),
+            "SAC.dbo"
         );
 
         $select->where('((((DATEDIFF(day, DtSolicitacao, GETDATE()) > 20');
-        $select->where("stProrrogacao =?)",'N');
+        $select->where("stProrrogacao =?)", 'N');
         $select->orWhere('(DATEDIFF(day, DtSolicitacao, GETDATE()) > 40');
-        $select->where("stProrrogacao =?))",'S');
-        $select->where("idTipoDiligencia =?)",124);
+        $select->where("stProrrogacao =?))", 'S');
+        $select->where("idTipoDiligencia =?)", 124);
         $select->orWhere('(DATEDIFF(day, DtSolicitacao, GETDATE()) > 30');
-        $select->where("idTipoDiligencia != ?))",124);
+        $select->where("idTipoDiligencia != ?))", 124);
         $select->where('DtResposta is null');
 
-        if($retornaSelect)
+        if ($retornaSelect) {
             return $select;
-        else
+        } else {
             return $this->fetchAll($select);
+        }
     }
 
-    public function buscarProjetosDiligenciadosCNIC($where=array(), $order=array(), $tamanho=-1, $inicio=-1) {
+    public function buscarProjetosDiligenciadosCNIC($where=array(), $order=array(), $tamanho=-1, $inicio=-1)
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -226,7 +231,7 @@ class Diligencia extends MinC_Db_Table_Abstract {
         foreach ($where as $coluna => $valor) {
             $select->where($coluna, $valor);
         }
-        $select->where(New Zend_Db_Expr('D.DtSolicitacao = (SELECT TOP 1 max(DtSolicitacao) from SAC..tbDiligencia WHERE idPronac = Pr.IdPRONAC)'));
+        $select->where(new Zend_Db_Expr('D.DtSolicitacao = (SELECT TOP 1 max(DtSolicitacao) from SAC..tbDiligencia WHERE idPronac = Pr.IdPRONAC)'));
         //adicionando linha order ao select
         $select->order($order);
 
@@ -242,6 +247,4 @@ class Diligencia extends MinC_Db_Table_Abstract {
         
         return $this->fetchAll($select);
     }
-
 }
-

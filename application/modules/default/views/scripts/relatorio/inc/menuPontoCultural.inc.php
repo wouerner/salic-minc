@@ -60,10 +60,10 @@
             $get = Zend_Registry::get("get");
             //define id do PreProjeto que sera passado as outras implementacoes
             $codProjeto = "?idPreProjeto=";
-            if(isset($this->proposta->idPreProjeto)){
+            if (isset($this->proposta->idPreProjeto)) {
                 $codProjeto .= $this->proposta->idPreProjeto;
                 $idPreProjeto = $this->proposta->idPreProjeto;
-            }elseif(isset($get->idPreProjeto)){
+            } elseif (isset($get->idPreProjeto)) {
                 $codProjeto .= $get->idPreProjeto;
                 $idPreProjeto = $get->idPreProjeto;
             }

@@ -1430,14 +1430,14 @@ class GerarrelatoriopareceristaController extends MinC_Controller_Action_Abstrac
                     }
                     $html .="</table>";
                 } else {
-                        $html .='<table class="tabela">
+                    $html .='<table class="tabela">
                             <tr>
                                 <th>
                                     Este parecerista n&atilde;o tem analises!
                                 </th>
                             </tr>
                         </table>';
-                    }
+                }
             break;
         }
         return $html;

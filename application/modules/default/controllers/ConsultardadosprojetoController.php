@@ -6890,7 +6890,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                             $campo = $this->_request->getParam("campo");
                             $order = array($campo." ".$ordem);
                             $ordenacao = "&campo=".$campo."&ordem=".$ordem;
-            
+
                         } else {
                             $campo = null;
                             $order = array(4,9,8);

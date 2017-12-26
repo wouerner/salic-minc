@@ -6,8 +6,8 @@
  * @uses GenericModel
  * @author
  */
-class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
-
+class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
+{
     protected $_schema = 'sac';
     protected $_name  = 'spPlanilhaOrcamentaria';
 
@@ -107,8 +107,8 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
             ->joinInner(array('e' => 'tbplanilhaunidade'), '(b.unidade = e.idunidade)', 'e.descricao as Unidade', $sac)
             ->joinInner(array('i' => 'tbplanilhaitens'), '(b.idplanilhaitem=i.idplanilhaitens)', 'i.descricao as Item', $sac)
             ->joinInner(array('x' => 'verificacao'), '(b.fonterecurso = x.idverificacao)', 'x.descricao as FonteRecurso', $sac)
-            ->joinLeft(array('f' => 'municipios'), '(b.municipiodespesa = f.idmunicipioibge)',array('u.sigla as UF'),$this->getSchema('agentes'))
-            ->joinLeft(array('u' => 'uf'), '(f.idufibge = u.iduf and b.ufdespesa = u.iduf)',array('f.descricao as Municipio'),$this->getSchema('agentes'))
+            ->joinLeft(array('f' => 'municipios'), '(b.municipiodespesa = f.idmunicipioibge)', array('u.sigla as UF'), $this->getSchema('agentes'))
+            ->joinLeft(array('u' => 'uf'), '(f.idufibge = u.iduf and b.ufdespesa = u.iduf)', array('f.descricao as Municipio'), $this->getSchema('agentes'))
             ->where('a.idpreprojeto = ? ', $idPronac)
             ->order("x.descricao")
             ->order("c.descricao DESC")
@@ -300,7 +300,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
             ->group("a1.idPlanilhaAprovacao")
         ;
 
-//echo $subSQLB;die;
+        //echo $subSQLB;die;
 
         $a = array(
             new Zend_Db_Expr("
@@ -516,7 +516,6 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract {
                 ->order('i.Descricao')
             ;
         } else {
-
             $subA = array(
                 "sum(b1.vlComprovacao) AS vlPagamento",
             );

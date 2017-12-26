@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
 */
@@ -9,8 +9,8 @@
  *
  * @author tisomar
  */
-class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
-
+class tbHistoricoDocumento extends MinC_Db_Table_Abstract
+{
     protected $_banco = "SAC";
     protected $_name = "tbHistoricoDocumento";
 
@@ -22,7 +22,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
      * @param int $inicio - offset
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function buscarCompleto($where=array(), $order=array(), $tamanho=-1, $inicio=-1) {
+    public function buscarCompleto($where=array(), $order=array(), $tamanho=-1, $inicio=-1)
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -69,7 +70,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
         return $this->fetchAll($slct);
     }
 
-    public function pegaTotalCompleto($where=array()) {
+    public function pegaTotalCompleto($where=array())
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -111,7 +113,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
      * @param int $inicio - offset
      * @return Zend_Db_Table_Rowset_Abstract
      */
-    public function buscarTramitacaoDocumento($where=array(), $order=array(), $tamanho=-1, $inicio=-1) {
+    public function buscarTramitacaoDocumento($where=array(), $order=array(), $tamanho=-1, $inicio=-1)
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -164,7 +167,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
         return $this->fetchAll($slct);
     }
 
-    public function pegaTotalTramitacaoDocumento($where=array()) {
+    public function pegaTotalTramitacaoDocumento($where=array())
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -204,8 +208,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
         return $this->fetchAll($slct);
     }
 
-    public function buscarHistoricoTramitacaoProjeto($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $count=false) {
-
+    public function buscarHistoricoTramitacaoProjeto($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $count=false)
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -227,7 +231,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
                                                                WHEN h.Acao = 3 THEN 'Recebido'
                                                                WHEN h.Acao = 4 THEN 'Recusado'
                                                                WHEN h.Acao = 6 THEN 'Anexado' END"),
-                ), "SAC.dbo"
+                ),
+            "SAC.dbo"
         );
         $slct->joinInner(
                 array("p"=>"Projetos"),
@@ -247,12 +252,13 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
             $slct->where($coluna, $valor);
         }
 
-        if($count) {
+        if ($count) {
             $slctCount = $this->select();
             $slctCount->setIntegrityCheck(false);
             $slctCount->from(
                     array("h"=>$this->_name),
-                    array('total'=>"count(*)"), "SAC.dbo"
+                    array('total'=>"count(*)"),
+                "SAC.dbo"
             );
             $slctCount->joinInner(
                     array("p"=>"Projetos"),
@@ -267,9 +273,9 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
             }
 
             $rs = $this->fetchAll($slctCount)->current();
-            if($rs) {
+            if ($rs) {
                 return $rs->total;
-            }else {
+            } else {
                 return 0;
             }
         }
@@ -290,8 +296,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
         return $this->fetchAll($slct);
     }
 
-    public function buscarHistoricoTramitacaoDocumento($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $count=false) {
-
+    public function buscarHistoricoTramitacaoDocumento($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $count=false)
+    {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
         $slct->from(
@@ -304,7 +310,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
                                                            WHEN h.Acao = 3 THEN 'Recebido'
                                                            WHEN h.Acao = 4 THEN 'Recusado'
                                                            WHEN h.Acao = 6 THEN 'Anexado' END"),
-                ), "SAC.dbo"
+                ),
+            "SAC.dbo"
         );
         $slct->joinInner(
                 array("p"=>"Projetos"),
@@ -339,12 +346,13 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
             $slct->where($coluna, $valor);
         }
 
-        if($count) {
+        if ($count) {
             $slctCount = $this->select();
             $slctCount->setIntegrityCheck(false);
             $slctCount->from(
                     array("h"=>$this->_name),
-                    array('total'=>"count(*)"), "SAC.dbo"
+                    array('total'=>"count(*)"),
+                "SAC.dbo"
             );
             $slctCount->joinInner(
                     array("p"=>"Projetos"),
@@ -371,9 +379,9 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
             }
 
             $rs = $this->fetchAll($slctCount)->current();
-            if($rs) {
+            if ($rs) {
                 return $rs->total;
-            }else {
+            } else {
                 return 0;
             }
         }
@@ -393,7 +401,8 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
         return $this->fetchAll($slct);
     }
 
-    public function consultarTramitacoes($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $qtdeTotal=false) {
+    public function consultarTramitacoes($where=array(), $order=array(), $tamanho=-1, $inicio=-1, $qtdeTotal=false)
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -417,16 +426,22 @@ class tbHistoricoDocumento extends MinC_Db_Table_Abstract {
                 )
         );
         $select->joinInner(
-            array('p' => 'Projetos'), 'h.idPronac = p.IdPRONAC',
-            array(new Zend_Db_Expr('AnoProjeto+Sequencial AS Pronac'),'NomeProjeto',new Zend_Db_Expr('h.idDocumento')), 'SAC.dbo'
+            array('p' => 'Projetos'),
+            'h.idPronac = p.IdPRONAC',
+            array(new Zend_Db_Expr('AnoProjeto+Sequencial AS Pronac'),'NomeProjeto',new Zend_Db_Expr('h.idDocumento')),
+            'SAC.dbo'
         );
         $select->joinLeft(
-            array('doc' => 'tbDocumento'), 'h.idDocumento = doc.idDocumento',
-            array('NoArquivo', 'CodigoCorreio'), 'SAC.dbo'
+            array('doc' => 'tbDocumento'),
+            'h.idDocumento = doc.idDocumento',
+            array('NoArquivo', 'CodigoCorreio'),
+            'SAC.dbo'
         );
         $select->joinLeft(
-            array('td' => 'tbTipoDocumento'), 'doc.idTipoDocumento = td.idTipoDocumento',
-            array('dsTipoDocumento'), 'SAC.dbo'
+            array('td' => 'tbTipoDocumento'),
+            'doc.idTipoDocumento = td.idTipoDocumento',
+            array('dsTipoDocumento'),
+            'SAC.dbo'
         );
 
         //adiciona quantos filtros foram enviados

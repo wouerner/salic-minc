@@ -1,6 +1,6 @@
 <?php
-class Orgaos extends MinC_Db_Table_Abstract{
-
+class Orgaos extends MinC_Db_Table_Abstract
+{
     protected $_banco = 'SAC';
     protected $_name  = 'Orgaos';
     protected $_primary = 'Codigo';
@@ -24,7 +24,7 @@ class Orgaos extends MinC_Db_Table_Abstract{
     const ORGAO_FCRB = 95;
     const ORGAO_IBRAM = 335;
 
-    public function pesquisarTodosOrgaos() 
+    public function pesquisarTodosOrgaos()
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -51,8 +51,9 @@ class Orgaos extends MinC_Db_Table_Abstract{
         return $this->fetchAll($select);
     }
 
-    public function pesquisarNomeOrgao($codOrgao){
-    	$select = $this->select();
+    public function pesquisarNomeOrgao($codOrgao)
+    {
+        $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
                         array('o'=>$this->_name),
@@ -63,21 +64,23 @@ class Orgaos extends MinC_Db_Table_Abstract{
                      );
         $select->where("o.Codigo = ?", $codOrgao);
 
-       return $this->fetchAll($select);
+        return $this->fetchAll($select);
     }
 
-    public function codigoOrgaoSuperior($codOrgao){
-    	$select = $this->select();
+    public function codigoOrgaoSuperior($codOrgao)
+    {
+        $select = $this->select();
         $select->setIntegrityCheck(false);
-        $select->from(array('o'=>$this->_name),
+        $select->from(
+            array('o'=>$this->_name),
                       array('o.Codigo',
                             'o.Sigla',
                             'o.idSecretaria as Superior')
-		);
+        );
 
-		$select->where("o.Codigo = ?", $codOrgao);
+        $select->where("o.Codigo = ?", $codOrgao);
 
-       return $this->fetchAll($select);
+        return $this->fetchAll($select);
     }
 
 
@@ -114,7 +117,7 @@ class Orgaos extends MinC_Db_Table_Abstract{
 //        $slct->where("se.stEstado = ?", 1);
 //        $slct->where("se.Codigo = ?", $area);
 //        $slct->orWhere("se.Codigo = ?", $segmento);
-//        
+//
 //        return $this->fetchAll($slct);
 //    }
 
@@ -148,7 +151,8 @@ class Orgaos extends MinC_Db_Table_Abstract{
         return $this->fetchAll($slct);
     }
 
-    public function obterOrgaoSuperior($codOrgao) {
+    public function obterOrgaoSuperior($codOrgao)
+    {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
 
@@ -167,7 +171,7 @@ class Orgaos extends MinC_Db_Table_Abstract{
 
         $objQuery->where("OrgaoFilho.Codigo = ?", $codOrgao);
         $resultado = $this->fetchRow($objQuery);
-        if($resultado) {
+        if ($resultado) {
             return $resultado->toArray();
         }
     }
@@ -176,18 +180,19 @@ class Orgaos extends MinC_Db_Table_Abstract{
     /*
      * Busca superintendências do IPHAN
      */
-    public function buscarSuperintendencias() {
-
+    public function buscarSuperintendencias()
+    {
         $query = $this->select()
-               ->from($this,
-                      array('Codigo', 'Sigla'));
+               ->from(
+                   $this,
+                      array('Codigo', 'Sigla')
+               );
 
         $query->where('Vinculo = 1');
         $query->where('idSecretaria = ' . Orgaos::ORGAO_IPHAN_PRONAC);
         $query->order('Sigla');
         
         return $this->fetchAll($query);
-
     }
 
     public function isVinculadaIphan($idOrgao)
@@ -206,4 +211,3 @@ class Orgaos extends MinC_Db_Table_Abstract{
         return (!in_array($idOrgao, $orgaos)) ? true : false;
     }
 }
-?>

@@ -51,9 +51,9 @@
             <div class="top"></div>
             <div id="qm0" class="qmmc">
                 <a class="no_seta" href="<?php echo $this->url(array('controller' => 'mantermensagens', 'action' => 'consultarmensagem')); ?>" title="Ir para Consultar Mensagem">Consultar Mensagem</a>
-                <?php //if ( !empty ( $this->BuscarSelect ) ){ ?>
+                <?php //if ( !empty ( $this->BuscarSelect ) ){?>
                     <a class="no_seta" href="<?php echo $this->url(array('controller' => 'mantermensagens', 'action' => 'incluirmensagem')); ?>" title="Ir para Incluir Mensagem" class="last">Incluir Mensagem</a>
-                <?php //} else { ?>
+                <?php //} else {?>
                     <!-- <a class="no_seta nomsg" title="Ir para Incluir Mensagem" class="last">Incluir Mensagem</a> -->
                 <?php //}?>
             </div>

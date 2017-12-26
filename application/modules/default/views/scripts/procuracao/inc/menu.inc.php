@@ -42,8 +42,8 @@
         <div id="menuContexto">
             <div class="top"></div>
             <div id="qm0" class="qmmc sanfona">
-                <a class="no_seta" href='<?php echo $this->url(array('controller' => 'procuracao', 'action' => 'index'), '',true); ?>'>Procurações cadastradas</a>
-                <a class="no_seta" href='<?php echo $this->url(array('controller' => 'procuracao', 'action' => 'cadastramento'), '',true); ?>'>Cadastramento</a>
+                <a class="no_seta" href='<?php echo $this->url(array('controller' => 'procuracao', 'action' => 'index'), '', true); ?>'>Procurações cadastradas</a>
+                <a class="no_seta" href='<?php echo $this->url(array('controller' => 'procuracao', 'action' => 'cadastramento'), '', true); ?>'>Cadastramento</a>
             </div>
             <div class="bottom"></div>
         </div>

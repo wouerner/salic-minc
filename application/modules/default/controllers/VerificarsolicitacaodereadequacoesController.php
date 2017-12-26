@@ -56,10 +56,10 @@ class VerificarSolicitacaoDeReadequacoesController extends MinC_Controller_Actio
                 $SolicitarReadequacaoCustoDAO = new SolicitarReadequacaoCustoDAO();
                 $resultadoEtapa = $buscaInformacoes->buscarEtapa();
                 $this->view->buscaetapa = $resultadoEtapa;
-        
-        
+
+
                 $resultadoProduto = $SolicitarReadequacaoCustoDAO->buscarProdutos($idPronac)->toArray();
-        
+
                 if ( empty ( $resultadoProduto ) )
                 {
                     $resultadoProduto = $SolicitarReadequacaoCustoDAO->buscarProdutosAprovados($idPronac);
@@ -68,11 +68,11 @@ class VerificarSolicitacaoDeReadequacoesController extends MinC_Controller_Actio
                 {
                     $resultadoProduto = $SolicitarReadequacaoCustoDAO->buscarProdutos($idPronac);
                 }
-        
+
                 $this->view->buscaproduto = $resultadoProduto;
-        
+
                 //var_dump($resultadoProduto);die;
-        
+
                 foreach ($resultadoProduto as $idProduto) {
                     foreach ($resultadoEtapa as $idEtapa) {
                         $resultadoProdutosItens = $buscaInformacoes->buscarProdutosItens($idPronac, $idEtapa->idPlanilhaEtapa, NULL, "S", $idProduto->idProduto);

@@ -1236,21 +1236,21 @@ class RelatorioController extends MinC_Controller_Action_Abstract
             $pageWidth  = $page->getWidth();
             return $page;
         }
-    
+
         public function gerarPdfAction()
         {
-    
+
             $_POST['html'] = str_replace('display:none', '', $_POST['html']);
             $_POST['html'] = str_replace('type="button"', 'type="hidden"', $_POST['html']);
-    
+
             $UF = new Uf();
             $b = $UF->buscar();
-    
+
             //parent::gerarPdfAction();
-    
+
             $pdf = new Zend_Pdf();
             $page = $this->newPdfPage();
-    
+
             $pageHeight = $page->getHeight();
             $pageWidth = $page->getWidth();
             $imageHeight = 72;
@@ -1259,51 +1259,51 @@ class RelatorioController extends MinC_Controller_Action_Abstract
             foreach($b as $row){
                 $title = $row->Sigla;
                 $entrydata = $row->Descricao;
-    
+
                 if ($startPos < 72){
                      array_push($pdf->pages, $page);
                      $page = $this->newPdfPage();
                      $startPos = $pageHeight - 48;
                 }
-    
+
                 $headlineStyle = new Zend_Pdf_Style();
                 $headlineStyle->setLineWidth(3);
                 $headlineStyle->setLineDashingPattern(array(3, 2, 3, 4), 1.6);
-    
+
                 $page->setStyle($headlineStyle);
                 $title = strip_tags($title );
                 $title = wordwrap($title , 55, '\n');
-    
+
                 $entrydata = strip_tags($entrydata);
                 $entrydata = wordwrap($entrydata, 90, '\n');
-    
+
                 $articleArray = explode('\n', $entrydata);
-    
+
                 foreach ($articleArray as $line) {
-    
+
                     if ($startPos < 48){
-    
+
                          array_push($pdf->pages, $page);
                          $page = $this->newPdfPage();
-    
+
                          $startPos = $pageHeight - 48;
-    
+
                     }
                     $page->drawText($line, 48, $startPos);
                     //$page->restoreGS();
                     $startPos = $startPos - 16;
-    
+
                 }
                 $startPos = $startPos - 16;
-    
+
             }
-    
+
             array_push($pdf->pages, $page);
-    
+
            //header('Content-type: application/pdf');
             //echo $pdf->render();
             $pdf->save("chomp.pdf");
-    
+
         }
     */
 
