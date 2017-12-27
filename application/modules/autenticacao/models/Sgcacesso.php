@@ -291,4 +291,13 @@ class Autenticacao_Model_Sgcacesso extends MinC_Db_Table_Abstract
         }
         return true;
     }
+
+    public function porCPF($cpf)
+    {
+        $objSgcAcesso = $this->select();
+        $objSgcAcesso->where('cpf = ?', $cpf);
+
+        $resultado = $this->fetchRow($objSgcAcesso);
+        return $resultado;
+    }
 }
