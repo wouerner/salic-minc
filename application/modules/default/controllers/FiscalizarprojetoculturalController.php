@@ -1,10 +1,4 @@
 <?php
-
-/**
- * Description of Fiscalizarprojetocultural
- *
- * @author André Nogueira Pereira
- */
 class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstract
 {
     public function init()

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of ManterloginController
- *
- * @author tisomar
- */
 class ManterloginController extends MinC_Controller_Action_Abstract
 {
     public function init()

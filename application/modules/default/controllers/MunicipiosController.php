@@ -1,14 +1,4 @@
 <?php
-/**
- * MunicipiosController
- * @author Emanuel Sampaio <emanuelonline@gmail.com>
- * @since 18/04/2012
- * @version 1.0
- * @package application
- * @subpackage application.controllers
- * @copyright � 2012 - Minist�rio da Cultura - Todos os direitos reservados.
- * @link http://salic.cultura.gov.br
- */
 
 class MunicipiosController extends Zend_Controller_Action
 {

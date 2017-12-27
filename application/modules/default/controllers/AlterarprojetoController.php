@@ -529,9 +529,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
         if (count($validapronac) > 0) {
             $tblAprovacao = new Aprovacao();
             $rsAprovacao = $tblAprovacao->buscar(array("AnoProjeto = ?" => $ano, "Sequencial = ?" => $sequencial));
-//               if($rsAprovacao->count() <= 0){
-//                    parent::message("Este Projeto ainda n&atilde;o foi aprovado", "Alterarprojeto/consultarprojeto", "ERROR");
-//               }
 
             $listaparecer = $projeto->buscarTodosDadosProjeto($validapronac[0]->IdPRONAC);
             $this->view->parecer = $listaparecer[0];
@@ -674,8 +671,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                     $dadosBuscar['idEmpresa'] = $buscarMandato[0]->idEmpresa;
                     $dadosBuscar['idDirigente'] = $buscarMandato[0]->idDirigente;
                     $dadosBuscar['idArquivo'] = $buscarMandato[0]->idArquivo;
-//                $this->_helper->json($dadosBuscar);
-//                $this->_helper->viewRenderer->setNoRender(TRUE);
                 }
 
                 parent::message("Cadastro realizado com sucesso!", "alterarprojeto/visualizadirigente/id/" . $idAgente . "/idDirigente/" . $idDirigente . "/pronac/" . $pronac, "CONFIRM");
@@ -769,7 +764,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                     // redireciona para a pagina com a busca dos dados com paginacao
                     $this->_redirect("agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
                 } // fecha else
-            } // fecha try
+            } 
             catch (Exception $e) {
                 $this->view->message = $e->getMessage();
                 $this->view->message_type = "ERROR";
@@ -781,7 +776,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
 
     public function agentecadastradoAction()
     {
-        //$this->autenticacao();
         $this->_helper->layout->disableLayout(); // desabilita o layout
         $this->_helper->viewRenderer->setNoRender(true);
         $cpf = $_REQUEST['cpf'];
@@ -806,8 +800,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
 
         $this->_helper->json($novos_valores);
     }
-
-    // fecha metodo buscaragentedirigenteAction()
 
     public function vinculadirigenteAction()
     {
@@ -1755,10 +1747,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
         }
     }
 
-
-    /*
-     *
-     */
     public function planodistribuicaoAction()
     {
         $pronac = $this->_request->getParam("pronac");

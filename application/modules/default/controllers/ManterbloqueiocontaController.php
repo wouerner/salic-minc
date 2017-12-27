@@ -1,14 +1,4 @@
 <?php 
-/**
- * Controller Manter bloqueio conta
- * @author XTI
- * @since 14/06/2012
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright @ 2012 - Ministerio da Cultura - Todos os direitos reservados.
- */
 
 class ManterbloqueiocontaController extends MinC_Controller_Action_Abstract
 {

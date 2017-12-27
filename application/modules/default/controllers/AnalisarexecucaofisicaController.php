@@ -1,15 +1,4 @@
 <?php 
-
-/**
- * Controller Disvincular Agentes
- * @author Equipe RUP - Politec
- * @since 07/06/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright 2010 - Minist�rio da Cultura - Todos os direitos reservados.
- */
 class AnalisarexecucaofisicaController extends MinC_Controller_Action_Abstract
 {
     private $getIdAgente  = 0;

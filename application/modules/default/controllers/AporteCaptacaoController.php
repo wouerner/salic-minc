@@ -47,9 +47,6 @@ class AporteCaptacaoController extends MinC_Controller_Action_Abstract
         parent::init();
     }
 
-    /**
-     *
-     */
     public function depositoEquivocadoAction()
     {
         $idPronac = $this->_request->getParam("idPronac");

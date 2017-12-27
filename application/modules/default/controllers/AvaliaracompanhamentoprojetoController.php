@@ -44,15 +44,14 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
             $this->usu_orgao = $GrupoAtivo->codOrgao;
 
             $this->getIdOrgao = $GrupoAtivo->codOrgao;
-        } // fecha if
+        } 
         else { // caso o usuario n&atilde;o esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
 
         //recupera ID do pre projeto (proposta)
         parent::init(); // chama o init() do pai GenericControllerNew
-    } // fecha m�todo init()*/
-
+    } 
 
     public function indexAction()
     {
@@ -167,7 +166,6 @@ class AvaliaracompanhamentoprojetoController extends MinC_Controller_Action_Abst
         $this->view->filtro         = $filtro;
         $this->view->tipoFiltro     = $tipoFiltro;
 
-//        $pa = new paUsuariosDoPerfil();
         $vw = new vwUsuariosOrgaosGrupos();
         $usuarios = $vw->buscarUsuarios($codPerfil, $codOrgao);
         $this->view->Usuarios = $usuarios;

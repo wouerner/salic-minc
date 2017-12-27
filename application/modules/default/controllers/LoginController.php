@@ -1,14 +1,4 @@
 <?php
-/**
- * Controller Login
- * @author tisomar - Politec
- * @since 2011
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright � 2011 - Minist�rio da Cultura - Todos os direitos reservados.
- */
 
 class LoginController extends MinC_Controller_Action_Abstract
 {

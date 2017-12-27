@@ -1,13 +1,4 @@
 <?php
-/**
- * Controller Movimentacaodeconta
- * @author Equipe RUP - Politec
- * @since 28/04/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- */
 include_once(APPLICATION_PATH . '/modules/default/models/dominio/TipoMensagem.php');
 class MovimentacaodecontaController extends MinC_Controller_Action_Abstract
 {

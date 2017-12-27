@@ -1,14 +1,4 @@
 <?php
-/**
- * Controller DBF
- * @author emanuel.sampaio - Politec
- * @since 29/07/2011
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright © 2011 - Ministério da Cultura - Todos os direitos reservados.
- */
 
 class DbfController extends MinC_Controller_Action_Abstract
 {

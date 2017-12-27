@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of Gerarsenha
- *
- * @author tisomar
- */
 class Gerarsenha extends MinC_Controller_Action_Abstract
 {
     public static function gerasenha($numcarats=8, $lmin=true, $lmai=true, $numeros=true, $simb=false)

@@ -1,16 +1,5 @@
 <?php
 
-
-/**
- * Controller Manter Conta Bancaria
- * @author Equipe RUP - Politec
- * @since 07/06/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright 2010 - Minist�rio da Cultura - Todos os direitos reservados.
- */
 class MantercontabancariaController extends MinC_Controller_Action_Abstract
 {
     private $modal = "n";
@@ -34,9 +23,6 @@ class MantercontabancariaController extends MinC_Controller_Action_Abstract
             $this->view->modal = "n";
         }
     }
-
-    // fecha m�todo init()
-
 
     public function consultarAction()
     {

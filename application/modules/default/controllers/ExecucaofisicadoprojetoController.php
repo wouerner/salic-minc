@@ -1,14 +1,4 @@
 <?php
-/**
- * Controller Execucaofisicadoprojeto
- * @author Equipe RUP - Politec
- * @since 28/04/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright © 2010 - Ministério da Cultura - Todos os direitos reservados.
- */
 
 class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
 {
@@ -23,17 +13,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         $this->view->title = "Salic - Sistema de Apoio às Leis de Incentivo à Cultura"; // título da página
 
         parent::init();
-    } // fecha método init()
-
-
-
-    /**
-     * ====================
-     * PROPONENTE
-     * ====================
-     */
-
-
+    } 
 
     /**
      * Redireciona para o fluxo inicial do sistema

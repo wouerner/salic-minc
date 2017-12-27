@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of Mantersecretarioorgao
- *
- * @author Tiago
- */
 class MantersecretarioorgaoController extends MinC_Controller_Action_Abstract
 {
     public function init()

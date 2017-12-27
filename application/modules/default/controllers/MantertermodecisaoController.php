@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of Mantertermodecisao
- *
- * @author Tiago
- */
 class MantertermodecisaoController extends MinC_Controller_Action_Abstract
 {
 

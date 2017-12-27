@@ -1,14 +1,7 @@
 <?php
 
-/**
- * @author Mikhail Cavalcanti <mikhail.leite@xti.com.br>
- */
 class CargoAssinanteController extends Zend_Controller_Action
 {
-
-    /**
-     *
-     */
     public function incluirAction()
     {
         $mensagem = null;

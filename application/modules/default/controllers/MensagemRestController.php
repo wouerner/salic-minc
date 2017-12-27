@@ -1,14 +1,5 @@
 <?php
 
-/**
- * Mensagens de notificações para os dispositivos móveis.
- *
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright © 2016 - Ministério da Cultura - Todos os direitos reservados.
- */
 class MensagemRestController extends Minc_Controller_AbstractRest
 {
     public function init()

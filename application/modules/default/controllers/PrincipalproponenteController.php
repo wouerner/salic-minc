@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of Principalproponente
- *
- * @author tisomar
- */
 class PrincipalproponenteController extends MinC_Controller_Action_Abstract
 {
     private $idAgente = null;
@@ -17,7 +12,6 @@ class PrincipalproponenteController extends MinC_Controller_Action_Abstract
         $auth = Zend_Auth::getInstance();
         $auth = array_change_key_case((array) $auth->getIdentity());
 
-//        Zend_Layout::startMvc(array('layout' => 'layout_proponente'));
         parent::perfil(4); // autenticao zend
         parent::init(); // chama o init() do pai GenericControllerNew
         $this->idUsuario = isset($auth['usu_codigo']) ? $auth['usu_codigo'] : $auth['idusuario'];
@@ -29,7 +23,6 @@ class PrincipalproponenteController extends MinC_Controller_Action_Abstract
     public function indexAction()
     {
         $a = new Agente_Model_DbTable_Agentes();
-//        Zend_Layout::startMvc(array('layout' => 'layout_proponente'));
         $verificarvinculo = $a->buscarAgenteVinculoResponsavel(array('vr.idAgenteProponente = ?'=>$this->idAgente, 'vprp.siVinculoProposta = ?'=>0))->count();
         $tbComunicados = new tbComunicados();
         $where['stEstado = ?'] = 1;
@@ -50,7 +43,6 @@ class PrincipalproponenteController extends MinC_Controller_Action_Abstract
      */
     public function listarComunicadosAction()
     {
-        //header("Content-Type: text/html; charset=ISO-8859-1");
         $this->_helper->layout->disableLayout();
         $post = Zend_Registry::get('post');
         $this->intTamPag = 1;

@@ -22,12 +22,7 @@ class LembretesController extends MinC_Controller_Action_Abstract
         if ($auth->hasIdentity()) { // caso o usuário esteja autenticado
             // verifica as permissões
             $PermissoesGrupo = array();
-            //$PermissoesGrupo[] = 93;  // Coordenador de Parecerista
-            //$PermissoesGrupo[] = 94;  // Parecerista
-            //$PermissoesGrupo[] = 103; // Coordenador de Análise
             $PermissoesGrupo[] = 118; // Componente da Comissão
-            //$PermissoesGrupo[] = 119; // Presidente da Mesa
-            //$PermissoesGrupo[] = 120; // Coordenador Administrativo CNIC
             if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo está no array de permissões
                 parent::message("Você não tem permissão para acessar essa área do sistema!", "principal/index", "ALERT");
             }
@@ -46,7 +41,7 @@ class LembretesController extends MinC_Controller_Action_Abstract
         }
 
         parent::init(); // chama o init() do pai GenericControllerNew
-    } // fecha método init()
+    } 
     
     public function indexAction()
     {

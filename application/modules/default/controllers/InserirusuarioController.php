@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of inserirUsuarioController
- *
- * @author augusto
- */
 class InserirusuarioController extends MinC_Controller_Action_Abstract
 {
     public function indexAction()

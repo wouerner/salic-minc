@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of GerarrelatoriopareceristaController
- *
- * @author 01610881125
- */
 class GerarrelatoriopareceristaController extends MinC_Controller_Action_Abstract
 {
     private $intTamPag = 100;
@@ -25,18 +20,9 @@ class GerarrelatoriopareceristaController extends MinC_Controller_Action_Abstrac
             }
         }
 
-        // verifica as permiss?es
-        /* $PermissoesGrupo[] = 103;  // Coordenador de Analise
-          $PermissoesGrupo[] = 97;  // Gestor do SALIC
-          $PermissoesGrupo[] = 93;  // Coordenador de Parecerista
-          $PermissoesGrupo[] = 94;  // Parecerista
-          $PermissoesGrupo[] = 121; // T?cnico
-          $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
-          $PermissoesGrupo[] = 126; // Coordenador Geral de Presta��o de Contas
-          $PermissoesGrupo[] = 134; // Coordenador de Fiscaliza�?o */
 
         $PermissoesGrupo[] = 148; // Coordenador de Fiscaliza�?o
-          $PermissoesGrupo[] = 151; // Coordenador de Fiscaliza�?o
+        $PermissoesGrupo[] = 151; // Coordenador de Fiscaliza�?o
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
 
         $this->usuarioLogado = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_codigo : $auth->getIdentity()->IdUsuario;

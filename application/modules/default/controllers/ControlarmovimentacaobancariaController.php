@@ -1,14 +1,4 @@
 <?php
-/**
- * Controller Controlarmovimentacaobancaria
- * @author Equipe RUP - Politec
- * @since 20/01/2011
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright � 2011 - Minist�rio da Cultura - Todos os direitos reservados.
- */
 
 class ControlarmovimentacaobancariaController extends MinC_Controller_Action_Abstract
 {

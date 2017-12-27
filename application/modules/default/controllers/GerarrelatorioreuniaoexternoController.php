@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of GerarRelatorioReuniao
- *
- * @author 01373930160
- */
 class GerarRelatorioReuniaoExternoController extends MinC_Controller_Action_Abstract
 {
     public function init()
@@ -11,8 +6,6 @@ class GerarRelatorioReuniaoExternoController extends MinC_Controller_Action_Abst
         Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
         parent::init(); // chama o init() do pai GenericControllerNew
     }
-
-    // fecha método init()
 
     public function gerarrelatorioreuniaoAction()
     {

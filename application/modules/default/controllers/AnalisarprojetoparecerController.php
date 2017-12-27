@@ -45,12 +45,12 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
                 $this->getIdUsuario = UsuarioDAO::getIdUsuario($auth->getIdentity()->usu_codigo);
                 $this->getIdUsuario = ($this->getIdUsuario) ? $this->getIdUsuario["idAgente"] : 0;
             }
-        } // fecha if
+        } 
         else { // caso o usu¿rio n¿o esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
 
-        parent::init(); // chama o init() do pai GenericControllerNew
+        parent::init(); 
     }
 
 
@@ -126,7 +126,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
 
         $limitador = 5;
         $where = array('d.idAgenteParecerista = ?' => $idAgenteParecerista, 'd.idOrgao = ?' => $idOrgao);
-        //$where = array();
         $projeto = new Projetos();
         switch ($nrRelatorio) {
             case 0:
@@ -290,7 +289,6 @@ class AnalisarprojetoparecerController extends MinC_Controller_Action_Abstract
     {
         $auth = Zend_Auth::getInstance(); // pega a autentica¿¿o
         $idUsuario = $auth->getIdentity()->usu_codigo;
-//      $idUsuario = $this->getIdUsuario;
 
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess¿o com o grupo ativo
         $idOrgao = $GrupoAtivo->codOrgao; //  ¿rg¿o ativo na sess¿o

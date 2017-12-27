@@ -1,28 +1,14 @@
 <?php
-/**
- * Controller Cadastraredital
- * @author Equipe RUP - Politec
- * @since 2011
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright � 2011 - Minist�rio da Cultura - Todos os direitos reservados.
- */
 
 class CadastrareditalController extends MinC_Controller_Action_Abstract
 {
     public function init()
     {
         $auth = Zend_Auth::getInstance();// instancia da autenticacao
-        //$idusuario = $auth->getIdentity()->usu_codigo;
-        //$idorgao = $auth->getIdentity()->usu_orgao;
-        //$usu_identificacao = $auth->getIdentity()->usu_identificacao;
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $codGrupo = $GrupoAtivo->codGrupo; //  Grupo ativo na sessao
         $codOrgao = $GrupoAtivo->codOrgao; //  Orgao ativo na sessao
         $this->view->codOrgao = $codOrgao;
-        //$this->view->idUsuarioLogado = $idusuario;
         //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC72
         if (isset($auth->getIdentity()->usu_codigo)) {
             //Recupera todos os grupos do Usuario
@@ -46,8 +32,7 @@ class CadastrareditalController extends MinC_Controller_Action_Abstract
         //parent::perfil(1, $PermissoesGrupo);
 
         parent::init();
-        // chama o init() do pai GenericControllerNew
-    } // fecha m�todo init()
+    } 
 
     public function indexAction()
     {

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Description of ManterRegularidadeProponenteController
- * @author Politec MinC
- */
 class ManterRegularidadeProponenteController extends MinC_Controller_Action_Abstract
 {
 

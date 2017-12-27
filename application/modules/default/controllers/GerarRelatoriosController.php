@@ -1,15 +1,5 @@
 <?php
 
-/**
- * ManterAgentesController
- * @author Equipe RUP - Politec
- * @since 09/08/2010
- * @version 1.0
- * @package application
- * @subpackage application.controllers
- * @link http://cultura.gov.br
- */
-
 class GerarRelatoriosController extends MinC_Controller_Action_Abstract
 {
     /**

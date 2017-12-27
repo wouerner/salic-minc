@@ -1,14 +1,4 @@
 <?php
-/**
- * Login e autenticacao
- * @author Equipe RUP - Politec
- * @since 20/07/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright © 2010 - Ministerio da Cultura - Todos os direitos reservados.
- */
 
 class IndexController extends MinC_Controller_Action_Abstract
 {

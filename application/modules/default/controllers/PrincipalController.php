@@ -1,12 +1,4 @@
 <?php
-/**
- * PrincipalController
- * @author Equipe RUP - Politec
- * @since 29/03/2010
- * @package application
- * @subpackage application.controllers
- * @link http://www.cultura.gov.br
- */
 
 class PrincipalController extends MinC_Controller_Action_Abstract
 {

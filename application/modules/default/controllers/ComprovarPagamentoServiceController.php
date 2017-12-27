@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of ComprovarPagamentoServiceController
- *
- * @author mikhail
- */
 class ComprovarPagamentoServiceController extends ServicoController
 {
 

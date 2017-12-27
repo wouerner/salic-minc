@@ -1,16 +1,4 @@
 <?php
-/**
- * ComunicadosController
- * @author Desenvolvimento - XTI
- * @since 25/05/2011
- * @version 1.0
- * @package application
- * @subpackage application.controllers
- * @link http://www.xti.com.br
- * @copyright © 2010 - XTI - Todos os direitos reservados.
- */
-
-
 
 class ComunicadosController extends MinC_Controller_Action_Abstract
 {

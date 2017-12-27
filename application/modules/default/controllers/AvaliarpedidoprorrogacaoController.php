@@ -1,14 +1,4 @@
 <?php 
-
-/**
- * @author Equipe RUP - Politec
- * @since 09/01/2013
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright 2010 - Ministério da Cultura - Todos os direitos reservados.
- */
 class AvaliarpedidoprorrogacaoController extends MinC_Controller_Action_Abstract
 {
     private $getIdAgente  = 0;

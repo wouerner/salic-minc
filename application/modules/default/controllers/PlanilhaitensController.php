@@ -1,14 +1,4 @@
 <?php
-/**
- * PlanilhaitensController
- * @author Emanuel Sampaio <emanuelonline@gmail.com>
- * @since 30/04/2012
- * @version 1.0
- * @package application
- * @subpackage application.controllers
- * @copyright © 2012 - Ministério da Cultura - Todos os direitos reservados.
- * @link http://salic.cultura.gov.br
- */
 
 class PlanilhaitensController extends Zend_Controller_Action
 {

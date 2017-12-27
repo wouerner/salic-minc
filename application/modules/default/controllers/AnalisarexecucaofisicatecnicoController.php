@@ -1,15 +1,4 @@
 <?php
-
-/**
- * Controller Disvincular Agentes
- * @author Equipe RUP - Politec
- * @since 07/06/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright 2010 - Minist�rio da Cultura - Todos os direitos reservados.
- */
 class AnalisarexecucaofisicatecnicoController extends MinC_Controller_Action_Abstract
 {
     private $getIdAgente  = 0;
@@ -24,7 +13,6 @@ class AnalisarexecucaofisicatecnicoController extends MinC_Controller_Action_Abs
      */
     public function init()
     {
-
         // verifica as permiss�es
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 97;  // Gestor do SALIC
@@ -229,7 +217,6 @@ class AnalisarexecucaofisicatecnicoController extends MinC_Controller_Action_Abs
 
     public function localDeRealizacaoAction()
     {
-
         //** Usuario Logado ************************************************/
         $auth               = Zend_Auth::getInstance(); // pega a autentica��o
         $idusuario          = $auth->getIdentity()->usu_codigo;

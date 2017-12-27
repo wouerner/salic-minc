@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of GerarRelatorioReuniao
- *
- * @author 01373930160
- */
 class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract
 {
     public function init()
@@ -57,7 +52,7 @@ class GerarRelatorioReuniaoController extends MinC_Controller_Action_Abstract
             $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuï¿½rio para a visão
             $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuï¿½rio para a visão
             $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o orgão ativo do usuï¿½rio para a visão
-        } // fecha if
+        } 
         else {
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }

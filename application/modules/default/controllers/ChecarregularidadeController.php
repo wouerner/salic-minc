@@ -2,7 +2,6 @@
 
 class ChecarRegularidadeController extends MinC_Controller_Action_Abstract
 {
-
     /**
      * Reescreve o método init()
      * @access public
@@ -11,22 +10,8 @@ class ChecarRegularidadeController extends MinC_Controller_Action_Abstract
      */
     public function init()
     {
-        // autenticação e permissï¿½es zend (AMBIENTE MINC)
-        // define as permissï¿½es
-        //$PermissoesGrupo = array();
-        //$PermissoesGrupo[] = 121; // Tï¿½cnico de Acompanhamento
-        //$PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
-        //$PermissoesGrupo[] = 123; // Coordenador - Geral de Acompanhamento
-        //parent::perfil(1, $PermissoesGrupo);
-
-
-
         parent::init();
     }
-
-    // fecha método init()
-
-
 
     public function indexAction()
     {

@@ -1,12 +1,4 @@
 <?php
-/**
- * CepController
- * @author Equipe RUP - Politec
- * @author wouerner <wouerner@gmail.com>
- * @since 29/03/2010
- * @link http://www.cultura.gov.br
- */
-
 class CepController extends MinC_Controller_Action_Abstract
 {
     /**

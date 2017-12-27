@@ -1,35 +1,8 @@
 <?php
-/**
- * Controller Disvincular Agentes
- * @author Equipe RUP - Politec
- * @since 07/06/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright © 2010 - Ministério da Cultura - Todos os direitos reservados.
- */
 
 class DesvincularagentesController extends MinC_Controller_Action_Abstract
 {
 
-    /**
-     * ====================
-     * AGENTES
-     * ====================
-     */
-    /**
-     * Reescreve o método init()
-     * @access public
-     * @param void
-     * @return void
-     */
-    /**
-     * Reescreve o método init()
-     * @access public
-     * @param void
-     * @return void
-     */
     public function init()
     {
         $this->view->title = "Salic - Sistema de Apoio às Leis de Incentivo à Cultura"; // título da página
@@ -41,10 +14,7 @@ class DesvincularagentesController extends MinC_Controller_Action_Abstract
             // verifica as permissões
             $PermissoesGrupo = array();
             $PermissoesGrupo[] = 93;  // Coordenador de Parecerista
-            //$PermissoesGrupo[] = 94;  // Parecerista
             $PermissoesGrupo[] = 103; // Coordenador de Análise
-            //$PermissoesGrupo[] = 118; // Componente da Comissão
-            //$PermissoesGrupo[] = 119; // Presidente da Mesa
             $PermissoesGrupo[] = 120; // Coordenador Administrativo CNIC
             $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
             if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo está no array de permissões
@@ -65,10 +35,8 @@ class DesvincularagentesController extends MinC_Controller_Action_Abstract
         }
 
         parent::init();
-        // chama o init() do pai GenericControllerNew
     }
 
-    // fecha método init()
     /**
      * Redireciona para o fluxo inicial do sistema
      * @access public

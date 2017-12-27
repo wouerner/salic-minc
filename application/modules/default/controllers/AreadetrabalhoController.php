@@ -39,7 +39,7 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract
             // pega o idAgente
             $this->idAgente = UsuarioDAO::getIdUsuario($auth->getIdentity()->usu_codigo);
             $this->idAgente = ($this->idAgente) ? $this->idAgente["idAgente"] : 0;
-        } // fecha if
+        } 
         else { // caso o usuario nao esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
@@ -82,31 +82,10 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract
         $diligencia = new Diligencia();
         $pauta = new Pauta();
 
-        /*$buscardadosanalise = $pauta->buscarpautacomponente($idagente, true);
-        $qtdFinalizados = $buscardadosanalise->count();
-        $this->view->qtdfinalizados = $qtdFinalizados;*/
-
         $tblDistribuicao = new tbDistribuicaoProjetoComissao();
 
-//        $ordem = array('1','21'); //ORDENACAO: analise , area cultural
-
-//        $arrProjetosAnalisados =array();
-        //$arrProjetosAnalisados['r.idNrReuniao = ?']= $ConsultaReuniaoAberta['idNrReuniao'];
-//        $arrProjetosAnalisados['dpc.idAgente = ?']= $idagente;
-//        $arrProjetosAnalisados['par.TipoParecer = ?']= 1; /**parecer de analise inicial**/
-//        $rsProjAnalisados = $tblDistribuicao->buscarProjetoEmPauta($arrProjetosAnalisados, $ordem, null, null, false, null, null, 1);
-
-//
-//        $arrProjetosAnalisadosReadequados['dpc.idAgente = ?']= $idagente;
-//        $arrProjetosAnalisadosReadequados['par.TipoParecer <> ?'] = 1; /**parecer de readequacao**/
-//        $rsProjAnalisadosReadequados = $tblDistribuicao->buscarProjetoEmPauta($arrProjetosAnalisadosReadequados, $ordem, null, true, false, null, null, 1);
-        
-
-//        $this->view->qtdfinalizados = $rsProjAnalisados->count();
-//        $this->view->qtdfinalizadosreadequados = $rsProjAnalisadosReadequados->count();
         $this->view->qtdfinalizados = null;
         $this->view->qtdfinalizadosreadequados = null;
-
 
         $tbanalise = $distribuicao->buscarProjetosDistribuidos($idagente, $ConsultaReuniaoAberta['idNrReuniao']);
 
@@ -128,7 +107,6 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract
         $arrBusca['D.DtResposta IS NULL'] = "(?)";
         $arrBusca['D.idTipoDiligencia = ?'] = "126"; //diligencia na cnic
         $arrBusca['DPC.idAgente = ?'] = $idagente;
-        //$diligenciado = $diligencia->buscarDiligencia($idagente, false, false, array('C30'));
         $diligenciado = $diligencia->buscarProjetosDiligenciadosCNIC($arrBusca);
         $this->view->diligenciado = $diligenciado;
 
@@ -138,7 +116,6 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract
         $arrBusca['D.DtResposta IS NOT NULL'] = "(?)";
         $arrBusca['D.idTipoDiligencia = ?'] = "126"; //diligencia na cnic
         $arrBusca['DPC.idAgente = ?'] = $idagente;
-        //$diligenciadoresposta = $diligencia->buscarDiligencia($idagente, false, true, array('C10','D01'));
         $diligenciadoresposta = $diligencia->buscarProjetosDiligenciadosCNIC($arrBusca);
         $this->view->diligenciarespondida = $diligenciadoresposta;
 
@@ -192,8 +169,6 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract
      */
     public function retirarDePautaAction()
     {
-        //$this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-
         // recebe os dados do formulario
         $post = Zend_Registry::get('post');
         $idPronac      = $post->idPronacPauta;
@@ -213,33 +188,23 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract
                         ,'stAtivo'          => 1);
 
                 if ($tbRetirarDePauta->inserir($dados)) {
-                    //$this->view->msg  = 'Solicita&ccedil;&atilde;o enviada com sucesso!';
-                    //$this->view->type = 'CONFIRM';
                     parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "areadetrabalho/index", "CONFIRM");
                 } else {
-                    //$this->view->msg  = 'Erro ao efetuar solicita&ccedil;&atilde;o!';
-                    //$this->view->type = 'ERROR';
                     throw new Exception("Erro ao efetuar solicita&ccedil;&atilde;o!");
                 }
             } else {
                 throw new Exception("Todos os campos s&atilde;o de preenchimento obrigat&oacute;rio!");
             }
         } catch (Exception $e) {
-            //$this->view->msg  = $e->getMessage();
-            //$this->view->type = 'ERROR';
             parent::message($e->getMessage(), "areadetrabalho/index", "ERROR");
         }
-    } // fecha metodo retirarDePautaAction()
-
-
+    } 
 
     /**
      * Metodo para efetuar o cancelamento da retirada de pauta
      */
     public function cancelarRetirarDePautaAction()
     {
-        //$this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-
         // recebe os dados do formulario
         $post = Zend_Registry::get('post');
         $idRetirarDePauta = $post->idRetirarDePauta;
@@ -255,21 +220,15 @@ class AreadetrabalhoController extends MinC_Controller_Action_Abstract
                 $where = array('idRetirarDePauta = ?' => $idRetirarDePauta);
 
                 if ($tbRetirarDePauta->alterar($dados, $where)) {
-                    //$this->view->msg  = 'Solicita&ccedil;&atilde;o enviada com sucesso!';
-                    //$this->view->type = 'CONFIRM';
                     parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "areadetrabalho/index", "CONFIRM");
                 } else {
-                    //$this->view->msg  = 'Erro ao efetuar solicita&ccedil;&atilde;o!';
-                    //$this->view->type = 'ERROR';
                     throw new Exception("Erro ao efetuar cancelamento de solicita&ccedil;&atilde;o!");
                 }
             } else {
                 throw new Exception("Erro ao efetuar cancelamento de solicita&ccedil;&atilde;o!");
             }
         } catch (Exception $e) {
-            //$this->view->msg  = $e->getMessage();
-            //$this->view->type = 'ERROR';
             parent::message($e->getMessage(), "areadetrabalho/index", "ERROR");
         }
-    } // fecha metodo cancelarRetirarDePautaAction()
+    } 
 }

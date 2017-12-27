@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of Pesquisarprojetofiscalizacao
- *
- * @author Andr� Nogueira Pereira
- */
 
 class PesquisarprojetofiscalizacaoController extends MinC_Controller_Action_Abstract
 {
