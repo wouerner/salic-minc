@@ -13,58 +13,58 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
      * @access public
      * @return void
      */
-    public function testListarpropostaAction()
-    {
-        $this->autenticar();
+    /* public function testListarpropostaAction() */
+    /* { */
+    /*     $this->autenticar(); */
 
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
+    /*     //reset para garantir respostas. */
+    /*     $this->resetRequest() */
+    /*         ->resetResponse(); */
 
-        // trocar para perfil Proponente
-        $this->request->setMethod('GET');
-        $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=1111&codOrgao=2222');
-        $this->assertRedirectTo('/principalproponente');
+    /*     // trocar para perfil Proponente */
+    /*     $this->request->setMethod('GET'); */
+    /*     $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=1111&codOrgao=2222'); */
+    /*     $this->assertRedirectTo('/principalproponente'); */
 
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
+    /*     //reset para garantir respostas. */
+    /*     $this->resetRequest() */
+    /*         ->resetResponse(); */
 
-        $this->dispatch('/proposta/manterpropostaincentivofiscal/listarproposta');
-        $this->assertModule('proposta');
-        $this->assertController('manterpropostaincentivofiscal');
-        $this->assertAction('listarproposta');
+    /*     $this->dispatch('/proposta/manterpropostaincentivofiscal/listarproposta'); */
+    /*     $this->assertModule('proposta'); */
+    /*     $this->assertController('manterpropostaincentivofiscal'); */
+    /*     $this->assertAction('listarproposta'); */
 
-        //verifica se tela carregou corretamente
-        $this->assertQuery('div.container-fluid div');
-    }
+    /*     //verifica se tela carregou corretamente */
+    /*     $this->assertQuery('div.container-fluid div'); */
+    /* } */
 
-    public function testConsultarresponsaveisAction()
-    {
-        $this->autenticar();
+    /* public function testConsultarresponsaveisAction() */
+    /* { */
+    /*     $this->autenticar(); */
 
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
+    /*     //reset para garantir respostas. */
+    /*     $this->resetRequest() */
+    /*         ->resetResponse(); */
 
-        // trocar para perfil Proponente
-        $this->request->setMethod('GET');
-        $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=1111&codOrgao=2222');
-        $this->assertRedirectTo('/principalproponente');
+    /*     // trocar para perfil Proponente */
+    /*     $this->request->setMethod('GET'); */
+    /*     $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=1111&codOrgao=2222'); */
+    /*     $this->assertRedirectTo('/principalproponente'); */
 
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
-        $url = '/proposta/manterpropostaincentivofiscal/consultarresponsaveis';
-        $this->dispatch($url);
+    /*     //reset para garantir respostas. */
+    /*     $this->resetRequest() */
+    /*         ->resetResponse(); */
+    /*     $url = '/proposta/manterpropostaincentivofiscal/consultarresponsaveis'; */
+    /*     $this->dispatch($url); */
 
-        $this->assertModule('proposta');
-        $this->assertController('manterpropostaincentivofiscal');
-        $this->assertAction('consultarresponsaveis');
+    /*     $this->assertModule('proposta'); */
+    /*     $this->assertController('manterpropostaincentivofiscal'); */
+    /*     $this->assertAction('consultarresponsaveis'); */
 
-        //verifica se tela carregou corretamente
-        $this->assertQueryContentContains('div#titulo div', 'Gerenciar responsáveis');
-    }
+    /*     //verifica se tela carregou corretamente */
+    /*     $this->assertQueryContentContains('div#titulo div', 'Gerenciar responsáveis'); */
+    /* } */
 
     /**
      * TestNovoresponsavel
@@ -72,24 +72,24 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
      * @access public
      * @return void
      */
-    public function testNovoresponsavel()
-    {
-        $this->autenticar();
-        $this->perfilParaProponente();
+    /* public function testNovoresponsavel() */
+    /* { */
+    /*     $this->autenticar(); */
+    /*     $this->perfilParaProponente(); */
 
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
-        $url = '/proposta/manterpropostaincentivofiscal/novoresponsavel';
-        $this->dispatch($url);
+    /*     //reset para garantir respostas. */
+    /*     $this->resetRequest() */
+    /*         ->resetResponse(); */
+    /*     $url = '/proposta/manterpropostaincentivofiscal/novoresponsavel'; */
+    /*     $this->dispatch($url); */
 
-        $this->assertModule('proposta');
-        $this->assertController('manterpropostaincentivofiscal');
-        $this->assertAction('novoresponsavel');
+    /*     $this->assertModule('proposta'); */
+    /*     $this->assertController('manterpropostaincentivofiscal'); */
+    /*     $this->assertAction('novoresponsavel'); */
 
-        //verifica se tela carregou corretamente
-        $this->assertQueryContentContains('html body div#titulo div', 'Novo Responsável ');
-    }
+    /*     //verifica se tela carregou corretamente */
+    /*     $this->assertQueryContentContains('html body div#titulo div', 'Novo Responsável '); */
+    /* } */
 
 //    public function testEditarAction()
 //    {
@@ -130,42 +130,42 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
 //        $this->assertQuery('html body div#titulo div', ' PROPOSTA ');
 //    }
 
-    public function testEnviarPropostaAction()
-    {
-        $this->autenticar();
+    /* public function testEnviarPropostaAction() */
+    /* { */
+    /*     $this->autenticar(); */
 
-        $this->perfilParaProponente();
+    /*     $this->perfilParaProponente(); */
 
-        $auth = Zend_Auth::getInstance();
-        $usuarioCpf = $auth->getIdentity()->Cpf;
+    /*     $auth = Zend_Auth::getInstance(); */
+    /*     $usuarioCpf = $auth->getIdentity()->Cpf; */
 
-        // Busca na SGCAcesso
-        $sgcAcesso = new Autenticacao_Model_Sgcacesso();
-        $acessos = $sgcAcesso->findBy(['cpf' => $usuarioCpf]);
+    /*     // Busca na SGCAcesso */
+    /*     $sgcAcesso = new Autenticacao_Model_Sgcacesso(); */
+    /*     $acessos = $sgcAcesso->findBy(['cpf' => $usuarioCpf]); */
 
-        // Buscar projetos do Usuario Logado.
-        $where['stestado = ?'] = 1;
-        $where['idusuario = ?'] = $acessos['IdUsuario'];
+    /*     // Buscar projetos do Usuario Logado. */
+    /*     $where['stestado = ?'] = 1; */
+    /*     $where['idusuario = ?'] = $acessos['IdUsuario']; */
 
-        $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-        $rsPreProjeto = $tblPreProjeto->buscar($where, array("idpreprojeto DESC"));
+    /*     $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto(); */
+    /*     $rsPreProjeto = $tblPreProjeto->buscar($where, array("idpreprojeto DESC")); */
 
-        //id do Pre Projeto, necessario usuario ter um pre projeto para testar
-        $idPreProjeto = $rsPreProjeto[0]->idPreProjeto;
+    /*     //id do Pre Projeto, necessario usuario ter um pre projeto para testar */
+    /*     $idPreProjeto = $rsPreProjeto[0]->idPreProjeto; */
 
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
+    /*     //reset para garantir respostas. */
+    /*     $this->resetRequest() */
+    /*         ->resetResponse(); */
 
-        // Acessando local de realizacao
-        $url = '/proposta/manterpropostaincentivofiscal/enviar-proposta/idPreProjeto/'. $idPreProjeto;
-        $this->request->setMethod('GET');
-        $this->dispatch($url);
-        $this->assertNotRedirect();
+    /*     // Acessando local de realizacao */
+    /*     $url = '/proposta/manterpropostaincentivofiscal/enviar-proposta/idPreProjeto/'. $idPreProjeto; */
+    /*     $this->request->setMethod('GET'); */
+    /*     $this->dispatch($url); */
+    /*     $this->assertNotRedirect(); */
 
-        $this->assertModule('proposta');
-        $this->assertController('manterpropostaincentivofiscal');
-        $this->assertAction('enviar-proposta');
-        $this->assertQuery('div#titulo div', 'Encaminhar Proposta Cultural ao Ministério da Cultura');
-    }
+    /*     $this->assertModule('proposta'); */
+    /*     $this->assertController('manterpropostaincentivofiscal'); */
+    /*     $this->assertAction('enviar-proposta'); */
+    /*     $this->assertQuery('div#titulo div', 'Encaminhar Proposta Cultural ao Ministério da Cultura'); */
+    /* } */
 }
