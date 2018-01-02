@@ -60,4 +60,4 @@ $ ./test.sh # executa todos os testes do projeto.
 
 5°passo - Devemos receber essa Uma tela parecida com essa: 
 
-
+![exemplo de teste](https://github.com/culturagovbr/salic-minc/raw/develop/doc/img/teste_exemplo.png "Teste com sucesso")
