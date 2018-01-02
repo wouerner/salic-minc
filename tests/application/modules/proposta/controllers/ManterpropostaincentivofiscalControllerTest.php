@@ -13,31 +13,31 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
      * @access public
      * @return void
      */
-    /* public function testListarpropostaAction() */
-    /* { */
-    /*     $this->autenticar(); */
+    public function testListarpropostaAction()
+    {
+        $this->autenticar();
 
-    /*     //reset para garantir respostas. */
-    /*     $this->resetRequest() */
-    /*         ->resetResponse(); */
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
 
-    /*     // trocar para perfil Proponente */
-    /*     $this->request->setMethod('GET'); */
-    /*     $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=1111&codOrgao=2222'); */
-    /*     $this->assertRedirectTo('/principalproponente'); */
+        // trocar para perfil Proponente
+        $this->request->setMethod('GET');
+        $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=1111&codOrgao=2222');
+        $this->assertRedirectTo('/principalproponente');
 
-    /*     //reset para garantir respostas. */
-    /*     $this->resetRequest() */
-    /*         ->resetResponse(); */
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
 
-    /*     $this->dispatch('/proposta/manterpropostaincentivofiscal/listarproposta'); */
-    /*     $this->assertModule('proposta'); */
-    /*     $this->assertController('manterpropostaincentivofiscal'); */
-    /*     $this->assertAction('listarproposta'); */
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/listarproposta');
+        $this->assertModule('proposta');
+        $this->assertController('manterpropostaincentivofiscal');
+        $this->assertAction('listarproposta');
 
-    /*     //verifica se tela carregou corretamente */
-    /*     $this->assertQuery('div.container-fluid div'); */
-    /* } */
+        //verifica se tela carregou corretamente
+        $this->assertQuery('div.container-fluid div');
+    }
 
     /* public function testConsultarresponsaveisAction() */
     /* { */
@@ -168,4 +168,57 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
     /*     $this->assertAction('enviar-proposta'); */
     /*     $this->assertQuery('div#titulo div', 'Encaminhar Proposta Cultural ao Ministério da Cultura'); */
     /* } */
+
+    public function testIdentificacaodapropostaAction()
+    {
+        $this->autenticar();
+
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
+
+        // trocar para perfil Proponente
+        $this->request->setMethod('GET');
+        $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=1111&codOrgao=2222');
+        $this->assertRedirectTo('/principalproponente');
+
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
+
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/identificacaodaproposta' . '/idPreProjeto/240102');
+        $this->assertModule('proposta');
+        $this->assertController('manterpropostaincentivofiscal');
+        $this->assertAction('identificacaodaproposta');
+
+        //verifica se tela carregou corretamente
+        /* $this->assertQuery('div.container-fluid div'); */
+    }
+
+    public function testResponsabilidadesocialAction() {}
+    public function testDetalhestecnicosAction() {}
+
+    public function testVerificaPermissaoAcessoProposta(){}
+    public function testIndexAction(){}
+    public function testDeclaracaonovapropostaAction(){}
+    public function testBuscaproponenteAction(){}
+    public function testValidaagenciaAction(){}
+    public function testSalvarAction(){}
+    public function testCarregaProposta(){}
+    public function testEditarAction(){}
+    public function testOutrasinformacoesAction(){}
+    public function testEncaminharprojetoaomincAction(){}
+    public function testExcluirAction(){}
+    public function testEnviarPropostaAction(){}
+    public function testValidarEnvioPropostaComSp(){}
+    public function testValidarEnvioPropostaSemSp(){}
+    public function testConfirmarEnvioPropostaAoMincAction(){}
+    public function testValidaDatasAction(){}
+    public function testListarPropostasAjaxAction(){}
+    public function testConsultarresponsaveisAction(){}
+    public function testVincularpropostasAction(){}
+    public function testVincularprojetosAction(){}
+    public function testNovoresponsavelAction(){}
+    public function testRespnovoresponsavelAction(){}
+    public function testAtualizarDadosPessoaJuridicaVerificandoCNAECultural(){}
 }
