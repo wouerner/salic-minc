@@ -10,7 +10,7 @@ Manual de testes Salic
 É **importante** observar as versões da bibliotecas de documentação do PHPUnit, pois estamos usando a ultima versão compativel sem modificar o core do Zend Framework.
 
 ## Estrutura de pastas
-
+```
 ./tests
 ├── application
 │   ├── Bootstrap.php (bootstrap dos testes, configuração de hook, init e helpers)
@@ -30,7 +30,7 @@ Manual de testes Salic
 │   └── test.sh (script para executar todos os teste do sistema)
 ├── log (pasta com codecoverage gerado pelo PHPUnit)
 └── phpunit.xml (configuraçãos dos testes)
-
+```
 ## Passo a passo
 
 1°passo - Entrar na pasta dos testes.
@@ -42,13 +42,13 @@ $ cd ./caminho/projeto/tests/bin
 $ chmod +x test.sh
 ```
 
-3°passo - Configurar login dos testes, geralmente fica no ambiente de [testing : production]
+3°passo - Configurar login dos testes, geralmente fica no ambiente de [testing : production] 
 ``` sh
 $ cd ./application/configs/
 $ vim application.ini 
 ```
-test.params.login = 239XXXXXX  - usuario que será usado para executar os testes
-test.params.password = m2XXXX - Senha do usuario de testes
+test.params.login = 239XXXXXX  - usuario que será usado para executar os testes    
+test.params.password = m2XXXX - Senha do usuario de testes  
 
 **OBS:** Esse usuario precisa ter o perfis de sistema necessarios para executar os testes, caso contrario recebermos falhas nos testes.
 
