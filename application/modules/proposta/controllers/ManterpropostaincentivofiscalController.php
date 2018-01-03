@@ -1,13 +1,5 @@
 <?php
 
-/** VerificarReadequacaoDeProjetoController
- * @author Equipe RUP - Politec
- * @author wouerner <wouerner@gmail.com>
- * @since 17/05/2010
- * @version 1.0
- * @package application
- * @subpackage application.controllers
- */
 class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericController
 {
 
