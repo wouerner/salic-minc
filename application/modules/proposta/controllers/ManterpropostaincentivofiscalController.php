@@ -1,13 +1,5 @@
 <?php
 
-/** VerificarReadequacaoDeProjetoController
- * @author Equipe RUP - Politec
- * @author wouerner <wouerner@gmail.com>
- * @since 17/05/2010
- * @version 1.0
- * @package application
- * @subpackage application.controllers
- */
 class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericController
 {
 
@@ -154,8 +146,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout->disableLayout();
 
-        $get = Zend_Registry::get('get');
-        $agencia = $get->agencia;
+        $agencia = $this->getParam('agencia');
 
         if ($agencia > 0) {
             $tblProposta = new Proposta_Model_DbTable_PreProjeto();
@@ -361,10 +352,6 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         $arrDados = array("proposta" => $rsPreProjeto,
             "proponente" => $rsProponente);
         return $arrDados;
-        //METODO QUE MONTA TELA DO USUARIO ENVIANDO TODOS OS PARAMETROS NECESSARIOS DENTRO DO ARRAY
-        $this->montaTela("manterpropostaincentivofiscal/identificacaodaproposta.phtml", array("acao" => $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar",
-            "proposta" => $rsPreProjeto,
-            "proponente" => $rsProponente));
     }
 
     /**
@@ -375,97 +362,11 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      */
     public function editarAction()
     {
-        /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
         $this->verificarPermissaoAcesso(true, false, false);
 
         $idPreProjeto = $this->idPreProjeto;
 
         $this->redirect("/proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/" . $this->idPreProjeto);
-
-        $this->view->idPreProjeto = $idPreProjeto;
-
-        if (!empty($idPreProjeto)) {
-            $arrBusca['idPreProjeto = ?'] = $idPreProjeto;
-
-            $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-            $rsPreProjeto = $tblPreProjeto->buscar($arrBusca)->current();
-
-            if ($rsPreProjeto) {
-                $rsPreProjeto = $rsPreProjeto->toArray();
-                $stProposta = $rsPreProjeto["stProposta"];
-            }
-
-            $arrBuscaProponete['a.idagente = ?'] = $rsPreProjeto['idAgente'];
-            $tblAgente = new Agente_Model_DbTable_Agentes();
-            $rsProponente = $tblAgente->buscarAgenteENome($arrBuscaProponete)->current();
-            if ($rsProponente) {
-                $rsProponente = ($rsProponente->toArray());
-            }
-
-            $ag = new Agente_Model_DbTable_Agentes();
-            $verificarvinculo = $ag->buscarAgenteVinculoProponente(array('vprp.idpreprojeto = ?' => $idPreProjeto, 'vprp.sivinculoproposta = ?' => 2));
-
-            $verificarvinculoCount = $ag->buscarAgenteVinculoProponente(array('vprp.idpreprojeto = ?' => $idPreProjeto))->count();
-
-            if ($verificarvinculoCount > 0) {
-                $this->view->verificarsolicitacaovinculo = true;
-            } else {
-                $this->view->verificarsolicitacaovinculo = false;
-            }
-
-            // I Love you @
-            if (@$verificarvinculo[0]->sivinculo != 2) {
-                $this->view->siVinculoProponente = true;
-            } else {
-                $this->view->siVinculoProponente = false;
-            }
-
-            $idAgente = $this->idResponsavel;
-
-            $tblVinculo = new Agente_Model_DbTable_TbVinculo();
-
-            $arrBuscaP['vp.idpreprojeto = ?'] = $idPreProjeto;
-            $arrBuscaP['vi.idusuarioresponsavel = ?'] = $this->idResponsavel;
-            $rsVinculoP = $tblVinculo->buscarVinculoProponenteResponsavel($arrBuscaP);
-
-            $arrBuscaN['vi.sivinculo IN (0,2)'] = '';
-            $arrBuscaN['vi.idusuarioresponsavel = ?'] = $this->idResponsavel;
-            $rsVinculoN = $tblVinculo->buscarVinculoProponenteResponsavel($arrBuscaN);
-            //METODO QUE MONTA TELA DO USUARIO ENVIANDO TODOS OS PARAMENTROS NECESSARIO DENTRO DO ARRAY
-
-
-            $idDocumento = "";
-
-            if (!empty($stProposta)) {
-                $tbl = new Proposta_Model_DbTable_TbDocumentosPreProjeto();
-
-                // Plano de execução imediata #novain
-                if ($stProposta == '618') { // proposta execucao imediata edital
-                    $idDocumento = 248;
-                } elseif ($stProposta == '619') { // proposta execucao imediata contrato de patrocínio
-                    $idDocumento = 162;
-                }
-                if (!empty($idDocumento)) {
-                    $arquivoExecucaoImediata = $tbl->buscarDocumentos(array("idprojeto = ?" => $idPreProjeto, "CodigoDocumento = ?" => $idDocumento));
-                }
-            }
-
-            $this->montaTela(
-                "manterpropostaincentivofiscal/identificacaodaproposta.phtml",
-                array("acao" => $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar",
-                    "proposta" => $rsPreProjeto,
-                    "solicitacaovinculo" => $verificarvinculo,
-                    "idResponsavel" => $idAgente,
-                    "dadosVinculo" => $rsVinculoP,
-                    "listaProponentes" => $rsVinculoN,
-                    "idPreProjeto" => $idPreProjeto,
-                    "arquivoExecucaoImediata" => $arquivoExecucaoImediata,
-                    "proponente" => $rsProponente)
-            );
-        } else {
-            //chama o metodo index
-            $this->_forward("index", "manterpropostaincentivofiscal", 'proposta');
-        }
     }
 
     public function identificacaodapropostaAction()
@@ -657,7 +558,6 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
      *
      * @access public
      * @return void
-     * @author wouerner <wouerner@gmail.com>
      */
     public function enviarPropostaAction()
     {
@@ -760,10 +660,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
     public function confirmarEnvioPropostaAoMincAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(true, false, false);
     }
 

@@ -72,7 +72,8 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
             'a.idpreprojeto as idPronac',
             new Zend_Db_Expr("' ' AS PRONAC"),
             'a.nomeprojeto',
-            new Zend_Db_Expr(" CASE WHEN idproduto = 0
+            new Zend_Db_Expr(" 
+            CASE WHEN idproduto = 0
                        THEN 'Administra&ccedil;&atilde;o do Projeto'
                        ELSE c.descricao
                   END as Produto"),
@@ -85,7 +86,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
             'b.quantidade as Quantidade',
             'b.ocorrencia as Ocorrencia',
             'b.valorunitario as vlUnitario',
-            'ROUND((b.quantidade * b.ocorrencia * b.valorunitario),2) as vlSolicitado',
+            new Zend_Db_Expr('ROUND((b.quantidade * b.ocorrencia * b.valorunitario),2) as vlSolicitado'),
             'b.fonterecurso as idFonte',
             'b.qtdedias as QtdeDias',
             'b.stCustoPraticado as stCustoPraticado',
@@ -112,7 +113,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
             ->where('a.idpreprojeto = ? ', $idPronac)
             ->order("x.descricao")
             ->order("c.descricao DESC")
-            ->order("$convert  $concat '-'  $concat d.descricao")
+            ->order(new Zend_Db_Expr("$convert  $concat '-'  $concat d.descricao"))
             ->order('u.sigla')
             ->order('f.descricao')
             ->order('i.descricao');

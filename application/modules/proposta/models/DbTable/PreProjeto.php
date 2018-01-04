@@ -999,17 +999,17 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $slct->setIntegrityCheck(false);
         $slct->from(
                 array('pp' => $this->_name),
-                array('pp.idPreProjeto,
-                       pp.idAgente,
-                       pp.NomeProjeto,
-                       pp.Mecanismo,
-                       pp.AgenciaBancaria,
-                       pp.DtInicioDeExecucao,
-                       pp.DtFinalDeExecucao,
-                       pp.stTipoDemanda,
-                       pp.idUsuario,
-                       pp.idEdital,
-                       CAST(pp.ResumoDoProjeto as TEXT) as ResumoDoProjeto'),
+                array('pp.idPreProjeto',
+                       'pp.idAgente',
+                       'pp.NomeProjeto',
+                       'pp.Mecanismo',
+                       'pp.AgenciaBancaria',
+                       'pp.DtInicioDeExecucao',
+                       'pp.DtFinalDeExecucao',
+                       'pp.stTipoDemanda',
+                       'pp.idUsuario',
+                       'pp.idEdital',
+                       new Zend_Db_Expr('CAST(pp.ResumoDoProjeto as TEXT) as ResumoDoProjeto')),
             $this->_schema
         );
 
