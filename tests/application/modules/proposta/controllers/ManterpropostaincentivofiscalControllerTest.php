@@ -63,13 +63,57 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
     }
 
     public function testVerificaPermissaoAcessoProposta(){}
-    public function testIndexAction(){}
+
+    public function testIndexAction()
+    {
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/index' . '/idPreProjeto/' . $this->idPreProjeto);
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'index');
+
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
+
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/index');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'index');
+    }
+
     public function testDeclaracaonovapropostaAction(){}
     public function testBuscaproponenteAction(){}
-    public function testValidaagenciaAction(){}
+
+    public function testValidaagenciaAction()
+    {
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/validaagencia');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'validaagencia');
+
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
+
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/validaagencia/agencia/123');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'validaagencia');
+
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
+
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/validaagencia/agencia/27278');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'validaagencia');
+    }
+
     public function testSalvarAction(){}
-    public function testCarregaProposta(){}
-    public function testEditarAction(){}
+
+    /**
+     * conferir se esse metodo é usado pelo sistema
+     *
+     */
+    public function testCarregaProposta(){
+    }
+
+    public function testEditarAction()
+    {
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/editar' . '/idPreProjeto/' . $this->idPreProjeto);
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'editar');
+    }
 
     public function testOutrasinformacoesAction()
     {
@@ -77,18 +121,39 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
         $this->assertUrl('proposta','manterpropostaincentivofiscal', 'outrasinformacoes');
     }
 
-    public function testEncaminharprojetoaomincAction(){}
+    public function testEncaminharprojetoaomincAction()
+    {
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc' . '/idPreProjeto/' . $this->idPreProjeto);
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'encaminharprojetoaominc');
+    }
+
     public function testExcluirAction(){}
     public function testEnviarPropostaAction(){}
-    public function testValidarEnvioPropostaComSp(){}
-    public function testValidarEnvioPropostaSemSp(){}
     public function testConfirmarEnvioPropostaAoMincAction(){}
     public function testValidaDatasAction(){}
     public function testListarPropostasAjaxAction(){}
-    public function testConsultarresponsaveisAction(){}
-    public function testVincularpropostasAction(){}
-    public function testVincularprojetosAction(){}
-    public function testNovoresponsavelAction(){}
-    public function testRespnovoresponsavelAction(){}
-    public function testAtualizarDadosPessoaJuridicaVerificandoCNAECultural(){}
+
+    public function testConsultarresponsaveisAction()
+    {
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/consultarresponsaveis');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'consultarresponsaveis');
+    }
+
+    public function testVincularpropostasAction()
+    {
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/vincularpropostas');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'vincularpropostas');
+    }
+
+    public function testVincularprojetosAction(){
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/vincularprojetos');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'vincularprojetos');
+    }
+    public function testNovoresponsavelAction(){
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/novoresponsavel');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'novoresponsavel');
+    }
+
+    public function testRespnovoresponsavelAction(){
+    }
 }
