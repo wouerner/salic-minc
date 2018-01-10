@@ -2,49 +2,59 @@
 /**
  * Proposta_PlanoDistribuicaoController
  *
- * @uses GenericControllerNew
  * @package
  * @author wouerner <wouerner@gmail.com>
  */
 class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
 {
-    /* public function testIndexAction() */
-    /* { */
-    /*     $this->autenticar(); */
-    /*     $this->perfilParaProponente(); */
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-    /*     $auth = Zend_Auth::getInstance(); */
-    /*     $usuarioCpf = $auth->getIdentity()->cpf; */
+    /**
+     * Proposta_PlanoDistribuicaoController
+     *
+     * @package
+     * @author wouerner <wouerner@gmail.com>
+     */
+    public function testIndexAction()
+    {
+        $this->autenticar();
+        $this->perfilParaProponente();
 
-    /*     // Busca na SGCAcesso */
-    /*     $sgcAcesso = new Autenticacao_Model_Sgcacesso(); */
-    /*     /1* var_dump($sgcAcesso);die; *1/ */
-    /*     $acessos = $sgcAcesso->findBy(['cpf' => $usuarioCpf]); */
-    /*     var_dump($acessos); */
+        $auth = Zend_Auth::getInstance();
+        $usuarioCpf = $auth->getIdentity()->cpf;
 
-    /*     // Buscar projetos do Usuario Logado. */
-    /*     $where['stestado = ?'] = 1; */
-    /*     $where['idusuario = ?'] = $acessos['idusuario']; */
+        // Busca na SGCAcesso
+        $sgcAcesso = new Autenticacao_Model_Sgcacesso();
+        /* var_dump($sgcAcesso);die; */
+        $acessos = $sgcAcesso->findBy(['cpf' => $usuarioCpf]);
+        var_dump($acessos);
 
-    /*     $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto(); */
-    /*     $rsPreProjeto = $tblPreProjeto->buscar($where, array("idpreprojeto DESC")); */
+        // Buscar projetos do Usuario Logado.
+        $where['stestado = ?'] = 1;
+        $where['idusuario = ?'] = $acessos['idusuario'];
 
-    /*     //id do Pre Projeto, necessario usuario ter um pre projeto */
-    /*     $idPreProjeto = $rsPreProjeto[0]->idPreProjeto; */
+        $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+        $rsPreProjeto = $tblPreProjeto->buscar($where, array("idpreprojeto DESC"));
 
-    /*     //reset para garantir respostas. */
-    /*     $this->resetRequest() */
-    /*         ->resetResponse(); */
+        //id do Pre Projeto, necessario usuario ter um pre projeto
+        $idPreProjeto = $rsPreProjeto[0]->idPreProjeto;
 
-    /*     // Acessando local de realizacao */
-    /*     $url = '/proposta/plano-distribuicao?idPreProjeto=' . $idPreProjeto; */
-    /*     $this->request->setMethod('GET'); */
-    /*     $this->dispatch($url); */
-    /*     $this->assertNotRedirect(); */
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
 
-    /*     $this->assertModule('proposta'); */
-    /*     $this->assertController('plano-distribuicao'); */
-    /*     $this->assertAction('index'); */
-    /*     $this->assertQueryContentContains('html body div#titulo', 'Plano de Distribuição'); */
-    /* } */
+        // Acessando local de realizacao
+        $url = '/proposta/plano-distribuicao?idPreProjeto=' . $idPreProjeto;
+        $this->request->setMethod('GET');
+        $this->dispatch($url);
+        $this->assertNotRedirect();
+
+        $this->assertModule('proposta');
+        $this->assertController('plano-distribuicao');
+        $this->assertAction('index');
+        $this->assertQueryContentContains('html body div#titulo', 'Plano de Distribuição');
+    }
 }
