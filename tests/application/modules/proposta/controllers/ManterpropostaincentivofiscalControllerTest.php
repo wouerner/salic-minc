@@ -1,10 +1,4 @@
 <?php
-
-/**
- * ManterpropostaincentivofiscalControllerTest
- *
- * @author  wouerner <wouerner@gmail.com>
- */
 class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerActionTestCase
 {
      public function setUp()
