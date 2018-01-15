@@ -169,3 +169,21 @@ x - INICIO ABAS
 #conteudo div.simpleTabsContent.currentTab {
     display: block;
 }
+
+/*--------------------------------------------------------------
+ TABS (MATERIALIZE)
+--------------------------------------------------------------*/
+.tabs .tab a {
+    background: #fff;
+    color: #212121;
+}
+
+.tabs .tab a:hover,
+.tabs .tab a.active {
+    background-color: #c8e6c9;
+    color: #212121;
+}
+
+.tabs .indicator {
+    background-color: #4caf50;
+}
