@@ -16,12 +16,14 @@
             <?php if (!empty($this->usuario->usu_identificacao) && !empty($this->usuario->usu_nome)) : ?>
                 <?php $nomeUsuario = explode(" ", $this->usuario->usu_nome); ?>
                 <?php $cpfUsuario = Validacao::mascaraCPFCNPJ($this->usuario->usu_identificacao); ?>
+                <?php $urlAlterarDados = $this->url(array('module' => 'autenticacao', 'controller' => 'index', 'action' => 'alterarsenhausuario'), '', true); ?>
             <?php endif; ?>
 
             <?php $user = array_change_key_case((array) $this->usuario); ?>
             <?php if (!empty($user['cpf']) && !empty($user['nome'])) : ?>
                 <?php $nomeUsuario = explode(" ", $user['nome']); ?>
                 <?php $cpfUsuario = Validacao::mascaraCPFCNPJ($user['cpf']); ?>
+                <?php $urlAlterarDados = $this->url(array('module' => 'autenticacao', 'controller' => 'index', 'action' => 'alterardados'), '', true); ?>
             <?php endif; ?>
 
             <?php
@@ -34,7 +36,7 @@
 
             <ul id="dropdown1" class="dropdown-content">
                 <li>
-                    <a href="#!">
+                    <a href="<?= $urlAlterarDados; ?>">
                         <p>
                             <i class="material-icons small left">person</i>
                             <?php echo $primeiroNome . " " . $ultimoNome; ?><br>
