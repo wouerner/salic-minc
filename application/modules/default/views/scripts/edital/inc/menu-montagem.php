@@ -16,7 +16,7 @@
 //            $("#rodapeConteudo").css("margin-left", "225px");
 //            $(".sanfonaDiv").css("clear", "both");
 //            $(".sanfonaDiv").css("width", "91%");
-    } // fecha funï¿½ï¿½o layout_fluido()
+    } // fecha função layout_fluido()
 
     $(document).ready(function(){
         $('a.sanfona').click(function(){
@@ -31,7 +31,7 @@
     <div id="qm0" class="qmmc">
         <a href="<?php echo $this->url(array('controller' => 'edital', 'action' => 'montagem-edital')); ?>" class="no_seta" >Montagem do Edital</a>
         <a href="<?php echo $this->url(array('controller' => 'edital', 'action' => 'adicionar-texto')); ?>" class="no_seta" >Adicionar Texto</a>
-        <!--a href="<?php // echo $this->url(array('controller' => 'edital', 'action' => 'adicionar-referencia')); ?>" class="no_seta" >Adicionar Referï¿½ncia</a-->
+        <!--a href="<?php // echo $this->url(array('controller' => 'edital', 'action' => 'adicionar-referencia'));?>" class="no_seta" >Adicionar Referência</a-->
         <a href="<?php echo $this->url(array('controller' => 'edital', 'action' => 'visualizar-edital')); ?>" class="no_seta" >Visualizar/Finalizar Edital</a>
         <br clear="left" />
     </div>

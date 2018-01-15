@@ -222,7 +222,7 @@ endif;
 			{
 				fecharModal('projeto-em-analise');
 				carregandoModal();
-				redirecionar('<?php //echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index')); ?>?idPronac=<?php //echo $this->idPronac; ?>');
+				redirecionar('<?php //echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php //echo $this->idPronac;?>');
 			}
 		}
 	});
@@ -429,7 +429,7 @@ endif;
         </div>
         <a class="sanfona" href="#" title="Abrir menu <?php echo $menu[3][0]; ?>"><?php echo $menu[3][0]; ?></a>
         <div class="sanfonaDiv<?php echo $sumirCusto; ?>">
-            <?php $i--; // $i = 7 ?>
+            <?php $i--; // $i = 7?>
             <?php for ($j = 1; $j <= 2; $j++) : ?>
             <a class="<?php echo $mAtivo[$i+$j]; ?>" href="<?php echo $this->url(array('controller' => $controle, 'action' => $acao[$i+$j], 'idpronac' => Seguranca::encrypt($this->idPronac)), '', true); ?>" <?php echo $onClick[$i+$j]; ?> title="Ir para <?php echo $menu[3][$j]; ?>"><?php echo $menu[3][$j]; ?></a>
             <?php endfor; ?>
