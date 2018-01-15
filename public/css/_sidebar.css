@@ -544,6 +544,7 @@ x - Ajustes do menu lateral com o container
 --------------------------------------------------------------*/
 
 /* remover apos migracao do layout de proposta */
+.small-menu .container-fluid .row .col.s2.m12.l2,
 .large-menu .container-fluid .row .col.s2.m12.l2 {
     margin: 0;
     width: 0;
@@ -552,10 +553,14 @@ x - Ajustes do menu lateral com o container
 
 /* remover apos migracao do layout de proposta */
 @media only screen and (min-width: 993px) {
+    .large-menu .container-fluid > .row > .col.s10.m12.l10,
     .large-menu .container-fluid > .row > .col.s10.m12.l10 {
         width: 100% !important;
     }
 
+    .small-menu .container-fluid > .row > .col.s10.m12.l10 #breadcrumb,
+    .small-menu .container-fluid > .row > .col.s10.m12.l10 #titulo,
+    .small-menu .container-fluid > .row > .col.s10.m12.l10 #conteudo,
     .large-menu .container-fluid > .row > .col.s10.m12.l10 #breadcrumb,
     .large-menu .container-fluid > .row > .col.s10.m12.l10 #titulo,
     .large-menu .container-fluid > .row > .col.s10.m12.l10 #conteudo {
