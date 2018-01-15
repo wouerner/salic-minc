@@ -134,7 +134,6 @@ x - CONTAINER
     max-width: 1250px;
 }
 
-
 #breadcrumb,
 #titulo,
 #conteudo,
@@ -166,9 +165,12 @@ x - CONTAINER
     }
 }
 
-
 .container {
     position: relative;
+}
+
+#container-progress {
+    top: 0px;
 }
 
 /*--------------------------------------------------------------
