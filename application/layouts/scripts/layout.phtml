@@ -140,16 +140,7 @@
 
     </script>
 
-    <!-- ========== INICIO MENSAGENS (ERROS, CONFIRMACOES E ADVERTENCIAS) ========== -->
-    <?php if (isset($this->message)) : ?>
-        <div class="msg<?php echo $this->message_type; ?>">
-            <div class="float_right"><input type="button" class="btn_close" title="Fechar mensagem"
-                                            id="msg<?php echo $this->message_type; ?>"
-                                            onclick="$('.msg<?php echo $this->message_type; ?>').hide();"
-                                            onkeypress="$('.msg<?php echo $this->message_type; ?>').hide();"/></div>
-            <div><?php echo $this->message; ?></div>
-        </div>
-    <?php endif; ?>
+
     <!-- ========== FIM MENSAGENS (ERROS, CONFIRMACOES E ADVERTENCIAS) ========== -->
     <!-- ========== INICIO MENSAGENS DO PROJETO PARA O USUARIO ========== -->
     <div class="msgALERT sumir" id="mensagensabertasprojeto">
@@ -164,6 +155,17 @@
     <!-- ========== FIM MENSAGENS DO PROJETO PARA O USUARIO ========== -->
 </header>
 <main>
+    <!-- ========== INICIO MENSAGENS (ERROS, CONFIRMACOES E ADVERTENCIAS) ========== -->
+    <?php if (isset($this->message)) : ?>
+        <div class="mensagens msg<?php echo $this->message_type; ?>">
+            <div class="float_right"><input type="button" class="btn_close" title="Fechar mensagem"
+                                            id="msg<?php echo $this->message_type; ?>"
+                                            onclick="$('.msg<?php echo $this->message_type; ?>').hide();"
+                                            onkeypress="$('.msg<?php echo $this->message_type; ?>').hide();"/></div>
+            <div><?php echo $this->message; ?></div>
+        </div>
+    <?php endif; ?>
+
     <?php echo $this->layout()->content; ?>
 </main>
 <?php echo $this->render('partials/footer.phtml'); ?>

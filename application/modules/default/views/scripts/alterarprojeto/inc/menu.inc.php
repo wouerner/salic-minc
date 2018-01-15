@@ -162,7 +162,7 @@ if (in_array($this->grupoAtivo, array(92,93,104,113,114,115,124,125,126,128,131,
 
         <table class="tabela">
             <tr class="fundo">
-                <td class="" colspan="2" align="left">Enviar anexo (tamanho máximo de 10 MB)<br>Tipos de arquivos permitidos: <font color="red">PDF</font></td>
+                <td class="" colspan="2" align="left">Enviar anexo (tamanho mï¿½ximo de 10 MB)<br>Tipos de arquivos permitidos: <font color="red">PDF</font></td>
             </tr>
             <tr class="fundo">
                 <td class="destacar bold" align="right" width="1">Arquivo</td>
@@ -219,11 +219,11 @@ if($menu != 0){ ?>
                 var fluidConteudo = janela - 253;
                 var fluidTitulo = janela - 252;
                 var fluidRodape = janela - 19;
-                $("#navglobal").css("width",fluidNavGlobal);
-                $("#conteudo").css("width",fluidConteudo);
-                $("#titulo").css("width",fluidTitulo);
-                $("#rodapeConteudo").css("width",fluidConteudo);
-                $("#rodape").css("width",fluidRodape);
+//                $("#navglobal").css("width",fluidNavGlobal);
+//                $("#conteudo").css("width",fluidConteudo);
+//                $("#titulo").css("width",fluidTitulo);
+//                $("#rodapeConteudo").css("width",fluidConteudo);
+//                $("#rodape").css("width",fluidRodape);
                 $("div#rodapeConteudo").attr("id", "rodapeConteudo_com_menu");
             }
         </script>
@@ -263,7 +263,7 @@ if($menu != 0){ ?>
                 <?php } ?>
 
                 <?php if(in_array($this->grupoAtivo, array(103))){ ?>
-                <a class="no_seta" href="<?php echo $this->url(array('controller' => 'alterarprojeto', 'action' => 'sintese', 'pronac' => $this->pronac)); ?>" title="Ir para síntese do projeto">Síntese do Projeto</a>
+                <a class="no_seta" href="<?php echo $this->url(array('controller' => 'alterarprojeto', 'action' => 'sintese', 'pronac' => $this->pronac)); ?>" title="Ir para sï¿½ntese do projeto">Sï¿½ntese do Projeto</a>
                 <?php } ?>
 
                 <?php if(in_array($this->grupoAtivo, array(97,103,122,123,125,126,127,134,138))){ ?>
@@ -275,7 +275,7 @@ if($menu != 0){ ?>
                 <?php } ?>
 
                 <?php if(in_array($this->grupoAtivo, array(97,103,110,121,122,123,127))){ ?>
-                <a class="no_seta" href="<?php echo $this->url(array('controller' => 'alterarprojeto', 'action' => 'periododeexecucao'), '', true); ?>?pronac=<?php echo $this->pronac ?>" title="Ir para per&iacute;odo de execu&ccedil;&atilde;o">Período de Execu&ccedil;&atilde;o</a>
+                <a class="no_seta" href="<?php echo $this->url(array('controller' => 'alterarprojeto', 'action' => 'periododeexecucao'), '', true); ?>?pronac=<?php echo $this->pronac ?>" title="Ir para per&iacute;odo de execu&ccedil;&atilde;o">Perï¿½odo de Execu&ccedil;&atilde;o</a>
                 <?php } ?>
 
                 <?php /*if(in_array('8', $menuAtor)){ ?>
