@@ -9,11 +9,11 @@
         var fluidTitulo = janela - 252;
         var fluidRodape = janela - 19;
 
-        $("#navglobal").css("width",fluidNavGlobal);
-        $("#conteudo").css("width",fluidConteudo);
-        $("#titulo").css("width",fluidTitulo);
-        $("#rodapeConteudo").css("width",fluidConteudo);
-        $("#rodape").css("width",fluidRodape);
+//        $("#navglobal").css("width",fluidNavGlobal);
+//        $("#conteudo").css("width",fluidConteudo);
+//        $("#titulo").css("width",fluidTitulo);
+//        $("#rodapeConteudo").css("width",fluidConteudo);
+//        $("#rodape").css("width",fluidRodape);
 
         $("div#rodapeConteudo").attr("id", "rodapeConteudo_com_menu");
     }
@@ -42,10 +42,10 @@
         });
     });
 </script>
-<!-- ========== INÍCIO MENU ========== -->
-<div id='nomsg' style="display:none">Este usuário não participou da análise deste projeto!</div>
+<!-- ========== INï¿½CIO MENU ========== -->
+<div id='nomsg' style="display:none">Este usuï¿½rio nï¿½o participou da anï¿½lise deste projeto!</div>
 <div id="menu">
-    <!-- início: conteúdo principal #container -->
+    <!-- inï¿½cio: conteï¿½do principal #container -->
     <div id="container">
         <div id="menuContexto">
             <div class="top"></div>
@@ -61,7 +61,7 @@
             <div id="space_menu"></div>
         </div>
 
-        <!-- final: navegação local #qm0 -->
+        <!-- final: navegaï¿½ï¿½o local #qm0 -->
     </div>
 </div>
 <!-- ========== FIM MENU ========== -->
