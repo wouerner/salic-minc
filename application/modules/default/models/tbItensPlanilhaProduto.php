@@ -152,7 +152,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function buscarItens($idEtapa, $idproduto = null, $fetchMode = Zend_DB::FETCH_OBJ)
+    public function buscarItens($where = array(), $idEtapa, $idproduto = null, $fetchMode = Zend_DB::FETCH_OBJ)
     {
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
@@ -160,6 +160,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
             array('a' => $this->_name),
             array(
                 'a.idPlanilhaItens',
+                'a.idPlanilhaEtapa',
                 'b.Descricao'
             ),
             $this->_schema
@@ -176,6 +177,10 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
             $select->where('idProduto = ?', $idproduto);
         }
         $select->order('b.Descricao');
+
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
 
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode($fetchMode);

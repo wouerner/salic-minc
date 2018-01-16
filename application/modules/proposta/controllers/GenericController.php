@@ -271,8 +271,17 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
 
         $ModelCV = new Proposta_Model_TbCustosVinculados();
 
+        $whereCustosVinculados = [
+            'a.idPlanilhaItens not in (?)' => array($ModelCV::ID_DIREITOS_AUTORAIS, $ModelCV::ID_CONTROLE_E_AUDITORIA)
+        ];
+
         $itensPlanilhaProduto = new tbItensPlanilhaProduto();
-        $itensCustosVinculados = $itensPlanilhaProduto->buscarItens($ModelCV::ID_ETAPA_CUSTOS_VINCULADOS, null, Zend_DB::FETCH_ASSOC);
+        $itensCustosVinculados = $itensPlanilhaProduto->buscarItens(
+            $whereCustosVinculados,
+            $ModelCV::ID_ETAPA_CUSTOS_VINCULADOS,
+            null,
+            Zend_DB::FETCH_ASSOC
+        );
 
         if (!empty($ufRegionalizacaoPlanilha)) { # sudeste e sul
             $valoresCustosVinculados['percentualDivulgacao'] = $ModelCV::PERCENTUAL_DIVULGACAO_SUL_SUDESTE;
@@ -298,13 +307,6 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
                 case $ModelCV::ID_REMUNERACAO_CAPTACAO:
                     $item['Percentual'] = $valoresCustosVinculados['percentualRemuneracaoCaptacao'];
                     $item['Limite'] = $valoresCustosVinculados['limiteRemuneracaoCaptacao'];
-                    break;
-                case $ModelCV::ID_CONTROLE_E_AUDITORIA:
-                    $item['Percentual'] = $ModelCV::PERCENTUAL_CONTROLE_E_AUDITORIA;
-                    $item['Limite'] = $ModelCV::LIMITE_CONTROLE_E_AUDITORIA;
-                    break;
-                case $ModelCV::ID_DIREITOS_AUTORAIS:
-                    $item['Percentual'] = $ModelCV::PERCENTUAL_DIREITOS_AUTORAIS;
                     break;
             }
 
