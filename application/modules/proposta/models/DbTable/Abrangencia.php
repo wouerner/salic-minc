@@ -713,7 +713,7 @@ LEFT JOIN BDCORPORATIVO.scSAC.tbAvaliacaoSubItemPedidoAlteracao tasipa ON (tasip
         return $db->fetchAll($select);
     }
 
-    public function buscarUfRegionalizacao($idPreProjeto)
+    public function buscarUfRegionalizacao($idPreProjeto, $where = array())
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -727,13 +727,16 @@ LEFT JOIN BDCORPORATIVO.scSAC.tbAvaliacaoSubItemPedidoAlteracao tasipa ON (tasip
         $select->joinInner(array('uf' => 'UF'), 'uf.idUF = a.idUF', array('idUF'=>'uf.idUF', 'UF'=>'uf.Sigla'), $this->getSchema('agentes'));
         $select->joinInner(array('mun' => 'Municipios'), 'mun.idMunicipioIBGE = a.idMunicipioIBGE', array('idMunicipio'=>'mun.idMunicipioIBGE', 'Municipio'=>'mun.Descricao'), $this->getSchema('agentes'));
         $select->where('a.idProjeto = ?', $idPreProjeto);
-        $select->where("uf.Regiao = 'Sul' OR uf.Regiao = 'Sudeste'");
         $select->order('a.idProjeto DESC');
         $select->limit(1);
 
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
-//
+
         return $db->fetchRow($select);
     }
 } // fecha class AvaliacaoSubItemPlanoDistribuicaoDAO

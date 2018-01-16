@@ -134,7 +134,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $tblAbrangencia = new Proposta_Model_DbTable_Abrangencia();
         $this->view->localRealizacao = $tblAbrangencia->buscar($arrBusca);
 
-        $this->view->itensCustosVinculados = $this->gerarArrayCustosVinculados($this->idPreProjeto);
+        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+        $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterValoresPecentuaisELimitesCustosVinculados($this->idPreProjeto);
     }
 
     public function salvarpercentuaiscustosvinculadosAction()
@@ -142,7 +143,9 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $params = $this->getRequest()->getParams();
 
         $custosVinculados = $params['itensCustosVinculados'];
-        $arrayCustosVinculados = $this->gerarArrayCustosVinculados($params['idPreProjeto']);
+
+        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+        $arrayCustosVinculados = $tbCustosVinculadosMapper->obterValoresPecentuaisELimitesCustosVinculados($params['idPreProjeto']);
 
         $mapper = new Proposta_Model_TbCustosVinculadosMapper();
 
@@ -384,7 +387,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             if ($this->isEditarProjeto($idPreProjeto)) {
                 $verifica = $this->verificarSeUltrapassaValorOriginal($idPreProjeto, $dados, $idPlanilhaProposta);
 
-                if ($verifica && $dados['FonteRecurso'] == 109) {
+                if ($verifica && $dados['FonteRecurso'] == Mecanismo::INCENTIVO_FISCAL) {
                     $retorno['msg'] = "O item cadastrado ultrapassa o valor original do projeto!";
                     $retorno['close'] = false;
                     $retorno['status'] = false;
@@ -500,8 +503,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
 
         # Faz a soma da planilha da proposta
-        $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaProdutos($idPreProjeto, 109);
-        $somaPlanilhaPropostaProdutos = !empty($somaPlanilhaPropostaProdutos['soma']) ? $somaPlanilhaPropostaProdutos['soma'] : 0;
+        $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaPorEtapa($idPreProjeto, Mecanismo::INCENTIVO_FISCAL, null, ['e.tpCusto = ?' => 'P']);
 
         # Item atual
         $totalItemAtual = $dados['Quantidade'] * $dados['ValorUnitario'] * $dados['Ocorrencia'];

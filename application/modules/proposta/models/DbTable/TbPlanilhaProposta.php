@@ -294,7 +294,7 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         $somar->from(
             $this,
             array(
-                'ROUND(sum(Quantidade*Ocorrencia*ValorUnitario), 2) as soma'
+                new Zend_Db_Expr('ROUND(sum(Quantidade*Ocorrencia*ValorUnitario), 2) as soma')
             )
         )
             ->where('idProjeto = ?', $idprojeto)
@@ -314,41 +314,42 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         return $this->fetchRow($somar);
     }
 
-    public function somarPlanilhaPropostaProdutos($idprojeto, $fonte = null, $outras = null, $where = array())
+    public function somarPlanilhaPropostaPorEtapa($idprojeto, $fonte = null, $outras = null, $where = array())
     {
-        $somar = $this->select();
-        $somar->from(
+        $select = $this->select();
+        $select->from(
             array('p' => $this->_name),
             array(
-                new Zend_Db_Expr('sum(Quantidade*Ocorrencia*ValorUnitario) as soma')
+                new Zend_Db_Expr('ROUND(sum(Quantidade*Ocorrencia*ValorUnitario), 2) as soma')
             ),
             $this->_schema
         );
 
-        $somar->joinInner(
+        $select->joinInner(
             array('e' => 'tbplanilhaetapa'),
             'e.idPlanilhaEtapa = p.idEtapa',
             array(),
             $this->_schema
         );
-        $somar->where("e.tpCusto = 'P'");
-        $somar->where('idProjeto = ?', $idprojeto);
-        $somar->where('idProduto <> ?', '206');
+
+        $select->where('idProjeto = ?', $idprojeto);
+        $select->where('idProduto <> ?', '206');
 
         if ($fonte) {
-            $somar->where('FonteRecurso = ?', $fonte);
+            $select->where('FonteRecurso = ?', $fonte);
         }
 
         if ($outras) {
-            $somar->where('FonteRecurso <> ?', $outras);
+            $select->where('FonteRecurso <> ?', $outras);
         }
 
-        //adiciona quantos filtros foram enviados
         foreach ($where as $coluna => $valor) {
-            $somar->where($coluna, $valor);
+            $select->where($coluna, $valor);
         }
 
-        return $this->fetchRow($somar);
+        $result = $this->fetchRow($select);
+
+        return $result->soma;
     }
 
     public function excluirCustosVinculados($idPreProjeto)
