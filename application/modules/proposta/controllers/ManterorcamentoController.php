@@ -268,7 +268,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->Unidade = $buscarUnidade->buscarUnidade();
 
         $itensPlanilhaProduto = new tbItensPlanilhaProduto();
-        $this->view->Item = $itensPlanilhaProduto->buscarItens(null, $etapa, $idProduto);
+        $this->view->Item = $itensPlanilhaProduto->buscarItens(array(), $etapa, $idProduto);
 
         $buscarProduto = new Proposta_Model_DbTable_PreProjeto();
         $this->view->Produtos = $buscarProduto->buscarProdutos($this->idPreProjeto);

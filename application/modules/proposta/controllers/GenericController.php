@@ -265,52 +265,67 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
 
     public function gerarArrayCustosVinculados($idPreProjeto)
     {
-        $valoresCustosVinculados = array();
-        $TPP = new Proposta_Model_DbTable_Abrangencia();
-        $ufRegionalizacaoPlanilha = $TPP->buscarUfRegionalizacao($idPreProjeto);
+        $tbAbrangencia = new Proposta_Model_DbTable_Abrangencia();
+        $ufRegionalizacaoPlanilha = $tbAbrangencia->buscarUfRegionalizacao($idPreProjeto);
 
-        $ModelCV = new Proposta_Model_TbCustosVinculados();
+        $ModelCustosVinculados = new Proposta_Model_TbCustosVinculados();
 
         $whereCustosVinculados = [
-            'a.idPlanilhaItens not in (?)' => array($ModelCV::ID_DIREITOS_AUTORAIS, $ModelCV::ID_CONTROLE_E_AUDITORIA)
+            'a.idPlanilhaItens not in (?)' => array($ModelCustosVinculados::ID_DIREITOS_AUTORAIS, $ModelCustosVinculados::ID_CONTROLE_E_AUDITORIA)
         ];
 
-        $itensPlanilhaProduto = new tbItensPlanilhaProduto();
-        $itensCustosVinculados = $itensPlanilhaProduto->buscarItens(
+        $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
+        $itensCustosVinculados = $tbItensPlanilhaProduto->buscarItens(
             $whereCustosVinculados,
-            $ModelCV::ID_ETAPA_CUSTOS_VINCULADOS,
+            $ModelCustosVinculados::ID_ETAPA_CUSTOS_VINCULADOS,
             null,
             Zend_DB::FETCH_ASSOC
         );
 
-        if (!empty($ufRegionalizacaoPlanilha)) { # sudeste e sul
-            $valoresCustosVinculados['percentualDivulgacao'] = $ModelCV::PERCENTUAL_DIVULGACAO_SUL_SUDESTE;
-            $valoresCustosVinculados['percentualRemuneracaoCaptacao'] = $ModelCV::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
-            $valoresCustosVinculados['limiteRemuneracaoCaptacao'] = $ModelCV::LIMITE_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
-        } else { # demais regiões
-            $valoresCustosVinculados['percentualDivulgacao'] = $ModelCV::PERCENTUAL_DIVULGACAO_OUTRAS_REGIOES;
-            $valoresCustosVinculados['percentualRemuneracaoCaptacao'] = $ModelCV::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
-            $valoresCustosVinculados['limiteRemuneracaoCaptacao'] = $ModelCV::LIMITE_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
+        $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
+        $limiteRemuneracaoCaptacao = $ModelCustosVinculados::LIMITE_CAPTACAO_DE_RECURSOS_OUTRAS_REGIOES;
+        $percentualDivulgacao = $ModelCustosVinculados::PERCENTUAL_DIVULGACAO_ATE_VALOR_LIMITE;
+
+        if (!empty($ufRegionalizacaoPlanilha)) {
+            $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REMUNERACAO_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
+            $limiteRemuneracaoCaptacao = $ModelCustosVinculados::LIMITE_CAPTACAO_DE_RECURSOS_SUL_SUDESTE;
         }
 
-        $CustosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $somaPlanilhaPropostaProdutos = $tbPlanilhaProposta->somarPlanilhaPropostaProdutos(
+            $idPreProjeto,
+            Mecanismo::INCENTIVO_FISCAL,
+            null,
+            ['e.tpGrupo = ?' => 'A']
+        );
+
+        if($somaPlanilhaPropostaProdutos->soma > $ModelCustosVinculados::VALOR_LIMITE_DIVULGACAO) {
+            $percentualDivulgacao = $ModelCustosVinculados::PERCENTUAL_DIVULGACAO_MAIOR_QUE_VALOR_LIMITE;
+        }
+
+        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
 
         $custosVinculados = array();
         foreach ($itensCustosVinculados as $item) {
             switch ($item['idPlanilhaItens']) {
-                case $ModelCV::ID_CUSTO_ADMINISTRATIVO:
-                    $item['Percentual'] = $ModelCV::PERCENTUAL_CUSTO_ADMINISTRATIVO;
+                case $ModelCustosVinculados::ID_CUSTO_ADMINISTRATIVO:
+                    $item['Percentual'] = $ModelCustosVinculados::PERCENTUAL_CUSTO_ADMINISTRATIVO;
                     break;
-                case $ModelCV::ID_DIVULGACAO:
-                    $item['Percentual'] = $valoresCustosVinculados['percentualDivulgacao'];
+                case $ModelCustosVinculados::ID_DIVULGACAO:
+                    $item['Percentual'] = $percentualDivulgacao;
                     break;
-                case $ModelCV::ID_REMUNERACAO_CAPTACAO:
-                    $item['Percentual'] = $valoresCustosVinculados['percentualRemuneracaoCaptacao'];
-                    $item['Limite'] = $valoresCustosVinculados['limiteRemuneracaoCaptacao'];
+                case $ModelCustosVinculados::ID_REMUNERACAO_CAPTACAO:
+                    $item['Percentual'] = $percentualRemuneracaoCaptacao;
+                    $item['Limite'] = $limiteRemuneracaoCaptacao;
                     break;
             }
 
-            $custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $idPreProjeto, 'idPlanilhaItem' => $item['idPlanilhaItens']));
+            $custoVinculadoProponente = $tbCustosVinculadosMapper->findBy(
+                array(
+                    'idProjeto' => $idPreProjeto,
+                    'idPlanilhaItem' => $item['idPlanilhaItens']
+                )
+            );
 
             if ($custoVinculadoProponente) {
                 $item['PercentualProponente'] = $custoVinculadoProponente['pcCalculo'];

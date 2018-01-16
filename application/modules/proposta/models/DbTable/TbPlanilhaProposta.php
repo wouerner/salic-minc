@@ -320,7 +320,7 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         $somar->from(
             array('p' => $this->_name),
             array(
-                'sum(Quantidade*Ocorrencia*ValorUnitario) as soma'
+                new Zend_Db_Expr('sum(Quantidade*Ocorrencia*ValorUnitario) as soma')
             ),
             $this->_schema
         );
