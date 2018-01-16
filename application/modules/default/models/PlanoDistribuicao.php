@@ -159,7 +159,6 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
             }
             $slct->limit($tamanho, $tmpInicio);
         }
-            /* echo $slct;die; */
 
         //SETANDO A QUANTIDADE DE REGISTROS
         $this->_totalRegistros = $this->pegaTotal($where);
@@ -382,12 +381,9 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
 
         $dados =  $this->fetchRow($sql);
         $dados = $dados->toArray();
-        /* var_dump($dados); */
-        /* echo $sql;die; */
 
         $db = Zend_Db_Table::getDefaultAdapter();
         $return = $db->update('planodistribuicaoproduto', $dados, "idPlanoDistribuicao = " . $idPlanoDistribuicao);
-        /* var_dump($return);die; */
     }
 
     public function buscarIdVinculada($idPreProjeto)

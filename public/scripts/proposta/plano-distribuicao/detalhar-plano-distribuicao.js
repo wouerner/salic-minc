@@ -626,8 +626,6 @@ Vue.component('my-component', {
             if(parseFloat(this.valorMedioProponente) > 225) {
                 this.mensagemAlerta("O valor medio:" + this.valorMedioProponente + ", n\xE3o pode ultrapassar: 225,00");
                 this.$data.produtos.splice(-1,1)
-                // this.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
-                // this.$refs.populacao.focus();
                 return;
             }
 
@@ -648,7 +646,6 @@ Vue.component('my-component', {
 
         },
         excluir: function(index){
-            //this.produtos.splice(index, 1)
 
             var vue = this;
             $3.ajax({
