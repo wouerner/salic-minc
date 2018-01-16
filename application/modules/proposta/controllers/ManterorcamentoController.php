@@ -165,7 +165,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 }
             }
 
-            $this->atualizarcustosvinculadosdaplanilha($this->idPreProjeto);
+            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+            $tbCustosVinculadosMapper->atualizarCustosVinculadosDaPlanilha($this->idPreProjeto);
 
             parent::message('Cadastro realizado com sucesso!', "/proposta/manterorcamento/custosvinculados?idPreProjeto=" . $this->idPreProjeto, "CONFIRM");
         } catch (Zend_Exception $ex) {
@@ -349,7 +350,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             }
         }
 
-        $this->atualizarcustosvinculadosdaplanilha($idPreProjeto);
+        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+        $tbCustosVinculadosMapper->atualizarCustosVinculadosDaPlanilha($idPreProjeto);
 
         $this->_helper->json($retorno);
         die;
@@ -492,6 +494,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
     public function verificarSeUltrapassaValorOriginal($idPreProjeto, $dados, $idPlanilhaProposta = null)
     {
         $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
 
         $totalItemSalvo = 0;
 
@@ -515,14 +518,15 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             if ($item) {
                 $totalItemSalvo = $item['Quantidade'] * $item['Ocorrencia'] * $item['ValorUnitario'];
 
-                $custosDesteItem = $this->somarTotalCustosVinculados($idPreProjeto, $totalItemSalvo);
+
+                $custosDesteItem = $tbCustosVinculadosMapper->somarTotalCustosVinculados($idPreProjeto, $totalItemSalvo);
                 $totalItemSalvo = $totalItemSalvo + $custosDesteItem;
             }
         }
 
         # eh necessario calcular os custos vinculados com o novo item
         $valorTotaldosProdutosIncentivados = $somaPlanilhaPropostaProdutos + ($totalItemAtual - $totalItemSalvo);
-        $custosvinculados = $this->somarTotalCustosVinculados($idPreProjeto, $valorTotaldosProdutosIncentivados);
+        $custosvinculados = $tbCustosVinculadosMapper->somarTotalCustosVinculados($idPreProjeto, $valorTotaldosProdutosIncentivados);
 
         $valorTotalProjetoIncentivo = $valorTotaldosProdutosIncentivados + $custosvinculados;
 
@@ -555,7 +559,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $result = $tbPlanilhaProposta->delete($where);
 
         if ($result) {
-            $this->atualizarcustosvinculadosdaplanilha($this->idPreProjeto);
+            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+            $tbCustosVinculadosMapper->atualizarCustosVinculadosDaPlanilha($this->idPreProjeto);
 
             $return['msg'] = "Exclus&atilde;o realizada com sucesso!";
             $return['status'] = true;
