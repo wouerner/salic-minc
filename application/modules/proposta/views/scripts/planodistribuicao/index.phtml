@@ -30,7 +30,9 @@
                 <h3>Plano de Distribui&ccedil;&atilde;o</h3>
                 <div>
                     <div id="div_form"></div>
-                    <?php if (!empty($this->planosDistribuicao)) : ?>
+        <?php if (!empty($this->planosDistribuicao)) : ?>
+                <div class="card">
+                     <div class="card-content">
                         <table class="bordered responsive-talbe">
                             <thead>
                                 <tr class="titulo_tabela">
@@ -112,7 +114,9 @@
                                     </tr>
                                 <?php endforeach; ?>
                             <tbody>
-                        </table>
+                    </table>
+                </div>
+			</div>
                     <?php endif; ?>
 
                     <div class="row">
