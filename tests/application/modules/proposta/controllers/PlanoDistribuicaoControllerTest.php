@@ -23,12 +23,12 @@ class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
         $this->autenticar();
         $this->perfilParaProponente();
 
-        $auth = Zend_Auth::getInstance();
+       /* $auth = Zend_Auth::getInstance();
         $usuarioCpf = $auth->getIdentity()->cpf;
 
         // Busca na SGCAcesso
         $sgcAcesso = new Autenticacao_Model_Sgcacesso();
-        /* var_dump($sgcAcesso);die; */
+        /* var_dump($sgcAcesso);die; *':
         $acessos = $sgcAcesso->findBy(['cpf' => $usuarioCpf]);
         var_dump($acessos);
 
@@ -40,12 +40,12 @@ class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
         $rsPreProjeto = $tblPreProjeto->buscar($where, array("idpreprojeto DESC"));
 
         //id do Pre Projeto, necessario usuario ter um pre projeto
-        $idPreProjeto = $rsPreProjeto[0]->idPreProjeto;
+	$idPreProjeto = $rsPreProjeto[0]->idPreProjeto;*/
 
         //reset para garantir respostas.
         $this->resetRequest()
             ->resetResponse();
-
+	$idPreProjeto = 240102;
         // Acessando local de realizacao
         $url = '/proposta/plano-distribuicao?idPreProjeto=' . $idPreProjeto;
         $this->request->setMethod('GET');
@@ -55,6 +55,18 @@ class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
         $this->assertModule('proposta');
         $this->assertController('plano-distribuicao');
         $this->assertAction('index');
-        $this->assertQueryContentContains('html body div#titulo', 'Plano de Distribuição');
+        //$this->assertQueryContentContains('html body div#titulo', 'Plano de Distribuição');
     }
+
+    public function testDetalharPlanoDistribuicaoAction()
+	{
+        $this->autenticar();
+        $this->perfilParaProponente();
+        $url = '/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/240102/idPlanoDistribuicao/192467';
+        $this->request->setMethod('GET');
+        $this->dispatch($url);
+        $this->assertModule('proposta');
+        $this->assertController('plano-distribuicao');
+        $this->assertAction('detalhar-plano-distribuicao');
+    }	    
 }
