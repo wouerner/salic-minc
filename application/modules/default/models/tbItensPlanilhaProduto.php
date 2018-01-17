@@ -186,7 +186,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
 
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode($fetchMode);
-        echo $select; die;
+
         return $db->fetchAll($select);
     }
 
