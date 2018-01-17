@@ -167,6 +167,10 @@
                             <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
                             <td></td>
                         </tr>
+                        <tr>
+                            <th class=""><b>Valor medio </b></th>
+                            <td class="center-align">{{valorMedioProponente}}</td>
+                        </tr>
                     </tfoot>
                 </table>
             </div>
@@ -311,7 +315,7 @@
                                     </input-money>
                                     <label class="active" v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
                                            :for="_uid + 'vlUnitarioPopularIntegral'">Pre&ccedil;o Unit&aacute;rio <br>(At&eacute;
-                                        R$ 50,00)</label>
+                                        R$ 75,00)</label>
                                 </div>
                                 <div class="input-field col s6 l2">
                                     <input type="number" class="right-align disabled" disabled
