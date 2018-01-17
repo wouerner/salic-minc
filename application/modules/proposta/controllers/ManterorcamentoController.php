@@ -127,8 +127,8 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->acao = $this->_urlPadrao . "/proposta/manterorcamento/salvarpercentuaiscustosvinculados";
 
         $arrBusca = array(
-            'idprojeto' => $this->idPreProjeto,
-            'stabrangencia' => 1
+            'idProjeto' => $this->idPreProjeto,
+            'stAbrangencia' => 1
         );
 
         $tblAbrangencia = new Proposta_Model_DbTable_Abrangencia();
@@ -166,7 +166,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             }
 
             $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-            $tbCustosVinculadosMapper->atualizarCustosVinculadosDaPlanilha($this->idPreProjeto);
+            $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
 
             parent::message('Cadastro realizado com sucesso!', "/proposta/manterorcamento/custosvinculados?idPreProjeto=" . $this->idPreProjeto, "CONFIRM");
         } catch (Zend_Exception $ex) {
@@ -351,7 +351,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         }
 
         $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-        $tbCustosVinculadosMapper->atualizarCustosVinculadosDaPlanilha($idPreProjeto);
+        $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($idPreProjeto);
 
         $this->_helper->json($retorno);
         die;
@@ -490,6 +490,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
     /*
     * Quando o sistema abre a opcao de alterar projeto, o proponente
     * nao pode ultrapassar o valor total inicialmente solicitado para incentivo fiscal(Fonte Recurso=109)
+    * @todo, apos atualizacao dos custos vinculados este item deve ser refatorado
     */
     public function verificarSeUltrapassaValorOriginal($idPreProjeto, $dados, $idPlanilhaProposta = null)
     {
@@ -500,13 +501,18 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         # Busca o valor total solicitado inicialmente
         $tblProjetos = new Projetos();
-        $projeto = $tblProjetos->findBy(array('idprojeto = ?' => $idPreProjeto));
+        $projeto = $tblProjetos->findBy(array('idProjeto = ?' => $idPreProjeto));
         $valorTotalIncentivoOriginal = $projeto['SolicitadoReal'];
 
         $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
 
         # Faz a soma da planilha da proposta
-        $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaPorEtapa($idPreProjeto, Mecanismo::INCENTIVO_FISCAL, null, ['e.tpCusto = ?' => 'P']);
+        $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaPorEtapa(
+            $idPreProjeto,
+            Mecanismo::INCENTIVO_FISCAL,
+            null,
+            ['e.tpCusto = ?' => 'P']
+        );
 
         # Item atual
         $totalItemAtual = $dados['Quantidade'] * $dados['ValorUnitario'] * $dados['Ocorrencia'];
@@ -533,41 +539,42 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         return ($valorTotalIncentivoOriginal < $valorTotalProjetoIncentivo);
     }
 
-    /**
-     * excluiritemAction
-     *
-     * @access public
-     * @return void
-     */
-    public function excluiritemAction()
+    public function excluirItemAction()
     {
-        $this->verificarPermissaoAcesso(true, false, false);
+        try {
 
-        $this->_helper->layout->disableLayout();
+            $this->verificarPermissaoAcesso(true, false, false);
 
-        $params = $this->getRequest()->getParams();
+            $this->_helper->layout->disableLayout();
 
-        $return['msg'] = "Erro ao excluir o item";
-        $return['status'] = false;
+            $params = $this->getRequest()->getParams();
 
-        $idPlanilhaProposta = $params['idPlanilhaProposta'];
+            $dados['msg'] = "Erro ao excluir o item";
+            $dados['status'] = false;
 
-        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+            $idPlanilhaProposta = $params['idPlanilhaProposta'];
 
-        $where = 'idPlanilhaProposta = ' . $idPlanilhaProposta;
+            $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
 
-        $result = $tbPlanilhaProposta->delete($where);
+            $where = 'idPlanilhaProposta = ' . $idPlanilhaProposta;
 
-        if ($result) {
-            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-            $tbCustosVinculadosMapper->atualizarCustosVinculadosDaPlanilha($this->idPreProjeto);
+            $result = $tbPlanilhaProposta->delete($where);
 
-            $return['msg'] = "Exclus&atilde;o realizada com sucesso!";
-            $return['status'] = true;
+            if ($result) {
+                $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+                $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
+
+                $dados['msg'] = "Exclus&atilde;o realizada com sucesso!";
+                $dados['status'] = true;
+            }
+
+            $this->_helper->json($dados);
+        } catch (Exception $e) {
+            $dados['msg'] = $e->getMessage();
+            $dados['status'] = false;
+            $this->_helper->json($dados);
         }
 
-        $this->_helper->json($return);
-        die;
     }
 
     public function restaurarplanilhaAction()

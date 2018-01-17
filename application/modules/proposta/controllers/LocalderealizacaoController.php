@@ -259,7 +259,7 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
 
                 if ($excluir) {
                     $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-                    $tbCustosVinculadosMapper->atualizarCustosVinculadosDaPlanilha($this->idPreProjeto);
+                    $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
                 }
             }
 

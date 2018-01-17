@@ -39,49 +39,54 @@
                             <p>Aqui voc&ecirc; pode definir os percentuais para c&aacute;lculo dos custos vinculados
                                 do seu projeto, essas escolhas ir&atilde;o influenciar no or&ccedil;amento do seu
                                 projeto.</p>
-                            <p>Ao clicar em salvar, o sistema ir&aacute; atualizar sua planilha or&ccedil;ament&aacute;ria com os novos c&aacute;lculos.</p>
+                            <p>Ao clicar em salvar, o sistema ir&aacute; atualizar sua planilha or&ccedil;ament&aacute;ria
+                                com os novos c&aacute;lculos.</p>
                         </div>
                         <?php if ($this->localRealizacao) : ?>
-                            <?php foreach ($this->itensCustosVinculados as $item) : ?>
-                                <div class="row">
-                                    <input type="hidden"
-                                           name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][idCustosVinculados]"
-                                           value="<?= $item['idCustosVinculados']; ?>">
+                            <?php if($this->itensCustosVinculados) : ?>
+                                <?php foreach ($this->itensCustosVinculados as $item) : ?>
+                                    <div class="row">
+                                        <input type="hidden"
+                                               name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][idCustosVinculados]"
+                                               value="<?= $item['idCustosVinculados']; ?>">
 
-                                    <div class="input-field col s6">
-                                        <select
-                                            name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][percentual]" class="validate" required>
-                                            <option value="" disabled selected>Selecione</option>
-                                            <?php $percentual = $item['percentualPadrao']; ?>
-                                            <?php while ($percentual >= 0) : ?>
-                                                <option
-                                                    <?= (isset($item['percentualProponente']) && $item['percentualProponente'] == $percentual) ? 'selected' : '' ?>
-                                                    value="<?= $percentual; ?>"><?= $percentual; ?>%
-                                                </option>
-                                                <?php $percentual--; ?>
-                                            <?php endwhile; ?>
-                                        </select>
-                                        <label><?= $item['Descricao']; ?></label>
-                                    </div>
-                                    <div class="col s6">
-                                        <p>
-                                            <br>
-                                        <?php if( $item['percentualPadrao'] ) : ?>
-                                               Percentual padrão: <?= $item['percentualPadrao']; ?>%
-                                        <?php endif; ?>
-                                        <?php if( $item['limitePadrao'] ) : ?>
-                                            <br>
-                                                Limite: R$ <?= number_format($item['limitePadrao'], 2, ",", "."); ?>
+                                        <div class="input-field col s6">
+                                            <select
+                                                name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][percentual]"
+                                                class="validate" required>
+                                                <option value="" disabled selected>Selecione</option>
+                                                <?php $percentual = $item['percentualPadrao']; ?>
+                                                <?php while ($percentual >= 0) : ?>
+                                                    <option
+                                                        <?= (isset($item['percentualProponente']) && $item['percentualProponente'] == $percentual) ? 'selected' : '' ?>
+                                                        value="<?= $percentual; ?>"><?= $percentual; ?>%
+                                                    </option>
+                                                    <?php $percentual--; ?>
+                                                <?php endwhile; ?>
+                                            </select>
+                                            <label><?= $item['Descricao']; ?></label>
+                                        </div>
+                                        <div class="col s6">
+                                            <p>
+                                                <br>
+                                                <?php if ($item['percentualPadrao']) : ?>
+                                                    Percentual padrão: <?= $item['percentualPadrao']; ?>%
+                                                <?php endif; ?>
+                                                <?php if ($item['limitePadrao']) : ?>
+                                                    <br>
+                                                    Limite: R$ <?= number_format($item['limitePadrao'], 2, ",", "."); ?>
 
-                                        <?php endif; ?>
-                                           </p>
+                                                <?php endif; ?>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         <?php else: ?>
                         <div class="col s12">
                             <div class="valign-wrapper">
-                                <p class="valign"> Para preencher os custos vinculados, &eacute; necess&aacute;rio informar o
+                                <p class="valign"> Para preencher os custos vinculados, &eacute; necess&aacute;rio
+                                    informar o
                                     <a href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'index', 'idPreProjeto' => $this->idPreProjeto)); ?>"
                                        titlte="Preencher local de reali&ccedil;&atilde;o">local de realiza&ccedil;&atilde;o</a>.
                                 </p>
@@ -93,7 +98,8 @@
                             <?php if ($this->isEditavel) : ?>
                                 <div class="row">
                                     <div class="input-field col s12 center">
-                                        <button class="btn waves-effect white-text waves-light btn-salvar" type="submit" name="action">
+                                        <button class="btn waves-effect white-text waves-light btn-salvar" type="submit"
+                                                name="action">
                                             Salvar
                                             <i class="material-icons right">send</i>
                                         </button>
@@ -112,31 +118,12 @@
     $(document).ready(function ($) {
 
         <?php if (!$this->isEditavel) : ?>
-        //DESABILITA ALTERACOES NOS DADOS DO FORMULARIO (INCLUIR/ALTERAR/EXCLUIR)
         JSBloquearAlteracaoFormulario();
         <?php endif; ?>
-
-
     });
 
     $3(document).ready(function () {
         $3('select').material_select();
     });
-
-//    $3('body').on('click', 'button, .btn-salvar', function () {
-//        var validar = true;
-//        $3('.validate').each(function () {
-//            if ($3(this).val() == '') {
-//                validar = false;
-//            }
-//        });
-//
-//        if (validar == false) {
-//            Materialize.toast("Todos os campos s&atilde;o obrigat&oacute;rios!", 4000);
-//            return false;
-//        } else {
-//            $3('#form').submit();
-//        }
-//    });
 
 </script>

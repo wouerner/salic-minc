@@ -351,7 +351,7 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         return $result->soma;
     }
 
-    public function excluirCustosVinculadosERemuneracao($idPreProjeto)
+    public function excluirCustosVinculadosERemuneracaoDaPlanilha($idPreProjeto)
     {
         if (empty($idPreProjeto)) {
             return false;
@@ -361,34 +361,10 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
             'idProjeto = ?' => $idPreProjeto,
             'idEtapa in (?)' => [
                 Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS,
-                Proposta_Model_TbPlanilhaEtapa::REMUNERACAO_CAPTACAO
-            ]
+                Proposta_Model_TbPlanilhaEtapa::REMUNERACAO_CAPTACAO]
         );
 
-        return $this->deleteBy($where);
-    }
-
-    /*
-     * @deprecated Este metodo nao eh usado apos a IN2017
-     */
-    public function somarPlanilhaPropostaDivulgacao($idprojeto, $fonte = null, $outras = null)
-    {
-        $somar = $this->select();
-        $somar->from(
-            $this,
-            array(
-                'sum(Quantidade*Ocorrencia*ValorUnitario) as soma'
-            )
-        )
-            ->where('idProjeto = ?', $idprojeto)
-            ->where('idEtapa = ?', 3);
-        if ($fonte) {
-            $somar->where('FonteRecurso = ?', $fonte);
-        }
-        if ($outras) {
-            $somar->where('FonteRecurso <> ?', $outras);
-        }
-        return $this->fetchRow($somar);
+        return $this->delete($where);
     }
 
     //Criado no dia 07/10/2013 - Jefferson Alessandro

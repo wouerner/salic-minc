@@ -226,7 +226,7 @@
                     $(this).dialog('close');
                 },
                 'Sim': function () {
-                    var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'excluiritem')); ?>";
+                    var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'excluir-item')); ?>";
                     var dados = {idPlanilhaProposta: idPlanilhaProposta, idPreProjeto: idPlanilhaProposta};
 
                     $.post(urlAction, dados, function (result) {

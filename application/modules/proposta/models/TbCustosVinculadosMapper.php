@@ -39,13 +39,17 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
             'a.idPlanilhaItens not in (?)' => array(
                 $ModelCustosVinculados::ID_DIREITOS_AUTORAIS,
                 $ModelCustosVinculados::ID_CONTROLE_E_AUDITORIA
-            )
+            ),
+            'a.idPlanilhaEtapa in (?)' => array(
+                Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS,
+                Proposta_Model_TbPlanilhaEtapa::REMUNERACAO_CAPTACAO
+            ),
         ];
 
         $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
-        $itensCustosVinculados = $tbItensPlanilhaProduto->buscarItens(
+        $itensCustosVinculadosERemuneracao = $tbItensPlanilhaProduto->buscarItens(
             $whereCustosVinculados,
-            $ModelCustosVinculados::ID_ETAPA_CUSTOS_VINCULADOS,
+            null,
             null,
             Zend_DB::FETCH_ASSOC
         );
@@ -76,7 +80,7 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         }
 
         $custosVinculados = array();
-        foreach ($itensCustosVinculados as $item) {
+        foreach ($itensCustosVinculadosERemuneracao as $item) {
             switch ($item['idPlanilhaItens']) {
                 case $ModelCustosVinculados::ID_CUSTO_ADMINISTRATIVO:
                     $item['percentualPadrao'] = $ModelCustosVinculados::PERCENTUAL_CUSTO_ADMINISTRATIVO;
@@ -112,51 +116,47 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         return $custosVinculados;
     }
 
-    public function atualizarCustosVinculadosDaPlanilha($idPreProjeto)
+    public function salvarCustosVinculadosDaTbPlanilhaProposta($idPreProjeto)
     {
 
         if (empty($idPreProjeto)) {
-            return false;
+            throw new Exception('idPreProjeto &eacute; obrigat&oacute;rio');
         }
 
-        $idEtapaCustosVinculados = Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS;
-//        $idEtapaRemuneracao = Proposta_Model_TbPlanilhaEtapa::REMUNERACAO_CAPTACAO;
-        $tipoCusto = Proposta_Model_TbPlanilhaEtapa::TIPO_CUSTO_ADMINISTRATIVO;
-
-//        $valorDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
-//            $idPreProjeto,
-//            Mecanismo::INCENTIVO_FISCAL,
-//            null,
-//            [
-//                'e.tpCusto = ?' => 'P',
-//                'e.tpGrupo = ?' => 'A',
-//            ]
-//        );
-//
-//        if (empty($valorDoProjeto) || (is_numeric($valorDoProjeto) && $valorDoProjeto <= 0)) {
-//            $tbPlanilhaProposta->excluirCustosVinculadosERemuneracao($idPreProjeto);
-//            return true;
-//        }
-
-        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
         $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto);
 
+        if (empty($itens)) {
+            $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+            $tbPlanilhaProposta->excluirCustosVinculadosERemuneracaoDaPlanilha($idPreProjeto);
+            return true;
+        }
+
+        $modelPlanilhaProposta = new Proposta_Model_TbPlanilhaProposta();
+        $tbPlanilhaPropostaMapper = new Proposta_Model_TbPlanilhaPropostaMapper();
+
         foreach ($itens as $item) {
-            $custosVinculados = null;
 
-            //fazer uma nova busca com o essencial para este caso
-            $custosVinculados = $tbPlanilhaProposta->buscarCustos($idPreProjeto, $tipoCusto, $idEtapaCustosVinculados, $item['idPlanilhaItem']);
+            $modelPlanilhaProposta->setOptions($item);
+            $itemPlanilhaProposta = $tbPlanilhaPropostaMapper->findBy(
+                [
+                    'idProjeto' => $idPreProjeto,
+                    'idPlanilhaItem' => $item['idPlanilhaItem']
+                ]
+            );
 
-            if (isset($custosVinculados[0]->idItem)) {
-                $where = 'idPlanilhaProposta = ' . $custosVinculados[0]->idPlanilhaProposta;
-                $tbPlanilhaProposta->update($item, $where);
-            } else {
-                $tbPlanilhaProposta->insert($item);
+            if(!empty($itemPlanilhaProposta)) {
+                $modelPlanilhaProposta->setIdPlanilhaProposta($itemPlanilhaProposta['idPlanilhaProposta']);
             }
+
+            $tbPlanilhaPropostaMapper->save($modelPlanilhaProposta);
         }
     }
 
-    public function calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto)
+    public function calcularCustosVinculadosERemuneracaoPlanilhaProposta(
+        $idPreProjeto,
+        $valorDoProjeto = null,
+        $valorCustoDoProjeto = null
+    )
     {
         if (empty($idPreProjeto)) {
             return false;
@@ -175,12 +175,18 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 
         $itensCustosVinculados = $this->obterValoresPecentuaisELimitesCustosVinculados($idPreProjeto);
 
-        $valorCustoDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
-            $idPreProjeto,
-            Mecanismo::INCENTIVO_FISCAL,
-            null,
-            ['e.idPlanilhaEtapa in (?)' => [1, 2, 7, 8]]
-        );
+        if (empty($itensCustosVinculados)) {
+            return [];
+        }
+
+        if (empty($valorCustoDoProjeto )) {
+            $valorCustoDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
+                $idPreProjeto,
+                Mecanismo::INCENTIVO_FISCAL,
+                null,
+                ['e.idPlanilhaEtapa in (?)' => [1, 2, 7, 8]]
+            );
+        }
 
         foreach ($itensCustosVinculados as $item) {
 
@@ -190,7 +196,11 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
                 $percentual = $item['percentualProponente'];
             }
 
-            $valorTotal = $item['valorDoProjeto'];
+            if(empty($valorDoProjeto)) {
+                $valorDoProjeto =  $item['valorDoProjeto'];
+            }
+
+            $valorTotal = $valorDoProjeto;
             if ($item['idPlanilhaEtapa'] != Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS) {
                 $valorTotal = $valorCustoDoProjeto;
             }
@@ -203,44 +213,42 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 
             $dados[] = array(
                 'idProjeto' => $idPreProjeto,
+                'idProduto' => 0,
                 'idEtapa' => $item['idPlanilhaEtapa'],
                 'idPlanilhaItem' => $item['idPlanilhaItens'],
                 'Descricao' => '',
                 'Unidade' => '1',
                 'Quantidade' => '1',
                 'Ocorrencia' => '1',
-                'valorUnitario' => $valorUnitario,
+                'ValorUnitario' => $valorUnitario,
                 'QtdeDias' => '1',
-                'tipoDespesa' => '0',
-                'tipoPessoa' => '0',
+                'TipoDespesa' => '0',
+                'TipoPessoa' => '0',
                 'contraPartida' => '0',
                 'FonteRecurso' => Mecanismo::INCENTIVO_FISCAL,
                 'UfDespesa' => $idUf,
-                'municipioDespesa' => $idMunicipio,
-                'idUsuario' => 462,
-                'dsJustificativa' => ''
+                'dsJustificativa' => '',
+                'MunicipioDespesa' => $idMunicipio,
+                'stCustoPraticado' => 0,
+                'idUsuario' => 462
             );
         }
 
         return $dados;
     }
 
-    /**
-     * @todo verificar onde usa e passar
-     */
-    public function somarTotalCustosVinculados($idPreProjeto, $valorTotalProdutos = null)
+    public function somarTotalCustosVinculados($idPreProjeto, $valorDoProjeto = null, $valorCustoDoProjeto = null)
     {
-        $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto, $valorTotalProdutos);
-        $soma = '';
+        $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto, $valorDoProjeto, $valorCustoDoProjeto);
 
-        if ($itens == 0) {
+        if ($itens == 0 || empty($itens)) {
             return 0;
         }
 
+        $soma = 0;
         if ($itens) {
-            $soma = 0;
             foreach ($itens as $item) {
-                $soma = $item['valorunitario'] + $soma;
+                $soma = $item['ValorUnitario'] + $soma;
             }
         }
         return $soma;
