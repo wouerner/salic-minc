@@ -52,10 +52,10 @@
                                         <select
                                             name="itensCustosVinculados[<?= $item['idPlanilhaItens']; ?>][percentual]" class="validate" required>
                                             <option value="" disabled selected>Selecione</option>
-                                            <?php $percentual = $item['Percentual']; ?>
+                                            <?php $percentual = $item['percentualPadrao']; ?>
                                             <?php while ($percentual >= 0) : ?>
                                                 <option
-                                                    <?= (isset($item['PercentualProponente']) && $item['PercentualProponente'] == $percentual) ? 'selected' : '' ?>
+                                                    <?= (isset($item['percentualProponente']) && $item['percentualProponente'] == $percentual) ? 'selected' : '' ?>
                                                     value="<?= $percentual; ?>"><?= $percentual; ?>%
                                                 </option>
                                                 <?php $percentual--; ?>
@@ -66,12 +66,12 @@
                                     <div class="col s6">
                                         <p>
                                             <br>
-                                        <?php if( $item['Percentual'] ) : ?>
-                                               Percentual padrão: <?= $item['Percentual']; ?>%
+                                        <?php if( $item['percentualPadrao'] ) : ?>
+                                               Percentual padrão: <?= $item['percentualPadrao']; ?>%
                                         <?php endif; ?>
-                                        <?php if( $item['Limite'] ) : ?>
+                                        <?php if( $item['limitePadrao'] ) : ?>
                                             <br>
-                                                Limite: R$ <?= number_format($item['Limite'], 2, ",", "."); ?>
+                                                Limite: R$ <?= number_format($item['limitePadrao'], 2, ",", "."); ?>
 
                                         <?php endif; ?>
                                            </p>

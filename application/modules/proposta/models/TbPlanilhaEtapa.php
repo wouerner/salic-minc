@@ -10,6 +10,7 @@ class Proposta_Model_TbPlanilhaEtapa extends MinC_Db_Model
     protected $_nrOrdenacao;
 
     const CUSTOS_VINCULADOS = 8;
+    const REMUNERACAO_CAPTACAO = 10;
     const TIPO_CUSTO_ADMINISTRATIVO = 'A';
 
     /**

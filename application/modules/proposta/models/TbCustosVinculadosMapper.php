@@ -1,14 +1,5 @@
 <?php
 
-/**
- * Class Proposta_Model_TbCustosVinculadosMapper
- *
- * @name Proposta_Model_TbCustosVinculadosMapper
- * @package Modules/Proposta
- * @subpackage Models
- *
- * @link http://salic.cultura.gov.br
- */
 class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 {
     public function __construct()
@@ -23,6 +14,25 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 
     public function obterValoresPecentuaisELimitesCustosVinculados($idPreProjeto)
     {
+        if (empty($idPreProjeto)) {
+            return [];
+        }
+
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $valorDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
+            $idPreProjeto,
+            Mecanismo::INCENTIVO_FISCAL,
+            null,
+            [
+                'e.tpCusto = ?' => 'P',
+                'e.tpGrupo = ?' => 'A',
+            ]
+        );
+
+        if (empty($valorDoProjeto)) {
+            return [];
+        }
+
         $ModelCustosVinculados = new Proposta_Model_TbCustosVinculados();
 
         $whereCustosVinculados = [
@@ -40,18 +50,6 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
             Zend_DB::FETCH_ASSOC
         );
 
-        $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
-        $limiteRemuneracaoCaptacao = $ModelCustosVinculados::LIMITE_PADRAO_CAPTACAO_DE_RECURSOS;
-        $percentualDivulgacao = $ModelCustosVinculados::PERCENTUAL_DIVULGACAO_ATE_VALOR_LIMITE;
-
-        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
-//        $valorCustoDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
-//            $idPreProjeto,
-//            Mecanismo::INCENTIVO_FISCAL,
-//            null,
-//            ['e.idPlanilhaEtapa in (?)' => [1,2,7,8]]
-//        );
-
         $whereRegional1 = array(
             "uf.Regiao in (?)" => ['Norte', 'Nordeste', 'Centro Oeste']
         );
@@ -64,25 +62,16 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         $propostaDaRegiao1 = $tbAbrangencia->buscarUfRegionalizacao($idPreProjeto, $whereRegional1);
         $propostaDaRegiao2 = $tbAbrangencia->buscarUfRegionalizacao($idPreProjeto, $whereRegional2);
 
+        $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
+
         if (!empty($propostaDaRegiao1)) {
             $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REGIOES_N_NE_CO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
-//            $limiteRemuneracaoCaptacao = ($valorCustoDoProjeto * $percentualRemuneracaoCaptacao / 100) + $limiteRemuneracaoCaptacao;
-        } else if($propostaDaRegiao2) {
+        } else if ($propostaDaRegiao2) {
             $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_UFS_RS_PR_SC_MG_ES_REMUNERACAO_CAPTACAO_DE_RECURSOS;
-//            $limiteRemuneracaoCaptacao = ($valorCustoDoProjeto * $percentualRemuneracaoCaptacao / 100) + $limiteRemuneracaoCaptacao;
         }
 
-        $valorDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
-            $idPreProjeto,
-            Mecanismo::INCENTIVO_FISCAL,
-            null,
-            [
-                'e.tpCusto = ?' => 'P',
-                'e.tpGrupo = ?' => 'A',
-            ]
-        );
-
-        if($valorDoProjeto > $ModelCustosVinculados::VALOR_LIMITE_DIVULGACAO) {
+        $percentualDivulgacao = $ModelCustosVinculados::PERCENTUAL_DIVULGACAO_ATE_VALOR_LIMITE;
+        if ($valorDoProjeto > $ModelCustosVinculados::VALOR_LIMITE_DIVULGACAO) {
             $percentualDivulgacao = $ModelCustosVinculados::PERCENTUAL_DIVULGACAO_MAIOR_QUE_VALOR_LIMITE;
         }
 
@@ -90,14 +79,14 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         foreach ($itensCustosVinculados as $item) {
             switch ($item['idPlanilhaItens']) {
                 case $ModelCustosVinculados::ID_CUSTO_ADMINISTRATIVO:
-                    $item['Percentual'] = $ModelCustosVinculados::PERCENTUAL_CUSTO_ADMINISTRATIVO;
+                    $item['percentualPadrao'] = $ModelCustosVinculados::PERCENTUAL_CUSTO_ADMINISTRATIVO;
                     break;
                 case $ModelCustosVinculados::ID_DIVULGACAO:
-                    $item['Percentual'] = $percentualDivulgacao;
+                    $item['percentualPadrao'] = $percentualDivulgacao;
                     break;
                 case $ModelCustosVinculados::ID_REMUNERACAO_CAPTACAO:
-                    $item['Percentual'] = $percentualRemuneracaoCaptacao;
-                    $item['Limite'] = $limiteRemuneracaoCaptacao;
+                    $item['percentualPadrao'] = $percentualRemuneracaoCaptacao;
+                    $item['limitePadrao'] = $ModelCustosVinculados::LIMITE_PADRAO_CAPTACAO_DE_RECURSOS;
                     break;
             }
 
@@ -109,8 +98,12 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
             );
 
             if ($custoVinculadoProponente) {
-                $item['PercentualProponente'] = $custoVinculadoProponente['pcCalculo'];
+                $item['percentualProponente'] = $custoVinculadoProponente['pcCalculo'];
                 $item['idCustosVinculados'] = $custoVinculadoProponente['idCustosVinculados'];
+            }
+
+            if (!empty($valorDoProjeto)) {
+                $item['valorDoProjeto'] = $valorDoProjeto;
             }
 
             $custosVinculados[] = $item;
@@ -121,105 +114,123 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 
     public function atualizarCustosVinculadosDaPlanilha($idPreProjeto)
     {
-        $idEtapa = '8'; // Custos Vinculados
-        $tipoCusto = 'A';
 
         if (empty($idPreProjeto)) {
             return false;
         }
 
-        $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
-        $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaPorEtapa($idPreProjeto, Mecanismo::INCENTIVO_FISCAL, null, ['e.tpCusto = ?' => 'P']);
+        $idEtapaCustosVinculados = Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS;
+//        $idEtapaRemuneracao = Proposta_Model_TbPlanilhaEtapa::REMUNERACAO_CAPTACAO;
+        $tipoCusto = Proposta_Model_TbPlanilhaEtapa::TIPO_CUSTO_ADMINISTRATIVO;
 
-        if (empty($somaPlanilhaPropostaProdutos) || (is_numeric($somaPlanilhaPropostaProdutos) && $somaPlanilhaPropostaProdutos <= 0)) {
-            $TPP->excluirCustosVinculados($idPreProjeto);
-            return true;
-        }
+//        $valorDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
+//            $idPreProjeto,
+//            Mecanismo::INCENTIVO_FISCAL,
+//            null,
+//            [
+//                'e.tpCusto = ?' => 'P',
+//                'e.tpGrupo = ?' => 'A',
+//            ]
+//        );
+//
+//        if (empty($valorDoProjeto) || (is_numeric($valorDoProjeto) && $valorDoProjeto <= 0)) {
+//            $tbPlanilhaProposta->excluirCustosVinculadosERemuneracao($idPreProjeto);
+//            return true;
+//        }
 
-        $itens = $this->calcularCustosVinculadosPlanilhaProposta($idPreProjeto, $somaPlanilhaPropostaProdutos);
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto);
 
         foreach ($itens as $item) {
             $custosVinculados = null;
 
             //fazer uma nova busca com o essencial para este caso
-            $custosVinculados = $TPP->buscarCustos($idPreProjeto, $tipoCusto, $idEtapa, $item['idplanilhaitem']);
+            $custosVinculados = $tbPlanilhaProposta->buscarCustos($idPreProjeto, $tipoCusto, $idEtapaCustosVinculados, $item['idPlanilhaItem']);
 
             if (isset($custosVinculados[0]->idItem)) {
                 $where = 'idPlanilhaProposta = ' . $custosVinculados[0]->idPlanilhaProposta;
-                $TPP->update($item, $where);
+                $tbPlanilhaProposta->update($item, $where);
             } else {
-                $TPP->insert($item);
+                $tbPlanilhaProposta->insert($item);
             }
         }
     }
 
-    public function calcularCustosVinculadosPlanilhaProposta($idPreProjeto, $valorTotalProdutos = null)
+    public function calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto)
     {
         if (empty($idPreProjeto)) {
             return false;
         }
 
-        $idEtapa = Proposta_Model_TbCustosVinculados::ID_ETAPA_CUSTOS_VINCULADOS;
-        $fonteRecurso = Proposta_Model_TbCustosVinculados::ID_FONTE_RECURSO_CUSTOS_VINCULADOS;
-
         $idUf = 1;
         $idMunicipio = 1;
         $dados = array();
 
-        $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
-
-        if (empty($valorTotalProdutos)) {
-            $somaPlanilhaPropostaProdutos = $TPP->somarPlanilhaPropostaPorEtapa(
-                $idPreProjeto,
-                Mecanismo::INCENTIVO_FISCAL,
-                null, ['e.tpCusto = ?' => 'P']);
-            $valorTotalProdutos = $somaPlanilhaPropostaProdutos;
-        }
-
-        if (!is_numeric($valorTotalProdutos)) {
-            return 0;
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $municipioUF = $tbPlanilhaProposta->obterMunicipioUFdoProdutoPrincipalComMaiorCusto($idPreProjeto);
+        if ($municipioUF) {
+            $idUf = $municipioUF->UfDespesa;
+            $idMunicipio = $municipioUF->MunicipioDespesa;
         }
 
         $itensCustosVinculados = $this->obterValoresPecentuaisELimitesCustosVinculados($idPreProjeto);
 
-        foreach ($itensCustosVinculados as $item) {
-            if ($item['PercentualProponente'] > 0) {
-                $valorCustoItem = ($valorTotalProdutos * ($item['PercentualProponente'] / 100));
+        $valorCustoDoProjeto = $tbPlanilhaProposta->somarPlanilhaPropostaPorEtapa(
+            $idPreProjeto,
+            Mecanismo::INCENTIVO_FISCAL,
+            null,
+            ['e.idPlanilhaEtapa in (?)' => [1, 2, 7, 8]]
+        );
 
-                if (isset($item['Limite']) && $valorCustoItem > $item['Limite']) {
-                    $valorCustoItem = $item['Limite'];
-                }
-            } elseif ($item['PercentualProponente'] == 0) {
-                $valorCustoItem = 0;
+        foreach ($itensCustosVinculados as $item) {
+
+            $percentual = $item['percentualPadrao'];
+
+            if (!empty($item['percentualProponente'])) {
+                $percentual = $item['percentualProponente'];
+            }
+
+            $valorTotal = $item['valorDoProjeto'];
+            if ($item['idPlanilhaEtapa'] != Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS) {
+                $valorTotal = $valorCustoDoProjeto;
+            }
+
+            $valorUnitario = ($valorTotal * ($percentual / 100));
+
+            if (isset($item['limitePadrao']) && $valorUnitario > $item['limitePadrao']) {
+                $valorUnitario = $item['limitePadrao'];
             }
 
             $dados[] = array(
-                'idprojeto' => $idPreProjeto,
-                'idetapa' => $idEtapa,
-                'idplanilhaitem' => $item['idPlanilhaItens'],
-                'descricao' => '',
-                'unidade' => '1',
-                'quantidade' => '1',
-                'ocorrencia' => '1',
-                'valorunitario' => $valorCustoItem,
-                'qtdedias' => '1',
-                'tipodespesa' => '0',
-                'tipopessoa' => '0',
-                'contrapartida' => '0',
-                'fonterecurso' => $fonteRecurso,
-                'ufdespesa' => $idUf,
-                'municipiodespesa' => $idMunicipio,
-                'idusuario' => 462,
-                'dsjustificativa' => ''
+                'idProjeto' => $idPreProjeto,
+                'idEtapa' => $item['idPlanilhaEtapa'],
+                'idPlanilhaItem' => $item['idPlanilhaItens'],
+                'Descricao' => '',
+                'Unidade' => '1',
+                'Quantidade' => '1',
+                'Ocorrencia' => '1',
+                'valorUnitario' => $valorUnitario,
+                'QtdeDias' => '1',
+                'tipoDespesa' => '0',
+                'tipoPessoa' => '0',
+                'contraPartida' => '0',
+                'FonteRecurso' => Mecanismo::INCENTIVO_FISCAL,
+                'UfDespesa' => $idUf,
+                'municipioDespesa' => $idMunicipio,
+                'idUsuario' => 462,
+                'dsJustificativa' => ''
             );
         }
 
         return $dados;
     }
 
+    /**
+     * @todo verificar onde usa e passar
+     */
     public function somarTotalCustosVinculados($idPreProjeto, $valorTotalProdutos = null)
     {
-        $itens = $this->calcularCustosVinculadosPlanilhaProposta($idPreProjeto, $valorTotalProdutos);
+        $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto, $valorTotalProdutos);
         $soma = '';
 
         if ($itens == 0) {

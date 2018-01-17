@@ -346,19 +346,24 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         foreach ($where as $coluna => $valor) {
             $select->where($coluna, $valor);
         }
-
         $result = $this->fetchRow($select);
 
         return $result->soma;
     }
 
-    public function excluirCustosVinculados($idPreProjeto)
+    public function excluirCustosVinculadosERemuneracao($idPreProjeto)
     {
         if (empty($idPreProjeto)) {
             return false;
         }
 
-        $where = array('idProjeto' => $idPreProjeto, 'idEtapa' => 8);
+        $where = array(
+            'idProjeto = ?' => $idPreProjeto,
+            'idEtapa in (?)' => [
+                Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS,
+                Proposta_Model_TbPlanilhaEtapa::REMUNERACAO_CAPTACAO
+            ]
+        );
 
         return $this->deleteBy($where);
     }
@@ -588,7 +593,6 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
-
         return $db->fetchAll($sql);
     }
 
@@ -728,5 +732,36 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
             $this->view->message = $e->getMessage();
         }
         return $db->fetchRow($exec);
+    }
+
+    public function obterMunicipioUFdoProdutoPrincipalComMaiorCusto($idPreProjeto) {
+
+        $select = $this->select()->setIntegrityCheck(false);
+        $select->from(
+            ['a' => $this->_name],
+            [
+                'a.UfDespesa',
+                'a.MunicipioDespesa',
+                new Zend_Db_Expr('sum(a.Quantidade * a.Ocorrencia * a.ValorUnitario) as totalMunicipioPorProduto')
+            ],
+            $this->_schema
+        );
+
+        $select->joinInner(
+            ['b' => 'PlanoDistribuicaoProduto'],
+            'b.idProjeto = a.idProjeto AND b.idProduto = a.idProduto',
+            ['b.idProduto'],
+            $this->_schema
+        );
+
+        $select->where('a.idProjeto = ?', $idPreProjeto)
+            ->where('b.stPrincipal = ?', 1)
+            ->where('b.idProduto <> 0')
+            ->group(['b.idProduto', 'a.UfDespesa', 'a.MunicipioDespesa'])
+            ->order('totalMunicipioPorProduto DESC')
+            ->limit(1);
+
+        return $this->fetchRow($select);
+
     }
 }

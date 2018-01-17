@@ -144,14 +144,14 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $custosVinculados = $params['itensCustosVinculados'];
 
-        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-        $arrayCustosVinculados = $tbCustosVinculadosMapper->obterValoresPecentuaisELimitesCustosVinculados($params['idPreProjeto']);
+//        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+//        $arrayCustosVinculados = $tbCustosVinculadosMapper->obterValoresPecentuaisELimitesCustosVinculados($params['idPreProjeto']);
 
         $mapper = new Proposta_Model_TbCustosVinculadosMapper();
 
         try {
             foreach ($custosVinculados as $key => $item) {
-                if (in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
+//                if (in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
                     $dados = array(
                         'idCustosVinculados' => $item['idCustosVinculados'],
                         'idProjeto' => $params['idPreProjeto'],
@@ -162,7 +162,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                     );
 
                     $mapper->save(new Proposta_Model_TbCustosVinculados($dados));
-                }
+//                }
             }
 
             $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
