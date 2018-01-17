@@ -239,6 +239,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             "fichatecnica" => isset($post['fichatecnica']) ? $post['fichatecnica'] : '',
             "sinopse" => isset($post['sinopse']) ? $post['sinopse'] : '',
             "impactoambiental" => isset($post['impactoambiental']) ? $post['impactoambiental'] : '',
+            "descricaoatividade" => isset($post['descricaoatividade']) ? $post['descricaoatividade'] : '',
             "especificacaotecnica" => isset($post['especificacaotecnica']) ? $post['especificacaotecnica'] : '', //No legado o que esta sendo gravado aqui e OUTRAS INFORMACOES
             "estrategiadeexecucao" => isset($post['estrategiadeexecucao']) ? $post['estrategiadeexecucao'] : '', //No legado o que esta sendo gravado aqui e ESPECIFICAO TECNICA
             "dtaceite" => isset($post['dtaceite']) ? $post['dtaceite'] : date("Y/m/d H:i:s"), // verificar se realmente eh sempre que salva
