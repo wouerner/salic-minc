@@ -271,7 +271,7 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $rsPreProjeto->DtInicioDeExecucao     = $dados["dtiniciodeexecucao"];
         $rsPreProjeto->DtFinalDeExecucao      = $dados["dtfinaldeexecucao"];
         $rsPreProjeto->NrAtoTombamento        = $dados["nratotombamento"];
-        $rsPreProjeto->DtAtoTombamento        = $dados["dtatotombamento"];
+        $rsPreProjeto->DtAtoTombamento        = (isset($dados["dtatotombamento"])) ? $dados["dtatotombamento"] : null;
         $rsPreProjeto->EsferaTombamento       = $dados["esferatombamento"];
         $rsPreProjeto->ResumoDoProjeto        = $dados["resumodoprojeto"];
         $rsPreProjeto->Objetivos              = $dados["objetivos"];
