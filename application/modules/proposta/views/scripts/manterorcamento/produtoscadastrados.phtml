@@ -206,14 +206,14 @@
                 }
 
 
-                $3.post($3('#form').attr('action'), $3('#form').serialize(), function (result) {
+                $3.post($3('#form').attr('action'), $3('#form').serialize(), function (response) {
                     event.preventDefault();
-                    $3.each(result, function (index, item) {
-                        console.log(result);
+                    $3.each(response, function (index, item) {
+                        console.log(response);
 
-                        var uf = item.dados.UfDespesa;
-                        var mun = item.dados.MunicipioDespesa;
-                        var stringLocalizacao = $3("select option[value='" + uf + ":" + mun + "']").text();
+                        let uf = item.dados.UfDespesa;
+                        let mun = item.dados.MunicipioDespesa;
+                        let stringLocalizacao = $3("select option[value='" + uf + ":" + mun + "']").text();
 
                         if (item.status == '1') {
                             if (item.action == 'update') {

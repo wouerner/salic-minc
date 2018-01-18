@@ -140,18 +140,20 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
     public function salvarpercentuaiscustosvinculadosAction()
     {
+
         $params = $this->getRequest()->getParams();
 
         $custosVinculados = $params['itensCustosVinculados'];
 
-//        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-//        $arrayCustosVinculados = $tbCustosVinculadosMapper->obterValoresPecentuaisELimitesCustosVinculados($params['idPreProjeto']);
-
         $mapper = new Proposta_Model_TbCustosVinculadosMapper();
 
         try {
+
+            if(!$this->isEditavel($this->idPreProjeto)) {
+                throw new Exception("Permissão negada!");
+            }
+
             foreach ($custosVinculados as $key => $item) {
-//                if (in_array($key, array_column($arrayCustosVinculados, 'idPlanilhaItens'))) {
                     $dados = array(
                         'idCustosVinculados' => $item['idCustosVinculados'],
                         'idProjeto' => $params['idPreProjeto'],
@@ -162,7 +164,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                     );
 
                     $mapper->save(new Proposta_Model_TbCustosVinculados($dados));
-//                }
             }
 
             $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
@@ -288,73 +289,86 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
     {
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
+        $dados = [];
 
-        $idPreProjeto = $params['idPreProjeto'];
+        try {
 
-        $justificativa = utf8_decode(substr(trim(strip_tags($params['justificativa'])), 0, 1000));
+            $justificativa = utf8_decode(substr(trim(strip_tags($params['justificativa'])), 0, 1000));
 
-        $dados = array(
-            'idProjeto' => $idPreProjeto,
-            'idProduto' => $params['produto'],
-            'idEtapa' => $params['idPlanilhaEtapa'],
-            'idPlanilhaItem' => $params['planilhaitem'],
-            'Descricao' => '',
-            'Unidade' => $params['unidade'],
-            'Quantidade' => $params['qtd'],
-            'Ocorrencia' => $params['ocorrencia'],
-            'ValorUnitario' => str_replace(",", ".", str_replace(".", "", $params['vlunitario'])),
-            'QtdeDias' => $params['qtdDias'],
-            'TipoDespesa' => 0,
-            'TipoPessoa' => 0,
-            'Contrapartida' => 0,
-            'FonteRecurso' => $params['fonterecurso'],
-            'UfDespesa' => $params['uf'],
-            'MunicipioDespesa' => $params['municipio'],
-            'dsJustificativa' => $justificativa,
-            'idUsuario' => $this->idUsuario,
-            'stCustoPraticado' => $params['stCustoPraticado']
-        );
+            $dados = array(
+                'idProjeto' => $params['idPreProjeto'],
+                'idProduto' => $params['produto'],
+                'idEtapa' => $params['idPlanilhaEtapa'],
+                'idPlanilhaItem' => $params['planilhaitem'],
+                'Descricao' => '',
+                'Unidade' => $params['unidade'],
+                'Quantidade' => $params['qtd'],
+                'Ocorrencia' => $params['ocorrencia'],
+                'ValorUnitario' => str_replace(",", ".", str_replace(".", "", $params['vlunitario'])),
+                'QtdeDias' => $params['qtdDias'],
+                'TipoDespesa' => 0,
+                'TipoPessoa' => 0,
+                'Contrapartida' => 0,
+                'FonteRecurso' => $params['fonterecurso'],
+                'UfDespesa' => $params['uf'],
+                'MunicipioDespesa' => $params['municipio'],
+                'dsJustificativa' => $justificativa,
+                'idUsuario' => $this->idUsuario,
+                'stCustoPraticado' => $params['stCustoPraticado']
+            );
 
-        $idPlanilhaProposta = isset($params['idPlanilhaProposta']) ? $params['idPlanilhaProposta'] : '';
+            if(!$this->isEditavel($this->idPreProjeto)) {
+                throw new Exception("Permiss&atilde;o negada!");
+            }
 
-        $retorno[] = self::salvarItemPlanilha($dados, $idPlanilhaProposta); # salva o item principal
+            $idPlanilhaProposta = $this->getRequest()->getParam('idPlanilhaProposta', null);
 
-        $outrasLocalidades = isset($params['comboOutrasCidades']) ? $params['comboOutrasCidades'] : '';
+            $retorno[] = self::salvarItemPlanilha($dados, $idPlanilhaProposta); # salva o item principal
 
-        if ($outrasLocalidades && count($outrasLocalidades) > 0) {
-            foreach ($outrasLocalidades as $localidade) {
-                if ($localidade == 'all') {
-                    continue;
-                }
+            $outrasLocalidades = isset($params['comboOutrasCidades']) ? $params['comboOutrasCidades'] : '';
 
-                $custoPraticado = isset($params['stCustoPraticado_' . $localidade]) ? $params['stCustoPraticado_' . $localidade] : 0;
-
-                # se o custo praticado for igual a 1, justificativa eh obrigatoria
-                if ($custoPraticado == 1) {
-                    $justificativa = isset($params['justificativa_' . $localidade]) ? $params['justificativa_' . $localidade] : '';
-
-                    $dados['dsJustificativa'] = utf8_decode(substr(trim(strip_tags($justificativa)), 0, 1000));
-
-                    if (empty($justificativa)) {
+            if ($outrasLocalidades && count($outrasLocalidades) > 0) {
+                foreach ($outrasLocalidades as $localidade) {
+                    if ($localidade == 'all') {
                         continue;
                     }
+
+                    $custoPraticado = isset($params['stCustoPraticado_' . $localidade]) ? $params['stCustoPraticado_' . $localidade] : 0;
+
+                    # se o custo praticado for igual a 1, justificativa eh obrigatoria
+                    if ($custoPraticado == 1) {
+                        $justificativa = isset($params['justificativa_' . $localidade]) ? $params['justificativa_' . $localidade] : '';
+
+                        $dados['dsJustificativa'] = utf8_decode(substr(trim(strip_tags($justificativa)), 0, 1000));
+
+                        if (empty($justificativa)) {
+                            continue;
+                        }
+                    }
+
+                    $dados['stCustoPraticado'] = $custoPraticado;
+                    $estadoMunicipio = explode(':', $localidade);
+                    $dados['UfDespesa'] = $estadoMunicipio[0];
+                    $dados['MunicipioDespesa'] = $estadoMunicipio[1];
+
+                    $retorno[] = self::salvarItemPlanilha($dados, null, true);
                 }
-
-                $dados['stCustoPraticado'] = $custoPraticado;
-
-                $estadoMunicipio = explode(':', $localidade);
-                $dados['UfDespesa'] = $estadoMunicipio[0];
-                $dados['MunicipioDespesa'] = $estadoMunicipio[1];
-
-                $retorno[] = self::salvarItemPlanilha($dados, null, true);
             }
+
+            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+            $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($params['idPreProjeto']);
+            $this->_helper->json($retorno);
+
+        } catch(Exception $e) {
+
+             $this->_helper->json(
+                 [[
+                     'status' => false,
+                     'msg' => $e->getMessage(),
+                     'dados' => $dados
+                 ]]
+             );
         }
-
-        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-        $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($idPreProjeto);
-
-        $this->_helper->json($retorno);
-        die;
     }
 
     private function salvarItemPlanilha($dados, $idPlanilhaProposta = null, $outraLocalidade = false)
@@ -545,6 +559,10 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             $this->verificarPermissaoAcesso(true, false, false);
 
+            if(!$this->isEditavel($this->idPreProjeto)) {
+                throw new Exception("Permissão negada!");
+            }
+
             $this->_helper->layout->disableLayout();
 
             $params = $this->getRequest()->getParams();
@@ -579,35 +597,48 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
     public function restaurarplanilhaAction()
     {
-        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
 
-        $return['msg'] = "Erro ao restaurar a planilha! ";
-        $return['status'] = false;
-        $restaurar = false;
+        try {
 
-        if (!empty($idPreProjeto)) {
-            if ($this->isEditarProjeto($idPreProjeto)) {
+            if(!$this->isEditavel($this->idPreProjeto)) {
+                throw new Exception("Permiss&atilde;o negada!");
+            }
+            $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
 
-                # restaura o local de realizacao
-                $TA = new Proposta_Model_DbTable_Abrangencia();
-                $this->restaurarObjetoSerializadoParaTabela($TA, $idPreProjeto, 'alterarprojeto_abrangencia');
+            $return['msg'] = "Erro ao restaurar a planilha! ";
+            $return['status'] = false;
+            $restaurar = false;
 
-                # restaura o plano de distribuicao e o plano de distribuicao detalhado
-                $this->restaurarPlanoDistribuicaoDetalhado($idPreProjeto);
+            if (!empty($idPreProjeto)) {
+                if ($this->isEditarProjeto($idPreProjeto)) {
 
-                # restaura o orcamento
-                $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
-                $restaurar = $this->restaurarObjetoSerializadoParaTabela($TPP, $idPreProjeto, 'alterarprojeto_tbplanilhaproposta');
+                    # restaura o local de realizacao
+                    $TA = new Proposta_Model_DbTable_Abrangencia();
+                    $this->restaurarObjetoSerializadoParaTabela($TA, $idPreProjeto, 'alterarprojeto_abrangencia');
+
+                    # restaura o plano de distribuicao e o plano de distribuicao detalhado
+                    $this->restaurarPlanoDistribuicaoDetalhado($idPreProjeto);
+
+                    # restaura o orcamento
+                    $TPP = new Proposta_Model_DbTable_TbPlanilhaProposta();
+                    $restaurar = $this->restaurarObjetoSerializadoParaTabela($TPP, $idPreProjeto, 'alterarprojeto_tbplanilhaproposta');
+                }
+
+                if ($restaurar) {
+                    $return['msg'] = "Plano distribui&ccedil;&atilde;o, Local de realiza&ccedil;&atilde;o e Or&ccedil;amento foram restaurados com sucesso!";
+                    $return['status'] = true;
+                }
             }
 
-            if ($restaurar) {
-                $return['msg'] = "Plano distribui&ccedil;&atilde;o, Local de realiza&ccedil;&atilde;o e Or&ccedil;amento foram restaurados com sucesso!";
-                $return['status'] = true;
-            }
+            $this->_helper->json($return);
+        } catch (Exception $e) {
+            $this->_helper->json([
+                'status' => false,
+                'msg' => $e->getMessage()
+            ]);
         }
 
-        $this->_helper->json($return);
-        die;
+
     }
 
     public function resumorestaurarplanilhaAction()

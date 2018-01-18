@@ -36,14 +36,13 @@
 
                     <div class="row">
                         <div class="col s12">
-                            <p>Aqui voc&ecirc; pode definir os percentuais para c&aacute;lculo dos custos vinculados
+                            <p>Aqui voc&ecirc; pode definir os percentuais para c&aacute;lculo dos Custos Vinculados / Remuneração
                                 do seu projeto, essas escolhas ir&atilde;o influenciar no or&ccedil;amento do seu
                                 projeto.</p>
                             <p>Ao clicar em salvar, o sistema ir&aacute; atualizar sua planilha or&ccedil;ament&aacute;ria
                                 com os novos c&aacute;lculos.</p>
                         </div>
                         <?php if ($this->localRealizacao) : ?>
-                            <?php if($this->itensCustosVinculados) : ?>
                                 <?php foreach ($this->itensCustosVinculados as $item) : ?>
                                     <div class="row">
                                         <input type="hidden"
@@ -81,6 +80,16 @@
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
+                            <?php if ($this->isEditavel) : ?>
+                                <div class="row">
+                                    <div class="input-field col s12 center">
+                                        <button class="btn waves-effect white-text waves-light btn-salvar" type="submit"
+                                                name="action">
+                                            Salvar
+                                            <i class="material-icons right">send</i>
+                                        </button>
+                                    </div>
+                                </div>
                             <?php endif; ?>
                         <?php else: ?>
                         <div class="col s12">
@@ -95,17 +104,7 @@
                                 <?php endif; ?>
                             </div>
 
-                            <?php if ($this->isEditavel) : ?>
-                                <div class="row">
-                                    <div class="input-field col s12 center">
-                                        <button class="btn waves-effect white-text waves-light btn-salvar" type="submit"
-                                                name="action">
-                                            Salvar
-                                            <i class="material-icons right">send</i>
-                                        </button>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
+
                         </div>
                 </form>
             </div>

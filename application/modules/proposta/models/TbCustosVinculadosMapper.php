@@ -29,10 +29,6 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
             ]
         );
 
-        if (empty($valorDoProjeto)) {
-            return [];
-        }
-
         $ModelCustosVinculados = new Proposta_Model_TbCustosVinculados();
 
         $whereCustosVinculados = [
@@ -124,8 +120,7 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         }
 
         $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto);
-
-        if (empty($itens)) {
+        if (array_sum(array_column($itens, 'ValorUnitario')) == 0) {
             $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
             $tbPlanilhaProposta->excluirCustosVinculadosERemuneracaoDaPlanilha($idPreProjeto);
             return true;
