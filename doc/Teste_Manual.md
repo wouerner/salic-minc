@@ -42,7 +42,7 @@ $ cd ./caminho/projeto/tests/bin
 $ chmod +x test.sh
 ```
 
-3°passo - Configurar login dos testes, geralmente fica no ambiente de [testing : production] 
+3°passo - Configurar login dos testes, geralmente fica no ambiente de **[testing : production]** 
 ``` sh
 $ cd ./application/configs/
 $ vim application.ini 
@@ -57,7 +57,86 @@ test.params.password = m2XXXX - Senha do usuario de testes
 $ cd ./caminho/projeto/tests/bin
 $ ./test.sh # executa todos os testes do projeto.
 ```
+**OBS:** Ao executar esse _script_ todos os _tests_ dentro do _application/modules_ serão executados e poderão levar um tempo significativo. Recomendamos a execução dos _tests_ separadamente atraves do comando:
+``` sh
+cd ./tests/application
+../../vendor/bin/phpunit --debug --colors --verbose -c ../phpunit.xml modules/NomeDoModulo/controllers/NomeDoTesteTest.php
+```
 
-5°passo - Devemos receber essa Uma tela parecida com essa: 
+5°passo - Devemos receber uma resposta parecida com essa: 
 
 ![exemplo de teste](https://github.com/culturagovbr/salic-minc/raw/develop/doc/img/teste_exemplo.png "Teste com sucesso")
+
+## Referências
+
+Nós criamos algumas funçes auxiliáres para ajudar nos testes que se encontram nesse arquivo:
+[ControllerActionTestCase.php](../library/MinC/Test/ControllerActionTestCase.php)
+
+
+Abaixo, referẽncia de implementação de testes possíveis:
+``` php
+<?php
+
+class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
+{
+    public function setUp()
+    {
+        parent::setUp();
+    }
+    
+    public function testIndexAction()
+    {
+        $this->autenticar();
+        $this->perfilParaProponente();
+       
+        //reset para garantir respostas.
+        $this->resetRequest()
+            ->resetResponse();
+	      $idPreProjeto = 240102;
+        // Acessando local de realizacao
+        $url = '/proposta/plano-distribuicao?idPreProjeto=' . $idPreProjeto;
+        $this->request->setMethod('GET');
+        $this->dispatch($url);
+        $this->assertNotRedirect();
+
+        $this->assertModule('proposta');
+        $this->assertController('plano-distribuicao');
+        $this->assertAction('index');
+    }
+
+    public function testDetalharPlanoDistribuicaoAction()
+	{
+        $this->autenticar();
+        $this->perfilParaProponente();
+        $url = '/proposta/plano-distribuicao/detalhar-plano-distribuicao/idPreProjeto/240102/idPlanoDistribuicao/192467';
+        $this->request->setMethod('GET');
+        $this->dispatch($url);
+        $this->assertModule('proposta');
+        $this->assertController('plano-distribuicao');
+        $this->assertAction('detalhar-plano-distribuicao');
+    }
+
+    public function testSalvarAction()
+	{
+        $this->autenticar();
+        $this->perfilParaProponente();
+
+        $this->resetRequest()
+            ->resetResponse();
+
+        $url = '/proposta/plano-distribuicao/salvar?idPreProjeto=240105';
+        $this->request->setMethod('POST')
+            ->setPost([
+            'areaCultural' => 1,
+            'idPlanoDistribuicao' => '',
+            'idProjeto' => '',
+            'prodprincipal' => 0,
+            'produto' => 81,
+            'segmentoCultural' => 17
+        ]);
+
+        $this->dispatch($url);
+        $this->assertRedirectTo('/proposta/plano-distribuicao/index?idPreProjeto=240105');
+    }
+}
+```
