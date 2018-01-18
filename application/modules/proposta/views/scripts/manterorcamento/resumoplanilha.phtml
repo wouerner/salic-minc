@@ -42,11 +42,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($this->EtapasProduto as $totalEtapa) : ?>
-                    <?php $valorProjeto = $valorProjeto + $totalEtapa['valorTotal']; ?>
+                <?php foreach ($this->EtapasProduto as $etapa) : ?>
+
+                    <?php
+                        if ($etapa['tpGrupo'] == 'A') {
+                            $valorProjeto = $valorProjeto + $etapa['valorTotal'];
+                        }
+                    ?>
                     <tr>
-                        <td class="">Valor total <?php echo $totalEtapa['DescricaoEtapa']; ?></td>
-                        <td class="right-align">R$ <?php echo number_format($totalEtapa['valorTotal'], 2, ",", "."); ?></td>
+                        <td class="">Valor total <?php echo $etapa['DescricaoEtapa']; ?></td>
+                        <td class="right-align">R$ <?php echo number_format($etapa['valorTotal'], 2, ",", "."); ?></td>
                     </tr>
                 <?php endforeach; ?>
                 <tr>
@@ -54,7 +59,7 @@
                     <td class="right-align">R$ <?php echo number_format($valorProjeto, 2, ",", "."); ?></td>
                 </tr>
                 <tr">
-                    <td>Valor Custos Vinculados </td>
+                    <td>Valor Custos Vinculados / Remuneração </td>
                     <td class="right-align">R$ <?php echo number_format($valorTotalCustosVinculados, 2, ",", "."); ?></td>
                 </tr>
                 <tr>
