@@ -61,7 +61,7 @@ class Proposta_Model_DbTable_TbPlanilhaEtapa extends MinC_Db_Table_Abstract
             ->from(array('tbplanilhaetapa'), array('idPlanilhaEtapa as idEtapa', 'Descricao as DescricaoEtapa', 'tpGrupo'), $this->getSchema('sac'))
             ->where("tpCusto = ?", $tipoEtapa)
             ->where("stEstado = 1")
-            ->order("idPlanilhaEtapa ASC")
+            ->order("nrOrdenacao ASC")
         ;
 
         return $db->fetchAll($sql);

@@ -4,7 +4,7 @@
                 <table class="bordered striped centered" width="98%" >
                     <thead>
                     <tr class="title">
-                        <th colspan="2">Administra&ccedil;&atilde;o do Projeto
+                        <th colspan="2">Custos Vinculados / Remuneração
 
                             <?php if ($this->isEditavel) : ?>
                                 <a  href="<?php echo $this->url( array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' =>'custosvinculados','idPreProjeto' => $this->idPreProjeto)); ?>"
@@ -58,11 +58,11 @@
                     <td class="right-align">R$ <?php echo number_format($valorProjeto, 2, ",", "."); ?></td>
                 </tr>
                 <tr">
-                    <td>Valor Administração do Projeto </td>
+                    <td>Valor total Custos Vinculados / Remuneração </td>
                     <td class="right-align">R$ <?php echo number_format($valorTotalCustosVinculados, 2, ",", "."); ?></td>
                 </tr>
                 <tr>
-                    <td>Valor total do Projeto </td>
+                    <td>Valor custo do Projeto </td>
                     <td class="right-align">R$ <?php echo number_format($valorTotalCustosVinculados + $valorProjeto, 2, ",", "."); ?></td>
                 </tr>
                 </tbody>

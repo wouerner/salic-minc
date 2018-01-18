@@ -13,22 +13,16 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
     public function indexAction()
     {
-        // Usuario Logado
-        $auth = Zend_Auth::getInstance(); // instancia da autenticacao
+        $auth = Zend_Auth::getInstance();
         $idusuario = $auth->getIdentity()->usu_codigo;
 
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        $codOrgao = $GrupoAtivo->codOrgao; //  orgao ativo na sessao
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $codOrgao = $GrupoAtivo->codOrgao;
 
         $this->view->codOrgao = $codOrgao;
         $this->view->idUsuarioLogado = $idusuario;
     }
 
-    /**
-     * produtoscadastradosAction
-     *
-     * @name produtoscadastradosAction
-     */
     public function produtoscadastradosAction()
     {
         $this->view->idPreProjeto = $this->idPreProjeto;
@@ -36,12 +30,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->charset = Zend_Registry::get('config')->db->params->charset;
     }
 
-    /**
-     * Lista os produtos na planilha orcamentaria
-     *
-     * @access public
-     * @return void
-     */
     public function listarprodutosAction()
     {
         $this->_helper->layout->disableLayout();
@@ -51,7 +39,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $manterOrcamento = new Proposta_Model_DbTable_TbPlanilhaEtapa();
         $listaEtapa = $manterOrcamento->buscarEtapas('P');
-        $this->view->EtapasProduto = $this->reordenaretapas($listaEtapa);
+        $this->view->EtapasProduto = $listaEtapa;
 
         $this->view->ItensProduto = $tbPreprojeto->listarItensProdutos($this->idPreProjeto, null, Zend_DB::FETCH_ASSOC);
 
@@ -74,17 +62,9 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
         $CustosMapper = new Proposta_Model_TbCustosVinculadosMapper();
         $this->view->custoVinculadoProponente = $CustosMapper->findBy(array('idProjeto' => $this->idPreProjeto));
-//
-//     $this->view->idPreProjeto = $this->idPreProjeto;
-//     $this->view->charset = Zend_Registry::get('config')->db->params->charset;
+
     }
 
-    /**
-     * altera ordem de apresentação das etapas no orcamento
-     *
-     * @access public
-     * @return void
-     */
     public function reordenaretapas($etapas)
     {
         if (empty($etapas)) {
@@ -98,24 +78,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         return $newListaEtapa;
     }
 
-    /**
-     * planilhaorcamentariaAction
-     *
-     *
-     * @access public
-     * @return void
-     */
-    public function planilhaorcamentariaAction()
-    {
-        $this->view->idPreProjeto = $this->idPreProjeto;
-    }
-
-    /**
-     * planilhaorcamentariageralAction
-     *
-     * @access public
-     * @return void
-     */
     public function planilhaorcamentariageralAction()
     {
         $this->view->tipoPlanilha = 0; // 0=Planilha Or?ament?ria da Proposta
@@ -175,11 +137,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         }
     }
 
-    /**
-     * resumoplanilhaAction
-     *
-     * @name resumoplanilhaAction
-     */
     public function resumoplanilhaAction()
     {
         $this->_helper->layout->disableLayout();
@@ -209,16 +166,10 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
                 $etapasPlanilha[] = $etapa;
             }
 
-            $this->view->EtapasProduto = $this->reordenaretapas($etapasPlanilha);
+            $this->view->EtapasProduto = $etapasPlanilha;
         }
     }
 
-    /**
-     * formitemAction
-     *
-     * @access public
-     * @return void
-     */
     public function formitemAction()
     {
         $this->_helper->layout->disableLayout();
@@ -279,12 +230,6 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->Produtos = $buscarProduto->buscarProdutos($this->idPreProjeto);
     }
 
-    /**
-     * salvaritemaction
-     *
-     * @access public
-     * @return void
-     */
     public function salvaritemAction()
     {
         $this->_helper->layout->disableLayout();
