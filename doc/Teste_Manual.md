@@ -57,6 +57,11 @@ test.params.password = m2XXXX - Senha do usuario de testes
 $ cd ./caminho/projeto/tests/bin
 $ ./test.sh # executa todos os testes do projeto.
 ```
+**OBS:** Ao executar esse _script_ todos os _tests_ dentro do _application/modules_ serão executados e poderão levar um tempo significativo. Recomendamos a execução dos _tests_ separadamente atraves do comando:
+``` sh
+cd ./tests/application
+../../vendor/bin/phpunit --debug --colors --verbose -c ../phpunit.xml modules/NomeDoModulo/controllers/NomeDoTesteTest.php
+```
 
 5°passo - Devemos receber essa Uma tela parecida com essa: 
 
