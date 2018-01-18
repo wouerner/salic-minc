@@ -1,10 +1,10 @@
 <?php if($this->EtapaCusto) : ?>
-        <?php foreach ($this->EtapaCusto as $etapaCusto) : ?>
+        <?php //foreach ($this->EtapaCusto as $etapaCusto) : ?>
             <?php  if($this->ItensEtapaCusto) : ?>
                 <table class="bordered striped centered" width="98%" >
                     <thead>
                     <tr class="title">
-                        <th colspan="2">Custos Vinculados / Remuneração
+                        <th colspan="2">Administra&ccedil;&atilde;o do Projeto
 
                             <?php if ($this->isEditavel) : ?>
                                 <a  href="<?php echo $this->url( array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' =>'custosvinculados','idPreProjeto' => $this->idPreProjeto)); ?>"
@@ -19,20 +19,19 @@
                     <tbody>
                     <?php $valorTotalCustosVinculados = null; ?>
                     <?php foreach ($this->ItensEtapaCusto as $itemEtapaCusto) : ?>
-                        <?php if ($etapaCusto->idEtapa == $itemEtapaCusto->idEtapa) :  ?>
-
+                        <?php// if ($etapaCusto->idEtapa == $itemEtapaCusto->idEtapa) :  ?>
                             <tr>
                                 <td class="left-align"><?php echo $itemEtapaCusto->DescricaoItem; ?></td>
                                 <td class="right-align">R$ <?php echo number_format($itemEtapaCusto->valorunitario, 2, ",", ".") ?></td>
                                 <?php $valorTotalCustosVinculados = $itemEtapaCusto->valorunitario + $valorTotalCustosVinculados; ?>
                             </tr>
-                        <?php endif; ?>
+                        <?php //endif; ?>
 
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             <?php endif; ?>
-        <?php endforeach; ?>
+        <?php //endforeach; ?>
         <br>
         <?php if( $this->EtapasProduto ) : ?>
             <table style="margin: 0px;" class="bordered striped">
@@ -59,7 +58,7 @@
                     <td class="right-align">R$ <?php echo number_format($valorProjeto, 2, ",", "."); ?></td>
                 </tr>
                 <tr">
-                    <td>Valor Custos Vinculados / Remuneração </td>
+                    <td>Valor Administração do Projeto </td>
                     <td class="right-align">R$ <?php echo number_format($valorTotalCustosVinculados, 2, ",", "."); ?></td>
                 </tr>
                 <tr>
