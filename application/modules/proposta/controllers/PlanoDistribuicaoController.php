@@ -136,7 +136,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
     public function salvarAction()
     {
-        $post = Zend_Registry::get("post");
+        $post = (object)($this->getRequest()->getPost());
 
         if (($this->isEditarProjeto($this->idPreProjeto) && $post->prodprincipal == 1)) {
             parent::message("Em alterar projeto, n&atilde;o pode alterar o produto principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
@@ -218,6 +218,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         }
 
         $retorno = $tblPlanoDistribuicao->salvar($dados);
+
         if ($retorno > 0) {
             parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
         } else {

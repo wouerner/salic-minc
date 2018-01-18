@@ -68,5 +68,28 @@ class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
         $this->assertModule('proposta');
         $this->assertController('plano-distribuicao');
         $this->assertAction('detalhar-plano-distribuicao');
-    }	    
+    }
+
+    public function testSalvarAction()
+	{
+        $this->autenticar();
+        $this->perfilParaProponente();
+
+        $this->resetRequest()
+            ->resetResponse();
+
+        $url = '/proposta/plano-distribuicao/salvar?idPreProjeto=240105';
+        $this->request->setMethod('POST')
+            ->setPost([
+            'areaCultural' => 1,
+            'idPlanoDistribuicao' => '',
+            'idProjeto' => '',
+            'prodprincipal' => 0,
+            'produto' => 81,
+            'segmentoCultural' => 17
+        ]);
+
+        $this->dispatch($url);
+        $this->assertRedirectTo('/proposta/plano-distribuicao/index?idPreProjeto=240105');
+    }
 }
