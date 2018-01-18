@@ -120,10 +120,31 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         }
 
         $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto);
+
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+
         if (array_sum(array_column($itens, 'ValorUnitario')) == 0) {
-            $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
             $tbPlanilhaProposta->excluirCustosVinculadosERemuneracaoDaPlanilha($idPreProjeto);
             return true;
+        }
+
+        /**
+         * Essa pesquisa e exclusão dos custos vinculados removidos poderá ser retirada.
+         * Foi feita apenas para propostas com custos vinculados que já existiam antes da nova IN
+         */
+        $whereCustosVinculadosRemovidos = [
+            'idProjeto = ?' => $idPreProjeto,
+            'idProduto = ?' => 0,
+            'idPlanilhaItem in (?)' => [
+                Proposta_Model_TbCustosVinculados::ID_CONTROLE_E_AUDITORIA,
+                Proposta_Model_TbCustosVinculados::ID_DIREITOS_AUTORAIS
+            ]
+        ];
+
+        $custosVinculadosRemovidos = $tbPlanilhaProposta->findBy($whereCustosVinculadosRemovidos);
+
+        if (!empty($custosVinculadosRemovidos)) {
+            $tbPlanilhaProposta->delete($whereCustosVinculadosRemovidos);
         }
 
         $modelPlanilhaProposta = new Proposta_Model_TbPlanilhaProposta();
