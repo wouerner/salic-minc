@@ -28,8 +28,11 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <p class="caption">Enumere e descreva todas as fases do projeto, informando quando e
-                                    como pretende realiz&aacute;-las.</p>
+                                <p class="caption">
+                                  Divida as etapas do projeto em 'Pr&eacute;-produ&ccedil;&atilde;o', 'Execu&ccedil;&atilde;o' e
+				  'P&oacute;s-produ&ccedil;&atilde;o', estimando - em dias/semanas/meses - a dura&ccedil;&atilde;o
+				  de cada etapa. *
+				</p>
 
                                 <textarea id="etapadetrabalho" class="browser-default editor"
                                           name="etapadetrabalho" <?php echo isset($this->arrConfig['etapadetrabalho']['disabled']) ? 'disabled="disabled"' : '' ?>>
@@ -41,13 +44,10 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <p class="caption">O proponente deve informa qual ser&aacute; sua fun&ccedil;&atilde;o
-                                    no projeto,
-                                    assim como a indica&ccedil;&atilde;o dos nomes, juntamente com os curr&iacute;culos
-                                    resumidos, do diretor/coordenador art&iacute;stico e dos artistas e/ou grupos
-                                    participantes.
-                                    Caso os nomes dos artistas ainda n&atilde;o estejam definidos, uma justificativa
-                                    pela falta dos mesmos faz-se necess&aacute;ria. *
+                                <p class="caption">
+				  Descreva com detalhes qual atividade (mesmo que volunt&atilde;ria) o dirigente ou a
+				  institui&ccedil;&atilde;o proponente realizar&aacute; no projeto. Apresente tamb&eacute;m
+				  curr&iacute;culo resumido dos principais participantes. *
                                 </p>
                                 <textarea id="fichatecnica" class="browser-default editor"
                                           name="fichatecnica" <?php echo isset($this->arrConfig['fichatecnica']['disabled']) ? 'disabled="disabled"' : '' ?>>
@@ -59,11 +59,11 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <p class="caption">Inserir o conte&uacute;do de todos os produtos do projeto que
-                                    necessitam de um breve resumo em rela&ccedil;&atilde;o ao seu assunto.
-                                    Como, por exemplo: semin&aacute;rios, palestras, livros, peri&oacute;dicos, espet&aacute;culo
-                                    de circo, pe&ccedil;a teatral, espet&aacute;culo de dan&ccedil;a, performance
-                                    de outra natureza, entre outros.
+                                <p class="caption">
+				  Insira o conte&uacute;do de todos os produtos do projeto que necessitam de um breve
+				  resumo em rela&ccedil;&atilde;o ao seu assunto, por exemplo: semin&aacute;rios, palestras,
+				  livros, espet&atilde;culo de circo, peça teatral, espet&atilde;culo de dan&ccedil;a, performance,
+				  classifica&ccedil;&atilde;o indicativa et&aacute;ria.
                                 </p>
                                 <textarea id="sinopse" class="browser-default editor"
                                           name="sinopse" <?php echo isset($this->arrConfig['sinopse']['disabled']) ? 'disabled="disabled"' : '' ?>>
@@ -75,12 +75,9 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <p class="caption">Inserir as especifica&ccedil;&otilde;es t&eacute;cnicas de todos os
-                                    produtos do projeto que necessitam desse datalhamento.
-                                    Ou seja, especifica&ccedil;&otilde;es t&eacute;cnicas das pe&ccedil;as gr&aacute;ficas,
-                                    do s&iacute;tio de internet, dos workshops com curta dura&ccedil;&atilde;o e dos
-                                    cursos
-                                    de longa dura&ccedil;&atilde;o (projeto pedag&oacute;gico), entre outros.
+                                <p class="caption">
+				  Insira detalhamento t&eacute;cnico de todos os produtos: pagina&ccedil;&aacute;o, dura&ccedil;&aacute;o, material,
+				  projeto pedag&oacute;gico.
                                 </p>
                                 <textarea id="especificacaotecnica" class="browser-default editor"
                                           name="especificacaotecnica" <?php echo isset($this->arrConfig['especificacaotecnica']['disabled']) ? 'disabled="disabled"' : '' ?>>
