@@ -411,6 +411,9 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
                 $retorno = $tblAbrangencia->update($dadosAbrangencia, $whereAbrangencia);
             }
 
+            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+            $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
+
             parent::message($msg, "/proposta/localderealizacao/index?idPreProjeto=" . $this->idPreProjeto, "CONFIRM");
         }
     }
