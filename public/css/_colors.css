@@ -276,11 +276,6 @@ header #atalhos #combousuario {
     color: #fff
 }
 
-#titulo {
-    background: linear-gradient(to bottom, #2a6b81 0%, rgba(53, 131, 159, 0) 0%, rgba(53, 131, 159, 0.15) 100%);
-    color: #3c3b3b;
-}
-
 #conteudo .titulo_tabela,
 #conteudo table tr.destacar td,
 #conteudo table td.destacar,

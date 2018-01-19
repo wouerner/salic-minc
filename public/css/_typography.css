@@ -14,7 +14,7 @@ LEGADO
 
 --------------------------------------------------------------*/
 body * {
-    font-family: "Roboto", sans-serif;
+    /*font-family: "Roboto", sans-serif;*/
 }
 
 /*------------------------------------------------------------------------ */
@@ -23,11 +23,12 @@ h1, h2, h3, h4, h5, h6 {
     clear: both;
 }
 
+#titulo div,
 h1 {
    color: #424242;
    font-weight: 400;
    text-transform: uppercase;
-   font-size: 30px;
+   font-size: 1.8rem;
 }
 
 @media only screen and (max-width: 993px) {

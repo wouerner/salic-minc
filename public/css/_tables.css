@@ -25,6 +25,7 @@ x - TABELAS (legado)
     /*background:url(../img/bg-celulas.gif) repeat-x ;*/
     background: #fff;
     padding: 3px;
+    border: 1px solid #ccc;
     /*color:auto;*/
 }
 

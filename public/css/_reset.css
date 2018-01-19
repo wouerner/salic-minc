@@ -22,7 +22,7 @@ x - RESET - Ajustes para compatibilidade com materialize
 .conteudoImprimir table,
 #conteudo table.tabela {
     background: #fff;
-    font-size: 12px;
+    /*font-size: 12px;*/
     margin: 10px !important;
     width: 98%;
 }
@@ -102,7 +102,7 @@ table.tabela td.destacar span,
 
 #conteudo table.tabela {
     width: 100% !important;
-    margin: 10px auto !important;
+    margin: 0px auto 20px auto !important;
 
 }
 #conteudo > fieldset,

@@ -2,21 +2,24 @@
 x - FORMS (LEGADO)
 --------------------------------------------------------------*/
 #conteudo .input_simples,
+form .input_simples,
 #conteudo .textarea_simples,
 #conteudo .select_simples,
 #conteudo .input_simples2,
 #conteudo .form .input {
     display: inline-block;
-    /*width: 100%;*/
-    padding: .5rem .75rem;
-    font-size: 1rem;
-    line-height: 1.25;
-    color: #495057;
-    background: #fff;
-    background-clip: padding-box;
+    width: auto;
+    /*padding: .5rem .75rem;*/
+    /*font-size: 1rem;*/
+    /*line-height: 1.25;*/
+    /*color: #495057;*/
+    /*background: #fff;*/
+    /*background-clip: padding-box;*/
     border: 1px solid rgba(0, 0, 0, 0.28);
     border-radius: .15rem;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    height: 2rem;
+    margin-bottom: 5px;
+    /*transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;*/
 }
 
 #conteudo .input_simples2 {
