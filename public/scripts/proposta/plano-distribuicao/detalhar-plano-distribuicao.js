@@ -623,7 +623,7 @@ Vue.component('my-component', {
 
             this.$data.produtos.push(p);
 
-            if(parseFloat(this.valorMedioProponente) > 225) {
+            if(numeral(this.valorMedioProponente).value() > 225) {
                 this.mensagemAlerta("O valor medio:" + this.valorMedioProponente + ", n\xE3o pode ultrapassar: 225,00");
                 this.$data.produtos.splice(-1,1)
                 return;
