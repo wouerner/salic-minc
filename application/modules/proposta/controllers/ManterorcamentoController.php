@@ -97,7 +97,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
         $this->view->localRealizacao = $tblAbrangencia->buscar($arrBusca);
 
         $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-        $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterValoresPecentuaisELimitesCustosVinculados($this->idPreProjeto);
+        $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterCustosVinculados($this->idPreProjeto);
     }
 
     public function salvarpercentuaiscustosvinculadosAction()
@@ -116,16 +116,16 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
             }
 
             foreach ($custosVinculados as $key => $item) {
-                    $dados = array(
-                        'idCustosVinculados' => $item['idCustosVinculados'],
-                        'idProjeto' => $params['idPreProjeto'],
-                        'idPlanilhaItem' => $key,
-                        'dtCadastro' => new Zend_Db_Expr('getdate()'),
-                        'pcCalculo' => $item['percentual'],
-                        'idUsuario' => $params['idagente']
-                    );
+                $dados = array(
+                    'idCustosVinculados' => $item['idCustosVinculados'],
+                    'idProjeto' => $params['idPreProjeto'],
+                    'idPlanilhaItem' => $key,
+                    'dtCadastro' => new Zend_Db_Expr('getdate()'),
+                    'pcCalculo' => $item['percentual'],
+                    'idUsuario' => $this->idUsuario
+                );
 
-                    $mapper->save(new Proposta_Model_TbCustosVinculados($dados));
+                $mapper->save(new Proposta_Model_TbCustosVinculados($dados));
             }
 
             $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
@@ -302,6 +302,7 @@ class Proposta_ManterorcamentoController extends Proposta_GenericController
 
             $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
             $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($params['idPreProjeto']);
+
             $this->_helper->json($retorno);
 
         } catch(Exception $e) {
