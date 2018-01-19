@@ -54,16 +54,16 @@
                     </tr>
                 <?php endforeach; ?>
                 <tr>
-                    <td>Valor do Projeto </td>
-                    <td class="right-align">R$ <?php echo number_format($valorProjeto, 2, ",", "."); ?></td>
+                    <td><b>Valor do Projeto<b/></td>
+                    <td class="right-align"><b>R$ <?php echo number_format($valorProjeto, 2, ",", "."); ?></b></td>
                 </tr>
                 <tr">
                     <td>Valor total Custos Vinculados / Remuneração </td>
                     <td class="right-align">R$ <?php echo number_format($valorTotalCustosVinculados, 2, ",", "."); ?></td>
                 </tr>
                 <tr>
-                    <td>Valor custo do Projeto </td>
-                    <td class="right-align">R$ <?php echo number_format($valorTotalCustosVinculados + $valorProjeto, 2, ",", "."); ?></td>
+                    <td><b>Custo Total <b></b><small>(Custo do Projeto + Valores de Outras Leis + Valores de Outras Fontes)</small></td>
+                    <td class="right-align"><b>R$ <?php echo number_format($valorTotalCustosVinculados + $valorProjeto, 2, ",", "."); ?></b></td>
                 </tr>
                 </tbody>
             </table>
