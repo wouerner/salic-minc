@@ -48,7 +48,7 @@
                                 <li>
                                     <div class="collapsible-header"><i class="material-icons">add</i>
                                         <?= isset($abrangencia['uf']) ? $abrangencia['uf'] : 'Exterior' ?> <?= isset($abrangencia['cidade']) ? ' - ' . $abrangencia['cidade'] : '' ?>
-                                    </div>
+                                   </div>
                                     <div class="collapsible-body">
                                         <my-component
                                             disabled="<?php echo $this->isEditavel; ?>"
@@ -169,7 +169,8 @@
                         </tr>
                         <tr>
                             <th class=""><b>Valor medio </b></th>
-                            <td class="center-align">{{valorMedioProponente}}</td>
+                            <td class="center-align red" v-if="(valorMedioProponente.value() > 225)">{{valorMedioProponenteFormatado}}</td>
+                            <td class="center-align " v-else>{{valorMedioProponenteFormatado}}</td>
                         </tr>
                     </tfoot>
                 </table>

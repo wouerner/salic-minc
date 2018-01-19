@@ -409,7 +409,10 @@ Vue.component('my-component', {
 
             var media = numeral(parseFloat(vlReceitaProponenteIntegral.value() + vlReceitaProponenteParcial.value()) / (qtProponenteIntegral.value() +qtProponenteParcial.value()));
 
-            return media.format();
+            return media;
+        },
+        valorMedioProponenteFormatado: function() {
+            return this.valorMedioProponente.format();
         }
     },
     watch:{
@@ -624,9 +627,8 @@ Vue.component('my-component', {
             this.$data.produtos.push(p);
 
             if(numeral(this.valorMedioProponente).value() > 225) {
-                this.mensagemAlerta("O valor medio:" + this.valorMedioProponente + ", n\xE3o pode ultrapassar: 225,00");
+                this.mensagemAlerta("O valor medio:" + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: 225,00");
                 this.$data.produtos.splice(-1,1)
-                return;
             }
 
             this.visualizarFormulario = false;
