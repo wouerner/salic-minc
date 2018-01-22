@@ -42,22 +42,33 @@ $ cd ./caminho/projeto/tests/bin
 $ chmod +x test.sh
 ```
 
-3°passo - Configurar login dos testes, geralmente fica no ambiente de **[testing : production]** 
+3°passo - Configurar login dos testes, que geralmente fica no ambiente de **[testing : production]** do arquivo application.ini 
 ``` sh
 $ cd ./application/configs/
 $ vim application.ini 
 ```
-test.params.login = 239XXXXXX  - usuario que será usado para executar os testes    
-test.params.password = m2XXXX - Senha do usuario de testes  
 
-**OBS:** Esse usuario precisa ter o perfis de sistema necessarios para executar os testes, caso contrario recebermos falhas nos testes.
+Exemplo de configuração da sessão de _test_ do arquivo application.ini:
+
+test.params.login = 239XXXXXX  - usuario que será usado para executar os testes    
+test.params.password = m2XXXX - Senha do usuario de testes
+
+resources.db.adapter = "PREENCHER"
+resources.db.params.host = "PREENCHER"
+resources.db.params.dbname = "PREENCHER"
+resources.db.params.username = "PREENCHER"
+resources.db.params.password = "PREENCHER"
+resources.db.params.port = "PREENCHER"
+resources.db.params.charset = "PREENCHER"
+
+**OBS:** O usuario precisa ter os perfis de acesso ao sistema necessarios para executar os testes, caso contrario recebermos falhas.
 
 4°passo - Executar os tests
 ``` sh
 $ cd ./caminho/projeto/tests/bin
 $ ./test.sh # executa todos os testes do projeto.
 ```
-**OBS:** Ao executar esse _script_ todos os _tests_ dentro do _application/modules_ serão executados e poderão levar um tempo significativo. Recomendamos a execução dos _tests_ separadamente atraves do comando:
+**OBS:** Ao executar esse _script_ todos os _tests_ dentro do _application/modules_ serão executados, o que pode levar algum tempo. Recomendamos a execução dos _tests_ separadamente atraves do comando:
 ``` sh
 cd ./tests/application
 ../../vendor/bin/phpunit --debug --colors --verbose -c ../phpunit.xml modules/NomeDoModulo/controllers/NomeDoTesteTest.php
