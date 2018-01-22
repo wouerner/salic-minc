@@ -243,7 +243,8 @@ footer.page-footer {
 #sidenav a.collapsible-header,
 #sidenav.fixed a.collapsible-header,
 #sidenav li > a.collapsible-header, #sidenav li > a {
-    color: #4a4949;
+    /*color: #4a4949;*/
+    color: #2d2d2d;
 }
 
 #sidenav .sidebar-info,

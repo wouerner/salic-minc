@@ -191,6 +191,7 @@ x - Forms
 --------------------------------------------------------------*/
 select {
     min-height: 30px;
+    font-size: 12px;
 }
 
 form fieldset {
@@ -213,7 +214,7 @@ form label {
     margin-bottom: .3rem;
     color: #212529;
     font-weight: 700;
-    /*font-size: 14px;*/
+    font-size: 14px;
 }
 
 form input[type="text"].browser-default,

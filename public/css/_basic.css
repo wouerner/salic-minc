@@ -11,10 +11,7 @@ x - ELEMENTOS BÁSICOS
 html {
     overflow-y: auto;
     -webkit-font-smoothing: antialiased;
-    font-size: 15px;
 }
-
-
 
 /*--------------------------------------------------------------
 x - BODY
@@ -47,8 +44,8 @@ main {
 }
 
 p {
-    line-height: 14px;
-    padding: 0 0 10px;
+    /*line-height: 14px;*/
+    /*padding: 0 0 10px;*/
 }
 
 

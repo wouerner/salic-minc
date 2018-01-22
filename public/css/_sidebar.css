@@ -66,6 +66,7 @@ x - Menu lateral (legado)
     padding-bottom: 99px;
     overflow-x: hidden;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    font-size: 13px;
 }
 
 .container-fluid #qm0.qmmc {
@@ -230,7 +231,7 @@ body.nav-fixed #sidenav {
     text-decoration: none;
     z-index: auto;
     transition: none;
-    /*font-size: 13px;*/
+    font-size: 13px;
     font-weight: 400;
     padding: 0px 20px;
 }
@@ -321,7 +322,7 @@ body.nav-fixed #sidenav {
 
     .small-menu #sidenav > li > a:hover {
         min-width: 250px;
-        /*font-size: 12px;*/
+        font-size: 12px;
         overflow: hidden;
     }
 
