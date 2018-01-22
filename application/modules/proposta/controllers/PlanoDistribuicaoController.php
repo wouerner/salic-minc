@@ -16,9 +16,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
             }
         }
 
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(true, false, false);
     }
 
@@ -73,7 +71,6 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                         "urlPaginacao"=>$this->_urlPadrao."/prosposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto
                     );
 
-//        $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
         $this->montaTela("planodistribuicao/index.phtml", $arrDados);
     }
@@ -139,7 +136,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
     public function salvarAction()
     {
-        $post = Zend_Registry::get("post");
+        $post = (object)($this->getRequest()->getPost());
 
         if (($this->isEditarProjeto($this->idPreProjeto) && $post->prodprincipal == 1)) {
             parent::message("Em alterar projeto, n&atilde;o pode alterar o produto principal cadastrado. A opera&ccedil;&atilde;o foi cancelada.", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
@@ -152,7 +149,6 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                  "Area"=>$post->areaCultural,
                  "idProjeto"=>$this->idPreProjeto,
                  "idProduto"=>$post->produto,
-//                 "idPosicaoDaLogo"=>$post->logomarca,
                  "Segmento"=>$post->segmentoCultural,
                  "QtdeProduzida"=>$QtdeProduzida,
                  "QtdeVendaNormal"=>$post->qtdenormal,
@@ -183,7 +179,6 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $arrBusca['a.idProjeto = ?'] = $this->idPreProjeto;
         $arrBusca['a.stPrincipal = ?'] = 1;
         !empty($post->idPlanoDistribuicao) ? $arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao : '' ;
-        //$arrBusca['idPlanoDistribuicao <> ?'] = $post->idPlanoDistribuicao;
         $arrBusca['stPlanoDistribuicaoProduto = ?'] = 1;
         $arrPlanoDistribuicao = $tblPlanoDistribuicao->buscar($arrBusca, array("idPlanoDistribuicao DESC"))->toArray();
 
@@ -211,16 +206,19 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
             }
         }
 
+        //VERIFICA SE PRODUTO JA ESTA CADASTRADO - NAO PODE GRAVAR O MESMO PRODUTO MAIS DE UMA VEZ.
         if (isset($post->produto)) {
-            //VERIFICA SE PRODUTO JA ESTA CADASTRADO - NAO PODE GRAVAR O MESMO PRODUTO MAIS DE UMA VEZ.
             $arrBuscaProduto['a.idProjeto = ?'] = $this->idPreProjeto;
             $arrBuscaProduto['a.idProduto = ?'] = $post->produto;
             $objProduto = $tblPlanoDistribuicao->buscar($arrBuscaProduto);
-            if ($objProduto[0]['idPlanoDistribuicao']) {
+
+            if (!empty($objProduto->toArray())) {
                 parent::message("Produto j&aacute; cadastrado no plano de distribui&ccedil;&atilde;o desta proposta!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
             }
         }
+
         $retorno = $tblPlanoDistribuicao->salvar($dados);
+
         if ($retorno > 0) {
             parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "CONFIRM");
         } else {
@@ -301,7 +299,6 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $tblAbrangencia = new Proposta_Model_DbTable_Abrangencia();
         $rsAbrangencia = $tblAbrangencia->buscar($arrBusca);
 
-//        $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->abrangencias = $rsAbrangencia;
         $this->view->planosDistribuicao=($rsPlanoDistribuicao);
         $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
