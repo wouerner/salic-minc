@@ -15,10 +15,10 @@
         padding: 8px 5px
     }
 </style>
-<div class="container-fluid">
+<?php echo $this->partial("inc/menu.phtml", $this); ?>
+<div class="container-fluid tem-menu-lateral">
     <div class="row">
-        <?php echo $this->partial("inc/menu.phtml", $this); ?>
-        <div class="content col s10 m10 l10 planilha-produtos">
+        <div class="content col s12 m12 l12 planilha-produtos">
             <?php if ( $this->localRealizacao) : ?>
                 <div id="confirm" title="Confirma&ccedil;&atilde;o" style="display: none">Tem certeza que deseja excluir o registro?</div>
                 <?php
