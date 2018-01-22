@@ -28,17 +28,15 @@
     }
 
 </style>
+<?php
+if (isset($this->proposta['idpreprojeto'])) {
+    echo $this->partial("inc/menu.phtml", $this); // menu
+}
 
-<div class="<?php echo isset($this->proposta['idpreprojeto']) ? 'container-fluid ' : 'container' ?>">
+?>
+<div class="<?php echo isset($this->proposta['idpreprojeto']) ? 'container-fluid tem-menu-lateral' : 'container' ?>">
     <div class="row">
-        <?php
-        if (isset($this->proposta['idpreprojeto'])) {
-            echo $this->partial("inc/menu.phtml", $this); // menu
-        }
-
-        ?>
-
-        <div class="col <?php echo isset($this->proposta['idpreprojeto']) ? 's10 m12 l10 ' : 's12 m12 l12' ?>">
+        <div class="col s12 m12 l12">
             <?php if (isset($this->proposta['idpreprojeto'])) {
                 gerarBreadCrumb(array(
                     $this->layout['listagem'],

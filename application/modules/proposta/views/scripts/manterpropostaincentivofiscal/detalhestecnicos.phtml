@@ -1,8 +1,7 @@
-<div class="container-fluid white">
+<?php echo $this->partial("inc/menu.phtml", $this); // menu ?>
+<div class="container-fluid tem-menu-lateral">
     <div class="row">
-        <?php echo $this->partial("inc/menu.phtml", $this); // menu ?>
-        <div class="col s10 m12 l10">
-
+        <div class="col s12 m12 l12">
             <?php
             gerarBreadCrumb(array(
                 $this->layout['listagem'],
