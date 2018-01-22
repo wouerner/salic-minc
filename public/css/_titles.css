@@ -20,7 +20,7 @@
 
 #titulo span {
     float: right;
-    font-size: 12px;
+    /*font-size: 12px;*/
 }
 
 #titulo .voltar a {
@@ -73,14 +73,14 @@ x - titulo da pagina (novo)
 
 
 .page-title h1 {
-    font-size: 2rem;
-    line-height: 2rem;
+    /*font-size: 2rem;*/
+    /*line-height: 2rem;*/
     margin: 0 15px 0 0;
     color: #404040;
 }
 
 .page-title ul {
-    color: #7C7E89;
+    color: #363636;
     margin: 5px 0 0;
 }
 
@@ -88,15 +88,28 @@ x - titulo da pagina (novo)
     display: inline-block;
 }
 
+.page-title li:after {
+    content: '/';
+    padding: 0px;
+    padding-left: 2px;
+}
+.page-title li:last-child {
+    font-weight: bold;
+}
+
+.page-title li:last-child:after {
+    content: '';
+}
+
 .page-title li,
 .page-title li a {
     color: inherit;
-    padding: 0 4px;
-    font-size: 12px
+    padding: 0 2px;
+    /*font-size: 15px*/
 }
 
 .page-title li a i {
-    font-size: 14px;
+    /*font-size: 14px;*/
     line-height: 13px;
     vertical-align: middle;
     margin-right: 3px;

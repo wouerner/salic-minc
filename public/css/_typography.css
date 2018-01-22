@@ -7,14 +7,13 @@ LEGADO
 --------------------------------------------------------------*/
 #conteudo h1, h2, h3, h4, h5, h6 {
     margin-bottom: 14px;
-    color: #435f20;
 }
 
 /*--------------------------------------------------------------
 
 --------------------------------------------------------------*/
 body * {
-    /*font-family: "Roboto", sans-serif;*/
+    font-family: "Roboto", sans-serif;
 }
 
 /*------------------------------------------------------------------------ */
@@ -25,10 +24,10 @@ h1, h2, h3, h4, h5, h6 {
 
 #titulo div,
 h1 {
-   color: #424242;
+   color: #2f2f2f;
    font-weight: 400;
    text-transform: uppercase;
-   font-size: 1.8rem;
+   font-size: 24px;
 }
 
 @media only screen and (max-width: 993px) {
@@ -92,7 +91,7 @@ h6 {
 td,
 p {
     font-size: 15px;
-    line-height: 1.4em;
+    line-height: 15px;
     letter-spacing: 0.01rem;
     color: black;
     -webkit-font-smoothing: antialiased;

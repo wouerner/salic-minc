@@ -140,7 +140,7 @@ table.tabela td.destacar span,
     display: inline;
     height: 25px;
     line-height: 25px;
-    font-size: 1rem;
+    /*font-size: 15px;*/
     transition: .28s ease;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -165,8 +165,8 @@ table.tabela td.destacar span,
 }
 
 #conteudo table.tabela label {
-    font-size: 0.8rem;
-    color: #212121;
+    /*font-size: 0.8rem;*/
+    /*color: #212121;*/
 }
 
 #conteudo table.tabela label.error {
