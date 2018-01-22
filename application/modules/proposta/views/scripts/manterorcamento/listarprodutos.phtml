@@ -1,5 +1,5 @@
 <?php if ( !empty($this->Produtos) ) : ?>
-    <p class="right-align" style="position: absolute; top: 167px; right: 20px">
+    <p class="right-align" style="position: absolute; top: 162px; right: 32px">
         <a class="expandall btn-floating waves-effect waves-light btn tooltipped btn-info" onClick="expandAll();" data-tooltip="Expandir tudo"><i class="material-icons left">fullscreen</i></a>
         <a class="collapseall btn-floating waves-effect waves-light btn tooltipped btn-info " onClick="collapseAll();" data-tooltip="Fechar tudo"><i class="material-icons left">fullscreen_exit</i></a>
     </p>
@@ -226,7 +226,7 @@
                     $(this).dialog('close');
                 },
                 'Sim': function () {
-                    var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'excluiritem')); ?>";
+                    var urlAction = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'excluir-item')); ?>";
                     var dados = {idPlanilhaProposta: idPlanilhaProposta, idPreProjeto: idPlanilhaProposta};
 
                     $.post(urlAction, dados, function (result) {
