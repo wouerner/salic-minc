@@ -18,7 +18,7 @@ x - TOOLTIP
     position: absolute;
     z-index: 98;
     width: 320px;
-    font-size: 14px;
+    /*font-size: 14px;*/
     line-height: 1.5em;
 }
 
@@ -35,7 +35,7 @@ x - TOOLTIP
 
 .gerenciar_pareceres .tooltip:hover:after{
     left: -300%;
-    font-size: 12px;
+    /*font-size: 12px;*/
     line-height: 1.3em;
 }
 

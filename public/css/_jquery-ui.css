@@ -7,7 +7,7 @@ x - JQUERY
 }
 
 .ui-dialog {
-    font-size: 14px;
+    /*font-size: 14px;*/
 }
 /*--------------------------------------------------------------
 x - DATE PICKER
@@ -22,7 +22,7 @@ x - DATE PICKER
 
 .ui-datepicker td span, .ui-datepicker td a {
     padding: 0.5em;
-    font-size: 18px;
+    /*font-size: 18px;*/
 }
 
 .ui-dialog .ui-dialog-titlebar {

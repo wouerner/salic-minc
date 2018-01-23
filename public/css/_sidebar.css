@@ -12,7 +12,7 @@ x - SIDEBAR (legado) - #menuContainer -  - Menu lateral
     padding: 0px;
     border-radius: 0;
     color: #fff;
-    font-size: 12px;
+    /*font-size: 12px;*/
     font-weight: bold;
 }
 
@@ -66,6 +66,7 @@ x - Menu lateral (legado)
     padding-bottom: 99px;
     overflow-x: hidden;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    font-size: 13px;
 }
 
 .container-fluid #qm0.qmmc {
@@ -94,23 +95,19 @@ x - Menu lateral (legado)
     line-height: 48px;
     cursor: pointer;
     color: #D8D8D8;
-    font-size: 13px;
+    /*font-size: 13px;*/
     font-weight: 400;
     padding: 0 20px;
     position: relative !important;
     overflow: hidden;
 }
 
-/*#qm0.qmmc a:hover {*/
-/*background-color: #2d2f40;*/
-/*}*/
 #qm0.qmmc div {
     width: 100% !important;
-    /*background-color: #232533;*/
 }
 
 #qm0.qmmc div a {
-    font-size: 13px;
+    /*font-size: 13px;*/
     line-height: 13px;
     padding: 15px 5px 0 40px;
     clear: both;
@@ -172,7 +169,8 @@ body.nav-fixed #sidenav {
 
 #sidenav .sidebar-info {
     background-color: #2d2f40;
-    padding: 15px 10px;
+    padding: 10px;
+    line-height: 12px;
 }
 
 #sidenav .sidebar-info.disabled {
@@ -187,6 +185,11 @@ body.nav-fixed #sidenav {
 #sidenav .sidebar-info b,
 #sidenav .sidebar-info i {
     color: #fff;
+    padding: 0px;
+}
+
+#sidenav .sidebar-info p {
+    margin: 10px 0px;
 }
 
 #sidenav .sidebar-info i.left {
@@ -194,7 +197,7 @@ body.nav-fixed #sidenav {
 }
 
 #sidenav .sidebar-info .info-title {
-    font-size: 15px;
+    /*font-size: 15px;*/
 }
 
 #sidenav ul {
@@ -236,7 +239,7 @@ body.nav-fixed #sidenav {
 /* sub-menu */
 #sidenav .collapsible-body li a,
 #sidenav.fixed .collapsible-body li a {
-    font-size: 13px;
+    /*font-size: 13px;*/
     line-height: 22px;
     padding: 14px 5px 7px 40px;
 }
@@ -304,29 +307,6 @@ body.nav-fixed #sidenav {
     .small-menu #sidenav > li.sidebar-info {
         display: block;
         height: 48px;
-    }
-
-    /*.small-menu #sidenav li:hover a,*/
-    /*.small-menu #sidenav a.collapsible-header,*/
-    /*.small-menu #sidenav.fixed a.collapsible-header,*/
-    /*.small-menu #sidenav li > a.collapsible-header,*/
-    /*.small-menu #sidenav li > a {*/
-    /*background-color: #35384C;*/
-    /*}*/
-    /*.small-menu #sidenav a.collapsible-header:hover,*/
-    /*.small-menu #sidenav.fixed a.collapsible-header:hover,*/
-    /*.small-menu #sidenav li > a.collapsible-header:hover,*/
-    /*.small-menu #sidenav li > a:hover,*/
-    /*.small-menu #sidenav > li.sidebar-info div {*/
-    /*background-color: #2d2f40;*/
-    /*}*/
-    .small-menu #sidenav > li.sidebar-info div p {
-        display: none;
-    }
-
-    .small-menu #sidenav > li.sidebar-info div p:first-child {
-        padding: 12px 0;
-        display: block;
         overflow: hidden;
     }
 
@@ -334,16 +314,12 @@ body.nav-fixed #sidenav {
         margin-right: 25px;
     }
 
-    .small-menu #sidenav > li.sidebar-info div,
     .small-menu #sidenav > li > a {
         position: absolute;
         top: 0;
         left: 0;
     }
 
-    .small-menu #sidenav > li.sidebar-info div:hover,
-    .small-menu #sidenav > li.sidebar-info div:hover b,
-    .small-menu #sidenav > li.sidebar-info div:hover p,
     .small-menu #sidenav > li > a:hover {
         min-width: 250px;
         font-size: 12px;
@@ -415,20 +391,20 @@ body.nav-fixed #sidenav {
 }
 
 #sidenav-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 120vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 996;
-    will-change: opacity;
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*height: 120vh;*/
+    /*background-color: rgba(0, 0, 0, 0.5);*/
+    /*z-index: 996;*/
+    /*will-change: opacity;*/
 }
 
 #small-menu-button {
     position: absolute;
     left: 24px;
-    bottom: 8px;
+    bottom: -8px;
     color: #fff;
 }
 
@@ -461,7 +437,7 @@ ul.sidebar-nav ul {
 .sidebar-nav a.collapsible-header,
 .sidebar-nav li a {
     position: relative;
-    font-size: 12px;
+    /*font-size: 12px;*/
     /*color: #565656;*/
     color: #212121;
     line-height: 44px;
@@ -521,7 +497,7 @@ ul.sidebar-nav ul {
 .sidebar-nav .detalhes-proposta p {
     line-height: 12pt;
     padding: 0 0 2px;
-    font-size: 13px;
+    /*font-size: 13px;*/
     margin: 10px 0px;
 }
 
@@ -539,62 +515,4 @@ ul.sidebar-nav ul {
     }
 }
 
-/*--------------------------------------------------------------
-x - Ajustes do menu lateral com o container
---------------------------------------------------------------*/
-
-/* remover apos migracao do layout de proposta */
-.small-menu .container-fluid .row .col.s2.m12.l2,
-.large-menu .container-fluid .row .col.s2.m12.l2 {
-    margin: 0;
-    width: 0;
-    padding: 0;
-}
-
-/* remover apos migracao do layout de proposta */
-@media only screen and (min-width: 993px) {
-    .large-menu .container-fluid > .row > .col.s10.m12.l10,
-    .large-menu .container-fluid > .row > .col.s10.m12.l10 {
-        width: 100% !important;
-    }
-
-    .small-menu .container-fluid > .row > .col.s10.m12.l10 #breadcrumb,
-    .small-menu .container-fluid > .row > .col.s10.m12.l10 #titulo,
-    .small-menu .container-fluid > .row > .col.s10.m12.l10 #conteudo,
-    .large-menu .container-fluid > .row > .col.s10.m12.l10 #breadcrumb,
-    .large-menu .container-fluid > .row > .col.s10.m12.l10 #titulo,
-    .large-menu .container-fluid > .row > .col.s10.m12.l10 #conteudo {
-        width: 100%;
-    }
-}
-
-@media screen and (min-width: 990px) {
-    aside ~ .container-fluid,
-    aside ~ .mensagens,
-    .menu-lateral.container-fluid,
-    .large-menu .container-fluid,
-    .large-menu  .mensagens {
-        transition: margin-left .3s ease;
-        margin-left: 250px;
-        width: auto;
-        overflow: hidden;
-    }
-
-    .large-menu footer,
-    .large-menu footer.page-footer {
-        margin-left: 100px;
-        width: auto;
-    }
-
-    .large-menu footer,
-    .large-menu footer.page-footer {
-        margin-left: 100px;
-        width: auto;
-    }
-
-    .small-menu footer.page-footer,
-    .small-menu .container-fluid {
-        margin-left: 70px;
-    }
-}
 
