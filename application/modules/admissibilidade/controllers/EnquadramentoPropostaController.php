@@ -1,12 +1,8 @@
 <?php
 
-class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abstract implements MinC_Assinatura_Controller_IDocumentoAssinaturaController
+class Admissibilidade_SugestaoEnquadramentoController extends MinC_Controller_Action_Abstract
 {
     private $idPronac;
-    /**
-     * @var MinC_Assinatura_Documento_IDocumentoAssinatura $servicoDocumentoAssinatura
-     */
-    private $servicoDocumentoAssinatura;
 
     public function init()
     {
@@ -14,20 +10,6 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
         parent::init();
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-    }
-
-    /**
-     * @return Admissibilidade_EnquadramentoDocumentoAssinaturaController
-     */
-    public function obterServicoDocumentoAssinatura()
-    {
-        if (!isset($this->servicoDocumentoAssinatura)) {
-            require_once __DIR__ . DIRECTORY_SEPARATOR . "EnquadramentoDocumentoAssinatura.php";
-            $this->servicoDocumentoAssinatura = new Admissibilidade_EnquadramentoDocumentoAssinaturaController(
-                $this->getRequest()->getPost()
-            );
-        }
-        return $this->servicoDocumentoAssinatura;
     }
 
     public function indexAction()
