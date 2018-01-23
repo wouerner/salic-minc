@@ -6,7 +6,10 @@ form .input_simples,
 #conteudo .textarea_simples,
 #conteudo .select_simples,
 #conteudo .input_simples2,
-#conteudo .form .input {
+#conteudo .form .input,
+.dataTables_wrapper select,
+div.dataTables_wrapper div.dataTables_filter input
+{
     display: inline-block;
     width: auto;
     border: 1px solid rgba(0, 0, 0, 0.28);

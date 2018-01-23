@@ -192,7 +192,8 @@ x - Ajustes do menu lateral com o container
         transition: margin-left .3s ease;
         margin-left: 250px;
         width: auto;
-        overflow: hidden;
+        height: 100%;
+        /*overflow: hidden;*/
     }
 
     /*aside ~ footer,*/

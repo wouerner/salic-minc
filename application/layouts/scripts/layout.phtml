@@ -141,10 +141,18 @@
 
             $3('.mensagens').each(function(){
 
-                var mensagemClass = 'green white-text';
+                var mensagemClass = '';
+
+                if($3(this).hasClass('msgCONFIRM')) {
+                    mensagemClass = 'green white-text'
+                }
 
                 if($3(this).hasClass('msgALERT')) {
                     mensagemClass = 'mensagem1 orange darken-3 white-text'
+                }
+
+                if($3(this).hasClass('msgINFO')) {
+                    mensagemClass = 'mensagem1 card cyan white-text'
                 }
 
                 if($3(this).hasClass('msgERROR')) {
@@ -152,7 +160,7 @@
                 }
 
                 var $toastContent = $3(".mensagens").html();
-                Materialize.toast($toastContent, 50000, mensagemClass);
+                Materialize.toast($toastContent, 20000, mensagemClass);
 
             });
         });
