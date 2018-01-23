@@ -73,6 +73,12 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
      */
     public function indexAction()
     {
+
+
+        $this->view->deslocamento = $this->getRequest()->getParam('deslocamento');
+        $this->view->edital = $this->getRequest()->getParam('edital');
+
+
         //RECUPERA OS LOCAIS DE REALIZACAO CADASTRADOS
         $arrBusca = array();
         $arrBusca['idprojeto'] = $this->idPreProjeto;
