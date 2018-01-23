@@ -115,7 +115,7 @@ if (isset($this->proposta['idpreprojeto'])) {
                                                         </span>
                                                 </div>
                                             </div>
-                                        </td>
+                                       </td>
                                     </tr>
                                     <tr class="esquerda">
                                         <td colspan="5">Nome da Proposta Cultural *
@@ -208,6 +208,9 @@ if (isset($this->proposta['idpreprojeto'])) {
                                                     class="select_simples" <?php echo (!empty($this->arquivoExecucaoImediata[0])) ? 'readonly' : ''; ?>>
                                                 <?php foreach ($this->listaExecucaoImediata as $key => $execucao) : ?>
                                                     <option value="<?php echo $key; ?>"
+                                            <div style="float:left; width: 15%">
+                                                Nr da Proposta:
+                                                <span style="color: blue;">
                                                         <?php
                                                         if (isset($this->proposta['idpreprojeto']))
                                                             if ($this->proposta['stproposta'] == $key) {
