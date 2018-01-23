@@ -49,16 +49,13 @@ class Proposta_DeslocamentoController extends Proposta_GenericController
      */
     public function indexAction()
     {
-        if (empty($_GET['verifica'])) {
+        if (empty($this->_request->getParam("verifica"))) {
             $this->_helper->layout->disableLayout();
         }
 
-        if ($_GET) {
-            $id = null;
+        try {
+            $id = $this->_request->getParam("id", null);
 
-            if (!empty($_GET['id'])) {
-                $id = $_GET['id'];
-            }
 
             $idPreProjeto = $this->idPreProjeto;
 
@@ -90,9 +87,12 @@ class Proposta_DeslocamentoController extends Proposta_GenericController
                 $this->view->Qtde 	= $Qtde;
                 $this->view->idDeslocamento = $id;
             }
-
+            $this->view->s = $this->_request->getParam("s");
+            $this->view->id = $id;
             $this->view->idPreProjeto	= $idPreProjeto;
             $this->view->deslocamentos = $deslocamentos->getDbTable()->buscarDeslocamento($idPreProjeto, null);
+        } catch(Exception $e) {
+            echo "Erro ao carregar deslocamento: " . $e->getMessage(); die;
         }
     }
 
