@@ -73,6 +73,12 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
      */
     public function indexAction()
     {
+
+
+        $this->view->deslocamento = $this->getRequest()->getParam('deslocamento');
+        $this->view->edital = $this->getRequest()->getParam('edital');
+
+
         //RECUPERA OS LOCAIS DE REALIZACAO CADASTRADOS
         $arrBusca = array();
         $arrBusca['idprojeto'] = $this->idPreProjeto;
@@ -258,7 +264,8 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
                 $excluir = $tbPlanilhaProposta->deleteBy(array('idProjeto' => $this->idPreProjeto, 'UfDespesa' => $abrangencia['idUF'], 'MunicipioDespesa' => $abrangencia['idMunicipioIBGE']));
 
                 if ($excluir) {
-                    $this->atualizarcustosvinculadosdaplanilha($this->idPreProjeto);
+                    $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+                    $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
                 }
             }
 
@@ -409,6 +416,9 @@ class Proposta_LocalderealizacaoController extends Proposta_GenericController
                 $whereAbrangencia['idAbrangencia = ?'] = $idAbrangencia;
                 $retorno = $tblAbrangencia->update($dadosAbrangencia, $whereAbrangencia);
             }
+
+            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+            $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
 
             parent::message($msg, "/proposta/localderealizacao/index?idPreProjeto=" . $this->idPreProjeto, "CONFIRM");
         }

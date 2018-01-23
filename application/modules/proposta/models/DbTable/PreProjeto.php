@@ -1,11 +1,4 @@
 <?php
-
-/**
- * PreProjeto
- *
- * @uses   Zend_Db_Table
- * @author wouerner <wouerner@gmail.com>
- */
 class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
 {
     protected $_schema= "sac";
@@ -113,22 +106,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
 
-//        "DtInicioDeExecucaoForm"=>"CONVERT(CHAR(10),DtInicioDeExecucao,103)",
-//                                  "DtFinalDeExecucaoForm"=>"CONVERT(CHAR(10),DtFinalDeExecucao,103)",
-//                                  "DtAtoTombamentoForm"=>"CONVERT(CHAR(10),DtAtoTombamento,103)",
-//                                  "dtAceiteForm"=>"CONVERT(CHAR(10),dtAceite,103)",
-//                                  "DtArquivamentoForm"=>"CONVERT(CHAR(10),DtArquivamento,103)",
-//                                  "CAST(ResumoDoProjeto as TEXT) as ResumoDoProjeto",
-//                                  "CAST(Objetivos as TEXT) as Objetivos",
-//                                  "CAST(Justificativa as TEXT) as Justificativa",
-//                                  "CAST(Acessibilidade as TEXT) as Acessibilidade",
-//                                  "CAST(DemocratizacaoDeAcesso as TEXT) as DemocratizacaoDeAcesso",
-//                                  "CAST(EtapaDeTrabalho as TEXT) as EtapaDeTrabalho",
-//                                  "CAST(FichaTecnica as TEXT) as FichaTecnica",
-//                                  "CAST(Sinopse as TEXT) as Sinopse",
-//                                  "CAST(ImpactoAmbiental as TEXT) as ImpactoAmbiental",
-//                                  "CAST(EspecificacaoTecnica as TEXT) as EspecificacaoTecnica",
-//                                  "CAST(EstrategiadeExecucao as TEXT) as EstrategiadeExecucao"
         $slct->from($this, array("*",
                                   "dtiniciodeexecucaoform"=> $this->getExpressionToChar("dtiniciodeexecucao"),
                                   "dtfinaldeexecucaoform"=> $this->getExpressionToChar("dtfinaldeexecucao"),
@@ -183,10 +160,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
                                   "a.EspecificacaoTecnica"=>"CAST(a.EspecificacaoTecnica AS TEXT) as EspecificacaoTecnica",
                                   "a.EstrategiadeExecucao"=>"CAST(a.EstrategiadeExecucao AS TEXT) as EstrategiadeExecucao",
                                   "a.DtInicioDeExecucaoForm"=>$this->getExpressionToChar(DtInicioDeExecucao),
-//                                  "a.DtFinalDeExecucaoForm"=>"parent::getExpressionToChar(a.DtFinalDeExecucao)",
-//                                  "a.DtAtoTombamentoForm"=>"parent::getExpressionToChar(a.DtAtoTombamento)",
-//                                  "a.dtAceiteForm"=>"parent::getExpressionToChar(a.dtAceite)",
-//                                  "a.DtArquivamentoForm"=> "parent::getExpressionToChar(a.DtArquivamento)"
                               ),
                           $this->_schema
         );
@@ -598,8 +571,8 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
                 array(
                     'aval.stProrrogacao',
                     'idDiligencia'=>'aval.idAvaliacaoProposta',
-                    'dataSolicitacao'=>'CONVERT(VARCHAR,aval.DtAvaliacao,120)',
-                    'dataResposta'=>'CONVERT(VARCHAR,aval.dtResposta,120)',
+                    'dataSolicitacao'=> new Zend_Db_Expr('CONVERT(VARCHAR,aval.DtAvaliacao,120)'),
+                    'dataResposta'=> new Zend_Db_Expr('CONVERT(VARCHAR,aval.dtResposta,120)'),
                     'Solicitacao'=>'aval.Avaliacao',
                     'Resposta'=>'aval.dsResposta',
                     'aval.idCodigoDocumentosExigidos',
@@ -1702,13 +1675,21 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $slct->joinInner(
                         array("m"=>"tbMovimentacao"),
                         "p.idPreProjeto = m.idProjeto AND m.stEstado = 0",
-                        array("idMovimentacao", "CodSituacao"=>"m.Movimentacao", "DtMovimentacao"=>"CONVERT(CHAR(20),m.DtMovimentacao, 120)", "diasDesdeMovimentacao"=>"DATEDIFF(d, m.DtMovimentacao, GETDATE())"),
+                        array(
+                            "idMovimentacao", "CodSituacao"=>"m.Movimentacao",
+                            "DtMovimentacao"=> new Zend_Db_Expr("CONVERT(CHAR(20),m.DtMovimentacao, 120)"),
+                            "diasDesdeMovimentacao"=> new Zend_Db_Expr("DATEDIFF(d, m.DtMovimentacao, GETDATE())")
+                        ),
                         "SAC.dbo"
                         );
         $slct->joinLeft(
                         array("x"=>"tbAvaliacaoProposta"),
                         "p.idPreProjeto = x.idProjeto AND x.stEstado = 0",
-                        array("idAvaliacaoProposta", "DtAdmissibilidade"=>"CONVERT(CHAR(20),x.DtAvaliacao, 120)", "diasCorridos"=>"DATEDIFF(d, x.DtAvaliacao, GETDATE())"),
+                        array(
+                            "idAvaliacaoProposta",
+                            "DtAdmissibilidade"=> new Zend_Db_Expr("CONVERT(CHAR(20),x.DtAvaliacao, 120)"),
+                            "diasCorridos"=> new Zend_Db_Expr("DATEDIFF(d, x.DtAvaliacao, GETDATE())")
+                        ),
                         "SAC.dbo"
                         );
         $slct->joinInner(
@@ -1989,7 +1970,7 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
             'NomeProjeto',
             'Tecnico',
             'DtEnvio',
-            'CONVERT(CHAR(20),DtMovimentacao, 120) AS DtMovimentacao',
+             new Zend_Db_Expr('CONVERT(CHAR(20),DtMovimentacao, 120) AS DtMovimentacao'),
             'DtAvaliacao',
             'Dias',
             'idOrgao',
@@ -2341,13 +2322,18 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $slct->setIntegrityCheck(false);
         $slct->from(
                     array("p"=>$this->_name),
-                    array("idProjeto"=>"idPreProjeto", "NomeProposta"=>"NomeProjeto", "idAgente", "DtCadastro"=>"CONVERT(CHAR(20),p.dtAceite, 120)"),
+                    array(
+                        "idProjeto"=>"idPreProjeto",
+                        "NomeProposta"=>"NomeProjeto",
+                        "idAgente",
+                        "DtCadastro"=> new Zend_Db_Expr("CONVERT(CHAR(20),p.dtAceite, 120)")
+                    ),
                     "SAC.dbo"
                     );
         $slct->joinLeft(
                         array("m"=>"tbMovimentacao"),
                         "p.idPreProjeto = m.idProjeto AND m.stEstado = 0",
-                        array("idMovimentacao", "CodSituacao"=>"m.Movimentacao", "DtMovimentacao"=>"CONVERT(CHAR(20),m.DtMovimentacao, 120)"),
+                        array("idMovimentacao", "CodSituacao"=>"m.Movimentacao", "DtMovimentacao"=> new Zend_Db_Expr("CONVERT(CHAR(20),m.DtMovimentacao, 120)")),
                         "SAC.dbo"
                         );
         $slct->joinLeft(
@@ -2359,7 +2345,7 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $slct->joinLeft(
                         array("x1"=>"tbAvaliacaoProposta"),
                         "p.idPreProjeto = x1.idProjeto",
-                        array("DtEnvioMinC"=>"CONVERT(CHAR(20),x1.DtEnvio , 120)"),
+                        array("DtEnvioMinC"=> new Zend_Db_Expr("CONVERT(CHAR(20),x1.DtEnvio , 120)")),
                         "SAC.dbo"
                         );
         $slct->joinLeft(

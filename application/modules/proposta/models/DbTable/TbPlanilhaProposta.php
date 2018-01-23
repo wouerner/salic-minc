@@ -294,7 +294,7 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         $somar->from(
             $this,
             array(
-                'ROUND(sum(Quantidade*Ocorrencia*ValorUnitario), 2) as soma'
+                new Zend_Db_Expr('ROUND(sum(Quantidade*Ocorrencia*ValorUnitario), 2) as soma')
             )
         )
             ->where('idProjeto = ?', $idprojeto)
@@ -314,75 +314,57 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         return $this->fetchRow($somar);
     }
 
-    public function somarPlanilhaPropostaProdutos($idprojeto, $fonte = null, $outras = null, $where = array())
+    public function somarPlanilhaPropostaPorEtapa($idprojeto, $fonte = null, $outras = null, $where = array())
     {
-        $somar = $this->select();
-        $somar->from(
+        $select = $this->select();
+        $select->from(
             array('p' => $this->_name),
             array(
-                'sum(Quantidade*Ocorrencia*ValorUnitario) as soma'
+                new Zend_Db_Expr('ROUND(sum(Quantidade*Ocorrencia*ValorUnitario), 2) as soma')
             ),
             $this->_schema
         );
 
-        $somar->joinInner(
+        $select->joinInner(
             array('e' => 'tbplanilhaetapa'),
             'e.idPlanilhaEtapa = p.idEtapa',
             array(),
             $this->_schema
         );
-        $somar->where("e.tpCusto = 'P'");
-        $somar->where('idProjeto = ?', $idprojeto);
-        $somar->where('idProduto <> ?', '206');
+
+        $select->where('idProjeto = ?', $idprojeto);
+        $select->where('idProduto <> ?', '206');
 
         if ($fonte) {
-            $somar->where('FonteRecurso = ?', $fonte);
+            $select->where('FonteRecurso = ?', $fonte);
         }
 
         if ($outras) {
-            $somar->where('FonteRecurso <> ?', $outras);
+            $select->where('FonteRecurso <> ?', $outras);
         }
 
-        //adiciona quantos filtros foram enviados
         foreach ($where as $coluna => $valor) {
-            $somar->where($coluna, $valor);
+            $select->where($coluna, $valor);
         }
+        $result = $this->fetchRow($select);
 
-        return $this->fetchRow($somar);
+        return $result->soma;
     }
 
-    public function excluirCustosVinculados($idPreProjeto)
+    public function excluirCustosVinculadosERemuneracaoDaPlanilha($idPreProjeto)
     {
         if (empty($idPreProjeto)) {
             return false;
         }
 
-        $where = array('idProjeto' => $idPreProjeto, 'idEtapa' => 8);
+        $where = array(
+            'idProjeto = ?' => $idPreProjeto,
+            'idEtapa in (?)' => [
+                Proposta_Model_TbPlanilhaEtapa::CUSTOS_VINCULADOS,
+                Proposta_Model_TbPlanilhaEtapa::REMUNERACAO_CAPTACAO]
+        );
 
-        return $this->deleteBy($where);
-    }
-
-    /*
-     * @deprecated Este metodo nao eh usado apos a IN2017
-     */
-    public function somarPlanilhaPropostaDivulgacao($idprojeto, $fonte = null, $outras = null)
-    {
-        $somar = $this->select();
-        $somar->from(
-            $this,
-            array(
-                'sum(Quantidade*Ocorrencia*ValorUnitario) as soma'
-            )
-        )
-            ->where('idProjeto = ?', $idprojeto)
-            ->where('idEtapa = ?', 3);
-        if ($fonte) {
-            $somar->where('FonteRecurso = ?', $fonte);
-        }
-        if ($outras) {
-            $somar->where('FonteRecurso <> ?', $outras);
-        }
-        return $this->fetchRow($somar);
+        return $this->delete($where);
     }
 
     //Criado no dia 07/10/2013 - Jefferson Alessandro
@@ -587,7 +569,6 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
-
         return $db->fetchAll($sql);
     }
 
@@ -727,5 +708,36 @@ class Proposta_Model_DbTable_TbPlanilhaProposta extends MinC_Db_Table_Abstract
             $this->view->message = $e->getMessage();
         }
         return $db->fetchRow($exec);
+    }
+
+    public function obterMunicipioUFdoProdutoPrincipalComMaiorCusto($idPreProjeto) {
+
+        $select = $this->select()->setIntegrityCheck(false);
+        $select->from(
+            ['a' => $this->_name],
+            [
+                'a.UfDespesa',
+                'a.MunicipioDespesa',
+                new Zend_Db_Expr('sum(a.Quantidade * a.Ocorrencia * a.ValorUnitario) as totalMunicipioPorProduto')
+            ],
+            $this->_schema
+        );
+
+        $select->joinInner(
+            ['b' => 'PlanoDistribuicaoProduto'],
+            'b.idProjeto = a.idProjeto AND b.idProduto = a.idProduto',
+            ['b.idProduto'],
+            $this->_schema
+        );
+
+        $select->where('a.idProjeto = ?', $idPreProjeto)
+            ->where('b.stPrincipal = ?', 1)
+            ->where('b.idProduto <> 0')
+            ->group(['b.idProduto', 'a.UfDespesa', 'a.MunicipioDespesa'])
+            ->order('totalMunicipioPorProduto DESC')
+            ->limit(1);
+
+        return $this->fetchRow($select);
+
     }
 }
