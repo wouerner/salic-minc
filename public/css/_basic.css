@@ -2,17 +2,16 @@
 x - ELEMENTOS BÁSICOS
 --------------------------------------------------------------*/
 * {
-    margin: 0;
-    padding: 0;
-    border: none;
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*border: none;*/
 
 }
 
 html {
     overflow-y: auto;
+    -webkit-font-smoothing: antialiased;
 }
-
-
 
 /*--------------------------------------------------------------
 x - BODY
@@ -20,9 +19,9 @@ x - BODY
 body {
     position: relative;
     margin: 0;
-    color: #000;
-    line-height: 14pt;
-    font-size: 1rem;
+    /*color: #000;*/
+    /*line-height: 14pt;*/
+    /*font-size: 1rem;*/
 
     display: flex;
     min-height: 100vh;
@@ -45,8 +44,8 @@ main {
 }
 
 p {
-    line-height: 14pt;
-    padding: 0 0 10px;
+    /*line-height: 14px;*/
+    /*padding: 0 0 10px;*/
 }
 
 
@@ -66,10 +65,6 @@ strong {
 
 a:hover {
     text-decoration: none;
-}
-
-select {
-    min-height: 30px;
 }
 
 .sumir {
@@ -134,9 +129,6 @@ x - CONTAINER
     max-width: 1250px;
 }
 
-#breadcrumb,
-#titulo,
-#conteudo,
 .container-fluid {
     margin: 0 auto;
     width: 100%;
@@ -147,22 +139,10 @@ x - CONTAINER
 #breadcrumb,
 #titulo,
 #conteudo {
-    width: 95%;
+    margin: 0 auto;
+    width: 98%;
     padding: 0px;
     margin-bottom: 20px;
-}
-
-
-@media screen and (min-width: 990px) {
-    #menuContexto ~ div,
-    main > #menu ~ div,
-    .menu-lateral.container-fluid,
-    .large-menu .container-fluid {
-        transition: margin-left .3s ease;
-        margin-left: 250px;
-        width: auto;
-        overflow: hidden;
-    }
 }
 
 .container {
@@ -172,6 +152,64 @@ x - CONTAINER
 #container-progress {
     top: 0px;
 }
+
+/*--------------------------------------------------------------
+x - Ajustes do menu lateral com o container
+--------------------------------------------------------------*/
+
+/* remover apos migracao do layout de proposta */
+.small-menu .container-fluid .row .col.s2.m12.l2,
+.large-menu .container-fluid .row .col.s2.m12.l2 {
+    margin: 0;
+    width: 0;
+    padding: 0;
+}
+
+/* remover apos migracao do layout de proposta */
+@media only screen and (min-width: 993px) {
+    .large-menu .container-fluid > .row > .col.s10.m12.l10,
+    .large-menu .container-fluid > .row > .col.s10.m12.l10 {
+        width: 100% !important;
+    }
+
+    .small-menu .container-fluid > .row > .col.s10.m12.l10 #breadcrumb,
+    .small-menu .container-fluid > .row > .col.s10.m12.l10 #titulo,
+    .small-menu .container-fluid > .row > .col.s10.m12.l10 #conteudo,
+    .large-menu .container-fluid > .row > .col.s10.m12.l10 #breadcrumb,
+    .large-menu .container-fluid > .row > .col.s10.m12.l10 #titulo,
+    .large-menu .container-fluid > .row > .col.s10.m12.l10 #conteudo {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 993px) {
+    #menuContexto ~ div,
+    main > #menu ~ div,
+    aside ~ .container-fluid,
+    aside ~ .container-fluid,
+    aside ~ .container-fluid.tem-menu-lateral,
+    .container-fluid.tem-menu-lateral {
+        transition: margin-left .3s ease;
+        margin-left: 250px;
+        width: auto;
+        height: 100%;
+        /*overflow: hidden;*/
+    }
+
+    /*aside ~ footer,*/
+    /*aside ~ footer.page-footer {*/
+        /*margin-left: 100px;*/
+        /*width: auto;*/
+    /*}*/
+
+    /*.small-menu aside ~ footer.page-footer,*/
+    .small-menu aside ~ .container-fluid,
+    .small-menu .container-fluid.tem-menu-lateral {
+        margin-left: 70px;
+        width: auto;
+    }
+}
+
 
 /*--------------------------------------------------------------
 x - CONTAINER

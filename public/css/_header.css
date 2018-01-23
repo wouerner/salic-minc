@@ -123,6 +123,9 @@ header #atalhos #combousuario li span {
 header #atalhos #combousuario span.caret {
     color: #fff;
     line-height: 8px;
+    margin-left: 10px;
+    right: -15px;
+    top: 3px;
 }
 
 header #atalhos #combousuario select.perfilXgrupo {
@@ -131,7 +134,7 @@ header #atalhos #combousuario select.perfilXgrupo {
     color: #fff;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 12px;
+    /*font-size: 12px;*/
 }
 
 header #atalhos #combousuario select.perfilXgrupo option {
@@ -157,7 +160,7 @@ header #navglobal ul li {
 }
 
 header #navglobal ul li a {
-    font-size: 11px;
+    /*font-size: 11px;*/
     padding: 11px 20px;
     color: #fff;
     text-decoration: none;
@@ -204,7 +207,7 @@ header nav {
 
 header nav ul a {
     transition: background-color .3s;
-    font-size: 1rem;
+    /*font-size: 1rem;*/
     color: #fff;
     display: block;
     padding: 0 15px;
@@ -212,7 +215,7 @@ header nav ul a {
 }
 
 header .dropdown-content li > a, .dropdown-content li > span {
-    font-size: 16px;
+    /*font-size: 16px;*/
     color: #424242;
     display: block;
     line-height: 22px;

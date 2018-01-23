@@ -10,10 +10,11 @@ $edital='';
 //}
 
 ?>
-<div class="container-fluid">
+<?php echo $this->partial("inc/menu.phtml", $this); ?>
+
+<div class="container-fluid tem-menu-lateral">
     <div class="row">
-        <?php echo $this->partial("inc/menu.phtml", $this); ?>
-        <div class="content col s10 m12 l10 planilha-produtos">
+        <div class="content col s12 m12 l12 planilha-produtos">
             <div id="msgExclusaoArq" class="sumir">Deseja realmente efetuar a exclus&atilde;o?</div>
             <h4>Anexar Documentos</h4>
             <div id="">
@@ -31,7 +32,7 @@ $edital='';
                             </div>
                             </div>
                             <div class="row">
-                                <div class="input-field col s12">
+                                <div class="col s12">
                                     <label class="active">Tipo do documento<span class="red-text">*</span></label>
                                     <p>
                                         <input type="radio"  name="tipoDocumento" class="tipoDocumento" id="tipoDocumento1" value="1" /><label for="tipoDocumento1">Proponente</label>

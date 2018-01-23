@@ -1,20 +1,29 @@
-<div class="container-fluid white">
+<?php echo $this->partial("inc/menu.phtml", $this); ?>
+
+<div class="container-fluid">
     <div class="row">
-        <?php echo $this->partial("inc/menu.phtml", $this); // menu ?>
-        <div class="col s10 m12 l10">
+        <div class="page-title">
+            <div class="row">
+                <div class="col s12 m9 l10">
+                    <h1>Responsabilidade Social</h1>
 
-            <?php
-            gerarBreadCrumb(array(
-                $this->layout['listagem'],
-                array('Responsabilidade Social' => '')
-            ));
-            ?>
-
-            <div id="titulo" style="width: 100%;">
-                <div><?php echo $this->layout['titleFull']; ?> - Responsabilidade Social</div>
+                    <?php
+                    gerarNovoBreadCrumb(array(
+                        $this->layout['listagem'],
+                        array('Responsabilidade Social' => '')
+                    ));
+                    ?>
+                </div>
+                <div class="col s12 m3 l2 right-align">
+                    <a href="javascript:voltar();" title="P&aacute;gina Anterior" title="P&aacute;gina Anterior"
+                       class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>
+                    </a>
+                </div>
             </div>
-            <div class="clear-fix"></div>
-            <div id="conteudo" class="section">
+        </div>
+
+        <div id="" class="content">
+            <div class="card-panel">
                 <div class="row">
                     <form action="<?php echo $this->acao; ?>" method="post" id="frmProposta" name="frmProposta"
                           enctype="multipart/form-data">
@@ -38,12 +47,11 @@
 				  A Acessibilidade de CONTE&Uacute;DO deve prever medidas para compreens&atilde;o do projeto
 				  (Libras, Braille, audiodescri&ccedil;&atilde;o, legenda descritiva, visita sensorial).
                                 </p>
-
+                                <label for="acessibilidade" class="">Acessibilidade *</label>
                                 <textarea id="acessibilidade" class="browser-default editor"
                                           name="acessibilidade" <?php echo isset($this->arrConfig['acessibilidade']['disabled']) ? 'disabled="disabled"' : '' ?>>
                                  <?php if (isset($this->proposta['acessibilidade'])) echo $this->proposta['acessibilidade']; ?>
                                 </textarea>
-                                <label for="acessibilidade" class="active">Acessibilidade *</label>
                             </div>
                         </div>
 
@@ -56,13 +64,14 @@
 				  Apresente tamb&eacute;m outras medidas de amplia&ccedil;&atilde;o de acesso, tais como: ensaio
 				  aberto, oficinas paralelas ou transmiss&atilde;o pela internet.
                                 </p>
+                                <label for="democratizacaodeacesso" class="">Democratiza&ccedil;&atilde;o de
+                                    Acesso
+                                    *</label>
                                 <textarea id="democratizacaodeacesso" class="browser-default editor"
                                           name="democratizacaodeacesso" <?php echo isset($this->arrConfig['democratizacaodeacesso']['disabled']) ? 'disabled="disabled"' : '' ?>>
                                     <?php if (isset($this->proposta['democratizacaodeacesso'])) echo $this->proposta['democratizacaodeacesso']; ?>
                                 </textarea>
-                                <label for="democratizacaodeacesso" class="active">Democratiza&ccedil;&atilde;o de
-                                    Acesso
-                                    *</label>
+
                             </div>
                         </div>
 

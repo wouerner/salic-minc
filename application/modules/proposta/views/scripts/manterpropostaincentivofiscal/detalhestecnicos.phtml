@@ -1,20 +1,28 @@
-<div class="container-fluid white">
+<?php echo $this->partial("inc/menu.phtml", $this); ?>
+
+<div class="container-fluid">
     <div class="row">
-        <?php echo $this->partial("inc/menu.phtml", $this); // menu ?>
-        <div class="col s10 m12 l10">
+        <div class="page-title">
+            <div class="row">
+                <div class="col s12 m9 l10">
+                    <h1>Detalhes t&eacute;cnicos</h1>
 
-            <?php
-            gerarBreadCrumb(array(
-                $this->layout['listagem'],
-                array('Detalhes t&eacute;cnicos' => '')
-            ));
-            ?>
-
-            <div id="titulo" style="width: 100%;">
-                <div><?php echo $this->layout['titleFull']; ?> - Detalhes t&eacute;cnicos</div>
+                    <?php
+                    gerarNovoBreadCrumb(array(
+                        $this->layout['listagem'],
+                        array('Detalhes t&eacute;cnicos' => '')
+                    ));
+                    ?>
+                </div>
+                <div class="col s12 m3 l2 right-align">
+                    <a href="javascript:voltar();" title="P&aacute;gina Anterior" title="P&aacute;gina Anterior"
+                       class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>
+                    </a>
+                </div>
             </div>
-            <div class="clear-fix"></div>
-            <div id="conteudo" class="section">
+        </div>
+        <div class="content">
+            <div class="card-panel">
                 <div class="row">
                     <form action="<?php echo $this->acao; ?>" method="post" id="frmProposta" name="frmProposta"
                           enctype="multipart/form-data">
@@ -33,12 +41,11 @@
 				  'P&oacute;s-produ&ccedil;&atilde;o', estimando - em dias/semanas/meses - a dura&ccedil;&atilde;o
 				  de cada etapa. *
 				</p>
-
+                                <label for="etapadetrabalho" class="">Etapas de trabalho *</label>
                                 <textarea id="etapadetrabalho" class="browser-default editor"
                                           name="etapadetrabalho" <?php echo isset($this->arrConfig['etapadetrabalho']['disabled']) ? 'disabled="disabled"' : '' ?>>
                                  <?php if (isset($this->proposta['etapadetrabalho'])) echo $this->proposta['etapadetrabalho']; ?>
                                 </textarea>
-                                <label for="etapadetrabalho" class="active">Etapas de trabalho *</label>
                             </div>
                         </div>
 
@@ -49,11 +56,11 @@
 				  institui&ccedil;&atilde;o proponente realizar&aacute; no projeto.
 				  <br/>Apresente tamb&eacute;m curr&iacute;culo resumido dos principais participantes. *
                                 </p>
+                                <label for="fichatecnica" class="">Ficha t&eacute;cnica *</label>
                                 <textarea id="fichatecnica" class="browser-default editor"
                                           name="fichatecnica" <?php echo isset($this->arrConfig['fichatecnica']['disabled']) ? 'disabled="disabled"' : '' ?>>
                                     <?php if (isset($this->proposta['fichatecnica'])) echo $this->proposta['fichatecnica']; ?>
                                 </textarea>
-                                <label for="fichatecnica" class="active">Ficha t&eacute;cnica *</label>
                             </div>
                         </div>
 
@@ -65,11 +72,11 @@
 				  livros, espet&aacute;culo de circo, pe&ccedil;a teatral, espet&aacute;culo de dan&ccedil;a, performance,
 				  classifica&ccedil;&atilde;o indicativa et&aacute;ria.
                                 </p>
+                                <label for="sinopse" class="">Sinopse da obra *</label>
                                 <textarea id="sinopse" class="browser-default editor"
                                           name="sinopse" <?php echo isset($this->arrConfig['sinopse']['disabled']) ? 'disabled="disabled"' : '' ?>>
                                     <?php if (isset($this->proposta['sinopse'])) echo $this->proposta['sinopse']; ?>
                                 </textarea>
-                                <label for="sinopse" class="active">Sinopse da obra *</label>
                             </div>
                         </div>
 
@@ -79,12 +86,12 @@
 				  Insira detalhamento t&eacute;cnico de todos os produtos: pagina&ccedil;&atilde;o, dura&ccedil;&atilde;o, material,
 				  projeto pedag&oacute;gico.
                                 </p>
+                                <label for="especificacaotecnica" class="">Especifica&ccedil;&otilde;es t&eacute;cnicas
+                                    do produto *</label>
                                 <textarea id="especificacaotecnica" class="browser-default editor"
                                           name="especificacaotecnica" <?php echo isset($this->arrConfig['especificacaotecnica']['disabled']) ? 'disabled="disabled"' : '' ?>>
                                     <?php if (isset($this->proposta['especificacaotecnica'])) echo $this->proposta['especificacaotecnica']; ?>
                                 </textarea>
-                                <label for="especificacaotecnica" class="active">Especifica&ccedil;&otilde;es t&eacute;cnicas
-                                    do produto *</label>
                             </div>
                         </div>
 
@@ -92,12 +99,12 @@
                             <div class="input-field col s12">
                               <p class="caption">[Incluir texto de ajuda da descri&ccedil;&atilde;o da atividade]
                                 </p>
+                                <label for="descricaoatividade" class="">Descri&ccedil;&atilde;o da atividade
+                                    do produto *</label>
                                 <textarea id="descricaoatividade" class="browser-default editor"
                                           name="descricaoatividade" <?php echo isset($this->arrConfig['descricaoatividade']['disabled']) ? 'disabled="disabled"' : '' ?>>
                                     <?php if (isset($this->proposta['descricaoatividade'])) echo $this->proposta['descricaoatividade']; ?>
                                 </textarea>
-                                <label for="descricaoatividade" class="active">Descri&ccedil;&atilde;o da atividade
-                                    do produto *</label>
                             </div>
                         </div>
 

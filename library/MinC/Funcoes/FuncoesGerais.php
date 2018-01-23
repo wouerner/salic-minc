@@ -263,7 +263,7 @@ function gerarNovoBreadCrumb($links = array()) {
         }
 
         $guia = "<div id='migalhas'><ul>";
-        $guia .= "<li class='first'><a href='{$primeiroLink}' title='In&iacute;cio'><i class='material-icons'>home</i>In&iacute;cio</a>/</li>";
+        $guia .= "<li class='first'><a href='{$primeiroLink}' title='In&iacute;cio'>In&iacute;cio</a></li>";
         $qtdLinks = count($links);
 
         $contador = 0;
@@ -286,7 +286,7 @@ function gerarNovoBreadCrumb($links = array()) {
                             $url = explode('/', $url);
                             $url = ('/'.$url[1] . '/' . $url[2] .'/'.$url[3]);
                         }
-                        $guia .= "<li><a href='" . $url . "' title='{$nomeLink}'>" . $nomeLink . "</a>/</li>";
+                        $guia .= "<li><a href='" . $url . "' title='{$nomeLink}'>" . $nomeLink . "</a></li>";
                     }
                 }
             }

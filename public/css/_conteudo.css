@@ -4,8 +4,8 @@ x - CONTEÚDO (legado)
 --------------------------------------------------------------*/
 #conteudo {
     /*margin-bottom: 20px;*/
-    box-shadow: none;
-    border: none;
+    /*box-shadow: none;*/
+    /*border: none;*/
 }
 
 #conteudo a {
@@ -44,7 +44,7 @@ x - MIOLO
 #conteudo #miolo fieldset legend,
 #conteudo .miolo fieldset legend,
 #conteudo fieldset legend {
-    font-size: 16px;
+    /*font-size: 16px;*/
     font-weight: bold;
     color: #35953f;
     padding: 5px;
