@@ -39,10 +39,17 @@ $arrMenuProponente['proposta'] = array(
     'menu' => array(),
     'grupo' => array(),
 );
-$arrMenuProponente['proposta']['menu'][] = array('label' => 'Listar Propostas', 'title' => 'Ir para Manter Proposta por Incentivo Fiscal',
+$arrMenuProponente['proposta']['menu'][] = array('label' => 'Listar', 'title' => 'Ir para Manter Proposta por Incentivo Fiscal',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'listarproposta'), '', true),
     'grupo' => array()
 );
+
+$arrMenuProponente['proposta']['menu'][] = [
+    'label' => 'Arquivadas',
+    'title' => 'Propostas Arquivadas',
+    'url' => $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'listar-propostas-arquivadas'), '', true),
+    'grupo' => array()
+];
 // ========== FIM MENU PROPOSTA ==========
 // ========== INICIO MENU PROJETO ==========
 $arrMenuProponente['projeto'] = array(
