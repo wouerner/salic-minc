@@ -1,14 +1,14 @@
 function carregarSegmento() {
-    $3('#segmentoCultural').html('<option value=""> - Carregando - </option>');
+    $3('#id_segmento').html('<option value=""> - Carregando - </option>');
     $3.ajax({
         type: 'POST',
         url: $("#action_segmento").val(),
         data: {
-            id: $3('#areaCultural').val()
+            id: $3('#id_area').val()
         },
         success: function (dados) {
-            $3('#segmentoCultural').find('option').remove();
-            $3('#segmentoCultural').append(dados);
+            $3('#id_segmento').find('option').remove();
+            $3('#id_segmento').append(dados);
         }
     });
 }
@@ -28,31 +28,31 @@ jQuery(function ($) {
 
     var limiteMaximo = 8000;
 
-    var editorRico = $("#observacao").editorRico({
+    var editorRico = $("#descricao_motivacao").editorRico({
         altura: 200,
         isLimitarCarateres: true,
         maxchar: limiteMaximo
     });
 
-    $3('#areaCultural').change(function () {
+    $3('#id_area').change(function () {
         $3("#bloco-Artigo").hide();
         carregarSegmento();
     });
 
-    $3('#segmentoCultural').change(function () {
+    $3('#id_segmento').change(function () {
         carregarEnquadramento(this);
     });
 
 
     $("#formEnquadramentoProjeto").validate({
         rules: {
-            observacao: {
+            descricao_motivacao: {
                 validarPreenchimento: true,
                 validarPreenchimentoMaximo: true
             }
         },
         messages: {
-            observacao: {
+            descricao_motivacao: {
                 validarPreenchimento: "Dado obrigat&oacute;rio n&atilde;o informado",
                 validarPreenchimentoMaximo: "limite excedido"
             }
@@ -63,7 +63,7 @@ jQuery(function ($) {
             form.submit();
         },
         invalidHandler: function (event, validator) {
-            Materialize.toast(validator.submitted.observacao, 4000);
+            Materialize.toast(validator.submitted.descricao_motivacao, 4000);
         }
     });
 
