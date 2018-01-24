@@ -1,5 +1,5 @@
 <?php
-class Proposta_Model_PreProjetoMeta extends MinC_Db_Model
+class Proposta_Model_TbPreProjetoMeta extends MinC_Db_Model
 {
     protected $_idPreProjetoMeta;
     protected $_idPreProjeto;

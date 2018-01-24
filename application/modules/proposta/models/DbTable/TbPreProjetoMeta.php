@@ -3,10 +3,10 @@
 /**
  * Class Proposta_Model_DbTable_PreProjeto
  */
-class Proposta_Model_DbTable_PreProjetoMeta extends MinC_Db_Table_Abstract
+class Proposta_Model_DbTable_TbPreProjetoMeta extends MinC_Db_Table_Abstract
 {
     protected $_schema = "sac";
-    protected $_name = "tbpreprojetometa";
+    protected $_name = "tbPreProjetoMeta";
     protected $_primary = "idPreProjetoMeta";
 
     /**
@@ -70,5 +70,12 @@ class Proposta_Model_DbTable_PreProjetoMeta extends MinC_Db_Table_Abstract
         if (empty($idPreProjeto) || empty($metaKey)) {
             return false;
         }
+
+        $where = array(
+            'idPreProjeto = ?' => $idPreProjeto,
+            'metaKey = ?' => $metaKey
+        );
+
+        return $this->delete($where);
     }
 }
