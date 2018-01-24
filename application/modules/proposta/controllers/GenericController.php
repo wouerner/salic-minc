@@ -124,10 +124,6 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
 
         if (!empty($this->idPreProjeto)) {
 
-            $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
-            $proposta = $tbPreProjetoMapper->obterPropostaCulturalCompleta($this->idPreProjeto);
-
-
             $this->_proposta = $this->buscarProposta($this->idPreProjeto);
             $this->_proponente = $this->buscarProponente($this->_proposta['idagente']);
 

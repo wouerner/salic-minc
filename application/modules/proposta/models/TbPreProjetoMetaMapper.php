@@ -166,6 +166,40 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
         return $response;
     }
 
+    public function unserializarPropostaCulturalCompleta($idPreProjeto, $prefix)
+    {
+        if (empty($idPreProjeto) || empty($prefix)) {
+            return false;
+        }
+
+        $propostaCultural = [];
+
+        $tbPreProjetoMeta = new Proposta_Model_DbTable_TbPreProjetoMeta();
+
+        $metas = $tbPreProjetoMeta->buscarMetas($idPreProjeto, null, $prefix);
+
+        if($metas) {
+            foreach ($metas as $meta) {
+                $key = str_replace($prefix . '_', '', $meta['metaKey']);
+                $propostaCultural[$key] = unserialize($meta['metaValue']);
+            }
+        }
+
+        return $propostaCultural;
+
+//        $propostaCultural['planilhaProjeto'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix .'_'. 'tbplanilhaproposta'));
+//        $propostaCultural['itensLocalRealizacao'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'abrangencia'));
+//        $propostaCultural['itensDeslocamento'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'deslocamento'));
+//        $propostaCultural['itensPlanosDistribuicao'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'planodistribuicaoproduto'));
+//        $propostaCultural['tbdetalhaplanodistribuicao'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'tbdetalhaplanodistribuicao'));
+//        $propostaCultural['identificacaoproposta'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'identificacaoproposta'));
+//        $propostaCultural['responsabilidadesocial'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'responsabilidadesocial'));
+//        $propostaCultural['detalhestecnicos'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'detalhestecnicos'));
+//        $propostaCultural['outrasinformacoes'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'outrasinformacoes'));
+
+//        xd($propostaCultural);
+    }
+
     /**
      * @param $object
      * @param $idPreProjeto

@@ -2868,4 +2868,25 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal-ajax.phtml");
         }
     }
+
+    function analisarAlteracoesDaDiligenciaAction()
+    {
+        // http://local.salic/admissibilidade/admissibilidade/analisar-alteracoes-da-diligencia/idPreProjeto/240095
+        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+        $prefix = $this->getRequest()->getParam('prefix', 'teste');
+
+        try {
+            if (empty($idPreProjeto)) {
+                throw new Exception("Rapazz me informa o numero do idPreProjeto");
+            }
+
+            $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
+            $propostaAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($this->idPreProjeto);
+            $propostaSalva = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($this->idPreProjeto, $prefix);
+            xd($propostaAtual, $propostaSalva, array_diff($propostaAtual, $propostaSalva));
+
+        } catch(Exception $e) {
+            parent::message($e->getMessage(), "/admissibilidade/admissibilidade/listar-propostas", "INFO");
+        }
+    }
 }
