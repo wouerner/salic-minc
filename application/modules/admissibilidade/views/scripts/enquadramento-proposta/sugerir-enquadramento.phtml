@@ -1,6 +1,7 @@
 <script type="text/javascript"
         src="<?php echo $this->baseUrl(); ?>/public/js/tinymce/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/js/jquery/plugins/editorRico.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/js/admissibilidade/enquadramento-proposta/sugerir-enquadramento.js"></script>
 <main>
     <div class="margin-bottom20 clearfix"></div>
 
@@ -32,25 +33,12 @@
                         </div>
                         <div class="input-field col s12 m6">
                             <select name="segmentoCultural" id="segmentoCultural">
-                                <?php if (!isset($this->preprojeto['Area']) || empty($this->preprojeto['Area'])) { ?>
                                     <option value=""> - Selecione uma &Aacute;rea Cultural -</option>
-                                <?php } else { ?>
-
-                                    <?php if (!isset($this->preprojeto['Segmento']) || empty($this->preprojeto['Segmento'])) { ?>
-                                        <option value=""> - Selecione -</option>
-                                    <?php } ?>
-
-                                    <?php foreach ($this->combosegmentosculturais as $combosegmentocultural) { ?>
-                                        <option
-                                            data-tp_enquadramento="<?php echo $combosegmentocultural->tp_enquadramento; ?>"
-                                            value="<?php echo $combosegmentocultural->id; ?>" <?php if ($this->preprojeto['Segmento'] == $combosegmentocultural->id) echo "selected=\"selected\""; ?>><?php echo $combosegmentocultural->descricao; ?></option>
-                                    <?php } ?>
-                                <?php } ?>
                             </select>
                             <label>Segmento Cultural</label>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="display: none;" id="bloco-Artigo">
                         <div class="col s12">
                             <label class="green-text text-darken-4">
                                 Enquadramento
@@ -60,18 +48,7 @@
                             <span id="enquadramentoText" class="bold"></span>
                         </div>
                     </div>
-                    <?php if (!empty($this->avaliacaoRecurso)) : ?>
-                        <div class="row">
-                            <div class="col s12">
-                                <label class="green-text text-darken-4">
-                                    Avalia&ccedil;&atilde;o do Recurso
-                                </label>
-                                <div class="">
-                                    <?php echo $this->avaliacaoRecurso; ?>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endif; ?>
+
                     <div class="row">
                         <div class="col s12">
                             <label class="green-text text-darken-4">
@@ -100,93 +77,11 @@
     </div>
     <div id="rodape"><span></span></div>
     <br clear="all"/>
-
-    <script type="text/javascript">
-        function carregarSegmento() {
-            $3('#segmentoCultural').html('<option value=""> - Carregando - </option>');
-            $3.ajax({
-                type: 'POST',
-                url: '<?php echo $this->url(
-                    [
-                        'module' => 'default',
-                        'controller' => 'segmento',
-                        'action' => 'combo'
-                    ]
-                ); ?>',
-                data: {
-                    id: $3('#areaCultural').val()
-                },
-                success: function (dados) {
-                    $3('#segmentoCultural').find('option').remove();
-                    $3('#segmentoCultural').append(dados);
-                }
-            });
-        }
-
-        function carregarEnquadramento(object) {
-            $3('#enquadramentoText').html('Artigo 26');
-            var enquadramentoProjeto = $3(object).children('option:selected').data('tp_enquadramento');
-
-            if (enquadramentoProjeto == '2') {
-                $3('#enquadramentoText').html('Artigo 18');
-            }
-            $3('#enquadramento_preprojeto').val(enquadramentoProjeto);
-        }
-
-        jQuery(function ($) {
-
-            var limiteMaximo = 8000;
-
-            var editorRico = $("#observacao").editorRico({
-                altura: 200,
-                isLimitarCarateres: true,
-                maxchar: limiteMaximo
-            });
-
-            $3('#areaCultural').change(function () {
-                carregarSegmento();
-            });
-
-            $3('#segmentoCultural').change(function () {
-                carregarEnquadramento(this);
-            });
-
-            $3('#segmentoCultural').trigger("change");
-
-
-            $("#formEnquadramentoProjeto").validate({
-                rules: {
-                    observacao: {
-                        validarPreenchimento: true,
-                        validarPreenchimentoMaximo: true
-                    }
-                },
-                messages: {
-                    observacao: {
-                        validarPreenchimento: "Dado obrigat&oacute;rio n&atilde;o informado",
-                        validarPreenchimentoMaximo: "limite excedido"
-                    }
-                },
-
-                submitHandler: function (form) {
-                    $("#container-progress").show();
-                    form.submit();
-                },
-                invalidHandler: function (event, validator) {
-                    Materialize.toast(validator.submitted.observacao, 4000);
-                }
-            });
-
-            $.validator.addMethod("validarPreenchimento", function (value, element) {
-                if (editorRico.contarCaracteres() > 0) {
-                    return true;
-                }
-            });
-            $.validator.addMethod("validarPreenchimentoMaximo", function (value, element) {
-                if (editorRico.contarCaracteres() <= limiteMaximo) {
-                    return true;
-                }
-            });
-        });
-    </script>
+    <input id="action_segmento" type="hidden" value="<?php echo $this->url(
+        [
+            'module' => 'default',
+            'controller' => 'segmento',
+            'action' => 'combo'
+        ]
+    ); ?>" />
 </main>
