@@ -640,7 +640,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $retorno['sucesso'] = "A Proposta " . $this->idPreProjeto . " foi transformada no Projeto No. " . $nrPronac;
             }
         } catch (Exception $objException) {
-//            $retorno['erro'] = 'Erro ao tentar transformar proposta em projeto!';
             $retorno['erro'] = $objException->getMessage();
         }
         header('Content-Type: application/json');
@@ -666,36 +665,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dados['idTecnico'] = $this->idUsuario;
         $dados['despacho'] = trim($post->despacho);
 
-//        $despachoExiste = Proposta_Model_AnalisarPropostaDAO::verificarDespacho($post->idPreProjeto);
-
-//        if(count($despachoExiste)>0){
-//            Proposta_Model_AnalisarPropostaDAO::updateEstadoDespacho($post->idPreProjeto);
-//        }
-
         Proposta_Model_AnalisarPropostaDAO::inserirDespacho($dados);
-
-        //if($despachoExiste[0]->Tipo == 129 ){
-//        $movimentacaoExiste = Proposta_Model_AnalisarPropostaDAO::verificarMovimentcaoDespacho($post->idPreProjeto);
-
-//        if(count($movimentacaoExiste)>0 && $movimentacaoExiste[0]->Movimentacao == 127)
-//        {
-//            $dados['movimentacao'] = Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL;
-//
-//            //APAGA DOCUMENTOS PENDENTES CONFORME REGRA DA TRIGGER
-//            Proposta_Model_AnalisarPropostaDAO::deleteDocumentoProponentePeloProjeto($post->idPreProjeto);
-//            Proposta_Model_AnalisarPropostaDAO::deleteDocumentoProjetoPeloProjeto($post->idPreProjeto);
-//
-//        }else{
-//            $dados['movimentacao'] = 127;
-//        }
-
-//        Proposta_Model_AnalisarPropostaDAO::updateEstadoMovimentacao($post->idPreProjeto);
-//        Proposta_Model_AnalisarPropostaDAO::inserirMovimentacao($dados);
-        //}
-
-        //Envia Email
-//        $msg = new Zend_Config_Ini(getcwd().'/public/admissibilidade/mensagens_email_proponente.ini', 'sem_pendencia_documental');
-//        $this->eviarEmail($this->idPreProjeto,$msg->msg);
 
         if (isset($post->devolver) && $post->devolver == 1) {
             parent::message("Mensagem enviada com sucesso!", "/admissibilidade/admissibilidade/gerenciamentodepropostas", "CONFIRM");
@@ -737,7 +707,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dao = new Proposta_Model_AnalisarPropostaDAO();
         $post = Zend_Registry::get('post');
         Proposta_Model_AnalisarPropostaDAO::deletePreProjeto($post->idprojeto);
-        ///Enviar e-mail informando arquivamento e a justificativa
     }
 
     public function imprimirpropostaculturalAction()
