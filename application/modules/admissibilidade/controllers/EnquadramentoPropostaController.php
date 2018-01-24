@@ -1,9 +1,7 @@
 <?php
 
-class Admissibilidade_SugestaoEnquadramentoController extends MinC_Controller_Action_Abstract
+class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Action_Abstract
 {
-    private $idPronac;
-
     public function init()
     {
         parent::perfil();
@@ -14,71 +12,40 @@ class Admissibilidade_SugestaoEnquadramentoController extends MinC_Controller_Ac
 
     public function indexAction()
     {
-        $this->redirect("/admissibilidade/enquadramento/gerenciar-enquadramento");
+        $this->redirect("/admissibilidade/enquadramento-proposta/gerenciar-enquadramento");
     }
 
-    public function gerenciarEnquadramentoAction()
-    {
-        // LEMBRAR :
-        // $this->grupoAtivo->codOrgao  => Orgão logado   ==== Projetos.Orgao
-
-        $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
-        $enquadramento = new Admissibilidade_Model_Enquadramento();
-
-        $this->view->dados = array();
-        $ordenacao = array("projetos.DtSituacao asc");
-
-        if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
-            $this->view->dados = $enquadramento->obterProjetosParaEnquadramento(
-                $this->grupoAtivo->codOrgao,
-                $ordenacao
-            );
-        } elseif ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-            $this->view->dados = $enquadramento->obterProjetosParaEnquadramentoVinculados(
-                $this->view->idUsuarioLogado,
-                $this->grupoAtivo->codOrgao,
-                $ordenacao
-            );
-        }
-
-        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
-    }
-
-
-    public function enquadrarprojetoAction()
+    public function sugerirEnquadramentoAction()
     {
         try {
             $get = $this->getRequest()->getParams();
-            if (!isset($get['IdPRONAC']) || empty($get['IdPRONAC'])) {
-                throw new Exception("N&uacute;mero de PRONAC n&atilde;o informado.");
+            if (!isset($get['id_preprojeto']) || empty($get['id_preprojeto'])) {
+                throw new Exception("Identificador da proposta não informado.");
             }
-            $this->view->IdPRONAC = $get['IdPRONAC'];
-            $objProjeto = new Projetos();
-            $projeto = $objProjeto->findBy(array('IdPRONAC' => $this->view->IdPRONAC));
+            $this->view->id_preprojeto = $get['id_preprojeto'];
 
-            if (!$projeto) {
-                throw new Exception("PRONAC n&atilde;ao encontrado.");
+            $preProjetoDbTable = new Proposta_Model_DbTable_PreProjeto();
+            $preprojeto = $preProjetoDbTable->findBy(array('idPreProjeto' => $this->view->id_preprojeto));
+
+            if (!$preprojeto) {
+                throw new Exception("Proposta não encontrada.");
             }
-
-//            $arraySituacoesValidas = array("B01", "B03");
-//            if (!in_array($projeto['Situacao'], $arraySituacoesValidas)) {
-//                throw new Exception("Situa&ccedil;&atilde;o do projeto n&atilde;o &eacute; v&aacute;lida.");
-//            }
 
             $post = $this->getRequest()->getPost();
             if (!$post) {
-                $this->carregardadosEnquadramentoProjeto($projeto);
+                $this->carregardadosEnquadramentoProposta($preprojeto);
             } else {
-                $this->salvarEnquadramentoProjeto($projeto);
+                $this->salvarSugestaoEnquadramento($preprojeto);
             }
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), '/admissibilidade/enquadramento/gerenciar-enquadramento');
         }
     }
 
-    private function salvarEnquadramentoProjeto($projeto)
+    private function salvarSugestaoEnquadramento($projeto)
     {
         try {
+xd(123);
             $auth = Zend_Auth::getInstance();
             $post = $this->getRequest()->getPost();
             $observacao = trim($post['observacao']);
@@ -170,101 +137,27 @@ class Admissibilidade_SugestaoEnquadramentoController extends MinC_Controller_Ac
         }
     }
 
-    private function carregardadosEnquadramentoProjeto(array $projeto)
+    private function carregardadosEnquadramentoProposta(array $preprojeto)
     {
         $mapperArea = new Agente_Model_AreaMapper();
         $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo', 'Descricao');
-        $this->view->projeto = $projeto;
+        $this->view->preprojeto = $preprojeto;
 
         if (count($this->view->comboareasculturais) < 1) {
             throw new Exception("N&atilde;o foram encontradas &Aacute;reas Culturais para o PRONAC informado.");
         }
-        $objSegmentocultural = new Segmentocultural();
-        $this->view->combosegmentosculturais = $objSegmentocultural->buscarSegmento($projeto['Area']);
+//        $objSegmentocultural = new Segmentocultural();
+//        $this->view->combosegmentosculturais = $objSegmentocultural->buscarSegmento($preprojeto['Area']);
 
-        if (count($this->view->combosegmentosculturais) < 1) {
-            throw new Exception("N&atilde;o foram encontradas Segmentos Culturais para o PRONAC informado.");
-        }
-
-        $objEnquadramento = new Admissibilidade_Model_Enquadramento();
-        $arrayPesquisa = array(
-            'AnoProjeto' => $projeto['AnoProjeto'],
-            'Sequencial' => $projeto['Sequencial'],
-            'IdPRONAC' => $projeto['IdPRONAC']
-        );
-        $arrayEnquadramento = $objEnquadramento->findBy($arrayPesquisa);
-
-        $this->view->observacao = $arrayEnquadramento['Observacao'];
-        if ($projeto['Situacao'] == 'B03') {
-            $objRecurso = new tbRecurso();
-            $this->view->avaliacaoRecurso = trim($objRecurso->buscarAvaliacaoRecurso($projeto['IdPRONAC']));
-        }
-        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
+//        if (count($this->view->combosegmentosculturais) < 1) {
+//            throw new Exception("N&atilde;o foram encontradas Segmentos Culturais para o PRONAC informado.");
+//        }
+        $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $this->view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($preprojeto['idPreProjeto']);
+        $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
+        $this->view->id_orgao = $this->grupoAtivo->codOrgao;
+        $this->view->id_usuario_avaliador = $this->auth->getIdentity()->usu_codigo;
     }
 
-    public function encaminharAssinaturaAction()
-    {
-        try {
-            $get = $this->getRequest()->getParams();
-            $post = $this->getRequest()->getPost();
-            $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
 
-            if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
-                $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
-                $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
-                parent::message('Projeto encaminhado com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
-            } elseif (isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
-                foreach ($post['IdPRONAC'] as $idPronac) {
-                    $servicoDocumentoAssinatura->idPronac = $idPronac;
-                    $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
-                }
-                parent::message('Projetos encaminhados com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
-            }
-            $this->carregarListaEncaminhamentoAssinatura();
-        } catch (Exception $objException) {
-            parent::message($objException->getMessage(), '/admissibilidade/enquadramento/encaminhar-assinatura');
-        }
-    }
-
-    private function carregarListaEncaminhamentoAssinatura()
-    {
-        $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
-        $enquadramento = new Admissibilidade_Model_Enquadramento();
-
-        $this->view->dados = array();
-        $ordenacao = array("dias desc");
-        $dados = $enquadramento->obterProjetosEnquadradosParaAssinatura($this->grupoAtivo->codOrgao, $ordenacao);
-
-        foreach ($dados as $dado) {
-            $dado->desistenciaRecursal = $enquadramento->verificarDesistenciaRecursal($dado->IdPRONAC);
-            $this->view->dados[] = $dado;
-        }
-
-        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
-        $this->view->codOrgao = $this->grupoAtivo->codOrgao;
-    }
-
-    public function visualizarDevolucaoAssinaturaAction()
-    {
-        try {
-            $get = $this->getRequest()->getParams();
-
-            if (!$get['IdPRONAC']) {
-                throw new Exception("Identificador do projeto n&atilde;o informado.");
-            }
-
-            $objDespacho = new Proposta_Model_DbTable_TbDespacho();
-            $despacho = $objDespacho->consultarDespachoAtivo($get['IdPRONAC']);
-
-            $this->_helper->json(
-                array(
-                    'status' => 1,
-                    'despacho' => utf8_encode($despacho['Despacho']),
-                    'data' => Data::tratarDataZend($despacho['Data'], 'brasileiro', true)
-                    )
-            );
-        } catch (Exception $objException) {
-            $this->_helper->json(array('status' => 0, 'msg' => $objException->getMessage()));
-        }
-    }
 }

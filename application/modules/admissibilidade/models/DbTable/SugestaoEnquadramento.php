@@ -5,4 +5,9 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
     protected $_name = "sugestao_enquadramento";
     protected $_schema = "sac";
     protected $_primary = "id_sugestao_enquadramento";
+
+    public function obterHistoricoEnquadramento($id_preprojeto) {
+
+        return $this->findBy(['id_preprojeto' => $id_preprojeto]);
+    }
 }
