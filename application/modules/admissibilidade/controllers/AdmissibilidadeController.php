@@ -261,6 +261,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $this->montaTela("admissibilidade/proposta-por-edital.phtml");
         } else {
+            $isPropostaEnquadrada = new tbAvaliacaoProposta();
+            $this->view->isPropostaEmConformidade = $isPropostaEnquadrada->isPropostaEmConformidade(
+                $this->idPreProjeto
+            );
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
     }

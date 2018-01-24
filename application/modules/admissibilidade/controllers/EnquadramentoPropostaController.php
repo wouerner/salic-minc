@@ -32,7 +32,11 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             }
 
             $post = $this->getRequest()->getPost();
-            if (!$post) {
+            if (
+                !$post['id_area']
+                || $post['id_segmento']
+                || $post['descricao_motivacao']
+            ) {
                 $this->carregardadosEnquadramentoProposta($preprojeto);
             } else {
                 $this->salvarSugestaoEnquadramento($preprojeto);
