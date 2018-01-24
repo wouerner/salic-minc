@@ -2679,12 +2679,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         if (!empty($propostas)) {
             $zDate = new Zend_Date();
+            $SugestaoEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             foreach ($propostas as $key => $proposta) {
                 $zDate->set($proposta->DtMovimentacao);
 
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
                 $proposta->Tecnico = utf8_encode($proposta->Tecnico);
                 $proposta->DtMovimentacao = $zDate->toString('dd/MM/y h:m');
+                $proposta->isEnquadrada = $SugestaoEnquadramento->isPropostaEnquadrada($proposta->idProjeto, $this->grupoAtivo->codOrgao, $this->grupoAtivo->codGrupo);
                 $aux[$key] = $proposta;
             }
 
