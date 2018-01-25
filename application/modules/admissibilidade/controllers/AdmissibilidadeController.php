@@ -677,23 +677,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
     }
 
-    public function arquivarpropostaAction()
-    {
-        $dao = new Proposta_Model_AnalisarPropostaDAO();
-        try {
-            //Enviar e-mail informando arquivamento e a justificativa
-            $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-            $rsPreProjeto = $tblPreProjeto->find($this->idPreProjeto)->current();
-            $rsPreProjeto->DtArquivamento = date("Y/m/d H:i:s");
-            $rsPreProjeto->stEstado = 0;
-            $rsPreProjeto->save();
-
-            parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/admissibilidade/admissibilidade/listar-propostas", "CONFIRM");
-        } catch (Exception $e) {
-            parent::message("Erro ao realizar opera&ccedil;&atilde;o!", "/admissibilidade/admissibilidade/listar-propostas", "ERROR");
-        }
-    }
-
     public function confirmararquivarpropostaAction()
     {
         $tblProposta = new Proposta_Model_DbTable_PreProjeto();

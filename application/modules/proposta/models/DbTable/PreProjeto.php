@@ -183,10 +183,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
                                   "a.EspecificacaoTecnica"=>"CAST(a.EspecificacaoTecnica AS TEXT) as EspecificacaoTecnica",
                                   "a.EstrategiadeExecucao"=>"CAST(a.EstrategiadeExecucao AS TEXT) as EstrategiadeExecucao",
                                   "a.DtInicioDeExecucaoForm"=>$this->getExpressionToChar(DtInicioDeExecucao),
-//                                  "a.DtFinalDeExecucaoForm"=>"parent::getExpressionToChar(a.DtFinalDeExecucao)",
-//                                  "a.DtAtoTombamentoForm"=>"parent::getExpressionToChar(a.DtAtoTombamento)",
-//                                  "a.dtAceiteForm"=>"parent::getExpressionToChar(a.dtAceite)",
-//                                  "a.DtArquivamentoForm"=> "parent::getExpressionToChar(a.DtArquivamento)"
                               ),
                           $this->_schema
         );
@@ -202,6 +198,13 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
             array('m' => 'Nomes'),
                          'a.idAgente = m.idAgente',
                          array("m.Descricao as NomeAgente"),
+                         $this->getSchema('agentes')
+        );
+
+        $slct->joinLeft(
+            array('i' => 'Internet'),
+                         'a.idAgente = i.idAgente and i.Status = 1',
+                         array("i.Descricao as EmailAgente"),
                          $this->getSchema('agentes')
         );
 
@@ -1214,7 +1217,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
      *
      * @access public
      * @return void
-     * @author wouerner <wouerner@gmail.com>
      */
     public function listarPropostasResultado($idAgente, $idResponsavel, $idAgenteCombo)
     {
