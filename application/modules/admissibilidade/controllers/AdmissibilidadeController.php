@@ -364,7 +364,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $tbAvaliacaoProposta = new tbAvaliacaoProposta();
             $avaliacoesAnteriores = $tbAvaliacaoProposta->buscar(
                 array(
-                    "idProjeto = ?" => $proposta->idPreProjeto,
+                    "idProjeto = ?" => $this->idPreProjeto,
                     "ConformidadeOK !=?" => 9
                 )
             );
