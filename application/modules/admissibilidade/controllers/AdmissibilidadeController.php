@@ -353,6 +353,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $this->view->nomeProjeto = strip_tags($rsProposta->NomeProjeto);
         $this->view->dataAtual = date("d/m/Y");
         $this->view->dataAtualBd = date("Y/m/d H:i:s");
+        $this->view->codGrupo = $this->codGrupo;
+        
+        if ($this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+            $tbAvaliacaoProposta = new tbAvaliacaoProposta();
+            $avaliacoesAnteriores = $tbAvaliacaoProposta->buscar(array("idProjeto = ?" => $proposta->idPreProjeto, "ConformidadeOK !=?" => 9));            
+            $this->view->avaliacoesAnteriores = $avaliacoesAnteriores;
+        }
+        
     }
 
     public function salvaravaliacaoAction()
