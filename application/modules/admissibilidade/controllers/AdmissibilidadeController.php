@@ -353,6 +353,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $this->view->nomeProjeto = strip_tags($rsProposta->NomeProjeto);
         $this->view->dataAtual = date("d/m/Y");
         $this->view->dataAtualBd = date("Y/m/d H:i:s");
+        $this->view->codGrupo = $this->codGrupo;
+        
+        if ($this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+            $tbAvaliacaoProposta = new tbAvaliacaoProposta();
+            $avaliacoesAnteriores = $tbAvaliacaoProposta->buscar(array("idProjeto = ?" => $proposta->idPreProjeto, "ConformidadeOK !=?" => 9));            
+            $this->view->avaliacoesAnteriores = $avaliacoesAnteriores;
+        }
+        
     }
 
     public function salvaravaliacaoAction()
@@ -362,13 +370,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dados = array();
         $dados['idProjeto'] = $post->idPreProjeto;
         $dados['idTecnico'] = $this->idUsuario;
+        $dados['idPerfil'] = $this->codGrupo;
         $dados['dtEnvio'] = $post->dataAtual;
         $dados['dtAvaliacao'] = $post->dataAtual;
         $dados['avaliacao'] = $_POST['despacho'];
         $dados['ConformidadeOK'] = $post->conformidade;
         $dados['stEstado'] = 0;
         $dados['stEnviado'] = 'N';
-
+        
         $projetoExiste = Proposta_Model_AnalisarPropostaDAO::verificarAvaliacao($post->idPreProjeto);
 
         //Esse if so existe por que nao existe objeto de negocio.
