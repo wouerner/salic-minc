@@ -362,13 +362,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dados = array();
         $dados['idProjeto'] = $post->idPreProjeto;
         $dados['idTecnico'] = $this->idUsuario;
+        $dados['idPerfil'] = $this->codGrupo;
         $dados['dtEnvio'] = $post->dataAtual;
         $dados['dtAvaliacao'] = $post->dataAtual;
         $dados['avaliacao'] = $_POST['despacho'];
         $dados['ConformidadeOK'] = $post->conformidade;
         $dados['stEstado'] = 0;
         $dados['stEnviado'] = 'N';
-
+        
         $projetoExiste = Proposta_Model_AnalisarPropostaDAO::verificarAvaliacao($post->idPreProjeto);
 
         //Esse if so existe por que nao existe objeto de negocio.
