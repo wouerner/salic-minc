@@ -342,19 +342,20 @@ class Proposta_Model_AnalisarPropostaDAO extends MinC_Db_Model
     public static function buscarHistorico($idPreProjeto)
     {
         $sql = "
-        SELECT 'Proposta' as tipo,idProjeto,idTecnico,usu_Nome, convert(varchar(30),DtAvaliacao, 120 ) as DtAvaliacao, Avaliacao
+        SELECT 'Proposta' as tipo,idProjeto,idTecnico,idPerfil, g.gru_nome AS Perfil ,usu_Nome, convert(varchar(30),DtAvaliacao, 120 ) as DtAvaliacao, Avaliacao
             FROM       SAC.dbo.tbAvaliacaoProposta p
               INNER JOIN tabelas.dbo.Usuarios        u on (p.idTecnico = u.usu_codigo)
+              LEFT JOIN tabelas.dbo.grupos g ON g.gru_codigo = idPerfil   
             WHERE    ConformidadeOK < 9
                      AND idProjeto = {$idPreProjeto}
             UNION ALL
-            SELECT 'Proposta' as tipo,idProjeto,0,'Proponente' as Tecnico, convert(varchar(30),DtMovimentacao, 120 ) as DtMovimentacao,
+            SELECT 'Proposta' as tipo,idProjeto,0,NULL, '','Proponente' as Tecnico, convert(varchar(30),DtMovimentacao, 120 ) as DtMovimentacao,
                                           'Proposta Cultural ENVIADA ao Minist&eacute;rio da Cultura para Conformidade Visual' as Avaliacao
             FROM SAC.dbo.tbMovimentacao
-            WHERE Movimentacao=96
+            WHERE Movimentacao=".Agente_Model_DbTable_Verificacao::PROPOSTA_PARA_ANALISE_INICIAL ."
                   AND idProjeto = {$idPreProjeto}
             UNION ALL
-            SELECT 'Projeto' as tipo,a.idPronac,idTecnico,d.usu_Nome, convert(varchar(30),DtAvaliacao, 120 ) as DtAvaliacao, dsAvaliacao
+            SELECT 'Projeto' as tipo,a.idPronac,idTecnico, NULL, '',d.usu_Nome, convert(varchar(30),DtAvaliacao, 120 ) as DtAvaliacao, dsAvaliacao
             FROM       SAC.dbo.tbAvaliarAdequacaoProjeto a
               INNER JOIN sac.dbo.Projetos                  b on (a.idPronac  = b.IdPRONAC)
               INNER JOIN sac.dbo.PreProjeto                c on (b.idProjeto = c.idPreProjeto)
@@ -362,7 +363,7 @@ class Proposta_Model_AnalisarPropostaDAO extends MinC_Db_Model
             WHERE idProjeto = {$idPreProjeto}
             ORDER BY 5 ASC
         ";
-
+        
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
