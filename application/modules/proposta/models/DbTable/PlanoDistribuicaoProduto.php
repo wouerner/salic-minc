@@ -188,4 +188,28 @@ class Proposta_Model_DbTable_PlanoDistribuicaoProduto extends MinC_Db_Table_Abst
         die;
         return $this->fetchRow($sql);
     }
+
+    public function obterUfsMunicipiosDoDetalhamento($idPreProjeto) {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('p' => $this->_name),
+            array(),
+            $this->_schema
+        );
+        $select->joinInner(
+            array('d' => 'tbDetalhaPlanoDistribuicao'),
+            "p.idPlanoDistribuicao = d.idPlanoDistribuicao",
+            array('d.idUF', 'd.idMunicipio'),
+            $this->_schema
+        );
+        $select->joinInner(
+            array('u' => 'uf'),
+            "d.idUF = u.idUf",
+            array('u.Sigla as UF'),
+            $this->getSchema('agentes')
+        );
+        $select->where('p.idProjeto = ?', $idPreProjeto);
+        return $this->fetchAll($select);
+    }
 }
