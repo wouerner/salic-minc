@@ -348,7 +348,12 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     {
         $this->validarAcessoAdmissibilidade();
         $tblProposta = new Proposta_Model_DbTable_PreProjeto();
-        $rsProposta = $tblProposta->buscar(array("idPreProjeto=?" => $this->idPreProjeto))->current();
+        $rsProposta = $tblProposta->buscar(
+            array(
+                "idPreProjeto=?" => $this->idPreProjeto
+            )
+        )->current();
+        
         $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->nomeProjeto = strip_tags($rsProposta->NomeProjeto);
         $this->view->dataAtual = date("d/m/Y");
@@ -357,7 +362,12 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         
         if ($this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
             $tbAvaliacaoProposta = new tbAvaliacaoProposta();
-            $avaliacoesAnteriores = $tbAvaliacaoProposta->buscar(array("idProjeto = ?" => $proposta->idPreProjeto, "ConformidadeOK !=?" => 9));            
+            $avaliacoesAnteriores = $tbAvaliacaoProposta->buscar(
+                array(
+                    "idProjeto = ?" => $proposta->idPreProjeto,
+                    "ConformidadeOK !=?" => 9
+                )
+            );
             $this->view->avaliacoesAnteriores = $avaliacoesAnteriores;
         }
         
