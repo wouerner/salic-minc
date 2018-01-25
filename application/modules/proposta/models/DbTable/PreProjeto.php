@@ -178,6 +178,13 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
                          $this->getSchema('agentes')
         );
 
+        $slct->joinLeft(
+            array('i' => 'Internet'),
+                         'a.idAgente = i.idAgente and i.Status = 1',
+                         array("i.Descricao as EmailAgente"),
+                         $this->getSchema('agentes')
+        );
+
         //adiciona quantos filtros foram enviados
         foreach ($where as $coluna=>$valor) {
             $slct->where($coluna, $valor);
@@ -1188,7 +1195,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
      *
      * @access public
      * @return void
-     * @author wouerner <wouerner@gmail.com>
      */
     public function listarPropostasResultado($idAgente, $idResponsavel, $idAgenteCombo)
     {

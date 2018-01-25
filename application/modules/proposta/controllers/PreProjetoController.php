@@ -94,4 +94,33 @@ class Proposta_PreProjetoController extends Proposta_GenericController
             'draw' => $draw,
             'recordsFiltered' => $recordsFiltered ? $recordsFiltered : 0));
     }
+
+    public function updateAction()
+    {
+        $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
+        $stEstado = $this->getRequest()->getParam('stEstado');
+        $DtArquivamento = $this->getRequest()->getParam('DtArquivamento');
+
+        $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+        $rsPreProjeto = $tblPreProjeto->find($this->idPreProjeto)->current();
+        $rsPreProjeto->DtArquivamento = $DtArquivamento;
+        $rsPreProjeto->stEstado = $stEstado;
+
+        try {
+            $rsPreProjeto->save();
+            $success = true;
+            $message = "Opera&ccedil;&atilde;o realizada com sucesso!";
+        } catch (Exception $e) {
+            $message = "Erro ao realizar opera&ccedil;&atilde;o!";
+            $success = false;
+        }
+
+        $this->_helper->json(
+            [
+                'data' => null,
+                'success' => $success,
+                'message' => $message
+            ]
+        );
+    }
 }
