@@ -1,0 +1,58 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="page-title">
+            <div class="row">
+                <div class="col s12 m9 l10">
+                    <h1>An&aacute;lise de altera&ccedil;&otilde;es da Proposta</h1>
+
+                    <?php
+                    gerarNovoBreadCrumb(array(
+                        array('An&aacute;lise de altera&ccedil;&otilde;es da Proposta' => '',
+                        )
+                    ));
+                    ?>
+                </div>
+                <div class="col s12 m3 l2 right-align">
+                    <a href="javascript:voltar();" title="P&aacute;gina Anterior" title="P&aacute;gina Anterior"
+                       class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="container-vue">
+                <salic-proposta-diff idpreprojeto="<?= $this->idPreProjeto; ?>"></salic-proposta-diff>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="/public/js/vue.js" type="text/javascript"></script>
+<script src="http://momentjs.com/downloads/moment-with-locales.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js" type="text/javascript"></script>
+
+<script src="/public/js/componentes/salic-table-easy.js" type="text/javascript"></script>
+<script src="/public/js/componentes/salic-texto-simples.vue.js" type="text/javascript"></script>
+
+<script src="/public/scripts/proposta/visualizar/salic-proposta-diff.vue.js" type="text/javascript"></script>
+<script src="/public/scripts/proposta/visualizar/salic-proposta-identificacao.vue.js" type="text/javascript"></script>
+<script src="/public/scripts/proposta/visualizar/salic-proposta-documentos.vue.js" type="text/javascript"></script>
+<script src="/public/scripts/proposta/visualizar/salic-proposta-fontes-de-recursos.vue.js"
+        type="text/javascript"></script>
+<script src="/public/scripts/proposta/visualizar/salic-proposta-historico-avaliacoes.vue.js"
+        type="text/javascript"></script>
+<script src="/public/scripts/proposta/visualizar/salic-proposta-local-realizacao-deslocamento.vue.js"
+        type="text/javascript"></script>
+<script src="/public/scripts/agente/visualizar/salic-agente-proponente.vue.js" type="text/javascript"></script>
+<script src="/public/scripts/autenticacao/index/salic-autenticacao-usuario.vue.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+
+    new Vue({
+        el: '#container-vue'
+    });
+
+</script>

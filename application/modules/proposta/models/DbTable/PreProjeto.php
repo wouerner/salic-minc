@@ -3353,4 +3353,77 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
 
         return $this->fetchRow($select);
     }
+
+    public function buscarIdentificacaoProposta($where=array())
+    {
+        $slct = $this->select();
+        $slct->setIntegrityCheck(false);
+        $slct->from(
+            array('pp' => $this->_name),
+            array( 'pp.idPreProjeto',
+                   'pp.idAgente',
+                   'pp.NomeProjeto',
+                   'pp.Mecanismo',
+                   'pp.AgenciaBancaria',
+                   'pp.DtInicioDeExecucao',
+                   'pp.DtFinalDeExecucao',
+                   'pp.areaAbrangencia',
+                   'pp.idUsuario',
+                   'pp.tpProrrogacao',
+                   'pp.stDataFixa',
+                   'pp.stProposta',
+                   'pp.NrAtoTombamento',
+                   'pp.DtAtoTombamento',
+                   'pp.EsferaTombamento',
+                   new Zend_Db_Expr('CAST(pp.ResumoDoProjeto as TEXT) as ResumoDoProjeto'),
+                   new Zend_Db_Expr('CAST(pp.Objetivos as TEXT) as Objetivos'),
+                   new Zend_Db_Expr('CAST(pp.Justificativa as TEXT) as Justificativa'),
+                   new Zend_Db_Expr('CAST(pp.Acessibilidade as TEXT) as Acessibilidade'),
+                   new Zend_Db_Expr('CAST(pp.DemocratizacaoDeAcesso as TEXT) as DemocratizacaoDeAcesso'),
+                   new Zend_Db_Expr('CAST(pp.EtapaDeTrabalho as TEXT) as EtapaDeTrabalho'),
+                   new Zend_Db_Expr('CAST(pp.FichaTecnica as TEXT) as FichaTecnica'),
+                   new Zend_Db_Expr('CAST(pp.Sinopse as TEXT) as Sinopse'),
+                   new Zend_Db_Expr('CAST(pp.ImpactoAmbiental as TEXT) as ImpactoAmbiental'),
+                   new Zend_Db_Expr('CAST(pp.EspecificacaoTecnica as TEXT) as EspecificacaoTecnica'),
+                   new Zend_Db_Expr('CAST(pp.EstrategiadeExecucao as TEXT) as EstrategiadeExecucao')
+                   ),
+            $this->_schema
+        );
+
+        $slct->joinInner(
+            array('ag' => 'agentes'), 'ag.idAgente= pp.idAgente',
+            array('ag.CNPJCPF'),
+            $this->getSchema('agentes')
+        );
+
+        $slct->joinInner(
+            array('n' => 'nomes'), 'n.idAgente= pp.idAgente',
+            array('n.Descricao as NomeAgente'),
+            $this->getSchema('agentes')
+        );
+
+        $slct->joinLeft(
+            array('ver' => 'verificacao'), 'ver.idVerificacao = pp.stProposta',
+            array('ver.Descricao as TipoExecucao'),
+            $this->_schema
+        );
+
+        $slct->joinLeft(
+            array('pr' => 'Projetos'), 'pp.idPreProjeto = pr.idProjeto',
+            array(
+                '(pr.AnoProjeto + pr.Sequencial) as PRONAC',
+                'pr.idPronac'
+            ),
+            $this->_schema
+        );
+
+        foreach ($where as $coluna => $valor) {
+            $slct->where($coluna, $valor);
+        }
+
+        $slct->order('pp.idPreProjeto');
+        $slct->order('pp.NomeProjeto');
+
+        return $this->fetchAll($slct);
+    }
 }

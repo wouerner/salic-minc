@@ -2873,17 +2873,25 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     {
         // http://local.salic/admissibilidade/admissibilidade/analisar-alteracoes-da-diligencia/idPreProjeto/240095
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
-        $prefix = $this->getRequest()->getParam('prefix', 'teste');
 
         try {
             if (empty($idPreProjeto)) {
-                throw new Exception("Rapazz me informa o numero do idPreProjeto");
+                throw new Exception("N&uacute;mero do projeto &eacute; obrigat&oacute;rio");
             }
+            $this->view->idPreProjeto = $idPreProjeto;
 
-            $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
-            $propostaAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($this->idPreProjeto);
-            $propostaSalva = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($this->idPreProjeto, $prefix);
-            xd($propostaAtual, $propostaSalva, array_diff($propostaAtual, $propostaSalva));
+
+
+            //        $tbProposta = new Proposta_Model_DbTable_PreProjeto();
+//        $dados = $tbProposta->buscarIdentificacaoProposta(['pp.idPreProjeto = ?' => $idPreProjeto])->current()->toArray();
+//
+            $prefix = $this->getRequest()->getParam('prefix', 'teste');
+//            $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
+//            $tbPreProjetoMapper->salvarPropostaCulturalSerializada($idPreProjeto, $prefix);
+
+//        $this->view->propostaAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($this->idPreProjeto);
+//            $this->view->propostaSalva = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($this->idPreProjeto, $prefix);
+
 
         } catch(Exception $e) {
             parent::message($e->getMessage(), "/admissibilidade/admissibilidade/listar-propostas", "INFO");
