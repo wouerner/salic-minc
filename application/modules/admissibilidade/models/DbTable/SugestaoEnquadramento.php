@@ -8,12 +8,12 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
 
     public function obterHistoricoEnquadramento($id_preprojeto)
     {
-        return $this->findBy(['id_preprojeto' => $id_preprojeto]);
+        return $this->findAll(['id_preprojeto' => $id_preprojeto]);
     }
 
     public function isPropostaEnquadrada($id_preprojeto, $id_orgao, $id_perfil_usuario)
     {
-        $resultado = $this->findBy(
+        $resultado = $this->findAll(
             [
                 'id_preprojeto' => $id_preprojeto,
                 'id_orgao' => $id_orgao,

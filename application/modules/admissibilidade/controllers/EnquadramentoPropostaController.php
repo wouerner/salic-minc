@@ -32,21 +32,20 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             }
 
             $post = $this->getRequest()->getPost();
-            if (
-                !$post['id_area']
+            if (!$post['id_area']
                 || $post['id_segmento']
                 || $post['descricao_motivacao']
             ) {
                 $this->carregardadosEnquadramentoProposta($preprojeto);
             } else {
-                $this->salvarSugestaoEnquadramento($preprojeto);
+                $this->salvarSugestaoEnquadramento();
             }
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), '/admissibilidade/enquadramento/gerenciar-enquadramento');
         }
     }
 
-    private function salvarSugestaoEnquadramento($projeto)
+    private function salvarSugestaoEnquadramento()
     {
         try {
             $post = $this->getRequest()->getPost();

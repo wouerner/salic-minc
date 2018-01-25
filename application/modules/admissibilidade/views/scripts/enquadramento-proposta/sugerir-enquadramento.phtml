@@ -13,11 +13,44 @@
                 <form method="post"
                       class="materialize"
                       id="formEnquadramentoProjeto"
-                      action="<?php echo $this->url(array(
+                      action="<?php echo $this->url([
                               'module' => 'admissibilidade',
                               'controller' => 'enquadramento-proposta',
                               'action' => 'sugerir-enquadramento'
-                          ), '', true) . "?id_preprojeto={$this->id_preprojeto}"; ?>">
+                          ],
+                              '',
+                              true) . "?id_preprojeto={$this->id_preprojeto}"; ?>">
+                    <div class="row">
+                        <div class="input-field col s12 m12" style="margin-bottom:50px">
+                            <h5 class="center">Enquadrar Proposta Cultural - <?php echo $this->preprojeto['NomeProjeto'] ?></h5>
+                        </div>
+                    </div>
+                    <div class="row" style="display: none;" id="bloco-Artigo">
+                        <?php
+//                    [0] => Array
+//                        (
+//                            [id_sugestao_enquadramento] => 1
+//                            [id_preprojeto] => 237487
+//                            [id_orgao] => 171
+//                            [id_perfil_usuario] => 92
+//                            [id_usuario_avaliador] => 236
+//                            [descricao_motivacao] => <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+//                                        [data_avaliacao] => 2018-01-24 19:38:54
+//                            [id_area] => 5
+//                            [id_segmento] => 5P
+//                        )
+//                        xd($this->historicoEnquadramento);
+                        ?>
+                        <div class="col s12">
+
+                            <label class="green-text text-darken-4">
+                                Enquadramento
+                            </label>
+                            <input type="hidden" name="enquadramento_preprojeto" id="enquadramento_preprojeto" value=""
+                                   class="obrigatorio"/>
+                            <span id="enquadramentoText" class="bold"></span>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="input-field col s12 m6">
                             <select id="id_area"
@@ -65,14 +98,14 @@
                         <div class="col s12">
                             <a class="btn waves-effect waves-dark red-text white" type="button" name="action"
                                href="<?php echo $this->url(
-                                   [
-                                       'module' => 'admissibilidade',
-                                       'controller' => 'admissibilidade',
-                                       'action' => 'exibirpropostacultural'
-                                   ],
-                                   '',
-                                   true
-                               ). "?idPreProjeto={$this->id_preprojeto}&realizar_analise=sim" ?>">
+                                       [
+                                           'module' => 'admissibilidade',
+                                           'controller' => 'admissibilidade',
+                                           'action' => 'exibirpropostacultural'
+                                       ],
+                                       '',
+                                       true
+                                   ) . "?idPreProjeto={$this->id_preprojeto}&realizar_analise=sim" ?>">
                                 Cancelar
                             </a>
                             <button class="btn waves-effect waves-light" type="submit" name="action">
