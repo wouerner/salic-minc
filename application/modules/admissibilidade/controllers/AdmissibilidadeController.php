@@ -14,6 +14,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     {
         $auth = Zend_Auth::getInstance(); // instancia da autenticacao
 
+        $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+
         // verifica as permissoes
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 90;  // Protocolo - Documento
@@ -259,6 +261,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $this->montaTela("admissibilidade/proposta-por-edital.phtml");
         } else {
+            $isPropostaEnquadrada = new tbAvaliacaoProposta();
+            $this->view->isPropostaEmConformidade = $isPropostaEnquadrada->isPropostaEmConformidade(
+                $this->idPreProjeto
+            );
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
     }
@@ -419,17 +425,17 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             //$email  =   'jailton.landim@cultura.gov.br';
             //para Produ�?o descomentar linha abaixo e para teste comente ela
             $email = trim(strtolower($d->Email));
-        $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Proponente: ' . $d->Destinatario . '<br> </b>' . $Mensagem;
-        $assunto = 'Avaliacao da proposta';
-        if ($pronac) {
-            $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Pronac: ' . $pronac . '<br> </b>' . $Mensagem;
-            $assunto = 'Proposta transformada em Projeto Cultural';
-        }
-        $perfil = "PerfilGrupoPRONAC";
+            $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Proponente: ' . $d->Destinatario . '<br> </b>' . $Mensagem;
+            $assunto = 'Avaliacao da proposta';
+            if ($pronac) {
+                $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Pronac: ' . $pronac . '<br> </b>' . $Mensagem;
+                $assunto = 'Proposta transformada em Projeto Cultural';
+            }
+            $perfil = "PerfilGrupoPRONAC";
 
-        $enviaEmail = EmailDAO::enviarEmail($email, $assunto, $mens, $perfil);
+            $enviaEmail = EmailDAO::enviarEmail($email, $assunto, $mens, $perfil);
 
-        $dados = array(
+            $dados = array(
                 'idProjeto' => $idProjeto,
                 'idTextoemail' => new Zend_Db_Expr('NULL'),
                 'iDAvaliacaoProposta' => new Zend_Db_Expr('NULL'),
@@ -438,7 +444,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 'idUsuario' => $auth->getIdentity()->usu_codigo,
             );
 
-        $tbHistoricoEmailDAO->inserir($dados);
+            $tbHistoricoEmailDAO->inserir($dados);
         endforeach;
     }
 
@@ -965,8 +971,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         foreach ($analistas as $analista) {
             $this->view->analistas[$analista->Tecnico][$i]['nrProposta'] = $analista->idProjeto;
             $this->view->analistas[$analista->Tecnico][$i]['NomeProjeto'] = $analista->NomeProposta;
-            $this->view->analistas[$analista->Tecnico][$i]['DtMovimentacao'] = ConverteData($analista->DtAdmissibilidade, 5);
-            ;
+            $this->view->analistas[$analista->Tecnico][$i]['DtMovimentacao'] = ConverteData($analista->DtAdmissibilidade, 5);;
             $this->view->analistas[$analista->Tecnico][$i]['fase'] = $analista->Fase;
             $i++;
         }
@@ -1083,14 +1088,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 if ($tipoCpf == "contendo") {
                     $arrBusca[" CNPJCPF LIKE "] = "'%" . $cpfCnpj . "%'";
                 } elseif ($tipoCpf == "igual") {
-                    $arrBusca[" CNPJCPF "] = "'" . $cpfCnpj . "'";
-                    ;
+                    $arrBusca[" CNPJCPF "] = "'" . $cpfCnpj . "'";;
                 } elseif ($tipoCpf == "inicioIgual") {
-                    $arrBusca[" CNPJCPF LIKE "] = "'" . $cpfCnpj . "%'";
-                    ;
+                    $arrBusca[" CNPJCPF LIKE "] = "'" . $cpfCnpj . "%'";;
                 } elseif ($tipoCpf == "diferente") {
-                    $arrBusca[" CNPJCPF <> "] = "'" . $cpfCnpj . "'";
-                    ;
+                    $arrBusca[" CNPJCPF <> "] = "'" . $cpfCnpj . "'";;
                 }
             }
             //ANALISTA
@@ -2586,8 +2588,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $idTextoEmail = 12;
 
                 $objTbTextoEmail = new tbTextoEmail();
-                $resultadoTetoEmail = $objTbTextoEmail->obterTextoPorIdentificador($idTextoEmail);
-                ;
+                $resultadoTetoEmail = $objTbTextoEmail->obterTextoPorIdentificador($idTextoEmail);;
 
                 $objProjetos = new Projetos();
 
@@ -2647,15 +2648,19 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         $recordsTotal = 0;
         $recordsFiltered = 0;
-
         if (!empty($propostas)) {
             $zDate = new Zend_Date();
+            $SugestaoEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             foreach ($propostas as $key => $proposta) {
                 $zDate->set($proposta->DtMovimentacao);
-
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
                 $proposta->Tecnico = utf8_encode($proposta->Tecnico);
                 $proposta->DtMovimentacao = $zDate->toString('dd/MM/y h:m');
+                $proposta->isEnquadrada = $SugestaoEnquadramento->isPropostaEnquadrada(
+                    $proposta->idProjeto,
+                    $this->grupoAtivo->codOrgao,
+                    $this->grupoAtivo->codGrupo
+                );
                 $aux[$key] = $proposta;
             }
 

@@ -1,0 +1,156 @@
+<script type="text/javascript"
+        src="<?php echo $this->baseUrl(); ?>/public/js/tinymce/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/js/jquery/plugins/editorRico.js"></script>
+<script type="text/javascript"
+        src="<?php echo $this->baseUrl(); ?>/public/js/admissibilidade/enquadramento-proposta/sugerir-enquadramento.js"></script>
+<main>
+    <div class="margin-bottom20 clearfix"></div>
+
+    <div id="alerta" class=""></div>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <form method="post"
+                      class="materialize"
+                      id="formEnquadramentoProjeto"
+                      action="<?php echo $this->url([
+                              'module' => 'admissibilidade',
+                              'controller' => 'enquadramento-proposta',
+                              'action' => 'sugerir-enquadramento'
+                          ],
+                              '',
+                              true) . "?id_preprojeto={$this->id_preprojeto}"; ?>">
+                    <div class="row">
+                        <div class="input-field col s12 m12" style="margin-bottom:50px">
+                            <h5 class="center">Enquadrar Proposta Cultural
+                                - <?php echo $this->preprojeto['NomeProjeto'] ?></h5>
+                        </div>
+                    </div>
+
+                    <?php
+                    if (count($this->historicoEnquadramento) > 0):
+                        ?>
+                        <div class="row">
+                            <div class="input-field col s12 m12 center" style="margin-bottom:80px">
+                                <button class="btn waves-effect waves-light enquadrarProposta"
+                                        type="button" id="botaoSugestoesEnquadramento">
+                                    Visualizar Hist&oacute;rico
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row conteudoImprimir" id="dialog-sugestoes-enquadramento" style="display: none" align="center">
+
+                            <table class="tabela" id="historicoSugestoes" style="border: 0px solid gray">
+                                <thead>
+                                <tr class="destacar">
+                                    <td class="center" width="10%"><b>N&uacute;mero</b></td>
+                                    <td class="center" width="10%"><b>Data</b></td>
+                                    <td class="center" width="20%"><b>Avaliador</b></td>
+                                    <td class="center" width="20%"><b>Unidade</b></td>
+                                    <td class="center" width="10%"><b>Enquadramento</b></td>
+                                    <td class="center"><b>Parecer</b></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                foreach ($this->historicoEnquadramento as $indice => $enquadramentoProposta) :
+                                    ?>
+                                    <tr>
+                                        <td align="left"><?php echo ++$indice ?></td>
+                                        <td align="left"><?php echo Data::dataBrasileira($enquadramentoProposta['data_avaliacao']) ?></td>
+                                        <td align="left"><?php echo $enquadramentoProposta['usu_nome'] ?></td>
+                                        <td align="left"><?php echo "{$enquadramentoProposta['org_sigla']} - {$enquadramentoProposta['gru_nome']}" ?></td>
+                                        <?php
+                                        $artigoEnquadramento = " - ";
+                                        if($enquadramentoProposta['tp_enquadramento']) {
+                                            $artigoEnquadramento = ($enquadramentoProposta['tp_enquadramento'] == 1) ? 'Artigo 26' : 'Artigo 18';
+                                        }
+                                        ?>
+                                        <td align="center" class="center"><?php echo $artigoEnquadramento ?></td>
+                                        <td align="left" nowrap><?php echo $enquadramentoProposta['descricao_motivacao'] ?></td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php
+                    endif;
+                    ?>
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <select id="id_area"
+                                    name="id_area"
+                                    style="width: 160px;">
+                                <option value=""> - Selecione -</option>
+                                <?php foreach ($this->comboareasculturais as $key => $value) { ?>
+                                    <option
+                                        value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                <?php } ?>
+                            </select>
+                            <label>&Aacute;rea Cultural</label>
+                            &nbsp; <span id="erroAreaCultural" class="spanError"></span>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <select name="id_segmento" id="id_segmento">
+                                <option value=""> - Selecione uma &Aacute;rea Cultural -</option>
+                            </select>
+                            <label>Segmento Cultural</label>
+                        </div>
+                    </div>
+                    <div class="row" style="display: none;" id="bloco-Artigo">
+                        <div class="col s12">
+                            <label class="green-text text-darken-4">
+                                Enquadramento
+                            </label>
+                            <input type="hidden" name="enquadramento_preprojeto" id="enquadramento_preprojeto" value=""
+                                   class="obrigatorio"/>
+                            <span id="enquadramentoText" class="bold"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12">
+                            <label class="green-text text-darken-4">
+                                Parecer de Enquadramento <b style="color: red">*</b>
+                            </label>
+                            <textarea cols="80" id="descricao_motivacao"
+                                      name="descricao_motivacao"
+                                      rows="10" class="textarea_simples"
+                                      style="width: 99%"><?php echo $this->descricao_motivacao ?></textarea>
+                        </div>
+                    </div>
+                    <div class="row" class="center-align">
+                        <div class="col s12">
+                            <a class="btn waves-effect waves-dark red-text white" type="button" name="action"
+                               href="<?php echo $this->url(
+                                       [
+                                           'module' => 'admissibilidade',
+                                           'controller' => 'admissibilidade',
+                                           'action' => 'exibirpropostacultural'
+                                       ],
+                                       '',
+                                       true
+                                   ) . "?idPreProjeto={$this->id_preprojeto}&realizar_analise=sim" ?>">
+                                Cancelar
+                            </a>
+                            <button class="btn waves-effect waves-light" type="submit" name="action">
+                                Salvar <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="rodape"><span></span></div>
+    <br clear="all"/>
+    <input id="action_segmento" type="hidden" value="<?php echo $this->url(
+        [
+            'module' => 'default',
+            'controller' => 'segmento',
+            'action' => 'combo'
+        ]
+    ); ?>"/>
+</main>
