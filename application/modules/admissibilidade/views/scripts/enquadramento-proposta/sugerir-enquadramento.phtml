@@ -22,35 +22,62 @@
                               true) . "?id_preprojeto={$this->id_preprojeto}"; ?>">
                     <div class="row">
                         <div class="input-field col s12 m12" style="margin-bottom:50px">
-                            <h5 class="center">Enquadrar Proposta Cultural - <?php echo $this->preprojeto['NomeProjeto'] ?></h5>
+                            <h5 class="center">Enquadrar Proposta Cultural
+                                - <?php echo $this->preprojeto['NomeProjeto'] ?></h5>
                         </div>
                     </div>
-                    <div class="row" style="display: none;" id="bloco-Artigo">
-                        <?php
-//                    [0] => Array
-//                        (
-//                            [id_sugestao_enquadramento] => 1
-//                            [id_preprojeto] => 237487
-//                            [id_orgao] => 171
-//                            [id_perfil_usuario] => 92
-//                            [id_usuario_avaliador] => 236
-//                            [descricao_motivacao] => <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-//                                        [data_avaliacao] => 2018-01-24 19:38:54
-//                            [id_area] => 5
-//                            [id_segmento] => 5P
-//                        )
-//                        xd($this->historicoEnquadramento);
-                        ?>
-                        <div class="col s12">
 
-                            <label class="green-text text-darken-4">
-                                Enquadramento
-                            </label>
-                            <input type="hidden" name="enquadramento_preprojeto" id="enquadramento_preprojeto" value=""
-                                   class="obrigatorio"/>
-                            <span id="enquadramentoText" class="bold"></span>
+                    <?php
+                    if (count($this->historicoEnquadramento) > 0):
+                        ?>
+                        <div class="row">
+                            <div class="input-field col s12 m12 center" style="margin-bottom:80px">
+                                <button class="btn waves-effect waves-light enquadrarProposta"
+                                        type="button" id="botaoSugestoesEnquadramento">
+                                    Visualizar Hist&oacute;rico
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row conteudoImprimir" id="dialog-sugestoes-enquadramento" style="display: none" align="center">
+
+                            <table class="tabela" id="historicoSugestoes" style="border: 0px solid gray">
+                                <thead>
+                                <tr class="destacar">
+                                    <td class="center" width="10%"><b>N&uacute;mero</b></td>
+                                    <td class="center" width="10%"><b>Data</b></td>
+                                    <td class="center" width="20%"><b>Avaliador</b></td>
+                                    <td class="center" width="20%"><b>Unidade</b></td>
+                                    <td class="center" width="10%"><b>Enquadramento</b></td>
+                                    <td class="center"><b>Parecer</b></td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                foreach ($this->historicoEnquadramento as $indice => $enquadramentoProposta) :
+                                    ?>
+                                    <tr>
+                                        <td align="left"><?php echo ++$indice ?></td>
+                                        <td align="left"><?php echo Data::dataBrasileira($enquadramentoProposta['data_avaliacao']) ?></td>
+                                        <td align="left"><?php echo $enquadramentoProposta['usu_nome'] ?></td>
+                                        <td align="left"><?php echo "{$enquadramentoProposta['org_sigla']} - {$enquadramentoProposta['gru_nome']}" ?></td>
+                                        <?php
+                                        $artigoEnquadramento = " - ";
+                                        if($enquadramentoProposta['tp_enquadramento']) {
+                                            $artigoEnquadramento = ($enquadramentoProposta['tp_enquadramento'] == 1) ? 'Artigo 26' : 'Artigo 18';
+                                        }
+                                        ?>
+                                        <td align="center" class="center"><?php echo $artigoEnquadramento ?></td>
+                                        <td align="left" nowrap><?php echo $enquadramentoProposta['descricao_motivacao'] ?></td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?php
+                    endif;
+                    ?>
                     <div class="row">
                         <div class="input-field col s12 m6">
                             <select id="id_area"

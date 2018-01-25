@@ -30,12 +30,8 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             if (!$preprojeto) {
                 throw new Exception("Proposta não encontrada.");
             }
-
             $post = $this->getRequest()->getPost();
-            if (!$post['id_area']
-                || $post['id_segmento']
-                || $post['descricao_motivacao']
-            ) {
+            if (!$post['descricao_motivacao']) {
                 $this->carregardadosEnquadramentoProposta($preprojeto);
             } else {
                 $this->salvarSugestaoEnquadramento();
@@ -45,12 +41,26 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
     }
 
+    private function carregardadosEnquadramentoProposta(array $preprojeto)
+    {
+        $mapperArea = new Agente_Model_AreaMapper();
+        $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo', 'Descricao');
+        $this->view->preprojeto = $preprojeto;
+
+        if (count($this->view->comboareasculturais) < 1) {
+            throw new Exception("N&atilde;o foram encontradas &Aacute;reas Culturais para o PRONAC informado.");
+        }
+
+        $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $this->view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($preprojeto['idPreProjeto']);
+    }
+
     private function salvarSugestaoEnquadramento()
     {
         try {
             $post = $this->getRequest()->getPost();
-            $observacao = trim($post['descricao_motivacao']);
-            if (empty($observacao)) {
+            $descricao_motivacao = trim($post['descricao_motivacao']);
+            if (empty($descricao_motivacao)) {
                 throw new Exception("O campo 'Parecer de Enquadramento' é de preenchimento obrigatório.");
             }
 
@@ -60,7 +70,8 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             $this->view->id_orgao = $this->grupoAtivo->codOrgao;
             $this->view->id_usuario_avaliador = $this->auth->getIdentity()->usu_codigo;
 
-
+            $id_area = ($post['id_area']) ? $post['id_area'] : null;
+            $id_segmento = ($post['id_segmento']) ? $post['id_segmento'] : null;
             $objEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
 
             $arrayArmazenamentoEnquadramento = array(
@@ -68,12 +79,11 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
                 'id_orgao' => $this->grupoAtivo->codOrgao,
                 'id_perfil_usuario' => $this->grupoAtivo->codGrupo,
                 'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo,
-                'id_area' => $post['id_area'],
-                'id_segmento' => $post['id_segmento'],
-                'descricao_motivacao' => $post['descricao_motivacao'],
+                'id_area' => $id_area,
+                'id_segmento' => $id_segmento,
+                'descricao_motivacao' => $descricao_motivacao,
                 'data_avaliacao' => $objEnquadramento->getExpressionDate(),
             );
-
 
             $arrayDadosEnquadramento = $objEnquadramento->findBy(
                 [
@@ -97,25 +107,4 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             parent::message($objException->getMessage(), "/admissibilidade/enquadramento-proposta/sugerir-enquadramento?id_preprojeto={$get['id_preprojeto']}");
         }
     }
-
-    private function carregardadosEnquadramentoProposta(array $preprojeto)
-    {
-        $mapperArea = new Agente_Model_AreaMapper();
-        $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo', 'Descricao');
-        $this->view->preprojeto = $preprojeto;
-
-        if (count($this->view->comboareasculturais) < 1) {
-            throw new Exception("N&atilde;o foram encontradas &Aacute;reas Culturais para o PRONAC informado.");
-        }
-//        $objSegmentocultural = new Segmentocultural();
-//        $this->view->combosegmentosculturais = $objSegmentocultural->buscarSegmento($preprojeto['Area']);
-
-//        if (count($this->view->combosegmentosculturais) < 1) {
-//            throw new Exception("N&atilde;o foram encontradas Segmentos Culturais para o PRONAC informado.");
-//        }
-        $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-        $this->view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($preprojeto['idPreProjeto']);
-    }
-
-
 }

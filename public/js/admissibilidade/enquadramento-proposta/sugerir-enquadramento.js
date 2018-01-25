@@ -23,7 +23,6 @@ function carregarEnquadramento(object) {
     }
     $3('#enquadramento_preprojeto').val(enquadramentoProjeto);
 }
-
 jQuery(function ($) {
 
     var limiteMaximo = 8000;
@@ -34,6 +33,18 @@ jQuery(function ($) {
         maxchar: limiteMaximo
     });
 
+    $('#botaoSugestoesEnquadramento').click(function () {
+        $("#dialog-sugestoes-enquadramento").dialog({
+            title :'Hist&oacute;rico de Sugest&otilde;es de Enquadramento.',
+            resizable: false,
+            width:'95%',
+            height: 450,
+            modal: true,
+            autoOpen:false
+        });
+        $("#dialog-sugestoes-enquadramento").dialog('open');
+    });
+
     $3('#id_area').change(function () {
         $3("#bloco-Artigo").hide();
         carregarSegmento();
@@ -42,7 +53,6 @@ jQuery(function ($) {
     $3('#id_segmento').change(function () {
         carregarEnquadramento(this);
     });
-
 
     $("#formEnquadramentoProjeto").validate({
         rules: {
