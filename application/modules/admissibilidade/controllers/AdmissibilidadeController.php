@@ -370,7 +370,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             );
             $this->view->avaliacoesAnteriores = $avaliacoesAnteriores;
         }
-        
+
+        $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
+        $this->view->existeVersionamentoProposta = $tbPreProjetoMapper->verificarSeExisteVersaoDaProposta($this->idPreProjeto, 'diligencia');
+
     }
 
     public function salvaravaliacaoAction()
@@ -2898,13 +2901,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 throw new Exception("N&uacute;mero do projeto &eacute; obrigat&oacute;rio");
             }
             $this->view->idPreProjeto = $idPreProjeto;
-
-
+            $this->view->etapa = $this->getRequest()->getParam('etapa', 'diligencia');
 
             //        $tbProposta = new Proposta_Model_DbTable_PreProjeto();
 //        $dados = $tbProposta->buscarIdentificacaoProposta(['pp.idPreProjeto = ?' => $idPreProjeto])->current()->toArray();
 //
-            $prefix = $this->getRequest()->getParam('prefix', 'teste');
 //            $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
 //            $tbPreProjetoMapper->salvarPropostaCulturalSerializada($idPreProjeto, $prefix);
 

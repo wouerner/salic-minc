@@ -346,4 +346,20 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
         return true;
     }
 
+    public function verificarSeExisteVersaoDaProposta($idPreProjeto, $etapa)
+    {
+        if(empty($idPreProjeto) || empty($etapa)) {
+            return false;
+        }
+
+        $TbPreProjetoMeta = new Proposta_Model_DbTable_TbPreProjetoMeta();
+        $response = $TbPreProjetoMeta->buscarMeta($idPreProjeto, $etapa . '_identificacaodaproposta');
+
+        if(empty($response)) {
+            return false;
+        }
+
+        return false;
+
+    }
 }
