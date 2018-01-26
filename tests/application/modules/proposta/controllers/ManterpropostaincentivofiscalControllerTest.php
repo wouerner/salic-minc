@@ -42,6 +42,10 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
         $this->assertModule('proposta');
         $this->assertController('manterpropostaincentivofiscal');
         $this->assertAction('identificacaodaproposta');
+
+        $this->assertQuery('#nomeProjeto');
+        $this->assertQuery('#objetivos');
+        $this->assertQuery('#justificativa');
     }
 
     public function testResponsabilidadesocialAction() 

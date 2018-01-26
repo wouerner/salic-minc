@@ -161,33 +161,31 @@ if ($this->isEditavel) {
 
 }
 ?>
-<div class="col s2 m12 l2">
-    <aside id="sidebar">
-        <ul id="sidenav" class="side-nav fixed">
-            <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'disabled' : ''; ?>">
-                <div>
-                    <p>
-                        <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
-                        <b>
-                            <?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
-                            <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?>
-                        </b>
-                    </p>
-                    <p class="info-title">
-                        <?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?>
-                    </p>
-                <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>
-                    <p class="">
-                        <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
-                        <i class="material-icons left tiny">query_builder</i>
-                        <span id="cronometro"></span>
-                    </p>
-                <?php endif; ?>
-                </div>
-            </li>
-            <?php echo $this->partialLoop('inc/item.phtml', $arrMenuProponente); ?>
-        </ul>
-    </aside>
+<aside id="sidebar">
+    <ul id="sidenav" class="side-nav fixed">
+        <li class="sidebar-info <?php echo (!$this->isEditavel) ? 'disabled' : ''; ?>">
+            <div>
+                <p>
+                    <i class="material-icons left tiny"><?php echo (!$this->isEditavel) ? 'lock_outline' : 'lock_open'; ?></i>
+                    <b>
+                        <?php echo isset($this->layout['titleShort']) ? $this->layout['titleShort'] : 'Proposta'; ?>
+                        <?php echo isset($this->layout['projeto']) ? $this->layout['projeto'] : $this->proposta['idpreprojeto']; ?>
+                    </b>
+                </p>
+                <p class="info-title">
+                    <?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?>
+                </p>
+            <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>
+                <p class="">
+                    <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
+                    <i class="material-icons left tiny">query_builder</i>
+                    <span id="cronometro"></span>
+                </p>
+            <?php endif; ?>
+            </div>
+        </li>
+        <?php echo $this->partialLoop('inc/item.phtml', $arrMenuProponente); ?>
+    </ul>
 
     <div id="trocarproponente" style="display:none">
 
@@ -228,7 +226,7 @@ if ($this->isEditavel) {
             </table>
         </form>
     </div>
-</div>
+</aside>
 <script type="text/javascript">
     function layout_fluido() {
         var janela = $(window).width();

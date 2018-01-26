@@ -6,7 +6,7 @@
     echo $this->partial('partials/head.phtml');
     ?>
 </head>
-<body class="<?= isset($this->bodyClass) ? $this->bodyClass : ''; ?>">
+<body class="<?= $this->bodyClass; ?>">
 <header>
     <?php $auth = array_change_key_case((array) Zend_Auth::getInstance()->getIdentity()); ?>
     <div id="topo" style="">
@@ -138,10 +138,43 @@
 
         $3(document).ready(function() {
             $3('#perfilXgrupo').material_select();
+
+            $3('.mensagens').each(function(){
+
+                var mensagemClass = '';
+
+                if($3(this).hasClass('msgCONFIRM')) {
+                    mensagemClass = 'green white-text'
+                }
+
+                if($3(this).hasClass('msgALERT')) {
+                    mensagemClass = 'mensagem1 orange darken-3 white-text'
+                }
+
+                if($3(this).hasClass('msgINFO')) {
+                    mensagemClass = 'mensagem1 card cyan white-text'
+                }
+
+                if($3(this).hasClass('msgERROR')) {
+                    mensagemClass = 'red darken-1 white-text'
+                }
+
+                var $toastContent = $3(".mensagens").html();
+                Materialize.toast($toastContent, 20000, mensagemClass);
+
+            });
         });
 
     </script>
 
+    <!-- ========== INICIO MENSAGENS (ERROS, CONFIRMACOES E ADVERTENCIAS) ========== -->
+    <?php if (isset($this->message)) : ?>
+        <div class="mensagem-content sumir">
+            <div class="mensagens msg<?php echo $this->message_type; ?>">
+                <div><?php echo $this->message; ?></div>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <!-- ========== FIM MENSAGENS (ERROS, CONFIRMACOES E ADVERTENCIAS) ========== -->
     <!-- ========== INICIO MENSAGENS DO PROJETO PARA O USUARIO ========== -->
@@ -157,17 +190,6 @@
     <!-- ========== FIM MENSAGENS DO PROJETO PARA O USUARIO ========== -->
 </header>
 <main>
-    <!-- ========== INICIO MENSAGENS (ERROS, CONFIRMACOES E ADVERTENCIAS) ========== -->
-    <?php if (isset($this->message)) : ?>
-        <div class="mensagens msg<?php echo $this->message_type; ?>">
-            <div class="float_right"><input type="button" class="btn_close" title="Fechar mensagem"
-                                            id="msg<?php echo $this->message_type; ?>"
-                                            onclick="$('.msg<?php echo $this->message_type; ?>').hide();"
-                                            onkeypress="$('.msg<?php echo $this->message_type; ?>').hide();"/></div>
-            <div><?php echo $this->message; ?></div>
-        </div>
-    <?php endif; ?>
-
     <?php echo $this->layout()->content; ?>
 </main>
 <?php echo $this->render('partials/footer.phtml'); ?>

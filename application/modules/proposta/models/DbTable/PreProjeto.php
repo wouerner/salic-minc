@@ -1,11 +1,4 @@
 <?php
-
-/**
- * PreProjeto
- *
- * @uses   Zend_Db_Table
- * @author wouerner <wouerner@gmail.com>
- */
 class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
 {
     protected $_schema= "sac";
@@ -113,22 +106,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
 
-//        "DtInicioDeExecucaoForm"=>"CONVERT(CHAR(10),DtInicioDeExecucao,103)",
-//                                  "DtFinalDeExecucaoForm"=>"CONVERT(CHAR(10),DtFinalDeExecucao,103)",
-//                                  "DtAtoTombamentoForm"=>"CONVERT(CHAR(10),DtAtoTombamento,103)",
-//                                  "dtAceiteForm"=>"CONVERT(CHAR(10),dtAceite,103)",
-//                                  "DtArquivamentoForm"=>"CONVERT(CHAR(10),DtArquivamento,103)",
-//                                  "CAST(ResumoDoProjeto as TEXT) as ResumoDoProjeto",
-//                                  "CAST(Objetivos as TEXT) as Objetivos",
-//                                  "CAST(Justificativa as TEXT) as Justificativa",
-//                                  "CAST(Acessibilidade as TEXT) as Acessibilidade",
-//                                  "CAST(DemocratizacaoDeAcesso as TEXT) as DemocratizacaoDeAcesso",
-//                                  "CAST(EtapaDeTrabalho as TEXT) as EtapaDeTrabalho",
-//                                  "CAST(FichaTecnica as TEXT) as FichaTecnica",
-//                                  "CAST(Sinopse as TEXT) as Sinopse",
-//                                  "CAST(ImpactoAmbiental as TEXT) as ImpactoAmbiental",
-//                                  "CAST(EspecificacaoTecnica as TEXT) as EspecificacaoTecnica",
-//                                  "CAST(EstrategiadeExecucao as TEXT) as EstrategiadeExecucao"
         $slct->from($this, array("*",
                                   "dtiniciodeexecucaoform"=> $this->getExpressionToChar("dtiniciodeexecucao"),
                                   "dtfinaldeexecucaoform"=> $this->getExpressionToChar("dtfinaldeexecucao"),
@@ -274,8 +251,9 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $rsPreProjeto->DtInicioDeExecucao     = $dados["dtiniciodeexecucao"];
         $rsPreProjeto->DtFinalDeExecucao      = $dados["dtfinaldeexecucao"];
         $rsPreProjeto->NrAtoTombamento        = $dados["nratotombamento"];
-        $rsPreProjeto->DtAtoTombamento        = $dados["dtatotombamento"];
+        $rsPreProjeto->DtAtoTombamento        = (isset($dados["dtatotombamento"])) ? $dados["dtatotombamento"] : null;
         $rsPreProjeto->EsferaTombamento       = $dados["esferatombamento"];
+        $rsPreProjeto->DescricaoAtividade     = $dados["descricaoatividade"];
         $rsPreProjeto->ResumoDoProjeto        = $dados["resumodoprojeto"];
         $rsPreProjeto->Objetivos              = $dados["objetivos"];
         $rsPreProjeto->Justificativa          = $dados["justificativa"];

@@ -18,6 +18,9 @@
                             <th>
                                Nome
                             </th>
+                            <th>
+                              E-mail 
+                            </th>
                         </thead>
                         <tbody>
                             <tr>
@@ -26,6 +29,9 @@
                                 </td>
                                 <td>
                                     <?php echo $this->nomeProjeto ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->emailProponente ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -53,6 +59,8 @@
 <script type="text/javascript">
     $3('#salvar')
         .on('click', function() {
+            $3('#salvar').prop('disabled', true);
+
             $3.ajax({
                   url: "/proposta/pre-projeto/update",
                   method: 'POST',
@@ -63,19 +71,19 @@
                   }
             })
             .done(function( data ) {
-              console.log(  data );
-            });
-
-            $3.ajax({
-                  url: "/proposta/pre-projeto-arquivado/store",
-                  method: 'POST',
-                  data: {
-                      idPreProjeto: $3('#idPreProjeto').val(),
-                      MotivoArquivamento: $3('#MotivoArquivamento').val()
-                  }
-            })
-            .done(function( data ) {
-              console.log(  data );
+                Materialize.toast(data.message, 4000,'green white-text');
+                $3.ajax({
+                      url: "/proposta/pre-projeto-arquivado/store",
+                      method: 'POST',
+                      data: {
+                          idPreProjeto: $3('#idPreProjeto').val(),
+                          MotivoArquivamento: $3('#MotivoArquivamento').val()
+                      }
+                })
+                .done(function( data ) {
+                    Materialize.toast(data.message, 4000, 'green white-text');
+                    window.location = "/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=" + $3('#idPreProjeto').val();
+                });
             });
     });
 </script>

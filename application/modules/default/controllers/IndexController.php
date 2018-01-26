@@ -239,7 +239,7 @@ class IndexController extends MinC_Controller_Action_Abstract
 
             $_SESSION["GrupoAtivo"]["codGrupo"] = $GrupoAtivo->codGrupo;
             $_SESSION["GrupoAtivo"]["codOrgao"] = $GrupoAtivo->codOrgao;
-            parent::message("Seu perfil foi alterado no sistema. Voc&ecirc; ter&aacute; acesso a outras funcionalidades!", "principalproponente", "ALERT");
+            parent::message("Seu perfil foi alterado no sistema. Voc&ecirc; ter&aacute; acesso a outras funcionalidades!", "principalproponente", "INFO");
         }
 
         //Reescreve a sessao com o novo orgao superior
@@ -248,7 +248,7 @@ class IndexController extends MinC_Controller_Action_Abstract
         $_SESSION['Zend_Auth']['storage']->usu_org_max_superior = $codOrgaoMaxSuperior;
 
         // redireciona para a p�gina inicial do sistema
-        parent::message("Seu perfil foi alterado no sistema. Voc&ecirc; ter&aacute; acesso a outras funcionalidades!", "principal", "ALERT");
+        parent::message("Seu perfil foi alterado no sistema. Voc&ecirc; ter&aacute; acesso a outras funcionalidades!", "principal", "INFO");
     } // fecha alterarPerfilAction()
 
 
