@@ -9,7 +9,8 @@
  *
  * @author 01610881125
  */
-class Contratoxagentes extends MinC_Db_Table_Abstract {
+class Contratoxagentes extends MinC_Db_Table_Abstract
+{
     protected $_name    = 'tbContratoxAgentes';
     protected $_schema  = 'bdcorporativo.scSAC';
 

@@ -9,7 +9,8 @@
  *
  * @author 01610881125
  */
-class Contratoxplanilhaaprovacao extends MinC_Db_Table_Abstract {
+class Contratoxplanilhaaprovacao extends MinC_Db_Table_Abstract
+{
     protected $_name    = 'tbContratoxPlanilhaAprovacao';
     protected $_schema  = 'bdcorporativo.scSAC';
 
