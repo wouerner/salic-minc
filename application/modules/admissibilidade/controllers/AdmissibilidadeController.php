@@ -1804,6 +1804,12 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             "urlResumo" => $this->_urlPadrao . "/admissibilidade/admissibilidade/resumo-propostas"
         );
 
+        if ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
+            $arrDados['liberarEncaminhamento'] = true;
+
+            $arrDados['unidadesEncaminhamento'] = [];
+        }
+
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
 
