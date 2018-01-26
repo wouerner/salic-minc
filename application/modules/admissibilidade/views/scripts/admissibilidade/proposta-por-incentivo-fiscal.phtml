@@ -34,6 +34,8 @@
         echo $this->partial("admissibilidade/inc/menu.inc.php");
     }
     $IncluirAvaliacao = $this->url(array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'incluiravaliacao'));
+    $enquadrarProposta = $this->url(array('module' => 'admissibilidade', 'controller' => 'enquadramento-proposta', 'action' => 'sugerir-enquadramento')) . "?id_preprojeto={$this->idPreProjeto}";
+
     ?>
     <style type="text/css">
         .mensagem {
@@ -51,6 +53,10 @@
         $(document).ready(function(){
             $('.avaliarProposta').click(function(){
                 $('#preProjeto').attr('action','<?php echo $IncluirAvaliacao;?>');
+                $('#preProjeto').submit();
+            });
+            $('.enquadrarProposta').click(function(){
+                $('#preProjeto').attr('action','<?php echo $enquadrarProposta;?>');
                 $('#preProjeto').submit();
             });
             $('.imprimirProposta').click(function(){
@@ -127,6 +133,13 @@
                         Avaliar <i class="material-icons right">gavel</i>
                     </button>
                 <?php endif; ?>
+
+                <?php if($this->isPropostaEmConformidade):?>
+                <button class="btn waves-effect waves-light enquadrarProposta" type="button" name="action">
+                    Enquadrar <i class="material-icons right">assignment</i>
+                </button>
+                <?php endif; ?>
+
             <?php endif; ?>
             <iframe name="esconde" id="esconde" class="sumir"> </iframe>
             <button title="Imprimir" class="btn waves-effect waves-light imprimirProposta white black-text" type="button" name="action">
@@ -265,6 +278,7 @@
                             <table class="bordered striped responsive-table">
                                 <tr class="destacar">
                                     <td align="left"><b>Data</b></td>
+                                    <td align="left"><b>Perfil</b></td>				    
                                     <td align="left"><b>Avalia&ccedil;&atilde;o</b></td>
                                 </tr>
                                 <?php
@@ -272,11 +286,13 @@
                                     foreach ($this->itensHistorico as $historico){ ?>
                                         <tr>
                                             <td align="left" nowrap><?php echo ConverteData($historico->DtAvaliacao, 25) ?></td>
+					    <td align="left"><?php echo $historico->Perfil ?></td>
                                             <td align="left"><?php echo $historico->Avaliacao ?></td>
                                         </tr>
                                         <?php if($historico->dtResposta != "" && strlen(strip_tags($historico->dsResposta)) > 1): ?>
                                             <tr>
                                                 <td align="left" nowrap><?php echo ConverteData($historico->dtResposta, 25) ?></td>
+						<td align="left"><?php echo $historico->Perfil ?></td>
                                                 <td align="left"><?php echo strip_tags($historico->dsResposta) ?></td>
                                             </tr>
                                         <?php endif; ?>
