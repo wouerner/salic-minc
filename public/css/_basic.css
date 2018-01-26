@@ -252,7 +252,6 @@ ul, menu, dir {
     -webkit-padding-start: 40px;
 }
 
-
 /*--------------------------------------------------------------
 x - CARREGAMENTO
 --------------------------------------------------------------*/
@@ -271,4 +270,9 @@ x - MODAL
     height: auto;
 }
 
+
+.collapsible-body .scroll .card-content {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
 
