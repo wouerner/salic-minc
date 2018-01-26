@@ -12,11 +12,11 @@
                     ));
                     ?>
                 </div>
-                <div class="col s12 m3 l2 right-align">
-                    <a href="javascript:voltar();" title="P&aacute;gina Anterior" title="P&aacute;gina Anterior"
-                       class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>
-                    </a>
-                </div>
+<!--                <div class="col s12 m3 l2 right-align">-->
+<!--                    <a href="javascript:voltar();" title="P&aacute;gina Anterior" title="P&aacute;gina Anterior"-->
+<!--                       class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>-->
+<!--                    </a>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -54,4 +54,93 @@
         el: '#container-vue'
     });
 
+</script>
+
+
+<div class="fixed-action-btn vertical">
+    <a class="btn-floating btn-large red">
+        <i class="large material-icons">add</i>
+    </a>
+    <ul>
+        <li>
+            <a href="/analise/analise/listarprojetos" class="btn-floating red tooltipped"
+               data-tooltip="Voltar para lista de projetos">
+                <i class="material-icons">undo</i>
+            </a>
+        </li>
+        <li>
+            <a id="ir-para-o-topo" class="btn-floating yellow darken-1 tooltipped" data-tooltip="Ir para o topo">
+                <i class="material-icons">arrow_upward</i>
+            </a>
+        </li>
+        <li>
+            <a class="expandall btn-floating waves-effect waves-light btn tooltipped btn-info" onClick="expandAll();" data-tooltip="Expandir tudo"><i class="material-icons left">fullscreen</i></a>
+            <a class="collapseall btn-floating waves-effect waves-light btn tooltipped btn-info " onClick="collapseAll();" data-tooltip="Fechar tudo"><i class="material-icons left">fullscreen_exit</i></a>
+        </li>
+
+
+    </ul>
+</div>
+
+<script>
+    $3(document).ready(function () {
+
+
+        $3("#visualizar-form").on('click', function () {
+            tinymce.remove();
+        });
+
+        if ($3('#ir-para-o-topo').length) {
+            var scrollTrigger = 100, // px
+                backToTop = function () {
+                    var scrollTop = $3(window).scrollTop();
+                    if (scrollTop > scrollTrigger) {
+                        $3('#ir-para-o-topo').parent().show();
+                    } else {
+                        $3('#ir-para-o-topo').parent().hide();
+                    }
+                };
+            backToTop();
+
+            $3(window).on('scroll', function () {
+                backToTop();
+            });
+
+            $3('#ir-para-o-topo').on('click', function (e) {
+                e.preventDefault();
+                $3('html,body').animate({
+                    scrollTop: 0
+                }, 700);
+            });
+        }
+
+        collapseAll();
+
+        $3(".container-fluid .collapsible-header").on('click', function () {
+            $3(".expandall").hide();
+            $3(".collapseall").show();
+        });
+
+    });
+
+    function expandAll(){
+
+        $3(".expandall").hide();
+        $3(".collapseall").show();
+
+        $3(".container-fluid .collapsible-header").addClass("active");
+        $3(".container-fluid .collapsible").collapsible({accordion: false});
+    }
+
+    function collapseAll(){
+        $3(".expandall").show();
+        $3(".collapseall").hide();
+
+        $3(".container-fluid .collapsible-header").removeClass(function(){
+            return "active";
+        });
+        $3(".container-fluid .collapsible").collapsible({accordion: true});
+        $3(".container-fluid .collapsible").collapsible({accordion: false});
+
+    }
 </script>
