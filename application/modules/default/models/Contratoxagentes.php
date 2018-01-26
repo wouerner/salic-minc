@@ -10,9 +10,8 @@
  * @author 01610881125
  */
 class Contratoxagentes extends MinC_Db_Table_Abstract {
-    protected $_banco   = 'bdcorporativo';
     protected $_name    = 'tbContratoxAgentes';
-    protected $_schema  = 'scSAC';
+    protected $_schema  = 'bdcorporativo.scSAC';
 
     public function inserirContratoxAgentes($data){
         $insert = $this->insert($data);
