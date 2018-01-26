@@ -1,8 +1,20 @@
 Vue.component('salic-proposta-diff', {
     template: `
         <div v-if="idpreprojeto" class="proposta">
-            <salic-proposta-identificacao :idpreprojeto="idpreprojeto" :proposta="dadosAtuais"></salic-proposta-identificacao>
-            <ul class="collapsible" data-collapsible="accordion">
+            <ul class="collapsible" data-collapsible="expandable">
+                 <li>
+                    <div class="collapsible-header"><i class="material-icons">assignment</i>Proposta - {{idpreprojeto}} - {{dadosAtuais.NomeProjeto}}</div>
+                    <div class="collapsible-body padding20">
+                        <div class="row">
+                            <div class="col s6 scroll">
+                                <salic-proposta-identificacao :idpreprojeto="idpreprojeto" :proposta="dadosHistorico"></salic-proposta-identificacao>
+                            </div>
+                            <div class="col s6 scroll">
+                                <salic-proposta-identificacao :idpreprojeto="idpreprojeto" :proposta="dadosAtuais"></salic-proposta-identificacao>
+                            </div>
+                        </div>
+                    </div>
+                </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">person</i>Proponente</div>
                     <div class="collapsible-body padding20">
@@ -137,6 +149,19 @@ Vue.component('salic-proposta-diff', {
                         </div>
                     </div>
                 </li>
+                 <li>
+                    <div class="collapsible-header"><i class="material-icons">subject</i>Descri&ccedil;&atilde;o de Atividades</div>
+                    <div class="collapsible-body padding20" v-if="dadosAtuais">
+                        <div class="row">
+                            <div class="col s6 scroll">
+                                <salic-texto-simples :texto="dadosHistorico.DescricaoAtividade"></salic-texto-simples>
+                            </div>
+                            <div class="col s6 scroll">
+                                <salic-texto-simples :texto="dadosAtuais.DescricaoAtividade"></salic-texto-simples>
+                            </div>
+                        </div>
+                    </div>
+                </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">place</i>Local de realiza&ccedil;&atilde;o/Deslocamento
                     </div>
@@ -217,7 +242,7 @@ Vue.component('salic-proposta-diff', {
             }
         }
     },
-    props: ['idpreprojeto'],
+    props: ['idpreprojeto', 'tipo'],
     mounted: function () {
         this.buscar_dados();
     },
@@ -225,10 +250,8 @@ Vue.component('salic-proposta-diff', {
         buscar_dados: function () {
             let vue = this;
             $3.ajax({
-                url: '/proposta/visualizar/obter-proposta-cultural-versionamento/idPreProjeto/' + vue.idpreprojeto
+                url: '/proposta/visualizar/obter-proposta-cultural-versionamento/idPreProjeto/' + vue.idpreprojeto + '/tipo/' + vue.tipo
             }).done(function (response) {
-                console.log(response.data.atual);
-                console.log(response.data.historico);
                 vue.dadosAtuais = response.data.atual;
                 vue.dadosHistorico= response.data.historico
             });

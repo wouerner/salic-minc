@@ -1,4 +1,5 @@
 <?php
+
 class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
 {
     public function __construct()
@@ -68,7 +69,8 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
         return $TbPreProjetoMeta->salvarMeta($idPreProjeto, $metakey, $serializado);
     }
 
-    public function salvarMatrizSerializada($array, $idPreProjeto, $prefix) {
+    public function salvarMatrizSerializada($array, $idPreProjeto, $prefix)
+    {
 
         if (empty($array) || empty($idPreProjeto) || empty($prefix)) {
             return false;
@@ -120,11 +122,11 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
 
         # identificacao da proposta (preprojeto) - campos que ainda nao foram salvo)
         $propostaCultural['identificacaoproposta'] = (
-            array_diff(
-                $proposta,
-                $propostaCultural['responsabilidadesocial'],
-                $propostaCultural['detalhestecnicos'],
-                $propostaCultural['outrasinformacoes'])
+        array_diff(
+            $proposta,
+            $propostaCultural['responsabilidadesocial'],
+            $propostaCultural['detalhestecnicos'],
+            $propostaCultural['outrasinformacoes'])
         );
 
         # Planilha orcamentaria
@@ -149,7 +151,7 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
         return $propostaCultural;
     }
 
-    public function salvarPropostaCulturalSerializada($idPreProjeto, $prefix = 'teste')
+    public function salvarPropostaCulturalSerializada($idPreProjeto, $prefix = 'alterarprojeto')
     {
         if (empty($idPreProjeto)) {
             return false;
@@ -178,7 +180,7 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
 
         $metas = $tbPreProjetoMeta->buscarMetas($idPreProjeto, null, $prefix);
 
-        if($metas) {
+        if ($metas) {
             foreach ($metas as $meta) {
                 $key = str_replace($prefix . '_', '', $meta['metaKey']);
                 $propostaCultural[$key] = unserialize($meta['metaValue']);
@@ -187,17 +189,6 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
 
         return $propostaCultural;
 
-//        $propostaCultural['planilhaProjeto'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix .'_'. 'tbplanilhaproposta'));
-//        $propostaCultural['itensLocalRealizacao'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'abrangencia'));
-//        $propostaCultural['itensDeslocamento'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'deslocamento'));
-//        $propostaCultural['itensPlanosDistribuicao'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'planodistribuicaoproduto'));
-//        $propostaCultural['tbdetalhaplanodistribuicao'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'tbdetalhaplanodistribuicao'));
-//        $propostaCultural['identificacaoproposta'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'identificacaoproposta'));
-//        $propostaCultural['responsabilidadesocial'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'responsabilidadesocial'));
-//        $propostaCultural['detalhestecnicos'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'detalhestecnicos'));
-//        $propostaCultural['outrasinformacoes'] = unserialize($tbPreProjetoMeta->buscarMeta($idPreProjeto, $prefix . '_' . 'outrasinformacoes'));
-
-//        xd($propostaCultural);
     }
 
     /**
@@ -346,4 +337,20 @@ class Proposta_Model_TbPreProjetoMetaMapper extends MinC_Db_Mapper
         return true;
     }
 
+    public function verificarSeExisteVersaoDaProposta($idPreProjeto, $etapa)
+    {
+        if (empty($idPreProjeto) || empty($etapa)) {
+            return false;
+        }
+
+        $TbPreProjetoMeta = new Proposta_Model_DbTable_TbPreProjetoMeta();
+        $response = $TbPreProjetoMeta->buscarMeta($idPreProjeto, $etapa . '_identificacaoproposta');
+
+        if (empty($response)) {
+            return false;
+        }
+
+        return true;
+
+    }
 }
