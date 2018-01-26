@@ -48,6 +48,8 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
             $propostaCulturalAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($idPreProjeto);
 
+            $propostaCulturalAtual = $this->prepararArrayParaJson($propostaCulturalAtual);
+
             $propostaAtual = array_merge(
                 $propostaCulturalAtual['responsabilidadesocial'],
                 $propostaCulturalAtual['detalhestecnicos'],
@@ -55,11 +57,15 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $propostaCulturalAtual['identificacaoproposta']
             );
 
+            $propostaAtual = array_merge($propostaAtual, $propostaCulturalAtual);
+
             $propostaCulturalHistorico = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($idPreProjeto, $tipo);
 
             if (empty($propostaCulturalHistorico)) {
                 throw new Exception("Historico n&atilde;o encontrado!");
             }
+
+            $propostaCulturalHistorico = $this->prepararArrayParaJson($propostaCulturalHistorico);
 
             $propostaHistorico = array_merge(
                 $propostaCulturalHistorico['responsabilidadesocial'],
@@ -68,11 +74,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $propostaCulturalHistorico['identificacaoproposta']
             );
 
-            $propostaAtual = array_map('utf8_encode', $propostaAtual);
-            $propostaAtual = array_map('html_entity_decode', $propostaAtual);
-
-            $propostaHistorico = array_map('utf8_encode', $propostaHistorico);
-            $propostaHistorico = array_map('html_entity_decode', $propostaHistorico);
+            $propostaHistorico = array_merge($propostaHistorico, $propostaCulturalHistorico);
 
             $dados = [];
             $dados['atual'] = $propostaAtual;
@@ -82,6 +84,30 @@ class Proposta_VisualizarController extends Proposta_GenericController
         } catch (Exception $e) {
             $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
         }
+    }
+
+    public function prepararArrayParaJson($dados)
+    {
+        foreach ($dados as $key => $array) {
+            foreach ($array as $key2 => $dado) {
+                if(is_array($dado)) {
+                    $dado = array_map('utf8_encode', $dado);
+                    $dados[$key][$key2] = array_map('html_entity_decode', $dado);
+
+                    foreach ($dado as $key3 => $dado2) {
+                        if(is_array($dado2)) {
+                            $dado2 = array_map('utf8_encode', $dado2);
+                            $dados[$key][$key2][$key3] = array_map('html_entity_decode', $dado2);
+                        }
+                    }
+                } else {
+                    $dado = utf8_encode($dado);
+                    $dados[$key][$key2] = html_entity_decode($dado);
+                }
+            }
+        }
+
+        return $dados;
     }
 
     public function obterHistoricoAvaliacoesAction()

@@ -44,6 +44,8 @@
         type="text/javascript"></script>
 <script src="/public/scripts/proposta/visualizar/salic-proposta-local-realizacao-deslocamento.vue.js"
         type="text/javascript"></script>
+<script src="/public/scripts/proposta/visualizar/salic-proposta-planilha-orcamentaria.vue.js"
+        type="text/javascript"></script>
 <script src="/public/scripts/agente/visualizar/salic-agente-proponente.vue.js" type="text/javascript"></script>
 <script src="/public/scripts/autenticacao/index/salic-autenticacao-usuario.vue.js" type="text/javascript"></script>
 
@@ -62,12 +64,12 @@
         <i class="large material-icons">add</i>
     </a>
     <ul>
-        <li>
-            <a href="/analise/analise/listarprojetos" class="btn-floating red tooltipped"
-               data-tooltip="Voltar para lista de projetos">
-                <i class="material-icons">undo</i>
-            </a>
-        </li>
+<!--        <li>-->
+<!--            <a href="/analise/analise/listarprojetos" class="btn-floating red tooltipped"-->
+<!--               data-tooltip="Voltar para lista de projetos">-->
+<!--                <i class="material-icons">undo</i>-->
+<!--            </a>-->
+<!--        </li>-->
         <li>
             <a id="ir-para-o-topo" class="btn-floating yellow darken-1 tooltipped" data-tooltip="Ir para o topo">
                 <i class="material-icons">arrow_upward</i>
@@ -119,6 +121,22 @@
         $3(".container-fluid .collapsible-header").on('click', function () {
             $3(".expandall").hide();
             $3(".collapseall").show();
+        });
+
+//        $('#cells').on('scroll', function () {
+//            $('#hours').scrollTop($(this).scrollTop());
+//            $('#days').scrollLeft($(this).scrollLeft());
+//        });
+//        $('#hours').on('scroll', function () {
+//            $('#cells').scrollTop($(this).scrollTop());
+//        });
+        $('.collapsible-body .scroll .card-content').on('scroll', function () {
+
+            console.log($(this).outerWidth());
+//            $( event.target ).closest( '.row' ).css('background', 'red');
+
+//            $(this).parent().parent().parent().parent().css('background', 'red');
+            //('.collapsible-body .scroll .card-content').scrollLeft($(this).scrollLeft());
         });
 
     });
