@@ -713,9 +713,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     public function confirmararquivarpropostaAction()
     {
         $tblProposta = new Proposta_Model_DbTable_PreProjeto();
-        $rsProposta = $tblProposta->buscar(array("idPreProjeto=?" => $this->idPreProjeto))->current();
+        $rsProposta = $tblProposta->buscaCompleta(array("idPreProjeto=?" => $this->idPreProjeto))->current();
+
         $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->nomeProjeto = strip_tags($rsProposta->NomeProjeto);
+        $this->view->emailProponente = $rsProposta->EmailAgente;
     }
 
     public function arquivarAction()
