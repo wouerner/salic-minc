@@ -39,11 +39,12 @@ class Proposta_VisualizarController extends Proposta_GenericController
         try {
 
             $idPreProjeto = $this->_request->getParam('idPreProjeto');
+            $tipo = $this->_request->getParam('tipo', 'alterarprojeto');
 
-            $tbProposta = new Proposta_Model_DbTable_PreProjeto();
-            $dados = $tbProposta->buscarIdentificacaoProposta(['pp.idPreProjeto = ?' => $idPreProjeto])->current()->toArray();
+            if( empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
+            }
 
-            $prefix = $this->getRequest()->getParam('prefix', 'teste');
             $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
             $propostaCulturalAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($idPreProjeto);
 
@@ -54,7 +55,12 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $propostaCulturalAtual['identificacaoproposta']
             );
 
-            $propostaCulturalHistorico = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($idPreProjeto, $prefix);
+            $propostaCulturalHistorico = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($idPreProjeto, $tipo);
+
+            if (empty($propostaCulturalHistorico)) {
+                throw new Exception("Historico n&atilde;o encontrado!");
+            }
+
             $propostaHistorico = array_merge(
                 $propostaCulturalHistorico['responsabilidadesocial'],
                 $propostaCulturalHistorico['detalhestecnicos'],

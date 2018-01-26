@@ -404,6 +404,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         if ($dados['ConformidadeOK'] == 1) {
             $objTbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
             $objTbMovimentacao->alterarConformidadeProposta($post->idPreProjeto, $this->idUsuario, Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL);
+        } else {
+
+            $tbPreProjetoMetaMapper = new Proposta_Model_TbPreProjetoMetaMapper();
+            $tbPreProjetoMetaMapper->salvarPropostaCulturalSerializada($post->idPreProjeto, 'diligencia');
+
         }
 
         parent::message("Conformidade visual finalizada com sucesso!", "/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=" . $post->idPreProjeto . "&gravado=sim", "CONFIRM");
@@ -2893,7 +2898,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     function analisarAlteracoesDaDiligenciaAction()
     {
-        // http://local.salic/admissibilidade/admissibilidade/analisar-alteracoes-da-diligencia/idPreProjeto/240095
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
 
         try {
@@ -2901,17 +2905,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 throw new Exception("N&uacute;mero do projeto &eacute; obrigat&oacute;rio");
             }
             $this->view->idPreProjeto = $idPreProjeto;
-            $this->view->etapa = $this->getRequest()->getParam('etapa', 'diligencia');
-
-            //        $tbProposta = new Proposta_Model_DbTable_PreProjeto();
-//        $dados = $tbProposta->buscarIdentificacaoProposta(['pp.idPreProjeto = ?' => $idPreProjeto])->current()->toArray();
-//
-//            $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
-//            $tbPreProjetoMapper->salvarPropostaCulturalSerializada($idPreProjeto, $prefix);
-
-//        $this->view->propostaAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($this->idPreProjeto);
-//            $this->view->propostaSalva = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($this->idPreProjeto, $prefix);
-
+            $this->view->tipo = $this->getRequest()->getParam('tipo', 'diligencia');
 
         } catch(Exception $e) {
             parent::message($e->getMessage(), "/admissibilidade/admissibilidade/listar-propostas", "INFO");
