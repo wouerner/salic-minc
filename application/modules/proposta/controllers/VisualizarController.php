@@ -41,12 +41,17 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $idPreProjeto = $this->_request->getParam('idPreProjeto');
             $tipo = $this->_request->getParam('tipo', 'alterarprojeto');
 
-            if( empty($idPreProjeto)) {
+            if (empty($idPreProjeto)) {
                 throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
             }
 
             $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
             $propostaCulturalAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($idPreProjeto);
+
+            $propostaCulturalAtual = $this->prepararArrayParaJson($propostaCulturalAtual);
+            $propostaCulturalAtual['tbplanilhaproposta'] = $this->montarPlanilhaProposta(
+                $propostaCulturalAtual['tbplanilhaproposta']
+            );
 
             $propostaAtual = array_merge(
                 $propostaCulturalAtual['responsabilidadesocial'],
@@ -55,12 +60,18 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $propostaCulturalAtual['identificacaoproposta']
             );
 
+            $propostaAtual = array_merge($propostaAtual, $propostaCulturalAtual);
+
             $propostaCulturalHistorico = $tbPreProjetoMapper->unserializarPropostaCulturalCompleta($idPreProjeto, $tipo);
 
             if (empty($propostaCulturalHistorico)) {
                 throw new Exception("Historico n&atilde;o encontrado!");
             }
 
+            $propostaCulturalHistorico = $this->prepararArrayParaJson($propostaCulturalHistorico);
+            $propostaCulturalHistorico['tbplanilhaproposta'] = $this->montarPlanilhaProposta(
+                $propostaCulturalHistorico['tbplanilhaproposta']
+            );
             $propostaHistorico = array_merge(
                 $propostaCulturalHistorico['responsabilidadesocial'],
                 $propostaCulturalHistorico['detalhestecnicos'],
@@ -68,11 +79,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $propostaCulturalHistorico['identificacaoproposta']
             );
 
-            $propostaAtual = array_map('utf8_encode', $propostaAtual);
-            $propostaAtual = array_map('html_entity_decode', $propostaAtual);
-
-            $propostaHistorico = array_map('utf8_encode', $propostaHistorico);
-            $propostaHistorico = array_map('html_entity_decode', $propostaHistorico);
+            $propostaHistorico = array_merge($propostaHistorico, $propostaCulturalHistorico);
 
             $dados = [];
             $dados['atual'] = $propostaAtual;
@@ -82,6 +89,69 @@ class Proposta_VisualizarController extends Proposta_GenericController
         } catch (Exception $e) {
             $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
         }
+    }
+
+    public function montarPlanilhaProposta($planilhaOrcamentaria)
+    {
+        $planilha = array();
+        $count = 0;
+        $i = 1;
+
+        foreach ($planilhaOrcamentaria as $item) {
+            $row = [];
+
+            $produto = !empty($item['idProduto']) ? $item['DescricaoProduto'] : utf8_encode('Administra&ccedil;&atilde;o do Projeto');
+
+            $row["Seq"] = $i;
+            $row["idPlanilhaProposta"] = $item['idPlanilhaProposta'];
+            $row["Item"] = $item['DescricaoItem'];
+            $row['FonteRecurso'] = $item['DescricaoRecurso'];
+            $row['Municipio'] = $item['DescricaoMunicipio'];
+            $row['UF'] = $item['DescricaoUf'];
+            $row['idEtapa'] = $item['idEtapa'];
+            $row['Etapa'] = $item['DescricaoEtapa'];
+            $row['Ocorrencia'] = $item['Ocorrencia'];
+            $row['Quantidade'] = $item['Quantidade'];
+            $row['QtdeDias'] = $item['QtdeDias'];
+            $row['vlUnitario'] = $item['ValorUnitario'];
+            $row["vlSolicitado"] = $item['Quantidade'] * $item['Ocorrencia'] * $item['ValorUnitario'];
+            $row['JustProponente'] = $item['dsJustificativa'];
+            $row['stCustoPraticado'] = $item['stCustoPraticado'];
+
+            foreach ($row as $cel => $val) {
+                $planilha[$row['FonteRecurso']][$produto][$row['idEtapa'] . ' - '
+                . $row['Etapa']][$row['UF'] . ' - '
+                . $row['Municipio']][$count][$cel] = $val;
+            }
+            $count++;
+            $i++;
+        }
+
+        return $planilha;
+    }
+
+    public function prepararArrayParaJson($dados)
+    {
+        foreach ($dados as $key => $array) {
+            foreach ($array as $key2 => $dado) {
+                if (is_array($dado)) {
+                    $dado = array_map('utf8_encode', $dado);
+                    $dados[$key][$key2] = array_map('html_entity_decode', $dado);
+
+                    foreach ($dado as $key3 => $dado2) {
+                        if (is_array($dado2)) {
+                            $dado2 = array_map('utf8_encode', $dado2);
+                            $dados[$key][$key2][$key3] = array_map('html_entity_decode', $dado2);
+                        }
+                    }
+                } else {
+                    $dado = utf8_encode($dado);
+                    $dados[$key][$key2] = html_entity_decode($dado);
+                }
+            }
+        }
+
+        return $dados;
     }
 
     public function obterHistoricoAvaliacoesAction()
@@ -103,7 +173,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $json['lines'] = $newArray;
             $json['cols'] = [
                 'Tipo' => ['name' => 'Tipo'],
-                'DtAvaliacao' =>['name' => 'Data'],
+                'DtAvaliacao' => ['name' => 'Data'],
                 'Avaliacao' => ['name' => 'Avalia&ccedil;&atilde;o']
             ];
 
@@ -160,7 +230,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 }
             }
 
-           $this->_helper->json(array('data' => $documentos, 'success' => 'true'));
+            $this->_helper->json(array('data' => $documentos, 'success' => 'true'));
         } catch (Exception $e) {
             $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
         }
@@ -255,7 +325,8 @@ class Proposta_VisualizarController extends Proposta_GenericController
         $this->_helper->json(array('data' => $dados, 'success' => 'true'));
     }
 
-    public function obterFonteDeRecursoAction() {
+    public function obterFonteDeRecursoAction()
+    {
 
         $this->_helper->layout->disableLayout();
         $idPreProjeto = $this->_request->getParam('idPreProjeto');
@@ -274,7 +345,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
         $json['lines'] = $newArray;
         $json['cols'] = [
             'Descricao' => ['name' => 'Fonte Recurso'],
-            'Valor' =>['name' => 'Valor (R$)']
+            'Valor' => ['name' => 'Valor (R$)']
         ];
 
         $this->_helper->json(array('data' => $json, 'success' => 'true'));
