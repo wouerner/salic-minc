@@ -1,17 +1,5 @@
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
-
-<!--div id="titulo">
-    <div><?php if(!$this->tituloTopo){?>Admissibilidade de propostas - Proposta cultural<?php } else { echo $this->tituloTopo;} ?>
-        <span class="voltar">
-            <?php if(isset($_GET['gravado']) && $_GET["gravado"]=="sim" ) :?>
-                <a href="<?php echo $this->url(array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'listar-propostas'))."?idPreProjeto=".$this->idPreProjeto; ?>"/>Voltar</a>
-           <?php else: ?>
-                <a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
-            <?php endif; ?>
-        </span>
-    </div>
-</div-->
 <script>
     function carregaDados(url,divRetorno){
         $("#conteudo").html('<br><br><center>Aguarde, carregando dados...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br><br>');
@@ -162,9 +150,6 @@
                    <i class="material-icons right ">transform</i> Transformar em Projeto
                 </button>
                 <a class="btn black white-text" title="Arquivar Proposta" alt="Arquivar Proposta"
-                    <?php if($this->movimentacao != Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL): ?>
-                         disabled
-                    <?php endif ?>
                     href="/admissibilidade/admissibilidade/confirmararquivarproposta?idPreProjeto=<?php echo $this->itensGeral[0]->idPreProjeto ?>">
                     <i class="material-icons right">archive</i>Arquivar
                 </a>

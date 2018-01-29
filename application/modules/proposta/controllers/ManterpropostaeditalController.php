@@ -1,14 +1,4 @@
 <?php
-/**
- * Controller Proposta_ManterpropostaeditalController
- * @author wouerner <wouerner@gmail.com>
- * @since 07/06/2010
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- */
-
 class Proposta_ManterpropostaeditalController extends Proposta_GenericController
 {
 

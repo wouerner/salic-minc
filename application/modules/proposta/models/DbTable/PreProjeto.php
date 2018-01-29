@@ -178,6 +178,13 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
                          $this->getSchema('agentes')
         );
 
+        $slct->joinLeft(
+            array('i' => 'Internet'),
+                         'a.idAgente = i.idAgente and i.Status = 1',
+                         array("i.Descricao as EmailAgente"),
+                         $this->getSchema('agentes')
+        );
+
         //adiciona quantos filtros foram enviados
         foreach ($where as $coluna=>$valor) {
             $slct->where($coluna, $valor);
@@ -1188,7 +1195,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
      *
      * @access public
      * @return void
-     * @author wouerner <wouerner@gmail.com>
      */
     public function listarPropostasResultado($idAgente, $idResponsavel, $idAgenteCombo)
     {
@@ -3348,5 +3354,91 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
         $select->limit(1);
 
         return $this->fetchRow($select);
+    }
+
+    public function listar(
+        $idAgente, 
+        $idResponsavel, 
+        $idAgenteCombo, 
+        $where = array(), 
+        $order = array(), 
+        $start = 0, 
+        $limit = 20, 
+        $search = null,
+        $stEstado = 1 
+    )
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+        $subSql = $db->select()
+            ->from(array('pr' => 'projetos'), array('idprojeto'), $this->_schema)
+            ->where('a.idpreprojeto = pr.idprojeto')
+        ;
+
+        $sql = $db->select()
+            ->from(array('a'=>'preprojeto'), array('a.idpreprojeto', 'a.nomeprojeto'), $this->_schema)
+            ->join(array('b' => 'agentes'), 'a.idagente = b.idagente', array('b.cnpjcpf', 'b.idagente'), $this->getSchema('agentes'))
+            ->joinleft(array('n' => 'nomes'), 'n.idagente = b.idagente', array('n.descricao as nomeproponente'), $this->getSchema('agentes'))
+            ->where('a.idagente = ? ', $idAgente)
+            ->where('a.stestado = ?', $stEstado)
+            ->where("NOT EXISTS($subSql)")
+            ->where("a.mecanismo = '1'")
+        ;
+
+        $sql2 = $db->select()
+            ->from(array('a'=>'preprojeto'), array('a.idpreprojeto', 'a.nomeprojeto'), $this->_schema)
+            ->join(array('b' => 'agentes'), 'a.idagente = b.idagente', array('b.cnpjcpf', 'b.idagente'), $this->getSchema('agentes'))
+            ->join(array('c' => 'vinculacao'), 'b.idagente = c.idvinculoprincipal', array(), $this->getSchema('agentes'))
+            ->join(array('d' => 'agentes'), 'c.idagente = d.idagente', array(), $this->getSchema('agentes'))
+            ->join(array('e' => 'sgcacesso'), 'd.cnpjcpf = e.cpf', array(), $this->getSchema('controledeacesso'))
+            ->joinleft(array('n' => 'nomes'), 'n.idagente = b.idagente', array('n.descricao as nomeproponente'), $this->getSchema('agentes'))
+            ->where('e.idusuario = ?', $idResponsavel)
+            ->where('a.stestado = ?', $stEstado)
+            ->where("NOT EXISTS($subSql)")
+            ->where("a.mecanismo = '1'")
+        ;
+
+        $sql3 = $db->select()
+            ->from(array('a'=>'preprojeto'), array('a.idpreprojeto', 'a.nomeprojeto'), Proposta_Model_DbTable_PreProjeto::getSchema('sac'))
+            ->join(array('b' => 'agentes'), 'a.idagente = b.idagente', array('b.cnpjcpf', 'b.idagente'), Proposta_Model_DbTable_PreProjeto::getSchema('agentes'))
+            ->join(array('c' => 'nomes'), 'b.idagente = c.idagente', array('c.descricao as nomeproponente'), Proposta_Model_DbTable_PreProjeto::getSchema('agentes'))
+            ->join(array('d' => 'sgcacesso'), 'a.idusuario = d.idusuario', array(), Proposta_Model_DbTable_PreProjeto::getSchema('controledeacesso'))
+            ->join(array('e' => 'tbvinculoproposta'), 'a.idpreprojeto = e.idpreprojeto', array(), Proposta_Model_DbTable_PreProjeto::getSchema('agentes'))
+            ->join(array('f' => 'tbvinculo'), 'e.idvinculo = f.idvinculo', array(), Proposta_Model_DbTable_PreProjeto::getSchema('agentes'))
+            ->where('a.stestado = ?', $stEstado)
+            ->where("NOT EXISTS($subSql)")
+            ->where("a.mecanismo = '1'")
+            ->where('e.sivinculoproposta = 2')
+            ->where('f.idusuarioresponsavel = ?', $idResponsavel)
+        ;
+
+        if (!empty($idAgenteCombo)) {
+            $sql->where('b.idagente = ?', $idAgenteCombo);
+            $sql2->where('b.idagente = ?', $idAgenteCombo);
+            $sql3->where('b.idagente = ?', $idAgenteCombo);
+        }
+
+        $sql = $db->select()->union(array($sql, $sql2,$sql3), Zend_Db_Select::SQL_UNION);
+
+        $sqlFinal = $db->select()->from(array("p" => $sql));
+
+        foreach ($where as $coluna=>$valor) {
+            $sqlFinal->where($coluna, $valor);
+        }
+
+        if (!empty($search['value'])) {
+            $sqlFinal->where('p.idpreprojeto like ? OR p.nomeprojeto like ? OR  p.nomeproponente like ?', '%'.$search['value'].'%');
+        }
+
+        $sqlFinal->order($order);
+
+        if (!is_null($start) && $limit) {
+            $start = (int)$start;
+            $limit = (int)$limit;
+            $sqlFinal->limitPage($start, $limit);
+        }
+
+        return $db->fetchAll($sqlFinal);
     }
 }

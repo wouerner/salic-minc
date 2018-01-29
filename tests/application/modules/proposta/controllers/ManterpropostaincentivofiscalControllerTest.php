@@ -154,4 +154,9 @@ class ManterpropostaincentivofiscalControllerTest extends MinC_Test_ControllerAc
 
     public function testRespnovoresponsavelAction(){
     }
+
+    public function testListarPropostasArquivadasAction(){
+        $this->dispatch('/proposta/manterpropostaincentivofiscal/listar-propostas-arquivadas');
+        $this->assertUrl('proposta','manterpropostaincentivofiscal', 'listar-propostas-arquivadas');
+    }
 }
