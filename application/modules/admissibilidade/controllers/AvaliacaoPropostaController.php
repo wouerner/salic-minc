@@ -15,17 +15,22 @@ class Admissibilidade_AvaliacaoPropostaController extends MinC_Controller_Action
 //        $this->redirect("/admissibilidade/enquadramento-proposta/gerenciar-enquadramento");
 //    }
 
-//    public function encaminharPropostaAction()
-//    {
-//        try {
-//            $post = $this->getRequest()->getPost();
-//            $descricao_motivacao = trim($post['descricao_motivacao']);
-//            if (empty($descricao_motivacao)) {
-//                throw new Exception("O campo 'Parecer de Enquadramento' é de preenchimento obrigatório.");
-//            }
-//
+    public function encaminharPropostaAction()
+    {
+        try {
+            $post = $this->getRequest()->getPost();
+            $id_preprojeto = trim($post['id_preprojeto']);
+            if (empty($id_preprojeto)) {
+                throw new Exception("Identificador da Proposta nao informado.");
+            }
+
+            $id_perfil = trim($post['id_perfil']);
+            if (empty($id_perfil)) {
+                throw new Exception("Identificador do Perfil nao informado.");
+            }
+
 //            $get = $this->getRequest()->getParams();
-//
+
 //            $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
 //            $this->view->id_orgao = $this->grupoAtivo->codOrgao;
 //            $this->view->id_usuario_avaliador = $this->auth->getIdentity()->usu_codigo;
@@ -61,10 +66,10 @@ class Admissibilidade_AvaliacaoPropostaController extends MinC_Controller_Action
 //                    'id_sugestao_enquadramento = ?' => $arrayDadosEnquadramento['id_sugestao_enquadramento']
 //                ]);
 //            }
-//
-//            parent::message('Enquadramento armazenado com sucesso!', "/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto={$get['id_preprojeto']}&realizar_analise=sim", 'CONFIRM');
-//        } catch (Exception $objException) {
-//            parent::message($objException->getMessage(), "/admissibilidade/enquadramento-proposta/sugerir-enquadramento?id_preprojeto={$get['id_preprojeto']}");
-//        }
-//    }
+
+            parent::message('Enquadramento armazenado com sucesso!', "/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto={$get['id_preprojeto']}&realizar_analise=sim", 'CONFIRM');
+        } catch (Exception $objException) {
+            parent::message($objException->getMessage(), "/admissibilidade/enquadramento-proposta/sugerir-enquadramento?id_preprojeto={$get['id_preprojeto']}");
+        }
+    }
 }
