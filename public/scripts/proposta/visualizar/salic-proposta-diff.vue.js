@@ -33,131 +33,131 @@ Vue.component('salic-proposta-diff', {
                 <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.FichaTecnica, dadosHistorico.FichaTecnica)}" i><i class="material-icons">subject</i>Ficha t&eacute;cnica</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.FichaTecnica"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.FichaTecnica"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.FichaTecnica"></td>
+                                    <td class="changed" v-html="dadosAtuais.FichaTecnica"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.ResumoDoProjeto, dadosHistorico.ResumoDoProjeto)}"><i class="material-icons">subject</i>Resumo</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.ResumoDoProjeto"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.ResumoDoProjeto"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.ResumoDoProjeto"></td>
+                                    <td class="changed" v-html="dadosAtuais.ResumoDoProjeto"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.Objetivos, dadosHistorico.Objetivos)}"><i class="material-icons">subject</i>Objetivos</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.Objetivos"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.Objetivos"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.Objetivos"></td>
+                                    <td class="changed" v-html="dadosAtuais.Objetivos"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.EtapaDeTrabalho, dadosHistorico.EtapaDeTrabalho)}"><i class="material-icons">subject</i>Etapa de Trabalho</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.EtapaDeTrabalho"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.EtapaDeTrabalho"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.EtapaDeTrabalho"></td>
+                                    <td class="changed" v-html="dadosAtuais.EtapaDeTrabalho"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.Acessibilidade, dadosHistorico.Acessibilidade)}"><i class="material-icons">subject</i>Acessibilidade</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.Acessibilidade"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.Acessibilidade"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.Acessibilidade"></td>
+                                    <td class="changed" v-html="dadosAtuais.Acessibilidade"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.Sinopse, dadosHistorico.Sinopse)}"><i class="material-icons">subject</i>Especifica&ccedil;&otilde;es t&eacute;cnicas do produto
+                    <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.EspecificacaoTecnica, dadosHistorico.EspecificacaoTecnica)}"><i class="material-icons">subject</i>Especifica&ccedil;&otilde;es t&eacute;cnicas do produto
                     </div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.Sinopse"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.Sinopse"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.EspecificacaoTecnica"></td>
+                                    <td class="changed" v-html="dadosAtuais.EspecificacaoTecnica"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.EspecificacaoTecnica, dadosHistorico.EspecificacaoTecnica)}"><i class="material-icons">subject</i>Sinopse de Obra</div>
+                    <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.Sinopse, dadosHistorico.Sinopse)}"><i class="material-icons">subject</i>Sinopse de Obra</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.EspecificacaoTecnica"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.EspecificacaoTecnica"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.Sinopse"></td>
+                                    <td class="changed" v-html="dadosAtuais.Sinopse"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.ImpactoAmbiental, dadosHistorico.ImpactoAmbiental)}"><i class="material-icons">subject</i>Impacto Ambiental</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.ImpactoAmbiental"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.ImpactoAmbiental"></salic-texto-simples>
-                            </div>
+                         <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.ImpactoAmbiental"></td>
+                                    <td class="changed" v-html="dadosAtuais.ImpactoAmbiental"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.Justificativa, dadosHistorico.Justificativa)}"><i class="material-icons">subject</i>Justificativa</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.Justificativa"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.Justificativa"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.Justificativa"></td>
+                                    <td class="changed" v-html="dadosAtuais.Justificativa"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
                  <li>
                     <div class="collapsible-header" v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.DescricaoAtividade, dadosHistorico.DescricaoAtividade)}"><i class="material-icons">subject</i>Descri&ccedil;&atilde;o de Atividades</div>
                     <div class="collapsible-body padding20" v-if="dadosAtuais">
-                        <div class="row">
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosHistorico.DescricaoAtividade"></salic-texto-simples>
-                            </div>
-                            <div class="col s12 m6 l6 scroll">
-                                <salic-texto-simples :texto="dadosAtuais.DescricaoAtividade"></salic-texto-simples>
-                            </div>
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="original" v-html="dadosHistorico.DescricaoAtividade"></td>
+                                    <td class="changed" v-html="dadosAtuais.DescricaoAtividade"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </li>
@@ -261,7 +261,11 @@ Vue.component('salic-proposta-diff', {
                 url: '/proposta/visualizar/obter-proposta-cultural-versionamento/idPreProjeto/' + vue.idpreprojeto + '/tipo/' + vue.tipo
             }).done(function (response) {
                 vue.dadosAtuais = response.data.atual;
-                vue.dadosHistorico= response.data.historico
+                vue.dadosHistorico= response.data.historico;
+
+                if(response.data.historico != 'undefined') {
+                    setTimeout(vue.mostrar_diferenca, 1000)
+                }
             });
         },
         existe_diferenca: function (atual, historico) {
@@ -271,6 +275,13 @@ Vue.component('salic-proposta-diff', {
             }
 
             return true;
+        },
+        mostrar_diferenca: function () {
+            $(".proposta table tr").prettyTextDiff({
+                cleanup: true,
+                diffContainer: ".diff",
+                debug: true
+            });
         }
     }
 });

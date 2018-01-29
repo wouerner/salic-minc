@@ -4,20 +4,17 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
             <div class="card">
                 <div class="card-content">
                     <h5>Planilha Or&ccedil;ament&aacute;ria</h5>
-
+        {{proposta}}
                     <table v-if="proposta" class="bordered responsive-table">
-                        <thead>
-                        <tr>
-                            <th>Etapa</th>
-                            <th>Item</th>
-                            <th>Valor unitario</th>
-                        </tr>
-                        </thead>
                         <tbody>
-                        <tr v-for="item in proposta">
-                            <td>{{ item.DescricaoEtapa }}</td>
-                            <td>{{ item.DescricaoItem }}</td>
-                            <td>{{ item.ValorUnitario }}</td>
+                        <tr v-for="(item, fonte) in proposta">
+                            <td>{{ fonte }}</td>
+                            
+                             <tr v-for="item in proposta.fonte">
+                                <td>{{ item.DescricaoEtapa }}</td>
+                                <td>{{ item.DescricaoItem }}</td>
+                                <td>{{ item.ValorUnitario }}</td>
+                            </tr>
                         </tr>
                         </tbody>
                     </table>
