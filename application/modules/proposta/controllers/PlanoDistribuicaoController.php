@@ -156,7 +156,8 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                  "dsJustificativaPosicaoLogo"=>$post->dsJustificativaPosicaoLogo,
                  "PrecoUnitarioNormal"=>$preconormal,
                  "PrecoUnitarioPromocional"=>$precopromocional,
-                 "stPrincipal"=>$post->prodprincipal
+                 "stPrincipal"=>$post->prodprincipal,
+                 "canalAberto"=>$post->canalAberto,
                  );
         if (isset($post->idPlanoDistribuicao)) {
             $dados["idPlanoDistribuicao"] = $post->idPlanoDistribuicao;
