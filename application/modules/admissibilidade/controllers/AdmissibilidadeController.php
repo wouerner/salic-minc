@@ -1777,6 +1777,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             "urlResumo" => $this->_urlPadrao . "/admissibilidade/admissibilidade/resumo-propostas"
         );
 
+        if ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
+            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
+        ) {
+            $arrDados['liberarEncaminhamento'] = true;
+        }
+
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
 
@@ -2653,6 +2660,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         if (!empty($propostas)) {
             $zDate = new Zend_Date();
             $SugestaoEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+            $avaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
             foreach ($propostas as $key => $proposta) {
                 $zDate->set($proposta->DtMovimentacao);
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
@@ -2663,7 +2671,22 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     $this->grupoAtivo->codOrgao,
                     $this->grupoAtivo->codGrupo
                 );
-                $aux[$key] = $proposta;
+
+                $avaliacaoProposta = true;
+                if ($this->codGrupo != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
+                    $avaliacaoProposta = $avaliacaoPropostaDbTable->findBy(
+                        [
+                            'id_preprojeto = ? ' => $proposta->idProjeto,
+                            'id_orgao_superior = ?' => $orgaoSuperior,
+                            'id_perfil = ?' => $this->codGrupo,
+                            'avaliacao_atual = ?' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
+                        ]
+                    );
+                }
+
+                if($avaliacaoProposta) {
+                    $aux[$key] = $proposta;
+                }
             }
 
             $recordsTotal = $vwPainelAvaliar->propostasTotal($where);
