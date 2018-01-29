@@ -2672,19 +2672,22 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     $this->grupoAtivo->codGrupo
                 );
 
-                $avaliacaoProposta = true;
+                $buscaAvaliacaoProposta = [
+                    'id_preprojeto = ? ' => $proposta->idProjeto,
+                    'id_orgao_superior = ?' => $orgaoSuperior,
+                    'avaliacao_atual = ?' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
+                ];
+
+                $validacaoPerfil = 'id_perfil <> ?';
                 if ($this->codGrupo != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-                    $avaliacaoProposta = $avaliacaoPropostaDbTable->findBy(
-                        [
-                            'id_preprojeto = ? ' => $proposta->idProjeto,
-                            'id_orgao_superior = ?' => $orgaoSuperior,
-                            'id_perfil = ?' => $this->codGrupo,
-                            'avaliacao_atual = ?' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
-                        ]
-                    );
+                    $validacaoPerfil = 'id_perfil = ?';
                 }
 
-                if($avaliacaoProposta) {
+                $buscaAvaliacaoProposta[$validacaoPerfil] = $this->codGrupo;
+                $avaliacaoProposta = $avaliacaoPropostaDbTable->findBy($buscaAvaliacaoProposta);
+
+                if($avaliacaoProposta
+                    || ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE && !$avaliacaoProposta)) {
                     $aux[$key] = $proposta;
                 }
             }
