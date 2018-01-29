@@ -211,19 +211,19 @@ Vue.component('salic-proposta-diff', {
                         <salic-proposta-fontes-de-recursos :idpreprojeto="idpreprojeto"></salic-proposta-fontes-de-recursos>
                     </div>
                 </li>
-                <li>
-                    <div id="planilha-orcamentaria" class="collapsible-header"><i class="material-icons">attach_money</i>Planilha
+               <li>
+                    <div id="planilha-orcamentaria" class="collapsible-header "><i class="material-icons">attach_money</i>Planilha
                         or&ccedil;ament&aacute;ria
                     </div>
-                    <div class="collapsible-body padding20">
+                    <div class="collapsible-body padding20 active">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll">
                                 <salic-proposta-planilha-orcamentaria
-                                :planilha="dadosAtuais"></salic-proposta-planilha-orcamentaria>
+                                :planilha="dadosAtuais.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
                             </div>
                              <div class="col s12 m6 l6 scroll">
                                 <salic-proposta-planilha-orcamentaria
-                                :planilha="dadosHistorico"></salic-proposta-planilha-orcamentaria>
+                                :planilha="dadosHistorico.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
                             </div>
                         </div>
                     </div>
@@ -280,7 +280,7 @@ Vue.component('salic-proposta-diff', {
             $(".proposta table tr").prettyTextDiff({
                 cleanup: true,
                 diffContainer: ".diff",
-                debug: true
+                debug: false
             });
         }
     }
