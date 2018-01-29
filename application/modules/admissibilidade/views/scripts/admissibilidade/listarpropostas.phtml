@@ -72,6 +72,41 @@
     </div>
 </div>
 
+<div id="modalEncaminharProposta" class="">
+    <div class="modal-content">
+        <h5>Encaminhamento da Avaliação da Proposta</h5>
+    </div>
+    <div class="modal-footer">
+
+        <form method="post"
+              action="<?php echo $this->url(
+                      [
+                          'module' => 'admissibilidade',
+                          'controller' => 'admissibilidade',
+                          'action' => 'gerarpdf'
+                      ]
+              ); ?>"  >
+
+            <select id="id_perfil">
+            <?php foreach ($perfis as $perfil) { ?>
+                <option value="<?php echo $perfil['Codigo'] ?>"><?php echo $perfil['Descricao'] ?></option>
+            <?php } ?>
+            </select>
+            <input type="hidden" id="id_preprojeto" name="id_preprojeto" />
+            <button class="btn waves-effect waves-light "
+                    id="botaoEnviarAvaliacaoProposta"
+                    type="button">
+                Enviar
+            </button>
+            <a class="btn waves-effect waves-dark red-text white modal-close">
+                Cancelar
+            </a>
+        </form>
+
+    </div>
+</div>
+
+
 <br clear="all"/>
 <iframe name="gerarPDF" style="display: none;"></iframe>
 
