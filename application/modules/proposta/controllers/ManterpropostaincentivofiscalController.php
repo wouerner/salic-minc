@@ -577,6 +577,10 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
                 $arrResultado = $this->validarEnvioPropostaComSp($idPreProjeto);
             }
 
+            /*Removaer*/
+            $arrResultado = new StdClass();
+            $params['confirmarenvioaominc'] = true; $arrResultado->Observacao = true;
+            /*Removaer*/
             if ($params['confirmarenvioaominc'] == true && $arrResultado->Observacao === true) {
                 $proposta = $tbPreProjeto->findBy(array('idPreProjeto' => $idPreProjeto));
 
@@ -1007,5 +1011,35 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             return true;
         }
         return true; #pf
+    }
+
+    public function listarPropostasArquivadasAction()
+    {
+        $proposta = new Proposta_Model_DbTable_PreProjeto();
+        $dadosCombo = array();
+        $cpfCnpj = '';
+
+        $rsVinculo = ($this->idResponsavel) ? $proposta->listarPropostasCombo($this->idResponsavel) : array();
+
+        $agente = array();
+
+        $i = 0;
+        foreach ($rsVinculo as $rs) {
+            $cpfCnpj = Mascara::addMaskCPF($rs->cnpjcpf);
+            if (strlen(trim($rs->cnpjcpf)) > 11) {
+                $cpfCnpj = Mascara::addMaskCNPJ($rs->cnpjcpf);
+            }
+
+            $dadosCombo[$i]['idAgenteProponente'] = $rs->idagente;
+            $dadosCombo[$i]['CPF'] = $cpfCnpj;
+            $dadosCombo[$i]['Nome'] = $rs->nomeproponente;
+
+            $i++;
+        }
+
+        $this->view->dadosCombo = $dadosCombo;
+        $this->view->idResponsavel = $this->idResponsavel;
+        $this->view->idUsuario = $this->idUsuario;
+        $this->view->idAgente = $this->idAgente;
     }
 }

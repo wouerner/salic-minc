@@ -14,6 +14,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     {
         $auth = Zend_Auth::getInstance(); // instancia da autenticacao
 
+        $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+
         // verifica as permissoes
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 90;  // Protocolo - Documento
@@ -259,6 +261,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $this->montaTela("admissibilidade/proposta-por-edital.phtml");
         } else {
+            $isPropostaEnquadrada = new tbAvaliacaoProposta();
+            $this->view->isPropostaEmConformidade = $isPropostaEnquadrada->isPropostaEmConformidade(
+                $this->idPreProjeto
+            );
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
     }
@@ -427,17 +433,17 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             //$email  =   'jailton.landim@cultura.gov.br';
             //para Produ�?o descomentar linha abaixo e para teste comente ela
             $email = trim(strtolower($d->Email));
-        $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Proponente: ' . $d->Destinatario . '<br> </b>' . $Mensagem;
-        $assunto = 'Avaliacao da proposta';
-        if ($pronac) {
-            $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Pronac: ' . $pronac . '<br> </b>' . $Mensagem;
-            $assunto = 'Proposta transformada em Projeto Cultural';
-        }
-        $perfil = "PerfilGrupoPRONAC";
+            $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Proponente: ' . $d->Destinatario . '<br> </b>' . $Mensagem;
+            $assunto = 'Avaliacao da proposta';
+            if ($pronac) {
+                $mens = '<b>Proposta: ' . $d->idProjeto . ' - ' . $d->NomeProjeto . '<br> Pronac: ' . $pronac . '<br> </b>' . $Mensagem;
+                $assunto = 'Proposta transformada em Projeto Cultural';
+            }
+            $perfil = "PerfilGrupoPRONAC";
 
-        $enviaEmail = EmailDAO::enviarEmail($email, $assunto, $mens, $perfil);
+            $enviaEmail = EmailDAO::enviarEmail($email, $assunto, $mens, $perfil);
 
-        $dados = array(
+            $dados = array(
                 'idProjeto' => $idProjeto,
                 'idTextoemail' => new Zend_Db_Expr('NULL'),
                 'iDAvaliacaoProposta' => new Zend_Db_Expr('NULL'),
@@ -446,7 +452,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 'idUsuario' => $auth->getIdentity()->usu_codigo,
             );
 
-        $tbHistoricoEmailDAO->inserir($dados);
+            $tbHistoricoEmailDAO->inserir($dados);
         endforeach;
     }
 
@@ -667,7 +673,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $retorno['sucesso'] = "A Proposta " . $this->idPreProjeto . " foi transformada no Projeto No. " . $nrPronac;
             }
         } catch (Exception $objException) {
-//            $retorno['erro'] = 'Erro ao tentar transformar proposta em projeto!';
             $retorno['erro'] = $objException->getMessage();
         }
         header('Content-Type: application/json');
@@ -693,36 +698,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dados['idTecnico'] = $this->idUsuario;
         $dados['despacho'] = trim($post->despacho);
 
-//        $despachoExiste = Proposta_Model_AnalisarPropostaDAO::verificarDespacho($post->idPreProjeto);
-
-//        if(count($despachoExiste)>0){
-//            Proposta_Model_AnalisarPropostaDAO::updateEstadoDespacho($post->idPreProjeto);
-//        }
-
         Proposta_Model_AnalisarPropostaDAO::inserirDespacho($dados);
-
-        //if($despachoExiste[0]->Tipo == 129 ){
-//        $movimentacaoExiste = Proposta_Model_AnalisarPropostaDAO::verificarMovimentcaoDespacho($post->idPreProjeto);
-
-//        if(count($movimentacaoExiste)>0 && $movimentacaoExiste[0]->Movimentacao == 127)
-//        {
-//            $dados['movimentacao'] = Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL;
-//
-//            //APAGA DOCUMENTOS PENDENTES CONFORME REGRA DA TRIGGER
-//            Proposta_Model_AnalisarPropostaDAO::deleteDocumentoProponentePeloProjeto($post->idPreProjeto);
-//            Proposta_Model_AnalisarPropostaDAO::deleteDocumentoProjetoPeloProjeto($post->idPreProjeto);
-//
-//        }else{
-//            $dados['movimentacao'] = 127;
-//        }
-
-//        Proposta_Model_AnalisarPropostaDAO::updateEstadoMovimentacao($post->idPreProjeto);
-//        Proposta_Model_AnalisarPropostaDAO::inserirMovimentacao($dados);
-        //}
-
-        //Envia Email
-//        $msg = new Zend_Config_Ini(getcwd().'/public/admissibilidade/mensagens_email_proponente.ini', 'sem_pendencia_documental');
-//        $this->eviarEmail($this->idPreProjeto,$msg->msg);
 
         if (isset($post->devolver) && $post->devolver == 1) {
             parent::message("Mensagem enviada com sucesso!", "/admissibilidade/admissibilidade/gerenciamentodepropostas", "CONFIRM");
@@ -734,29 +710,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
     }
 
-    public function arquivarpropostaAction()
-    {
-        $dao = new Proposta_Model_AnalisarPropostaDAO();
-        try {
-            //Enviar e-mail informando arquivamento e a justificativa
-            $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-            $rsPreProjeto = $tblPreProjeto->find($this->idPreProjeto)->current();
-            $rsPreProjeto->DtArquivamento = date("Y/m/d H:i:s");
-            $rsPreProjeto->stEstado = 0;
-            $rsPreProjeto->save();
-
-            parent::message("Opera&ccedil;&atilde;o realizada com sucesso!", "/admissibilidade/admissibilidade/listar-propostas", "CONFIRM");
-        } catch (Exception $e) {
-            parent::message("Erro ao realizar opera&ccedil;&atilde;o!", "/admissibilidade/admissibilidade/listar-propostas", "ERROR");
-        }
-    }
-
     public function confirmararquivarpropostaAction()
     {
         $tblProposta = new Proposta_Model_DbTable_PreProjeto();
-        $rsProposta = $tblProposta->buscar(array("idPreProjeto=?" => $this->idPreProjeto))->current();
+        $rsProposta = $tblProposta->buscaCompleta(array("idPreProjeto=?" => $this->idPreProjeto))->current();
+
         $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->nomeProjeto = strip_tags($rsProposta->NomeProjeto);
+        $this->view->emailProponente = $rsProposta->EmailAgente;
     }
 
     public function arquivarAction()
@@ -764,7 +725,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dao = new Proposta_Model_AnalisarPropostaDAO();
         $post = Zend_Registry::get('post');
         Proposta_Model_AnalisarPropostaDAO::deletePreProjeto($post->idprojeto);
-        ///Enviar e-mail informando arquivamento e a justificativa
     }
 
     public function imprimirpropostaculturalAction()
@@ -1021,8 +981,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         foreach ($analistas as $analista) {
             $this->view->analistas[$analista->Tecnico][$i]['nrProposta'] = $analista->idProjeto;
             $this->view->analistas[$analista->Tecnico][$i]['NomeProjeto'] = $analista->NomeProposta;
-            $this->view->analistas[$analista->Tecnico][$i]['DtMovimentacao'] = ConverteData($analista->DtAdmissibilidade, 5);
-            ;
+            $this->view->analistas[$analista->Tecnico][$i]['DtMovimentacao'] = ConverteData($analista->DtAdmissibilidade, 5);;
             $this->view->analistas[$analista->Tecnico][$i]['fase'] = $analista->Fase;
             $i++;
         }
@@ -1139,14 +1098,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 if ($tipoCpf == "contendo") {
                     $arrBusca[" CNPJCPF LIKE "] = "'%" . $cpfCnpj . "%'";
                 } elseif ($tipoCpf == "igual") {
-                    $arrBusca[" CNPJCPF "] = "'" . $cpfCnpj . "'";
-                    ;
+                    $arrBusca[" CNPJCPF "] = "'" . $cpfCnpj . "'";;
                 } elseif ($tipoCpf == "inicioIgual") {
-                    $arrBusca[" CNPJCPF LIKE "] = "'" . $cpfCnpj . "%'";
-                    ;
+                    $arrBusca[" CNPJCPF LIKE "] = "'" . $cpfCnpj . "%'";;
                 } elseif ($tipoCpf == "diferente") {
-                    $arrBusca[" CNPJCPF <> "] = "'" . $cpfCnpj . "'";
-                    ;
+                    $arrBusca[" CNPJCPF <> "] = "'" . $cpfCnpj . "'";;
                 }
             }
             //ANALISTA
@@ -1828,6 +1784,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             "formularioLocalizar" => $this->_urlPadrao . "/admissibilidade/admissibilidade/localizar",
             "urlResumo" => $this->_urlPadrao . "/admissibilidade/admissibilidade/resumo-propostas"
         );
+
+        if ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
+            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
+        ) {
+            $arrDados['liberarEncaminhamento'] = true;
+        }
 
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
@@ -2642,8 +2605,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $idTextoEmail = 12;
 
                 $objTbTextoEmail = new tbTextoEmail();
-                $resultadoTetoEmail = $objTbTextoEmail->obterTextoPorIdentificador($idTextoEmail);
-                ;
+                $resultadoTetoEmail = $objTbTextoEmail->obterTextoPorIdentificador($idTextoEmail);;
 
                 $objProjetos = new Projetos();
 
@@ -2703,16 +2665,36 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         $recordsTotal = 0;
         $recordsFiltered = 0;
-
         if (!empty($propostas)) {
             $zDate = new Zend_Date();
+            $SugestaoEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+            $avaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
             foreach ($propostas as $key => $proposta) {
                 $zDate->set($proposta->DtMovimentacao);
-
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
                 $proposta->Tecnico = utf8_encode($proposta->Tecnico);
                 $proposta->DtMovimentacao = $zDate->toString('dd/MM/y h:m');
-                $aux[$key] = $proposta;
+                $proposta->isEnquadrada = $SugestaoEnquadramento->isPropostaEnquadrada(
+                    $proposta->idProjeto,
+                    $this->grupoAtivo->codOrgao,
+                    $this->grupoAtivo->codGrupo
+                );
+
+                $avaliacaoProposta = true;
+                if ($this->codGrupo != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
+                    $avaliacaoProposta = $avaliacaoPropostaDbTable->findBy(
+                        [
+                            'id_preprojeto = ? ' => $proposta->idProjeto,
+                            'id_orgao_superior = ?' => $orgaoSuperior,
+                            'id_perfil = ?' => $this->codGrupo,
+                            'avaliacao_atual = ?' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
+                        ]
+                    );
+                }
+
+                if($avaliacaoProposta) {
+                    $aux[$key] = $proposta;
+                }
             }
 
             $recordsTotal = $vwPainelAvaliar->propostasTotal($where);

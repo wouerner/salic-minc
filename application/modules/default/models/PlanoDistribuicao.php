@@ -381,7 +381,6 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
 
         $dados =  $this->fetchRow($sql);
         $dados = $dados->toArray();
-
         $db = Zend_Db_Table::getDefaultAdapter();
         $return = $db->update('planodistribuicaoproduto', $dados, "idPlanoDistribuicao = " . $idPlanoDistribuicao);
     }
