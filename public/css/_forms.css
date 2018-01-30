@@ -15,6 +15,7 @@ div.dataTables_wrapper div.dataTables_filter input
     border: 1px solid rgba(0, 0, 0, 0.28);
     border-radius: .15rem;
     height: 2rem;
+    font-size: 15px;
     margin-bottom: 5px;
 }
 
@@ -225,9 +226,9 @@ form .browser-default {
     display: block;
     width: 100%;
     padding: .5rem .75rem;
-    /*font-size: 1rem;*/
+    font-size: 1rem;
     line-height: 1.25;
-    color: #495057;
+    color: #111213;
     background-color: #fff;
     background-image: none;
     background-clip: padding-box;
@@ -411,7 +412,7 @@ form .caption {
 
 #frmProposta .input-field label {
     color: #212121;
-    /*font-size: 16px;*/
+    font-size: 21px;
     line-height: 23px;
 }
 

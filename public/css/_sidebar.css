@@ -108,7 +108,7 @@ x - Menu lateral (legado)
 
 #qm0.qmmc div a {
     /*font-size: 13px;*/
-    line-height: 13px;
+    line-height: 16px;
     padding: 15px 5px 0 40px;
     clear: both;
     width: 100%;
@@ -141,7 +141,7 @@ x - Menu lateral (legado)
 #sidenav {
     max-width: 250px;
     position: absolute;
-    top: 99px;
+    top: 100px;
     background-color: #35384C;
     height: 100%;
     height: calc(100% - 99px);
