@@ -69,12 +69,16 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
             $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
         }
 
-        if ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
-            || $id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
-            /**
-             * @todo Preencher carregamento das entidades vinculadas.
-             */
+        if ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE) {
+            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
+            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_CNIC;
         }
+
+        if ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
+            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE;
+            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_CNIC;
+        }
+
 
         if($perfis) {
             return $this->findAll(

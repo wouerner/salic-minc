@@ -1,5 +1,9 @@
 <div class="container-fluid">
-    <?php echo $this->grupoAtivo->codGrupo ?>
+    <input type="hidden" id="perfil_atual" value="<?php echo $this->grupo ?>"/>
+    <input type="hidden" id="perfil_tecnico_admissibilidade"
+           value="<?php echo Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE ?>"/>
+    <input type="hidden" id="perfil_coordenador_admissibilidade"
+           value="<?php echo Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE ?>"/>
     <div class="row">
         <?php echo $this->partial("admissibilidade/inc/menu.inc.php", $this); ?>
         <div class="col s10 m10 l10">
@@ -218,11 +222,21 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-                                return '<a class="waves-effect waves-light btn modal-trigger" data-id_preprojeto="' + data.idProjeto + '" href="#dialogEncaminharProposta">'
-                                    + '<i class="material-icons" '
-                                    + ' title="Encaminhar An&aacute;lise de Proposta" '
-                                    + ' alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>'
-                                    + ' </a>'
+
+                                if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
+                                    && (
+                                        parseInt(data.quantidade_distribuicoes, 10) == 0 && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()
+                                        || (parseInt(data.quantidade_distribuicoes, 10) > 0 && parseInt(data.avaliacao_atual, 10) == 1)
+                                    )
+                                ) {
+                                    return '<a class="waves-effect waves-light btn modal-trigger" data-id_preprojeto="' + data.idProjeto + '" href="#dialogEncaminharProposta">'
+                                        + '<i class="material-icons" '
+                                        + ' title="Encaminhar An&aacute;lise de Proposta" '
+                                        + ' alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>'
+                                        + ' </a>'
+                                }
+
+                                return ''
                             }
                         },
                         <?php
@@ -236,7 +250,6 @@
     }($.noConflict(true)))
 
     $3('#imprimir').on('click', function () {
-        console.log('teste')
         $3('#conteudoImprimir').val($3('.conteudoImprimivel').html())
         $3('#formGerarPdf').submit()
     })
@@ -266,27 +279,27 @@
             var parametros = {}
             $3('#dialogEncaminharProposta form').serializeArray().map(function (x) {
                 parametros[x.name] = x.value
-            });
+            })
 
-            $3('#botaoEnviarAvaliacaoProposta').prop('disabled', true);
+            $3('#botaoEnviarAvaliacaoProposta').prop('disabled', true)
             $3.ajax({
                 type: 'POST',
                 url: $('#dialogEncaminharProposta form').attr('action'),
                 data: parametros,
                 success: function (data) {
-                    var callback = function(){};
-                    if(data.resposta){
-                        callback = function(){
-                            window.location.reload();
-                        };
-                        $3('#dialogEncaminharProposta').modal('close');
+                    var callback = function () {}
+                    if (data.resposta) {
+                        callback = function () {
+                            window.location.reload()
+                        }
+                        $3('#dialogEncaminharProposta').modal('close')
                     }
-                    Materialize.toast(data.mensagem, 4000,'', callback);
-                    $3('#botaoEnviarAvaliacaoProposta').prop('disabled', false);
+                    Materialize.toast(data.mensagem, 4000, '', callback)
+                    $3('#botaoEnviarAvaliacaoProposta').prop('disabled', false)
                 }
-            });
-        });
-    });
+            })
+        })
+    })
 
     $('#tabelaAnaliseFinal').ready(function () {
 
