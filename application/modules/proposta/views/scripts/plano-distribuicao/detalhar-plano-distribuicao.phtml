@@ -27,6 +27,9 @@
                                 <th>&Aacute;rea</th>
                                 <th>Segmento</th>
                                 <th>Principal</th>
+				<?php if ($planoDistribuicao->canalAberto): ?>
+				    <th>Canal aberto</th>
+				<?php endif; ?>
                             </tr>
                             </thead>
                             <tbody>
@@ -35,6 +38,9 @@
                                 <td><?php echo $planoDistribuicao->DescricaoArea; ?></td>
                                 <td><?php echo $planoDistribuicao->DescricaoSegmento; ?></td>
                                 <td><?php echo ($planoDistribuicao->stPrincipal == 0) ? 'N&atilde;o' : 'Sim'; ?></td>
+				<?php if ($planoDistribuicao->canalAberto): ?>
+				    <td>Sim</td>
+				<?php endif; ?>
                             </tr>
                             </tbody>
                         </table>
@@ -56,6 +62,7 @@
                                             idpreprojeto="<?php echo $this->idPreProjeto; ?>"
                                             iduf="<?php echo $abrangencia['idUF']; ?>"
                                             idmunicipioibge="<?php echo $abrangencia['idMunicipioIBGE']; ?>"
+					    canalaberto="<?php echo $planoDistribuicao->canalAberto; ?>"
                                         ></my-component>
                                     </div>
                                 </li>
@@ -168,8 +175,8 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <th class=""><b>Valor medio </b></th>
-                            <td class="center-align red" v-if="(valorMedioProponente.value() > 225)">{{valorMedioProponenteFormatado}}</td>
+                            <th class=""><b>Valor m&eacute;dio </b></th>
+                            <td class="center-align red" v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))">{{valorMedioProponenteFormatado}}</td>
                             <td class="center-align " v-else>{{valorMedioProponenteFormatado}}</td>
                         </tr>
                     </tfoot>
@@ -186,7 +193,7 @@
             </div>
 
             <div :id="_uid + '_form_detalhamento'">
-                <form v-show="visualizarFormulario" class="card" style="max-width: 1200px; margin: 0 auto; padding: 10px;">
+	      <form v-show="visualizarFormulario" class="card" style="max-width: 1200px; margin: 0 auto; padding: 10px;">
                     <div class="row">
                         <h5 class="light center-align">Cadastrar novo detalhamento</h5>
                         <div class="row">
