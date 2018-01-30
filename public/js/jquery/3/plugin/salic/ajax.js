@@ -93,11 +93,11 @@
 
         // Renderizando ajax e abrindo a modal por callback.
         objSettings.strTarget = strIdModal;
-        $(strIdModal).modal('open');
         $.ajaxRender(objSettings, function () {
             if (typeof callback == 'function') {
                 callback.call(this);
             }
+            $(strIdModal).modal('open');
         });
     };
 
