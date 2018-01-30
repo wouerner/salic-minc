@@ -2658,7 +2658,18 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $orgaoSuperior = $orgao[0]['Superior'];
         $where['idSecretaria = ?'] = $orgaoSuperior;
 
-        $propostas = $vwPainelAvaliar->propostas($where, $order, $start, $length, $search);
+        $distribuicaoAvaliacaoProposta = new Admissibilidade_Model_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoProposta->setIdOrgaoSuperior($orgaoSuperior);
+        $distribuicaoAvaliacaoProposta->setIdPerfil($this->grupoAtivo->codGrupo);
+
+        $propostas = $vwPainelAvaliar->obterPropostasParaAvaliacao(
+            $where,
+            $order,
+            $start,
+            $length,
+            $search,
+            $distribuicaoAvaliacaoProposta
+        );
 
         $recordsTotal = 0;
         $recordsFiltered = 0;
@@ -2677,24 +2688,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     $this->grupoAtivo->codGrupo
                 );
 
-                $buscaAvaliacaoProposta = [
-                    'id_preprojeto = ? ' => $proposta->idProjeto,
-                    'id_orgao_superior = ?' => $orgaoSuperior,
-                    'avaliacao_atual = ?' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
-                ];
-
-                $validacaoPerfil = 'id_perfil <> ?';
-                if ($this->codGrupo != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-                    $validacaoPerfil = 'id_perfil = ?';
-                }
-
-                $buscaAvaliacaoProposta[$validacaoPerfil] = $this->codGrupo;
-                $avaliacaoProposta = $avaliacaoPropostaDbTable->findBy($buscaAvaliacaoProposta);
-
-                if ($avaliacaoProposta
-                    || ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE && !$avaliacaoProposta)) {
-                    $aux[$key] = $proposta;
-                }
+                $aux[$key] = $proposta;
             }
 
             $recordsTotal = $vwPainelAvaliar->propostasTotal($where);
