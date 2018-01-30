@@ -576,11 +576,15 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             } else {
                 $arrResultado = $this->validarEnvioPropostaComSp($idPreProjeto);
             }
-
-            /*Removaer*/
-            $arrResultado = new StdClass();
-            $params['confirmarenvioaominc'] = true; $arrResultado->Observacao = true;
-            /*Removaer*/
+            
+            // validar planodistribuicao
+            $planoDistribuicao = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+            $verificaPlanoDistribuicao = $planoDistribuicao->validatePlanoDistribuicao($idPreProjeto);
+            
+            if (!empty($verificaPlanoDistribuicao)) {
+                $arrResultado = array_merge($arrResultado, $verificaPlanoDistribuicao);
+            }
+            
             if ($params['confirmarenvioaominc'] == true && $arrResultado->Observacao === true) {
                 $proposta = $tbPreProjeto->findBy(array('idPreProjeto' => $idPreProjeto));
 

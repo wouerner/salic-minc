@@ -158,7 +158,7 @@ Vue.component('my-component', {
             activeForm : false
         }
     },
-    props:['idpreprojeto','idplanodistribuicao', 'idmunicipioibge', 'iduf', 'disabled'],
+    props:['idpreprojeto','idplanodistribuicao', 'idmunicipioibge', 'iduf', 'disabled', 'canalaberto'],
     computed:{
         // Limite: preço popular: Quantidade de Inteira
         qtPrecoPopularValorIntegralLimite: function() {
@@ -544,7 +544,6 @@ Vue.component('my-component', {
     },
     mounted: function() {
         this.t();
-        // console.log(this.disabled);
         this.$refs.add.disabled = !this.disabled;
     },
     methods: {
@@ -626,7 +625,8 @@ Vue.component('my-component', {
 
             this.$data.produtos.push(p);
 
-            if(numeral(this.valorMedioProponente).value() > 225) {
+            if((numeral(this.valorMedioProponente).value() > 225
+		&& (this.canalaberto == 0))) {
                 this.mensagemAlerta("O valor medio:" + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: 225,00");
                 this.$data.produtos.splice(-1,1)
             }

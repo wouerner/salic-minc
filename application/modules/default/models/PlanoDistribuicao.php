@@ -72,7 +72,10 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
         if (isset($dados['stPlanoDistribuicaoProduto'])) {
             $tmpRsPlanoDistribuicao->stPlanoDistribuicaoProduto = $dados['stPlanoDistribuicaoProduto'] ;
         }
-
+        if (isset($dados['canalAberto'])) {
+            $tmpRsPlanoDistribuicao->canalAberto = $dados['canalAberto'] ;
+        }
+        
 //        echo "<pre>";
 
         //SALVANDO O OBJETO CRIADO
@@ -199,7 +202,8 @@ class PlanoDistribuicao extends MinC_Db_Table_Abstract
                     'a.stPrincipal',
                     'a.Usuario',
                     'CAST(a.dsJustificativaPosicaoLogo AS TEXT) AS dsJustificativaPosicaoLogo',
-                    'a.Usuario'
+                    'a.Usuario',
+                    'a.canalAberto'
                 ),
                 $this->_schema
         );
