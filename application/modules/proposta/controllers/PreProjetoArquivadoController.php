@@ -83,6 +83,37 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         );
     }
 
+    public function updateAction()
+    {
+        $message = null;
+        $success = true;
+
+        $idPreProjeto = $this->getRequrst()->getParam("idPreProjeto");
+        $SolicitacaoDesarquivamento = $this->getRequest()->getParam("SolicitacaoDesarquivamento");
+
+        $arquivar = new Proposta_Model_PreProjetoArquivado();
+
+        $data = [
+            'SolicitacaoDesarquivamento' => $SolicitacaoDesarquivamento,
+        ];
+
+        try {
+            $arquivar->update($data, ['idPreProjeto = ?' => $idPreProjeto]);
+            $message = 'Solicitação enviada!';
+        } catch(Exception $e){
+            $message = $e->getMessage();
+            $success = false;
+        }
+
+        $this->_helper->json(
+            [
+                'data' => $data,
+                'success' => $success,
+                'message' => $message
+            ]
+        );
+    }
+
     private function email($texto)
     {
         return function($e) {

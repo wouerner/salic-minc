@@ -59,9 +59,10 @@
                         <thead>
                         <tr>
                             <th>Proposta</th>
-                            <th>Nome da Proposta</th>
-                            <th>Nome do Proponente</th>
-                            <th>Situa&ccedil;&atilde;o</th>
+                            <th>Nome</th>
+                            <th>Proponente</th>
+                            <th>Data Arquivamento</th>
+                            <th>Desarquivar</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -74,7 +75,31 @@
         </div>
     </div>
 </div>
-
+<div id="modal1" class="modal bottom-sheet" style="max-height:95%; height:95%">
+    <div class="modal-content">
+      <h4>Solicitar Desarquivamento</h4>
+          <div class="row">
+            <div class=" col s12">
+                <p>
+                    motivos desarquivamento
+                </p>
+            </div>
+          </div>
+         <div class="row">
+            <form class="col s12">
+                <input type="hidden" name="idpreprojeto" id="idpreprojeto" value="">
+                <div class="input-field col s12">
+                  <textarea style="height:200px" class="materialize-textarea" id="SolicitacaoDesarquivamento" name="SolicitacaoDesarquivamento"></textarea>
+                  <label for="SolicitacaoDesarquivamento">Solicita&ccedil;&atilde;o Desarquivamento</label>
+                </div>
+            </form>
+          </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" id="enviarSolicitacao" class="modal-action modal-close waves-effect waves-green btn-flat green white-text">Solicitar</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat red-text">Cancelar</a>
+    </div>
+</div>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.expandir').live('click', function () {
@@ -121,6 +146,7 @@
 <script type="text/javascript">
     (function ($) {
         $(document).ready(function () {
+            $3('.modal').modal();
 
             var table =  $('#tabelaAnaliseFinal').DataTable(
                 {
@@ -150,7 +176,7 @@
                             data: null,
                             "name": "idpreprojeto",
                             render: function (data, type, row) {
-                                return '<a class="btn waves-effect waves-darrk white black-text small" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'identificacaodaproposta')); ?>/idPreProjeto/' + data.idpreprojeto + '">'
+                                return '<a class="btn waves-effect waves-dark white black-text small" href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'identificacaodaproposta')); ?>/idPreProjeto/' + data.idpreprojeto + '">'
                                     + data.idpreprojeto + '</a>'
                             }
                         },
@@ -164,8 +190,15 @@
 
                         },
                         {
-                            "name": "situacao",
-                            "data": "situacao"
+                            "name": "Data Arquivamento",
+                            "data": "DtArquivamento"
+                        },
+                        {
+                            data: null,
+                            "name": "botao",
+                            render: function (data, type, row) {
+                                return '<button data-target="modal1" class="btnSolicitar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '">Solicitar</button>'
+                            }
                         }
                     ]
                 }
@@ -173,6 +206,26 @@
 
             $("#localizar").click(function () {
                 table.ajax.reload();
+            });
+
+            $("tbody").on('click','button', function () {
+                console.log($3(this).data('idpreprojeto'));
+                let idpreprojeto = $3(this).data('idpreprojeto');
+                $3('#idpreprojeto').val(idpreprojeto);
+            });
+
+            $("#enviarSolicitacao").on('click', function () {
+                $3.ajax({
+                    url:'/proposta/pre-projeto-arquivado/update',
+                    data: {
+                        idpreprojeto: $3('#idpreprojeto').val(), 
+                        SolicitacaoDesarquivamento: $3('#SolicitacaoDesarquivamento').val() 
+                    },
+                    method:'POST'
+                }).
+                done(function(data) {
+                    console.log(data);
+                });
             });
         });
     }($.noConflict(true)));
