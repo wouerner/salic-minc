@@ -70,21 +70,22 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         $idUFLocalizacao = null;
         $idMunicipioLocalizacao = null;
         foreach ($localizacoesProposta as $localizacao) {
-            if($percentualRemuneracaoCaptacao == $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS) {
+            if (in_array($localizacao->UF, $wherePercentualRemuneracao12)) {
+                $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_UFS_RS_PR_SC_MG_ES_REMUNERACAO_CAPTACAO_DE_RECURSOS;
                 $idUFLocalizacao = $localizacao->idUF;
                 $idMunicipioLocalizacao = $localizacao->idMunicipio;
             }
 
-            if (in_array($localizacao->UF, $wherePercentualRemuneracao15)) {
-                $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REGIOES_N_NE_CO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
+            if (in_array($localizacao->UF, $wherePercentualRemuneracao10)) {
+                $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
                 $idUFLocalizacao = $localizacao->idUF;
                 $idMunicipioLocalizacao = $localizacao->idMunicipio;
                 break;
             }
 
-            if (in_array($localizacao->UF, $wherePercentualRemuneracao12)
-                && $percentualRemuneracaoCaptacao != $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS) {
-                $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_UFS_RS_PR_SC_MG_ES_REMUNERACAO_CAPTACAO_DE_RECURSOS;
+            if(in_array($localizacao->UF, $wherePercentualRemuneracao15)
+                && $percentualRemuneracaoCaptacao != $ModelCustosVinculados::PERCENTUAL_UFS_RS_PR_SC_MG_ES_REMUNERACAO_CAPTACAO_DE_RECURSOS) {
+                $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REGIOES_N_NE_CO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
                 $idUFLocalizacao = $localizacao->idUF;
                 $idMunicipioLocalizacao = $localizacao->idMunicipio;
             }
@@ -276,7 +277,7 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
         $custosVinculados = $tbCustosVinculadosMapper->obterCustosVinculados($idPreProjeto);
 
         $auth = Zend_Auth::getInstance();
-        $idUsuario = $auth->getIdentity()->usu_codigo;
+        $idUsuario = $auth->getIdentity()->IdUsuario;
 
         foreach ($custosVinculados as $key => $item) {
 
