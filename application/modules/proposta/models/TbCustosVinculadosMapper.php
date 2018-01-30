@@ -56,8 +56,8 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
             'SC', 'RS', 'PR', 'ES', 'MG'
         );
 
-        $tbAbrangencia = new Proposta_Model_DbTable_Abrangencia();
-        $localizacoesProposta = $tbAbrangencia->buscarRegiaoUFMunicipio($idPreProjeto);
+        $tbPlanoDistribuicao = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+        $localizacoesProposta = $tbPlanoDistribuicao->obterUfsMunicipiosDoDetalhamento($idPreProjeto);
 
         $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REGIOES_N_NE_CO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
 
