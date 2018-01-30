@@ -48,6 +48,7 @@ header #atalhos {
     width: 80%;
     text-align: right;
     min-height: 45px;
+    z-index: 1001;
 }
 
 header #atalhos a {
