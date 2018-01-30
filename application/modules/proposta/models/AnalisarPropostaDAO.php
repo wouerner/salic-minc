@@ -45,6 +45,7 @@ class Proposta_Model_AnalisarPropostaDAO extends MinC_Db_Model
                     p.stPlanoAnual,
                     p.stProposta,
                     p.tpProrrogacao,
+                    p.DescricaoAtividade,
                     a.CNPJCPF,
                     agentes.dbo.fnNome(p.idAgente) as NomeAgente,
                     SAC.dbo.fnNomeTecnicoMinc(tbap.idTecnico) as tecnico,
@@ -345,7 +346,7 @@ class Proposta_Model_AnalisarPropostaDAO extends MinC_Db_Model
         SELECT 'Proposta' as tipo,idProjeto,idTecnico,idPerfil, g.gru_nome AS Perfil ,usu_Nome, convert(varchar(30),DtAvaliacao, 120 ) as DtAvaliacao, Avaliacao
             FROM       SAC.dbo.tbAvaliacaoProposta p
               INNER JOIN tabelas.dbo.Usuarios        u on (p.idTecnico = u.usu_codigo)
-              LEFT JOIN tabelas.dbo.grupos g ON g.gru_codigo = idPerfil   
+              LEFT JOIN tabelas.dbo.grupos g ON g.gru_codigo = idPerfil
             WHERE    ConformidadeOK < 9
                      AND idProjeto = {$idPreProjeto}
             UNION ALL
@@ -363,7 +364,7 @@ class Proposta_Model_AnalisarPropostaDAO extends MinC_Db_Model
             WHERE idProjeto = {$idPreProjeto}
             ORDER BY 5 ASC
         ";
-        
+
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);

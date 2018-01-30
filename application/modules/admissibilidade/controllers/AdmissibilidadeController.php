@@ -52,6 +52,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $PermissoesGrupo[] = 139; // Tecnico de Avaliacao
         $PermissoesGrupo[] = 140; // Tecnico de Admissibilidade Edital
         $PermissoesGrupo[] = 148;
+        kmjknmjmjimi
         $PermissoesGrupo[] = 151;
         //parent::perfil(1, $PermissoesGrupo);
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
