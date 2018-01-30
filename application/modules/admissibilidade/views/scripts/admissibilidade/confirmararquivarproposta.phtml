@@ -13,13 +13,13 @@
                     <table class="">
                         <thead>
                             <th>
-                               Numero
+                               Numero:
                             </th>
                             <th>
-                               Nome
+                               Nome:
                             </th>
                             <th>
-                              E-mail 
+                              E-mail:
                             </th>
                         </thead>
                         <tbody>
@@ -37,8 +37,16 @@
                         </tbody>
                     </table>
                         <div class="input-field">
-                            <textarea id="MotivoArquivamento" name="MotivoArquivamento" class="materialize-textarea"></textarea>
-                            <label form="MotivoArquivamento">Justificativa *</label>
+                            <textarea id="MotivoArquivamento" name="MotivoArquivamento" class="materialize-textarea">
+Sr(a) Proponente,
+
+Informa-se que a proposta n&deg; <?php echo $this->idPreProjeto ?> foi arquivada no exame preliminar de admissibilidade pelo seguinte motivo:
+
+[Motivo do arquivamento]
+
+O proponente pode pedir o desarquivamento da proposta uma &uacute;nica vez acessando a listagem das propostas arquivadas e clicando no bot&atilde;o "solicitar desarquivamento". O pedido deve ser motivado, ou seja, conter as justificativas necess&aacute;rias para o desarquivamento.
+                            </textarea>
+                            <label class="actived" form="MotivoArquivamento">Justificativa *</label>
                         </div>
                 </div>
                 <div class="card-action">
@@ -55,6 +63,11 @@
         </div>
     </div>
 </div>
+<style>
+    textarea.materialize-textarea{
+        height: 10rem;
+    }
+</style>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script type="text/javascript">
     $3('#salvar')
