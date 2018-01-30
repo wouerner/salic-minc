@@ -265,20 +265,34 @@ class Proposta_VisualizarController extends Proposta_GenericController
         $this->_helper->layout->disableLayout();
 
         $deslocamentos = new Proposta_Model_TbDeslocamentoMapper();
-        $dados = $deslocamentos->getDbTable()->buscarDeslocamento($idPreProjeto, $id);
+        $dados = $deslocamentos->getDbTable()->buscarDeslocamento($idPreProjeto);
 
         $dados = [];
 
         $this->_helper->json(array('data' => $dados, 'success' => 'true'));
     }
 
-    public function obterPlanilhaOrcamentariaPropostaAction($idPreProjeto)
+    public function obterPlanilhaOrcamentariaPropostaAction()
     {
         $this->_helper->layout->disableLayout();
 
-        $dados = [];
+        $idPreProjeto = $this->_request->getParam('idPreProjeto');
 
-        $this->_helper->json(array('data' => $dados, 'success' => 'true'));
+        try {
+
+            if (empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;ria");
+            }
+            $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
+            $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPreProjeto, 0);
+            $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, 0);
+
+            //@todo, falta converter para utf8
+
+            $this->_helper->json(array('data' => $planilha, 'success' => 'true'));
+        } catch (Exception $e) {
+            $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
+        }
     }
 
     public function obterPlanoDeDivulgacaoAction($idPreProjeto)

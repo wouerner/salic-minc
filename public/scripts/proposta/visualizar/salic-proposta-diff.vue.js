@@ -269,11 +269,9 @@ Vue.component('salic-proposta-diff', {
             });
         },
         existe_diferenca: function (atual, historico) {
-
             if(atual == historico) {
                 return false;
             }
-
             return true;
         },
         mostrar_diferenca: function () {
