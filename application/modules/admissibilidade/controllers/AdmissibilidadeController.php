@@ -1784,6 +1784,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $arrDados['liberarEncaminhamento'] = true;
         }
 
+        $this->view->perfis = $this->obterPerfisEncaminhamentoProposta($this->codGrupo);
+
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
 
@@ -2871,5 +2873,29 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         } else {
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal-ajax.phtml");
         }
+    }
+
+    private function obterPerfisEncaminhamentoProposta($id_perfil)
+    {
+        $perfis = [];
+        if ($id_perfil == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
+            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE;
+            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
+        }
+
+        if ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
+        || $id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
+            /**
+             * @todo Preencher carregamento das entidades vinculadas.
+             */
+        }
+
+        $gruposDbTable = new Autenticacao_Model_Grupos();
+        return $gruposDbTable->findAll(
+            [
+                'gru_codigo in (?)' => $perfis,
+                'gru_status' => true
+            ]
+        );
     }
 }
