@@ -359,13 +359,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 "idPreProjeto=?" => $this->idPreProjeto
             )
         )->current();
-        
+
         $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->nomeProjeto = strip_tags($rsProposta->NomeProjeto);
         $this->view->dataAtual = date("d/m/Y");
         $this->view->dataAtualBd = date("Y/m/d H:i:s");
         $this->view->codGrupo = $this->codGrupo;
-        
+
         if ($this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
             $tbAvaliacaoProposta = new tbAvaliacaoProposta();
             $avaliacoesAnteriores = $tbAvaliacaoProposta->buscar(
@@ -376,7 +376,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             );
             $this->view->avaliacoesAnteriores = $avaliacoesAnteriores;
         }
-        
+
     }
 
     public function salvaravaliacaoAction()
@@ -393,7 +393,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dados['ConformidadeOK'] = $post->conformidade;
         $dados['stEstado'] = 0;
         $dados['stEnviado'] = 'N';
-        
+
         $projetoExiste = Proposta_Model_AnalisarPropostaDAO::verificarAvaliacao($post->idPreProjeto);
 
         //Esse if so existe por que nao existe objeto de negocio.
@@ -1784,7 +1784,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $arrDados['liberarEncaminhamento'] = true;
         }
 
-        $this->view->perfis = $this->obterPerfisEncaminhamentoProposta($this->codGrupo);
+        $gruposDbTable = new Autenticacao_Model_Grupos();
+        $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
 
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
@@ -2688,7 +2689,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $buscaAvaliacaoProposta[$validacaoPerfil] = $this->codGrupo;
                 $avaliacaoProposta = $avaliacaoPropostaDbTable->findBy($buscaAvaliacaoProposta);
 
-                if($avaliacaoProposta
+                if ($avaliacaoProposta
                     || ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE && !$avaliacaoProposta)) {
                     $aux[$key] = $proposta;
                 }
@@ -2875,27 +2876,4 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
     }
 
-    private function obterPerfisEncaminhamentoProposta($id_perfil)
-    {
-        $perfis = [];
-        if ($id_perfil == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE;
-            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
-        }
-
-        if ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
-        || $id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
-            /**
-             * @todo Preencher carregamento das entidades vinculadas.
-             */
-        }
-
-        $gruposDbTable = new Autenticacao_Model_Grupos();
-        return $gruposDbTable->findAll(
-            [
-                'gru_codigo in (?)' => $perfis,
-                'gru_status' => true
-            ]
-        );
-    }
 }
