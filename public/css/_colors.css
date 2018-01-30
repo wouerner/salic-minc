@@ -214,11 +214,12 @@ body {
 }
 
 header #topo {
-    background-color: #4E9353;
+    background-color: #1B5E20;
 }
 
 #navbar-header nav {
-    background-color: #1B5E20;
+    /*background-color: #1B5E20;*/
+    background-color: #0A420E;
 }
 
 footer.page-footer {
@@ -226,7 +227,8 @@ footer.page-footer {
 }
 
 #sidenav,
-#qm0, #qm0.qmmc, #legado
+#qm0, #qm0.qmmc,
+#legado,
 .small-menu #sidenav li:hover a,
 .small-menu #sidenav a.collapsible-header,
 .small-menu #sidenav.fixed a.collapsible-header,
@@ -247,9 +249,20 @@ footer.page-footer {
     color: #2d2d2d;
 }
 
+#qm0.qmmc > a:first-child,
+#qm0.qmmc > a:first-child:hover,
 #sidenav .sidebar-info,
 .small-menu #sidenav > li.sidebar-info:hover div {
-    background-color: #2D342E;
+    background-color: #0A420E;
+    color: #fff;
+}
+
+#qm0.qmmc > a:first-child,
+#qm0.qmmc > a:first-child:hover {
+    font-weight: 500;
+    font-size: 15px;
+    height: 60px;
+    padding-top: 5px;
 }
 
 /* submenu */
