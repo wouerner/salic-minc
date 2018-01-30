@@ -88,13 +88,15 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $message = null;
         $success = true;
 
-        $idPreProjeto = $this->getRequrst()->getParam("idPreProjeto");
+        $idPreProjeto = $this->getRequest()->getParam("idPreProjeto");
         $SolicitacaoDesarquivamento = $this->getRequest()->getParam("SolicitacaoDesarquivamento");
 
         $arquivar = new Proposta_Model_PreProjetoArquivado();
 
         $data = [
             'SolicitacaoDesarquivamento' => $SolicitacaoDesarquivamento,
+            'dtSolicitacaoDesarquivamento' => new Zend_Db_Expr('getdate()'),
+
         ];
 
         try {
