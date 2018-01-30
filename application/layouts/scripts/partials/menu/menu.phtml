@@ -39,10 +39,17 @@ $arrMenuProponente['proposta'] = array(
     'menu' => array(),
     'grupo' => array(),
 );
-$arrMenuProponente['proposta']['menu'][] = array('label' => 'Listar Propostas', 'title' => 'Ir para Manter Proposta por Incentivo Fiscal',
+$arrMenuProponente['proposta']['menu'][] = array('label' => 'Listar', 'title' => 'Ir para Manter Proposta por Incentivo Fiscal',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'listarproposta'), '', true),
     'grupo' => array()
 );
+
+$arrMenuProponente['proposta']['menu'][] = [
+    'label' => 'Arquivadas',
+    'title' => 'Propostas Arquivadas',
+    'url' => $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'listar-propostas-arquivadas'), '', true),
+    'grupo' => array()
+];
 // ========== FIM MENU PROPOSTA ==========
 // ========== INICIO MENU PROJETO ==========
 $arrMenuProponente['projeto'] = array(
@@ -817,12 +824,16 @@ if (isset ($auth['cpf'])) {
 
             $3('body').addClass(getCookie('menu'));
 
-            $3('#navbar-header nav').prepend('<a id="small-menu-button" href="#" class="left hide-on-med-and-down"><i class="material-icons">more_vert</i></a>');
+            $3('#navbar-header nav').prepend(
+                '<a id="small-menu-button" href="#" class="left hide-on-med-and-down">' +
+                '<i class="material-icons">more_vert</i>' +
+                '</a>'
+            );
         }
 
         // Ajuste na sidebar, quando faz scroll ela dá um bug
-        var height = $3('body').height();
-        $3('#sidenav, .qmmc').css('min-height', height - 100);
+//        var height = $3('body').height();
+//        $3('#sidenav, .qmmc').css('min-height', height - 100);
 
         $3('#small-menu-button').on('click', function(){
             $3(this).find('i').text('more_horiz');

@@ -11,9 +11,9 @@
  */
 class Contratoxplanilhaaprovacao extends MinC_Db_Table_Abstract
 {
-    protected $_banco   = 'bdcorporativo';
+
     protected $_name    = 'tbContratoxPlanilhaAprovacao';
-    protected $_schema  = 'scSAC';
+    protected $_schema  = 'bdcorporativo.scSAC';
 
     public function inserirContratoxPlanilhaAprovacao($data)
     {

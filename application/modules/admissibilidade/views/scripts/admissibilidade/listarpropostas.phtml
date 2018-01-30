@@ -1,4 +1,5 @@
 <div class="container-fluid">
+<?php echo $this->grupoAtivo->codGrupo ?>
     <div class="row">
         <?php echo $this->partial("admissibilidade/inc/menu.inc.php", $this); ?>
         <div class="col s10 m10 l10">
@@ -28,7 +29,14 @@
                     <th>Outras Propostas</th>
                     <th>T&eacute;cnico</th>
                     <th>Analisado</th>
+                    <th>Enquadrado</th>
                     <th>Analisar</th>
+                    <?php
+                    if ($this->liberarEncaminhamento === true) : ?>
+                        <th>Encaminhar</th>
+                    <?php
+                    endif;
+                    ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -150,11 +158,35 @@
                             {
                                 data: null,
                                 render: function ( data, type, row ) {
+                                    if (data.isEnquadrada == true){
+                                        return '<i class="material-icons">done</i>'+
+                                             '';
+                                    }
+                                    return '';
+                                }
+                            },
+
+                            {
+                                data: null,
+                                render: function ( data, type, row ) {
                                     return '<a class="btn waves-effect waves-darrk white black-text" href="<?php echo $this->baseUrl(); ?>/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto='+data.idProjeto+'&realizar_analise=sim">'
                                             +'<i class="material-icons" '
                                             +'title="Fazer An&aacute;lise Visual da Proposta" alt="Fazer An&aacute;lise Visual da Proposta">visibility</i></a>'
                                 }
                             },
+                            <?php
+                            if ($this->liberarEncaminhamento === true) : ?>
+                            {
+                                data: null,
+                                render: function ( data, type, row ) {
+                                    return '<a class="btn waves-effect waves-darrk white black-text" href="#">'
+                                        +'<i class="material-icons" '
+                                        +'title="Encaminhar An&aacute;lise de Proposta" alt="Encaminhar An&aacute;lise de Proposta">forward</i></a>'
+                                }
+                            },
+                            <?php
+                            endif;
+                            ?>
                         ]
                     }
                 );

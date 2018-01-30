@@ -124,7 +124,7 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
         }
 
         $select->order($order);
-        
+
         return $this->fetchAll($select);
     }
 
@@ -148,11 +148,11 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
 
         $select->order('2'); // Descricao
 
-        
+
         return $this->fetchAll($select);
     }
 
-    public function buscarItens($idEtapa, $idproduto = null, $fetchMode = Zend_DB::FETCH_OBJ)
+    public function buscarItens($where = array(), $idEtapa = null, $idproduto = null, $fetchMode = Zend_DB::FETCH_OBJ)
     {
         $select = $this->select()->distinct();
         $select->setIntegrityCheck(false);
@@ -160,25 +160,33 @@ class tbItensPlanilhaProduto extends MinC_Db_Table_Abstract
             array('a' => $this->_name),
             array(
                 'a.idPlanilhaItens',
-                'b.Descricao'
+                'a.idPlanilhaEtapa'
             ),
             $this->_schema
         );
         $select->joinInner(
-            array('b' => 'tbplanilhaitens'),
+            array('b' => 'tbPlanilhaItens'),
             'a.idPlanilhaItens = b.idPlanilhaItens',
-            array(''),
+            array('b.Descricao'),
             $this->_schema
         );
-        $select->where('idPlanilhaEtapa = ?', $idEtapa);
+
+        if (!empty($idEtapa)) {
+            $select->where('a.idPlanilhaEtapa = ?', $idEtapa);
+        }
 
         if (!empty($idproduto)) {
             $select->where('idProduto = ?', $idproduto);
         }
         $select->order('b.Descricao');
 
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode($fetchMode);
+
         return $db->fetchAll($select);
     }
 
