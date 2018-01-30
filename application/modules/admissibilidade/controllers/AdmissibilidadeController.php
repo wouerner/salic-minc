@@ -1784,8 +1784,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $arrDados['liberarEncaminhamento'] = true;
         }
 
-        $gruposDbTable = new Autenticacao_Model_Grupos();
-        $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
+        if($this->codGrupo) {
+            $gruposDbTable = new Autenticacao_Model_Grupos();
+            $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
+        }
 
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
