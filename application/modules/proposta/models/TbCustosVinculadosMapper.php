@@ -56,21 +56,27 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
             'SC', 'RS', 'PR', 'ES', 'MG'
         );
 
+        $wherePercentualRemuneracao15 = array(
+            'AC', 'AP', 'AM', 'PA','RO', 'RR', 'TO',
+            'AL', 'BA', 'CE', 'MA','PB', 'PE', 'PI', 'RN', 'SE',
+            'DF', 'GO', 'MT', 'MS'
+        );
+
         $tbPlanoDistribuicao = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
         $localizacoesProposta = $tbPlanoDistribuicao->obterUfsMunicipiosDoDetalhamento($idPreProjeto);
 
-        $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REGIOES_N_NE_CO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
+        $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
 
         $idUFLocalizacao = null;
         $idMunicipioLocalizacao = null;
         foreach ($localizacoesProposta as $localizacao) {
-            if($percentualRemuneracaoCaptacao == $ModelCustosVinculados::PERCENTUAL_REGIOES_N_NE_CO_REMUNERACAO_CAPTACAO_DE_RECURSOS) {
+            if($percentualRemuneracaoCaptacao == $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS) {
                 $idUFLocalizacao = $localizacao->idUF;
                 $idMunicipioLocalizacao = $localizacao->idMunicipio;
             }
 
-            if (in_array($localizacao->UF, $wherePercentualRemuneracao10)) {
-                $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_PADRAO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
+            if (in_array($localizacao->UF, $wherePercentualRemuneracao15)) {
+                $percentualRemuneracaoCaptacao = $ModelCustosVinculados::PERCENTUAL_REGIOES_N_NE_CO_REMUNERACAO_CAPTACAO_DE_RECURSOS;
                 $idUFLocalizacao = $localizacao->idUF;
                 $idMunicipioLocalizacao = $localizacao->idMunicipio;
                 break;
@@ -291,8 +297,8 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
     }
 
     /**
-     * Essa pesquisa e exclusão dos custos vinculados removidos poderá ser retirada futuramente.
-     * Foi feita apenas para propostas com custos vinculados que já existiam antes da nova IN
+     * Essa pesquisa e exclusï¿½o dos custos vinculados removidos poderï¿½ ser retirada futuramente.
+     * Foi feita apenas para propostas com custos vinculados que jï¿½ existiam antes da nova IN
      */
     private function removerCustosVinculadosPropostaLegada($idPreProjeto)
     {
