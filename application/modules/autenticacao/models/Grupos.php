@@ -62,6 +62,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
 
     public function obterPerfisEncaminhamentoAvaliacaoProposta($id_perfil)
     {
+
         $perfis = [];
         if ($id_perfil == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
             $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE;
@@ -75,11 +76,13 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
              */
         }
 
-        return $this->findAll(
-            [
-                'gru_codigo in (?)' => $perfis,
-                'gru_status' => true
-            ]
-        );
+        if($perfis) {
+            return $this->findAll(
+                [
+                    'gru_codigo in (?)' => $perfis,
+                    'gru_status' => true
+                ]
+            );
+        }
     }
 }
