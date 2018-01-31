@@ -1,17 +1,5 @@
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
-
-<!--div id="titulo">
-    <div><?php if(!$this->tituloTopo){?>Admissibilidade de propostas - Proposta cultural<?php } else { echo $this->tituloTopo;} ?>
-        <span class="voltar">
-            <?php if(isset($_GET['gravado']) && $_GET["gravado"]=="sim" ) :?>
-                <a href="<?php echo $this->url(array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'listar-propostas'))."?idPreProjeto=".$this->idPreProjeto; ?>"/>Voltar</a>
-           <?php else: ?>
-                <a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a>
-            <?php endif; ?>
-        </span>
-    </div>
-</div-->
 <script>
     function carregaDados(url,divRetorno){
         $("#conteudo").html('<br><br><center>Aguarde, carregando dados...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br><br>');
@@ -34,6 +22,8 @@
         echo $this->partial("admissibilidade/inc/menu.inc.php");
     }
     $IncluirAvaliacao = $this->url(array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'incluiravaliacao'));
+    $enquadrarProposta = $this->url(array('module' => 'admissibilidade', 'controller' => 'enquadramento-proposta', 'action' => 'sugerir-enquadramento')) . "?id_preprojeto={$this->idPreProjeto}";
+
     ?>
     <style type="text/css">
         .mensagem {
@@ -51,6 +41,10 @@
         $(document).ready(function(){
             $('.avaliarProposta').click(function(){
                 $('#preProjeto').attr('action','<?php echo $IncluirAvaliacao;?>');
+                $('#preProjeto').submit();
+            });
+            $('.enquadrarProposta').click(function(){
+                $('#preProjeto').attr('action','<?php echo $enquadrarProposta;?>');
                 $('#preProjeto').submit();
             });
             $('.imprimirProposta').click(function(){
@@ -127,6 +121,13 @@
                         Avaliar <i class="material-icons right">gavel</i>
                     </button>
                 <?php endif; ?>
+
+                <?php if($this->isPropostaEmConformidade):?>
+                <button class="btn waves-effect waves-light enquadrarProposta" type="button" name="action">
+                    Enquadrar <i class="material-icons right">assignment</i>
+                </button>
+                <?php endif; ?>
+
             <?php endif; ?>
             <iframe name="esconde" id="esconde" class="sumir"> </iframe>
             <button title="Imprimir" class="btn waves-effect waves-light imprimirProposta white black-text" type="button" name="action">
@@ -149,9 +150,6 @@
                    <i class="material-icons right ">transform</i> Transformar em Projeto
                 </button>
                 <a class="btn black white-text" title="Arquivar Proposta" alt="Arquivar Proposta"
-                    <?php if($this->movimentacao != Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL): ?>
-                         disabled
-                    <?php endif ?>
                     href="/admissibilidade/admissibilidade/confirmararquivarproposta?idPreProjeto=<?php echo $this->itensGeral[0]->idPreProjeto ?>">
                     <i class="material-icons right">archive</i>Arquivar
                 </a>
@@ -265,6 +263,7 @@
                             <table class="bordered striped responsive-table">
                                 <tr class="destacar">
                                     <td align="left"><b>Data</b></td>
+                                    <td align="left"><b>Perfil</b></td>
                                     <td align="left"><b>Avalia&ccedil;&atilde;o</b></td>
                                 </tr>
                                 <?php
@@ -272,11 +271,13 @@
                                     foreach ($this->itensHistorico as $historico){ ?>
                                         <tr>
                                             <td align="left" nowrap><?php echo ConverteData($historico->DtAvaliacao, 25) ?></td>
+					    <td align="left"><?php echo $historico->Perfil ?></td>
                                             <td align="left"><?php echo $historico->Avaliacao ?></td>
                                         </tr>
                                         <?php if($historico->dtResposta != "" && strlen(strip_tags($historico->dsResposta)) > 1): ?>
                                             <tr>
                                                 <td align="left" nowrap><?php echo ConverteData($historico->dtResposta, 25) ?></td>
+						<td align="left"><?php echo $historico->Perfil ?></td>
                                                 <td align="left"><?php echo strip_tags($historico->dsResposta) ?></td>
                                             </tr>
                                         <?php endif; ?>
@@ -794,19 +795,19 @@
                 </table>
 
                 <table>
-                    <tr onclick="abrirDinamico('#tdImpactoAmbiental', $(this));" style="cursor:pointer">
+                    <tr onclick="abrirDinamico('#PreProjeto', $(this));" style="cursor:pointer">
                         <th>
                             <img src="<?php echo $this->baseUrl();?>/public/img/navigation-right.png" id="imgDinamica" align="left"/>
-                            Impacto Ambiental
+                            Descri&ccedil;&atilde;o da Atividade
                         </th>
                     </tr>
-                    <tr id="tdImpactoAmbiental" style="display: none;">
+                    <tr id="PreProjeto" style="display: none;">
                         <td>
 
                             <table class="tabela">
                                 <?php if(is_array($this->itensGeral) and count($this->itensGeral)>0){ ?>
                                     <tr>
-                                        <td><?php echo (trim(strip_tags($this->itensGeral[0]->ImpactoAmbiental)) != "")?strip_tags($this->itensGeral[0]->ImpactoAmbiental,"<b></b><ul></ul><li></li><strong></strong><i></i><p></p><br>"):"N&atilde;o informado.";  ?></td>
+                                        <td><?php echo (trim(strip_tags($this->itensGeral[0]->DescricaoAtividade)) != "")?strip_tags($this->itensGeral[0]->DescricaoAtividade,"<b></b><ul></ul><li></li><strong></strong><i></i><p></p><br>"):"N&atilde;o informado.";  ?></td>
                                     </tr>
                                 <?php }?>
                             </table>
