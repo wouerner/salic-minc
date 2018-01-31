@@ -1,89 +1,142 @@
+(function (global, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['../numeral'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        factory(require('../numeral'));
+    } else {
+        factory(global.numeral);
+    }
+}(this, function (numeral) {
+    numeral.register('locale', 'pt-br', {
+        delimiters: {
+            thousands: '.',
+            decimal: ','
+        },
+        abbreviations: {
+            thousand: 'mil',
+            million: 'milhões',
+            billion: 'b',
+            trillion: 't'
+        },
+        ordinal: function (number) {
+            return 'º';
+        },
+        currency: {
+            symbol: 'R$'
+        }
+    });
+}));
+
+numeral.locale('pt-br');
+
 Vue.component('salic-proposta-planilha-orcamentaria', {
-    template: `<div class="planilha-orcamentaria">
-            <div class="card">
-                <div class="card-content">
-                    <h2>Planilha Or&ccedil;ament&aacute;ria</h2>
-                    <div v-if="proposta">
-                        <div tipo="fonte" v-for="(fontes, fonte) of planilhaCompleta" v-if="isObject(fontes)">
-                            <h3 class="red-text">{{fonte}}</h3>
-                            <div tipo="produto" v-for="(produtos, produto) of fontes" v-if="isObject(produtos)">
-                                <h4 class="green-text" v-html="produto"></h4>
-                                 <div tipo="etapa"  v-for="(etapas, etapa) of produtos" v-if="isObject(etapas)">
-                                    <h5 class="orange-text" v-html="etapa"></h5>
-                                     <div tipo="local" v-for="(locais, local) of etapas" v-if="isObject(locais)">
-                                        <div class="title">
-                                            <h6 class="blue-text" v-html="local"></h6>
-                                            <span class="badge" data-badge-caption="custom caption">{{locais.total}}</span>
-                                        </div>
-                                         <table class="bordered">
-                                            <tbody>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Item</th>
-                                                    <th>Dias</th>
-                                                    <th>Qtde</th>
-                                                    <th>Ocor.</th>
-                                                    <th>Vl. Unit&aacute;rio</th>
-                                                    <th>Vl. Solicitado</th>
-                                                </tr>
-                                                <tr v-for="row of locais" :key="row.idPlanilhaProposta"  v-if="isObject(row)">
-                                                    <td>{{row.Seq}}</td>
-                                                    <td>{{row.Item}}</td>
-                                                    <td>{{row.QtdeDias}}</td>
-                                                    <td>{{row.Quantidade}}</td>
-                                                    <td>{{row.Ocorrencia}}</td>
-                                                    <td>{{row.vlUnitario}}</td>
-                                                    <td>{{row.vlSolicitado}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="total blue-text">Total Local {{local}}: {{locais.total}}</div>
-                                    </div> 
-                                    <div class="total orange-text">Total Etapa{{etapa}}: {{etapas.total}}</div>
-                                </div>
-                                <div class="total green-text">Total Produto{{produto}}: {{produtos.total}}</div>
-                            </div>
-                             <div class="total red-text">Total Fonte:{{fonte}}: {{fontes.total}}</div>
-                        </div>
+    template: `
+    <div class="planilha-orcamentaria card">
+        <div class="card-content" v-if="planilha" style="padding: 10px">
+            <h2>Planilha Or&ccedil;ament&aacute;ria</h2>
+            <ul class="collapsible no-margin" data-collapsible="accordion">
+                <li v-for="(fontes, fonte) of planilhaCompleta" v-if="isObject(fontes)">
+                    <div class="collapsible-header active red-text">
+                        <i class="material-icons">beenhere</i>{{fonte}}<span class="badge">R$ {{fontes.total}}</span>
                     </div>
-                    <div v-else>Nenhuma planilha encontrada</div>
-                </div>
-            </div>
+                    <div class="collapsible-body no-padding">
+                        <ul class="collapsible no-border no-margin" data-collapsible="expandable">
+                            <li v-for="(produtos, produto) of fontes" v-if="isObject(produtos)">
+                                <div class="collapsible-header active green-text" style="padding-left: 30px;">
+                                    <i class="material-icons">perm_media</i>{{produto}}<span class="badge">R$ {{produtos.total}}</span>
+                                </div>
+                                <div class="collapsible-body no-padding no-border">
+                                    <ul class="collapsible no-border no-margin" data-collapsible="expandable">
+                                        <li v-for="(etapas, etapa) of produtos" v-if="isObject(etapas)">
+                                             <div class="collapsible-header active orange-text" style="padding-left: 50px;">
+                                                <i class="material-icons">label</i>{{etapa}}<span class="badge">R$ {{etapas.total}}</span>
+                                            </div>
+                                            <div class="collapsible-body no-padding no-border">
+                                                <ul class="collapsible no-border no-margin" data-collapsible="expandable">
+                                                    <li v-for="(locais, local) of etapas" v-if="isObject(locais)">
+                                                         <div class="collapsible-header active blue-text" style="padding-left: 70px;">
+                                                            <i class="material-icons">place</i>{{local}} <span class="badge">R$ {{locais.total}}</span>
+                                                        </div>
+                                                        <div class="collapsible-body padding10">
+                                                            <table class="bordered">
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Item</th>
+                                                                    <th>Dias</th>
+                                                                    <th>Qtde</th>
+                                                                    <th>Ocor.</th>
+                                                                    <th>Vl. Unit&aacute;rio</th>
+                                                                    <th>Vl. Solicitado</th>
+                                                                    <th>#</th>
+                                                                </tr>
+                                                                <tr v-for="row of locais" 
+                                                                    :key="row.idPlanilhaProposta"  
+                                                                    v-if="isObject(row)"
+                                                                    v-bind:class="{'orange lighten-2': ultrapassaValor(row)}"
+                                                                >
+                                                                    <td>{{row.Seq}}</td>
+                                                                    <td>{{row.Item}}</td>
+                                                                    <td>{{row.QtdeDias}}</td>
+                                                                    <td>{{row.Quantidade}}</td>
+                                                                    <td>{{row.Ocorrencia}}</td>
+                                                                    <td>{{converterParaReal(row.vlUnitario)}}</td>
+                                                                    <td>{{converterParaReal(row.vlSolicitado)}}</td>
+                                                                    <td>
+                                                                        <a  v-if="row.JustProponente.length > 3"
+                                                                            class="tooltipped"
+                                                                            data-position="left"
+                                                                            data-delay="50"
+                                                                            v-bind:data-tooltip="row.JustProponente"
+                                                                            ><i class="material-icons tiny">message</i>
+                                                                        </a>
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li> 
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
+        <div v-else>Nenhuma planilha encontrada</div>
+        <div class="card-action">
+             <span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total}}</span>
+        </div>
+    </div>
     `,
     data: function () {
         return {
-            proposta: [],
-            totalFonte: 0,
-            last: 0
+            planilha: []
         }
-
     },
     props: [
         'idpreprojeto',
-        'planilha'
+        'arrayPlanilha'
     ],
     mounted: function () {
         if (typeof this.idpreprojeto != 'undefined') {
             this.fetch(this.idpreprojeto);
         }
-        // if (typeof this.planilha != 'undefined') {
-        //     this.proposta = this.planilha;
-        //     console.log(this.planilha);
-        // }
     },
     computed: {
-        planilhaCompleta: function() {
+        planilhaCompleta: function () {
 
-            if (!this.proposta) {
+            if (!this.planilha) {
                 return 0;
             }
 
-            let planilha = {}, totalProjeto = 0, totalFonte = 0, totalProduto = 0, totalEtapa = 0, totalLocal = 0;
+            let novaPlanilha = {}, totalProjeto = 0, totalFonte = 0, totalProduto = 0, totalEtapa = 0, totalLocal = 0;
 
-            planilha = this.proposta;
-            //
-            Object.entries(this.proposta).forEach(([fonte, produtos]) => {
+            novaPlanilha = this.planilha;
+            Object.entries(this.planilha).forEach(([fonte, produtos]) => {
                 totalFonte = 0;
                 Object.entries(produtos).forEach(([produto, etapas]) => {
                     totalProduto = 0;
@@ -94,29 +147,30 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
                             Object.entries(itens).forEach(([column, cell]) => {
                                 totalLocal += cell.vlSolicitado;
                             });
-                            this.$set(this.proposta[fonte][produto][etapa][local], 'total', totalLocal.toFixed(2));
+                            this.$set(this.planilha[fonte][produto][etapa][local], 'total',  numeral(totalLocal).format('0,0.00'));
                             totalEtapa += totalLocal;
                         });
-                        this.$set(this.proposta[fonte][produto][etapa], 'total', totalEtapa.toFixed(2));
+                        this.$set(this.planilha[fonte][produto][etapa], 'total', numeral(totalEtapa).format('0,0.00'));
                         totalProduto += totalEtapa;
                     });
-                    this.$set(this.proposta[fonte][produto], 'total', totalProduto.toFixed(2));
+                    this.$set(this.planilha[fonte][produto], 'total', numeral(totalProduto).format('0,0.00'));
                     totalFonte += totalProduto;
                 });
-                this.$set(this.proposta[fonte], 'total', totalFonte.toFixed(2));
+                this.$set(this.planilha[fonte], 'total', numeral(totalFonte).format('0,0.00'));
                 totalProjeto += totalFonte;
             });
-            // this.$set(planilha, 'total', totalProjeto.toFixed(2));
+            this.$set(novaPlanilha, 'total', numeral(totalProjeto).format('0,0.00'));
 
-            return this.proposta;
+            return novaPlanilha;
         }
     },
     watch: {
         idpreprojeto: function (value) {
             this.fetch(value);
         },
-        planilha: function (value) {
-            this.proposta = value;
+        arrayPlanilha: function (value) {
+            this.planilha = value;
+            this.iniciarCollapsible();
         }
     },
     methods: {
@@ -136,36 +190,28 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
 
             return date;
         },
-        isObject: function(el) {
+        isObject: function (el) {
 
-            if(typeof el !== "object") {
+            if (typeof el !== "object") {
                 return false;
             }
-
             return true;
-        }
-
-    },
-    filters: {
-        calcularFontes: function(list) {
-                return '';
-            // if(typeof list === "object") {
-            //    return Object.keys(list).reduce(function (previous, key) {
-            //        this.iterarFonte = previous + parseFloat(list[key].vlSolicitado);
-            //         return previous + parseFloat(list[key].vlSolicitado);
-            //    }, 0);
-            // }
-            //
-            // return list.reduce(function(total, item) {
-            //     this.iterarFonte = total + parseFloat(item.vlSolicitado);
-            //     return previous + parseFloat(list[key].vlSolicitado);
-            // }, 0)
         },
-        calcularEtapa: function(list) {
-            // return Object.keys(list).reduce(function (total, key) {
-            //     // console.log(total + this.$options.filters.calcularFontes(list[key]));
-            //     // return total + this.$options.filters.calcularFontes(list[key]);
-            // }, 0);
+        iniciarCollapsible: function () {
+            $3('.planilha-orcamentaria .collapsible').each(function() {
+                $3(this).collapsible();
+            });
+        },
+        ultrapassaValor: function (row) {
+            if (row.stCustoPraticado == true) {
+                return true;
+            }
+            return false;
+        },
+        converterParaReal: function (value) {
+            value = parseFloat(value);
+            return numeral(value).format('0,0.00');
         }
     }
 });
+

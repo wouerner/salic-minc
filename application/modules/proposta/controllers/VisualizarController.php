@@ -100,7 +100,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
         foreach ($planilhaOrcamentaria as $item) {
             $row = [];
 
-            $produto = !empty($item['idProduto']) ? $item['DescricaoProduto'] : utf8_encode('Administra&ccedil;&atilde;o do Projeto');
+            $produto = !empty($item['idProduto']) ? $item['DescricaoProduto'] : html_entity_decode('Administra&ccedil;&atilde;o do Projeto');
 
             $row["Seq"] = $i;
             $row["idPlanilhaProposta"] = $item['idPlanilhaProposta'];

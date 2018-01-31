@@ -219,11 +219,11 @@ Vue.component('salic-proposta-diff', {
                         <div class="row">
                             <div class="col s12 m6 l6 scroll">
                                 <salic-proposta-planilha-orcamentaria
-                                :planilha="dadosAtuais.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
+                                :arrayPlanilha="dadosHistorico.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
                             </div>
-                             <div class="col s12 m6 l6 scroll">
+                            <div class="col s12 m6 l6 scroll">
                                 <salic-proposta-planilha-orcamentaria
-                                :planilha="dadosHistorico.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
+                                :arrayPlanilha="dadosAtuais.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
                             </div>
                         </div>
                     </div>
