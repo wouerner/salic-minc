@@ -263,7 +263,7 @@
                             <table class="bordered striped responsive-table">
                                 <tr class="destacar">
                                     <td align="left"><b>Data</b></td>
-                                    <td align="left"><b>Perfil</b></td>				    
+                                    <td align="left"><b>Perfil</b></td>
                                     <td align="left"><b>Avalia&ccedil;&atilde;o</b></td>
                                 </tr>
                                 <?php
@@ -795,19 +795,19 @@
                 </table>
 
                 <table>
-                    <tr onclick="abrirDinamico('#tdImpactoAmbiental', $(this));" style="cursor:pointer">
+                    <tr onclick="abrirDinamico('#PreProjeto', $(this));" style="cursor:pointer">
                         <th>
                             <img src="<?php echo $this->baseUrl();?>/public/img/navigation-right.png" id="imgDinamica" align="left"/>
-                            Impacto Ambiental
+                            Descri&ccedil;&atilde;o da Atividade
                         </th>
                     </tr>
-                    <tr id="tdImpactoAmbiental" style="display: none;">
+                    <tr id="PreProjeto" style="display: none;">
                         <td>
 
                             <table class="tabela">
                                 <?php if(is_array($this->itensGeral) and count($this->itensGeral)>0){ ?>
                                     <tr>
-                                        <td><?php echo (trim(strip_tags($this->itensGeral[0]->ImpactoAmbiental)) != "")?strip_tags($this->itensGeral[0]->ImpactoAmbiental,"<b></b><ul></ul><li></li><strong></strong><i></i><p></p><br>"):"N&atilde;o informado.";  ?></td>
+                                        <td><?php echo (trim(strip_tags($this->itensGeral[0]->DescricaoAtividade)) != "")?strip_tags($this->itensGeral[0]->DescricaoAtividade,"<b></b><ul></ul><li></li><strong></strong><i></i><p></p><br>"):"N&atilde;o informado.";  ?></td>
                                     </tr>
                                 <?php }?>
                             </table>
