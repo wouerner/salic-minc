@@ -12,6 +12,9 @@ x - CONTEÚDO (legado)
     color: #0a449b;
 }
 
+#conteudo > br {
+    display: none;
+}
 
 #conteudo select {
     background: transparent;

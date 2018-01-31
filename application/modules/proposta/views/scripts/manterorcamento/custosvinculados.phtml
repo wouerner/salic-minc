@@ -55,12 +55,14 @@
                                                 class="validate" required>
                                                 <option value="" disabled selected>Selecione</option>
                                                 <?php $percentual = $item['percentualPadrao']; ?>
-                                                <?php while ($percentual >= 0) : ?>
+                                                <?php while ($percentual >= 0) :  ?>
                                                     <option
                                                         <?= (isset($item['percentualProponente']) && $item['percentualProponente'] == $percentual) ? 'selected' : '' ?>
                                                         value="<?= $percentual; ?>"><?= $percentual; ?>%
                                                     </option>
-                                                    <?php $percentual--; ?>
+                                                    <?php
+                                                    $percentual = is_float($percentual) ? $percentual - 0.5 : $percentual - 1;
+                                                    ?>
                                                 <?php endwhile; ?>
                                             </select>
                                             <label><?= $item['Descricao']; ?></label>

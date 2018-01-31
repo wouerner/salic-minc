@@ -156,7 +156,8 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                  "dsJustificativaPosicaoLogo"=>$post->dsJustificativaPosicaoLogo,
                  "PrecoUnitarioNormal"=>$preconormal,
                  "PrecoUnitarioPromocional"=>$precopromocional,
-                 "stPrincipal"=>$post->prodprincipal
+                 "stPrincipal"=>$post->prodprincipal,
+                 "canalAberto"=>$post->canalAberto,
                  );
         if (isset($post->idPlanoDistribuicao)) {
             $dados["idPlanoDistribuicao"] = $post->idPlanoDistribuicao;
@@ -310,9 +311,13 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $detalhamento = new Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto();
         $tblPlanoDistribuicao = new PlanoDistribuicao();
 
+
         try {
             $detalhamento->salvar($dados);
             $tblPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
+
+            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+            $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
         } catch (Exception $e) {
             $this->_helper->json(array('data' => $dados, 'success' => 'false', 'error'=>$e));
         }
@@ -340,6 +345,9 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
         $tblPlanoDistribuicao = new PlanoDistribuicao();
         $tblPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($idPlanoDistribuicao);
+
+        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+        $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
 
         $this->_helper->json(array('data' => $dados, 'success' => 'true'));
     }

@@ -188,4 +188,66 @@ class Proposta_Model_DbTable_PlanoDistribuicaoProduto extends MinC_Db_Table_Abst
         die;
         return $this->fetchRow($sql);
     }
+
+    public function obterUfsMunicipiosDoDetalhamento($idPreProjeto) {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('p' => $this->_name),
+            array(),
+            $this->_schema
+        );
+        $select->joinInner(
+            array('d' => 'tbDetalhaPlanoDistribuicao'),
+            "p.idPlanoDistribuicao = d.idPlanoDistribuicao",
+            array('d.idUF', 'd.idMunicipio'),
+            $this->_schema
+        );
+        $select->joinInner(
+            array('u' => 'uf'),
+            "d.idUF = u.idUf",
+            array('u.Sigla as UF'),
+            $this->getSchema('agentes')
+        );
+        $select->where('p.idProjeto = ?', $idPreProjeto);
+        return $this->fetchAll($select);
+    }
+    
+    public function validatePlanoDistribuicao($idPreProjeto)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('pd'=>$this->getName('PlanoDistribuicaoProduto')),
+            array('pd.canalAberto', 'pd.PrecoUnitarioNormal')
+        )
+            ->joinInner(
+                array('p' => 'Produto'),
+                "pd.idProduto = p.Codigo",
+                array('Descricao as Produto'),
+                'SAC.dbo'
+            )
+            ->where('pd.idProjeto = ?' , $idPreProjeto);
+        
+        $planosDistribuicao = $this->fetchAll($select);
+
+        $errors = array();
+        
+        foreach ($planosDistribuicao as $planoDistribuicao) {
+            if (!$planoDistribuicao['canalAberto']) {
+                if ((int)$planoDistribuicao['PrecoUnitarioNormal'] > 225) {
+                    $error = new StdClass();
+                    $error->idPreProjeto = $idPreProjeto;
+                    $error->dsChamada = '';
+                    $error->dsInconsistencia = "O pre&ccedil;o m&eacute;dio do produto '" . $planoDistribuicao['Produto'] . "' ultrapassou o limite de 225,00.";
+                    $error->Observacao = 'PENDENTE';
+                    
+                    $errors[] = $error;
+                }
+            }
+        }
+        
+        return $errors;        
+    }
 }
