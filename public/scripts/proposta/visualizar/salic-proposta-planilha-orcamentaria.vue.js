@@ -3,65 +3,47 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
             <div class="card">
                 <div class="card-content">
                     <h2>Planilha Or&ccedil;ament&aacute;ria</h2>
-                        {{novaPlanilha}}
                     <div v-if="proposta">
-                        <div v-for="(recursos, fonte) of proposta">
-                            <div tipo="fonte">
-                                <h3 class="red-text">{{fonte}}</h3>
-                                <div v-for="(produtos, produto) of recursos">
-                                    <div tipo="produto">
-                                        <h4 class="orange-text" v-html="produto"></h4>
-                                         <div v-for="(etapas, etapa) of produtos">
-                                            <div tipo="etapa">
-                                                <h5 class="green-text" v-html="etapa"></h5>
-                                                 <div v-for="(locais, local) of etapas">
-                                                    <div tipo="local">
-                                                        <h6 class="blue-text" v-html="local"></h6>
-                                                         <table class="bordered">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Item</th>
-                                                                    <th>Dias</th>
-                                                                    <th>Qtde</th>
-                                                                    <th>Ocor.</th>
-                                                                    <th>Vl. Unit&aacute;rio</th>
-                                                                    <th>Vl. Solicitado</th>
-                                                                </tr>
-                                                                <tr v-for="row of locais">
-                                                                    <td>{{row.Seq}}</td>
-                                                                    <td>{{row.Item}}</td>
-                                                                    <td>{{row.QtdeDias}}</td>
-                                                                    <td>{{row.Quantidade}}</td>
-                                                                    <td>{{row.Ocorrencia}}</td>
-                                                                    <td>{{row.vlUnitario}}</td>
-                                                                    <td>{{row.vlSolicitado}}</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div> 
-                                                    <table>
-                                                        <tr>
-                                                            <td colspan="7">
-                                                                    <div class="total">Total var </div>
-                                                                  <div class="total">Total {{local}}: {{ locais | calcularFontes}}</div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div> 
-                                            </div> 
-                                             <table>
-                                                <tr><td colspan="7">
-                                                 <div class="total">Total {{produto}}: {{ produtos | calcularEtapa}}</div>
-                                                </td></tr>
-                                            </table>
+                        <div tipo="fonte" v-for="(fontes, fonte) of planilhaCompleta" v-if="isObject(fontes)">
+                            <h3 class="red-text">{{fonte}}</h3>
+                            <div tipo="produto" v-for="(produtos, produto) of fontes" v-if="isObject(produtos)">
+                                <h4 class="green-text" v-html="produto"></h4>
+                                 <div tipo="etapa"  v-for="(etapas, etapa) of produtos" v-if="isObject(etapas)">
+                                    <h5 class="orange-text" v-html="etapa"></h5>
+                                     <div tipo="local" v-for="(locais, local) of etapas" v-if="isObject(locais)">
+                                        <div class="title">
+                                            <h6 class="blue-text" v-html="local"></h6>
+                                            <span class="badge" data-badge-caption="custom caption">{{locais.total}}</span>
                                         </div>
-                                     </div> 
-                                </div> 
+                                         <table class="bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Item</th>
+                                                    <th>Dias</th>
+                                                    <th>Qtde</th>
+                                                    <th>Ocor.</th>
+                                                    <th>Vl. Unit&aacute;rio</th>
+                                                    <th>Vl. Solicitado</th>
+                                                </tr>
+                                                <tr v-for="row of locais" :key="row.idPlanilhaProposta"  v-if="isObject(row)">
+                                                    <td>{{row.Seq}}</td>
+                                                    <td>{{row.Item}}</td>
+                                                    <td>{{row.QtdeDias}}</td>
+                                                    <td>{{row.Quantidade}}</td>
+                                                    <td>{{row.Ocorrencia}}</td>
+                                                    <td>{{row.vlUnitario}}</td>
+                                                    <td>{{row.vlSolicitado}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="total blue-text">Total Local {{local}}: {{locais.total}}</div>
+                                    </div> 
+                                    <div class="total orange-text">Total Etapa{{etapa}}: {{etapas.total}}</div>
+                                </div>
+                                <div class="total green-text">Total Produto{{produto}}: {{produtos.total}}</div>
                             </div>
-                        </div>
-                        <div>
-                         Valor total do projeto: {{totalFonte}}
+                             <div class="total red-text">Total Fonte:{{fonte}}: {{fontes.total}}</div>
                         </div>
                     </div>
                     <div v-else>Nenhuma planilha encontrada</div>
@@ -91,39 +73,16 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
         // }
     },
     computed: {
-        novaPlanilha: function() {
+        planilhaCompleta: function() {
 
             if (!this.proposta) {
                 return 0;
             }
-            // let titles = [];
-            // for(var i = 0; i < this.items.length; i++){
-            //     for(var k = 0; k < this.items[i].length; k++){
-            //         titles.push(this.items[i][k].title);
-            //     }
-            // }
-            let planilha = [], totalFonte = 0, totalProduto = 0, totalEtapa = 0, totalLocal = 0;
 
-            // planilha = this.proposta;
-            // if(this.proposta && this.proposta.length != 'undefined') {
-            //
-            //         console.log(this.proposta);
-            //     for(let fonte = 0; fonte < this.proposta.length; fonte++){
-            //         for(let produto = 0; produto < this.proposta[fonte].length; produto++){
-            //             for(let etapa = 0; etapa < this.proposta[fonte][produto].length; etapa++){
-            //                 for(let local = 0; local < this.proposta[fonte][produto][etapa].length; local++){
-            //                     console.log(this.proposta[fonte][produto][etapa][local].vlUnitario);
-            //                 }
-            //             }
-            //         }
-            //     }
-            // return planilha;
-            // }
-            // for(let fonte = 0; fonte < this.proposta.length; fonte++) {
-            // }
+            let planilha = {}, totalProjeto = 0, totalFonte = 0, totalProduto = 0, totalEtapa = 0, totalLocal = 0;
 
             planilha = this.proposta;
-
+            //
             Object.entries(this.proposta).forEach(([fonte, produtos]) => {
                 totalFonte = 0;
                 Object.entries(produtos).forEach(([produto, etapas]) => {
@@ -135,27 +94,21 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
                             Object.entries(itens).forEach(([column, cell]) => {
                                 totalLocal += cell.vlSolicitado;
                             });
+                            this.$set(this.proposta[fonte][produto][etapa][local], 'total', totalLocal.toFixed(2));
                             totalEtapa += totalLocal;
-                            console.log(local + ' local ' + totalLocal);
                         });
+                        this.$set(this.proposta[fonte][produto][etapa], 'total', totalEtapa.toFixed(2));
                         totalProduto += totalEtapa;
-                        console.log('etapa' + '' +etapa + '' + totalEtapa);
                     });
+                    this.$set(this.proposta[fonte][produto], 'total', totalProduto.toFixed(2));
                     totalFonte += totalProduto;
-                    console.log('produto' + '' +produto+ ''+ totalProduto);
                 });
-                console.log(produtos);
-                console.log('fonte' + '' +fonte+ ''+ totalFonte);
+                this.$set(this.proposta[fonte], 'total', totalFonte.toFixed(2));
+                totalProjeto += totalFonte;
             });
+            // this.$set(planilha, 'total', totalProjeto.toFixed(2));
 
-
-            return planilha;
-            //
-            // this.proposta.forEach(function (recursos, key) {
-            //      console.log(recursos);
-            // });
-            //
-
+            return this.proposta;
         }
     },
     watch: {
@@ -183,6 +136,14 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
 
             return date;
         },
+        isObject: function(el) {
+
+            if(typeof el !== "object") {
+                return false;
+            }
+
+            return true;
+        }
 
     },
     filters: {

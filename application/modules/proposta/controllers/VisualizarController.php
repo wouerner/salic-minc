@@ -119,8 +119,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $row['stCustoPraticado'] = $item['stCustoPraticado'];
 
             foreach ($row as $cel => $val) {
-                $planilha[$row['FonteRecurso']][$produto][$row['idEtapa'] . ' - '
-                . $row['Etapa']][$row['UF'] . ' - '
+                $planilha[$row['FonteRecurso']][$produto][$row['Etapa']][$row['UF'] . ' - '
                 . $row['Municipio']][$count][$cel] = $val;
             }
             $count++;
