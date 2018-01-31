@@ -63,7 +63,7 @@
                             <th>Proponente</th>
                             <th>Data Arquivamento</th>
                             <th>Motivo arquivamento</th>
-                            <th>Desarquivar</th>
+<!--                            <th>Desarquivar</th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -76,14 +76,13 @@
         </div>
     </div>
 </div>
+<!--
 <div id="modal_solicitar" class="modal bottom-sheet" style="max-height:95%; height:95%">
     <div class="modal-content">
       <h4>Solicitar Desarquivamento</h4>
           <div class="row">
             <div class=" col s12">
-                <p>
-                    motivos desarquivamento
-                </p>
+	      <p class="motivo_arquivamento"></p>
             </div>
           </div>
          <div class="row">
@@ -100,15 +99,13 @@
       <a href="#!" id="enviarSolicitacao" class="modal-action modal-close waves-effect waves-green btn-flat green white-text">Solicitar</a>
       <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat red-text">Cancelar</a>
     </div>
-</div>
+</div>-->
 <div id="modal_visualizar" class="modal bottom-sheet" style="max-height:95%; height:95%">
     <div class="modal-content">
       <h4>Motivo do arquivamento</h4>
           <div class="row">
             <div class=" col s12">
-                <p>
-                    motivos desarquivamento
-                </p>
+                <p class="motivo_arquivamento"></p>
             </div>
           </div>
     </div>
@@ -171,7 +168,7 @@
                     }
                     , "lengthChange": true
                     , "ajax": {
-                        url: "/proposta/pre-projeto/index",
+                        url: "/proposta/pre-projeto-arquivado/index",
                         data: {
                             "idagente": function (d) {
                                 return $('#proponente').val();
@@ -214,12 +211,20 @@
                             "name": "visualizarmotivo",
                             render: function (data, type, row) {
                                 if (data.MotivoArquivamento !== '') {
-                                    return '<button data-target="modal_visualizar" class="btnVisualizar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '">Visualizar</button>';
+				    
+				    var motivo = data.MotivoArquivamento;
+				    motivo = motivo.replace(/\"/g,'&#34;'); // aspa dupla
+				    motivo = motivo.replace(/\'/g,'&#39;'); // aspa simples
+				    motivo = motivo.replace(/\n/g,'<br/>');
+				    data.MotivoArquivamento = motivo;
+				    
+                                    return '<button data-target="modal_visualizar" class="btnVisualizar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '" data-motivoarquivamento="' + data.MotivoArquivamento + '"><i class="material-icons">remove_red_eye</i></button>';
                                 } else {
                                     return '';
                                 }
                             }
-                        },
+                        }
+/*			,
                         {
                             data: null,
                             "name": "botao",
@@ -227,6 +232,7 @@
                                 return '<button data-target="modal_solicitar" class="btnSolicitar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '">Solicitar</button>'
                             }
                         }
+*/
                     ]
                 }
             );
@@ -236,9 +242,11 @@
             });
 
             $("tbody").on('click','button', function () {
-                console.log($3(this).data('idpreprojeto'));
                 let idpreprojeto = $3(this).data('idpreprojeto');
+		let motivoarquivamento = $3(this).data('motivoarquivamento');
+		
                 $3('#idpreprojeto').val(idpreprojeto);
+		$3('.motivo_arquivamento').html(motivoarquivamento);
             });
 
             $("#enviarSolicitacao").on('click', function () {
