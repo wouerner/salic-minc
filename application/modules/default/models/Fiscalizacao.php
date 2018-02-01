@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of Projetos
- *
- * @author Andr� Nogueira Pereira
- */
 class Fiscalizacao extends MinC_Db_Table_Abstract
 {
     protected $_name = 'tbFiscalizacao';
@@ -60,7 +55,6 @@ class Fiscalizacao extends MinC_Db_Table_Abstract
                 array($this->_name),
                 array('IdPRONAC')
         );
-        //$select->where("tbFiscalizacao.stFiscalizacaoProjeto = 'S'");
         $select->Where("tbFiscalizacao.stFiscalizacaoProjeto = '0'");
         $select->orWhere("tbFiscalizacao.stFiscalizacaoProjeto = '1'");
 
