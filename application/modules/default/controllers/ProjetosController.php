@@ -61,7 +61,7 @@ class ProjetosController extends MinC_Controller_Action_Abstract
         $qntdProdValidados = $tbDistParecer->QntdProdutosXValidados($w2);
 
         if ($qntdProdValidados != $qntdProd) { //Se n�o houver valida��o para cada produto, o sistema n�o deixa continuar.
-            parent::message("Produto sem valida��o do Coordenador da Vinculada!", "gerenciarpareceres/index", "ERROR");
+            parent::message("Produto sem valida&ccedil;&atilde;o do Coordenador da Vinculada!", "gerenciarpareceres/index", "ERROR");
         }
                 
         $planilhaAprovacao = new PlanilhaAprovacao();
