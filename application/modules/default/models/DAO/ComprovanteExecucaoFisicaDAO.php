@@ -1,7 +1,6 @@
 <?php
 class ComprovanteExecucaoFisicaDAO extends Zend_Db_Table
 {
-    /* dados da tabela */
     protected $_schema  = "";
     protected $_name    = "BDCORPORATIVO.scSAC.tbComprovanteExecucao";
     protected $_primary = "idComprovante";
@@ -19,8 +18,6 @@ class ComprovanteExecucaoFisicaDAO extends Zend_Db_Table
             return false;
         }
     } // fecha m�todo cadastrar()
-
-
 
     /**
      * M�todo para alterar os comprovantes
