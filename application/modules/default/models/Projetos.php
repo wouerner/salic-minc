@@ -1118,7 +1118,7 @@ class Projetos extends MinC_Db_Table_Abstract
                 'pr.ResumoProjeto',
                 'pr.UfProjeto',
                 'pr.Processo',
-                'CAST(pr.ProvidenciaTomada AS TEXT) AS ProvidenciaTomada',
+                new Zend_Db_Expr('CAST(pr.ProvidenciaTomada AS TEXT) AS ProvidenciaTomada'),
                 'pr.Localizacao',
                 'pr.SolicitadoReal',
                 'pr.dtSituacao'
