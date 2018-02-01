@@ -5,15 +5,13 @@ class CaptacaoConversao extends MinC_Db_Table_Abstract
     protected $_schema = "SAC";
     protected $_name   = "CaptacaoConversao";
 
-
-
     public function buscarCaptacaoConversao()
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from($this);
         return $this->fetchAll($select);
-    } // fecha m�todo buscarCaptacaoConversao()
+    } 
 
     public function BuscarTotalCaptacaoConversao($retornaSelect = false, $where = array())
     {

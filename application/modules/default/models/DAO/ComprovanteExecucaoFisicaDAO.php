@@ -1,15 +1,4 @@
 <?php
-/**
- * DAO ComprovanteExecucaoFisica
- * @author Equipe RUP - Politec
- * @since 28/04/2010
- * @version 1.0
- * @package application
- * @subpackage application.model.DAO
- * @copyright � 2010 - Minist�rio da Cultura - Todos os direitos reservados.
- * @link http://www.cultura.gov.br
- */
-
 class ComprovanteExecucaoFisicaDAO extends Zend_Db_Table
 {
     /* dados da tabela */
@@ -17,15 +6,6 @@ class ComprovanteExecucaoFisicaDAO extends Zend_Db_Table
     protected $_name    = "BDCORPORATIVO.scSAC.tbComprovanteExecucao";
     protected $_primary = "idComprovante";
 
-
-
-    /**
-     * M�todo para cadastrar os comprovantes
-     * @access public
-     * @static
-     * @param array $dados
-     * @return bool
-     */
     public static function cadastrar($dados)
     {
         $db= Zend_Db_Table::getDefaultAdapter();
@@ -441,5 +421,5 @@ class ComprovanteExecucaoFisicaDAO extends Zend_Db_Table
 					AND doc.idComprovanteAnterior = {$idComprovanteAnterior}";
 
         return $db->fetchAll($sql);
-    } // fecha buscarUltimoComprovanteAprovado()
-} // fecha class
+    }
+} 
