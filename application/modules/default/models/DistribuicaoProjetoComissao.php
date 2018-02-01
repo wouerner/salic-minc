@@ -31,10 +31,10 @@ class DistribuicaoProjetoComissao extends MinC_Db_Table_Abstract
             array('Pa' => 'Parecer'),
             'Pa.idPRONAC = Pr.IdPRONAC',
             array(
-            "CASE WHEN Pa.ParecerFavoravel in ('2','3')
+                new Zend_Db_Expr("CASE WHEN Pa.ParecerFavoravel in ('2','3')
                 THEN 'Sim'
                 ELSE 'Nao'
-                End AS ParecerFavoravel",
+                End AS ParecerFavoravel"),
             "Pa.idTipoAgente"
                 ),
             'SAC.dbo'
@@ -79,10 +79,10 @@ class DistribuicaoProjetoComissao extends MinC_Db_Table_Abstract
         $select->joinInner(
             array('Pa' => 'Parecer'),
                                  'Pa.idPRONAC = Pr.IdPRONAC',
-                            array("CASE WHEN Pa.ParecerFavoravel in ('2','3')
+            array(new Zend_Db_Expr("CASE WHEN Pa.ParecerFavoravel in ('2','3')
                                     THEN 'Sim'
                                     ELSE 'Não'
-                                    End AS ParecerFavoravel",
+                                    End AS ParecerFavoravel"),
                                     "Pa.idTipoAgente"
                                 ),
             'SAC.dbo'
