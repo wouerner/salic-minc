@@ -168,6 +168,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract
             //---------------------------------------------------------------------------------------------------------------
             $votantes = new Votante();
             $exibirVotantes = $votantes->selecionarvotantes($ConsultaReuniaoAberta['idNrReuniao']);
+
             if (count($exibirVotantes) > 0) {
                 foreach ($exibirVotantes as $votantes) {
                     $dadosVotante[] = $votantes->idAgente;
@@ -179,9 +180,11 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract
                         $this->view->votante = false;
                     }
                 }
+            }else {
+                parent::message("Nao existem votantes no momento. Favor aguardar!", "principal/index", "ERROR");
             }
         } else {
-            parent::message("Nao existe CNIC aberta no momento. Favor aguardar!", "principal/index", "ERROR");
+            parent::message("N&atilde;o existe CNIC aberta no momento. Favor aguardar!", "principal/index", "ERROR");
         }
 
         $idpronac = $this->_request->getParam("idpronac");
