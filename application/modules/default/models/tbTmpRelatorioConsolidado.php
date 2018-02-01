@@ -1,10 +1,4 @@
 <?php
-/**
- * DAO tbTmpRelatorioConsolidado
- * @since 16/03/2011
- * @version 1.0
- * @link http://www.cultura.gov.br
- */
 
 class tbTmpRelatorioConsolidado extends MinC_Db_Table_Abstract
 {
@@ -13,13 +7,6 @@ class tbTmpRelatorioConsolidado extends MinC_Db_Table_Abstract
     protected $_name   = "tbTmpRelatorioConsolidado";
     protected $_primary = "idPronac";
 
-
-    /**
-     * M�todo para cadastrar
-     * @access public
-     * @param array $dados
-     * @return integer (retorna o �ltimo id cadastrado)
-     */
     public function buscarDados($idpronac)
     {
         $select = $this->select();
@@ -77,5 +64,5 @@ class tbTmpRelatorioConsolidado extends MinC_Db_Table_Abstract
         $select->where('a.idPronac = ?', $idpronac);
 
         return $this->fetchAll($select);
-    } // fecha m�todo cadastrarDados()
+    }
 }
