@@ -117,9 +117,9 @@ class HistoricoDocumento extends MinC_Db_Table_Abstract
                     "h.idLote as idLote",
                     "h.Acao as Acao",
                     "p.Orgao as Orgao",
-                    "dtEnvio" => "(CONVERT(CHAR(10), h.dtTramitacaoEnvio,103) + ' ' + CONVERT(CHAR(8), h.dtTramitacaoEnvio,108))",
-                    "dtRecebida" =>"(CONVERT(CHAR(10), h.dtTramitacaoRecebida,103) + ' ' + CONVERT(CHAR(8), h.dtTramitacaoRecebida,108))",
-                    "dtSituacao" => "(CONVERT(CHAR(10), p.DtSituacao,103) + ' ' + CONVERT(CHAR(8), p.DtSituacao,108))",
+                    "dtEnvio" => new Zend_Db_Expr("(CONVERT(CHAR(10), h.dtTramitacaoEnvio,103) + ' ' + CONVERT(CHAR(8), h.dtTramitacaoEnvio,108))"),
+                    "dtRecebida" =>new Zend_Db_Expr("(CONVERT(CHAR(10), h.dtTramitacaoRecebida,103) + ' ' + CONVERT(CHAR(8), h.dtTramitacaoRecebida,108))"),
+                    "dtSituacao" => new Zend_Db_Expr("(CONVERT(CHAR(10), p.DtSituacao,103) + ' ' + CONVERT(CHAR(8), p.DtSituacao,108))"),
                     "Situacao" => new Zend_Db_Expr(
                             "CASE
                               WHEN h.Acao = 0 THEN 'Bloqueado'
@@ -233,7 +233,7 @@ class HistoricoDocumento extends MinC_Db_Table_Abstract
                     'p.IdPRONAC as idPronac',
                     '(p.AnoProjeto + p.Sequencial) AS Pronac',
                     'p.NomeProjeto',
-                    'SAC.dbo.fnFormataProcesso(p.IdPRONAC) AS Processo'
+                    new Zend_Db_Expr('SAC.dbo.fnFormataProcesso(p.IdPRONAC) AS Processo')
                 )
         );
         $select->joinInner(
