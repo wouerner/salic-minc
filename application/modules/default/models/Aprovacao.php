@@ -405,7 +405,7 @@ class Aprovacao extends MinC_Db_Table_Abstract
             $db= Zend_Db_Table::getDefaultAdapter();
             $db->setFetchMode(Zend_DB::FETCH_OBJ);
         } catch (Zend_Exception_Db $e) {
-            $this->view->message = $e->getMessage();
+            throw $e->getMessage();
         }
             
         return $db->fetchAll($select);
@@ -418,7 +418,7 @@ class Aprovacao extends MinC_Db_Table_Abstract
         $select->from(
                 array('ap' => $this->_name),
                 array(
-                    new Zend_Db_Expr"CONVERT(CHAR(10), ap.DtAprovacao, 103) AS DtAprovacao"),
+                    new Zend_Db_Expr("CONVERT(CHAR(10), ap.DtAprovacao, 103) AS DtAprovacao"),
                     'ap.ResumoAprovacao as ResumoAprovacao',
                     'ap.TipoAprovacao'
                 )

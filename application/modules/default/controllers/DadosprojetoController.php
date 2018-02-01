@@ -11,7 +11,7 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract
      */
     public function init()
     {
-        Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
+//        Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
         $this->view->title = "Salic - Sistema de Apoio &agrave;s Leis de Incentivo &agrave; Cultura"; // titulo da pagina
         $auth              = Zend_Auth::getInstance(); // pega a autenticacao
         $Usuario           = new UsuarioDAO(); // objeto usuario
@@ -180,8 +180,6 @@ class DadosprojetoController extends MinC_Controller_Action_Abstract
                         $this->view->votante = false;
                     }
                 }
-            }else {
-                parent::message("Nao existem votantes no momento. Favor aguardar!", "principal/index", "ERROR");
             }
         } else {
             parent::message("N&atilde;o existe CNIC aberta no momento. Favor aguardar!", "principal/index", "ERROR");
