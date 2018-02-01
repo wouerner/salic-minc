@@ -1371,36 +1371,6 @@ class tbDistribuirParecer extends MinC_Db_Table_Abstract
             array(),
             'TABELAS.dbo'
         );
-        /*$slct->joinInner(
-                array('uog2'=>'UsuariosXOrgaosXGrupos'),
-                'uog2.uog_usuario = usu2.usu_codigo',
-                array(),
-                'TABELAS.dbo'
-                );*/
-        /*$slct->joinInner(
-                array('gru2'=>'Grupos'),
-                'gru2.gru_codigo = uog2.uog_grupo',
-                array('cdPerfil2'=>'gru2.gru_codigo','Perfil2'=>'gru2.gru_nome'),
-                'TABELAS.dbo'
-                );*/
-        /*$slct->joinInner(
-                array('org2'=>'Orgaos'),
-                'org2.Codigo = uog2.uog_orgao',
-                array('Orgao2'=>'org2.Sigla'),
-                'SAC.dbo'
-                );*/
-        /* $slct->joinInner(array('ag2'=>'Agentes'),
-                         'ag2.CNPJCPF = usu2.usu_identificacao',
-                         array('idAgente2'=>'ag2.idAgente'),
-                         'AGENTES.dbo');*/
-        /*$slct->joinInner(array('nm2'=>'Nomes'),
-                         'nm2.idAgente = ag2.idAgente',
-                        array('Nome2'=>'nm2.Descricao'),
-                        'AGENTES.dbo');*/
-
-        /*foreach ($where as $coluna => $valor) {
-            $slct->where($coluna, $valor);
-        }*/
 
         $slct->where('dp.idPRONAC = ?', $idpronac);
         $slct->where('gru.gru_codigo = 93 or gru.gru_codigo = 94');
