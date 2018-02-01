@@ -21,7 +21,7 @@ class Fiscalizacao extends MinC_Db_Table_Abstract
                       ,'Fisc.dtInicioFiscalizacaoProjeto'
                       ,'Fisc.dtFimFiscalizacaoProjeto'
                       ,'Fisc.dtRespostaSolicitada'
-                      ,'CAST(Fisc.dsFiscalizacaoProjeto AS TEXT) as dsFiscalizacaoProjeto'
+                      ,new Zend_Db_Expr('CAST(Fisc.dsFiscalizacaoProjeto AS TEXT) as dsFiscalizacaoProjeto')
                       ,'Fisc.tpDemandante'
                       ,'Fisc.stFiscalizacaoProjeto'
                       ,'Fisc.idAgente'
