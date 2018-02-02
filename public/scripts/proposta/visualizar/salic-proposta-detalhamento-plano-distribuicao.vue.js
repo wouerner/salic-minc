@@ -1,66 +1,87 @@
-Vue.component('salic-proposta-plano-distribuicao', {
+Vue.component('salic-proposta-detalhamento-plano-distribuicao', {
     template: `
-    <div class="plano-distribuicao">
-        <ul class="collapsible collapsible-produto no-padding" data-collapsible="accordion">
-            <li v-for="produto of produtos">
+    <div class="detalhamento-plano-distribuicao">
+        <ul class="collapsible" data-collapsible="expandable">
+            <li v-for="( detalhamento, local ) in detalhamentos">
                 <div class="collapsible-header">
-                    <i class="material-icons">add</i> {{produto.Produto}}
+                    <i class="material-icons">place</i>
+                    Detalhamento - {{local}}
                 </div>
-                <div class="collapsible-body">
+                <div class="collapsible-body no-padding margin20 scroll-x">
                     <table>
-                        <thead>
-                           <tr>
-                                <th>&Aacute;rea</th>
-                                <th>Segmento</th>
-                                <th>Principal</th>
-                            </tr>
+                        <thead v-if="detalhamento.length > 0">
+                        <tr>
+                            <th rowspan="2">Categoria</th>
+                            <th rowspan="2">Qtd.</th>
+                            <th class="center-align gratuito" rowspan="2">
+                                Dist. <br>Gratuita
+                            </th>
+                            <th class="center-align popular" colspan="3">
+                                Pre&ccedil;o Popular
+                            </th>
+                            <th class="center-align proponente" colspan="3">
+                                Proponente
+                            </th>
+                            <th rowspan="2" class="center-align">Receita <br> Prevista</th>
+                        </tr>
+                        <tr>
+                            <th class="right-align popular">Qtd. Inteira</th>
+                            <th class="right-align popular">Qtd. Meia</th>
+                            <th class="right-align popular">Pre&ccedil;o <br> Unit&aacute;rio</th>
+                            <th class="right-align proponente">Qtd. Inteira</th>
+                            <th class="right-align proponente">Qtd. Meia</th>
+                            <th class="right-align proponente">Pre&ccedil;o <br> Unit&aacute;rio</th>
+                        </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="detalhamento.length > 0">
+                            <tr v-for="( item, index ) in detalhamento">
+                                <td>{{ item.dsProduto }}</td>
+                                <td class="right-align">{{ item.qtExemplares }}</td>
+            
+                                <!-- Distribuicao Gratuita-->
+                                <td class="right-align">{{ parseInt(item.qtGratuitaDivulgacao) +
+                                    parseInt(item.qtGratuitaPatrocinador) + parseInt(item.qtGratuitaPopulacao) }}
+                                </td>
+            
+                                <!--Preço Popular -->
+                                <td class="right-align">{{ item.qtPopularIntegral }}</td>
+                                <td class="right-align">{{ item.qtPopularParcial }}</td>
+                                <td class="right-align">{{ formatarValor(item.vlUnitarioPopularIntegral) }}</td>
+            
+                                <!--Preço Proponente -->
+                                <td class="right-align">{{ item.qtProponenteIntegral }}</td>
+                                <td class="right-align">{{ item.qtProponenteParcial }}</td>
+                                <td class="right-align">{{ formatarValor(item.vlUnitarioProponenteIntegral) }}</td>
+            
+                                <td class="right-align">{{ formatarValor(item.vlReceitaPrevista) }}</td>
+            
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
                             <tr>
-                                <td>{{produto.DescricaoArea}}</td>
-                                <td>{{produto.DescricaoSegmento}}</td>
-                                <td>{{produto.stPrincipal ? 'N&atilde;o' : 'Sim'}}</td>
+                                <td colspan="12" class="center-align">Sem detalhamento</td>
                             </tr>
                         </tbody>
-                    </table>
-                   
-                    <table class="resumo-distribuicao planoDistribuicao">
-                        <thead>
-                        <tr>
-                            <th class="center-align" rowspan="2">Quantidade</th>
-                            <th colspan="3" class="center-align gratuito">Distribui&ccedil;&atilde;o Gratuita</th>
-                            <th colspan="3" class="center-align popular">Pre&ccedil;o Popular</th>
-                            <th colspan="3" class="center-align proponente">Proponente</th>
-                            <th class="right-align" rowspan="2" width="8%">Receita Prevista total</th>
-                        </tr>
-                        <tr>
-                            <th class="gratuito right-align">Divulga&ccedil;&atilde;o</th>
-                            <th class="gratuito right-align">Patrocinador</th>
-                            <th class="gratuito right-align">Popula&ccedil;&atilde;o</th>
-                            <th class="popular right-align">Qtd. Inteira</th>
-                            <th class="popular right-align">Qtd. Meia</th>
-                            <th class="popular right-align">Valor m&eacute;dio</th>
-                            <th class="proponente right-align">Qtd. Inteira</th>
-                            <th class="proponente right-align">Qtd. Meia</th>
-                            <th class="proponente right-align">Valor m&eacute;dio</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="center-align">{{produto.QtdeProduzida}}</td>
-                            <td class="gratuito right-align">{{produto.QtdeProponente}}</td>
-                            <td class="gratuito right-align">{{produto.QtdePatrocinador}}</td>
-                            <td class="gratuito right-align">{{produto.QtdeOutros}}</td>
-                            <td class="popular right-align">{{produto.QtdeVendaPopularNormal}}</td>
-                            <td class="popular right-align">{{produto.QtdeVendaPopularPromocional}}</td>
-                            <td class="popular right-align">{{produto.ReceitaPopularNormal}}</td>
-                            <td class="proponente right-align">{{produto.QtdeVendaNormal}}</td>
-                            <td class="proponente right-align">{{produto.QtdeVendaPromocional}}</td>
-                            <td class="proponente right-align">{{produto.PrecoUnitarioNormal}}</td>
-                            <td class="right-align">{{produto.Receita}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                        <tfoot v-if="detalhamentos.length > 0" style="opacity: 0.8">
+                            <tr>
+                                <td><b>Totais</b></td>
+                                <td class="right-align">{{ qtExemplaresTotal }}</td>
+                                <!--Distribuicao gratuita -->
+                                <td class="right-align">
+                                {{ parseInt(qtGratuitaDivulgacaoTotal) + parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}
+                                </td>
+                                <!--Preço Popular -->
+                                <td class="right-align">{{ qtPopularIntegralTotal }}</td>
+                                <td class="right-align">{{ qtPopularParcialTotal }}</td>
+                                <td class="right-align"> -</td>
+                                <!--Fim: Preço Popular -->
+                                <td class="right-align">{{ qtProponenteIntegralTotal }}</td>
+                                <td class="right-align">{{ qtProponenteParcialTotal }}</td>
+                                <td class="right-align"> -</td>
+                                <td class="right-align">{{ receitaPrevistaTotal }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>               
                 </div>
             </li>
         </ul>
@@ -68,43 +89,135 @@ Vue.component('salic-proposta-plano-distribuicao', {
     `,
     data: function () {
         return {
-            "dsProduto": '', // Categoria
-            "qtExemplares": 0, // Quantidade de exemplar / Ingresso
-            "qtGratuitaDivulgacao": 0,
-            "qtGratuitaPatrocinador": 0,
-            "qtGratuitaPopulacao": 0,
-            "vlUnitarioPopularIntegral": 0.0, // Preço popular: Preço Unitario do Ingresso
-            "qtPrecoPopularValorIntegral": 0, //Preço Popular: Quantidade de Inteira
-            "qtPrecoPopularValorParcial": 0,//Preço Popular: Quantidade de meia entrada
-            "vlUnitarioProponenteIntegral": 0,
-            "qtPopularIntegral": 0,
-            "qtPopularParcial": 0,
-            produto: {}, // produto sendo manipulado
-            produtos: [], // lista de produtos
-            active: false,
-            icon: 'add',
-            radio: 'n'
+            detalhamentos: [],
         }
     },
     props: [
-        'idpreprojeto',
         'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
-        'arrayProdutos'
+        'arrayDetalhamentos'
     ],
-    computed: {},
-    watch: {
-        idpreprojeto: function (value) {
-            this.fetch(value);
+    computed: {
+        // Total de exemplares
+        qtExemplaresTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtExemplares']);
+            }
+            return total;
         },
-        arrayProdutos: function (value) {
-            this.produtos = value;
+        // Total de divulgação gratuita.
+        qtGratuitaDivulgacaoTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtGratuitaDivulgacao']);
+            }
+            return total;
+        },
+        // Total de divulgação Patrocinador
+        qtGratuitaPatrocinadorTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtGratuitaPatrocinador']);
+            }
+            return total;
+        },
+        // Total de divulgação gratuita.
+        qtGratuitaPopulacaoTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtGratuitaPopulacao']);
+            }
+            return total;
+        },
+        //Preço Popular: Quantidade de Inteira
+        qtPopularIntegralTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtPopularIntegral']);
+            }
+            return total;
+        },
+        //Preço Popular: Quantidade de meia entrada
+        qtPopularParcialTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtPopularParcial']);
+            }
+            return total;
+        },
+        vlReceitaPopularIntegralTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = (this.detalhamentos[i]['vlReceitaPopularIntegral']);
+                total += numeral(vl).value();
+            }
+            return numeral(total).format();
+        },
+        vlReceitaPopularParcialTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = (this.detalhamentos[i]['vlReceitaPopularParcial']);
+                total += numeral(vl).value();
+            }
+            return numeral(total).format();
+        },
+        qtProponenteIntegralTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtProponenteIntegral']);
+            }
+            return total;
+        },
+        qtProponenteParcialTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtProponenteParcial']);
+            }
+            return total;
+        },
+        vlReceitaProponenteIntegralTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                vl = (this.detalhamentos[i]['vlReceitaProponenteIntegral']);
+                total += this.converterParaMoedaAmericana(vl);
+            }
+            return numeral(total).format();
+        },
+        vlReceitaProponenteParcialTotal: function () {
+            total = 0;
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = (this.detalhamentos[i]['vlReceitaProponenteParcial']);
+                total += this.converterParaMoedaAmericana(vl);
+            }
+            return numeral(total).format();
+        },
+        receitaPrevistaTotal: function () {
+            var total = numeral();
+
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = this.detalhamentos[i]['vlReceitaPrevista'];
+                total.add(parseFloat(vl));
+            }
+            return total.format();
         }
     },
+    watch: {
+        idplanodistribuicao: function (value) {
+            // this.fetch(value);
+        },
+        arrayDetalhamentos: function(value) {
+            this.detalhamentos = value;
+        }
+
+    },
     mounted: function () {
-        if (typeof this.idpreprojeto != 'undefined') {
-            this.fetch(this.idpreprojeto);
+        if (typeof this.idplanodistribuicao != 'undefined') {
+            // this.fetch(this.idplanodistribuicao);
+        }
+
+        if (typeof this.arrayDetalhamentos != 'undefined') {
+            this.iniciarCollapsible();
+            this.detalhamentos = this.arrayDetalhamentos;
         }
     },
     methods: {
@@ -113,14 +226,38 @@ Vue.component('salic-proposta-plano-distribuicao', {
 
             $3.ajax({
                 type: "GET",
-                url: "/proposta/visualizar/obter-plano-distribuicacao/idPreProjeto/",
+                url: "/proposta/visualizar/obter-detalhamento-plano-distribuicao",
                 data: {
+                    idPlanoDistribuicao: vue.idplanodistribuicao,
                     idPreProjeto: vue.idpreprojeto,
-                    idPlanoDistribuicao: vue.idplanodistribuicao
                 }
             }).done(function (response) {
-                vue.produtos = response.data;
+                vue.detalhamentos = response.data;
+            });
+        },
+        converterParaMoedaAmericana: function (valor) {
+            if (!valor)
+                valor = '0';
+
+            valor = valor.replace(/\./g, '');
+            valor = valor.replace(/\,/g, '.');
+            valor = parseFloat(valor);
+            valor = valor.toFixed(2);
+
+            if (isNaN(valor))
+                valor = 0;
+
+            return valor;
+        },
+        formatarValor: function (valor) {
+            valor = parseFloat(valor);
+            return numeral(valor).format();
+        },
+        iniciarCollapsible: function () {
+            $3('.detalhamento-plano-distribuicao .collapsible').each(function () {
+                $3(this).collapsible();
             });
         }
     }
 });
+
