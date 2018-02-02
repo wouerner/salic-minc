@@ -47,7 +47,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
 
             $tbPreProjetoMapper = new Proposta_Model_TbPreProjetoMetaMapper();
             $propostaCulturalAtual = $tbPreProjetoMapper->obterPropostaCulturalCompleta($idPreProjeto);
-
+        xd($propostaCulturalAtual);
             $propostaCulturalAtual = $this->prepararArrayParaJson($propostaCulturalAtual);
             $propostaCulturalAtual['tbplanilhaproposta'] = $this->montarPlanilhaProposta(
                 $propostaCulturalAtual['tbplanilhaproposta']
