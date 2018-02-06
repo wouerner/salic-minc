@@ -442,7 +442,9 @@ class tbComprovantePagamentoxPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 array(),
             'AGENTES.dbo'
         );
+
         $a->where(new Zend_Db_Expr('a.AnoProjeto+a.Sequencial = (SELECT x.Anoprojeto+x.Sequencial FROM SAC.dbo.Projetos x WHERE x.idPronac = ?)'), $idPronac);
+
         $a->group(array('a.CgcCpfMecena','c.Descricao'));
         $a->order(array('2','3'));
 
