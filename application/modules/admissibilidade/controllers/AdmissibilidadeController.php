@@ -359,13 +359,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 "idPreProjeto=?" => $this->idPreProjeto
             )
         )->current();
-        
+
         $this->view->idPreProjeto = $this->idPreProjeto;
         $this->view->nomeProjeto = strip_tags($rsProposta->NomeProjeto);
         $this->view->dataAtual = date("d/m/Y");
         $this->view->dataAtualBd = date("Y/m/d H:i:s");
         $this->view->codGrupo = $this->codGrupo;
-        
+
         if ($this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
             $tbAvaliacaoProposta = new tbAvaliacaoProposta();
             $avaliacoesAnteriores = $tbAvaliacaoProposta->buscar(
@@ -396,7 +396,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $dados['ConformidadeOK'] = $post->conformidade;
         $dados['stEstado'] = 0;
         $dados['stEnviado'] = 'N';
-        
+
         $projetoExiste = Proposta_Model_AnalisarPropostaDAO::verificarAvaliacao($post->idPreProjeto);
 
         //Esse if so existe por que nao existe objeto de negocio.
@@ -1792,6 +1792,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $arrDados['liberarEncaminhamento'] = true;
         }
 
+        if ($this->codGrupo) {
+            $gruposDbTable = new Autenticacao_Model_Grupos();
+            $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
+        }
+
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
 
@@ -2648,7 +2653,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
 
-        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : array("DtAvaliacao DESC");
+        $order = (is_array($order)
+            && $order[0]['column']
+            && $order[0]['dir']
+            && $order[0]['dir'] != 1)
+            ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : array("DtAvaliacao DESC");
 
         $vwPainelAvaliar = new Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas();
 
@@ -2661,7 +2670,18 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $orgaoSuperior = $orgao[0]['Superior'];
         $where['idSecretaria = ?'] = $orgaoSuperior;
 
-        $propostas = $vwPainelAvaliar->propostas($where, $order, $start, $length, $search);
+        $distribuicaoAvaliacaoProposta = new Admissibilidade_Model_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoProposta->setIdOrgaoSuperior($orgaoSuperior);
+        $distribuicaoAvaliacaoProposta->setIdPerfil($this->grupoAtivo->codGrupo);
+
+        $propostas = $vwPainelAvaliar->obterPropostasParaAvaliacao(
+            $where,
+            $order,
+            $start,
+            $length,
+            $search,
+            $distribuicaoAvaliacaoProposta
+        );
 
         $recordsTotal = 0;
         $recordsFiltered = 0;
@@ -2680,21 +2700,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     $this->grupoAtivo->codGrupo
                 );
 
-                $avaliacaoProposta = true;
-                if ($this->codGrupo != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-                    $avaliacaoProposta = $avaliacaoPropostaDbTable->findBy(
-                        [
-                            'id_preprojeto = ? ' => $proposta->idProjeto,
-                            'id_orgao_superior = ?' => $orgaoSuperior,
-                            'id_perfil = ?' => $this->codGrupo,
-                            'avaliacao_atual = ?' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
-                        ]
-                    );
-                }
-
-                if($avaliacaoProposta) {
-                    $aux[$key] = $proposta;
-                }
+                $aux[$key] = $proposta;
             }
 
             $recordsTotal = $vwPainelAvaliar->propostasTotal($where);
@@ -2878,6 +2884,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
     }
 
+
     function analisarAlteracoesDaDiligenciaAction()
     {
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
@@ -2889,7 +2896,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->view->idPreProjeto = $idPreProjeto;
             $this->view->tipo = $this->getRequest()->getParam('tipo', 'diligencia');
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             parent::message($e->getMessage(), "/admissibilidade/admissibilidade/listar-propostas", "INFO");
         }
     }

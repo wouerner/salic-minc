@@ -1,17 +1,6 @@
 <?php
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Contratoxplanilhaaprovacao
- *
- * @author 01610881125
- */
 class Contratoxplanilhaaprovacao extends MinC_Db_Table_Abstract
 {
-
     protected $_name    = 'tbContratoxPlanilhaAprovacao';
     protected $_schema  = 'bdcorporativo.scSAC';
 

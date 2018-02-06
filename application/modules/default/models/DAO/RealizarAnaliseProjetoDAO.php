@@ -1,14 +1,4 @@
 <?php
-/* DAO RealizarAnaliseProjeto
- * @author Equipe RUP - Politec
- * @since 07/06/2010
- * @version 1.0
- * @package application
- * @subpackage application.model.DAO
- * @link http://www.politec.com.br
- * @copyright � 2010 - Politec - Todos os direitos reservados.
-*/
-
 class RealizarAnaliseProjetoDAO extends Zend_db_table
 {
     public static function somarOrcamentoSolicitado($idpronac)
@@ -39,7 +29,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
 			                       THEN 'Artigo 26' 
 				                 WHEN Enquadramento = 2 
 				                   THEN 'Artigo 18' 
-                                 ELSE 'Não enquadrado'
+                                 ELSE 'N&atilde;o enquadrado'
                                  END"
                             )),
                             'SAC.dbo'
@@ -330,9 +320,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo analiseDeConta()
-
-
+    }
 
     /**
      * M�todo que busca as informa��es da an�lise do parecer consolidado
@@ -353,15 +341,15 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
 			,par.SugeridoReal
             ,par.ResumoParecer
             , case
-                  when par.ParecerFavoravel = 1 then 'N�o'
+                  when par.ParecerFavoravel = 1 then 'N&atilde;o'
                   when par.ParecerFavoravel = 2 then 'Sim'
             end as parecerfavoravel,
             par.TipoParecer
             ,case
-			      when par.TipoParecer = 1 then 'Aprova��o Inicial'
-			      when par.TipoParecer = 2 then 'Complementa��o'
-			      when par.TipoParecer = 3 then 'Prorroga��o'
-			      when par.TipoParecer = 4 then 'Redu��o'
+			      when par.TipoParecer = 1 then 'Aprova&ccedil;&atilde;o Inicial'
+			      when par.TipoParecer = 2 then 'Complementa&ccedil;&atilde;o'
+			      when par.TipoParecer = 3 then 'Prorroga&ccedil;&atilde;o'
+			      when par.TipoParecer = 4 then 'Redu&ccedil;&atilde;o'
 			end as tipoparecer
             ,case
 			when par.idEnquadramento = 1 then 'Artigo 26'
@@ -371,7 +359,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
 			left JOIN SAC.dbo.Enquadramento enq on enq.IdPRONAC  = PRO.IdPRONAC
             WHERE PAR.idTipoAgente = 1 and PRO.IdPRONAC=" . $idPronac;
         // busca de acordo com o pronac
-
+        
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
@@ -405,7 +393,6 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
                      FROM sac.dbo.Projetos
                          WHERE sac.dbo.fnValorDaProposta(idProjeto) > 0 and IdPRONAC=$idpronac
 ";
-//            echo '<pre>'.$sql; die;
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         return $db->fetchAll($sql);
@@ -457,13 +444,8 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
-//        echo "<pre>".$sql; die;
         return $resultado;
-    } // fecha o metodo analiseparecerConsolidado
-
-
-
-
+    } 
 
     /**
      * M�todo que busca as informa��es da an�lise de conte�do
@@ -529,14 +511,12 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         if (!empty($idPronac)) {
             $sql.= " WHERE AP. tpAnalise = '$tpAnalise' and AC.idPronac = $idPronac";
         }
-//
+
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo analiseDeConteudo()
-
-
+    } 
 
     /**
      * M�todo que busca os produtos dos projetos da an�lise de custos
@@ -548,11 +528,9 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
     public static function JustificativaComponente($idpronac)
     {
         $sql = "select dsAnalise from BDCORPORATIVO.scSAC.tbPauta where idpronac = $idpronac ";
-        //die($sql);
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_ASSOC);
         $resultado = $db->fetchRow($sql);
-//        die($sql);
         return $resultado;
     }
 
@@ -600,9 +578,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo analiseDeCustosBuscarProduto()
-
-
+    } 
 
     /**
      * M�todo que busca as etapas dos projetos da an�lise de custos
@@ -647,9 +623,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo analiseDeCustosBuscarEtapa()
-
-
+    }
 
     /**
      * M�todo que busca os estados dos projetos da an�lise de custos
@@ -700,8 +674,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo analiseDeCustosBuscarUF()
-
+    } 
 
     /**
      * M�todo que emite parecer (grava na tabela de aprova��o)
@@ -722,7 +695,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         } else {
             return false;
         }
-    } // fecha m�todo emitirParecer()
+    }
 
     /**
      * M�todo que verifica a tabela aprovacao
@@ -737,7 +710,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         return $db->fetchAll($sql);
-    } // fecha verificaraprovacao
+    }
 
     /**
      * M�todo que verifica a tabela aprovacao
@@ -793,9 +766,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         } catch (Exception $e) {
             return false;
         }
-    } // fecha m�todo cadastrarSubmeterCNIC()
-
-
+    }
 
     /**
      * M�todo que altera o projeto na pauta
@@ -821,9 +792,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
             die($e->getMessage());
             return false;
         }
-    } // fecha m�todo cadastrarSubmeterCNIC()
-
-
+    }
 
     /**
      * M�todo que altera o projeto na pauta
@@ -849,9 +818,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         } else {
             return false;
         }
-    } // fecha m�todo submeterCnic()
-
-
+    }
 
     /**
      * M�todo que busca os projetos em pauta
@@ -871,8 +838,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
             $this->view->message = "Erro ao buscar os Tipos de Documentos: " . $e->getMessage();
         }
         return $db->fetchAll($sql);
-    } // retornaRegistro()
-
+    }
 
     public static function retornaIndeferimento()
     {
@@ -933,7 +899,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
             $this->view->message = "Erro ao buscar os Tipos de Documentos: " . $e->getMessage();
         }
         return $db->fetchRow($sql);
-    } // fecha class
+    } 
 
     public static function localrealizacao($idpronac)
     {
@@ -992,7 +958,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         } catch (Zend_Exception_Db $e) {
             $this->view->message = $e->getMessage();
         }
-    } // fecha class
+    } 
 
     public static function deslocamento($pronac)
     {
@@ -1359,18 +1325,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
             $this->view->message = "Erro ao buscar os Tipos de Documentos: " . $e->getMessage();
         }
         return $db->fetchAll($sql);
-    } // fecha class
-
-
-
-
-
-
-
-
-
-
-
+    } 
 
     /**
      * Planilha de Or�amento
@@ -1434,9 +1389,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo planilhaOrcamento()
-
-
+    }
 
     /**
      * M�todo que busca os produtos da planilha or�amento
@@ -1460,9 +1413,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo planilhaOrcamentoBuscarProduto()
-
-
+    }
 
     /**
      * M�todo que busca as etapas da planilhaOrcamento
@@ -1493,9 +1444,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo planilhaOrcamentoBuscarEtapa()
-
-
+    } 
 
     /**
      * M�todo que busca os estados da planilhaOrcamento
@@ -1530,8 +1479,7 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo planilhaOrcamentoBuscarUF()
-
+    } 
 
     /**
      * M�todo que busca o valor total de custo administrativo
@@ -1541,10 +1489,6 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
      */
     public static function ValorTotalAdministrativo($idPronac = null, $tpAprovacao=null)
     {
-
-        /*$sql = "select sum((qtItem * nrOcorrencia * vlUnitario)) as valorTotaladministrativo from SAC.dbo.tbPlanilhaAprovacao where tpPlanilha = '$tpAprovacao'
-                and idproduto=0 and idplanilhaitem not in (5249, 206, 1238)";*/
-
         $sql = "select sum((qtItem * nrOcorrencia * vlUnitario)) as valorTotaladministrativo from SAC.dbo.tbPlanilhaAprovacao
         where tpPlanilha = '$tpAprovacao'
         and idproduto=0
@@ -1641,10 +1585,9 @@ class RealizarAnaliseProjetoDAO extends Zend_db_table
             $sql.= "AND PRO.idpronac = $idPronac ";
         }
 
-        //$sql.= "ORDER BY PAP.nrFonteRecurso, PD.Descricao, PAP.idEtapa, E.Descricao, UF.Sigla, CID.Descricao, I.Descricao";
         $db= Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
         $resultado = $db->fetchAll($sql);
         return $resultado;
-    } // fecha m�todo analiseDeCustos()
+    } 
 }
