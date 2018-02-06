@@ -84,7 +84,7 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
 //            }
 
             $post = $this->getRequest()->getPost();
-            if (!$post) {
+            if (!$post['areaCultural'] || !$post['segmentoCultural'] || !$post['enquadramento_projeto'] || !$post['observacao']) {
                 $this->carregardadosEnquadramentoProjeto($projeto);
             } else {
                 $this->salvarEnquadramentoProjeto($projeto);
@@ -108,6 +108,7 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
             $authIdentity = array_change_key_case((array)$auth->getIdentity());
             $objEnquadramento = new Admissibilidade_Model_Enquadramento();
             $arrayDadosEnquadramento = $objEnquadramento->findBy(array('IdPRONAC = ?'=>$projeto['IdPRONAC']));
+
             $arrayArmazenamentoEnquadramento = array(
                 'AnoProjeto' => $projeto['AnoProjeto'],
                 'Sequencial' => $projeto['Sequencial'],
@@ -178,10 +179,10 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
 
             $objInternet = new Agente_Model_DbTable_Internet();
             $arrayEmails = $objInternet->obterEmailProponentesPorPreProjeto($projeto['idProjeto']);
+
             foreach ($arrayEmails as $email) {
                 EmailDAO::enviarEmail($email->Descricao, $verificacao['Descricao'], $textoEmail['dsTexto']);
             }
-
             parent::message('Enquadramento cadastrado com sucesso.', '/admissibilidade/enquadramento/gerenciar-enquadramento', 'CONFIRM');
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/admissibilidade/enquadramento/enquadrarprojeto?IdPRONAC={$projeto['IdPRONAC']}");
