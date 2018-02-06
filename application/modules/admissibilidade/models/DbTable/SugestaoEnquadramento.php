@@ -59,7 +59,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         );
 
         $tableSelect->where('id_preprojeto = ?', $id_preprojeto);
-        $tableSelect->order('id_sugestao_enquadramento asc');
+        $tableSelect->order('data_avaliacao desc');
 
         $resultado = $this->fetchAll($tableSelect);
         if ($resultado) {
