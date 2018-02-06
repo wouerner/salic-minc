@@ -43,7 +43,7 @@ class Zend_View_Helper_IsProjetoJaAssinado
         )->toArray();
         
         $ultimaAssinatura = end($assinaturas);
-        $idUltimaAssinatura = ($ultimaAssinatura['idOrdemDaAssinatura']) ? $ultimaAssinatura['idOrdemDaAssinatura'] : 0;
+        $idUltimaAssinatura = ($ultimaAssinatura->idOrdemDaAssinatura) ? $ultimaAssinatura->idOrdemDaAssinatura : 0;
         
         if ($idUltimaAssinatura <= count($assinaturasNecessarias)) {
             $idProximaAssinatura = $idUltimaAssinatura + 1;
