@@ -1195,7 +1195,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
         // erro ao abrir o arquivo
         if (!$resultado) {
-            $this->view->message      = 'N�o foi poss�vel abrir o arquivo!';
+            $this->view->message      = 'N&atilde;o foi poss&iacute;vel abrir o arquivo!';
             $this->view->message_type = 'ERROR';
         } else {
             // l� os cabe�alhos formatado
@@ -1305,7 +1305,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $this->view->intTamPag     = $this->intTamPag;
         } else {
             $idPronacCriptado = Seguranca::encrypt($idPronac);
-            parent::message("N�o foi encontrado nenhum projeto!", "consultardadosprojeto?idPronac=$idPronacCriptado", "ERROR");
+            parent::message("N&atilde;o foi encontrado nenhum projeto!", "consultardadosprojeto?idPronac=$idPronacCriptado", "ERROR");
         }
     }
 
