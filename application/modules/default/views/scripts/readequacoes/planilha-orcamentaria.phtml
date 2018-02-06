@@ -23,7 +23,7 @@
                 height:170,
                 modal: true,
                 buttons : {
-		    'N�o' : function(){
+		    'N\xE3o' : function(){
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
@@ -50,7 +50,7 @@
                 width:360,
                 modal: true,
                 buttons : {
-                    'N�o' : function(){
+                    'N\xE3o' : function(){
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
@@ -675,7 +675,7 @@
         var descJustificativa = CKEDITOR.instances['descJustificativa'].getData().toString().replace(/(<.*?>)|(&nbsp;)|(\s+)/g,''),
             texto = CKEDITOR.instances['descJustificativa'].getData(),
             erro = 0,
-            msg = 'Favor preencher os dados obrigatarios!';
+            msg = 'Favor preencher os dados obrigat&oacute;rios!';
         
         if (descJustificativa == ''){
             erro++;
@@ -956,7 +956,7 @@
                 <td id="TotalCalculado" class="direita" style="width: 125px;"></td>
             </tr>
             <tr>
-                <td colspan="6" class="destacar bold centro">Justificativa da Readequa��o <span class="red-text">*</span> <span id="textoErroValores" style="float:right; color: red;"></span></td>
+                <td colspan="6" class="destacar bold centro">Justificativa da Readequa&ccedil;&atilde;o <span class="red-text">*</span> <span id="textoErroValores" style="float:right; color: red;"></span></td>
             </tr>
             <tr>
                 <td colspan="6" class="centro">
@@ -973,7 +973,7 @@
             <tr>
                 <td class="destacar bold" style="width: 33%">Recursos</td>
                 <td class="destacar bold" style="width: 33%">UF</td>
-                <td class="destacar bold" style="width: 33%">Munic�pio</td>
+                <td class="destacar bold" style="width: 33%">Munic&iacute;pio</td>
             </tr>
             <tr>
                 <td>
@@ -1035,7 +1035,7 @@
             <tr class="centro">
                 <td class="destacar bold w150">Unidade</td>
                 <td class="destacar bold">Qtd</td>
-                <td class="destacar bold">Ocorrencia</td>
+                <td class="destacar bold">Ocorr&ecirc;ncia</td>
                 <td class="destacar bold">Vl. Unitario</td>
                 <td class="destacar bold">Dias</td>
                 <td class="destacar bold">Total</td>
