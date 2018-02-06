@@ -200,7 +200,7 @@
                                                 <?php if ($isProjetoJaAssinado):
                                                     $parametrosAssinatura = "?idPronac=" . $d->IdPRONAC . "&idProduto=" . $d->idProduto . "&situacao=" . $d->situacao . "&idD=" . $d->idDistribuirParecer . "&concluir=1";
                                                     ?>
-                                                    <a class="btn waves-effect waves-light tooltipped small btn cyan"
+                                                    <a class="btn waves-effect waves-light tooltipped small btn cyan modal-trigger"
                                                        href="#modalConfirmacao"
                                                        data-redirect-url="<?php echo $this->url(
                                                                array(
