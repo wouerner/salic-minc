@@ -22,34 +22,43 @@
         ?>
         <div>Gerenciar Pareceres - <?php echo $filtros[$this->tipoFiltro]; ?><span class="voltar"><a href="#" onclick="voltar();">Voltar</a></span></div>
     </div>
-    <!-- ========== INÍCIO CONTEÚDO ========== -->
-    <div class="content padding20 clearfix">
+    <div class="content  clearfix">
       <div class="row">
         <div class="col s12">
-          <table class="tabela">
-              <tr>
-                  <td class="destacar bold" width="1" align="center">PRONAC</td>
-                  <td width="465" align="center">
-                      <input type="text" class="input_simples" name="pronac" id="pronac" maxlength="7" style="width: 90px;" value="<?php echo $this->pronacProjeto;?>">
-                      <input type="button" name="btn_pesquisar" id="btn_pesquisar" class="btn_pesquisar" value="">
-                      <select name="tipoFiltro" style="" class="input_simples comboFiltro white">
-                          <option value="aguardando_distribuicao" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'aguardando_distribuicao' ? 'selected="selected"':''; ?>>Aguardando distribui&ccedil;&atilde;o</option>
-                          <option value="em_analise" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_analise' ? 'selected="selected"':''; ?>>Em an&aacute;lise</option>
-                          <option value="em_validacao" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_validacao' ? 'selected="selected"':''; ?>>Em valida&ccedil;&atilde;o</option>
-                          <option value="validados" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'validados' ? 'selected="selected"':''; ?>>Validados</option>
-                          <?php if ($this->codOrgao == Orgaos::ORGAO_IPHAN_PRONAC) : ?>
-                              <option value="analisado_superintendencia" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisado_superintendencia' ? 'selected="selected"':''; ?>>Analisado pela superintend&ecirc;ncia</option>
-                          <?php endif; ?>
-                          <option value="devolvida" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'devolvida' ? 'selected="selected"':''; ?>>Devolvidas para nova an&aacute;lise</option>
-                          <option value="impedimento_parecerista" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'impedimento_parecerista' ? 'selected="selected"':''; ?>>Impedimento do parecerista</option>
-                      </select>
-                  </td>
-                  <td class="center-align"><?php if($this->qtdDocumentos != 0){echo $this->qtdDocumentos.' Projetos listados';}else{ echo 'Nenhum Registro encontrado!';}?></td>
-              </tr>
-          </table>
+            <div class="card ">
+            <div class="card-content ">
+              <div class="row">
+                <div class="input-field col s3">  
+                  <input type="text" class="" name="pronac" id="pronac" maxlength="7" value="<?php echo $this->pronacProjeto;?>">
+                  <label for="pronac">PRONAC</label>
+                  <button type="button" name="btn_pesquisar" id="btn_pesquisar" class="btn " value="">Pesquisar</button>
+                </div>
+                <div class="input-field col s3 ">  
+                              <select id="selectFilter" name="tipoFiltro" style="" class="input_simples comboFiltro white">
+                                  <option value="aguardando_distribuicao" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'aguardando_distribuicao' ? 'selected="selected"':''; ?>>Aguardando distribui&ccedil;&atilde;o</option>
+                                  <option value="em_analise" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_analise' ? 'selected="selected"':''; ?>>Em an&aacute;lise</option>
+                                  <option value="em_validacao" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'em_validacao' ? 'selected="selected"':''; ?>>Em valida&ccedil;&atilde;o</option>
+                                  <option value="validados" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'validados' ? 'selected="selected"':''; ?>>Validados</option>
+                                  <?php if ($this->codOrgao == Orgaos::ORGAO_IPHAN_PRONAC) : ?>
+                                      <option value="analisado_superintendencia" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'analisado_superintendencia' ? 'selected="selected"':''; ?>>Analisado pela superintend&ecirc;ncia</option>
+                                  <?php endif; ?>
+                                  <option value="devolvida" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'devolvida' ? 'selected="selected"':''; ?>>Devolvidas para nova an&aacute;lise</option>
+                                  <option value="impedimento_parecerista" <?php echo isset($_GET['tipoFiltro']) && $_GET['tipoFiltro'] == 'impedimento_parecerista' ? 'selected="selected"':''; ?>>Impedimento do parecerista</option>
+                              </select>
+                            <label for="selectFilter">
+                                Filtro
+                            </label>
+                        </div>
+                    <div class="col s3">  
+                      <?php if($this->qtdDocumentos != 0){echo $this->qtdDocumentos.' Projetos listados';}else{ echo 'Nenhum Registro encontrado!';}?></td>
+                    </div>
+        </div>
+        </div>
+        </div>
 
           <?php if(count($this->dados)>0): ?>
-            <!-- ============ PAGINAÇÃO ============ -->
+            <div class="card ">
+            <div class="card-content ">
             <table class="tabela" style="width: 97%;" border="0" cellpadding="0" cellspacing="0">
                 <tbody>
                     <tr>
@@ -428,6 +437,8 @@
                     </tbody>
                 </table>
                 <!-- ========== FIM PAGINAÇÃO ========== -->
+                </div>
+                </div>
             <?php endif; ?>
           <?php endif; ?>
         </div>
@@ -477,13 +488,13 @@
     }
 
     $(document).ready(function(){
-	$("#pronac").keypress(function(e) {
-	    if (e.which == 13) {
-		var pronac = $('#pronac').val(),
-                    filtro = $('.comboFiltro').val();
-		window.location = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?pag=1&tipoFiltro="+filtro+"&pronac="+pronac;
-	    }
-	});
+        $("#pronac").keypress(function(e) {
+            if (e.which == 13) {
+            var pronac = $('#pronac').val(),
+                        filtro = $('.comboFiltro').val();
+            window.location = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?pag=1&tipoFiltro="+filtro+"&pronac="+pronac;
+            }
+        });
 
         $("#btn_pesquisar").click(function(){
             var pronac = $('#pronac').val(),
@@ -491,7 +502,8 @@
             window.location = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?pag=1&tipoFiltro="+filtro+"&pronac="+pronac;
         });
 
-        $('.comboFiltro').change(function(){
+        $3('#selectFilter').on('change', function(){
+            console.log('teste');
             var pronac = $('#pronac').val(),
                 filtro = $('.comboFiltro').val(),
                 url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?tipoFiltro="+$(this).val()+"&pronac="+pronac;
