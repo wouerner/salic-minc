@@ -1,0 +1,1 @@
+ALTER TABLE sac.dbo.sugestao_enquadramento ADD id_orgao_superior INT NULL;
