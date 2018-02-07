@@ -191,5 +191,45 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
             $mail->setSubject($email->subject);
             $mail->send($transport);
         };
-    }    
+    }
+
+    public function listarSolicitacoesAction()
+    {
+        $start = $this->getRequest()->getParam('start');
+        $length = $this->getRequest()->getParam('length');
+        $draw = (int)$this->getRequest()->getParam('draw');
+        $search = $this->getRequest()->getParam('search');
+        $order = $this->getRequest()->getParam('order');
+        $columns = $this->getRequest()->getParam('columns');
+        $order = new Zend_Db_Expr('"p"."idpreprojeto" DESC');
+        
+        $tblPreProjetoArquivado = new Proposta_Model_PreProjetoArquivado();
+
+        $rsPreProjetoArquivado = $tblPreProjetoArquivado->listarSolicitacoes(
+            array(),
+            $order,
+            $start,
+            $length,
+            $search,
+            $stEstado
+        );
+
+        $recordsTotal = 0;
+        $recordsFiltered = 0;
+        $aux = array();
+        if (!empty($rsPreProjetoArquivado)) {
+            foreach ($rsPreProjetoArquivado as $key => $proposta) {
+                $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
+                $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
+                
+                $aux[$key] = $proposta;
+            }
+        }
+        
+        $this->_helper->json(array(
+            "data" => !empty($aux) ? $aux : 0,
+            'recordsTotal' => $recordsTotal ? $recordsTotal : 0,
+            'draw' => $draw,
+            'recordsFiltered' => $recordsFiltered ? $recordsFiltered : 0));        
+    }
 }

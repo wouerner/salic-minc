@@ -1,0 +1,126 @@
+<div class="container-fluid">
+    <div class="page-title">
+	<div class="row">
+	    <div class="col s12 m9 l10">
+		<h1>Listar Solicita&ccedil;&atilde;oes de desarquivamento</h1>
+	    </div>
+	    <div class="col s12 m3 l2 right-align">
+		<a href="javascript:voltar();" title="Página Anterior"title="Página Anterior" class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">keyboard_return</i>
+		</a>
+	    </div>
+	</div>
+    </div>
+    <div class="content">
+	<div class="row">
+	    <div class="col s12 m12 l12">
+		<div  id="propostasCadastradas">
+		    <div class="card z-depth-2">
+			<div class="card-content">
+			    <table class="bordered striped conteudoImprimivel" id="tabelaSolicitacoesDesarquivamento">
+				<thead>
+				    <tr>
+					<th>Proposta</th>
+					<th>Nome</th>
+					<th>Data da Solicita&ccedil;&atilde;o</th>
+				    </tr>
+				</thead>
+				<tbody>
+				</tbody>
+			    </table>
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</div>
+    </div>
+</div>
+<div id="modal_solicitacao" class="modal bottom-sheet" style="max-height:95%; height:95%">
+    <div class="modal-content">
+	<h4>Solicita&ccedil;&atilde; de Desarquivamento</h4>
+	<div class="row">
+	    <div class=" col s12">
+		<p class="motivo_arquivamento"></p>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class=" col s12">
+		<p class="solicitacao_desarquivamento"></p>
+	    </div>
+	</div>
+    </div>
+</div>
+<script type="text/javascript">
+ $(document).ready(function () {
+     $('.expandir').live('click', function () {
+         var elemento = $(this),
+             idAgente = elemento.attr('idAgente');
+	 
+         $('.mostraProposta_' + idAgente).toggle();
+         if (elemento.hasClass('btn_adicionar')) {
+             elemento.addClass('btn_remover');
+             elemento.removeClass('btn_adicionar');
+         } else {
+             elemento.addClass('btn_adicionar');
+             elemento.removeClass('btn_remover');
+         }
+     });
+
+ });
+</script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
+<script type="text/javascript">
+ (function ($) {
+     $(document).ready(function () {
+         $3('.modal').modal();
+	 
+         var table =  $('#tabelaSolicitacoesDesarquivamento').DataTable(
+             {
+                 "language": {
+                     "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json"
+                 }
+                 , "lengthChange": true
+                 , "ajax": {
+                     url: "/proposta/pre-projeto-arquivado/listar-solicitacoes",
+                     data: {}
+		 ,
+                     type: "POST"
+                 },
+                 "processing": true,
+                 "serverSide": true,
+                 "bFilter": false,
+                 "aoColumnDefs": [
+                     {'bSortable': false, 'aTargets': [1]}
+                 ],
+                 "order": [[ 0, 'desc' ]],
+                 "columns": [
+                     {
+                         data: null,
+                         "name": "idpreprojeto",
+			 "data": "idpreprojeto"
+                     },
+                     {
+                         "name": "nomeprojeto",
+                         "data": "nomeprojeto"
+                     },
+                     {
+                         "name": "Data da Solicita&ccedil;&atilde;o",
+                         "data": "dtSolicitacaoDesarquivamento"
+                     }
+                 ]
+             }
+         );
+	 
+         $("tbody").on('click','button', function () {
+             let idpreprojeto = $3(this).data('idpreprojeto');
+	     let motivoarquivamento = $3(this).data('motivoarquivamento');
+	     
+             //$3('#idpreprojeto').val(idpreprojeto);
+	     //$3('.motivo_arquivamento').html(motivoarquivamento);
+         });
+     });
+ }($.noConflict(true)));
+</script>

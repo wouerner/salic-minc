@@ -197,5 +197,58 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
             $sqlFinal->limitPage($start, $limit);
         }
         return $db->fetchOne($sqlFinal);
+    }
+
+    public function listarSolicitacoes(
+        $where = array(),
+        $order = array(),
+        $start = 0,
+        $limit = 20,
+        $search = null,
+        $stEstado = 1
+    )
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->setFetchMode(Zend_DB::FETCH_OBJ);
+
+        $sql = $db->select()
+             ->from(
+                 array('a'=>'preprojeto'),
+                 array(
+                     'a.idpreprojeto',
+                     'a.nomeprojeto',
+                     'a.DtArquivamento'),
+                 $this->_schema
+             )
+             ->join(
+                 array('ppa' => $this->_name),
+                 'ppa.idpreprojeto = a.idpreprojeto',
+                 array(
+                     'ppa.MotivoArquivamento',
+                     'ppa.SolicitacaoDesarquivamento AS SolicitacaoDesarquivamento',
+                     'ppa.Avaliacao',
+                     'ppa.idAvaliador',
+                     'ppa.dtSolicitacaoDesarquivamento',
+                     'ppa.dtAvaliacao',
+                     'ppa.stDecisao'
+                 ),
+                 $this->getSchema($this->_schema))
+             ->where("a.mecanismo = '1'");
+        
+        $sql = $db->select()->from(array("p" => $sql));
+
+        $sql->where('SolicitacaoDesarquivamento IS NOT NULL');
+        
+        foreach ($where as $coluna=>$valor) {
+            $sql->where($coluna, $valor);
+        }
+        
+        if (!is_null($start) && $limit) {
+            $start = (int)$start;
+            $limit = (int)$limit;
+            $sql->limitPage($start, $limit);
+        }
+        
+        return $db->fetchAll($sql);
     }    
 }
