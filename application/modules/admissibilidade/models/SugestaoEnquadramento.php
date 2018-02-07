@@ -5,12 +5,31 @@ class Admissibilidade_Model_SugestaoEnquadramento extends MinC_Db_Model
     protected $_id_sugestao_enquadramento;
     protected $_id_preprojeto;
     protected $_id_orgao;
+    protected $_id_orgao_superior;
     protected $_id_perfil_usuario;
     protected $_id_usuario_avaliador;
     protected $_id_area;
     protected $_id_segmento;
     protected $_descricao_motivacao;
     protected $_data_avaliacao;
+
+    /**
+     * @return mixed
+     */
+    public function getIdOrgaoSuperior()
+    {
+        return $this->_id_orgao_superior;
+    }
+
+    /**
+     * @param mixed $id_orgao_superior
+     * @return Admissibilidade_Model_SugestaoEnquadramento
+     */
+    public function setIdOrgaoSuperior($id_orgao_superior)
+    {
+        $this->_id_orgao_superior = $id_orgao_superior;
+        return $this;
+    }
 
     /**
      * @return mixed

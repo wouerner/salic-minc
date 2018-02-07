@@ -81,15 +81,19 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             , $this->getSchema('sac')
         );
 
+
         if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
             $select->joinLeft(
                 ['sugestao_enquadramento']
                 , "
                         sugestao_enquadramento.id_preprojeto = distribuicao_avaliacao_proposta.id_preprojeto
-                        and sugestao_enquadramento.id_orgao = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}
+                        and sugestao_enquadramento.id_orgao_superior = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}
                         and sugestao_enquadramento.id_perfil_usuario = {$distribuicaoAvaliacaoProposta->getIdPerfil()}
                     "
-                , ['sugestao_enquadramento.id_area']
+                , [
+                    'sugestao_enquadramento.id_area',
+                    'sugestao_enquadramento.id_sugestao_enquadramento',
+                ]
                 , $this->getSchema('sac')
             );
         }
@@ -103,7 +107,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         }
 
         $restricaoPropostasParaAvaliacao = $this->obterRestricaoPropostasParaAvaliacao($distribuicaoAvaliacaoProposta);
-        if($restricaoPropostasParaAvaliacao) {
+        if ($restricaoPropostasParaAvaliacao) {
             $select->where($restricaoPropostasParaAvaliacao);
         }
 
@@ -111,13 +115,13 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             $select->order($order);
         }
 
-        //xdnb($select->assemble());
+        xdnb($select->assemble());
         return $db->fetchAll($select);
     }
 
     private function obterRestricaoPropostasParaAvaliacao(Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta)
     {
-        if($distribuicaoAvaliacaoProposta->getIdPerfil()) {
+        if ($distribuicaoAvaliacaoProposta->getIdPerfil()) {
             $restricaoPropostasParaAvaliacao = '( ';
             if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
                 || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {

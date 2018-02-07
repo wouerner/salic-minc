@@ -10,4 +10,5 @@ update enquadramento set id_orgao_superior = tabela_temporaria.id_orgao_superior
              from sac.dbo.PreProjeto) tabela_temporaria on enquadramento.id_preprojeto = tabela_temporaria.id_preprojeto
  where enquadramento.id_orgao_superior is null
 
+-- Definindo coluna id_orgao_superior como obrigatório
 ALTER TABLE sac.dbo.sugestao_enquadramento ALTER COLUMN id_orgao_superior INT NOT NULL

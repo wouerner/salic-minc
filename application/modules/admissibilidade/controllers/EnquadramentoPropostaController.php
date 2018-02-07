@@ -73,9 +73,14 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             $id_segmento = ($post['id_segmento']) ? $post['id_segmento'] : null;
             $objEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
 
+            $orgaoDbTable = new Orgaos();
+            $resultadoOrgaoSuperior = $orgaoDbTable->codigoOrgaoSuperior($this->grupoAtivo->codOrgao);
+            $orgaoSuperior = $resultadoOrgaoSuperior[0]['Superior'];
+
             $arrayArmazenamentoEnquadramento = array(
                 'id_preprojeto' => $get['id_preprojeto'],
                 'id_orgao' => $this->grupoAtivo->codOrgao,
+                'id_orgao_superior' => $orgaoSuperior,
                 'id_perfil_usuario' => $this->grupoAtivo->codGrupo,
                 'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo,
                 'id_area' => $id_area,
@@ -88,6 +93,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
                 [
                     'id_preprojeto' => $get['id_preprojeto'],
                     'id_orgao' => $this->grupoAtivo->codOrgao,
+                    'id_orgao_superior' => $orgaoSuperior,
                     'id_perfil_usuario' => $this->grupoAtivo->codGrupo,
                     'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo
                 ]
