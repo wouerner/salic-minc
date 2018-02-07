@@ -51,6 +51,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             throw new Exception("N&atilde;o foram encontradas &Aacute;reas Culturais para o PRONAC informado.");
         }
 
+        $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
         $this->view->historicoEnquadramento = $this->obterHistoricoSugestaoEnquadramento($preprojeto['idPreProjeto']);
     }
 
