@@ -9,15 +9,15 @@
     <div id="titulo">
         <?php
             $filtros = array(
-                     'aguardando_distribuicao' => 'Aguardando distribuição',
-                     'em_analise' => 'Em análise',
-                     'em_validacao' => 'Em validação',
+                     'aguardando_distribuicao' => 'Aguardando distribuiÃ§Ã£o',
+                     'em_analise' => 'Em anÃ¡lise',
+                     'em_validacao' => 'Em validaÃ§Ã£o',
                      'validados' => 'Validados',
-                     'devolvida' => 'Devolvidas para análise',
+                     'devolvida' => 'Devolvidas para anÃ¡lise',
                      'impedimento_parecerista' => 'Impedimento do parecerista'
             );
             if ($this->codOrgao == Orgaos::ORGAO_IPHAN_PRONAC) {
-                $filtros['analisado_superintendencia'] = 'Analisado pela superintendência';
+                $filtros['analisado_superintendencia'] = 'Analisado pela superintendÃªncia';
             }
         ?>
         <div>Gerenciar Pareceres - <?php echo $filtros[$this->tipoFiltro]; ?><span class="voltar"><a href="#" onclick="voltar();">Voltar</a></span></div>
@@ -107,7 +107,7 @@
                     echo " de ". $this->paginacao['total'];
                 ?>
             </center>
-            <!-- ========== FIM PAGINAÇÃO ========== -->
+            <!-- ========== FIM PAGINAÃ‡ÃƒO ========== -->
           <?php endif; ?>
           <?php if($this->qtdDocumentos != 0): ?>
             <table class="bordered margin0 dataTable no-footer" style="width:100%">
@@ -267,7 +267,7 @@
                           <?php if($this->checarValidacaoSecundarios[$dp->IdPRONAC] == 1) {
                                     $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/tipoFiltro/" . $this->tipoFiltro;
                           ?>
-                          <!-- se retornar true mostra o botão -->
+                          <!-- se retornar true mostra o botÃ£o -->
                             <a class="btn waves-effect waves-light tooltipped small btn cyan"
                                href="#modalConfirmacao"
                                data-redirect-url="<?php echo $this->url(
@@ -279,11 +279,11 @@
                               <i class="material-icons">check_circle</i>
                             </a>
                           <?php } ?>
-                        <!-- secundários: sempre exibe botão de concluir -->
+                        <!-- secundÃ¡rios: sempre exibe botÃ£o de concluir -->
                         <?php } else {
                              $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/tipoFiltro/" . $this->tipoFiltro;
                         ?>
-                        <!-- se retornar true mostra o botão -->
+                        <!-- se retornar true mostra o botÃ£o -->
                           <a class="btn waves-effect waves-light tooltipped small btn cyan"
                              href="<?php echo $this->url(
                                                 array( 'module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'concluir'
@@ -303,7 +303,7 @@
                         <?php if ($dp->stPrincipal == 1) { ?>
                           <!-- pergunto se tem secundarios abertos -->
                           <?php if($this->checarValidacaoSecundarios[$dp->IdPRONAC] == 1) { ?>
-                            <!-- se retornar true mostra o botão -->
+                            <!-- se retornar true mostra o botÃ£o -->
                             <?php if($this->verificarIN2017($dp->IdPRONAC)): ?>
                               <?php if($this->IsProjetoDisponivelParaAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo)): ?>
                                 <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($dp->IdPRONAC, $this->idTipoDoAtoAdministrativo); ?>
@@ -343,7 +343,7 @@
                                 <?php endif; ?>
                               <?php elseif(!$this->verificarIN2017($dp->IdPRONAC)): ?>
                                 <?php $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/concluir/1/tipoFiltro/" . $this->tipoFiltro; ?>
-                                  <!-- se retornar true mostra o botão -->
+                                  <!-- se retornar true mostra o botÃ£o -->
                                           <a class="btn waves-effect waves-light tooltipped small btn cyan"
                                              href="<?php echo $this->url(
                                                                 array(
@@ -359,11 +359,11 @@
                                           </a>
                             <?php endif; ?>
                           <?php } ?>
-                        <!-- secundários: sempre exibe botão de concluir -->
+                        <!-- secundÃ¡rios: sempre exibe botÃ£o de concluir -->
                         <?php } else {
                           $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/concluir/1/tipoFiltro/" . $this->tipoFiltro;
                         ?>
-                        <!-- se retornar true mostra o botão -->
+                        <!-- se retornar true mostra o botÃ£o -->
                           <a class="btn waves-effect waves-light tooltipped small btn cyan"
                              href="<?php echo $this->url(
                                                 array( 'module' => 'default', 'controller' => 'gerenciarparecer', 'action' => 'concluir'
@@ -386,7 +386,7 @@
               </tbody>
             </table>
             <?php if(count($this->dados) > 0): ?>
-                <!-- ============ PAGINAÇÃO ============ -->
+                <!-- ============ PAGINAÃ‡ÃƒO ============ -->
                 <center>
                     <?php
                         echo $this->paginacao['inicio']." a ";
@@ -436,7 +436,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- ========== FIM PAGINAÇÃO ========== -->
+                <!-- ========== FIM PAGINAÃ‡ÃƒO ========== -->
                 </div>
                 </div>
             <?php endif; ?>
@@ -503,7 +503,6 @@
         });
 
         $3('#selectFilter').on('change', function(){
-            console.log('teste');
             var pronac = $('#pronac').val(),
                 filtro = $('.comboFiltro').val(),
                 url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?tipoFiltro="+$(this).val()+"&pronac="+pronac;
