@@ -50,40 +50,25 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $db = $this->getAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
-        $subSelect = $this->select();
-        $subSelect->setIntegrityCheck(false);
-        $subSelect->from('vwPainelAvaliarPropostas',
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from('vwPainelAvaliarPropostas',
             ['*'],
             $this->_schema);
-
-        foreach ($where as $coluna => $valor) {
-            $subSelect->where($coluna, $valor);
-        }
-
-        if (!empty($search['value'])) {
-            $subSelect->where('idProjeto like ? OR NomeProposta like ? OR Tecnico like ?', "%{$search['value']}%");
-        }
 
         if (!is_null($start) && $limit) {
             $start = (int)$start;
             $limit = (int)$limit;
-            $subSelect->limitPage($start, $limit);
+            $select->limitPage($start, $limit);
         }
 
         $sqlPerfisDistribuicao = '';
-        if($distribuicaoAvaliacaoProposta->getIdPerfil() != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-            $perfis = [
-                $distribuicaoAvaliacaoProposta->getIdPerfil()
-            ];
-
-            if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
-                $perfis[] = Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE;
-            }
-            $perfisDistribuicao = implode(',', $perfis);
+        $perfisDistribuicao = $this->obterPerfisDistribuicao($distribuicaoAvaliacaoProposta);
+        if ($perfisDistribuicao) {
             $sqlPerfisDistribuicao = " and distribuicao_avaliacao_proposta.id_perfil in ({$perfisDistribuicao}) ";
         }
 
-        $subSelect->joinLeft(
+        $select->joinLeft(
             ['distribuicao_avaliacao_proposta']
             , "distribuicao_avaliacao_proposta.id_preprojeto = vwPainelAvaliarPropostas.idProjeto
                     {$sqlPerfisDistribuicao}
@@ -93,26 +78,76 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 'avaliacao_atual' => "coalesce(distribuicao_avaliacao_proposta.avaliacao_atual, '0')",
                 'quantidade_distribuicoes' => "coalesce(distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta, '0')"
             ]
-            ,  $this->getSchema('sac')
+            , $this->getSchema('sac')
         );
 
-        $selectFinal = $this->select();
-        $selectFinal->setIntegrityCheck(false);
-        $selectFinal->isUseSchema(false);
-        $selectFinal->from(
-            ['tabela_temporaria' => new Zend_Db_Expr("($subSelect)")],
-            ['*']
-        );
-        if($order) {
-            $selectFinal->order($order);
+        if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+            $select->joinLeft(
+                ['sugestao_enquadramento']
+                , "
+                        sugestao_enquadramento.id_preprojeto = distribuicao_avaliacao_proposta.id_preprojeto
+                        and sugestao_enquadramento.id_orgao = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}
+                        and sugestao_enquadramento.id_perfil_usuario = {$distribuicaoAvaliacaoProposta->getIdPerfil()}
+                    "
+                , ['sugestao_enquadramento.id_area']
+                , $this->getSchema('sac')
+            );
         }
 
-        $selectFinal->where('avaliacao_atual = 0');
-        $selectFinal->where('quantidade_distribuicoes = 0');
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
+        if (!empty($search['value'])) {
+            $select->where('idProjeto like ? OR NomeProposta like ? OR Tecnico like ?', "%{$search['value']}%");
+        }
+
+        $restricaoPropostasParaAvaliacao = $this->obterRestricaoPropostasParaAvaliacao($distribuicaoAvaliacaoProposta);
+        if($restricaoPropostasParaAvaliacao) {
+            $select->where($restricaoPropostasParaAvaliacao);
+        }
+
+        if ($order) {
+            $select->order($order);
+        }
+
+        //xdnb($select->assemble());
+        return $db->fetchAll($select);
+    }
+
+    private function obterRestricaoPropostasParaAvaliacao(Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta)
+    {
+        if($distribuicaoAvaliacaoProposta->getIdPerfil()) {
+            $restricaoPropostasParaAvaliacao = '( ';
+            if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+                || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+                $restricaoPropostasParaAvaliacao .= ' distribuicao_avaliacao_proposta.avaliacao_atual is null ';
+                $restricaoPropostasParaAvaliacao .= ' AND distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta is null ';
+            }
+            if ($distribuicaoAvaliacaoProposta->getIdPerfil() != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
+                if (!empty($restricaoPropostasParaAvaliacao)) {
+                    $restricaoPropostasParaAvaliacao .= ' OR ';
+                }
+                $restricaoPropostasParaAvaliacao .= 'distribuicao_avaliacao_proposta.avaliacao_atual = 1 and distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta > 0';
+            }
+            $restricaoPropostasParaAvaliacao .= ' )';
+            return $restricaoPropostasParaAvaliacao;
+        }
+    }
+
+
+    private function obterPerfisDistribuicao(Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta)
+    {
         if ($distribuicaoAvaliacaoProposta->getIdPerfil() != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-            $selectFinal->orWhere('avaliacao_atual = 1 and quantidade_distribuicoes > 0');
+            $perfis = [
+                $distribuicaoAvaliacaoProposta->getIdPerfil()
+            ];
+
+            if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+                $perfis[] = Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE;
+            }
+            return implode(',', $perfis);
         }
-        return $db->fetchAll($selectFinal);
     }
 
     public function propostasTotal($where = array(), $order = array(), $start = null, $limit = null, $search = null)
