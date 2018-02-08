@@ -82,7 +82,8 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         );
 
 
-        if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+        if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
+            || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             $select->joinLeft(
                 ['sugestao_enquadramento']
                 , "
@@ -96,6 +97,30 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 ]
                 , $this->getSchema('sac')
             );
+
+            if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
+
+                $select->joinLeft(
+                    ['tbtitulacaoconselheiro']
+                    , "
+                        tbtitulacaoconselheiro.cdArea = sugestao_enquadramento.id_area
+                        and tbtitulacaoconselheiro.stTitular = 1
+                        and tbtitulacaoconselheiro.stConselheiro = 'A'
+                    "
+                    , []
+                    , $this->getSchema('agentes')
+                );
+
+                $auth = Zend_Auth::getInstance();
+                $tblAgente = new Agente_Model_DbTable_Agentes();
+                $rsAgente = $tblAgente->buscarAgenteENome(
+                    ['CNPJCPF = ?' => $auth->getIdentity()->usu_identificacao]
+                );
+                if($rsAgente && count($rsAgente->current()->toArray()) > 0) {
+                    $agente = $rsAgente->current()->toArray();
+                    $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
+                }
+            }
         }
 
         foreach ($where as $coluna => $valor) {
@@ -114,7 +139,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         if ($order) {
             $select->order($order);
         }
-
+//xdnb($select->assemble());
         return $db->fetchAll($select);
     }
 

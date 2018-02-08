@@ -118,18 +118,27 @@
         <br/>
         <div class="center">
             <?php if (
-                Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE == $this->codGrupo ||
-                Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
+                Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE == $this->codGrupo
+                || Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
+                || Autenticacao_Model_Grupos::COMPONENTE_COMISSAO == $this->codGrupo
             ) :
                 ?>
 
-                <?php if ((isset($_GET['realizar_analise']) && $_GET['realizar_analise'] == "sim")): ?>
+                <?php if (
+
+                isset($_GET['realizar_analise'])
+                && $_GET['realizar_analise'] == "sim"
+                && (
+                    Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE == $this->codGrupo
+                    || Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
+                )
+            ): ?>
                 <button class="btn waves-effect waves-light avaliarProposta" type="button" name="action">
                     Avaliar <i class="material-icons right">gavel</i>
                 </button>
             <?php endif; ?>
 
-                <?php if ($this->isPropostaEmConformidade): ?>
+            <?php if ($this->isPropostaEmConformidade): ?>
                 <button class="btn waves-effect waves-light enquadrarProposta" type="button" name="action">
                     Enquadrar <i class="material-icons right">assignment</i>
                 </button>
