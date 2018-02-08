@@ -268,7 +268,7 @@
                                     $parametrosAssinatura = "/idDistribuirParecer/" . $dp->idDistribuirParecer . "/idpronac/". $dp->IdPRONAC ."/tipoFiltro/" . $this->tipoFiltro;
                           ?>
                           <!-- se retornar true mostra o botão -->
-                            <a class="btn waves-effect waves-light tooltipped small btn cyan"
+                            <a class="btn waves-effect waves-light tooltipped small btn cyan modal-trigger"
                                href="#modalConfirmacao"
                                data-redirect-url="<?php echo $this->url(
                                                   array( 'module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'concluiu')
@@ -325,7 +325,7 @@
                                       data-tooltip="Visualizar documento assinado">
                                       <i class="material-icons white-text">remove_red_eye</i>
                                     </a>
-                                    <a class="btn waves-effect waves-light tooltipped small btn cyan"
+                                    <a class="btn waves-effect waves-light tooltipped small btn cyan modal-trigger"
                                                    href="#modalConfirmacao"
                                                    data-redirect-url="<?php echo $this->url(
                                                                       array(
