@@ -52,6 +52,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
 
         $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
+        $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
         $this->view->historicoEnquadramento = $this->obterHistoricoSugestaoEnquadramento($preprojeto['idPreProjeto']);
     }
 
