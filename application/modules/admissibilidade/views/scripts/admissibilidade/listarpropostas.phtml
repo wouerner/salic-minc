@@ -4,6 +4,8 @@
            value="<?php echo Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE ?>"/>
     <input type="hidden" id="perfil_coordenador_admissibilidade"
            value="<?php echo Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE ?>"/>
+    <input type="hidden" id="perfil_componente_comissao"
+           value="<?php echo Autenticacao_Model_Grupos::COMPONENTE_COMISSAO?>"/>
     <div class="row">
         <?php echo $this->partial("admissibilidade/inc/menu.inc.php", $this); ?>
         <div class="col s10 m10 l10">
@@ -226,13 +228,27 @@
                                 if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
                                     &&
                                     (
-                                        parseInt(data.quantidade_distribuicoes, 10) == 0 && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()
+                                        (
+                                            parseInt(data.quantidade_distribuicoes, 10) == 0
+                                            && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()
+                                        )
                                         ||
                                         (
-                                            parseInt(data.quantidade_distribuicoes, 10) > 0 && parseInt(data.avaliacao_atual, 10) == 1
+                                            parseInt(data.quantidade_distribuicoes, 10) > 0
+                                            && parseInt(data.avaliacao_atual, 10) == 1
+                                            && $('#perfil_atual').val() != $('#perfil_coordenador_admissibilidade').val()
+                                        )
+                                        ||
+                                        (
+                                            parseInt(data.quantidade_distribuicoes, 10) > 0
+                                            && parseInt(data.avaliacao_atual, 10) == 1
+                                                && $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
+                                                && data.id_area != null
                                         )
                                     )
                                 ) {
+
+
                                     return '<a class="waves-effect waves-light btn modal-trigger" data-id_preprojeto="' + data.idProjeto + '" href="#dialogEncaminharProposta">'
                                         + '<i class="material-icons" '
                                         + ' title="Encaminhar An&aacute;lise de Proposta" '

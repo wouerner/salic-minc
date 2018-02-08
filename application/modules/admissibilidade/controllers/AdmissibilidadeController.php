@@ -1788,6 +1788,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         if ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
             || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
             || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
+            || $this->codGrupo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO
         ) {
             $arrDados['liberarEncaminhamento'] = true;
         }

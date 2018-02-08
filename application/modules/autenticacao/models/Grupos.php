@@ -72,12 +72,12 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
 
         if ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
             $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
-            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_CNIC;
+            $perfis[] = Autenticacao_Model_Grupos::COMPONENTE_COMISSAO;
         }
 
         if ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
             $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE;
-            $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_CNIC;
+            $perfis[] = Autenticacao_Model_Grupos::COMPONENTE_COMISSAO;
         }
 
 
