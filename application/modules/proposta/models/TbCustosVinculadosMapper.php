@@ -145,12 +145,12 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 
         $itens = $this->calcularCustosVinculadosERemuneracaoPlanilhaProposta($idPreProjeto);
 
-        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+//        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
 
-        if (array_sum(array_column($itens, 'ValorUnitario')) == 0) {
-            $tbPlanilhaProposta->excluirCustosVinculadosERemuneracaoDaPlanilha($idPreProjeto);
-            return true;
-        }
+//        if (array_sum(array_column($itens, 'ValorUnitario')) == 0) {
+//            $tbPlanilhaProposta->excluirCustosVinculadosERemuneracaoDaPlanilha($idPreProjeto);
+//            return true;
+//        }
 
         $this->removerCustosVinculadosPropostaLegada($idPreProjeto);
 
@@ -209,8 +209,7 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 
             $percentual = $item['percentualPadrao'];
 
-            if (!empty($item['percentualProponente'])
-                && $percentual['percentualProponente'] <= $item['percentualPadrao']) {
+            if ($percentual['percentualProponente'] <= $item['percentualPadrao']) {
                 $percentual = $item['percentualProponente'];
             }
 
