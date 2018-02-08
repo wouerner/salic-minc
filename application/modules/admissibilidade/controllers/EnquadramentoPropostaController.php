@@ -88,6 +88,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
                 'id_segmento' => $id_segmento,
                 'descricao_motivacao' => $descricao_motivacao,
                 'data_avaliacao' => $objEnquadramento->getExpressionDate(),
+                'ultima_sugestao' => 1,
             );
 
             $arrayDadosEnquadramento = $objEnquadramento->findBy(
@@ -101,6 +102,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             );
 
             if (count($arrayDadosEnquadramento) < 1) {
+                $objEnquadramento->inativarSugestoes($get['id_preprojeto']);
                 $objEnquadramento->inserir($arrayArmazenamentoEnquadramento);
             } else {
                 $objEnquadramento->update($arrayArmazenamentoEnquadramento, [
