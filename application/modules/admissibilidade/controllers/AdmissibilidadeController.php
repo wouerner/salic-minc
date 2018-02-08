@@ -13,7 +13,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     public function init()
     {
         $auth = Zend_Auth::getInstance(); // instancia da autenticacao
-
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
         // verifica as permissoes

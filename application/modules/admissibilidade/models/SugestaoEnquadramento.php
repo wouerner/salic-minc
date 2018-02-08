@@ -12,6 +12,25 @@ class Admissibilidade_Model_SugestaoEnquadramento extends MinC_Db_Model
     protected $_id_segmento;
     protected $_descricao_motivacao;
     protected $_data_avaliacao;
+    protected $_ultima_sugestao;
+
+    /**
+     * @return mixed
+     */
+    public function getUltimaSugestao()
+    {
+        return $this->_ultima_sugestao;
+    }
+
+    /**
+     * @param mixed $ultima_sugestao
+     * @return Admissibilidade_Model_SugestaoEnquadramento
+     */
+    public function setUltimaSugestao($ultima_sugestao)
+    {
+        $this->_ultima_sugestao = $ultima_sugestao;
+        return $this;
+    }
 
     /**
      * @return mixed
