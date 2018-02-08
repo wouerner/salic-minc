@@ -223,6 +223,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->view->menu = 'inativo';
             $this->view->tituloTopo = 'Consultar dados da proposta';
         }
+        $this->view->grupo = $this->codGrupo;
 
         if ($propostaPorEdital) {
             $tbFormDocumentoDAO = new tbFormDocumento();
@@ -2842,6 +2843,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->view->menu = 'inativo';
             $this->view->tituloTopo = 'Consultar dados da proposta';
         }
+        $this->view->grupo = $this->codGrupo;
 
         if ($propostaPorEdital) {
             $tbFormDocumentoDAO = new tbFormDocumento();
