@@ -19,40 +19,40 @@ class Zend_View_Helper_IsProjetoJaAssinado
         $objDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
 
         $documentoAssinatura = $objDocumentoAssinatura->isProjetoDisponivelParaAssinatura($idPronac, $idTipoDoAtoAdministrativo);
-        
+
         if (!$documentoAssinatura) {
             return false;
         }
-        
+
         $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
         // verificar quantidade de assinaturas, verificar se idOrdemAssinatura
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $idOrgaoDoAssinante = $GrupoAtivo->codOrgao;
         $idPerfilDoAssinante = $GrupoAtivo->codGrupo;
-        
+
         $orgao = new Orgaos();
         $codOrgaoSuperior = $orgao->obterOrgaoSuperior($idOrgaoDoAssinante)['Codigo'];
-        
+
         $tbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-        
+
         $assinaturasNecessarias = $tbAtoAdministrativo->buscar(
             array(
                 'idTipoDoAto = ?' => $idTipoDoAtoAdministrativo,
                 'idOrgaoSuperiorDoAssinante = ?' => $codOrgaoSuperior
             )
         )->toArray();
-        
+
         $ultimaAssinatura = end($assinaturas);
-        $idUltimaAssinatura = ($ultimaAssinatura['idOrdemDaAssinatura']) ? $ultimaAssinatura['idOrdemDaAssinatura'] : 0;
-        
+        $idUltimaAssinatura = ($ultimaAssinatura->idOrdemDaAssinatura) ? $ultimaAssinatura->idOrdemDaAssinatura : 0;
+
         if ($idUltimaAssinatura <= count($assinaturasNecessarias)) {
             $idProximaAssinatura = $idUltimaAssinatura + 1;
         } else {
             return true;
         }
-        
+
         $dadosAssinaturaAtual = $assinaturasNecessarias[$idUltimaAssinatura];
-        
+
         if ($dadosAssinaturaAtual['idOrgaoDoAssinante'] == $idOrgaoDoAssinante
             && $dadosAssinaturaAtual['idPerfilDoAssinante'] == $idPerfilDoAssinante) {
             return false;
