@@ -9,15 +9,15 @@
     <div id="titulo">
         <?php
             $filtros = array(
-                     'aguardando_distribuicao' => 'Aguardando distribuição',
-                     'em_analise' => 'Em análise',
-                     'em_validacao' => 'Em validação',
+                     'aguardando_distribuicao' => 'Aguardando distribui&ccedil;&atilde;o',
+                     'em_analise' => 'Em an&aacute;lise',
+                     'em_validacao' => 'Em valida&ccedil;&atilde;o',
                      'validados' => 'Validados',
-                     'devolvida' => 'Devolvidas para análise',
+                     'devolvida' => 'Devolvidas para an&aacute;lise',
                      'impedimento_parecerista' => 'Impedimento do parecerista'
             );
             if ($this->codOrgao == Orgaos::ORGAO_IPHAN_PRONAC) {
-                $filtros['analisado_superintendencia'] = 'Analisado pela superintendência';
+                $filtros['analisado_superintendencia'] = 'Analisado pela superintend&ecirc;ncia';
             }
         ?>
         <div>Gerenciar Pareceres - <?php echo $filtros[$this->tipoFiltro]; ?><span class="voltar"><a href="#" onclick="voltar();">Voltar</a></span></div>
@@ -491,20 +491,21 @@
         $("#pronac").keypress(function(e) {
             if (e.which == 13) {
             var pronac = $('#pronac').val(),
-                        filtro = $('.comboFiltro').val();
+                        filtro = $('#comboFiltro').val();
             window.location = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?pag=1&tipoFiltro="+filtro+"&pronac="+pronac;
             }
         });
 
         $("#btn_pesquisar").click(function(){
             var pronac = $('#pronac').val(),
-                filtro = $('.comboFiltro').val();
+                filtro = $('#selectFilter').val();
             window.location = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?pag=1&tipoFiltro="+filtro+"&pronac="+pronac;
         });
 
         $3('#selectFilter').on('change', function(){
+            $('#btn_pesquisar').prop('disabled', true);
             var pronac = $('#pronac').val(),
-                filtro = $('.comboFiltro').val(),
+                filtro = $('#selectFilter').val(),
                 url = "<?php echo $this->url(array('module' => 'parecer', 'controller' => 'gerenciar-parecer', 'action' => 'index')); ?>?tipoFiltro="+$(this).val()+"&pronac="+pronac;
             window.location = url;
         });
