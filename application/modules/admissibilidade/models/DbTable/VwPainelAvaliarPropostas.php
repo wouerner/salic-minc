@@ -128,7 +128,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 $restricaoPropostasParaAvaliacao .= ' AND distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta is null ';
             }
             if ($distribuicaoAvaliacaoProposta->getIdPerfil() != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-                if (!empty($restricaoPropostasParaAvaliacao)) {
+                if (!empty($restricaoPropostasParaAvaliacao) && $restricaoPropostasParaAvaliacao != '( ') {
                     $restricaoPropostasParaAvaliacao .= ' OR ';
                 }
                 $restricaoPropostasParaAvaliacao .= 'distribuicao_avaliacao_proposta.avaliacao_atual = 1 and distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta > 0';
