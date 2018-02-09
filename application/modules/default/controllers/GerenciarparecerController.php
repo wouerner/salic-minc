@@ -288,7 +288,17 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
         }
 
         $orgaos = new Orgaos();
-        $buscar = $orgaos->buscar(array("Codigo <> ?" => $codOrgao, "Status = ?" => 0, "Vinculo = ?" => 1), array(2));
+        $buscar = $orgaos->buscar(
+            array(
+                "Codigo <> ?" => $codOrgao, 
+                "Status = ?" => 0, 
+                "Vinculo = ?" => 1,
+                "stVinculada = ?" => 1,
+                "idsecretaria <> ?" => 251,
+            ), 
+            array(2));
+        //idsecretaria <> 251 stvinculada = 1
+        /* var_dump($buscar);die; */
 
         $this->view->idSegmentoProduto = $buscaDadosProjeto[0]->idSegmento;
         $this->view->idAreaProduto = $buscaDadosProjeto[0]->idArea;
