@@ -28,3 +28,32 @@ ALTER TABLE sac.dbo.sugestao_enquadramento ALTER COLUMN ultima_sugestao BIT NOT 
 -- Adição da coluna 'id_distribuicao_avaliacao_proposta' na tabela 'sac.dbo.sugestao_enquadramento'
 ALTER TABLE sac.dbo.sugestao_enquadramento ADD id_distribuicao_avaliacao_proposta INT NULL;
 ALTER TABLE sac.dbo.sugestao_enquadramento ADD CONSTRAINT sugestao_enquadramento_distribuicao_avaliacao_proposta_id_distribuicao_avaliacao_proposta_fk FOREIGN KEY (id_distribuicao_avaliacao_proposta) REFERENCES distribuicao_avaliacao_proposta (id_distribuicao_avaliacao_proposta);
+
+-----------------------------------------------------------------------------------------------------------------------
+-- Atualização sugestões distribuídas à partir de perfis diferentes de Técnico de admissibilidade,
+-- que ainda não possuem registro na tabela "distribuicao_avaliacao_proposta" quando fazem a primeira sugestão de
+-- enquadramento.
+-----------------------------------------------------------------------------------------------------------------------
+update enquadramento set id_distribuicao_avaliacao_proposta = tabela_temporaria.id_distribuicao_avaliacao_proposta
+  --select count(*)
+from sac.dbo.sugestao_enquadramento enquadramento
+  inner join sac.dbo.distribuicao_avaliacao_proposta tabela_temporaria
+     on enquadramento.id_preprojeto = tabela_temporaria.id_preprojeto
+    and enquadramento.id_perfil_usuario = tabela_temporaria.id_perfil
+    and enquadramento.id_orgao_superior = tabela_temporaria.id_orgao_superior
+where enquadramento.id_distribuicao_avaliacao_proposta is null;
+
+/*
+@todo:
+
+  Modificar sac.dbo.sugestao_enquadramento:
+
+    - Adicionar coluna 'id_distribuicao_avaliacao_proposta' que vincula com distribuicao_avaliacao_proposta
+
+    - Alterar Joins, informando o id_distribuicao_avaliacao_proposta.
+
+    - remover colunas:
+      * id_perfil_usuario
+      * id_orgao_superior
+*/
+
