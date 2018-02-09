@@ -182,7 +182,7 @@ function ExecucaoDaFuncaoLimiterPag(fieldName, minchar){
                 <td width="1">
                     <select name="orgao" class="input_simples sumir" id="entidadesCombo">
                         <?php foreach($this->orgaos as $p):?>
-                        <option value="<?php echo $p->Codigo; ?>"><?php echo $p->Sigla; ?></option>
+                        <option value="<?php echo $p['Codigo']; ?>"><?php echo $p['Sigla']; ?></option>
                         <?php endforeach; ?>
                     </select>
                     

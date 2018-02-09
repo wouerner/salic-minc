@@ -296,9 +296,21 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
                 "stVinculada = ?" => 1,
                 "idsecretaria <> ?" => 251,
             ), 
-            array(2));
-        //idsecretaria <> 251 stvinculada = 1
-        /* var_dump($buscar);die; */
+            array(2)
+        );
+
+        // Apenas o IPHAN principal pode ter acesso as unidades vinculadas
+        if ($codOrgao == 91) {
+            $buscarIPHAN = $orgaos->buscar(
+                array(
+                    "Codigo <> ?" => $codOrgao,
+                    "Status = ?" => 0,
+                    "idSecretaria = ?" => 91 ,
+                )
+            );
+
+            $buscar = array_merge($buscar->toArray(), $buscarIPHAN->toArray());
+        }
 
         $this->view->idSegmentoProduto = $buscaDadosProjeto[0]->idSegmento;
         $this->view->idAreaProduto = $buscaDadosProjeto[0]->idArea;
@@ -520,7 +532,29 @@ class GerenciarparecerController extends MinC_Controller_Action_Abstract
             $this->view->idAreaProduto = $buscaDadosProjeto[0]->idArea;
         }
         $orgaos = new Orgaos();
-        $buscar = $orgaos->buscar(array("Codigo <> ?" => $codOrgao, "Status = ?" => 0, "Vinculo = ?" => 1));
+
+        $buscar = $orgaos->buscar(
+            array(
+                "Codigo <> ?" => $codOrgao, 
+                "Status = ?" => 0, 
+                "Vinculo = ?" => 1,
+                "stvinculada = ?" => 1,
+                "idSecretaria <> ?" => 251 ,
+            )
+        );
+
+        // Apenas o IPHAN principal pode ter acesso as unidades vinculadas
+        if ($codOrgao == 91) {
+            $buscarIPHAN = $orgaos->buscar(
+                array(
+                    "Codigo <> ?" => $codOrgao,
+                    "Status = ?" => 0,
+                    "idSecretaria = ?" => 91 ,
+                )
+            );
+
+            $buscar = array_merge($buscar->toArray(), $buscarIPHAN->toArray());
+        }
 
         $this->view->orgaos = $buscar;
         $this->view->idpronac = $idPronac;
