@@ -332,17 +332,17 @@
                         <option value="">Selecione</option>
                         <?php
                         foreach ($this->indeferidos as $indeferidos) {
-                            echo "<option value='" . $indeferidos->Codigo . "'>" . $indeferidos->Descricao . "</option>";
+                        echo "<option value='" . $indeferidos->Codigo . "'>" . $indeferidos->Descricao . "</option>";
                         }
                         ?>
                     </select>
                 </p>
             </div>
             <input id="reuniaoaberta" type="hidden" value="<?php echo $this->plenariaatual; ?>"/>
-            <div style="margin-left: 13.5em; margin-top: 1.5em; margin-bottom: 1.5em;">
-                <input id="stEnvioPlenaria" type="checkbox" name="stEnvioPlenaria" disabled="disabled" value="S" />
+	    <div style="margin-left: 13.5em; margin-top: 1.5em; margin-bottom: 1.5em;">
+                <input id="stEnvioPlenaria" type="checkbox" name="stEnvioPlenaria" value="S" />
                 <label for="stEnvioPlenaria"> Submeter &agrave; Plen&aacute;ria?</label>
-            </div>
+	    </div>
             <div id="justificativaenvioplenaria" style="display: none; width: 99%" class="esquerda">
                 <div style="margin-left: 3em; margin-top: 1.5em; margin-bottom: 1.5em;">
                     <div style="margin-left: 10.6em; margin-top: 1.5em; margin-bottom: 1.5em;">
@@ -557,10 +557,6 @@
 		      </p>
 		    </div>
 		    <input id="reuniaoaberta" type="hidden" value="<?php echo $this->plenariaatual; ?>"/>
-		    <div style="margin-left: 13.5em; margin-top: 1.5em; margin-bottom: 1.5em;">
-                      <input id="stEnvioPlenaria" type="checkbox" name="stEnvioPlenaria" value="S" />
-                      <label for="stEnvioPlenaria"> Submeter &agrave; Plen&aacute;ria?</label>
-		    </div>
 		    <div id="justificativaenvioplenaria" style="display: none; width: 99%" class="esquerda">
                       <div style="margin-left: 3em; margin-top: 1.5em; margin-bottom: 1.5em;">
 			<div style="margin-left: 10.6em; margin-top: 1.5em; margin-bottom: 1.5em;">
@@ -607,6 +603,11 @@
 				?>
 			    </select>
 			</p>
+			<br/><br/>
+			<div style="margin-left: 13.5em; margin-top: 1.5em; margin-bottom: 1.5em;">
+			    <input id="stEnvioPlenaria" type="checkbox" name="stEnvioPlenaria" disabled="disabled" value="S" />
+			    <label for="stEnvioPlenaria"> Submeter &agrave; Plen&aacute;ria?</label>
+			</div>
 		    </td>
 		</tr>
 		<?php } ?>
