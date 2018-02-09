@@ -224,9 +224,35 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         );
         $objQuery->where('Codigo = idSecretaria');
         $objQuery->where('Status = ?', 0);
-        $objQuery->order(2);
+        /* $objQuery->order(2); */
 
-        return $this->fetchAll($objQuery)->toArray();
+        $sqlIPHAN = $this->select();
+        $sqlIPHAN->setIntegrityCheck(false);
+        $sqlIPHAN->from(
+            ['Orgaos' => 'Orgaos'],
+            array(
+                'codigo' => 'Codigo',
+                'descricao' => 'Sigla',
+            ),
+            $this->_schema
+        );
+        $sqlIPHAN->where('idSecretaria = 91');
+        $sqlIPHAN->where('Status = ?', 0);
+        /* $sqlIPHAN->order(2); */
+
+        $slctUnion = $this->select()
+            ->union(
+                array(
+                    '(' . $objQuery . ')', 
+                    '(' . $sqlIPHAN . ')')
+                , 
+                'UNION ALL'
+            )->order('Sigla ASC');
+
+        /* echo $slctUnion;die; */
+
+        return $this->fetchAll($slctUnion)->toArray();
+        /* return $this->fetchAll($objQuery)->toArray(); */
     }
 
     public function obterOrgaos($idOrgaoSuperior)
@@ -241,7 +267,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
             ),
             $this->_schema
         );
-        $objQuery->where('idSecretaria = ?', $idOrgaoSuperior);
+        $objQuery->where('(idSecretaria = ? OR idSecretaria = 91)', $idOrgaoSuperior);
         $objQuery->where('Status = ?', 0);
         $objQuery->order(2);
 
