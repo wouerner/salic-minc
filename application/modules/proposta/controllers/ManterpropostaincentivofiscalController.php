@@ -708,7 +708,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
         }
 
         //VERIFICA SE DATA INICIO E MAIOR QUE 90 DIAS DA DATA ATUAL
-        if (!empty($get->dtInicio) && strlen($get->dtInicio) == 10) {
+        if (!empty($get->dtInicio) && strlen($get->dtInicio) == 10 && !$this->view->isEditarProjeto ) {
             $dtTemp = explode("/", $get->dtInicio);
             $dtInicio = $dtTemp[2] . $dtTemp[1] . $dtTemp[0];
 

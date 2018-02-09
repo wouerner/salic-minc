@@ -553,23 +553,25 @@ if (isset($this->proposta['idpreprojeto'])) {
                     $("#msgValidaData").focusin();
                     return false;
                 }
-                //valida data do ano anual
-                if ($("#stProposta").val() == '4' && $("#dtInicioDeExecucao").val().length == 10) {
-                    ano_vigente = <?php echo date('Y')?>;
-                    ano_execucao = new Number($('#dtInicioDeExecucao').val().substr(6, 4));
-                    if (ano_vigente >= ano_execucao) {
-//                        JSMostraOcultaObj('identificacaodiv');
-                        $("#ValidaStProposta").html("<font color='red'>O per&iacute;odo de execu&ccedil;&atilde;o de projetos de plano anual dever ser posterior ao ano vigente</font>");
-                        $("#dtInicioDeExecucao").focusin();
-                        return false;
+
+                <?php if (!$this->projeto) : ?>
+                    //valida data do ano anual
+                    if ($("#stProposta").val() == '614' && $("#dtInicioDeExecucao").val().length == 10) {
+                        ano_vigente = <?php echo date('Y')?>;
+                        ano_execucao = new Number($('#dtInicioDeExecucao').val().substr(6, 4));
+                        if (ano_vigente >= ano_execucao) {
+                            $("#ValidaStProposta").html("<font color='red'>O per&iacute;odo de execu&ccedil;&atilde;o de projetos de plano anual dever ser posterior ao ano vigente</font>");
+                            $("#dtInicioDeExecucao").focusin();
+                            return false;
+
+                        } else {
+                            $("#ValidaStProposta").html("");
+                        }
 
                     } else {
                         $("#ValidaStProposta").html("");
                     }
-
-                } else {
-                    $("#ValidaStProposta").html("");
-                }
+                <?php endif; ?>
 
                 form.submit();
 
