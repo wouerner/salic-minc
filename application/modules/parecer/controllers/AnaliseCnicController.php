@@ -127,6 +127,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $this->view->idPerfilDoAssinante = $GrupoAtivo->codGrupo;
+        $this->view->situacaoAprovar = 'D50';
 
         $projetos = new Projetos();
         $this->view->IN2017 = $projetos->VerificarIN2017($idPronac);
@@ -780,9 +781,9 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $tipoAgente = $_POST['tipoplanilha'];
         $parecer = $_POST['parecer'];
 
-        $buscarParecer = $tblParecer->buscar(array('IdPRONAC = ?' => $_POST['idpronac'], 'stAtivo = ?' => 1))->current();
-        if (count($buscarParecer) > 0) {
-            $buscarParecer = $buscarParecer->toArray();
+        $buscarParecer = $tblParecer->buscar(array('IdPRONAC = ?' => $_POST['idpronac'], 'stAtivo = ?' => 1))->current()->toArray();
+        if (!empty($buscarParecer)) {
+            
             $dados = array(
                 'idPRONAC' => $_POST['idpronac'],
                 'AnoProjeto' => $buscarParecer['AnoProjeto'],
@@ -803,7 +804,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 'idTipoAgente' => $tipoAgente
             );
             $idparecer = isset($buscarParecer['IdParecer']) ? $buscarParecer['IdParecer'] : $buscarParecer['idParecer'];
-
+            
             //se parecer ativo nao � o Componente, inativa os outros e grava o do Componente
             if (!$buscarParecer or $buscarParecer['idTipoAgente'] != $tipoAgente) {
                 try {
