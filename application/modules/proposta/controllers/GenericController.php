@@ -162,10 +162,10 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
                     'prazoAlterarProjeto' => $this->contagemRegressivaSegundos($projeto['dtsituacao'], $this->_diasParaAlterarProjeto)
                 );
 
+//                $tbPreProjetoMetaMapper = new Proposta_Model_TbPreProjetoMetaMapper();
+//                $tbPreProjetoMetaMapper->salvarPropostaCulturalSerializada($this->idPreProjeto, 'alterarprojeto');
 
-                $tbPreProjetoMetaMapper = new Proposta_Model_TbPreProjetoMetaMapper();
-                $tbPreProjetoMetaMapper->salvarPropostaCulturalSerializada($this->idPreProjeto, 'alterarprojeto');
-//                $this->salvarDadosPropostaSerializada($this->idPreProjeto);
+                $this->salvarDadosPropostaSerializada($this->idPreProjeto);
 
             }
 

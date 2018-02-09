@@ -482,6 +482,14 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             $projeto = array_change_key_case($tblProjetos->findBy(array('idprojeto = ?' => $idPreProjeto)));
             $idPronac = $projeto['idpronac'];
 
+            // validar planodistribuicao
+            $planoDistribuicao = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+            $verificaPlanoDistribuicao = $planoDistribuicao->validatePlanoDistribuicao($idPreProjeto);
+
+            if (!empty($verificaPlanoDistribuicao)) {
+                $arrResultado = array_merge($arrResultado, $verificaPlanoDistribuicao);
+            }
+
             if ($arrResultado->Observacao === true) {
                     $listaValidacao = $arrResultado;
                     $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/encaminharprojetoaominc";
