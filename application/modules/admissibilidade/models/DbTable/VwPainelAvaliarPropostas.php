@@ -81,16 +81,11 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             , $this->getSchema('sac')
         );
 
-
         if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
             || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             $select->joinLeft(
                 ['sugestao_enquadramento']
-                , "
-                        sugestao_enquadramento.id_preprojeto = distribuicao_avaliacao_proposta.id_preprojeto
-                        and sugestao_enquadramento.id_orgao_superior = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}
-                        and sugestao_enquadramento.id_perfil_usuario = {$distribuicaoAvaliacaoProposta->getIdPerfil()}
-                    "
+                , "sugestao_enquadramento.id_distribuicao_avaliacao_proposta = distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta"
                 , [
                     'sugestao_enquadramento.id_area',
                     'sugestao_enquadramento.id_sugestao_enquadramento',
@@ -100,15 +95,43 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
 
             if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
 
+                $subSelectPenultimaDistribuicao = $this->select();
+                $subSelectPenultimaDistribuicao->setIntegrityCheck(false);
+                $subSelectPenultimaDistribuicao->from(
+                    ['sub_select_distribuicao_avaliacao' => 'distribuicao_avaliacao_proposta'],
+                    [
+                        new Zend_Db_Expr('*')
+                    ],
+                    $this->getSchema('sac')
+                );
+                $subSelectPenultimaDistribuicao->limit(1);
+                $subSelectPenultimaDistribuicao->order('data_distribuicao desc');
+                $subSelectPenultimaDistribuicao->where('id_preprojeto = vwPainelAvaliarPropostas.idProjeto');
+                $subSelectPenultimaDistribuicao->where('avaliacao_atual = ?', 0);
+
+                $selectPenultimaDistribuicao = $this->select();
+                $selectPenultimaDistribuicao->setIntegrityCheck(false);
+                $selectPenultimaDistribuicao->isUseSchema(false);
+                $selectPenultimaDistribuicao->from(
+                    $subSelectPenultimaDistribuicao,
+                    ['id_distribuicao_avaliacao_proposta']
+                );
+
+                $select->isUseSchema(false);
                 $select->joinLeft(
-                    ['tbtitulacaoconselheiro']
-                    , "
-                        tbtitulacaoconselheiro.cdArea = sugestao_enquadramento.id_area
-                        and tbtitulacaoconselheiro.stTitular = 1
-                        and tbtitulacaoconselheiro.stConselheiro = 'A'
-                    "
+                    ['penultima_distribuicao' => 'distribuicao_avaliacao_proposta'],
+//                    ['penultima_distribuicao' => new Zend_Db_Expr("({$selectPenultimaDistribuicao})")],
+                    "vwPainelAvaliarPropostas.idProjeto = penultima_distribuicao.id_preprojeto
+                    and penultima_distribuicao.id_distribuicao_avaliacao_proposta = ({$selectPenultimaDistribuicao})",
+                    []
+                );
+                $select->isUseSchema(true);
+
+                $select->joinLeft(
+                    ['sugestao_distribuida' => 'sugestao_enquadramento']
+                    , "sugestao_distribuida.id_distribuicao_avaliacao_proposta = penultima_distribuicao.id_distribuicao_avaliacao_proposta"
                     , []
-                    , $this->getSchema('agentes')
+                    , $this->getSchema('sac')
                 );
 
                 $auth = Zend_Auth::getInstance();
@@ -116,7 +139,17 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 $rsAgente = $tblAgente->buscarAgenteENome(
                     ['CNPJCPF = ?' => $auth->getIdentity()->usu_identificacao]
                 );
-                if($rsAgente && count($rsAgente->current()->toArray()) > 0) {
+                if ($rsAgente && count($rsAgente->current()->toArray()) > 0) {
+                    $select->joinLeft(
+                        ['tbtitulacaoconselheiro']
+                        , "
+                        tbtitulacaoconselheiro.cdArea = sugestao_distribuida.id_area
+                        and tbtitulacaoconselheiro.stTitular = 1
+                        and tbtitulacaoconselheiro.stConselheiro = 'A'
+                    "
+                        , []
+                        , $this->getSchema('agentes')
+                    );
                     $agente = $rsAgente->current()->toArray();
                     $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
                 }
@@ -139,7 +172,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         if ($order) {
             $select->order($order);
         }
-//xdnb($select->assemble());
+
         return $db->fetchAll($select);
     }
 

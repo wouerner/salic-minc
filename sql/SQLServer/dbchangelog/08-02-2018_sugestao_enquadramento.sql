@@ -43,17 +43,13 @@ from sac.dbo.sugestao_enquadramento enquadramento
     and enquadramento.id_orgao_superior = tabela_temporaria.id_orgao_superior
 where enquadramento.id_distribuicao_avaliacao_proposta is null;
 
-/*
+/**
 @todo:
 
   Modificar sac.dbo.sugestao_enquadramento:
-
     - Adicionar coluna 'id_distribuicao_avaliacao_proposta' que vincula com distribuicao_avaliacao_proposta
-
     - Alterar Joins, informando o id_distribuicao_avaliacao_proposta.
-
-    - remover colunas:
+    - Remover colunas:
       * id_perfil_usuario
       * id_orgao_superior
 */
-
