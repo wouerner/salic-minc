@@ -132,7 +132,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $projetos = new Projetos();
         $this->view->IN2017 = $projetos->VerificarIN2017($idPronac);
         
-        $this->view->bln_readequacao = "false";
+        $this->view->bln_readequacao = false;
         
         if (!empty($idPronac)) {
             $tbPedidoAlteracao = new tbPedidoAlteracaoProjeto();
@@ -168,13 +168,15 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $tblProjetos = new Projetos();
         $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-
+        
         $ConsultaReuniaoAberta = ReuniaoDAO::buscarReuniaoAberta();
         $numeroReuniao = $ConsultaReuniaoAberta['NrReuniao'];
+        
         //CASO O COMPONENTE QUEIRA APENAS SALVAR O SEU PARECER - INICIO
         if (isset($_POST['usu_codigo'])) {
             $this->salvarParecerComponente($numeroReuniao);
         }
+        
         //CASO O COMPONENTE QUEIRA SALVAR O SEU PARECER - FIM
 
         if (isset($_POST['idpronac'])) {
@@ -184,7 +186,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         }
         
         //FINALIZAR ANALISE - JUSTIFICATIVA DE PLENARIA - INICIO
-        if (isset($_POST['justificativaenvioplenaria'])) {
+        if ($_POST['stEnvioPlenaria'] == 'S') {
             /**** CODIGO DE READEQUACAO ****/
             //SE O PROJETO FOR DE READEQUACAO e a DECISAO FOR DE APROVACAO - INATIVA A ANTIGA PLANILHA 'CO' e ATIVA A 'CO' READEQUADA
             if ($this->bln_readequacao == "true") {
@@ -192,7 +194,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 // encerra
             }
             /**** FIM CODIGO DE READEQUACAO ****/
-
+            
             $this->incluirNaPauta($idPronac, $ConsultaReuniaoAberta);
         } // fecha if
         // =================================================================
@@ -257,7 +259,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $buscarnrreuniaoprojeto = $tblPauta->dadosiniciaistermoaprovacao(array($idpronac))->current();
         $dados = array();
         //TRATANDO SITUACAO DO PROJETO QUANDO ESTE FOR DE READEQUACAO
-        if ($this->bln_readequacao == "false") {
+        if ($this->bln_readequacao == false) {
             $dados['Situacao'] = 'D50';
             $buscarsituacao = $tblSituacao->listasituacao(array('D50'))->current();
         } else {
@@ -277,8 +279,8 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     private function incluirNaPauta($idPronac, $ConsultaReuniaoAberta)
     {
         $post = Zend_Registry::get('post');
-
-        $codSituacao = ($this->bln_readequacao == "false") ? 'D50' : 'D02';
+        
+        $codSituacao = ($this->bln_readequacao == false) ? 'D50' : 'D02';
         $stEnvioPlenaria = isset($post->stEnvioPlenaria) ? 'S' : 'N';
         $justificativa = $post->justificativaenvioplenaria;
         $TipoAprovacao = $post->decisao;
@@ -288,8 +290,10 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         try {
             // busca a reuniao aberta
             $idReuniao = $ConsultaReuniaoAberta['idNrReuniao'];
+            $nrReuniao = $ConsultaReuniaoAberta['NrReuniao'];
             // verifica se ja esta na pauta
             $verificaPauta = RealizarAnaliseProjetoDAO::retornaRegistro($idPronac, $idReuniao);
+            
             if (count($verificaPauta) == 0) {
                 $tblPauta = new Pauta();
                 $tblProjetos = new Projetos();
@@ -302,13 +306,14 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                     'stEnvioPlenario' => $stEnvioPlenaria,
                     'tpPauta' => 1,
                     'stAnalise' => $TipoAprovacao,
-                    'dsAnalise' => TratarString::escapeString($justificativa),
+                    'dsAnalise' => ' ',
                     'stPlanoAnual' => $post->stPlanoAnual
                 );
                 
                 $tblPauta->inserir($dados);
                 
-                $ProvidenciaTomada = 'Projeto apreciado pela Comissão Nacional de Incentivo à Cultura - ';
+                $ProvidenciaTomada = 'PROJETO APRECIADO PELO COMPONENTE DA COMISSÃO NA REUNIÃO DA CNIC N°. ' . $ConsultaReuniaoAberta['idNrReuniao'];
+                
                 $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada);
                 parent::message("Projeto cadastrado na Pauta com sucesso!", "areadetrabalho/index", "CONFIRM");
                 $this->_helper->viewRenderer->setNoRender(true);
@@ -319,7 +324,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                     'dtEnvioPauta' => new Zend_Db_Expr('GETDATE()'),
                     'stEnvioPlenario' => $stEnvioPlenaria,
                     'tpPauta' => 1,
-                    'dsAnalise' => TratarString::escapeString($justificativa),
+                    'dsAnalise' => '',
                     'stAnalise' => $TipoAprovacao,
                     'stPlanoAnual' => $post->stPlanoAnual
                 );
@@ -647,7 +652,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 $arrWhereSomaPlanilha['idPronac = ?'] = $idpronac;
                 
                 //TRATANDO SOMA DE PROJETO QUANDO ESTE FOR DE READEQUACAO
-                if ($this->bln_readequacao == "false") {
+                if ($this->bln_readequacao == false) {
                     $fonteincentivo = $planilhaproposta->somarPlanilhaProposta($idprojeto, 109);
                     $outrasfontes = $planilhaproposta->somarPlanilhaProposta($idprojeto, false, 109);
                 } else {

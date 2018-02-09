@@ -130,39 +130,52 @@
      $('#desAprovar').click(function(e) {
 	 $('.situacao').css('display','none');
 	 $('#situacao').css('display','none');
+
+	 if ($('#finalizarparecer').length > 0) {
+	     $('#finalizarparecer').prop('disabled', 'disabled');
+	 }
      });
      
      $('#desIndeferir').click(function(e) {
 	 $('.situacao').css('display','');
 	 $('#situacao').css('display','');
+
+	 if ($('#finalizarparecer').length > 0) {
+	     $('#finalizarparecer').prop('disabled', 'disabled');
+	 }
      });
      
      if ($('#desIndeferir').prop('checked') == true) {
 	 $('.situacao').css('display','');
 	 $('#situacao').css('display','');
      }
+
+     $('#justificativa').keypress(function() {
+	 if ($('#finalizarparecer').length > 0) {
+	     $('#finalizarparecer').prop('disabled', 'disabled');
+	 }
+     });
+     
      <?php endif; ?>
      
      <?php endif; ?>
      $("#finalizarparecer").click(function()
          {
-             //atualiza no banco de dados o parecer digitado pelo componente
-             var parecer = $("input:radio[name='decisao']:checked").val();
-             
-             salvar(parecer,0);
-
-             var tipoPlanilha = '<?php echo $this->tipoplanilha; ?>';
-             if(tipoPlanilha == 'CO')
+	     //atualiza no banco de dados o parecer digitado pelo componente
+	     var parecer = $("input:radio[name='decisao']:checked").val();
+	     
+	     var tipoPlanilha = '<?php echo $this->tipoplanilha; ?>';
+	     if(tipoPlanilha == 'CO')
 		 {
 		     <?php if (!$this->IN2017): ?>			
-                     if (document.getElementById('verificarParecerFavoravel').value != 'sim')
+		     if (document.getElementById('verificarParecerFavoravel').value != 'sim')
 			 {
 			     document.getElementById('desAprovar').disabled = true;
 			 }
 		     <?php endif; ?>
-                     $("#formEnviar").each(function(){
+		     $("#formEnviar").each(function(){
 			 this.reset();
-                     });
+		     });
 
 		     if ($('#situacao').val() == '' && parecer == 'IC') {
 			 $('#confirm').dialog('open');
@@ -171,23 +184,23 @@
 			 return false;
 		     }
 		     
-                     if($("#justificativa").val().length <= 20){
+		     if($("#justificativa").val().length <= 20){
 			 $("#erro").html("Campos Obrigat&oacute;rios n&atilde;o preenchidos ou justificativa com menos de 20 caracteres!");
 			 $("#erro").dialog('open');
-                     } else{
+		     } else{
 			 $('#alert').html('Deseja finalizar sua aprecia&ccedil;&atilde;o?');
 			 $("#alert").dialog({
 			     title: "Alerta!",
-                             resizable: false,
-                             width:400,
-                             height:200,
-                             modal: true,
+			     resizable: false,
+			     width:400,
+			     height:200,
+			     modal: true,
 			     buttons: {
 				 'Não': function(){
 				     $("#alert").dialog('close');
 				 },
 				 'Sim': function(){
-                                     var url = '<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer', 'idpronac' => null)); ?>',
+				     var url = '<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'emitirparecer', 'idpronac' => null)); ?>',
 					 parecer = $("input:radio[name='decisao']:checked").val(),
 					 justificativa = $('#justificativa').val(),
 					 situacao = $('#situacao').val(),
@@ -204,34 +217,34 @@
 				 }
 			     }
 			 });
-                     }
+		     }
 		 }
-             else{
+	     else{
                  var justificativa =  $('#justificativa').val();
                  if (document.getElementById('verificarParecerFavoravel').value != 'sim')
-                     {
+		     {
 			 $("#erro").html("Aten&ccedil;&atilde;o! &Eacute; preciso realizar os ajustes necess&aacute;rios para finalizar a an&aacute;lise do projeto. Verifique se o corte no projeto n&atilde;o foi superior a 50%.");
 			 $("#erro").dialog('open');
 			 return false;
-                     }
+		     }
                  if($.trim(justificativa).length == 0){
-                     $("#erro").html("Campos Obrig&aacute;torios n&atilde;o preenchidos!");
-                     $("#erro").dialog('open');
+		     $("#erro").html("Campos Obrig&aacute;torios n&atilde;o preenchidos!");
+		     $("#erro").dialog('open');
                  }
                  else{
-                     alerta(
+		     alerta(
 			 function(){
-                             salvar();
-                             $("#idpronac").val(<?php echo $this->idpronac; ?>);
-                             $("#formread").submit();
+			     salvar();
+			     $("#idpronac").val(<?php echo $this->idpronac; ?>);
+			     $("#formread").submit();
 			 },
 			 function(){ $("#alert").dialog('close');}
-                     );
+		     );
                  }
                  $("#alert").html("O projeto j&aacute; foi aprovado pela CNIC. Deseja salvar as readequa&ccedil;&atilde;es e o parecer final do projeto?");
                  $("#alert").dialog('open');
                  $('html').css('overflow', 'auto');
-             }
+	     }
          });
 
      $("#load").dialog({
@@ -245,45 +258,45 @@
 
      $("input[name='decisao']").click(function(){
          if($('#stEnvioPlenaria').attr('checked') == false){
-             $('#stEnvioPlenaria').removeAttr("disabled","disabled");
-             $('#stPlanoAnual').removeAttr("disabled","disabled");
+	     $('#stEnvioPlenaria').removeAttr("disabled","disabled");
+	     $('#stPlanoAnual').removeAttr("disabled","disabled");
          }
      });
 
      $('#stEnvioPlenaria').click(function(){
          if($(this).attr('checked')== true){
-             $('#justificativaenvioplenaria').css('display','');
+	     $('#justificativaenvioplenaria').css('display','');
          }
          else{
-             $('#justificativaenvioplenaria').css('display','none');
+	     $('#justificativaenvioplenaria').css('display','none');
 
          }
      });
      
      $("#salvarparecer").click(function()
          {
-             $("#alert").html('Deseja salvar o seu parecer consolidado?');
-             alerta(function(){
+	     $("#alert").html('Deseja salvar o seu parecer consolidado?');
+	     alerta(function(){
 		 var parecer = null;
 		 <?php if ($this->IN2017) : ?>
 		 parecer = $("input:radio[name='decisao']:checked").val();
 		 
 		 if (!parecer) {
-                     $('#confirm').dialog('open');
-                     $('#confirm').html('<font color="red">Defina seu posicionamento para salvar o Parecer!</font>');
-                     $('#alert').dialog('close');                
-                     return false;
+		     $('#confirm').dialog('open');
+		     $('#confirm').html('<font color="red">Defina seu posicionamento para salvar o Parecer!</font>');
+		     $('#alert').dialog('close');                
+		     return false;
 		 } 
 		 
 		 <?php endif; ?>
                  salvar(parecer);
                  $("#alert").html('Aguarde, salvando informa&ccedil;&otilde;es...');
-             },
-                    function(){
+	     },
+		    function(){
 			$(this).dialog('close');
-                    }
-             );
-             $("#alert").dialog('open');
+		    }
+	     );
+	     $("#alert").dialog('open');
 	 });
 
  });
@@ -603,13 +616,18 @@
 				?>
 			    </select>
 			</p>
-			<br/><br/>
+		    </td>
+		</tr>
+		<?php if ($this->IsProjetoJaAssinado($this->idpronac, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
+		<tr>
+		    <td>
 			<div style="margin-left: 13.5em; margin-top: 1.5em; margin-bottom: 1.5em;">
 			    <input id="stEnvioPlenaria" type="checkbox" name="stEnvioPlenaria" value="S" />
 			    <label for="stEnvioPlenaria"> Submeter &agrave; Plen&aacute;ria?</label>
 			</div>
 		    </td>
 		</tr>
+		<?php endif; ?>
 		<?php } ?>
 	    </table>
 	    
@@ -640,8 +658,8 @@
             <div class="centro">
                 <br />
                 <p>
-		  <input type="button" class="btn" value=" Salvar " id="salvarparecer"/>
-		  <?php if(!$this->IN2017): ?>
+		    <input type="button" class="btn" value=" Salvar " id="salvarparecer"/>
+		    <?php if(!$this->IN2017): ?>
 
                     <?php if($this->qtdErrosCheckList==0) { ?>
                     <input type="button" class="btn" value=" Finalizar " id="finalizarparecer"/>
@@ -654,16 +672,16 @@
     <?php if(!$this->parecerFavoravel) : ?>style="display:none"<?php endif; ?>
 		       href="<?php echo $this->url(array('module' => 'parecer', 'controller' => 'analise-cnic', 'action' => 'encaminhar-assinatura')) . "?IdPRONAC={$this->idpronac}&encaminhar=true&origin=parecer/analise-cnic" ?>"
 		      data-tooltip="Gerar documento para assinatura">
-		      <i class="material-icons white-text">note_add</i>
+			<i class="material-icons white-text">note_add</i>
 		    </a>
 		    <?php elseif($this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
 		    <?php if($this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
 		    <?php $idDocumentoAssinatura = $this->GetIdDocumentoAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo); ?>
 		    &nbsp;&nbsp;
-		    <a class="btn waves-effect waves-light tooltipped small"
+		    <a class="btn waves-effect waves-light tooltipped small btn-visualizar"
 		     href="<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-projeto')) . "?idDocumentoAssinatura=" . $idDocumentoAssinatura; ?>&origin=parecer/analise-cnic"
 		    data-tooltip="Visualizar documento">
-		    <i class="material-icons white-text">remove_red_eye</i>
+			<i class="material-icons white-text">remove_red_eye</i>
 		    </a>
 		    &nbsp;&nbsp;
 		    <?php endif; ?>
