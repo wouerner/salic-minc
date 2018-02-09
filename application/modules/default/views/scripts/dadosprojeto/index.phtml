@@ -1,4 +1,6 @@
 <script>
+    var isIn2017 =  <?= ($this->in2017); ?>;
+
     $(document).ready(function (){
         $('.btnAbrirDiv').click(function(){
             var idpronac = '<?php echo $this->idpronac ?>';
@@ -8,15 +10,17 @@
                 tipo : tipo
             };
 
-            <?php if($this->in2017) : ?>
-                if(tipo == 'plano') {
-                    var idDiv = "#"+tipo;
+            var idDiv = "#"+tipo;
 
+            if (tipo == 'plano') {
+                if (isIn2017) {
                     $(idDiv).toggle('fast');
-
                     return;
+                } else {
+                    $(idDiv).html('');
                 }
-            <?php endif; ?>
+            }
+
             ajax(dadosOb, tipo);
         });
         

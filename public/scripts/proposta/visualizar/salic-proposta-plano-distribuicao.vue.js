@@ -1,6 +1,9 @@
 Vue.component('salic-proposta-plano-distribuicao', {
     template: `
     <div class="plano-distribuicao" v-if="produtos">
+        <div v-if="produtos.length <= 0" class="padding10">
+            <b>Aguarde! Carregando....</b>
+        </div>
         <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
             <li v-for="produto of produtos">
                 <div class="collapsible-header green-text">
@@ -103,9 +106,6 @@ Vue.component('salic-proposta-plano-distribuicao', {
                 </div>
             </li>
         </ul>
-    </div>
-    <div v-else class="padding10">
-        Carregando....
     </div>
     `,
     data: function () {
