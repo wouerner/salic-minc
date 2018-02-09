@@ -778,14 +778,18 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
 
         $tblParecer = new Parecer();
         
-        $tipoAgente = $_POST['tipoplanilha'];
-        $parecer = $_POST['parecer'];
-
-        $buscarParecer = $tblParecer->buscar(array('IdPRONAC = ?' => $_POST['idpronac'], 'stAtivo = ?' => 1))->current()->toArray();
+        $tipoAgente = $this->_request->getParam("tipoplanilha");
+        $parecer = $this->_request->getParam("parecer");
+        $idPronac = $this->_request->getParam("idpronac");
+        $justificativa = $this->_request->getParam("justificativa");
+        $valorReal = $this->_request->getParam("valorReal");
+        $logon = $this->_request->getParam("usu_codigo");
+        
+        $buscarParecer = $tblParecer->buscar(array('IdPRONAC = ?' => $idPronac, 'stAtivo = ?' => 1))->current()->toArray();
         if (!empty($buscarParecer)) {
             
             $dados = array(
-                'idPRONAC' => $_POST['idpronac'],
+                'idPRONAC' => $idPronac,
                 'AnoProjeto' => $buscarParecer['AnoProjeto'],
                 'idEnquadramento' => $buscarParecer['idEnquadramento'],
                 'Sequencial' => $buscarParecer['Sequencial'],
@@ -793,13 +797,13 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 'ParecerFavoravel' => Seguranca::tratarVarAjaxUFT8($parecer),
                 'dtParecer' => date('Y-m-d H:i:s'),
                 'NumeroReuniao' => $numeroReuniao,
-                'ResumoParecer' => utf8_decode($_POST['justificativa']),
+                'ResumoParecer' => utf8_decode($justificativa),
                 'SugeridoUfir' => 0,
-                'SugeridoReal' => $_POST['valorreal'],
+                'SugeridoReal' => $valorreal,
                 'SugeridoCusteioReal' => 0,
                 'SugeridoCapitalReal' => 0,
                 'Atendimento' => 'S',
-                'Logon' => $_POST['usu_codigo'],
+                'Logon' => $logon,
                 'stAtivo' => 1,
                 'idTipoAgente' => $tipoAgente
             );
@@ -810,7 +814,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 try {
                     $dadosAtualizar = array('stAtivo' => 0);
                     $where = "idparecer = " . $idparecer;
-
+                    
                     $update = $tblParecer->alterar($dadosAtualizar, $where);
                     $inserir = $tblParecer->inserir($dados);
                     $this->_helper->json(array('error' => false));
@@ -821,6 +825,20 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
             } else {
                 try {
                     $where = "idparecer = " . $idparecer;
+                    
+                    $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
+
+                    $tbDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+                    $idDocumentoAssinatura = $tbDocumentoAssinatura->getIdDocumentoAssinatura(
+                        $idPronac,
+                        $idTipoDoAtoAdministrativo
+                    );
+                    
+                    if ($idDocumentoAssinatura) {
+                        $this->removerAssinatura($idPronac, $idDocumentoAssinatura);
+                        $this->removerDocumentoAssinatura($idPronac, $idDocumentoAssinatura);
+                    }
+                    
                     $update = $tblParecer->alterar($dados, $where);
                     $this->_helper->json(array('error' => false));
                 } catch (Zend_Exception $e) {
@@ -863,6 +881,46 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
             }
         } catch (Zend_Exception $ex) {
             parent::message("Erro ao concluir " . $ex->getMessage(), "parecer/analise-cnic/emitirparecer/$idPronac", "ERROR");
+        }
+    }
+
+    private function removerAssinatura($idPronac, $idDocumentoAssinatura) {
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $idPerfilDoAssinante = $GrupoAtivo->codGrupo;
+
+        $objDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinaturaMapper();
+        
+        if ($objDocumentoAssinatura->IsProjetoJaAssinado(
+            $idPronac,
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC,
+            $idPerfilDoAssinante))
+        {
+            try {
+                $tbAssinatura = new Assinatura_Model_DbTable_TbAssinatura();
+            
+                $tbAssinatura->delete(
+                    array(
+                        'idDocumentoAssinatura = ?' => $idDocumentoAssinatura
+                    )
+                );
+            } catch (Exception $objException) {
+                parent::message($objException->getMessage(), $origin);
+            }
+        }
+    }
+    
+    private function removerDocumentoAssinatura($idPronac, $idDocumentoAssinatura) {
+        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        
+        try {
+            $tbDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $tbDocumentoAssinatura->delete(
+                array(
+                    'idDocumentoAssinatura = ?' => $idDocumentoAssinatura
+                )
+            );
+        } catch (Exception $objException) {
+            parent::message($objException->getMessage(), $origin);
         }
     }
 }
