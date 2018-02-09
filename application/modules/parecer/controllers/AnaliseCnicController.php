@@ -183,6 +183,13 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
             $this->fecharAssinatura($idPronac);
             
             $this->readequarProjetoAprovadoNaCNIC();
+
+            $codSituacao = ($this->bln_readequacao == false) ? 'D50' : 'D02';
+            $situacao = $this->_request->getParam("situacao") == null ? $codSituacao : $this->_request->getParam("situacao");
+            $ProvidenciaTomada = 'PROJETO APRECIADO PELO COMPONENTE DA COMISSÃO NA REUNIÃO DA CNIC N°. ' . $ConsultaReuniaoAberta['idNrReuniao'];
+            
+            $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada);
+
         }
         
         //FINALIZAR ANALISE - JUSTIFICATIVA DE PLENARIA - INICIO
@@ -280,11 +287,12 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     {
         $post = Zend_Registry::get('post');
         
-        $codSituacao = ($this->bln_readequacao == false) ? 'D50' : 'D02';
+
         $stEnvioPlenaria = isset($post->stEnvioPlenaria) ? 'S' : 'N';
         $justificativa = $post->justificativaenvioplenaria;
         $TipoAprovacao = $post->decisao;
-        $situacao = $post->situacao == null ? $codSituacao : $post->situacao;
+        $codSituacao = ($this->bln_readequacao == false) ? 'D50' : 'D02';
+        $situacao = $this->_request->getParam("situacao") == null ? $codSituacao : $this->_request->getParam("situacao");
         $dtsituacao = date('Y-m-d H:i:s');
         
         try {
@@ -312,9 +320,6 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 
                 $tblPauta->inserir($dados);
                 
-                $ProvidenciaTomada = 'PROJETO APRECIADO PELO COMPONENTE DA COMISSÃO NA REUNIÃO DA CNIC N°. ' . $ConsultaReuniaoAberta['idNrReuniao'];
-                
-                $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada);
                 parent::message("Projeto cadastrado na Pauta com sucesso!", "areadetrabalho/index", "CONFIRM");
                 $this->_helper->viewRenderer->setNoRender(true);
             } else {
