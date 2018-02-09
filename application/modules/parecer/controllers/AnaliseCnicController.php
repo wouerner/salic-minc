@@ -178,7 +178,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         }
         
         //CASO O COMPONENTE QUEIRA SALVAR O SEU PARECER - FIM
-
+        
         if (isset($_POST['idpronac'])) {
             $this->fecharAssinatura($idPronac);
             
@@ -867,7 +867,9 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         
         try {
             $tbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            
             $objAtoAdministrativo = $tbAtoAdministrativo->obterAtoAdministrativoAtual($idTipoDoAtoAdministrativo, $idPerfilDoAssinante, $idOrgaoDoAssinante);
+            
             if (count($objAtoAdministrativo) > 0) {
                 $idAtoAdministrativo = $objAtoAdministrativo['idAtoAdministrativo'];
                 
@@ -875,13 +877,17 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 $data = array(
                     'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
                 );
+                // TODO: buscar idParecer para ato de gestao
+                //$idAtoDeGestao = '';
+                
                 $where = array(
                     'IdPRONAC = ?' => $idPronac,
                     'idTipoDoAtoAdministrativo = ?' => $idTipoDoAtoAdministrativo,
-                    'idAtoDeGestao = ?' => $idAtoAdministrativo,
+                    //'idAtoDeGestao = ?' => $idAtoDeGestao,
                     'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
                     'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
                 );
+                
                 $objModelDocumentoAssinatura->update($data, $where);
             }
         } catch (Zend_Exception $ex) {
