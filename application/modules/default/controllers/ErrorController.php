@@ -7,8 +7,17 @@ class ErrorController extends Zend_Controller_Action
      */
     private $ravenClient;
 
-    public function init() {
-        $this->ravenClient = new Raven_Client('url');
+    public function init()
+    {
+        $config = Zend_Registry::get("config")->toArray();
+        if ($config['errorHandler'] && $config['errorHandler']['sentryURL']) {
+            $this->instanciarRaven($config['errorHandler']['sentryURL']);
+        }
+    }
+
+    private function instanciarRaven($url)
+    {
+        $this->ravenClient = new Raven_Client($url);
         $error_handler = new Raven_ErrorHandler($this->ravenClient);
         $error_handler->registerExceptionHandler();
         $error_handler->registerErrorHandler();
@@ -111,7 +120,7 @@ class ErrorController extends Zend_Controller_Action
             $this->view->exception = $errors->exception;
         }
 
-        $this->view->request   = $errors->request;
+        $this->view->request = $errors->request;
     }
 
     /**
@@ -136,7 +145,9 @@ class ErrorController extends Zend_Controller_Action
     public function errorAction()
     {
         $error = $this->_getParam('error_handler');
-        $this->ravenClient->captureException($error->exception);
+        if($this->ravenClient) {
+            $this->ravenClient->captureException($error->exception);
+        }
 
         if (APPLICATION_ENV === 'development') {
             $this->_helper->viewRenderer->setNoRender();
@@ -150,9 +161,9 @@ class ErrorController extends Zend_Controller_Action
         // pega a excecao e manda para o template
         $this->_helper->viewRenderer->setViewSuffix('phtml');
 
-        $this->view->ambiente     = APPLICATION_ENV;
-        $this->view->exception    = $error->exception;
-        $this->view->request      = $error->request;
+        $this->view->ambiente = APPLICATION_ENV;
+        $this->view->exception = $error->exception;
+        $this->view->request = $error->request;
         $this->view->message_type = "ERROR";
 
         switch ($error->type) {
