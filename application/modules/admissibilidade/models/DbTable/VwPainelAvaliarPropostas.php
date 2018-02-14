@@ -81,44 +81,23 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             , $this->getSchema('sac')
         );
 
+        $select->joinLeft(
+            ['sugestao_enquadramento']
+            , "sugestao_enquadramento.id_preprojeto = vwPainelAvaliarPropostas.idProjeto
+                    and sugestao_enquadramento.id_orgao_superior = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}
+                    and sugestao_enquadramento.id_perfil_usuario = {$distribuicaoAvaliacaoProposta->getIdPerfil()}"
+            , [
+                'sugestao_enquadramento.id_area',
+                'sugestao_enquadramento.id_sugestao_enquadramento',
+            ]
+            , $this->getSchema('sac')
+        );
         if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
             || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
-            $select->joinLeft(
-                ['sugestao_enquadramento']
-//                , "sugestao_enquadramento.id_distribuicao_avaliacao_proposta = distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta"
-                , "sugestao_enquadramento.id_preprojeto = vwPainelAvaliarPropostas.idProjeto
-                        and sugestao_enquadramento.id_orgao_superior = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}
-                        and sugestao_enquadramento.id_perfil_usuario = {$distribuicaoAvaliacaoProposta->getIdPerfil()}"
-                , [
-                    'sugestao_enquadramento.id_area',
-                    'sugestao_enquadramento.id_sugestao_enquadramento',
-                ]
-                , $this->getSchema('sac')
-            );
 
             if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
 
-                $subSelectPenultimaDistribuicao = $this->select();
-                $subSelectPenultimaDistribuicao->setIntegrityCheck(false);
-                $subSelectPenultimaDistribuicao->from(
-                    ['sub_select_distribuicao_avaliacao' => 'distribuicao_avaliacao_proposta'],
-                    [
-                        new Zend_Db_Expr('*')
-                    ],
-                    $this->getSchema('sac')
-                );
-                $subSelectPenultimaDistribuicao->limit(1);
-                $subSelectPenultimaDistribuicao->order('data_distribuicao desc');
-                $subSelectPenultimaDistribuicao->where('id_preprojeto = vwPainelAvaliarPropostas.idProjeto');
-                $subSelectPenultimaDistribuicao->where('avaliacao_atual = ?', 0);
-
-                $selectPenultimaDistribuicao = $this->select();
-                $selectPenultimaDistribuicao->setIntegrityCheck(false);
-                $selectPenultimaDistribuicao->isUseSchema(false);
-                $selectPenultimaDistribuicao->from(
-                    $subSelectPenultimaDistribuicao,
-                    ['id_distribuicao_avaliacao_proposta']
-                );
+                $selectPenultimaDistribuicao = $this->obterQueryPenultimaDistribuicaoAvaliacao();
 
                 $select->isUseSchema(false);
                 $select->joinLeft(
@@ -176,6 +155,33 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         }
 //        xdnb($select->assemble());
         return $db->fetchAll($select);
+    }
+
+    private function obterQueryPenultimaDistribuicaoAvaliacao()
+    {
+        $subSelectPenultimaDistribuicao = $this->select();
+        $subSelectPenultimaDistribuicao->setIntegrityCheck(false);
+        $subSelectPenultimaDistribuicao->from(
+            ['sub_select_distribuicao_avaliacao' => 'distribuicao_avaliacao_proposta'],
+            [new Zend_Db_Expr('*')],
+            $this->getSchema('sac')
+        );
+        $subSelectPenultimaDistribuicao->limit(1);
+        $subSelectPenultimaDistribuicao->order('data_distribuicao desc');
+        $subSelectPenultimaDistribuicao->where('id_preprojeto = vwPainelAvaliarPropostas.idProjeto');
+        $subSelectPenultimaDistribuicao->where(
+            'avaliacao_atual = ?',
+            Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_INATIVA
+        );
+
+        $selectPenultimaDistribuicao = $this->select();
+        $selectPenultimaDistribuicao->setIntegrityCheck(false);
+        $selectPenultimaDistribuicao->isUseSchema(false);
+        $selectPenultimaDistribuicao->from(
+            $subSelectPenultimaDistribuicao,
+            ['id_distribuicao_avaliacao_proposta']
+        );
+        return $selectPenultimaDistribuicao;
     }
 
     private function obterRestricaoPropostasParaAvaliacao(Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta)
@@ -238,7 +244,6 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             $limit = (int)$limit;
             $sql->limitPage($start, $limit);
         }
-        //echo $sql;
 
         return $db->fetchRow($sql);
     }
