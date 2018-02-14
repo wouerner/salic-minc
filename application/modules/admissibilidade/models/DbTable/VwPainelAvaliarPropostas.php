@@ -174,7 +174,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         if ($order) {
             $select->order($order);
         }
-//xdnb($select->assemble());
+//        xdnb($select->assemble());
         return $db->fetchAll($select);
     }
 
@@ -186,6 +186,8 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
                 $restricaoPropostasParaAvaliacao .= ' distribuicao_avaliacao_proposta.avaliacao_atual is null ';
                 $restricaoPropostasParaAvaliacao .= ' AND distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta is null ';
+                $restricaoPropostasParaAvaliacao .= ' AND sugestao_enquadramento.id_area is null';
+                $restricaoPropostasParaAvaliacao .= ' AND sugestao_enquadramento.id_sugestao_enquadramento is null ';
             }
             if ($distribuicaoAvaliacaoProposta->getIdPerfil() != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
                 if (!empty($restricaoPropostasParaAvaliacao) && $restricaoPropostasParaAvaliacao != '( ') {
