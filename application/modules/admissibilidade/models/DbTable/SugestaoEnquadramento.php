@@ -68,7 +68,6 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         if ($resultado) {
             return $resultado->toArray();
         }
-
     }
 
     public function isPropostaEnquadrada($id_preprojeto, $id_orgao, $id_perfil_usuario)
@@ -85,7 +84,8 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         }
     }
 
-    public function inativarSugestoes($id_preprojeto) {
+    public function inativarSugestoes($id_preprojeto)
+    {
 
         $this->alterar(
             ['ultima_sugestao' => self::ULTIMA_SUGESTAO_INATIVA],

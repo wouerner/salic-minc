@@ -71,6 +71,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->codOrgao = $GrupoAtivo->codOrgao;
             $this->codOrgaoSuperior = (!empty($auth->getIdentity()->usu_org_max_superior)) ? $auth->getIdentity()->usu_org_max_superior : null;
         }
+xd($this->codGrupo);
     }
 
     public function indexAction()
@@ -2689,13 +2690,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $recordsFiltered = 0;
         if (!empty($propostas)) {
             $zDate = new Zend_Date();
-            $SugestaoEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+            $sugestaoEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             foreach ($propostas as $key => $proposta) {
                 $zDate->set($proposta->DtMovimentacao);
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
                 $proposta->Tecnico = utf8_encode($proposta->Tecnico);
                 $proposta->DtMovimentacao = $zDate->toString('dd/MM/y h:m');
-                $proposta->isEnquadrada = $SugestaoEnquadramento->isPropostaEnquadrada(
+                $proposta->isEnquadrada = $sugestaoEnquadramento->isPropostaEnquadrada(
                     $proposta->idProjeto,
                     $this->grupoAtivo->codOrgao,
                     $this->grupoAtivo->codGrupo

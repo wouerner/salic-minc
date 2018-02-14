@@ -37,12 +37,14 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
                 $this->salvarSugestaoEnquadramento();
             }
         } catch (Exception $objException) {
+
             parent::message($objException->getMessage(), '/admissibilidade/enquadramento/gerenciar-enquadramento');
         }
     }
 
     private function carregardadosEnquadramentoProposta(array $preprojeto)
     {
+
         $mapperArea = new Agente_Model_AreaMapper();
         $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo', 'Descricao');
         $this->view->preprojeto = $preprojeto;
@@ -51,7 +53,6 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             throw new Exception("N&atilde;o foram encontradas &Aacute;reas Culturais para o PRONAC informado.");
         }
 
-        $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
         $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
         $this->view->historicoEnquadramento = $this->obterHistoricoSugestaoEnquadramento($preprojeto['idPreProjeto']);
     }
@@ -64,7 +65,6 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             if (empty($descricao_motivacao)) {
                 throw new Exception("O campo 'Parecer de Enquadramento' é de preenchimento obrigatório.");
             }
-
             $get = $this->getRequest()->getParams();
 
             $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
@@ -73,40 +73,61 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
 
             $id_area = ($post['id_area']) ? $post['id_area'] : null;
             $id_segmento = ($post['id_segmento']) ? $post['id_segmento'] : null;
-            $objEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+            $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
 
             $orgaoDbTable = new Orgaos();
             $resultadoOrgaoSuperior = $orgaoDbTable->codigoOrgaoSuperior($this->grupoAtivo->codOrgao);
             $orgaoSuperior = $resultadoOrgaoSuperior[0]['Superior'];
 
-            $arrayArmazenamentoEnquadramento = array(
+            $distribuicaoAvaliacaoPropostaDtTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+            $distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoPropostaDtTable->findBy([
                 'id_preprojeto' => $get['id_preprojeto'],
+                'id_orgao_superior' => $orgaoSuperior,
+                'id_perfil' => $this->grupoAtivo->codGrupo
+            ]);
+
+            if (!$distribuicaoAvaliacaoProposta &&
+                (
+                    $this->grupoAtivo->codGrupo != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+                    && $this->grupoAtivo->codGrupo != Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
+                )
+            ) {
+                throw new Exception("Distribui&ccedil;&atilde;o n&atilde;o localizada para o perfil atual.");
+            }
+
+            $arrayArmazenamentoEnquadramento = [
                 'id_orgao' => $this->grupoAtivo->codOrgao,
+                'id_preprojeto' => $get['id_preprojeto'],
                 'id_orgao_superior' => $orgaoSuperior,
                 'id_perfil_usuario' => $this->grupoAtivo->codGrupo,
                 'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo,
                 'id_area' => $id_area,
                 'id_segmento' => $id_segmento,
                 'descricao_motivacao' => $descricao_motivacao,
-                'data_avaliacao' => $objEnquadramento->getExpressionDate(),
-                'ultima_sugestao' => 1,
-            );
+                'data_avaliacao' => $sugestaoEnquadramentoDbTable->getExpressionDate(),
+                'ultima_sugestao' => Admissibilidade_Model_DbTable_SugestaoEnquadramento::ULTIMA_SUGESTAO_ATIVA,
+            ];
 
-            $arrayDadosEnquadramento = $objEnquadramento->findBy(
+            $arrayDadosEnquadramento = $sugestaoEnquadramentoDbTable->findBy(
                 [
-                    'id_preprojeto' => $get['id_preprojeto'],
                     'id_orgao' => $this->grupoAtivo->codOrgao,
+                    'id_preprojeto' => $get['id_preprojeto'],
                     'id_orgao_superior' => $orgaoSuperior,
                     'id_perfil_usuario' => $this->grupoAtivo->codGrupo,
                     'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo
                 ]
             );
 
+            if ($distribuicaoAvaliacaoProposta && $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop']) {
+                $arrayArmazenamentoEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
+                $arrayDadosEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
+            }
+
             if (count($arrayDadosEnquadramento) < 1) {
-                $objEnquadramento->inativarSugestoes($get['id_preprojeto']);
-                $objEnquadramento->inserir($arrayArmazenamentoEnquadramento);
+                $sugestaoEnquadramentoDbTable->inativarSugestoes($get['id_preprojeto']);
+                $sugestaoEnquadramentoDbTable->inserir($arrayArmazenamentoEnquadramento);
             } else {
-                $objEnquadramento->update($arrayArmazenamentoEnquadramento, [
+                $sugestaoEnquadramentoDbTable->update($arrayArmazenamentoEnquadramento, [
                     'id_sugestao_enquadramento = ?' => $arrayDadosEnquadramento['id_sugestao_enquadramento']
                 ]);
             }
@@ -117,7 +138,8 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
     }
 
-    private function obterHistoricoSugestaoEnquadramento($id_preprojeto) {
+    private function obterHistoricoSugestaoEnquadramento($id_preprojeto)
+    {
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-proposta');
 
