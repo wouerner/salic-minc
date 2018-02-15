@@ -224,7 +224,6 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-//console.log(data);
                                 if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
                                     &&
                                     (
@@ -234,8 +233,7 @@
                                         )
                                         ||
                                         (
-                                            parseInt(data.quantidade_distribuicoes, 10) == 0
-                                            && $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
+                                            $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
                                             && data.id_area != null
                                             && data.isEnquadrada == true
                                         )
