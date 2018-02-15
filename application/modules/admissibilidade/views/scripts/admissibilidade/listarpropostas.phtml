@@ -247,38 +247,56 @@
         })
     }($.noConflict(true)))
 
-    function permitirEncaminhamento (data) {
-        if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
-            &&
-            (
-                (
-                    parseInt(data.quantidade_distribuicoes, 10) == 0
-                    && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()
-                )
-                ||
-                (
-                    $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
-                    && data.id_area != null
-                    && data.isEnquadrada == true
-                )
-                ||
-                (
-                    parseInt(data.quantidade_distribuicoes, 10) > 0
-                    && parseInt(data.avaliacao_atual, 10) == 1
-                    && $('#perfil_atual').val() != $('#perfil_coordenador_admissibilidade').val()
-                    && data.isEnquadrada == true
-                )
-                ||
-                (
-                    parseInt(data.quantidade_distribuicoes, 10) > 0
-                    && parseInt(data.avaliacao_atual, 10) == 1
-                    && $('#perfil_atual').val() == $('#perfil_componente_comissao').val()
-                    && data.id_area != null
-                    && data.isEnquadrada == true
-                )
-            )
-        )
+    function permitirEncaminhamentoTecnicoAdmissibilidade (data) {
+        if (parseInt(data.quantidade_distribuicoes, 10) == 0
+            && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()) {
+
             return true
+        }
+    }
+
+    function permitirEncaminhamentoCoordenadorAdmissibilidade (data) {
+        if ((
+                $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
+                && data.id_area != null
+                && data.isEnquadrada == true
+            )
+            ||
+            (
+                parseInt(data.quantidade_distribuicoes, 10) > 0
+                && parseInt(data.avaliacao_atual, 10) == 1
+                && $('#perfil_atual').val() != $('#perfil_coordenador_admissibilidade').val()
+                && data.isEnquadrada == true
+            )) {
+            return true
+        }
+    }
+
+    function permitirEncaminhamentoComponenteComissao (data) {
+        if (parseInt(data.quantidade_distribuicoes, 10) > 0
+                && parseInt(data.avaliacao_atual, 10) == 1
+                && $('#perfil_atual').val() == $('#perfil_componente_comissao').val()
+                && data.id_area != null
+                && data.isEnquadrada == true
+            ) {
+            return true
+        }
+    }
+
+    function permitirEncaminhamento (data) {
+        if (data.CodSituacao != $('#PROPOSTA_EM_ANALISE_FINAL').val()) {
+            return false
+        }
+        if (
+            !permitirEncaminhamentoTecnicoAdmissibilidade(data)
+            && !permitirEncaminhamentoCoordenadorAdmissibilidade(data)
+            && !permitirEncaminhamentoComponenteComissao(data)
+        ) {
+
+            return false;
+        }
+        return true;
+
     }
 
     $3('#imprimir').on('click', function () {
