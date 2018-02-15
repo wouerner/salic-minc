@@ -147,4 +147,14 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         $view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($id_preprojeto);
         return $view->render('historico-sugestao-enquadramento.phtml');
     }
+
+    public function tratarAvaliacoesVencidasComponentesComissaoAction()
+    {
+        $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(new Admissibilidade_Model_DistribuicaoAvaliacaoProposta(
+            ['id_perfil' => Autenticacao_Model_Grupos::COMPONENTE_COMISSAO]
+        ));
+        $avaliacoesVencidas = $distribuicaoAvaliacaoPropostaDbTable->obterAvaliacoesVencidas();
+//        xd($avaliacoesVencidas);
+    }
 }
