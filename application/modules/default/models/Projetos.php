@@ -3044,7 +3044,7 @@ class Projetos extends MinC_Db_Table_Abstract
             array('p' => $this->_name),
             array(new Zend_Db_Expr('SAC.dbo.fnchecarDiligencia(p.IdPRONAC) AS Diligencia'),
                 'p.IdPRONAC',
-                '(p.AnoProjeto + p.Sequencial) AS PRONAC',
+                new Zend_Db_Expr('(p.AnoProjeto + p.Sequencial) AS PRONAC'),
                 'p.NomeProjeto')
         );
 
@@ -3060,7 +3060,7 @@ class Projetos extends MinC_Db_Table_Abstract
                 'd.Observacao',
                 'DescricaoAnalise' => new Zend_Db_Expr('CASE WHEN TipoAnalise = 0 THEN \'Cont?udo\' WHEN TipoAnalise = 1 THEN \'Custo do Produto\' ELSE \'Custo Administrativo\' END'),
                 'd.TipoAnalise',
-                'AGENTES.dbo.fnNome(d.idAgenteParecerista) AS Parecerista')
+                new Zend_Db_Expr('AGENTES.dbo.fnNome(d.idAgenteParecerista) AS Parecerista'))
         );
 
 
