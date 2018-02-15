@@ -169,27 +169,24 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $tblProjetos = new Projetos();
         $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
         
-        $ConsultaReuniaoAberta = ReuniaoDAO::buscarReuniaoAberta();
-        $numeroReuniao = $ConsultaReuniaoAberta['NrReuniao'];
-        
         //CASO O COMPONENTE QUEIRA APENAS SALVAR O SEU PARECER - INICIO
         if (isset($_POST['usu_codigo'])) {
             $this->salvarParecerComponente($numeroReuniao);
         }
         
         //CASO O COMPONENTE QUEIRA SALVAR O SEU PARECER - FIM
+        $ConsultaReuniaoAberta = ReuniaoDAO::buscarReuniaoAberta();
+        $numeroReuniao = $ConsultaReuniaoAberta['NrReuniao'];
         
         if (isset($_POST['idpronac'])) {
             $this->fecharAssinatura($idPronac);
             
-            $this->readequarProjetoAprovadoNaCNIC();
-
             $codSituacao = ($this->bln_readequacao == false) ? 'D50' : 'D02';
             $situacao = $this->_request->getParam("situacao") == null ? $codSituacao : $this->_request->getParam("situacao");
-            $ProvidenciaTomada = 'PROJETO APRECIADO PELO COMPONENTE DA COMISSÃO NA REUNIÃO DA CNIC N°. ' . $ConsultaReuniaoAberta['idNrReuniao'];
-            
+            $ProvidenciaTomada = 'PROJETO APRECIADO PELO COMPONENTE DA COMISSÃO NA REUNIÃO DA CNIC N°. ' . $numeroReuniao;
             $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada);
 
+            $this->incluirNaPauta($idPronac, $ConsultaReuniaoAberta);
         }
         
         //FINALIZAR ANALISE - JUSTIFICATIVA DE PLENARIA - INICIO
@@ -201,8 +198,6 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                 // encerra
             }
             /**** FIM CODIGO DE READEQUACAO ****/
-            
-            $this->incluirNaPauta($idPronac, $ConsultaReuniaoAberta);
         } // fecha if
         // =================================================================
         // ========= CARREGANDO TELA DE EMISSAO DE PARECER =================
@@ -287,7 +282,6 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     {
         $post = Zend_Registry::get('post');
         
-
         $stEnvioPlenaria = isset($post->stEnvioPlenaria) ? 'S' : 'N';
         $justificativa = $post->justificativaenvioplenaria;
         $TipoAprovacao = $post->decisao;
