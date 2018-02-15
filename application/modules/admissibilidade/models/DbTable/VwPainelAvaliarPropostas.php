@@ -121,20 +121,20 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 $rsAgente = $tblAgente->buscarAgenteENome(
                     ['CNPJCPF = ?' => $auth->getIdentity()->usu_identificacao]
                 );
-//                if ($rsAgente && count($rsAgente->current()->toArray()) > 0) {
-//                    $select->joinLeft(
-//                        ['tbtitulacaoconselheiro']
-//                        , "
-//                        tbtitulacaoconselheiro.cdArea = sugestao_distribuida.id_area
-//                        and tbtitulacaoconselheiro.stTitular = 1
-//                        and tbtitulacaoconselheiro.stConselheiro = 'A'
-//                    "
-//                        , []
-//                        , $this->getSchema('agentes')
-//                    );
-//                    $agente = $rsAgente->current()->toArray();
-//                    $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
-//                }
+                if ($rsAgente && count($rsAgente->current()->toArray()) > 0) {
+                    $select->joinLeft(
+                        ['tbtitulacaoconselheiro']
+                        , "
+                        tbtitulacaoconselheiro.cdArea = sugestao_distribuida.id_area
+                        and tbtitulacaoconselheiro.stTitular = 1
+                        and tbtitulacaoconselheiro.stConselheiro = 'A'
+                    "
+                        , []
+                        , $this->getSchema('agentes')
+                    );
+                    $agente = $rsAgente->current()->toArray();
+                    $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
+                }
             }
         }
 
