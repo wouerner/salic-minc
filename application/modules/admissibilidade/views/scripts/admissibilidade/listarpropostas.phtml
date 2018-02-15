@@ -35,8 +35,8 @@
             <table class="bordered striped conteudoImprimivel" id="tabelaAnaliseFinal">
                 <thead>
                 <tr>
-                    <th title="Clique aqui para ordenar">Nr. Proposta</th>
-                    <th title="Clique aqui para ordenar">Nome da Proposta</th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Clique aqui para ordenar">Nr. Proposta</th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Clique aqui para ordenar">Nome da Proposta</th>
                     <th>Dt. Admiss&atilde;o</th>
                     <th>Dias em An&aacute;lise</th>
                     <?php if ($this->grupo != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO): ?>
@@ -44,7 +44,7 @@
                         <th>T&eacute;cnico</th>
                         <th>Analisado</th>
                     <?php else: ?>
-                        <th class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Dias restantes para avaliação">
+                        <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Dias restantes para avalia&ccedil;&atilde;o">
                             Dias Restantes
                         </th>
                     <?php endif; ?>
