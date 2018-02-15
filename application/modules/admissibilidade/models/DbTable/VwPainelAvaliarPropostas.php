@@ -76,7 +76,8 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             ,
             [
                 'avaliacao_atual' => "coalesce(distribuicao_avaliacao_proposta.avaliacao_atual, '0')",
-                'quantidade_distribuicoes' => "coalesce(distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta, '0')"
+                'quantidade_distribuicoes' => "coalesce(distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta, '0')",
+                'dias_corridos_distribuicao' => new Zend_Db_Expr('DATEDIFF(d, distribuicao_avaliacao_proposta.data_distribuicao, GETDATE())')
             ]
             , $this->getSchema('sac')
         );
@@ -120,20 +121,20 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 $rsAgente = $tblAgente->buscarAgenteENome(
                     ['CNPJCPF = ?' => $auth->getIdentity()->usu_identificacao]
                 );
-                if ($rsAgente && count($rsAgente->current()->toArray()) > 0) {
-                    $select->joinLeft(
-                        ['tbtitulacaoconselheiro']
-                        , "
-                        tbtitulacaoconselheiro.cdArea = sugestao_distribuida.id_area
-                        and tbtitulacaoconselheiro.stTitular = 1
-                        and tbtitulacaoconselheiro.stConselheiro = 'A'
-                    "
-                        , []
-                        , $this->getSchema('agentes')
-                    );
-                    $agente = $rsAgente->current()->toArray();
-                    $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
-                }
+//                if ($rsAgente && count($rsAgente->current()->toArray()) > 0) {
+//                    $select->joinLeft(
+//                        ['tbtitulacaoconselheiro']
+//                        , "
+//                        tbtitulacaoconselheiro.cdArea = sugestao_distribuida.id_area
+//                        and tbtitulacaoconselheiro.stTitular = 1
+//                        and tbtitulacaoconselheiro.stConselheiro = 'A'
+//                    "
+//                        , []
+//                        , $this->getSchema('agentes')
+//                    );
+//                    $agente = $rsAgente->current()->toArray();
+//                    $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
+//                }
             }
         }
 

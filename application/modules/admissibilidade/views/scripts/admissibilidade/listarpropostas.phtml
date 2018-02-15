@@ -43,6 +43,10 @@
                         <th>Outras Propostas</th>
                         <th>T&eacute;cnico</th>
                         <th>Analisado</th>
+                    <?php else: ?>
+                        <th>
+                            Dias Restantes
+                        </th>
                     <?php endif; ?>
                     <th>Enquadrado</th>
                     <th>Analisar</th>
@@ -56,12 +60,11 @@
                 </thead>
                 <tbody>
                 <?php
+                $cor = 'style = "color: #FF0000"';
                 if ($propostaFinal->diasCorridos < 11) {
                     $cor = 'style = "color: #228B22"';
                 } else if ($propostaFinal->diasCorridos > 10 && $propostaFinal->diasCorridos < 21) {
                     $cor = 'style = "color: #FFD700"';
-                } else {
-                    $cor = 'style = "color: #FF0000"';
                 }
                 ?>
                 </tbody>

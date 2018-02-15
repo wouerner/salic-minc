@@ -90,6 +90,18 @@ function obterColunasListagem () {
                 return ''
             }
         })
+    } else {
+        colunas.push({
+            data: null,
+            render: function (data, type, row) {
+                var diasRestantes = 5 - parseInt(data.dias_corridos_distribuicao,10);
+                if (diasRestantes <= 0) {
+                    return '<i class="material-icons">close</i>' +
+                        ''
+                }
+                return diasRestantes;
+            }
+        })
     }
     colunas.push({
         data: null,
