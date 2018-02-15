@@ -125,6 +125,8 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
 <script type="text/javascript">
+
+
     (function ($) {
         $(document).ready(function () {
             $('#tabelaAnaliseFinal').DataTable(
@@ -224,37 +226,7 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-                                if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
-                                    &&
-                                    (
-                                        (
-                                            parseInt(data.quantidade_distribuicoes, 10) == 0
-                                            && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()
-                                        )
-                                        ||
-                                        (
-                                            $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
-                                            && data.id_area != null
-                                            && data.isEnquadrada == true
-                                        )
-                                        ||
-                                        (
-                                            parseInt(data.quantidade_distribuicoes, 10) > 0
-                                            && parseInt(data.avaliacao_atual, 10) == 1
-                                            && $('#perfil_atual').val() != $('#perfil_coordenador_admissibilidade').val()
-                                            && data.isEnquadrada == true
-                                        )
-                                        ||
-                                        (
-                                            parseInt(data.quantidade_distribuicoes, 10) > 0
-                                            && parseInt(data.avaliacao_atual, 10) == 1
-                                            && $('#perfil_atual').val() == $('#perfil_componente_comissao').val()
-                                            && data.id_area != null
-                                            && data.isEnquadrada == true
-                                        )
-                                    )
-                                ) {
-
+                                if (permitirEncaminhamento(data)) {
                                     return '<a class="waves-effect waves-light btn modal-trigger" data-id_preprojeto="' + data.idProjeto + '" href="#dialogEncaminharProposta">'
                                         + '<i class="material-icons" '
                                         + ' title="Encaminhar An&aacute;lise de Proposta" '
@@ -274,6 +246,40 @@
 
         })
     }($.noConflict(true)))
+
+    function permitirEncaminhamento (data) {
+        if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
+            &&
+            (
+                (
+                    parseInt(data.quantidade_distribuicoes, 10) == 0
+                    && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()
+                )
+                ||
+                (
+                    $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
+                    && data.id_area != null
+                    && data.isEnquadrada == true
+                )
+                ||
+                (
+                    parseInt(data.quantidade_distribuicoes, 10) > 0
+                    && parseInt(data.avaliacao_atual, 10) == 1
+                    && $('#perfil_atual').val() != $('#perfil_coordenador_admissibilidade').val()
+                    && data.isEnquadrada == true
+                )
+                ||
+                (
+                    parseInt(data.quantidade_distribuicoes, 10) > 0
+                    && parseInt(data.avaliacao_atual, 10) == 1
+                    && $('#perfil_atual').val() == $('#perfil_componente_comissao').val()
+                    && data.id_area != null
+                    && data.isEnquadrada == true
+                )
+            )
+        )
+            return true
+    }
 
     $3('#imprimir').on('click', function () {
         $3('#conteudoImprimir').val($3('.conteudoImprimivel').html())
