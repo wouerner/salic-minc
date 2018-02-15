@@ -224,7 +224,7 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-console.log(data);
+//console.log(data);
                                 if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
                                     &&
                                     (
@@ -237,12 +237,14 @@ console.log(data);
                                             parseInt(data.quantidade_distribuicoes, 10) == 0
                                             && $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
                                             && data.id_area != null
+                                            && data.isEnquadrada == true
                                         )
                                         ||
                                         (
                                             parseInt(data.quantidade_distribuicoes, 10) > 0
                                             && parseInt(data.avaliacao_atual, 10) == 1
                                             && $('#perfil_atual').val() != $('#perfil_coordenador_admissibilidade').val()
+                                            && data.isEnquadrada == true
                                         )
                                         ||
                                         (
@@ -250,6 +252,7 @@ console.log(data);
                                             && parseInt(data.avaliacao_atual, 10) == 1
                                             && $('#perfil_atual').val() == $('#perfil_componente_comissao').val()
                                             && data.id_area != null
+                                            && data.isEnquadrada == true
                                         )
                                     )
                                 ) {

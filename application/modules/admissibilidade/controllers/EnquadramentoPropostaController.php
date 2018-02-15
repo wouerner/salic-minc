@@ -118,15 +118,15 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
                 ]
             );
 
+
             if ($distribuicaoAvaliacaoProposta && $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop']) {
                 $arrayArmazenamentoEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
-                $arrayDadosEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
             }
-
             if (count($arrayDadosEnquadramento) < 1) {
                 $sugestaoEnquadramentoDbTable->inativarSugestoes($get['id_preprojeto']);
                 $sugestaoEnquadramentoDbTable->inserir($arrayArmazenamentoEnquadramento);
             } else {
+                $arrayDadosEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
                 $sugestaoEnquadramentoDbTable->update($arrayArmazenamentoEnquadramento, [
                     'id_sugestao_enquadramento = ?' => $arrayDadosEnquadramento['id_sugestao_enquadramento']
                 ]);
