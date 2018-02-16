@@ -14,7 +14,7 @@ class Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta extends MinC_D
      * @param Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta
      * @return Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta
      */
-    public function setDistribuicaoAvaliacaoProposta($distribuicaoAvaliacaoProposta)
+    public function setDistribuicaoAvaliacaoProposta(Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta)
     {
         $this->_distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoProposta;
         return $this;
@@ -47,12 +47,12 @@ class Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta extends MinC_D
             ['distribuicao_avaliacao_proposta']
             , "distribuicao_avaliacao_proposta.id_preprojeto = vwPainelAvaliarPropostas.idProjeto"
             , [
-                'dias_corridos_distribuicao' => new Zend_Db_Expr('DATEDIFF(d, distribuicao_avaliacao_proposta.data_distribuicao, GETDATE())'),
-                '*'
+                'dias_corridos_distribuicao' => new Zend_Db_Expr('DATEDIFF(d, distribuicao_avaliacao_proposta.data_distribuicao, GETDATE())')
+                , '*'
             ]
             , $this->getSchema('sac')
         );
-        if($this->_distribuicaoAvaliacaoProposta->getIdPerfil()) {
+        if ($this->_distribuicaoAvaliacaoProposta->getIdPerfil()) {
             $select->where("distribuicao_avaliacao_proposta.id_perfil = {$this->_distribuicaoAvaliacaoProposta->getIdPerfil()}");
         }
         $select->where(new Zend_Db_Expr("DATEDIFF(d, distribuicao_avaliacao_proposta.data_distribuicao, GETDATE()) > ?"), $prazoVencimentoEmDias);

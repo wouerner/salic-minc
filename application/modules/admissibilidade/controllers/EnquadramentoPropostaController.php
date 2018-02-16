@@ -4,7 +4,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
 {
     public function init()
     {
-        parent::perfil();
+//        parent::perfil();
         parent::init();
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
@@ -95,7 +95,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
                 throw new Exception("Distribui&ccedil;&atilde;o n&atilde;o localizada para o perfil atual.");
             }
 
-            $arrayArmazenamentoEnquadramento = [
+            $dadosNovaSugestaoEnquadramento = [
                 'id_orgao' => $this->grupoAtivo->codOrgao,
                 'id_preprojeto' => $get['id_preprojeto'],
                 'id_orgao_superior' => $orgaoSuperior,
@@ -108,7 +108,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
                 'ultima_sugestao' => Admissibilidade_Model_DbTable_SugestaoEnquadramento::ULTIMA_SUGESTAO_ATIVA,
             ];
 
-            $arrayDadosEnquadramento = $sugestaoEnquadramentoDbTable->findBy(
+            $dadosBuscaPorSugestao = $sugestaoEnquadramentoDbTable->findBy(
                 [
                     'id_orgao' => $this->grupoAtivo->codOrgao,
                     'id_preprojeto' => $get['id_preprojeto'],
@@ -120,15 +120,15 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
 
 
             if ($distribuicaoAvaliacaoProposta && $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop']) {
-                $arrayArmazenamentoEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
+                $dadosNovaSugestaoEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
             }
-            if (count($arrayDadosEnquadramento) < 1) {
+            if (count($dadosBuscaPorSugestao) < 1) {
                 $sugestaoEnquadramentoDbTable->inativarSugestoes($get['id_preprojeto']);
-                $sugestaoEnquadramentoDbTable->inserir($arrayArmazenamentoEnquadramento);
+                $sugestaoEnquadramentoDbTable->inserir($dadosNovaSugestaoEnquadramento);
             } else {
-                $arrayDadosEnquadramento['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
-                $sugestaoEnquadramentoDbTable->update($arrayArmazenamentoEnquadramento, [
-                    'id_sugestao_enquadramento = ?' => $arrayDadosEnquadramento['id_sugestao_enquadramento']
+                $dadosBuscaPorSugestao['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
+                $sugestaoEnquadramentoDbTable->update($dadosNovaSugestaoEnquadramento, [
+                    'id_sugestao_enquadramento = ?' => $dadosBuscaPorSugestao['id_sugestao_enquadramento']
                 ]);
             }
 
@@ -155,6 +155,26 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             ['id_perfil' => Autenticacao_Model_Grupos::COMPONENTE_COMISSAO]
         ));
         $avaliacoesVencidas = $distribuicaoAvaliacaoPropostaDbTable->obterAvaliacoesVencidas();
-//        xd($avaliacoesVencidas);
+
+        $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+
+        foreach ($avaliacoesVencidas as $avaliacaoVencida) {
+            $ultimaSugestaoAtiva = $sugestaoEnquadramentoDbTable->obterSugestaoAtiva($avaliacaoVencida->id_preprojeto);
+
+            unset($ultimaSugestaoAtiva['id_sugestao_enquadramento']);
+            $ultimaSugestaoAtiva['descricao_motivacao'] = "A avalia&ccedil;&atilde;o foi automaticamente encaminhada para o Coordenador Geral concordando tacitamente com o enquadramento do Coordenador de Admissibilidade.";
+            $ultimaSugestaoAtiva['id_distribuicao_avaliacao_proposta'] = $avaliacaoVencida->id_distribuicao_avaliacao_prop;
+            unset($ultimaSugestaoAtiva['id_distribuicao_avaliacao_prop']);
+            $sugestaoEnquadramentoDbTable->inativarSugestoes($avaliacaoVencida->id_preprojeto);
+            $sugestaoEnquadramentoDbTable->inserir($ultimaSugestaoAtiva);
+
+            unset($avaliacaoVencida->dias_corridos_distribuicao);
+            unset($avaliacaoVencida->id_distribuicao_avaliacao_prop);
+            $avaliacaoVencida->id_perfil = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE;
+            $avaliacaoVencida->data_distribuicao = $distribuicaoAvaliacaoPropostaDbTable->getExpressionDate();
+            $distribuicaoAvaliacaoPropostaDbTable->inativarAvaliacoesProposta($avaliacaoVencida->id_preprojeto);
+            $distribuicaoAvaliacaoPropostaDbTable->inserir((array)$avaliacaoVencida);
+        }
     }
 }
