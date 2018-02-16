@@ -691,6 +691,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                     $rsDirigentes = $tblAgente->buscarDirigentes(array('v.idVinculoPrincipal =?'=>$rsIdAgente,'n.Status =?'=>0), array('n.Descricao ASC'));
                     $this->view->dirigentes = $rsDirigentes;
 
+                    $tbProcuradorProjeto = new tbProcuradorProjeto();
+                    $this->view->procuradores = $tbProcuradorProjeto->buscarProcuradorDoProjeto($idPronac);
+
                     //========== inicio codigo mandato dirigente ================
                     $arrMandatos = array();
 
