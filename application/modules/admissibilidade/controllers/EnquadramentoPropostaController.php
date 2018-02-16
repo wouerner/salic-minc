@@ -150,11 +150,34 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
 
     public function tratarAvaliacoesVencidasComponentesComissaoAction()
     {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $configuracoesAplicacao = Zend_Registry::get("config")->toArray();
+
+        if (!isset($configuracoesAplicacao['cronJobs'])
+            || !isset($configuracoesAplicacao['cronJobs']['proponente'])
+            || !isset($configuracoesAplicacao['cronJobs']['proponente']['avaliacaoProposta'])
+            || !isset($configuracoesAplicacao['cronJobs']['proponente']['avaliacaoProposta']['hash'])
+            || empty($configuracoesAplicacao['cronJobs']['proponente']['avaliacaoProposta']['hash'])
+        ) {
+            throw new Exception("Defini&ccedil;&otilde;es de CronJob n&atilde;o definidas.");
+        }
+
+        $hashArquivoConfiguracao = $configuracoesAplicacao['cronJobs']['proponente']['avaliacaoProposta']['hash'];
+        $get = Zend_Registry::get('get');
+        if (!isset($get->hash) || empty($get->hash)) {
+            throw new Exception("Hash de autoriza&ccedil;&atilde;o n&atilde;o informado");
+        }
+        if ($hashArquivoConfiguracao != $get->hash) {
+            throw new Exception("Hash de autoriza&ccedil;&atilde;o n&atilde;o coincide com o da aplica&ccedil;&atilde;o.");
+        }
+
         $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
-        $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(new Admissibilidade_Model_DistribuicaoAvaliacaoProposta(
-            ['id_perfil' => Autenticacao_Model_Grupos::COMPONENTE_COMISSAO]
-        ));
-        $avaliacoesVencidas = $distribuicaoAvaliacaoPropostaDbTable->obterAvaliacoesVencidas();
+        $distribuicaoAvaliacaoProposta = new Admissibilidade_Model_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoProposta->setIdPerfil(Autenticacao_Model_Grupos::COMPONENTE_COMISSAO);
+        $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta($distribuicaoAvaliacaoProposta);
+
+        $avaliacoesVencidas = $distribuicaoAvaliacaoPropostaDbTable->obterAvaliacoesVencidas(5);
 
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
         $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();

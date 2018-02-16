@@ -34,6 +34,7 @@ class Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta extends MinC_D
 
     public function obterAvaliacoesVencidas($prazoVencimentoEmDias = 5)
     {
+
         $db = $this->getAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
@@ -52,6 +53,7 @@ class Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta extends MinC_D
             ]
             , $this->getSchema('sac')
         );
+
         if ($this->_distribuicaoAvaliacaoProposta->getIdPerfil()) {
             $select->where("distribuicao_avaliacao_proposta.id_perfil = {$this->_distribuicaoAvaliacaoProposta->getIdPerfil()}");
         }
