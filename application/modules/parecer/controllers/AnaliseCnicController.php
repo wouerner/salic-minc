@@ -281,10 +281,9 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
     private function incluirNaPauta($idPronac, $ConsultaReuniaoAberta)
     {
         $post = Zend_Registry::get('post');
-        
-        $stEnvioPlenaria = isset($post->stEnvioPlenaria) ? 'S' : 'N';
-        $justificativa = $post->justificativaenvioplenaria;
-        $TipoAprovacao = $post->decisao;
+        $stEnvioPlenaria = $this->_request->getParam("stEnvioPlenaria");
+        $justificativa = $this->_request->getParam("justificativaenvioplenaria");
+        $TipoAprovacao = $this->_request->getParam("decisao");
         $codSituacao = ($this->bln_readequacao == false) ? 'D50' : 'D02';
         $situacao = $this->_request->getParam("situacao") == null ? $codSituacao : $this->_request->getParam("situacao");
         $dtsituacao = date('Y-m-d H:i:s');
@@ -309,7 +308,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                     'tpPauta' => 1,
                     'stAnalise' => $TipoAprovacao,
                     'dsAnalise' => ' ',
-                    'stPlanoAnual' => $post->stPlanoAnual
+                    'stPlanoAnual' => $this->_request->getParam("stPlanoAnual")
                 );
                 
                 $tblPauta->inserir($dados);
@@ -325,7 +324,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                     'tpPauta' => 1,
                     'dsAnalise' => '',
                     'stAnalise' => $TipoAprovacao,
-                    'stPlanoAnual' => $post->stPlanoAnual
+                    'stPlanoAnual' => $this->_request->getParam("stPlanoAnual")
                 );
                 
                 $dadosprojeto = array(
