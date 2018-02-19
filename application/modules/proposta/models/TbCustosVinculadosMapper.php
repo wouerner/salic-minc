@@ -281,7 +281,7 @@ class Proposta_Model_TbCustosVinculadosMapper extends MinC_Db_Mapper
 
         foreach ($custosVinculados as $key => $item) {
 
-            if($item['percentualPadrao'] < $item['percentualProponente']) {
+            if($item['percentualPadrao'] < $item['percentualProponente'] || !isset($item['percentualProponente'])) {
                 $item['percentualProponente'] = $item['percentualPadrao'];
             }
             $dados = array(
