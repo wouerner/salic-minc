@@ -124,7 +124,16 @@
 	 salvar(parecer,0);		
 	 window.location.href  = redirectUrl;
      });
+
+    <?php if(!$this->IsProjetoDisponivelParaAssinatura($this->idpronac, $this->idTipoDoAtoAdministrativo)): ?>
+     $('#justificativa').keypress(function() {
+	 if ($('#finalizarparecer').length > 0) {
+	     $('#finalizarparecer').prop('disabled', 'disabled');
+	 }
+     });
      
+     <?php endif; ?>
+
      <?php if ($this->IsProjetoJaAssinado($this->idpronac, $this->idTipoDoAtoAdministrativo, $this->idPerfilDoAssinante)): ?>
 
      $('#desAprovar').click(function(e) {
@@ -183,7 +192,6 @@
 			 $('#alert').dialog('close');                
 			 return false;
 		     }
-		     
 		     if($("#justificativa").val().length <= 20){
 			 $("#erro").html("Campos Obrigat&oacute;rios n&atilde;o preenchidos ou justificativa com menos de 20 caracteres!");
 			 $("#erro").dialog('open');
@@ -204,7 +212,7 @@
 					 parecer = $("input:radio[name='decisao']:checked").val(),
 					 justificativa = $('#justificativa').val(),
 					 situacao = $('#situacao').val(),
-					 stEnvioPlenaria = $('#stEnvioPlenaria').val(),
+					 stEnvioPlenaria = ($('#stEnvioPlenaria').prop('checked')) ? 'S' : 'N',
 					 justificativaenvcioplenaria = $('#justificativaenvioplenaria').val();
 				     
 				     document.forms.formEnviar.decisao.value = parecer;

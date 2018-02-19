@@ -879,7 +879,7 @@
             <tr>
                 <td class="centro">
                   <input type="button" class="btn_finalizar sumir" id="btn_finalizar" title="Finalizar" />
-                  <input type="button" class="btn_exclusao sumir" id="btn_excluir" readequacao="<?php echo $this->readequacao[0]->idReadequacao; ?>" />
+                  <input type="button" class="btn_exclusao sumir" id="btn_excluir" readequacao="<?php echo count($this->readequacao) > 0 ? $this->readequacao[0]->idReadequacao : ''; ?>" />
                   <input type="button" class="btn_cancelar" id="btn_voltar" title="Voltar" />
                 </td>
             </tr>

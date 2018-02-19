@@ -18,7 +18,7 @@ class Assinatura_Model_TbDocumentoAssinaturaMapper extends MinC_Db_Mapper
         $assinaturas = $objAssinatura->obterAssinaturas($idPronac, $idTipoDoAtoAdministrativo);
 
         foreach ($assinaturas as $assinatura) {
-            if ($assinatura['idPerfilDoAssinante'] == $idPerfilDoAssinante) {
+            if ($assinatura->idPerfilDoAssinante == $idPerfilDoAssinante) {
                 return true;
             }
         }
