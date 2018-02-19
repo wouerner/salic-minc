@@ -388,6 +388,8 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
                 $this->view->proponente = $rsProponente;
 
+                $this->view->isEditavel = true;
+
                 $this->montaTela("manterpropostaincentivofiscal/identificacaodaproposta.phtml", array("proponente" => $rsProponente,
                     "acao" => $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar"));
             }
