@@ -24,4 +24,18 @@ Uma das CronJobs executará uma rotina acessada através da url abaixo:
     {ambiente}/admissibilidade/enquadramento-proposta/tratar-avaliacoes-vencidas-componentes-comissao?hash=XPTO
 ```
 
+Comandos importantes sobre as crontabs:
+
+```
+    crontab -l # lista as entradas para crontabs 
+
+    crontab -e # Edita as crontabs para o usuário atual
+```
+
+Sugestão de definição para crontab em /etc/crontab:
+
+```
+    5  0    * * *   root    wget -o /var/www/cron/salic-minc/propostas-avaliacoes -q http://localhost/admissibilidade/enquadramento-proposta/tratar-avaliacoes-vencidas-componentes-comissao?hash=XPTO
+```
+
 Onde o ```hash=XPTO``` deve ser substituído pelo hash definido na propriedade ```cronJobs.proponente.avaliacaoProposta.hash``` do arquivo de configurações da aplicação ```application.ini```.
