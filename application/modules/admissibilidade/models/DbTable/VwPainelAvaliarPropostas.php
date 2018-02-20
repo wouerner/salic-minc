@@ -62,16 +62,16 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             $select->limitPage($start, $limit);
         }
 
-        $sqlPerfisDistribuicao = '';
-        $perfisDistribuicao = $this->obterPerfisDistribuicao($distribuicaoAvaliacaoProposta);
-        if ($perfisDistribuicao) {
-            $sqlPerfisDistribuicao = " and distribuicao_avaliacao_proposta.id_perfil in ({$perfisDistribuicao}) ";
-        }
+//        $sqlPerfisDistribuicao = '';
+//        $perfisDistribuicao = $this->obterPerfisDistribuicao($distribuicaoAvaliacaoProposta);
+//        if ($perfisDistribuicao) {
+//            $sqlPerfisDistribuicao = " and distribuicao_avaliacao_proposta.id_perfil in ({$perfisDistribuicao}) ";
+//        }
 
         $select->joinLeft(
             ['distribuicao_avaliacao_proposta']
             , "distribuicao_avaliacao_proposta.id_preprojeto = vwPainelAvaliarPropostas.idProjeto
-                    {$sqlPerfisDistribuicao}
+                    
                     and distribuicao_avaliacao_proposta.id_orgao_superior = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}"
             ,
             [
@@ -200,7 +200,13 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 if (!empty($restricaoPropostasParaAvaliacao) && $restricaoPropostasParaAvaliacao != '( ') {
                     $restricaoPropostasParaAvaliacao .= ' OR ';
                 }
-                $restricaoPropostasParaAvaliacao .= 'distribuicao_avaliacao_proposta.avaliacao_atual = 1 and distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta > 0';
+
+                $restricaoPropostasParaAvaliacao .= ' distribuicao_avaliacao_proposta.avaliacao_atual = 1';
+                $restricaoPropostasParaAvaliacao .= ' AND distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta > 0 ';
+                $perfisDistribuicao = $this->obterPerfisDistribuicao($distribuicaoAvaliacaoProposta);
+                if ($perfisDistribuicao) {
+                    $restricaoPropostasParaAvaliacao .= " AND distribuicao_avaliacao_proposta.id_perfil IN ({$perfisDistribuicao})";
+                }
             }
             $restricaoPropostasParaAvaliacao .= ' )';
             return $restricaoPropostasParaAvaliacao;
