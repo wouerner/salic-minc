@@ -98,23 +98,17 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
 
             if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
 
-                $selectPenultimaDistribuicao = $this->obterQueryPenultimaDistribuicaoAvaliacao();
-
                 $select->isUseSchema(false);
-                $select->joinLeft(
-                    ['penultima_distribuicao' => 'distribuicao_avaliacao_proposta'],
-                    "vwPainelAvaliarPropostas.idProjeto = penultima_distribuicao.id_preprojeto
-                    and penultima_distribuicao.id_distribuicao_avaliacao_proposta = ({$selectPenultimaDistribuicao})",
-                    []
-                );
-                $select->isUseSchema(true);
-
+                $selectPenultimaDistribuicao = $this->obterQueryPenultimaSugestaoEnquadramento();
                 $select->joinLeft(
                     ['sugestao_distribuida' => 'sugestao_enquadramento']
-                    , "sugestao_distribuida.id_distribuicao_avaliacao_proposta = penultima_distribuicao.id_distribuicao_avaliacao_proposta"
+                    , "sugestao_distribuida.id_preprojeto = vwPainelAvaliarPropostas.idProjeto
+                            and sugestao_distribuida.id_sugestao_enquadramento = ({$selectPenultimaDistribuicao})"
                     , []
                     , $this->getSchema('sac')
                 );
+
+                $select->isUseSchema(true);
 
                 $auth = Zend_Auth::getInstance();
                 $tblAgente = new Agente_Model_DbTable_Agentes();
@@ -154,34 +148,28 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         if ($order) {
             $select->order($order);
         }
-//        xdnb($select->assemble());
+//xdnb($select->assemble());
         return $db->fetchAll($select);
     }
 
-    private function obterQueryPenultimaDistribuicaoAvaliacao()
+    private function obterQueryPenultimaSugestaoEnquadramento()
     {
-        $subSelectPenultimaDistribuicao = $this->select();
-        $subSelectPenultimaDistribuicao->setIntegrityCheck(false);
-        $subSelectPenultimaDistribuicao->from(
-            ['sub_select_distribuicao_avaliacao' => 'distribuicao_avaliacao_proposta'],
-            [new Zend_Db_Expr('*')],
-            $this->getSchema('sac')
-        );
-        $subSelectPenultimaDistribuicao->limit(1);
-        $subSelectPenultimaDistribuicao->order('data_distribuicao desc');
-        $subSelectPenultimaDistribuicao->where('id_preprojeto = vwPainelAvaliarPropostas.idProjeto');
-        $subSelectPenultimaDistribuicao->where(
-            'avaliacao_atual = ?',
-            Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_INATIVA
-        );
-
         $selectPenultimaDistribuicao = $this->select();
         $selectPenultimaDistribuicao->setIntegrityCheck(false);
-        $selectPenultimaDistribuicao->isUseSchema(false);
         $selectPenultimaDistribuicao->from(
-            $subSelectPenultimaDistribuicao,
-            ['id_distribuicao_avaliacao_proposta']
+            ['sub_select_sugestao_enquadramento' => 'sugestao_enquadramento'],
+            [new Zend_Db_Expr('id_sugestao_enquadramento')],
+            $this->getSchema('sac')
         );
+        $selectPenultimaDistribuicao->limit(1);
+        $selectPenultimaDistribuicao->order('data_avaliacao desc');
+        $selectPenultimaDistribuicao->where('id_preprojeto = vwPainelAvaliarPropostas.idProjeto');
+        $selectPenultimaDistribuicao->where(
+            'sub_select_sugestao_enquadramento.id_distribuicao_avaliacao_proposta 
+                   <> distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta
+               OR sub_select_sugestao_enquadramento.id_distribuicao_avaliacao_proposta is null'
+        );
+
         return $selectPenultimaDistribuicao;
     }
 

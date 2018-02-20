@@ -239,7 +239,7 @@ $3(document).ready(function () {
                     }
                     $3('#dialogEncaminharProposta').modal('close')
                 }
-                Materialize.toast(data.mensagem, 4000, '', callback)
+                Materialize.toast(data.mensagem, 2000, '', callback)
                 $3('#botaoEnviarAvaliacaoProposta').prop('disabled', false)
             }
         })
