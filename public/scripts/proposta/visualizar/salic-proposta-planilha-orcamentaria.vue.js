@@ -196,10 +196,8 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
         },
         isObject: function (el) {
 
-            if (typeof el !== "object") {
-                return false;
-            }
-            return true;
+            return typeof el === "object";
+
         },
         iniciarCollapsible: function () {
             $3('.planilha-orcamentaria .collapsible').each(function() {
@@ -207,10 +205,8 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
             });
         },
         ultrapassaValor: function (row) {
-            if (row.stCustoPraticado == true) {
-                return true;
-            }
-            return false;
+            return row.stCustoPraticado == true;
+
         },
         converterParaReal: function (value) {
             value = parseFloat(value);
