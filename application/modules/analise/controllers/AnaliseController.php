@@ -186,6 +186,15 @@ class Analise_AnaliseController extends Analise_GenericController
             # informacoes do historico
             $PPM = new Proposta_Model_DbTable_TbPreProjetoMeta();
             $historico['planilhaProjeto'] = unserialize($PPM->buscarMeta($idPreProjeto, 'alterarprojeto_tbplanilhaproposta'));
+
+            if(!isset($historico['planilhaProjeto'][0]['OrdemEtapa'])) {
+                $historico['planilhaProjeto'] = TratarArray::ordenarArrayMultiPorColuna(
+                    $historico['planilhaProjeto'],
+                    'DescricaoEtapa', SORT_DESC,
+                    'DescricaoMunicipio', SORT_ASC
+                );
+            }
+
             $historico['itensLocalRealizacao'] = unserialize($PPM->buscarMeta($idPreProjeto, 'alterarprojeto_abrangencia'));
             $historico['itensDeslocamento'] = unserialize($PPM->buscarMeta($idPreProjeto, 'alterarprojeto_deslocamento'));
             $historico['itensPlanosDistribuicao'] = unserialize($PPM->buscarMeta($idPreProjeto, 'alterarprojeto_planodistribuicaoproduto'));
