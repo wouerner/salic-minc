@@ -2,10 +2,10 @@ Vue.component('salic-proposta-detalhamento-plano-distribuicao', {
     template: `
     <div class="detalhamento-plano-distribuicao">
         <ul class="collapsible" data-collapsible="expandable">
-            <li v-for="( detalhamento, local ) in detalhamentos">
+            <li v-for="( detalhamento, index ) in detalhamentos">
                 <div class="collapsible-header">
                     <i class="material-icons">place</i>
-                    Detalhamento - {{local}}
+                    Detalhamento - {{detalhamento[0].DescricaoUf}} - {{detalhamento[0].DescricaoMunicipio}}
                 </div>
                 <div class="collapsible-body no-padding margin20 scroll-x">
                     <table>
@@ -62,7 +62,7 @@ Vue.component('salic-proposta-detalhamento-plano-distribuicao', {
                                 <td colspan="12" class="center-align">Sem detalhamento</td>
                             </tr>
                         </tbody>
-                        <tfoot v-if="detalhamentos.length > 0" style="opacity: 0.8">
+                        <tfoot v-if="detalhamento.length > 0" style="opacity: 0.8">
                             <tr>
                                 <td><b>Totais</b></td>
                                 <td class="right-align">{{ qtExemplaresTotal }}</td>
@@ -201,15 +201,15 @@ Vue.component('salic-proposta-detalhamento-plano-distribuicao', {
         }
     },
     watch: {
-        arrayDetalhamentos: function(value) {
-            this.detalhamentos = value;
+        arrayDetalhamentos: function (value) {
+            this.detalhamentos = this.montarVisualizacao(value);
         }
 
     },
     mounted: function () {
         if (typeof this.arrayDetalhamentos != 'undefined') {
             this.iniciarCollapsible();
-            this.detalhamentos = this.arrayDetalhamentos;
+            this.detalhamentos = this.montarVisualizacao(this.arrayDetalhamentos);
         }
     },
     methods: {
@@ -248,6 +248,22 @@ Vue.component('salic-proposta-detalhamento-plano-distribuicao', {
             $3('.detalhamento-plano-distribuicao .collapsible').each(function () {
                 $3(this).collapsible();
             });
+        },
+        montarVisualizacao(detalhamentos) {
+
+            let novoDetalhamento = {};
+            let arrayS = [];
+            let municipio = '';
+
+            detalhamentos.forEach((element, index) => {
+                novoDetalhamento[element.idMunicipio] = [];
+            });
+
+            detalhamentos.forEach((element, index) => {
+                novoDetalhamento[element.idMunicipio][index] = element
+            });
+
+            return novoDetalhamento;
         }
     }
 });

@@ -167,12 +167,12 @@ Vue.component('salic-proposta-plano-distribuicao', {
             if(typeof lista != 'undefined') {
                 Object.keys(lista)
                     .map(function(key) {
-                        if(key == id) {
+                        if(lista[key].idPlanoDistribuicao == id) {
                             novaLista.push(lista[key]);
                         }
                     });
 
-                return novaLista[0];
+                return novaLista;
             }
             return lista;
         },
