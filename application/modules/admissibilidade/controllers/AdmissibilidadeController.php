@@ -2705,15 +2705,32 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $aux[$key] = $proposta;
             }
 
-            $recordsTotal = $vwPainelAvaliar->propostasTotal($where);
-            $recordsFiltered = $vwPainelAvaliar->propostasTotal($where, null, null, null, $search);
+            $recordsTotal = $vwPainelAvaliar->obterQuantidadePropostasParaAvaliacao(
+                $where,
+                null,
+                null,
+                null,
+                null,
+                $distribuicaoAvaliacaoProposta
+            );
+            $recordsFiltered = $vwPainelAvaliar->obterQuantidadePropostasParaAvaliacao(
+                $where,
+                null,
+                null,
+                null,
+                $search,
+                $distribuicaoAvaliacaoProposta
+            );
         }
 
-        $this->_helper->json(array(
-            "data" => !empty($aux) ? $aux : 0,
-            'recordsTotal' => $recordsTotal ? $recordsTotal->total : 0,
-            'draw' => $draw,
-            'recordsFiltered' => $recordsFiltered ? $recordsFiltered->total : 0));
+        $this->_helper->json(
+            [
+                "data" => !empty($aux) ? $aux : 0,
+                'recordsTotal' => $recordsTotal ? $recordsTotal->total : 0,
+                'draw' => $draw,
+                'recordsFiltered' => $recordsFiltered ? $recordsFiltered->total : 0
+            ]
+        );
     }
 
     public function exibirpropostaculturalAjaxAction()

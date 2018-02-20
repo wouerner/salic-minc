@@ -50,6 +50,58 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $db = $this->getAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
+        $select = $this->obterQueryPropostasParaAvaliacao(
+            $where,
+            $order,
+            $start,
+            $limit,
+            $search,
+            $distribuicaoAvaliacaoProposta
+        );
+
+        return $db->fetchAll($select);
+    }
+
+    public function obterQuantidadePropostasParaAvaliacao(
+        $where = [],
+        $order = [],
+        $start = 0,
+        $limit = 10,
+        $search = null,
+        Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta = null
+    )
+    {
+        $subSelectPropostaParaAvaliacao = $this->obterQueryPropostasParaAvaliacao(
+            $where,
+            $order,
+            $start,
+            $limit,
+            $search,
+            $distribuicaoAvaliacaoProposta
+        );
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->isUseSchema(false);
+        $select->from(
+            ['total_propostas_para_avaliacao' => new Zend_Db_Expr("({$subSelectPropostaParaAvaliacao})")],
+            ['total' => new Zend_Db_Expr('count(*)')]
+        );
+
+        $db = $this->getAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+        return $db->fetchRow($select);
+    }
+
+    private function obterQueryPropostasParaAvaliacao(
+        $where = [],
+        $order = [],
+        $start = 0,
+        $limit = 10,
+        $search = null,
+        Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta = null
+    )
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from('vwPainelAvaliarPropostas',
@@ -61,12 +113,6 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             $limit = (int)$limit;
             $select->limitPage($start, $limit);
         }
-
-//        $sqlPerfisDistribuicao = '';
-//        $perfisDistribuicao = $this->obterPerfisDistribuicao($distribuicaoAvaliacaoProposta);
-//        if ($perfisDistribuicao) {
-//            $sqlPerfisDistribuicao = " and distribuicao_avaliacao_proposta.id_perfil in ({$perfisDistribuicao}) ";
-//        }
 
         $select->joinLeft(
             ['distribuicao_avaliacao_proposta']
@@ -149,7 +195,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             $select->order($order);
         }
 //xdnb($select->assemble());
-        return $db->fetchAll($select);
+        return $select;
     }
 
     private function obterQueryPenultimaSugestaoEnquadramento()
