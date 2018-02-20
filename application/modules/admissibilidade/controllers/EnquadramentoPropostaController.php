@@ -51,8 +51,6 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             throw new Exception("N&atilde;o foram encontradas &Aacute;reas Culturais para o PRONAC informado.");
         }
 
-//        $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-//        $this->view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($preprojeto['idPreProjeto']);
         $this->view->historicoEnquadramento = $this->obterHistoricoSugestaoEnquadramento($preprojeto['idPreProjeto']);
     }
 
