@@ -1,53 +1,79 @@
 Vue.component('historico-sugestao-enquadramento-proposta', {
     template: `
-        <div v-if="id_preprojeto">
-            <h4>Hist&oacute;rico de Sugest&otilde;es de Enquadramento.</h4>
+        <div v-if="id_preprojeto" v-if="sugestoes_enquadramento">
+        
             <div class="row">
-                <table class="tabela striped" id="historicoSugestoes" style="border: 0px solid gray">
-                    <thead>
-                    <tr class="destacar">
-                        <td class="center" width="10%"><b>N&uacute;mero</b></td>
-                        <td class="center" width="10%"><b>Data</b></td>
-                        <td class="center" width="20%"><b>Avaliador</b></td>
-                        <td class="center" width="20%"><b>Unidade</b></td>
-                        <td class="center" width="10%"><b>&Aacute;rea</b></td>
-                        <td class="center" width="10%"><b>Segmento</b></td>
-                        <td class="center" width="10%"><b>Enquadramento</b></td>
-                        <td class="center"><b>Parecer</b></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    foreach ($this->historicoEnquadramento as $indice => $enquadramentoProposta) :
-                        ?>
-                        <tr>
-                            <td align="left"><?php echo ++$indice ?></td>
-                            <td align="left"><?php echo Data::dataBrasileira($enquadramentoProposta['data_avaliacao']) ?></td>
-                            <td align="left"><?php echo $enquadramentoProposta['usu_nome'] ?></td>
-                            <td align="left"><?php echo "{$enquadramentoProposta['org_sigla']} - {$enquadramentoProposta['gru_nome']}" ?></td>
-                            <?php
-                            $artigoEnquadramento = " - ";
-                            if($enquadramentoProposta['tp_enquadramento']) {
-                                $artigoEnquadramento = ($enquadramentoProposta['tp_enquadramento'] == 1) ? 'Artigo 26' : 'Artigo 18';
-                            }
-                            $area = ($enquadramentoProposta['area']) ? $enquadramentoProposta['area'] : ' - ';
-                            $segmento = ($enquadramentoProposta['segmento']) ? $enquadramentoProposta['segmento'] : ' - ';
-                            ?>
-                            <td align="center" class="center"><?php echo $area ?></td>
-                            <td align="center" class="center"><?php echo $segmento ?></td>
-                            <td align="center" class="center"><?php echo $artigoEnquadramento ?></td>
-                            <td align="left" nowrap><?php echo $enquadramentoProposta['descricao_motivacao'] ?></td>
-                        </tr>
-                        <?php
-                    endforeach;
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div v-else class="center-align">
-            <div class="padding10 green white-text">Opa! Proposta n�o informada...</div>
-        </div>
+                            <div class="input-field col s12 m12 center" style="margin-bottom:80px">
+                                <a class="waves-effect waves-light btn modal-trigger"
+                                   href="#dialog-sugestoes-enquadramento">
+                                    <button class="btn waves-effect waves-light enquadrarProposta"
+                                            type="button" id="botaoSugestoesEnquadramento">
+                                        Visualizar Hist&oacute;rico
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="conteudoImprimir modal modal-fixed-footer" id="dialog-sugestoes-enquadramento"
+                             align="center" style="width: 1150px;">
+                            <div class="modal-content">
+                            
+                                <h4>Hist\u00F3rico de Sugest\u00F3es de Enquadramento.</h4>
+                                <div class="row">
+                                    <table class="tabela striped" id="historicoSugestoes" style="border: 0px solid gray">
+                                        <thead>
+                                        <tr class="destacar">
+                                            <td class="center" width="10%"><b>N\u00FAmero</b></td>
+                                            <td class="center" width="10%"><b>Data</b></td>
+                                            <td class="center" width="20%"><b>Avaliador</b></td>
+                                            <td class="center" width="20%"><b>Unidade</b></td>
+                                            <td class="center" width="10%"><b>\u00C1rea</b></td>
+                                            <td class="center" width="10%"><b>Segmento</b></td>
+                                            <td class="center" width="10%"><b>Enquadramento</b></td>
+                                            <td class="center"><b>Parecer</b></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="sugestao_enquadramento of sugestoes_enquadramento" 
+                                                :key="sugestao_enquadramento.id_sugestao_enquadramento" >
+                                                <td align="left">@todo: adicionar indice aqui</td>
+                                                <td align="left">{{sugestao_enquadramento.data_avaliacao}}</td>
+                                                <td align="left">{{sugestao_enquadramento.usu_nome}}</td>
+                                                <td align="left">{{sugestao_enquadramento.org_sigla}} - {{sugestao_enquadramento.gru_nome}}</td>
+                                                <td align="center" v-if="sugestao_enquadramento.area != null && sugestao_enquadramento.area != ''" 
+                                                    class="center">{{sugestao_enquadramento.area}}</td>
+                                                <td align="center" v-if="sugestao_enquadramento.area == null || sugestao_enquadramento.area == ''" 
+                                                    class="center"> - </td>
+                                                <td align="center" v-if="sugestao_enquadramento.segmento != null && sugestao_enquadramento.segmento != ''" 
+                                                    class="center">{{sugestao_enquadramento.segmento}}</td>
+                                                <td align="center" v-if="sugestao_enquadramento.segmento == null || sugestao_enquadramento.segmento == ''" 
+                                                    class="center"> - </td>
+                                                <td align="center" 
+                                                    v-if="sugestao_enquadramento.tp_enquadramento != null && sugestao_enquadramento.tp_enquadramento == 1" 
+                                                    class="center">Artigo 26</td>
+                                                <td align="center" 
+                                                    v-if="sugestao_enquadramento.tp_enquadramento != null && sugestao_enquadramento.tp_enquadramento != 1" 
+                                                    class="center">Artigo 18</td>
+                                                <td align="center" 
+                                                    v-if="sugestao_enquadramento.tp_enquadramento == null" 
+                                                    class="center"> - </td>
+                                                <td align="left" nowrap>{{sugestao_enquadramento.descricao_motivacao}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div v-else class="center-align">
+                                <div class="padding10 green white-text">Opa! Proposta n\u00E3o informada...</div>
+                            </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn waves-effect waves-light modal-action modal-close "
+                                    type="button">
+                                Fechar
+                            </button>
+                        </div>
+                    </div>
     `,
     data: function () {
         return {
