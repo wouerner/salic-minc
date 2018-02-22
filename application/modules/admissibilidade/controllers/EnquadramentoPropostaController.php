@@ -114,12 +114,19 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
     }
 
-    private function obterHistoricoSugestaoEnquadramento($id_preprojeto) {
+    public function obterHistoricoSugestaoEnquadramentoAjaxAction($id_preprojeto) {
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-proposta');
 
         $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-        $view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($id_preprojeto);
-        return $view->render('historico-sugestao-enquadramento.phtml');
+//        $view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($id_preprojeto);
+//        $view->id_preprojeto = $id_preprojeto;
+//        return $view->render('historico-sugestao-enquadramento.phtml');
+
+        $this->_helper->json(
+            [
+                'sugestoes_enquadramento' => $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($id_preprojeto)
+            ]
+        );
     }
 }
