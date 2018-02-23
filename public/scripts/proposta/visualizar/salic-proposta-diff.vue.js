@@ -264,11 +264,11 @@ Vue.component('salic-proposta-diff', {
                     </div>
                 </li>
                 <li>
-                    <div id="plano-distribuicao" class="collapsible-header active" 
+                    <div id="plano-distribuicao" class="collapsible-header"
                         v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.tbdetalhaplanodistribuicao, dadosHistorico.tbdetalhaplanodistribuicao)}">
                         <i class="material-icons">equalizer</i>Plano Distribui&ccedil;&atilde;o
                     </div>
-                    <div class="collapsible-body padding20 active">
+                    <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
                                 <salic-proposta-plano-distribuicao

@@ -111,20 +111,22 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
 
     public function prepararPropostaParaJson($proposta)
     {
-
         $proposta = TratarArray::prepararArrayMultiParaJson($proposta);
-
-        $proposta['tbplanilhaproposta'] = $this->montarPlanilhaProposta(
-            $proposta['tbplanilhaproposta']
-        );
 
         if (!isset($proposta['tbplanilhaproposta'][0]['OrdemEtapa'])) {
             $proposta['tbplanilhaproposta'] = TratarArray::ordenarArrayMultiPorColuna(
                 $proposta['tbplanilhaproposta'],
+                'DescricaoRecurso', SORT_DESC,
+                'DescricaoProduto', SORT_DESC,
                 'DescricaoEtapa', SORT_DESC,
-                'DescricaoMunicipio', SORT_ASC
+                'DescricaoMunicipio', SORT_ASC,
+                'DescricaoItem', SORT_ASC
             );
         }
+
+        $proposta['tbplanilhaproposta'] = $this->montarPlanilhaProposta(
+            $proposta['tbplanilhaproposta']
+        );
 
         $proposta['tbdetalhaplanodistribuicao'] = $this->montarArrayDetalhamentoPlanoDistribuicao(
             $proposta['tbdetalhaplanodistribuicao']
