@@ -232,14 +232,14 @@ Vue.component('salic-proposta-diff', {
                         <div class="row">
                             <div class="col s12 m6 l6 scroll">
                                 <salic-proposta-plano-distribuicao
-                                    :arrayProdutos="dadosAtuais.planodistribuicaoproduto"
-                                    :arrayDetalhamentos="dadosAtuais.tbdetalhaplanodistribuicao"
-                                ></salic-proposta-plano-distribuicao>
-                            </div>
-                             <div class="col s12 m6 l6 scroll">
-                                <salic-proposta-plano-distribuicao
                                     :arrayProdutos="dadosHistorico.planodistribuicaoproduto"
                                     :arrayDetalhamentos="dadosHistorico.tbdetalhaplanodistribuicao"
+                                ></salic-proposta-plano-distribuicao>
+                            </div>
+                            <div class="col s12 m6 l6 scroll">
+                                <salic-proposta-plano-distribuicao
+                                    :arrayProdutos="dadosAtuais.planodistribuicaoproduto"
+                                    :arrayDetalhamentos="dadosAtuais.tbdetalhaplanodistribuicao"
                                 ></salic-proposta-plano-distribuicao>
                             </div>
                         </div>
@@ -297,16 +297,16 @@ Vue.component('salic-proposta-diff', {
                 url: '/proposta/visualizar/obter-proposta-cultural-versionamento/idPreProjeto/' + vue.idpreprojeto + '/tipo/' + vue.tipo
             }).done(function (response) {
                 vue.dadosAtuais = response.data.atual;
-                vue.dadosHistorico= response.data.historico;
+                vue.dadosHistorico = response.data.historico;
 
-                if(response.data.historico != 'undefined') {
+                if (response.data.historico != 'undefined') {
                     setTimeout(vue.mostrar_diferenca, 1000)
                 }
             });
         },
         existe_diferenca: function (atual, historico) {
 
-            if(typeof atual == 'object') {
+            if (typeof atual == 'object') {
                 return JSON.stringify(atual) != JSON.stringify(historico);
             }
 

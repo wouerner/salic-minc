@@ -41,69 +41,24 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $idPreProjeto = $this->_request->getParam('idPreProjeto');
             $tipo = $this->_request->getParam('tipo', 'alterarprojeto');
 
+
             if (empty($idPreProjeto)) {
                 throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
             }
-
-//            $tbPreProjetoMetaMapper = new Proposta_Model_TbPreProjetoMetaMapper();
-//            $propostaCulturalAtual = $tbPreProjetoMetaMapper->obterPropostaCulturalCompleta($idPreProjeto);
-
-
-//
-//            $propostaCulturalAtual = $this->prepararArrayParaJson($propostaCulturalAtual);
-//
-//            $propostaCulturalAtual['tbplanilhaproposta'] = $this->montarPlanilhaProposta(
-//                $propostaCulturalAtual['tbplanilhaproposta']
-//            );
-//
-//            $propostaCulturalAtual['tbdetalhaplanodistribuicao'] = $this->montarArrayDetalhamentoPlanoDistribuicao(
-//                $propostaCulturalAtual['tbdetalhaplanodistribuicao']
-//            );
-//
-//            $propostaAtual = array_merge(
-//                $propostaCulturalAtual['responsabilidadesocial'],
-//                $propostaCulturalAtual['detalhestecnicos'],
-//                $propostaCulturalAtual['outrasinformacoes'],
-//                $propostaCulturalAtual['identificacaoproposta']
-//            );
-//
-//            $propostaAtual = array_merge($propostaAtual, $propostaCulturalAtual);
 
             $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
             $propostaAtual = $preProjetoMapper->obterArrayPropostaCompleta($idPreProjeto);
             $propostaHistorico = $preProjetoMapper->obterArrayVersaoPropostaCompleta($idPreProjeto, $tipo);
 
-//            $propostaCulturalHistorico = $tbPreProjetoMetaMapper->unserializarPropostaCulturalCompleta($idPreProjeto, $tipo);
-//
-//            if (empty($propostaCulturalHistorico)) {
-//                throw new Exception("Historico n&atilde;o encontrado!");
-//            }
-//
-//            $propostaCulturalHistorico = $this->prepararArrayParaJson($propostaCulturalHistorico);
-//            $propostaCulturalHistorico['tbplanilhaproposta'] = $this->montarPlanilhaProposta(
-//                $propostaCulturalHistorico['tbplanilhaproposta']
-//            );
-//
-//            if(!isset($propostaCulturalHistorico['tbplanilhaproposta'][0]['OrdemEtapa'])) {
-//                $propostaCulturalHistorico['tbplanilhaproposta'] = Funcoes::ordenarArrayMultiPorColuna(
-//                    $propostaCulturalHistorico['tbplanilhaproposta'],
-//                    'DescricaoEtapa', SORT_DESC,
-//                    'DescricaoMunicipio', SORT_ASC
-//                );
-//            }
-//
-//            $propostaCulturalHistorico['tbdetalhaplanodistribuicao'] = $this->montarArrayDetalhamentoPlanoDistribuicao(
-//                $propostaCulturalHistorico['tbdetalhaplanodistribuicao']
-//            );
-//
-//            $propostaHistorico = array_merge(
-//                $propostaCulturalHistorico['responsabilidadesocial'],
-//                $propostaCulturalHistorico['detalhestecnicos'],
-//                $propostaCulturalHistorico['outrasinformacoes'],
-//                $propostaCulturalHistorico['identificacaoproposta']
-//            );
-//
-//            $propostaHistorico = array_merge($propostaHistorico, $propostaCulturalHistorico);
+            $tbProjeto = new Projeto_Model_DbTable_Projetos();
+            $projeto = $tbProjeto->findBy(['idProjeto'=> $idPreProjeto]);
+
+            if (!empty($projeto)) {
+
+                $pronac = $projeto['AnoProjeto'] . $projeto['Sequencial'];
+                $propostaAtual = array_merge($propostaAtual, ['PRONAC'=>$pronac, 'idPronac'=> $projeto['IdPRONAC']]);
+
+            }
 
             $dados = [];
             $dados['atual'] = $propostaAtual;
