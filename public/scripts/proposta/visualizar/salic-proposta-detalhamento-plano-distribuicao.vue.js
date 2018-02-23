@@ -1,6 +1,6 @@
 Vue.component('salic-proposta-detalhamento-plano-distribuicao', {
     template: `
-    <div class="detalhamento-plano-distribuicao">
+    <div  class="detalhamento-plano-distribuicao">
         <ul class="collapsible" data-collapsible="expandable">
             <li v-for="( detalhamento, index ) in detalhamentos">
                 <div class="collapsible-header">
@@ -75,7 +75,6 @@ Vue.component('salic-proposta-detalhamento-plano-distribuicao', {
         arrayDetalhamentos: function (value) {
             this.detalhamentos = this.montarVisualizacao(value);
         }
-
     },
     mounted: function () {
         if (typeof this.arrayDetalhamentos != 'undefined') {
@@ -151,7 +150,6 @@ Vue.component('salic-proposta-detalhamento-consolidacao', {
                 <td><b>Totais</b></td>
                 <td class="right-align">{{ qtExemplaresTotal }}</td>
                 
-                <!--Distribuicao gratuita -->
                 <td class="right-align">
                     {{ 
                         parseInt(qtGratuitaDivulgacaoTotal) + 
@@ -160,12 +158,10 @@ Vue.component('salic-proposta-detalhamento-consolidacao', {
                     }}
                 </td>
                 
-                <!--Preço Popular -->
                 <td class="right-align">{{ qtPopularIntegralTotal }}</td>
                 <td class="right-align">{{ qtPopularParcialTotal }}</td>
                 <td class="right-align"> --- </td>
                 
-                <!--Fim: Preço Popular -->
                 <td class="right-align">{{ qtProponenteIntegralTotal }}</td>
                 <td class="right-align">{{ qtProponenteParcialTotal }}</td>
                 <td class="right-align"> --- </td>

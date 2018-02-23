@@ -1,6 +1,6 @@
 Vue.component('salic-proposta-plano-distribuicao', {
     template: `
-    <div class="plano-distribuicao" v-if="produtos">
+    <div class="plano-distribuicao card" v-if="produtos">
         <div v-if="produtos.length <= 0" class="padding10">
             <b>Aguarde! Carregando....</b>
         </div>
