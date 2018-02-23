@@ -20,9 +20,7 @@ class AssinaturaControllerTest extends MinC_Test_ControllerActionTestCase
             ->resetResponse();
 
         $this->dispatch('/assinatura/index/gerenciar-assinaturas');
-        $this->assertModule('assinatura');
-        $this->assertController('index');
-        $this->assertAction('gerenciar-assinaturas');
+        $this->assertUrl('assinatura','index', 'gerenciar-assinaturas');
     }
 
     /**
@@ -42,9 +40,7 @@ class AssinaturaControllerTest extends MinC_Test_ControllerActionTestCase
             ->resetResponse();
 
         $this->dispatch('/assinatura/index/visualizar-assinaturas');
-        $this->assertModule('assinatura');
-        $this->assertController('index');
-        $this->assertAction('visualizar-assinaturas');
+        $this->assertUrl('assinatura','index', 'visualizar-assinaturas');
     }
 
     /**
@@ -64,8 +60,6 @@ class AssinaturaControllerTest extends MinC_Test_ControllerActionTestCase
             ->resetResponse();
 
         $this->dispatch('/assinatura/index/visualizar-projeto?idDocumentoAssinatura=5842');
-        $this->assertModule('assinatura');
-        $this->assertController('index');
-        $this->assertAction('visualizar-projeto');
+        $this->assertUrl('assinatura','index', 'visualizar-projeto');
     }
 }

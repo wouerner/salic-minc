@@ -20,9 +20,7 @@ class EnquadramentoControllerTest extends MinC_Test_ControllerActionTestCase
             ->resetResponse();
 
         $this->dispatch('/admissibilidade/enquadramento/encaminhar-assinatura');
-        $this->assertModule('admissibilidade');
-        $this->assertController('enquadramento');
-        $this->assertAction('encaminhar-assinatura');
+        $this->assertUrl('admissibilidade','enquadramento', 'enquadramento-assinatura');
     }
 
     /**
@@ -42,8 +40,6 @@ class EnquadramentoControllerTest extends MinC_Test_ControllerActionTestCase
             ->resetResponse();
 
         $this->dispatch('/admissibilidade/enquadramento-assinatura/gerenciar-assinaturas');
-        $this->assertModule('admissibilidade');
-        $this->assertController('enquadramento-assinatura');
-        $this->assertAction('gerenciar-assinaturas');
+        $this->assertUrl('admissibilidade','enquadramento-assinatura', 'gerenciar-assinaturas');
     }
 }
