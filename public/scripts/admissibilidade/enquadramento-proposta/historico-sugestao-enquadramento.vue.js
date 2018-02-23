@@ -1,6 +1,6 @@
 Vue.component('historico-sugestao-enquadramento-proposta', {
     template: `
-        <div v-if="id_preprojeto" v-if="sugestoes_enquadramento">
+        <div v-if="id_preprojeto && sugestoes_enquadramento">
         
             <div class="row">
                             <div class="input-field col s12 m12 center" style="margin-bottom:80px">
@@ -33,12 +33,12 @@ Vue.component('historico-sugestao-enquadramento-proposta', {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="sugestao_enquadramento of sugestoes_enquadramento" 
+                                            <tr v-for="(sugestao_enquadramento, indice) of sugestoes_enquadramento" 
                                                 :key="sugestao_enquadramento.id_sugestao_enquadramento" >
-                                                <td align="left">@todo: adicionar indice aqui</td>
-                                                <td align="left">{{sugestao_enquadramento.data_avaliacao}}</td>
-                                                <td align="left">{{sugestao_enquadramento.usu_nome}}</td>
-                                                <td align="left">{{sugestao_enquadramento.org_sigla}} - {{sugestao_enquadramento.gru_nome}}</td>
+                                                <td align="left">{{ indice+1 }}</td>
+                                                <td align="left">{{ formatar_data(sugestao_enquadramento.data_avaliacao) }}</td>
+                                                <td align="left">{{ sugestao_enquadramento.usu_nome }}</td>
+                                                <td align="left">{{ sugestao_enquadramento.org_sigla }} - {{ sugestao_enquadramento.gru_nome }}</td>
                                                 <td align="center" v-if="sugestao_enquadramento.area != null && sugestao_enquadramento.area != ''" 
                                                     class="center">{{sugestao_enquadramento.area}}</td>
                                                 <td align="center" v-if="sugestao_enquadramento.area == null || sugestao_enquadramento.area == ''" 
@@ -56,22 +56,19 @@ Vue.component('historico-sugestao-enquadramento-proposta', {
                                                 <td align="center" 
                                                     v-if="sugestao_enquadramento.tp_enquadramento == null" 
                                                     class="center"> - </td>
-                                                <td align="left" nowrap>{{sugestao_enquadramento.descricao_motivacao}}</td>
+                                                <td align="left" nowrap v-html="sugestao_enquadramento.descricao_motivacao"></td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div v-else class="center-align">
-                                <div class="padding10 green white-text">Opa! Proposta n\u00E3o informada...</div>
-                            </div>
                             
-                        </div>
                         <div class="modal-footer">
                             <button class="btn waves-effect waves-light modal-action modal-close "
                                     type="button">
                                 Fechar
                             </button>
+                        </div>
                         </div>
                     </div>
     `,
@@ -86,20 +83,36 @@ Vue.component('historico-sugestao-enquadramento-proposta', {
         }
     },
     props: [
-        'id_preprojeto'
+        'id_preprojeto',
+        'dados'
     ],
+    computed: {
+        dados : function (data) {
+            this.sugestoes_enquadramento = data
+        }
+    },
     mounted: function () {
-        this.buscar_dados()
+        if(typeof this.dados == 'undefined' && typeof this.id_preprojeto != 'undefined') {
+            this.buscar_dados()
+        }
     },
     methods: {
         buscar_dados: function () {
+
             let vue = this
+
             $3.ajax({
-                url: '/admissibilidade/enquadramento-proposta/obter-historico-sugestao-enquadramento-ajax/id_preprojeto/'
+                url: '/admissibilidade/enquadramento-proposta/obter-historico-sugestao-enquadramento-ajax?id_preprojeto='
                 + vue.id_preprojeto
             }).done(function (response) {
                 vue.sugestoes_enquadramento = response.sugestoes_enquadramento
             })
+        },
+        formatar_data: function (date) {
+
+            date = moment(date).format('DD/MM/YYYY')
+
+            return date
         }
     }
 })

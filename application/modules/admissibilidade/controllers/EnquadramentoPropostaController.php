@@ -52,7 +52,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
 
         $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
-        $this->view->historicoEnquadramento = $this->obterHistoricoSugestaoEnquadramento($preprojeto['idPreProjeto']);
+//        $this->view->historicoEnquadramento = $this->obterHistoricoSugestaoEnquadramento($preprojeto['idPreProjeto']);
     }
 
     private function salvarSugestaoEnquadramento()
@@ -114,19 +114,32 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
     }
 
-    public function obterHistoricoSugestaoEnquadramentoAjaxAction($id_preprojeto) {
-        $view = new Zend_View();
-        $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-proposta');
+    public function obterHistoricoSugestaoEnquadramentoAjaxAction()
+    {
+        try {
+            $this->_helper->layout->disableLayout();
 
-        $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-//        $view->historicoEnquadramento = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($id_preprojeto);
-//        $view->id_preprojeto = $id_preprojeto;
-//        return $view->render('historico-sugestao-enquadramento.phtml');
+            $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
 
-        $this->_helper->json(
-            [
-                'sugestoes_enquadramento' => $sugestaoEnquadramentoModel->obterHistoricoEnquadramento($id_preprojeto)
-            ]
-        );
+            $get = $this->getRequest()->getParams();
+            if (!isset($get['id_preprojeto']) || empty($get['id_preprojeto'])) {
+                throw new Exception("Identificador da proposta não informado.");
+            }
+
+            $resultado = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento(
+                $get['id_preprojeto']
+            );
+
+            $resultado = array_map(function($dado) {
+                return array_map('utf8_encode', $dado);
+            }, $resultado);
+
+            $this->_helper->json(
+                ['sugestoes_enquadramento' => $resultado]
+            );
+//xd($resultado);
+        } catch (Exception $objException) {
+            xd($objException->getMessage());
+        }
     }
 }
