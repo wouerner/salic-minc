@@ -20,7 +20,7 @@ class EnquadramentoControllerTest extends MinC_Test_ControllerActionTestCase
             ->resetResponse();
 
         $this->dispatch('/admissibilidade/enquadramento/encaminhar-assinatura');
-        $this->assertUrl('admissibilidade','enquadramento', 'enquadramento-assinatura');
+        $this->assertUrl('admissibilidade','enquadramento', 'encaminhar-assinatura');
     }
 
     /**
