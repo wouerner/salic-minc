@@ -130,6 +130,26 @@ abstract class MinC_Test_ControllerActionTestCase extends MinC_Test_Abstract
         $this->assertRedirectTo('/principal');
     }
 
+    /*
+     * @param integer $codGrupo
+     * @param integer $codOrgao
+     */
+    protected function alterarPerfil($codGrupo, $codOrgao)
+    {
+        $this->resetRequest()
+            ->resetResponse();
+
+        if (!is_int($codGrupo) ||
+            !is_int($codOrgao)) {
+            throw new exception('Perfil inválido: codGrupo('. $codGrupo .') / codOrgao('. $codOrgao .')!');
+        }
+        
+        $this->request->setMethod('GET');
+        $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=' . $codGrupo . '&codOrgao=' . $codOrgao);
+        $this->assertRedirectTo('/principal');
+    }      
+
+    
     protected function assertUrl($module, $controller, $action)
     {
         $this->assertModule($module);
