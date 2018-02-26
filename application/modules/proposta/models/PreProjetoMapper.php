@@ -60,6 +60,10 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
         $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
         $proposta['tbplanilhaproposta'] = $tbPlanilhaProposta->buscarPlanilhaCompleta($idPreProjeto);
 
+        # Custos Vinculados
+        $tbCustosVinculados = new Proposta_Model_DbTable_TbCustosVinculados();
+        $proposta['tbcustosvinculados'] = $tbCustosVinculados->buscarCustosVinculados(['idProjeto = ?' => $idPreProjeto])->toArray();
+
         # Local de realizacao (abrangencia)
         $tbAbrangencia = new Proposta_Model_DbTable_Abrangencia();
         $proposta['abrangencia'] = $tbAbrangencia->buscar(['idProjeto' => $idPreProjeto]);
