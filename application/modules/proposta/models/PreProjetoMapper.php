@@ -21,7 +21,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
         $proposta = [];
 
         $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-        $preProjeto = $tblPreProjeto->buscar(array('idPreProjeto = ?' => $idPreProjeto))->current()->toArray();
+        $preProjeto = $tblPreProjeto->buscarIdentificacaoProposta(array('idPreProjeto = ?' => $idPreProjeto))->current()->toArray();
 
         /**
          * devido ao tamanho da tabela preprojeto separamos em partes
