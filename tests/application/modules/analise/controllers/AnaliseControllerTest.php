@@ -1,6 +1,6 @@
 <?php
 
-class AdmissibilidadeControllerTest extends MinC_Test_ControllerActionTestCase
+class AnaliseControllerTest extends MinC_Test_ControllerActionTestCase
 {
      public function setUp()
      {
