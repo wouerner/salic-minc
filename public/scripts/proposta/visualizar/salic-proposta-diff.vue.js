@@ -312,6 +312,26 @@ Vue.component('salic-proposta-diff', {
                         </div>
                     </div>
                 </li>
+                <li>
+                    <div id="custos-vinculados" class="collapsible-header"
+                        v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.tbcustosvinculados, dadosHistorico.tbcustosvinculados)}">
+                        <i class="material-icons">equalizer</i>Custos Vinculados
+                    </div>
+                    <div class="collapsible-body padding20">
+                        <div class="row">
+                            <div class="col s12 m6 l6 scroll historico">
+                                <salic-proposta-custos-vinculados
+                                    :arrayCustos="dadosHistorico.tvcustosvinculados"
+                                ></salic-proposta-custos-vinculados>
+                            </div>
+                            <div class="col s12 m6 l6 scroll atual">
+                                <salic-proposta-custos-vinculados
+                                    :arrayCustos="dadosAtuais.tbcustosvinculados"
+                                ></salic-proposta-custos-vinculados>
+                            </div>
+                        </div>
+                    </div>
+                </li>
             </ul>
             <div v-show="Object.keys(dadosHistorico).length == 0" class="center-align">
                 <div class="padding20">Ops! Não existe versão para a proposta informada...</div>
