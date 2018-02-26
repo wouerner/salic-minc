@@ -97,4 +97,28 @@ class AdmissibilidadeControllerTest extends MinC_Test_ControllerActionTestCase
         $this->dispatch('/admissibilidade/admissibilidade/redistribuiranalise');
         $this->assertUrl('admissibilidade','admissibilidade', 'redistribuiranalise');
     }
+
+    /**
+     * TestGerenciaranalistasAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testGerenciaranalistasAction()
+    {
+        $this->dispatch('/admissibilidade/admissibilidade/gerenciaranalistas');
+        $this->assertUrl('admissibilidade','admissibilidade', 'gerenciaranalistas');
+    }
+
+    /**
+     * TestGerenciaranalistasLista
+     *
+     * @access public
+     * @return void
+     */
+    public function testGerenciaranalistaAction()
+    {
+        $this->dispatch('/admissibilidade/admissibilidade/gerenciaranalista?usu_cod=6927&usu_orgao=262&gru_codigo=92');
+        $this->assertUrl('admissibilidade','admissibilidade', 'gerenciaranalista');
+    }
 }
