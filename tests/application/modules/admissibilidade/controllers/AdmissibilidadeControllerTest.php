@@ -61,4 +61,40 @@ class AdmissibilidadeControllerTest extends MinC_Test_ControllerActionTestCase
         
         $this->assertQuery('form table.tabela');
     }
+
+    /**
+     * TestMensagemAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testMensagemAction()
+    {
+        $this->dispatch('/admissibilidade/mensagem' . '?idPronac=' . $this->idPronac);
+        $this->assertUrl('admissibilidade','mensagem', 'index');
+    }
+
+    /**
+     * TestDesarquivarPropostaAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testDesarquivarPropostaAction()
+    {
+        $this->dispatch('/admissibilidade/admissibilidade/desarquivarpropostas');
+        $this->assertUrl('admissibilidade','admissibilidade', 'desarquivarpropostas');
+    }
+
+    /**
+     * TestRedistribuiranaliseAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testRedistribuiranaliseAction()
+    {
+        $this->dispatch('/admissibilidade/admissibilidade/redistribuiranalise');
+        $this->assertUrl('admissibilidade','admissibilidade', 'redistribuiranalise');
+    }
 }

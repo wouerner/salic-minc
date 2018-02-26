@@ -2,44 +2,60 @@
 
 class EnquadramentoControllerTest extends MinC_Test_ControllerActionTestCase
 {
+     public function setUp()
+     {
+        parent::setUp();
 
+        $this->idPronac = 215141;
+        
+        $this->autenticar();
+
+        $this->resetRequest()
+            ->resetResponse();
+
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
+        
+        $this->resetRequest()
+            ->resetResponse();
+     }
+    
     /**
-     * TestEncaminharAssinatura Listagem de projetos disponíveis para encaminhar para assinatura
+     * TestEncaminharAssinaturaAction Listagem de projetos disponíveis para encaminhar para assinatura
      *
      * @access public
      * @return void
      */
-    public function testEncaminharAssinatura()
+    public function testEncaminharAssinaturaAction()
     {
-        $this->autenticar();
-
-        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE, Orgaos::ORGAO_SEFIC_DIC);
-
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
-
         $this->dispatch('/admissibilidade/enquadramento/encaminhar-assinatura');
         $this->assertUrl('admissibilidade','enquadramento', 'encaminhar-assinatura');
     }
 
     /**
-     * TestEncaminharAssinatura Listagem de assinaturas disponíveis
+     * TestGerenciarEnquadramentoAction
      *
      * @access public
      * @return void
      */
-    public function testAssinatura()
+    public function testGerenciarEnquadramentoAction()
     {
-        $this->autenticar();
+        $this->dispatch('/admissibilidade/enquadramento/gerenciar-enquadramento');
+        $this->assertUrl('admissibilidade','enquadramento', 'gerenciar-enquadramento');
+       
+        $this->assertQuery('table#enquadramento');
+    }
 
-        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE, Orgaos::ORGAO_SEFIC_DIC);
-
-        //reset para garantir respostas.
-        $this->resetRequest()
-            ->resetResponse();
-
-        $this->dispatch('/admissibilidade/enquadramento-assinatura/gerenciar-assinaturas');
-        $this->assertUrl('admissibilidade','enquadramento-assinatura', 'gerenciar-assinaturas');
+    /**
+     * TestEnquadrarprojetoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testEnquadrarprojetoAction()
+    {
+        $this->dispatch('/admissibilidade/enquadramento/enquadrarprojeto' . '?IdPRONAC=' . $this->idPronac);
+        $this->assertUrl('admissibilidade','enquadramento', 'enquadrarprojeto');
+       
+        $this->assertQuery('form#formEnquadramentoProjeto');
     }
 }
