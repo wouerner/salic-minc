@@ -267,7 +267,7 @@ Vue.component('salic-proposta-diff', {
             </ul>
         </div>
         <div v-else class="center-align">
-            <div class="padding10 green white-text">Opa! Proposta não informada...</div>
+            <div class="padding10 green white-text">Opa! Proposta nï¿½o informada...</div>
         </div>
     `,
     data: function () {
