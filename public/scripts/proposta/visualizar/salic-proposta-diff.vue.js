@@ -5,7 +5,9 @@ Vue.component('salic-proposta-diff', {
                  <li>
                     <div class="collapsible-header"
                         v-bind:class="{'orange lighten-4': existe_diferenca(dadosAtuais.identificacaoproposta, dadosHistorico.identificacaoproposta)}">
-                        <i class="material-icons">assignment</i>Proposta - {{idpreprojeto}} - {{dadosAtuais.NomeProjeto}}
+                        <i class="material-icons">assignment</i>
+                        <span v-if="dadosAtuais.PRONAC">Projeto - {{dadosAtuais.PRONAC}} - {{dadosAtuais.NomeProjeto}}</span>
+                        <span v-else>Proposta - {{idpreprojeto}} - {{dadosAtuais.NomeProjeto}}</span>
                     </div>
                     <div class="collapsible-body padding20">
                         <div class="row">
@@ -334,7 +336,11 @@ Vue.component('salic-proposta-diff', {
                 </li>
             </ul>
             <div v-show="Object.keys(dadosHistorico).length == 0" class="center-align">
-                <div class="padding20">Ops! Não existe versão para a proposta informada...</div>
+                <div class="card padding20">
+                    <h5 v-if="dadosAtuais.PRONAC">Projeto - {{dadosAtuais.PRONAC}} - {{dadosAtuais.NomeProjeto}}</h5>
+                    <h5 v-else>Proposta - {{idpreprojeto}} - {{dadosAtuais.NomeProjeto}}</h5>
+                    <div class="padding20">Ops! Não existe versão para a proposta informada...</div>
+                </div>
             </div>
         </div>
     `,
