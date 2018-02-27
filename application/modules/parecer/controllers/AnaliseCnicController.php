@@ -168,22 +168,22 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $tblProjetos = new Projetos();
         $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+
+        //CASO O COMPONENTE QUEIRA SALVAR O SEU PARECER - FIM
+        $ConsultaReuniaoAberta = ReuniaoDAO::buscarReuniaoAberta();
+        $numeroReuniao = $ConsultaReuniaoAberta['NrReuniao'];
         
         //CASO O COMPONENTE QUEIRA APENAS SALVAR O SEU PARECER - INICIO
         if (isset($_POST['usu_codigo'])) {
             $this->salvarParecerComponente($numeroReuniao);
         }
         
-        //CASO O COMPONENTE QUEIRA SALVAR O SEU PARECER - FIM
-        $ConsultaReuniaoAberta = ReuniaoDAO::buscarReuniaoAberta();
-        $numeroReuniao = $ConsultaReuniaoAberta['NrReuniao'];
-        
         if (isset($_POST['idpronac'])) {
             $this->fecharAssinatura($idPronac);
             
             $codSituacao = ($this->bln_readequacao == false) ? 'D50' : 'D02';
             $situacao = $this->_request->getParam("situacao") == null ? $codSituacao : $this->_request->getParam("situacao");
-            $ProvidenciaTomada = 'PROJETO APRECIADO PELO COMPONENTE DA COMISSÃO NA REUNIÃO DA CNIC N°. ' . $numeroReuniao;
+            $ProvidenciaTomada = 'PROJETO APRECIADO PELO COMPONENTE DA COMISS&Atilde;O NA REUNIÃ&Atilde; DA CNIC N&ordm;. ' . $numeroReuniao;
             $tblProjetos->alterarSituacao($idPronac, '', $situacao, $ProvidenciaTomada);
 
             $this->incluirNaPauta($idPronac, $ConsultaReuniaoAberta);
@@ -341,7 +341,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
                     //ATUALIZA��O DA TABELA RECURSO//
                     $dadosNovos = array(
                         'dtAvaliacao' => new Zend_Db_Expr('GETDATE()'),
-                        'dsAvaliacao' => 'Recurso deferido conforme solicita��o do Proponente.',
+                        'dsAvaliacao' => 'Recurso deferido conforme solicita&ccedil;&atilde;o do Proponente.',
                         'idAgenteAvaliador' => $this->idUsuario
                     );
                     $tbRecurso->update($dadosNovos, "idRecurso=" . $dadosRecursoAtual[0]->idRecurso);
