@@ -168,21 +168,27 @@
             <?php endif; ?>
 
             <?php if (Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo
-                || Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
-                || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo): ?>
-                <button
-                    <?php if ($this->movimentacao != Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL): ?>
-                        disabled
-                    <?php endif ?>
-                        id="transformarPropostaEmProjeto" class=" waves-effect waves-light btn blue white-text"
-                        title="Transformar Proposta em Projeto" alt="Transformar Proposta em Projeto"
-                        data-id-pre-projeto="<?php echo $this->itensGeral[0]->idPreProjeto ?>">
-                    <i class="material-icons right ">transform</i> Transformar em Projeto
-                </button>
-                <a class="btn black white-text" title="Arquivar Proposta" alt="Arquivar Proposta"
-                   href="/admissibilidade/admissibilidade/confirmararquivarproposta?idPreProjeto=<?php echo $this->itensGeral[0]->idPreProjeto ?>">
-                    <i class="material-icons right">archive</i>Arquivar
-                </a>
+            || Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
+            || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo): ?>
+            <button
+
+                <?php if (!(
+                        Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
+                        || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo
+                    )
+                    || $this->possuiAvaliacaoCnic === false
+                ): ?>
+                    disabled
+                <?php endif; ?>
+                    id="transformarPropostaEmProjeto" class=" waves-effect waves-light btn blue white-text"
+                    title="Transformar Proposta em Projeto" alt="Transformar Proposta em Projeto"
+                    data-id-pre-projeto="<?php echo $this->itensGeral[0]->idPreProjeto ?>">
+                <i class="material-icons right ">transform</i> Transformar em Projeto
+            </button>
+            <a class="btn black white-text" title="Arquivar Proposta" alt="Arquivar Proposta"
+               href="/admissibilidade/admissibilidade/confirmararquivarproposta?idPreProjeto=<?php echo $this->itensGeral[0]->idPreProjeto ?>">
+                <i class="material-icons right">archive</i>Arquivar
+            </a>
             <?php endif; ?>
 
             <?php if (!$this->menu): ?>

@@ -23,6 +23,21 @@ class Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta extends MinC_D
     const AVALIACAO_ATUAL_INATIVA = 0;
     const AVALIACAO_ATUAL_ATIVA = 1;
 
+    public function propostaPossuiAvaliacao($id_preprojeto, $id_perfil =  null)
+    {
+        $filtroBusca = [
+            'id_preprojeto' => $id_preprojeto
+        ];
+        if($id_perfil) {
+            $filtroBusca['id_perfil'] = $id_perfil;
+        }
+        $resultado = $this->findAll($filtroBusca);
+        if (count($resultado) > 0) {
+            return true;
+        }
+        return false;
+    }
+
     public function inativarAvaliacoesProposta($id_preprojeto)
     {
 
