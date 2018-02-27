@@ -89,7 +89,7 @@ abstract class MinC_Test_ControllerActionTestCase extends MinC_Test_Abstract
         $this->assertRedirectTo('/principal');
     }
 
-     protected function mudarPerfil1()
+    protected function mudarPerfil1()
     {
         //reset para garantir respostas.
         $this->resetRequest()
@@ -99,6 +99,7 @@ abstract class MinC_Test_ControllerActionTestCase extends MinC_Test_Abstract
         $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=93&codOrgao=93');
         $this->assertRedirectTo('/principal');
     }
+
     protected function mudarPerfil2()
     {
         //reset para garantir respostas.
@@ -109,6 +110,7 @@ abstract class MinC_Test_ControllerActionTestCase extends MinC_Test_Abstract
         $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=131&codOrgao=171');
         $this->assertRedirectTo('/principal');
     }
+
     protected function mudarPerfilTecnicoADM()
     {
         //reset para garantir respostas.
@@ -119,6 +121,7 @@ abstract class MinC_Test_ControllerActionTestCase extends MinC_Test_Abstract
         $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=92&codOrgao=262');
         $this->assertRedirectTo('/principal');
     }
+
     protected function mudarPerfilCoordenadorADM()
     {
         //reset para garantir respostas.
@@ -141,15 +144,15 @@ abstract class MinC_Test_ControllerActionTestCase extends MinC_Test_Abstract
 
         if (!is_int($codGrupo) ||
             !is_int($codOrgao)) {
-            throw new exception('Perfil inválido: codGrupo('. $codGrupo .') / codOrgao('. $codOrgao .')!');
+            throw new exception('Perfil inválido: codGrupo(' . $codGrupo . ') / codOrgao(' . $codOrgao . ')!');
         }
-        
+
         $this->request->setMethod('GET');
         $this->dispatch('/autenticacao/perfil/alterarperfil?codGrupo=' . $codGrupo . '&codOrgao=' . $codOrgao);
         $this->assertRedirectTo('/principal');
-    }      
+    }
 
-    
+
     protected function assertUrl($module, $controller, $action)
     {
         $this->assertModule($module);
