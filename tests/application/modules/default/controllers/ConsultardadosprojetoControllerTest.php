@@ -111,7 +111,7 @@ class ConsultardadosprojetoControllerTest extends MinC_Test_ControllerActionTest
         $this->assertUrl('default','consultardadosprojeto', 'documentos-anexados');
     }
 
-   /**
+    /**
      * TestDiligenciasAction
      *
      * @access public
@@ -121,5 +121,29 @@ class ConsultardadosprojetoControllerTest extends MinC_Test_ControllerActionTest
     {
         $this->dispatch('/consultardadosprojeto/diligencias?idPronac=' . $this->idPronac);
         $this->assertUrl('default','consultardadosprojeto', 'diligencias');
-    }    
+    }
+
+    /**
+     * TestLocalRealizacaoDeslocamentoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testLocalRealizacaoDeslocamentoAction()
+    {
+        $this->dispatch('/consultardadosprojeto/local-realizacao-deslocamento?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'local-realizacao-deslocamento');
+    }
+
+    /**
+     * TestPlanoDeDivulgacaoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testPlanoDeDivulgacaoAction()
+    {
+        $this->dispatch('/consultardadosprojeto/plano-de-divulgacao?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'plano-de-divulgacao');
+    }
 }
