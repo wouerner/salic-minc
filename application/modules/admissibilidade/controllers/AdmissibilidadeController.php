@@ -72,7 +72,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->codOrgao = $GrupoAtivo->codOrgao;
             $this->codOrgaoSuperior = (!empty($auth->getIdentity()->usu_org_max_superior)) ? $auth->getIdentity()->usu_org_max_superior : null;
         }
-
     }
 
     public function indexAction()

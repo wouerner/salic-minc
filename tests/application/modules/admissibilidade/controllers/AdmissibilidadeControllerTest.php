@@ -9,16 +9,13 @@ class AdmissibilidadeControllerTest extends MinC_Test_ControllerActionTestCase
         $this->idPreProjeto = 276034;
 
         $this->autenticar();
-
-        $this->resetRequest()
-            ->resetResponse();
-
-        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
-
-        $this->resetRequest()
-            ->resetResponse();
+        $this->resetRequest()->resetResponse();
+        $this->alterarPerfil(
+            Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
+            Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI
+        );
+        $this->resetRequest()->resetResponse();
     }
-
 
     public function testAdmissibilidadeAvaliacaoAction()
     {
@@ -30,11 +27,25 @@ class AdmissibilidadeControllerTest extends MinC_Test_ControllerActionTestCase
 
     public function testExibirpropostaculturalAction()
     {
-        $this->dispatch('/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=' . $this->idPreProjeto);
-        $this->assertUrl('admissibilidade', 'admissibilidade', 'exibirpropostacultural');
+        $this->alterarPerfil(
+            Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE,
+            171
+        );
+        $this->resetRequest()->resetResponse();
+        $this->request->setMethod('GET');
 
+        $idPreProjeto = '240094';
+
+        $this->dispatch('/admissibilidade/admissibilidade/exibirpropostacultural/?idPreProjeto=' . $idPreProjeto);
+        $this->assertUrl(
+            'admissibilidade',
+            'admissibilidade',
+            'exibirpropostacultural'
+        );
         $this->assertQuery('div .exibir-proposta-cultural');
+        $this->assertResponseCode('200');
     }
+
 
     public function testAlterarunidadedeanalisepropostaAction()
     {
