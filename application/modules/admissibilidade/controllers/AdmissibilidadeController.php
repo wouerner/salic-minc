@@ -2920,4 +2920,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             parent::message($e->getMessage(), "/admissibilidade/admissibilidade/listar-propostas", "INFO");
         }
     }
+
+    public function listarSolicitacoesDesarquivamentoAction()
+    {
+    }    
 }
