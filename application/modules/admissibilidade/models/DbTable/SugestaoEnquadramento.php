@@ -70,7 +70,11 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         }
     }
 
-    public function isPropostaEnquadrada($id_preprojeto, $id_orgao, $id_perfil_usuario)
+    public function isPropostaEnquadrada(
+        $id_preprojeto,
+        $id_orgao,
+        $id_perfil_usuario
+    )
     {
         $resultado = $this->findAll(
             [

@@ -2,23 +2,14 @@
 
 class SugestaoEnquadramentoTest extends MinC_Test_ModelActionTestCase
 {
-    public function testPropostaEnquadradaPorDistribuicaoAvaliacao()
+    public function testIsPropostaEnquadrada()
     {
-//        $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-//        $sugestaoEnquadramentoDbTable->
+        $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $isPropostaEnquadrada = $sugestaoEnquadramentoDbTable->isPropostaEnquadrada(
+            237487,
+            171,
+            92
+        );
+        $this->assertNotNull($isPropostaEnquadrada);
     }
-
-//    public function isPropostaEnquadrada($id_preprojeto, $id_orgao, $id_perfil_usuario)
-//    {
-//        $resultado = $this->findAll(
-//            [
-//                'id_preprojeto' => $id_preprojeto,
-//                'id_orgao' => $id_orgao,
-//                'id_perfil_usuario' => $id_perfil_usuario
-//            ]
-//        );
-//        if (count($resultado) > 0) {
-//            return true;
-//        }
-//    }
 }
