@@ -84,6 +84,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         }
     }
 
+
     public function inativarSugestoes($id_preprojeto)
     {
         $this->alterar(
