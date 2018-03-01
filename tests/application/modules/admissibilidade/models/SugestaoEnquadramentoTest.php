@@ -15,7 +15,7 @@ class SugestaoEnquadramentoTest extends MinC_Test_ModelActionTestCase
         $this->assertNotNull($isPropostaEnquadradaFase1);
 
         $sugestaoEnquadramentoFase2 = new Admissibilidade_Model_SugestaoEnquadramento();
-        $sugestaoEnquadramentoFase2->setIdDistribuicaoAvaliacaoProposta(XXX);
+        $sugestaoEnquadramentoFase2->setIdDistribuicaoAvaliacaoProposta(28);
 
         $isPropostaEnquadradaFase2 = $sugestaoEnquadramentoDbTable->isPropostaEnquadrada($sugestaoEnquadramentoFase2);
         $this->assertNotNull($isPropostaEnquadradaFase2);
