@@ -146,4 +146,203 @@ class ConsultardadosprojetoControllerTest extends MinC_Test_ControllerActionTest
         $this->dispatch('/consultardadosprojeto/plano-de-divulgacao?idPronac=' . $this->idPronac);
         $this->assertUrl('default','consultardadosprojeto', 'plano-de-divulgacao');
     }
+
+    /**
+     * TestTramitacaoDocumentoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testTramitacaoDocumentoAction()
+    {
+        $this->dispatch('/consultardadosprojeto/tramitacao-documento?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'tramitacao-documento');
+    }
+
+    /**
+     * TestHistoricoEncaminhamentoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testHistoricoEncaminhamentoAction()
+    {
+        $this->dispatch('/consultardadosprojeto/historico-encaminhamento?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'historico-encaminhamento');
+    }
+
+   /**
+     * TestAnaliseProjetoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testAnaliseProjetoAction()
+    {
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost(
+                array(
+                    'idPronac' => $this->idPronac,
+                    'tipoAnalise' => 'inicial'
+                )
+            );
+        
+        $this->dispatch('/consultardadosprojeto/analise-projeto');
+        $this->assertUrl('default','consultardadosprojeto', 'analise-projeto');
+    }
+
+   /**
+     * TestAnaliseParecerTecnicoConsolidadoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testAnaliseParecerTecnicoConsolidadoAction()
+    {
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost(
+                array(
+                    'idPronac' => $this->idPronac,
+                    'tipoAnalise' => 'inicial'
+                )
+            );
+        
+        $this->dispatch('/consultardadosprojeto/analise-parecer-tecnico-consolidado');
+        $this->assertUrl('default','consultardadosprojeto', 'analise-parecer-tecnico-consolidado');
+    }
+
+   /**
+     * TestAnaliseDeConteudoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testAnaliseDeConteudoAction()
+    {
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost(
+                array(
+                    'idPronac' => $this->idPronac,
+                    'tipoAnalise' => 'inicial'
+                )
+            );
+        
+        $this->dispatch('/consultardadosprojeto/analise-de-conteudo');
+        $this->assertUrl('default','consultardadosprojeto', 'analise-de-conteudo');
+    }
+
+  /**
+     * TestAprovacaoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testAprovacaoAction()
+    {
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost(
+                array(
+                    'idPronac' => $this->idPronac
+                )
+            );
+        
+        $this->dispatch('/consultardadosprojeto/aprovacao');
+        $this->assertUrl('default','consultardadosprojeto', 'aprovacao');
+    }
+
+    /**
+     * TestRecursoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testRecursoActionPOST()
+    {
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost(
+                array(
+                    'idPronac' => $this->idPronac
+                )
+            );
+        
+        $this->dispatch('/consultardadosprojeto/recurso');
+        $this->assertUrl('default','consultardadosprojeto', 'recurso');
+    }
+
+    /**
+     * TestRecursoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testRecursoActionGET()
+    {
+        $this->dispatch('/consultardadosprojeto/recurso?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'recurso');
+    }
+
+    /**
+     * TestDadosBancariosAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testDadosBancariosAction()
+    {
+        $this->dispatch('/consultardadosprojeto/dados-bancarios?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'dados-bancarios');
+    }
+
+    /**
+     * TestDadosBancariosLiberacaoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testDadosBancariosLiberacaoAction()
+    {
+        $this->dispatch('/consultardadosprojeto/dados-bancarios-liberacao?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'dados-bancarios-liberacao');
+    }
+
+    /**
+     * TestDadosBancariosCaptacaoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testDadosBancariosCaptacaoAction()
+    {
+        $this->dispatch('/consultardadosprojeto/dados-bancarios-captacao?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'dados-bancarios-captacao');
+    }    
+
+    /**
+     * TestExtratosBancariosCaptacaoAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testExtratosBancariosCaptacaoAction()
+    {
+        $this->dispatch('/consultardadosprojeto/extratos-bancarios?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'extratos-bancarios');
+    }
+
+    /**
+     * TestExtratoDeSaldoBancarioAction
+     *
+     * @access public
+     * @return void
+     */
+    public function testExtratoDeSaldoBancarioAction()
+    {
+        $this->dispatch('/consultardadosprojeto/extrato-de-saldo-bancario-consolidado?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','consultardadosprojeto', 'extrato-de-saldo-bancario-consolidado');
+    }
 }
