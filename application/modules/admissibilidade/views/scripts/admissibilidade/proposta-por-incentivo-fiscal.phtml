@@ -177,6 +177,7 @@
                         || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo
                     )
                     || $this->possuiAvaliacaoCnic === false
+                    || $this->isPropostaEnquadrada !== true
                 ): ?>
                     disabled
                 <?php endif; ?>

@@ -267,11 +267,33 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->view->isPropostaEmConformidade = $tbAvaliacaoProposta->isPropostaEmConformidade(
                 $this->idPreProjeto
             );
+
+            $orgaoDbTable = new Orgaos();
+            $orgao = $orgaoDbTable->codigoOrgaoSuperior($this->codOrgao);
+
+            if(count($orgao) < 1 || !$orgao[0]['Superior']) {
+                throw new Exception('N&atilde;o foi poss&iacute;vel obter o &Oacute;rg&atilde;o Superior');
+            }
+
+            $orgaoSuperior = $orgao[0]['Superior'];
             $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
-            $this->view->possuiAvaliacaoCnic = $distribuicaoAvaliacaoPropostaDbTable->propostaPossuiAvaliacao(
-                $this->idPreProjeto,
-                Autenticacao_Model_Grupos::COMPONENTE_COMISSAO
+            $distribuicaoAvaliacaoPropostaAtual = $distribuicaoAvaliacaoPropostaDbTable->findBy(
+                [
+                    'id_preprojeto' => $this->idPreProjeto,
+                    'id_orgao_superior' => $orgaoSuperior,
+                    'id_perfil' => $this->codGrupo,
+                    'avaliacao_atual' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
+                ]
             );
+            $this->view->possuiAvaliacaoCnic = (count($distribuicaoAvaliacaoPropostaAtual) > 0);
+
+            $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+            $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento(
+                ['id_distribuicao_avaliacao_proposta' => $distribuicaoAvaliacaoPropostaAtual['id_distribuicao_avaliacao_prop']]
+            );
+
+            $this->view->isPropostaEnquadrada = $sugestaoEnquadramentoDbTable->isPropostaEnquadrada($sugestaoEnquadramento);
+
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
     }

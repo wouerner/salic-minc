@@ -77,10 +77,10 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
     public function isPropostaEnquadrada(Admissibilidade_Model_SugestaoEnquadramento $sugestaoEnquadramento)
     {
         $arrayPesquisa = [];
-        if($sugestaoEnquadramento->getIdDistribuicaoAvaliacaoProposta()) {
+        if ($sugestaoEnquadramento->getIdDistribuicaoAvaliacaoProposta()) {
             $arrayPesquisa['id_distribuicao_avaliacao_proposta'] = $sugestaoEnquadramento->getIdDistribuicaoAvaliacaoProposta();
         }
-        if($sugestaoEnquadramento->getIdPreprojeto()
+        if ($sugestaoEnquadramento->getIdPreprojeto()
             && $sugestaoEnquadramento->getIdOrgao()
             && $sugestaoEnquadramento->getIdPerfilUsuario()) {
             $arrayPesquisa['id_preprojeto'] = $sugestaoEnquadramento->getIdPreprojeto();
@@ -88,7 +88,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             $arrayPesquisa['id_perfil_usuario'] = $sugestaoEnquadramento->getIdPerfilUsuario();
         }
 
-        if(count($arrayPesquisa) > 0) {
+        if (count($arrayPesquisa) > 0) {
             $resultado = $this->findAll($arrayPesquisa);
             if (count($resultado) > 0) {
                 return true;
@@ -115,4 +115,5 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             ]
         );
     }
+
 }
