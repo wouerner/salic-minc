@@ -296,6 +296,16 @@ class Analise_AnaliseController extends Analise_GenericController
                 throw new Exception("Identificador do projeto &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
 
+            $vwPainelAvaliar = new Analise_Model_DbTable_vwProjetosAdequadosRealidadeExecucao();
+            $where['idpronac = ?'] = $params['idpronac'];
+            $projetos = $vwPainelAvaliar->projetos($where, array(), 0, 1);
+
+            if (empty($projetos)) {
+                throw new Exception("Projeto n&atilde;o dispon&iacute;vel para redistribui&ccedil;&atilde;o!");
+            }
+
+            $this->view->projeto = $projetos[0];
+
             if ($this->getRequest()->isPost()) {
                 if (empty($params['idNovoTecnico']) || empty($params['tecnicoAtual'])) {
                     throw new Exception("Id do t&eacute;cnico &eacute; necess&aacute;rio para acessar essa funcionalidade.");
@@ -313,15 +323,8 @@ class Analise_AnaliseController extends Analise_GenericController
 
                 parent::message("An&aacute;lise redistribu&iacute;da com sucesso.", "/{$this->moduleName}/analise/listarprojetos", "CONFIRM");
             } else {
+
                 $vw = new vwUsuariosOrgaosGrupos();
-
-                $vwPainelAvaliar = new Analise_Model_DbTable_vwProjetosAdequadosRealidadeExecucao();
-
-                $where['idpronac = ?'] = $params['idpronac'];
-
-                $projetos = $vwPainelAvaliar->projetos($where, array(), 0, 1);
-                $this->view->projeto = $projetos[0];
-
                 $this->view->novosAnalistas = $vw->carregarTecnicosPorUnidadeEGrupo($this->codOrgao, 110);
             }
         } catch (Exception $objException) {
