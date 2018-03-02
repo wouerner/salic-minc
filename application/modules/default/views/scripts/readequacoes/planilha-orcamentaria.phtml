@@ -71,13 +71,20 @@
             $('.ui-dialog-titlebar-close').remove();
         });
         
-        $('#AdicionarItem').click(function(){
-        
+        $('.btn-incluir-novo-item').click(function(){
+            console.log(123);
             // **** LIMPA OS CAMPOS ANTES DE ABRIR A MODAL ****
             $('.camposObrigatoriosInclusao:not(#newRecursos,#newUF,#newMunicipio,#newEtapa,#newProduto)').each(function(){
                 $(this).css('border-color', '#CCCCCC');
                 $(this).val('');
             });
+            
+            $('#newFonte').val($(this).attr('fonte'));
+            //                $('#newUF').val($(this).attr('uf'));
+            $('#newMunicipio').val($(this).attr('municipio'));
+            $('#newEtapa').val($(this).attr('etapa'));
+            $('#newProduto').val($(this).attr('produto'));
+            
             $('#newTotalCalculado').html('R$ 0,00');
             // ***********************************************
             
@@ -163,6 +170,7 @@
             $('.ui-dialog-titlebar-close').remove();
         });
 
+      /*
         $('#newUF').change(function(){
             $("#newMunicipio").html('<option value=""> - Carregando - </option>');
             if($(this).val() == 0){
@@ -216,7 +224,8 @@
                 });
             }
         });
-        
+      */
+      
         $('.btn_finalizar').click(function(){
 	    $('#mensagens').html('<span style="font-weigth: bold; color: grey">Verificando limites or&ccedil;amentarios...</span>');
 	    // verifica limites or�ament�rios
