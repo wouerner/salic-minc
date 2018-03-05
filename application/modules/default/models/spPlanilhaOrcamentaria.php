@@ -678,7 +678,7 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 ->order("i.Descricao");
 
         } else {
-
+            
             $subA = array(
                 new Zend_Db_Expr("sum(b1.vlComprovacao) AS vlPagamento"),
             );
@@ -734,10 +734,10 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                 ->where("a.idPronac = ? ", $idPronac)
                 ->order("x.Descricao")
                 ->order("c.Descricao DESC")
+                ->order(new Zend_Db_Expr("CONVERT(VARCHAR(8),d.idPlanilhaEtapa) + ' - ' + d.Descricao"))                 
                 ->order("f.UF")
                 ->order("f.Municipio")
                 ->order("i.Descricao")
-                ->order(new Zend_Db_Expr("CONVERT(VARCHAR(8),d.idPlanilhaEtapa) + ' - ' + d.Descricao"))
             ;
         }
         
