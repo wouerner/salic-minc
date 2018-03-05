@@ -71,8 +71,8 @@
             $('.ui-dialog-titlebar-close').remove();
         });
         
-        $('.btn-incluir-novo-item').click(function(){
-            console.log(123);
+        $('#AdicionarItem').click(function(){
+            
             // **** LIMPA OS CAMPOS ANTES DE ABRIR A MODAL ****
             $('.camposObrigatoriosInclusao:not(#newRecursos,#newUF,#newMunicipio,#newEtapa,#newProduto)').each(function(){
                 $(this).css('border-color', '#CCCCCC');
@@ -170,7 +170,6 @@
             $('.ui-dialog-titlebar-close').remove();
         });
 
-      /*
         $('#newUF').change(function(){
             $("#newMunicipio").html('<option value=""> - Carregando - </option>');
             if($(this).val() == 0){
@@ -224,7 +223,6 @@
                 });
             }
         });
-      */
       
         $('.btn_finalizar').click(function(){
 	    $('#mensagens').html('<span style="font-weigth: bold; color: grey">Verificando limites or&ccedil;amentarios...</span>');
@@ -827,7 +825,14 @@
                                 <td id="valorEntrePlanilhas">
                                     <span class="bold black-text">R$ 0,00</span>
                                 </td>
-                                <td style="width: 1px;"><input type="button" class="btn_incluir" id="AdicionarItem" title="Adicionar Item � Planilha" /></td>
+                                <td>
+				    <div class="right-align">
+					<a class="waves-effect waves-light btn white-text btn-incluir-novo-item" id="AdicionarItem">
+					    <i class="material-icons left">add</i>
+					    Adicionar item em novo munic&iacute;pio
+					</a>
+				    </div>
+				</td>
                             </tr>
                         </table>
                     </div>

@@ -1108,30 +1108,28 @@ else if($this->tipoPlanilha == 6){ ?>
                 $valorUnitarioTotalEtapa = 0;
                 $valorAprovadoTotalEtapa = 0;
                 foreach ($this->planilha[$fonte][$produto][$etapa] as $cidade => $planilha) {
+                    $item = $planilha[0];
                     ?>
                     <tr class="master produto etapa" produto="<?php echo $nrproduto; ?>" etapa="<?php echo $nretapa; ?>"  fonte="<?php echo $nrfonte; ?>" >
                         <td>
                             <div tipo="cidade" fonte="<?php echo $nrfonte; ?>" produto="<?php echo $nrproduto; ?>" etapa="<?php echo $nretapa; ?>" cidade="<?php echo $nrcidade; ?>" aberto="true" class="icn_menos" style="width:94%; margin-left:6%;"><span class="black del_link" style="font-size: 12pt; font-weight: 800;"><?php echo $cidade; ?></span></div>
                         </td>
                     </tr>
-                    <tr>
-			<td>
-			    <div class="center-align">
-				<a class="waves-effect waves-light btn white-text btn-incluir-novo-item"
-				   fonte="<?php echo $idFonte; ?>"
-				   produto="<?php echo $idProduto; ?>"
-				   etapa="<?php echo $idEtapa; ?>"
-				   uf="<?php echo $UF; ?>"
-				   municipio="<?php echo $idCidade ?>" >
-				    <i class="material-icons left">add</i>
-				    incluir novo item
-				</a>
-			    </div>
-			</td>
-		    </tr>
 
                     <tr class="master produto etapa cidade" produto="<?php echo $nrproduto; ?>" etapa="<?php echo $nretapa; ?>" cidade="<?php echo $nrcidade; ?>"  fonte="<?php echo $nrfonte; ?>">
                         <td>
+			    <div class="center-align">
+				<a class="waves-effect waves-light btn white-text btn-incluir-novo-item"
+				   fonte="<?php echo $item['idFonte']; ?>"
+				   produto="<?php echo $item['idProduto']; ?>"
+				   etapa="<?php echo $item['idEtapa']; ?>"
+				   uf="<?php echo $item['idUF']; ?>"
+				   municipio="<?php echo $item['idMunicipio'] ?>" >
+				    <i class="material-icons left">add</i>
+				    incluir item neste munic&iacute;pio
+				</a>
+			    </div>
+			    <br/>
                             <table class="tabela">
                                 <tr>
                                     <th>&nbsp;</th>
