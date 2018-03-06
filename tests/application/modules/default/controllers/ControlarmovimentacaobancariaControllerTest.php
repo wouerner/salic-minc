@@ -30,15 +30,22 @@ class ControlarmovimentacaobancariaControllerTest extends MinC_Test_ControllerAc
      * @access public
      * @return void
      */
+
+    public function testindexAction()
+    {
+        $this->dispatch('/controlarmovimentacaobancaria?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','controlarmovimentacaobancaria', 'form');
+    }
+
     public function testuploadAction()
     {
         $this->dispatch('/controlarmovimentacaobancaria/upload?idPronac=' . $this->idPronac);
         $this->assertUrl('default','controlarmovimentacaobancaria', 'upload');
     }
 
-//    public function testfinalizarAction()
+//    public function testindexAction()
 //    {
 //        $this->dispatch('/controlarmovimentacaobancaria/index/inconsistencia/true?idPronac=' . $this->idPronac);
-//        $this->assertUrl('default','controlarmovimentacaobancaria', 'index');
+//        $this->assertUrl('default','controlarmovimentacaobancaria', 'form');
 //    }
 }
