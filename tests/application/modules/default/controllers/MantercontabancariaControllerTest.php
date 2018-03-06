@@ -38,4 +38,12 @@ class MantercontabancariaControllerTest extends MinC_Test_ControllerActionTestCa
         $this->assertUrl('default','mantercontabancaria', 'consultar');
     }
 
+    public function testregularidadeProponenteAction()
+    {
+        $this->dispatch('/mantercontabancaria/regularidade-proponente?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','mantercontabancaria', 'regularidade-proponente');
+    }
+
+
 }
+
