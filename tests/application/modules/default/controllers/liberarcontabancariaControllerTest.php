@@ -36,4 +36,12 @@ class liberarcontabancariaControllerTest extends MinC_Test_ControllerActionTestC
         $this->dispatch('/liberarcontabancaria?idPronac=' . $this->idPronac);
         $this->assertUrl('default','liberarcontabancaria', 'index');
     }
+
+    public function testcontasLiberadasAction()
+    {
+        $this->dispatch('/liberarcontabancaria/contas-liberadas?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','liberarcontabancaria', 'contas-liberadas');
+    }
 }
+
+

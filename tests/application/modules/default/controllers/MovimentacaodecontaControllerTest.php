@@ -1,6 +1,6 @@
 <?php
 /**
- * Projeto_ChecklistpublicacaoController
+ * Projeto_MovimentacaodecontaControllerTest
  *
  * @package
  * @author isaiassm <isaias1113@outlook.com>
@@ -31,6 +31,34 @@ class MovimentacaodecontaControllerTest extends MinC_Test_ControllerActionTestCa
         $this->assertUrl('default', 'movimentacaodeconta', 'index');
     }
 
+    public function testresultadoExtratoDeContaCaptacaoAction()
+    {
+        $this->dispatch('/movimentacaodeconta/resultado-extrato-de-conta-captacao?idPronac=' . $this->idPronac);
+        $this->assertUrl('default', 'movimentacaodeconta', 'resultado-extrato-de-conta-captacao');
+    }
+
+    public function testuploadAction()
+    {
+        $this->dispatch('/movimentacaodeconta/upload?idPronac=' . $this->idPronac);
+        $this->assertUrl('default', 'movimentacaodeconta', 'upload');
+    }
+
+    public function testlistarInconsistenciasAction()
+    {
+        $this->dispatch('/movimentacaodeconta/listar-inconsistencias?idPronac=' . $this->idPronac);
+        $this->assertUrl('default', 'movimentacaodeconta', 'listar-inconsistencias');
+    }
+
+    public function testformRelatorioReciboCaptacaoAction()
+    {
+        $this->dispatch('movimentacaodeconta/form-relatorio-recibo-captacao?idPronac=' . $this->idPronac);
+        $this->assertUrl('default', 'movimentacaodeconta', 'form-relatorio-recibo-captacao');
+    }
 
 
 }
+
+
+
+
+
