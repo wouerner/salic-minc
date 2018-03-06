@@ -55,7 +55,6 @@ class SpPlanilhaOrcamentariaModelTest extends MinC_Test_ModelTestCase
         $tipoPlanilha = 6;
         $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
 
-        $resultFuncao = $spPlanilhaOrcamentaria->readequacao($this->idPronac);
         $resultSP = $spPlanilhaOrcamentaria->execSpPlanilhaOrcamentaria($this->idPronac, $tipoPlanilha);
 
         $nomesColunasSP = (array)$resultSP[0];
@@ -78,9 +77,8 @@ class SpPlanilhaOrcamentariaModelTest extends MinC_Test_ModelTestCase
         $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
 
         $resultFuncao = $spPlanilhaOrcamentaria->readequacao($this->idPronac);
-        $result = $spPlanilhaOrcamentaria->execSpPlanilhaOrcamentaria($this->idPronac, $tipoPlanilha);
-
-        $nomesColunas = (array)$result[0];
+        
+        $nomesColunas = (array)$resultFuncao[0];
         $colunas = array_keys($nomesColunas);
         
         $this->assertEmpty(
@@ -92,16 +90,16 @@ class SpPlanilhaOrcamentariaModelTest extends MinC_Test_ModelTestCase
     } 
 
     
-    public function testExecPlanilhaReadequacaoCompararVerificarAdicaoDeColunas()
+    public function testExecPlanilhaReadequacaoCompararVerificarAdicaoDeColunasNaFuncao()
     {
         $diferencaEsperada = ['idMunicipio', 'idUF'];
 
         $tipoPlanilha = 6;
         $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-
+        
         $resultFuncao = $spPlanilhaOrcamentaria->readequacao($this->idPronac);
         $resultSP = $spPlanilhaOrcamentaria->execSpPlanilhaOrcamentaria($this->idPronac, $tipoPlanilha);
-
+        
         $nomesColunasFuncao = (array)$resultFuncao[0];
         $nomesColunasSP = (array)$resultSP[0];
         
@@ -113,6 +111,6 @@ class SpPlanilhaOrcamentariaModelTest extends MinC_Test_ModelTestCase
         );
         
         $this->assertEquals($diferenca, $diferencaEsperada);
-        
     }
+
 }
