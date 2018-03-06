@@ -27,6 +27,18 @@ class ReadequacoesControllerTest extends MinC_Test_ControllerActionTestCase
     }
 
     /**
+     * TestIndexAction
+     *
+     * @access public
+     * @return void
+     */    
+    public function testIndexAction()
+    {
+        $this->dispatch('/readequacoes?idPronac=' . $this->hashPronac);
+        $this->assertUrl('default','readequacoes', 'index');
+    }
+    
+    /**
      * TestPlanilhaOrcamentariaAction
      *
      * @access public
@@ -37,4 +49,6 @@ class ReadequacoesControllerTest extends MinC_Test_ControllerActionTestCase
         $this->dispatch('/readequacoes/planilha-orcamentaria?idPronac=' . $this->hashPronac);
         $this->assertUrl('default','readequacoes', 'planilha-orcamentaria');
     }
+
+    
 }
