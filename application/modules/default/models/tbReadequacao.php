@@ -479,7 +479,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
      */
     public function painelReadequacoesAnalise($where = array(), $order = array(), $tamanho = -1, $inicio = -1, $qtdeTotal = false, $idPerfil = 0)
     {
-        if ($idPerfil == 121) {
+        if ($idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             $nome = 'd.usu_nome AS Tecnico';
         } else {
             $nome = 'd.Descricao AS Tecnico';
@@ -507,7 +507,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
             'SAC.dbo'
         );
 
-        if ($idPerfil == 121) {
+        if ($idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             $select->joinLeft(
                 array('d' => 'Usuarios'),
                 'a.idAvaliador = d.usu_codigo',
