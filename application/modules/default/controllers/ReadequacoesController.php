@@ -26,9 +26,9 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
 
         // verifica as permissoes
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = '1111'; //Permissao para proponentes.
-        $PermissoesGrupo[] = '151'; //Permissao para proponentes.
-        $PermissoesGrupo[] = '148'; //Permissao para proponentes.
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::PROPONENTE;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_VINCULADA_SUBSTITUTO;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO;
 
         // pega o idAgente do usuário logado
         $auth = Zend_Auth::getInstance(); // pega a autenticação
@@ -80,9 +80,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     public function indexAction()
     {
 
-        //FUNÇÃO ACESSADA SOMENTE PELO PROPONENTE.
         $this->view->idPerfil = $this->idPerfil;
-        if ($this->idPerfil != 1111) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -584,11 +583,11 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbAbrangencia = new tbAbrangencia();
         $editarItem = $tbAbrangencia->buscar(array('idAbrangencia=?'=>$_POST['idAbrangencia']))->current();
 
-        if ($this->idPerfil == 94 || $this->idPerfil == 121) { //Parecerista e Técnico de Acompanhamento
+        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) { //Parecerista e Técnico de Acompanhamento
             $editarItem->tpAnaliseTecnica = $_POST['tpAcao'];
         } elseif ($this->idPerfil == 118) { //Componente da Comissão
             $editarItem->tpAnaliseComissao = $_POST['tpAcao'];
-        } elseif ($this->idPerfil == 1111) { //Proponente
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE) {
             if ($editarItem->tpSolicitacao == 'E') {
                 $editarItem->tpSolicitacao = 'N';
             } elseif ($editarItem->tpSolicitacao == 'I') {
@@ -616,11 +615,11 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbPlanoDivulgacao = new tbPlanoDivulgacao();
         $editarItem = $tbPlanoDivulgacao->buscar(array('idPlanoDivulgacao=?'=>$_POST['idPlanoDivulgacao']))->current();
 
-        if ($this->idPerfil == 94 || $this->idPerfil == 121) { //Parecerista e Técnico de Acompanhamento
+        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) { //Parecerista e Técnico de Acompanhamento
             $editarItem->tpAnaliseTecnica = $_POST['tpAcao'];
         } elseif ($this->idPerfil == 118) { //Componente da Comissão
             $editarItem->tpAnaliseComissao = $_POST['tpAcao'];
-        } elseif ($this->idPerfil == 1111) { //Proponente
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE) {
             if ($editarItem->tpSolicitacao == 'E') {
                 $editarItem->tpSolicitacao = 'N';
             } elseif ($editarItem->tpSolicitacao == 'I') {
@@ -648,11 +647,11 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbPlanoDistribuicao = new tbPlanoDistribuicao();
         $editarItem = $tbPlanoDistribuicao->buscar(array('idPlanoDistribuicao=?'=>$_POST['idPlanoDistribuicao']))->current();
 
-        if ($this->idPerfil == 94 || $this->idPerfil == 121) { //Parecerista e Técnico de Acompanhamento
+        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) { //Parecerista e Técnico de Acompanhamento
             $editarItem->tpAnaliseTecnica = $_POST['tpAcao'];
         } elseif ($this->idPerfil == 118) { //Componente da Comissão
             $editarItem->tpAnaliseComissao = $_POST['tpAcao'];
-        } elseif ($this->idPerfil == 1111) { //Proponente
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE) {
             if ($editarItem->tpSolicitacao == 'E') {
                 $editarItem->tpSolicitacao = 'N';
             } elseif ($editarItem->tpSolicitacao == 'I') {
@@ -1629,8 +1628,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     {
         $acaoErro = '';
 
-        //FUNÇÃO ACESSADA SOMENTE PELO PROPONENTE.
-        if ($this->idPerfil != 1111) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -1795,8 +1793,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
      */
     public function excluirSolicitacaoReadequacaoAction()
     {
-        //FUNÇÃO ACESSADA SOMENTE PELO PROPONENTE.
-        if ($this->idPerfil != 1111) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -1873,8 +1870,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
 
     public function finalizarSolicitacaoReadequacaoAction()
     {
-        //FUNÇÃO ACESSADA SOMENTE PELO PROPONENTE.
-        if ($this->idPerfil != 1111) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -1939,8 +1935,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
      */
     public function painelAction()
     {
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE ACOMPANHAMENTO E COORD. DE ACOMPANHAMENTO.
-        if ($this->idPerfil != 122 && $this->idPerfil != 123 && $this->idPerfil != 151 && $this->idPerfil != 148) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::PRESIDENTE_VINCULADA_SUBSTITUTO && $this->idPerfil != Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2047,8 +2042,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     public function imprimirReadequacoesAction()
     {
 
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE ACOMPANHAMENTO E COORD. DE ACOMPANHAMENTO.
-        if ($this->idPerfil != 122 && $this->idPerfil != 123) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2125,8 +2119,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
      */
     public function avaliarReadequacaoAction()
     {
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE ACOMPANHAMENTO E COORD. DE ACOMPANHAMENTO.
-        $perfisAcesso = array(121, 122, 123);
+        $perfisAcesso = array(Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO);
 
         if (!in_array($this->idPerfil, $perfisAcesso)) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
@@ -2167,7 +2160,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $dados = array();
             $dados['sis_codigo = ?'] = 21;
             $dados['uog_status = ?'] = 1;
-            $dados['gru_codigo = ?'] = 121; //Tecnico de Acompanhamento
+            $dados['gru_codigo = ?'] = Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO; //Tecnico de Acompanhamento
             if ($vinculada == 166) {
                 $dados['org_superior = ?'] = 160;
             } else {
@@ -2218,9 +2211,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
      */
     public function salvarAvaliacaoAction()
     {
-        $perfisAcesso = array(121, 122, 123);
+        $perfisAcesso = array(Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO);
 
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE ACOMPANHAMENTO, TECNICO DE ACOMPANHAMENTO E COORD. DE ACOMPANHAMENTO.
         if (!in_array($this->idPerfil, $perfisAcesso)) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
@@ -2296,13 +2288,13 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                     $tbDistribuirReadequacao->update($dados, $where);
                 }
             }
-            if ($this->idPerfil == 121) {
+            if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
                 parent::message('Dados salvos com sucesso!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
             } else {
                 parent::message('Dados salvos com sucesso!', "readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
             }
         } else {
-            if ($this->idPerfil == 121) {
+            if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
                 parent::message('Nenhum registro encontrado.', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "ERROR");
             } else {
                 parent::message('Nenhum registro encontrado.', "readequacoes/painel?tipoFiltro=$filtro", "ERROR");
@@ -2317,9 +2309,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function painelReadequacoesAction()
     {
-
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. DE PARECER, PARECERISTA E TECNICO DE ACOMPANHAMENTO.
-        if ($this->idPerfil != 93 && $this->idPerfil != 94 && $this->idPerfil != 121) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2366,7 +2356,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         if ($this->_request->getParam('tipoFiltro') !== null) {
             $filtro = $this->_request->getParam('tipoFiltro');
         } else {
-            if ($this->idPerfil == 93) {
+            if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
                 $filtro = 'aguardando_distribuicao';
             } else {
                 $filtro = 'painel_do_tecnico';
@@ -2389,9 +2379,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbReadequacao = new tbReadequacao();
         $tbDistribuirReadequacao = new tbDistribuirReadequacao();
 
-        if ($this->idPerfil == 93) {
-            // coordenador parecer
-
+        if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
+            
             switch ($filtro) {
                 case 'aguardando_distribuicao':
                     $total = count($tbDistribuirReadequacao->buscarReadequacaoCoordenadorParecerAguardandoAnalise($where));
@@ -2406,8 +2395,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
 //                    $total = $tbReadequacao->count('vwPainelReadequacaoCoordenadorParecerAnalisados' , $where);
                     break;
             }
-        } elseif ($this->idPerfil == 121 || $this->idPerfil == 94) {
-            // técnico de acompanhamento ou parecerista de vinculada
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO || $this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA) {
             $auth = Zend_Auth::getInstance(); // pega a autenticação
             $where['d.idAvaliador = ?'] = $auth->getIdentity()->usu_codigo;
 
@@ -2421,8 +2409,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
 
-        // coordenador de parecer
-        if ($this->idPerfil == 93) {
+        if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
             switch ($filtro) {
                 case 'aguardando_distribuicao':
                         $busca = $tbDistribuirReadequacao->buscarReadequacaoCoordenadorParecerAguardandoAnalise($where, $order, $tamanho, $inicio, false);
@@ -2434,8 +2421,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                     $busca = $tbDistribuirReadequacao->buscarReadequacaoCoordenadorParecerAnalisados($where, $order, $tamanho, $inicio, false);
                     break;
             }
-        } elseif ($this->idPerfil == 121 || $this->idPerfil == 94) {
-            // tecnico de acompanhamento ou parecerista de vinculada
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO || $this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA) {
             $busca = $tbReadequacao->painelReadequacoesTecnicoAcompanhamento($where, $order, $tamanho, $inicio, false);
         }
         $paginacao = array(
@@ -2467,9 +2453,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function visualizarReadequacaoAction()
     {
-
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. DE PARECER, COORD. DE ACOMPANHAMETO E COORD. GERAL DE ACOMPANHAMENTO.
-        if ($this->idPerfil != 93 && $this->idPerfil != 122 && $this->idPerfil != 123) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2551,7 +2535,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function formAvaliarReadequacaoAction()
     {
-        $perfisAcesso = array(94, 121);
+        $perfisAcesso = array(Autenticacao_Model_Grupos::PARECERISTA, Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO);
 
         if (!in_array($this->idPerfil, $perfisAcesso)) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
@@ -2596,7 +2580,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function salvarParecerTecnicoAction()
     {
-        if ($this->idPerfil != 94 && $this->idPerfil != 121) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2713,7 +2697,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                     $x = $tbDistribuirReadequacao->update($dadosDP, $whereDP);
 
                     $siEncaminhamento = 5; //Devolvido da análise técnica
-                    if ($this->idPerfil == 121) {
+                    if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
                         $siEncaminhamento = 10; //Devolver para Coordenador do MinC
                     }
                     //ATUALIZA A TABELA tbReadequacao
@@ -3534,7 +3518,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function encaminharReadequacaoChecklistAction()
     {
-        if ($this->idPerfil != 93 && $this->idPerfil != 94 && $this->idPerfil != 121 && $this->idPerfil != 122 && $this->idPerfil != 123) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
             parent::message("Você não tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
         // TODO: quando finalizar, mantem filtro de pronac caso estiver marca
@@ -4046,9 +4030,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
      */
     public function planilhaOrcamentariaAction()
     {
-        //FUNÇÃO ACESSADA SOMENTE PELO PROPONENTE.
         $this->view->idPerfil = $this->idPerfil;
-        if ($this->idPerfil != 1111) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -4272,9 +4255,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
      */
     public function encaminharAnaliseTecnicaAction()
     {
-        $perfisAcesso = array(121, 122, 123);
+        $perfisAcesso = array(Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO);
 
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE ACOMPANHAMENTO, TECNICO DE ACOMPANHAMENTO E COORD. DE ACOMPANHAMENTO.
         if (!in_array($this->idPerfil, $perfisAcesso)) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
@@ -4312,9 +4294,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
      */
     public function formEncaminharAnaliseTecnicaAction()
     {
-        $perfisAcesso = array(121, 122, 123);
+        $perfisAcesso = array(Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO, Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO);
 
-        //FUNÇÃO ACESSADA SOMENTE PELOS PERFIS DE COORD. GERAL DE ACOMPANHAMENTO, TECNICO DE ACOMPANHAMENTO E COORD. DE ACOMPANHAMENTO.
         if (!in_array($this->idPerfil, $perfisAcesso)) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
@@ -4351,7 +4332,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                 $where['idReadequacao = ?'] = $idReadequacao;
                 $tbReadequacao->update($dados, $where);
 
-                if ($this->idPerfil == 121) {
+                if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
                     parent::message('Dados salvos com sucesso!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
                 } else {
                     parent::message('Dados salvos com sucesso!', "readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
@@ -4379,14 +4360,14 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                 );
                 $u = $tbReadequacao->update($dadosReadequacao, $where);
 
-                if ($this->idPerfil == 121) {
+                if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
                     parent::message('Dados salvos com sucesso!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
                 } else {
                     parent::message('Dados salvos com sucesso!', "readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
                 }
             }
         } catch (Exception $e) {
-            if ($this->idPerfil == 121) {
+            if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
                 parent::message('Erro ao encaminhar readequa&ccedil;&atilde;o!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "ERROR");
             } else {
                 parent::message('Erro ao encaminhar readequa&ccedil;&atilde;o!', "readequacoes/painel?tipoFiltro=$filtro", "ERROR");
