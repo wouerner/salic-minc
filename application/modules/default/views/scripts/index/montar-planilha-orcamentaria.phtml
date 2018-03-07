@@ -1189,9 +1189,14 @@ else if($this->tipoPlanilha == 6){ ?>
                                         <td style="width: 5%;"><?php echo $planilha['Seq']; ?></td>
                                         <td style="width: 20%;">
 					    <?php
-                                        if((($this->link && $planilha['tpAcao'] != 'E') && $nrfonte == '0')
+                                        if((
+                                            ($this->link && $planilha['tpAcao'] != 'E') &&
+                                            $nrfonte == '0' &&
+                                            !$planilha['vlComprovado'])
                                            ||
-                                           ($this->idPerfil == '1111') // se for proponente
+                                           ($this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE &&
+                                            (!$planilha['vlComprovado'])
+                                           )
                                         ) { ?>
                                                 <a href="#" style="color: <?php echo $corLinha; ?> !important;" title="clique para alterar os dados do item" class="editarItem" idPlanilhaAprovacao="<?php echo $planilha['idPlanilhaAprovacao']; ?>"><?php echo $planilha['Item']; ?></a>
                                             <?php } else {
