@@ -583,9 +583,9 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbAbrangencia = new tbAbrangencia();
         $editarItem = $tbAbrangencia->buscar(array('idAbrangencia=?'=>$_POST['idAbrangencia']))->current();
 
-        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) { //Parecerista e Técnico de Acompanhamento
+        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             $editarItem->tpAnaliseTecnica = $_POST['tpAcao'];
-        } elseif ($this->idPerfil == 118) { //Componente da Comissão
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             $editarItem->tpAnaliseComissao = $_POST['tpAcao'];
         } elseif ($this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE) {
             if ($editarItem->tpSolicitacao == 'E') {
@@ -615,9 +615,9 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbPlanoDivulgacao = new tbPlanoDivulgacao();
         $editarItem = $tbPlanoDivulgacao->buscar(array('idPlanoDivulgacao=?'=>$_POST['idPlanoDivulgacao']))->current();
 
-        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) { //Parecerista e Técnico de Acompanhamento
+        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             $editarItem->tpAnaliseTecnica = $_POST['tpAcao'];
-        } elseif ($this->idPerfil == 118) { //Componente da Comissão
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             $editarItem->tpAnaliseComissao = $_POST['tpAcao'];
         } elseif ($this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE) {
             if ($editarItem->tpSolicitacao == 'E') {
@@ -647,9 +647,9 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbPlanoDistribuicao = new tbPlanoDistribuicao();
         $editarItem = $tbPlanoDistribuicao->buscar(array('idPlanoDistribuicao=?'=>$_POST['idPlanoDistribuicao']))->current();
 
-        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) { //Parecerista e Técnico de Acompanhamento
+        if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             $editarItem->tpAnaliseTecnica = $_POST['tpAcao'];
-        } elseif ($this->idPerfil == 118) { //Componente da Comissão
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             $editarItem->tpAnaliseComissao = $_POST['tpAcao'];
         } elseif ($this->idPerfil == Autenticacao_Model_Grupos::PROPONENTE) {
             if ($editarItem->tpSolicitacao == 'E') {
@@ -2831,7 +2831,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function analisarReadequacoesCnicAction()
     {
-        if ($this->idPerfil != 118) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2921,7 +2921,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function formAvaliarReadequacaoCnicAction()
     {
-        if ($this->idPerfil != 118) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2963,7 +2963,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     */
     public function componenteComissaoSalvarAvaliacaoAction()
     {
-        if ($this->idPerfil != 118) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
