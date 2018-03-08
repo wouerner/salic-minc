@@ -85,36 +85,16 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
-        if (isset($_POST['iduf'])) {
-            $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-            $iduf = $_POST['iduf'];
-            $mun = new Agente_Model_DbTable_Municipios();
-            $cidade = $mun->listar($iduf);
-            $a = 0;
-            $cidadeArray = array();
-            foreach ($cidade as $DadosCidade) {
-                $cidadeArray[$a]['idCidade'] = $DadosCidade->id;
-                $cidadeArray[$a]['nomeCidade'] = utf8_encode($DadosCidade->Descricao);
-                $a++;
-            }
-            $this->_helper->json($cidadeArray);
-            $this->_helper->viewRenderer->setNoRender(true);
+        $idUF = $this->_request->getParam('iduf');
+        $idEtapa = $this->_request->getParam('idEtapa');
+        $idProduto = $this->_request->getParam('idProduto');
+        
+        if ($idUF) {
+            $this->carregarListaUF($idUF);
         }
-
-        if (isset($_POST['idEtapa']) && isset($_POST['idProduto'])) {
-            $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-            $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
-            $itens = $tbItensPlanilhaProduto->itensPorItemEEtapaReadequacao($_POST['idEtapa'], $_POST['idProduto']);
-
-            $a = 0;
-            $itensArray = array();
-            foreach ($itens as $i) {
-                $itensArray[$a]['idPlanilhaItens'] = $i->idPlanilhaItens;
-                $itensArray[$a]['Item'] = utf8_encode($i->Item);
-                $a++;
-            }
-            $this->_helper->json($itensArray);
-            $this->_helper->viewRenderer->setNoRender(true);
+        
+        if ($idEtapa && $idProduto) {
+            $this->carregarEtapaProduto($idEtapa, $idProduto);
         }
 
         $idPronac = $this->_request->getParam("idPronac");
@@ -160,6 +140,40 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
     }
 
 
+    private function carregarListaUF($idUF)
+    {
+        $this->_helper->layout->disableLayout();
+        
+        $mun = new Agente_Model_DbTable_Municipios();
+        $cidade = $mun->listar($idUF);
+        $a = 0;
+        $cidadeArray = array();
+        foreach ($cidade as $DadosCidade) {
+            $cidadeArray[$a]['idCidade'] = $DadosCidade->id;
+            $cidadeArray[$a]['nomeCidade'] = utf8_encode($DadosCidade->Descricao);
+            $a++;
+        }
+        $this->_helper->json($cidadeArray);
+        $this->_helper->viewRenderer->setNoRender(true);        
+    }
+
+    private function carregarEtapaProduto($idEtapa, $idProduto)
+    {
+        $this->_helper->layout->disableLayout();
+        
+        $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
+        $itens = $tbItensPlanilhaProduto->itensPorItemEEtapaReadequacao($idEtapa, $idProduto);
+        
+        $a = 0;
+        $itensArray = array();
+        foreach ($itens as $i) {
+            $itensArray[$a]['idPlanilhaItens'] = $i->idPlanilhaItens;
+            $itensArray[$a]['Item'] = utf8_encode($i->Item);
+            $a++;
+        }
+        $this->_helper->json($itensArray);
+        $this->_helper->viewRenderer->setNoRender(true);
+    }
 
     /*
      * Criada em 06/03/14
