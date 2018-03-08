@@ -64,8 +64,12 @@
             <div class="row">
                 <div class="col s8">
                     <h5>
-                        Comprovar
-                        Pagamento<?php if ($this->idComprovantePagamento) : ?> - editando item<?php else : ?> - cadastrar item<?php endif; ?>
+                        Comprovar Pagamento
+                        <?php if ($this->idComprovantePagamento): ?>
+                            - editando item
+                        <?php else: ?> 
+                            - cadastrar item
+                        <?php endif; ?>
                     </h5>
                 </div>
                 <div class="col s4 align-right">
@@ -77,7 +81,6 @@
                     <?php endif; ?>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col s12">
                     <div id="incluircomprovacaoAjax">
@@ -127,14 +130,13 @@
                                 <div id="tabelaComprovante">
                                     <fieldset>
                                         <legend>Identifica&ccedil;&atilde;o do Contratado</legend>
-                                        <input type="hidden" name="idAgente" id="idAgente"
-                                               value="<?php echo $this->idAgente; ?>"/>
+                                        <input type="hidden" name="idAgente" id="idAgente" value="<?php echo $this->idAgente; ?>"/>
                                         <div class="row">
                                             <div class="input-field col s4">
                                                 <select
                                                     id="pais"
                                                     name="pais"
-                                                    class="left-align"
+                                                    class="left-align "
                                                     onchange="toggleTabelaComprovacaoPagamentoInvoice();" >
                                                     <?php foreach ($this->paises as $pais) : ?>
                                                         <option value="<?php echo $pais->Descricao; ?>"
@@ -144,11 +146,11 @@
                                                         </option>
                                                     <?php endforeach; ?>
                                                 </select>
-                                                <label for="pais">Nacionalidade do Fornecedor <span style='color:red'>*</span></label>
+                                                <label class="actived" for="pais">Nacionalidade do Fornecedor <span style='color:red'>*</span></label>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="input-field col s6">
+                                            <div class=" col s6">
                                                 <p>Tipo do Fornecedor <span style='color:red'>*</span></p>
                                                 <p>
                                                     <input
@@ -575,9 +577,7 @@
         </div>
     </div>
 </div>
-
-<iframe id="anexarArquivo" name="anexarArquivo" src="#"
-        style="width: 300px;height: 300px;display: none;"></iframe>
+<iframe id="anexarArquivo" name="anexarArquivo" src="#" style="width: 300px;height: 300px;display: none;"></iframe>
 
 <div id="alerta"></div>
 
@@ -610,9 +610,10 @@
     $(document).ready(function () {
         // tratamento comum
         var form = '#incluircomprovacaoAjax';
-        $('input[type!=button][type!=submit]').addClass('input_simples');
-        $('textarea').addClass('textarea_simples');
-        $('select[id!=perfilXgrupo]').addClass('select_simples');
+        /* $('input[type!=button][type!=submit]').addClass('input_simples'); */
+        /* $('textarea').addClass('textarea_simples'); */
+        /* $('select[id!=perfilXgrupo]').addClass('select_simples'); */
+
         $(form).find('[data=true]').each(function () {
             $(this).keyup(function () {
                 mascara(this, format_data);
@@ -640,13 +641,17 @@
         });
 
         $(form).find('[cnpjcpf=true]').each(function () {
+            console.log('teste1:');
             var este = this;
-            $('.' + $(este).attr('classaux')).click(function () {
+            /* $('.' + $(este).attr('classaux')).click(function () { */
+            $('.' + $(este).prop('classaux')).click(function () {
                 mascaraCNPJCPF(este);
                 buscarFornecedor(este);
             });
-            $('#' + $(este).attr('idDescricao')).attr('readonly', true);
+            /* $('#' + $(este).prop('idDescricao')).attr('readonly', true); */
+            $('#' + $(este).prop('idDescricao')).prop('readonly', true);
         });
+
         $(form).find('[cnpjcpf=true]').keyup(function () {
             mascaraCNPJCPF(this);
             buscarFornecedor(this);
@@ -654,6 +659,7 @@
 
         function mascaraCNPJCPF(este) {
             var marcado = buscarRadioMarcado(este);
+            console.log('teste');
             switch (marcado) {
                 case 'cpf':
                     $(este).val($(este).val().slice(0, 14));
@@ -671,9 +677,11 @@
         }
 
         function buscarRadioMarcado(este) {
+            console.log('teste:');
             var marcado = '';
             $('.' + $(este).attr('classaux')).each(function () {
-                if ($(this).attr('checked')) {
+                /* if ($(this).attr('checked')) { */
+                if ($(this).prop('checked')) {
                     marcado = $(this).val();
                 }
             });
@@ -1084,5 +1092,11 @@
         mascaraCNPJCPF(cnpjcpf);
     }
 
-    $3('select').material_select();
+    /* $3('select').material_select(); */
+</script>
+<script>
+  $(document).ready(function() {
+    /* $3('select').material_select(); */
+   console.log($3('#tpFornecedorCpf :checked').val());
+  });
 </script>
