@@ -97,7 +97,22 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
         }
     }
 
-    public function buscarTecnicosPorOrgao($idOrgao)
+    public function obterTecnicos()
+    {
+        $tecnicos = [];
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_ANALISE;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::PROTOCO_DOCUMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::PROTOCOLO_RECBIMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO;
+
+        return $tecnicos;
+    }
+
+    public function buscarTecnicosPorOrgao($id_orgao)
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -107,9 +122,9 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
 
         $select->joinInner(['u' => 'UsuariosXOrgaosXGrupos'], 'u.uog_grupo = g.gru_codigo', ['uog_orgao'], $this->_schema );
 
-        $select->where('g.gru_nome like ?', "Técnico%");
+        $select->where('g.gru_codigo in (?)', $this->obterTecnicos());
         $select->where('g.gru_status = ?', 1);
-        $select->where('u.uog_orgao = ?', $idOrgao);
+        $select->where('u.uog_orgao = ?', $id_orgao);
         $select->group(['gru_codigo', 'gru_nome','uog_orgao']);
 
         return $this->fetchAll($select);
