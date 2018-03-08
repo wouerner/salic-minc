@@ -14,7 +14,6 @@ class Proposta_MenuController extends Proposta_GenericController
 
     public function menuAction()
     {
-
         $this->view->arrMenuProponente = self::gerarArrayMenu($this->idPreProjeto);
 
     }
@@ -27,7 +26,8 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'informacaoinicial',
             'label' => 'Informa&ccedil;&otilde;es iniciais',
             'title' => '',
-            'link' => '',
+            'url' => '',
+            'icon' => 'home',
             'menu' => array(),
             'grupo' => array()
         );
@@ -53,6 +53,7 @@ class Proposta_MenuController extends Proposta_GenericController
             'label' => 'Local de realiza&ccedil;&atilde;o',
             'title' => '',
             'link' => array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
+            'icon' => 'pin_drop',
             'menu' => array(),
             'grupo' => array()
         );
@@ -62,6 +63,7 @@ class Proposta_MenuController extends Proposta_GenericController
             'label' => 'Plano de distribui&ccedil;&atilde;o',
             'title' => 'Ir para plano de distribui&ccedil;&atilde;o',
             'link' => array('module' => 'proposta', 'controller' => 'plano-distribuicao', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
+            'icon' => 'multiline_chart',
             'menu' => array(),
             'grupo' => array()
         );
@@ -70,7 +72,8 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'planodedistribuicao',
             'label' => 'Or&ccedil;amento do projeto',
             'title' => '',
-            'link' => '',
+            'url' => '',
+            'icon' => 'insert_chart',
             'menu' => array(),
             'grupo' => array()
         );
@@ -91,7 +94,8 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'itensorcamentario',
             'label' => 'Itens or&ccedil;ament&aacute;rios',
             'title' => '',
-            'link' => '',
+            'url' => '',
+            'icon' => 'show_chart',
             'menu' => array(),
             'grupo' => array()
         );
@@ -108,7 +112,8 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'anexardocumentos',
             'label' => 'Anexar documentos',
             'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterpropostaedital', 'action' => 'enviararquivoedital', 'idPreProjeto' => $idPreProjeto),
+            'link' => array('module' => 'proposta', 'controller' => 'manterpropostaedital', 'action' => 'enviararquivoedital') . '?idPreProjeto=' . $idPreProjeto,
+            'icon' => 'attachment',
             'menu' => array(),
             'grupo' => array()
         );
@@ -118,6 +123,7 @@ class Proposta_MenuController extends Proposta_GenericController
             'label' => 'Gerar PDF',
             'title' => '',
             'link' => array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'imprimirpropostacultural', 'idPreProjeto' => $idPreProjeto),
+            'icon' => 'picture_as_pdf',
             'menu' => array(),
             'grupo' => array()
         );
@@ -127,6 +133,7 @@ class Proposta_MenuController extends Proposta_GenericController
             'label' => 'Dilig&ecirc;ncias',
             'title' => '',
             'link' => array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaproponente', 'idPreProjeto' => $idPreProjeto),
+            'icon' => 'announcement',
             'menu' => array(),
             'grupo' => array()
         );
@@ -135,6 +142,7 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'minhassolicitacoes',
             'label' => 'Minhas solicita&ccedil;&otilde;es',
             'title' => '',
+            'icon' => 'message',
             'link' => array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
             'menu' => array(),
             'grupo' => array()
@@ -148,7 +156,8 @@ class Proposta_MenuController extends Proposta_GenericController
                     'id' => 'excluirproposta',
                     'label' => 'Excluir proposta',
                     'title' => '',
-                    'link' => '',
+                    'url' => '',
+                    'icon' => 'delete_forever',
                     'menu' => array(),
                     'grupo' => array()
                 );
@@ -158,6 +167,7 @@ class Proposta_MenuController extends Proposta_GenericController
                     'label' => 'Enviar proposta ao MinC',
                     'title' => '',
                     'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'enviar-proposta', 'idPreProjeto' => $idPreProjeto),
+                    'icon' => 'send',
                     'menu' => array(),
                     'grupo' => array()
                 );
@@ -167,6 +177,7 @@ class Proposta_MenuController extends Proposta_GenericController
                     'label' => 'Encaminhar projeto ao MinC',
                     'title' => '',
                     'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'encaminharprojetoaominc', 'idPreProjeto' => $idPreProjeto),
+                    'icon' => 'send',
                     'menu' => array(),
                     'grupo' => array()
                 );
@@ -187,6 +198,4 @@ class Proposta_MenuController extends Proposta_GenericController
 
         return $segundos;
     }
-
-
 }

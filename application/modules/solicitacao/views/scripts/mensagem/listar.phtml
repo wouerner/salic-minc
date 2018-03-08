@@ -1,7 +1,7 @@
-<div class="table-responsive mensagens">
+<div class="table-responsive mensagens bordered">
     <?php if (count($this->arrResult) > 0) : ?>
-        <table class="table table-bordered" style="width: 100%">
-            <thead class=" green darken-1 white-text">
+        <table class="table table-bordered striped" style="width: 100%">
+            <thead class="">
             <tr>
                 <th data-field="" class="messagem-numero left-align">Nº</th>
                 <th data-field="" class="messagem-titulo left-align">Título</th>
@@ -39,9 +39,11 @@
                 <tr class="<?= ($arrValue['stLeitura'] == 0 && !empty($arrValue['dtResposta'])) ? 'unread' : 'read'; ?>">
                     <td>
                         <?php if (!empty($arrValue['Pronac'])) : ?>
-                            <a class="waves-effect waves-teal btn small white"
+                            <a
                                target="_blank"
                                href="<?= $this->url($arrayLinkProjeto, null, true); ?>"
+                               data-tooltip="Visualizar projeto"
+                               class="waves-effect waves-teal btn small white tooltipped black-text"
                             ><?= $arrValue['Pronac']; ?></a>
 
                         <?php elseif ($arrValue['idProjeto']) : ?>
@@ -53,7 +55,7 @@
                                 data-ajax-modal-height="96%"
                                 data-ajax-modal-width="98%"
                                 data-tooltip="Visualizar proposta"
-                                class="waves-effect waves-teal btn small white tooltipped"
+                                class="waves-effect waves-teal btn small white tooltipped black-text"
                             ><?= $arrValue['idProjeto']; ?></a>
                         <?php endif; ?>
                     </td>
