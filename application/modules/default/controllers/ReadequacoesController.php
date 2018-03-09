@@ -88,21 +88,23 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $idUF = $this->_request->getParam('iduf');
         $idEtapa = $this->_request->getParam('idEtapa');
         $idProduto = $this->_request->getParam('idProduto');
+        $idMunicipio = $this->_request->getParam('idMunicipio');
+        
+        $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        $this->view->idPronac = $idPronac;
         
         if ($idUF) {
             $this->carregarListaUF($idUF);
         }
         
         if ($idEtapa && $idProduto) {
-            $this->carregarEtapaProduto($idEtapa, $idProduto);
+            $this->carregarEtapaProduto($idEtapa, $idProduto, $idPronac, $idMunicipio);
         }
 
-        $idPronac = $this->_request->getParam("idPronac");
-        if (strlen($idPronac) > 7) {
-            $idPronac = Seguranca::dencrypt($idPronac);
-        }
-
-        $this->view->idPronac = $idPronac;
+        
         if (!empty($idPronac)) {
             $Projetos = new Projetos();
             $this->view->projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
@@ -157,20 +159,48 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $this->_helper->viewRenderer->setNoRender(true);        
     }
 
-    private function carregarEtapaProduto($idEtapa, $idProduto)
+    private function carregarEtapaProduto($idEtapa, $idProduto, $idPronac = null, $idMunicipio = null)
     {
         $this->_helper->layout->disableLayout();
         
         $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
         $itens = $tbItensPlanilhaProduto->itensPorItemEEtapaReadequacao($idEtapa, $idProduto);
-        
-        $a = 0;
-        $itensArray = array();
-        foreach ($itens as $i) {
-            $itensArray[$a]['idPlanilhaItens'] = $i->idPlanilhaItens;
-            $itensArray[$a]['Item'] = utf8_encode($i->Item);
-            $a++;
+
+        if ($idPronac && $idMunicipio) {
+            $itensAtuais = $tbItensPlanilhaProduto->itensPorProdutoItemEtapaMunicipioReadequacao(
+                $idEtapa,
+                $idProduto,
+                $idMunicipio,
+                $idPronac
+            );
+            
+            $a = 0;
+            $itensArray = array();
+            
+            foreach ($itens as $item) {
+                $excluir = false;
+                foreach ($itensAtuais as $atuais) {
+                    if ($item->idPlanilhaItens == $atuais->idPlanilhaItens) {
+                        $excluir = true;
+                    }
+                }
+
+                if (!$excluir) {
+                    $itensArray[$a]['idPlanilhaItens'] = $item->idPlanilhaItens;
+                    $itensArray[$a]['Item'] = utf8_encode($item->Item);                
+                    $a++;
+                }
+            }
+            
+        } else {
+            // old
+            foreach ($itens as $item) {
+                $itensArray[$a]['idPlanilhaItens'] = $item->idPlanilhaItens;
+                $itensArray[$a]['Item'] = utf8_encode($item->Item);
+                $a++;
+            }            
         }
+        
         $this->_helper->json($itensArray);
         $this->_helper->viewRenderer->setNoRender(true);
     }

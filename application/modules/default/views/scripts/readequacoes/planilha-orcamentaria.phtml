@@ -79,7 +79,7 @@
 	      'id_produto': $(this).attr('id_produto'),
 	      'id_fonte': $(this).attr('id_fonte')
 	  }
-	  console.log(dadosModal);
+          
 	  modalItem(dadosModal);
       });
         
@@ -119,7 +119,10 @@
 		    type: "POST",
                     data :{
                         idEtapa : $('#newEtapa').val(),
-                        idProduto : dados.id_produto
+			idMunicipio: dados.id_municipio,
+			idProduto : dados.id_produto,
+			idPronac: <?php print $this->idPronac; ?>
+			
                     },
                     success: function(valor){
                         $("#newItem").html('<option value=""> - Selecione - </option>');
