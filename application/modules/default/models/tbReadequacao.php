@@ -1228,7 +1228,11 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         $liberacao = new Liberacao();
         $projeto = new Projetos();
         
-        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac, $idAgente);
+        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento(
+            $idPronac,
+            $idAgente,
+            self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+        );
         $contaLiberada = $liberacao->contaLiberada($idPronac);
         $periodoExecucao = $projeto->buscarPeriodoExecucao($idPronac);
         

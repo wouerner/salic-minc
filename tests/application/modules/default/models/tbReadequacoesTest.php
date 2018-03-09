@@ -75,4 +75,13 @@ class TbReadequacoesModelTest extends MinC_Test_ModelTestCase
         $disponivelParaEdicaoReadequacaoPlanilha = $tbReadequacao->disponivelParaEdicaoReadequacaoPlanilha($this->idPronac, $idAgente);
         $this->assertTrue($disponivelParaEdicaoReadequacaoPlanilha);
     }
+
+    public function testDisponivelParaAdicaoItensReadequacaoPlanilha()
+    {
+        $idAgente = 9343;
+        $tbReadequacao = new tbReadequacao();
+        
+        $disponivelParaEdicaoReadequacaoPlanilha = $tbReadequacao->disponivelParaAdicaoItensReadequacaoPlanilha($this->idPronac, $idAgente);
+        $this->assertTrue($disponivelParaEdicaoReadequacaoPlanilha);
+    }
 }
