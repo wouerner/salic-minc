@@ -21,7 +21,7 @@
                 <?php endif; ?>
             </div>
         </li>
-        <?php echo $this->partialLoop('inc/item.phtml', $this->arrMenuProponente); ?>
+        <?php echo $this->partialLoop('/menu/partials/item.phtml', 'proposta', $this->arrMenuProponente); ?>
     </ul>
 
     <div id="trocarproponente" style="display:none">
@@ -65,17 +65,6 @@
     </div>
 </aside>
 <script type="text/javascript">
-    function layout_fluido() {
-        var janela = $(window).width();
-
-//        $("#navglobal").css("width", "100%");
-//        $("#conteudo").css("width", "100%");
-//        $("#titulo").css("width", "100%");
-//        $("#rodapeConteudo").css("width", "100%");
-//        $("#rodape").css("width", "100%");
-        $("div#rodapeConteudo").attr("id", "rodapeConteudo_com_menu");
-    }
-
     $(document).ready(function () {
         <?php if (!$this->isEditavel) : ?>
         //DESABILITA ALTERACOES NOS DADOS DO FORMULARIO (INCLUIR/ALTERAR/EXCLUIR)

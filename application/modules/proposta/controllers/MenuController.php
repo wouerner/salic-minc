@@ -20,31 +20,57 @@ class Proposta_MenuController extends Proposta_GenericController
 
     private function gerarArrayMenu($idPreProjeto)
     {
-
         $arrMenuProponente = array();
         $arrMenuProponente['principal'] = array(
             'id' => 'informacaoinicial',
             'label' => 'Informa&ccedil;&otilde;es iniciais',
             'title' => '',
-            'url' => '',
+            'link' => '',
             'icon' => 'home',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
-        $arrMenuProponente['principal']['menu'][] = array('label' => 'Identifica&ccedil&atilde;o da proposta', 'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'identificacaodaproposta', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['principal']['menu_nivel_1'][] = array(
+            'label' => 'Identifica&ccedil&atilde;o da proposta',
+            'title' => '',
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'manterpropostaincentivofiscal',
+                'action' => 'identificacaodaproposta',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
-        $arrMenuProponente['principal']['menu'][] = array('label' => 'Responsabilidade Social', 'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'responsabilidadesocial', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['principal']['menu_nivel_1'][] = array(
+            'label' => 'Responsabilidade Social',
+            'title' => '',
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'manterpropostaincentivofiscal',
+                'action' => 'responsabilidadesocial',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
-        $arrMenuProponente['principal']['menu'][] = array('label' => 'Detalhes t&eacute;cnicos', 'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'detalhestecnicos', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['principal']['menu_nivel_1'][] = array(
+            'label' => 'Detalhes t&eacute;cnicos',
+            'title' => '',
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'manterpropostaincentivofiscal',
+                'action' => 'detalhestecnicos',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
-        $arrMenuProponente['principal']['menu'][] = array('label' => 'Outras informa&ccedil;&otilde;es', 'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'outrasinformacoes', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['principal']['menu_nivel_1'][] = array(
+            'label' => 'Outras informa&ccedil;&otilde;es',
+            'title' => '',
+            'link' => array('module' => 'proposta',
+                'controller' => 'manterpropostaincentivofiscal',
+                'action' => 'outrasinformacoes',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
 
@@ -52,9 +78,14 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'localderealizacoes',
             'label' => 'Local de realiza&ccedil;&atilde;o',
             'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'localderealizacao', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'localderealizacao',
+                'action' => 'index',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'icon' => 'pin_drop',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
 
@@ -62,9 +93,14 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'planodedistribuicao',
             'label' => 'Plano de distribui&ccedil;&atilde;o',
             'title' => 'Ir para plano de distribui&ccedil;&atilde;o',
-            'link' => array('module' => 'proposta', 'controller' => 'plano-distribuicao', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'plano-distribuicao',
+                'action' => 'index',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'icon' => 'multiline_chart',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
 
@@ -72,21 +108,40 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'planodedistribuicao',
             'label' => 'Or&ccedil;amento do projeto',
             'title' => '',
-            'url' => '',
+            'link' => '',
             'icon' => 'insert_chart',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
-        $arrMenuProponente['planilhaorcamentaria']['menu'][] = array('label' => 'Custos Vinculados', 'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'custosvinculados', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['planilhaorcamentaria']['menu_nivel_1'][] = array(
+            'label' => 'Custos Vinculados',
+            'title' => '',
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'manterorcamento',
+                'action' => 'custosvinculados',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
-        $arrMenuProponente['planilhaorcamentaria']['menu'][] = array('label' => 'Custos por produtos', 'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'produtoscadastrados', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['planilhaorcamentaria']['menu_nivel_1'][] = array(
+            'label' => 'Custos por produtos',
+            'title' => '',
+            'link' => array('module' => 'proposta',
+                'controller' => 'manterorcamento',
+                'action' => 'produtoscadastrados',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
-        $arrMenuProponente['planilhaorcamentaria']['menu'][] = array('label' => 'Visualizar planilha', 'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterorcamento', 'action' => 'planilhaorcamentariageral', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['planilhaorcamentaria']['menu_nivel_1'][] = array(
+            'label' => 'Visualizar planilha',
+            'title' => '',
+            'link' => array('module' => 'proposta',
+                'controller' => 'manterorcamento',
+                'action' => 'planilhaorcamentariageral',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
 
@@ -94,17 +149,32 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'itensorcamentario',
             'label' => 'Itens or&ccedil;ament&aacute;rios',
             'title' => '',
-            'url' => '',
+            'link' => '',
             'icon' => 'show_chart',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
-        $arrMenuProponente['itensorcamentario']['menu'][] = array('label' => 'Solicitar inclus&atilde;o de itens', 'title' => 'Ir para Solicitar inclus&atilde;o de itens',
-            'link' => array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
+        $arrMenuProponente['itensorcamentario']['menu_nivel_1'][] = array(
+            'label' => 'Solicitar inclus&atilde;o de itens',
+            'title' => 'Ir para Solicitar inclus&atilde;o de itens',
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'mantertabelaitens',
+                'action' => 'index',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'grupo' => array()
         );
-        $arrMenuProponente['itensorcamentario']['menu'][] = array('label' => 'Minhas solicita&ccedil;&otilde;es', 'title' => 'Ir para Minhas solicita&ccedil;&otilde;es',
-            'link' => array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'minhas-solicitacoes', 'idPreProjeto' => $idPreProjeto, 'tipoFiltro' => 'solicitado'),
+        $arrMenuProponente['itensorcamentario']['menu_nivel_1'][] = array(
+            'label' => 'Minhas solicita&ccedil;&otilde;es',
+            'title' => 'Ir para Minhas solicita&ccedil;&otilde;es',
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'mantertabelaitens',
+                'action' => 'minhas-solicitacoes',
+                'idPreProjeto' => $idPreProjeto,
+                'tipoFiltro' => 'solicitado'
+            ),
             'grupo' => array()
         );
 
@@ -112,9 +182,14 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'anexardocumentos',
             'label' => 'Anexar documentos',
             'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'manterpropostaedital', 'action' => 'enviararquivoedital') . '?idPreProjeto=' . $idPreProjeto,
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'manterpropostaedital',
+                'action' => 'enviararquivoedital',
+                'idPreProjeto' => $idPreProjeto
+                ),
             'icon' => 'attachment',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
 
@@ -122,9 +197,14 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'imprimir',
             'label' => 'Gerar PDF',
             'title' => '',
-            'link' => array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'imprimirpropostacultural', 'idPreProjeto' => $idPreProjeto),
+            'link' => array(
+                'module' => 'admissibilidade',
+                'controller' => 'admissibilidade',
+                'action' => 'imprimirpropostacultural',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'icon' => 'picture_as_pdf',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
 
@@ -132,9 +212,14 @@ class Proposta_MenuController extends Proposta_GenericController
             'id' => 'mensagensenviadas',
             'label' => 'Dilig&ecirc;ncias',
             'title' => '',
-            'link' => array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaproponente', 'idPreProjeto' => $idPreProjeto),
+            'link' => array(
+                'module' => 'proposta',
+                'controller' => 'diligenciar',
+                'action' => 'listardiligenciaproponente',
+                'idPreProjeto' => $idPreProjeto
+            ),
             'icon' => 'announcement',
-            'menu' => array(),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
 
@@ -143,8 +228,13 @@ class Proposta_MenuController extends Proposta_GenericController
             'label' => 'Minhas solicita&ccedil;&otilde;es',
             'title' => '',
             'icon' => 'message',
-            'link' => array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index', 'idPreProjeto' => $idPreProjeto),
-            'menu' => array(),
+            'link' => array(
+                'module' => 'solicitacao',
+                'controller' => 'mensagem',
+                'action' => 'index',
+                'idPreProjeto' => $idPreProjeto
+            ),
+            'menu_nivel_1' => array(),
             'grupo' => array()
         );
 
@@ -156,9 +246,9 @@ class Proposta_MenuController extends Proposta_GenericController
                     'id' => 'excluirproposta',
                     'label' => 'Excluir proposta',
                     'title' => '',
-                    'url' => '',
+                    'link' => '',
                     'icon' => 'delete_forever',
-                    'menu' => array(),
+                    'menu_nivel_1' => array(),
                     'grupo' => array()
                 );
 
@@ -166,9 +256,14 @@ class Proposta_MenuController extends Proposta_GenericController
                     'id' => 'enviarproposta',
                     'label' => 'Enviar proposta ao MinC',
                     'title' => '',
-                    'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'enviar-proposta', 'idPreProjeto' => $idPreProjeto),
+                    'link' => array(
+                        'module' => 'proposta',
+                        'controller' => 'manterpropostaincentivofiscal',
+                        'action' => 'enviar-proposta',
+                        'idPreProjeto' => $idPreProjeto
+                    ),
                     'icon' => 'send',
-                    'menu' => array(),
+                    'menu_nivel_1' => array(),
                     'grupo' => array()
                 );
             } else {
@@ -176,9 +271,14 @@ class Proposta_MenuController extends Proposta_GenericController
                     'id' => 'encaminharprojetoaominc',
                     'label' => 'Encaminhar projeto ao MinC',
                     'title' => '',
-                    'link' => array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'encaminharprojetoaominc', 'idPreProjeto' => $idPreProjeto),
+                    'link' => array(
+                        'module' => 'proposta',
+                        'controller' => 'manterpropostaincentivofiscal',
+                        'action' => 'encaminharprojetoaominc',
+                        'idPreProjeto' => $idPreProjeto
+                    ),
                     'icon' => 'send',
-                    'menu' => array(),
+                    'menu_nivel_1' => array(),
                     'grupo' => array()
                 );
             }
