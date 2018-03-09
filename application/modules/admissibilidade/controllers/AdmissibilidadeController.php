@@ -389,7 +389,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $tblProposta = new Proposta_Model_DbTable_PreProjeto();
         $rsProposta = $tblProposta->buscar(
             array(
-                "idPreProjeto=?" => $this->idPreProjeto
+                "idPreProjeto = ?" => $this->idPreProjeto
             )
         )->current();
 
@@ -2707,6 +2707,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $distribuicaoAvaliacaoProposta = new Admissibilidade_Model_DistribuicaoAvaliacaoProposta();
         $distribuicaoAvaliacaoProposta->setIdOrgaoSuperior($orgaoSuperior);
         $distribuicaoAvaliacaoProposta->setIdPerfil($this->grupoAtivo->codGrupo);
+
+        $get = $this->getRequest()->getParams();
+        if($get['filtro'] == 'inicial') {
+            $where['CodSituacao = ?'] = Agente_Model_DbTable_Verificacao::PROPOSTA_PARA_ANALISE_INICIAL;
+        }
+        if($get['filtro'] == 'avaliada') {
+            $where['CodSituacao = ?'] = Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL;
+        }
 
         $propostas = $vwPainelAvaliar->obterPropostasParaAvaliacao(
             $where,

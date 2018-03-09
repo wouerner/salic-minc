@@ -1,6 +1,6 @@
 (function ($) {
     $(document).ready(function () {
-        $('#tabelaAnaliseFinal').DataTable(
+        var objetoDataTable = $('#tabelaAnaliseFinal').DataTable(
             {
                 'language': {
                     'url': 'https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json'
@@ -27,7 +27,12 @@
                 ]
                 , 'ajax': {
                 url: '/admissibilidade/admissibilidade/listar-propostas-ajax',
-                type: 'POST'
+                type: 'POST',
+                data: {
+                    filtro: function () {
+                        return $3("#filtro").val()
+                    }
+                }
             },
                 'processing': true,
                 'serverSide': true,
@@ -38,9 +43,17 @@
                 },
                 'columns': obterColunasListagem()
             }
-        )
+        );
 
-    })
+        $3(".filtro-avaliacao").click(function() {
+            $3("#filtro").val('');
+            if(typeof $(this).data('filtro') != 'undefined') {
+                $3("#filtro").val($(this).data('filtro'));
+                objetoDataTable.ajax.reload();
+            }
+        });
+    });
+
 }($.noConflict(true)))
 
 function obterColunasListagem () {
@@ -83,7 +96,7 @@ function obterColunasListagem () {
         colunas.push({
             data: null,
             render: function (data, type, row) {
-                if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()) {
+                    if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()) {
                     return '<i class="material-icons">done</i>' +
                         ''
                 }
@@ -244,6 +257,8 @@ $3(document).ready(function () {
             }
         })
     })
+
+
 })
 
 $('#tabelaAnaliseFinal').ready(function () {
