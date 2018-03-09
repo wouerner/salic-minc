@@ -1,10 +1,10 @@
-<?php if ($this->idPreProjeto && $this->ehProponente) : ?>
-    <?= $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
+<?php if ($this->idPreProjeto && $this->isProponente) : ?>
+    <?php echo $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
 <?php else: ?>
-    <?= $this->partial('/mensagem/partials/menu.phtml', $this); ?>
+    <?php echo $this->partial('/mensagem/partials/menu.phtml', $this); ?>
 <?php endif; ?>
 
-<div class="container-fluid">
+<div class="container-fluid cant-disable">
     <div class="row">
         <div class="page-title">
             <div class="row">
@@ -32,13 +32,13 @@
         <div class="content">
             <div class="card-panel">
                 <div class="row">
-                    <?php if ($this->arrPartial['dataForm']['idSolicitacao'] && $this->arrPartial['ehProponente']) : ?>
+                    <?php if ($this->arrPartial['dataForm']['idSolicitacao'] && $this->arrPartial['isProponente']) : ?>
                         <div class="msgALERT">
                             <div>Solicitação salva como rascunho!</div>
                         </div>
                     <?php endif; ?>
 
-                    <?= $this->partial('/mensagem/partials/form.phtml', $this->arrPartial); ?>
+                    <?php echo $this->partial('/mensagem/partials/form.phtml', $this->arrPartial); ?>
                 </div>
             </div>
         </div>

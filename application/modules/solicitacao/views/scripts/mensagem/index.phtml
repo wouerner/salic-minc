@@ -11,10 +11,8 @@ if ($this->listarTudo == true) {
 }
 
 ?>
-<?php if ($this->idPreProjeto && $this->ehProponente) : ?>
-    <?= $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
-<?php else: ?>
-    <?= $this->partial('/mensagem/partials/menu.phtml', $this); ?>
+<?php if ($this->idPreProjeto && $this->isProponente) : ?>
+    <?php echo $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
 <?php endif; ?>
 
 <div class="container-fluid">
@@ -69,7 +67,7 @@ if ($this->listarTudo == true) {
                          data-ajax-render='/solicitacao/mensagem/listar<?= $params; ?>'>
                     </div>
                     <?php if(isset($this->projeto->IdPRONAC) || $this->proposta->idPreProjeto) : ?>
-                        <?php if (!empty($this->existeSolicitacaoEnviadaNaoRespondida) && $this->ehProponente) : ?>
+                        <?php if (!empty($this->existeSolicitacaoEnviadaNaoRespondida) && $this->isProponente) : ?>
                             <div class="center-align padding20">
                                 <a href="javascript:void(0)"
                                    onload="(function(e){ alert(e); })(event)"
@@ -77,7 +75,7 @@ if ($this->listarTudo == true) {
                             </div>
                             <div class="message"><span>Você possui uma solicitação aguardando resposta.</span></div>
                         <?php else: ?>
-                            <?php if ($this->ehProponente) : ?>
+                            <?php if ($this->isProponente) : ?>
                                 <div class="center-align padding20">
                                     <a id="btn_enviar"
                                        href="<?= $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'solicitar', 'idPronac' => $this->projeto->IdPRONAC, 'idPreProjeto' => $this->proposta->idPreProjeto)); ?>"

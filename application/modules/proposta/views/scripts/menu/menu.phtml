@@ -68,13 +68,9 @@
     $(document).ready(function () {
         <?php if (!$this->isEditavel) : ?>
         //DESABILITA ALTERACOES NOS DADOS DO FORMULARIO (INCLUIR/ALTERAR/EXCLUIR)
-        JSBloquearAlteracaoFormulario();
-
-        $("textarea.editor").each(function () {
-            $(this).editorRico({
-                isDesabilitarEdicao: 1
-            });
-        });
+        if(!$('.cant-disable').length){
+            JSBloquearAlteracaoFormulario();
+        }
 
         <?php endif; ?>
         $('.planilha').click(function () {

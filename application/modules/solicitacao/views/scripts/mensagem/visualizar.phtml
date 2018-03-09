@@ -1,8 +1,8 @@
-<?php if ($this->arrPartial['dataForm']['idProjeto'] && $this->ehProponente) : ?>
-    <?= $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->arrPartial['dataForm']['idProjeto'] )); ?>
-<?php else: ?>
-    <?= $this->partial('/mensagem/partials/menu.phtml', $this); ?>
-<?php endif; ?>
+<?php
+    if ($this->arrPartial['dataForm']['idProjeto'] && $this->isProponente) {
+        echo $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->arrPartial['dataForm']['idProjeto']));
+    }
+?>
 
 <div class="container-fluid">
     <div class="row">
@@ -32,7 +32,7 @@
         <div class="content">
             <div class="card-panel">
                 <div class="row">
-                    <?= $this->partial('/mensagem/partials/form.phtml', $this->arrPartial); ?>
+                    <?php echo $this->partial('/mensagem/partials/form.phtml', $this->arrPartial); ?>
                 </div>
             </div>
         </div>

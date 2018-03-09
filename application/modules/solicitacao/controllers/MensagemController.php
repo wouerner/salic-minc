@@ -55,7 +55,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             'urlAction' => $strUrlAction,
             'strActionBack' => $strActionBack,
             'currentUrl' => Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(),
-            'ehProponente' => $this->ehProponente
+            'isProponente' => $this->isProponente
         );
     }
 
@@ -206,7 +206,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         $urlAction = $this->_urlPadrao . "/solicitacao/mensagem/salvar";
         $urlCallBack = $this->_urlPadrao . "/solicitacao/mensagem/index";
-
+        $this->view->isEditavel = true;
         try {
 
             if (empty($this->idPronac) && empty($this->idPreProjeto))
@@ -247,7 +247,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
     public function salvarAction()
     {
-        $status = false;
 
         if ($this->getRequest()->isPost()) {
 
@@ -266,17 +265,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
 
-                $whereSolicitacoes = [];
-                $whereSolicitacoes['a.idUsuario'] = $arrayForm['idUsuario'];
-                if ($arrayForm['idPronac']) {
-                    $whereSolicitacoes['a.idPronac'] = $arrayForm['idPronac'];
-                }
-
-                if ($arrayForm['idPreProjeto']) {
-                    $whereSolicitacoes['a.idPreProjeto'] = $arrayForm['idPreProjeto'];
-                }
-
-                $solicitacao = $mapperSolicitacao->solicitacaoNaoRespondida($whereSolicitacoes);
+                $solicitacao = $mapperSolicitacao->solicitacaoNaoRespondida($arrayForm);
 
                 if (isset($solicitacao['siEncaminhamento'])) {
 
@@ -289,10 +278,13 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
 
+
                 if ($arrayForm['siEncaminhamento'] == 1 && $idSolicitacao) {
                     $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao . $strParams;
                     $status = true;
-                } else {
+                } elseif($idSolicitacao == 0){
+                    $status = false;
+                }else{
                     $strUrl = '/solicitacao/mensagem/solicitar' . $strParams;
                     $status = true;
                 }
