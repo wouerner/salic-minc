@@ -5,7 +5,7 @@ class AnaliseControllerTest extends MinC_Test_ControllerActionTestCase
      public function setUp()
      {
         parent::setUp();
-
+        $this->idPreProjeto = '204078';
         $this->autenticar();
 
         $this->resetRequest()
@@ -28,5 +28,10 @@ class AnaliseControllerTest extends MinC_Test_ControllerActionTestCase
     {
         $this->dispatch('/analise/analise/listarprojetos');
         $this->assertUrl('analise','analise', 'listarprojetos');
+    }
+    public function testAnaliseVizualizarProjetosAction()
+    {
+        $this->dispatch('/analise/analise/visualizarprojeto?idpronac=' . $this->idPreProjeto);
+        $this->assertUrl('analise','analise', 'visualizarprojeto');
     }
 }
