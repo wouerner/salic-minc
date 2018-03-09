@@ -20,7 +20,7 @@ class TbLiberacaoModelTest extends MinC_Test_ModelTestCase
         $idPronac = 206025;
         $liberacao = new Liberacao();
         $contaLiberada = $liberacao->contaLiberada($this->idPronac);
-        print_r($contaLiberada);
+        
         $this->assertTrue($contaLiberada);
     }
 }
