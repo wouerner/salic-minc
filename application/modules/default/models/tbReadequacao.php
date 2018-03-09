@@ -1109,4 +1109,141 @@ class tbReadequacao extends MinC_Db_Table_Abstract
             return false;
         }
     }
+
+
+    /**
+     * Método para verificar se existe qualquer tipo de readequação em andamento
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idAgente
+     * @param integer $idTipoReadequacao
+     * @return boolean
+     */    
+    public function existeReadequacaoEmAndamento($idPronac, $idAgente = null, $idTipoReadequacao = null)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('r' => $this->_name),
+            'r.idReadequacao'
+        );
+        $select->where('r.idPronac = ?', $idPronac);
+        
+        if ($idTipoReadequacao) {
+            $tiposReadequacoes = array($idTipoReadequacao);
+        } else {
+            $tiposReadequacoes = array(
+                self::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+            );
+        }
+        
+        $select->where('r.idTipoReadequacao IN(?)', $tiposReadequacoes);
+        $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
+        
+        if ($idAgente) {
+            $select->where('r.idSolicitante = ?', $idAgente);
+        }
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método para verificar se está o projeto está disponivel para rReadequacao de planilha 
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idAgente
+     * @return boolean
+     */
+    public function disponivelParaReadequacaoPlanilha($idPronac)
+    {
+        $liberacao = new Liberacao();
+        $projeto = new Projetos();
+        
+        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac);
+        $contaLiberada = $liberacao->contaLiberada($idPronac);
+        $periodoExecucao = $projeto->buscarPeriodoExecucao($idPronac);
+        
+        $periodoExecucaoVigente = (
+            $periodoExecucao->DtInicioExecucao < date('d/m/Y') &&
+            $periodoExecucao->DtFimExecucao > date('d/m/Y')
+        ) ? true : false;
+             
+        if (!$existeReadequacaoEmAndamento &&
+            $contaLiberada &&
+            $periodoExecucao) {
+
+            return true;
+        } else {
+            return false;
+        }            
+    }
+    
+    /**
+     * Método para verificar se está o projeto está disponivel para edição da readequacao de planilha
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idAgente
+     * @return boolean
+     */
+    public function disponivelParaEdicaoReadequacaoPlanilha($idPronac, $idAgente)
+    {
+        $liberacao = new Liberacao();
+        $projeto = new Projetos();
+        
+        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac, $idAgente);
+        $contaLiberada = $liberacao->contaLiberada($idPronac);
+        $periodoExecucao = $projeto->buscarPeriodoExecucao($idPronac);
+        
+        $periodoExecucaoVigente = (
+            $periodoExecucao->DtInicioExecucao < date('d/m/Y') &&
+            $periodoExecucao->DtFimExecucao > date('d/m/Y')
+        ) ? true : false;
+             
+        if ($existeReadequacaoEmAndamento &&
+            $contaLiberada &&
+            $periodoExecucao) {
+
+            return true;
+        } else {
+            return false;
+        }        
+    }
+
+    /**
+     * Método para verificar se está o projeto está disponivel para adição de itens da readequacao de planilha
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idAgente
+     * @return boolean
+     */
+    public function disponivelParaAdicaoItensReadequacaoPlanilha($idPronac, $idAgente)
+    {
+        $liberacao = new Liberacao();
+        $projeto = new Projetos();
+        
+        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac, $idAgente);
+        $contaLiberada = $liberacao->contaLiberada($idPronac);
+        $periodoExecucao = $projeto->buscarPeriodoExecucao($idPronac);
+        
+        $periodoExecucaoVigente = (
+            $periodoExecucao->DtInicioExecucao < date('d/m/Y') &&
+            $periodoExecucao->DtFimExecucao > date('d/m/Y')
+        ) ? true : false;
+             
+        if ($existeReadequacaoEmAndamento &&
+            $contaLiberada &&
+            $periodoExecucao) {
+
+            return true;
+        } else {
+            return false;
+        }        
+    }    
 }
