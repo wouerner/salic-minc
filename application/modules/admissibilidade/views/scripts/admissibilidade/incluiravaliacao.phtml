@@ -2,7 +2,7 @@
     <div class="row">
         <?php
         echo $this->partial("admissibilidade/inc/menu.inc.php");
-        $SalvarAvaliacao = $this->url(
+        $salvarAvaliacao = $this->url(
             [
                 'module' => 'admissibilidade',
                 'controller' => 'admissibilidade',
@@ -75,7 +75,7 @@
 
             <div class="col s10">
                 <h4>Incluir avalia&ccedil;&atilde;o </h4>
-                <form id="formEncaminhar" name="formEncaminhar" method="post" action="<?php echo $SalvarAvaliacao; ?>"
+                <form id="formEncaminhar" name="formEncaminhar" method="post" action="<?php echo $salvarAvaliacao; ?>"
                       onsubmit="return false">
                     <table class="tabela">
                         <tr>

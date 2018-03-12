@@ -35,14 +35,14 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             $this->view->id_orgao = $this->grupoAtivo->codOrgao;
             $this->view->id_usuario_avaliador = $this->auth->getIdentity()->usu_codigo;
 
-            $arrDados = $this->getRequest()->getPost();
-            if (!$arrDados['descricao_motivacao']) {
+            $dadosSugetaoEnquadramento = $this->getRequest()->getPost();
+            if (!$dadosSugetaoEnquadramento['descricao_motivacao']) {
                 $this->carregardadosEnquadramentoProposta($preprojeto);
             } else {
-                $arrDados['id_orgao'] = $this->grupoAtivo->codOrgao;
-                $arrDados['id_perfil'] = $this->grupoAtivo->codGrupo;
-                $arrDados['id_usuario_avaliador'] = $this->auth->getIdentity()->usu_codigo;
-                $this->salvarSugestaoEnquadramento($arrDados, $get['id_preprojeto']);
+                $dadosSugetaoEnquadramento['id_orgao'] = $this->grupoAtivo->codOrgao;
+                $dadosSugetaoEnquadramento['id_perfil'] = $this->grupoAtivo->codGrupo;
+                $dadosSugetaoEnquadramento['id_usuario_avaliador'] = $this->auth->getIdentity()->usu_codigo;
+                $this->salvarSugestaoEnquadramento($dadosSugetaoEnquadramento, $get['id_preprojeto']);
             }
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), '/admissibilidade/enquadramento/gerenciar-enquadramento');
@@ -61,11 +61,11 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
     }
 
-    public function salvarSugestaoEnquadramento(array $arrDados, $id_preprojeto)
+    public function salvarSugestaoEnquadramento(array $dadosSugetaoEnquadramento, $id_preprojeto)
     {
         try {
             $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-            $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($arrDados, $id_preprojeto);
+            $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($dadosSugetaoEnquadramento, $id_preprojeto);
 
             parent::message('Enquadramento armazenado com sucesso!', "/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto={$id_preprojeto}&realizar_analise=sim", 'CONFIRM');
         } catch (Exception $objException) {

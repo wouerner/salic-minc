@@ -116,50 +116,50 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         );
     }
 
-    public function salvarSugestaoEnquadramento(array $arrDados, $id_preprojeto)
+    public function salvarSugestaoEnquadramento(array $dadosSugestaoEnquadramento, $id_preprojeto)
     {
         $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento();
 
-        $descricao_motivacao = trim($arrDados['descricao_motivacao']);
+        $descricao_motivacao = trim($dadosSugestaoEnquadramento['descricao_motivacao']);
         if (empty($descricao_motivacao)) {
             throw new Exception("O campo 'Parecer de Enquadramento' é de preenchimento obrigatório.");
         }
 
-        if ($arrDados['id_perfil'] != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
-            && !$sugestaoEnquadramento->isPermitidoSugerirEnquadramento($arrDados['id_perfil'])) {
+        if ($dadosSugestaoEnquadramento['id_perfil'] != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+            && !$sugestaoEnquadramento->isPermitidoSugerirEnquadramento($dadosSugestaoEnquadramento['id_perfil'])) {
             throw new Exception("Perfil sem permissão para executar a ação");
         }
 
-        $id_area = ($arrDados['id_area']) ? $arrDados['id_area'] : null;
-        $id_segmento = ($arrDados['id_segmento']) ? $arrDados['id_segmento'] : null;
+        $id_area = ($dadosSugestaoEnquadramento['id_area']) ? $dadosSugestaoEnquadramento['id_area'] : null;
+        $id_segmento = ($dadosSugestaoEnquadramento['id_segmento']) ? $dadosSugestaoEnquadramento['id_segmento'] : null;
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
 
         $orgaoDbTable = new Orgaos();
-        $resultadoOrgaoSuperior = $orgaoDbTable->codigoOrgaoSuperior($arrDados['id_orgao']);
+        $resultadoOrgaoSuperior = $orgaoDbTable->codigoOrgaoSuperior($dadosSugestaoEnquadramento['id_orgao']);
         $orgaoSuperior = $resultadoOrgaoSuperior[0]['Superior'];
 
         $distribuicaoAvaliacaoPropostaDtTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
         $distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoPropostaDtTable->findBy([
             'id_preprojeto' => $id_preprojeto,
             'id_orgao_superior' => $orgaoSuperior,
-            'id_perfil' => $arrDados['id_perfil']
+            'id_perfil' => $dadosSugestaoEnquadramento['id_perfil']
         ]);
 
         if (!$distribuicaoAvaliacaoProposta &&
             (
-                $arrDados['id_perfil'] != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
-                && $arrDados['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
+                $dadosSugestaoEnquadramento['id_perfil'] != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+                && $dadosSugestaoEnquadramento['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
             )
         ) {
             throw new Exception("Distribui&ccedil;&atilde;o n&atilde;o localizada para o perfil atual.");
         }
 
         $dadosNovaSugestaoEnquadramento = [
-            'id_orgao' => $arrDados['id_orgao'],
+            'id_orgao' => $dadosSugestaoEnquadramento['id_orgao'],
             'id_preprojeto' => $id_preprojeto,
             'id_orgao_superior' => $orgaoSuperior,
-            'id_perfil_usuario' => $arrDados['id_perfil'],
-            'id_usuario_avaliador' => $arrDados['id_usuario_avaliador'],
+            'id_perfil_usuario' => $dadosSugestaoEnquadramento['id_perfil'],
+            'id_usuario_avaliador' => $dadosSugestaoEnquadramento['id_usuario_avaliador'],
             'id_area' => $id_area,
             'id_segmento' => $id_segmento,
             'descricao_motivacao' => $descricao_motivacao,
@@ -169,11 +169,11 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
 
         $dadosBuscaPorSugestao = $sugestaoEnquadramentoDbTable->findBy(
             [
-                'id_orgao' => $arrDados['id_orgao'],
+                'id_orgao' => $dadosSugestaoEnquadramento['id_orgao'],
                 'id_preprojeto' => $id_preprojeto,
                 'id_orgao_superior' => $orgaoSuperior,
-                'id_perfil_usuario' => $arrDados['id_perfil'],
-                'id_usuario_avaliador' => $arrDados['id_usuario_avaliador']
+                'id_perfil_usuario' => $dadosSugestaoEnquadramento['id_perfil'],
+                'id_usuario_avaliador' => $dadosSugestaoEnquadramento['id_usuario_avaliador']
             ]
         );
 

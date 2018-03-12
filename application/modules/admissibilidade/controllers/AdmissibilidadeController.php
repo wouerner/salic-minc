@@ -440,9 +440,27 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $avaliacaoProposta = new tbAvaliacaoProposta();
         $avaliacaoProposta->inserir($dados);
 
-        if ($dados['ConformidadeOK'] == 1) {
+        if ($dados['ConformidadeOK'] == AvaliacaoProposta::CONFORMIDADE_OK_APROVADO) {
             $objTbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $objTbMovimentacao->alterarConformidadeProposta($post->idPreProjeto, $this->idUsuario, Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL);
+            $objTbMovimentacao->alterarConformidadeProposta(
+                $post->idPreProjeto,
+                $this->idUsuario,
+                Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL
+            );
+
+            if($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
+                $dadosSugestaoEnquadramento = [
+                    'descricao_motivacao' => $dados['avaliacao'],
+                    'id_orgao' => $this->grupoAtivo->codOrgao,
+                    'id_perfil' => $this->grupoAtivo->codGrupo,
+                    'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo,
+
+                ];
+
+                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+                $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($dadosSugestaoEnquadramento, $post->idPreProjeto);
+            }
+
         } else {
 
             $tbPreProjetoMetaMapper = new Proposta_Model_TbPreProjetoMetaMapper();
@@ -450,7 +468,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         }
 
-        parent::message("Conformidade visual finalizada com sucesso!", "/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=" . $post->idPreProjeto . "&gravado=sim", "CONFIRM");
+        parent::message(
+            "Conformidade visual finalizada com sucesso!",
+            "/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=" . $post->idPreProjeto . "&gravado=sim",
+            "CONFIRM"
+        );
     }
 
     private function eviarEmail($idProjeto, $Mensagem, $pronac = null)
