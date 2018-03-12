@@ -465,7 +465,8 @@
                         $('#modalUnidade').val(data.dadosPlanilhaEditavel.idUnidade);
                         $('#modalQuantidade').val(data.dadosPlanilhaEditavel.Quantidade);
                         $('#modalOcorrencia').val(data.dadosPlanilhaEditavel.Ocorrencia);
-                        $('#modalValorUnitario').val(data.dadosPlanilhaEditavel.ValorUnitario.replace('R$ ',''));
+                        $('#modalValorUnitario').val(data.dadosPlanilhaEditavel.ValorUnitario);
+                        
                         $('#modalDias').val(data.dadosPlanilhaEditavel.QtdeDias);
                         $('#modalJustificativa').val(data.dadosPlanilhaEditavel.Justificativa);
                         $('#TotalCalculado').html(data.dadosPlanilhaEditavel.TotalSolicitado);

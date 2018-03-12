@@ -4089,7 +4089,8 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $this->view->readequacao = $tbReadequacao->readequacoesCadastradasProponente(array(
                 'a.idPronac = ?'=>$idPronac,
                 'a.siEncaminhamento = ?'=>12,
-                'a.idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+                'a.idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA,
+                'a.stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
             ), array(1));
         } else {
             parent::message("N&uacute;mero Pronac inv&aacute;lido!", "principalproponente", "ERROR");

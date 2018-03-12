@@ -283,6 +283,35 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
+
+    /**
+     * Método para buscar id da readequacao ativa
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idTipoReadequacao
+     * @return integer
+     */    
+    public function buscarIdReadequacaoAtiva($idPronac, $idTipoReadequacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            'a.idReadequacao');
+        
+        $select->where('a.stEstado = ?', self::ST_ESTADO_EM_ANDAMENTO);
+        $select->where('a.idPronac = ?' , $idPronac);
+        $select->where('a.idTipoReadequacao = ?', $idTipoReadequacao);
+        
+        $result = $this->fetchAll($select);
+
+        if (count($result)) {
+            return $result[0]['idReadequacao'];
+        } else {
+            return false;
+        }
+    }
+    
     /*
      * Alterada em 06/03/14
      * @author: Jefferson Alessandro
