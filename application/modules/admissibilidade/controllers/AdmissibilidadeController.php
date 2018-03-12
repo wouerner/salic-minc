@@ -2709,11 +2709,18 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $distribuicaoAvaliacaoProposta->setIdPerfil($this->grupoAtivo->codGrupo);
 
         $get = $this->getRequest()->getParams();
-        if($get['filtro'] == 'inicial') {
-            $where['CodSituacao = ?'] = Agente_Model_DbTable_Verificacao::PROPOSTA_PARA_ANALISE_INICIAL;
-        }
-        if($get['filtro'] == 'avaliada') {
-            $where['CodSituacao = ?'] = Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL;
+        switch ($get['filtro']) {
+            case 'inicial':
+                $where['ConformidadeOK = ?'] = AvaliacaoProposta::CONFORMIDADE_OK_PRE_ENVIADO;
+                break;
+            case 'reavaliacao':
+                $where['ConformidadeOK = ?'] = AvaliacaoProposta::CONFORMIDADE_OK_REPROVADO;
+                break;
+            case 'vinculada':
+                break;
+            case 'avaliada':
+                $where['ConformidadeOK = ?'] = AvaliacaoProposta::CONFORMIDADE_OK_APROVADO;
+                break;
         }
 
         $propostas = $vwPainelAvaliar->obterPropostasParaAvaliacao(

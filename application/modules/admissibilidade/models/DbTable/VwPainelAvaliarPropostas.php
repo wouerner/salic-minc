@@ -58,6 +58,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             $search,
             $distribuicaoAvaliacaoProposta
         );
+//xdnb($select->assemble());
 
         return $db->fetchAll($select);
     }

@@ -47,7 +47,7 @@
 
         $3(".filtro-avaliacao").click(function() {
             $3("#filtro").val('');
-            if(typeof $(this).data('filtro') != 'undefined') {
+            // if(typeof $(this).data('filtro') != 'undefined') {
                 $3("#filtro").val($(this).data('filtro'));
 
                 $3("#coluna_encaminhar").hide('fast');
@@ -56,7 +56,7 @@
                 }
 
                 objetoDataTable.ajax.reload();
-            }
+            // }
         });
     });
 
@@ -121,7 +121,7 @@ function obterColunasListagem () {
         }
     })
 
-    if ($('#liberar_encaminhamento').val() == 'sim' && $(".filtro-avaliacao").data('filtro') == 'avaliada') {
+    if ($(".filtro-avaliacao").data('filtro') == 'avaliada') {
         colunas.push({
             data: null,
             render: function (data, type, row) {
