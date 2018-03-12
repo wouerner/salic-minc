@@ -88,7 +88,7 @@
 	});
         
       var modalItem = function(dados = null) {
-	  
+
 	    if (dados) {
 		$('#newRecursos').val(dados.id_fonte).prop('disabled', true);
 		$('#newUF').val(dados.id_uf).prop('disabled', true);
@@ -136,11 +136,20 @@
 		
 		
 	    } else {
-		$('#newRecursos').val('').prop('disabled', false);;
-		$('#newUF').val('').prop('disabled', false);;
-		$('#newEtapa').val('').prop('disabled', false);;
-		$('#newProduto').val('').prop('disabled', false);;
-		$('#newMunicipio').val('').prop('disabled', false);
+		
+		$('#newRecursos').val('').prop('disabled', false);
+		$('#newUF').val('').prop('disabled', false);
+		$('#newEtapa').val('').prop('disabled', false);
+		$('#newProduto').val('').prop('disabled', false);
+		
+		$('#newMunicipio')
+		    .find('option')
+		    .remove()
+		    .end();
+		$('#newItem')
+		    .find('option')
+		    .remove()
+		    .end();
 	    }
           
             // **** LIMPA OS CAMPOS ANTES DE ABRIR A MODAL ****
