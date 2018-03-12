@@ -49,6 +49,12 @@
             $3("#filtro").val('');
             if(typeof $(this).data('filtro') != 'undefined') {
                 $3("#filtro").val($(this).data('filtro'));
+
+                $3("#coluna_encaminhar").hide('fast');
+                if($(this).data('filtro') == 'avaliada') {
+                    $3("#coluna_encaminhar").show('fast');
+                }
+
                 objetoDataTable.ajax.reload();
             }
         });
@@ -93,16 +99,6 @@ function obterColunasListagem () {
             'name': 'Tecnico',
             'data': 'Tecnico'
         })
-        colunas.push({
-            data: null,
-            render: function (data, type, row) {
-                    if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()) {
-                    return '<i class="material-icons">done</i>' +
-                        ''
-                }
-                return ''
-            }
-        })
     } else {
         colunas.push({
             data: null,
@@ -119,23 +115,13 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            if (data.isEnquadrada == true) {
-                return '<i class="material-icons">done</i>' +
-                    ''
-            }
-            return ''
-        }
-    })
-    colunas.push({
-        data: null,
-        render: function (data, type, row) {
             return '<a class="btn waves-effect waves-darrk white black-text" href="' + $('#base_url').val() + '/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=' + data.idProjeto + '&realizar_analise=sim">'
                 + '<i class="material-icons" '
                 + 'title="Fazer An&aacute;lise Visual da Proposta" alt="Fazer An&aacute;lise Visual da Proposta">visibility</i></a>'
         }
     })
 
-    if ($('#liberar_encaminhamento').val() == 'sim') {
+    if ($('#liberar_encaminhamento').val() == 'sim' && $(".filtro-avaliacao").data('filtro') == 'avaliada') {
         colunas.push({
             data: null,
             render: function (data, type, row) {
