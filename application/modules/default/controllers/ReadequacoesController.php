@@ -910,8 +910,14 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         }
 
         $tbReadequacao = new tbReadequacao();
-        $tbReadequacao = $tbReadequacao->buscar(array('idPronac=?'=>$idPronac, 'siEncaminhamento=?'=>12,'stEstado=?'=>0))->current();
-        
+        $resultReadequacao = $tbReadequacao->buscar(
+            array(
+                'idPronac=?'=>$idPronac,
+                'siEncaminhamento=?'=>12,
+                'stEstado=?'=>0,
+                'idTipoReadequacao =?' => tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+            ))->current();
+
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
 
         //BUSCAR VALOR TOTAL DA PLANILHA ATIVA
@@ -920,14 +926,14 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $where['a.stAtivo = ?'] = 'S';
         
         $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+        
         //BUSCAR VALOR TOTAL DA PLANILHA DE READEQUADA
         $where = array();
         $where['a.IdPRONAC = ?'] = $idPronac;
         $where['a.tpPlanilha = ?'] = 'SR';
         $where['a.stAtivo = ?'] = 'N';
         $where['a.tpAcao != ?'] = 'E';
-        $where['a.idReadequacao = ?'] = $tbReadequacao['idReadequacao'];
+        $where['a.idReadequacao = ?'] = $resultReadequacao['idReadequacao'];
 
         $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
