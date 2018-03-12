@@ -135,7 +135,14 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
 
             // na listagem de 'outras solicitações' não listar planilha orçamentária (idTipoReadequacao 2)
             $tbReadequacao = new tbReadequacao();
-            $this->view->readequacoesCadastradas = $tbReadequacao->readequacoesCadastradasProponente(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento = ?'=>12, 'a.idTipoReadequacao != ?' => 2), array(1));
+            $this->view->readequacoesCadastradas = $tbReadequacao->readequacoesCadastradasProponente(
+                array(
+                    'a.idPronac = ?'=>$idPronac,
+                    'a.siEncaminhamento = ?'=>12,
+                    'a.idTipoReadequacao != ?' => tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+                ),
+                array(1)
+            );
         } else {
             parent::message("N&uacute;mero Pronac inv&aacute;lido!", "principalproponente", "ERROR");
         }
@@ -4082,7 +4089,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $this->view->readequacao = $tbReadequacao->readequacoesCadastradasProponente(array(
                 'a.idPronac = ?'=>$idPronac,
                 'a.siEncaminhamento = ?'=>12,
-                'a.idTipoReadequacao = ?' => 2,
+                'a.idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
             ), array(1));
         } else {
             parent::message("N&uacute;mero Pronac inv&aacute;lido!", "principalproponente", "ERROR");
@@ -4116,7 +4123,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $tbReadequacao = new tbReadequacao();
             $dados = array();
             $dados['idPronac'] = $idPronac;
-            $dados['idTipoReadequacao'] = 2;
+            $dados['idTipoReadequacao'] = tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA;
             $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
             $dados['idSolicitante'] = $rsAgente->idAgente;
             $dados['dsJustificativa'] = '';
