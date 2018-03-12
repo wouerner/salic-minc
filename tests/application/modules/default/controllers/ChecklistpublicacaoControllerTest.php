@@ -33,8 +33,8 @@ class ChecklistpublicacaoControllerTest extends MinC_Test_ControllerActionTestCa
      */
     public function testlistasAction()
     {
-        $this->dispatch('/checklistpublicacao?idPronac=' . $this->idPronac);
-        $this->assertUrl('default','checklistpublicacao', 'index');
+        $this->dispatch('/checklistpublicacao/listas?idPronac=' . $this->idPronac);
+        $this->assertUrl('default','checklistpublicacao', 'listas');
     }
 
 
