@@ -301,6 +301,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         
         $select->where('a.stEstado = ?', self::ST_ESTADO_EM_ANDAMENTO);
         $select->where('a.idPronac = ?' , $idPronac);
+        $select->where('siEncaminhamento = ?', 12);
         $select->where('a.idTipoReadequacao = ?', $idTipoReadequacao);
         
         $result = $this->fetchAll($select);
@@ -1271,5 +1272,32 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         } else {
             return false;
         }        
+    }
+
+    /**
+     * Método para retornar idPronac de projeto com readequação em andamento
+     * @param integer $idTipoReadequacao
+     * @return integer
+     */
+    public function buscarIdPronacReadequacaoEmAndamento($idTipoReadequacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('r' => $this->_name),
+            'r.idPronac'
+        );
+        $select->where('r.idTipoReadequacao = ?', $idTipoReadequacao);
+        $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
+        $select->order('r.dtSolicitacao DESC');
+        $select->limit(1);
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result) > 0) {
+            return $result->current()['idPronac'];
+        } else {
+            return false;
+        }
     }
 }

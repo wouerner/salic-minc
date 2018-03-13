@@ -10,9 +10,8 @@ class TbReadequacaoModelTest extends MinC_Test_ModelTestCase
     {
         parent::setUp();
 
-        // Marcado para refatoração futura
-        // * fixture do banco de dados com dados controlados
-        $this->idPronac = '206025';
+        $tbReadequacao = new tbReadequacao();
+        $this->idPronac = $tbReadequacao->buscarIdPronacReadequacaoEmAndamento(tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
     }
 
     public function testExisteReadequacaoEmAndamento()
@@ -69,5 +68,13 @@ class TbReadequacaoModelTest extends MinC_Test_ModelTestCase
         $result = $tbReadequacao->buscarIdReadequacaoAtiva($this->idPronac, tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
         
         $this->assertNotEmpty($result);
+    }
+
+    public function testBuscarIdPronacReadequacaoEmAndamento()
+    {
+        $tbReadequacao = new tbReadequacao();
+        $idPronac = $tbReadequacao->buscarIdPronacReadequacaoEmAndamento(tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
+        
+        $this->assertNotEmpty($idPronac);
     }
 }
