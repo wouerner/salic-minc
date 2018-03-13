@@ -131,6 +131,18 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
+            return (data.descricao_area != null && data.descricao_area != '') ? data.descricao_area : ' - ';
+        }
+    })
+    colunas.push({
+        data: null,
+        render: function (data, type, row) {
+            return (data.descricao_segmento != null && data.descricao_segmento != '') ? data.descricao_segmento : ' - ';
+        }
+    })
+    colunas.push({
+        data: null,
+        render: function (data, type, row) {
             return '<a class="btn waves-effect waves-darrk white black-text" href="' + $('#base_url').val() + '/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=' + data.idProjeto + '&realizar_analise=sim">'
                 + '<i class="material-icons" '
                 + 'title="Fazer An&aacute;lise Visual da Proposta" alt="Fazer An&aacute;lise Visual da Proposta">visibility</i></a>'
