@@ -36,12 +36,24 @@
                 $("#conteudo").html('<br><br><center>Aguarde, carregando dados...<br><img src="<?php echo $this->baseUrl(); ?>/public/img/ajax.gif" /></center><br><br>');
                 $.ajax({
                     url : url,
-                    /*data :
-                    {
-                        idPronac : 'teste'
-                    },*/
                     success: function(data){
-                        //alert(data);
+
+                        var data_title = '<div id="titulo"></div>';
+                        var data_breadcrumb =
+                            '<div id="breadcrumb">' +
+                            '<ul>' +
+                            '<li class="first">' +
+                            '<a href="<?php echo $this->url(array("module" => "default", "controller" => "principal", "action" => "")); ?>" title="Ir para In&iacute;cio">' +
+                            'In&iacute;cio</a></li>' +
+                            '<li class="second"><a href="<?php echo $this->url(array("module" => "default", "controller" => "consultardadosprojeto", "action" => "")); ?>?idPronac=<?php echo $this->idPronac;?>" title="Ir para In&iacute;cio">Consultar dados do Projeto</a></li>' +
+                            '<li class="last" id="caminhoLocalAtual">Consultar dados do Projeto</li>' +
+                            '</ul></div>';
+
+                        var breadcrumb_title = data_breadcrumb+data_title;
+
+                        if($("#titulo").length < 1){
+                            $("#"+divRetorno).before(breadcrumb_title);
+                        }
                         $("#"+divRetorno).html(data);
                     },
                     type : 'post'
@@ -503,7 +515,7 @@
                 if(data.IN2017 == false) {
                     $('#pronacProjeto').append(' [IN2013]');
                     $('#planoDistribuicaoId').click( function() {
-                        carregaDados('<?php echo $this->url(['controller' => 'consultardadosprojeto', 'action' => 'plano-de-distribuicao']); ?><?php echo $codPronac;?>','conteudo');
+                        carregaDados('<?php echo $this->url(['module' => 'default','controller' => 'consultardadosprojeto', 'action' => 'plano-de-distribuicao']); ?><?php echo $codPronac;?>','conteudo');
                     });
                 } else {
                     $('#pronacProjeto').append(' [IN2017]');
