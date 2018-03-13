@@ -125,11 +125,7 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            if (data.isEnquadrada == true) {
-                return '<i class="material-icons">done</i>' +
-                    ''
-            }
-            return ''
+            return (data.enquadramento != null && data.enquadramento != '') ? data.enquadramento : ' - ';
         }
     })
     colunas.push({

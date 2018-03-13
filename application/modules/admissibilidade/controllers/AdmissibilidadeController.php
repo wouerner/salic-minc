@@ -2765,6 +2765,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
                 $proposta->Tecnico = utf8_encode($proposta->Tecnico);
                 $proposta->DtMovimentacao = $zDate->toString('dd/MM/y h:m');
+                $proposta->descricao_segmento = utf8_encode($proposta->descricao_segmento);
+                $proposta->descricao_area = utf8_encode($proposta->descricao_area);
                 $sugestaoEnquadramento->setIdPreprojeto($proposta->idProjeto);
                 $sugestaoEnquadramento->setIdOrgao($this->grupoAtivo->codOrgao);
                 $sugestaoEnquadramento->setIdPerfilUsuario($this->grupoAtivo->codGrupo);
@@ -2790,7 +2792,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $distribuicaoAvaliacaoProposta
             );
         }
-
         $this->_helper->json(
             [
                 "data" => !empty($aux) ? $aux : 0,
