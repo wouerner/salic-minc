@@ -40,13 +40,13 @@
             <input id="PROPOSTA_EM_ANALISE_FINAL" type="hidden"
                    value="<?php echo Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL ?>">
             <div class="row">
-                <div class="col s12 m12 l10">
+                <div class="col s12 m12 l12">
                     <form method="POST" id="formGerarPdf" name="formGerarPdf"
                           action="<?php echo $this->url(array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'gerarpdf')); ?>"
                           target="gerarPDF" style="display:none">
                         <textarea name="html" id="conteudoImprimir"></textarea>
                     </form>
-
+<!--
                     <div class="row">
                         <div class="col s12">
                             <a class="waves-effect waves-light btn filtro-avaliacao">Todas</a>
@@ -58,7 +58,7 @@
                             <input type="hidden" id="filtro" value=""/>
                         </div>
                     </div>
-
+-->
                     <table>
                         <tr>
                             <td class="center-align">
@@ -85,16 +85,18 @@
                             <?php if ($this->grupo != Autenticacao_Model_Grupos::COMPONENTE_COMISSAO): ?>
                                 <th>Outras Propostas</th>
                                 <th>T&eacute;cnico</th>
+                                <th>Analisado</th>
                             <?php else: ?>
                                 <th class="tooltipped" data-position="top" data-delay="50"
                                     data-tooltip="Dias restantes para avalia&ccedil;&atilde;o">
                                     Dias Restantes
                                 </th>
                             <?php endif; ?>
+                            <th>Enquadrado</th>
                             <th>Analisar</th>
                             <?php
                             if ($this->liberarEncaminhamento === true) : ?>
-                                <th id="coluna_encaminhar" style="display: none">Encaminhar</th>
+                                <th id="coluna_encaminhar">Encaminhar</th>
                                 <?php
                             endif;
                             ?>

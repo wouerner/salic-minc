@@ -99,6 +99,16 @@ function obterColunasListagem () {
             'name': 'Tecnico',
             'data': 'Tecnico'
         })
+        colunas.push({
+            data: null,
+            render: function (data, type, row) {
+                if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()) {
+                    return '<i class="material-icons">done</i>' +
+                        ''
+                }
+                return ''
+            }
+        })
     } else {
         colunas.push({
             data: null,
@@ -115,13 +125,23 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
+            if (data.isEnquadrada == true) {
+                return '<i class="material-icons">done</i>' +
+                    ''
+            }
+            return ''
+        }
+    })
+    colunas.push({
+        data: null,
+        render: function (data, type, row) {
             return '<a class="btn waves-effect waves-darrk white black-text" href="' + $('#base_url').val() + '/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=' + data.idProjeto + '&realizar_analise=sim">'
                 + '<i class="material-icons" '
                 + 'title="Fazer An&aacute;lise Visual da Proposta" alt="Fazer An&aacute;lise Visual da Proposta">visibility</i></a>'
         }
     })
 
-    if ($(".filtro-avaliacao").data('filtro') == 'avaliada') {
+    if ($('#liberar_encaminhamento').val() == 'sim') {
         colunas.push({
             data: null,
             render: function (data, type, row) {
