@@ -1258,7 +1258,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
     }
 
     /**
-     * Método para retornar idPronac de projeto com readequação em andamento
+     * Método para retornar idPronac do projeto com readequação em andamento mais recentemente criada, com, prazo de execução vigente
      * @param integer $idTipoReadequacao
      * @return integer
      */
@@ -1270,8 +1270,18 @@ class tbReadequacao extends MinC_Db_Table_Abstract
             array('r' => $this->_name),
             'r.idPronac'
         );
+
+        $select->joinInner(
+            array('p' => 'Projetos'),
+            'r.idPronac = p.idPronac',
+            array(''),
+            $this->_schema
+        );
+        
         $select->where('r.idTipoReadequacao = ?', $idTipoReadequacao);
         $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
+        $select->where(new Zend_Db_Expr('p.DtInicioExecucao < GETDATE()'));
+        $select->where(new Zend_Db_Expr('p.DtFimExecucao > GETDATE()'));
         $select->order('r.dtSolicitacao DESC');
         $select->limit(1);
         
