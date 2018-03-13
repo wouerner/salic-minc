@@ -331,7 +331,9 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             } else {
                 $Readequacao_50 = 0;
             }
-            
+
+            $ReadequacaoPlanilha = 1;
+                
             /* ===== CHECAR SE EXISTE RELAT�RIO DE CUMPRIMENTO DO OBJETO PARA SER ENVIADO ===== */
             $relatorioCumprimentoEnvio = $db->select()
                 ->from(

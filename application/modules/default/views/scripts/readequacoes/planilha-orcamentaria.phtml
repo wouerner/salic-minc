@@ -141,6 +141,7 @@
 		$('#newUF').val('').prop('disabled', false);
 		$('#newEtapa').val('').prop('disabled', false);
 		$('#newProduto').val('').prop('disabled', false);
+		$('#newMunicipio').val('').prop('disabled', false);
 		
 		$('#newMunicipio')
 		    .find('option')
@@ -819,7 +820,6 @@
 	    type: 'POST',
 	    data: {
 		idPronac: <?php echo $this->idPronac; ?>,
-		criarNovaPlanilha: 1,
 		idReadequacao: idReadequacao,
 		idTipoReadequacao: 6,
 	    },
