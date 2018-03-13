@@ -40,4 +40,12 @@ class ProjetosModelTest extends MinC_Test_ModelTestCase
         $this->assertNotEmpty($periodoExecucao->DtInicioExecucao);
         $this->assertNotEmpty($periodoExecucao->DtFimExecucao);
     }
+
+    public function testPeriodoExecucaoVigente()
+    {
+        $projetos = new Projetos();
+        
+        $periodoExecucaoVigente = $projetos->verificarPeriodoExecucaoVigente($this->idPronac);
+        $this->assertTrue($periodoExecucaoVigente);
+    }    
 }
