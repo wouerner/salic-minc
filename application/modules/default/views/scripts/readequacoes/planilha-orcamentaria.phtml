@@ -919,13 +919,15 @@
                                 <td id="valorEntrePlanilhas">
                                     <span class="bold black-text">R$ 0,00</span>
                                 </td>
-                                <td>
+				<td>
+				    <?php if ($this->DisponivelParaAdicaoItensReadequacaoPlanilha($this->idPronac)) : ?>
 				    <div class="right-align">
 					<a class="waves-effect waves-light btn white-text btn-incluir-novo-item" id="AdicionarItem">
 					    <i class="material-icons left">add</i>
 					    Adicionar item em novo munic&iacute;pio
 					</a>
 				    </div>
+				    <?php endif; ?>
 				</td>
                             </tr>
                         </table>
