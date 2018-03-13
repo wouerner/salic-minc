@@ -125,12 +125,6 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            return (data.enquadramento != null && data.enquadramento != '') ? data.enquadramento : ' - ';
-        }
-    })
-    colunas.push({
-        data: null,
-        render: function (data, type, row) {
             return (data.descricao_area != null && data.descricao_area != '') ? data.descricao_area : ' - ';
         }
     })
@@ -138,6 +132,12 @@ function obterColunasListagem () {
         data: null,
         render: function (data, type, row) {
             return (data.descricao_segmento != null && data.descricao_segmento != '') ? data.descricao_segmento : ' - ';
+        }
+    })
+    colunas.push({
+        data: null,
+        render: function (data, type, row) {
+            return (data.enquadramento != null && data.enquadramento != '') ? data.enquadramento : ' - ';
         }
     })
     colunas.push({
