@@ -47,6 +47,7 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
 
         $mapperArea = new Agente_Model_AreaMapper();
         $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo', 'Descricao');
+
         $this->view->preprojeto = $preprojeto;
 
         if (count($this->view->comboareasculturais) < 1) {
@@ -54,6 +55,22 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         }
 
         $this->view->id_perfil_usuario = $this->grupoAtivo->codGrupo;
+
+        $sugestaoEnquadramento = new Admissibilidade_Model_DbTable_SugestaoEnquadramento;
+
+        $ultimaSugestaoPerfil = [];
+        if($this->view->id_perfil_usuario){
+            $ultimaSugestaoPerfil = $sugestaoEnquadramento->obterHistoricoEnquadramento($preprojeto['idPreProjeto'], $this->view->id_perfil_usuario);
+            $ultimaSugestaoPerfil = count($ultimaSugestaoPerfil) >= 1 ? current($ultimaSugestaoPerfil) : $ultimaSugestaoPerfil;
+
+            if(!empty($ultimaSugestaoPerfil['id_area'])){
+                $Segmento = new Segmento();
+                $combosegmentos = $Segmento->combo(array("a.codigo = ?" => $ultimaSugestaoPerfil['id_area']), array('s.segmento ASC'));
+            }
+        }
+
+        $this->view->combosegmentos = !empty($combosegmentos) ? $combosegmentos : [];
+        $this->view->ultimaSugestaoPerfil = $sugestaoEnquadramento->createRow($ultimaSugestaoPerfil)->toArray();
 //        $this->view->historicoEnquadramento = $this->obterHistoricoSugestaoEnquadramento($preprojeto['idPreProjeto']);
     }
 
