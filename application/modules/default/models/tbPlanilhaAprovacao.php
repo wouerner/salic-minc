@@ -305,7 +305,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 new Zend_Db_Expr('ROUND(SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario), 2) AS Total')
             )
         );
-        
+        $select->where('a.idPronac = ?', $idPronac);
         $select->where('a.stAtivo = ?', 'S');
                 
         return $this->fetchAll($select);
@@ -330,7 +330,6 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             )
         );
         
-        $select->where('a.stAtivo = ?', 'S');
         $select->where('a.tpPlanilha = ?', 'SR');
         $select->where('a.stAtivo = ?', 'N');
         $select->where('a.tpAcao != ?', 'E');

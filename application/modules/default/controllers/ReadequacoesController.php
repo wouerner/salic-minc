@@ -821,14 +821,14 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
 
     public function carregarValorEntrePlanilhasAction()
     {
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
-        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        $get = Zend_Registry::get('get');
+        $auth = Zend_Auth::getInstance();
+        $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
+        
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         $tbReadequacao = new tbReadequacao();
         $idReadequacao = $tbReadequacao->buscarIdReadequacaoAtiva(
             $idPronac,
@@ -838,7 +838,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilhaAtiva($idPronac)->current();
         $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilhaReadequada($idPronac, $idReadequacao)->current();
-        
+
         if ($PlanilhaReadequada->Total > 0) {
             if ($PlanilhaAtiva->Total == $PlanilhaReadequada->Total) {
                 $statusPlanilha = 'neutro';
