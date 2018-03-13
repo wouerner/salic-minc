@@ -13,8 +13,9 @@ class ReadequacoesControllerTest extends MinC_Test_ControllerActionTestCase
 
         // Marcado para refatoração futura
         // * fixture do banco de dados com dados controlados
-        $this->idPronac = '209649';
-        $this->hashPronac = '501eac548e7d4fa987034573abc6e179MjA4OTQ3ZUA3NWVmUiEzNDUwb3RT';
+        $this->idPronac = $tbReadequacao->buscarIdPronacReadequacaoEmAndamento(tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
+        
+        $this->hashPronac = Seguranca::encrypt($this->idPronac);
         
         $this->autenticar();
         
@@ -78,21 +79,8 @@ class ReadequacoesControllerTest extends MinC_Test_ControllerActionTestCase
      */    
     public function testPlanilhaOrcamentariaCondicoesNaoSatisfeitas()
     {
-        // puxar um projetos com condições não satisfeitos
-        // verificar que não consegue acessar página de readequação de planilha
+        $idPronac = $this->buscaProjetoDisponivelParaReadequacaoPlanilha();
         
-        /* Condições para realizar uma readequação de planilha orçamentária
-         
-         Regras
-         - NÃO POSSUIR ((readequação OU remanejamento 50%) E (em andamento)))
-         - POSSUIR (conta liberada)
-         - POSSUIR (período de execução vigente))
-         
-         Ação
-         - ACESSAR url
-
-        */
-        $idPronac = 206025;
         $tbReadequacao = new tbReadequacao();
         $possuiReadequacao = $tbReadequacao->existeReadequacaoEmAndamento($idPronac);
         
