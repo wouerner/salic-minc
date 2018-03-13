@@ -10,9 +10,24 @@ class ProjetosModelTest extends MinC_Test_ModelTestCase
     {
         parent::setUp();
 
-        // Marcado para refatoração futura
-        // * fixture do banco de dados com dados controlados
-        $this->idPronac = '206025';
+        $this->idPronac = $this->retornaProjetoVigente();
+    }
+
+    private function retornaProjetoVigente()
+    {
+        $projetos = new Projetos();
+
+        $where = array();
+        $where['DtInicioExecucao <= ?'] = new Zend_Db_Expr('GETDATE()');
+        $where['DtFimExecucao >= ?'] = new Zend_Db_Expr('GETDATE()');
+        
+        $result = $projetos->buscar(
+            $where,
+            array('IdPRONAC DESC'),
+            1
+        )->current();
+        
+        return $result['IdPRONAC'];        
     }
 
     public function testPeriodoExecucao()
