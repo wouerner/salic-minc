@@ -169,7 +169,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             $tbSolicitacoes = new Solicitacao_Model_DbTable_TbSolicitacao();
             $dataForm = $tbSolicitacoes->obterSolicitacoes($where)->current()->toArray();
-
             if (empty($dataForm))
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
 
@@ -190,6 +189,41 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 }
             }
+
+            if($dataForm['idPronac']){
+                $idUsuarioLogado = Zend_Auth::getInstance()->getIdentity()->IdUsuario;
+
+                $projetos = $projetos = new Projetos();
+
+                $projeto = $projetos->buscar(array('IdPRONAC = ?' => $dataForm['idPronac']))->current();
+                $cpf = $projeto->CgcCpf;
+
+                $links = new fnLiberarLinks();
+                $linksXpermissao = $links->links(2, $cpf, $idUsuarioLogado, $dataForm['idPronac']);
+                $linksGeral = str_replace(' ', '', explode('-', $linksXpermissao->links));
+
+                $arrayLinks = array(
+                    'Permissao' => $linksGeral[0],
+                    'FaseDoProjeto' => $linksGeral[1],
+                    'Diligencia' => $linksGeral[2],
+                    'Recursos' => $linksGeral[3],
+                    'Readequacao' => $linksGeral[4],
+                    'ComprovacaoFinanceira' => $linksGeral[5],
+                    'RelatorioTrimestral' => $linksGeral[6],
+                    'RelatorioFinal' => $linksGeral[7],
+                    'Analise' => $linksGeral[8],
+                    'Execucao' => $linksGeral[9],
+                    'PrestacaoContas' => $linksGeral[10],
+                    'Readequacao_50' => $linksGeral[11],
+                    'Marcas' => $linksGeral[12],
+                    'SolicitarProrrogacao' => $linksGeral[13],
+                    'ReadequacaoPlanilha' => $linksGeral[14]
+                );
+                $this->view->blnProponente = true;
+                $this->view->fnLiberarLinks = $arrayLinks;
+                $this->view->pronac = $projeto->AnoProjeto . $projeto->Sequencial;
+            }
+
 
             $arrConfig['dsResposta']['show'] = true;
 

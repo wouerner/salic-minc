@@ -1,10 +1,28 @@
+<?php
+if (!empty($this->dataForm['Pronac'])){
+    $arrayLinkProjeto = ['module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index', 'idPronac' => Seguranca::encrypt($this->dataForm['idPronac'])];
+} elseif (!empty($this->dataForm['idProjeto'])){
+    $arrayLinkProjeto = ['module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'exibirpropostacultural-ajax', 'idPreProjeto' => $this->dataForm['idProjeto']];
+}
+
+?>
+
 <div class="">
     <div class="row">
         <div class="col s12">
             <?php if (!empty($this->dataForm['Pronac'])) : ?>
-                <b>Pronac:</b> <?= $this->dataForm['Pronac']; ?> <br>
+                <b>Pronac:</b> <?= $this->dataForm['Pronac']; ?><br>
             <?php elseif (!empty($this->dataForm['idProjeto'])) : ?>
-                <b>Nº Proposta: </b><?= $this->dataForm['idProjeto']; ?> <br>
+                <b>Nº Proposta: </b><a
+                        data-ajax-modal="<?= $this->url($arrayLinkProjeto); ?>"
+                        href="javascript:void(0);"
+                        data-position="top"
+                        data-delay="50"
+                        data-ajax-modal-height="96%"
+                        data-ajax-modal-width="98%"
+                        data-tooltip="Visualizar proposta"
+                        class="waves-effect waves-teal btn small white tooltipped black-text"
+                ><?= $this->dataForm['idProjeto']; ?></a> <br>
             <?php endif; ?>
         </div>
         <div class="col s12">
@@ -120,17 +138,6 @@
         $3('input[name=siEncaminhamento]').val('0');
         $3("#form-mensagem").ajaxFormSubmit();
     });
-//    $3.ajax({
-//        url: "/form.php",
-//        type: "post",
-//        data: serializedData
-//    });
-
-//    $3('#btn_rascunho').on('click', function () {
-//
-//
-//        alert($('#form-mensagem').attr('action'));
-//    });
 
     $3('#btn_enviar').on('click', function () {
         $3('input[name=siEncaminhamento]').val('1');
