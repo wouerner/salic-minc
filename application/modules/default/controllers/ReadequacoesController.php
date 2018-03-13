@@ -1814,31 +1814,47 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
+        $idReadequacao = $this->_request->getParam("idReadequacao");
+        
         try {
+            $arrayBuscaReadequacao = array(
+                'idPronac = ?'=>$idPronac,
+                'siEncaminhamento = ?'=>12,
+                'stEstado = ?'=>0
+            );
+            if ($idReadequacao) {
+                $arrayBuscaReadequacao['idReadequacao = ?'] = $idReadequacao;
+            }
+            
             $tbReadequacao = new tbReadequacao();
-            $readequacoes = $tbReadequacao->buscar(array('idPronac=?'=>$idPronac, 'siEncaminhamento=?'=>12,'stEstado=?'=>0));
-
+            $readequacoes = $tbReadequacao->buscar(
+                $arrayBuscaReadequacao
+            );
+            
             $dados = array();
             $dados['siEncaminhamento'] = 1;
             $dados['dtEnvio'] = new Zend_Db_Expr('GETDATE()');
             $where = "idPronac = $idPronac AND siEncaminhamento = 12 AND stEstado = 0";
+            if ($idReadequacao) {
+                $where .= " AND idReadequacao = $idReadequacao";
+            }
             $atualizar = $tbReadequacao->update($dados, $where);
 
             foreach ($readequacoes as $r) {
-                if ($r->idTipoReadequacao == 9) {
+                if ($r->idTipoReadequacao == tbReadequacao::TIPO_READEQUACAO_LOCAL_REALIZACAO) {
                     $tbAbrangencia = new tbAbrangencia();
                     $dadosAb = array();
                     $dadosAb['idReadequacao'] = $r->idReadequacao;
                     $whereAb = "idPronac = $idPronac AND stAtivo = 'S' AND idReadequacao is null";
                     $tbAbrangencia->update($dadosAb, $whereAb);
-                } elseif ($r->idTipoReadequacao == 11) {
+                } elseif ($r->idTipoReadequacao == tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
                     $tbPlanoDistribuicao = new tbPlanoDistribuicao();
                     $dadosPDDist = array();
                     $dadosPDDist['idReadequacao'] = $r->idReadequacao;
                     $wherePDDist = "idPronac = $idPronac AND stAtivo = 'S' AND idReadequacao is null";
                     $tbPlanoDistribuicao->update($dadosPDDist, $wherePDDist);
-                } elseif ($r->idTipoReadequacao == 14) {
+                } elseif ($r->idTipoReadequacao == tbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
                     $tbPlanoDivulgacao = new tbPlanoDivulgacao();
                     $dadosPDD = array();
                     $dadosPDD['idReadequacao'] = $r->idReadequacao;
