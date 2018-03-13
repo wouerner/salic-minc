@@ -1192,12 +1192,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         
         $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac);
         $contaLiberada = $liberacao->contaLiberada($idPronac);
-        $periodoExecucao = $projeto->buscarPeriodoExecucao($idPronac);
-        
-        $periodoExecucaoVigente = (
-            $periodoExecucao->DtInicioExecucao < date('d/m/Y') &&
-            $periodoExecucao->DtFimExecucao > date('d/m/Y')
-        ) ? true : false;
+        $periodoExecucaoVigente = $projeto->verificarPeriodoExecucaoVigente($idPronac);
         
         if (!$existeReadequacaoEmAndamento &&
             $contaLiberada &&
@@ -1222,14 +1217,8 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         
         $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac);
         $contaLiberada = $liberacao->contaLiberada($idPronac);
-        $periodoExecucao = $projeto->buscarPeriodoExecucao($idPronac);
-        $dataCorrente = strtotime(date('d/m/Y'));
+        $periodoExecucaoVigente = $projeto->verificarPeriodoExecucaoVigente($idPronac);
         
-        $periodoExecucaoVigente = (
-            strtotime($periodoExecucao->DtInicioExecucao) < $dataCorrente &&
-            strtotime($periodoExecucao->DtFimExecucao) < $dataCorrente
-        ) ? true : false;
-
         if ($existeReadequacaoEmAndamento &&
             $contaLiberada &&
             $periodoExecucaoVigente) {
@@ -1256,13 +1245,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
             self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
         );
         $contaLiberada = $liberacao->contaLiberada($idPronac);
-        $periodoExecucao = $projeto->buscarPeriodoExecucao($idPronac);
-        $dataCorrente = strtotime(date('d/m/Y'));
-        
-        $periodoExecucaoVigente = (
-            strtotime($periodoExecucao->DtInicioExecucao) < $dataCorrente &&
-            strtotime($periodoExecucao->DtFimExecucao) < $dataCorrente
-        ) ? true : false;
+        $periodoExecucaoVigente = $projeto->verificarPeriodoExecucaoVigente($idPronac);
         
         if ($existeReadequacaoEmAndamento &&
             $contaLiberada &&
