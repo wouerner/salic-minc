@@ -34,4 +34,17 @@ class RelatorioControllerTest extends MinC_Test_ControllerActionTestCase
         $this->dispatch('/relatorio/projeto?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'relatorio', 'projeto');
     }
+
+    public function testgerencialAction()
+    {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_AVALIACAO, Orgaos::ORGAO_GEAR_SACAV);
+        $this->dispatch('/relatorio/gerencial?idPronac=' . $this->idPronac);
+        $this->assertUrl('default', 'relatorio', 'gerencial');
+    }
+    public function testdesembolsoAction()
+    {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_AVALIACAO, Orgaos::ORGAO_GEAR_SACAV);
+        $this->dispatch('/relatorio/desembolso?idPronac=' . $this->idPronac);
+        $this->assertUrl('default', 'relatorio', 'desembolso');
+    }
 }
