@@ -97,7 +97,7 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 $mensagemSucesso = "Solicita&ccedil;&atilde;o enviada com sucesso!";
                 $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC);
 
-                # define se eh para salvar ou enviar ao minc
+                # define se é para salvar ou enviar ao minc
                 if ($arrData['siEncaminhamento'] == 0) {
                     $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
                     $mensagemSucesso = "Rascunho salvo com sucesso!";

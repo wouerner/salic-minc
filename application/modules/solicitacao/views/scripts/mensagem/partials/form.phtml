@@ -128,7 +128,11 @@ if (!empty($this->dataForm['Pronac'])){
 <script>
     $(document).ready(function ($) {
         $("textarea.editor").each(function () {
-            $(this).editorRico({altura: 200});
+            $(this).editorRico({
+                altura: 200,
+                maxchar: 8000,
+                isLimitarCarateres: true
+            });
         });
     });
 

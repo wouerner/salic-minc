@@ -22,7 +22,7 @@ class Solicitacao_Model_DbTable_TbSolicitacao extends MinC_Db_Table_Abstract
                     'idOrgao',
                     'idSolicitante',
                     'dtSolicitacao',
-                    'dsSolicitacao',
+                    'CAST(dsSolicitacao AS TEXT) AS dsSolicitacao',
                     'dtResposta',
                     'dsResposta',
                     'idDocumento',
