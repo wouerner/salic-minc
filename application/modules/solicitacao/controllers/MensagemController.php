@@ -153,9 +153,46 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $this->view->idPronac = $idPronac;
     }
 
+    private function liberarOpcoesMenuLateral($idPronac)
+    {
+        $idUsuarioLogado = Zend_Auth::getInstance()->getIdentity()->IdUsuario;
+
+        $projetos = $projetos = new Projetos();
+
+        $projeto = $projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
+        $cpf = $projeto->CgcCpf;
+
+        $links = new fnLiberarLinks();
+        $linksXpermissao = $links->links(2, $cpf, $idUsuarioLogado, $idPronac);
+        $linksGeral = str_replace(' ', '', explode('-', $linksXpermissao->links));
+
+        $arrayLinks = array(
+            'Permissao' => $linksGeral[0],
+            'FaseDoProjeto' => $linksGeral[1],
+            'Diligencia' => $linksGeral[2],
+            'Recursos' => $linksGeral[3],
+            'Readequacao' => $linksGeral[4],
+            'ComprovacaoFinanceira' => $linksGeral[5],
+            'RelatorioTrimestral' => $linksGeral[6],
+            'RelatorioFinal' => $linksGeral[7],
+            'Analise' => $linksGeral[8],
+            'Execucao' => $linksGeral[9],
+            'PrestacaoContas' => $linksGeral[10],
+            'Readequacao_50' => $linksGeral[11],
+            'Marcas' => $linksGeral[12],
+            'SolicitarProrrogacao' => $linksGeral[13],
+            'ReadequacaoPlanilha' => $linksGeral[14]
+        );
+
+        return [
+            'blnProponente' => true,
+            'fnLiberarLinks' => $arrayLinks,
+            'pronac' => $projeto->AnoProjeto . $projeto->Sequencial
+        ];
+    }
+
     public function visualizarAction()
     {
-
         $urlAction = $this->_urlPadrao . "/solicitacao/mensagem/salvar";
 
         try {
@@ -191,39 +228,11 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             }
 
             if($dataForm['idPronac']){
-                $idUsuarioLogado = Zend_Auth::getInstance()->getIdentity()->IdUsuario;
-
-                $projetos = $projetos = new Projetos();
-
-                $projeto = $projetos->buscar(array('IdPRONAC = ?' => $dataForm['idPronac']))->current();
-                $cpf = $projeto->CgcCpf;
-
-                $links = new fnLiberarLinks();
-                $linksXpermissao = $links->links(2, $cpf, $idUsuarioLogado, $dataForm['idPronac']);
-                $linksGeral = str_replace(' ', '', explode('-', $linksXpermissao->links));
-
-                $arrayLinks = array(
-                    'Permissao' => $linksGeral[0],
-                    'FaseDoProjeto' => $linksGeral[1],
-                    'Diligencia' => $linksGeral[2],
-                    'Recursos' => $linksGeral[3],
-                    'Readequacao' => $linksGeral[4],
-                    'ComprovacaoFinanceira' => $linksGeral[5],
-                    'RelatorioTrimestral' => $linksGeral[6],
-                    'RelatorioFinal' => $linksGeral[7],
-                    'Analise' => $linksGeral[8],
-                    'Execucao' => $linksGeral[9],
-                    'PrestacaoContas' => $linksGeral[10],
-                    'Readequacao_50' => $linksGeral[11],
-                    'Marcas' => $linksGeral[12],
-                    'SolicitarProrrogacao' => $linksGeral[13],
-                    'ReadequacaoPlanilha' => $linksGeral[14]
-                );
-                $this->view->blnProponente = true;
-                $this->view->fnLiberarLinks = $arrayLinks;
-                $this->view->pronac = $projeto->AnoProjeto . $projeto->Sequencial;
+                $condicoesMenu = self::liberarOpcoesMenuLateral($dataForm['idPronac']);
+                foreach($condicoesMenu as $condicao => $valor){
+                    $this->view->{$condicao} = $valor;
+                }
             }
-
 
             $arrConfig['dsResposta']['show'] = true;
 
@@ -269,6 +278,13 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             if ($dataForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SOLICITACAO_ENCAMINHADA_AO_MINC) {
                 $this->redirect($this->_urlPadrao . '/solicitacao/mensagem/visualizar/id/' . $dataForm['idSolicitacao']);
+            }
+
+            if($this->idPronac){
+                $condicoesMenu = self::liberarOpcoesMenuLateral($this->idPronac);
+                foreach($condicoesMenu as $condicao => $valor){
+                    $this->view->{$condicao} = $valor;
+                }
             }
 
             self::prepareForm($dataForm, $arrConfig, $urlAction, $urlCallBack);
