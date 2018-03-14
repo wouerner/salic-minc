@@ -277,6 +277,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $orgaoSuperior = $orgao[0]['Superior'];
             $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+            $distribuicaoAvaliacaoPropostaAtual = $distribuicaoAvaliacaoPropostaDbTable->findBy(
+                [
+                    'id_preprojeto' => $this->idPreProjeto,
+                    'id_orgao_superior' => $orgaoSuperior,
+                    'id_perfil' => $this->codGrupo,
+                    'avaliacao_atual' => Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
+                ]
+            );
             $this->view->possuiAvaliacaoCnic = $distribuicaoAvaliacaoPropostaDbTable->propostaPossuiAvaliacao(
                 $this->idPreProjeto,
                 Autenticacao_Model_Grupos::COMPONENTE_COMISSAO,
@@ -289,13 +297,14 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     'id_preprojeto' => $this->idPreProjeto,
                     'id_orgao' => $this->codOrgao,
                     'id_orgao_superior' => $orgaoSuperior,
-                    'id_perfil_usuario' => $this->codGrupo
+                    'id_perfil_usuario' => $this->codGrupo,
+                    'ultima_sugestao' => Admissibilidade_Model_DbTable_SugestaoEnquadramento::ULTIMA_SUGESTAO_ATIVA
                 ]
             );
-
-            $this->view->isPropostaEnquadrada = $sugestaoEnquadramentoDbTable->isPropostaEnquadrada($sugestaoEnquadramento);
-            $this->view->isPermitidoSugerirEnquadramento = $sugestaoEnquadramento->isPermitidoSugerirEnquadramento();
             $gruposDbTable = new Autenticacao_Model_Grupos();
+            $this->view->isPropostaEnquadrada = $sugestaoEnquadramentoDbTable->isPropostaEnquadrada($sugestaoEnquadramento);
+            $this->view->distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoPropostaAtual;
+            $this->view->isPermitidoSugerirEnquadramento = $sugestaoEnquadramento->isPermitidoSugerirEnquadramento();
             $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }

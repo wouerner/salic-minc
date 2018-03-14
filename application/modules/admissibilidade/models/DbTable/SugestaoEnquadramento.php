@@ -91,6 +91,9 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         if ($sugestaoEnquadramento->getIdOrgaoSuperior()) {
             $arrayPesquisa['id_orgao_superior'] = $sugestaoEnquadramento->getIdOrgaoSuperior();
         }
+        if ($sugestaoEnquadramento->getUltimaSugestao()) {
+            $arrayPesquisa['ultima_sugestao'] = $sugestaoEnquadramento->getUltimaSugestao();
+        }
 
         if (count($arrayPesquisa) > 0) {
             $resultado = $this->findAll($arrayPesquisa);

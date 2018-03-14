@@ -166,33 +166,6 @@ $3(document).ready(function () {
     $3('.modal').modal()
     $3('#id_perfil').material_select()
 
-
-    $3('#botaoEnviarAvaliacaoProposta').click(function () {
-        var parametros = {}
-        $3('#dialogEncaminharProposta form').serializeArray().map(function (x) {
-            parametros[x.name] = x.value
-        })
-
-        $3('#botaoEnviarAvaliacaoProposta').prop('disabled', true)
-        $3.ajax({
-            type: 'POST',
-            url: $('#dialogEncaminharProposta form').attr('action'),
-            data: parametros,
-            success: function (data) {
-                var callback = function () {}
-                if (data.resposta) {
-                    callback = function () {
-                        window.location.reload()
-                    }
-                    $3('#dialogEncaminharProposta').modal('close')
-                }
-                Materialize.toast(data.mensagem, 2000, '', callback)
-                $3('#botaoEnviarAvaliacaoProposta').prop('disabled', false)
-            }
-        })
-    })
-
-
 })
 
 $('#tabelaAnaliseFinal').ready(function () {
