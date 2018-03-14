@@ -18,13 +18,13 @@
 
 <div class="row">
     <?php
-//    if (!$this->menu) {
-//        echo $this->partial(
-//            "admissibilidade/inc/menu.inc.php",
-//            null,
-//            ['grupo' => $this->grupo]
-//        );
-//    }
+    //    if (!$this->menu) {
+    //        echo $this->partial(
+    //            "admissibilidade/inc/menu.inc.php",
+    //            null,
+    //            ['grupo' => $this->grupo]
+    //        );
+    //    }
     $IncluirAvaliacao = $this->url(array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'incluiravaliacao'));
     $enquadrarProposta = $this->url(array('module' => 'admissibilidade', 'controller' => 'enquadramento-proposta', 'action' => 'sugerir-enquadramento')) . "?id_preprojeto={$this->idPreProjeto}";
     ?>
@@ -42,7 +42,7 @@
     </style>
 
     <script type="text/javascript">
-        $3(document).ready(function() {
+        $3(document).ready(function () {
             $3('#dialogoEncaminharProposta').modal(
                 {
                     dismissible: true,
@@ -58,8 +58,8 @@
                     complete: function () {
                     }
                 }
-            );
-        });
+            )
+        })
         $(document).ready(function () {
             $('.avaliarProposta').click(function () {
                 $('#preProjeto').attr('action', '<?php echo $IncluirAvaliacao;?>')
@@ -158,15 +158,17 @@
                     </button>
                 <?php endif; ?>
 
-                <a class="btn waves-effect waves-light btn modal-trigger"
-                   data-id_preprojeto="<?php echo $this->idPreProjeto; ?>"
-                   href="#dialogoEncaminharProposta">
-                    Encaminhar <i class="material-icons"
-                                  title="Encaminhar An&aacute;lise de Proposta"
-                                  alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>
-                </a>
-
-            <?php } ?>
+                <?php if ($this->isPropostaEnquadrada
+                    && Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE != $this->codGrupo) { ?>
+                    <a class="btn waves-effect waves-light btn modal-trigger"
+                       data-id_preprojeto="<?php echo $this->idPreProjeto; ?>"
+                       href="#dialogoEncaminharProposta">
+                        Encaminhar <i class="material-icons"
+                                      title="Encaminhar An&aacute;lise de Proposta"
+                                      alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>
+                    </a>
+                <?php }
+            } ?>
             <iframe name="esconde" id="esconde" class="sumir"></iframe>
             <button title="Imprimir" class="btn waves-effect waves-light imprimirProposta white black-text"
                     type="button" name="action">

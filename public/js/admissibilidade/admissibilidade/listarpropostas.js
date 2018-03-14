@@ -153,78 +153,7 @@ function obterColunasListagem () {
         }
     })
 
-    if ($('#liberar_encaminhamento').val() == 'sim') {
-        colunas.push({
-            data: null,
-            render: function (data, type, row) {
-                if (permitirEncaminhamento(data)) {
-                    return '<a class="waves-effect waves-light btn modal-trigger" data-id_preprojeto="'
-                        + data.idProjeto
-                        + '" href="#dialogEncaminharProposta">'
-                        + '<i classrial-icons" '
-                        + ' title="Encaminhar An&aacute;lise de Proposta" '
-                        + ' alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>'
-                        + ' </a>'
-                }
-
-                return ''
-            }
-        })
-    }
-
     return colunas
-}
-
-function permitirEncaminhamentoTecnicoAdmissibilidade (data) {
-    if (parseInt(data.quantidade_distribuicoes, 10) == 0
-        && $('#perfil_atual').val() == $('#perfil_tecnico_admissibilidade').val()) {
-
-        return true
-    }
-}
-
-function permitirEncaminhamentoCoordenadorAdmissibilidade (data) {
-    if ((
-            $('#perfil_atual').val() == $('#perfil_coordenador_admissibilidade').val()
-            && data.id_area != null
-            && data.isEnquadrada == true
-        )
-        ||
-        (
-            parseInt(data.quantidade_distribuicoes, 10) > 0
-            && parseInt(data.avaliacao_atual, 10) == 1
-            && $('#perfil_atual').val() != $('#perfil_coordenador_admissibilidade').val()
-            && data.isEnquadrada == true
-        )) {
-        return true
-    }
-}
-
-function permitirEncaminhamentoComponenteComissao (data) {
-    if (parseInt(data.quantidade_distribuicoes, 10) > 0
-        && parseInt(data.avaliacao_atual, 10) == 1
-        && $('#perfil_atual').val() == $('#perfil_componente_comissao').val()
-        && data.id_area != null
-        && data.isEnquadrada == true
-    ) {
-        return true
-    }
-}
-
-function permitirEncaminhamento (data) {
-    if (data.CodSituacao != $('#PROPOSTA_EM_ANALISE_FINAL').val()) {
-        return false
-    }
-    if (
-        !permitirEncaminhamentoTecnicoAdmissibilidade(data)
-        && !permitirEncaminhamentoCoordenadorAdmissibilidade(data)
-        && !permitirEncaminhamentoComponenteComissao(data)
-    ) {
-
-        return false
-    }
-    return true
-
 }
 
 $3('#imprimir').on('click', function () {
@@ -236,22 +165,7 @@ $3(document).ready(function () {
 
     $3('.modal').modal()
     $3('#id_perfil').material_select()
-    $3('#dialogEncaminharProposta').modal(
-        {
-            dismissible: true,
-            opacity: .5,
-            inDuration: 300,
-            outDuration: 200,
-            startingTop: '4%',
-            endingTop: '10%',
-            ready: function (modal, trigger) {
-                $3('#id_preprojeto').val($3(trigger).data('id_preprojeto'))
-                $3('#span_id_preprojeto').html($3(trigger).data('id_preprojeto'))
-            },
-            complete: function () {
-            }
-        }
-    )
+
 
     $3('#botaoEnviarAvaliacaoProposta').click(function () {
         var parametros = {}
