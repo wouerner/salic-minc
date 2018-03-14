@@ -18,16 +18,15 @@
 
 <div class="row">
     <?php
-    if (!$this->menu) {
-        echo $this->partial(
-            "admissibilidade/inc/menu.inc.php",
-            null,
-            ['grupo' => $this->grupo]
-        );
-    }
+//    if (!$this->menu) {
+//        echo $this->partial(
+//            "admissibilidade/inc/menu.inc.php",
+//            null,
+//            ['grupo' => $this->grupo]
+//        );
+//    }
     $IncluirAvaliacao = $this->url(array('module' => 'admissibilidade', 'controller' => 'admissibilidade', 'action' => 'incluiravaliacao'));
     $enquadrarProposta = $this->url(array('module' => 'admissibilidade', 'controller' => 'enquadramento-proposta', 'action' => 'sugerir-enquadramento')) . "?id_preprojeto={$this->idPreProjeto}";
-
     ?>
     <style type="text/css">
         .mensagem {
@@ -43,6 +42,24 @@
     </style>
 
     <script type="text/javascript">
+        $3(document).ready(function() {
+            $3('#dialogoEncaminharProposta').modal(
+                {
+                    dismissible: true,
+                    opacity: .5,
+                    inDuration: 300,
+                    outDuration: 200,
+                    startingTop: '4%',
+                    endingTop: '10%',
+                    ready: function (modal, trigger) {
+                        $3('#id_preprojeto').val($3(trigger).data('id_preprojeto'))
+                        $3('#span_id_preprojeto').html($3(trigger).data('id_preprojeto'))
+                    },
+                    complete: function () {
+                    }
+                }
+            );
+        });
         $(document).ready(function () {
             $('.avaliarProposta').click(function () {
                 $('#preProjeto').attr('action', '<?php echo $IncluirAvaliacao;?>')
@@ -105,6 +122,7 @@
             }
         }
     </script>
+    <div class="col s1"></div>
     <div class="col s10">
         <form method="get" id="formGerarPdf" target="_blank"
               action="<?php echo $this->url([
@@ -122,32 +140,33 @@
         <br/>
         <div class="center">
             <?php
-            $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento([
-                'id_perfil_usuario' => $this->codGrupo
-            ]);
-            if ($sugestaoEnquadramento->isPermitidoSugerirEnquadramento()) :
+            if ($this->isPermitidoSugerirEnquadramento) {
                 ?>
-                <?php if (
-                isset($_GET['realizar_analise'])
-                && $_GET['realizar_analise'] == "sim"
-                && (
-                    Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE == $this->codGrupo
-                    || Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
-                    || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo
-                )
-            ): ?>
-                <button class="btn waves-effect waves-light avaliarProposta" type="button" name="action">
-                    Avaliar <i class="material-icons right">gavel</i>
-                </button>
-            <?php endif; ?>
+                <?php if (isset($_GET['realizar_analise'])
+                    && $_GET['realizar_analise'] == "sim"
+                    && (Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE == $this->codGrupo
+                        || Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
+                        || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo)) { ?>
+                    <button class="btn waves-effect waves-light avaliarProposta" type="button" name="action">
+                        Avaliar <i class="material-icons right">gavel</i>
+                    </button>
+                <?php } ?>
 
-                <?php if ($this->isPropostaEmConformidade && $sugestaoEnquadramento->isPermitidoSugerirEnquadramento()): ?>
-                <button class="btn waves-effect waves-light enquadrarProposta" type="button" name="action">
-                    Enquadrar <i class="material-icons right">assignment</i>
-                </button>
-            <?php endif; ?>
+                <?php if ($this->isPropostaEmConformidade && $this->isPermitidoSugerirEnquadramento): ?>
+                    <button class="btn waves-effect waves-light enquadrarProposta" type="button" name="action">
+                        Enquadrar <i class="material-icons right">assignment</i>
+                    </button>
+                <?php endif; ?>
 
-            <?php endif; ?>
+                <a class="btn waves-effect waves-light btn modal-trigger"
+                   data-id_preprojeto="<?php echo $this->idPreProjeto; ?>"
+                   href="#dialogoEncaminharProposta">
+                    Encaminhar <i class="material-icons"
+                                  title="Encaminhar An&aacute;lise de Proposta"
+                                  alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>
+                </a>
+
+            <?php } ?>
             <iframe name="esconde" id="esconde" class="sumir"></iframe>
             <button title="Imprimir" class="btn waves-effect waves-light imprimirProposta white black-text"
                     type="button" name="action">
@@ -198,6 +217,7 @@
                 </a>
             <?php endif ?>
         </div>
+
         <div class="conteudoImprimir exibir-proposta-cultural">
             <br>
             <div><h5 class="center">Proposta Cultural - <?php echo $this->itensGeral[0]->NomeProjeto ?></h5></div>
@@ -1035,5 +1055,40 @@
             </tr>
         </table>
     </div>
+    <div class="col s1"></div>
+</div>
+<div id="dialogoEncaminharProposta" class="modal bottom-sheet">
+    <form method="post"
+          action="<?php echo $this->url(
+              [
+                  'module' => 'admissibilidade',
+                  'controller' => 'distribuicao-avaliacao-proposta',
+                  'action' => 'encaminhar-proposta-ajax'
+              ]
+          ); ?>" onsubmit="return false">
+        <div class="modal-content">
+            <h4>Proposta Nr. <span id="span_id_preprojeto"></span> - Encaminhar Avalia&ccedil;&atilde;o</h4>
+            <div class="input-field col s12" style="margin-top: 35px">
+                <select id="id_perfil" name="id_perfil">
+                    <?php foreach ($this->perfis as $perfil) { ?>
+                        <option value="<?php echo $perfil['gru_codigo'] ?>"><?php echo $perfil['gru_nome'] ?></option>
+                    <?php } ?>
+                </select>
+                <label>Selecione o pr&oacute;ximo perfil avaliador</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+
+            <input type="hidden" id="id_preprojeto" name="id_preprojeto"/>
+            <a class="btn waves-effect waves-dark red-text white modal-close">
+                Cancelar
+            </a>
+            <button class="btn waves-effect waves-light "
+                    id="botaoEnviarAvaliacaoProposta"
+                    type="button">
+                Enviar
+            </button>
+        </div>
+    </form>
 </div>
 <?php echo $this->partial('admissibilidade/inc/modalTransformarEmProjeto.phtml') ?>
