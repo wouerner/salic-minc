@@ -225,6 +225,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
         $this->view->grupo = $this->codGrupo;
 
+
+        // Recuperando o Histórico de Sugestão de Enquadramento
+        $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $this->view->sugestao_enquadramento = $sugestaoEnquadramentoDbTable->obterHistoricoEnquadramento($idPreProjeto);
+
         if ($propostaPorEdital) {
             $tbFormDocumentoDAO = new tbFormDocumento();
             $edital = $tbFormDocumentoDAO->buscar(array('idEdital = ?' => $this->view->itensGeral[0]->idEdital, 'idClassificaDocumento = ?' => $this->COD_CLASSIFICACAO_DOCUMENTO));
@@ -291,7 +296,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $orgaoSuperior
             );
 
-            $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+
             $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento(
                 ['id_distribuicao_avaliacao_proposta' => $distribuicaoAvaliacaoPropostaAtual['id_distribuicao_avaliacao_prop']]
             );
