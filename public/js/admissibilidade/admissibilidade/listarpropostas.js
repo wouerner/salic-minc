@@ -143,7 +143,11 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            return '<a class="btn waves-effect waves-darrk white black-text" href="' + $('#base_url').val() + '/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto=' + data.idProjeto + '&realizar_analise=sim">'
+            return '<a class="btn waves-effect waves-darrk white black-text" href="'
+                + $('#base_url').val()
+                + '/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto='
+                + data.idProjeto
+                + '&realizar_analise=sim">'
                 + '<i class="material-icons" '
                 + 'title="Fazer An&aacute;lise Visual da Proposta" alt="Fazer An&aacute;lise Visual da Proposta">visibility</i></a>'
         }
@@ -154,8 +158,10 @@ function obterColunasListagem () {
             data: null,
             render: function (data, type, row) {
                 if (permitirEncaminhamento(data)) {
-                    return '<a class="waves-effect waves-light btn modal-trigger" data-id_preprojeto="' + data.idProjeto + '" href="#dialogEncaminharProposta">'
-                        + '<i class="material-icons" '
+                    return '<a class="waves-effect waves-light btn modal-trigger" data-id_preprojeto="'
+                        + data.idProjeto
+                        + '" href="#dialogEncaminharProposta">'
+                        + '<i classrial-icons" '
                         + ' title="Encaminhar An&aacute;lise de Proposta" '
                         + ' alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>'
                         + ' </a>'

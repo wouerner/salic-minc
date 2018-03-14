@@ -118,15 +118,16 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
 
     public function salvarSugestaoEnquadramento(array $dadosSugestaoEnquadramento, $id_preprojeto)
     {
-        $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento();
+        $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento([
+            'id_perfil_usuario' => $dadosSugestaoEnquadramento['id_perfil']
+        ]);
 
         $descricao_motivacao = trim($dadosSugestaoEnquadramento['descricao_motivacao']);
         if (empty($descricao_motivacao)) {
             throw new Exception("O campo 'Parecer de Enquadramento' é de preenchimento obrigatório.");
         }
 
-        if ($dadosSugestaoEnquadramento['id_perfil'] != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
-            && !$sugestaoEnquadramento->isPermitidoSugerirEnquadramento($dadosSugestaoEnquadramento['id_perfil'])) {
+        if (!$sugestaoEnquadramento->isPermitidoSugerirEnquadramento()) {
             throw new Exception("Perfil sem permissão para executar a ação");
         }
 
