@@ -9,7 +9,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
     const ULTIMA_SUGESTAO_ATIVA = 1;
     const ULTIMA_SUGESTAO_INATIVA = 0;
 
-    public function obterHistoricoEnquadramento($id_preprojeto)
+    public function obterHistoricoEnquadramento($id_preprojeto, $id_perfil_usuario = null)
     {
 
         $tableSelect = $this->select();
@@ -62,6 +62,11 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         );
 
         $tableSelect->where('id_preprojeto = ?', $id_preprojeto);
+
+        if($id_perfil_usuario){
+            $tableSelect->where('id_perfil_usuario = ?', $id_perfil_usuario);
+        }
+
         $tableSelect->order('data_avaliacao desc');
 
         $resultado = $this->fetchAll($tableSelect);

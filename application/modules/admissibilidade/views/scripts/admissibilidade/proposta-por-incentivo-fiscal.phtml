@@ -376,6 +376,58 @@
             </table>
 
             <table>
+                <tr onclick="abrirDinamico('#historicoEnquadramento', $(this))" style="cursor:pointer">
+                    <th>
+                        <img src="<?php echo $this->baseUrl(); ?>/public/img/navigation-right.png" id="imgDinamica"
+                             align="left"/>
+                        Hist&oacute;rico de Sugest&otilde;es de Enquadramento
+                    </th>
+                </tr>
+                <tr id="historicoEnquadramento" style="display: none;">
+                    <td>
+                        <table class="tabela striped responsive-table">
+                            <thead>
+                            <tr class="destacar">
+                                <td class="center" width="10%"><b>N&uacute;mero</b></td>
+                                <td class="center" width="10%"><b>Data</b></td>
+                                <td class="center" width="20%"><b>Avaliador</b></td>
+                                <td class="center" width="20%"><b>Unidade</b></td>
+                                <td class="center" width="10%"><b>&Aacute;rea</b></td>
+                                <td class="center" width="10%"><b>Segmento</b></td>
+                                <td class="center" width="10%"><b>Enquadramento</b></td>
+                                <td class="center"><b>Parecer</b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php if (is_array($this->sugestao_enquadramento) and count($this->sugestao_enquadramento) > 0)
+                                foreach ($this->sugestao_enquadramento as $indice => $historico) { ?>
+                                    <tr>
+                                        <td align="left"><?php echo $indice +1; ?></td>
+                                        <td align="left"><?php echo ConverteData($historico['data_avaliacao'], 25) ?></td>
+                                        <td align="left"><?php echo $historico['usu_nome'] ?></td>
+                                        <td align="left"><?php echo $historico['org_sigla'] . ' - ' . $historico['gru_nome'] ?></td>
+                                        <td align="center" class="center"><?php echo $historico['area'] ? $historico['area'] : '-' ?></td>
+                                        <td align="center" class="center"><?php echo $historico['segmento'] ? $historico['segmento'] : '-' ?></td>
+                                        <td align="center" class="center">
+                                            <?php
+                                            if($tp_enquadramento){
+                                                $tp_enquadramento = $historico['tp_enquadramento'] == 1 ? 'Artigo 26' : 'Artigo 18';
+                                            } else {
+                                                $tp_enquadramento = '-';
+                                            }
+                                            echo $tp_enquadramento
+                                            ?>
+                                        </td>
+                                        <td align="left" nowrap><?php echo $historico['descricao_motivacao'] ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table>
                 <tr onclick="abrirDinamico('#proponente', $(this))" style="cursor:pointer">
                     <th>
                         <img src="<?php echo $this->baseUrl(); ?>/public/img/navigation-right.png" id="imgDinamica"
