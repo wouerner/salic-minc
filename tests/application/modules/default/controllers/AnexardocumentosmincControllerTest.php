@@ -24,15 +24,17 @@ class AnexardocumentosmincControllerTest extends MinC_Test_ControllerActionTestC
         $this->resetRequest()
             ->resetResponse();
     }
+
     public function testindexAction()
     {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
         $this->dispatch('/anexardocumentosminc?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'anexardocumentosminc', 'index');
     }
 
-
     public function testexcluirAction()
     {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
         $this->dispatch('/anexardocumentosminc/excluir?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'anexardocumentosminc', 'excluir');
     }

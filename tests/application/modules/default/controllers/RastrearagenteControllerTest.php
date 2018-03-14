@@ -26,6 +26,7 @@ class RastrearagenteControllerTest extends MinC_Test_ControllerActionTestCase
     }
     public function testindexAction()
     {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
         $this->dispatch('/rastrearagente?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'rastrearagente', 'index');
     }

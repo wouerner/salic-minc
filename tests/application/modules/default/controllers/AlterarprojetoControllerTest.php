@@ -27,6 +27,7 @@ class AlterarprojetoControllerTest extends MinC_Test_ControllerActionTestCase
 
     public function testconsultarprojetoAction()
     {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
         $this->dispatch('/alterarprojeto/consultarprojeto?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'alterarprojeto', 'consultarprojeto');
     }
