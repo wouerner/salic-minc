@@ -33,10 +33,8 @@ class ChecklistpublicacaoControllerTest extends MinC_Test_ControllerActionTestCa
      */
     public function testlistasAction()
     {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
         $this->dispatch('/checklistpublicacao/listas?idPronac=' . $this->idPronac);
         $this->assertUrl('default','checklistpublicacao', 'listas');
     }
-
-
-
 }

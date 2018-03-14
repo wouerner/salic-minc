@@ -27,7 +27,9 @@ class GerartermodeaprovacaoControllerTest extends MinC_Test_ControllerActionTest
 
     public function testindexAction()
     {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
         $this->dispatch('/gerartermodeaprovacao?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'gerartermodeaprovacao', 'index');
     }
+
 }
