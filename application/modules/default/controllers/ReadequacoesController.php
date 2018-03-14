@@ -97,7 +97,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $this->view->idPronac = $idPronac;
         
         if ($idUF) {
-            $this->carregarListaUF($idUF);
+            $this->carregarListaMunicipios($idUF);
         }
         
         if ($idEtapa && $idProduto) {
@@ -148,8 +148,11 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         }
     }
 
-
-    private function carregarListaUF($idUF)
+    /**
+     * Método privado para carregar lista de cidades
+     *
+     */
+    private function carregarListaMunicipios($idUF)
     {
         $this->_helper->layout->disableLayout();
         
