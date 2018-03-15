@@ -23,7 +23,6 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
     public function obterHistoricoEnquadramento()
     {
         $tableSelect = $this->obterQueryDetalhadaEnquadramentosProposta();
-
         $resultado = $this->fetchAll($tableSelect);
         if ($resultado) {
             return $resultado->toArray();
@@ -33,14 +32,16 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
     public function obterUltimaSugestaoEnquadramentoProposta()
     {
         $this->sugestaoEnquadramento->setUltimaSugestao(self::ULTIMA_SUGESTAO_ATIVA);
+
         $tableSelect = $this->obterQueryDetalhadaEnquadramentosProposta();
-        $resultado = $this->fetchAll($tableSelect);
+        $resultado = $this->fetchRow($tableSelect);
         if ($resultado) {
             return $resultado->toArray();
         }
     }
 
-    public function obterQueryDetalhadaEnquadramentosProposta() {
+    public function obterQueryDetalhadaEnquadramentosProposta()
+    {
         $tableSelect = $this->select();
         $tableSelect->setIntegrityCheck(false);
         $tableSelect->from(
@@ -90,14 +91,17 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             $this->_schema
         );
 
-        $tableSelect->where('id_preprojeto = ?', $this->sugestaoEnquadramento->getIdPreprojeto());
+        if(!$this->sugestaoEnquadramento->getIdPreprojeto()) {
+            throw new Exception("Identificador da proposta n&atilde;o informado.");
+        }
 
-        if($this->sugestaoEnquadramento->getIdPerfilUsuario()){
+        $tableSelect->where('id_preprojeto = ?', $this->sugestaoEnquadramento->getIdPreprojeto());
+        if ($this->sugestaoEnquadramento->getIdPerfilUsuario()) {
             $tableSelect->where('id_perfil_usuario = ?', $this->sugestaoEnquadramento->getIdPerfilUsuario());
         }
 
-        if($this->sugestaoEnquadramento->getUltimaSugestao() == self::ULTIMA_SUGESTAO_ATIVA
-            || $this->sugestaoEnquadramento->getUltimaSugestao() == self::ULTIMA_SUGESTAO_INATIVA){
+        if ($this->sugestaoEnquadramento->getUltimaSugestao() === self::ULTIMA_SUGESTAO_ATIVA
+            || $this->sugestaoEnquadramento->getUltimaSugestao() === self::ULTIMA_SUGESTAO_INATIVA) {
             $tableSelect->where('ultima_sugestao = ?', $this->sugestaoEnquadramento->getUltimaSugestao());
         }
 
