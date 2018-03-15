@@ -279,6 +279,20 @@
             </fieldset>
             <fieldset>
                 <legend>Informa&ccedil;&otilde;es Complementares</legend>
+                <?php if(count($this->ultimaSugestaoEnquadramento) > 0) { ?>
+                <table class="tabela">
+                    <tr class="destacar">
+                        <td><b>&Aacute;rea</b></td>
+                        <td><b>Segmento</b></td>
+                        <td><b>Artigo</b></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->ultimaSugestaoEnquadramento['area'] ?> </td>
+                        <td><?php echo $this->ultimaSugestaoEnquadramento['segmento'] ?> </td>
+                        <td><?php echo $this->ultimaSugestaoEnquadramento['enquadramento'] ?> </td>
+                    </tr>
+                </table>
+                <?php } ?>
                 <table class="tabela">
                     <tr class="destacar">
                         <td><b>&Eacute; proposta de audiovisual?</b></td>
@@ -298,20 +312,6 @@
                             <td><?php if ($this->itensGeral[0]->stDataFixa == 1) echo "Sim"; else echo "N&atilde;o"; ?></td>
                         </tr>
                     <?php } ?>
-                </table>
-                <table class="tabela">
-                    <tr class="destacar">
-                        <td><b>Área</b></td>
-                        <td><b>Segmento</b></td>
-                        <td><b>Artigo</b></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <?php
-                            xd($this->ultimaSugestaoEnquadramento)
-                            ?>
-                        <td>
-                    </tr>
                 </table>
                 <table class="tabela">
                     <tr class="destacar">

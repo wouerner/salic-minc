@@ -78,6 +78,10 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             "{$this->_name}.id_segmento = Segmento.Codigo",
             [
                 'segmento' => 'Descricao',
+                'enquadramento' => new Zend_Db_Expr(
+                    "CASE WHEN Segmento.tp_enquadramento = 1 THEN 'Artigo 26' "
+                    . " WHEN Segmento.tp_enquadramento = 2 THEN 'Artigo 18' END"
+                ),
                 'tp_enquadramento'
             ],
             $this->_schema

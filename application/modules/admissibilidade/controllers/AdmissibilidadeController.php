@@ -311,7 +311,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->view->distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoPropostaAtual;
             $this->view->isPermitidoSugerirEnquadramento = $sugestaoEnquadramento->isPermitidoSugerirEnquadramento();
             $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
-
             $this->view->ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
 
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
