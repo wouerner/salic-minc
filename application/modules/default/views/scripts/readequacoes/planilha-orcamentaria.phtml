@@ -890,7 +890,9 @@
 	     $('#idReadequacao').val(data.idReadequacao);
 	     $('#btn_excluir').removeClass('sumir');
 	     $('#btn_finalizar').removeClass('sumir');
+	     $('#adicionar_item_novo_municipio').removeClass('sumir');
 	     $('#btn_exclusao').attr('readequacao', data.idReadequacao);
+	     
 	 }
      });
  }
@@ -956,14 +958,12 @@
                                     <span class="bold black-text">R$ 0,00</span>
                                 </td>
 				<td>
-				    <?php if ($this->DisponivelParaAdicaoItensReadequacaoPlanilha($this->idPronac)) : ?>
-				    <div class="right-align">
+				    <div id="adicionar_item_novo_municipio" class="right-align <?php if (!$this->DisponivelParaAdicaoItensReadequacaoPlanilha($this->idPronac)) : ?>sumir<?php endif; ?>">
 					<a class="waves-effect waves-light btn white-text btn-incluir-novo-item" id="AdicionarItem">
 					    <i class="material-icons left">add</i>
-					    Adicionar item em novo munic&iacute;pio
+					    Incluir item em um novo munic&iacute;pio
 					</a>
 				    </div>
-				    <?php endif; ?>
 				</td>
                             </tr>
                         </table>
