@@ -64,7 +64,7 @@
                          title: 'Carregando..'
                      });
                      $('.ui-dialog-titlebar-close').remove();
-                     window.setTimeout('excluirReadequacao('+idReadequacao+')', 1000);
+                     window.setTimeout('excluirReadequacao()', 1000);
                  }
              }
          });
@@ -480,8 +480,6 @@
      $('#planilhaOrcamentariaMontada').on('click', '.editarItem', function(){
          var idPlanilhaAprovacao = $(this).attr('idPlanilhaAprovacao'), itemClicado = $(this);
 
-         console.log(idPlanilhaAprovacao);
-         
          //AO ABRIR A MODAL, LIMPA TODOS OS CAMPOS EDIT�VEIS
          $('.modalObrigatorios').each(function(){
              $(this).css('border-color', '#CCCCCC');
@@ -848,7 +846,9 @@
      window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'finalizar-solicitacao-readequacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>&idReadequacao=" + idReadequacao;
  }
  
- function excluirReadequacao(idReadequacao){
+ function excluirReadequacao(){
+     var idReadequacao = $('#idReadequacao').val();
+     
      window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'excluir-solicitacao-readequacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>&idReadequacao="+idReadequacao;
  }
 
