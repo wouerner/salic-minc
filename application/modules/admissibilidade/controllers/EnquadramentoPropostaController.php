@@ -67,7 +67,9 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
 
         $ultimaSugestaoPerfil = [];
         if($this->view->id_perfil_usuario){
-            $ultimaSugestaoPerfil = $sugestaoEnquadramento->obterHistoricoEnquadramento($preprojeto['idPreProjeto'], $this->view->id_perfil_usuario);
+            $sugestaoEnquadramento->sugestaoEnquadramento->setIdPreprojeto($preprojeto['idPreProjeto']);
+            $sugestaoEnquadramento->sugestaoEnquadramento->setIdPerfilUsuario($this->view->id_perfil_usuario);
+            $ultimaSugestaoPerfil = $sugestaoEnquadramento->obterHistoricoEnquadramento();
             $ultimaSugestaoPerfil = count($ultimaSugestaoPerfil) >= 1 ? current($ultimaSugestaoPerfil) : $ultimaSugestaoPerfil;
 
             if(!empty($ultimaSugestaoPerfil['id_area'])){
@@ -98,16 +100,14 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
         try {
             $this->_helper->layout->disableLayout();
 
-            $sugestaoEnquadramentoModel = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+            $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
 
             $get = $this->getRequest()->getParams();
             if (!isset($get['id_preprojeto']) || empty($get['id_preprojeto'])) {
                 throw new Exception("Identificador da proposta não informado.");
             }
-
-            $resultado = $sugestaoEnquadramentoModel->obterHistoricoEnquadramento(
-                $get['id_preprojeto']
-            );
+            $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($get['id_preprojeto']);
+            $resultado = $sugestaoEnquadramentoDbTable->obterHistoricoEnquadramento();
 
             $resultado = array_map(function ($dado) {
                 return array_map('utf8_encode', $dado);

@@ -228,7 +228,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         // Recuperando o Histórico de Sugestão de Enquadramento
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-        $this->view->sugestao_enquadramento = $sugestaoEnquadramentoDbTable->obterHistoricoEnquadramento($idPreProjeto);
+        $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($idPreProjeto);
+        $this->view->sugestao_enquadramento = $sugestaoEnquadramentoDbTable->obterHistoricoEnquadramento();
 
         if ($propostaPorEdital) {
             $tbFormDocumentoDAO = new tbFormDocumento();

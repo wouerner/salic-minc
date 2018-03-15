@@ -2,16 +2,45 @@
 
 class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_Abstract
 {
-    protected $_name = "sugestao_enquadramento";
-    protected $_schema = "sac";
-    protected $_primary = "id_sugestao_enquadramento";
-
     const ULTIMA_SUGESTAO_ATIVA = 1;
     const ULTIMA_SUGESTAO_INATIVA = 0;
 
-    public function obterHistoricoEnquadramento($id_preprojeto, $id_perfil_usuario = null)
-    {
+    protected $_name = "sugestao_enquadramento";
+    protected $_schema = "sac";
+    protected $_primary = "id_sugestao_enquadramento";
+    /**
+     * @var Admissibilidade_Model_SugestaoEnquadramento
+     */
+    public $sugestaoEnquadramento;
 
+    public function __construct(array $config = array())
+    {
+        $this->sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento();
+        parent::__construct($config);
+    }
+
+
+    public function obterHistoricoEnquadramento()
+    {
+        $tableSelect = $this->obterQueryDetalhadaEnquadramentosProposta();
+
+        $resultado = $this->fetchAll($tableSelect);
+        if ($resultado) {
+            return $resultado->toArray();
+        }
+    }
+
+    public function obterUltimaSugestaoEnquadramentoProposta()
+    {
+        $this->sugestaoEnquadramento->setUltimaSugestao(self::ULTIMA_SUGESTAO_ATIVA);
+        $tableSelect = $this->obterQueryDetalhadaEnquadramentosProposta();
+        $resultado = $this->fetchAll($tableSelect);
+        if ($resultado) {
+            return $resultado->toArray();
+        }
+    }
+
+    public function obterQueryDetalhadaEnquadramentosProposta() {
         $tableSelect = $this->select();
         $tableSelect->setIntegrityCheck(false);
         $tableSelect->from(
@@ -61,18 +90,20 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             $this->_schema
         );
 
-        $tableSelect->where('id_preprojeto = ?', $id_preprojeto);
+        $tableSelect->where('id_preprojeto = ?', $this->sugestaoEnquadramento->getIdPreprojeto());
 
-        if($id_perfil_usuario){
-            $tableSelect->where('id_perfil_usuario = ?', $id_perfil_usuario);
+        if($this->sugestaoEnquadramento->getIdPerfilUsuario()){
+            $tableSelect->where('id_perfil_usuario = ?', $this->sugestaoEnquadramento->getIdPerfilUsuario());
+        }
+
+        if($this->sugestaoEnquadramento->getUltimaSugestao() == self::ULTIMA_SUGESTAO_ATIVA
+            || $this->sugestaoEnquadramento->getUltimaSugestao() == self::ULTIMA_SUGESTAO_INATIVA){
+            $tableSelect->where('ultima_sugestao = ?', $this->sugestaoEnquadramento->getUltimaSugestao());
         }
 
         $tableSelect->order('data_avaliacao desc');
 
-        $resultado = $this->fetchAll($tableSelect);
-        if ($resultado) {
-            return $resultado->toArray();
-        }
+        return $tableSelect;
     }
 
     /**
