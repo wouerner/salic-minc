@@ -331,7 +331,7 @@
 	 
 	 if(texto.length > 6000){
              erro++;
-             msg = 'O campo so permite 5.000 caracteres!';
+             msg = 'O campo s&oacute; permite 5.000 caracteres!';
 	 }
 	 if (erro > 0) {
              $("#msgAlerta").dialog("destroy");
@@ -766,11 +766,11 @@
      CKEDITOR.replace( 'descJustificativa', { toolbar: [] } );
      
      
-     <?php if($this->idPerfil == 1111){ ?>
+     <?php if($this->idPerfil == Autenticacao_Model_Grupos::Proponente){ ?>
          $('.restaurarItem').live('click', function(){
              var idPlanilha = $(this).attr('idPlanilha'),
                  tpAcao = $(this).attr('tipo'),
-                 msg = 'Tem certeza que deseja restaurar o item exclu�do?';
+                 msg = 'Tem certeza que deseja restaurar o item exclu&iacute;do?';
 
              $("#msgAlerta").dialog("destroy");
              $("#msgAlerta").html(msg);
@@ -817,7 +817,7 @@
      
      if(texto.length > 6000){
          erro++;
-         msg = 'O campo so permite 5.000 caracteres!';
+         msg = 'O campo s&oacute; permite 5.000 caracteres!';
      }
      if (erro > 0) {
          $("#msgAlerta").dialog("destroy");
