@@ -65,9 +65,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $idPronac = $this->getRequest()->getParam('idPronac', null);
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
         $listarTudo = $this->getRequest()->getParam('listarTudo', null);
-        $this->view->ehTecnico = false;
-
-        $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
+        $this->view->isTecnico = false;
 
         $where = [];
         if ($idPronac) {
@@ -88,8 +86,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             if (empty($listarTudo)) {
 
-                $grupos = new Autenticacao_Model_Grupos();
-                $tecnicos = $grupos->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
+                $tecnicos = (new Autenticacao_Model_Grupos)->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
 
                 if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
                     $where['a.idTecnico = ?'] = $this->idUsuario;
@@ -100,8 +97,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             }
         }
 
-        $solicitacoes = $tbSolicitacao->obterSolicitacoes($where);
-        $this->view->arrResult = $solicitacoes;
+        $this->view->arrResult = (new Solicitacao_Model_DbTable_TbSolicitacao)->obterSolicitacoes($where);
         $this->view->idPronac = $idPronac;
 
     }
@@ -114,7 +110,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $this->_helper->layout->disableLayout();
         $idPronac = $this->getRequest()->getParam('idPronac', null);
         $idPreProjeto = $this->getRequest()->getParam('idPreProjeto', null);
-        $this->view->ehTecnico = false;
+        $this->view->isTecnico = false;
 
         $tbSolicitacoes = new Solicitacao_Model_DbTable_TbSolicitacao();
 
@@ -341,9 +337,26 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 $this->_helper->json(array('status' => $status, 'msg' => $mapperSolicitacao->getMessages(), 'redirect' => $strUrl));
             } catch (Exception $objException) {
-                $this->_helper->json(array('status' => false, 'msg' => $objException->getMessage(), 'redirect' => $strUrl));
+                $this->_helper->json(array('status' => false, 'msg' => $objException->getMessage()));
             }
 
+        }
+    }
+
+    public function deletarArquivoAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        if ($this->getRequest()->isPost()) {
+            try {
+                $arrayForm = $this->getRequest()->getPost();
+
+                (new Solicitacao_Model_TbSolicitacaoMapper)->deletarArquivo($arrayForm);
+                (new Arquivo_Model_DbTable_TbDocumento)->excluir("idDocumento = {$arrayForm['idDocumento']}");
+
+            } catch(Exception $objException) {
+                echo $objException->getMessage();
+            }
         }
     }
 

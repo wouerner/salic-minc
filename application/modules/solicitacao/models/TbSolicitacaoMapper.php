@@ -75,7 +75,6 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 } elseif (!empty($arrData['idProjeto'])) {
                     $tecnico = $sp->exec($arrData['idProjeto'], 'proposta');
                 }
-
                 if (empty($tecnico))
                     throw new Exeception("Erro ao salvar! T&eacute;cnico n&atilde;o encontrado!");
 
@@ -102,20 +101,23 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                     $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SOLICITACAO_CADASTRADA);
                     $mensagemSucesso = "Rascunho salvo com sucesso!";
                 }
-
                 $file = new Zend_File_Transfer();
 
-                if (!empty($file->getFileInfo())) {
+                $model->setIdDocumento($model->getIdDocumento());
+                if($file->isUploaded()){
 
-                    $arrDoc = [];
-                    $arrDoc['idTipoDocumento'] = 24;
-                    $arrDoc['dsDocumento'] = 'Anexo solicita&ccedil;&atilde;o';
+                    if (!empty($file->getFileInfo())) {
 
-                    $mapperArquivo = new Arquivo_Model_TbDocumentoMapper();
-                    $idDocumento = $mapperArquivo->saveCustom($arrDoc, $file);
+                        $arrDoc = [];
+                        $arrDoc['idTipoDocumento'] = 24;
+                        $arrDoc['dsDocumento'] = 'Anexo solicita&ccedil;&atilde;o';
 
+                        $mapperArquivo = new Arquivo_Model_TbDocumentoMapper();
+                        $idDocumento = $mapperArquivo->saveCustom($arrDoc, $file);
+
+                    }
+                    $model->setIdDocumento($idDocumento);
                 }
-                $model->setIdDocumento($idDocumento);
 
                 if ($id = $this->save($model)) {
                     $booStatus = $id;
@@ -178,4 +180,23 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
         }
         return $booStatus;
     }
+
+
+    public function deletarArquivo($arrData)
+    {
+        if (!empty($arrData)) {
+            try {
+
+                $model = new Solicitacao_Model_DbTable_TbSolicitacao();
+                $model->update(['idDocumento' => 0],"idSolicitacao = {$arrData['idSolicitacao']}");
+                $this->updateCustom($model);
+
+            } catch (Exception $e) {
+                $this->setMessage($e->getMessage());
+
+            }
+        }
+
+    }
+
 }
