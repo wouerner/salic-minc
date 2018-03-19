@@ -465,18 +465,18 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 Agente_Model_DbTable_Verificacao::PROPOSTA_EM_ANALISE_FINAL
             );
 
-            if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
-                $dadosSugestaoEnquadramento = [
-                    'descricao_motivacao' => $dados['avaliacao'],
-                    'id_orgao' => $this->grupoAtivo->codOrgao,
-                    'id_perfil' => $this->grupoAtivo->codGrupo,
-                    'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo,
-
-                ];
-
-                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-                $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($dadosSugestaoEnquadramento, $post->idPreProjeto);
-            }
+//            if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE) {
+//                $dadosSugestaoEnquadramento = [
+//                    'descricao_motivacao' => $dados['avaliacao'],
+//                    'id_orgao' => $this->grupoAtivo->codOrgao,
+//                    'id_perfil' => $this->grupoAtivo->codGrupo,
+//                    'id_usuario_avaliador' => $this->auth->getIdentity()->usu_codigo,
+//
+//                ];
+//
+//                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+//                $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($dadosSugestaoEnquadramento, $post->idPreProjeto);
+//            }
 
         } else {
 
@@ -743,6 +743,23 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             if (!empty($rsProjeto)) {
                 $nrPronac = $rsProjeto->AnoProjeto . $rsProjeto->Sequencial;
                 $retorno['sucesso'] = "A Proposta " . $this->idPreProjeto . " foi transformada no Projeto No. " . $nrPronac;
+
+                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+                $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
+                $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
+                $authIdentity = array_change_key_case((array)$auth->getIdentity());
+
+                $arrayArmazenamentoEnquadramento = [
+                    'AnoProjeto' => $rsProjeto->AnoProjeto,
+                    'Sequencial' => $rsProjeto->Sequencial,
+                    'Enquadramento' => $ultimaSugestaoEnquadramento['tp_enquadramento'],
+                    'DtEnquadramento' => $sugestaoEnquadramentoDbTable->getExpressionDate(),
+                    'Observacao' => $ultimaSugestaoEnquadramento['descricao_motivacao'],
+                    'Logon' => $authIdentity['usu_codigo'],
+                    'IdPRONAC' => $rsProjeto->IdPRONAC
+                ];
+                $enquadramentoDbTable = new Admissibilidade_Model_Enquadramento();
+                $enquadramentoDbTable->salvar($arrayArmazenamentoEnquadramento);
             }
         } catch (Exception $objException) {
             $retorno['erro'] = $objException->getMessage();
