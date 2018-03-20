@@ -623,6 +623,22 @@ $arrMenu['relatorios']['menu'][] = array(
     'label' => 'Listar Selecionados'
 );
 
+
+
+
+$arrMenu['solicitacoes'] = array(
+    'id' => 'solicitacoes',
+    'label' => 'Solicita&ccedil;&otilde;es',
+    'title' => 'Ir para Solicitacoes',
+    'menu' => array(),
+    'grupo' => []
+);
+$arrMenu['solicitacoes']['menu'][] = [
+    'label' => 'Listar Solicita&ccedil;&otilde;es', 'title' => 'Ir para Listar Solicita&ccedil;&otilde;es',
+    'url' => $this->url(['module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index'], null, true),
+    'grupo' => []
+];
+
 // ========== INICIO MENU ASSINATURA ==========
 //$arrMenu['assinatura'] = array(
 //'id' => 'assinatura',
