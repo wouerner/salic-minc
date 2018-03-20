@@ -2321,7 +2321,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $this->view->filtro = $filtro;
 
         if ($this->_request->getParam('pronac')) {
-            $where['PRONAC = ?'] = $this->_request->getParam('pronac');
+            $where['c.AnoProjeto+c.Sequencial = ?'] = $this->_request->getParam('pronac');
             $this->view->pronac = $this->_request->getParam('pronac');
         }
 
