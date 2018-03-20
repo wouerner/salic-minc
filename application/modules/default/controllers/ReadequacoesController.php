@@ -838,12 +838,12 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         );
         
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilhaAtiva($idPronac);
-
+        $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilhaAtiva($idPronac)->current();
+        
         $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilhaReadequada(
                             $idPronac,
                             $idReadequacao
-        );
+        )->current();
         
         if ($PlanilhaReadequada['Total'] > 0) {
             if ($PlanilhaAtiva['Total'] == $PlanilhaReadequada['Total']) {
