@@ -232,9 +232,7 @@
                                 <i class="material-icons right ">work</i>Outras Propostas</a>
                             <?php endif; ?>
 
-                            <?php if (Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo
-                                || Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
-                                || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo): ?>
+                            <?php if ($this->isPermitidoAvaliarProposta){ ?>
                                 <button
 
                                     <?php if (!(
@@ -252,10 +250,12 @@
                                         data-id-pre-projeto="<?php echo $this->itensGeral[0]->idPreProjeto ?>">
                                     <i class="material-icons right ">transform</i> Transformar em Projeto
                                 </button>
+                                <?php if(Autenticacao_Model_Grupos::COMPONENTE_COMISSAO != $this->codGrupo) { ?>
                                 <a class="btn black white-text" title="Arquivar Proposta" alt="Arquivar Proposta"
                                    href="/admissibilidade/admissibilidade/confirmararquivarproposta?idPreProjeto=<?php echo $this->itensGeral[0]->idPreProjeto ?>">
                                     <i class="material-icons right">archive</i>Arquivar
                                 </a>
+                                <?php } ?>
                                 <button title="Imprimir"
                                         class="btn waves-effect waves-light imprimirProposta white black-text"
                                         type="button" name="action">
@@ -271,7 +271,7 @@
                                                       alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>
                                     </a>
                                 <?php } ?>
-                            <?php endif; ?>
+                            <?php } ?>
                         </div>
                     </div>
 
