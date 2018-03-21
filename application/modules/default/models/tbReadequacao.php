@@ -17,6 +17,27 @@ class tbReadequacao extends MinC_Db_Table_Abstract
     protected $_primary = "idReadequacao";
 
     const TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL = 1;
+    const TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA = 2;
+    const TIPO_READEQUACAO_RAZAO_SOCIAL = 3;
+    const TIPO_READEQUACAO_AGENCIA_BANCARIA = 4;
+    const TIPO_READEQUACAO_SINOPSE_OBRA = 5;
+    const TIPO_READEQUACAO_IMPACTO_AMBIENTAL = 6;
+    const TIPO_READEQUACAO_ESPECIFICACAO_TECNICA = 7;
+    const TIPO_READEQUACAO_ESTRATEGIA_EXECUCAO = 8;
+    const TIPO_READEQUACAO_LOCAL_REALIZACAO = 9;
+    const TIPO_READEQUACAO_ALTERACAO_PROPONENTE = 10;
+    const TIPO_READEQUACAO_PLANO_DISTRIBUICAO = 11;
+    const TIPO_READEQUACAO_NOME_PROJETO = 12;
+    const TIPO_READEQUACAO_PERIODO_EXECUCAO = 13;
+    const TIPO_READEQUACAO_PLANO_DIVULGACAO = 14;
+    const TIPO_READEQUACAO_RESUMO_PROJETO = 15;
+    const TIPO_READEQUACAO_OBJETIVOS = 16;
+    const TIPO_READEQUACAO_JUSTIFICATIVA = 17;
+    const TIPO_READEQUACAO_ACESSIBILIDADE = 18;
+    const TIPO_READEQUACAO_DEMOCRATIZACAO_ACESSO = 19;
+    const TIPO_READEQUACAO_ETAPAS_TRABALHO = 20;
+    const TIPO_READEQUACAO_FICHA_TECNICA = 21;
+    
     const PERCENTUAL_REMANEJAMENTO = 50;
     const ST_ESTADO_EM_ANDAMENTO = 0;
     const ST_ESTADO_FINALIZADO = 1;
@@ -262,6 +283,36 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
+
+    /**
+     * Método para buscar id da readequacao ativa
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idTipoReadequacao
+     * @return integer
+     */    
+    public function buscarIdReadequacaoAtiva($idPronac, $idTipoReadequacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            'a.idReadequacao');
+        
+        $select->where('a.stEstado = ?', self::ST_ESTADO_EM_ANDAMENTO);
+        $select->where('a.idPronac = ?' , $idPronac);
+        $select->where('siEncaminhamento <> ?', tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA);
+        $select->where('a.idTipoReadequacao = ?', $idTipoReadequacao);
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result)) {
+            return $result[0]['idReadequacao'];
+        } else {
+            return false;
+        }
+    }
+    
     /*
      * Alterada em 06/03/14
      * @author: Jefferson Alessandro
@@ -289,7 +340,8 @@ class tbReadequacao extends MinC_Db_Table_Abstract
                 CAST(b.dsEncaminhamento AS TEXT) AS dsEncaminhamento,
                 a.stEstado,
                 e.idArquivo,
-                e.nmArquivo
+                e.nmArquivo,
+                a.dtEnvio
             ")
         );
         $select->joinInner(
@@ -478,7 +530,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
      */
     public function painelReadequacoesAnalise($where = array(), $order = array(), $tamanho = -1, $inicio = -1, $qtdeTotal = false, $idPerfil = 0)
     {
-        if ($idPerfil == 121) {
+        if ($idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             $nome = 'd.usu_nome AS Tecnico';
         } else {
             $nome = 'd.Descricao AS Tecnico';
@@ -506,7 +558,7 @@ class tbReadequacao extends MinC_Db_Table_Abstract
             'SAC.dbo'
         );
 
-        if ($idPerfil == 121) {
+        if ($idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             $select->joinLeft(
                 array('d' => 'Usuarios'),
                 'a.idAvaliador = d.usu_codigo',
@@ -1078,12 +1130,197 @@ class tbReadequacao extends MinC_Db_Table_Abstract
         $select->where('a.idTipoReadequacao=?', tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL);
         $select->where('a.stAtendimento=?', 'D');
         $select->where('a.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
-        $select->where('a.siEncaminhamento=?', 11);
+        $select->where('a.siEncaminhamento=?', tbTipoEncaminhamento::SI_ENCAMINHAMENTO_NAO_ENVIA_MINC);
         
         $remanejamentos = $this->fetchAll($select);
         
         if (count($remanejamentos) > 0) {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * Método para verificar se existe qualquer tipo de readequação em andamento
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idTipoReadequacao
+     * @return boolean
+     */    
+    public function existeReadequacaoEmAndamento($idPronac, $idTipoReadequacao = null)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('r' => $this->_name),
+            'r.idReadequacao'
+        );
+        $select->where('r.idPronac = ?', $idPronac);
+        
+        if ($idTipoReadequacao) {
+            $tiposReadequacoes = array($idTipoReadequacao);
+        } else {
+            $tiposReadequacoes = array(
+                self::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+            );
+        }
+        
+        $select->where('r.idTipoReadequacao IN(?)', $tiposReadequacoes);
+        $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método para verificar se existe readequacao de planilha em edição
+     * @access public
+     * @param integer $idPronac
+     * @return boolean
+     */    
+    public function existeReadequacaoPlanilhaEmEdicao($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('r' => $this->_name),
+            'r.idReadequacao'
+        );
+        $select->where('r.idPronac = ?', $idPronac);
+        $select->where('r.siEncaminhamento = ?', tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE);
+        $select->where('r.idTipoReadequacao = ?', self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
+        $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método para verificar se existe readequacao parcial em edição
+     * @access public
+     * @param integer $idPronac
+     * @return boolean
+     */    
+    public function existeReadequacaoParcialEmEdicao($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('r' => $this->_name),
+            'r.idReadequacao'
+        );
+        $select->where('r.idPronac = ?', $idPronac);
+        $select->where('r.siEncaminhamento = ?', tbTipoEncaminhamento::SI_ENCAMINHAMENTO_NAO_ENVIA_MINC);
+        $select->where('r.idTipoReadequacao = ?', self::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL);
+        $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }    
+
+    /**
+     * Método para verificar se está o projeto está disponivel para edição da readequacao de planilha
+     * @access public
+     * @param integer $idPronac
+     * @return boolean
+     */
+    public function disponivelParaEdicaoReadequacaoPlanilha($idPronac)
+    {
+        $liberacao = new Liberacao();
+        $projeto = new Projetos();
+        
+        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac);
+        $contaLiberada = $liberacao->contaLiberada($idPronac);
+        $periodoExecucaoVigente = $projeto->verificarPeriodoExecucaoVigente($idPronac);
+        
+        if ($existeReadequacaoEmAndamento &&
+            $contaLiberada &&
+            $periodoExecucaoVigente) {
+
+            return true;
+        } else {
+            return false;
+        }        
+    }
+
+    /**
+     * Método para verificar se está o projeto está disponivel para adição de itens da readequacao de planilha
+     * @access public
+     * @param integer $idPronac
+     * @return boolean
+     */
+    public function disponivelParaAdicaoItensReadequacaoPlanilha($idPronac)
+    {
+        $liberacao = new Liberacao();
+        $projeto = new Projetos();
+        
+        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento(
+            $idPronac,
+            self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+        );
+        $contaLiberada = $liberacao->contaLiberada($idPronac);
+        $periodoExecucaoVigente = $projeto->verificarPeriodoExecucaoVigente($idPronac);
+        
+        if ($existeReadequacaoEmAndamento &&
+            $contaLiberada &&
+            $periodoExecucaoVigente) {
+
+            return true;
+        } else {
+            return false;
+        }        
+    }
+
+    /**
+     * Método para retornar idPronac do projeto com readequação em andamento mais recentemente criada, com, prazo de execução vigente
+     * @param integer $idTipoReadequacao
+     * @return integer
+     */
+    public function buscarIdPronacReadequacaoEmAndamento($idTipoReadequacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('r' => $this->_name),
+            'r.idPronac'
+        );
+
+        $select->joinInner(
+            array('p' => 'Projetos'),
+            'r.idPronac = p.idPronac',
+            array(''),
+            $this->_schema
+        );
+        
+        $select->where('r.idTipoReadequacao = ?', $idTipoReadequacao);
+        $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
+        $select->where(new Zend_Db_Expr('p.DtInicioExecucao < GETDATE()'));
+        $select->where(new Zend_Db_Expr('p.DtFimExecucao > GETDATE()'));
+        $select->order('r.dtSolicitacao DESC');
+        $select->limit(1);
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result) > 0) {
+            return $result->current()['idPronac'];
         } else {
             return false;
         }
