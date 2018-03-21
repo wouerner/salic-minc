@@ -1006,10 +1006,10 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
             $this->view->projeto = $rsProjeto;
 
-            $tbReadequacao = new tbReadequacao();
-            $dadosReadequacoes = $tbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento <> ?'=>12))->toArray();
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+            $dadosReadequacoes = $Readequacao_Model_tbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento <> ?'=>12))->toArray();
 
-            $dadosReadequacoesDevolvidas = $tbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento = ?'=>12, 'a.stAtendimento = ?' => 'E', 'a.stEstado = ?' => 0))->toArray();
+            $dadosReadequacoesDevolvidas = $Readequacao_Model_tbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento = ?'=>12, 'a.stAtendimento = ?' => 'E', 'a.stEstado = ?' => 0))->toArray();
 
             $tbReadequacaoXParecer = new tbReadequacaoXParecer();
             foreach ($dadosReadequacoes as &$dr) {
@@ -2271,19 +2271,19 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $DadosProjeto = $projetos->buscarProjetoXProponente(array('idPronac = ?' => $idPronac))->current();
         $this->view->DadosProjeto = $DadosProjeto;
         
-        $readequacao = new tbReadequacao();
+        $readequacao = new Readequacao_Model_tbReadequacao();
         $existeRemanejamento50EmAndamento = $readequacao->existeRemanejamento50EmAndamento($idPronac);
         
         if ($existeRemanejamento50EmAndamento) {
             $tbPlanilhaAprovacao = new PlanilhaAprovacao();
             $planilhaOrcamentaria = $tbPlanilhaAprovacao->visualizarPlanilhaEmRemanejamento($idPronac);
             
-            $tbReadequacao = new tbReadequacao();
-            $readequacaoAtiva = $tbReadequacao->buscar(
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+            $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
                 array(
                     'idPronac = ?' => $idPronac,
-                    'stEstado =?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
-                    'idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
+                    'stEstado =?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                    'idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
                 )
             );
             if (count($readequacaoAtiva)>0) {
@@ -2335,12 +2335,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $where['a.idEtapa in (?)'] = array(5);
         $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
-        $tbReadequacao = new tbReadequacao();
-        $readequacaoAtiva = $tbReadequacao->buscar(
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
             array(
                 'idPronac = ?' => $idPronac,
-                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
-                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
+                'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
             )
         );
         $idReadequacao = $readequacaoAtiva[0]['idReadequacao'];
@@ -2430,15 +2430,15 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $dadosReadequacao['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
             $dadosReadequacao['idSolicitante'] = $rsAgente->idAgente;
             $dadosReadequacao['dsJustificativa'] = utf8_decode('Readequação até 50%');
-            $dadosReadequacao['stEstado'] = tbReadequacao::ST_ESTADO_FINALIZADO;
-            $update = $tbReadequacao->update(
+            $dadosReadequacao['stEstado'] = Readequacao_Model_tbReadequacao::ST_ESTADO_FINALIZADO;
+            $update = $Readequacao_Model_tbReadequacao->update(
                 $dadosReadequacao,
                 array(
                     'idPronac=?' => $idPronac,
-                    'idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                    'idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
                     'stAtendimento=?' => 'D',
                     'siEncaminhamento=?' => 11,
-                    'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                    'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                     'idReadequacao=?' => $idReadequacao
                 )
             );
@@ -2497,12 +2497,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $where['a.idEtapa in (?)'] = array(5);
             $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
-            $tbReadequacao = new tbReadequacao();
-            $readequacaoAtiva = $tbReadequacao->buscar(
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+            $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
                 array(
                     'idPronac = ?'=> $idPronac,
-                    'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                    'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
+                    'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                    'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO
                 )
             );
             
@@ -2641,12 +2641,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         //x($PlanilhaAtiva->Total);
 
         //BUSCAR VALOR TOTAL DA PLANILHA DE REMANEJADA
-        $tbReadequacao = new tbReadequacao();
-        $readequacaoAtiva = $tbReadequacao->buscar(
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
             array(
                 'idPronac = ?'=> $idPronac,
-                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
+                'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO
             )
         );
         
@@ -2707,12 +2707,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         $planilhaAtiva = $tbPlanilhaAprovacao->buscar($where)->current();
         
         try {
-            $tbReadequacao = new tbReadequacao();
-            $readequacaoAtiva = $tbReadequacao->buscar(
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+            $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
                 array(
                     'idPronac = ?' => $idPronac,
-                    'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                    'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
+                    'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                    'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO
                 )
             );
             
@@ -2752,12 +2752,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
 
-        $tbReadequacao = new tbReadequacao();
-        $readequacaoAtiva = $tbReadequacao->buscar(
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
             array(
                 'idPronac = ?' => $idPronac,
-                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO
+                'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO
             )
         );
         
@@ -2775,12 +2775,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 );
                 
                 if ($del > 0) {
-                    $tbReadequacao = new tbReadequacao();
-                    $readequacaoAtiva = $tbReadequacao->delete(
+                    $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+                    $readequacaoAtiva = $Readequacao_Model_tbReadequacao->delete(
                         array(
                             'idPronac=?' => $idPronac,
-                            'idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                            'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                            'idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                            'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                             'stAtendimento=?' => 'D',
                             'siEncaminhamento=?' => 11,
                             'idReadequacao = ?' => $idReadequacao
@@ -2861,7 +2861,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             
             //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
             $vlAtual = @number_format(($registro['qtItem']*$registro['nrOcorrencia']*$registro['vlUnitario']), 2, '', '');
-            $vlAtualPerc = $vlAtual* tbReadequacao::PERCENTUAL_REMANEJAMENTO/100;
+            $vlAtualPerc = $vlAtual* Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100;
             
             //VALOR MINIMO E MAXIMO DO ITEM ORIGINAL
             //SE TIVER VALOR COMPROVADO, DEVE SUBTRAIR O VALOR DO ITEM COMPROVADO DO VALOR UNITARIO
@@ -2871,9 +2871,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             if ($vlAtualMin > $vlTotalItem) {
                 $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode('R$ '.number_format($vlAtualMin/100, 2, ',', '.'));
             } else {
-                $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode('R$ '.number_format(($vlAtual - ($vlAtual * tbReadequacao::PERCENTUAL_REMANEJAMENTO/100)), 2, ',', '.'));
+                $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode('R$ '.number_format(($vlAtual - ($vlAtual * Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100)), 2, ',', '.'));
             }
-            $dadosPlanilhaOriginal['ValorMaximoProItem'] = utf8_encode('R$ '.number_format(($vlAtual + ($vlAtual * tbReadequacao::PERCENTUAL_REMANEJAMENTO/100))/100, 2, ',', '.'));
+            $dadosPlanilhaOriginal['ValorMaximoProItem'] = utf8_encode('R$ '.number_format(($vlAtual + ($vlAtual * Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100))/100, 2, ',', '.'));
             $dadosPlanilhaOriginal['vlMinimoValidacao'] = utf8_encode($vlAtualMin);
             $dadosPlanilhaOriginal['vlMaximoValidacao'] = utf8_encode($vlAtualMax);
             $dadosPlanilhaOriginal['ValorMinimoProItemValidacao'] = utf8_encode($vlAtualMin);
@@ -2889,12 +2889,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         
         /* DADOS DO ITEM PARA EDICAO DO REMANEJAMENTO */
 
-        $tbReadequacao = new tbReadequacao();
-        $readequacaoAtiva = $tbReadequacao->buscar(
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
             array(
                 'idPronac = ?' => $idPronac,
-                'stEstado = ?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
-                'idTipoReadequacao = ?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
+                'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
             )
         );
         
@@ -3009,8 +3009,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
         
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $tbReadequacao = new tbReadequacao();
-        $existeRemanejamento50EmAndamento = $tbReadequacao->existeRemanejamento50EmAndamento($idPronac);
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $existeRemanejamento50EmAndamento = $Readequacao_Model_tbReadequacao->existeRemanejamento50EmAndamento($idPronac);
         
         //BUSCA OS DADOS DO ITEM ORIGINAL PARA VALIDA��O DE VALORES
         if (!$existeRemanejamento50EmAndamento && !$idPlanilhaAprovacaoPai) {
@@ -3048,7 +3048,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
         
         $vlAtual = @number_format(($valoresItem['qtItem']*$valoresItem['nrOcorrencia']*$valoresItem['vlUnitario']), 2, '', '');
-        $vlAtualPerc = $vlAtual* tbReadequacao::PERCENTUAL_REMANEJAMENTO /100;
+        $vlAtualPerc = $vlAtual* Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO /100;
         
         //VALOR M�NIMO E M�XIMO DO ITEM ORIGINAL
         $vlAtualMin = round($vlAtual-$vlAtualPerc);
@@ -3056,7 +3056,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         
         //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO
         if ($vlTotal < $vlAtualMin || $vlTotal > $vlAtualMax) {
-            $mensagem = ($vlTotal < $vlAtualMin) ? "O valor total do item desejado é menor que o mínimo de " . tbReadequacao::PERCENTUAL_REMANEJAMENTO . "% do valor original." : "O valor total do item ultrapassou a margem de ". tbReadequacao::PERCENTUAL_REMANEJAMENTO . ".";
+            $mensagem = ($vlTotal < $vlAtualMin) ? "O valor total do item desejado é menor que o mínimo de " . Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO . "% do valor original." : "O valor total do item ultrapassou a margem de ". Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO . ".";
             
             $this->_helper->json(array('resposta'=>false, 'msg'=> $mensagem,
             'qtItem' => $valoresItem['qtItem'],
@@ -3071,11 +3071,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         }
 
         // verifica se existe readequacao ativa
-        $readequacaoAtiva = $tbReadequacao->buscarDadosReadequacoes(
+        $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscarDadosReadequacoes(
             array(
                 'a.idPronac=?' => $idPronac,
-                'a.idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                'a.stEstado=?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                'a.idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                'a.stEstado=?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                 'a.stAtendimento=?' => 'D',
                 'a.siEncaminhamento=?' => 11
             )
@@ -3097,8 +3097,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 $dadosReadequacao['dsJustificativa'] = utf8_decode('Readequação até 50%');
                 $dadosReadequacao['stAtendimento'] = 'D';
                 $dadosReadequacao['siEncaminhamento'] = 11;
-                $dadosReadequacao['stEstado'] = tbReadequacao::ST_ESTADO_EM_ANDAMENTO;
-                $idReadequacao = $tbReadequacao->inserir($dadosReadequacao);
+                $dadosReadequacao['stEstado'] = Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO;
+                $idReadequacao = $Readequacao_Model_tbReadequacao->inserir($dadosReadequacao);
                 
                 $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
                 $planilhaAtiva = $tbPlanilhaAprovacao->buscar(
@@ -3141,11 +3141,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                     $tbPlanilhaAprovacao->inserir($planilhaRP);
                 }
 
-                $readequacaoAtiva = $tbReadequacao->buscarDadosReadequacoes(
+                $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscarDadosReadequacoes(
                     array(
                         'a.idPronac=?' => $idPronac,
-                        'a.idTipoReadequacao=?' => tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                        'a.stEstado=?' => tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
+                        'a.idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+                        'a.stEstado=?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                         'a.stAtendimento=?' => 'D',
                         'a.siEncaminhamento=?' => 11
                     )
