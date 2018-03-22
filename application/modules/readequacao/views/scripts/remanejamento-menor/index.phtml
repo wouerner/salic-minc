@@ -582,7 +582,7 @@
             <td align="center"><span class="bold">Grupo C</span><br /><span style="font-size: 12px;">Custos / Administrativos</span></td>
             <td align="center"><span class="bold">Grupo D</span><br /><span style="font-size: 12px;">Recolhimentos</span></td>
             <td align="center" class="w200 bold">Valor da Planilha Remanejada (R$)<br />&nbsp;</td>
-            <td align="center" style="width: 4px;" class="bold sumir">Reintegrar<br />&nbsp;</td>
+            <td align="center" style="width: 4px;" class="bold <?php if (!isset($this->idReadequacao)): ?>sumir<?php endif; ?>">Reintegrar<br />&nbsp;</td>
         </tr>
         <tr>
             <td align="center" id="td-grupo-a"><span class= "bold">R$ 0,00</span></td>
@@ -592,7 +592,7 @@
             <td align="center" id="td-somatoria"><span class= "bold">R$ 0,00</span></td>
                 <?php /****** FIM VALOR ENTRE AS PLANILHAS ATIVA E REMANEJADA ******/ ?>
             </td>
-            <td class="centro">
+            <td class="centro <?php if (!isset($this->idReadequacao)): ?>sumir<?php endif; ?>">
                 <img idPronac="<?php echo $this->idPronac; ?>" src="<?php echo $this->baseUrl(); ?>/public/img/refresh.gif" title="Reintegrar Planilha" id="reintegrar-planilha" style="cursor: pointer; display:<?php if (isset($this->idReadequacao)) { echo 'inline-block'; } else { echo 'none'; } ?>">
             </td>
         </tr>
