@@ -12,12 +12,12 @@
     
     function atualizarDiferencaDeValores(){
         $('#valorEntrePlanilhas').html('&nbsp;');
-        jqAjaxLinkSemLoading('<?php echo $this->Url(array('controller' => 'consultardadosprojeto', 'action' => 'carregar-valor-entre-planilhas'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'valorEntrePlanilhas');
+        jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'carregar-valor-entre-planilhas'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'valorEntrePlanilhas');
     }
     
     function atualizaDadosGrupos(){
         $.ajax({
-            url : '<?php echo $this->Url(array('controller' => 'consultardadosprojeto', 'action' => 'carregar-valor-por-grupo-remanejamento'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>',
+            url : '<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'carregar-valor-por-grupo-remanejamento'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>',
             success: function(data){
                 if(data.resposta){
                     $("#td-grupo-a").html(data.dadosPlanilha.GrupoA);
@@ -127,7 +127,7 @@
                         $(this).dialog('close');
                     },
                     'Sim' : function(){
-                        redirecionar('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-menor-finalizar'), null, true); ?>?idPronac=<?php echo $this->idPronac; ?>")');
+                        redirecionar('<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'finalizar'), null, true); ?>?idPronac=<?php echo $this->idPronac; ?>")');
                     }
                 }
             });
@@ -139,7 +139,7 @@
 		idPlanilhaAprovacaoPai = $(this).attr('idPlanilhaAprovacaoPai');
             $.ajax({
                 type: 'POST',
-                url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-reintegrar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'reintegrar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                 data: {
                     idPlanilha: idPlanilha,
                     idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai
@@ -207,7 +207,7 @@
                         
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-reintegrar-planilha'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'reintegrar-planilha'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                             data: {
                                 id: idPronac
                             },
@@ -259,7 +259,7 @@
             //BUSCA OS DADOS DO ITEM PARA VISUALIZA��O DOS NA MODAL
             $.ajax({
                 type: 'POST',
-                url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-alterar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'alterar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                 data: {
                   idPlanilha: idPlanilhaAprovacao,
                     idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai
@@ -388,7 +388,7 @@
                                     } else {
                                         $.ajax({
                                             type: 'POST',
-                                            url: '<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'salvar-avaliacao-do-item-remanejamento'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'salvar-avaliacao-do-item-remanejamento'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                                             data: {
                                                 idPlanilha: idPlanilhaAprovacao,
 						                        idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai,
@@ -582,7 +582,7 @@
             <td align="center"><span class="bold">Grupo C</span><br /><span style="font-size: 12px;">Custos / Administrativos</span></td>
             <td align="center"><span class="bold">Grupo D</span><br /><span style="font-size: 12px;">Recolhimentos</span></td>
             <td align="center" class="w200 bold">Valor da Planilha Remanejada (R$)<br />&nbsp;</td>
-            <td align="center" style="width: 4px;" class="bold">Reintegrar<br />&nbsp;</td>
+            <td align="center" style="width: 4px;" class="bold sumir">Reintegrar<br />&nbsp;</td>
         </tr>
         <tr>
             <td align="center" id="td-grupo-a"><span class= "bold">R$ 0,00</span></td>
