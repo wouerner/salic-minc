@@ -5,17 +5,48 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
     protected $_idRecursoProposta;
     protected $_idPreProjeto;
     protected $_dtRecursoProponente;
+    /**
+     * @var $_dsRecursoProponente Motivo da solicitação do Proponente
+     */
     protected $_dsRecursoProponente;
+    /**
+     * @var $_idProponente Proponente que está solicitando o recurso (idAgente)
+     */
     protected $_idProponente;
+    /**
+     * @var $_idAvaliadorTecnico Código do usuário que está avaliando o recurso (Tabelas.dbo.Usuarios.usu_codigo)
+     */
     protected $_idAvaliadorTecnico;
     protected $_dtAvaliacaoTecnica;
     protected $_dsAvaliacaoTecnica;
+    /**
+     * @var $_tpRecurso
+            tpRecurso => 1 - Pedido de reconsideração
+            tpRecurso => 2 - Recurso
+     */
     protected $_tpRecurso;
+    /**
+     * @var $_tpSolicitacao
+            DR => Desistência do Prazo Recursal
+            EN => Enquadramento
+     */
     protected $_tpSolicitacao;
     protected $_stAtendimento;
     protected $_idArquivo;
+    /**
+     * @var $_stEstado
+            0 - Registro Atual
+            1 - Registro Inativo
+     */
     protected $_stEstado;
 
+    const TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO = 1;
+    const TIPO_RECURSO_RECURSO = 2;
+    const TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL = 'DR';
+    const TIPO_SOLICITACAO_ENQUADRAMENTO = 'EN';
+    const SITUACAO_ESTADO_ATUAL = 0;
+    const SITUACAO_ESTADO_INATIVO = 1;
+    
     /**
      * @return mixed
      */
