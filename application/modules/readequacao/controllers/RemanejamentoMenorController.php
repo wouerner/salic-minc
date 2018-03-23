@@ -54,6 +54,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
+            $this->view->idPronac = $idPronac;
         }
         
         if (empty($idPronac)) {
@@ -123,16 +124,13 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             $planilhaOrcamentaria = $tbPlanilhaAprovacao->visualizarPlanilhaEmRemanejamento($idPronac);
             
             $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
-            $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
+            $this->view->readequacao = $Readequacao_Model_tbReadequacao->buscar(
                 array(
                     'idPronac = ?' => $idPronac,
                     'stEstado =?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                     'idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
                 )
-            );
-            if (count($readequacaoAtiva)>0) {
-                $this->view->idReadequacao = $readequacaoAtiva[0]['idReadequacao'];
-            }
+            )->current();
         } elseif (!$existeRemanejamento50EmAndamento) {
             $db = Zend_Db_Table::getDefaultAdapter();
             $db->setFetchMode(Zend_DB :: FETCH_OBJ);
@@ -281,7 +279,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
                     'idPronac=?' => $idPronac,
                     'idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
                     'stAtendimento=?' => 'D',
-                    'siEncaminhamento=?' => 11,
+                    'siEncaminhamento=?' => Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_NAO_ENVIA_MINC,
                     'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
                     'idReadequacao=?' => $idReadequacao
                 )
@@ -522,7 +520,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         }
 
         $this->montaTela(
-            'consultardadosprojeto/carregar-valor-entre-planilhas.phtml',
+            'remanejamento-menor/carregar-valor-entre-planilhas.phtml',
             array(
             'statusPlanilha' => $statusPlanilha,
             'vlDiferencaPlanilhas' => 'R$ '.number_format(($PlanilhaAtiva->Total-$PlanilhaRemanejada->Total), 2, ',', '.')
@@ -1038,6 +1036,139 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         } catch (Zend_Exception $e) {
             $this->_helper->json(array('resposta'=>$e));
             $this->_helper->viewRenderer->setNoRender(true);
+        }
+    }
+
+    /**
+     * Método criar readequação de planilha orçamentária
+     * @access private
+     * @param integer $idPronac
+     * @return Bool
+     */
+    private function criarReadequacaoPlanilha($idPronac)
+    {
+        $auth = Zend_Auth::getInstance();        
+        $tblAgente = new Agente_Model_DbTable_Agentes();
+        $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
+        
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $dados = array();
+        $dados['idPronac'] = $idPronac;
+        $dados['idTipoReadequacao'] = Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL;
+        $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
+        $dados['idSolicitante'] = $rsAgente->idAgente;
+        $dados['dsJustificativa'] = utf8_decode('Readequação até 50%');
+        $dados['dsSolicitacao'] = '';
+        $dados['stAtendimento'] = 'D';
+        $dados['idDocumento'] = null;
+        $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_NAO_ENVIA_MINC;
+        $dados['stEstado'] = Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO;
+        
+        try {
+            $idReadequacao = $Readequacao_Model_tbReadequacao->inserir($dados);
+            
+            return $idReadequacao;
+            
+        } catch (Zend_Exception $e) {
+            $this->_helper->json(array('msg' => 'Houve um erro na criação do registro de tbReadequacao'));
+            $this->_helper->viewRenderer->setNoRender(true);
+        }
+    }
+    
+    /**
+     * Função para verificar e copiar planilha
+     * 
+     * @access public
+     * @return Bool   True se foi possível criar a planilha ou se ela existe
+     */
+    public function verificarPlanilhaAtivaAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->layout->disableLayout();
+        
+        $idPronac = $this->_request->getParam('idPronac');
+        $idReadequacao = $this->_request->getParam('idReadequacao');
+        
+        if (!$idReadequacao || $idReadequacao == 0) {
+            $idReadequacao = $this->criarReadequacaoPlanilha($idPronac);
+            
+            $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+            
+            $verificarPlanilhaReadequadaAtual = $tbPlanilhaAprovacao->buscarPlanilhaReadequadaEmEdicao($idPronac, $idReadequacao);
+            
+            if (count($verificarPlanilhaReadequadaAtual) == 0) {
+                $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtiva($idPronac);
+                $criarPlanilha = $this->copiarPlanilhas($idPronac, $idReadequacao);
+                
+                if ($criarPlanilha) {
+                    $this->_helper->json(array(
+                        'msg' => 'Planilha copiada corretamente',
+                        'idReadequacao' => $idReadequacao
+                    ));
+                } else {
+                    $this->_helper->json(array(
+                        'msg' => 'Houve um erro ao tentar copiar a planilha',
+                        'idReadequacao' => $idReadequacao
+                    ));
+                }
+            }            
+        } else {
+            $this->_helper->json(array(
+                'msg' => 'OK - planilha existe',
+                'idReadequacao' => $idReadequacao
+            ));            
+        }
+    }
+    
+    /**
+     * Método que copia planilha associando a um idReadequacao
+     * @access private
+     * @param integer $idPronac
+     * @param integer $idReadequacao
+     * @return Bool
+     */
+    private function copiarPlanilhas($idPronac, $idReadequacao)
+    {
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $planilha = array();
+        
+        try {
+            $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtivaNaoExcluidos($idPronac);
+            
+            foreach ($planilhaAtiva as $value) {
+                $planilha['tpPlanilha'] = 'SR';
+                $planilha['dtPlanilha'] = new Zend_Db_Expr('GETDATE()');
+                $planilha['idPlanilhaProjeto'] = $value['idPlanilhaProjeto'];
+                $planilha['idPlanilhaProposta'] = $value['idPlanilhaProposta'];
+                $planilha['IdPRONAC'] = $value['IdPRONAC'];
+                $planilha['idProduto'] = $value['idProduto'];
+                $planilha['idEtapa'] = $value['idEtapa'];
+                $planilha['idPlanilhaItem'] = $value['idPlanilhaItem'];
+                $planilha['dsItem'] = $value['dsItem'];
+                $planilha['idUnidade'] = $value['idUnidade'];
+                $planilha['qtItem'] = $value['qtItem'];
+                $planilha['nrOcorrencia'] = $value['nrOcorrencia'];
+                $planilha['vlUnitario'] = $value['vlUnitario'];
+                $planilha['qtDias'] = $value['qtDias'];
+                $planilha['tpDespesa'] = $value['tpDespesa'];
+                $planilha['tpPessoa'] = $value['tpPessoa'];
+                $planilha['nrContraPartida'] = $value['nrContraPartida'];
+                $planilha['nrFonteRecurso'] = $value['nrFonteRecurso'];
+                $planilha['idUFDespesa'] = $value['idUFDespesa'];
+                $planilha['idMunicipioDespesa'] = $value['idMunicipioDespesa'];
+                $planilha['dsJustificativa'] = null;
+                $planilha['idAgente'] = 0;
+                $planilha['idPlanilhaAprovacaoPai'] = $value['idPlanilhaAprovacao'];
+                $planilha['idReadequacao'] = $idReadequacao;
+                $planilha['tpAcao'] = 'N';
+                $planilha['idRecursoDecisao'] = $value['idRecursoDecisao'];
+                $planilha['stAtivo'] = 'N';
+                
+                $tbPlanilhaAprovacao->inserir($planilha);
+            }
+            return true;
+        } catch (Zend_Exception $e) {
+            $this->_helper->json(array('msg' => 'Houve um erro na c&oacute;pia das planilhas!'));
         }
     }    
 }

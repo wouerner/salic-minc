@@ -1259,6 +1259,37 @@ class Readequacao_Model_tbReadequacao extends MinC_Db_Table_Abstract
     }
 
     /**
+     * Método para verificar se está o projeto está disponivel para edição do remanejamento de planilha
+     * @access public
+     * @param integer $idPronac
+     * @return boolean
+     */
+    public function disponivelParaEdicaoRemanejamentoPlanilha($idPronac)
+    {
+        $liberacao = new Liberacao();
+        $projeto = new Projetos();
+        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        
+        $existeReadequacaoEmAndamento = $this->existeReadequacaoEmAndamento($idPronac);
+        $contaLiberada = $liberacao->contaLiberada($idPronac);
+        $periodoExecucaoVigente = $projeto->verificarPeriodoExecucaoVigente($idPronac);
+        $possuiRelatorioDeCumprimento = $tbCumprimentoObjeto->possuiRelatorioDeCumprimento($idPronac);
+        
+        if (
+            $existeReadequacaoEmAndamento &&
+            $periodoExecucaoVigente &&
+            (
+                $contaLiberada ||
+                (!$contaLiberada && !$possuiRelatorioDeCumprimento)
+            )
+        ) {
+            return true;
+        } else {
+            return false;
+        }        
+    }
+    
+    /**
      * Método para verificar se está o projeto está disponivel para adição de itens da readequacao de planilha
      * @access public
      * @param integer $idPronac
