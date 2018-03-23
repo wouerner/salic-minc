@@ -1130,7 +1130,7 @@ class Readequacao_Model_tbReadequacao extends MinC_Db_Table_Abstract
         $select->where('a.siEncaminhamento=?', Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_NAO_ENVIA_MINC);
         
         $remanejamentos = $this->fetchAll($select);
-        
+
         if (count($remanejamentos) > 0) {
             return true;
         } else {

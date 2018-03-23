@@ -588,30 +588,28 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
     public function reintegrarPlanilhaAction()
     {
         $this->_helper->layout->disableLayout();
-        $idPronac = $this->_request->getParam("id");
+        $idPronac = $this->_request->getParam("idPronac");
+        $idReadequacao = $this->_request->getParam("idReadequacao");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
+        
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
+        
         $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
-        $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
+        $readequacao = $Readequacao_Model_tbReadequacao->buscar(
             array(
-                'idPronac = ?' => $idPronac,
-                'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO
+                'idReadequacao = ?' => $idReadequacao
             )
         );
         
         try {
-            if (!empty($readequacaoAtiva)) {
-                $idReadequacao = $readequacaoAtiva[0]['idReadequacao'];
+            if (!empty($readequacao)) {
+                $idReadequacao = $readequacao[0]['idReadequacao'];
                 
                 $del = $tbPlanilhaAprovacao->delete(
                     array(
                         'IdPRONAC = ?'=>$idPronac,
-                        'tpPlanilha = ?'=>'RP',
-                        'stAtivo = ?'=>'N',
                         'idReadequacao = ?' => $idReadequacao
                     )
                 );
@@ -622,14 +620,11 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
                         array(
                             'idPronac=?' => $idPronac,
                             'idTipoReadequacao=?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                            'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
-                            'stAtendimento=?' => 'D',
-                            'siEncaminhamento=?' => 11,
                             'idReadequacao = ?' => $idReadequacao
                         )
                     );
                     
-                    $planilhaAtiva = $tbPlanilhaAprovacao->buscar(array('IdPRONAC=?'=>$idPronac, 'StAtivo=?'=>'S'));
+                    $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtiva($idPronac);
                     $this->_helper->json(array('resposta'=>true));
                 } else {
                     $msg = utf8_encode('A planilha j&aacute; foi reintegrada.');
