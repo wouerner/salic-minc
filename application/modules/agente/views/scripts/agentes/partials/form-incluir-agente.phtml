@@ -635,9 +635,10 @@
                     elmLogradouro.removeAttr("disabled");
                     elmLogradouro.attr("placeholder", "Informe o logradouro");
                 }
-
                 elmTipoLogradouro.find('option:eq(0)').html("- Selecione -").attr('selected', true);
-                if (result.tipoLogradouro !== null && result.tipoLogradouro.length > 1) {
+                if (result.tipoLogradouro !== null
+                    && result.tipoLogradouro.length > 1
+                    && elmTipoLogradouro.find("option:contains(" + result.tipoLogradouro + ")").length > 0) {
                     elmTipoLogradouro.find("option:contains(" + result.tipoLogradouro + ")").attr('selected', true);
                 } else {
                     elmTipoLogradouro.removeAttr("disabled");
