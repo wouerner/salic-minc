@@ -14,7 +14,7 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
      */
     protected $_idProponente;
     /**
-     * @var $_idAvaliadorTecnico Código do usuário que está avaliando o recurso (Tabelas.dbo.Usuarios.usu_codigo)
+     * @var $_idAvaliadorTecnico C&oacute;digo do usuário que está avaliando o recurso (Tabelas.dbo.Usuarios.usu_codigo)
      */
     protected $_idAvaliadorTecnico;
     protected $_dtAvaliacaoTecnica;
@@ -31,21 +31,36 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
             EN => Enquadramento
      */
     protected $_tpSolicitacao;
+    /**
+     * @var $_stAtendimento
+            'N' => Sem avaliação
+            'I' => Quando é indeferido
+            'D' => Quando é deferido (movimenta para frente)
+     */
     protected $_stAtendimento;
     protected $_idArquivo;
     /**
-     * @var $_stEstado
-            0 - Registro Atual
-            1 - Registro Inativo
+     * @var $_stAtivo
+             0 - Registro Atual
+             1 - Registro Inativo
      */
-    protected $_stEstado;
+    protected $_stAtivo;
 
     const TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO = 1;
     const TIPO_RECURSO_RECURSO = 2;
     const TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL = 'DR';
     const TIPO_SOLICITACAO_ENQUADRAMENTO = 'EN';
-    const SITUACAO_ESTADO_ATUAL = 0;
-    const SITUACAO_ESTADO_INATIVO = 1;
+    const SITUACAO_RECURSO_ATIVO = 0;
+    const SITUACAO_RECURSO_INATIVO = 1;
+    const SITUACAO_ATENDIMENTO_SEM_AVALIACAO = 'N';
+    const SITUACAO_ATENDIMENTO_INDEFERIDO = 'I';
+    const SITUACAO_ATENDIMENTO_DEFERIDO = 'D';
+
+    /*
+     *  'N' => Sem avaliação
+        'I' => Quando é indeferido
+        'D' => Quando é deferido (movimenta para frente)
+     */
     
     /**
      * @return mixed
@@ -266,20 +281,18 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
     /**
      * @return mixed
      */
-    public function getStEstado()
+    public function getStAtivo()
     {
-        return $this->_stEstado;
+        return $this->_stAtivo;
     }
 
     /**
      * @param mixed $stEstado
      * @return Recurso_Model_TbRecursoProposta
      */
-    public function setStEstado($stEstado)
+    public function setStAtivo($stEstado)
     {
-        $this->_stEstado = $stEstado;
+        $this->_stAtivo = $stEstado;
         return $this;
     }
-
-
 }

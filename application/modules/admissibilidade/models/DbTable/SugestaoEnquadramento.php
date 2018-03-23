@@ -192,8 +192,8 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         $resultadoOrgaoSuperior = $orgaoDbTable->codigoOrgaoSuperior($dadosSugestaoEnquadramento['id_orgao']);
         $orgaoSuperior = $resultadoOrgaoSuperior[0]['Superior'];
 
-        $distribuicaoAvaliacaoPropostaDtTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
-        $distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoPropostaDtTable->findBy([
+        $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoPropostaDbTable->findBy([
             'id_preprojeto' => $dadosSugestaoEnquadramento['id_preprojeto'],
             'id_orgao_superior' => $orgaoSuperior,
             'id_perfil' => $dadosSugestaoEnquadramento['id_perfil']
@@ -244,6 +244,28 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
                 'id_sugestao_enquadramento = ?' => $dadosBuscaPorSugestao['id_sugestao_enquadramento']
             ]);
         }
+
+//        $distribuicaoAvaliacaoPropostaDtTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $dadosSugestaoEnquadramento['id_preprojeto']]);
+//        $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDtTable->obterDistribuicaoAtiva();
+//        if($distribuicaoAtiva)
+        // $dadosSugestaoEnquadramento['id_perfil'] != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+
+
+
+        //start POC
+        $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $dadosSugetaoEnquadramento['id_preprojeto']]);
+        $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
+        if($distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) {
+            // Cria registro na tbRecursoProposta
+            // Envia e-mail
+            $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+            $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugetaoEnquadramento['id_preprojeto']);
+
+            //$sugestaoEnquadramentoDbTable->inativarSugestoes($dadosSugestaoEnquadramento['id_preprojeto']);
+        }
+        xd($distribuicaoAtiva);
+        //end POC
     }
 
 }
