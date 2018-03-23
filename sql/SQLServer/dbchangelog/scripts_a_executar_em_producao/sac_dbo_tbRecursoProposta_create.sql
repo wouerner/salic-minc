@@ -19,7 +19,6 @@ CREATE TABLE sac.dbo.tbRecursoProposta
   -- tpSolicitacao EN => Enquadramento
   stAtendimento CHAR(1) DEFAULT 'N' NOT NULL,
   -- stAtendimento - 'N' => Sem avaliação
-  -- stAtendimento - 'E' => Quando devolve para o proponente
   -- stAtendimento - 'I' => Quando é indeferido
   -- stAtendimento - 'D' => Quando é deferido (movimenta para frente)
   idArquivo INT NULL,
