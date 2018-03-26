@@ -63,6 +63,11 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const COORDENADOR_DO_PRONAC = 137;
     const COORDENADOR_DE_CONVENIO = 142;
 
+    const PROPONENTE = 1111;
+
+    const DIRETOR_DEPARTAMENTO = 148;
+    const PRESIDENTE_VINCULADA_SUBSTITUTO = 151;
+
     public function obterPerfisEncaminhamentoAvaliacaoProposta($id_perfil)
     {
 
