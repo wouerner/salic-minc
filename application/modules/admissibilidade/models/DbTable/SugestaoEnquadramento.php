@@ -238,6 +238,27 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         if (count($dadosBuscaPorSugestao) < 1) {
             $sugestaoEnquadramentoDbTable->inativarSugestoes($dadosSugestaoEnquadramento['id_preprojeto']);
             $sugestaoEnquadramentoDbTable->inserir($dadosNovaSugestaoEnquadramento);
+
+            $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+            $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $dadosSugestaoEnquadramento['id_preprojeto']]);
+            $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
+            if($distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) {
+                // Cria registro na tbRecursoProposta
+                $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+                $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugestaoEnquadramento['id_preprojeto']);
+
+                $mensagemEmail = <<<MENSAGEM_EMAIL
+Foi aberto o prazo para entrada com Recurso ou Desist&ecirc;ncia do Prazo Recursal.
+Ao acessar a Proposta {$dadosSugestaoEnquadramento['id_preprojeto']} a op&ccedil;&atilde;o "Enquadramento" no menu lateral estar&aacute; dispon&iacute;vel.
+MENSAGEM_EMAIL;
+
+                $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
+                $preprojetoDbTable->enviarEmailProponente(
+                    $dadosSugestaoEnquadramento['id_preprojeto'],
+                    'Recurso',
+                    $mensagemEmail
+                    );
+            }
         } else {
             $dadosBuscaPorSugestao['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
             $sugestaoEnquadramentoDbTable->update($dadosNovaSugestaoEnquadramento, [
@@ -245,27 +266,6 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             ]);
         }
 
-//        $distribuicaoAvaliacaoPropostaDtTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $dadosSugestaoEnquadramento['id_preprojeto']]);
-//        $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDtTable->obterDistribuicaoAtiva();
-//        if($distribuicaoAtiva)
-        // $dadosSugestaoEnquadramento['id_perfil'] != Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
-
-
-
-        //start POC
-        $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
-        $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $dadosSugetaoEnquadramento['id_preprojeto']]);
-        $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
-        if($distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) {
-            // Cria registro na tbRecursoProposta
-            // Envia e-mail
-            $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-            $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugetaoEnquadramento['id_preprojeto']);
-
-            //$sugestaoEnquadramentoDbTable->inativarSugestoes($dadosSugestaoEnquadramento['id_preprojeto']);
-        }
-        xd($distribuicaoAtiva);
-        //end POC
     }
 
 }
