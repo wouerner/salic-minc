@@ -3515,4 +3515,42 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
 
         return $this->fetchAll($slct);
     }
+
+    public function enviarEmailProponente($idPreProjeto, $titulo, $mensagem)
+    {
+
+        /*  SELECT Internet.Descricao
+              FROM Agentes.dbo.Agentes Agentes
+             INNER JOIN Agentes.dbo.Internet Internet ON Internet.idAgente = Agentes.idAgente
+             WHERE TipoInternet IN (28, 29)
+               AND Agentes.idAgente = 9343
+         */
+        $internetDbTable = new Agente_Model_DbTable_Internet();
+        $arrayEmailsProponente = $internetDbTable->obterEmailProponentesPorPreProjeto($idPreProjeto);
+//        $tbTextoEmailDAO = new tbTextoEmail();
+
+        $tbHistoricoEmailDAO = new tbHistoricoEmail();
+
+        $preprojeto = $this->findBy(['idPreProjeto' => $idPreProjeto]);
+        $auth = Zend_Auth::getInstance();
+        foreach($arrayEmailsProponente as $arrayEmailProponente) {
+            $email = trim(strtolower($arrayEmailProponente['Descricao']));
+            $mensagem = "<b>Proposta {$preprojeto['idPreProjeto']} - {$preprojeto['NomeProjeto']} :</b> <br /> {$mensagem}";
+            $assunto = utf8_decode("Proposta {$preprojeto['idPreProjeto']} - {$titulo}");
+
+            EmailDAO::enviarEmail($email, $assunto, $mensagem);
+
+            $dados = array(
+                'idProjeto' => $idPreProjeto,
+                'idTextoemail' => new Zend_Db_Expr('NULL'),
+                'idAvaliacaoProposta' => new Zend_Db_Expr('NULL'),
+                'DtEmail' => new Zend_Db_Expr('getdate()'),
+                'stEstado' => $tbHistoricoEmailDAO::SITUACAO_ESTADO_ENVIADO,
+                'idUsuario' => $auth->getIdentity()->usu_codigo,
+            );
+
+            $tbHistoricoEmailDAO->inserir($dados);
+        }
+
+    }
 }
