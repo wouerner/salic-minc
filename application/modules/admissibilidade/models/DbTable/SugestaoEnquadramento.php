@@ -239,26 +239,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             $sugestaoEnquadramentoDbTable->inativarSugestoes($dadosSugestaoEnquadramento['id_preprojeto']);
             $sugestaoEnquadramentoDbTable->inserir($dadosNovaSugestaoEnquadramento);
 
-            $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
-            $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $dadosSugestaoEnquadramento['id_preprojeto']]);
-            $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
-            if($distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) {
-                // Cria registro na tbRecursoProposta
-                $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-                $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugestaoEnquadramento['id_preprojeto']);
-
-                $mensagemEmail = <<<MENSAGEM_EMAIL
-Foi aberto o prazo para entrada com Recurso ou Desist&ecirc;ncia do Prazo Recursal.
-Ao acessar a Proposta {$dadosSugestaoEnquadramento['id_preprojeto']} a op&ccedil;&atilde;o "Enquadramento" no menu lateral estar&aacute; dispon&iacute;vel.
-MENSAGEM_EMAIL;
-
-                $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
-                $preprojetoDbTable->enviarEmailProponente(
-                    $dadosSugestaoEnquadramento['id_preprojeto'],
-                    'Recurso',
-                    $mensagemEmail
-                    );
-            }
+            $this->enviarEmailAberturaDePrazoRecursal($dadosSugestaoEnquadramento['id_preprojeto']);
         } else {
             $dadosBuscaPorSugestao['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
             $sugestaoEnquadramentoDbTable->update($dadosNovaSugestaoEnquadramento, [
@@ -266,6 +247,29 @@ MENSAGEM_EMAIL;
             ]);
         }
 
+    }
+
+    private function enviarEmailAberturaDePrazoRecursal($id_preprojeto) {
+        $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $id_preprojeto]);
+        $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
+        if($distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) {
+            // Cria registro na tbRecursoProposta
+            $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+            $tbRecursoPropostaDbTable->cadastrarRecurso($id_preprojeto);
+
+            $mensagemEmail = <<<MENSAGEM_EMAIL
+Foi aberto o prazo para entrada com Recurso ou Desist&ecirc;ncia do Prazo Recursal.
+Ao acessar a Proposta {$id_preprojeto} a op&ccedil;&atilde;o "Enquadramento" no menu lateral estar&aacute; dispon&iacute;vel.
+MENSAGEM_EMAIL;
+
+            $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
+            $preprojetoDbTable->enviarEmailProponente(
+                $id_preprojeto,
+                'Recurso',
+                $mensagemEmail
+            );
+        }
     }
 
 }
