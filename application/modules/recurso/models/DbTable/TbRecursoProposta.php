@@ -15,7 +15,7 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
         }
     }
 
-    public function cadastrarRecurso(array $idPreProjeto)
+    public function cadastrarRecurso($idPreProjeto)
     {
         if (!$idPreProjeto) {
             throw new Exception("Identificador do projeto n&atilde;o informado.");
