@@ -7,10 +7,10 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
 
     public function inativarRecursos($id_preprojeto)
     {
-        if ($id_preprojeto) {
+        if (!is_null($id_preprojeto) && !empty($id_preprojeto)) {
             $this->alterar(
-                ['stEstado' => Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_INATIVO],
-                ['id_preprojeto = ?' => $id_preprojeto]
+                array('stAtivo' => Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_INATIVO),
+                ['idPreProjeto = ?' => $id_preprojeto]
             );
         }
     }
@@ -23,8 +23,6 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
 
         $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
         $arrPreprojeto = $preprojetoDbTable->findBy(['idPreProjeto' => $idPreProjeto]);
-
-
         $dados = [
             'idPreProjeto' => $idPreProjeto,
             'idProponente' => $arrPreprojeto['idAgente'],

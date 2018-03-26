@@ -97,7 +97,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             $this->_schema
         );
 
-        if(!$this->sugestaoEnquadramento->getIdPreprojeto()) {
+        if (!$this->sugestaoEnquadramento->getIdPreprojeto()) {
             throw new Exception("Identificador da proposta n&atilde;o informado.");
         }
 
@@ -193,6 +193,9 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         $orgaoSuperior = $resultadoOrgaoSuperior[0]['Superior'];
 
         $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
+        $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta([
+            'id_preprojeto' => $dadosSugestaoEnquadramento['id_preprojeto']
+        ]);
         $distribuicaoAvaliacaoProposta = $distribuicaoAvaliacaoPropostaDbTable->findBy([
             'id_preprojeto' => $dadosSugestaoEnquadramento['id_preprojeto'],
             'id_orgao_superior' => $orgaoSuperior,
@@ -239,10 +242,14 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             $sugestaoEnquadramentoDbTable->inativarSugestoes($dadosSugestaoEnquadramento['id_preprojeto']);
             $sugestaoEnquadramentoDbTable->inserir($dadosNovaSugestaoEnquadramento);
 
-            $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-            $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugestaoEnquadramento['id_preprojeto']);
+            $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
+            if (/*$distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+            &&*/ $this->isPermitidoCadastrarRecurso($dadosSugestaoEnquadramento['id_perfil'])) {
+                $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+                $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugestaoEnquadramento['id_preprojeto']);
 
-            $this->enviarEmailAberturaDePrazoRecursal($dadosSugestaoEnquadramento['id_preprojeto']);
+                $this->enviarEmailAberturaDePrazoRecursal($dadosSugestaoEnquadramento['id_preprojeto']);
+            }
         } else {
             $dadosBuscaPorSugestao['id_distribuicao_avaliacao_proposta'] = $distribuicaoAvaliacaoProposta['id_distribuicao_avaliacao_prop'];
             $sugestaoEnquadramentoDbTable->update($dadosNovaSugestaoEnquadramento, [
@@ -252,24 +259,26 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
 
     }
 
-    private function enviarEmailAberturaDePrazoRecursal($id_preprojeto) {
+    private function isPermitidoCadastrarRecurso($id_perfil) {
+        return  ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+        || $id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE);
+    }
+
+    private function enviarEmailAberturaDePrazoRecursal($id_preprojeto)
+    {
         $distribuicaoAvaliacaoPropostaDbTable = new Admissibilidade_Model_DbTable_DistribuicaoAvaliacaoProposta();
         $distribuicaoAvaliacaoPropostaDbTable->setDistribuicaoAvaliacaoProposta(['id_preprojeto' => $id_preprojeto]);
-        $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
-        if($distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) {
-
-            $mensagemEmail = <<<MENSAGEM_EMAIL
+        $mensagemEmail = <<<MENSAGEM_EMAIL
 Foi aberto o prazo para entrada com Recurso ou Desist&ecirc;ncia do Prazo Recursal.
 Ao acessar a Proposta {$id_preprojeto} a op&ccedil;&atilde;o "Enquadramento" no menu lateral estar&aacute; dispon&iacute;vel.
 MENSAGEM_EMAIL;
 
-            $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
-            $preprojetoDbTable->enviarEmailProponente(
-                $id_preprojeto,
-                'Recurso',
-                $mensagemEmail
-            );
-        }
+        $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
+        $preprojetoDbTable->enviarEmailProponente(
+            $id_preprojeto,
+            'Recurso',
+            $mensagemEmail
+        );
     }
 
 }
