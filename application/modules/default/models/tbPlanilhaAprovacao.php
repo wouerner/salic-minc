@@ -225,7 +225,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         foreach ($where as $key => $valor) {
             $select->where($key, $valor);
         }
-
+        
         return $this->fetchAll($select);
     }
 
@@ -364,5 +364,141 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         $select->where('a.idReadequacao = ?', $idReadequacao);
         
         return $this->fetchAll($select);
-    }    
+    }
+    
+    /**
+     * Função para buscar item de planilha original
+     * @param integer $idPlanilhaAprovacao
+     * @return mixed
+     */
+    public function buscarItemPlanilhaOriginal($idPlanilhaAprovacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('a' => $this->_name),
+            '*'
+        );
+        $select->joinInner(
+            array('b' => $this->_name),
+            'a.idPlanilhaAprovacao = b.idPlanilhaAprovacaoPai',
+            array(''),
+            $this->_schema
+        );
+        
+        $select->where('b.idPlanilhaAprovacao = ?', $idPlanilhaAprovacao);
+        
+        return $this->fetchAll($select);        
+    }
+
+    /**
+     * Busca item ativo por idPlanilhaAprovacao
+     *
+     * @param integer $idPlanilhaAprovacao
+     * @return mixed
+     */
+    public function buscarItemAtivoId($idPlanilhaAprovacao)
+    {
+        $where = [];
+        $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
+        
+        $planilhaAtiva = $this->buscarDadosAvaliacaoDeItemRemanejamento($where);
+
+        if (count($planilhaAtiva) > 0) {
+            return $planilhaAtiva[0];
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * função para buscar valor comprovado do item
+     *
+     * @param mixed $planilhaAtiva
+     * @return mixed $resComprovado
+     */
+    public function buscarItemValorComprovado($planilhaAtiva)
+    {
+        $whereItemValorComprovado = [];
+        $whereItemValorComprovado['b.IdPRONAC = ?'] = $planilhaAtiva['idPRONAC'];
+        $whereItemValorComprovado['b.idPlanilhaItem = ?'] = $planilhaAtiva['idPlanilhaItem'];
+        $whereItemValorComprovado['b.idEtapa = ?'] = $planilhaAtiva['idEtapa'];
+        $whereItemValorComprovado['b.idProduto = ?'] = $planilhaAtiva['idProduto'];
+        $whereItemValorComprovado['b.idUFDespesa = ?'] = $planilhaAtiva['idUFDespesa'];
+        $whereItemValorComprovado['b.idMunicipioDespesa = ?'] = $planilhaAtiva['idMunicipioDespesa'];
+        $whereItemValorComprovado['b.nrFonteRecurso = ?'] = $planilhaAtiva['nrFonteRecurso'];
+        
+        $tbCompPagxPlanAprov = new tbComprovantePagamentoxPlanilhaAprovacao();
+        $resComprovado = $tbCompPagxPlanAprov->buscarValorComprovadoPorFonteProdutoEtapaLocalItem($whereItemValorComprovado);
+        
+        if (count($resComprovado) > 0) {
+            return $resComprovado;
+        } else {
+            return false;
+        }
+    }
+    
+
+    /**
+     * retorna item original da planilha
+     *
+     * @param mixed $planilhaAtiva
+     * @return mixed
+     */
+    public function buscarRemanejamentoPlanilhaOriginal($planilhaAtiva)
+    {
+        $whereItemPlanilhaOriginal = [];
+        $whereItemPlanilhaOriginal['tpPlanilha = ?'] = 'CO'; # CO - planilha do componente da comissao (original aprovada)
+        $whereItemPlanilhaOriginal['IdPRONAC = ?'] = $planilhaAtiva['idPRONAC'];
+        $whereItemPlanilhaOriginal['idPlanilhaItem = ?'] = $planilhaAtiva['idPlanilhaItem'];
+        $whereItemPlanilhaOriginal['idEtapa = ?'] = $planilhaAtiva['idEtapa'];
+        $whereItemPlanilhaOriginal['idProduto = ?'] = $planilhaAtiva['idProduto'];
+        $whereItemPlanilhaOriginal['idUFDespesa = ?'] = $planilhaAtiva['idUFDespesa'];
+        $whereItemPlanilhaOriginal['idMunicipioDespesa = ?'] = $planilhaAtiva['idMunicipioDespesa'];
+        $whereItemPlanilhaOriginal['nrFonteRecurso = ?'] = $planilhaAtiva['nrFonteRecurso'];
+        
+        $planilhaOriginal = $this->buscar($whereItemPlanilhaOriginal);
+
+        if (count($planilhaOriginal) > 0) {
+            return $planilhaOriginal[0];
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * retorna valores do item
+     */
+    public function buscarValoresItem($item, $valorComprovado)
+    {
+        $vlTotalItem = number_format(($item['qtItem']*$item['nrOcorrencia']*$item['vlUnitario']), 2, '', '');
+        
+        //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
+        $vlAtual = @number_format(($item['qtItem']*$item['nrOcorrencia']*$item['vlUnitario']), 2, '', '');
+        $vlAtualPerc = $vlAtual* Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100;
+        
+        //VALOR MINIMO E MAXIMO DO ITEM ORIGINAL
+        //SE TIVER VALOR COMPROVADO, DEVE SUBTRAIR O VALOR DO ITEM COMPROVADO DO VALOR UNITARIO
+        
+        $vlAtualMin = (
+            $valorComprovado > round($vlAtual-$vlAtualPerc)
+        )
+                    ? $valorComprovado
+                    : round($vlAtual-$vlAtualPerc);
+
+        $vlAtualMax = round($vlAtual+$vlAtualPerc);
+        
+        $valoresItem = [];
+        
+        $valoresItem['vlTotalItem'] = $vlTotalItem;
+        $valoresItem['vlAtual'] = $vlAtual;
+        $valoresItem['vlAtualPerc'] = $vlAtualPerc;
+        $valoresItem['vlAtualMin'] = $vlAtualMin;
+        $valoresItem['vlAtualMax'] = $vlAtualMax;
+        
+        return $valoresItem;
+    }
 }

@@ -96,5 +96,27 @@ class TbPlanilhaAprovacaoTest extends MinC_Test_ModelTestCase
         $planilhaReadequadaEmEdicao = $tbPlanilhaAprovacao->buscarPlanilhaReadequadaEmEdicao($this->idPronac, $idReadequacao);
         
         $this->assertEmpty($planilhaReadequadaEmEdicao);
-    }        
+    }
+
+    public function testBuscarItemPlanilhaOriginal()
+    {
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+
+        // Marcado para refatoração futura
+        // * fixture do banco de dados com dados controlados
+        $idPlanilhaAprovacao = 2224030;  // buscar um idPlanilhaAprovacao de planilha em remanejamento
+        $itemPlanilha = $tbPlanilhaAprovacao->buscarItemPlanilhaOriginal($idPlanilhaAprovacao);
+        
+        $this->assertNotEmpty($itemPlanilha);
+    }
+    
+    public function testBuscarItemAtivoId()
+    {
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+
+        $idPlanilhaAprovacao = 2224030;
+        $itemPlanilha = $tbPlanilhaAprovacao->buscarItemPlanilhaOriginal($idPlanilhaAprovacao);
+        
+        $this->assertNotEmpty($itemPlanilha);
+    }
 }

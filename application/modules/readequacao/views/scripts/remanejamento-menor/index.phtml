@@ -1,8 +1,8 @@
 <?php
 if(isset($this->readequacao->idReadequacao)){
-    $idReadequacao = $this->readequacao->idReadequacao;
+$idReadequacao = $this->readequacao->idReadequacao;
 } else {
-    $idReadequacao = 0;
+$idReadequacao = 0;
 }
 ?><script type="text/javascript">
    function getIdReadequacao() {
@@ -60,13 +60,13 @@ if(isset($this->readequacao->idReadequacao)){
    }
 
    // Pegando eventos ajax e exibindo informacao de carregamento.
-   $(document).ajaxStart(function () {
-       $('#container-loading').fadeIn('fast');
-   });
+   // $(document).ajaxStart(function () {
+   //     $('#container-loading').fadeIn('fast');
+   // });
 
-   $(document).ajaxComplete(function () {
-       $('#container-loading').fadeOut('fast');
-   });
+   // $(document).ajaxComplete(function () {
+   //     $('#container-loading').fadeOut('fast');
+   // });
 
    $(document).ready(function(){
        
@@ -97,57 +97,57 @@ if(isset($this->readequacao->idReadequacao)){
        
        atualizaDadosGrupos();
        
-       $(".icn_menos").click(function(){
-           var tipo = $(this).attr('tipo');
-           var aberto = $(this).attr('aberto');
-           if(aberto == 'true'){
-	       adisplay = 'none';
-	       $(this).attr('aberto','false')
-	       $(this).removeClass('icn_menos').addClass('icn_mais')
-           }
-           else{
-	       adisplay = '';
-	       $(this).attr('aberto','true')
-	       $(this).removeClass('icn_mais').addClass('icn_menos')
-           }
-           if(tipo == 'fonte'){
-	       fonte = $(this).attr('fonte');
-	       $(".master[fonte='"+fonte+"']").css('display', adisplay);
-	       $(".clickproduto").removeClass('icn_mais').addClass('icn_menos');
-           }
-           if(tipo == 'produto'){
-	       fonte = $(this).attr('fonte');
-	       produto = $(this).attr('produto');
-	       $(".produto[produto='"+produto+"'][fonte='"+fonte+"']").css('display', adisplay);
-           }
-           if(tipo == 'etapa'){
-	       fonte = $(this).attr('fonte');
-	       produto = $(this).attr('produto');
-	       etapa = $(this).attr('etapa');
-	       $(".etapa[produto='"+produto+"'][etapa='"+etapa+"'][fonte='"+fonte+"']").css('display', adisplay);
-           }
-           if(tipo == 'cidade'){
-	       fonte = $(this).attr('fonte');
-	       produto = $(this).attr('produto');
-	       etapa = $(this).attr('etapa');
-	       cidade = $(this).attr('cidade');
-	       $(".cidade[produto='"+produto+"'][etapa='"+etapa+"'][cidade='"+cidade+"'][fonte='"+fonte+"']").css('display', adisplay);
-           }
-       });
-       $(".item").mouseover(function(){
-           $(this).addClass('fundo_linha3');
-       });
-       $(".item").mouseout(function(){
-           $(this).removeClass('fundo_linha3');
-       });
-       $(".item").click(function(){
-           if($(this).hasClass('fundo_linha4')){
-	       $(this).removeClass('fundo_linha4');
-           }
-           else{
-	       $(this).addClass('fundo_linha4');
-           }
-       });
+       // $(".icn_menos").click(function(){
+       //     var tipo = $(this).attr('tipo');
+       //     var aberto = $(this).attr('aberto');
+       //     if(aberto == 'true'){
+       //     adisplay = 'none';
+       //     $(this).attr('aberto','false')
+       //     $(this).removeClass('icn_menos').addClass('icn_mais')
+       //     }
+       //     else{
+       //     adisplay = '';
+       //     $(this).attr('aberto','true')
+       //     $(this).removeClass('icn_mais').addClass('icn_menos')
+       //     }
+       //     if(tipo == 'fonte'){
+       //     fonte = $(this).attr('fonte');
+       //     $(".master[fonte='"+fonte+"']").css('display', adisplay);
+       //     $(".clickproduto").removeClass('icn_mais').addClass('icn_menos');
+       //     }
+       //     if(tipo == 'produto'){
+       //     fonte = $(this).attr('fonte');
+       //     produto = $(this).attr('produto');
+       //     $(".produto[produto='"+produto+"'][fonte='"+fonte+"']").css('display', adisplay);
+       //     }
+       //     if(tipo == 'etapa'){
+       //     fonte = $(this).attr('fonte');
+       //     produto = $(this).attr('produto');
+       //     etapa = $(this).attr('etapa');
+       //     $(".etapa[produto='"+produto+"'][etapa='"+etapa+"'][fonte='"+fonte+"']").css('display', adisplay);
+       //     }
+       //     if(tipo == 'cidade'){
+       //     fonte = $(this).attr('fonte');
+       //     produto = $(this).attr('produto');
+       //     etapa = $(this).attr('etapa');
+       //     cidade = $(this).attr('cidade');
+       //     $(".cidade[produto='"+produto+"'][etapa='"+etapa+"'][cidade='"+cidade+"'][fonte='"+fonte+"']").css('display', adisplay);
+       //     }
+       // });
+       // $(".item").mouseover(function(){
+       //     $(this).addClass('fundo_linha3');
+       // });
+       // $(".item").mouseout(function(){
+       //     $(this).removeClass('fundo_linha3');
+       // });
+       // $(".item").click(function(){
+       //     if($(this).hasClass('fundo_linha4')){
+       //     $(this).removeClass('fundo_linha4');
+       //     }
+       //     else{
+       //     $(this).addClass('fundo_linha4');
+       //     }
+       // });
        
        $('#finalizarRemanejamento').click(function(){
            $("#msgAlerta").dialog("destroy");
@@ -276,8 +276,8 @@ if(isset($this->readequacao->idReadequacao)){
            });
            $('.ui-dialog-titlebar-close').remove();
        });
-       
-       $('.editarItem').click(function(){
+
+       $('#planilhaOrcamentariaMontada').on('click', '.editarItem', function(){
            var idPlanilhaAprovacao = $(this).attr('idPlanilhaAprovacao'),
 	       idPlanilhaAprovacaoPai = $(this).attr('idPlanilhaAprovacaoPai'),
 	       itemClicado = $(this);
@@ -291,14 +291,15 @@ if(isset($this->readequacao->idReadequacao)){
            $('#campoTotal').css('color','#222222');
            $('#TotalCalculado').css('color','#222222');
            $('#textoErroValores').html('');
-
+           
            //BUSCA OS DADOS DO ITEM PARA VISUALIZA��O DOS NA MODAL
            $.ajax({
 	       type: 'POST',
 	       url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'alterar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
 	       data: {
                    idPlanilha: idPlanilhaAprovacao,
-                   idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai
+		   idPronac: <?php echo $this->idPronac; ?>,
+            	   idReadequacao: getIdReadequacao()
 	       },
 	       success: function(data){
                    
@@ -426,11 +427,12 @@ if(isset($this->readequacao->idReadequacao)){
                                            type: 'POST',
                                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'salvar-avaliacao-do-item-remanejamento'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                                            data: {
-					       idPlanilha: idPlanilhaAprovacao,
+					       idPlanilhaAprovacao: idPlanilhaAprovacao,
 					       idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai,
-					       Quantidade: Quantidade,
-					       Ocorrencia: Ocorrencia,
-					       ValorUnitario: ValorUnitario,
+					       idReadequacao: getIdReadequacao(),
+					       qtItem: Quantidade,
+					       nrOcorrencia: Ocorrencia,
+					       vlUnitario: ValorUnitario,
 					       QtdeDias: QtdeDias,
 					       Unidade: Unidade,
 					       Justificativa: Justificativa,
