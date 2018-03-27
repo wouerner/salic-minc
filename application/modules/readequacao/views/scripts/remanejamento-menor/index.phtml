@@ -1,8 +1,8 @@
 <?php
 if(isset($this->readequacao->idReadequacao)){
-$idReadequacao = $this->readequacao->idReadequacao;
+    $idReadequacao = $this->readequacao->idReadequacao;
 } else {
-$idReadequacao = 0;
+    $idReadequacao = 0;
 }
 ?><script type="text/javascript">
    function getIdReadequacao() {
@@ -28,7 +28,7 @@ $idReadequacao = 0;
    
    function atualizaDadosGrupos(){
        $.ajax({
-               url : '<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'carregar-valor-por-grupo-remanejamento'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=' + getIdReadequacao(),
+           url : '<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'carregar-valor-por-grupo-remanejamento'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=' + getIdReadequacao(),
            success: function(data){
                if(data.resposta){
                    $("#td-grupo-a").html(data.dadosPlanilha.GrupoA);
@@ -59,15 +59,6 @@ $idReadequacao = 0;
        });
    }
 
-   // Pegando eventos ajax e exibindo informacao de carregamento.
-   // $(document).ajaxStart(function () {
-   //     $('#container-loading').fadeIn('fast');
-   // });
-
-   // $(document).ajaxComplete(function () {
-   //     $('#container-loading').fadeOut('fast');
-   // });
-
    $(document).ready(function(){
        
        $('#IniciarRemanejamento').click(function(){
@@ -95,58 +86,6 @@ $idReadequacao = 0;
 	   });
        });
        
-       // $(".icn_menos").click(function(){
-       //     var tipo = $(this).attr('tipo');
-       //     var aberto = $(this).attr('aberto');
-       //     if(aberto == 'true'){
-       //     adisplay = 'none';
-       //     $(this).attr('aberto','false')
-       //     $(this).removeClass('icn_menos').addClass('icn_mais')
-       //     }
-       //     else{
-       //     adisplay = '';
-       //     $(this).attr('aberto','true')
-       //     $(this).removeClass('icn_mais').addClass('icn_menos')
-       //     }
-       //     if(tipo == 'fonte'){
-       //     fonte = $(this).attr('fonte');
-       //     $(".master[fonte='"+fonte+"']").css('display', adisplay);
-       //     $(".clickproduto").removeClass('icn_mais').addClass('icn_menos');
-       //     }
-       //     if(tipo == 'produto'){
-       //     fonte = $(this).attr('fonte');
-       //     produto = $(this).attr('produto');
-       //     $(".produto[produto='"+produto+"'][fonte='"+fonte+"']").css('display', adisplay);
-       //     }
-       //     if(tipo == 'etapa'){
-       //     fonte = $(this).attr('fonte');
-       //     produto = $(this).attr('produto');
-       //     etapa = $(this).attr('etapa');
-       //     $(".etapa[produto='"+produto+"'][etapa='"+etapa+"'][fonte='"+fonte+"']").css('display', adisplay);
-       //     }
-       //     if(tipo == 'cidade'){
-       //     fonte = $(this).attr('fonte');
-       //     produto = $(this).attr('produto');
-       //     etapa = $(this).attr('etapa');
-       //     cidade = $(this).attr('cidade');
-       //     $(".cidade[produto='"+produto+"'][etapa='"+etapa+"'][cidade='"+cidade+"'][fonte='"+fonte+"']").css('display', adisplay);
-       //     }
-       // });
-       // $(".item").mouseover(function(){
-       //     $(this).addClass('fundo_linha3');
-       // });
-       // $(".item").mouseout(function(){
-       //     $(this).removeClass('fundo_linha3');
-       // });
-       // $(".item").click(function(){
-       //     if($(this).hasClass('fundo_linha4')){
-       //     $(this).removeClass('fundo_linha4');
-       //     }
-       //     else{
-       //     $(this).addClass('fundo_linha4');
-       //     }
-       // });
-       
        $('#finalizarRemanejamento').click(function(){
            $("#msgAlerta").dialog("destroy");
            $("#msgAlerta").html('Deseja realmente finalizar o remanejamento?<br /><br />');
@@ -160,7 +99,7 @@ $idReadequacao = 0;
 		       $(this).dialog('close');
                    },
                    'Sim' : function(){
-		       redirecionar('<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'finalizar'), null, true); ?>?idPronac=<?php echo $this->idPronac; ?>")');
+                       redirecionar('<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'finalizar'), null, true); ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=' + getIdReadequacao());
                    }
 	       }
            });
@@ -247,7 +186,7 @@ $idReadequacao = 0;
                            },
                            success: function(data){
 			       if(data.resposta){
-                       location.reload();
+				   location.reload();
 			       } else {
                                    //ABRE O MODAL DE CONFIRMA��O DA A��O REALIZADA
                                    $("#modalItem").dialog('close');
@@ -589,9 +528,10 @@ $idReadequacao = 0;
 		   
 		   $('#idReadequacao').val(data.idReadequacao);
 		   $('#valores-grupos').removeClass('sumir');
+		   $('#finalizar').removeClass('sumir');
 		   $('.acoes').removeClass('sumir');
-           
-           atualizaDadosGrupos();
+		   
+		   atualizaDadosGrupos();
 	       }
 	   });
        }
@@ -599,6 +539,7 @@ $idReadequacao = 0;
        <?php if (isset($this->readequacao->idReadequacao)): ?>
        atualizarDadosPlanilha();
        $('.planilhaOrcamentaria').removeClass('sumir');
+       $('#finalizar').removeClass('sumir');
        <?php endif; ?>
    });
 </script>
@@ -675,6 +616,12 @@ $idReadequacao = 0;
                 <div id="planilhaOrcamentariaMontada"></div>
             </td>
         </tr>
+	
+        <tr id="finalizar" class="sumir">
+            <td class="centro">
+		<button class="waves-effect waves-light btn small" id="finalizarRemanejamento" name="finalizar">finalizar</button>
+            </td>
+        </tr>	
     </table>
 </div>
 </div>
@@ -682,14 +629,6 @@ $idReadequacao = 0;
 <?php //MODAL DE AVALIA��O DO ITEM ?>
 <div id="modalItem" class="sumir">
     <table class="tabela">
-	<!--        <tr>
-             <td class="destacar bold" style="width: 30%">PRONAC</td>
-             <td class="destacar bold" colspan="2">Nome do Projeto</td>
-             </tr>
-             <tr>
-             <td id="campoPronac" class="camposModal">&nbsp;</td>
-             <td id="campoNomeProjeto" colspan="2" class="camposModal">&nbsp;</td>
-             </tr>-->
         <tr>
             <td class="destacar bold">Produto</td>
             <td class="destacar bold">Etapa</td>
@@ -743,32 +682,16 @@ $idReadequacao = 0;
             <th colspan="6">Dados para o remanejamento</th>
         </tr>
         <tr class="centro">
-            <!--<td class="destacar bold">Unidade</td>-->
             <td class="destacar bold">Qtd</td>
             <td class="destacar bold">Ocorr&ecirc;ncia</td>
             <td class="destacar bold">Vl. Unit&aacute;rio</td>
-            <!--<td class="destacar bold">Dias</td>-->
             <td class="destacar bold">Total</td>
-<!--            <td class="destacar bold">Vl. M&iacute;nimo</td>
-            <td class="destacar bold">Vl. M&aacute;ximo</td>-->
         </tr>
         <tr>
-<!--            <td class="centro">
-                <?php /*$planilhaUnidade = PlanilhaUnidadeDAO::buscar(); ?>
-                <select id="modalUnidade" name="idUnidade" class="input_simples modalObrigatorios">
-                    <option value=""> - Selecione - </option>
-                    <?php foreach ($planilhaUnidade as $unidade){ ?>
-                    <option value="<?php echo $unidade->idUnidade; ?>"><?php echo $unidade->Descricao; ?></option>
-                    <?php }*/ ?>
-                </select>
-            </td>-->
             <td class="centro"><input class="input_simples w50 multiplicarValores modalObrigatorios" id="modalQuantidade" type="text" maxlength="5" name="Quantidade" onkeyup="mascara(this, format_num_float);"></td>
             <td class="centro"><input class="input_simples w50 multiplicarValores modalObrigatorios" id="modalOcorrencia" type="text" maxlength="5" name="Ocorrencia" onkeyup="mascara(this, format_num_float);"></td>
             <td class="centro"><input class="input_simples w100 multiplicarValores modalValorUnitario modalObrigatorios" id="modalValorUnitario" type="text" maxlength="13" name="ValorUnitario"></td>
-            <!--<td class="centro"><input class="input_simples w50 modalObrigatorios" id="modalQtdeDias" type="text" maxlength="4" name="QtdeDias" onkeyup="mascara(this, format_num);"></td>-->
             <td id="TotalCalculado" class="direita" style="width: 125px;"></td>
-<!--            <td class="direita camposModal red bold"><span id="campoValorMinimo">&nbsp;</span></td>
-            <td class="direita camposModal blue bold"><span id="campoValorMaximo">&nbsp;</span></td>-->
         </tr>
         <tr>
             <td colspan="6" class="destacar bold centro">Justificativa do Remanejamento <span class="red">*</span> <span id="textoErroValores" style="float:right; color: red;"></span></td>

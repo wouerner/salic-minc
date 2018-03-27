@@ -148,50 +148,20 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
 
     public function finalizarAction()
     {
-        //REMANEJAMENTO MENOR OU IGUAL A 50%
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        $idReadequacao = $this->_request->getParam("idReadequacao");
+        
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
-        //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA ATIVA
-        $where = array();
-        $where['a.IdPRONAC = ?'] = $idPronac;
-        $where['a.stAtivo = ?'] = 'S';
-
-        //PLANILHA ATIVA - GRUPO A
-        $where['a.idEtapa in (?)'] = array(1,2);
-        $PlanilhaAtivaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-        //PLANILHA ATIVA - GRUPO B
-        $where['a.idEtapa in (?)'] = array(3);
-        $PlanilhaAtivaGrupoB = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-        //PLANILHA ATIVA - GRUPO C
-        $where['a.idEtapa in (?)'] = array(4);
-        $PlanilhaAtivaGrupoC = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-        //PLANILHA ATIVA - GRUPO D
-        $where['a.idEtapa in (?)'] = array(5);
-        $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
-        $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
-            array(
-                'idPronac = ?' => $idPronac,
-                'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO,
-                'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL
-            )
-        );
-        $idReadequacao = $readequacaoAtiva[0]['idReadequacao'];
-
+        $PlanilhaAtivaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(1, 2))->current();
+        $PlanilhaAtivaGrupoB = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(3))->current();
+        $PlanilhaAtivaGrupoC = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(4))->current();
+        $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(5))->current();
+        
         //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA REMANEJADA
-        $where = array();
-        $where['a.IdPRONAC = ?'] = $idPronac;
-        $where['a.tpPlanilha = ?'] = 'RP';
-        $where['a.stAtivo = ?'] = 'N';
+        $where = [];
         $where['a.idReadequacao = ?'] = $idReadequacao;
         
         //PLANILHA ATIVA - GRUPO A
@@ -260,12 +230,13 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         
         $id = Seguranca::encrypt($idPronac);
         if ($erros > 0) {
-            parent::message("<b>A T E N &Ccedil; &Atilde;; O !!!</b> Para finalizar a opera&ccedil;&atilde;o de remanejamento os valores da coluna 'Valor da Planilha Remanejada' devem ser igual a R$0,00 (zero real).", "readequacao/remanejamento-menor?idPronac=$id", "ERROR");
+            parent::message("<b>A T E N &Ccedil; &Atilde;; O !!!</b> Para finalizar a opera&ccedil;&atilde;o de remanejamento os valores da coluna 'Valor da Planilha Remanejada' devem ser iguais a R$0,00 (zero real).", "readequacao/remanejamento-menor?idPronac=$id", "ERROR");
         } else {
             $auth = Zend_Auth::getInstance(); // pega a autentica��o
             $tblAgente = new Agente_Model_DbTable_Agentes();
             $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
 
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
             
             $dadosReadequacao = array();
             $dadosReadequacao['idPronac'] = $idPronac;
@@ -808,11 +779,12 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         }
         
         try {
+            $where = [];
             $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
             $where['idReadequacao = ?'] = $idReadequacao;
             $where['IdPRONAC = ?'] = $idPronac;
             
-            $editarItem = $tbPlanilhaAprovacao->buscar($where)->current();
+            $editarItem = $tbPlanilhaAprovacao->buscar($where);//->current();
             
             $editarItem->qtItem = $qtItem;
             $editarItem->nrOcorrencia = $nrOcorrencia;
