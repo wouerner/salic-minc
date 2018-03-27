@@ -480,7 +480,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         $this->_helper->layout->disableLayout();
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilhaAprovacao");
         $idPlanilhaAprovacaoPai = $this->_request->getParam("idPlanilhaAprovacaoPai");
-        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $idReadequacao = $this->_request->getParam("idReadequacao");
         
         $auth = Zend_Auth::getInstance(); // pega a autentica��o
         $tblAgente = new Agente_Model_DbTable_Agentes();
@@ -490,21 +490,13 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         }
 
         /* DADOS DO ITEM ATIVO */
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         $where = array();
         $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacaoPai;
         $where['stAtivo = ?'] = 'S';
         $planilhaAtiva = $tbPlanilhaAprovacao->buscar($where)->current();
         
         try {
-            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
-            $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
-                array(
-                    'idPronac = ?' => $idPronac,
-                    'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                    'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO
-                )
-            );
-            
             $where = array();
             $where['idPlanilhaAprovacaoPai = ?'] = $idPlanilhaAprovacaoPai;
             $where['idReadequacao = ?'] = $idReadequacao;
@@ -785,7 +777,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             $where['IdPRONAC = ?'] = $idPronac;
             
             $editarItem = $tbPlanilhaAprovacao->buscar($where)->current();
-            
+            $editarItem->tpAcao = 'A';
             $editarItem->qtItem = $qtItem;
             $editarItem->nrOcorrencia = $nrOcorrencia;
             $editarItem->vlUnitario = $ValorUnitario;

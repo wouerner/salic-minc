@@ -235,6 +235,7 @@ if(isset($this->readequacao->idReadequacao)){
 	       url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'alterar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
 	       data: {
                    idPlanilhaAprovacao: idPlanilhaAprovacao,
+		   idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai,
 		   idPronac: <?php echo $this->idPronac; ?>,
             	   idReadequacao: getIdReadequacao()
 	       },
