@@ -928,7 +928,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtivaNaoExcluidos($idPronac);
             
             foreach ($planilhaAtiva as $value) {
-                $planilha['tpPlanilha'] = 'SR';
+                $planilha['tpPlanilha'] = 'RP';
                 $planilha['dtPlanilha'] = new Zend_Db_Expr('GETDATE()');
                 $planilha['idPlanilhaProjeto'] = $value['idPlanilhaProjeto'];
                 $planilha['idPlanilhaProposta'] = $value['idPlanilhaProposta'];
