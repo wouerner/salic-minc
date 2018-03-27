@@ -665,9 +665,27 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         $dadosPlanilhaOriginal = [];
         
         if ($valoresOriginais['vlAtualMin'] > $valoresOriginais['vlTotalItem']) {
-            $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode('R$ '.number_format($valoresOriginais['vlAtualMin']/100, 2, ',', '.'));
+            $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode(
+                'R$ '.number_format(
+                    $valoresOriginais['vlAtualMin']/100,
+                    2,
+                    ',',
+                    '.'
+                )
+            );
         } else {
-            $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode('R$ '.number_format(($valoresOriginais['vlAtual'] - ($valoresOriginais['vlAtual'] * Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100)), 2, ',', '.'));
+            $dadosPlanilhaOriginal['ValorMinimoProItem'] = utf8_encode(
+                'R$ '.number_format(
+                    (
+                        $valoresOriginais['vlAtual'] - (
+                            $valoresOriginais['vlAtual'] * Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100
+                        )
+                    ),
+                    2,
+                    ',',
+                    '.'
+                )
+            );
         }
         
         $dadosPlanilhaOriginal['ValorMaximoProItem'] = utf8_encode('R$ '.number_format(($valoresOriginais['vlAtual'] + ($valoresOriginais['vlAtual'] * Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100))/100, 2, ',', '.'));

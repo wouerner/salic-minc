@@ -474,19 +474,36 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
      */
     public function buscarValoresItem($item, $valorComprovado)
     {
-        $vlTotalItem = number_format(($item['qtItem']*$item['nrOcorrencia']*$item['vlUnitario']), 2, '', '');
+        $vlTotalItem = $item['qtItem']*$item['nrOcorrencia']*$item['vlUnitario'];
         
         //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
-        $vlAtual = @number_format(($item['qtItem']*$item['nrOcorrencia']*$item['vlUnitario']), 2, '', '');
+        $vlAtual = @number_format(
+            (
+                $item['qtItem'] * $item['nrOcorrencia'] * $item['vlUnitario']
+            ),
+            2,
+            '',
+            ''
+        );
         $vlAtualPerc = $vlAtual* Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100;
         
         //VALOR MINIMO E MAXIMO DO ITEM ORIGINAL
         //SE TIVER VALOR COMPROVADO, DEVE SUBTRAIR O VALOR DO ITEM COMPROVADO DO VALOR UNITARIO
         
         $vlAtualMin = (
-            $valorComprovado > round($vlAtual-$vlAtualPerc)
+            number_format(
+                $valorComprovado,
+                2,
+                '',
+                ''
+            ) > round($vlAtual-$vlAtualPerc)
         )
-                    ? $valorComprovado
+                    ? number_format(
+                        $valorComprovado,
+                        2,
+                        '',
+                        ''
+                    )
                     : round($vlAtual-$vlAtualPerc);
 
         $vlAtualMax = round($vlAtual+$vlAtualPerc);
