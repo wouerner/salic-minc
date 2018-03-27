@@ -157,7 +157,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $this->getIdUsuario = UsuarioDAO::getIdUsuario($arrAuth['usu_codigo']);
             $this->getIdUsuario = ($this->getIdUsuario) ? $this->getIdUsuario["idAgente"] : 0;
         } else { // autenticacao scriptcase
-            $this->getIdUsuario = (isset($params["idusuario"])) ? $params["idusuario"] : 0;
+            $this->getIdUsuario = (isset($arrAuth['idusuario'])) ? $arrAuth['idusuario'] : 0;
         }
 
         $Cpflogado = $this->getIdUsuario;
