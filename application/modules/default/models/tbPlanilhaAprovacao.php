@@ -339,6 +339,31 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
+    /**
+     * Método para retornar o valor total da planilha ativa
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idPlanilhaItem
+     * @return boolean
+     */
+    public function valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, $idEtapa) {
+        
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            array(
+                new Zend_Db_Expr('ROUND(SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario), 2) AS Total')
+            )
+        );
+        $select->where('a.idPronac = ?', $idPronac);
+        $select->where('a.stAtivo = ?', 'S');
+        $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
+        $select->where(new Zend_Db_Expr('(a.qtItem * a.nrOcorrencia * a.vlUnitario) > ?'), '0');
+        $select->where('a.idEtapa IN (?)', $idEtapa);
+                
+        return $this->fetchAll($select);
+    }
 
     /**
      * Método para retornar o valor total da planilha readequada

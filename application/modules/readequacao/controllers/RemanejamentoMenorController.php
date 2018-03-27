@@ -318,35 +318,21 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         
         try {
             $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-
-            //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA ATIVA
-            $where = array();
-            $where['a.IdPRONAC = ?'] = $idPronac;
-            $where['a.stAtivo = ?'] = 'S';
             
-            //PLANILHA ATIVA - GRUPO A
-            $where['a.idEtapa in (?)'] = array(1,2);
-            $PlanilhaAtivaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-            //PLANILHA ATIVA - GRUPO B
-            $where['a.idEtapa in (?)'] = array(3);
-            $PlanilhaAtivaGrupoB = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-            //PLANILHA ATIVA - GRUPO C
-            $where['a.idEtapa in (?)'] = array(4);
-            $PlanilhaAtivaGrupoC = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-            //PLANILHA ATIVA - GRUPO D
-            $where['a.idEtapa in (?)'] = array(5);
-            $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
-            $where = [];
-            $where['a.IdPRONAC = ?'] = $idPronac;
+            $PlanilhaAtivaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(1, 2))->current();
+            $PlanilhaAtivaGrupoB = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(3))->current();
+            $PlanilhaAtivaGrupoC = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(4))->current();
+            $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, array(5))->current();
+            
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+            $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
+                array(
+                    'idReadequacao = ?' => $idReadequacao
+                )
+            );
             
             //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA REMANEJADA
             if (count($readequacaoAtiva) > 0) {
-                $where['a.tpPlanilha = ?'] = 'RP';
-                $where['a.stAtivo = ?'] = 'N';
                 $where['a.idReadequacao = ?'] = $idReadequacao;
             } elseif (count($readequacaoAtiva) == 0) {
                 $where['a.stAtivo = ?'] = 'S';
@@ -357,7 +343,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             //PLANILHA ATIVA - GRUPO A
             $where['a.idEtapa in (?)'] = array(1,2);
             $PlanilhaRemanejadaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
-
+            
             //PLANILHA ATIVA - GRUPO B
             $where['a.idEtapa in (?)'] = array(3);
             $PlanilhaRemanejadaGrupoB = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
@@ -521,7 +507,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
     public function reintegrarItemAction()
     {
         $this->_helper->layout->disableLayout();
-        $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
+        $idPlanilhaAprovacao = $this->_request->getParam("idPlanilhaAprovacao");
         $idPlanilhaAprovacaoPai = $this->_request->getParam("idPlanilhaAprovacaoPai");
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
         
@@ -633,7 +619,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
     public function alterarItemAction()
     {
         $this->_helper->layout->disableLayout();
-        $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
+        $idPlanilhaAprovacao = $this->_request->getParam("idPlanilhaAprovacao");
         $idPlanilhaAprovacaoPai = $this->_request->getParam("idPlanilhaAprovacaoPai");
         $idReadequacao = $this->_request->getParam("idReadequacao");
         
@@ -772,9 +758,6 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         $ValorUnitario = str_replace(',', '.', $ValorUnitario);
 
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
-
-        $existeRemanejamento50EmAndamento = $Readequacao_Model_tbReadequacao->existeRemanejamento50EmAndamento($idPronac);
         
         $valoresItem = $tbPlanilhaAprovacao->buscar(
             array(
@@ -792,15 +775,21 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             'vlUnitario' => $ValorUnitario,
             'vlTotal' => $vlTotal
         ];
-
+        
         $planilhaAtiva = $tbPlanilhaAprovacao->buscarItemAtivoId($idPlanilhaAprovacao);
         $itemComprovado = $tbPlanilhaAprovacao->buscarItemValorComprovado($planilhaAtiva);
         $valoresAtuais = $tbPlanilhaAprovacao->buscarValoresItem($itemAlterado, $itemComprovado->vlComprovado);
         
         //VERIFICA SE O VALOR TOTAL DOS DADOS INFORMADOR PELO PROPONENTE EST� ENTRE O M�NIMO E M�XIMO PERMITIDO
         
-        if ($itemAlterado['vlTotal'] < $valoresAtuais['vlAtualMin'] || $itemAlterado['vlTotal'] > $valoresAtuais['vlAtualMax']) {
-            $mensagem = ($itemAlterado['vlTotal'] < $valoresAtuais['vlAtualMin']) ? "O valor total do item desejado é menor que o mínimo de " . Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO . "% do valor original." : "O valor total do item ultrapassou a margem de ". Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO . ".";
+        if ($itemAlterado['vlTotal'] < $valoresAtuais['vlAtualMin']
+            || $itemAlterado['vlTotal'] > $valoresAtuais['vlAtualMax']
+        ) {
+            $mensagem = (
+                $itemAlterado['vlTotal'] < $valoresAtuais['vlAtualMin']
+            )
+                      ? "O valor total do item desejado é menor que o mínimo de " . $valoresAtuais['vlAtualMin']
+                      : "O valor total do item ultrapassou a margem de ". Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO . "%.";
             
             $this->_helper->json(
                 array(
@@ -819,6 +808,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         }
         
         try {
+            $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
             $where['idReadequacao = ?'] = $idReadequacao;
             $where['IdPRONAC = ?'] = $idPronac;
             

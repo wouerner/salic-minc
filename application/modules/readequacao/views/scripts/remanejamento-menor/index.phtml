@@ -95,8 +95,6 @@ $idReadequacao = 0;
 	   });
        });
        
-       atualizaDadosGrupos();
-       
        // $(".icn_menos").click(function(){
        //     var tipo = $(this).attr('tipo');
        //     var aberto = $(this).attr('aberto');
@@ -170,14 +168,14 @@ $idReadequacao = 0;
        });
        
        $('.reintegrar').click(function(){
-           var idPlanilha = $(this).attr('idPlanilha'),
+           var idPlanilhaAprovacao = $(this).attr('idPlanilhaAprovacao'),
 	       idPlanilhaAprovacaoPai = $(this).attr('idPlanilhaAprovacaoPai');
            $.ajax({
 	       type: 'POST',
 	       url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'reintegrar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
 	       data: {
 		   idReadequacao: getIdReadequacao(),
-                   idPlanilha: idPlanilha,
+                   idPlanilhaAprovacao: idPlanilhaAprovacao,
                    idPlanilhaAprovacaoPai: idPlanilhaAprovacaoPai
 	       },
 	       success: function(data){
@@ -188,7 +186,7 @@ $idReadequacao = 0;
 		       $('#modalJustificativa').val(data.dadosPlanilhaEditavel.Justificativa);
 		       $('#TotalCalculado').html(data.dadosPlanilhaEditavel.TotalSolicitado);
 		       
-		       var itemClicado = $('.editarItem[idPlanilhaAprovacao="'+idPlanilha+'"]');
+		       var itemClicado = $('.editarItem[idPlanilhaAprovacao="'+idPlanilhaAprovacao+'"]');
 		       
 		       itemClicado.parent().parent().removeClass('red');
 		       itemClicado.parent().parent().removeClass('fundo_linha4');
@@ -297,7 +295,7 @@ $idReadequacao = 0;
 	       type: 'POST',
 	       url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'alterar-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
 	       data: {
-                   idPlanilha: idPlanilhaAprovacao,
+                   idPlanilhaAprovacao: idPlanilhaAprovacao,
 		   idPronac: <?php echo $this->idPronac; ?>,
             	   idReadequacao: getIdReadequacao()
 	       },
@@ -330,7 +328,7 @@ $idReadequacao = 0;
 		       $('#modalJustificativa').val(data.dadosPlanilhaEditavel.Justificativa);
 		       $('#TotalCalculado').html(data.dadosPlanilhaEditavel.TotalSolicitado);
 		       
-		       $('#campoIdPlanilha').attr('idPlanilha', idPlanilhaAprovacao);
+		       $('#campoIdPlanilha').attr('idPlanilhaAprovacao', idPlanilhaAprovacao);
 		       $('#campoIdPlanilha').attr('idPlanilhaAprovacaoPai', idPlanilhaAprovacaoPai);
 
 		       var valorMinimoValidacao = data.dadosPlanilhaOriginal.ValorMinimoProItemValidacao,
@@ -596,10 +594,8 @@ $idReadequacao = 0;
 		   $('#idReadequacao').val(data.idReadequacao);
 		   $('#valores-grupos').removeClass('sumir');
 		   $('.acoes').removeClass('sumir');
-		   //		 $('#btn_excluir').removeClass('sumir');
-		   //$('#btn_finalizar').removeClass('sumir');
-		   //$('#btn_exclusao').attr('readequacao', data.idReadequacao);
-		   
+           
+           atualizaDadosGrupos();
 	       }
 	   });
        }
@@ -730,7 +726,7 @@ $idReadequacao = 0;
             <td id="campoDiasSolicitado" class="direita camposModal">&nbsp;</td>
             <td id="campoTotalSolicitado" class="direita camposModal">&nbsp;</td>
             <td class="centro">
-                <img idPlanilha="" idPlanilhaAprovacaoPai="" src="<?php echo $this->baseUrl(); ?>/public/img/refresh.gif" title="Reintegrar Item" class="reintegrar" id="campoIdPlanilha" style="cursor: pointer; display:<?php if (isset($this->readequacao->idReadequacao)) { echo 'inline-block'; } else { echo 'none'; } ?>">
+                <img idPlanilhaAprovacao="" idPlanilhaAprovacaoPai="" src="<?php echo $this->baseUrl(); ?>/public/img/refresh.gif" title="Reintegrar Item" class="reintegrar" id="campoIdPlanilha" style="cursor: pointer; display:<?php if (isset($this->readequacao->idReadequacao)) { echo 'inline-block'; } else { echo 'none'; } ?>">
             </td>
         </tr>
     </table>

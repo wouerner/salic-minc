@@ -119,4 +119,30 @@ class TbPlanilhaAprovacaoTest extends MinC_Test_ModelTestCase
         
         $this->assertNotEmpty($itemPlanilha);
     }
+
+    public function testValorTotalPlanilhaAtivaNaoExcluidosPorEtapa()
+    {
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        
+        $idPlanilhaAprovacao = 2224030;
+        $valorTotal = $tbPlanilhaAprovacao->valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($this->idPronac, 2);
+        
+        $this->assertNotEmpty($valorTotal);
+    }
+
+    public function testBuscarValoresItem()
+    {
+        $item = [];
+        $item['qtItem'] = 10;
+        $item['nrOcorrencia'] = 3;
+        $item['vlUnitario'] = 1000;
+        $valorComprovado = 30000;
+        
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $valores = $tbPlanilhaAprovacao->buscarValoresItem($item, $valorComprovado);
+
+        $this->assertEquals(30000, $valores['vlTotalItem']);
+        $this->assertEquals(3000000, $valores['vlAtual']);
+        $this->assertEquals(3000000, $valores['vlAtualMin']);
+    }
 }
