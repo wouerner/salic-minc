@@ -784,7 +784,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             $where['idReadequacao = ?'] = $idReadequacao;
             $where['IdPRONAC = ?'] = $idPronac;
             
-            $editarItem = $tbPlanilhaAprovacao->buscar($where);//->current();
+            $editarItem = $tbPlanilhaAprovacao->buscar($where)->current();
             
             $editarItem->qtItem = $qtItem;
             $editarItem->nrOcorrencia = $nrOcorrencia;
