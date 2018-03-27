@@ -28,7 +28,7 @@ $idReadequacao = 0;
    
    function atualizaDadosGrupos(){
        $.ajax({
-           url : '<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'carregar-valor-por-grupo-remanejamento'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>',
+               url : '<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'carregar-valor-por-grupo-remanejamento'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=' + getIdReadequacao(),
            success: function(data){
                if(data.resposta){
                    $("#td-grupo-a").html(data.dadosPlanilha.GrupoA);

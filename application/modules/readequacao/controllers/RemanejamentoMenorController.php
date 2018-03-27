@@ -314,6 +314,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
+        $idReadequacao = $this->_request->getParam("idReadequacao");
         
         try {
             $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
@@ -322,7 +323,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             $where = array();
             $where['a.IdPRONAC = ?'] = $idPronac;
             $where['a.stAtivo = ?'] = 'S';
-
+            
             //PLANILHA ATIVA - GRUPO A
             $where['a.idEtapa in (?)'] = array(1,2);
             $PlanilhaAtivaGrupoA = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
@@ -339,22 +340,11 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             $where['a.idEtapa in (?)'] = array(5);
             $PlanilhaAtivaGrupoD = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
-            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
-            $readequacaoAtiva = $Readequacao_Model_tbReadequacao->buscar(
-                array(
-                    'idPronac = ?'=> $idPronac,
-                    'idTipoReadequacao = ?' => Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                    'stEstado = ?' => Readequacao_Model_tbReadequacao::ST_ESTADO_EM_ANDAMENTO
-                )
-            );
-            
-            $where = array();
+            $where = [];
             $where['a.IdPRONAC = ?'] = $idPronac;
             
             //ARRAY PARA BUSCAR VALOR TOTAL DA PLANILHA REMANEJADA
             if (count($readequacaoAtiva) > 0) {
-                $idReadequacao = $readequacaoAtiva[0]['idReadequacao'];
-
                 $where['a.tpPlanilha = ?'] = 'RP';
                 $where['a.stAtivo = ?'] = 'N';
                 $where['a.idReadequacao = ?'] = $idReadequacao;
@@ -400,7 +390,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
             }
             
             $valorTotalGrupoASoma = 0;
-                        
+            
             $dadosPlanilha = array();
             $dadosPlanilha['dadosPlanilhaAtivaA'] = $PlanilhaAtivaGrupoA->Total;
             $dadosPlanilha['dadosPlanilhaRemanejadaA'] = $PlanilhaRemanejadaGrupoA->Total;
