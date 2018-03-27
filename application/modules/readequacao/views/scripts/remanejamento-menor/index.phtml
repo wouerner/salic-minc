@@ -43,7 +43,7 @@ $idReadequacao = 0;
                        resizable: false,
                        title: 'Alerta!',
                        width:340,
-                       height:170,
+                       height:220,
                        modal: true,
                        buttons : {
                            'OK' : function(){
@@ -247,7 +247,7 @@ $idReadequacao = 0;
                            },
                            success: function(data){
 			       if(data.resposta){
-                                   location.reload();
+                       location.reload();
 			       } else {
                                    //ABRE O MODAL DE CONFIRMA��O DA A��O REALIZADA
                                    $("#modalItem").dialog('close');
@@ -394,7 +394,7 @@ $idReadequacao = 0;
                                    if(parseInt($('#TotalCalculado').html().replace(/[^\d]/g, "")) > parseInt(valorMaximoValidacao)){
 				       var valorMaximoFormatado = moeda.formatar(data.dadosPlanilhaAtiva.ValorMaximoProItemValidacao/100);
 				       mensagem += '- O valor total do item n&atilde;o pode ser maior que o originalmente aprovado (R$ '+ valorMaximoFormatado +'). ' +
-                                                   '<br/>Para ajuste superior &agrave; R$' + valorMaximoFormatado + ' fa&ccedil;a na planilha or&ccedil;ament&aacute;ria';
+                                                   '<br/>Para ajuste superior &agrave; R$' + valorMaximoFormatado + ' fa&ccedil;a uma readequa&ccedil;&atilde;o de planilha or&ccedil;ament&aacute;ria';
 
 				       erros++;
                                    }
@@ -485,14 +485,10 @@ $idReadequacao = 0;
                                                    itemClicado.parent().parent().find('.textQuantidade').html(Quantidade);
                                                    itemClicado.parent().parent().find('.textOcorrencia').html(Ocorrencia);
                                                    itemClicado.parent().parent().find('.textValorUnitario').html(ValorUnitario);
-						   itemClicado.parent().parent().find('.textValorAprovado').html(Total);
+                                                   itemClicado.parent().parent().find('.textValorAprovado').html(Total);
                                                    itemClicado.parent().parent().find('.textValorTotalSugerido').html(Total);
                                                    itemClicado.parent().parent().find('.textJustificativa').html(Justificativa);
                                                    atualizaDadosGrupos();
-
-                                                   window.location.reload();    
-
-                                                   
 					       }
 					       
 					       //ABRE O MODAL DE CONFIRMA��O DA A��O REALIZADA
@@ -503,7 +499,7 @@ $idReadequacao = 0;
                                                    resizable: false,
                                                    title: 'Alerta!',
                                                    width:340,
-                                                   height:170,
+                                                   height:200,
                                                    modal: true,
                                                    buttons : {
 						       'OK' : function(){
