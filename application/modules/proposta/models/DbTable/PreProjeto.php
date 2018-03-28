@@ -3457,7 +3457,6 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
 
     public function enviarEmailProponente($idPreProjeto, $titulo, $mensagem)
     {
-
         /*  SELECT Internet.Descricao
               FROM Agentes.dbo.Agentes Agentes
              INNER JOIN Agentes.dbo.Internet Internet ON Internet.idAgente = Agentes.idAgente
