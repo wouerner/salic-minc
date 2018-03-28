@@ -100,7 +100,7 @@ class Analise_Model_DbTable_TbAvaliarAdequacaoProjeto extends MinC_Db_Table_Abst
         }
 
         $select->where('a.stEstado = ?', 0);
-        $select->where('a.stAvaliacao = ?', 2);
+        $select->where('a.stAvaliacao = ?', Analise_Model_TbAvaliarAdequacaoProjeto::ADEQUACAO_NAO_APROVADA);
         $select->where('a.siEncaminhamento = ?', TbTipoEncaminhamento::SOLICITACAO_DEVOLVIDA_AO_PROPONENTE_PARA_AJUSTES);
 
         $select->order('a.DtAvaliacao DESC');
