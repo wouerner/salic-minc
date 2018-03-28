@@ -135,7 +135,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             $this->view->isEditarProposta = $this->isEditarProposta($this->idPreProjeto);
             $this->view->isEditarProjeto = $this->isEditarProjeto($this->idPreProjeto);
             $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
-            $this->view->recursoEnquadramento = $this->obterRecursoEnquadramento($this->idPreProjeto);
+            $this->view->recursoEnquadramentoVisaoProponente = $this->obterRecursoEnquadramentoVisaoProponente($this->idPreProjeto);
 
             $layout = array(
                 'titleShort' => 'Proposta',
@@ -315,9 +315,9 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
         }
     }
 
-    private function obterRecursoEnquadramento($idPreProjeto)
+    private function obterRecursoEnquadramentoVisaoProponente($idPreProjeto)
     {
         $tbRecursoProposta = new Recurso_Model_DbTable_TbRecursoProposta();
-        $tbRecursoProposta->obterRecursoAtualVisaoProponente($idPreProjeto);
+        return $tbRecursoProposta->obterRecursoAtualVisaoProponente($idPreProjeto);
     }
 }

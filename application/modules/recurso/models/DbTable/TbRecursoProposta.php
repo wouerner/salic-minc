@@ -4,6 +4,7 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
 {
     protected $_schema = 'sac';
     protected $_name = 'tbRecursoProposta';
+    protected $_primary = 'idRecursoProposta';
 
     /**
      * @var Recurso_Model_TbRecursoProposta
@@ -50,6 +51,7 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
     {
         $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
         $arrPreprojeto = $preprojetoDbTable->findBy(['idPreProjeto' => $id_preprojeto]);
+
         return $this->findBy([
             'idPreProjeto' => $id_preprojeto,
             'idProponente' => $arrPreprojeto['idAgente'],
