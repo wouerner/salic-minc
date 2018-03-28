@@ -1,0 +1,118 @@
+<?php
+if (isset($this->proposta['idpreprojeto'])) {
+
+    echo $this->partial("inc/menu.phtml", 'proposta', $this); // menu
+}
+
+?>
+<div class="container-fluid">
+    <div class="page-title">
+        <div class="row">
+            <div class="col s12 m9 l10">
+                <h1>Enquadramento da Proposta</h1>
+                <?php
+                $links = [
+                    $this->layout['listagem'],
+                    [
+                        'An&aacute;lise de Proposta Cultural' => [
+                            'module' => 'admissibilidade',
+                            'controller' => 'admissibilidade',
+                            'action' => 'exibirpropostacultural',
+
+                        ]
+                    ],
+                ];
+                gerarBreadCrumb($links, 'migalhas');
+                ?>
+            </div>
+            <div class="col s12 m3 l2 right-align">
+                <!--                --><?php //if (!$this->menu): ?>
+                <!--                    <a href="/admissibilidade/admissibilidade/listar-propostas" title="P&aacute;gina Anterior"-->
+                <!--                       title="P&aacute;gina Anterior"-->
+                <!--                       class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">keyboard_return</i>-->
+                <!--                    </a>-->
+                <!--                --><?php //endif ?>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="card-panel">
+            <div class="row card-panel">
+
+                <h4>Identifica&ccedil;&atilde;o da Proposta Cultural</h4>
+                <table class="tabela" cellpadding="1" cellspacing="1">
+                    <tr class="esquerda">
+                        <td>
+                            Nr da Proposta:<br/>
+                            <span style="color: blue;">
+                                <?php
+                                if (isset($this->proposta['idpreprojeto']))
+                                    echo $this->proposta['idpreprojeto'];
+                                ?>
+                            </span>
+                        </td>
+                        <td colspan="4">
+                            Nome da Proposta Cultural *
+                            <br/>
+                            <b>
+                            <?php
+                           if (isset($this->proposta['idpreprojeto']))
+                               echo str_replace("'", "", str_replace("\"", "", ($this->proposta['nomeprojeto'])));
+                           ?>
+                            </b>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="row card-panel">
+
+                <h4>Sugest&atilde;o de Enquadramento da Proposta Cultural</h4>
+
+            <?php if (count($this->recursoEnquadramento) > 0
+                && !empty($this->recursoEnquadramento['area'])
+                && !empty($this->recursoEnquadramento['segmento'])
+                && !empty($this->recursoEnquadramento['enquadramento'])
+            ) { ?>
+                <table class="tabela">
+                    <tr class="destacar">
+                        <td><b>&Aacute;rea</b></td>
+                        <td><b>Segmento</b></td>
+                        <td><b>Artigo</b></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->recursoEnquadramento['area'] ?> </td>
+                        <td><?php echo $this->recursoEnquadramento['segmento'] ?> </td>
+                        <td><?php echo $this->recursoEnquadramento['enquadramento'] ?> </td>
+                    </tr>
+                </table>
+            <?php } ?>
+            </div>
+            <div class="row card-panel">
+                <h4>Recurso</h4>
+                <form action="#">
+                    <p>
+                        <label>
+                            <input name="group1" type="radio" checked/>
+                            <span>Desist&ecirc;ncia do Prazo Recursal</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input name="group1" type="radio"/>
+                            <span>Recurso</span>
+                        </label>
+                    </p>
+
+                </form>
+            </div>
+            <div class="row">
+                <div class="col s12 center">
+                    <button class="btn" id="enviar" type="button" value="">Salvar</button>
+                    <button class="btn" id="enviar" type="button" value="">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
