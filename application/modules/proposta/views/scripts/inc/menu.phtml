@@ -90,7 +90,7 @@ $arrMenuProponente['itensorcamentario']['menu'][] = array('label' => 'Solicitar 
     'grupo' => array()
 );
 $arrMenuProponente['itensorcamentario']['menu'][] = array('label' => 'Minhas solicita&ccedil;&otilde;es', 'title' => 'Ir para Minhas solicita&ccedil;&otilde;es',
-    'url' => $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'minhas-solicitacoes', 'idPreProjeto' => $idPreProjeto)).'?tipoFiltro=solicitado',
+    'url' => $this->url(array('module' => 'proposta', 'controller' => 'mantertabelaitens', 'action' => 'minhas-solicitacoes', 'idPreProjeto' => $idPreProjeto)) . '?tipoFiltro=solicitado',
     'grupo' => array()
 );
 
@@ -119,10 +119,28 @@ $arrMenuProponente['mensagensenviadas'] = array(
     'label' => 'Dilig&ecirc;ncias',
     'title' => '',
     'url' => $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaproponente', 'idPreProjeto' => $idPreProjeto)),
-    'icon' => 'announcement',
+    'icon' => 'announcement', 
     'menu' => array(),
     'grupo' => array()
 );
+if(count($this->recursoEnquadramento) > 0 ) {
+    $arrMenuProponente['enquadramento'] = [
+        'id' => 'menu_enquadramento',
+        'label' => 'Enquadramento',
+        'title' => 'Recurso de Enquadramento',
+        'icon' => 'build',
+        'menuClass' => ' light-green lighten-4',
+        'url' => $this->url(
+            [
+                'module' => 'recurso',
+                'controller' => 'recurso-proposta',
+                'action' => 'visao-proponente',
+                'idPreProjeto' => $idPreProjeto
+            ]
+        ),
+        'grupo' => []
+    ];
+}
 
 if ($this->isEditavel) {
 
@@ -175,13 +193,13 @@ if ($this->isEditavel) {
                 <p class="info-title">
                     <?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?>
                 </p>
-            <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>
-                <p class="">
-                    <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
-                    <i class="material-icons left tiny">query_builder</i>
-                    <span id="cronometro"></span>
-                </p>
-            <?php endif; ?>
+                <?php if (isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0) : ?>
+                    <p class="">
+                        <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
+                        <i class="material-icons left tiny">query_builder</i>
+                        <span id="cronometro"></span>
+                    </p>
+                <?php endif; ?>
             </div>
         </li>
         <?php echo $this->partialLoop('inc/item.phtml', $arrMenuProponente); ?>
@@ -214,7 +232,7 @@ if ($this->isEditavel) {
                                 <?php foreach ($this->listaProponentes as $lp): $lp = array_change_key_case($lp); ?>
                                     <?php if ($lp['idagenteproponente'] != $idAgente): ?>
                                         <option
-                                            value="<?php echo $lp['idvinculo']; ?>:<?php echo $lp['idagenteproponente']; ?>"><?php echo $lp['nomeproponente']; ?></option>
+                                                value="<?php echo $lp['idvinculo']; ?>:<?php echo $lp['idagenteproponente']; ?>"><?php echo $lp['nomeproponente']; ?></option>
                                     <?php endif; ?>
 
                                     <?php $idAgente = $lp['idagenteproponente']; ?>
@@ -228,47 +246,47 @@ if ($this->isEditavel) {
     </div>
 </aside>
 <script type="text/javascript">
-    function layout_fluido() {
-        var janela = $(window).width();
+    function layout_fluido () {
+        var janela = $(window).width()
 
 //        $("#navglobal").css("width", "100%");
 //        $("#conteudo").css("width", "100%");
 //        $("#titulo").css("width", "100%");
 //        $("#rodapeConteudo").css("width", "100%");
 //        $("#rodape").css("width", "100%");
-        $("div#rodapeConteudo").attr("id", "rodapeConteudo_com_menu");
+        $('div#rodapeConteudo').attr('id', 'rodapeConteudo_com_menu')
     }
 
     $(document).ready(function () {
         <?php if (!$this->isEditavel) : ?>
         //DESABILITA ALTERACOES NOS DADOS DO FORMULARIO (INCLUIR/ALTERAR/EXCLUIR)
-             JSBloquearAlteracaoFormulario();
+        JSBloquearAlteracaoFormulario()
 
-            $("textarea.editor").each(function () {
-                $(this).editorRico({
-                    isDesabilitarEdicao: 1
-                });
-            });
+        $('textarea.editor').each(function () {
+            $(this).editorRico({
+                isDesabilitarEdicao: 1
+            })
+        })
 
         <?php endif; ?>
         $('.planilha').click(function () {
-            $(this).next().toggle('fast');
-        });
+            $(this).next().toggle('fast')
+        })
 
         $('#excluirproposta').click(function () {
-            JSExcluirProposta();
-        });
+            JSExcluirProposta()
+        })
 
-    });
+    })
 
-    function JSExcluirProposta() {
+    function JSExcluirProposta () {
 
-        var text = 'Deseja realmente excluir sua proposta?';
+        var text = 'Deseja realmente excluir sua proposta?'
 
-        $('<div id="modalExcluirProposta"></div>').appendTo($("#sidenav")).html(text)
+        $('<div id="modalExcluirProposta"></div>').appendTo($('#sidenav')).html(text)
 
-        $("#modalExcluirProposta").dialog("destroy");
-        $("#modalExcluirProposta").dialog
+        $('#modalExcluirProposta').dialog('destroy')
+        $('#modalExcluirProposta').dialog
         ({
             width: 450,
             height: 200,
@@ -276,23 +294,23 @@ if ($this->isEditavel) {
             modal: true
             , buttons: {
                 'Cancelar': function () {
-                    $(this).dialog('close');
+                    $(this).dialog('close')
                 },
                 'OK': function () {
-                    window.location = "<?php echo $this->baseUrl(); ?>/proposta/manterpropostaedital/exluirproposta/?idPreProjeto=<?php echo $idPreProjeto; ?>";
-                    $(this).dialog('close');
+                    window.location = '<?php echo $this->baseUrl(); ?>/proposta/manterpropostaedital/exluirproposta/?idPreProjeto=<?php echo $idPreProjeto; ?>'
+                    $(this).dialog('close')
                 }
             }
-        });
-        return false;
+        })
+        return false
     }
 
-    function trocarproponente() {
+    function trocarproponente () {
 
-        $('<div id="trocarproponente"></div>').appendTo($("#sidenav")).html(text)
+        $('<div id="trocarproponente"></div>').appendTo($('#sidenav')).html(text)
 
-        $("#trocarproponente").dialog("destroy");
-        $("#trocarproponente").dialog
+        $('#trocarproponente').dialog('destroy')
+        $('#trocarproponente').dialog
         ({
             width: 600,
             height: 250,
@@ -301,28 +319,28 @@ if ($this->isEditavel) {
             title: 'Trocar Proponente'
             , buttons: {
                 'Cancelar': function () {
-                    $(this).dialog('close'); // fecha a modal
+                    $(this).dialog('close') // fecha a modal
                 },
                 'Novo Proponente': function () {
-                    window.location = "<?php echo $this->url(array('module' => 'proposta', 'controller' => 'vincularresponsavel', 'action' => 'index')); ?>";
+                    window.location = '<?php echo $this->url(array('module' => 'proposta', 'controller' => 'vincularresponsavel', 'action' => 'index')); ?>'
                 },
                 'Trocar Proponente': function () {
-                    $("#formtrocaproponente").submit();
+                    $('#formtrocaproponente').submit()
 
                 }
             }
-        });
+        })
 
-        return false;
+        return false
     }
 
-    function JSPrazoDeAlterarExpirado() {
-        var text = 'O prazo para alterar o projeto expirou!';
+    function JSPrazoDeAlterarExpirado () {
+        var text = 'O prazo para alterar o projeto expirou!'
 
-        $('<div id="modalEnviarProposta"></div>').appendTo($("#sidenav")).html(text)
+        $('<div id="modalEnviarProposta"></div>').appendTo($('#sidenav')).html(text)
 
-        $("#modalEnviarProposta").dialog("destroy");
-        $("#modalEnviarProposta").dialog
+        $('#modalEnviarProposta').dialog('destroy')
+        $('#modalEnviarProposta').dialog
         ({
             width: 450,
             height: 200,
@@ -331,55 +349,48 @@ if ($this->isEditavel) {
             modal: true,
             buttons: {
                 'OK': function () {
-                    window.location = "<?php echo $this->baseUrl(); ?>/proposta/manterorcamento/produtoscadastrados/idPreProjeto/<?php echo $idPreProjeto; ?>";
-                    $(this).dialog('close');
+                    window.location = '<?php echo $this->baseUrl(); ?>/proposta/manterorcamento/produtoscadastrados/idPreProjeto/<?php echo $idPreProjeto; ?>'
+                    $(this).dialog('close')
                 }
             }
-        });
+        })
 
-        return false;
+        return false
     }
 
     <?php if( isset($this->layout['prazoAlterarProjeto'])) : ?>
-        var segundos = new Number();
-        var segundos = <?php print $this->layout['prazoAlterarProjeto']; ?>;
+    var segundos = new Number()
+    var segundos = <?php print $this->layout['prazoAlterarProjeto']; ?>
     <?php endif; ?>
 
-    function contagemregressiva()
-    {
+    function contagemregressiva () {
 
-        if( ( segundos - 1 ) >= 0 )
-        {
-            segundos = segundos - 1;
-            if( segundos > 86400 )
-            {
-                dias = Math.round( segundos / 86400 );
-                cronometro.innerText = dias + ' dias para alterar';
+        if (( segundos - 1 ) >= 0) {
+            segundos = segundos - 1
+            if (segundos > 86400) {
+                dias = Math.round(segundos / 86400)
+                cronometro.innerText = dias + ' dias para alterar'
             }
-            else if( segundos > 3600 )
-            {
-                horas = Math.round( segundos / 3600 );
-                cronometro.innerText = horas + ' horas para alterar';
+            else if (segundos > 3600) {
+                horas = Math.round(segundos / 3600)
+                cronometro.innerText = horas + ' horas para alterar'
             }
-            else if( segundos > 60 )
-            {
-                minutos = Math.round( segundos / 60 );
-                cronometro.innerText = minutos + ' minutos para alterar';
+            else if (segundos > 60) {
+                minutos = Math.round(segundos / 60)
+                cronometro.innerText = minutos + ' minutos para alterar'
             }
-            else if( segundos > 0 )
-            {
-                cronometro.innerText = segundos + ' segundos para alterar';
+            else if (segundos > 0) {
+                cronometro.innerText = segundos + ' segundos para alterar'
             }
-            else
-            {
-                JSPrazoDeAlterarExpirado();
-                JSBloquearAlteracaoFormulario();
-                cronometro.innerText = 'Alterar projeto encerrado';
+            else {
+                JSPrazoDeAlterarExpirado()
+                JSBloquearAlteracaoFormulario()
+                cronometro.innerText = 'Alterar projeto encerrado'
             }
-            setTimeout( 'contagemregressiva()', 1000 );
+            setTimeout('contagemregressiva()', 1000)
         }
     }
     <?php if( isset($this->layout['prazoAlterarProjeto'])) : ?>
-    contagemregressiva();
+    contagemregressiva()
     <?php endif; ?>
 </script>

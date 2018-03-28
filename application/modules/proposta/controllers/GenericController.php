@@ -135,6 +135,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             $this->view->isEditarProposta = $this->isEditarProposta($this->idPreProjeto);
             $this->view->isEditarProjeto = $this->isEditarProjeto($this->idPreProjeto);
             $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
+            $this->view->recursoEnquadramento = $this->obterRecursoEnquadramento($this->idPreProjeto);
 
             $layout = array(
                 'titleShort' => 'Proposta',
@@ -312,5 +313,11 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             $tbPreProjetoMetaMapper = new Proposta_Model_TbPreProjetoMetaMapper();
             $tbPreProjetoMetaMapper->salvarPropostaCulturalSerializada($this->idPreProjeto, 'alterarprojeto');
         }
+    }
+
+    private function obterRecursoEnquadramento($idPreProjeto)
+    {
+        $tbRecursoProposta = new Recurso_Model_DbTable_TbRecursoProposta();
+        $tbRecursoProposta->obterRecursoAtualVisaoProponente($idPreProjeto);
     }
 }
