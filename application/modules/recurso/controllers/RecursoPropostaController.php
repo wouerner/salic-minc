@@ -30,9 +30,8 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
      */
     public function visaoProponenteSalvarAction()
     {
-
+xd($_POST, $_FILES);
         $post = $this->getRequest()->getPost();
-
         $id_preprojeto = trim($post['id_preprojeto']);
         if (empty($id_preprojeto) || is_null($id_preprojeto)) {
             throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
@@ -77,21 +76,25 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
      */
     private function uploadArquivoProponente(array $recursoEnquadramento)
     {
-        if ($recursoEnquadramento['idArquivo']) {
+
+        $upload_field_name = 'arquivo';
+        $file = new Zend_File_Transfer();
+        if ($file->isUploaded() && !empty($file->getFileInfo()) && $recursoEnquadramento['idArquivo']
+        ) {
             $tbArquivoDbTable = new tbArquivo();
             $tbArquivoImagemDAO = new tbArquivoImagem();
             $tbArquivoImagemDAO->delete("idArquivo = {$recursoEnquadramento['idArquivo']}");
             $tbArquivoDbTable->delete("idArquivo = {$recursoEnquadramento['idArquivo']}");
+            $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+            $recursoEnquadramentoDbTable->update([
+                'idArquivo' => new Zend_Db_Expr('NULL')
+            ], [
+                'idRecursoProposta = ?' => $recursoEnquadramento['idRecursoProposta'],
+                'idPreProjeto = ?' => $recursoEnquadramento['idPreProjeto']
+            ]);
         }
 
-        $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-        $recursoEnquadramentoDbTable->update([
-            'idArquivo' => new Zend_Db_Expr('NULL')
-        ], [
-            'idRecursoProposta = ?' => $recursoEnquadramento['idRecursoProposta'],
-            'idPreProjeto = ?' => $recursoEnquadramento['idPreProjeto']
-        ]);
-        return $this->uploadArquivoSqlServer('arquivo');
+        return $this->uploadArquivoSqlServer($upload_field_name);
     }
 
     /**
@@ -107,47 +110,44 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
     {
         $idArquivo = null;
         $file = new Zend_File_Transfer();
-        if ($file->isUploaded()) {
-            if (!empty($file->getFileInfo())) {
+        if ($file->isUploaded() && !empty($file->getFileInfo())) {
+            $fileInformation = $file->getFileInfo();
 
-                $fileInformation = $file->getFileInfo();
+            $arquivoNome = $fileInformation[$upload_field_name]['name'];
+            $arquivoTemp = $fileInformation[$upload_field_name]['tmp_name'];
+            $arquivoTamanho = $fileInformation[$upload_field_name]['size'];
+            $arquivoHash = '';
 
-                $arquivoNome = $fileInformation[$upload_field_name]['name'];
-                $arquivoTemp = $fileInformation[$upload_field_name]['tmp_name'];
-                $arquivoTamanho = $fileInformation[$upload_field_name]['size'];
-                $arquivoHash = '';
-
-                if (!empty($arquivoNome) && !empty($arquivoTemp)) {
-                    $arquivoExtensao = Upload::getExtensao($arquivoNome);
-                    $arquivoBinario = Upload::setBinario($arquivoTemp);
-                    $arquivoHash = Upload::setHash($arquivoTemp);
-                }
-
-                if ($arquivoTamanho > $maxSizeFile) {
-                    throw new Exception("O arquivo n&atilde;o pode ser maior do que 10MB!");
-                }
-
-                $auth = Zend_Auth::getInstance();
-                $authIdentity = array_change_key_case((array)$auth->getIdentity());
-                $tbArquivoDbTable = new tbArquivo();
-                $dadosArquivo = [];
-                $dadosArquivo['nmArquivo'] = $arquivoNome;
-                $dadosArquivo['sgExtensao'] = $arquivoExtensao;
-                $dadosArquivo['nrTamanho'] = $arquivoTamanho;
-                $dadosArquivo['dtEnvio'] = $tbArquivoDbTable->getExpressionDate();
-                $dadosArquivo['stAtivo'] = 'A';
-                $dadosArquivo['dsHash'] = $arquivoHash;
-                $dadosArquivo['idUsuario'] = $authIdentity['idusuario'];
-
-                $idArquivo = $tbArquivoDbTable->insert($dadosArquivo);
-
-                $tbArquivoImagemDAO = new tbArquivoImagem();
-                $dadosBinario = array(
-                    'idArquivo' => $idArquivo,
-                    'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
-                );
-                $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
+            if (!empty($arquivoNome) && !empty($arquivoTemp)) {
+                $arquivoExtensao = Upload::getExtensao($arquivoNome);
+                $arquivoBinario = Upload::setBinario($arquivoTemp);
+                $arquivoHash = Upload::setHash($arquivoTemp);
             }
+
+            if ($arquivoTamanho > $maxSizeFile) {
+                throw new Exception("O arquivo n&atilde;o pode ser maior do que 10MB!");
+            }
+
+            $auth = Zend_Auth::getInstance();
+            $authIdentity = array_change_key_case((array)$auth->getIdentity());
+            $tbArquivoDbTable = new tbArquivo();
+            $dadosArquivo = [];
+            $dadosArquivo['nmArquivo'] = $arquivoNome;
+            $dadosArquivo['sgExtensao'] = $arquivoExtensao;
+            $dadosArquivo['nrTamanho'] = $arquivoTamanho;
+            $dadosArquivo['dtEnvio'] = $tbArquivoDbTable->getExpressionDate();
+            $dadosArquivo['stAtivo'] = 'A';
+            $dadosArquivo['dsHash'] = $arquivoHash;
+            $dadosArquivo['idUsuario'] = $authIdentity['idusuario'];
+
+            $idArquivo = $tbArquivoDbTable->insert($dadosArquivo);
+
+            $tbArquivoImagemDAO = new tbArquivoImagem();
+            $dadosBinario = array(
+                'idArquivo' => $idArquivo,
+                'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
+            );
+            $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
         }
         return $idArquivo;
     }
