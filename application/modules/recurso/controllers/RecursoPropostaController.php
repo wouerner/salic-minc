@@ -22,7 +22,6 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             && !is_null($this->view->recursoEnquadramento['idArquivo'])) {
             $tbArquivo = new tbArquivo();
             $this->view->arquivoRecursoProponente = $tbArquivo->buscarDados($this->view->recursoEnquadramento['idArquivo']);
-
         }
     }
 
@@ -32,10 +31,6 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
     public function visaoProponenteSalvarAction()
     {
 
-//xd($_FILES, $_POST, $_GET);
-
-        $auth = Zend_Auth::getInstance();
-        $authIdentity = array_change_key_case((array)$auth->getIdentity());
         $post = $this->getRequest()->getPost();
 
         $id_preprojeto = trim($post['id_preprojeto']);
@@ -52,110 +47,113 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
         if (empty($justificativa) || is_null($justificativa)) {
             throw new Exception("O campo 'Justificativa' &eacute; de preenchimento obrigat&oacute;rio.");
         }
-        $file = new Zend_File_Transfer();
 
         $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
         $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
-        xd($recursoEnquadramento);
 
-//        $model->setIdDocumento($model->getIdDocumento());
+
+        $idArquivo = $this->uploadArquivoProponente($recursoEnquadramento);
+        $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
+            'idRecursoProposta' => $recursoEnquadramento['idRecursoProposta'],
+            'idPreProjeto' => $recursoEnquadramento['idPreProjeto'],
+            'dtRecursoProponente' => $recursoEnquadramentoDbTable->getExpressionDate(),
+            'dsRecursoProponente' => $justificativa,
+            'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
+            'tpSolicitacao' => $tpSolicitacao,
+            'idArquivo' => $idArquivo,
+        ]);
+        $tbRecursoMapper = new Recurso_Model_TbRecursoPropostaMapper();
+        $tbRecursoMapper->save($tbRecursoModel);
+
+        parent::message(
+            'Dados armazenados com sucesso.',
+            "/recurso/recurso-proposta/visao-proponente/idPreProjeto/{$id_preprojeto}",
+            'CONFIRM'
+        );
+    }
+
+    /**
+     * @return int|null
+     */
+    private function uploadArquivoProponente(array $recursoEnquadramento)
+    {
+        if ($recursoEnquadramento['idArquivo']) {
+            $tbArquivoDbTable = new tbArquivo();
+            $tbArquivoImagemDAO = new tbArquivoImagem();
+            $tbArquivoImagemDAO->delete("idArquivo = {$recursoEnquadramento['idArquivo']}");
+            $tbArquivoDbTable->delete("idArquivo = {$recursoEnquadramento['idArquivo']}");
+        }
+
+        $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+        $recursoEnquadramentoDbTable->update([
+            'idArquivo' => new Zend_Db_Expr('NULL')
+        ], [
+            'idRecursoProposta = ?' => $recursoEnquadramento['idRecursoProposta'],
+            'idPreProjeto = ?' => $recursoEnquadramento['idPreProjeto']
+        ]);
+        return $this->uploadArquivoSqlServer('arquivo');
+    }
+
+    /**
+     * @todo Mover esse m&eacute;todo para o local correto.
+     * @param string $upload_field_name
+     * @param int $maxSizeFile
+     * @return int|null $idArquivo
+     */
+    private function uploadArquivoSqlServer(
+        $upload_field_name = 'arquivo',
+        $maxSizeFile = 10485760
+    )
+    {
+        $idArquivo = null;
+        $file = new Zend_File_Transfer();
         if ($file->isUploaded()) {
             if (!empty($file->getFileInfo())) {
 
                 $fileInformation = $file->getFileInfo();
 
-                $arquivoNome = $fileInformation['arquivo']['name']; # nome
-                $arquivoTemp = $fileInformation['arquivo']['tmp_name']; # nome temporario
-                $arquivoTipo = $fileInformation['arquivo']['type']; # tipo
-                $arquivoTamanho = $fileInformation['arquivo']['size']; # tamanho
-                $arquivoHash = ''; # hash
+                $arquivoNome = $fileInformation[$upload_field_name]['name'];
+                $arquivoTemp = $fileInformation[$upload_field_name]['tmp_name'];
+                $arquivoTamanho = $fileInformation[$upload_field_name]['size'];
+                $arquivoHash = '';
 
                 if (!empty($arquivoNome) && !empty($arquivoTemp)) {
-                    $arquivoExtensao = Upload::getExtensao($arquivoNome); # extensao
-                    $arquivoBinario = Upload::setBinario($arquivoTemp); # binario
-                    $arquivoHash = Upload::setHash($arquivoTemp); # hash
+                    $arquivoExtensao = Upload::getExtensao($arquivoNome);
+                    $arquivoBinario = Upload::setBinario($arquivoTemp);
+                    $arquivoHash = Upload::setHash($arquivoTemp);
                 }
-
-                $maxSizeFile = 10485760;
 
                 if ($arquivoTamanho > $maxSizeFile) {
                     throw new Exception("O arquivo n&atilde;o pode ser maior do que 10MB!");
                 }
 
+                $auth = Zend_Auth::getInstance();
+                $authIdentity = array_change_key_case((array)$auth->getIdentity());
                 $tbArquivoDbTable = new tbArquivo();
                 $dadosArquivo = [];
                 $dadosArquivo['nmArquivo'] = $arquivoNome;
                 $dadosArquivo['sgExtensao'] = $arquivoExtensao;
                 $dadosArquivo['nrTamanho'] = $arquivoTamanho;
                 $dadosArquivo['dtEnvio'] = $tbArquivoDbTable->getExpressionDate();
-                $dadosArquivo['stAtivo'] = 'I';
+                $dadosArquivo['stAtivo'] = 'A';
                 $dadosArquivo['dsHash'] = $arquivoHash;
                 $dadosArquivo['idUsuario'] = $authIdentity['idusuario'];
 
                 $idArquivo = $tbArquivoDbTable->insert($dadosArquivo);
 
-                $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
-                    'idRecursoProposta' => $recursoEnquadramento['idRecursoProposta'],
-                    'idPreProjeto' => $recursoEnquadramento['idPreProjeto'],
-                    'dtRecursoProponente' => $recursoEnquadramentoDbTable->getExpressionDate(),
-                    'dsRecursoProponente' => $justificativa,
-                    'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
-                    'tpSolicitacao' => $tpSolicitacao,
+                $tbArquivoImagemDAO = new tbArquivoImagem();
+                $dadosBinario = array(
                     'idArquivo' => $idArquivo,
-                ]);
-                $tbRecursoMapper = new Recurso_Model_TbRecursoPropostaMapper();
-                $tbRecursoMapper->save($tbRecursoModel);
-
+                    'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
+                );
+                $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
             }
         }
-
-
-        /**
-         * @todo : Implementar :
-         * - consulta pelo recurso, caso tenha idArquivo:
-         *      * Atualizar registro do idArquivo da tabela tbRecursoProposta para null
-         *      * Remover registro da tabela idArquivo
-         */
-
-//        if ($id = $this->save($model)) {
-//            $booStatus = $id;
-//            $this->setMessage($mensagemSucesso);
-//        } else {
-//            $this->setMessage('N&atilde;o foi poss&iacute;vel efetuar a opera&ccedil;&atilde;o!');
-//        }
-
-        ///
-//        $authIdentity = array_change_key_case((array)$auth->getIdentity());
-//        $objEnquadramento = new Admissibilidade_Model_Enquadramento();
-//
-//        $arrayArmazenamentoEnquadramento = [
-//            'AnoProjeto' => $projeto['AnoProjeto'],
-//            'Sequencial' => $projeto['Sequencial'],
-//            'Enquadramento' => $post['enquadramento_projeto'],
-//            'DtEnquadramento' => $objEnquadramento->getExpressionDate(),
-//            'Observacao' => $tpSolicitacao,
-//            'Logon' => $authIdentity['usu_codigo'],
-//            'IdPRONAC' => $projeto['IdPRONAC']
-//        ];
-//
-//        $objEnquadramento = new Admissibilidade_Model_Enquadramento();
-//        $objEnquadramento->salvar($arrayArmazenamentoEnquadramento);
-//
-//        $projetos = new Projeto_Model_DbTable_Projetos();
-//        $projetos->atualizarProjetoEnquadrado(
-//            $projeto,
-//            $authIdentity['usu_codigo']
-//        );
-//
-//        parent::message(
-//            'Enquadramento cadastrado com sucesso.',
-//            '/admissibilidade/enquadramento/gerenciar-enquadramento',
-//            'CONFIRM'
-//        );
+        return $idArquivo;
     }
 
     public function downloadAnexoProponente()
     {
-
+        throw new Exception('Implementar esse método');
     }
 }
