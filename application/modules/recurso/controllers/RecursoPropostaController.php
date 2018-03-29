@@ -30,7 +30,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
      */
     public function visaoProponenteSalvarAction()
     {
-xd($_POST, $_FILES);
+//xd($_POST, $_FILES);
         $post = $this->getRequest()->getPost();
         $id_preprojeto = trim($post['id_preprojeto']);
         if (empty($id_preprojeto) || is_null($id_preprojeto)) {
@@ -47,9 +47,14 @@ xd($_POST, $_FILES);
             throw new Exception("O campo 'Justificativa' &eacute; de preenchimento obrigat&oacute;rio.");
         }
 
+        $acao_salvar = trim($post['acao_salvar']);
+        if (empty($acao_salvar) || is_null($acao_salvar)) {
+            throw new Exception("Bot&atilde;o de a&ccedil;&atilde;o n&atilde;o informado.");
+        }
+        $stRascunho = ($acao_salvar == 'rascunho') ? Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO : Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO;
+
         $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
         $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
-
 
         $idArquivo = $this->uploadArquivoProponente($recursoEnquadramento);
         $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
@@ -60,6 +65,7 @@ xd($_POST, $_FILES);
             'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
             'tpSolicitacao' => $tpSolicitacao,
             'idArquivo' => $idArquivo,
+            'stRascunho' => $stRascunho,
         ]);
         $tbRecursoMapper = new Recurso_Model_TbRecursoPropostaMapper();
         $tbRecursoMapper->save($tbRecursoModel);

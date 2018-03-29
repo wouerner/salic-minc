@@ -35,5 +35,4 @@ CREATE INDEX tbRecursoProposta_idProponente_index
   ON tbRecursoProposta (idProponente)
 GO
 
-
-
+ALTER TABLE sac.dbo.tbRecursoProposta ADD stRascunho BIT DEFAULT 0 NULL;

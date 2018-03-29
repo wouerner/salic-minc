@@ -47,6 +47,13 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
     protected $_stAtivo;
 
     /**
+     * @var $_stRascunho
+     *      0 - Enviado
+     *      1 - Rascunho Salvo
+     */
+    protected $_stRascunho;
+
+    /**
      * Quando o proponente o proponente não concordar com o enquadramento
      * ele poderá entrar um pedido de reconsideração.
      */
@@ -63,6 +70,8 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
     const SITUACAO_ATENDIMENTO_SEM_AVALIACAO = 'N';
     const SITUACAO_ATENDIMENTO_INDEFERIDO = 'I';
     const SITUACAO_ATENDIMENTO_DEFERIDO = 'D';
+    const SITUACAO_RASCUNHO_SALVO = 1;
+    const SITUACAO_RASCUNHO_ENVIADO = 0;
 
     /*
      *  'N' => Sem avaliação
@@ -303,4 +312,23 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
         $this->_stAtivo = $stEstado;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStRascunho()
+    {
+        return $this->_stRascunho;
+    }
+
+    /**
+     * @param mixed $stRascunho
+     * @return Recurso_Model_TbRecursoProposta
+     */
+    public function setStRascunho($stRascunho)
+    {
+        $this->_stRascunho = $stRascunho;
+        return $this;
+    }
+
 }
