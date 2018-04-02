@@ -66,6 +66,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
                 'tpRecurso',
                 'idArquivo',
                 'stAtendimento',
+                'stRascunho',
                 'tpSolicitacao',
                 'diasDesdeAberturaRecurso' => new Zend_Db_Expr('DATEDIFF(DAY, dtRecursoProponente, GETDATE())')
             ],
