@@ -90,13 +90,12 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
         $nomeArquivoUpload = 'arquivo';
         $file = new Zend_File_Transfer();
-        if ($file->isUploaded() && !empty($file->getFileInfo()) && $recursoProposta['idArquivo']
-        ) {
-            $tbArquivoDbTable = new TbArquivo();
+        $tbArquivoDbTable = new tbArquivo();
+        if ($file->isUploaded() && !empty($file->getFileInfo()) && $recursoProposta['idArquivo']) {
             $tbArquivoDbTable->removerAnexoDoRecursoDaPropostaVisaoProponente($recursoProposta, $this->authIdentity['idusuario']);
         }
 
-        return $tbArquivoDbTable->uploadAnexoSqlServer($nomeArquivoUpload);
+        return $tbArquivoDbTable->uploadAnexoSqlServer($this->authIdentity['idusuario'], $nomeArquivoUpload);
     }
 
     public function removerAnexoProponenteAction()
@@ -104,39 +103,59 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
         try {
             $this->_helper->layout()->disableLayout();
             $this->_helper->viewRenderer->setNoRender(true);
-            $post = $this->getRequest()->getPost();
-            if ($post) {
+            $get = $this->getRequest()->getParams();
 
-                $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-                $id_perfil = $grupoAtivo->codGrupo;
-                if ($id_perfil != Autenticacao_Model_Grupos::PROPONENTE) {
-                    throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o para realizar essa opera&ccedil;&atilde;o.");
-                }
+            $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+            $id_perfil = $grupoAtivo->codGrupo;
+            if ((int)$id_perfil != (int)Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o para realizar essa opera&ccedil;&atilde;o.");
+            }
 
-                $id_preprojeto = trim($post['id_preprojeto']);
-                if (empty($id_preprojeto) || is_null($id_preprojeto)) {
-                    throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
-                }
+            $id_preprojeto = trim($get['id_preprojeto']);
+            if (empty($id_preprojeto) || is_null($id_preprojeto)) {
+                throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+            }
 
-                $idArquivo = trim($post['idArquivo']);
-                if (empty($idArquivo) || is_null($idArquivo)) {
-                    throw new Exception("Identificador do arquivo foi localizado.");
-                }
+            $idArquivo = trim($get['idArquivo']);
+            if (empty($idArquivo) || is_null($idArquivo)) {
+                throw new Exception("Identificador do arquivo foi localizado.");
+            }
 
-                $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-                $recursoProposta = $recursoPropostaDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
+            $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+            $recursoProposta = $recursoPropostaDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
 
-                if (count($recursoProposta) < 1) {
-                    throw new Exception("Informa&ccedil;&otilde;es do Arquivo e Proposta Cultural n&atilde;o coincidem.");
-                }
+            if (count($recursoProposta) < 1) {
+                throw new Exception("Informa&ccedil;&otilde;es do Arquivo e Proposta Cultural n&atilde;o coincidem.");
+            }
 
-                if ($recursoProposta['idProponente'] != $this->authIdentity['idusuario']) {
-                    throw new Exception("Usu&aacute;rio sem permiss&atilde;o para remo&ccedil;&atilde;o do arquivo.");
-                }
+            $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
+            $possuiPermissaoDeEdicao = (bool)$fnVerificarPermissao->verificarPermissaoProposta(
+                $id_preprojeto,
+                $this->authIdentity['idusuario'],
+                false
+            );
+            if (!$possuiPermissaoDeEdicao) {
+                throw new Exception("Usu&aacute;rio sem permiss&atilde;o para remo&ccedil;&atilde;o do arquivo.");
+            }
 
-                $tbArquivoDbTable = new TbArquivo();
-                $tbArquivoDbTable->removerAnexoDoRecursoDaPropostaVisaoProponente($recursoProposta, $this->authIdentity['idusuario']);
+            $tbArquivoDbTable = new tbArquivo();
+            $isArquivoRemovido = $tbArquivoDbTable->removerAnexoDoRecursoDaPropostaVisaoProponente(
+                $recursoProposta,
+                $this->authIdentity['idusuario']
+            );
 
+            if ($isArquivoRemovido) {
+                parent::message(
+                    'Anexo removido com sucesso.',
+                    "/recurso/recurso-proposta/visao-proponente/idPreProjeto/{$id_preprojeto}",
+                    'CONFIRM'
+                );
+            } else {
+                parent::message(
+                    'Não foi possível remover o arquivo..',
+                    "/recurso/recurso-proposta/visao-proponente/idPreProjeto/{$id_preprojeto}",
+                    'ALERT'
+                );
             }
         } catch (Exception $objException) {
             throw $objException;

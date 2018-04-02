@@ -107,7 +107,7 @@ if (isset($this->proposta['idpreprojeto'])) {
                         <p>
                         <span>
                             <input name="tpSolicitacao"
-                                <?php echo (!$this->recursoEnquadramento['tpSolicitacao']|| $this->recursoEnquadramento['tpSolicitacao']== 'DR') ? "checked='checked'" : '' ?>
+                                <?php echo (!$this->recursoEnquadramento['tpSolicitacao'] || $this->recursoEnquadramento['tpSolicitacao'] == 'DR') ? "checked='checked'" : '' ?>
                                    type="radio"
                                    value="DR"
                                    id="desistencia_prazo_recursal"/>
@@ -115,7 +115,7 @@ if (isset($this->proposta['idpreprojeto'])) {
                         </span>
                             <span>
                             <input name="tpSolicitacao"
-                                <?php echo ($this->recursoEnquadramento['tpSolicitacao']&& $this->recursoEnquadramento['tpSolicitacao']== 'EN') ? "checked='checked'" : '' ?>
+                                <?php echo ($this->recursoEnquadramento['tpSolicitacao'] && $this->recursoEnquadramento['tpSolicitacao'] == 'EN') ? "checked='checked'" : '' ?>
                                    type="radio"
                                    value="EN"
                                    id="recurso"/>
@@ -143,54 +143,60 @@ if (isset($this->proposta['idpreprojeto'])) {
                 <br/>
                 <div class="row">
                     <div class="col s12">
-                        <label>
-                            Anexar Documento
-                        </label>
+
                         <p>
-                            <label class="active">Arquivo</label>
-                            <input type="file"
-                                   name="arquivo"
-                                   id="arquivo"
-                                   class="hiddenfile">
-                        <div id="arquivoinvalido" style="color:#FF0000"></div>
+
+                        <ul class="collection">
+                            <li class="collection-item ">
+
+                                <?php if (!empty($this->recursoEnquadramento['idArquivo'])
+                                    && !is_null($this->recursoEnquadramento['idArquivo'])) { ?>
+                                    <label style="width: 100px; ">Arquivo anexo: </label>
+                                    <span id="file_name"
+                                          style="margin-right:20px"><?= utf8_decode(htmlentities($this->arquivoRecursoProponente['nmArquivo'])); ?></span>
+
+                                    <a class="waves-effect waves-light btn tooltipped"
+                                       data-position="top"
+                                       data-delay="50"
+                                       data-tooltip="Download"
+                                       href="<?= $this->url([
+                                           'module' => 'recurso',
+                                           'controller' => 'recurso-proposta',
+                                           'action' => 'download-anexo-proponente'
+                                       ],
+                                           null,
+                                           true); ?>/?id_preprojeto=<?php echo $this->proposta['idpreprojeto'] ?>&idArquivo=<?= $this->arquivoRecursoProponente['idArquivo']; ?>">
+                                        <i class="tiny material-icons">file_download</i></a>
+
+                                    <a class="waves-effect waves-light btn red darken-4  tooltipped"
+                                       data-position="top"
+                                       data-delay="50"
+                                       data-tooltip="Remover"
+                                       href="<?= $this->url([
+                                           'module' => 'recurso',
+                                           'controller' => 'recurso-proposta',
+                                           'action' => 'remover-anexo-proponente'
+                                       ],
+                                           null,
+                                           true); ?>/id_preprojeto/<?php echo $this->proposta['idpreprojeto'] ?>?idArquivo=<?= $this->arquivoRecursoProponente['idArquivo']; ?>">
+                                        <i class="tiny material-icons">delete_forever</i>
+                                    </a>
+                                <?php } else { ?>
+                                    <label>
+                                        Anexar Documento :
+                                    </label>
+                                    <input type="file"
+                                           name="arquivo"
+                                           id="arquivo"
+                                           class="hiddenfile"/>
+                                <?php } ?>
+                            </li>
+                        </ul>
                         </p>
-                        <?php if (!empty($this->recursoEnquadramento['idArquivo'])
-                            && !is_null($this->recursoEnquadramento['idArquivo'])) { ?>
-                            <label for="arquivo" style="width: 100px; ">Anexar arquivo: </label>
-                            <span id="file_name"
-                                  style="margin-right:20px"><?= utf8_decode(htmlentities($this->arquivoRecursoProponente['nmArquivo'])); ?></span>
-
-                            <a class="waves-effect waves-light btn tooltipped"
-                               data-position="top"
-                               data-delay="50"
-                               data-tooltip="Download"
-                               href="<?= $this->url([
-                                   'module' => 'recurso',
-                                   'controller' => 'recurso-proposta',
-                                   'action' => 'download-anexo-proponente'
-                               ],
-                                   null,
-                                   true); ?>/?id_preprojeto=<?php echo $this->proposta['idpreprojeto'] ?>&idArquivo=<?= $this->arquivoRecursoProponente['idArquivo']; ?>">
-                                <i class="tiny material-icons">file_download</i></a>
-
-                            <a class="waves-effect waves-light btn red darken-4  tooltipped"
-                               data-position="top"
-                               data-delay="50"
-                               data-tooltip="Remover"
-                               href="<?= $this->url([
-                                   'module' => 'recurso',
-                                   'controller' => 'recurso-proposta',
-                                   'action' => 'remover-anexo-proponente'
-                               ],
-                                   null,
-                                   true); ?>/id_preprojeto/<?php echo $this->proposta['idpreprojeto'] ?>?idArquivo=<?= $this->arquivoRecursoProponente['idArquivo']; ?>">
-                                <i class="tiny material-icons">delete_forever</i>
-                            </a>
-                        <?php } ?>
 
                     </div>
                 </div>
-                <br />
+                <br/>
                 <div class="row">
                     <div class="col s12 center">
                         <button class="btn" type="submit" name="acao_salvar" value="rascunho">Salvar</button>

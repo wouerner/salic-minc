@@ -153,40 +153,49 @@ class tbArquivo extends MinC_Db_Table_Abstract
 
     public function removerAnexoDoRecursoDaPropostaVisaoProponente(array $recursoProposta, $idProponente)
     {
-        $tbArquivoDbTable = new tbArquivo();
+        try {
+            $tbArquivoDbTable = new tbArquivo();
 
-        if (!$recursoProposta['idPreProjeto']) {
-            throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+            if (!$recursoProposta['idPreProjeto']) {
+                throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+            }
+
+            if (!$recursoProposta['idArquivo']) {
+                throw new Exception("Identificador do Arquivo n&atilde;o informado.");
+            }
+
+            if (is_null($idProponente) || empty($idProponente)) {
+                throw new Exception("Identificador do Proponente n&atilde;o localizado.");
+            }
+
+            $tbArquivoDbTable->findBy([
+                'idArquivo' => $recursoProposta['idArquivo'],
+                'idUsuario' => $idProponente
+            ]);
+
+            $tbArquivoImagemDAO = new tbArquivoImagem();
+            $tbArquivoImagemDAO->delete("idArquivo = {$recursoProposta['idArquivo']}");
+            $tbArquivoDbTable->delete("idArquivo = {$recursoProposta['idArquivo']}");
+            $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+            $recursoPropostaDbTable->update([
+                'idArquivo' => new Zend_Db_Expr('NULL')
+            ], [
+                'idRecursoProposta = ?' => $recursoProposta['idRecursoProposta'],
+                'idPreProjeto = ?' => $recursoProposta['idPreProjeto']
+            ]);
+            return true;
+        } catch (Exception $exception) {
+            throw $exception;
         }
-
-        if (!$recursoProposta['idArquivo']) {
-            throw new Exception("Identificador do Arquivo n&atilde;o informado.");
-        }
-
-        $tbArquivoDbTable->findBy([
-            'idArquivo' => $recursoProposta['idArquivo'],
-            'idUsuario' => $idProponente
-        ]);
-
-        $tbArquivoImagemDAO = new tbArquivoImagem();
-        $tbArquivoImagemDAO->delete("idArquivo = {$recursoProposta['idArquivo']}");
-        $tbArquivoDbTable->delete("idArquivo = {$recursoProposta['idArquivo']}");
-        $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-        $recursoEnquadramentoDbTable->update([
-            'idArquivo' => new Zend_Db_Expr('NULL')
-        ], [
-            'idRecursoProposta = ?' => $recursoProposta['idRecursoProposta'],
-            'idPreProjeto = ?' => $recursoProposta['idPreProjeto']
-        ]);
     }
 
     /**
-     * @todo Mover esse m&eacute;todo para o local correto.
      * @param string $nomeArquivoUpload
      * @param int $tamanhoMaximoUpload
      * @return int|null $idArquivo
      */
     public function uploadAnexoSqlServer(
+        $idUsuario,
         $nomeArquivoUpload = 'arquivo',
         $tamanhoMaximoUpload = 10485760
     )
@@ -211,7 +220,6 @@ class tbArquivo extends MinC_Db_Table_Abstract
                 throw new Exception("O arquivo n&atilde;o pode ser maior do que 10MB!");
             }
 
-
             $tbArquivoDbTable = new tbArquivo();
             $dadosArquivo = [];
             $dadosArquivo['nmArquivo'] = $arquivoNome;
@@ -220,8 +228,7 @@ class tbArquivo extends MinC_Db_Table_Abstract
             $dadosArquivo['dtEnvio'] = $tbArquivoDbTable->getExpressionDate();
             $dadosArquivo['stAtivo'] = 'A';
             $dadosArquivo['dsHash'] = $arquivoHash;
-            $dadosArquivo['idUsuario'] = $this->authIdentity['idusuario'];
-
+            $dadosArquivo['idUsuario'] = $idUsuario;
             $idArquivo = $tbArquivoDbTable->insert($dadosArquivo);
 
             $tbArquivoImagemDAO = new tbArquivoImagem();

@@ -60,6 +60,11 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
      */
     protected $_proponente;
 
+    /**
+     * @var array
+     */
+    protected $_agenteUsuarioLogado;
+
 
     private $_movimentacaoAlterarProposta = '95';
     private $_situacaoAlterarProjeto = Projeto_Model_Situacao::PROJETO_LIBERADO_PARA_AJUSTES;
@@ -114,7 +119,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
          */
         $tblAgentes = new Agente_Model_DbTable_Agentes();
         $agente = $tblAgentes->findBy(array('cnpjcpf' => $this->cpfLogado));
-
+        $this->_agenteUsuarioLogado = $agente;
         if ($agente) {
             $this->idAgente = $agente['idAgente'];
             $this->view->idAgente = $agente['idAgente'];
