@@ -150,4 +150,87 @@ class tbArquivo extends MinC_Db_Table_Abstract
     {
         return $this->delete($where);
     }
+
+    public function removerAnexoDoRecursoDaPropostaVisaoProponente(array $recursoProposta, $idProponente)
+    {
+        $tbArquivoDbTable = new tbArquivo();
+
+        if (!$recursoProposta['idPreProjeto']) {
+            throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+        }
+
+        if (!$recursoProposta['idArquivo']) {
+            throw new Exception("Identificador do Arquivo n&atilde;o informado.");
+        }
+
+        $tbArquivoDbTable->findBy([
+            'idArquivo' => $recursoProposta['idArquivo'],
+            'idUsuario' => $idProponente
+        ]);
+
+        $tbArquivoImagemDAO = new tbArquivoImagem();
+        $tbArquivoImagemDAO->delete("idArquivo = {$recursoProposta['idArquivo']}");
+        $tbArquivoDbTable->delete("idArquivo = {$recursoProposta['idArquivo']}");
+        $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+        $recursoEnquadramentoDbTable->update([
+            'idArquivo' => new Zend_Db_Expr('NULL')
+        ], [
+            'idRecursoProposta = ?' => $recursoProposta['idRecursoProposta'],
+            'idPreProjeto = ?' => $recursoProposta['idPreProjeto']
+        ]);
+    }
+
+    /**
+     * @todo Mover esse m&eacute;todo para o local correto.
+     * @param string $nomeArquivoUpload
+     * @param int $tamanhoMaximoUpload
+     * @return int|null $idArquivo
+     */
+    public function uploadAnexoSqlServer(
+        $nomeArquivoUpload = 'arquivo',
+        $tamanhoMaximoUpload = 10485760
+    )
+    {
+        $idArquivo = null;
+        $file = new Zend_File_Transfer();
+        if ($file->isUploaded() && !empty($file->getFileInfo())) {
+            $fileInformation = $file->getFileInfo();
+
+            $arquivoNome = $fileInformation[$nomeArquivoUpload]['name'];
+            $arquivoTemp = $fileInformation[$nomeArquivoUpload]['tmp_name'];
+            $arquivoTamanho = $fileInformation[$nomeArquivoUpload]['size'];
+            $arquivoHash = '';
+
+            if (!empty($arquivoNome) && !empty($arquivoTemp)) {
+                $arquivoExtensao = Upload::getExtensao($arquivoNome);
+                $arquivoBinario = Upload::setBinario($arquivoTemp);
+                $arquivoHash = Upload::setHash($arquivoTemp);
+            }
+
+            if ($arquivoTamanho > $tamanhoMaximoUpload) {
+                throw new Exception("O arquivo n&atilde;o pode ser maior do que 10MB!");
+            }
+
+
+            $tbArquivoDbTable = new tbArquivo();
+            $dadosArquivo = [];
+            $dadosArquivo['nmArquivo'] = $arquivoNome;
+            $dadosArquivo['sgExtensao'] = $arquivoExtensao;
+            $dadosArquivo['nrTamanho'] = $arquivoTamanho;
+            $dadosArquivo['dtEnvio'] = $tbArquivoDbTable->getExpressionDate();
+            $dadosArquivo['stAtivo'] = 'A';
+            $dadosArquivo['dsHash'] = $arquivoHash;
+            $dadosArquivo['idUsuario'] = $this->authIdentity['idusuario'];
+
+            $idArquivo = $tbArquivoDbTable->insert($dadosArquivo);
+
+            $tbArquivoImagemDAO = new tbArquivoImagem();
+            $dadosBinario = array(
+                'idArquivo' => $idArquivo,
+                'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
+            );
+            $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
+        }
+        return $idArquivo;
+    }
 }
