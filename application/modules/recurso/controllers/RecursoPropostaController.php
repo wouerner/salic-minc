@@ -164,6 +164,66 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     public function downloadAnexoProponente()
     {
-        throw new Exception('Implementar esse método');
+//        $idDocumento = $this->getRequest()->getParam('id', null);
+//        try {
+//            $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
+//            $solicitacao = $tbSolicitacao->obterSolicitacoes(
+//                ['a.idDocumento = ?' => $idDocumento]
+//            )->current();
+//            if (empty($solicitacao))
+//                throw new Exception('Documento n&atilde;o encontrado!');
+//            $idProjeto = $solicitacao['idProjeto'] ? $solicitacao['idProjeto'] : false;
+//            $idPronac = $solicitacao['idPronac'] ? $solicitacao['idPronac'] : false;
+//            # verificar se o usuario tem permissao para acessar este documento por meio do id do projeto/proposta
+//            $permissao = parent::verificarPermissaoAcesso($idProjeto, $idPronac, false, true);
+//            if ($permissao['status'] === false)
+//                throw new Exception('Voc&ecirc; n&atilde;o tem permiss&atilde;o para baixar esse arquivo!');
+//            parent::abrirDocumento($idDocumento);
+//        } catch (Exception $e) {
+//            throw $e;
+//        }
+
+
     }
+
+//    public function abrirDocumentosPreProjetoAction()
+//    {
+//        $get = Zend_Registry::get('get');
+//        $id = (int) isset($get->id) ? $get->id : $this->_request->getParam('id');
+//
+//        # Configuracao o php.ini para 10MB
+//        @ini_set("mssql.textsize", 10485760);
+//        @ini_set("mssql.textlimit", 10485760);
+//        @ini_set("upload_max_filesize", "10M");
+//
+//        # busca o arquivo
+//        $tbl = new Proposta_Model_DbTable_TbDocumentosPreProjeto();
+//        $resultado = $tbl->abrir($id)->current();
+//
+//        # erro ao abrir o arquivo
+//        $this->_helper->layout->disableLayout();        # Desabilita o Zend Layout
+//        $this->_helper->viewRenderer->setNoRender();    # Desabilita o Zend Render
+//        if (!$resultado) {
+//            die("N&atilde;o existe o arquivo especificado");
+//            $this->view->message = 'N&atilde;o foi poss&iacute;vel abrir o arquivo!';
+//            $this->view->message_type = 'ERROR';
+//        } else {
+//            Zend_Layout::getMvcInstance()->disableLayout(); # Desabilita o Zend MVC
+//            $this->_response->clearBody();                  # Limpa o corpo html
+//            $this->_response->clearHeaders();               # Limpa os headers do Zend
+//            $up = new Upload();
+//            $tipoArquivo = method_exists($up, $up->getMimeType($resultado->noarquivo)) ? $up->getMimeType("jpg") : "application/pdf";
+//            if ($tbl->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mssql) {
+//                $this->getResponse()
+//                    ->setHeader('Content-Type', $tipoArquivo)
+//                    ->setHeader('Content-Disposition', 'attachment; filename="' . $resultado->noarquivo . '"')
+//                    ->setBody($resultado->imdocumento);
+//            } else {
+//                $this->getResponse()
+//                    ->setHeader('Content-Type', $tipoArquivo)
+//                    ->setHeader('Content-Disposition', 'attachment; filename="' . $resultado->noarquivo . '"');
+//                readfile(APPLICATION_PATH . '/..' . $resultado->imdocumento);
+//            }
+//        }
+//    }
 }
