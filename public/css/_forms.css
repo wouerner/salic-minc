@@ -228,6 +228,7 @@ form label {
 }
 
 form input[type="text"].browser-default,
+form input[type="number"].browser-default,
 form .browser-default {
     display: block;
     width: 100%;
