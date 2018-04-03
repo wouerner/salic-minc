@@ -2229,7 +2229,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             if ($this->_request->getParam('stAtendimento') == 'D') {
 
                 // busca readequacao para ver se existe. Se não existe, cria, senão atualiza
-                $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+                $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
                 $jaDistribuiu = $tbDistribuirReadequacao->buscar(array('idReadequacao = ?'=>$r->idReadequacao))->current();
 
                 if (empty($jaDistribuiu)) {
@@ -2347,7 +2347,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         }
 
         $tbReadequacao = new Readequacao_Model_tbReadequacao();
-        $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+        $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
 
         if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
             
@@ -2462,7 +2462,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $dados['idAvaliador'] = $idAvaliador;
             $dados['DtEnvioAvaliador'] = new Zend_Db_Expr('GETDATE()');
             $where["idDistribuirReadequacao = ? "] = $idDistRead;
-            $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+            $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
             $return = $tbDistribuirReadequacao->update($dados, $where);
 
             //Atualiza a tabelaReadequacao_Model_tbReadequacao
@@ -2486,7 +2486,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $dados = array();
             $dados['idUnidade'] = $idVinculada;
             $where["idDistribuirReadequacao = ? "] = $idDistRead;
-            $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+            $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
             $return = $tbDistribuirReadequacao->update($dados, $where);
 
             if ($return) {
@@ -2656,7 +2656,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             }
 
             if (isset($_POST['finalizarAvaliacao']) && $_POST['finalizarAvaliacao'] == 1) {
-                $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+                $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
                 $dDP = $tbDistribuirReadequacao->buscar(array('idReadequacao = ?'=>$idReadequacao));
 
                 if (count($dDP)>0) {
@@ -2755,7 +2755,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $dadosReadequacao = $tbReadequacao->buscar(array('idReadequacao = ?'=>$idReadequacao))->current();
         $idPronac = $dadosReadequacao->idPronac;
 
-        $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+        $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
         $dadosDistRead = $tbDistribuirReadequacao->buscar(array('idReadequacao=?'=>$idReadequacao));
         if (count($dadosDistRead)>0) {
             //Atualiza a tabela tbDistribuirReadequacao
@@ -3030,7 +3030,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             }
 
             if (isset($_POST['finalizarAvaliacao']) && $_POST['finalizarAvaliacao'] == 1) {
-                $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+                $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
                 $dDP = $tbDistribuirReadequacao->buscar(array('idReadequacao = ?'=>$idReadequacao, 'idUnidade =?'=>400, 'idAvaliador=?'=>$this->idUsuario));
 
                 if (count($dDP)>0) {
@@ -3454,7 +3454,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                         $dados['DtValidacaoCoordenador'] = new Zend_Db_Expr('GETDATE()');
                         $dados['idCoordenador'] = $this->idUsuario;
                         $where = "idReadequacao = $idReadequacao";
-                        $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+                        $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
                         $tbDistribuirReadequacao->update($dados, $where);
                     }
 
@@ -3951,7 +3951,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $dados['DtValidacaoCoordenador'] = new Zend_Db_Expr('GETDATE()');
         $dados['idCoordenador'] = $idCoordenador;
         $where = "idReadequacao = $idReadequacao";
-        $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+        $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
         $return2 = $tbDistribuirReadequacao->update($dados, $where);
 
         if (!$return && !$return2) {
@@ -4285,7 +4285,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         try {
             if (in_array($idUnidade, array(Orgaos::ORGAO_SAV_CAP, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI))) {
                 // MUDANÇA DE TECNICO
-                $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+                $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
                 $dados = array(
                     'idAvaliador' => $destinatario,
                     'DtEnvioAvaliador' => new Zend_Db_Expr('GETDATE()'),
@@ -4315,7 +4315,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                 // MUDANÇA DE VINCULADA
 
                 // MUDANÇA DE TECNICO
-                $tbDistribuirReadequacao = new tbDistribuirReadequacao();
+                $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
                 $dados = array(
                     'idUnidade' => $idUnidade,
                     'DtEncaminhamento' => new Zend_Db_Expr('GETDATE()'),
