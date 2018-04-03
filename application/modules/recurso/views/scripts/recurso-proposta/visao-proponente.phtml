@@ -163,9 +163,9 @@ if (isset($this->proposta['idpreprojeto'])) {
                                        data-delay="50"
                                        data-tooltip="Download"
                                        href="<?= $this->url([
-                                           'module' => 'recurso',
-                                           'controller' => 'recurso-proposta',
-                                           'action' => 'download-anexo-proponente'
+                                           'module' => 'default',
+                                           'controller' => 'upload',
+                                           'action' => 'download-anexo-recurso-proposta'
                                        ],
                                            null,
                                            true); ?>/?id_preprojeto=<?php echo $this->proposta['idpreprojeto'] ?>&idArquivo=<?= $this->arquivoRecursoProponente['idArquivo']; ?>">

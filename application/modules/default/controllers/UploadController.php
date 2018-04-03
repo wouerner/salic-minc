@@ -23,6 +23,7 @@ class UploadController extends MinC_Controller_Action_Abstract
     private $cpfLogado = 0;
     private $idResponsavel = 0;
     private $idAgente = 0;
+    private $authIdentity;
 
     /**
      * Reescreve o m?todo init()
@@ -34,7 +35,9 @@ class UploadController extends MinC_Controller_Action_Abstract
     {
         $this->limiteTamanhoArq = 1024 * 1024 * 10;
 
-        $auth = Zend_Auth::getInstance(); // instancia da autenticacao
+        $auth = Zend_Auth::getInstance();
+        $this->authIdentity = array_change_key_case((array)$auth->getIdentity());
+
         $PermissoesGrupo = array();
 
         //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
@@ -954,6 +957,72 @@ class UploadController extends MinC_Controller_Action_Abstract
             }
         } else {
             parent::message("Pronac inv&aacute;lido.", "upload/form-enviar-arquivo-marca?idPronac=$idPronac", "ERROR");
+        }
+    }
+
+    public function downloadAnexoRecursoPropostaAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $get = $this->getRequest()->getParams();
+
+        $id_preprojeto = trim($get['id_preprojeto']);
+        if (empty($id_preprojeto) || is_null($id_preprojeto)) {
+            throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+        }
+
+        $idArquivo = trim($get['idArquivo']);
+        if (empty($idArquivo) || is_null($idArquivo)) {
+            throw new Exception("Identificador do arquivo foi localizado.");
+        }
+
+        $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+        $recursoProposta = $recursoPropostaDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
+
+        if (count($recursoProposta) < 1) {
+            throw new Exception("Informa&ccedil;&otilde;es do Arquivo e Proposta Cultural n&atilde;o coincidem.");
+        }
+
+        $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
+        $possuiPermissaoDeEdicao = (bool)$fnVerificarPermissao->verificarPermissaoProposta(
+            $id_preprojeto,
+            $this->authIdentity['idusuario'],
+            false
+        );
+        if (!$possuiPermissaoDeEdicao) {
+            throw new Exception("Usu&aacute;rio sem permiss&atilde;o para visualizar o arquivo.");
+        }
+
+        @ini_set("mssql.textsize", 10485760);
+        @ini_set("mssql.textlimit", 10485760);
+        @ini_set("upload_max_filesize", "10M");
+
+        $tbArquivo = new tbArquivo();
+        $dadosArquivo = $tbArquivo->buscarArquivoComBinario($idArquivo);
+
+        if (!$dadosArquivo) {
+            throw new Exception("Arquivo especificado inexistente.");
+        }
+
+        Zend_Layout::getMvcInstance()->disableLayout();
+        $this->_response->clearBody();
+        $this->_response->clearHeaders();
+        $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
+        $this->_helper->viewRenderer->setNoRender();    // Desabilita o Zend Render
+        if ($tbArquivo->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mssql) {
+            $this->getResponse()
+                ->setHeader('Content-Type', $dadosArquivo->dsTipoPadronizado)
+                ->setHeader('Content-Disposition', 'attachment; filename="' . $dadosArquivo->nmArquivo . '"')
+//                ->setHeader("Connection", "close")
+//                ->setHeader("Content-transfer-encoding", "binary")
+//                ->setHeader("Cache-control", "private")
+                ->setBody($dadosArquivo->biArquivo);
+        } else {
+            $this->getResponse()
+                ->setHeader('Content-Type', $dadosArquivo->dsTipoPadronizado)
+                ->setHeader('Content-Disposition', 'attachment; filename="' . $dadosArquivo->nmArquivo . '"');
+            readfile(APPLICATION_PATH . '/..' . $dadosArquivo->imdocumento);
         }
     }
 }

@@ -1,28 +1,12 @@
 <?php
 
-/**
- * DAO tbArquivo
- * @author emanuel.sampaio - Politec
- * @since 19/02/2011
- * @version 1.0
- * @package application
- * @subpackage application.model
- * @copyright  2011 - Ministerio da Cultura - Todos os direitos reservados.
- * @link http://www.cultura.gov.br
- */
 class tbArquivo extends MinC_Db_Table_Abstract
 {
     protected $_schema = "bdcorporativo.scCorp";
     protected $_name = "tbArquivo";
     protected $_primary = "idArquivo";
 
-    /**
-     * Metodo para buscar um arquivo pelo seu id
-     * @access public
-     * @param integer $idArquivo
-     * @return array
-     */
-    public function buscarDados($idArquivo)
+    public function buscarArquivoComBinario($idArquivo)
     {
         $select = $this->select();
         $select->setIntegrityCheck(false);
@@ -37,19 +21,19 @@ class tbArquivo extends MinC_Db_Table_Abstract
             , "a.stAtivo"
             , "a.dsTipoPadronizado"
             , "a.idUsuario"),
-            'BDCORPORATIVO.scCorp'
+            $this->getSchema('BDCORPORATIVO.scCorp')
         );
         $select->joinInner(
             array("i" => "tbArquivoImagem"),
             "a.idArquivo = i.idArquivo",
             array("i.biArquivo"),
-            'BDCORPORATIVO.scCorp'
+            $this->getSchema('BDCORPORATIVO.scCorp')
         );
 
         $select->where("a.idArquivo = ?", $idArquivo);
 
         return $this->fetchRow($select);
-    } // fecha metodo buscarDados()
+    }
 
     public static function buscarArquivo($id)
     {
@@ -241,66 +225,4 @@ class tbArquivo extends MinC_Db_Table_Abstract
         return $idArquivo;
     }
 
-    public function abrirdocumentosanexadosbinarioAction()
-    {
-        // recebe o id do arquivo via get
-//        $get = Zend_Registry::get('get');
-//        $id = (int)$get->id;
-//        $busca = $this->_request->getParam('busca'); //$get->busca;
-//        // Configuracao o php.ini para 10MB
-//        @ini_set("mssql.textsize", 10485760);
-//        @ini_set("mssql.textlimit", 10485760);
-//        @ini_set("upload_max_filesize", "10M");
-//
-//        $response = new Zend_Controller_Response_Http;
-//
-//        // busca o arquivo
-//        $resultado = UploadDAO::abrirdocumentosanexados($id, $busca);
-//        if (!$resultado) {
-//            if ($busca == "documentosanexadosminc") {
-//                $resultado = UploadDAO::abrirdocumentosanexados($id, "documentosanexadosminc");
-//            } else {
-//                $resultado = UploadDAO::abrirdocumentosanexados($id, "documentosanexados");
-//            }
-//        }
-//
-//        // erro ao abrir o arquivo
-//        if (!$resultado) {
-//            $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
-//            $this->_helper->viewRenderer->setNoRender();    // Desabilita o Zend Render
-//            die("N&atilde;o existe o arquivo especificado");
-//            $this->view->message = 'N&atilde;o foi poss&iacute;vel abrir o arquivo!';
-//            $this->view->message_type = 'ERROR';
-//        } else {
-//            // os cabecalhos formatado
-//            foreach ($resultado as $r) {
-//                $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
-//                $this->_helper->viewRenderer->setNoRender();    // Desabilita o Zend Render
-//                Zend_Layout::getMvcInstance()->disableLayout(); // Desabilita o Zend MVC
-//                $this->_response->clearBody();                  // Limpa o corpo html
-//                $this->_response->clearHeaders();               // Limpa os headers do Zend
-//
-//                $hashArquivo = ($r->biArquivo) ? $r->biArquivo : $r->biArquivo2;
-//
-//                $this->getResponse()
-//                    ->setHeader('Content-Type', 'application/pdf')
-//                    ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
-//                    ->setHeader("Connection", "close")
-//                    ->setHeader("Content-transfer-encoding", "binary")
-//                    ->setHeader("Cache-control", "private");
-//
-//                if ($r->biArquivo2 == 1) {
-//                    if (strtolower(substr($r->biArquivo, 0, 4)) == '%pdf') {
-//                        $this->getResponse()->setBody($hashArquivo);
-//                    } else {
-//                        $this->getResponse()->setBody(base64_decode($hashArquivo));
-//                    }
-//                } else {
-//                    $this->getResponse()->setBody($hashArquivo);
-//                }
-//                        $this->getResponse()->setBody($hashArquivo);
-                //->setBody(base64_decode($hashArquivo));
-//            } // fecha foreach
-//        }
-    }
 }
