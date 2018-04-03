@@ -20,7 +20,7 @@ Para criar uma hotfix, siga os passos abaixo:
 
 1. crie um pull request da branch h/[numero da issue]/nome-da-correcao para a **master** em https://github.com/culturagovbr/salic-minc/pulls 
 2. solicite a revisão do código.   
-3 com a revisão sendo aprovada:   
+3. com a revisão sendo aprovada:   
   * crie uma nova release em https://github.com/culturagovbr/salic-minc/releases (draft a new release)
   * preencha a release com:
       - número da tag
@@ -63,7 +63,6 @@ Comite suas correções.
 No github (irá publicar todas as features aprovadas e mergeadas na develop):
  * crie um pull request da feature develop em https://github.com/culturagovbr/salic-minc/pulls  
  * solicite o __pull request__  
- * aceite ou rejeite  
  * crie uma nova release em https://github.com/culturagovbr/salic-minc/releases   (draft a new release)
  * preencha a release com:  
    - número da tag  
