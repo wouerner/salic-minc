@@ -192,7 +192,7 @@ class UploadController extends MinC_Controller_Action_Abstract
     {
         // recebe o id do arquivo via get
         $get = Zend_Registry::get('get');
-        $id = (int) isset($get->id) ? $get->id : $this->_request->getParam('id');
+        $id = (int)isset($get->id) ? $get->id : $this->_request->getParam('id');
 
         // Configuracao o php.ini para 10MB
         @ini_set("mssql.textsize", 10485760);
@@ -221,12 +221,12 @@ class UploadController extends MinC_Controller_Action_Abstract
                 $this->_response->clearHeaders();               // Limpa os headers do Zend
 
                 $this->getResponse()
-                        ->setHeader('Content-Type', $r->dsTipoPadronizado)
-                        ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
-                        //->setHeader("Connection", "close")
-                        //->setHeader("Content-transfer-encoding", "binary")
-                        //->setHeader("Cache-control", "private")
-                        ->setBody($r->biArquivo);
+                    ->setHeader('Content-Type', $r->dsTipoPadronizado)
+                    ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
+                    //->setHeader("Connection", "close")
+                    //->setHeader("Content-transfer-encoding", "binary")
+                    //->setHeader("Cache-control", "private")
+                    ->setBody($r->biArquivo);
             } // fecha foreach
         } // fecha else
     }
@@ -242,7 +242,7 @@ class UploadController extends MinC_Controller_Action_Abstract
     public function abrirDocumentosPreProjetoAction()
     {
         $get = Zend_Registry::get('get');
-        $id = (int) isset($get->id) ? $get->id : $this->_request->getParam('id');
+        $id = (int)isset($get->id) ? $get->id : $this->_request->getParam('id');
 
         # Configuracao o php.ini para 10MB
         @ini_set("mssql.textsize", 10485760);
@@ -292,7 +292,7 @@ class UploadController extends MinC_Controller_Action_Abstract
     {
         // recebe o id do arquivo via get
         $get = Zend_Registry::get('get');
-        $id = (int) isset($get->id) ? $get->id : $this->_request->getParam('id');
+        $id = (int)isset($get->id) ? $get->id : $this->_request->getParam('id');
 
         // Configuracao o php.ini para 10MB
         @ini_set("mssql.textsize", 10485760);
@@ -351,7 +351,7 @@ class UploadController extends MinC_Controller_Action_Abstract
     {
         // recebe o id do arquivo via get
         $get = Zend_Registry::get('get');
-        $id = (int) $get->id;
+        $id = (int)$get->id;
         $busca = $this->_request->getParam('busca'); //$get->busca;
         // Configuracao o php.ini para 10MB
         @ini_set("mssql.textsize", 10485760);
@@ -389,11 +389,11 @@ class UploadController extends MinC_Controller_Action_Abstract
                 $hashArquivo = ($r->biArquivo) ? $r->biArquivo : $r->biArquivo2;
 
                 $this->getResponse()
-                        ->setHeader('Content-Type', 'application/pdf')
-                        ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
-                        ->setHeader("Connection", "close")
-                        ->setHeader("Content-transfer-encoding", "binary")
-                        ->setHeader("Cache-control", "private");
+                    ->setHeader('Content-Type', 'application/pdf')
+                    ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
+                    ->setHeader("Connection", "close")
+                    ->setHeader("Content-transfer-encoding", "binary")
+                    ->setHeader("Cache-control", "private");
 
                 if ($r->biArquivo2 == 1) {
                     if (strtolower(substr($r->biArquivo, 0, 4)) == '%pdf') {
@@ -419,7 +419,7 @@ class UploadController extends MinC_Controller_Action_Abstract
     {
         // recebe o id do arquivo via get
         $get = Zend_Registry::get('get');
-        $id = (int) $get->id;
+        $id = (int)$get->id;
         $busca = $this->_request->getParam('busca'); //$get->busca;
         // Configuracao o php.ini para 10MB
         @ini_set("mssql.textsize", 10485760);
@@ -457,11 +457,11 @@ class UploadController extends MinC_Controller_Action_Abstract
                 $hashArquivo = ($r->biArquivo) ? $r->biArquivo : $r->biArquivo2;
 
                 $this->getResponse()
-                        ->setHeader('Content-Type', 'application/pdf')
-                        ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
-                        ->setHeader("Connection", "close")
-                        ->setHeader("Content-transfer-encoding", "binary")
-                        ->setHeader("Cache-control", "private");
+                    ->setHeader('Content-Type', 'application/pdf')
+                    ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
+                    ->setHeader("Connection", "close")
+                    ->setHeader("Content-transfer-encoding", "binary")
+                    ->setHeader("Cache-control", "private");
 
                 if ($r->biArquivo2 == 1) {
                     if (strtolower(substr($r->biArquivo, 0, 4)) == '%pdf') {
@@ -489,9 +489,9 @@ class UploadController extends MinC_Controller_Action_Abstract
         $this->montaTela(
             "upload/formenviararquivomarca.phtml",
             array("idPronac" => $this->idPronac,
-            "orgao" => $this->orgaoLogado,
-            "orgaoAutorizado" => $this->orgaoAutorizado,
-            "projeto" => $dadosProjeto)
+                "orgao" => $this->orgaoLogado,
+                "orgaoAutorizado" => $this->orgaoAutorizado,
+                "projeto" => $dadosProjeto)
         );
     }
 
@@ -518,8 +518,8 @@ class UploadController extends MinC_Controller_Action_Abstract
         $this->montaTela(
             "upload/listaarquivomarca.phtml",
             array("arquivos" => $rsArquivos,
-            "orgao" => $this->orgaoLogado,
-            "orgaoAutorizado" => $this->orgaoAutorizado)
+                "orgao" => $this->orgaoLogado,
+                "orgaoAutorizado" => $this->orgaoAutorizado)
         );
     }
 
@@ -545,8 +545,8 @@ class UploadController extends MinC_Controller_Action_Abstract
                 $this->montaTela(
                     "upload/mensagem.phtml",
                     array("mensagem" => $mensagem,
-                    "tipoMensagem" => "ERROR",
-                    "script" => $script)
+                        "tipoMensagem" => "ERROR",
+                        "script" => $script)
                 );
                 return;
             }
@@ -571,8 +571,8 @@ class UploadController extends MinC_Controller_Action_Abstract
                     $this->montaTela(
                         "upload/mensagem.phtml",
                         array("mensagem" => $mensagem,
-                        "tipoMensagem" => "ERROR",
-                        "script" => $script)
+                            "tipoMensagem" => "ERROR",
+                            "script" => $script)
                     );
                     return;
                 }
@@ -585,8 +585,8 @@ class UploadController extends MinC_Controller_Action_Abstract
                     $this->montaTela(
                         "upload/mensagem.phtml",
                         array("mensagem" => $mensagem,
-                        "tipoMensagem" => "ERROR",
-                        "script" => $script)
+                            "tipoMensagem" => "ERROR",
+                            "script" => $script)
                     );
                     return;
                 }
@@ -663,8 +663,8 @@ class UploadController extends MinC_Controller_Action_Abstract
                     $this->montaTela(
                         "upload/mensagem.phtml",
                         array("mensagem" => $mensagem,
-                        "tipoMensagem" => "CONFIRM",
-                        "script" => $script)
+                            "tipoMensagem" => "CONFIRM",
+                            "script" => $script)
                     );
                     return;
                     //echo $script;
@@ -678,9 +678,9 @@ class UploadController extends MinC_Controller_Action_Abstract
                     $this->montaTela(
                         "upload/mensagem.phtml",
                         array("mensagem" => $mensagem,
-                        "tipoMensagem" => "ERROR",
-                        "script" => $script
-                            )
+                            "tipoMensagem" => "ERROR",
+                            "script" => $script
+                        )
                     );
                     return;
                 }
@@ -691,8 +691,8 @@ class UploadController extends MinC_Controller_Action_Abstract
                 $this->montaTela(
                     "upload/mensagem.phtml",
                     array("mensagem" => $mensagem,
-                    "tipoMensagem" => "ERROR",
-                    "script" => $script)
+                        "tipoMensagem" => "ERROR",
+                        "script" => $script)
                 );
                 return;
             }
@@ -703,8 +703,8 @@ class UploadController extends MinC_Controller_Action_Abstract
             $this->montaTela(
                 "upload/mensagem.phtml",
                 array("mensagem" => $mensagem,
-                "tipoMensagem" => "ERROR",
-                "script" => $script)
+                    "tipoMensagem" => "ERROR",
+                    "script" => $script)
             );
             return;
         }
@@ -730,8 +730,8 @@ class UploadController extends MinC_Controller_Action_Abstract
             $this->montaTela(
                 "upload/mensagem.phtml",
                 array("mensagem" => $mensagem,
-                "tipoMensagem" => "CONFIRM",
-                "script" => $script)
+                    "tipoMensagem" => "CONFIRM",
+                    "script" => $script)
             );
             return;
         } catch (Exception $e) {
@@ -741,8 +741,8 @@ class UploadController extends MinC_Controller_Action_Abstract
             $this->montaTela(
                 "upload/mensagem.phtml",
                 array("mensagem" => $mensagem,
-                "script" => $script,
-                "tipoMensagem" => "ERROR")
+                    "script" => $script,
+                    "tipoMensagem" => "ERROR")
             );
             return;
         }
@@ -791,8 +791,8 @@ class UploadController extends MinC_Controller_Action_Abstract
             $this->montaTela(
                 "upload/mensagem.phtml",
                 array("mensagem" => $mensagem,
-                "tipoMensagem" => "CONFIRM",
-                "script" => $script)
+                    "tipoMensagem" => "CONFIRM",
+                    "script" => $script)
             );
             return;
         } catch (Exception $e) {
@@ -803,8 +803,8 @@ class UploadController extends MinC_Controller_Action_Abstract
             $this->montaTela(
                 "upload/mensagem.phtml",
                 array("mensagem" => $mensagem,
-                "script" => $script,
-                "tipoMensagem" => "ERROR")
+                    "script" => $script,
+                    "tipoMensagem" => "ERROR")
             );
             return;
         }
@@ -984,14 +984,17 @@ class UploadController extends MinC_Controller_Action_Abstract
             throw new Exception("Informa&ccedil;&otilde;es do Arquivo e Proposta Cultural n&atilde;o coincidem.");
         }
 
-        $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
-        $possuiPermissaoDeEdicao = (bool)$fnVerificarPermissao->verificarPermissaoProposta(
-            $id_preprojeto,
-            $this->authIdentity['idusuario'],
-            false
-        );
-        if (!$possuiPermissaoDeEdicao) {
-            throw new Exception("Usu&aacute;rio sem permiss&atilde;o para visualizar o arquivo.");
+        $idUsuarioSGCAcesso = $this->authIdentity['idusuario'];
+        if ((!is_null($idUsuarioSGCAcesso) && !empty($idUsuarioSGCAcesso))) {
+            $fnVerificarPermissao = new Autenticacao_Model_FnVerificarPermissao();
+            $possuiPermissaoDeEdicao = (bool)$fnVerificarPermissao->verificarPermissaoProposta(
+                $id_preprojeto,
+                $idUsuarioSGCAcesso,
+                false
+            );
+            if (!$possuiPermissaoDeEdicao) {
+                throw new Exception("Usu&aacute;rio sem permiss&atilde;o para visualizar o arquivo.");
+            }
         }
 
         @ini_set("mssql.textsize", 10485760);

@@ -32,6 +32,20 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
         }
     }
 
+    public function visaoAvaliadorAction()
+    {
+        $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
+        $this->view->recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
+        if (!empty($this->view->recursoEnquadramento['idArquivo'])
+            && !is_null($this->view->recursoEnquadramento['idArquivo'])) {
+            $tbArquivoDbTable = new tbArquivo();
+            $this->view->arquivoRecursoProponente = $tbArquivoDbTable->findBy([
+                'idArquivo' => $this->view->recursoEnquadramento['idArquivo']
+            ]);
+        }
+    }
+
     /**
      * @todo Refatorar esse trecho de c&oacute;digo pois as demandas desse m&oacute;dulo foram emergenciais.
      */
