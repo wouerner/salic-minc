@@ -212,7 +212,7 @@ class Readequacao_RemanejamentoMenorController extends MinC_Controller_Action_Ab
         
         $id = Seguranca::encrypt($idPronac);
         if ($erros > 0) {
-            parent::message("<b>A T E N &Ccedil; &Atilde;; O !!!</b> Para finalizar a opera&ccedil;&atilde;o de remanejamento os valores da coluna 'Valor da Planilha Remanejada' devem ser iguais a R$0,00 (zero real).", "readequacao/remanejamento-menor?idPronac=$id", "ERROR");
+            parent::message("<b>A T E N &Ccedil; &Atilde; O !!!</b> Para finalizar a opera&ccedil;&atilde;o de remanejamento os valores da coluna 'Valor da Planilha Remanejada' devem ser iguais a R$0,00 (zero real).", "readequacao/remanejamento-menor?idPronac=$id", "ERROR");
         } else {
             $auth = Zend_Auth::getInstance(); // pega a autentica��o
             $tblAgente = new Agente_Model_DbTable_Agentes();
