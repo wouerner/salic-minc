@@ -1023,8 +1023,6 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
         $rsVinculo = ($this->idResponsavel) ? $proposta->listarPropostasCombo($this->idResponsavel) : array();
 
-        $agente = array();
-
         $i = 0;
         foreach ($rsVinculo as $rs) {
             $cpfCnpj = Mascara::addMaskCPF($rs->cnpjcpf);
