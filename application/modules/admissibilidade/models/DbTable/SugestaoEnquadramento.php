@@ -56,6 +56,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             , $condicaoJoinTbRecursoProposta
             ,[
 //                '*',
+                'idPreProjeto',
                 'idRecursoProposta',
                 'dtRecursoProponente',
                 'dsRecursoProponente',

@@ -4,6 +4,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 {
 
     private $authIdentity;
+    private $grupoAtivo;
 
     public function init()
     {
@@ -11,6 +12,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
         $auth = Zend_Auth::getInstance();
         $this->authIdentity = array_change_key_case((array)$auth->getIdentity());
+        $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
     }
 
     public function indexAction()
@@ -20,6 +22,11 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     public function visaoProponenteAction()
     {
+        $id_perfil = $this->grupoAtivo->codGrupo;
+        if ((int)$id_perfil != (int)Autenticacao_Model_Grupos::PROPONENTE) {
+            throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o acessar essa funcionalidade.");
+        }
+
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
         $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
         $this->view->recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
@@ -34,6 +41,12 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     public function visaoAvaliadorAction()
     {
+        $id_perfil = $this->grupoAtivo->codGrupo;
+        if ((int)$id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+        && (int)$id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+            throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o acessar essa funcionalidade.");
+        }
+
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
         $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
         $this->view->recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
@@ -44,6 +57,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
                 'idArquivo' => $this->view->recursoEnquadramento['idArquivo']
             ]);
         }
+//        $this->view->idPreProjeto =
     }
 
     /**
@@ -79,7 +93,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
         $idArquivo = $this->uploadAnexoProponente($recursoEnquadramento);
         $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
             'idRecursoProposta' => $recursoEnquadramento['idRecursoProposta'],
-            'idPreProjeto' => $recursoEnquadramento['idPreProjeto'],
+            'idPreProjeto' => $id_preprojeto,
             'dtRecursoProponente' => $recursoEnquadramentoDbTable->getExpressionDate(),
             'dsRecursoProponente' => $justificativa,
             'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
@@ -120,8 +134,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             $this->_helper->viewRenderer->setNoRender(true);
             $get = $this->getRequest()->getParams();
 
-            $grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-            $id_perfil = $grupoAtivo->codGrupo;
+            $id_perfil = $this->grupoAtivo->codGrupo;
             if ((int)$id_perfil != (int)Autenticacao_Model_Grupos::PROPONENTE) {
                 throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o para realizar essa opera&ccedil;&atilde;o.");
             }
