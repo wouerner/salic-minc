@@ -31,9 +31,17 @@
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');
 
-// register
 Vue.component('select-percent', {
-    template: '<select style="width: 75px; display: inline-block; display: inline-block;" @change="valorSelecionado($event.target.value)" ref="combo" tabindex="-1" class="browser-default"><option v-for="item in items">{{ item }}%</option></select>',
+    template: `
+        <select 
+            style="width: 75px; display: inline-block;" 
+            @change="valorSelecionado($event.target.value)" 
+            ref="combo" 
+            tabindex="-1" 
+            class="browser-default">
+                <option v-for="item in items">{{ item }}%</option>
+        </select>
+    `,
     props: {
         disabled: {
             type: Boolean,
@@ -74,18 +82,16 @@ Vue.component('select-percent', {
     }
 });
 
-// register
 Vue.component('input-money', {
-    template: '<div>\
-                <input\
-                    type="text"\
-                    class="browser-default right-align"\
-                    v-bind:disabled="false"\
-                    v-bind:value="value"\
-                    ref="input"\
-                    v-on:input="updateMoney($event.target.value)"\
-                    v-on:blur="formatValue">\
-                </div>',
+    template: `<input
+        type="text"
+        class="validate right-align"
+        v-bind:disabled="false"
+        v-bind:value="value"
+        ref="input"
+        v-on:input="updateMoney($event.target.value)"
+        v-on:blur="formatValue"
+    />`,
     props: {
         value: {
             default: 0
@@ -109,7 +115,6 @@ Vue.component('input-money', {
             this.$refs.input.value = numeral(this.$refs.input.value).format();
         },
         updateMoney: function (value) {
-            // console.log(value);
             this.val = value;
             this.$emit('ev', this.val)
         }
@@ -124,97 +129,35 @@ Vue.component('input-money', {
     }
 });
 
-
-Vue.component('proposta-plano-distribuicao-detalhamento-listagem', {
+Vue.component('proposta-plano-distribuicao-detalhamentos', {
     template: `
-        <table class="bordered">
-            <thead v-if="produtos && produtos.length > 0">
-            <tr>
-                <th rowspan="2">Categoria</th>
-                <th rowspan="2">Quantidade</th>
-                <th class="proponente" colspan="3">
-                    Proponente
-                </th>
-                <th class="popular" colspan="3">
-                    Pre&ccedil;o Popular
-                </th>
-                <th class="gratuito" rowspan="2">
-                    Distribui&ccedil;&atilde;o <br>Gratuita
-                </th>
-                <th rowspan="2" class="center-align">Receita <br> Prevista</th>
-                <th rowspan="2" width="5%">A&ccedil;&otildees</th>
-            </tr>
-            <tr>
-                <th class="proponente">Qtd. Inteira</th>
-                <th class="proponente">Qtd. Meia</th>
-                <th class="proponente">Pre&ccedil;o <br> Unitario</th>
-                <th class="popular">Qtd. Inteira</th>
-                <th class="popular">Qtd. Meia</th>
-                <th class="popular">Pre&ccedil;o <br> Unitario</th>
-            </tr>
-            </thead>
-            <tbody v-if="produtos && produtos.length > 0">
-            <tr v-for="( produto, index ) in produtos">
-                <td>{{ produto.dsProduto }}</td>
-                <td class="center-align">{{ produto.qtExemplares }}</td>
-                <!--Preço Proponente -->
-                <td class="center-align">{{ produto.qtProponenteIntegral }}</td>
-                <td class="center-align">{{ produto.qtProponenteParcial }}</td>
-                <td class="right-align">{{ formatarValor(produto.vlUnitarioProponenteIntegral) }}</td>
-                <!--Preço Popular -->
-                <td class="center-align">{{ produto.qtPopularIntegral }}</td>
-                <td class="center-align">{{ produto.qtPopularParcial }}</td>
-                <td class="right-align">{{ formatarValor(produto.vlUnitarioPopularIntegral) }}</td>
-                <!-- Distribuicao Gratuita-->
-                <td class="center-align">{{ parseInt(produto.qtGratuitaDivulgacao) +
-                    parseInt(produto.qtGratuitaPatrocinador) + parseInt(produto.qtGratuitaPopulacao) }}
-                </td>
-                <td class="right-align">{{ formatarValor(produto.vlReceitaPrevista) }}</td>
-                <td>
-                    <button class="btn red white-text small" v-bind:disabled="!disabled"
-                            v-on:click="excluir(produto.idDetalhaPlanoDistribuicao)">
-                        <i class="material-icons">delete</i>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-            <tbody v-else>
-            <tr>
-                <td colspan="12" class="center-align">Nenhum detalhamento cadastrado</td>
-            </tr>
-            </tbody>
-            <tfoot v-if="produtos && produtos.length > 0" style="opacity: 0.5">
-            <tr>
-                <td><b>Totais</b></td>
-                <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
-                <!--Fim: Preço Popular -->
-                <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
-                <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
-                <td class="right-align"> -</td>
-                <!--Preço Popular -->
-                <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
-                <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
-                <td class="right-align"> -</td>
-                <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
-                        parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
-                </td>
-                <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
-                <td></td>
-            </tr>
-            <tr>
-                <th class=""><b>Valor m&eacute;dio </b></th>
-                <td class="center-align red"
-                    v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))">
-                    {{valorMedioProponenteFormatado}}
-                </td>
-                <td class="center-align " v-else>{{valorMedioProponenteFormatado}}</td>
-            </tr>
-            </tfoot>
-        </table>
+        <div class="plano-distribuicao-detalhanentos">
+            <proposta-plano-distribuicao-lista-detalhamentos
+                :disabled="disabled"
+                :idplanodistribuicao="idplanodistribuicao"
+                :idpreprojeto="idpreprojeto"
+                :iduf="iduf"
+                :idmunicipioibge="idmunicipioibge"
+                :detalhamentos="detalhamentos"
+                :canalaberto="canalaberto"
+                 v-on:eventoRemoveDetalhamento="detalhamentoRemovido"
+                >
+            </proposta-plano-distribuicao-lista-detalhamentos>
+            <proposta-plano-distribuicao-formulario-detalhamento
+                :disabled="disabled"
+                :idplanodistribuicao="idplanodistribuicao"
+                :idpreprojeto="idpreprojeto"
+                :iduf="iduf"
+                :idmunicipioibge="idmunicipioibge"
+                :canalaberto="canalaberto"
+                v-on:eventoNovoDetalhamento="detalhamentoCadastrado"
+                >
+            </proposta-plano-distribuicao-formulario-detalhamento>
+        </div>
     `,
     data: function () {
         return {
-            produtos: [],
+            detalhamentos: [],
         }
     },
     props: [
@@ -225,97 +168,235 @@ Vue.component('proposta-plano-distribuicao-detalhamento-listagem', {
         'disabled',
         'canalaberto'
     ],
+    mounted: function () {
+        this.obterDetalhamentos();
+    },
+    methods: {
+        detalhamentoCadastrado(index) {
+            this.$data.detalhamentos.push(index);
+            console.log('detalhamento cadastrado', this.detalhamentos);
+        },
+        detalhamentoRemovido(detalhamento) {
+            Vue.delete(this.detalhamentos, detalhamento);
+            console.log('detalhamento removido', this.detalhamentos);
+        },
+        obterDetalhamentos: function () {
+            var vue = this;
+
+            // this.$data.detalhamentos = [];
+            url = "/proposta/plano-distribuicao/detalhar-mostrar/idPreProjeto/" + this.idpreprojeto + "?idPlanoDistribuicao=" + this.idplanodistribuicao + "&idMunicipio=" + this.idmunicipioibge + "&idUF=" + this.iduf
+            $3.ajax({
+                type: "GET",
+                url: url
+            }).done(function (data) {
+                // if ((numeral(this.valorMedioProponente).value() > 225
+                //     && (this.canalaberto == 0))) {
+                //     this.mensagemAlerta("O valor medio:" + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: 225,00");
+                //     this.$data.detalhamentos.splice(-1, 1)
+                // }
+                console.log(data.data);
+                vue.$data.detalhamentos = data.data;
+            }).fail(function () {
+                vue.mensagemErro('Erro ao buscar detalhamento');
+            });
+        }
+    }
+});
+
+Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
+    template: `
+        <div class="row center-align">
+            <table class="bordered">
+                <thead v-if="detalhamentos && detalhamentos.length > 0">
+                <tr>
+                    <th rowspan="2">Categoria</th>
+                    <th rowspan="2">Quantidade</th>
+                    <th class="proponente" colspan="3">
+                        Proponente
+                    </th>
+                    <th class="popular" colspan="3">
+                        Pre&ccedil;o Popular
+                    </th>
+                    <th class="gratuito" rowspan="2">
+                        Distribui&ccedil;&atilde;o <br>Gratuita
+                    </th>
+                    <th rowspan="2" class="center-align">Receita <br> Prevista</th>
+                    <th rowspan="2" width="5%">A&ccedil;&otildees</th>
+                </tr>
+                <tr>
+                    <th class="proponente">Qtd. Inteira</th>
+                    <th class="proponente">Qtd. Meia</th>
+                    <th class="proponente">Pre&ccedil;o <br> Unitario</th>
+                    <th class="popular">Qtd. Inteira</th>
+                    <th class="popular">Qtd. Meia</th>
+                    <th class="popular">Pre&ccedil;o <br> Unitario</th>
+                </tr>
+                </thead>
+                <tbody v-if="detalhamentos && detalhamentos.length > 0">
+                <tr v-for="( detalhamento, index ) in detalhamentos">
+                    <td>{{ detalhamento.dsProduto }}</td>
+                    <td class="center-align">{{ detalhamento.qtExemplares }}</td>
+                    <!--Preço Proponente -->
+                    <td class="center-align">{{ detalhamento.qtProponenteIntegral }}</td>
+                    <td class="center-align">{{ detalhamento.qtProponenteParcial }}</td>
+                    <td class="right-align">{{ formatarValor(detalhamento.vlUnitarioProponenteIntegral) }}</td>
+                    <!--Preço Popular -->
+                    <td class="center-align">{{ detalhamento.qtPopularIntegral }}</td>
+                    <td class="center-align">{{ detalhamento.qtPopularParcial }}</td>
+                    <td class="right-align">{{ formatarValor(detalhamento.vlUnitarioPopularIntegral) }}</td>
+                    <!-- Distribuicao Gratuita-->
+                    <td class="center-align">{{ parseInt(detalhamento.qtGratuitaDivulgacao) +
+                        parseInt(detalhamento.qtGratuitaPatrocinador) + parseInt(detalhamento.qtGratuitaPopulacao) }}
+                    </td>
+                    <td class="right-align">{{ formatarValor(detalhamento.vlReceitaPrevista) }}</td>
+                    <td>
+                        <button class="btn red white-text small" v-bind:disabled="!disabled"
+                                v-on:click="excluir(detalhamento, index)">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody v-else>
+                <tr>
+                    <td colspan="12" class="center-align">Nenhum detalhamento cadastrado</td>
+                </tr>
+                </tbody>
+                <tfoot v-if="detalhamentos && detalhamentos.length > 0" style="opacity: 0.5">
+                <tr>
+                    <td><b>Totais</b></td>
+                    <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
+                    <!--Fim: Preço Popular -->
+                    <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
+                    <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
+                    <td class="right-align"> -</td>
+                    <!--Preço Popular -->
+                    <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
+                    <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
+                    <td class="right-align"> -</td>
+                    <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
+                            parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
+                    </td>
+                    <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class=""><b>Valor m&eacute;dio </b></th>
+                    <td class="center-align red"
+                        v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))">
+                        {{valorMedioProponenteFormatado}}
+                    </td>
+                    <td class="center-align " v-else>{{valorMedioProponenteFormatado}}</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    `,
+    data: function () {
+        return {
+            // detalhamentos: [],
+        }
+    },
+    props: [
+        'idpreprojeto',
+        'idplanodistribuicao',
+        'idmunicipioibge',
+        'iduf',
+        'disabled',
+        'canalaberto',
+        'detalhamentos'
+    ],
     computed: {
         // Total de exemplares
         qtExemplaresTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtExemplares']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtExemplares']);
             }
             return total;
         },
         // Total de divulgação gratuita.
         qtGratuitaDivulgacaoTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtGratuitaDivulgacao']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtGratuitaDivulgacao']);
             }
             return total;
         },
         // Total de divulgação Patrocinador
         qtGratuitaPatrocinadorTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtGratuitaPatrocinador']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtGratuitaPatrocinador']);
             }
             return total;
         },
         // Total de divulgação gratuita.
         qtGratuitaPopulacaoTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtGratuitaPopulacao']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtGratuitaPopulacao']);
             }
             return total;
         },
         //Preço Popular: Quantidade de Inteira
         qtPopularIntegralTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtPopularIntegral']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtPopularIntegral']);
             }
             return total;
         },
         //Preço Popular: Quantidade de meia entrada
         qtPopularParcialTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtPopularParcial']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtPopularParcial']);
             }
             return total;
         },
         vlReceitaPopularIntegralTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                var vl = (this.produtos[i]['vlReceitaPopularIntegral']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = (this.detalhamentos[i]['vlReceitaPopularIntegral']);
                 total += numeral(vl).value();
             }
             return numeral(total).format();
         },
         vlReceitaPopularParcialTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                var vl = (this.produtos[i]['vlReceitaPopularParcial']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = (this.detalhamentos[i]['vlReceitaPopularParcial']);
                 total += numeral(vl).value();
             }
             return numeral(total).format();
         },
         qtProponenteIntegralTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtProponenteIntegral']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtProponenteIntegral']);
             }
             return total;
         },
         qtProponenteParcialTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                total += parseInt(this.produtos[i]['qtProponenteParcial']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                total += parseInt(this.detalhamentos[i]['qtProponenteParcial']);
             }
             return total;
         },
         vlReceitaProponenteIntegralTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                vl = (this.produtos[i]['vlReceitaProponenteIntegral']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                vl = (this.detalhamentos[i]['vlReceitaProponenteIntegral']);
                 total += this.converterParaMoedaAmericana(vl);
             }
             return numeral(total).format();
         },
         vlReceitaProponenteParcialTotal: function () {
             total = 0;
-            for (var i = 0; i < this.produtos.length; i++) {
-                var vl = (this.produtos[i]['vlReceitaProponenteParcial']);
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = (this.detalhamentos[i]['vlReceitaProponenteParcial']);
                 total += this.converterParaMoedaAmericana(vl);
             }
             return numeral(total).format();
@@ -323,8 +404,8 @@ Vue.component('proposta-plano-distribuicao-detalhamento-listagem', {
         receitaPrevistaTotal: function () {
             var total = numeral();
 
-            for (var i = 0; i < this.produtos.length; i++) {
-                var vl = this.produtos[i]['vlReceitaPrevista'];
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                var vl = this.detalhamentos[i]['vlReceitaPrevista'];
                 total.add(parseFloat(vl));
             }
             return total.format();
@@ -335,11 +416,11 @@ Vue.component('proposta-plano-distribuicao-detalhamento-listagem', {
             var qtProponenteIntegral = numeral();
             var qtProponenteParcial = numeral();
 
-            for (var i = 0; i < this.produtos.length; i++) {
-                vlReceitaProponenteIntegral.add(this.produtos[i]['vlReceitaProponenteIntegral']);
-                vlReceitaProponenteParcial.add(parseFloat(this.produtos[i]['vlReceitaProponenteParcial']));
-                qtProponenteIntegral.add(parseFloat(this.produtos[i]['qtProponenteIntegral']));
-                qtProponenteParcial.add(parseFloat(this.produtos[i]['qtProponenteParcial']));
+            for (var i = 0; i < this.detalhamentos.length; i++) {
+                vlReceitaProponenteIntegral.add(this.detalhamentos[i]['vlReceitaProponenteIntegral']);
+                vlReceitaProponenteParcial.add(parseFloat(this.detalhamentos[i]['vlReceitaProponenteParcial']));
+                qtProponenteIntegral.add(parseFloat(this.detalhamentos[i]['qtProponenteIntegral']));
+                qtProponenteParcial.add(parseFloat(this.detalhamentos[i]['qtProponenteParcial']));
             }
 
             var media = numeral(parseFloat(vlReceitaProponenteIntegral.value() + vlReceitaProponenteParcial.value()) / (qtProponenteIntegral.value() + qtProponenteParcial.value()));
@@ -350,44 +431,24 @@ Vue.component('proposta-plano-distribuicao-detalhamento-listagem', {
             return this.valorMedioProponente.format();
         }
     },
-    watch: {},
-    mounted: function () {
-        this.t();
-    },
     methods: {
-        t: function () {
-            var vue = this;
-
-            // this.$data.produtos = [];
-            url = "/proposta/plano-distribuicao/detalhar-mostrar/idPreProjeto/" + this.idpreprojeto + "?idPlanoDistribuicao=" + this.idplanodistribuicao + "&idMunicipio=" + this.idmunicipioibge + "&idUF=" + this.iduf
-            $3.ajax({
-                type: "GET",
-                url: url
-            }).done(function (data) {
-                // if ((numeral(this.valorMedioProponente).value() > 225
-                //     && (this.canalaberto == 0))) {
-                //     this.mensagemAlerta("O valor medio:" + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: 225,00");
-                //     this.$data.produtos.splice(-1, 1)
-                // }
-
-                vue.$data.produtos = data.data;
-            }).fail(function () {
-                vue.mensagemErro('Erro ao buscar detalhamento');
-            });
-        },
-        excluir: function (index) {
-
+        excluir: function (detalhamento, index) {
             var vue = this;
             $3.ajax({
                 type: "POST",
                 url: "/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/" + this.idpreprojeto,
                 data: {
-                    idDetalhaPlanoDistribuicao: index,
+                    idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
                     idPlanoDistribuicao: this.idplanodistribuicao
-                },
-            }).done(function () {
-                vue.t();
-                vue.mensagemSucesso("Excluido com sucesso");
+                }
+            }).done(function (response) {
+                if(response.success == 'true') {
+                    vue.visualizarFormulario = false;
+                    vue.$emit('eventoRemoveDetalhamento', index);
+                    vue.mensagemSucesso(response.msg);
+                }
+            }).fail(function (response) {
+                vue.mensagemErro(response.responseJSON.msg);
             });
         },
         converterParaMoedaAmericana: function (valor) {
@@ -433,27 +494,14 @@ const DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO = 0.3;
 const PRECO_POPULAR_PERCENTUAL_PADRAO = 0.2;
 const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
 
-// register
-Vue.component('proposta-plano-distribuicao-form-detalhamento', {
+Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
     template: `
-        <div>
-            <div class="row">
-                <div class="center">
-                    <proposta-plano-distribuicao-detalhamento-listagem
-                        disabled="disabled"
-                        idplanodistribuicao="idplanodistribuicao"
-                        idpreprojeto="idpreprojeto"
-                        iduf="iduf"
-                        idmunicipioibge="idmunicipioibge"
-                        canalaberto="canalaberto"
-                    ></proposta-plano-distribuicao-detalhamento-listagem>
-                </div>
-            </div>
+        <div class="detalhamento-distribuicao-dos-produtos">
             <div class="row center-align">
                 <br>
                 <button class="btn waves-effect waves-light" ref="mostrarForm"
                         v-on:click.prevent="mostrarFormulario(_uid + '_form_detalhamento')">
-                        Novo detalhamento
+                    Novo detalhamento
                     <i class="material-icons right">add</i>
                 </button>
             </div>
@@ -464,19 +512,19 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                         <div class="col s12 m6 l6">
                             <span>
                                 <b>Tipo de venda</b><br>
-                                <input 
-                                    name="tipoVenda" 
-                                    type="radio" 
-                                    :id="_uid + 'tipoVendaIngresso'" 
-                                    value="i" 
+                                <input
+                                    name="tipoVenda"
+                                    type="radio"
+                                    :id="_uid + 'tipoVendaIngresso'"
+                                    value="i"
                                     v-model="distribuicao.tpVenda"
                                 />
                                 <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
-                                <input 
-                                    name="tipoVenda" 
-                                    type="radio" 
-                                    :id="_uid + 'tipoVendaExemplar'" 
-                                    value="e" 
+                                <input
+                                    name="tipoVenda"
+                                    type="radio"
+                                    :id="_uid + 'tipoVendaExemplar'"
+                                    value="e"
                                     v-model="distribuicao.tpVenda"
                                 />
                                 <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
@@ -485,42 +533,42 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                         <div class="col s12 m6 l6">
                             <span>
                                 <b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
-                                <input 
-                                    name="group1" 
-                                    type="radio" 
-                                    :id="_uid + '1'" 
-                                    value="s" 
+                                <input
+                                    name="group1"
+                                    type="radio"
+                                    :id="_uid + '1'"
+                                    value="s"
                                     v-model="distribuicaoGratuita"
                                 />
                                 <label :for="_uid + '1'">Sim</label>
-                                <input 
-                                    name="group1" 
-                                    type="radio" 
-                                    :id="_uid + '2'" 
-                                    value="n" 
+                                <input
+                                    name="group1"
+                                    type="radio"
+                                    :id="_uid + '2'"
+                                    value="n"
                                     v-model="distribuicaoGratuita"
                                 />
                                 <label :for="_uid + '2'">N&atilde;o</label>
                             </span>
                         </div>
                     </div>
-
+            
                     <div class="row" v-if="distribuicao.tpVenda == 'i'">
                         <div class="col col s12 m6 l6">
                             <span>
                                 <b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
-                                <input 
-                                    name="tipoLocalRealizacao" 
-                                    type="radio" 
-                                    :id="_uid + 'tipoAberto'" 
-                                    value="a" 
+                                <input
+                                    name="tipoLocalRealizacao"
+                                    type="radio"
+                                    :id="_uid + 'tipoAberto'"
+                                    value="a"
                                     v-model="distribuicao.tpLocal"
                                 />
                                 <label :for=" _uid + 'tipoAberto'">Aberto</label>
-                                <input 
-                                    name="tipoLocalRealizacao" 
-                                    type="radio" :id=" _uid + 'tipoFechado'" 
-                                    value="f" 
+                                <input
+                                    name="tipoLocalRealizacao"
+                                    type="radio" :id=" _uid + 'tipoFechado'"
+                                    value="f"
                                     v-model="distribuicao.tpLocal"
                                 />
                                 <label :for=" _uid + 'tipoFechado'">Fechado</label>
@@ -529,18 +577,18 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                         <div class="col col s12 m6 l6">
                             <span>
                                 <b>Espa&ccedil;o p&uacute;blico</b><br>
-                                <input 
-                                    type="radio" 
-                                    :id="_uid + 'espacoPublicoSim'" 
-                                    value="s" 
+                                <input
+                                    type="radio"
+                                    :id="_uid + 'espacoPublicoSim'"
+                                    value="s"
                                     v-model="distribuicao.tpEspaco"
                                 />
                                 <label :for="_uid + 'espacoPublicoSim'">Sim</label>
-                                <input 
-                                    type="radio" 
-                                    id="espacoPublicoNao" 
-                                    :id=" _uid + 'espacoPublicoNao'" 
-                                    value="n" 
+                                <input
+                                    type="radio"
+                                    id="espacoPublicoNao"
+                                    :id=" _uid + 'espacoPublicoNao'"
+                                    value="n"
                                     v-model="distribuicao.tpEspaco"/>
                                 <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
                             </span>
@@ -549,29 +597,29 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                     <br>
                     <div class="row">
                         <div class="input-field col s12 m6 l6">
-                            <input 
-                                :id="_uid + 'dsProduto'" 
-                                type="text" 
-                                class="browser-default validate" 
+                            <input
+                                :id="_uid + 'dsProduto'"
+                                type="text"
+                                class="validate"
                                 ref="dsProduto"
-                                placeholder="Ex: Arquibancada" 
+                                placeholder="Ex: Arquibancada"
                                 v-model="distribuicao.dsProduto"
                             />
                             <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
                         </div>
                         <div class="input-field col s12 m6 l6">
-                            <input 
-                                :id="_uid + 'qtExemplares'" 
-                                type="number" 
-                                class="validate browser-default"
+                            <input
+                                :id="_uid + 'qtExemplares'"
+                                type="number"
+                                class="validate"
                                 ref="qtExemplares"
-                                placeholder="0" 
+                                placeholder="0"
                                 v-model.number.lazy="distribuicao.qtExemplares"
                             />
                             <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
                         </div>
                     </div>
-
+            
                     <fieldset class="proponente-s" v-show="distribuicaoGratuita =='s' ? false : true">
                         <legend>
                             <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
@@ -585,60 +633,60 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                             <div class="input-field col s12 m6 l2">
                                 <input-money
                                     v-bind:disabled="distribuicaoGratuita =='s'? true: false"
-                                    v-bind:value="distribuicao.vlUnitarioProponenteIntegral"
-                                    v-on:ev="distribuicao.vlUnitarioProponenteIntegral = $event">
+                                    v-bind:value="inputUnitarioProponenteIntegral"
+                                    v-on:ev="inputUnitarioProponenteIntegral = $event">
                                 </input-money>
-                                <label 
-                                    class="active" 
+                                <label
+                                    class="active"
                                     :for="_uid + 'vlUnitarioProponenteIntegral'"
                                 >Pre&ccedil;o Unit&aacute;rio R$</label>
                             </div>
                             <div class="input-field col s12 m6 l2">
-                                <input 
-                                    type="text" 
-                                    class="browser-default disabled" 
-                                    disabled 
-                                    v-model="distribuicao.qtProponenteIntegral" 
+                                <input
+                                    type="text"
+                                    class="disabled right-align"
+                                    disabled
+                                    v-model.number="distribuicao.qtProponenteIntegral"
                                     ref="qtProponenteIntegral"
                                 />
-                                <label 
-                                    class="active" 
+                                <label
+                                    class="active"
                                     :for="_uid + 'qtProponenteIntegral'"
                                 >Quantidade {{labelInteira}}</label>
                             </div>
                             <div class="input-field col s12 m6 l2" v-if="distribuicao.tpVenda == 'i'">
-                                <input 
-                                    type="text" 
-                                    class="browser-default disabled" 
-                                    disabled 
-                                    v-model="distribuicao.qtProponenteParcial"
+                                <input
+                                    type="text"
+                                    class="disabled right-align"
+                                    disabled
+                                    v-model.number="distribuicao.qtProponenteParcial"
                                 />
-                                <label 
-                                    class="active" 
+                                <label
+                                    class="active"
                                     :for="_uid + 'qtProponenteParcial'"
                                 >Quantidade Meia</label>
                             </div>
                             <div class="input-field col s12 m6 l3">
-                                <input 
-                                    type="text" 
-                                    class="browser-default disabled" 
-                                    disabled 
-                                    v-model="distribuicao.vlReceitaProponenteIntegral"
+                                <input
+                                    type="text"
+                                    class="disabled right-align"
+                                    disabled
+                                    v-model="this.vlReceitaProponenteIntegral"
                                 />
-                                <label 
-                                    class="active" 
+                                <label
+                                    class="active"
                                     :for="_uid + 'vlReceitaProponenteIntegral'"
                                 >Valor {{labelInteira}} R$</label>
                             </div>
                             <div class="input-field col s12 m6 l3" v-if="distribuicao.tpVenda == 'i'">
-                                <input 
-                                    type="text" 
-                                    class="browser-default disabled" 
-                                    disabled 
-                                    v-model="distribuicao.vlReceitaProponenteParcial"
+                                <input
+                                    type="text"
+                                    class="disabled right-align"
+                                    disabled
+                                    v-model.number="this.vlReceitaProponenteParcial"
                                 />
-                                <label 
-                                    class="active" 
+                                <label
+                                    class="active"
                                     :for="_uid + 'vlReceitaProponenteParcial'"
                                 >Valor meia R$</label>
                             </div>
@@ -657,36 +705,36 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                             <div class="input-field col s12 m6 l2">
                                 <input-money
                                     v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
-                                    v-bind:value="distribuicao.vlUnitarioPopularIntegral"
-                                    v-on:ev="distribuicao.vlUnitarioPopularIntegral = $event">
+                                    v-bind:value="inputUnitarioPopularIntegral"
+                                    v-on:ev="inputUnitarioPopularIntegral = $event">
                                 </input-money>
-                                <label 
-                                    class="active" 
+                                <label
+                                    class="active"
                                     v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
                                     :for="_uid + 'vlUnitarioPopularIntegral'"
                                 >Pre&ccedil;o Unit&aacute;rio R$
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l2">
-                                <input 
-                                    type="text" 
-                                    class="browser-default right-align disabled" 
+                                <input
+                                    type="text"
+                                    class="right-align disabled"
                                     disabled
-                                    v-model="distribuicao.qtPopularIntegral" 
+                                    v-model.number="distribuicao.qtPopularIntegral"
                                     ref="qtPopularIntegral"
                                 />
-                                <label 
-                                    class="active" 
+                                <label
+                                    class="active"
                                     :for="_uid + 'qtPopularIntegral'">
                                     Quantidade {{labelInteira}}
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l2" v-if="distribuicao.tpVenda == 'i'">
-                                <input 
-                                    type="text" 
-                                    class="browser-default right-align disabled" 
+                                <input
+                                    type="text"
+                                    class="right-align disabled"
                                     disabled
-                                    v-model="distribuicao.qtPopularParcial" 
+                                    v-model.number="distribuicao.qtPopularParcial"
                                     ref="distribuicao.qtPopularParcial"
                                 />
                                 <label class="active" :for="_uid + 'qtPopularParcial'">
@@ -694,22 +742,22 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l3">
-                                <input 
-                                    type="text" 
-                                    class="browser-default disabled" 
-                                    disabled 
-                                    v-model="distribuicao.vlReceitaPopularIntegral"
+                                <input
+                                    type="text"
+                                    class="disabled right-align"
+                                    disabled
+                                    v-model.number="this.vlReceitaPopularIntegral"
                                 />
                                 <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">
                                     Valor {{labelInteira}} R$
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l3" v-if="distribuicao.tpVenda == 'i'">
-                                <input 
-                                    type="text" 
-                                    class="browser-default disabled" 
-                                    disabled 
-                                    v-model="distribuicao.vlReceitaPopularParcial"
+                                <input
+                                    type="text"
+                                    class="disabled right-align"
+                                    disabled
+                                    v-model.number="this.vlReceitaPopularParcial"
                                 />
                                 <label class="active" :for="_uid + 'vlReceitaPopularParcial'">Valor meia R$</label>
                             </div>
@@ -717,16 +765,17 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                     </fieldset>
                     <fieldset class="distribuicao-gratuita">
                         <legend>
-                            <strong>Distribui&ccedil;&atilde;o Gratuita</strong> (m&iacute;nimo {{percentualGratuitoPadrao * 100 }}%)
+                            <strong>Distribui&ccedil;&atilde;o Gratuita</strong> (m&iacute;nimo {{percentualGratuitoPadrao * 100
+                            }}%)
                             <span v-if="percentualGratuitoPadrao !== this.percentualGratuito"> 
-                                <b>Atual {{ parseInt(this.percentualGratuito *  100) }}%</b>
-                            </span>
+                                        <b>Atual {{ parseInt(this.percentualGratuito *  100) }}%</b>
+                                    </span>
                         </legend>
                         <div class="row">
                             <div class="input-field col s12 m6 l3">
-                                <input 
-                                    type="number" 
-                                    class="browser-default right-align" 
+                                <input
+                                    type="number"
+                                    class="validate right-align"
                                     v-model.number="distribuicao.qtGratuitaDivulgacao"
                                     ref="divulgacao"
                                 />
@@ -735,10 +784,10 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l3">
-                                <input 
-                                    type="number" 
-                                    class="browser-default right-align" 
-                                    v-model="distribuicao.qtGratuitaPatrocinador"
+                                <input
+                                    type="number"
+                                    class="validate right-align"
+                                    v-model.number="distribuicao.qtGratuitaPatrocinador"
                                     ref="patrocinador"
                                 />
                                 <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">
@@ -746,15 +795,15 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                                 </label>
                             </div>
                             <div class="input-field col s12 m6 l3">
-                                <input 
-                                    type="text" 
-                                    class="browser-default right-align disabled" 
+                                <input
+                                    type="text"
+                                    class="right-align disabled"
                                     disabled
-                                    v-model.number.lazy="distribuicao.qtGratuitaPopulacao"
-                                    ref="populacao" 
+                                    v-model.number="distribuicao.qtGratuitaPopulacao"
+                                    ref="populacao"
                                 />
                                 <label class="active" :for="_uid + 'qtGratuitaPopulacao'">
-                                    Popula&ccedil;&atilde;o 
+                                    Popula&ccedil;&atilde;o
                                 </label>
                             </div>
                         </div>
@@ -811,7 +860,8 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
             "percentualProponentePadrao": PROPONENTE_PERCENTUAL_PADRAO,
             "percentualProponente": PROPONENTE_PERCENTUAL_PADRAO,
             "labelInteira": 'Inteira',
-            activeForm: false
+            "inputUnitarioPopularIntegral": 0,
+            "inputUnitarioProponenteIntegral": 0,
         }
     },
     props: [
@@ -839,41 +889,57 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
             }
             return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularParcial);
         },
-        qtGratuitaPopulacaoMinimo: function () {
-            let soma =
-                parseInt(this.distribuicao.qtExemplares)
-                * this.percentualGratuito
-                - (parseInt(this.distribuicao.qtGratuitaPatrocinador) + parseInt(this.distribuicao.qtGratuitaDivulgacao));
-            return parseInt(soma)
+        qtGratuitaPopulacaoMinimo: function() {
+            let soma = numeral();
+
+            soma.add(this.distribuicao.qtProponenteIntegral);
+            soma.add(this.distribuicao.qtProponenteParcial);
+            soma.add(this.distribuicao.qtPopularIntegral);
+            soma.add(this.distribuicao.qtPopularParcial);
+            soma.add(this.distribuicao.qtGratuitaDivulgacao);
+            soma.add(this.distribuicao.qtGratuitaPatrocinador);
+
+            return parseInt(parseInt(this.distribuicao.qtExemplares) - numeral(soma).value());
         },
         percentualGratuito: function () {
             if (this.distribuicaoGratuita == SIM) {
                 return 1;
             }
-            return DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO + (this.percentualMaximoPrecoPopular - this.percentualPrecoPopular);
+            return DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO +
+                (this.percentualMaximoPrecoPopular - this.percentualPrecoPopular)
+            ;
         },
         percentualMaximoPrecoPopular: function () {
             return PRECO_POPULAR_PERCENTUAL_PADRAO + (PROPONENTE_PERCENTUAL_PADRAO - this.percentualProponente);
         },
         vlReceitaPopularIntegral: function () {
-            return numeral(parseInt(this.distribuicao.qtPopularIntegral) * this.converterParaMoedaAmericana(this.distribuicao.vlUnitarioPopularIntegral)).format();
+            return numeral(
+                parseInt(this.distribuicao.qtPopularIntegral) *
+                this.converterParaMoedaAmericana(this.inputUnitarioPopularIntegral)
+            ).format();
         },
         vlReceitaPopularParcial: function () {
-            return numeral(this.distribuicao.qtPopularParcial * this.converterParaMoedaAmericana(this.distribuicao.vlUnitarioPopularIntegral) * 0.5).format();
+            return numeral(
+                this.distribuicao.qtPopularParcial * this.converterParaMoedaAmericana(this.inputUnitarioPopularIntegral) * 0.5
+            ).format();
         },
         vlReceitaProponenteIntegral: function () {
-            return numeral(this.converterParaMoedaAmericana(this.distribuicao.vlUnitarioProponenteIntegral) * parseInt(this.distribuicao.qtProponenteIntegral)).format();
+            return numeral(
+                this.converterParaMoedaAmericana(this.inputUnitarioProponenteIntegral) * parseInt(this.distribuicao.qtProponenteIntegral)
+            ).format();
         },
         vlReceitaProponenteParcial: function () {
-            return numeral((this.converterParaMoedaAmericana(this.distribuicao.vlUnitarioProponenteIntegral) * 0.5 ) * this.distribuicao.qtProponenteParcial).format();
+            return numeral(
+                (this.converterParaMoedaAmericana(this.inputUnitarioProponenteIntegral) * 0.5 ) * this.distribuicao.qtProponenteParcial
+            ).format();
         },
         vlReceitaPrevista: function () {
             let calc = numeral();
 
-            calc.add(this.converterParaMoedaAmericana(this.distribuicao.vlReceitaPopularIntegral));
-            calc.add(this.converterParaMoedaAmericana(this.distribuicao.vlReceitaPopularParcial));
-            calc.add(this.converterParaMoedaAmericana(this.distribuicao.vlReceitaProponenteIntegral));
-            calc.add(this.converterParaMoedaAmericana(this.distribuicao.vlReceitaProponenteParcial));
+            calc.add(this.distribuicao.vlReceitaPopularIntegral);
+            calc.add(this.distribuicao.vlReceitaPopularParcial);
+            calc.add(this.distribuicao.vlReceitaProponenteIntegral);
+            calc.add(this.distribuicao.vlReceitaProponenteParcial);
 
             return numeral(calc).format();
         },
@@ -882,8 +948,8 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                 this.distribuicao.qtExemplares,
                 this.distribuicaoGratuita,
                 this.distribuicao.tpVenda,
-                this.distribuicao.vlUnitarioProponenteIntegral,
-                this.distribuicao.vlUnitarioPopularIntegral,
+                this.inputUnitarioProponenteIntegral,
+                this.inputUnitarioPopularIntegral,
                 this.percentualPrecoPopular
             ].join()
         }
@@ -906,14 +972,13 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                 this.distribuicao.qtProponenteParcial = this.obterQuantidadePorPercentual(this.percentualProponente);
                 this.distribuicao.qtPopularIntegral = this.obterQuantidadePorPercentual(this.percentualPrecoPopular);
                 this.distribuicao.qtPopularParcial = this.obterQuantidadePorPercentual(this.percentualPrecoPopular);
-                this.distribuicao.vlReceitaProponenteIntegral = this.vlReceitaProponenteIntegral;
-                this.distribuicao.vlReceitaProponenteParcial = this.vlReceitaProponenteParcial;
-                this.distribuicao.vlReceitaPopularIntegral = this.vlReceitaPopularIntegral;
-                this.distribuicao.vlReceitaPopularParcial = this.vlReceitaPopularParcial;
-
-                this.$refs.populacao.disabled = false;
-                this.$refs.divulgacao.disabled = false;
-                this.$refs.patrocinador.disabled = false;
+                this.distribuicao.vlReceitaProponenteIntegral = this.converterParaMoedaAmericana(this.vlReceitaProponenteIntegral);
+                this.distribuicao.vlReceitaProponenteParcial = this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial);
+                this.distribuicao.vlReceitaPopularIntegral = this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral);
+                this.distribuicao.vlReceitaPopularParcial = this.converterParaMoedaAmericana(this.vlReceitaPopularParcial);
+                this.distribuicao.vlReceitaPrevista = this.converterParaMoedaAmericana(this.vlReceitaPrevista);
+                this.distribuicao.vlUnitarioProponenteIntegral = this.converterParaMoedaAmericana(this.inputUnitarioPopularIntegral);
+                this.distribuicao.vlUnitarioPopularIntegral = this.converterParaMoedaAmericana(this.inputUnitarioPopularIntegral);
             } else {
                 this.distribuicao.vlUnitarioProponenteIntegral = 0;
                 this.distribuicao.vlUnitarioPopularIntegral = 0;
@@ -935,27 +1000,24 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
             let limiteQuantidadeDivulgacao = this.distribuicao.qtExemplares * 0.1;
 
             if (val > limiteQuantidadeDivulgacao) {
-                this.mensagemErro("A quantidade n\xE3o pode passar de " + limiteQuantidadeDivulgacao);
+                this.mensagemAlerta("A quantidade n\xE3o pode passar de " + limiteQuantidadeDivulgacao);
                 this.distribuicao.qtGratuitaDivulgacao = limiteQuantidadeDivulgacao;
             }
-
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         "distribuicao.qtGratuitaPatrocinador": function (val) {
             let limitePatrocinador = this.distribuicao.qtExemplares * 0.1;
 
             if (val > limitePatrocinador) {
-                this.mensagemErro("A quantidade n\xE3o pode passar de " + limitePatrocinador);
+                this.mensagemAlerta("A quantidade n\xE3o pode passar de " + limitePatrocinador);
                 this.distribuicao.qtGratuitaPatrocinador = limitePatrocinador;
             }
-
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         "distribuicao.vlUnitarioPopularIntegral": function () {
-            if (this.converterParaMoedaAmericana(this.distribuicao.vlUnitarioPopularIntegral) > 75.00) {
-                this.mensagemErro('O pre\xE7o unit\xE1rio n\xE3o pode ser maior que R$ 75,00');
-                this.distribuicao.vlUnitarioPopularIntegral = numeral(75.00).format();
-                console.log('vlunitarioPopularIntegral', this.distribuicao.vlUnitarioPopularIntegral);
+            if (this.distribuicao.vlUnitarioPopularIntegral > 75.00) {
+                this.mensagemAlerta('O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode ser maior que R$ 75,00');
+                this.distribuicao.vlUnitarioPopularIntegral = 75.00;
             }
         },
         percentualProponente: function () {
@@ -963,24 +1025,9 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
         }
     },
     mounted: function () {
-        // this.t();
         this.$refs.add.disabled = !this.disabled;
     },
     methods: {
-        obterDiferencaDosItensDistribuidos: function () {
-            let soma = numeral();
-
-            soma.add(this.distribuicao.qtProponenteIntegral);
-            soma.add(this.distribuicao.qtProponenteParcial);
-            soma.add(this.distribuicao.qtPopularIntegral);
-            soma.add(this.distribuicao.qtPopularParcial);
-            soma.add(this.distribuicao.qtGratuitaDivulgacao);
-            soma.add(this.distribuicao.qtGratuitaPatrocinador);
-            soma.add(this.distribuicao.qtGratuitaPopulacao);
-            console.log('numeral', numeral(soma).value());
-            console.log('exemplares', parseInt(this.distribuicao.qtExemplares));
-            return parseInt(numeral(soma).value() - parseInt(this.distribuicao.qtExemplares));
-        },
         obterQuantidadePorPercentual: function (percentualDistribuicao) {
             let divisao = 0.5;
 
@@ -1007,14 +1054,14 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
             this.active = this.active == true ? false : true;
             this.icon = this.icon == 'visibility_off' ? 'add' : 'visibility_off';
         },
-        mostrarFormulario: function (el) {
+        mostrarFormulario: function (id) {
             this.visualizarFormulario = this.visualizarFormulario == true ? false : true;
 
             if (this.visualizarFormulario == true) {
-                let element = $('#' + el).offset().top - 60;
-                $('body').animate({
-                    scrollTop: element
-                }, 500);
+                let elm = $3("#" + id);
+                $3("html, body").animate({
+                    scrollTop: $3(elm).offset().top - 60
+                }, 600);
             }
         },
         limparFormulario: function () {
@@ -1030,6 +1077,10 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
             Materialize.toast(msg, 8000, 'mensagem1 orange darken-3 white-text');
         },
         salvar: function (event) {
+
+            // this.$emit('eventoNovoDetalhamento', this.distribuicao);
+
+            // return;
 
             if (this.distribuicao.dsProduto == '' && this.distribuicao.tpVenda == 'i') {
                 this.mensagemAlerta("\xC9 obrigat\xF3rio informar a categoria");
@@ -1062,21 +1113,22 @@ Vue.component('proposta-plano-distribuicao-form-detalhamento', {
                 return;
             }
 
-            // this.$data.produtos.push(this.distribuicao);
-
-            this.visualizarFormulario = false;
-
             let vue = this;
             $3.ajax({
                 type: "POST",
                 url: "/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/" + this.idpreprojeto,
                 data: this.distribuicao
-            }).done(function () {
-                // vue.t();
-                vue.limparFormulario();
-                vue.mensagemSucesso('Detalhamento salvo com sucesso');
-            }).fail(function () {
-                vue.mensagemErro('Erro ao salvar o detalhamento!');
+            }).done(function (response) {
+                console.log(response);
+                if(response.success == 'true') {
+                    // vue.visualizarFormulario = false;
+                    vue.$emit('eventoNovoDetalhamento', response.data);
+                    vue.limparFormulario();
+                    vue.mensagemSucesso(response.msg);
+                }
+
+            }).fail(function (response) {
+                vue.mensagemErro(response.responseJSON.msg);
             });
         }
     }

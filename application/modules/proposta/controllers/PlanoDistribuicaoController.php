@@ -311,18 +311,26 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $detalhamento = new Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto();
         $tblPlanoDistribuicao = new PlanoDistribuicao();
 
-
         try {
-            $detalhamento->salvar($dados);
+            $id = $detalhamento->salvar($dados);
+
+            if (!empty($id)) {
+                $dados['idDetalhaPlanoDistribuicao'] = $id;
+            }
+
             $tblPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
 
             $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
             $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
+
+            $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento salvo com sucesso!'));
         } catch (Exception $e) {
-            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'error'=>$e));
+            $this->getResponse()
+                ->setHeader('Content-Type', 'application/json')
+                ->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg'=> $e->getMessage()));
         }
 
-        $this->_helper->json(array('data' => $dados, 'success' => 'true'));
     }
 
     public function detalharMostrarAction()
@@ -337,18 +345,36 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
 
     public function detalharExcluirAction()
     {
-        $id = (int)$this->getRequest()->getParam('idDetalhaPlanoDistribuicao');
-        $idPlanoDistribuicao = (int)$this->getRequest()->getParam('idPlanoDistribuicao');
+        try {
+            $id = (int)$this->getRequest()->getParam('idDetalhaPlanoDistribuicao');
+            $idPlanoDistribuicao = (int)$this->getRequest()->getParam('idPlanoDistribuicao');
 
-        $detalhamento = new Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto();
-        $dados = $detalhamento->excluir($id);
+            if (empty($id)) {
+                throw new Exception("ID do detalhamento &eacute; obrigat&oacute;rio");
+            }
 
-        $tblPlanoDistribuicao = new PlanoDistribuicao();
-        $tblPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($idPlanoDistribuicao);
+            if (empty($idPlanoDistribuicao)) {
+                throw new Exception("ID do Produto &eacute; obrigat&oacute;rio");
+            }
 
-        $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
-        $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
+            $detalhamento = new Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto();
+            $retorno = $detalhamento->excluir($id);
 
-        $this->_helper->json(array('data' => $dados, 'success' => 'true'));
+            $tblPlanoDistribuicao = new PlanoDistribuicao();
+            $tblPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($idPlanoDistribuicao);
+
+            $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+            $tbCustosVinculadosMapper->salvarCustosVinculadosDaTbPlanilhaProposta($this->idPreProjeto);
+
+            $this->_helper->json(array('data' => $retorno, 'success' => 'true', 'msg' => 'Detalhamento exclu&iacute;do com sucesso'));
+
+        } catch (Exception $e) {
+            $this->getResponse()
+                ->setHeader('Content-Type', 'application/json')
+                ->setHttpResponseCode(412);
+
+            $this->_helper->json(array('data' => $retorno, 'success' => 'false', 'msg' => $e->getMessage()));
+        }
+
     }
 }
