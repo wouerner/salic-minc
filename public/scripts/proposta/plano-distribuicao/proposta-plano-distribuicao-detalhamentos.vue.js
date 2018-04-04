@@ -189,12 +189,6 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 type: "GET",
                 url: url
             }).done(function (data) {
-                // if ((numeral(this.valorMedioProponente).value() > 225
-                //     && (this.canalaberto == 0))) {
-                //     this.mensagemAlerta("O valor medio:" + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: 225,00");
-                //     this.$data.detalhamentos.splice(-1, 1)
-                // }
-                console.log(data.data);
                 vue.$data.detalhamentos = data.data;
             }).fail(function () {
                 vue.mensagemErro('Erro ao buscar detalhamento');
@@ -280,21 +274,34 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                     <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
                     <td></td>
                 </tr>
+                </tfoot>
+            </table>
+            
+            <table style="max-width: 300px">
                 <tr>
-                    <th class=""><b>Valor m&eacute;dio </b></th>
+                    <th>
+                        <b>Valor m&eacute;dio </b>
+                    </th>
                     <td class="center-align red"
-                        v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))">
-                        {{valorMedioProponenteFormatado}}
+                        v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))"> {{valorMedioProponenteFormatado}}
                     </td>
                     <td class="center-align " v-else>{{valorMedioProponenteFormatado}}</td>
                 </tr>
-                </tfoot>
             </table>
         </div>
     `,
     data: function () {
         return {
             // detalhamentos: [],
+        }
+    },
+    watch: {
+        detalhamentos: function () {
+            if ((numeral(this.valorMedioProponente).value() > 225
+                && (this.canalaberto == 0))) {
+                this.mensagemAlerta("O valor medio:" + this.valorMedioProponenteFormatado + ", n\xE3o pode ultrapassar: 225,00");
+                this.$data.detalhamentos.splice(-1, 1)
+            }
         }
     },
     props: [
@@ -423,7 +430,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                 qtProponenteParcial.add(parseFloat(this.detalhamentos[i]['qtProponenteParcial']));
             }
 
-            var media = numeral(parseFloat(vlReceitaProponenteIntegral.value() + vlReceitaProponenteParcial.value()) / (qtProponenteIntegral.value() + qtProponenteParcial.value()));
+            let media = numeral(parseFloat(vlReceitaProponenteIntegral.value() + vlReceitaProponenteParcial.value()) / (qtProponenteIntegral.value() + qtProponenteParcial.value()));
 
             return media;
         },
@@ -1078,10 +1085,6 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
         },
         salvar: function (event) {
 
-            // this.$emit('eventoNovoDetalhamento', this.distribuicao);
-
-            // return;
-
             if (this.distribuicao.dsProduto == '' && this.distribuicao.tpVenda == 'i') {
                 this.mensagemAlerta("\xC9 obrigat\xF3rio informar a categoria");
                 this.$refs.dsProduto.focus();
@@ -1138,10 +1141,15 @@ var app6 = new Vue({
     el: '#container-vue'
 });
 
+
+$3(document).ready(function () {
+    $3('#container-loading').fadeIn();
+});
+
 $3(document).ajaxStart(function () {
-    $3('#container-loading').show();
+    $3('#container-loading').fadeIn();
 });
 
 $3(document).ajaxComplete(function () {
-    $3('#container-loading').hide();
+    $3('#container-loading').fadeOut();
 });
