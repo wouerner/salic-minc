@@ -277,7 +277,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                 </tfoot>
             </table>
             
-            <table style="max-width: 300px">
+            <table style="max-width: 300px" v-if="detalhamentos && detalhamentos.length > 0">
                 <tr>
                     <th>
                         <b>Valor m&eacute;dio </b>
