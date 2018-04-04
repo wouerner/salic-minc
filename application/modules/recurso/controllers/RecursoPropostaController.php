@@ -13,6 +13,8 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
         $auth = Zend_Auth::getInstance();
         $this->authIdentity = array_change_key_case((array)$auth->getIdentity());
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+
+        $this->view->id_perfil = $this->grupoAtivo->codGrupo;
     }
 
     public function indexAction()
@@ -22,8 +24,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     public function visaoProponenteAction()
     {
-        $id_perfil = $this->grupoAtivo->codGrupo;
-        if ((int)$id_perfil != (int)Autenticacao_Model_Grupos::PROPONENTE) {
+        if ((int)$this->view->id_perfil != (int)Autenticacao_Model_Grupos::PROPONENTE) {
             throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o acessar essa funcionalidade.");
         }
 
@@ -41,9 +42,8 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     public function visaoAvaliadorAction()
     {
-        $id_perfil = $this->grupoAtivo->codGrupo;
-        if ((int)$id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-        && (int)$id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+        if ((int)$this->view->id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+        && (int)$this->view->id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
             throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o acessar essa funcionalidade.");
         }
 
@@ -57,11 +57,14 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
                 'idArquivo' => $this->view->recursoEnquadramento['idArquivo']
             ]);
         }
-//        $this->view->idPreProjeto =
     }
 
     /**
      * @todo Refatorar esse trecho de c&oacute;digo pois as demandas desse m&oacute;dulo foram emergenciais.
+     * @todo tratar o trecho abaixo para que caso já exista um registro avaliado, entrar com:
+     * ```
+     *  'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
+     * ```
      */
     public function visaoProponenteSalvarAction()
     {

@@ -56,11 +56,13 @@ class Recurso_Model_TbRecursoProposta extends MinC_Db_Model
     /**
      * Quando o proponente o proponente não concordar com o enquadramento
      * ele poderá entrar um pedido de reconsideração.
+     * 1ª vez
      */
     const TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO = 1;
     /**
      * Quando o Avalialiador não concordar com o pedido de reconsideração
      * (faz o indeferimento) o proponente poderá entrar com outro pedido.
+     * 2ª vez
      */
     const TIPO_RECURSO_RECURSO = 2;
     const TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL = 'DR';
