@@ -114,6 +114,54 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
         );
     }
 
+    public function visaoAvaliadorSalvarAction()
+    {
+//        $post = $this->getRequest()->getPost();
+//        $id_preprojeto = trim($post['id_preprojeto']);
+//        if (empty($id_preprojeto) || is_null($id_preprojeto)) {
+//            throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+//        }
+//
+//        $tpSolicitacao = trim($post['tpSolicitacao']);
+//        if (empty($tpSolicitacao) || is_null($tpSolicitacao)) {
+//            throw new Exception("O campo 'Tipo de Solicita&amp;ccedil;&amp;atilde;o' &eacute; de preenchimento obrigat&oacute;rio.");
+//        }
+//
+//        $justificativa = trim($post['dsRecursoProponente']);
+//        if (empty($justificativa) || is_null($justificativa)) {
+//            throw new Exception("O campo 'Justificativa' &eacute; de preenchimento obrigat&oacute;rio.");
+//        }
+//
+//        $acao_salvar = trim($post['acao_salvar']);
+//        if (empty($acao_salvar) || is_null($acao_salvar)) {
+//            throw new Exception("Bot&atilde;o de a&ccedil;&atilde;o n&atilde;o informado.");
+//        }
+//        $stRascunho = ($acao_salvar == 'rascunho') ? Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO : Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO;
+//
+//        $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+//        $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
+//
+//        $idArquivo = $this->uploadAnexoProponente($recursoEnquadramento);
+//        $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
+//            'idRecursoProposta' => $recursoEnquadramento['idRecursoProposta'],
+//            'idPreProjeto' => $id_preprojeto,
+//            'dtRecursoProponente' => $recursoEnquadramentoDbTable->getExpressionDate(),
+//            'dsRecursoProponente' => $justificativa,
+//            'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
+//            'tpSolicitacao' => $tpSolicitacao,
+//            'idArquivo' => $idArquivo,
+//            'stRascunho' => $stRascunho,
+//        ]);
+//        $tbRecursoMapper = new Recurso_Model_TbRecursoPropostaMapper();
+//        $tbRecursoMapper->save($tbRecursoModel);
+//
+//        parent::message(
+//            'Dados armazenados com sucesso.',
+//            "/recurso/recurso-proposta/visao-proponente/idPreProjeto/{$id_preprojeto}",
+//            'CONFIRM'
+//        );
+    }
+
     /**
      * @return int|null
      */

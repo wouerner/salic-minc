@@ -21,18 +21,20 @@
                     <p>
                         <span>
                             <input name="tpSolicitacao"
-                                <?php echo (!$this->recursoEnquadramento['tpSolicitacao'] || $this->recursoEnquadramento['tpSolicitacao'] == 'DR') ? "checked='checked'" : '' ?>
+                                <?php echo (!$this->recursoEnquadramento['tpSolicitacao']
+                                    || $this->recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) ? "checked='checked'" : '' ?>
                                    type="radio"
-                                   value="DR"
+                                   value="<?php echo Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL ?>"
                                 <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
                                    id="desistencia_prazo_recursal"/>
                             <label for="desistencia_prazo_recursal">Desist&ecirc;ncia do Prazo Recursal</label>
                         </span>
                         <span>
                             <input name="tpSolicitacao"
-                                <?php echo ($this->recursoEnquadramento['tpSolicitacao'] && $this->recursoEnquadramento['tpSolicitacao'] == 'EN') ? "checked='checked'" : '' ?>
+                                <?php echo ($this->recursoEnquadramento['tpSolicitacao']
+                                    && $this->recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_ENQUADRAMENTO) ? "checked='checked'" : '' ?>
                                    type="radio"
-                                   value="EN"
+                                   value="<?php echo Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_ENQUADRAMENTO ?>"
                                 <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
                                    id="recurso"/>
                             <label for="recurso">Recurso</label>
