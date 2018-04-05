@@ -56,7 +56,14 @@
                 <div class="row">
                     <div class="col s12">
                         <?php
-                        echo $this->partial("recurso-proposta/inc/bloco_sugestao-enquadramento.phtml", $this);
+                        echo $this->partial("recurso-proposta/inc/bloco_enquadramento-proposta-proponente.phtml", $this);
+                        ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <?php
+                        echo $this->partial("recurso-proposta/inc/bloco_enquadramento-proposto-avaliador.phtml", $this);
                         ?>
                     </div>
                 </div>
@@ -70,19 +77,23 @@
                                 if ($this->recursoEnquadramento['tpRecurso'] == Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO) {
                                     $tipoRecurso = "recurso";
                                 }
-                                echo $tipoRecurso; ?>
+                                echo $tipoRecurso;
+                                ?>
                             </b>
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <fieldset>
-                            <legend>Justificativa do Pedido</legend>
-                            <p class="">
-                                <?php echo $this->recursoEnquadramento['dsRecursoProponente'] ?>
-                            </p>
-                        </fieldset>
+                        <p><b>Justificativa do Pedido</b></p>
+                        <p class="">
+                            <textarea cols="80"
+                                      id="dsRecursoProponente"
+                                      name="dsRecursoProponente"
+                                      rows="10"
+                                      class="textarea_simples"
+                                      style="width: 99%"><?php echo $this->recursoEnquadramento['dsRecursoProponente'] ?></textarea>
+                        </p>
                     </div>
                 </div>
                 <div class="row">

@@ -90,6 +90,8 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             )
         );
 
+        $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+        $this->view->enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($idPreProjeto);
     }
 
     /**
@@ -173,7 +175,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
         $idAvaliadorTecnico = $this->authIdentity['usu_codigo'];
         $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-        $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
+        $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoAvaliador($id_preprojeto);
 
         if (!$recursoEnquadramento['idRecursoProposta']) {
             throw new Exception("Identificador do Recurso da Proposta n&atilde;o localizado.");

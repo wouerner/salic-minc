@@ -47,30 +47,30 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         $this->sugestaoEnquadramento->setUltimaSugestao(self::ULTIMA_SUGESTAO_ATIVA);
         $tableSelect = $this->obterQueryDetalhadaEnquadramentosProposta();
         $condicaoJoinTbRecursoProposta = 'sugestao_enquadramento.id_preprojeto = tbRecursoProposta.idPreProjeto ';
-        $condicaoJoinTbRecursoProposta .= " and tbRecursoProposta.stAtivo = " . Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_ATIVO ;
+        $condicaoJoinTbRecursoProposta .= " and tbRecursoProposta.stAtivo = " . Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_ATIVO;
 //        $condicaoJoinTbRecursoProposta .= " and tbRecursoProposta.stAtendimento in (";
 //        $condicaoJoinTbRecursoProposta .= "'" . Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_SEM_AVALIACAO . "'" ;
 //        $condicaoJoinTbRecursoProposta .= ", '" . Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO . "')";
         $tableSelect->joinInner(
             'tbRecursoProposta'
             , $condicaoJoinTbRecursoProposta
-            ,[
+            , [
 //                '*',
-                'idPreProjeto',
-                'idRecursoProposta',
-                'dtRecursoProponente',
-                'dsRecursoProponente',
-                'idProponente',
-                'dtAvaliacaoTecnica',
-                'idAvaliadorTecnico',
-                'dsAvaliacaoTecnica',
-                'tpRecurso',
-                'idArquivo',
-                'stAtendimento',
-                'stRascunho',
-                'tpSolicitacao',
-                'diasDesdeAberturaRecurso' => new Zend_Db_Expr('DATEDIFF(DAY, dtRecursoProponente, GETDATE())')
-            ],
+            'idPreProjeto',
+            'idRecursoProposta',
+            'dtRecursoProponente',
+            'dsRecursoProponente',
+            'idProponente',
+            'dtAvaliacaoTecnica',
+            'idAvaliadorTecnico',
+            'dsAvaliacaoTecnica',
+            'tpRecurso',
+            'idArquivo',
+            'stAtendimento',
+            'stRascunho',
+            'tpSolicitacao',
+            'diasDesdeAberturaRecurso' => new Zend_Db_Expr('DATEDIFF(DAY, dtRecursoProponente, GETDATE())')
+        ],
             $this->getSchema('sac')
         );
         $tableSelect->joinLeft(
@@ -78,7 +78,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             , "distribuicao_avaliacao_proposta.id_preprojeto = sugestao_enquadramento.id_preprojeto
                     and distribuicao_avaliacao_proposta.id_orgao_superior = sugestao_enquadramento.id_orgao_superior
                     and distribuicao_avaliacao_proposta.id_perfil = " . Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-                 . " and distribuicao_avaliacao_proposta.avaliacao_atual = " . Admissibilidade_Model_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
+            . " and distribuicao_avaliacao_proposta.avaliacao_atual = " . Admissibilidade_Model_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA
             ,
             [
                 'id_distribuicao_avaliacao_proposta',
@@ -298,7 +298,8 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
 
             $distribuicaoAtiva = $distribuicaoAvaliacaoPropostaDbTable->obterDistribuicaoAtiva();
             if (/*$distribuicaoAtiva['id_perfil'] == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-            &&*/ $this->isPermitidoCadastrarRecurso($dadosSugestaoEnquadramento['id_perfil'])) {
+            &&*/
+            $this->isPermitidoCadastrarRecurso($dadosSugestaoEnquadramento['id_perfil'])) {
                 $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
                 $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugestaoEnquadramento['id_preprojeto']);
 
@@ -313,9 +314,10 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
 
     }
 
-    private function isPermitidoCadastrarRecurso($id_perfil) {
-        return  ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-        || $id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE);
+    private function isPermitidoCadastrarRecurso($id_perfil)
+    {
+        return ($id_perfil == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+            || $id_perfil == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE);
     }
 
     private function enviarEmailAberturaDePrazoRecursal($id_preprojeto)

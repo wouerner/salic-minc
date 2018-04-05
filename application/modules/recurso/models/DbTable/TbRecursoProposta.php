@@ -61,7 +61,22 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
                 Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO
             ]
         ]);
+    }
+
+    public function obterRecursoAtualVisaoAvaliador($id_preprojeto)
+    {
+        $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
+        $arrPreprojeto = $preprojetoDbTable->findBy(['idPreProjeto' => $id_preprojeto]);
+
+        return $this->findBy([
+            'idPreProjeto' => $id_preprojeto,
+            'idProponente' => $arrPreprojeto['idAgente'],
+            'stAtivo' => new Zend_Db_Expr((string)Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_ATIVO),
+            'stAtendimento <> ?' =>
+                Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_SEM_AVALIACAO
+        ]);
 
     }
+
 
 }

@@ -90,6 +90,15 @@
             } ?>
             })
 
+            var editorRicoAvaliacaoProponente = $('#dsRecursoProponente').editorRico({
+                altura: 200,
+                isLimitarCarateres: true,
+                maxchar: limiteMaximo,
+                isDesabilitarEdicao: 1
+            })
+
+
+
             $('#formEnquadramentoProjeto').validate({
                 rules: {
                     dsAvaliacaoTecnica: {
