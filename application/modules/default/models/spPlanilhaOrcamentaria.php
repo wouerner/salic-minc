@@ -51,7 +51,6 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
                     $spVisualizarPlanilhaOrcamentariaPlanilhaOrcamentaria = new spVisualizarPlanilhaOrcamentaria();
                     $planilhaOrcamentaria = $spVisualizarPlanilhaOrcamentariaPlanilhaOrcamentaria->exec($idPronac);
                 }
-                
                 return $planilhaOrcamentaria;
                 break;
             default:

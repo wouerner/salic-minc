@@ -1,15 +1,5 @@
 <?php
 
-/**
- * Controller Readequacoes
- * @author Jefferson Alessandro - jeffersonassilva@gmail.com
- * @since 14/11/2013
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://www.cultura.gov.br
- * @copyright  2010 - Ministerio da Cultura - Todos os direitos reservados.
- */
 class ReadequacoesController extends MinC_Controller_Action_Abstract
 {
     private $intTamPag = 10;
