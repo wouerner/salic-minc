@@ -6,6 +6,13 @@
           'action' => 'visao-avaliador-salvar'
       ]) ?>"
       enctype="multipart/form-data">
+    <input type="hidden"
+           name="id_preprojeto"
+           value="<?php echo $this->recursoEnquadramento['id_preprojeto'] ?>" />
+    <input type="hidden"
+           name="idRecursoProposta"
+           value="<?php echo $this->recursoEnquadramento['idRecursoProposta'] ?>" />
+
     <div class="row">
         <div class="col s12">
             <label>Tipo de Avalia&ccedil;&atilde;o</label>
@@ -15,9 +22,7 @@
                         || $this->recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO) ? "checked='checked'" : '' ?>
                        type="radio"
                        value="<?php echo Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO ?>"
-                    <?php if ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                        && !is_null($this->recursoEnquadramento['dtAvaliacaoTecnica'])
-                        && !empty($this->recursoEnquadramento['dtAvaliacaoTecnica'])) {
+                    <?php if (!$this->isPermitidoEditar) {
                         echo 'disabled="disabled"';
                     } ?>
                        id="situacao_atendimento_deferido"/>
@@ -27,9 +32,7 @@
                         && $this->recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO) ? "checked='checked'" : '' ?>
                        type="radio"
                        value="<?php echo Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO ?>"
-                    <?php if ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                        && !is_null($this->recursoEnquadramento['dtAvaliacaoTecnica'])
-                        && !empty($this->recursoEnquadramento['dtAvaliacaoTecnica'])) {
+                    <?php if (!$this->isPermitidoEditar) {
                         echo 'disabled="disabled"';
                     } ?>
                        id="situacao_atendimento_indeferido"/>
@@ -46,11 +49,6 @@
                           id="dsAvaliacaoTecnica"
                           name="dsAvaliacaoTecnica"
                           rows="10"
-                    <?php if ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                        && !is_null($this->recursoEnquadramento['dtAvaliacaoTecnica'])
-                        && !empty($this->recursoEnquadramento['dtAvaliacaoTecnica'])) {
-                        echo 'disabled="disabled"';
-                    } ?>
                           class="textarea_simples"
                           style="width: 99%"><?php echo $this->recursoEnquadramento['dsAvaliacaoTecnica'] ?></textarea>
             </p>
@@ -62,9 +60,7 @@
             <button class="btn"
                     type="submit"
                     name="acao_salvar"
-                <?php if ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                    && !is_null($this->recursoEnquadramento['dtAvaliacaoTecnica'])
-                    && !empty($this->recursoEnquadramento['dtAvaliacaoTecnica'])) {
+                <?php if (!$this->isPermitidoEditar) {
                     echo 'disabled="disabled"';
                 } ?>
                     value="rascunho">Salvar
@@ -72,9 +68,7 @@
             <button class="btn"
                     type="submit"
                     name="acao_salvar"
-                <?php if ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                    && !is_null($this->recursoEnquadramento['dtAvaliacaoTecnica'])
-                    && !empty($this->recursoEnquadramento['dtAvaliacaoTecnica'])) {
+                <?php if (!$this->isPermitidoEditar) {
                     echo 'disabled="disabled"';
                 } ?>
                     value="enviar">Enviar
@@ -89,10 +83,8 @@
                 altura: 200,
                 isLimitarCarateres: true,
                 maxchar: limiteMaximo,
-                <?php if ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                && !is_null($this->recursoEnquadramento['dtAvaliacaoTecnica'])
-                && !empty($this->recursoEnquadramento['dtAvaliacaoTecnica'])) {
-                echo 'isDesabilitarEdicao="1"';
+                <?php if (!$this->isPermitidoEditar) {
+                echo 'isDesabilitarEdicao: 1';
             } ?>
             })
 

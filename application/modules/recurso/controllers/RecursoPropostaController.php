@@ -38,18 +38,37 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
                 'idArquivo' => $this->view->recursoEnquadramento['idArquivo']
             ]);
         }
+
+        $this->view->isPermitirEdicao = (
+            (
+                is_null($this->view->recursoEnquadramento['stRascunho'])
+                ||
+                (
+                    !is_null($this->view->recursoEnquadramento['stRascunho']) &&
+                    (int)$this->view->recursoEnquadramento['stRascunho'] != (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+                )
+            ) && !$this->view->recursoEnquadramento['dtAvaliacaoTecnica']
+        );
     }
 
     public function visaoAvaliadorAction()
     {
         if ((int)$this->view->id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-        && (int)$this->view->id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
+            && (int)$this->view->id_perfil != (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
             throw new Exception("Perfil de Usu&aacute;rio sem permiss&atilde;o acessar essa funcionalidade.");
         }
 
+        $get = $this->getRequest()->getParams();
+        $idPreProjeto = trim($get['idPreProjeto']);
+
+        if (empty($idPreProjeto) || is_null($idPreProjeto)) {
+            throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+        }
+
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-        $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
+        $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($idPreProjeto);
         $this->view->recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
+
         if (!empty($this->view->recursoEnquadramento['idArquivo'])
             && !is_null($this->view->recursoEnquadramento['idArquivo'])) {
             $tbArquivoDbTable = new tbArquivo();
@@ -57,6 +76,20 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
                 'idArquivo' => $this->view->recursoEnquadramento['idArquivo']
             ]);
         }
+
+        $this->view->isPermitidoEditar = (
+            is_null($this->view->recursoEnquadramento['stRascunho'])
+            || (
+                !is_null($this->view->recursoEnquadramento['stRascunho'])
+                && (int)$this->view->recursoEnquadramento['stRascunho'] != (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+            )
+            || (
+                !is_null($this->view->recursoEnquadramento['stRascunho'])
+                && (int)$this->view->recursoEnquadramento['stRascunho'] == (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+                && !$this->view->recursoEnquadramento['dtAvaliacaoTecnica']
+            )
+        );
+
     }
 
     /**
@@ -116,50 +149,52 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     public function visaoAvaliadorSalvarAction()
     {
-//        $post = $this->getRequest()->getPost();
-//        $id_preprojeto = trim($post['id_preprojeto']);
-//        if (empty($id_preprojeto) || is_null($id_preprojeto)) {
-//            throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
-//        }
-//
-//        $tpSolicitacao = trim($post['tpSolicitacao']);
-//        if (empty($tpSolicitacao) || is_null($tpSolicitacao)) {
-//            throw new Exception("O campo 'Tipo de Solicita&amp;ccedil;&amp;atilde;o' &eacute; de preenchimento obrigat&oacute;rio.");
-//        }
-//
-//        $justificativa = trim($post['dsRecursoProponente']);
-//        if (empty($justificativa) || is_null($justificativa)) {
-//            throw new Exception("O campo 'Justificativa' &eacute; de preenchimento obrigat&oacute;rio.");
-//        }
-//
-//        $acao_salvar = trim($post['acao_salvar']);
-//        if (empty($acao_salvar) || is_null($acao_salvar)) {
-//            throw new Exception("Bot&atilde;o de a&ccedil;&atilde;o n&atilde;o informado.");
-//        }
-//        $stRascunho = ($acao_salvar == 'rascunho') ? Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO : Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO;
-//
-//        $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-//        $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
-//
-//        $idArquivo = $this->uploadAnexoProponente($recursoEnquadramento);
-//        $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
-//            'idRecursoProposta' => $recursoEnquadramento['idRecursoProposta'],
-//            'idPreProjeto' => $id_preprojeto,
-//            'dtRecursoProponente' => $recursoEnquadramentoDbTable->getExpressionDate(),
-//            'dsRecursoProponente' => $justificativa,
-//            'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
-//            'tpSolicitacao' => $tpSolicitacao,
-//            'idArquivo' => $idArquivo,
-//            'stRascunho' => $stRascunho,
-//        ]);
-//        $tbRecursoMapper = new Recurso_Model_TbRecursoPropostaMapper();
-//        $tbRecursoMapper->save($tbRecursoModel);
-//
-//        parent::message(
-//            'Dados armazenados com sucesso.',
-//            "/recurso/recurso-proposta/visao-proponente/idPreProjeto/{$id_preprojeto}",
-//            'CONFIRM'
-//        );
+        $post = $this->getRequest()->getPost();
+        $id_preprojeto = trim($post['id_preprojeto']);
+        if (empty($id_preprojeto) || is_null($id_preprojeto)) {
+            throw new Exception("Identificador da Proposta n&atilde;o foi localizado.");
+        }
+
+        $stAtendimento = trim($post['stAtendimento']);
+        if (empty($stAtendimento) || is_null($stAtendimento)) {
+            throw new Exception("O campo 'Tipo de Avalia&ccedil;&atilde;o' &eacute; de preenchimento obrigat&oacute;rio.");
+        }
+
+        $dsAvaliacaoTecnica = trim($post['dsAvaliacaoTecnica']);
+        if (empty($dsAvaliacaoTecnica) || is_null($dsAvaliacaoTecnica)) {
+            throw new Exception("O campo 'Motiva&ccedil;&atilde;o' &eacute; de preenchimento obrigat&oacute;rio.");
+        }
+
+        $acao_salvar = trim($post['acao_salvar']);
+        if (empty($acao_salvar) || is_null($acao_salvar)) {
+            throw new Exception("Bot&atilde;o de a&ccedil;&atilde;o n&atilde;o informado.");
+        }
+        $stRascunho = ($acao_salvar == 'rascunho') ? Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO : Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO;
+
+        $idAvaliadorTecnico = $this->authIdentity['usu_codigo'];
+        $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+        $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
+
+        if (!$recursoEnquadramento['idRecursoProposta']) {
+            throw new Exception("Identificador do Recurso da Proposta n&atilde;o localizado.");
+        }
+
+        $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
+            'idRecursoProposta' => $recursoEnquadramento['idRecursoProposta'],
+            'dtAvaliacaoTecnica' => $recursoEnquadramentoDbTable->getExpressionDate(),
+            'dsAvaliacaoTecnica' => $dsAvaliacaoTecnica,
+            'stAtendimento' => $stAtendimento,
+            'idAvaliadorTecnico' => $idAvaliadorTecnico,
+            'stRascunho' => $stRascunho,
+        ]);
+        $tbRecursoMapper = new Recurso_Model_TbRecursoPropostaMapper();
+        $tbRecursoMapper->save($tbRecursoModel);
+
+        parent::message(
+            'Dados armazenados com sucesso.',
+            "/recurso/recurso-proposta/visao-avaliador/idPreProjeto/{$id_preprojeto}",
+            'CONFIRM'
+        );
     }
 
     /**

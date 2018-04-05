@@ -318,8 +318,9 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
             $recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
-            if($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-            && !$recursoEnquadramento['dtAvaliacaoTecnica']) {
+
+            if ($recursoEnquadramento['dtAvaliacaoTecnica'] && (int)$recursoEnquadramento['stRascunho'] != (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+                || !$recursoEnquadramento['dtAvaliacaoTecnica']) {
                 $this->view->recursoEnquadramento = $recursoEnquadramento;
             }
 

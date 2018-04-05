@@ -25,7 +25,7 @@
                                     || $this->recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) ? "checked='checked'" : '' ?>
                                    type="radio"
                                    value="<?php echo Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL ?>"
-                                <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
+                                <?php echo ($this->isPermitidoEditar) ? '' : 'disabled="disabled"' ?>
                                    id="desistencia_prazo_recursal"/>
                             <label for="desistencia_prazo_recursal">Desist&ecirc;ncia do Prazo Recursal</label>
                         </span>
@@ -35,7 +35,7 @@
                                     && $this->recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_ENQUADRAMENTO) ? "checked='checked'" : '' ?>
                                    type="radio"
                                    value="<?php echo Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_ENQUADRAMENTO ?>"
-                                <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
+                                <?php echo ($this->isPermitidoEditar) ? '' : 'disabled="disabled"' ?>
                                    id="recurso"/>
                             <label for="recurso">Recurso</label>
                         </span>
@@ -53,7 +53,7 @@
                                       id="dsRecursoProponente"
                                       name="dsRecursoProponente"
                                       rows="10"
-                                <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
+                                <?php echo ($this->isPermitidoEditar) ? '' : 'disabled="disabled"' ?>
                                       class="textarea_simples"
                                       style="width: 99%"><?php echo $this->recursoEnquadramento['dsRecursoProponente'] ?></textarea>
                     </p>
@@ -76,13 +76,13 @@
                     <button class="btn"
                             type="submit"
                             name="acao_salvar"
-                        <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
+                        <?php echo ($this->isPermitidoEditar) ? '' : 'disabled="disabled"' ?>
                             value="rascunho">Salvar
                     </button>
                     <button class="btn"
                             type="submit"
                             name="acao_salvar"
-                        <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
+                        <?php echo ($this->isPermitidoEditar) ? '' : 'disabled="disabled"' ?>
                             value="enviar">Enviar
                     </button>
                 </div>
@@ -95,7 +95,7 @@
                         altura: 200,
                         isLimitarCarateres: true,
                         maxchar: limiteMaximo,
-                        isDesabilitarEdicao: <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '0' : '1' ?>,
+                        isDesabilitarEdicao: <?php echo ($this->isPermitidoEditar) ? '0' : '1' ?>,
                     })
 
                     $('#formEnquadramentoProjeto').validate({
