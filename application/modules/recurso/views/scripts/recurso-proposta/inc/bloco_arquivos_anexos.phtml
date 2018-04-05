@@ -26,7 +26,7 @@
                    data-position="top"
                    data-delay="50"
                    data-tooltip="Remover"
-                    <?php echo ($this->recursoEnquadramento['stRascunho'] != Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO) ? '' : 'disabled="disabled"' ?>
+                    <?php echo ($this->isPermitidoEditar && $this->id_perfil == Autenticacao_Model_Grupos::PROPONENTE) ? '' : 'disabled="disabled"' ?>
                    href="<?= $this->url([
                        'module' => 'recurso',
                        'controller' => 'recurso-proposta',
