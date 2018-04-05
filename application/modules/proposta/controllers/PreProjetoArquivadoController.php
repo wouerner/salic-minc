@@ -228,25 +228,26 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
         if ($stDecisao !== null) {
             $data['stDecisao'] = $stDecisao;
-            $mensagemDecisaoAssunto = ($stDecisao == 1) ? '(Aprovada)' : '(Reprovada)';
         }
 
         if ($avaliacaoFinal) {
-            if ($Avaliacao != null) {
 
-                $data2 = [
-                    'Avaliacao' => $Avaliacao,
-                    'dtAvaliacao' => new Zend_Db_Expr('GETDATE()'),
-                    'idAvaliadorAnaliseDesarquivamento' => $this->auth->getIdentity()->usu_codigo
-                ];
+            $data2 = [
+                'dtAvaliacao' => new Zend_Db_Expr('GETDATE()'),
+                'idAvaliadorAnaliseDesarquivamento' => $this->auth->getIdentity()->usu_codigo,
+                'Avaliacao' => null
+            ];
 
-                $data = array_merge($data, $data2);
+            if ($Avaliacao == null && $stDecisao == 0) {
 
-            }else{
                 $success = false;
                 $message = "É necessário descrever a avaliação!";
+            }else{
+                $data2['Avaliacao'] = $Avaliacao;
             }
         }
+
+        $data = array_merge($data, $data2);
 
         try {
             if($success){

@@ -179,8 +179,6 @@
                             data: null,
                             "name": "visualizarmotivo",
                             render: function (data, type, row) {
-                                console.log(data);
-                                console.log('de cima');
                                 if (data.MotivoArquivamento !== '') {
 
                                     var motivo = data.MotivoArquivamento;
@@ -199,18 +197,14 @@
                             data: null,
                             "name": "botao",
                             render: function (data, type, row) {
-                                console.log(data);
                                 if (data.ultimaSolicitacao == 1) {
                                     return 'Arquivada sem possibilidade de desarquivamento';
                                 }
 
                                 if (data.stDecisao == 0) {
                                     return '<button data-target="modal_visualizar_recusado" id="visualizar_recusado" class="waves-effect waves-light btn modal-trigger waves-dark white black-text"  data-idpreprojeto="' + data.idpreprojeto + '" data-avaliacao="' + data.Avaliacao + '"><i class="material-icons right">remove_red_eye</i>Solicitação recusada</button>';
-//                                    return '<button data-target="modal_visualizar_recusado" class="btnSolicitar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '">Solicitação recusada<i class="material-icons">remove_red_eye</i></button>'
-                                    return 'Solicitação de desarquivamento recusada'
                                 }
 
-                                console.log(data);
                                 if (data.SolicitacaoDesarquivamento == null) {
                                     return '<button data-target="modal_solicitar" class="btnSolicitar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '">Solicitar Desarquivamento</button>'
                                 }

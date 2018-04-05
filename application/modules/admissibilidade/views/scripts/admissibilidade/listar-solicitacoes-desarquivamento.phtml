@@ -1,3 +1,18 @@
+<style>
+    .switch label .lever{
+        background-color: #4CAF50;
+    }
+    .switch label .lever:after{
+        background-color: #2c7930;
+    }
+    .switch label input[type=checkbox]:checked + .lever{
+        background-color: #F44336;
+    }
+    .switch label input[type=checkbox]:checked + .lever:after{
+        background-color: #d43024;
+    }
+</style>
+
 <div class="container-fluid">
     <div class="page-title">
 	<div class="row">
@@ -41,21 +56,31 @@
         <div class=" col s12">
           <h3>Analisar Desarquivamento</h3>
           <h4 id="titulo_proposta"></h4>
-          <div class="card">
-            <div class="card-content ">
-              <span class="card-title">Motivo Arquivamento</span>
-              <p id="motivoarquivamento"></p>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-content ">
-              <span class="card-title">Solicita&ccedil;&atilde;o Desarquivamento</span>
-              <p id="solicitacao"></p>
-            </div>
-          </div>
             <div class="card">
                 <div class="card-content ">
+                    <span class="card-title">Motivo Arquivamento</span>
+                    <p id="motivoarquivamento"></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content ">
+                  <span class="card-title">Solicita&ccedil;&atilde;o Desarquivamento</span>
+                  <p id="solicitacao"></p>
+                </div>
+            </div>
+            <div class="card hoverable">
+                <div class="card-content ">
                     <span class="card-title">Avaliação</span>
+                    <div class="row s12">
+                        <div class="switch">
+                            <label>
+                                Aprovar
+                                <input class="switch_aprovacao" type="checkbox">
+                                <span class="lever"></span>
+                                Reprovar
+                            </label>
+                        </div>
+                    </div>
                     <textarea cols="80" id="MotivoDesarquivamento"
                               name="MotivoDesarquivamento"
                               class="textarea"
@@ -68,17 +93,32 @@
     </div>
     <div class="modal-footer">
       <input type="hidden" id="idpreprojeto" value="">
-      <a href="#!" id="aprovar" class="modal-action waves-effect waves-green btn-flat green white-text">Aprovar</a>
-      <a href="#!" id="reprovar" class="modal-action waves-effect waves-red btn-flat red white-text">Reprovar</a>
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat red-text">Cancelar</a>
+<!--      <a href="#!" id="aprovar" class="modal-action waves-effect waves-green btn-flat green white-text">Aprovar</a>-->
+<!--      <a href="#!" id="reprovar" class="modal-action waves-effect waves-red btn-flat red white-text">Reprovar</a>-->
+       <a href="#!" id="analisar" class="waves-effect waves-light btn"><i class="material-icons right">gavel</i>enviar</a>
+
+       <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat red-text">Cancelar</a>
     </div>
 </div>
 <script type="text/javascript">
  $(document).ready(function () {
-     var editorRico = $("#MotivoDesarquivamento").editorRico({
+     $("#MotivoDesarquivamento").editorRico({
          altura: 200,
          maxchar: 5000,
          isLimitarCarateres : true
+     });
+
+     $(".switch").find("input[type=checkbox]").on("change",function() {
+         if($('.switch_aprovacao').prop('checked')){
+
+             $(".mce-tinymce").show('slow');
+             $("#contadorRicoMotivoDesarquivamento").show('slow');
+
+         }else{
+             console.log('asdasd');
+             $(".mce-tinymce").hide('slow');
+             $("#contadorRicoMotivoDesarquivamento").hide('slow');
+         }
      });
 
      $('.expandir').live('click', function () {
@@ -183,66 +223,73 @@
              let solicitacao = $3(this).data('solicitacao');
              console.log(idpreprojeto);
 
+             $(".mce-tinymce").hide();
+             $("#contadorRicoMotivoDesarquivamento").hide();
+
+
              $3('#idpreprojeto').val(idpreprojeto);
              $3('#titulo_proposta').text(idpreprojeto + ' ' + nome);
              $3('#motivoarquivamento').html(motivoarquivamento);
              $3('#solicitacao').html(solicitacao);
          });
 
-        $3("#aprovar").on('click', function () {
-            $3.ajax({
-                url:'/proposta/pre-projeto-arquivado/avaliar-arquivamento',
-                data: {
-                    idpreprojeto: $3('#idpreprojeto').val(),
-                    Avaliacao: tinyMCE.get('MotivoDesarquivamento').getContent(),
-                    stDecisao: 1,
-                    stEstado: 0,
-                    avaliacaoFinal: true
-                },
-                method:'POST'
-            })
-            .done(function(data) {
-                let message_type = (data.success) ? 'green' : 'red';
+        $3("#analisar").on('click', function () {
 
-                Materialize.toast(data.message, 4000, message_type+' white-text');
-                table.ajax.reload();
-                if(data.success){
-                    $3('#modal_solicitacao').modal('close');
-                    $3.ajax({
-                        url:'/proposta/pre-projeto/update',
-                        data: {
-                            idPreProjeto: $3('#idpreprojeto').val(),
-                            stEstado: 1
-                        },
-                        method:'POST'
-                    }).done(function(data) {
-                        console.log(data);
-                    });
-                }
-            });
+            if($('.switch_aprovacao').prop('checked')){
+                $3.ajax({
+                    url:'/proposta/pre-projeto-arquivado/avaliar-arquivamento',
+                    data: {
+                        idpreprojeto: $3('#idpreprojeto').val(),
+                        Avaliacao: tinyMCE.get('MotivoDesarquivamento').getContent(),
+                        stDecisao: 0,
+                        stEstado: 0,
+                        avaliacaoFinal: true
+                    },
+                    method:'POST'
+                }).done(function(data) {
+                    let message_type = (data.success) ? 'green' : 'red';
+                    Materialize.toast(data.message, 4000, message_type+' white-text');
+                    console.log(data);
+                    table.ajax.reload();
+                    if(data.success){
+                        $3('#modal_solicitacao').modal('close');
+                    }
+                });
+
+            } else {
+
+                $3.ajax({
+                    url:'/proposta/pre-projeto-arquivado/avaliar-arquivamento',
+                    data: {
+                        idpreprojeto: $3('#idpreprojeto').val(),
+                        Avaliacao: tinyMCE.get('MotivoDesarquivamento').getContent(),
+                        stDecisao: 1,
+                        stEstado: 0,
+                        avaliacaoFinal: true
+                    },
+                    method:'POST'
+                }).done(function(data) {
+                    let message_type = (data.success) ? 'green' : 'red';
+
+                    Materialize.toast(data.message, 4000, message_type+' white-text');
+                    table.ajax.reload();
+                    if(data.success){
+                        $3('#modal_solicitacao').modal('close');
+                        $3.ajax({
+                            url:'/proposta/pre-projeto/update',
+                            data: {
+                                idPreProjeto: $3('#idpreprojeto').val(),
+                                stEstado: 1
+                            },
+                            method:'POST'
+                        }).done(function(data) {
+                            console.log(data);
+                        });
+                    }
+                });
+            }
         });
 
-        $3("#reprovar").on('click', function () {
-            $3.ajax({
-                url:'/proposta/pre-projeto-arquivado/avaliar-arquivamento',
-                data: {
-                    idpreprojeto: $3('#idpreprojeto').val(),
-                    Avaliacao: tinyMCE.get('MotivoDesarquivamento').getContent(),
-                    stDecisao: 0,
-                    stEstado: 0,
-                    avaliacaoFinal: true
-                },
-                method:'POST'
-            }).done(function(data) {
-                let message_type = (data.success) ? 'green' : 'red';
-                Materialize.toast(data.message, 4000, message_type+' white-text');
-                console.log(data);
-                table.ajax.reload();
-                if(data.success){
-                    $3('#modal_solicitacao').modal('close');
-                }
-            });
-        });
      });
  }($.noConflict(true)));
 </script>
