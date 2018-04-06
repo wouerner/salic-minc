@@ -93,38 +93,38 @@
             </div>
         </div>
     </div>
+</div>
+<script>
+    $3(document).ready(function () {
 
-    <script>
-        $3(document).ready(function () {
-
-            $3('#container-vue .collapsible').collapsible({
-                accordion: true,
-                onOpen: function (el) {
-                    el.find('.material-icons:first').html('remove');
-                },
-                onClose: function (el) {
-                    el.find('.material-icons:first').html('add');
-                }
-            });
+        $3('#container-vue .collapsible').collapsible({
+            accordion: true,
+            onOpen: function (el) {
+                el.find('.material-icons:first').html('remove');
+            },
+            onClose: function (el) {
+                el.find('.material-icons:first').html('add');
+            }
         });
+    });
 
-    </script>
+</script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
-    <script src="/public/js/vue.js"></script>
-    <script type="text/javascript"
-            src="/public/scripts/proposta/plano-distribuicao/proposta-plano-distribuicao-detalhamentos.vue.js"></script>
-    <style>
-        .input-field,
-        .input-field label,
-        input[type=text]:not(.browser-default):disabled + label {
-            color: #2b2322;;
-        }
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js"></script>
+<script src="/public/js/vue.js"></script>
+<script type="text/javascript"
+        src="/public/scripts/proposta/plano-distribuicao/proposta-plano-distribuicao-detalhamentos.vue.js"></script>
+<style>
+    .input-field,
+    .input-field label,
+    input[type=text]:not(.browser-default):disabled + label {
+        color: #2b2322;;
+    }
 
-        input[type=text]:not(.browser-default):disabled {
-            color: rgba(0, 0, 0, 0.65);
-        }
-    </style>
+    input[type=text]:not(.browser-default):disabled {
+        color: rgba(0, 0, 0, 0.65);
+    }
+</style>
 
 
 

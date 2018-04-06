@@ -31,6 +31,40 @@
 numeral.locale('pt-br');
 numeral.defaultFormat('0,0.00');
 
+const funcoes = {
+    methods: {
+        converterParaMoedaAmericana: function (valor) {
+            if (!valor) {
+               return 0;
+            }
+
+            valor = valor.replace(/\./g, '');
+            valor = valor.replace(/\,/g, '.');
+            valor = parseFloat(valor);
+            valor = valor.toFixed(2);
+
+            if (isNaN(valor)) {
+                valor = 0;
+            }
+
+            return valor;
+        },
+        mensagemSucesso: function (msg) {
+            Materialize.toast(msg, 8000, 'green white-text');
+        },
+        mensagemErro: function (msg) {
+            Materialize.toast(msg, 8000, 'red darken-1 white-text');
+        },
+        mensagemAlerta: function (msg) {
+            Materialize.toast(msg, 8000, 'mensagem1 orange darken-3 white-text');
+        },
+        formatarValor: function (valor) {
+            valor = parseFloat(valor);
+
+        }
+    }
+}
+
 Vue.component('select-percent', {
     template: `
         <select 
@@ -149,7 +183,6 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 :idpreprojeto="idpreprojeto"
                 :iduf="iduf"
                 :idmunicipioibge="idmunicipioibge"
-                :canalaberto="canalaberto"
                 v-on:eventoNovoDetalhamento="detalhamentoCadastrado"
                 >
             </proposta-plano-distribuicao-formulario-detalhamento>
@@ -174,11 +207,9 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
     methods: {
         detalhamentoCadastrado(index) {
             this.$data.detalhamentos.push(index);
-            console.log('detalhamento cadastrado', this.detalhamentos);
         },
         detalhamentoRemovido(detalhamento) {
             Vue.delete(this.detalhamentos, detalhamento);
-            console.log('detalhamento removido', this.detalhamentos);
         },
         obterDetalhamentos: function () {
             var vue = this;
@@ -202,78 +233,78 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
         <div class="row center-align">
             <table class="bordered">
                 <thead v-if="detalhamentos && detalhamentos.length > 0">
-                <tr>
-                    <th rowspan="2">Categoria</th>
-                    <th rowspan="2">Quantidade</th>
-                    <th class="proponente" colspan="3">
-                        Proponente
-                    </th>
-                    <th class="popular" colspan="3">
-                        Pre&ccedil;o Popular
-                    </th>
-                    <th class="gratuito" rowspan="2">
-                        Distribui&ccedil;&atilde;o <br>Gratuita
-                    </th>
-                    <th rowspan="2" class="center-align">Receita <br> Prevista</th>
-                    <th rowspan="2" width="5%">A&ccedil;&otildees</th>
-                </tr>
-                <tr>
-                    <th class="proponente">Qtd. Inteira</th>
-                    <th class="proponente">Qtd. Meia</th>
-                    <th class="proponente">Pre&ccedil;o <br> Unitario</th>
-                    <th class="popular">Qtd. Inteira</th>
-                    <th class="popular">Qtd. Meia</th>
-                    <th class="popular">Pre&ccedil;o <br> Unitario</th>
-                </tr>
+                    <tr>
+                        <th rowspan="2">Categoria</th>
+                        <th rowspan="2">Quantidade</th>
+                        <th class="proponente" colspan="3">
+                            Proponente
+                        </th>
+                        <th class="popular" colspan="3">
+                            Pre&ccedil;o Popular
+                        </th>
+                        <th class="gratuito" rowspan="2">
+                            Distribui&ccedil;&atilde;o <br>Gratuita
+                        </th>
+                        <th rowspan="2" class="center-align">Receita <br> Prevista</th>
+                        <th rowspan="2" width="5%">A&ccedil;&otildees</th>
+                    </tr>
+                    <tr>
+                        <th class="proponente">Qtd. Inteira</th>
+                        <th class="proponente">Qtd. Meia</th>
+                        <th class="proponente">Pre&ccedil;o <br> Unitario</th>
+                        <th class="popular">Qtd. Inteira</th>
+                        <th class="popular">Qtd. Meia</th>
+                        <th class="popular">Pre&ccedil;o <br> Unitario</th>
+                    </tr>
                 </thead>
                 <tbody v-if="detalhamentos && detalhamentos.length > 0">
-                <tr v-for="( detalhamento, index ) in detalhamentos">
-                    <td>{{ detalhamento.dsProduto }}</td>
-                    <td class="center-align">{{ detalhamento.qtExemplares }}</td>
-                    <!--Preço Proponente -->
-                    <td class="center-align">{{ detalhamento.qtProponenteIntegral }}</td>
-                    <td class="center-align">{{ detalhamento.qtProponenteParcial }}</td>
-                    <td class="right-align">{{ formatarValor(detalhamento.vlUnitarioProponenteIntegral) }}</td>
-                    <!--Preço Popular -->
-                    <td class="center-align">{{ detalhamento.qtPopularIntegral }}</td>
-                    <td class="center-align">{{ detalhamento.qtPopularParcial }}</td>
-                    <td class="right-align">{{ formatarValor(detalhamento.vlUnitarioPopularIntegral) }}</td>
-                    <!-- Distribuicao Gratuita-->
-                    <td class="center-align">{{ parseInt(detalhamento.qtGratuitaDivulgacao) +
-                        parseInt(detalhamento.qtGratuitaPatrocinador) + parseInt(detalhamento.qtGratuitaPopulacao) }}
-                    </td>
-                    <td class="right-align">{{ formatarValor(detalhamento.vlReceitaPrevista) }}</td>
-                    <td>
-                        <button class="btn red white-text small" v-bind:disabled="!disabled"
-                                v-on:click="excluir(detalhamento, index)">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </td>
-                </tr>
+                    <tr v-for="( detalhamento, index ) in detalhamentos">
+                        <td>{{ detalhamento.dsProduto }}</td>
+                        <td class="center-align">{{ detalhamento.qtExemplares }}</td>
+                        <!--Preço Proponente -->
+                        <td class="center-align">{{ detalhamento.qtProponenteIntegral }}</td>
+                        <td class="center-align">{{ detalhamento.qtProponenteParcial }}</td>
+                        <td class="right-align">{{ formatarValor(detalhamento.vlUnitarioProponenteIntegral) }}</td>
+                        <!--Preço Popular -->
+                        <td class="center-align">{{ detalhamento.qtPopularIntegral }}</td>
+                        <td class="center-align">{{ detalhamento.qtPopularParcial }}</td>
+                        <td class="right-align">{{ formatarValor(detalhamento.vlUnitarioPopularIntegral) }}</td>
+                        <!-- Distribuicao Gratuita-->
+                        <td class="center-align">{{ parseInt(detalhamento.qtGratuitaDivulgacao) +
+                            parseInt(detalhamento.qtGratuitaPatrocinador) + parseInt(detalhamento.qtGratuitaPopulacao) }}
+                        </td>
+                        <td class="right-align">{{ formatarValor(detalhamento.vlReceitaPrevista) }}</td>
+                        <td>
+                            <button class="btn red white-text small" v-bind:disabled="!disabled"
+                                    v-on:click="excluir(detalhamento, index)">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </td>
+                    </tr>
                 </tbody>
                 <tbody v-else>
-                <tr>
-                    <td colspan="12" class="center-align">Nenhum detalhamento cadastrado</td>
-                </tr>
+                    <tr>
+                        <td colspan="12" class="center-align">Nenhum detalhamento cadastrado</td>
+                    </tr>
                 </tbody>
                 <tfoot v-if="detalhamentos && detalhamentos.length > 0" style="opacity: 0.5">
-                <tr>
-                    <td><b>Totais</b></td>
-                    <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
-                    <!--Fim: Preço Popular -->
-                    <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
-                    <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
-                    <td class="right-align"> -</td>
-                    <!--Preço Popular -->
-                    <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
-                    <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
-                    <td class="right-align"> -</td>
-                    <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
-                            parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
-                    </td>
-                    <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
-                    <td></td>
-                </tr>
+                    <tr>
+                        <td><b>Totais</b></td>
+                        <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
+                        <!--Fim: Preço Popular -->
+                        <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
+                        <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
+                        <td class="right-align"> -</td>
+                        <!--Preço Popular -->
+                        <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
+                        <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
+                        <td class="right-align"> -</td>
+                        <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
+                                parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
+                        </td>
+                        <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
+                        <td></td>
+                    </tr>
                 </tfoot>
             </table>
             
@@ -282,8 +313,8 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                     <th>
                         <b>Valor m&eacute;dio </b>
                     </th>
-                    <td class="center-align red"
-                        v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))"> {{valorMedioProponenteFormatado}}
+                    <td class="center-align red" v-if="((valorMedioProponente.value() > 225) && (this.canalaberto == 0))"> 
+                        {{valorMedioProponenteFormatado}}
                     </td>
                     <td class="center-align " v-else>{{valorMedioProponenteFormatado}}</td>
                 </tr>
@@ -295,6 +326,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
             // detalhamentos: [],
         }
     },
+    mixins: [funcoes],
     watch: {
         detalhamentos: function () {
             if ((numeral(this.valorMedioProponente).value() > 225
@@ -449,7 +481,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                     idPlanoDistribuicao: this.idplanodistribuicao
                 }
             }).done(function (response) {
-                if(response.success == 'true') {
+                if (response.success == 'true') {
                     vue.visualizarFormulario = false;
                     vue.$emit('eventoRemoveDetalhamento', index);
                     vue.mensagemSucesso(response.msg);
@@ -457,33 +489,6 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
             }).fail(function (response) {
                 vue.mensagemErro(response.responseJSON.msg);
             });
-        },
-        converterParaMoedaAmericana: function (valor) {
-            if (!valor)
-                valor = '0';
-
-            valor = valor.replace(/\./g, '');
-            valor = valor.replace(/\,/g, '.');
-            valor = parseFloat(valor);
-            valor = valor.toFixed(2);
-
-            if (isNaN(valor))
-                valor = 0;
-
-            return valor;
-        },
-        mensagemSucesso: function (msg) {
-            Materialize.toast(msg, 8000, 'green white-text');
-        },
-        mensagemErro: function (msg) {
-            Materialize.toast(msg, 8000, 'red darken-1 white-text');
-        },
-        mensagemAlerta: function (msg) {
-            Materialize.toast(msg, 8000, 'mensagem1 orange darken-3 white-text');
-        },
-        formatarValor: function (valor) {
-            valor = parseFloat(valor);
-            return numeral(valor).format();
         }
     }
 });
@@ -504,331 +509,335 @@ const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
 Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
     template: `
         <div class="detalhamento-distribuicao-dos-produtos">
-            <div class="row center-align">
-                <br>
+            <div :id="_uid + '_form_detalhamento'" class="row center-align">
                 <button class="btn waves-effect waves-light" ref="mostrarForm"
-                        v-on:click.prevent="mostrarFormulario(_uid + '_form_detalhamento')">
+                        @click="mostrarFormulario(_uid + '_form_detalhamento')">
                     Novo detalhamento
                     <i class="material-icons right">add</i>
                 </button>
             </div>
-            <div :id="_uid + '_form_detalhamento'" class="card">
-                <form v-show="visualizarFormulario" class="card-content">
-                    <span class="card-title">Cadastrar novo detalhamento</span>
-                    <div class="row">
-                        <div class="col s12 m6 l6">
-                            <span>
-                                <b>Tipo de venda</b><br>
-                                <input
-                                    name="tipoVenda"
-                                    type="radio"
-                                    :id="_uid + 'tipoVendaIngresso'"
-                                    value="i"
-                                    v-model="distribuicao.tpVenda"
-                                />
-                                <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
-                                <input
-                                    name="tipoVenda"
-                                    type="radio"
-                                    :id="_uid + 'tipoVendaExemplar'"
-                                    value="e"
-                                    v-model="distribuicao.tpVenda"
-                                />
-                                <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
-                            </span>
-                        </div>
-                        <div class="col s12 m6 l6">
-                            <span>
-                                <b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
-                                <input
-                                    name="group1"
-                                    type="radio"
-                                    :id="_uid + '1'"
-                                    value="s"
-                                    v-model="distribuicaoGratuita"
-                                />
-                                <label :for="_uid + '1'">Sim</label>
-                                <input
-                                    name="group1"
-                                    type="radio"
-                                    :id="_uid + '2'"
-                                    value="n"
-                                    v-model="distribuicaoGratuita"
-                                />
-                                <label :for="_uid + '2'">N&atilde;o</label>
-                            </span>
-                        </div>
-                    </div>
-            
-                    <div class="row" v-if="distribuicao.tpVenda == 'i'">
-                        <div class="col col s12 m6 l6">
-                            <span>
-                                <b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
-                                <input
-                                    name="tipoLocalRealizacao"
-                                    type="radio"
-                                    :id="_uid + 'tipoAberto'"
-                                    value="a"
-                                    v-model="distribuicao.tpLocal"
-                                />
-                                <label :for=" _uid + 'tipoAberto'">Aberto</label>
-                                <input
-                                    name="tipoLocalRealizacao"
-                                    type="radio" :id=" _uid + 'tipoFechado'"
-                                    value="f"
-                                    v-model="distribuicao.tpLocal"
-                                />
-                                <label :for=" _uid + 'tipoFechado'">Fechado</label>
-                            </span>
-                        </div>
-                        <div class="col col s12 m6 l6">
-                            <span>
-                                <b>Espa&ccedil;o p&uacute;blico</b><br>
-                                <input
-                                    type="radio"
-                                    :id="_uid + 'espacoPublicoSim'"
-                                    value="s"
-                                    v-model="distribuicao.tpEspaco"
-                                />
-                                <label :for="_uid + 'espacoPublicoSim'">Sim</label>
-                                <input
-                                    type="radio"
-                                    id="espacoPublicoNao"
-                                    :id=" _uid + 'espacoPublicoNao'"
-                                    value="n"
-                                    v-model="distribuicao.tpEspaco"/>
-                                <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
-                            </span>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="input-field col s12 m6 l6">
-                            <input
-                                :id="_uid + 'dsProduto'"
-                                type="text"
-                                class="validate"
-                                ref="dsProduto"
-                                placeholder="Ex: Arquibancada"
-                                v-model="distribuicao.dsProduto"
-                            />
-                            <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
-                        </div>
-                        <div class="input-field col s12 m6 l6">
-                            <input
-                                :id="_uid + 'qtExemplares'"
-                                type="number"
-                                class="validate"
-                                ref="qtExemplares"
-                                placeholder="0"
-                                v-model.number.lazy="distribuicao.qtExemplares"
-                            />
-                            <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
-                        </div>
-                    </div>
-            
-                    <fieldset class="proponente-s" v-show="distribuicaoGratuita =='s' ? false : true">
-                        <legend>
-                            <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
-                            <select-percent
-                                v-bind:disabled="distribuicaoGratuita =='s' ? true: false"
-                                v-bind:maximoCombo="(percentualProponentePadrao *  100)"
-                                v-on:evento="percentualProponente = $event/100">
-                            </select-percent>
-                        </legend>
+            <transition
+                name="custom-classes-transition"
+                enter-active-class="animated slideInUp"
+            >
+                <div v-show="visualizarFormulario" class="card">
+                    <form class="card-content">
+                        <span class="card-title">Cadastrar novo detalhamento</span>
                         <div class="row">
-                            <div class="input-field col s12 m6 l2">
-                                <input-money
-                                    v-bind:disabled="distribuicaoGratuita =='s'? true: false"
-                                    v-bind:value="inputUnitarioProponenteIntegral"
-                                    v-on:ev="inputUnitarioProponenteIntegral = $event">
-                                </input-money>
-                                <label
-                                    class="active"
-                                    :for="_uid + 'vlUnitarioProponenteIntegral'"
-                                >Pre&ccedil;o Unit&aacute;rio R$</label>
+                            <div class="col s12 m6 l6">
+                                <span>
+                                    <b>Tipo de venda</b><br>
+                                    <input
+                                        name="tipoVenda"
+                                        type="radio"
+                                        :id="_uid + 'tipoVendaIngresso'"
+                                        value="i"
+                                        v-model="distribuicao.tpVenda"
+                                    />
+                                    <label :for=" _uid + 'tipoVendaIngresso'">Ingresso</label>
+                                    <input
+                                        name="tipoVenda"
+                                        type="radio"
+                                        :id="_uid + 'tipoVendaExemplar'"
+                                        value="e"
+                                        v-model="distribuicao.tpVenda"
+                                    />
+                                    <label :for=" _uid + 'tipoVendaExemplar'">Exemplar</label>
+                                </span>
                             </div>
-                            <div class="input-field col s12 m6 l2">
-                                <input
-                                    type="text"
-                                    class="disabled right-align"
-                                    disabled
-                                    v-model.number="distribuicao.qtProponenteIntegral"
-                                    ref="qtProponenteIntegral"
-                                />
-                                <label
-                                    class="active"
-                                    :for="_uid + 'qtProponenteIntegral'"
-                                >Quantidade {{labelInteira}}</label>
-                            </div>
-                            <div class="input-field col s12 m6 l2" v-if="distribuicao.tpVenda == 'i'">
-                                <input
-                                    type="text"
-                                    class="disabled right-align"
-                                    disabled
-                                    v-model.number="distribuicao.qtProponenteParcial"
-                                />
-                                <label
-                                    class="active"
-                                    :for="_uid + 'qtProponenteParcial'"
-                                >Quantidade Meia</label>
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                <input
-                                    type="text"
-                                    class="disabled right-align"
-                                    disabled
-                                    v-model="this.vlReceitaProponenteIntegral"
-                                />
-                                <label
-                                    class="active"
-                                    :for="_uid + 'vlReceitaProponenteIntegral'"
-                                >Valor {{labelInteira}} R$</label>
-                            </div>
-                            <div class="input-field col s12 m6 l3" v-if="distribuicao.tpVenda == 'i'">
-                                <input
-                                    type="text"
-                                    class="disabled right-align"
-                                    disabled
-                                    v-model.number="this.vlReceitaProponenteParcial"
-                                />
-                                <label
-                                    class="active"
-                                    :for="_uid + 'vlReceitaProponenteParcial'"
-                                >Valor meia R$</label>
+                            <div class="col s12 m6 l6">
+                                <span>
+                                    <b>Distribui&ccedil;&atilde;o ser&aacute; totalmente gratuita?</b><br>
+                                    <input
+                                        name="group1"
+                                        type="radio"
+                                        :id="_uid + '1'"
+                                        value="s"
+                                        v-model="distribuicaoGratuita"
+                                    />
+                                    <label :for="_uid + '1'">Sim</label>
+                                    <input
+                                        name="group1"
+                                        type="radio"
+                                        :id="_uid + '2'"
+                                        value="n"
+                                        v-model="distribuicaoGratuita"
+                                    />
+                                    <label :for="_uid + '2'">N&atilde;o</label>
+                                </span>
                             </div>
                         </div>
-                    </fieldset>
-                    <fieldset class="preco-popular" v-show="distribuicaoGratuita =='s' ? false : true">
-                        <legend>
-                            <strong>Pre&ccedil;o Popular</strong> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100 }}%)
-                            <select-percent
-                                v-bind:disabled="distribuicaoGratuita =='s'? true: false"
-                                v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
-                                v-on:evento="percentualPrecoPopular = $event/100">
-                            </select-percent>
-                        </legend>
-                        <div class="row">
-                            <div class="input-field col s12 m6 l2">
-                                <input-money
-                                    v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
-                                    v-bind:value="inputUnitarioPopularIntegral"
-                                    v-on:ev="inputUnitarioPopularIntegral = $event">
-                                </input-money>
-                                <label
-                                    class="active"
-                                    v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
-                                    :for="_uid + 'vlUnitarioPopularIntegral'"
-                                >Pre&ccedil;o Unit&aacute;rio R$
-                                </label>
+                
+                        <div class="row" v-if="distribuicao.tpVenda == 'i'">
+                            <div class="col col s12 m6 l6">
+                                <span>
+                                    <b>Tipo do local de apresenta&ccedil;&atilde;o</b><br>
+                                    <input
+                                        name="tipoLocalRealizacao"
+                                        type="radio"
+                                        :id="_uid + 'tipoAberto'"
+                                        value="a"
+                                        v-model="distribuicao.tpLocal"
+                                    />
+                                    <label :for=" _uid + 'tipoAberto'">Aberto</label>
+                                    <input
+                                        name="tipoLocalRealizacao"
+                                        type="radio" :id=" _uid + 'tipoFechado'"
+                                        value="f"
+                                        v-model="distribuicao.tpLocal"
+                                    />
+                                    <label :for=" _uid + 'tipoFechado'">Fechado</label>
+                                </span>
                             </div>
-                            <div class="input-field col s12 m6 l2">
-                                <input
-                                    type="text"
-                                    class="right-align disabled"
-                                    disabled
-                                    v-model.number="distribuicao.qtPopularIntegral"
-                                    ref="qtPopularIntegral"
-                                />
-                                <label
-                                    class="active"
-                                    :for="_uid + 'qtPopularIntegral'">
-                                    Quantidade {{labelInteira}}
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m6 l2" v-if="distribuicao.tpVenda == 'i'">
-                                <input
-                                    type="text"
-                                    class="right-align disabled"
-                                    disabled
-                                    v-model.number="distribuicao.qtPopularParcial"
-                                    ref="distribuicao.qtPopularParcial"
-                                />
-                                <label class="active" :for="_uid + 'qtPopularParcial'">
-                                    Quantidade Meia
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                <input
-                                    type="text"
-                                    class="disabled right-align"
-                                    disabled
-                                    v-model.number="this.vlReceitaPopularIntegral"
-                                />
-                                <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">
-                                    Valor {{labelInteira}} R$
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m6 l3" v-if="distribuicao.tpVenda == 'i'">
-                                <input
-                                    type="text"
-                                    class="disabled right-align"
-                                    disabled
-                                    v-model.number="this.vlReceitaPopularParcial"
-                                />
-                                <label class="active" :for="_uid + 'vlReceitaPopularParcial'">Valor meia R$</label>
+                            <div class="col col s12 m6 l6">
+                                <span>
+                                    <b>Espa&ccedil;o p&uacute;blico</b><br>
+                                    <input
+                                        type="radio"
+                                        :id="_uid + 'espacoPublicoSim'"
+                                        value="s"
+                                        v-model="distribuicao.tpEspaco"
+                                    />
+                                    <label :for="_uid + 'espacoPublicoSim'">Sim</label>
+                                    <input
+                                        type="radio"
+                                        id="espacoPublicoNao"
+                                        :id=" _uid + 'espacoPublicoNao'"
+                                        value="n"
+                                        v-model="distribuicao.tpEspaco"/>
+                                    <label :for="_uid + 'espacoPublicoNao'">N&atilde;o</label>
+                                </span>
                             </div>
                         </div>
-                    </fieldset>
-                    <fieldset class="distribuicao-gratuita">
-                        <legend>
-                            <strong>Distribui&ccedil;&atilde;o Gratuita</strong> (m&iacute;nimo {{percentualGratuitoPadrao * 100
-                            }}%)
-                            <span v-if="percentualGratuitoPadrao !== this.percentualGratuito"> 
-                                        <b>Atual {{ parseInt(this.percentualGratuito *  100) }}%</b>
-                                    </span>
-                        </legend>
-                        <div class="row">
-                            <div class="input-field col s12 m6 l3">
-                                <input
-                                    type="number"
-                                    class="validate right-align"
-                                    v-model.number="distribuicao.qtGratuitaDivulgacao"
-                                    ref="divulgacao"
-                                />
-                                <label class="active" :for="_uid + 'qtGratuitaDivulgacao'">
-                                    Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(distribuicao.qtExemplares * 0.1) }})
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                <input
-                                    type="number"
-                                    class="validate right-align"
-                                    v-model.number="distribuicao.qtGratuitaPatrocinador"
-                                    ref="patrocinador"
-                                />
-                                <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">
-                                    Patrocinador (At&eacute; {{ parseInt(distribuicao.qtExemplares * 0.1) }})
-                                </label>
-                            </div>
-                            <div class="input-field col s12 m6 l3">
-                                <input
-                                    type="text"
-                                    class="right-align disabled"
-                                    disabled
-                                    v-model.number="distribuicao.qtGratuitaPopulacao"
-                                    ref="populacao"
-                                />
-                                <label class="active" :for="_uid + 'qtGratuitaPopulacao'">
-                                    Popula&ccedil;&atilde;o
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <div class="row receita-prevista center-align">
-                        <div class="col s12 l12 offset-l8">
-                            <p><strong>Receita Prevista: </strong> R$ {{vlReceitaPrevista}}</p>
-                        </div>
-                    </div>
-                    <div class="row salvar center-align">
                         <br>
-                        <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="salvar">
-                            Salvar
-                            <i class="material-icons right">send</i>
-                        </button>
-                    </div>
-                </form>
-            </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6 l6">
+                                <input
+                                    :id="_uid + 'dsProduto'"
+                                    type="text"
+                                    class="validate"
+                                    ref="dsProduto"
+                                    placeholder="Ex: Arquibancada"
+                                    v-model="distribuicao.dsProduto"
+                                />
+                                <label class="active" :for="_uid + 'dsProduto'">Categoria</label>
+                            </div>
+                            <div class="input-field col s12 m6 l6">
+                                <input
+                                    :id="_uid + 'qtExemplares'"
+                                    type="number"
+                                    class="validate"
+                                    ref="qtExemplares"
+                                    placeholder="0"
+                                    v-model.number.lazy="distribuicao.qtExemplares"
+                                />
+                                <label class="active" :for="_uid + 'qtExemplares'">Quantidade</label>
+                            </div>
+                        </div>
+                
+                        <fieldset class="proponente-s" v-show="distribuicaoGratuita =='s' ? false : true">
+                            <legend>
+                                <strong>Proponente </strong>(at&eacute; {{ percentualProponentePadrao * 100 }}%)
+                                <select-percent
+                                    v-bind:disabled="distribuicaoGratuita =='s' ? true: false"
+                                    v-bind:maximoCombo="(percentualProponentePadrao *  100)"
+                                    v-on:evento="percentualProponente = $event/100">
+                                </select-percent>
+                            </legend>
+                            <div class="row">
+                                <div class="input-field col s12 m6 l2">
+                                    <input-money
+                                        v-bind:disabled="distribuicaoGratuita =='s'? true: false"
+                                        v-bind:value="inputUnitarioProponenteIntegral"
+                                        v-on:ev="inputUnitarioProponenteIntegral = $event">
+                                    </input-money>
+                                    <label
+                                        class="active"
+                                        :for="_uid + 'vlUnitarioProponenteIntegral'"
+                                    >Pre&ccedil;o Unit&aacute;rio R$</label>
+                                </div>
+                                <div class="input-field col s12 m6 l2">
+                                    <input
+                                        type="text"
+                                        class="disabled right-align"
+                                        disabled
+                                        v-model.number="distribuicao.qtProponenteIntegral"
+                                        ref="qtProponenteIntegral"
+                                    />
+                                    <label
+                                        class="active"
+                                        :for="_uid + 'qtProponenteIntegral'"
+                                    >Quantidade {{labelInteira}}</label>
+                                </div>
+                                <div class="input-field col s12 m6 l2" v-if="distribuicao.tpVenda == 'i'">
+                                    <input
+                                        type="text"
+                                        class="disabled right-align"
+                                        disabled
+                                        v-model.number="distribuicao.qtProponenteParcial"
+                                    />
+                                    <label
+                                        class="active"
+                                        :for="_uid + 'qtProponenteParcial'"
+                                    >Quantidade Meia</label>
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    <input
+                                        type="text"
+                                        class="disabled right-align"
+                                        disabled
+                                        v-model="this.vlReceitaProponenteIntegral"
+                                    />
+                                    <label
+                                        class="active"
+                                        :for="_uid + 'vlReceitaProponenteIntegral'"
+                                    >Valor {{labelInteira}} R$</label>
+                                </div>
+                                <div class="input-field col s12 m6 l3" v-if="distribuicao.tpVenda == 'i'">
+                                    <input
+                                        type="text"
+                                        class="disabled right-align"
+                                        disabled
+                                        v-model.number="this.vlReceitaProponenteParcial"
+                                    />
+                                    <label
+                                        class="active"
+                                        :for="_uid + 'vlReceitaProponenteParcial'"
+                                    >Valor meia R$</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="preco-popular" v-show="distribuicaoGratuita =='s' ? false : true">
+                            <legend>
+                                <strong>Pre&ccedil;o Popular</strong> (Padr&atilde;o: {{ percentualPrecoPopularPadrao * 100 }}%)
+                                <select-percent
+                                    v-bind:disabled="distribuicaoGratuita =='s'? true: false"
+                                    v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
+                                    v-on:evento="percentualPrecoPopular = $event/100">
+                                </select-percent>
+                            </legend>
+                            <div class="row">
+                                <div class="input-field col s12 m6 l2">
+                                    <input-money
+                                        v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
+                                        v-bind:value="inputUnitarioPopularIntegral"
+                                        v-on:ev="inputUnitarioPopularIntegral = $event">
+                                    </input-money>
+                                    <label
+                                        class="active"
+                                        v-bind:disabled="distribuicaoGratuita=='s' ? true: false"
+                                        :for="_uid + 'vlUnitarioPopularIntegral'"
+                                    >Pre&ccedil;o Unit&aacute;rio R$
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m6 l2">
+                                    <input
+                                        type="text"
+                                        class="right-align disabled"
+                                        disabled
+                                        v-model.number="distribuicao.qtPopularIntegral"
+                                        ref="qtPopularIntegral"
+                                    />
+                                    <label
+                                        class="active"
+                                        :for="_uid + 'qtPopularIntegral'">
+                                        Quantidade {{labelInteira}}
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m6 l2" v-if="distribuicao.tpVenda == 'i'">
+                                    <input
+                                        type="text"
+                                        class="right-align disabled"
+                                        disabled
+                                        v-model.number="distribuicao.qtPopularParcial"
+                                        ref="distribuicao.qtPopularParcial"
+                                    />
+                                    <label class="active" :for="_uid + 'qtPopularParcial'">
+                                        Quantidade Meia
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    <input
+                                        type="text"
+                                        class="disabled right-align"
+                                        disabled
+                                        v-model.number="this.vlReceitaPopularIntegral"
+                                    />
+                                    <label class="active" :for="_uid + 'vlReceitaPopularIntegral'">
+                                        Valor {{labelInteira}} R$
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m6 l3" v-if="distribuicao.tpVenda == 'i'">
+                                    <input
+                                        type="text"
+                                        class="disabled right-align"
+                                        disabled
+                                        v-model.number="this.vlReceitaPopularParcial"
+                                    />
+                                    <label class="active" :for="_uid + 'vlReceitaPopularParcial'">Valor meia R$</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="distribuicao-gratuita">
+                            <legend>
+                                <strong>Distribui&ccedil;&atilde;o Gratuita</strong> (m&iacute;nimo {{percentualGratuitoPadrao * 100
+                                }}%)
+                                <span v-if="percentualGratuitoPadrao !== this.percentualGratuito"> 
+                                            <b>Atual {{ parseInt(this.percentualGratuito *  100) }}%</b>
+                                        </span>
+                            </legend>
+                            <div class="row">
+                                <div class="input-field col s12 m6 l3">
+                                    <input
+                                        type="number"
+                                        class="validate right-align"
+                                        v-model.number="distribuicao.qtGratuitaDivulgacao"
+                                        ref="divulgacao"
+                                    />
+                                    <label class="active" :for="_uid + 'qtGratuitaDivulgacao'">
+                                        Divulga&ccedil;&atilde;o (At&eacute; {{ parseInt(distribuicao.qtExemplares * 0.1) }})
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    <input
+                                        type="number"
+                                        class="validate right-align"
+                                        v-model.number="distribuicao.qtGratuitaPatrocinador"
+                                        ref="patrocinador"
+                                    />
+                                    <label class="active" :for="_uid + 'qtGratuitaPatrocinador'">
+                                        Patrocinador (At&eacute; {{ parseInt(distribuicao.qtExemplares * 0.1) }})
+                                    </label>
+                                </div>
+                                <div class="input-field col s12 m6 l3">
+                                    <input
+                                        type="text"
+                                        class="right-align disabled"
+                                        disabled
+                                        v-model.number="distribuicao.qtGratuitaPopulacao"
+                                        ref="populacao"
+                                    />
+                                    <label class="active" :for="_uid + 'qtGratuitaPopulacao'">
+                                        Popula&ccedil;&atilde;o
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="row receita-prevista center-align">
+                            <div class="col s12 l4 offset-l8">
+                                <p><strong>Receita Prevista: </strong> R$ {{vlReceitaPrevista}}</p>
+                            </div>
+                        </div>
+                        <div class="row salvar center-align">
+                            <br>
+                            <button class="btn waves-effect waves-light" ref="add" v-on:click.prevent="salvar">
+                                Salvar
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                 </div>
+            </transition>
         </div>
     `,
     data: function () {
@@ -871,13 +880,13 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             "inputUnitarioProponenteIntegral": 0,
         }
     },
+    mixins: [funcoes],
     props: [
         'idpreprojeto',
         'idplanodistribuicao',
         'idmunicipioibge',
         'iduf',
         'disabled',
-        'canalaberto'
     ],
     computed: {
         qtPrecoPopularValorIntegralLimite: function () {
@@ -896,7 +905,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             }
             return parseInt((this.distribuicao.qtExemplares * this.percentualPrecoPopular) * percentualPopularParcial);
         },
-        qtGratuitaPopulacaoMinimo: function() {
+        qtGratuitaPopulacaoMinimo: function () {
             let soma = numeral();
 
             soma.add(this.distribuicao.qtProponenteIntegral);
@@ -914,7 +923,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             }
             return DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO +
                 (this.percentualMaximoPrecoPopular - this.percentualPrecoPopular)
-            ;
+                ;
         },
         percentualMaximoPrecoPopular: function () {
             return PRECO_POPULAR_PERCENTUAL_PADRAO + (PROPONENTE_PERCENTUAL_PADRAO - this.percentualProponente);
@@ -1003,22 +1012,40 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             this.distribuicao.qtGratuitaPatrocinador = parseInt(this.distribuicao.qtExemplares * 0.1);
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
+        "distribuicao.qtExemplares": function (val) {
+            if (val < 0) {
+                this.mensagemAlerta("A quantidade n\xE3o pode passar ser menor que zero");
+                this.distribuicao.qtExemplares = 0;
+            }
+        },
         "distribuicao.qtGratuitaDivulgacao": function (val) {
-            let limiteQuantidadeDivulgacao = this.distribuicao.qtExemplares * 0.1;
+            let limiteQuantidadeDivulgacao = parseInt(this.distribuicao.qtExemplares * 0.1);
 
             if (val > limiteQuantidadeDivulgacao) {
                 this.mensagemAlerta("A quantidade n\xE3o pode passar de " + limiteQuantidadeDivulgacao);
                 this.distribuicao.qtGratuitaDivulgacao = limiteQuantidadeDivulgacao;
             }
+
+            if (val < 0) {
+                this.mensagemAlerta("A quantidade n\xE3o pode passar ser menor que zero");
+                this.distribuicao.qtGratuitaDivulgacao = 0;
+            }
+
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         "distribuicao.qtGratuitaPatrocinador": function (val) {
-            let limitePatrocinador = this.distribuicao.qtExemplares * 0.1;
+            let limitePatrocinador = parseInt(this.distribuicao.qtExemplares * 0.1);
 
             if (val > limitePatrocinador) {
                 this.mensagemAlerta("A quantidade n\xE3o pode passar de " + limitePatrocinador);
                 this.distribuicao.qtGratuitaPatrocinador = limitePatrocinador;
             }
+
+            if (val < 0) {
+                this.mensagemAlerta("A quantidade n\xE3o pode passar ser menor que zero");
+                this.distribuicao.qtGratuitaPatrocinador = 0;
+            }
+
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
         "distribuicao.vlUnitarioPopularIntegral": function () {
@@ -1041,21 +1068,8 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             if (this.distribuicao.tpVenda == TIPO_EXEMPLAR) {
                 divisao = 1;
             }
+
             return parseInt((this.distribuicao.qtExemplares * percentualDistribuicao) * divisao);
-        },
-        converterParaMoedaAmericana: function (valor) {
-            if (!valor)
-                valor = '0';
-
-            valor = valor.replace(/\./g, '');
-            valor = valor.replace(/\,/g, '.');
-            valor = parseFloat(valor);
-            valor = valor.toFixed(2);
-
-            if (isNaN(valor))
-                valor = 0;
-
-            return valor;
         },
         mostrar: function () {
             this.active = this.active == true ? false : true;
@@ -1067,21 +1081,12 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             if (this.visualizarFormulario == true) {
                 let elm = $3("#" + id);
                 $3("html, body").animate({
-                    scrollTop: $3(elm).offset().top - 60
+                    scrollTop: $3(elm).offset().top - 80
                 }, 600);
             }
         },
         limparFormulario: function () {
             Object.assign(this.$data, this.$options.data.apply(this))
-        },
-        mensagemSucesso: function (msg) {
-            Materialize.toast(msg, 8000, 'green white-text');
-        },
-        mensagemErro: function (msg) {
-            Materialize.toast(msg, 8000, 'red darken-1 white-text');
-        },
-        mensagemAlerta: function (msg) {
-            Materialize.toast(msg, 8000, 'mensagem1 orange darken-3 white-text');
         },
         salvar: function (event) {
 
@@ -1122,14 +1127,11 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                 url: "/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/" + this.idpreprojeto,
                 data: this.distribuicao
             }).done(function (response) {
-                console.log(response);
-                if(response.success == 'true') {
-                    // vue.visualizarFormulario = false;
+                if (response.success == 'true') {
                     vue.$emit('eventoNovoDetalhamento', response.data);
                     vue.limparFormulario();
                     vue.mensagemSucesso(response.msg);
                 }
-
             }).fail(function (response) {
                 vue.mensagemErro(response.responseJSON.msg);
             });
@@ -1140,7 +1142,6 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
 var app6 = new Vue({
     el: '#container-vue'
 });
-
 
 $3(document).ready(function () {
     $3('#container-loading').fadeIn();
