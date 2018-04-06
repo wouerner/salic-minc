@@ -260,8 +260,18 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
                 $agente = new Proposta_Model_DbTable_PreProjeto();
                 $agente = $agente->buscaCompleta(['a.idPreProjeto = ? ' => $idPreProjeto]);
 
+                $corpoEmail = '<p>Senhor(a) Proponente,</p></br>';
+                if($stDecisao == 1){
+                    $corpoEmail = '<p>O pedido de desarquivamento referente à proposta supracitada foi aceito.  A proposta será desarquivada e seguirá em análise. Dessa forma, acompanhe diariamente a proposta no sistema em virtude de novas diligências e comunicados</p>';
+
+                } else {
+                    $corpoEmail .= '<p>O pedido de desarquivamento referente à proposta supracitada não foi aceito pelo seguinte motivo:<p/></br>';
+                    $corpoEmail .= "<p>{$Avaliacao}</p></br>";
+                    $corpoEmail .= '<p>Salientamos que o proponente poderá inscrever e enviar novamente a mesma proposta ao MinC desde que observada a restrição contida na alínea "c", inciso I do artigo 23 da Instrução Normativa nº 05/2017 do Ministério da Cultura.</p></br>';
+                }
+
                 $email = new StdClass();
-                $email->text = $Avaliacao;
+                $email->text = $corpoEmail;
                 $email->to = $agente->current()->EmailAgente;
                 $email->subject = "SALIC - Desarquivamento da proposta nº: " . $idPreProjeto;
 
