@@ -11,11 +11,10 @@ class ReadequacoesControllerTest extends MinC_Test_ControllerActionTestCase
     {
         parent::setUp();
         
-        $tbReadequacao = new tbReadequacao();
-        $this->idPronac = $tbReadequacao->buscarIdPronacReadequacaoEmAndamento(tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $this->idPronac = $this->getProjetoAptoReadequacao();
 
         $projetos = new Projetos();
-        
         $projeto = $projetos->buscar(
             array(
                 'IdPRONAC = ?' => $this->idPronac
@@ -38,6 +37,63 @@ class ReadequacoesControllerTest extends MinC_Test_ControllerActionTestCase
         
     }
 
+    private function getProjetoAptoReadequacao()
+    {
+        $projetos = new Projetos();
+
+        $select = $projetos->select();
+        
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('p' => 'projetos'),
+            'p.IdPRONAC AS idPronac'
+        );
+
+        $select->joinLeft(
+            array('l' => 'liberacao'),
+            'l.AnoProjeto = p.AnoProjeto AND l.Sequencial = p.Sequencial',
+            array(''),
+            'sac.dbo'
+        );
+        $select->where(new Zend_Db_Expr('p.DtInicioExecucao < GETDATE()'));
+        $select->where(new Zend_Db_Expr('p.DtFimExecucao > GETDATE()'));
+        $select->where('p.AnoProjeto > ?', 16);
+        $select->where('p.AnoProjeto < ?', 90);
+        $select->limit(30);
+        
+        $result = $projetos->fetchAll($select);
+        
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+        foreach ($result as $item) {
+            
+            $existeReadequacaoEmAndamento = $Readequacao_Model_tbReadequacao->existeReadequacaoEmAndamento($item->idPronac);
+            $existeReadequacaoPlanilhaEmEdicao = $Readequacao_Model_tbReadequacao->existeReadequacaoPlanilhaEmEdicao($item->idPronac);
+            $existeReadequacaoParcialEmEdicao = $Readequacao_Model_tbReadequacao->existeReadequacaoParcialEmEdicao($item->idPronac);
+            $possuiRelatorioDeCumprimento = $tbCumprimentoObjeto->possuiRelatorioDeCumprimento($idPronac);
+            
+            $Readequacao = false;
+            if (!$existeReadequacaoEmAndamento && !$existeReadequacaoEmAndamento) {
+                $Readequacao = true;
+            } else if ($existeReadequacaoEmAndamento && $existeReadequacaoPlanilhaEmEdicao) {
+                $ReadequacaoPlanilha = true;
+            } else if ($existeReadequacaoEmAndamento && $existeReadequacaoParcialEmEdicao) {
+                $Readequacao = false;
+            } else if ($existeReadequacaoEmAndamento && !$existeReadequacaoPlanilhaEmEdicao)  {
+                $Readequacao = false;
+            }
+            if ($possuiRelatorioDeCumprimento) {
+                $Readequacao = false;
+            }
+            
+            if ($Readequacao) {
+                $idPronac = $item->idPronac;
+                break;
+            }                
+        }
+        return $idPronac;
+    }
+    
     /**
      * TestIndexAction
      *
@@ -88,8 +144,8 @@ class ReadequacoesControllerTest extends MinC_Test_ControllerActionTestCase
      */    
     public function testPlanilhaOrcamentariaCondicoesNaoSatisfeitas()
     {
-        $tbReadequacao = new tbReadequacao();
-        $possuiReadequacao = $tbReadequacao->existeReadequacaoEmAndamento($this->idPronac);
+        $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $possuiReadequacao = $Readequacao_Model_tbReadequacao->existeReadequacaoEmAndamento($this->idPronac);
         
         $this->assertTrue($possuiReadequacao);
 
