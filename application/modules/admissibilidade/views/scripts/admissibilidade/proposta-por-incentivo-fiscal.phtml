@@ -247,16 +247,9 @@
 
                             <?php if ($this->isPermitidoAvaliarProposta) { ?>
                                 <button
-
-                                    <?php if (!(
-                                            Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE == $this->codGrupo
-                                            || Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE == $this->codGrupo
-                                        )
-                                        || $this->possuiAvaliacaoCnic === false
-                                        || $this->isPropostaEnquadrada !== true
-                                    ): ?>
-                                        disabled
-                                    <?php endif; ?>
+                                    <?php if ($this->isPermitidoTransformarPropostaEmProjeto === false) { ?>
+                                        disabled="disabled"
+                                    <?php } ?>
                                         id="transformarPropostaEmProjeto"
                                         class=" waves-effect waves-light btn blue white-text"
                                         title="Transformar Proposta em Projeto" alt="Transformar Proposta em Projeto"

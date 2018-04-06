@@ -318,14 +318,35 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
             $recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
-
             if ($this->isRecursoEnviadoPorProponente($recursoEnquadramento) ||
                 $this->isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)) {
                 $this->view->recursoEnquadramento = $recursoEnquadramento;
             }
 
+            $this->view->isRecursoAvaliado = false;
+            if ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+                && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO
+            ) {
+                $this->view->isRecursoAvaliado = true;
+            }
+
+            $perfisAutorizadosTransformarPropostaEmProjeto = [
+                Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
+                Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+            ];
+
+            $this->view->isPermitidoTransformarPropostaEmProjeto = $this->isAutorizado(
+                    $perfisAutorizadosTransformarPropostaEmProjeto,
+                    $this->codGrupo
+                )
+                && $this->view->isRecursoAvaliado;
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
+    }
+
+    public function isAutorizado($perfisAutorizados, $id_perfil)
+    {
+        return in_array($id_perfil, $perfisAutorizados);
     }
 
     private function isRecursoEnviadoPorProponente($recursoEnquadramento)
