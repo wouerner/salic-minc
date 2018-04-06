@@ -197,17 +197,18 @@
                             data: null,
                             "name": "botao",
                             render: function (data, type, row) {
-                                if (data.ultimaSolicitacao == 1) {
+
+                                if (data.stDecisao == 0  && data.dtSolicitacaoDesarquivamento) {
+                                    return 'Solicita&ccedil;&atilde;o de desarquivamento reprovada';
+//                                    return '<button data-target="modal_visualizar_recusado" id="visualizar_recusado" class="waves-effect waves-light btn modal-trigger waves-dark white black-text" data-avaliacao="' + data.Avaliacao + '"><i class="material-icons right">remove_red_eye</i>Solicitação recusada</button>';
+                                }
+                                if (data.SolicitacaoDesarquivamento == null && data.dtAvaliacao == null) {
+                                    return '<button data-target="modal_solicitar" class="btnSolicitar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '">Solicitar Desarquivamento</button>'
+                                }
+                                if (data.stEstado && data.dtAvaliacao) {
                                     return 'Arquivada sem possibilidade de desarquivamento';
                                 }
 
-                                if (data.stDecisao == 0) {
-                                    return '<button data-target="modal_visualizar_recusado" id="visualizar_recusado" class="waves-effect waves-light btn modal-trigger waves-dark white black-text"  data-idpreprojeto="' + data.idpreprojeto + '" data-avaliacao="' + data.Avaliacao + '"><i class="material-icons right">remove_red_eye</i>Solicitação recusada</button>';
-                                }
-
-                                if (data.SolicitacaoDesarquivamento == null) {
-                                    return '<button data-target="modal_solicitar" class="btnSolicitar modal-trigger btn waves-effect waves-dark white black-text small" data-idpreprojeto="' + data.idpreprojeto + '">Solicitar Desarquivamento</button>'
-                                }
                                 return 'Solicita&ccedil;&atilde;o de desarquivamento em an&aacute;lise';
                             }
                         }

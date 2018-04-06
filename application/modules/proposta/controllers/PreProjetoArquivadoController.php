@@ -113,21 +113,20 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
             'idAvaliadorArquivamento' => $idAvaliador,
             'stEstado' =>  1, // arquivamento ativo.
             'dtArquivamento' => date('Y-m-d h:i'),
-            'ultimaSolicitacao' => 0 //primeira solicitação
         ];
 
         $registroArquivamento = $arquivar->listaRegistrosDeArquivamento($idPreProjeto);
 
         try {
-            if ($registroArquivamento->idPreProjeto && $registroArquivamento->ultimaSolicitacao == 0) {
-                $AnaliseFinal = [
-                    'ultimaSolicitacao' => '1', //segunda e última solicitação
-                ];
-
-                $data = array_merge($data, $AnaliseFinal);
-                $arquivar->update($data, ["idPreProjeto = ?" => $idPreProjeto]);
-            }elseif (!count($registroArquivamento)) {
+            if (!count($registroArquivamento)) {
                 $arquivar->insert($data);
+            } else {
+                $segundaArquivacao = [
+                    'stEstado' => '0', //segunda arquivacao
+                ];
+                $data = array_merge($data, $segundaArquivacao);
+
+                $arquivar->update($data, ["idPreProjeto = ?" => $idPreProjeto]);
             }
 
         } catch(Exception $e){
@@ -239,10 +238,9 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
             ];
 
             if ($Avaliacao == null && $stDecisao == 0) {
-
                 $success = false;
                 $message = "É necessário descrever a avaliação!";
-            }else{
+            } else {
                 $data2['Avaliacao'] = $Avaliacao;
             }
         }
@@ -265,7 +263,7 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
                 $email = new StdClass();
                 $email->text = $Avaliacao;
                 $email->to = $agente->current()->EmailAgente;
-                $email->subject = "SALIC - Solicitação de desarquivamento {$mensagemDecisaoAssunto}: " . $idPreProjeto;
+                $email->subject = "SALIC - Desarquivamento da proposta nº: " . $idPreProjeto;
 
                 $this->events->trigger('email', $this, $email);
             }
