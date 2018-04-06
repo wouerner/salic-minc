@@ -728,6 +728,9 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     public function transformarPropostaEmProjetoAction()
     {
+        $this->mockProjeto();
+        die;
+
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
@@ -751,29 +754,20 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 if (!$rsPlanoDistribuicao) {
                     throw new Exception("Erro ao tentar transformar proposta em projeto, n&atilde;o existe produto principal cadastrado.");
                 }
-
                 //Se existe plano de distribuicao, entao pega-se o orgao baseado no produto principal
                 $rsOrgaos = $tblOrgaos->buscarOrgaoPorSegmento($rsPlanoDistribuicao->Segmento)->current();
-                //$idOrgao = $rsOrgaos->Codigo;
-                $idOrgao = $this->codOrgao;
             } else {
                 //Se nao existe plano de distribuicao, entao esta e uma proposta por edital,
                 //entao pega-se o orgao do edital
                 $tblEdital = new Edital();
                 $rsEdital = $tblEdital->buscar(array("idEdital = ?" => $rsProposta->idEdital))->current();
-
                 $rsOrgaos = $tblOrgaos->buscar(array("Codigo = ?" => $rsEdital->idOrgao))->current();
-                //$idOrgao = $rsOrgaos->Codigo;
-                $idOrgao = $this->codOrgao;
             }
 
             $tblAgente = new Agente_Model_DbTable_Agentes();
             $rsAgente = $tblAgente->buscarAgenteENome(array("a.idAgente = ?" => $rsProposta->idAgente))->current();
-
             $cnpjcpf = $rsAgente->CNPJCPF;
-
             $wsWebServiceSEI = new ServicosSEI();
-
             $arrRetornoGerarProcedimento = $wsWebServiceSEI->wsGerarProcedimento();
             $chars = array(".", "/", "-");
             $nrProcessoSemFormatacao = str_replace($chars, "", $arrRetornoGerarProcedimento->ProcedimentoFormatado);
@@ -784,7 +778,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $rsProjeto = $tblProjeto->buscar(array("idProjeto = ?" => $this->idPreProjeto), "IdPRONAC DESC")->current();
             if (!empty($rsProjeto)) {
                 $nrPronac = $rsProjeto->AnoProjeto . $rsProjeto->Sequencial;
-                $retorno['sucesso'] = "A Proposta " . $this->idPreProjeto . " foi transformada no Projeto No. " . $nrPronac;
+                $retorno['sucesso'] = "A Proposta {$this->idPreProjeto} foi transformada no Projeto No {$nrPronac}";
 
                 $authIdentity = array_change_key_case((array)$auth->getIdentity());
                 $this->enquadrarProjetoComSugestaoEnquadramento(
@@ -797,6 +791,67 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
         header('Content-Type: application/json');
         $this->_helper->json($retorno);
+    }
+
+    private function mockProjeto()
+    {
+        $tblProjeto = new Projetos();
+        $rsProjeto = $tblProjeto->buscar(["IdPRONAC = ?" => 204085], "IdPRONAC DESC");
+
+        $auth = Zend_Auth::getInstance();
+        $authIdentity = array_change_key_case((array)$auth->getIdentity());
+//        $this->enquadrarProjetoComSugestaoEnquadramento(
+//            $rsProjeto,
+//            $authIdentity['usu_codigo']
+//        );
+        try {
+            $idUsuario = $authIdentity['usu_codigo'];
+
+
+            $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+            $recursoAtual = $recursoPropostaDbTable->obterRecursoAtual($this->idPreProjeto);
+            if($recursoAtual['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO) {
+                $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+                $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($this->idPreProjeto);
+//xd($recursoAtual, $enquadramentoInicialProponente);
+                $tpEnquadramento = $enquadramentoInicialProponente['tp_enquadramento'];
+                $observacao = $enquadramentoInicialProponente['dsAvaliacaoTecnica'];
+            }
+//            elseif($recursoAtual['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
+//                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+//                $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
+//                $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
+//                $tpEnquadramento = $ultimaSugestaoEnquadramento['tp_enquadramento'];
+//                $observacao = $ultimaSugestaoEnquadramento['descricao_motivacao'];
+//            }
+
+
+            $arrayArmazenamentoEnquadramento = [
+                'AnoProjeto' => $rsProjeto->AnoProjeto,
+                'Sequencial' => $rsProjeto->Sequencial,
+                'Enquadramento' => $tpEnquadramento,
+                'DtEnquadramento' => $sugestaoEnquadramentoDbTable->getExpressionDate(),
+                'Observacao' => $observacao,
+                'Logon' => $idUsuario,
+                'IdPRONAC' => $rsProjeto->IdPRONAC
+            ];
+            $enquadramentoDbTable = new Admissibilidade_Model_Enquadramento();
+            $enquadramentoDbTable->salvar($arrayArmazenamentoEnquadramento);
+
+            $objProjeto = new Projetos();
+            $dadosProjeto = $objProjeto->findBy([
+                'IdPRONAC' => $rsProjeto->IdPRONAC
+            ]);
+
+            $projetos = new Projeto_Model_DbTable_Projetos();
+            $projetos->atualizarProjetoEnquadrado(
+                $dadosProjeto,
+                $idUsuario
+            );
+            return true;
+        } catch (Exception $exception) {
+            throw $exception;
+        }
     }
 
     private function enquadrarProjetoComSugestaoEnquadramento($rsProjeto, $idUsuario)
