@@ -60,7 +60,7 @@ const funcoes = {
         },
         formatarValor: function (valor) {
             valor = parseFloat(valor);
-
+            return numeral(valor).format();
         }
     }
 }
@@ -299,8 +299,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                         <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
                         <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
                         <td class="right-align"> -</td>
-                        <td class="center-align"><b>{{ parseInt(qtGratuitaDivulgacaoTotal) +
-                                parseInt(qtGratuitaPatrocinadorTotal) + parseInt(qtGratuitaPopulacaoTotal)}}</b>
+                        <td class="center-align"><b>{{ qtDistribuicaoGratuitaTotal }}</b>
                         </td>
                         <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
                         <td></td>
@@ -346,108 +345,47 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
         'detalhamentos'
     ],
     computed: {
-        // Total de exemplares
         qtExemplaresTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtExemplares']);
-            }
-            return total;
+            return this.detalhamentos.reduce(function (total, value) {
+                return total + parseInt(value.qtExemplares);
+            }, 0);
         },
-        // Total de divulgação gratuita.
-        qtGratuitaDivulgacaoTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtGratuitaDivulgacao']);
-            }
-            return total;
+        qtDistribuicaoGratuitaTotal: function () {
+            return this.detalhamentos.reduce(function (total, value) {
+                return total + (
+                    parseInt(value.qtGratuitaDivulgacao) +
+                    parseInt(value.qtGratuitaPatrocinador) +
+                    parseInt(value.qtGratuitaPopulacao));
+            }, 0);
         },
-        // Total de divulgação Patrocinador
-        qtGratuitaPatrocinadorTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtGratuitaPatrocinador']);
-            }
-            return total;
-        },
-        // Total de divulgação gratuita.
-        qtGratuitaPopulacaoTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtGratuitaPopulacao']);
-            }
-            return total;
-        },
-        //Preço Popular: Quantidade de Inteira
         qtPopularIntegralTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtPopularIntegral']);
-            }
-            return total;
+            return this.detalhamentos.reduce(function (total, value) {
+                return total + parseInt(value.qtPopularIntegral);
+            }, 0);
         },
-        //Preço Popular: Quantidade de meia entrada
         qtPopularParcialTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtPopularParcial']);
-            }
-            return total;
-        },
-        vlReceitaPopularIntegralTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                var vl = (this.detalhamentos[i]['vlReceitaPopularIntegral']);
-                total += numeral(vl).value();
-            }
-            return numeral(total).format();
-        },
-        vlReceitaPopularParcialTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                var vl = (this.detalhamentos[i]['vlReceitaPopularParcial']);
-                total += numeral(vl).value();
-            }
-            return numeral(total).format();
+            return this.detalhamentos.reduce(function (total, value) {
+                return total + parseInt(value.qtPopularParcial);
+            }, 0);
         },
         qtProponenteIntegralTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtProponenteIntegral']);
-            }
-            return total;
+            return this.detalhamentos.reduce(function (total, value) {
+                return total + parseInt(value.qtProponenteIntegral);
+            }, 0);
         },
         qtProponenteParcialTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                total += parseInt(this.detalhamentos[i]['qtProponenteParcial']);
-            }
-            return total;
-        },
-        vlReceitaProponenteIntegralTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                vl = (this.detalhamentos[i]['vlReceitaProponenteIntegral']);
-                total += this.converterParaMoedaAmericana(vl);
-            }
-            return numeral(total).format();
-        },
-        vlReceitaProponenteParcialTotal: function () {
-            total = 0;
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                var vl = (this.detalhamentos[i]['vlReceitaProponenteParcial']);
-                total += this.converterParaMoedaAmericana(vl);
-            }
-            return numeral(total).format();
+            return this.detalhamentos.reduce(function (total, value) {
+                return total + parseInt(value.qtProponenteParcial);
+            }, 0);
         },
         receitaPrevistaTotal: function () {
-            var total = numeral();
+            var soma = numeral();
 
-            for (var i = 0; i < this.detalhamentos.length; i++) {
-                var vl = this.detalhamentos[i]['vlReceitaPrevista'];
-                total.add(parseFloat(vl));
-            }
-            return total.format();
+            soma.add(this.detalhamentos.reduce(function (total, value) {
+                return total + parseFloat(value.vlReceitaPrevista);
+            }, 0));
+
+            return soma.format();
         },
         valorMedioProponente: function () {
             var vlReceitaProponenteIntegral = numeral();
