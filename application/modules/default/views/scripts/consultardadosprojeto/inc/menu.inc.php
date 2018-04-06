@@ -154,7 +154,7 @@
                 </div>
                 <!-- ==================== FIM - Outras Informações  =======================   -->
 
-                <?php if (($this->fnLiberarLinks['Analise'] && in_array($this->fnLiberarLinks['FaseDoProjeto'], array('2','3','4'))) || $this->usuarioInterno) {
+                <?php if ($this->fnLiberarLinks['Analise'] || $this->usuarioInterno) {
             ?>
                 <!-- ======================= Análise e Aprovação  =======================   -->
                 <div class="sanfonaDiv" style="display:none;"></div>
@@ -229,7 +229,7 @@
                 <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
                     <?php if ($this->fnLiberarLinks['Readequacao_50']) {
                 ?>
-                    <a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'remanejamento-menor'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Ir para Remanejamento &le; 50%">Remanejamento &le; 50%</a>
+                    <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Ir para Remanejamento &le; 50%">Remanejamento &le; 50%</a>
                     <?php
             } ?>
 
