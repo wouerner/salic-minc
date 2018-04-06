@@ -978,7 +978,7 @@ class UploadController extends MinC_Controller_Action_Abstract
         }
 
         $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-        $recursoProposta = $recursoPropostaDbTable->obterRecursoAtualVisaoProponente($id_preprojeto);
+        $recursoProposta = $recursoPropostaDbTable->obterRecursoAtualVisaoAvaliador($id_preprojeto);
 
         if (count($recursoProposta) < 1) {
             throw new Exception("Informa&ccedil;&otilde;es do Arquivo e Proposta Cultural n&atilde;o coincidem.");
