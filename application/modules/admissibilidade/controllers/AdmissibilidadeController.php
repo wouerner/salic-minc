@@ -781,7 +781,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $retorno['sucesso'] = "A Proposta {$this->idPreProjeto} foi transformada no Projeto No {$nrPronac}";
 
                 $authIdentity = array_change_key_case((array)$auth->getIdentity());
-                $this->enquadrarProjetoComSugestaoEnquadramento(
+                $this->enquadrarProjetoComRecursoProposta(
                     $rsProjeto,
                     $authIdentity['usu_codigo']
                 );
@@ -796,35 +796,34 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     private function mockProjeto()
     {
         $tblProjeto = new Projetos();
-        $rsProjeto = $tblProjeto->buscar(["IdPRONAC = ?" => 204085], "IdPRONAC DESC");
+        $rsProjeto = $tblProjeto->buscar(["IdPRONAC = ?" => 204085], "IdPRONAC DESC")->current();
 
         $auth = Zend_Auth::getInstance();
         $authIdentity = array_change_key_case((array)$auth->getIdentity());
-//        $this->enquadrarProjetoComSugestaoEnquadramento(
-//            $rsProjeto,
-//            $authIdentity['usu_codigo']
-//        );
-        try {
-            $idUsuario = $authIdentity['usu_codigo'];
 
+        $idUsuario = $authIdentity['usu_codigo'];
+        $this->enquadrarProjetoComRecursoProposta($rsProjeto, $idUsuario);
+    }
+
+    private function enquadrarProjetoComRecursoProposta($rsProjeto, $idUsuario)
+    {
+        try {
 
             $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
             $recursoAtual = $recursoPropostaDbTable->obterRecursoAtual($this->idPreProjeto);
             if($recursoAtual['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO) {
                 $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
                 $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($this->idPreProjeto);
-//xd($recursoAtual, $enquadramentoInicialProponente);
-                $tpEnquadramento = $enquadramentoInicialProponente['tp_enquadramento'];
-                $observacao = $enquadramentoInicialProponente['dsAvaliacaoTecnica'];
-            }
-//            elseif($recursoAtual['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
-//                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-//                $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
-//                $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
-//                $tpEnquadramento = $ultimaSugestaoEnquadramento['tp_enquadramento'];
-//                $observacao = $ultimaSugestaoEnquadramento['descricao_motivacao'];
-//            }
 
+                $tpEnquadramento = $enquadramentoInicialProponente['tp_enquadramento'];
+                $observacao = $recursoAtual['dsAvaliacaoTecnica'];
+            } elseif($recursoAtual['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
+                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+                $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
+                $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
+                $tpEnquadramento = $ultimaSugestaoEnquadramento['tp_enquadramento'];
+                $observacao = $ultimaSugestaoEnquadramento['descricao_motivacao'];
+            }
 
             $arrayArmazenamentoEnquadramento = [
                 'AnoProjeto' => $rsProjeto->AnoProjeto,
@@ -832,41 +831,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 'Enquadramento' => $tpEnquadramento,
                 'DtEnquadramento' => $sugestaoEnquadramentoDbTable->getExpressionDate(),
                 'Observacao' => $observacao,
-                'Logon' => $idUsuario,
-                'IdPRONAC' => $rsProjeto->IdPRONAC
-            ];
-            $enquadramentoDbTable = new Admissibilidade_Model_Enquadramento();
-            $enquadramentoDbTable->salvar($arrayArmazenamentoEnquadramento);
-
-            $objProjeto = new Projetos();
-            $dadosProjeto = $objProjeto->findBy([
-                'IdPRONAC' => $rsProjeto->IdPRONAC
-            ]);
-
-            $projetos = new Projeto_Model_DbTable_Projetos();
-            $projetos->atualizarProjetoEnquadrado(
-                $dadosProjeto,
-                $idUsuario
-            );
-            return true;
-        } catch (Exception $exception) {
-            throw $exception;
-        }
-    }
-
-    private function enquadrarProjetoComSugestaoEnquadramento($rsProjeto, $idUsuario)
-    {
-        try {
-            $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-            $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
-            $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
-
-            $arrayArmazenamentoEnquadramento = [
-                'AnoProjeto' => $rsProjeto->AnoProjeto,
-                'Sequencial' => $rsProjeto->Sequencial,
-                'Enquadramento' => $ultimaSugestaoEnquadramento['tp_enquadramento'],
-                'DtEnquadramento' => $sugestaoEnquadramentoDbTable->getExpressionDate(),
-                'Observacao' => $ultimaSugestaoEnquadramento['descricao_motivacao'],
                 'Logon' => $idUsuario,
                 'IdPRONAC' => $rsProjeto->IdPRONAC
             ];
