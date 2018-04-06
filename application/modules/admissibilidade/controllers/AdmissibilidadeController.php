@@ -319,13 +319,25 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
             $recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
 
-            if ($recursoEnquadramento['dtAvaliacaoTecnica'] && (int)$recursoEnquadramento['stRascunho'] != (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                || !$recursoEnquadramento['dtAvaliacaoTecnica']) {
+            if ($this->isRecursoEnviadoPorProponente($recursoEnquadramento) ||
+                $this->isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)) {
                 $this->view->recursoEnquadramento = $recursoEnquadramento;
             }
 
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
+    }
+
+    private function isRecursoEnviadoPorProponente($recursoEnquadramento)
+    {
+        return ($recursoEnquadramento['dsRecursoProponente']
+            && !is_null($recursoEnquadramento['stRascunho'])
+            && (int)$recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO);
+    }
+
+    private function isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)
+    {
+        return (!is_null($recursoEnquadramento['dtAvaliacaoTecnica']) && !empty($recursoEnquadramento['dtAvaliacaoTecnica']));
     }
 
     public function abrirDocumentosAnexadosAction()
