@@ -38,6 +38,7 @@ const funcoes = {
                return 0;
             }
 
+            valor = String(valor);
             valor = valor.replace(/\./g, '');
             valor = valor.replace(/\,/g, '.');
             valor = parseFloat(valor);
@@ -81,7 +82,8 @@ Vue.component('select-percent', {
             type: Boolean,
             default: false
         },
-        maximoCombo: {}
+        maximoCombo: {},
+        selected: 0
     },
     data: function () {
         return {
@@ -98,15 +100,19 @@ Vue.component('select-percent', {
         }
     },
     watch: {
+        selected: function(val) {
+
+        },
         disabled: function () {
             this.$refs.combo.disabled = this.disabled;
             if (this.disabled) {
                 this.value = 0;
             }
-        }
+        },
     },
     methods: {
         valorSelecionado: function (value) {
+            console.log("valor selecionado", value);
             this.retorno = value;
             this.$emit('evento', parseInt(this.retorno))
         }
@@ -175,7 +181,6 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 :detalhamentos="detalhamentos"
                 :canalaberto="canalaberto"
                  v-on:eventoRemoverDetalhamento="removerDetalhamento"
-                 v-on:eventoEditarDetalhamento="editarDetalhamento"
                 >
             </proposta-plano-distribuicao-lista-detalhamentos>
             <proposta-plano-distribuicao-formulario-detalhamento
@@ -284,7 +289,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                                 class="btn small waves-effect waves-light tooltipped btn-primary"
                                 data-tooltip="Editar detalhamento"
                                 v-bind:disabled="!disabled"
-                                    @click="editar(detalhamento, index)">
+                                    @click.prevent="editar(detalhamento, index)">
                                 <i class="material-icons">edit</i>
                             </a>
                         </td>
@@ -294,7 +299,7 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                                 class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item"
                                 data-tooltip="Excluir detalhamento"
                                 v-bind:disabled="!disabled"
-                                    @:click="excluir(detalhamento, index)">
+                                    @:click.prevent="excluir(detalhamento, index)">
                                 <i class="material-icons">delete</i>
                             </a>
                             
@@ -599,6 +604,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                                 <select-percent
                                     v-bind:disabled="distribuicaoGratuita =='s' ? true: false"
                                     v-bind:maximoCombo="(percentualProponentePadrao *  100)"
+                                    v-bind:selected="(percentualProponente *  100)"
                                     v-on:evento="percentualProponente = $event/100">
                                 </select-percent>
                             </legend>
@@ -671,6 +677,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                                 <select-percent
                                     v-bind:disabled="distribuicaoGratuita =='s'? true: false"
                                     v-bind:maximoCombo="(percentualMaximoPrecoPopular *  100)"
+                                    v-bind:selected="(percentualPrecoPopular *  100)"
                                     v-on:evento="percentualPrecoPopular = $event/100">
                                 </select-percent>
                             </legend>
@@ -849,20 +856,36 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
         'disabled',
     ],
     created: function() {
+        let vue = this;
         detalhamentoEventBus.$on('editarDetalhamento', function (object, index) {
-            if(object.idDetalhaPlanoDistribuicao) {
-                // this.distribuicao = object;
-                this.distribuicao = Object.assign({}, this.distribuicao, object);
-                console.log(this.distribuicao);
-                this.visualizarFormulario = true;
-                console.log('form mostrar', this.visualizarFormulario);
+            if(object.idDetalhaPlanoDistribuicao != null) {
+                vue.limparFormulario();
+                vue.visualizarFormulario = true;
+
+                vue.percentualProponente =  (parseInt(object.qtProponenteIntegral) + parseInt(object.qtProponenteParcial)) / parseInt(object.qtExemplares);
+                vue.percentualPrecoPopular =  (parseInt(object.qtPopularIntegral) + parseInt(object.qtPopularParcial)) / parseInt(object.qtExemplares);
+                console.log(vue.percentualProponente, vue.percentualPrecoPopular);
+                //
+                // Object.assign(vue.distribuicao, object);
+                //
+                //
+                // vue.inputUnitarioPopularIntegral = vue.formatarValor(object.vlUnitarioPopularIntegral);
+                // vue.inputUnitarioProponenteIntegral = vue.formatarValor(object.vlUnitarioProponenteIntegral);
+                //
+                //
+                // if(object.vlUnitarioPopularIntegral == 0 && object.vlUnitarioProponenteIntegral == 0) {
+                //     vue.distribuicaoGratuita = SIM;
+                // }
+                // vue.percentualPrecoPopular
+                // object.qtPopularIntegral
+                // object.qtPopularParcial
+                // vue.editarDistribuicao(object);
+                // vue.mostrarFormulario(0);
             }
         });
     },
     mounted: function () {
         this.$refs.add.disabled = !this.disabled;
-
-        console.log('form mostrar2', this.visualizarFormulario);
     },
     computed: {
         qtPrecoPopularValorIntegralLimite: function () {
@@ -899,7 +922,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             }
             return DISTRIBUICAO_GRATUITA_PERCENTUAL_PADRAO +
                 (this.percentualMaximoPrecoPopular - this.percentualPrecoPopular)
-                ;
+            ;
         },
         percentualMaximoPrecoPopular: function () {
             return PRECO_POPULAR_PERCENTUAL_PADRAO + (PROPONENTE_PERCENTUAL_PADRAO - this.percentualProponente);
@@ -949,7 +972,6 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
     },
     watch: {
         atualizarCalculosDistribuicao: function (val) {
-            console.log('tesaaaaaaaaaaaaaaaaaaa');
 
             this.labelInteira = 'Inteira';
             this.distribuicao.qtProponenteIntegral = 0;
@@ -1032,9 +1054,9 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                 this.distribuicao.vlUnitarioPopularIntegral = 75.00;
             }
         },
-        percentualProponente: function () {
-            this.percentualPrecoPopular = this.percentualMaximoPrecoPopular;
-        }
+        // percentualProponente: function () {
+        //     this.percentualPrecoPopular = this.percentualMaximoPrecoPopular;
+        // }
     },
     methods: {
         obterQuantidadePorPercentual: function (percentualDistribuicao) {
@@ -1046,11 +1068,18 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
 
             return parseInt((this.distribuicao.qtExemplares * percentualDistribuicao) * divisao);
         },
+        editarDistribuicao: function(distribuicao) {
+            // Object.assign(this.distribuicao, object);
+            // vue.visualizarFormulario = true;
+            // console.log(distribuicao, this.distribuicao);
+            // this.distribuicao = distribuicao
+        },
         mostrar: function () {
             this.active = this.active == true ? false : true;
             this.icon = this.icon == 'visibility_off' ? 'add' : 'visibility_off';
         },
         mostrarFormulario: function (id) {
+            this.limparFormulario();
             this.visualizarFormulario = this.visualizarFormulario == true ? false : true;
 
             if (this.visualizarFormulario == true) {
