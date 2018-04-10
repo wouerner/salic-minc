@@ -110,7 +110,7 @@
         if (!idPronac) {
             return false;
         }
-        $3('#mensagem-pre-loader').html('Clonando projeto...');
+        $3('#loading-message').html('Clonando projeto...');
         $3.ajax({
             type: 'POST',
             url: "<?php echo $this->url(array('controller' => 'listarprojetos', 'action' => 'clonar-projeto-ajax')); ?>",
@@ -135,16 +135,16 @@
         });
     }
 
-    $3(document).ready(function () {
-        $3('.modal-pre-loader').modal();
-    });
+//    $3(document).ready(function () {
+//        $3('.modal-pre-loader').modal();
+//    });
 
     $3(document).ajaxStart(function () {
-        $3('#modal-pre-loader').modal('open');
+        $3('#container-loading').fadeIn();
     });
 
     $3(document).ajaxComplete(function () {
-        $3('#modal-pre-loader').modal('close');
+        $3('#container-loading').fadeOut();
     });
 
 </script>
@@ -314,18 +314,6 @@ gerarBreadCrumb($links);
                                                         <i class="material-icons">message</i>
                                                     </a>
                                                 </li>
-                                                <?php if ($projeto["projetoPossuiProposta"]) : ?>
-                                                    <li><a class="clonar-projeto btn btn-floating tooltipped btn-primary"
-                                                           data-tooltip="Clonar Projeto" target="_blank"
-                                                           href="javascript:void(0)"
-                                                           id-pronac="<?= $this->escape($projeto["IdPRONAC"]); ?>"
-                                                           pronac="<?= $this->escape($projeto["Pronac"]); ?>"
-                                                           titulo="<?= $projeto["NomeProjeto"]; ?>">
-                                                            <i class="material-icons">content_copy</i>
-                                                        </a>
-                                                    </li>
-                                                <?php endif; ?>
-
                                                 <?php if ($projeto["podeClonarProjeto"]) : ?>
                                                     <li>
                                                         <a class="clonar-projeto btn btn-floating tooltipped btn-primary"

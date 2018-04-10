@@ -142,6 +142,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 'ReadequacaoPlanilha' => $linksGeral[14]
             );
             $this->view->fnLiberarLinks = $arrayLinks;
+            $projetos = new Projeto_Model_DbTable_Projetos();
+            $this->view->isAdequarARealidade = $projetos->fnChecarLiberacaoDaAdequacaoDoProjeto($idPronac);
 
             $r = new tbRelatorio();
             $rt = new tbRelatorioTrimestral();

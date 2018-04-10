@@ -266,6 +266,14 @@
 		<?php if ($this->fnLiberarLinks['SolicitarProrrogacao']): ?>
                 <a class="no_seta" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'solicitarprorrogacao', 'action' => 'index', 'idpronac' => Seguranca::encrypt($this->idPronac))); ?>">Solicitar Prorroga&ccedil;&atilde;o</a>
 		<?php endif; ?>
+
+        <?php if ($this->isAdequarARealidade) : ?>
+            <a class="no_seta tooltipped"
+               data-tooltip="Adequar à realidade ou Encaminhar projeto adequado para o MinC" target="_blank"
+               href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'identificacaodaproposta', 'idPreProjeto' => $this->resp->idProjeto)); ?>">
+                Adequar &agrave; realidade
+            </a>
+        <?php endif; ?>
                 <?php
         } ?>
                 <!-- ==================== FIM - SOLICITAR PRAZO CAPTAÇÃO  =======================   -->
