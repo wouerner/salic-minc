@@ -300,42 +300,60 @@ gerarBreadCrumb($links);
                                 ?></td>
                             <td>
                                 <p>
-                                <div style="position: relative; height: 50px;">
-                                    <div class="fixed-action-btn horizontal"
-                                         style="position: absolute; top: -10px; right: 0; padding: 15px 0 15px 15px; z-index: 996;">
-                                        <a class="btn btn-primary small" style="margin-left: 15px;">
-                                            <i class="material-icons">more_vert</i>
-                                        </a>
-                                        <ul>
-                                            <li>
-                                                <a class="btn btn-floating red tooltipped"
-                                                   data-tooltip="Solicita&ccedil;&otilde;es"
-                                                   href="/solicitacao/mensagem/index/idPronac/<?= $this->escape($projeto["IdPRONAC"]); ?>">
-                                                    <i class="material-icons">message</i>
-                                                </a>
-                                            </li>
-                                            <?php if ($projeto["projetoPossuiProposta"]) : ?>
-                                                <li><a class="clonar-projeto btn btn-floating tooltipped btn-primary"
-                                                       data-tooltip="Clonar Projeto" target="_blank"
-                                                       href="javascript:void(0)"
-                                                       id-pronac="<?= $this->escape($projeto["IdPRONAC"]); ?>"
-                                                       pronac="<?= $this->escape($projeto["Pronac"]); ?>"
-                                                       titulo="<?= $projeto["NomeProjeto"]; ?>">
-                                                        <i class="material-icons">content_copy</i>
+                                    <div style="position: relative; height: 50px;">
+                                        <div class="fixed-action-btn horizontal"
+                                             style="position: absolute; top: -10px; right: 0; padding: 15px 0 15px 15px; z-index: 996;">
+                                            <a class="btn btn-primary small" style="margin-left: 15px;">
+                                                <i class="material-icons">more_vert</i>
+                                            </a>
+                                            <ul>
+                                                <li>
+                                                    <a class="btn btn-floating red tooltipped"
+                                                       data-tooltip="Solicita&ccedil;&otilde;es"
+                                                       href="/solicitacao/mensagem/index/idPronac/<?= $this->escape($projeto["IdPRONAC"]); ?>">
+                                                        <i class="material-icons">message</i>
                                                     </a>
                                                 </li>
-                                            <?php endif; ?>
+                                                <?php if ($projeto["projetoPossuiProposta"]) : ?>
+                                                    <li><a class="clonar-projeto btn btn-floating tooltipped btn-primary"
+                                                           data-tooltip="Clonar Projeto" target="_blank"
+                                                           href="javascript:void(0)"
+                                                           id-pronac="<?= $this->escape($projeto["IdPRONAC"]); ?>"
+                                                           pronac="<?= $this->escape($projeto["Pronac"]); ?>"
+                                                           titulo="<?= $projeto["NomeProjeto"]; ?>">
+                                                            <i class="material-icons">content_copy</i>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
 
-                                <?php if ($projeto["liberarEdicao"]) : ?>
-                                    <a class="btn small waves-effect waves-light tooltipped btn-default"
-                                       data-tooltip="Adequar à realidade ou Encaminhar para o MinC" target="_blank"
-                                       href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'identificacaodaproposta', 'idPreProjeto' => $projeto["idProjeto"])); ?>">
-                                        <i class="material-icons">edit</i>
-                                    </a>
-                                <?php endif; ?>
-                            </p>
-                        </td>
-                    </tr>
+                                                <?php if ($projeto["podeClonarProjeto"]) : ?>
+                                                    <li>
+                                                        <a class="clonar-projeto btn btn-floating tooltipped btn-primary"
+                                                           data-tooltip="Clonar Projeto" target="_blank"
+                                                           href="javascript:void(0)"
+                                                           id-pronac="<?= $this->escape($projeto["IdPRONAC"]); ?>"
+                                                           pronac="<?= $this->escape($projeto["Pronac"]); ?>"
+                                                           titulo="<?= $projeto["NomeProjeto"]; ?>">
+                                                            <i class="material-icons">content_copy</i>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
+
+                                                <?php if ($projeto["liberarEdicao"]) : ?>
+                                                    <li>
+                                                        <a class="btn btn-floating waves-effect waves-light tooltipped btn-default"
+                                                           data-tooltip="Adequar à realidade ou Encaminhar para o MinC" target="_blank"
+                                                           href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'identificacaodaproposta', 'idPreProjeto' => $projeto["idProjeto"])); ?>">
+                                                            <i class="material-icons">edit</i>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </p>
+                            </td>
+                        </tr>
 
                         <?php $idAgente = $projeto["idAgente"]; ?>
 
