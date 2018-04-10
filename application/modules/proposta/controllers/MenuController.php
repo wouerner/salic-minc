@@ -269,7 +269,7 @@ class Proposta_MenuController extends Proposta_GenericController
             } else {
                 $arrMenuProponente['encaminharprojetoaominc'] = array(
                     'id' => 'encaminharprojetoaominc',
-                    'label' => 'Encaminhar projeto ao MinC',
+                    'label' => 'Devolver projeto ao MinC',
                     'title' => '',
                     'link' => array(
                         'module' => 'proposta',
