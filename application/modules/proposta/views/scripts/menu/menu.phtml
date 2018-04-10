@@ -12,13 +12,18 @@
                 <p class="info-title">
                     <?php echo isset($this->proposta['nomeprojeto']) ? $this->proposta['nomeprojeto'] : ''; ?>
                 </p>
-                <?php if( isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0 ) : ?>
+                <?php if (isset($this->layout['prazoAlterarProjeto']) && $this->layout['prazoAlterarProjeto'] > 0) : ?>
                     <p class="">
                         <?php $n = round($this->layout['prazoAlterarProjeto']); ?>
                         <i class="material-icons left tiny">query_builder</i>
                         <span id="cronometro"></span>
                     </p>
-                <?php endif; ?>
+                <?php elseif ($this->projeto): ?>
+                    <p class="">
+                        <i class="material-icons left tiny">query_builder</i>
+                        <span id="cronometro">Prazo de altera&ccedil;&atilde;o expirado</span>
+                    </p>
+                <? endif; ?>
             </div>
         </li>
         <?php echo $this->partialLoop('/menu/partials/item.phtml', 'proposta', $this->arrMenuProponente); ?>
