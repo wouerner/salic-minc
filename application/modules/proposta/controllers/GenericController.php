@@ -107,7 +107,6 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
          */
         $this->idResponsavel = $auth->getIdentity()->IdUsuario;
 
-
         /**
          * Agentes sao proponentes da proposta ou do projeto
          */
@@ -134,6 +133,7 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             $this->view->isEditarProposta = $this->isEditarProposta($this->idPreProjeto);
             $this->view->isEditarProjeto = $this->isEditarProjeto($this->idPreProjeto);
             $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
+
 
             $layout = array(
                 'titleShort' => 'Proposta',
