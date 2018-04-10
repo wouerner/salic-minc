@@ -171,7 +171,10 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
         if (empty($acao_salvar) || is_null($acao_salvar)) {
             throw new Exception("Bot&atilde;o de a&ccedil;&atilde;o n&atilde;o informado.");
         }
-        $stRascunho = ($acao_salvar == 'rascunho') ? Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO : Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO;
+        $stRascunho = Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO;
+        if ($acao_salvar == 'rascunho') {
+            $stRascunho = Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO;
+        }
 
         $idAvaliadorTecnico = $this->authIdentity['usu_codigo'];
         $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
@@ -181,6 +184,12 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             throw new Exception("Identificador do Recurso da Proposta n&atilde;o localizado.");
         }
 
+        $stAtivo = Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_ATIVO;
+        if ($recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO
+            && $recursoEnquadramento['tpRecurso'] == Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO) {
+            $stAtivo = Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_INATIVO;
+        }
+
         $tbRecursoModel = new Recurso_Model_TbRecursoProposta([
             'idRecursoProposta' => $recursoEnquadramento['idRecursoProposta'],
             'dtAvaliacaoTecnica' => $recursoEnquadramentoDbTable->getExpressionDate(),
@@ -188,9 +197,19 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             'stAtendimento' => $stAtendimento,
             'idAvaliadorTecnico' => $idAvaliadorTecnico,
             'stRascunho' => $stRascunho,
+            'stAtivo' => $stAtivo
         ]);
         $tbRecursoMapper = new Recurso_Model_TbRecursoPropostaMapper();
         $tbRecursoMapper->save($tbRecursoModel);
+
+        if ($recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO
+            && $recursoEnquadramento['tpRecurso'] == Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO) {
+            $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+            $tbRecursoPropostaDbTable->cadastrarRecurso(
+                $id_preprojeto,
+                Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO
+            );
+        }
 
         parent::message(
             'Dados armazenados com sucesso.',
