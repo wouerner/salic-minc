@@ -105,16 +105,13 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
     {
         try {
             $this->_helper->layout->disableLayout();
-
             $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-
             $get = $this->getRequest()->getParams();
             if (!isset($get['id_preprojeto']) || empty($get['id_preprojeto'])) {
                 throw new Exception("Identificador da proposta não informado.");
             }
             $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($get['id_preprojeto']);
             $resultado = $sugestaoEnquadramentoDbTable->obterHistoricoEnquadramento();
-
             $resultado = array_map(function ($dado) {
                 return array_map('utf8_encode', $dado);
             }, $resultado);
@@ -122,7 +119,6 @@ class Admissibilidade_EnquadramentoPropostaController extends MinC_Controller_Ac
             $this->_helper->json(
                 ['sugestoes_enquadramento' => $resultado]
             );
-//xd($resultado);
         } catch (Exception $objException) {
             xd($objException->getMessage());
         }

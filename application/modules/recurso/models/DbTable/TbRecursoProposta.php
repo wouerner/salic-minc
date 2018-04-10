@@ -27,7 +27,10 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
         }
     }
 
-    public function cadastrarRecurso($idPreProjeto)
+    public function cadastrarRecurso(
+        $idPreProjeto,
+        $tpRecurso = Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO
+    )
     {
         if (!$idPreProjeto) {
             throw new Exception("Identificador do projeto n&atilde;o informado.");
@@ -41,10 +44,28 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
             'dtRecursoProponente' => $this->getExpressionDate(),
             'stAtendimento' => Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_SEM_AVALIACAO,
             'stAtivo' => Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_ATIVO,
+            'tpRecurso' => $tpRecurso
         ];
 
         $this->inativarRecursos($idPreProjeto);
         $this->inserir($dados);
+
+        $this->enviarEmailAberturaDePrazoRecursal($idPreProjeto);
+    }
+
+    private function enviarEmailAberturaDePrazoRecursal($id_preprojeto)
+    {
+        $mensagemEmail = <<<MENSAGEM_EMAIL
+Foi aberto o prazo para entrada com Recurso ou Desist&ecirc;ncia do Prazo Recursal.
+Ao acessar a Proposta {$id_preprojeto} a op&ccedil;&atilde;o "Enquadramento" no menu lateral estar&aacute; dispon&iacute;vel.
+MENSAGEM_EMAIL;
+
+        $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
+        $preprojetoDbTable->enviarEmailProponente(
+            $id_preprojeto,
+            'Recurso',
+            $mensagemEmail
+        );
     }
 
     public function obterRecursoAtualVisaoProponente($id_preprojeto)

@@ -153,13 +153,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $propostaPorEdital = true;
         }
 
-//        $tblPlanoDistribuicao = new PlanoDistribuicao();
-//
-//        $this->view->itensPlanosDistribuicao = $tblPlanoDistribuicao->buscar(
-//            array("a.idprojeto = ?" => $idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
-//            array("idplanodistribuicao DESC")
-//        );
-
         $this->view->isEdital = $propostaPorEdital;
         $this->view->itensTelefone = Proposta_Model_AnalisarPropostaDAO::buscarTelefone($this->view->itensGeral[0]->idAgente);
         //$this->view->itensPlanosDistribuicao = Proposta_Model_AnalisarPropostaDAO::buscarPlanoDeDistribucaoProduto($idPreProjeto);
@@ -202,21 +195,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
         $this->view->documentosExigidos = $arrDocumentosExigidos;
         $this->view->itensHistorico = Proposta_Model_AnalisarPropostaDAO::buscarHistorico($idPreProjeto);
-
-//        $this->view->itensPlanilhaOrcamentaria = Proposta_Model_AnalisarPropostaDAO::buscarPlanilhaOrcamentaria($idPreProjeto);
-//        $buscarProduto = ManterorcamentoDAO::buscarProdutos($this->idPreProjeto);
-//        $this->view->Produtos = $buscarProduto;
-//
-//        $tbPlanilhaEtapa = new Proposta_Model_DbTable_TbPlanilhaEtapa();
-//        $buscarEtapa = $tbPlanilhaEtapa->listarEtapasProdutos($this->idPreProjeto);
-//
-//        $this->view->Etapa = $buscarEtapa;
-
-        $preProjeto = new Proposta_Model_DbTable_PreProjeto();
-
-//        $buscarItem = $preProjeto->listarItensProdutos($this->idPreProjeto);
         $this->view->AnaliseCustos = Proposta_Model_DbTable_PreProjeto::analiseDeCustos($this->idPreProjeto);
-
         $this->view->idPreProjeto = $this->idPreProjeto;
         $pesquisaView = $this->_getParam('pesquisa');
         if ($pesquisaView == 'proposta') {
@@ -224,7 +203,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->view->tituloTopo = 'Consultar dados da proposta';
         }
         $this->view->grupo = $this->codGrupo;
-
 
         // Recuperando o Histórico de Sugestão de Enquadramento
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
