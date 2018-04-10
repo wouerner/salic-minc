@@ -19,6 +19,10 @@
             if ($(this).attr('data-ajax-modal-width') !== '') {
                 objConfig.strWidth = $(this).attr('data-ajax-modal-width');
             }
+
+            if ($(this).attr('data-ajax-modal-full') !== '') {
+                objConfig.full = true;
+            }
             $.ajaxModal(objConfig);
         });
 
@@ -101,12 +105,13 @@
      * @since 28/12/2016
      */
     $.ajaxModal = function (objOption, callback) {
-        var objDefaults = {strUrl: '', strIdModal: 'modal', strType: 'modal-fixed-footer', strHeight: '', strWidth: ''},
+        var objDefaults = {strUrl: '', strIdModal: 'modal', strType: 'modal-fixed-footer', strHeight: '', strWidth: '', full: false},
             objSettings = $.extend({}, objDefaults, objOption),
             strIdModal = '#' + objSettings.strIdModal;
+            strClassFull = (objSettings.full) ? 'full ' : '';
         // Removendo e criando elemento div para o modal.
         $(strIdModal).remove();
-        $('body').append('<div id="' + objSettings.strIdModal + '" class="modal ' + objSettings.strType + '" style="height: '+ objSettings.strHeight +'; width: '+ objSettings.strWidth +'"></div>');
+        $('body').append('<div id="' + objSettings.strIdModal + '" class="modal ' + strClassFull + objSettings.strType + '" style="height: '+ objSettings.strHeight +'; width: '+ objSettings.strWidth +'"></div>');
         $(strIdModal).modal();
 
         // Renderizando ajax e abrindo a modal por callback.
@@ -210,6 +215,9 @@
                                 window.location.href = result.redirect;
                             }
                         }, 500);
+                        if (typeof result.close != 'undefined' && result.close != '0') {
+                            elmForm.closest('.modal').modal('close');
+                        }
                         booReturn = true;
                     } else {
                         if (typeof result.msg != 'string') {
