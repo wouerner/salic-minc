@@ -78,8 +78,8 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
                 $aux[$key] = $proposta;
             }
-            //            $recordsFiltered = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, $search);
-            //            $recordsTotal = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente);
+//                        $recordsFiltered = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, $search);
+//                        $recordsTotal = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente);
         }
 
         $this->_helper->json(array(
@@ -110,13 +110,25 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $data = [
             'idPreProjeto' => $idPreProjeto,
             'MotivoArquivamento' => $MotivoArquivamento,
-            'idAvaliador' => $idAvaliador,
+            'idAvaliadorArquivamento' => $idAvaliador,
             'stEstado' =>  1, // arquivamento ativo.
-            'dtArquivamento' => date('Y-m-d h:i')
+            'dtArquivamento' => date('Y-m-d h:i'),
         ];
 
+        $registroArquivamento = $arquivar->listaRegistrosDeArquivamento($idPreProjeto);
+
         try {
-            $arquivar->insert($data);
+            if (!count($registroArquivamento)) {
+                $arquivar->insert($data);
+            } else {
+                $segundaArquivacao = [
+                    'stEstado' => '0', //segunda arquivacao
+                ];
+                $data = array_merge($data, $segundaArquivacao);
+
+                $arquivar->update($data, ["idPreProjeto = ?" => $idPreProjeto]);
+            }
+
         } catch(Exception $e){
             $message = $e->getMessage();
             $success = false;
@@ -150,13 +162,25 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $idPreProjeto = $this->getRequest()->getParam("idpreprojeto");
         $SolicitacaoDesarquivamento = $this->getRequest()->getParam("SolicitacaoDesarquivamento");
         $stEstado = $this->getRequest()->getParam("stEstado");
+        $Avaliacao = $this->getRequest()->getParam("Avaliacao");
         $stDecisao = $this->getRequest()->getParam("stDecisao");
+        $avaliacaoFinal = $this->getRequest()->getParam("avaliacaoFinal");
 
         $arquivar = new Proposta_Model_PreProjetoArquivado();
 
         if($SolicitacaoDesarquivamento){
             $data['SolicitacaoDesarquivamento'] = $SolicitacaoDesarquivamento;
             $data['dtSolicitacaoDesarquivamento'] = new Zend_Db_Expr('GETDATE()');
+        }
+
+        if($avaliacaoFinal) {
+            if ($Avaliacao != null) {
+                $data['Avaliacao'] = $Avaliacao;
+                $data['dtAvaliacao'] = new Zend_Db_Expr('GETDATE()');
+                $data['idAvaliadorAnaliseDesarquivamento'] = $this->auth->getIdentity()->usu_codigo;
+            }else{
+                throw new Exception("É necessário preencher a Avaliação!");
+            }
         }
 
         if($stEstado !== null) {
@@ -169,8 +193,90 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
         try {
             $arquivar->update($data, array('idPreProjeto = ?' => $idPreProjeto));
-            $message = $data['dtSolicitacaoDesarquivamento'];
             $message = 'Solicitação enviada!' . $idPreProjeto;
+        } catch(Exception $e){
+            $message = $e->getMessage();
+            $success = false;
+        }
+
+        $this->_helper->json(
+            [
+                'data' => $data,
+                'success' => $success,
+                'message' => $message
+            ]
+        );
+    }
+
+    public function avaliarArquivamentoAction()
+    {
+        $message = null;
+        $success = true;
+        $data = [];
+
+        $idPreProjeto = $this->getRequest()->getParam("idpreprojeto");
+        $stEstado = $this->getRequest()->getParam("stEstado");
+        $Avaliacao = $this->getRequest()->getParam("Avaliacao");
+        $stDecisao = $this->getRequest()->getParam("stDecisao");
+        $avaliacaoFinal = $this->getRequest()->getParam("avaliacaoFinal");
+
+
+        if ($stEstado !== null) {
+            $data['stEstado'] = $stEstado;
+        }
+
+        if ($stDecisao !== null) {
+            $data['stDecisao'] = $stDecisao;
+        }
+
+        if ($avaliacaoFinal) {
+
+            $data2 = [
+                'dtAvaliacao' => new Zend_Db_Expr('GETDATE()'),
+                'idAvaliadorAnaliseDesarquivamento' => $this->auth->getIdentity()->usu_codigo,
+                'Avaliacao' => null
+            ];
+
+            if ($Avaliacao == null && $stDecisao == 0) {
+                $success = false;
+                $message = "É necessário descrever a avaliação!";
+            } else {
+                $data2['Avaliacao'] = $Avaliacao;
+            }
+        }
+
+        $data = array_merge($data, $data2);
+
+        try {
+            if($success){
+                $where = ['idPreProjeto = ?' => $idPreProjeto];
+
+                (new Proposta_Model_PreProjetoArquivado)->update($data, $where);
+
+                if ($data['stDecisao'] == 1) {
+                    (new Proposta_Model_DbTable_PreProjeto)->update(['dtArquivamento' => null], $where);
+                }
+
+                $agente = new Proposta_Model_DbTable_PreProjeto();
+                $agente = $agente->buscaCompleta(['a.idPreProjeto = ? ' => $idPreProjeto]);
+
+                $corpoEmail = '<p>Senhor(a) Proponente,</p></br>';
+                if($stDecisao == 1){
+                    $corpoEmail = '<p>O pedido de desarquivamento referente à proposta supracitada foi aceito.  A proposta será desarquivada e seguirá em análise. Dessa forma, acompanhe diariamente a proposta no sistema em virtude de novas diligências e comunicados</p>';
+
+                } else {
+                    $corpoEmail .= '<p>O pedido de desarquivamento referente à proposta supracitada não foi aceito pelo seguinte motivo:<p/></br>';
+                    $corpoEmail .= "<p>{$Avaliacao}</p></br>";
+                    $corpoEmail .= '<p>Salientamos que o proponente poderá inscrever e enviar novamente a mesma proposta ao MinC desde que observada a restrição contida na alínea "c", inciso I do artigo 23 da Instrução Normativa nº 05/2017 do Ministério da Cultura.</p></br>';
+                }
+
+                $email = new StdClass();
+                $email->text = $corpoEmail;
+                $email->to = $agente->current()->EmailAgente;
+                $email->subject = "SALIC - Desarquivamento da proposta nº: " . $idPreProjeto;
+
+                $this->events->trigger('email', $this, $email);
+            }
         } catch(Exception $e){
             $message = $e->getMessage();
             $success = false;
@@ -221,8 +327,7 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
             $order,
             $start,
             $length,
-            $search,
-            $stEstado
+            $search
         );
 
         $recordsTotal = 0;
