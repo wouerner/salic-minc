@@ -74,13 +74,13 @@ class Autenticacao_Model_FnVerificarPermissao extends MinC_Db_Table_Abstract
             return 0;
         }
 
-        if ($proposta['tipopessoa'] == 0) {
-            if ($cpfLogado == $proposta['cnpjcpf'] || $proposta['idUsuario'] == $idUsuarioLogado) {
-                $permissao = 1;
-            }
+        if ($cpfLogado == $proposta['cnpjcpf'] || $proposta['idUsuario'] == $idUsuarioLogado) {
+            $permissao = 1;
         }
 
         if ($proposta['tipopessoa'] == 1) {
+
+
 
             if (!empty($proposta['cnpjcpf'])) {
                 $queryDirigente = $db->select()
