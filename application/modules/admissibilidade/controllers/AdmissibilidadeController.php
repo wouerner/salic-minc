@@ -304,7 +304,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->view->isRecursoAvaliado = false;
             if ($this->isRecursoDeferidoAvaliado($recursoEnquadramento)
                 || $this->isRecursoDuplamenteIndeferido($recursoEnquadramento)
-                || $this->isRecursoDesistidoDePrazoRecursal($recursoEnquadramento)) {
+                || $this->isRecursoDesistidoDePrazoRecursal($recursoEnquadramento)
+                || $this->isRecursoExpirou10dias($recursoEnquadramento)) {
                 $this->view->isRecursoAvaliado = true;
             }
 
@@ -321,6 +322,22 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
+    }
+
+    public function isRecursoExpirou10dias(array $recursoEnquadramento)
+    {
+
+        return (
+            (is_null($recursoEnquadramento['stRascunho'])
+                || empty($recursoEnquadramento['stRascunho'])
+                || $recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO
+            )
+            && is_null($recursoEnquadramento['dsRecursoProponente'])
+            && empty(trim($recursoEnquadramento['dsRecursoProponente']))
+            && is_null($recursoEnquadramento['dsAvaliacaoTecnica'])
+            && empty(trim($recursoEnquadramento['dsAvaliacaoTecnica']))
+            && $recursoEnquadramento['diasDesdeAberturaRecurso'] > 10
+            && $recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL);
     }
 
     public function isRecursoDesistidoDePrazoRecursal(array $recursoEnquadramento)
