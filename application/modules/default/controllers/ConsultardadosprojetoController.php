@@ -118,7 +118,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $cpf = $proj->buscarProponenteProjeto($idPronac);
             $cpf = $cpf->CgcCpf;
             $idUsuarioLogado = $auth->getIdentity()->IdUsuario;
-            
+
             $links = new fnLiberarLinks();
             $linksXpermissao = $links->links(2, $cpf, $idUsuarioLogado, $idPronac);
 
@@ -184,8 +184,11 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        if (isset($_REQUEST['idPronac'])) {
-            $idPronac = $_GET['idPronac'];
+        $params = $this->getRequest()->getParams();
+
+        if (isset($params['idPronac'])) {
+
+            $idPronac = $params['idPronac'];
             if (strlen($idPronac) > 7) {
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
@@ -435,11 +438,13 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     {
         $this->_helper->layout->disableLayout();
 
-        if (isset($_REQUEST['idPronac'])) {
-            $idPronac = $_REQUEST['idPronac'];
-            if (strlen($idPronac) > 7) {
-                $idPronac = Seguranca::dencrypt($idPronac);
-            }
+        $params = $this->getRequest()->getParams();
+
+        if (isset($params['idPronac'])) {
+        	$idPronac = $params['idPronac'];
+			if (strlen($idPronac) > 7) {
+				$idPronac = Seguranca::dencrypt($idPronac);
+			}
             $dados = array();
             $dados['idPronac'] = (int) $idPronac;
             if (is_numeric($dados['idPronac'])) {
@@ -462,7 +467,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     {
         $this->_helper->layout->disableLayout();
 
-        $this->view->idPreProjeto = $_REQUEST['idPreProjeto'];
+        $this->view->idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
     }
 
     public function faseDoProjeto($idPronac)
@@ -632,8 +637,12 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function dadosProponenteAction()
     {
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
-        if (isset($_REQUEST['idPronac'])) {
-            $idPronac = $_GET['idPronac'];
+
+        $params = $this->getRequest()->getParams();
+
+        if (isset($params['idPronac'])) {
+
+            $idPronac = $params['idPronac'];
             if (strlen($idPronac) > 7) {
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
@@ -2272,7 +2281,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             'finalizar',
             'remanejamento-menor',
             'readequacao'
-        );        
+        );
     }
 
     public function carregarValorPorGrupoRemanejamentoAction()
@@ -2282,7 +2291,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             'carregar-valor-por-grupo-remanejamento',
             'remanejamento-menor',
             'readequacao'
-        );        
+        );
     }
 
     public function carregarValorEntrePlanilhasAction()
@@ -2302,7 +2311,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             'reintegrar-item',
             'remanejamento-menor',
             'readequacao'
-        );        
+        );
     }
 
     public function remanejamentoReintegrarPlanilhaAction()
