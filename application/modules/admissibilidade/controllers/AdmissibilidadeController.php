@@ -302,39 +302,59 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             }
 
             $this->view->isRecursoAvaliado = false;
-            if ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-                && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO
-            ) {
+            if ($this->isRecursoDeferidoAvaliado($recursoEnquadramento)
+                || $this->isRecursoDuplamenteIndeferido($recursoEnquadramento)
+                || $this->isRecursoDesistidoDePrazoRecursal($recursoEnquadramento)) {
                 $this->view->isRecursoAvaliado = true;
             }
 
             $perfisAutorizadosTransformarPropostaEmProjeto = [
-                Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
-                Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+                (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
+                (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
             ];
 
             $this->view->isPermitidoTransformarPropostaEmProjeto = $this->isAutorizado(
                     $perfisAutorizadosTransformarPropostaEmProjeto,
-                    $this->codGrupo
+                    (int)$this->codGrupo
                 )
                 && $this->view->isRecursoAvaliado;
+
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
     }
 
-    public function isAutorizado($perfisAutorizados, $id_perfil)
+    public function isRecursoDesistidoDePrazoRecursal(array $recursoEnquadramento)
+    {
+        return ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+            && $recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL);
+    }
+
+    public function isRecursoDuplamenteIndeferido(array $recursoEnquadramento)
+    {
+        return ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+            && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO
+            && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO);
+    }
+
+    public function isRecursoDeferidoAvaliado(array $recursoEnquadramento)
+    {
+        return ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+            && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO);
+    }
+
+    public function isAutorizado(array $perfisAutorizados, $id_perfil)
     {
         return in_array($id_perfil, $perfisAutorizados);
     }
 
-    private function isRecursoEnviadoPorProponente($recursoEnquadramento)
+    private function isRecursoEnviadoPorProponente(array $recursoEnquadramento)
     {
         return ($recursoEnquadramento['dsRecursoProponente']
             && !is_null($recursoEnquadramento['stRascunho'])
             && (int)$recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO);
     }
 
-    private function isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)
+    private function isRecursoPossuiAvaliacaoAvaliador(array $recursoEnquadramento)
     {
         return (!is_null($recursoEnquadramento['dtAvaliacaoTecnica']) && !empty($recursoEnquadramento['dtAvaliacaoTecnica']));
     }
@@ -789,13 +809,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
             $recursoAtual = $recursoPropostaDbTable->obterRecursoAtual($this->idPreProjeto);
-            if($recursoAtual['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO) {
+            if ($recursoAtual['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO) {
                 $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
                 $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($this->idPreProjeto);
 
                 $tpEnquadramento = $enquadramentoInicialProponente['tp_enquadramento'];
                 $observacao = $recursoAtual['dsAvaliacaoTecnica'];
-            } elseif($recursoAtual['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
+            } elseif ($recursoAtual['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
                 $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
                 $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
                 $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();

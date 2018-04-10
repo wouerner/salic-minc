@@ -227,7 +227,8 @@
                                 <a href="<?php echo $this->url([
                                     'module' => 'recurso',
                                     'controller' => 'recurso-proposta',
-                                    'action' => 'visao-avaliador'
+                                    'action' => 'visao-avaliador',
+                                    'idPreProjeto' => $this->idPreProjeto
                                 ]); ?>/?idRecursoProposta=<?php echo $this->recursoEnquadramento['idRecursoProposta']; ?>">
 
                                     <button class="btn waves-effect waves-light" type="button"
