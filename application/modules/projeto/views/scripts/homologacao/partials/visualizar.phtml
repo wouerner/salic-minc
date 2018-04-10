@@ -19,8 +19,8 @@
             </tr>
             <tr>
                 <td>UF: <?= $this->arrValue['enquadramentoProjeto']['UfProjeto'] ?></td>
-                <td>Per&iacute;odo de execu&ccedil;&atilde;o: <?= Mascara::convertDateToView($this->arrValue['enquadramentoProjeto']['DtInicioExecucao']) ?>
-                    &agrave; <?= Mascara::convertDateToView($this->arrValue['enquadramentoProjeto']['DtFimExecucao']) ?></td>
+                <td>Per&iacute;odo de execu&ccedil;&atilde;o: <?= reset(explode(' ', Data::dataBrasileira($this->arrValue['enquadramentoProjeto']['DtInicioExecucao']))) ?>
+                    &agrave; <?= reset(explode(' ', Data::dataBrasileira($this->arrValue['enquadramentoProjeto']['DtFimExecucao']))) ?></td>
                 <td>Enquadramento: <?= $this->arrValue['enquadramentoProjeto']['Enquadramento'] ?></td>
             </tr>
             </tbody>

@@ -29,8 +29,8 @@
                     <td class="center-align"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index')) . "?idPronac={$arrValue['IdPRONAC']}"; ?>" target="_blank"><u><?php echo $arrValue['Pronac']; ?></td>
                     <td class="left-align"><?php echo $arrValue['NomeProjeto']; ?></td>
                     <td class="center-align"><?php echo $arrValue['Enquadramento']; ?></td>
-                    <td class="center-align"><?php echo reset(explode(' ', new Zend_Date($arrValue['DtInicioExecucao']))); ?></td>
-                    <td class="center-align"><?php echo reset(explode(' ', new Zend_Date($arrValue['DtFimExecucao']))); ?></td>
+                    <td class="center-align"><?php echo reset(explode(' ', Data::dataBrasileira($arrValue['DtInicioExecucao']))); ?></td>
+                    <td class="center-align"><?php echo reset(explode(' ', Data::dataBrasileira($arrValue['DtInicioExecucao']))); ?></td>
                     <td class="center-align"><?php echo $arrValue['NrReuniao']; ?></td>
                     <td class="right-align"><?php echo 'R$ ' . number_format($arrValue['vlHomologado'], 2, ',', '.'); ?></td>
                     <td class="center-align">

@@ -9,6 +9,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     const TIPO_ATO_ENQUADRAMENTO = 626;
     const TIPO_ATO_ANALISE_INICIAL = 630;
     const TIPO_ATO_ANALISE_CNIC = 631;
+    const TIPO_ATO_HOMOLOGAR_PROJETO = 643;
 
     /**
     * Esse metodo deve retornar Objeto

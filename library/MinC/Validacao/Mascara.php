@@ -318,12 +318,14 @@ class Mascara
 	 * @static
 	 * @param string $strDate
 	 * @return string
-     *
-     * @author Ruy Ferreira <ruyjfs@gmail.com>
-     * @since 04/12/2017
+	 *
+	 * @author Ruy Ferreira <ruyjfs@gmail.com>
+	 * @since 04/12/2017
+	 * 
+	 * @todo Verificar o por que a data no servidor de hmg nao esta ficando com a mesma formatacao da maquina local.
 	 */
 	public static function convertDateToView($strDate)
 	{
-        return reset(explode(' ', new Zend_Date($strDate)));
+	    return reset(explode(' ', new Zend_Date($strDate)));
 	}
 }

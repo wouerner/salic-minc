@@ -40,14 +40,6 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
             }
         }
 
-        if ($booStatus) {
-            $arrProjectDb = $this->findBy(['IdPRONAC' => $model->getIdPRONAC()]);
-            if (!$arrProjectDb) {
-                $this->setMessage('Projeto n&atilde;o encontrado para ser homologado.', 'IdPRONAC');
-                $booStatus = false;
-            }
-        }
-
         return $booStatus;
     }
 
@@ -113,7 +105,7 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
                     $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
                     $objModelDocumentoAssinatura
                         ->setIdPRONAC($intIdPronac)
-                        ->setIdTipoDoAtoAdministrativo(Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ADMINISTRATIVO)
+                        ->setIdTipoDoAtoAdministrativo(Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO)
                         ->setIdAtoDeGestao($arrData['IdEnquadramento'])
                         ->setConteudo($arrData['conteudo'])
                         ->setIdCriadorDocumento($auth->getIdentity()->usu_codigo)

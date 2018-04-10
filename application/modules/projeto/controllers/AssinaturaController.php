@@ -62,7 +62,7 @@ class Projeto_AssinaturaController extends Assinatura_GenericController
 
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ADMINISTRATIVO;
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO;
     }
 
     public function indexAction()
@@ -76,6 +76,7 @@ class Projeto_AssinaturaController extends Assinatura_GenericController
             $this->auth->getIdentity()->usu_org_max_superior,
             $this->idTipoDoAtoAdministrativo
         );
+
         d($this->view->dados);
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
@@ -86,10 +87,6 @@ class Projeto_AssinaturaController extends Assinatura_GenericController
             $this->auth->getIdentity()->usu_org_max_superior
         );
         $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
-    }
-
-    public function gerenciarAssinaturasAction()
-    {
     }
 
     public function devolverProjetoAction()

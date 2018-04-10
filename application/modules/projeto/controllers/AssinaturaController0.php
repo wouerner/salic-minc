@@ -25,7 +25,7 @@ class Projeto_AssinaturasssController extends Assinatura_GenericController
         //
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ADMINISTRATIVO;
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO;
 
             $auth = Zend_Auth::getInstance(); // pega a autenticacao
             $idPreProjeto = $this->getRequest()->getParam('idPreProjeto');
