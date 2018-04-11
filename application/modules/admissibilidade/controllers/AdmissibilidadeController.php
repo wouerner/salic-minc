@@ -299,6 +299,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
             $recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
             $this->view->isRecursoAvaliado = false;
+            $perfisAutorizadosTransformarPropostaEmProjeto = [
+                (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
+                (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+            ];
             if($recursoEnquadramento) {
                 if ($this->isRecursoEnviadoPorProponente($recursoEnquadramento) ||
                     $this->isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)) {
@@ -311,11 +315,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     || $this->isRecursoExpirou10dias($recursoEnquadramento)) {
                     $this->view->isRecursoAvaliado = true;
                 }
-
-                $perfisAutorizadosTransformarPropostaEmProjeto = [
-                    (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
-                    (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-                ];
             }
             $this->view->isPermitidoTransformarPropostaEmProjeto = $this->isAutorizado(
                     $perfisAutorizadosTransformarPropostaEmProjeto,
