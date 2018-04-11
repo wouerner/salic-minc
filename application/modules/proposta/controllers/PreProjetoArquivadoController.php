@@ -78,8 +78,11 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
                 $aux[$key] = $proposta;
             }
-//                        $recordsFiltered = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, $search);
-//                        $recordsTotal = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente);
+            $filteredData = $tblPreProjetoArquivado->listar($this->idAgente, $this->idResponsavel, $idAgente, $where, null, null, null, $search, $stEstado);
+            $recordsFiltered = count($filteredData);
+
+            $totalData = $tblPreProjetoArquivado->listar($this->idAgente, $this->idResponsavel, $idAgente);
+            $recordsTotal = count($totalData);
         }
 
         $this->_helper->json(array(
@@ -318,7 +321,8 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $search = $this->getRequest()->getParam('search');
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
-        $order = new Zend_Db_Expr('"p"."idpreprojeto" DESC');
+
+        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["idpreprojeto desc"];
 
         $tblPreProjetoArquivado = new Proposta_Model_PreProjetoArquivado();
 
@@ -326,12 +330,16 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
             array(),
             $order,
             $start,
-            $length,
-            $search
+            $length
         );
 
-        $recordsTotal = 0;
-        $recordsFiltered = 0;
+        $filteredData = $tblPreProjetoArquivado->listarSolicitacoes( array(), null, null, $length);
+
+        $recordsFiltered = count($filteredData);
+
+        $totalData = $tblPreProjetoArquivado->listarSolicitacoes();
+        $recordsTotal = count($totalData);
+
         $aux = array();
         if (!empty($rsPreProjetoArquivado)) {
             foreach ($rsPreProjetoArquivado as $key => $proposta) {
