@@ -9,6 +9,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     private $codGrupo = null;
     private $codOrgao = null;
     private $COD_CLASSIFICACAO_DOCUMENTO = 23;
+    protected $auth;
 
     public function init()
     {
@@ -54,6 +55,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $PermissoesGrupo[] = 151;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COMPONENTE_COMISSAO;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO;
 
         isset($this->auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
         parent::init();
@@ -743,9 +745,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     public function transformarPropostaEmProjetoAction()
     {
-        $this->mockProjeto();
-        die;
-
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
@@ -765,6 +764,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $rsPlanoDistribuicao = $tblPlanoDistribuicao->buscar(array("idProjeto = ?" => $this->idPreProjeto, "stPrincipal = ?" => 1))->current();
 
             $tblOrgaos = new Orgaos();
+            $idOrgao = $this->codOrgao;
             if ($rsProposta->idEdital == 0 || empty($rsProposta->idEdital)) {
                 if (!$rsPlanoDistribuicao) {
                     throw new Exception("Erro ao tentar transformar proposta em projeto, n&atilde;o existe produto principal cadastrado.");
@@ -777,6 +777,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $tblEdital = new Edital();
                 $rsEdital = $tblEdital->buscar(array("idEdital = ?" => $rsProposta->idEdital))->current();
                 $rsOrgaos = $tblOrgaos->buscar(array("Codigo = ?" => $rsEdital->idOrgao))->current();
+                //$idOrgao = $rsOrgaos->Codigo;
             }
 
             $tblAgente = new Agente_Model_DbTable_Agentes();
@@ -806,18 +807,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         }
         header('Content-Type: application/json');
         $this->_helper->json($retorno);
-    }
-
-    private function mockProjeto()
-    {
-        $tblProjeto = new Projetos();
-        $rsProjeto = $tblProjeto->buscar(["IdPRONAC = ?" => 204085], "IdPRONAC DESC")->current();
-
-        $auth = Zend_Auth::getInstance();
-        $authIdentity = array_change_key_case((array)$auth->getIdentity());
-
-        $idUsuario = $authIdentity['usu_codigo'];
-        $this->enquadrarProjetoComRecursoProposta($rsProjeto, $idUsuario);
     }
 
     private function enquadrarProjetoComRecursoProposta($rsProjeto, $idUsuario)
@@ -911,7 +900,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     public function arquivarAction()
     {
-        $dao = new Proposta_Model_AnalisarPropostaDAO();
         $post = Zend_Registry::get('post');
         Proposta_Model_AnalisarPropostaDAO::deletePreProjeto($post->idprojeto);
     }
@@ -1973,6 +1961,19 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             "formularioLocalizar" => $this->_urlPadrao . "/admissibilidade/admissibilidade/localizar",
             "urlResumo" => $this->_urlPadrao . "/admissibilidade/admissibilidade/resumo-propostas"
         );
+
+//        if ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
+//            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
+//            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
+//            || $this->codGrupo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO
+//        ) {
+//            $arrDados['liberarEncaminhamento'] = true;
+//        }
+//
+//        if ($this->codGrupo) {
+//            $gruposDbTable = new Autenticacao_Model_Grupos();
+//            $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
+//        }
 
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
