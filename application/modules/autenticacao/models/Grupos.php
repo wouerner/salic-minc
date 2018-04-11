@@ -92,7 +92,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
                 break;
         }
 
-        if($perfis) {
+        if ($perfis) {
             return $this->findAll(
                 [
                     'gru_codigo in (?)' => $perfis,
@@ -101,6 +101,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
             );
         }
     }
+
 
     public function obterTecnicos()
     {
