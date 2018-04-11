@@ -298,24 +298,25 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
             $recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
-            if ($this->isRecursoEnviadoPorProponente($recursoEnquadramento) ||
-                $this->isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)) {
-                $this->view->recursoEnquadramento = $recursoEnquadramento;
-            }
-
             $this->view->isRecursoAvaliado = false;
-            if ($this->isRecursoDeferidoAvaliado($recursoEnquadramento)
-                || $this->isRecursoDuplamenteIndeferido($recursoEnquadramento)
-                || $this->isRecursoDesistidoDePrazoRecursal($recursoEnquadramento)
-                || $this->isRecursoExpirou10dias($recursoEnquadramento)) {
-                $this->view->isRecursoAvaliado = true;
+            if($recursoEnquadramento) {
+                if ($this->isRecursoEnviadoPorProponente($recursoEnquadramento) ||
+                    $this->isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)) {
+                    $this->view->recursoEnquadramento = $recursoEnquadramento;
+                }
+
+                if ($this->isRecursoDeferidoAvaliado($recursoEnquadramento)
+                    || $this->isRecursoDuplamenteIndeferido($recursoEnquadramento)
+                    || $this->isRecursoDesistidoDePrazoRecursal($recursoEnquadramento)
+                    || $this->isRecursoExpirou10dias($recursoEnquadramento)) {
+                    $this->view->isRecursoAvaliado = true;
+                }
+
+                $perfisAutorizadosTransformarPropostaEmProjeto = [
+                    (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
+                    (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+                ];
             }
-
-            $perfisAutorizadosTransformarPropostaEmProjeto = [
-                (int)Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
-                (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-            ];
-
             $this->view->isPermitidoTransformarPropostaEmProjeto = $this->isAutorizado(
                     $perfisAutorizadosTransformarPropostaEmProjeto,
                     (int)$this->codGrupo
