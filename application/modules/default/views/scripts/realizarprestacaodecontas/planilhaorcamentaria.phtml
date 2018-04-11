@@ -1,15 +1,15 @@
 <div class="container-fluid">
-            <div class="page-title">
-                <div class="row">
-                    <div class="col s12 m9 l10">
-                        <h1>Presta&ccedil;&atilde;o de Contas: Planilha or&ccedil;ament&aacute;ria comprovada</h1>
-                    </div>
-                    <div class="col s12 m3 l2 right-align">
-                        <a href="javascript:voltar();" title="Página Anterior"title="Página Anterior" class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">keyboard_return</i>
-                        </a>
-                    </div>
-                </div>
+    <div class="page-title">
+        <div class="row">
+            <div class="col s12 m9 l10">
+                <h1>Presta&ccedil;&atilde;o de Contas: Planilha or&ccedil;ament&aacute;ria comprovada</h1>
             </div>
+            <div class="col s12 m3 l2 right-align">
+                <a href="javascript:voltar();" title="Página Anterior"title="Página Anterior" class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">keyboard_return</i>
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <!-- div class="col s2">
             <?php
@@ -123,66 +123,54 @@
         </div -->
 
 
+    <div class="card">
+        <div class="card-content">
+            <div class="col s12" id="pagina">
+                <table class="bordered responsive-table">
+                    <thead>
+                        <th>PRONAC</th>
+                        <th>NOME DO PROJETO</th>
+                        <?php if($this->itemAvaliadoFilter == 2 || $this->codGrupo == 132){ ?>
+                            <th>Valor Impugnado</th>
+                        <?php } ?>
+                        <th>RESUMO</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td align="center"><a class="btn waves-effect waves-light white black-text" href="<?php echo $this->baseUrl().'/consultardadosprojeto/index?idPronac='.$this->idPronac; ?>" target="_blank"><?php echo $this->pronac;?></a></td>
+                            <td align="center"><?php echo $this->nomeProjeto;?></td>
+                            <?php if($this->itemAvaliadoFilter == 2 || $this->codGrupo == 132): ?>
+                                <td align="center"><?php echo $this->formatarReal($this->vlComprovacaoImpugnado); ?></td>
+                            <?php endif ?>
+                            <td>
+                                <div id="btn_consolidacao">
+                                    <sl-btn-visualizar
+                                        idpronac="<?php echo $this->idPronac;?>"
+                                        pronac="Resumo: <?php echo $this->pronac; ?>"
+                                        nome="<?php echo $this->nomeProjeto; ?>"
+                                    ></sl-btn-visualizar>
+                                    <!-- Modal Structure -->
+                                    <div id="abrirModal" class="modal modal-fixed-footer">
+                                        <div class="modal-content">
+                                            <h3>Visualizar consolida&ccedil;&atilde;o</h3>
+                                           <sl-collapse-visualizar></sl-collapse-visualizar>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
+                                        </div>
+                                    </div>
+                                    <!-- Modal Structure -->
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
    <div class="card">
     <div class="card-content">
-        <div class="col s12" id="pagina">
-            <!-- div class="row">
-                <div class="col s12" id="breadcrumb">
-                    <ul>
-                        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => ''), '', true); ?>" title="Ir para p&aacute;gina inicial">Início</a></li>
-                        <?php if($this->codGrupo == 132){ ?>
-                            <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
-                        <?php }else if($this->codGrupo == 124): ?>
-                            <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'));?>">Presta&ccedil;&atilde;o de contas</a></li>
-                        <?php else: ?>
-                        <?php if ($this->grupoAtivo != 121) { //Tecnico de Acompanhamento ?>
-                            <li><a href="<?php echo $this->url(array('controller' => 'realizarprestacaodecontas', 'action' => 'painel'));?>">Presta&ccedil;&atilde;o de contas</a></li>
-                        <?php } ?>
-                        <?php endif; ?>
-                        <li class="last">Planilha or&ccedil;ament&aacute;ria comprovada</li>
-                    </ul>
-                </div>
-            </div-->
-
-            <table class="bordered responsive-table">
-                <thead>
-                    <th>PRONAC</th>
-                    <th>NOME DO PROJETO</th>
-                    <?php if($this->itemAvaliadoFilter == 2 || $this->codGrupo == 132){ ?>
-                        <th>Valor Impugnado</th>
-                    <?php } ?>
-                    <th>RESUMO</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td align="center"><a class="btn waves-effect waves-light white black-text" href="<?php echo $this->baseUrl().'/consultardadosprojeto/index?idPronac='.$this->idPronac; ?>" target="_blank"><?php echo $this->pronac;?></a></td>
-                        <td align="center"><?php echo $this->nomeProjeto;?></td>
-                        <?php if($this->itemAvaliadoFilter == 2 || $this->codGrupo == 132): ?>
-                            <td align="center"><?php echo $this->formatarReal($this->vlComprovacaoImpugnado); ?></td>
-                        <?php endif ?>
-                        <td>
-                            <div id="btn_consolidacao">
-                                <sl-btn-visualizar
-                                    idpronac="<?php echo $this->idPronac;?>"
-                                    pronac="Resumo: <?php echo $this->pronac; ?>"
-                                    nome="<?php echo $this->nomeProjeto; ?>"
-                                ></sl-btn-visualizar>
-                                <!-- Modal Structure -->
-                                <div id="abrirModal" class="modal modal-fixed-footer">
-                                    <div class="modal-content">
-                                        <h3>Visualizar consolida&ccedil;&atilde;o</h3>
-                                       <sl-collapse-visualizar></sl-collapse-visualizar>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Fechar</a>
-                                    </div>
-                                </div>
-                                <!-- Modal Structure -->
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
             <?php
                 $validaA = true;
                 $validab = true;
