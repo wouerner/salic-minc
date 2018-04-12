@@ -4,7 +4,7 @@ class DbfController extends MinC_Controller_Action_Abstract
 {
     /**
      * @access private
-     * @var integer (idAgente do usuário logado)
+     * @var integer (idAgente do usuï¿½rio logado)
      */
     private $getIdUsuario;
 
@@ -21,38 +21,38 @@ class DbfController extends MinC_Controller_Action_Abstract
 
     /**
      * @access private
-     * @var string (diretório onde se enconta o arquivo .txt)
+     * @var string (diretï¿½rio onde se enconta o arquivo .txt)
      */
     private $arquivoTXT = 'DBF';
 
 
 
     /**
-     * Reescreve o método init()
+     * Reescreve o mï¿½todo init()
      * @access public
      * @param void
      * @return void
      */
     public function init()
     {
-        $this->view->title = 'Salic - Sistema de Apoio às Leis de Incentivo à Cultura'; // título da página
+        $this->view->title = 'Salic - Sistema de Apoio ï¿½s Leis de Incentivo ï¿½ Cultura'; // tï¿½tulo da pï¿½gina
 
-        /* ========== INÍCIO PERFIL ========== */
+        /* ========== INï¿½CIO PERFIL ========== */
         // define os grupos que tem acesso
         $PermissoesGrupo = array();
-        //$PermissoesGrupo[] = 121; // Técnico de Acompanhamento
+        //$PermissoesGrupo[] = 121; // Tï¿½cnico de Acompanhamento
         $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
         //$PermissoesGrupo[] = 123; // Coordenador - Geral de Acompanhamento
-        //$PermissoesGrupo[] = 129; // Técnico de Acompanhamento
-        //$PermissoesGrupo[] = ; // Coordenador de Avaliação
-        //$PermissoesGrupo[] = 134; // Coordenador de Fiscalização
-        //$PermissoesGrupo[] = 124; // Técnico de Prestação de Contas
-        //$PermissoesGrupo[] = 125; // Coordenador de Prestação de Contas
-        //$PermissoesGrupo[] = 126; // Coordenador - Geral de Prestação de Contas
+        //$PermissoesGrupo[] = 129; // Tï¿½cnico de Acompanhamento
+        //$PermissoesGrupo[] = ; // Coordenador de Avaliaï¿½ï¿½o
+        //$PermissoesGrupo[] = 134; // Coordenador de Fiscalizaï¿½ï¿½o
+        //$PermissoesGrupo[] = 124; // Tï¿½cnico de Prestaï¿½ï¿½o de Contas
+        //$PermissoesGrupo[] = 125; // Coordenador de Prestaï¿½ï¿½o de Contas
+        //$PermissoesGrupo[] = 126; // Coordenador - Geral de Prestaï¿½ï¿½o de Contas
         parent::perfil(1, $PermissoesGrupo); // perfil novo salic
 
-        // pega o idAgente do usuário logado
-        $auth = Zend_Auth::getInstance(); // pega a autenticação
+        // pega o idAgente do usuï¿½rio logado
+        $auth = Zend_Auth::getInstance(); // pega a autenticaï¿½ï¿½o
         if (isset($auth->getIdentity()->usu_codigo)) { // autenticacao novo salic
             $this->getIdUsuario = UsuarioDAO::getIdUsuario($auth->getIdentity()->usu_codigo);
             $this->getIdUsuario = ($this->getIdUsuario) ? $this->getIdUsuario['idAgente'] : 0;
@@ -62,7 +62,7 @@ class DbfController extends MinC_Controller_Action_Abstract
         /* ========== FIM PERFIL ========== */
 
         parent::init();
-    } // fecha método init()
+    } // fecha mï¿½todo init()
 
 
 
@@ -74,20 +74,20 @@ class DbfController extends MinC_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        $this->_forward('form'); // redireciona para o formulário
-    } // fecha método indexAction()
+        $this->forward('form'); // redireciona para o formulï¿½rio
+    } // fecha mï¿½todo indexAction()
 
 
 
     /**
-     * Formulário para gerar o DBF
+     * Formulï¿½rio para gerar o DBF
      * @access public
      * @param void
      * @return void
      */
     public function formAction()
     {
-    } // fecha método formAction()
+    } // fecha mï¿½todo formAction()
 
 
 
@@ -99,9 +99,9 @@ class DbfController extends MinC_Controller_Action_Abstract
      */
     public function gerarDbfAction()
     {
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         if ($this->getRequest()->isPost()) {
-            // configuração o php.ini para 100MB
+            // configuraï¿½ï¿½o o php.ini para 100MB
             @set_time_limit(0);
             @ini_set('mssql.textsize', 10485760000);
             @ini_set('mssql.textlimit', 10485760000);
@@ -115,22 +115,22 @@ class DbfController extends MinC_Controller_Action_Abstract
             $receber = (isset($post->receber) && $post->receber == 'S') ? 'S' : 'N';
             $email   = strtolower($post->email);
 
-            // objeto para validação de e-mail
+            // objeto para validaï¿½ï¿½o de e-mail
             $ValidarEmail = new Zend_Validate_EmailAddress();
 
             try {
                 if (empty($ano)) {
-                    throw new Exception('Por favor, informe um ano válido!');
+                    throw new Exception('Por favor, informe um ano vï¿½lido!');
                 } elseif ($ano > date('Y')) {
-                    throw new Exception('O ano informado não pode ser maior que o ano atual!');
+                    throw new Exception('O ano informado nï¿½o pode ser maior que o ano atual!');
                 } elseif ($receber == 'S' && (empty($email) || !$ValidarEmail->isValid($email))) {
-                    throw new Exception('Por favor, informe um e-mail válido!');
+                    throw new Exception('Por favor, informe um e-mail vï¿½lido!');
                 } else {
                     // executa a sp
                     $this->sInformacaoReceitaFederalV3 = new sInformacaoReceitaFederalV3();
                     $this->sInformacaoReceitaFederalV3->gerarDBF($ano);
 
-                    // busca as infomações que serão armazenadas no arquivo
+                    // busca as infomaï¿½ï¿½es que serï¿½o armazenadas no arquivo
                     $this->Dbf = new Dbf();
                     $buscar = $this->Dbf->buscarInformacoes();
 
@@ -144,7 +144,7 @@ class DbfController extends MinC_Controller_Action_Abstract
                         $url              = $protocolo . '://' . $host . Zend_Controller_Front::getInstance()->getBaseUrl();         // url externa do arquivo
                         $url             .= '/public/txt/DBF/' . $arq;
                         $folder           = getcwd() . $bar . 'public' . $bar . 'txt' . $bar . $this->arquivoTXT;
-                        $this->arquivoTXT = $folder . $bar . $arq;      // diretório interno do arquivo
+                        $this->arquivoTXT = $folder . $bar . $arq;      // diretï¿½rio interno do arquivo
 
                         if (!file_exists($folder)) {
                             mkdir($folder, 0755, true);
@@ -167,8 +167,8 @@ class DbfController extends MinC_Controller_Action_Abstract
                             fclose($arquivo);
 
                             if ($receber == 'S') {
-                                // envia uma cópia do arquivo para o e-mail informado no formulário
-                                $msg = 'Segue cópia do arquivo para geração da DBF. ';
+                                // envia uma cï¿½pia do arquivo para o e-mail informado no formulï¿½rio
+                                $msg = 'Segue cï¿½pia do arquivo para geraï¿½ï¿½o da DBF. ';
                                 $msg.= 'O arquivo original foi salvo em: ';
                                 $msg.= '<strong><a href="' . $url . '" title="Abrir arquivo" target="_blank">' . $url . '</a></strong>';
 
@@ -189,7 +189,7 @@ class DbfController extends MinC_Controller_Action_Abstract
             }
         } // fecha if post
         else {
-            parent::message('Por favor, preencha o formulário para gerar o DBF corretamente!', 'dbf/form', 'ALERT');
+            parent::message('Por favor, preencha o formulï¿½rio para gerar o DBF corretamente!', 'dbf/form', 'ALERT');
         }
-    } // fecha método gerarDbfAction()
+    } // fecha mï¿½todo gerarDbfAction()
 } // fecha class

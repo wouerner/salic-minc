@@ -36,7 +36,7 @@ class CadastrareditalController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("cadastraredital/consultaralterareditais");
+        $this->redirect("cadastraredital/consultaralterareditais");
     }
 
 

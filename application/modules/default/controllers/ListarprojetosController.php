@@ -85,7 +85,7 @@ class ListarprojetosController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("Listarprojetos/listarprojetos");
+        $this->redirect("Listarprojetos/listarprojetos");
     }
 
     public function listarprojetosAction()

@@ -498,7 +498,7 @@ class Proposta_MantertabelaitensController extends Proposta_GenericController
         $post = Zend_Registry::get('post');
 
         if (empty($post->tipoPesquisa) && empty($post->item) && empty($post->etapa) && empty($post->produto)) {
-            $this->_redirect("mantertabelaitens/exibirdados/idPreProjeto/" . $this->idPreProjeto);
+            $this->redirect("mantertabelaitens/exibirdados/idPreProjeto/" . $this->idPreProjeto);
         }
         $tipoPesquisa = $post->tipoPesquisa;
         $item = $post->item;

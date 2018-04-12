@@ -87,9 +87,9 @@ class TramitardocumentosController extends MinC_Controller_Action_Abstract
     {
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
         if ($GrupoAtivo->codGrupo == 90) { //Protocolo - Documento
-            $this->_redirect("tramitardocumentos/despachar");
+            $this->redirect("tramitardocumentos/despachar");
         } else {
-            $this->_redirect("tramitardocumentos/receber");
+            $this->redirect("tramitardocumentos/receber");
         }
     }
 
