@@ -3197,21 +3197,21 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
             ->where("a.mecanismo = '1'");
 
         $sql2 = $db->select()
-            ->from(array('a'=>'preprojeto'), array('a.idpreprojeto'), $this->_schema)
-            ->join(array('b' => 'agentes'), 'a.idagente = b.idagente', array(), $this->getSchema('agentes'))
+            ->from(array('a'=>'preprojeto'), array('a.idpreprojeto', 'a.nomeprojeto'), $this->_schema)
+            ->join(array('b' => 'agentes'), 'a.idagente = b.idagente', array('b.cnpjcpf', 'b.idagente'), $this->getSchema('agentes'))
             ->join(array('c' => 'vinculacao'), 'b.idagente = c.idvinculoprincipal', array(), $this->getSchema('agentes'))
             ->join(array('d' => 'agentes'), 'c.idagente = d.idagente', array(), $this->getSchema('agentes'))
             ->join(array('e' => 'sgcacesso'), 'd.cnpjcpf = e.cpf', array(), $this->getSchema('controledeacesso'))
-            ->joinleft(array('n' => 'nomes'), 'n.idagente = b.idagente', array(), $this->getSchema('agentes'))
+            ->joinleft(array('n' => 'nomes'), 'n.idagente = b.idagente', array('n.descricao as nomeproponente'), $this->getSchema('agentes'))
             ->where('e.idusuario = ?',$idResponsavel)
             ->where('(a.stestado = 0 AND a.dtArquivamento IS NOT NULL) OR (a.stestado = 1)', '')
             ->where("NOT EXISTS($subSql)")
             ->where("a.mecanismo = '1'");
 
         $sql3 = $db->select()
-            ->from(array('a'=>'preprojeto'), array('a.idpreprojeto'), $this->_schema)
-            ->join(array('b' => 'agentes'), 'a.idagente = b.idagente', array(), $this->getSchema('agentes'))
-            ->join(array('c' => 'nomes'), 'b.idagente = c.idagente', array(), $this->getSchema('agentes'))
+            ->from(array('a'=>'preprojeto'), array('a.idpreprojeto', 'a.nomeprojeto'), $this->_schema)
+            ->join(array('b' => 'agentes'), 'a.idagente = b.idagente', array('b.cnpjcpf', 'b.idagente'), $this->getSchema('agentes'))
+            ->join(array('c' => 'nomes'), 'b.idagente = c.idagente', array('c.descricao as nomeproponente'), $this->getSchema('agentes'))
             ->join(array('d' => 'sgcacesso'), 'a.idusuario = d.idusuario', array(), $this->getSchema('controledeacesso'))
             ->join(array('e' => 'tbvinculoproposta'), 'a.idpreprojeto = e.idpreprojeto', array(), $this->getSchema('agentes'))
             ->join(array('f' => 'tbvinculo'), 'e.idvinculo = f.idvinculo', array(), $this->getSchema('agentes'))
