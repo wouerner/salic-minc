@@ -3205,7 +3205,9 @@ class Proposta_Model_DbTable_PreProjeto extends MinC_Db_Table_Abstract
             $sqlFinal->where('p.idpreprojeto like ?', '%'.$search['value']);
         }
 
-        $sqlFinal->order($order);
+        if(count($order) > 0 && !empty(trim($order[0]))) {
+            $sqlFinal->order($order);
+        }
 
         if (!is_null($start) && $limit) {
             $start = (int) $start;
