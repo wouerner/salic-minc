@@ -39,7 +39,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             ]);
         }
 
-        $this->view->isPermitirEdicao = (
+        $this->view->isPermitidoEditar = (
             (
                 is_null($this->view->recursoEnquadramento['stRascunho'])
                 ||
