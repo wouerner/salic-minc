@@ -140,7 +140,6 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             $this->view->isEditavel = $this->isEditavel($this->idPreProjeto);
             $this->view->recursoEnquadramentoVisaoProponente = $this->obterRecursoEnquadramentoVisaoProponente($this->idPreProjeto);
 
-
             $layout = array(
                 'titleShort' => 'Proposta',
                 'titleFull' => 'Proposta Cultural',
