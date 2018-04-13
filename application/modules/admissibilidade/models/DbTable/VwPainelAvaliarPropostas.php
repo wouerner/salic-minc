@@ -278,6 +278,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
 
             if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE) {
                 $perfis[] = Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE;
+                $perfis[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE;
             }
             return implode(',', $perfis);
         }
