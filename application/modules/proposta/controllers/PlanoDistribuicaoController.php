@@ -272,7 +272,8 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
             parent::message("&Eacute; necess&aacute;rio informar o produto do plano de distribui&ccedil;&atilde;o", "/proposta/plano-distribuicao/index?idPreProjeto=".$this->idPreProjeto, "ERROR");
         }
 
-        $rsPlanoDistribuicao = $tblPlanoDistribuicao->buscar(
+        $planoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+        $rsPlanoDistribuicao = $planoDistribuicaoProduto->buscar(
             array("a.idplanodistribuicao = ?" => $params['idPlanoDistribuicao'], "a.idprojeto = ?" => $this->idPreProjeto, "a.stplanodistribuicaoproduto = ?" => 1),
             array("idplanodistribuicao DESC"),
             $tamanho,
@@ -308,8 +309,6 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
     public function detalharSalvarAction()
     {
         $dados = $this->getRequest()->getPost();
-        $detalhamento = new Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto();
-        $tblPlanoDistribuicao = new PlanoDistribuicao();
 
         try {
 
@@ -321,20 +320,20 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                 throw new Exception("Produto é obrigatório");
             }
 
-            if(empty($dados['idDetalhaPlanoDistribuicao'])) {
+            if (empty($dados['idDetalhaPlanoDistribuicao'])) {
                 unset($dados['idDetalhaPlanoDistribuicao']);
             }
 
-            $tbDetalhamentoMapper = new Proposta_Model_TbDetalhamentoPlanoDistribuicaoProdutoMapper();
-            $id = $tbDetalhamentoMapper->save((new Proposta_Model_TbDetalhamentoPlanoDistribuicaoProduto($dados)));
-            xd($id);
+            $tbDetalhamentoMapper = new Proposta_Model_TbDetalhaPlanoDistribuicaoMapper();
 
-            $id = $detalhamento->salvar($dados);
+            $mdlDetalhaPlanoDistribuicao = new Proposta_Model_TbDetalhaPlanoDistribuicao($dados);
+            $id = $tbDetalhamentoMapper->save($mdlDetalhaPlanoDistribuicao);
 
             if (!empty($id)) {
                 $dados['idDetalhaPlanoDistribuicao'] = $id;
             }
 
+            $tblPlanoDistribuicao = new PlanoDistribuicao();
             $tblPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
 
             $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
@@ -345,15 +344,15 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
             $this->getResponse()
                 ->setHeader('Content-Type', 'application/json')
                 ->setHttpResponseCode(412);
-            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg'=> $e->getMessage()));
+            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
         }
 
     }
 
-    public function detalharMostrarAction()
+    public function obterDetalhamentosAction()
     {
         $dados = $this->getRequest()->getParams();
-        $detalhamento = new Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto();
+        $detalhamento = new Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao();
         $dados = $detalhamento->listarPorMunicicipioUF($dados);
 
         $this->_helper->json(array('data' => $dados->toArray(), 'success' => 'true'));
@@ -373,7 +372,7 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
                 throw new Exception("ID do Produto &eacute; obrigat&oacute;rio");
             }
 
-            $detalhamento = new Proposta_Model_DbTable_TbDetalhamentoPlanoDistribuicaoProduto();
+            $detalhamento = new Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao();
             $retorno = $detalhamento->excluir($id);
 
             $tblPlanoDistribuicao = new PlanoDistribuicao();

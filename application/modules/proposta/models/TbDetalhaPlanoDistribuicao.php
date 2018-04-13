@@ -1,5 +1,5 @@
 <?php
-class Proposta_Model_TbDetalhamentoPlanoDistribuicaoProduto extends MinC_Db_Model
+class Proposta_Model_TbDetalhaPlanoDistribuicao extends MinC_Db_Model
 {
 
     protected $_idDetalhaPlanoDistribuicao;

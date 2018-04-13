@@ -70,7 +70,7 @@ Vue.component('select-percent', {
     template: `
         <select 
             style="width: 75px; display: inline-block;" 
-            @change="valorSelecionado($event.target.value)" 
+            @change="valorSelecionado(selecionado)" 
             v-model="selecionado"
             ref="combo" 
             tabindex="-1" 
@@ -105,7 +105,7 @@ Vue.component('select-percent', {
     },
     watch: {
         selected: function(val) {
-            this.selecionado = val;
+            this.selecionado = parseInt(val);
         },
         disabled: function () {
             this.$refs.combo.disabled = this.disabled;
@@ -116,7 +116,6 @@ Vue.component('select-percent', {
     },
     methods: {
         valorSelecionado: function (value) {
-            console.log("valor selecionado", value);
             this.retorno = value;
             this.$emit('evento', parseInt(this.retorno))
         }
@@ -185,6 +184,7 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 :detalhamentos="detalhamentos"
                 :canalaberto="canalaberto"
                  v-on:eventoRemoverDetalhamento="removerDetalhamento"
+                 v-on:eventoEditarDetalhamento="editarDetalhamento"
                 >
             </proposta-plano-distribuicao-lista-detalhamentos>
             <proposta-plano-distribuicao-formulario-detalhamento
@@ -193,6 +193,7 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 :idpreprojeto="idpreprojeto"
                 :iduf="iduf"
                 :idmunicipioibge="idmunicipioibge"
+                :editarDetalhamento="detalhamento"
                 v-on:eventoSalvarDetalhamento="salvarDetalhamento"
                 >
             </proposta-plano-distribuicao-formulario-detalhamento>
@@ -200,8 +201,8 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
     `,
     data: function () {
         return {
-            detalhamentos: []
-
+            detalhamentos: [],
+            detalhamento: {}
         }
     },
     mixins: [funcoes],
@@ -219,22 +220,26 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
     methods: {
         removerDetalhamento(detalhamento, index) {
             var vue = this;
-
-            $3.ajax({
-                type: "POST",
-                url: "/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/" + this.idpreprojeto,
-                data: {
-                    idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
-                    idPlanoDistribuicao: this.idplanodistribuicao
-                }
-            }).done(function (response) {
-                if (response.success == 'true') {
-                    Vue.delete(vue.detalhamentos, index);
-                    vue.mensagemSucesso(response.msg);
-                }
-            }).fail(function (response) {
-                vue.mensagemErro(response.responseJSON.msg);
-            });
+            if (confirm("Tem certeza que deseja deletar o item?")) {
+                $3.ajax({
+                    type: "POST",
+                    url: "/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/" + this.idpreprojeto,
+                    data: {
+                        idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
+                        idPlanoDistribuicao: this.idplanodistribuicao
+                    }
+                }).done(function (response) {
+                    if (response.success == 'true') {
+                        Vue.delete(vue.detalhamentos, index);
+                        vue.mensagemSucesso(response.msg);
+                    }
+                }).fail(function (response) {
+                    vue.mensagemErro(response.responseJSON.msg);
+                });
+            }
+        },
+        editarDetalhamento(detalhamento, index) {
+            this.detalhamento = detalhamento;
         },
         salvarDetalhamento(detalhamento) {
 
@@ -245,6 +250,8 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
                 data: detalhamento
             }).done(function (response) {
                 if (response.success == 'true') {
+                    let index = vue.$data.detalhamentos.map(item => item.idDetalhaPlanoDistribuicao).indexOf(response.data.idDetalhaPlanoDistribuicao);
+                    Vue.delete(vue.detalhamentos, index);
                     vue.$data.detalhamentos.push(response.data);
                     vue.mensagemSucesso(response.msg);
                     detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
@@ -256,7 +263,7 @@ Vue.component('proposta-plano-distribuicao-detalhamentos', {
         obterDetalhamentos: function () {
             var vue = this;
 
-            url = "/proposta/plano-distribuicao/detalhar-mostrar/idPreProjeto/" + this.idpreprojeto + "?idPlanoDistribuicao=" + this.idplanodistribuicao + "&idMunicipio=" + this.idmunicipioibge + "&idUF=" + this.iduf
+            url = "/proposta/plano-distribuicao/obter-detalhamentos/idPreProjeto/" + this.idpreprojeto + "?idPlanoDistribuicao=" + this.idplanodistribuicao + "&idMunicipio=" + this.idmunicipioibge + "&idUF=" + this.iduf
             $3.ajax({
                 type: "GET",
                 url: url
@@ -318,7 +325,8 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
                         <td>
                              <a 
                                 href="javascript:void(0)"
-                                class="btn small waves-effect waves-light tooltipped btn-primary"
+                                class="btn small waves-effect waves-light tooltipped btn-primary btn-editar"
+                                :class="_uid + '_teste'"
                                 data-tooltip="Editar detalhamento"
                                 v-bind:disabled="!disabled"
                                     @click.prevent="editar(detalhamento, index)">
@@ -467,7 +475,12 @@ Vue.component('proposta-plano-distribuicao-lista-detalhamentos', {
             this.$emit('eventoRemoverDetalhamento', detalhamento, index);
         },
         editar: function(detalhamento, index) {
-            detalhamentoEventBus.$emit('editarDetalhamento', detalhamento, index)
+            let elm = $3("div[formIdMunicipio='"+ detalhamento.idMunicipio + "']" );
+            $3("html, body").animate({
+                scrollTop: $3(elm).offset().top + 30
+            }, 600);
+
+            this.$emit('eventoEditarDetalhamento', detalhamento, index);
         }
     }
 });
@@ -488,11 +501,13 @@ const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
 Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
     template: `
         <div class="detalhamento-distribuicao-dos-produtos">
-            <div :id="_uid + '_form_detalhamento'" class="row center-align">
-                <button class="btn waves-effect waves-light" ref="mostrarForm"
-                        @click="mostrarFormulario(_uid + '_form_detalhamento')">
+            <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="idmunicipioibge" class="row center-align" ref="containerForm">
+                <button 
+                    class="btn waves-effect waves-light" 
+                    ref="mostrarForm"
+                    @click="mostrarFormulario(_uid + '_form_detalhamento')">
                     Novo detalhamento
-                    <i class="material-icons right">add</i>
+                    <i class="material-icons right">{{icon}}</i>
                 </button>
             </div>
             <transition
@@ -864,39 +879,15 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
     },
     mixins: [funcoes],
     props: [
-        'idDetalhaPlanoDistribuicao',
         'idpreprojeto',
         'idplanodistribuicao',
         'idmunicipioibge',
         'iduf',
         'disabled',
+        'editarDetalhamento'
     ],
     created: function() {
         let vue = this;
-        detalhamentoEventBus.$on('editarDetalhamento', function (object, index) {
-            if(object.idDetalhaPlanoDistribuicao != null) {
-                vue.limparFormulario();
-                vue.visualizarFormulario = true;
-
-                let percentualProponente = (parseInt(object.qtProponenteIntegral) + parseInt(object.qtProponenteParcial)) / parseInt(object.qtExemplares);
-                vue.percentualProponente = Number((percentualProponente).toFixed(2));
-
-                vue.$nextTick(() => { // no proximo ciclo atualiza
-                    let percentualPrecoPopular = (parseInt(object.qtPopularIntegral) + parseInt(object.qtPopularParcial)) / parseInt(object.qtExemplares);
-                    vue.percentualPrecoPopular = Number((percentualPrecoPopular).toFixed(2));
-                });
-
-                Object.assign(vue.distribuicao, object);
-
-                vue.inputUnitarioPopularIntegral = vue.formatarValor(object.vlUnitarioPopularIntegral);
-                vue.inputUnitarioProponenteIntegral = vue.formatarValor(object.vlUnitarioProponenteIntegral);
-
-                if(object.vlUnitarioPopularIntegral == 0 && object.vlUnitarioProponenteIntegral == 0) {
-                    vue.distribuicaoGratuita = SIM;
-                }
-            }
-        });
-
         detalhamentoEventBus.$on('callBackSalvarDetalhamento', function (response) {
             if(response == true) {
                 vue.limparFormulario();
@@ -946,7 +937,7 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
         "distribuicao.vlUnitarioPopularIntegral": function () {
             if (this.distribuicao.vlUnitarioPopularIntegral > 75.00) {
                 this.mensagemAlerta('O pre\xE7o unit\xE1rio do pre\xE7o popular n\xE3o pode ser maior que R$ 75,00');
-                this.distribuicao.vlUnitarioPopularIntegral = 75.00;
+                this.inputUnitarioPopularIntegral = this.formatarValor(75.00);
             }
         },
         percentualProponente: function () {
@@ -973,7 +964,6 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                 this.distribuicao.vlReceitaProponenteParcial = this.converterParaMoedaAmericana(this.vlReceitaProponenteParcial);
                 this.distribuicao.vlReceitaPopularIntegral = this.converterParaMoedaAmericana(this.vlReceitaPopularIntegral);
                 this.distribuicao.vlReceitaPopularParcial = this.converterParaMoedaAmericana(this.vlReceitaPopularParcial);
-                this.distribuicao.vlReceitaPrevista = this.converterParaMoedaAmericana(this.vlReceitaPrevista);
                 this.distribuicao.vlUnitarioProponenteIntegral = this.converterParaMoedaAmericana(this.inputUnitarioProponenteIntegral);
                 this.distribuicao.vlUnitarioPopularIntegral = this.converterParaMoedaAmericana(this.inputUnitarioPopularIntegral);
             } else {
@@ -989,9 +979,36 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
                 this.labelInteira = '';
             }
 
+            this.distribuicao.vlReceitaPrevista = this.converterParaMoedaAmericana(this.vlReceitaPrevista);
             this.distribuicao.qtGratuitaDivulgacao = parseInt(this.distribuicao.qtExemplares * 0.1);
             this.distribuicao.qtGratuitaPatrocinador = parseInt(this.distribuicao.qtExemplares * 0.1);
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
+        },
+        editarDetalhamento: function(object) {
+            let vue = this;
+            if(object.idDetalhaPlanoDistribuicao != null) {
+                vue.limparFormulario();
+                vue.visualizarFormulario = true;
+
+                // definir o percentual do proponente
+                let percentualProponente = (parseInt(object.qtProponenteIntegral) + parseInt(object.qtProponenteParcial)) / parseInt(object.qtExemplares);
+                vue.percentualProponente = Number((percentualProponente).toFixed(2));
+
+                // definir o percentual do preco popular, é atualizado no proximo clico
+                vue.$nextTick(() => {
+                    let percentualPrecoPopular = (parseInt(object.qtPopularIntegral) + parseInt(object.qtPopularParcial)) / parseInt(object.qtExemplares);
+                    vue.percentualPrecoPopular = Number((percentualPrecoPopular).toFixed(2));
+                });
+
+                Object.assign(vue.distribuicao, object);
+
+                vue.inputUnitarioPopularIntegral = vue.formatarValor(object.vlUnitarioPopularIntegral);
+                vue.inputUnitarioProponenteIntegral = vue.formatarValor(object.vlUnitarioProponenteIntegral);
+
+                if(object.vlUnitarioPopularIntegral == 0 && object.vlUnitarioProponenteIntegral == 0) {
+                    vue.distribuicaoGratuita = SIM;
+                }
+            }
         }
     },
     computed: {
@@ -1077,7 +1094,6 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
             return numeral(calc).format();
         }
     },
-
     methods: {
         obterQuantidadePorPercentual: function (percentualDistribuicao) {
             let divisao = 0.5;
@@ -1088,20 +1104,17 @@ Vue.component('proposta-plano-distribuicao-formulario-detalhamento', {
 
             return parseInt((this.distribuicao.qtExemplares * percentualDistribuicao) * divisao);
         },
-        mostrar: function () {
-            this.active = this.active == true ? false : true;
-            this.icon = this.icon == 'visibility_off' ? 'add' : 'visibility_off';
-        },
         mostrarFormulario: function (id) {
 
-            this.visualizarFormulario = this.visualizarFormulario == true ? false : true;
+            this.visualizarFormulario = !this.visualizarFormulario;
+            this.icon =  this.visualizarFormulario ? 'visibility_off' : 'add';
 
             if (this.visualizarFormulario == true) {
                 let elm = $3("#" + id);
                 $3("html, body").animate({
-                    scrollTop: $3(elm).offset().top - 80
+                    scrollTop: $3(elm).offset().top + 30
                 }, 600);
-            }else {
+            } else {
                 this.limparFormulario();
             }
         },
