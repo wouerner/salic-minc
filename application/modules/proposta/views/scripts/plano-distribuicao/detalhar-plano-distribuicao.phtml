@@ -1,6 +1,4 @@
-<?php echo $this->partial("inc/menu.phtml", $this); ?>
-
-<?php $frmplanoHref = $this->url(array('module' => 'proposta', 'controller' => 'plano-distribuicao', 'action' => 'frm-plano-distribuicao')) . '?idPreProjeto=' . $_GET['idPreProjeto']; ?>
+<?php echo $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
 
 <div class="container-fluid">
     <div class="row">
@@ -66,7 +64,7 @@
                     <ul class="collapsible" data-collapsible="accordion">
                         <?php foreach ($this->abrangencias as $abrangencia): ?>
                             <li>
-                                <div class="collapsible-header"><i class="material-icons">add</i>
+                                <div class="collapsible-header"><i class="material-icons">place</i>
                                     <?= isset($abrangencia['uf']) ? $abrangencia['uf'] : 'Exterior' ?> <?= isset($abrangencia['cidade']) ? ' - ' . $abrangencia['cidade'] : '' ?>
                                 </div>
                                 <div class="collapsible-body">
@@ -103,7 +101,7 @@
                 el.find('.material-icons:first').html('remove');
             },
             onClose: function (el) {
-                el.find('.material-icons:first').html('add');
+                el.find('.material-icons:first').html('place');
             }
         });
     });
