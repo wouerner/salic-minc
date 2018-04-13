@@ -785,6 +785,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $cnpjcpf = $rsAgente->CNPJCPF;
             $wsWebServiceSEI = new ServicosSEI();
             $arrRetornoGerarProcedimento = $wsWebServiceSEI->wsGerarProcedimento();
+
             $chars = array(".", "/", "-");
             $nrProcessoSemFormatacao = str_replace($chars, "", $arrRetornoGerarProcedimento->ProcedimentoFormatado);
             $nrProcesso = $nrProcessoSemFormatacao;
@@ -792,6 +793,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $this->incluirProjeto($this->idPreProjeto, $cnpjcpf, $idOrgao, $this->idUsuario, $nrProcesso, $rsProposta->stProposta);
             $tblProjeto = new Projetos();
             $rsProjeto = $tblProjeto->buscar(array("idProjeto = ?" => $this->idPreProjeto), "IdPRONAC DESC")->current();
+
             if (!empty($rsProjeto)) {
                 $nrPronac = $rsProjeto->AnoProjeto . $rsProjeto->Sequencial;
                 $retorno['sucesso'] = "A Proposta {$this->idPreProjeto} foi transformada no Projeto No {$nrPronac}";
@@ -815,6 +817,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
             $recursoAtual = $recursoPropostaDbTable->obterRecursoAtual($this->idPreProjeto);
+            $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             if ($recursoAtual['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO) {
                 $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
                 $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($this->idPreProjeto);
@@ -822,7 +825,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $tpEnquadramento = $enquadramentoInicialProponente['tp_enquadramento'];
                 $observacao = $recursoAtual['dsAvaliacaoTecnica'];
             } elseif ($recursoAtual['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
-                $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
                 $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($this->idPreProjeto);
                 $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
                 $tpEnquadramento = $ultimaSugestaoEnquadramento['tp_enquadramento'];
