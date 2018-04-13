@@ -178,7 +178,7 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
         $idAvaliadorTecnico = $this->authIdentity['usu_codigo'];
         $recursoEnquadramentoDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-        $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtualVisaoAvaliador($id_preprojeto);
+        $recursoEnquadramento = $recursoEnquadramentoDbTable->obterRecursoAtual($id_preprojeto);
 
         if (!$recursoEnquadramento['idRecursoProposta']) {
             throw new Exception("Identificador do Recurso da Proposta n&atilde;o localizado.");
