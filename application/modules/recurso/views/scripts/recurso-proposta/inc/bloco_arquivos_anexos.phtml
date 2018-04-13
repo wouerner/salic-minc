@@ -1,4 +1,9 @@
-<?php if (!empty($this->proposta['idpreprojeto'])) { ?>
+<?php if ((!empty($this->proposta['idpreprojeto']))
+    && ($this->id_perfil == Autenticacao_Model_Grupos::PROPONENTE
+        ||  (!empty($this->recursoEnquadramento['idArquivo'])
+            && !is_null($this->recursoEnquadramento['idArquivo']))
+    )
+) { ?>
     <ul class="collection">
         <li class="collection-item ">
             <?php if (!empty($this->recursoEnquadramento['idArquivo'])
