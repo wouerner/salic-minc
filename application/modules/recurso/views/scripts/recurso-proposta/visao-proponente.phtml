@@ -1,6 +1,6 @@
 <?php
 if (isset($this->proposta['idpreprojeto'])) {
-    echo $this->partial("inc/menu.phtml", 'proposta', $this); // menu
+    echo $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->proposta['idpreprojeto']));  // menu
 }
 ?>
 <div class="container-fluid">

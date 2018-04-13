@@ -44,7 +44,8 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
             'dtRecursoProponente' => $this->getExpressionDate(),
             'stAtendimento' => Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_SEM_AVALIACAO,
             'stAtivo' => Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_ATIVO,
-            'tpRecurso' => $tpRecurso
+            'tpRecurso' => $tpRecurso,
+            'stRascunho' => Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_SALVO,
         ];
 
         $this->inativarRecursos($idPreProjeto);
