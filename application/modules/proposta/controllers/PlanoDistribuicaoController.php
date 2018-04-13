@@ -312,6 +312,23 @@ class Proposta_PlanoDistribuicaoController extends Proposta_GenericController
         $tblPlanoDistribuicao = new PlanoDistribuicao();
 
         try {
+
+            if (empty($this->idPreProjeto)) {
+                throw new Exception("Proposta é obrigatória");
+            }
+
+            if (empty($dados['idPlanoDistribuicao'])) {
+                throw new Exception("Produto é obrigatório");
+            }
+
+            if(empty($dados['idDetalhaPlanoDistribuicao'])) {
+                unset($dados['idDetalhaPlanoDistribuicao']);
+            }
+
+            $tbDetalhamentoMapper = new Proposta_Model_TbDetalhamentoPlanoDistribuicaoProdutoMapper();
+            $id = $tbDetalhamentoMapper->save((new Proposta_Model_TbDetalhamentoPlanoDistribuicaoProduto($dados)));
+            xd($id);
+
             $id = $detalhamento->salvar($dados);
 
             if (!empty($id)) {
