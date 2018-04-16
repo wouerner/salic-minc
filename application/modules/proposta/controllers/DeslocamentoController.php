@@ -172,14 +172,14 @@ class Proposta_DeslocamentoController extends Proposta_GenericController
                 $this->vies->message_type = "ERROR";
             }
         }
-        $this->_redirect("localderealizacao\\index");
+        $this->redirect("localderealizacao\\index");
     }
 
     public function alterarAction()
     {
         $id = isset($_GET['id']);
         $idPreProjeto = $this->idPreProjeto;
-        $this->_redirect("localderealizacao\\index?idPreProjeto=".$idPreProjeto."&id=".$id);
+        $this->redirect("localderealizacao\\index?idPreProjeto=".$idPreProjeto."&id=".$id);
     }
 
     public function consultarcomponenteAction()

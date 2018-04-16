@@ -1,11 +1,11 @@
 <?php
 /**
- * Projeto_RastrearagenteControllerTest
+ * Projeto_RelatorioControllerTest
  *
  * @package
  * @author isaiassm <isaias1113@outlook.com>
  */
-class RastrearagenteControllerTest extends MinC_Test_ControllerActionTestCase
+class GerarrelatoriopareceristaControllerTest extends MinC_Test_ControllerActionTestCase
 {
     public function setUp()
     {
@@ -19,17 +19,15 @@ class RastrearagenteControllerTest extends MinC_Test_ControllerActionTestCase
         $this->resetRequest()
             ->resetResponse();
 
-        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO, Orgaos::ORGAO_GEAR_SACAV);
+        $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_AVALIACAO, Orgaos::ORGAO_GEAR_SACAV);
 
         $this->resetRequest()
             ->resetResponse();
     }
-    public function testindexAction()
+    public function testgeraldeanaliseAction()
     {
         $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
-        $this->alterarPerfil(Autenticacao_Model_Grupos::GESTOR_SALIC, Orgaos::ORGAO_SUPERIOR_SEFIC);
-
-        $this->dispatch('/rastrearagente?idPronac=' . $this->idPronac);
-        $this->assertUrl('default', 'rastrearagente', 'index');
+        $this->dispatch('/gerarrelatorioparecerista/geraldeanalise?idPronac=' . $this->idPronac);
+        $this->assertUrl('default', 'gerarrelatorioparecerista', 'geraldeanalise');
     }
 }

@@ -281,7 +281,7 @@ class SolicitarAlteracaoController extends MinC_Controller_Action_Abstract
                     
                     // caso o usu�rio n�o esteja cadastrado, vai para o manter agentes
                     if (!SolicitarAlteracaoDAO::verificarInteressadosAgentes($CPFCNPJ)) {
-                        $this->_redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
+                        $this->redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
                     }
                     
                     if (empty($buscatbProposta)) {
@@ -299,7 +299,7 @@ class SolicitarAlteracaoController extends MinC_Controller_Action_Abstract
 
                     // caso o usu�rio n�o esteja cadastrado, vai para o manter agentes
                     if (!SolicitarAlteracaoDAO::verificarInteressadosAgentes($CPFCNPJ)) {
-                        $this->_redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
+                        $this->redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
                     }
 
                     if (empty($buscatbProposta)) {
@@ -317,7 +317,7 @@ class SolicitarAlteracaoController extends MinC_Controller_Action_Abstract
 
                 // caso o usu�rio n�o esteja cadastrado, vai para o manter agentes
                 if (!SolicitarAlteracaoDAO::verificarInteressadosAgentes($CPFCNPJ)) {
-                    $this->_redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
+                    $this->redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
                 }
 
                 if (empty($buscatbProposta)) {
@@ -378,7 +378,7 @@ class SolicitarAlteracaoController extends MinC_Controller_Action_Abstract
 
                     // caso o usu�rio n�o esteja cadastrado, vai para o manter agentes
                     if (!SolicitarAlteracaoDAO::verificarInteressadosAgentes($CPFCNPJ)) {
-                        $this->_redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
+                        $this->redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
                     }
 
                     if (empty($buscatbProposta)) {
@@ -395,7 +395,7 @@ class SolicitarAlteracaoController extends MinC_Controller_Action_Abstract
 
                     // caso o usu�rio n�o esteja cadastrado, vai para o manter agentes
                     if (!SolicitarAlteracaoDAO::verificarInteressadosAgentes($CPFCNPJ)) {
-                        $this->_redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
+                        $this->redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
                     }
 
                     if (empty($buscatbProposta)) {
@@ -419,7 +419,7 @@ class SolicitarAlteracaoController extends MinC_Controller_Action_Abstract
 
                 // caso o usu�rio n�o esteja cadastrado, vai para o manter agentes
                 if (!SolicitarAlteracaoDAO::verificarInteressadosAgentes($CPFCNPJ)) {
-                    $this->_redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
+                    $this->redirect("/agente/manteragentes/agentes?acao=cc&cpf=" . $CPFCNPJ);
                 }
 
                 if (empty($buscatbProposta)) {
