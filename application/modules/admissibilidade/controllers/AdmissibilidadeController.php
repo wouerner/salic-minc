@@ -316,6 +316,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     $this->view->isRecursoAvaliado = true;
                 }
             }
+
             $this->view->isPermitidoTransformarPropostaEmProjeto = $this->isAutorizado(
                     $perfisAutorizadosTransformarPropostaEmProjeto,
                     (int)$this->codGrupo
@@ -344,20 +345,20 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     public function isRecursoDesistidoDePrazoRecursal(array $recursoEnquadramento)
     {
-        return ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+        return ((int)$recursoEnquadramento['stRascunho'] == (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
             && $recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL);
     }
 
     public function isRecursoDuplamenteIndeferido(array $recursoEnquadramento)
     {
-        return ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-            && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO
+        return ((int)$recursoEnquadramento['stRascunho'] == (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+            && (int)$recursoEnquadramento['tpRecurso'] == (int)Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO
             && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_INDEFERIDO);
     }
 
     public function isRecursoDeferidoAvaliado(array $recursoEnquadramento)
     {
-        return ($recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
+        return ((int)$recursoEnquadramento['stRascunho'] == (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
             && $recursoEnquadramento['stAtendimento'] == Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO);
     }
 
@@ -370,7 +371,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     {
         return ($recursoEnquadramento['dsRecursoProponente']
             && !is_null($recursoEnquadramento['stRascunho'])
-            && (int)$recursoEnquadramento['stRascunho'] == Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO);
+            && (int)$recursoEnquadramento['stRascunho'] == (int)Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO);
     }
 
     private function isRecursoPossuiAvaliacaoAvaliador(array $recursoEnquadramento)
