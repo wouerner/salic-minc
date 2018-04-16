@@ -31,6 +31,7 @@ class GerenciarpareceresControllerTest extends MinC_Test_ControllerActionTestCas
     }
     public function testImprimirParecerTecnicoAction()
     {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::GESTOR_SALIC, Orgaos::ORGAO_SUPERIOR_SEFIC);
         $this->dispatch('/gerenciarpareceres/imprimir-parecer-tecnico?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'gerenciarpareceres', 'imprimir-parecer-tecnico');
     }
