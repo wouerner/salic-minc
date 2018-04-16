@@ -44,6 +44,7 @@ HTML;
     for ($i = 0; $i < func_num_args(); $i++) {
         $value = func_get_arg($i);
         var_dump($value);
+        echo "<br /><br />";
         print_r($value);
     }
     echo <<<HTML

@@ -5,7 +5,7 @@ class AnaliseControllerTest extends MinC_Test_ControllerActionTestCase
     public function setUp()
     {
         parent::setUp();
-
+        $this->idPreProjeto = '204078';
         $this->autenticar();
 
         $this->resetRequest()
@@ -30,14 +30,6 @@ class AnaliseControllerTest extends MinC_Test_ControllerActionTestCase
         $this->assertUrl('analise', 'analise', 'listar-projetos-ajax');
     }
 
-    public function testAnaliseVisualizarprojetoAction()
-    {
-        $this->dispatch('/analise/analise/visualizarprojeto');
-        $this->assertUrl('analise', 'analise', 'visualizarprojeto');
-        $this->assertRedirectTo('/analise/analise/listarprojetos');
-
-    }
-
     public function testAnaliseRedistribuiranaliseitemAction()
     {
         $this->dispatch('/analise/analise/redistribuiranaliseitem');
@@ -51,4 +43,9 @@ class AnaliseControllerTest extends MinC_Test_ControllerActionTestCase
 //        $this->assertQueryCountMin('form#frmRedistAnalise select.select_simples option', 2);
 //    }
 
+    public function testAnaliseVizualizarProjetosAction()
+    {
+        $this->dispatch('/analise/analise/visualizarprojeto?idpronac=' . $this->idPreProjeto);
+        $this->assertUrl('analise','analise', 'visualizarprojeto');
+    }
 }

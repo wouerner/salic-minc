@@ -118,6 +118,8 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $idOrgaoSuperiorDoAssinante,
         $idTipoDoAtoAdministrativo = null
     ) {
+
+        // d($idOrgaoDoAssinante, $idPerfilDoAssinante, $idOrgaoSuperiorDoAssinante, $idTipoDoAtoAdministrativo);
         $query = $this->select();
         $query->setIntegrityCheck(false);
 
