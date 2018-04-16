@@ -84,4 +84,18 @@ class AdmissibilidadeControllerTest extends MinC_Test_ControllerActionTestCase
         $this->dispatch('/admissibilidade/admissibilidade/gerenciaranalista?usu_cod=6927&usu_orgao=262&gru_codigo=92');
         $this->assertUrl('admissibilidade', 'admissibilidade', 'gerenciaranalista');
     }
+
+    public function testlistarPropostasAction()
+    {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::GESTOR_SALIC, Orgaos::ORGAO_SUPERIOR_SEFIC);
+        $this->dispatch('/admissibilidade/admissibilidade/listar-propostas');
+        $this->assertUrl('admissibilidade', 'admissibilidade', 'listar-propostas');
+    }
+
+    public function testlistarSolicitacoesDesarquivamentoAction()
+    {
+        $this->alterarPerfil(Autenticacao_Model_Grupos::GESTOR_SALIC, Orgaos::ORGAO_SUPERIOR_SEFIC);
+        $this->dispatch('/admissibilidade/admissibilidade/listar-solicitacoes-desarquivamento');
+        $this->assertUrl('admissibilidade', 'admissibilidade', 'listar-solicitacoes-desarquivamento');
+    }
 }
