@@ -318,7 +318,7 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $start = $this->getRequest()->getParam('start');
         $length = $this->getRequest()->getParam('length');
         $draw = (int)$this->getRequest()->getParam('draw');
-        $search = $this->getRequest()->getParam('search');
+//        $search = $this->getRequest()->getParam('search');
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
 
@@ -333,13 +333,6 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
             $length
         );
 
-        $filteredData = $tblPreProjetoArquivado->listarSolicitacoes( array(), null, null, $length);
-
-        $recordsFiltered = count($filteredData);
-
-        $totalData = $tblPreProjetoArquivado->listarSolicitacoes();
-        $recordsTotal = count($totalData);
-
         $aux = array();
         if (!empty($rsPreProjetoArquivado)) {
             foreach ($rsPreProjetoArquivado as $key => $proposta) {
@@ -348,6 +341,10 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
                 $aux[$key] = $proposta;
             }
+            $totalData = $tblPreProjetoArquivado->listarSolicitacoes(array(), null, null, null);
+            $recordsTotal = count($totalData);
+
+            $recordsFiltered = $recordsTotal;
         }
 
         $this->_helper->json(array(

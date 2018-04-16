@@ -263,9 +263,9 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
         }
 
         if (!is_null($start) && $limit) {
-            $start = (int)$start;
-            $limit = (int)$limit;
-            $sql->limitPage($start, $limit);
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $sql->limit($limit, $start);
         }
 
         return $db->fetchAll($sql);
