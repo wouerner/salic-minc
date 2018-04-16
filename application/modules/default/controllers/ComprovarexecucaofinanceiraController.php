@@ -473,7 +473,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
             $this->view->message_type = 'ERROR';
-            $this->_forward('incluircotacao');
+            $this->forward('incluircotacao');
         }
     }
 
@@ -717,7 +717,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             if ($pais == 'Brasil') {
 
                 if (empty($dtPagamento)) {
-                    throw new Exception('A data do pagamento é obrigatória.');
+                    throw new Exception('A data do pagamento ï¿½ obrigatï¿½ria.');
                 }
 
                 $arquivoModel->cadastrar('arquivo');
@@ -771,7 +771,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
             $this->_helper->flashMessenger('Comprovante cadastrado com sucesso.');
             $this->_helper->flashMessengerType('CONFIRM');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -788,7 +788,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovacaopagamento');
+            $this->forward('comprovacaopagamento');
         }
     }
 
@@ -828,7 +828,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
                 if ($_FILES['arquivo']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se não houver novo upload
+                    // nao atualiza arquivo se nï¿½o houver novo upload
                     $comprovantePagamentoModel->atualizar(4);
                 }
 
@@ -864,7 +864,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
                 if ($_FILES['arquivoInternacional']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se não houver novo upload
+                    // nao atualiza arquivo se nï¿½o houver novo upload
                     $comprovantePagamentoModel->atualizar(4);
                 }
             }
@@ -874,7 +874,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
             $this->_helper->flashMessenger('Comprovante enviado com sucesso.');
             $this->_helper->flashMessengerType('CONFIRM');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -898,7 +898,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             }
             $this->view->message = $message;
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovacaopagamento-recusado');
+            $this->forward('comprovacaopagamento-recusado');
         }
     }
 
@@ -2601,7 +2601,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             'idusuario' => $this->getRequest()->getParam('idusuario'),
             'idpronac' => $this->getRequest()->getParam('idpronac'),
         ), null, true);
-        $this->_redirect(str_replace($this->view->baseUrl(), '', $url));
+        $this->redirect(str_replace($this->view->baseUrl(), '', $url));
     }
 
     /*
@@ -2618,7 +2618,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } else {
             $this->view->mensagem = 'A comprova&ccedil;&atilde;o j&aacute; foi finalizada!';
         }
-        $this->_redirect("comprovarexecucaofinanceira/pagamento?idusuario=".$_GET['idusuario']."&idpronac=".$_GET['idpronac']);
+        $this->redirect("comprovarexecucaofinanceira/pagamento?idusuario=".$_GET['idusuario']."&idpronac=".$_GET['idpronac']);
     }
 
     /*
@@ -2645,7 +2645,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             'idusuario' => $this->getRequest()->getParam('idusuario'),
             'idpronac' => $this->getRequest()->getParam('idpronac'),
         ), null, true);
-        $this->_redirect(str_replace($this->view->baseUrl(), '', $url));
+        $this->redirect(str_replace($this->view->baseUrl(), '', $url));
     }
 
     public function comprovantesRecusadosAction()
@@ -2663,8 +2663,8 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
 
     /**
-     * Função criada a pedido da Área Finalistica em 13/04/2016
-     * @author: Fernão Lopes Ginez de Lara
+     * Funï¿½ï¿½o criada a pedido da ï¿½rea Finalistica em 13/04/2016
+     * @author: Fernï¿½o Lopes Ginez de Lara
      * @access public
      * @param void
      * @return void
@@ -2678,7 +2678,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             $comprovantePagamento = $comprovantePagamentoModel->atualizarComprovanteRecusado($idPronac);
 
             $this->_helper->flashMessenger('Comprovantes enviados com sucesso!');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -2695,11 +2695,11 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } catch (Exception $e) {
             $message = $e->getMessage();
             if (strpos($e->getMessage(), 'DateTime::__construct()') !== false) {
-                $message = 'Não foi possível enviar os comprovantes de pagamento!';
+                $message = 'Nï¿½o foi possï¿½vel enviar os comprovantes de pagamento!';
             }
             $this->view->message = $message;
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovacaopagamento-recusado');
+            $this->forward('comprovacaopagamento-recusado');
         }
     }
 }

@@ -65,7 +65,7 @@ class AnexardocumentosController extends MinC_Controller_Action_Abstract
     {
         // despacha para buscarpronac.phtml
         $pronac = $this->_request->getParam("idpronac");
-        $this->_redirect("anexardocumentos/documentos-anexados/idpronac/$pronac");
+        $this->redirect("anexardocumentos/documentos-anexados/idpronac/$pronac");
         $auth = Zend_Auth::getInstance(); // pega a autentica��o
         $idagente = GerenciarPautaReuniaoDAO::consultaAgenteUsuario($auth->getIdentity()->usu_codigo);
         $idagente = $idagente['idAgente'];

@@ -7,23 +7,23 @@ class AvaliarpedidoprorrogacaoController extends MinC_Controller_Action_Abstract
     private $getIdUsuario = 0;
     private $intTamPag = 10;
     /**
-     * Reescreve o método init()
+     * Reescreve o mï¿½todo init()
      * @access public
      * @param void
      * @return void
      */
     public function init()
     {
-        // verifica as permissões
+        // verifica as permissï¿½es
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 121;  // Técnico de Acompanhamento
+        $PermissoesGrupo[] = 121;  // Tï¿½cnico de Acompanhamento
         $PermissoesGrupo[] = 122;  // Coordenador de Acompanhamento
         parent::perfil(1, $PermissoesGrupo);
 
-        $Usuario = new Autenticacao_Model_Usuario(); // objeto usuário
-        $auth = Zend_Auth::getInstance(); // pega a autenticação
+        $Usuario = new Autenticacao_Model_Usuario(); // objeto usuï¿½rio
+        $auth = Zend_Auth::getInstance(); // pega a autenticaï¿½ï¿½o
         $idagente = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessï¿½o com o grupo ativo
         $this->getIdAgente = $idagente['idAgente'];
         $this->getIdGrupo = $GrupoAtivo->codGrupo;
         $this->getIdOrgao = $GrupoAtivo->codOrgao;
@@ -237,7 +237,7 @@ class AvaliarpedidoprorrogacaoController extends MinC_Controller_Action_Abstract
         try {
             if (ProrrogacaoModel::DEFERIDO == $this->getRequest()->getParam('analise')) {
                 if (empty($opcaoDeferimento) && PerfilModel::TECNICO_DE_ACOMPANHAMENTO == $this->getIdGrupo) {
-                    parent::message("Ao dererir, escolha uma das opções antes de salvar a sua avaliação!", "avaliarpedidoprorrogacao/detalhar/prorrogacao/{$idProrrogacao}", "ERROR");
+                    parent::message("Ao dererir, escolha uma das opï¿½ï¿½es antes de salvar a sua avaliaï¿½ï¿½o!", "avaliarpedidoprorrogacao/detalhar/prorrogacao/{$idProrrogacao}", "ERROR");
                 }
                 $prorrogacaoModel->deferir(
                     $idProrrogacao,
@@ -263,12 +263,12 @@ class AvaliarpedidoprorrogacaoController extends MinC_Controller_Action_Abstract
                     $this->getIdUsuario
                 );
             } else {
-                parent::message("Não foi encontrada nenhuma análise. Favor preencher o campo obrigatório!", "avaliarpedidoprorrogacao/detalhar/prorrogacao/{$idProrrogacao}", "ERROR");
+                parent::message("Nï¿½o foi encontrada nenhuma anï¿½lise. Favor preencher o campo obrigatï¿½rio!", "avaliarpedidoprorrogacao/detalhar/prorrogacao/{$idProrrogacao}", "ERROR");
             }
-            parent::message('Prorrogação alterada com sucesso!', 'avaliarpedidoprorrogacao', 'CONFIRM');
+            parent::message('Prorrogaï¿½ï¿½o alterada com sucesso!', 'avaliarpedidoprorrogacao', 'CONFIRM');
         } catch (InvalidArgumentException $exception) {
             $this->view->camposObrigatoriosException = true;
-            $this->_forward('detalhar', 'avaliarpedidoprorrogacao', null, array('prorrogacao' => $idProrrogacao));
+            $this->forward('detalhar', 'avaliarpedidoprorrogacao', null, array('prorrogacao' => $idProrrogacao));
         } catch (DateException $exception) {
             parent::message($exception->getMessage(), "avaliarpedidoprorrogacao/detalhar/prorrogacao/{$idProrrogacao}", 'ERROR');
         } catch (Exception $exception) {
@@ -276,7 +276,7 @@ class AvaliarpedidoprorrogacaoController extends MinC_Controller_Action_Abstract
                 $this->view->Erros = $prorrogacaoModel->getErros();
                 $this->view->dadosProjeto = $prorrogacaoModel->getProjeto($idProrrogacao);
             } else {
-                parent::message('Não foi possível realizar seu pedido!', "avaliarpedidoprorrogacao/detalhar/prorrogacao/{$idProrrogacao}", "ERROR");
+                parent::message('Nï¿½o foi possï¿½vel realizar seu pedido!', "avaliarpedidoprorrogacao/detalhar/prorrogacao/{$idProrrogacao}", "ERROR");
             }
         }
     }
@@ -285,6 +285,6 @@ class AvaliarpedidoprorrogacaoController extends MinC_Controller_Action_Abstract
     {
         $prorrogacaoModel = new ProrrogacaoModel();
         $prorrogacaoModel->deletar($this->getRequest()->getParam('idProrrogacao'));
-        parent::message("Prorrogação excluída com sucesso!", "avaliarpedidoprorrogacao", "CONFIRM");
+        parent::message("Prorrogaï¿½ï¿½o excluï¿½da com sucesso!", "avaliarpedidoprorrogacao", "CONFIRM");
     }
 }

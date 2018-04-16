@@ -762,7 +762,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                     throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
-                    $this->_redirect("agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
+                    $this->redirect("agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
                 } // fecha else
             } 
             catch (Exception $e) {
@@ -833,7 +833,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("/alterarprojeto/consultarprojeto");
+        $this->redirect("/alterarprojeto/consultarprojeto");
     }
 
     public function consultarprojetoAction()

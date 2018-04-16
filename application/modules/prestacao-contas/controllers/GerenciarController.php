@@ -213,7 +213,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
             $comprovantePagamentoModel->cadastrar();
             $this->_helper->flashMessenger('Comprovante cadastrado com sucesso.');
             $this->_helper->flashMessengerType('CONFIRM');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -231,7 +231,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovar');
+            $this->forward('comprovar');
         }
     }
 
@@ -271,7 +271,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
                 if ($_FILES['arquivo']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se não houver novo upload
+                    // nao atualiza arquivo se nï¿½o houver novo upload
                     $comprovantePagamentoModel->atualizar(4);
                 }
 
@@ -307,7 +307,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
                 if ($_FILES['arquivoInternacional']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se não houver novo upload
+                    // nao atualiza arquivo se nï¿½o houver novo upload
                     $comprovantePagamentoModel->atualizar(4);
                 }
             }
@@ -317,7 +317,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
             $this->_helper->flashMessenger('Comprovante enviado com sucesso.');
             $this->_helper->flashMessengerType('CONFIRM');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -341,7 +341,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
             }
             $this->view->message = $message;
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovacaopagamento-recusado');
+            $this->forward('comprovacaopagamento-recusado');
         }
     }
 

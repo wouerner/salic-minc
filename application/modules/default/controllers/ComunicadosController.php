@@ -3,7 +3,7 @@
 class ComunicadosController extends MinC_Controller_Action_Abstract
 {
     /**
-     * @var integer (variável com o id do grupo ativo)
+     * @var integer (variï¿½vel com o id do grupo ativo)
      * @access private
      */
     private $GrupoAtivoSalic = 0;
@@ -11,22 +11,22 @@ class ComunicadosController extends MinC_Controller_Action_Abstract
     
     
     /**
-     * Reescreve o método init()
+     * Reescreve o mï¿½todo init()
      * @access public
      * @param void
      * @return void
      */
     public function init()
     {
-        $auth = Zend_Auth::getInstance(); // pega a autenticação
+        $auth = Zend_Auth::getInstance(); // pega a autenticaï¿½ï¿½o
 
-        // define as permissões
+        // define as permissï¿½es
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 97;  // Gestor Salic
         
         parent::perfil(1, $PermissoesGrupo);
 
-        // pega o idAgente do usuário logado
+        // pega o idAgente do usuï¿½rio logado
         if (isset($auth->getIdentity()->usu_codigo)) {
             $this->getIdUsuario = UsuarioDAO::getIdUsuario($auth->getIdentity()->usu_codigo);
             if ($this->getIdUsuario) {
@@ -42,48 +42,48 @@ class ComunicadosController extends MinC_Controller_Action_Abstract
     }
 
     /**
-     * Método index()
+     * Mï¿½todo index()
      * @access public
      * @param void
      * @return void
      */
     public function indexAction()
     {
-        $this->_redirect("comunicados/consultar");
-    } // fecha método indexAction()
+        $this->redirect("comunicados/consultar");
+    } // fecha mï¿½todo indexAction()
 
     /**
-     * Método novo()
+     * Mï¿½todo novo()
      * @access public
      * @param void
      * @return void
      */
     public function novoAction()
     {
-    } // fecha método novoAction()
+    } // fecha mï¿½todo novoAction()
     
     /**
-     * Método consultar()
+     * Mï¿½todo consultar()
      * @access public
      * @param void
      * @return void
      */
     public function consultarAction()
     {
-    } // fecha método consultarAction()
+    } // fecha mï¿½todo consultarAction()
     
     /**
-     * Método ativos()
+     * Mï¿½todo ativos()
      * @access public
      * @param void
      * @return List
      */
     public function ativosAction()
     {
-    } // fecha método ativosAction()
+    } // fecha mï¿½todo ativosAction()
 
     /**
-     * Método listarComunicados()
+     * Mï¿½todo listarComunicados()
      * @access public
      * @param void
      * @return List
@@ -151,18 +151,18 @@ class ComunicadosController extends MinC_Controller_Action_Abstract
     }
         
     /**
-     * Método desativados()
+     * Mï¿½todo desativados()
      * @access public
      * @param void
      * @return List
      */
     public function desativadosAction()
     {
-    } // fecha método desativadosAction()
+    } // fecha mï¿½todo desativadosAction()
     
     
     /**
-     * Método editar()
+     * Mï¿½todo editar()
      * @access public
      * @param void
      * @return List
@@ -178,10 +178,10 @@ class ComunicadosController extends MinC_Controller_Action_Abstract
         $comunicado = $tbComunicados->listarComunicados($where);
         
         $this->view->comunicado = $comunicado;
-    } // fecha método editarAction()
+    } // fecha mï¿½todo editarAction()
     
     /**
-     * Método salvar()
+     * Mï¿½todo salvar()
      * @access public
      * @param void
      * @return List
@@ -237,5 +237,5 @@ class ComunicadosController extends MinC_Controller_Action_Abstract
         } catch (Exception $e) {
             parent::message("Erro ao salvar: " . $e->getMessage(), "comunicados/editar/idComunicado/".$idComunicado, "ERROR");
         }
-    } // fecha método salvarAction()
+    } // fecha mï¿½todo salvarAction()
 } // fecha class

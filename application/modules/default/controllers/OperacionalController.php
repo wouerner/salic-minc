@@ -69,7 +69,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
     public function indexAction()
     {
         //RECUPERA OS LOCAIS DE REALIZACAO CADASTRADOS
-        $this->_forward("diagnostico");
+        $this->forward("diagnostico");
         //        $arrDados = array();
         //        $this->montaTela("operacional/diagnostico.phtml", $arrDados);
     }
@@ -225,7 +225,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                     $fim = 0;
                     $rs = $tbl->buscar(array("stEstado = ?"=>0), array(), $tamanho, $inicio);
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -300,7 +300,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                     $arrBusca['Codigo > ?'] = 0;
                     $rs = $tbl->buscar($arrBusca, array(), $tamanho, $inicio);
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -399,7 +399,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                         }
                     }
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -485,7 +485,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                     $arrBusca = array();
                     $rs = $tbl->buscar($arrBusca, array(), $tamanho, $inicio);
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -569,7 +569,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                         }
                     }
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -656,7 +656,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                     $arrBusca = array();
                     $rs = $tbl->buscar($arrBusca, array(), $tamanho, $inicio);
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -730,7 +730,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                     $arrBusca = array("idTipo = ?"=>1, "stEstado = ?"=>1);
                     $rs = $tbl->buscar($arrBusca, array(), $tamanho, $inicio);
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -804,7 +804,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                     $arrBusca = array("idTipo = ?"=>2, "stEstado = ?"=>1);
                     $rs = $tbl->buscar($arrBusca, array(), $tamanho, $inicio);
 
-                    $this->_forward(
+                    $this->forward(
                                             'preparar-xls-pdf',
                                             null,
                                             null,
@@ -983,7 +983,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             $total = 0;
             $fim = 0;
             $rs = $tblProrrogacao->buscar($arrBusca, array(), $tamanho, $inicio);
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -1151,7 +1151,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             $total = 0;
             $fim = 0;
             $rs = $tbl->buscar($arrBusca, array(), $tamanho, $inicio);
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -1270,7 +1270,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             $fim = 0;
             $rs = $tbl->buscarProjetosPautaReuniao($arrBusca, array(new Zend_Db_expr("Area ASC")), $tamanho, $inicio);
 
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -1387,7 +1387,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             $totalPag = 0;
             $fim = 0;
             $rs = $tblTbHistoricoDocumento->buscarTramitacaoDocumento($arrBusca, $ordem, $tamanho, $inicio);
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -1622,7 +1622,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                 $arr[$item->FundoNome][$item->dsClassificaDocumento][$item->Edital][] = $item;
             }
 
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -1708,7 +1708,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             }
 
             $rs    = $tbl->diagnostico($arrBusca, $ordem);
-            $this->_forward('gerar-pdf-xls-diagnostico', null, null, array('valores'=>$rs,'gerar'=>'html'));
+            $this->forward('gerar-pdf-xls-diagnostico', null, null, array('valores'=>$rs,'gerar'=>'html'));
         } elseif (isset($post->xls) && !empty($post->xls) && $post->xls == 'xls') {
             $arrBusca = array();
             if ($post->orgao != "") {
@@ -1719,7 +1719,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             }
 
             $rs    = $tbl->diagnostico($arrBusca, $ordem);
-            $this->_forward('gerar-pdf-xls-diagnostico', null, null, array('valores'=>$rs,'gerar'=>'xls'));
+            $this->forward('gerar-pdf-xls-diagnostico', null, null, array('valores'=>$rs,'gerar'=>'xls'));
         }
         //$arrBusca = array("o.Status = ?"=>0, "s.StatusProjeto <> ?"=>0, "o.idSecretaria = ?"=>$this->codOrgaoSuperior);
         $arrBusca = array();
@@ -1762,7 +1762,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
     {
         Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
         $this->_response->clearHeaders();
-        $dados = $this->_getAllParams();
+        $dados = $this->getAllParams();
         $this->view->projetos = $dados;
         $this->view->gerar = $dados['gerar'];
     }
@@ -1856,7 +1856,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             $total = 0;
             $fim = 0;
             $rs = $tbl->extratoPautaItercambio($arrBusca, $ordem, $tamanho, $inicio);
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -2111,7 +2111,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
 
             $landscape = (sizeof($post->visaoAgente) > 4)?true:false;
 
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -2485,7 +2485,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                 }
             }
 
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -2747,7 +2747,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
                 }
             }
 
-            $this->_forward(
+            $this->forward(
                         'preparar-xls-pdf',
                         null,
                         null,
@@ -3024,7 +3024,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
         if (isset($post->imprimirResumo) && $post->imprimirResumo == 'html') {
             $rs2 = $tbl->buscaProjetosEmPauta($arrBusca, $ordem, null, null, null, $statusAnalise);
             //Envia os par�metros para outra fun��o sem a necessidade de criar uma tela .phtml
-            $this->_forward(
+            $this->forward(
                 'gerar-xls-html-projetos-em-pauta-reuniao-cnic-sem-quebra',
                 null,
                 null,
@@ -3041,7 +3041,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             $rs2 = $tbl->buscaProjetosEmPautaTeste($arrBusca, $ordem, null, null, null, $statusAnalise);
 
             //Envia os par�metros para outra fun��o sem a necessidade de criar uma tela .phtml
-            $this->_forward(
+            $this->forward(
                 'gerar-xls-html-projetos-em-pauta-reuniao-cnic-sem-quebra',
                 null,
                 null,
@@ -3053,7 +3053,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
 
         if (isset($post->gerarPdf)) {
             $rs2 = $tbl->buscaProjetosEmPauta($arrBusca, $ordem, null, null, null, $statusAnalise);
-            $this->_forward('gerar-xls-html-projetos-em-pauta-reuniao-cnic-sem-quebra', null, null, array('valores' => $rs2, 'gerar' => 'pdf'));
+            $this->forward('gerar-xls-html-projetos-em-pauta-reuniao-cnic-sem-quebra', null, null, array('valores' => $rs2, 'gerar' => 'pdf'));
         }
 
 
@@ -3522,7 +3522,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
             $valorRenunciaFiscal = $vlRenunciaTotal - $vlCaptado;
 
             //Envia os par�metros para outra fun��o sem a necessidade de criar uma tela .phtml
-            $this->_forward('gerar-tela-xls-html', null, null, array('valores'=>$lista,
+            $this->forward('gerar-tela-xls-html', null, null, array('valores'=>$lista,
                                                                   'SmAu'=>$rsSomatorioAutorizado,
                                                                   'SmCp'=>$rsSomatorioCaptado,
                                                                   'teto'=>$teto,
@@ -3576,7 +3576,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
 
             $valorRenunciaFiscal = $vlRenunciaTotal - $vlCaptado;
             //Envia os par�metros para outra fun��o sem a necessidade de criar uma tela .phtml
-            $this->_forward('gerar-tela-xls-html', null, null, array('valores'=>$lista,
+            $this->forward('gerar-tela-xls-html', null, null, array('valores'=>$lista,
                                                                   'SmAu'=>$rsSomatorioAutorizado,
                                                                   'SmCp'=>$rsSomatorioCaptado,
                                                                   'teto'=>$teto,
@@ -3641,7 +3641,7 @@ class OperacionalController extends MinC_Controller_Action_Abstract
         Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
         ini_set('max_execution_time', 900);
         $this->_response->clearHeaders();
-        $teste = $this->_getAllParams();
+        $teste = $this->getAllParams();
         $this->view->registros 			 = $teste;
         $this->view->valorAltorizado     = $teste;
         $this->view->valorCaptado        = $teste;

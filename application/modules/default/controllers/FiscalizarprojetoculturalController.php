@@ -3,31 +3,31 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
 {
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio às Leis de Incentivo à Cultura"; // título da página
-        $auth = Zend_Auth::getInstance(); // pega a autenticação
-        $Usuario = new UsuarioDAO(); // objeto usuário
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
+        $this->view->title = "Salic - Sistema de Apoio ï¿½s Leis de Incentivo ï¿½ Cultura"; // tï¿½tulo da pï¿½gina
+        $auth = Zend_Auth::getInstance(); // pega a autenticaï¿½ï¿½o
+        $Usuario = new UsuarioDAO(); // objeto usuï¿½rio
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessï¿½o com o grupo ativo
 
-        if ($auth->hasIdentity()) { // caso o usuário esteja autenticado
-            // verifica as permissões
+        if ($auth->hasIdentity()) { // caso o usuï¿½rio esteja autenticado
+            // verifica as permissï¿½es
             $PermissoesGrupo = array();
             $PermissoesGrupo[] = 135; // tecnico
             $PermissoesGrupo[] = 134; // coordenador
             $PermissoesGrupo[] = 123; //
-            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo está no array de permissões
+            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo estï¿½ no array de permissï¿½es
                 parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
             }
 
-            // pega as unidades autorizadas, orgãos e grupos do usuário (pega todos os grupos)
+            // pega as unidades autorizadas, orgï¿½os e grupos do usuï¿½rio (pega todos os grupos)
             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
 
-            // manda os dados para a visão
-            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuário para a visão
-            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuário para a visão
-            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuário para a visão
-            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o órgão ativo do usuário para a visão
+            // manda os dados para a visï¿½o
+            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuï¿½rio para a visï¿½o
+            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuï¿½rio para a visï¿½o
+            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuï¿½rio para a visï¿½o
+            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o ï¿½rgï¿½o ativo do usuï¿½rio para a visï¿½o
         } // fecha if
-        else { // caso o usuário não esteja autenticado
+        else { // caso o usuï¿½rio nï¿½o esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
         //recupera ID do pre projeto (proposta)
@@ -35,11 +35,11 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
         parent::init(); // chama o init() do pai GenericControllerNew
     }
 
-    // fecha método init()*/
+    // fecha mï¿½todo init()*/
 
     public function painelcontroletecnicofiscalizacaoAction()
     {
-        $auth = Zend_Auth::getInstance(); // instancia da autenticação
+        $auth = Zend_Auth::getInstance(); // instancia da autenticaï¿½ï¿½o
         $idUsuario = $auth->getIdentity()->usu_codigo;
 
         $usuarios = new Autenticacao_Model_Usuario();
@@ -153,7 +153,7 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
 
     public function parecerdocoordenadorAction()
     {
-        $this->_forward('parecerdotecnico', 'fiscalizarprojetocultural');
+        $this->forward('parecerdotecnico', 'fiscalizarprojetocultural');
         $idFiscalizacao = $this->_getParam('idFiscalizacao');
 
         $ProjetosDAO = new Projetos();
@@ -188,8 +188,8 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
     public function cadastraranexo($arquivoNome, $arquivoTemp, $arquivoTipo, $arquivoTamanho)
     {
         if (!empty($arquivoNome) && !empty($arquivoTemp)) {
-            $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensão
-            $arquivoBinario = Upload::setBinario($arquivoTemp); // binário
+            $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensï¿½o
+            $arquivoBinario = Upload::setBinario($arquivoTemp); // binï¿½rio
             $arquivoHash = Upload::setHash($arquivoTemp); // hash
         }
 
@@ -204,11 +204,11 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
             'stAtivo' => 'A');
         $cadastrarArquivo = ArquivoDAO::cadastrar($dadosArquivo);
 
-        // pega o id do último arquivo cadastrado
+        // pega o id do ï¿½ltimo arquivo cadastrado
         $idUltimoArquivo = ArquivoDAO::buscarIdArquivo();
         $idUltimoArquivo = (int) $idUltimoArquivo[0]->id;
 
-        // cadastra o binário do arquivo
+        // cadastra o binï¿½rio do arquivo
         $dadosBinario = array(
             'idArquivo' => $idUltimoArquivo,
             'biArquivo' => $arquivoBinario);
@@ -280,7 +280,7 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
             $FiscalizacaoDAO = new Fiscalizacao();
             $FiscalizacaoDAO->alteraSituacaoProjeto(2, $idFiscalizacao);
 
-            parent::message("Formulário enviado com sucesso!", "pesquisarprojetofiscalizacao/grid", "CONFIRM");
+            parent::message("Formulï¿½rio enviado com sucesso!", "pesquisarprojetofiscalizacao/grid", "CONFIRM");
         } else {
             parent::message("Dados salvos com sucesso!", "fiscalizarprojetocultural/parecerdotecnico" . '?idFiscalizacao=' . $idFiscalizacao, "CONFIRM");
         }
@@ -288,7 +288,7 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
 
     public function salvarelatoriocoordenadorAction()
     {
-        $auth = Zend_Auth::getInstance(); // instancia da autenticação
+        $auth = Zend_Auth::getInstance(); // instancia da autenticaï¿½ï¿½o
         $dados = $_POST;
 
         $anexardocumentos = false;
@@ -321,7 +321,7 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
 
 //        $Usuario = $usuarios->getIdUsuario($idUsuario);
 //        if(!isset($Usuario->idAgente)){
-//            parent::message("Não foi possível realizar a operação. Favor entrar em contato com os gestores do sistema!", "pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "ERROR");
+//            parent::message("Nï¿½o foi possï¿½vel realizar a operaï¿½ï¿½o. Favor entrar em contato com os gestores do sistema!", "pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "ERROR");
 //        }
 //        $idAvaliador = $Usuario->idAgente;
         
@@ -418,11 +418,11 @@ class FiscalizarprojetoculturalController extends MinC_Controller_Action_Abstrac
         }
         if ($dados['stAvaliacao']==0) {
             $FiscalizacaoDAO->alteraSituacaoProjeto(1, $idFiscalizacao);
-            parent::message("Retornado ao técnico com sucesso!", "pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "CONFIRM");
+            parent::message("Retornado ao tï¿½cnico com sucesso!", "pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "CONFIRM");
         }
 
         if ($stAprovar) {
-            parent::message("Fiscalizaç&atilde;o aprovada com sucesso!", "pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "CONFIRM");
+            parent::message("Fiscalizaï¿½&atilde;o aprovada com sucesso!", "pesquisarprojetofiscalizacao/grid?tipoFiltro=analisados", "CONFIRM");
         } else {
             parent::message("Dados salvos com sucesso!", "fiscalizarprojetocultural/parecerdocoordenador?idFiscalizacao=" . $idFiscalizacao, "CONFIRM");
         }
