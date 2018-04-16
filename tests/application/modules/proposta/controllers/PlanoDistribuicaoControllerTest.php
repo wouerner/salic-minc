@@ -121,6 +121,7 @@ class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
 	{
 
         $url = '/proposta/plano-distribuicao/salvar?idPreProjeto=' . $this->idPreProjeto;
+
         $this->request->setMethod('POST')
             ->setPost([
             'areaCultural' => 1,
@@ -132,6 +133,6 @@ class PlanoDistribuicaoControllerTest extends MinC_Test_ControllerActionTestCase
         ]);
 
         $this->dispatch($url);
-        $this->assertRedirectTo('/proposta/plano-distribuicao/index?idPreProjeto=' . $this->idPreProjeto);
+        $this->assertRedirectTo('/proposta/plano-distribuicao/index/idPreProjeto/' . $this->idPreProjeto);
     }
 }
