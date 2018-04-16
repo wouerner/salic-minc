@@ -32,7 +32,7 @@ class Projeto_AssinaturaController extends Assinatura_GenericController
         $cpf = isset($arrIdentity['usu_codigo']) ? $arrIdentity['usu_identificacao'] : $arrIdentity['cpf'];
 
         if (is_null($cpf)) {
-            $this->_redirect('/');
+            $this->redirect('/');
         }
 
         // Busca na SGCAcesso

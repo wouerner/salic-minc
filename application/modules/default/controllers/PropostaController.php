@@ -29,7 +29,7 @@ class PropostaController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("/proposta/listar-propostas");
+        $this->redirect("/proposta/listar-propostas");
     }
 
     public function propostaPorProponenteAction()

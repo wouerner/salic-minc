@@ -75,7 +75,7 @@ class RealizarAnaliseProjetoController extends MinC_Controller_Action_Abstract
         $pronac = $get->idPronac;
         $produto = $get->idProduto;
         $query_string = "?idPlanilha=" . $planilha . "&idPronac=" . $pronac . "&idProduto=" . $produto;
-        $this->_forward("analisedeconta" . $query_string);
+        $this->forward("analisedeconta" . $query_string);
     }
 
     public function parecerconsolidadoAction()

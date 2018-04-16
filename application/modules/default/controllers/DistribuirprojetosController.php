@@ -68,7 +68,7 @@ class DistribuirprojetosController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("distribuirprojetos/distribuir");
+        $this->redirect("distribuirprojetos/distribuir");
     }
 
     public function distribuirAction()
@@ -567,7 +567,7 @@ class DistribuirprojetosController extends MinC_Controller_Action_Abstract
             $tbltbdistribuir->delete($where);
         }
 
-        $this->_redirect('distribuirprojetos/distribuirprojeto?PreProjetos='.$_POST['PreProjetos'].'&Del=1');
+        $this->redirect('distribuirprojetos/distribuirprojeto?PreProjetos='.$_POST['PreProjetos'].'&Del=1');
         return;
     }
 

@@ -99,7 +99,7 @@ class MovimentacaodecontaController extends MinC_Controller_Action_Abstract
     public function indexAction()
     {
         // redireciona para o fluxo inicial
-        $this->_redirect('movimentacaodeconta/listar-inconsistencias');
+        $this->redirect('movimentacaodeconta/listar-inconsistencias');
     } // fecha metodo indexAction()
 
 
@@ -2105,7 +2105,7 @@ class MovimentacaodecontaController extends MinC_Controller_Action_Abstract
         } // Fecha caso tem arquivos
 
         // Agora vai verificar o que j&aacute; tem cadastrado
-        $this->_redirect('movimentacaodeconta/verificacao');
+        $this->redirect('movimentacaodeconta/verificacao');
     } // fecha metodo salvararquivobbAction()
 
 
