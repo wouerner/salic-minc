@@ -107,7 +107,7 @@ class TramitarprojetosController extends MinC_Controller_Action_Abstract
         $auth = Zend_Auth::getInstance(); // instancia da autentica��o
         $idusuario = $this->getIdUsuario;
         $idorgao = $this->getIdOrgao;
-        $this->_redirect("tramitarprojetos/despacharprojetos");
+        $this->redirect("tramitarprojetos/despacharprojetos");
 
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
         $codGrupo = $GrupoAtivo->codGrupo; //  Grupo ativo na sess�o

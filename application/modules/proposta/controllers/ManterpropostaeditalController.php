@@ -213,7 +213,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
                 if (strlen(trim($_REQUEST['resumoProjeto'])) > 1000) {
                     $array['mensagem'] = 'Quantidade de caracteres maior que o permitido. Limite: 1000 caracteres.';
                     $array['tpmensagem'] = 'msgERROR';
-                    $this->_redirect('/manterpropostaedital/dadospropostaedital?idPreProjeto=' . $params['idPreProjeto'] . '&idAgente=' . $_REQUEST['idAgente'] . '&idEdital=' . $_REQUEST['idEdital'] . '&mensagem=' . $array['mensagem'] . '&tpmensagem=' . $array['tpmensagem']);
+                    $this->redirect('/manterpropostaedital/dadospropostaedital?idPreProjeto=' . $params['idPreProjeto'] . '&idAgente=' . $_REQUEST['idAgente'] . '&idEdital=' . $_REQUEST['idEdital'] . '&mensagem=' . $array['mensagem'] . '&tpmensagem=' . $array['tpmensagem']);
                 }
 
                 $array = array();
@@ -293,7 +293,7 @@ class Proposta_ManterpropostaeditalController extends Proposta_GenericController
             $array['mensagem'] 	 = 'Dados incorretos.';
             $array['tpmensagem'] = 'Erro!';
         }
-        $this->_redirect('/proposta/manterpropostaedital/dadospropostaedital?idPreProjeto=' . $array['idPreProjeto'] . '&mensagem=' . $array['mensagem'] . '&tpmensagem=' . $array['tpmensagem']);
+        $this->redirect('/proposta/manterpropostaedital/dadospropostaedital?idPreProjeto=' . $array['idPreProjeto'] . '&mensagem=' . $array['mensagem'] . '&tpmensagem=' . $array['tpmensagem']);
     }
 
     /**

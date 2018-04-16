@@ -167,7 +167,7 @@ class Agente_ManterAgentesController extends MinC_Controller_Action_Abstract
                     throw new Exception("O CNPJ informado é inválido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
-                    $this->_redirect("agente/manteragentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
+                    $this->redirect("agente/manteragentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
                 } // fecha else
             } // fecha try
             catch (Exception $e) {
