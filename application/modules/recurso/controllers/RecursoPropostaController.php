@@ -96,10 +96,6 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     /**
      * @todo Refatorar esse trecho de c&oacute;digo pois as demandas desse m&oacute;dulo foram emergenciais.
-     * @todo tratar o trecho abaixo para que caso já exista um registro avaliado, entrar com:
-     * ```
-     *  'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
-     * ```
      */
     public function visaoProponenteSalvarAction()
     {
@@ -134,7 +130,6 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             'idPreProjeto' => $id_preprojeto,
             'dtRecursoProponente' => $recursoEnquadramentoDbTable->getExpressionDate(),
             'dsRecursoProponente' => $justificativa,
-            'tpRecurso' => Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO,
             'tpSolicitacao' => $tpSolicitacao,
             'idArquivo' => $idArquivo,
             'stRascunho' => $stRascunho,
