@@ -78,11 +78,11 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
                 $aux[$key] = $proposta;
             }
-            $filteredData = $tblPreProjetoArquivado->listar($this->idAgente, $this->idResponsavel, $idAgente, $where, null, null, null, $search, $stEstado);
-            $recordsFiltered = count($filteredData);
 
-            $totalData = $tblPreProjetoArquivado->listar($this->idAgente, $this->idResponsavel, $idAgente);
+            $totalData = $tblPreProjetoArquivado->listar($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, null);
             $recordsTotal = count($totalData);
+            $recordsFiltered = $recordsTotal;
+
         }
 
         $this->_helper->json(array(
