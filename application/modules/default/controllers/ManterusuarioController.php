@@ -331,7 +331,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                     $arrPerfis2[$orgaoUsuario->gru_codigo][] = $orgaoUsuario;
                     $arrPerfisNomes2[$orgaoUsuario->gru_codigo] = $orgaoUsuario->gru_nome;
                 }
-                $this->_forward(
+                $this->forward(
                     'gerar-pdf-permissao-salic',
                                 null,
                                 null,
@@ -506,7 +506,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                     $perfisNomes2 = "";
                 }
 
-                $this->_forward(
+                $this->forward(
                     'gerar-pdf-permissao-salic',
                                 null,
                                 null,
@@ -573,7 +573,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                 $arrPerfisNomes2[$orgaoUsuario->gru_codigo] = $orgaoUsuario->gru_nome;
                 endforeach;
 
-                $this->_forward(
+                $this->forward(
                     'gerar-pdf-permissao-salic',
                                 null,
                                 null,
@@ -592,7 +592,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
         Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
         $this->_response->clearHeaders();
 
-        $dados = $this->_getAllParams();
+        $dados = $this->getAllParams();
         //x($dados['perfisNomes2']);
 
         $this->view->resultadoOrgaoUsuario2 = $dados['resultadoOrgaoUsuario2'];

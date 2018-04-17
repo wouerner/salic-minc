@@ -183,7 +183,7 @@ class IndexController extends MinC_Controller_Action_Abstract
                                 $tbLoginTentativasAcesso->atualizaTentativa($username, $ip, $LoginAttempt->nrTentativa, $data->get('YYYY-MM-dd HH:mm:ss'));
                             }
 
-                            $this->_forward("login", "login");
+                            $this->forward("login", "login");
                             //throw new Exception("Usurio inexistente!");
                         }
                     } // fecha else
@@ -209,7 +209,7 @@ class IndexController extends MinC_Controller_Action_Abstract
         $auth->clearIdentity(); // limpa a autentica��o
         Zend_Session::destroy();
         unset($_SESSION);
-        $this->_redirect('index');
+        $this->redirect('index');
     } // fecha logoutAction
 
 

@@ -3,14 +3,14 @@
 class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
 {
     /**
-     * Reescreve o método init()
+     * Reescreve o mï¿½todo init()
      * @access public
      * @param void
      * @return void
      */
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio às Leis de Incentivo à Cultura"; // título da página
+        $this->view->title = "Salic - Sistema de Apoio ï¿½s Leis de Incentivo ï¿½ Cultura"; // tï¿½tulo da pï¿½gina
 
         parent::init();
     } 
@@ -24,25 +24,25 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
     public function indexAction()
     {
         // despacha para buscarpronac.phtml
-        $this->_forward("buscardocumentos");
+        $this->forward("buscardocumentos");
     }
 
 
 
     /**
-     * Método com o formulário para buscar o PRONAC
+     * Mï¿½todo com o formulï¿½rio para buscar o PRONAC
      * @access public
      * @param void
      * @return void
      */
     public function buscarpronacAction()
     {
-        // autenticação scriptcase (AMBIENTE PROPONENTE)
+        // autenticaï¿½ï¿½o scriptcase (AMBIENTE PROPONENTE)
         parent::perfil(2);
 
 
 
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         if ($this->getRequest()->isPost()) {
             // recebe o pronac via post
             $post   = Zend_Registry::get('post');
@@ -55,20 +55,20 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 }
                 // busca o pronac no banco
                 else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca de acordo com o pronac no banco
                     $resultado = ProjetoDAO::buscar($pronac);
 
-                    // caso o PRONAC não esteja cadastrado
+                    // caso o PRONAC nï¿½o esteja cadastrado
                     if (!$resultado) {
-                        throw new Exception("Registro não encontrado!");
+                        throw new Exception("Registro nï¿½o encontrado!");
                     }
                     // caso o PRONAC esteja cadastrado,
-                    // vai para a página de busca dos documentos (comprovantes) do pronac
+                    // vai para a pï¿½gina de busca dos documentos (comprovantes) do pronac
                     else {
-                        // redireciona o pronac para a página com seus documentos (comprovantes)
-                        $this->_redirect("execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac);
+                        // redireciona o pronac para a pï¿½gina com seus documentos (comprovantes)
+                        $this->redirect("execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac);
                     }
                 } // fecha else
             } // fecha try
@@ -76,19 +76,19 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 parent::message($e->getMessage(), "execucaofisicadoprojeto/buscarpronac", "ERROR");
             }
         } // fecha if
-    } // fecha método buscarpronacAction()
+    } // fecha mï¿½todo buscarpronacAction()
 
 
 
     /**
-     * Método para buscar os documentos (comprovantes) do PRONAC
+     * Mï¿½todo para buscar os documentos (comprovantes) do PRONAC
      * @access public
      * @param void
      * @return void
      */
     public function buscardocumentosAction()
     {
-        // autenticação scriptcase (AMBIENTE PROPONENTE)
+        // autenticaï¿½ï¿½o scriptcase (AMBIENTE PROPONENTE)
         parent::perfil(2);
 
 
@@ -102,69 +102,69 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             if (empty($pronac)) {
                 throw new Exception("Por favor, informe o PRONAC!");
             }
-            // valida o número do pronac
+            // valida o nï¿½mero do pronac
             elseif (strlen($pronac) > 20) {
-                throw new Exception("O Nº do PRONAC é inválido!");
+                throw new Exception("O Nï¿½ do PRONAC ï¿½ invï¿½lido!");
             } else {
-                // integração MODELO e VISÃO
+                // integraï¿½ï¿½o MODELO e VISï¿½O
 
                 // busca de acordo com o pronac no banco
                 $resultPronac = ProjetoDAO::buscar($pronac);
 
-                // caso o PRONAC não esteja cadastrado
+                // caso o PRONAC nï¿½o esteja cadastrado
                 if (!$resultPronac) {
-                    throw new Exception("Registro não encontrado!");
+                    throw new Exception("Registro nï¿½o encontrado!");
                 }
-                // caso o PRONAC esteja cadastrado, vai para a página de busca
+                // caso o PRONAC esteja cadastrado, vai para a pï¿½gina de busca
                 // dos seus documentos (comprovantes)
                 else {
-                    // manda o pronac para a visão
+                    // manda o pronac para a visï¿½o
                     $this->view->buscarPronac = $resultPronac;
 
                     // pega o id do pronac
                     $idPronac = $resultPronac[0]->IdPRONAC;
 
                     // busca os documentos (comprovantes) do pronac
-                    // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARÂMETRO ==========
+                    // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARï¿½METRO ==========
                     $resultComprovantes = ComprovanteExecucaoFisicaDAO::buscarDocumentos($idPronac);
 
-                    // caso não existam comprovantes cadastrados
+                    // caso nï¿½o existam comprovantes cadastrados
                     if (!$resultComprovantes) {
-                        $this->view->message      = "Nenhum comprovante cadastrado para o PRONAC Nº " . $pronac . "!";
+                        $this->view->message      = "Nenhum comprovante cadastrado para o PRONAC Nï¿½ " . $pronac . "!";
                         $this->view->message_type = "ALERT";
                     } else {
-                        // busca o histórico dos comprovantes
+                        // busca o histï¿½rico dos comprovantes
                         for ($i = 0; $i < sizeof($resultComprovantes); $i++) :
                             // adiciona os comprovantes no novo array
                             $arrayComprovantes[$i] = array('comprovantes' => $resultComprovantes[$i]);
 
-                        // histórico
+                        // histï¿½rico
                         $resultHistorico = ComprovanteExecucaoFisicaDAO::buscarHistorico(
                                 $resultComprovantes[$i]->idComprovante,
                                 $resultComprovantes[$i]->idComprovanteAnterior
                             );
-                        // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARÂMETRO ==========
+                        // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARï¿½METRO ==========
 
-                        // adiciona o histórico no seu respectivo comprovante
+                        // adiciona o histï¿½rico no seu respectivo comprovante
                         if (sizeof($resultHistorico) > 0) :
                                 array_push($arrayComprovantes[$i], array('historicos' => $resultHistorico));
                         endif;
                         endfor;
 
 
-                        // ========== INÍCIO PAGINAÇÃO ==========
-                        //criando a paginaçao
+                        // ========== INï¿½CIO PAGINAï¿½ï¿½O ==========
+                        //criando a paginaï¿½ao
                         Zend_Paginator::setDefaultScrollingStyle('Sliding');
                         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
                         $paginator = Zend_Paginator::factory($arrayComprovantes); // dados a serem paginados
 
-                        // página atual e quantidade de ítens por página
+                        // pï¿½gina atual e quantidade de ï¿½tens por pï¿½gina
                         $currentPage = $this->_getParam('page', 1);
                         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(20);
-                        // ========== FIM PAGINAÇÃO ==========
+                        // ========== FIM PAGINAï¿½ï¿½O ==========
 
 
-                        // manda os comprovantes e seu histórico para a visão
+                        // manda os comprovantes e seu histï¿½rico para a visï¿½o
                         //$this->view->buscarComprovantes = $arrayComprovantes;
                         $this->view->paginacao          = $paginator;
                         $this->view->qtdComprovantes    = count($resultComprovantes); // quantidade de comprovantes
@@ -175,19 +175,19 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         catch (Exception $e) {
             parent::message($e->getMessage(), "execucaofisicadoprojeto/buscarpronac", "ERROR");
         }
-    } // fecha método buscardocumentosAction()
+    } // fecha mï¿½todo buscardocumentosAction()
 
 
 
     /**
-     * Método com o formulário para cadastrar documento do PRONAC
+     * Mï¿½todo com o formulï¿½rio para cadastrar documento do PRONAC
      * @access public
      * @param void
      * @return void
      */
     public function cadastrardocumentosAction()
     {
-        // autenticação scriptcase (AMBIENTE PROPONENTE)
+        // autenticaï¿½ï¿½o scriptcase (AMBIENTE PROPONENTE)
         parent::perfil(2);
 
 
@@ -195,7 +195,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         // combo com os tipos de documentos
         $this->view->combotipodocumento = TipoDocumentoDAO::buscar();
 
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         // cadastra o documento
         if ($this->getRequest()->isPost()) {
             // recebe os dados via post
@@ -206,28 +206,28 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             $titulo        = $post->titulo;
             $descricao     = $post->descricao;
 
-            // pega as informações do arquivo
+            // pega as informaï¿½ï¿½es do arquivo
             $arquivoNome     = $_FILES['arquivo']['name']; // nome
-            $arquivoTemp     = $_FILES['arquivo']['tmp_name']; // nome temporário
+            $arquivoTemp     = $_FILES['arquivo']['tmp_name']; // nome temporï¿½rio
             $arquivoTipo     = $_FILES['arquivo']['type']; // tipo
             $arquivoTamanho  = $_FILES['arquivo']['size']; // tamanho
             if (!empty($arquivoNome) && !empty($arquivoTemp)) {
-                $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensão
-                $arquivoBinario  = Upload::setBinario($arquivoTemp); // binário
+                $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensï¿½o
+                $arquivoBinario  = Upload::setBinario($arquivoTemp); // binï¿½rio
                 $arquivoHash     = Upload::setHash($arquivoTemp); // hash
             }
 
             try {
-                // integração MODELO e VISÃO
+                // integraï¿½ï¿½o MODELO e VISï¿½O
 
                 // busca de acordo com o pronac no banco
                 $resultado = ProjetoDAO::buscar($pronac);
 
-                // caso o PRONAC não esteja cadastrado
+                // caso o PRONAC nï¿½o esteja cadastrado
                 if (!$resultado) {
-                    parent::message("Registro não encontrado!", "execucaofisicadoprojeto/buscarpronac", "ERROR");
+                    parent::message("Registro nï¿½o encontrado!", "execucaofisicadoprojeto/buscarpronac", "ERROR");
                 }
-                // caso o PRONAC esteja cadastrado, vai para a página de busca
+                // caso o PRONAC esteja cadastrado, vai para a pï¿½gina de busca
                 else {
                     $this->view->buscarPronac = $resultado;
                 }
@@ -235,24 +235,24 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 // valida os campos vazios
                 if (empty($tipoDocumento)) {
                     throw new Exception("Por favor, informe o tipo de documento!");
-                } elseif (empty($titulo) || $titulo == 'Digite o título do comprovante...') {
-                    throw new Exception("Por favor, informe o título do documento!");
+                } elseif (empty($titulo) || $titulo == 'Digite o tï¿½tulo do comprovante...') {
+                    throw new Exception("Por favor, informe o tï¿½tulo do documento!");
                 } elseif (strlen($titulo) < 2 || strlen($titulo) > 100) {
-                    throw new Exception("O título do documento é inválido! A quantidade mínima é de 2 caracteres!");
+                    throw new Exception("O tï¿½tulo do documento ï¿½ invï¿½lido! A quantidade mï¿½nima ï¿½ de 2 caracteres!");
                 } elseif (empty($descricao) || $descricao == 'Digite o texto do comprovante...') {
-                    throw new Exception("Por favor, informe a descrição do documento!");
+                    throw new Exception("Por favor, informe a descriï¿½ï¿½o do documento!");
                 } elseif (strlen($descricao) < 20 || strlen($descricao) > 500) {
-                    throw new Exception("A descrição do documento é inválida! São permitidos entre 20 e 500 caracteres!");
+                    throw new Exception("A descriï¿½ï¿½o do documento ï¿½ invï¿½lida! Sï¿½o permitidos entre 20 e 500 caracteres!");
                 } elseif (empty($arquivoTemp)) { // nome do arquivo
                     throw new Exception("Por favor, informe o arquivo!");
                 } elseif ($arquivoExtensao == 'exe' || $arquivoExtensao == 'bat' ||
                 $arquivoTipo == 'application/exe' || $arquivoTipo == 'application/x-exe' ||
-                $arquivoTipo == 'application/dos-exe' || strlen($arquivoExtensao) > 5) { // extensão do arquivo
-                    throw new Exception("A extensão do arquivo é inválida!");
+                $arquivoTipo == 'application/dos-exe' || strlen($arquivoExtensao) > 5) { // extensï¿½o do arquivo
+                    throw new Exception("A extensï¿½o do arquivo ï¿½ invï¿½lida!");
                 } elseif ($arquivoTamanho > 10485760) { // tamanho do arquivo: 10MB
-                    throw new Exception("O arquivo não pode ser maior do que 10MB!");
+                    throw new Exception("O arquivo nï¿½o pode ser maior do que 10MB!");
                 } elseif (ArquivoDAO::verificarHash($arquivoHash)) { // hash do arquivo
-                    throw new Exception("O arquivo enviado já está cadastrado na base de dados! Por favor, informe outro!");
+                    throw new Exception("O arquivo enviado jï¿½ estï¿½ cadastrado na base de dados! Por favor, informe outro!");
                 }
                 // faz o cadastro no banco de dados
                 else {
@@ -267,11 +267,11 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                         'stAtivo'           => 'A');
                     $cadastrarArquivo = ArquivoDAO::cadastrar($dadosArquivo);
 
-                    // pega o id do último arquivo cadastrado
+                    // pega o id do ï¿½ltimo arquivo cadastrado
                     $idUltimoArquivo = ArquivoDAO::buscarIdArquivo();
                     $idUltimoArquivo = (int) $idUltimoArquivo[0]->id;
 
-                    // cadastra o binário do arquivo
+                    // cadastra o binï¿½rio do arquivo
                     $dadosBinario = array(
                         'idArquivo' => $idUltimoArquivo,
                         'biArquivo' => $arquivoBinario);
@@ -291,7 +291,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                         'stComprovante'        => 'A');
                     $cadastrarComprovante = ComprovanteExecucaoFisicaDAO::cadastrar($dadosComprovante);
 
-                    // pega o id do último comprovante cadastrado
+                    // pega o id do ï¿½ltimo comprovante cadastrado
                     $idUltimoComprovante = ComprovanteExecucaoFisicaDAO::buscarIdComprovante();
                     $idUltimoComprovante = (int) $idUltimoComprovante[0]->id;
 
@@ -314,7 +314,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 $this->view->descricao     = $descricao;
             }
         }
-        // quando a página é aberta
+        // quando a pï¿½gina ï¿½ aberta
         else {
             // recebe o pronac via get
             $get    = Zend_Registry::get('get');
@@ -325,16 +325,16 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($pronac)) {
                     throw new Exception("Por favor, informe o PRONAC!");
                 } else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca o PRONAC no banco
                     $resultado = ProjetoDAO::buscar($pronac);
 
-                    // caso o PRONAC não esteja cadastrado
+                    // caso o PRONAC nï¿½o esteja cadastrado
                     if (!$resultado) {
-                        throw new Exception("Regisitro não encontrado!");
+                        throw new Exception("Regisitro nï¿½o encontrado!");
                     }
-                    // caso o PRONAC esteja cadastrado, vai para a página de busca
+                    // caso o PRONAC esteja cadastrado, vai para a pï¿½gina de busca
                     else {
                         $this->view->buscarPronac = $resultado;
                     }
@@ -344,19 +344,19 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 parent::message($e->getMessage(), "execucaofisicadoprojeto/buscarpronac", "ERROR");
             }
         } // fecha else
-    } // fecha método cadastrardocumentosAction()
+    } // fecha mï¿½todo cadastrardocumentosAction()
 
 
 
     /**
-     * Método com o formulário para alterar documento do PRONAC
+     * Mï¿½todo com o formulï¿½rio para alterar documento do PRONAC
      * @access public
      * @param void
      * @return void
      */
     public function alterardocumentosAction()
     {
-        // autenticação scriptcase (AMBIENTE PROPONENTE)
+        // autenticaï¿½ï¿½o scriptcase (AMBIENTE PROPONENTE)
         parent::perfil(2);
 
 
@@ -364,7 +364,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         // combo com os tipos de documentos
         $this->view->combotipodocumento = TipoDocumentoDAO::buscar();
 
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         // altera do documento
         if ($this->getRequest()->isPost()) {
             // recebe os dados via post
@@ -377,19 +377,19 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             $titulo        = $post->titulo;
             $descricao     = $post->descricao;
 
-            // pega as informações do arquivo
+            // pega as informaï¿½ï¿½es do arquivo
             $arquivoNome     = $_FILES['arquivo']['name']; // nome
-            $arquivoTemp     = $_FILES['arquivo']['tmp_name']; // nome temporário
+            $arquivoTemp     = $_FILES['arquivo']['tmp_name']; // nome temporï¿½rio
             $arquivoTipo     = $_FILES['arquivo']['type']; // tipo
             $arquivoTamanho  = $_FILES['arquivo']['size']; // tamanho
             if (!empty($arquivoNome) && !empty($arquivoTemp)) {
-                $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensão
-                $arquivoBinario  = Upload::setBinario($arquivoTemp); // binário
+                $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensï¿½o
+                $arquivoBinario  = Upload::setBinario($arquivoTemp); // binï¿½rio
                 $arquivoHash     = Upload::setHash($arquivoTemp); // hash
             }
 
             try {
-                // integração MODELO e VISÃO
+                // integraï¿½ï¿½o MODELO e VISï¿½O
 
                 // busca o PRONAC no banco
                 $resultadoPronac = ProjetoDAO::buscar($pronac);
@@ -397,11 +397,11 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 // busca o Comprovante de acordo com o id no banco
                 $resultadoComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultadoPronac[0]->IdPRONAC, $doc);
 
-                // caso o PRONAC ou o Comprovante não estejam cadastrados
+                // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                 if (!$resultadoPronac || !$resultadoComprovante) {
-                    parent::message("Registro não encontrado!", "execucaofisicadoprojeto/buscarpronac", "ERROR");
+                    parent::message("Registro nï¿½o encontrado!", "execucaofisicadoprojeto/buscarpronac", "ERROR");
                 }
-                // caso o PRONAC e o Comprovante estejam cadastrados, vai para a página de busca
+                // caso o PRONAC e o Comprovante estejam cadastrados, vai para a pï¿½gina de busca
                 else {
                     $this->view->buscarPronac = $resultadoPronac;
                     $this->view->buscarDoc    = $resultadoComprovante;
@@ -411,23 +411,23 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($tipoDocumento)) {
                     throw new Exception("Por favor, informe o tipo de documento!");
                 } elseif (empty($titulo)) {
-                    throw new Exception("Por favor, informe o título do documento!");
+                    throw new Exception("Por favor, informe o tï¿½tulo do documento!");
                 } elseif (strlen($titulo) < 2 || strlen($titulo) > 100) {
-                    throw new Exception("O título do documento é inválido! A quantidade mínima é de 2 caracteres!");
+                    throw new Exception("O tï¿½tulo do documento ï¿½ invï¿½lido! A quantidade mï¿½nima ï¿½ de 2 caracteres!");
                 } elseif (empty($descricao)) {
-                    throw new Exception("Por favor, informe a descrição do documento!");
+                    throw new Exception("Por favor, informe a descriï¿½ï¿½o do documento!");
                 } elseif (strlen($descricao) < 20 || strlen($descricao) > 500) {
-                    throw new Exception("A descrição do documento é inválida! São permitidos entre 20 e 500 caracteres!");
+                    throw new Exception("A descriï¿½ï¿½o do documento ï¿½ invï¿½lida! Sï¿½o permitidos entre 20 e 500 caracteres!");
                 } elseif (!empty($arquivoTemp) && ($arquivoExtensao == 'exe' || $arquivoExtensao == 'bat' ||
                 $arquivoTipo == 'application/exe' || $arquivoTipo == 'application/x-exe' ||
-                $arquivoTipo == 'application/dos-exe' || strlen($arquivoExtensao) > 5)) { // extensão do arquivo
-                    throw new Exception("A extensão do arquivo é inválida!");
+                $arquivoTipo == 'application/dos-exe' || strlen($arquivoExtensao) > 5)) { // extensï¿½o do arquivo
+                    throw new Exception("A extensï¿½o do arquivo ï¿½ invï¿½lida!");
                 } elseif (!empty($arquivoTemp) && $arquivoTamanho > 10485760) { // tamanho do arquivo: 10MB
-                    throw new Exception("O arquivo não pode ser maior do que 10MB!");
+                    throw new Exception("O arquivo nï¿½o pode ser maior do que 10MB!");
                 } elseif (!empty($arquivoTemp) && ArquivoDAO::verificarHash($arquivoHash)) { // hash do arquivo
-                    throw new Exception("O arquivo enviado já está cadastrado na base de dados! Por favor, informe outro!");
+                    throw new Exception("O arquivo enviado jï¿½ estï¿½ cadastrado na base de dados! Por favor, informe outro!");
                 }
-                // faz a alteração no banco de dados
+                // faz a alteraï¿½ï¿½o no banco de dados
                 else {
                     // altera o arquivo caso o mesmo tenha sido enviado
                     if (!empty($arquivoTemp)) {
@@ -441,7 +441,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                             'dsHash'            => $arquivoHash);
                         $alterarArquivo = ArquivoDAO::alterar($dadosArquivo, $idArquivo);
 
-                        // altera o binário do arquivo
+                        // altera o binï¿½rio do arquivo
                         $dadosBinario = array('biArquivo' => $arquivoBinario);
                         $alterarBinario = ArquivoImagemDAO::alterar($dadosBinario, $idArquivo);
                     } // fecha if
@@ -458,9 +458,9 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     $alterarComprovante = ComprovanteExecucaoFisicaDAO::alterar($dadosComprovante, $doc);
 
                     if ($alterarComprovante) {
-                        parent::message("Alteração realizada com sucesso!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "CONFIRM");
+                        parent::message("Alteraï¿½ï¿½o realizada com sucesso!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "CONFIRM");
                     } else {
-                        parent::message("Erro ao realizar alteração!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "ERROR");
+                        parent::message("Erro ao realizar alteraï¿½ï¿½o!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "ERROR");
                     }
                 }
             } // fecha try
@@ -472,7 +472,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 $this->view->descricao     = $descricao;
             }
         }
-        // quando a página é aberta
+        // quando a pï¿½gina ï¿½ aberta
         else {
             // recebe o pronac e comprovante via get
             $get    = Zend_Registry::get('get');
@@ -484,7 +484,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($pronac) || empty($doc)) {
                     throw new Exception("Por favor, informe o PRONAC e o Comprovante!");
                 } else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca o PRONAC no banco
                     $resultadoPronac = ProjetoDAO::buscar($pronac);
@@ -492,11 +492,11 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     // busca o Comprovante de acordo com o id no banco
                     $resultadoComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultadoPronac[0]->IdPRONAC, $doc);
 
-                    // caso o PRONAC ou o Comprovante não estejam cadastrados
+                    // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                     if (!$resultadoPronac || !$resultadoComprovante) {
-                        throw new Exception("Registro não encontrado!");
+                        throw new Exception("Registro nï¿½o encontrado!");
                     }
-                    // caso o PRONAC e o Comprovante estejam cadastrados, vai para a página de busca
+                    // caso o PRONAC e o Comprovante estejam cadastrados, vai para a pï¿½gina de busca
                     else {
                         $this->view->buscarPronac = $resultadoPronac;
                         $this->view->buscarDoc    = $resultadoComprovante;
@@ -507,19 +507,19 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 parent::message($e->getMessage(), "execucaofisicadoprojeto/buscarpronac", "ERROR");
             }
         } // fecha else
-    } // fecha método alterardocumentosAction()
+    } // fecha mï¿½todo alterardocumentosAction()
 
 
 
     /**
-     * Método com o formulário para substituir documento do PRONAC
+     * Mï¿½todo com o formulï¿½rio para substituir documento do PRONAC
      * @access public
      * @param void
      * @return void
      */
     public function substituirdocumentosAction()
     {
-        // autenticação scriptcase (AMBIENTE PROPONENTE)
+        // autenticaï¿½ï¿½o scriptcase (AMBIENTE PROPONENTE)
         parent::perfil(2);
 
 
@@ -527,8 +527,8 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         // combo com os tipos de documentos
         $this->view->combotipodocumento = TipoDocumentoDAO::buscar();
 
-        // caso o formulário seja enviado via post
-        // realiza a substituição do documento
+        // caso o formulï¿½rio seja enviado via post
+        // realiza a substituiï¿½ï¿½o do documento
         if ($this->getRequest()->isPost()) {
             // recebe os dados via post
             $post                     = Zend_Registry::get('post');
@@ -543,19 +543,19 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             $justificativa            = $post->justificativa;
             $justificativaCoordenador = $post->justificativaCoordenador;
 
-            // pega as informações do arquivo
+            // pega as informaï¿½ï¿½es do arquivo
             $arquivoNome     = $_FILES['arquivo']['name']; // nome
-            $arquivoTemp     = $_FILES['arquivo']['tmp_name']; // nome temporário
+            $arquivoTemp     = $_FILES['arquivo']['tmp_name']; // nome temporï¿½rio
             $arquivoTipo     = $_FILES['arquivo']['type']; // tipo
             $arquivoTamanho  = $_FILES['arquivo']['size']; // tamanho
             if (!empty($arquivoNome) && !empty($arquivoTemp)) {
-                $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensão
-                $arquivoBinario  = Upload::setBinario($arquivoTemp); // binário
+                $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensï¿½o
+                $arquivoBinario  = Upload::setBinario($arquivoTemp); // binï¿½rio
                 $arquivoHash     = Upload::setHash($arquivoTemp); // hash
             }
 
             try {
-                // integração MODELO e VISÃO
+                // integraï¿½ï¿½o MODELO e VISï¿½O
 
                 // busca o PRONAC no banco
                 $resultadoPronac = ProjetoDAO::buscar($pronac);
@@ -563,11 +563,11 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 // busca o Comprovante de acordo com o id no banco
                 $resultadoComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultadoPronac[0]->IdPRONAC, $doc);
 
-                // caso o PRONAC ou o Comprovante não estejam cadastrados
+                // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                 if (!$resultadoPronac || !$resultadoComprovante) {
-                    parent::message("Registro não encontrado!", "execucaofisicadoprojeto/buscarpronac", "ERROR");
+                    parent::message("Registro nï¿½o encontrado!", "execucaofisicadoprojeto/buscarpronac", "ERROR");
                 }
-                // caso o PRONAC e o Comprovante estejam cadastrados, vai para a página de busca
+                // caso o PRONAC e o Comprovante estejam cadastrados, vai para a pï¿½gina de busca
                 else {
                     $this->view->buscarPronac = $resultadoPronac;
                     $this->view->buscarDoc    = $resultadoComprovante;
@@ -577,27 +577,27 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($tipoDocumento)) {
                     throw new Exception("Por favor, informe o tipo de documento!");
                 } elseif (empty($titulo)) {
-                    throw new Exception("Por favor, informe o título do documento!");
+                    throw new Exception("Por favor, informe o tï¿½tulo do documento!");
                 } elseif (strlen($titulo) < 2 || strlen($titulo) > 100) {
-                    throw new Exception("O título do documento é inválido! A quantidade mínima é de 2 caracteres!");
+                    throw new Exception("O tï¿½tulo do documento ï¿½ invï¿½lido! A quantidade mï¿½nima ï¿½ de 2 caracteres!");
                 } elseif (empty($descricao)) {
-                    throw new Exception("Por favor, informe a descrição do documento!");
+                    throw new Exception("Por favor, informe a descriï¿½ï¿½o do documento!");
                 } elseif (strlen($descricao) < 20 || strlen($descricao) > 500) {
-                    throw new Exception("A descrição do documento é inválida! São permitidos entre 20 e 500 caracteres!");
+                    throw new Exception("A descriï¿½ï¿½o do documento ï¿½ invï¿½lida! Sï¿½o permitidos entre 20 e 500 caracteres!");
                 } elseif (empty($justificativa) || $justificativa == "Digite a justificativa...") {
                     throw new Exception("Por favor, informe a justificativa do documento!");
                 } elseif (strlen($justificativa) < 20 || strlen($justificativa) > 500) {
-                    throw new Exception("A justificativa do documento é inválida! São permitidos entre 20 e 500 caracteres!");
+                    throw new Exception("A justificativa do documento ï¿½ invï¿½lida! Sï¿½o permitidos entre 20 e 500 caracteres!");
                 } elseif (!empty($arquivoTemp) && ($arquivoExtensao == 'exe' || $arquivoExtensao == 'bat' ||
                 $arquivoTipo == 'application/exe' || $arquivoTipo == 'application/x-exe' ||
-                $arquivoTipo == 'application/dos-exe' || strlen($arquivoExtensao) > 5)) { // extensão do arquivo
-                    throw new Exception("A extensão do arquivo é inválida!");
+                $arquivoTipo == 'application/dos-exe' || strlen($arquivoExtensao) > 5)) { // extensï¿½o do arquivo
+                    throw new Exception("A extensï¿½o do arquivo ï¿½ invï¿½lida!");
                 } elseif (!empty($arquivoTemp) && $arquivoTamanho > 10485760) { // tamanho do arquivo: 10MB
-                    throw new Exception("O arquivo não pode ser maior do que 10MB!");
+                    throw new Exception("O arquivo nï¿½o pode ser maior do que 10MB!");
                 } elseif (!empty($arquivoTemp) && ArquivoDAO::verificarHash($arquivoHash)) { // hash do arquivo
-                    throw new Exception("O arquivo enviado já está cadastrado na base de dados! Por favor, informe outro!");
+                    throw new Exception("O arquivo enviado jï¿½ estï¿½ cadastrado na base de dados! Por favor, informe outro!");
                 }
-                // faz a inserção (substituição) no banco de dados
+                // faz a inserï¿½ï¿½o (substituiï¿½ï¿½o) no banco de dados
                 else {
                     // cadastra o arquivo caso o mesmo tenha sido enviado
                     if (!empty($arquivoTemp)) {
@@ -612,11 +612,11 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                             'stAtivo'           => 'A');
                         $substituirArquivo = ArquivoDAO::cadastrar($dadosArquivo);
 
-                        // pega o id do último arquivo cadastrado
+                        // pega o id do ï¿½ltimo arquivo cadastrado
                         $idUltimoArquivo = ArquivoDAO::buscarIdArquivo();
                         $idUltimoArquivo = (int) $idUltimoArquivo[0]->id;
 
-                        // cadastrar o binário do arquivo
+                        // cadastrar o binï¿½rio do arquivo
                         $dadosBinario = array(
                             'idArquivo' => $idUltimoArquivo,
                             'biArquivo' => $arquivoBinario);
@@ -638,8 +638,8 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                             'idComprovanteAnterior'      => $idComprovanteAnterior);
                         $substituirComprovante = ComprovanteExecucaoFisicaDAO::cadastrar($dadosComprovante, $doc);
                     } // fecha if
-                    // não cadastra o arquivo
-                    // pega a referência do arquivo cadastrado com o comprovante anterior
+                    // nï¿½o cadastra o arquivo
+                    // pega a referï¿½ncia do arquivo cadastrado com o comprovante anterior
                     else {
                         // cadastra dados do comprovante
                         $dadosComprovante = array(
@@ -659,9 +659,9 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     }
 
                     if ($substituirComprovante) {
-                        parent::message("Solicitação de substituição realizada com sucesso!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "CONFIRM");
+                        parent::message("Solicitaï¿½ï¿½o de substituiï¿½ï¿½o realizada com sucesso!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "CONFIRM");
                     } else {
-                        parent::message("Erro ao realizar solicitação de substituição!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "ERROR");
+                        parent::message("Erro ao realizar solicitaï¿½ï¿½o de substituiï¿½ï¿½o!", "execucaofisicadoprojeto/buscardocumentos?pronac=" . $pronac, "ERROR");
                     }
                 } // fecha else
             } // fecha try
@@ -675,7 +675,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 $this->view->justificativaCoordenador = $justificativaCoordenador;
             }
         }
-        // quando a página é aberta
+        // quando a pï¿½gina ï¿½ aberta
         else {
             // recebe o pronac via get
             $get    = Zend_Registry::get('get');
@@ -687,7 +687,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($pronac) || empty($doc)) {
                     throw new Exception("Por favor, informe o PRONAC e o Comprovante!");
                 } else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca o PRONAC no banco
                     $resultadoPronac = ProjetoDAO::buscar($pronac);
@@ -695,11 +695,11 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     // busca o Comprovante de acordo com o id no banco
                     $resultadoComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultadoPronac[0]->IdPRONAC, $doc);
 
-                    // caso o PRONAC ou o Comprovante não estejam cadastrados
+                    // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                     if (!$resultadoPronac || !$resultadoComprovante) {
-                        throw new Exception("Registro não encontrado!");
+                        throw new Exception("Registro nï¿½o encontrado!");
                     }
-                    // caso o PRONAC e o Comprovante estejam cadastrados, vai para a página de busca
+                    // caso o PRONAC e o Comprovante estejam cadastrados, vai para a pï¿½gina de busca
                     else {
                         $this->view->buscarPronac = $resultadoPronac;
                         $this->view->buscarDoc    = $resultadoComprovante;
@@ -710,23 +710,23 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 parent::message($e->getMessage(), "execucaofisicadoprojeto/buscarpronac", "ERROR");
             }
         } // fecha else
-    } // fecha método substituirdocumentosAction()
+    } // fecha mï¿½todo substituirdocumentosAction()
 
 
 
     /**
-     * Método com o formulário para visualização de documento agardando avaliação
+     * Mï¿½todo com o formulï¿½rio para visualizaï¿½ï¿½o de documento agardando avaliaï¿½ï¿½o
      * @access public
      * @param void
      * @return void
      */
     public function visualizardocumentosAction()
     {
-        // autenticação scriptcase e autenticação/permissão zend (AMBIENTE PROPONENTE E MINC)
-        // define as permissões
+        // autenticaï¿½ï¿½o scriptcase e autenticaï¿½ï¿½o/permissï¿½o zend (AMBIENTE PROPONENTE E MINC)
+        // define as permissï¿½es
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 121; // Técnico de Acompanhamento
-        $PermissoesGrupo[] = 129; // Técnico de Acompanhamento
+        $PermissoesGrupo[] = 121; // Tï¿½cnico de Acompanhamento
+        $PermissoesGrupo[] = 129; // Tï¿½cnico de Acompanhamento
         $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
         $PermissoesGrupo[] = 123; // Coordenador - Geral de Acompanhamento
         parent::perfil(3, $PermissoesGrupo);
@@ -743,7 +743,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             if (empty($pronac) || empty($doc)) {
                 throw new Exception("Por favor, informe o PRONAC e o Comprovante!");
             } else {
-                // integração MODELO e VISÃO
+                // integraï¿½ï¿½o MODELO e VISï¿½O
 
                 // busca o PRONAC no banco
                 $resultadoPronac = ProjetoDAO::buscar($pronac);
@@ -751,11 +751,11 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 // busca o Comprovante de acordo com o id no banco
                 $resultadoComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultadoPronac[0]->IdPRONAC, $doc);
 
-                // caso o PRONAC ou o Comprovante não estejam cadastrados
+                // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                 if (!$resultadoPronac || !$resultadoComprovante) {
-                    throw new Exception("Registro não encontrado!");
+                    throw new Exception("Registro nï¿½o encontrado!");
                 }
-                // caso o PRONAC e o Comprovante estejam cadastrados, vai para a página de busca
+                // caso o PRONAC e o Comprovante estejam cadastrados, vai para a pï¿½gina de busca
                 else {
                     $this->view->buscarPronac = $resultadoPronac;
                     $this->view->buscarDoc    = $resultadoComprovante;
@@ -765,7 +765,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         catch (Exception $e) {
             parent::message($e->getMessage(), "execucaofisicadoprojeto/buscarpronac", "ERROR");
         }
-    } // fecha método visualizacaodedocumentosAction()
+    } // fecha mï¿½todo visualizacaodedocumentosAction()
 
 
 
@@ -773,31 +773,31 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
 
     /**
      * ====================
-     * TÉCNICO
+     * Tï¿½CNICO
      * ====================
      */
 
 
 
     /**
-     * Método para buscar projetos com comprovantes aguardando avaliação
+     * Mï¿½todo para buscar projetos com comprovantes aguardando avaliaï¿½ï¿½o
      * @access public
      * @param void
      * @return void
      */
     public function aguardandoavaliacaoAction()
     {
-        // autenticação e permissões zend (AMBIENTE MINC)
-        // define as permissões
+        // autenticaï¿½ï¿½o e permissï¿½es zend (AMBIENTE MINC)
+        // define as permissï¿½es
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 121; // Técnico de Acompanhamento
-        $PermissoesGrupo[] = 129; // Técnico de Acompanhamento
+        $PermissoesGrupo[] = 121; // Tï¿½cnico de Acompanhamento
+        $PermissoesGrupo[] = 129; // Tï¿½cnico de Acompanhamento
         parent::perfil(1, $PermissoesGrupo);
 
 
 
-        // caso o formulário seja enviado via post
-        // realiza a busca de acordo com os parâmetros enviados
+        // caso o formulï¿½rio seja enviado via post
+        // realiza a busca de acordo com os parï¿½metros enviados
         if ($this->getRequest()->isPost()) {
             // recebe o pronac via post
             $post      = Zend_Registry::get('post');
@@ -820,15 +820,15 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             $dt_end   = explode(" ", $dt_end);
 
             try {
-                // valida o número do pronac
+                // valida o nï¿½mero do pronac
                 if (!empty($pronac) && strlen($pronac) > 20) {
-                    throw new Exception("O Nº do PRONAC é inválido!");
+                    throw new Exception("O Nï¿½ do PRONAC ï¿½ invï¿½lido!");
                 }
                 // valida as datas
                 elseif (!empty($dt_inicio) && !Data::validarData(Data::dataBrasileira($dt_begin[0]))) {
-                    throw new Exception("A data inicial é inválida!");
+                    throw new Exception("A data inicial ï¿½ invï¿½lida!");
                 } elseif (!empty($dt_fim) && !Data::validarData(Data::dataBrasileira($dt_end[0]))) {
-                    throw new Exception("A data final é inválida!");
+                    throw new Exception("A data final ï¿½ invï¿½lida!");
                 } else {
                     // busca os projetos com comprovantes
                     $resultado = ComprovanteExecucaoFisicaDAO::buscarProjetos($pronac, $status, $dt_inicio, $dt_fim);
@@ -838,44 +838,44 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 parent::message($e->getMessage(), "execucaofisicadoprojeto/aguardandoavaliacao", "ERROR");
             }
         } // fecha if
-        // busca todos os pronac com status aguardando avaliação
+        // busca todos os pronac com status aguardando avaliaï¿½ï¿½o
         else {
             $resultado = ComprovanteExecucaoFisicaDAO::buscarProjetos();
         } // fecha else
 
 
-        // ========== INÍCIO PAGINAÇÃO ==========
-        //criando a paginaçao
+        // ========== INï¿½CIO PAGINAï¿½ï¿½O ==========
+        //criando a paginaï¿½ao
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
         $paginator = Zend_Paginator::factory($resultado); // dados a serem paginados
 
-        // página atual e quantidade de ítens por página
+        // pï¿½gina atual e quantidade de ï¿½tens por pï¿½gina
         $currentPage = $this->_getParam('page', 1);
         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(20);
-        // ========== FIM PAGINAÇÃO ==========
+        // ========== FIM PAGINAï¿½ï¿½O ==========
 
 
-        // manda para a visão
+        // manda para a visï¿½o
         $this->view->paginacao = $paginator;
         $this->view->qtd       = count($resultado); // quantidade
-    } // fecha método aguardandoavaliacaoAction()
+    } // fecha mï¿½todo aguardandoavaliacaoAction()
 
 
 
     /**
-     * Método para buscar os documentos (comprovantes) do PRONAC 'Em Avaliação'
+     * Mï¿½todo para buscar os documentos (comprovantes) do PRONAC 'Em Avaliaï¿½ï¿½o'
      * @access public
      * @param void
      * @return void
      */
     public function comprovantesemavaliacaoAction()
     {
-        // autenticação e permissões zend (AMBIENTE MINC)
-        // define as permissões
+        // autenticaï¿½ï¿½o e permissï¿½es zend (AMBIENTE MINC)
+        // define as permissï¿½es
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 121; // Técnico de Acompanhamento
-        $PermissoesGrupo[] = 129; // Técnico de Acompanhamento
+        $PermissoesGrupo[] = 121; // Tï¿½cnico de Acompanhamento
+        $PermissoesGrupo[] = 129; // Tï¿½cnico de Acompanhamento
         parent::perfil(1, $PermissoesGrupo);
 
 
@@ -889,69 +889,69 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             if (empty($pronac)) {
                 throw new Exception("Por favor, informe o PRONAC!");
             }
-            // valida o número do pronac
+            // valida o nï¿½mero do pronac
             elseif (strlen($pronac) > 20) {
-                throw new Exception("O Nº do PRONAC é inválido!");
+                throw new Exception("O Nï¿½ do PRONAC ï¿½ invï¿½lido!");
             } else {
-                // integração MODELO e VISÃO
+                // integraï¿½ï¿½o MODELO e VISï¿½O
 
                 // busca o PRONAC no banco
                 $resultPronac = ProjetoDAO::buscar($pronac);
 
-                // caso o PRONAC não esteja cadastrado
+                // caso o PRONAC nï¿½o esteja cadastrado
                 if (!$resultPronac) {
-                    throw new Exception("Registro não encontrado!");
+                    throw new Exception("Registro nï¿½o encontrado!");
                 }
-                // caso o PRONAC esteja cadastrado, vai para a página de busca
+                // caso o PRONAC esteja cadastrado, vai para a pï¿½gina de busca
                 // dos seus documentos (comprovantes)
                 else {
-                    // manda o pronac para a visão
+                    // manda o pronac para a visï¿½o
                     $this->view->buscarPronac = $resultPronac;
 
                     // pega o id do pronac
                     $idPronac = $resultPronac[0]->IdPRONAC;
 
                     // busca os documentos (comprovantes) do pronac
-                    // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARÂMETRO ==========
+                    // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARï¿½METRO ==========
                     $resultComprovantes = ComprovanteExecucaoFisicaDAO::buscarDocumentos($idPronac);
 
-                    // caso não existam comprovantes cadastrados
+                    // caso nï¿½o existam comprovantes cadastrados
                     if (!$resultComprovantes) {
-                        $this->view->message      = "Nenhum comprovante cadastrado para o PRONAC Nº " . $pronac . "!";
+                        $this->view->message      = "Nenhum comprovante cadastrado para o PRONAC Nï¿½ " . $pronac . "!";
                         $this->view->message_type = "ALERT";
                     } else {
-                        // busca o histórico dos comprovantes
+                        // busca o histï¿½rico dos comprovantes
                         for ($i = 0; $i < sizeof($resultComprovantes); $i++) :
                             // adiciona os comprovantes no novo array
                             $arrayComprovantes[$i] = array('comprovantes' => $resultComprovantes[$i]);
 
-                        // histórico
+                        // histï¿½rico
                         $resultHistorico = ComprovanteExecucaoFisicaDAO::buscarHistorico(
                                 $resultComprovantes[$i]->idComprovante,
                                 $resultComprovantes[$i]->idComprovanteAnterior
                             );
-                        // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARÂMETRO ==========
+                        // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARï¿½METRO ==========
 
-                        // adiciona o histórico no seu respectivo comprovante
+                        // adiciona o histï¿½rico no seu respectivo comprovante
                         if (sizeof($resultHistorico) > 0) :
                                 array_push($arrayComprovantes[$i], array('historicos' => $resultHistorico));
                         endif;
                         endfor;
 
 
-                        // ========== INÍCIO PAGINAÇÃO ==========
-                        //criando a paginaçao
+                        // ========== INï¿½CIO PAGINAï¿½ï¿½O ==========
+                        //criando a paginaï¿½ao
                         Zend_Paginator::setDefaultScrollingStyle('Sliding');
                         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
                         $paginator = Zend_Paginator::factory($arrayComprovantes); // dados a serem paginados
 
-                        // página atual e quantidade de ítens por página
+                        // pï¿½gina atual e quantidade de ï¿½tens por pï¿½gina
                         $currentPage = $this->_getParam('page', 1);
                         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(20);
-                        // ========== FIM PAGINAÇÃO ==========
+                        // ========== FIM PAGINAï¿½ï¿½O ==========
 
 
-                        // manda os comprovantes e seu histórico para a visão
+                        // manda os comprovantes e seu histï¿½rico para a visï¿½o
                         //$this->view->buscarComprovantes = $arrayComprovantes;
                         $this->view->paginacao          = $paginator;
                         $this->view->qtdComprovantes    = count($resultComprovantes); // quantidade de comprovantes
@@ -962,28 +962,28 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         catch (Exception $e) {
             parent::message($e->getMessage(), "execucaofisicadoprojeto/aguardandoavaliacao", "ERROR");
         }
-    } // fecha método comprovantesemavaliacaoAction()
+    } // fecha mï¿½todo comprovantesemavaliacaoAction()
 
 
 
     /**
-     * Método para avaliar os comprovantes
+     * Mï¿½todo para avaliar os comprovantes
      * @access public
      * @param void
      * @return void
      */
     public function avaliarcomprovanteAction()
     {
-        // autenticação e permissões zend (AMBIENTE MINC)
-        // define as permissões
+        // autenticaï¿½ï¿½o e permissï¿½es zend (AMBIENTE MINC)
+        // define as permissï¿½es
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 121; // Técnico de Acompanhamento
-        $PermissoesGrupo[] = 129; // Técnico de Acompanhamento
+        $PermissoesGrupo[] = 121; // Tï¿½cnico de Acompanhamento
+        $PermissoesGrupo[] = 129; // Tï¿½cnico de Acompanhamento
         parent::perfil(1, $PermissoesGrupo);
 
 
 
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         if ($this->getRequest()->isPost()) {
             // recebe os dados via post
             $post     = Zend_Registry::get("post");
@@ -997,7 +997,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($pronac) || empty($doc)) {
                     throw new Exception("Por favor, informe o PRONAC e o Comprovante!");
                 } else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca o PRONAC no banco
                     $resultPronac = ProjetoDAO::buscar($pronac);
@@ -1005,13 +1005,13 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     // busca o Comprovante de acordo com o id no banco
                     $resultComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultPronac[0]->IdPRONAC, $doc);
 
-                    // caso o PRONAC ou o Comprovante não estejam cadastrados
+                    // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                     if (!$resultPronac || !$resultComprovante) {
-                        parent::message("Registro não encontrado!", "execucaofisicadoprojeto/aguardandoavaliacao", "ERROR");
+                        parent::message("Registro nï¿½o encontrado!", "execucaofisicadoprojeto/aguardandoavaliacao", "ERROR");
                     }
                     // caso o PRONAC esteja cadastrado
                     else {
-                        // busca o comprovante anterior caso seja um comprovante substituído
+                        // busca o comprovante anterior caso seja um comprovante substituï¿½do
                         $resultComprovanteSubstituido = ComprovanteExecucaoFisicaDAO::buscarUltimoComprovanteAprovado($resultPronac[0]->IdPRONAC, $doc, $resultComprovante[0]->idComprovanteAnterior);
                         $this->view->buscarComprovanteSubstituido = $resultComprovanteSubstituido;
 
@@ -1024,9 +1024,9 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($parecer) || $parecer == 'Digite o parecer...') {
                     throw new Exception("Por favor, informe o parecer!");
                 } elseif (strlen($parecer) < 20 || strlen($parecer) > 500) {
-                    throw new Exception("O Parecer é inválido! São permitidos entre 20 e 500 caracteres!");
+                    throw new Exception("O Parecer ï¿½ invï¿½lido! Sï¿½o permitidos entre 20 e 500 caracteres!");
                 } else {
-                    // atualiza o status para 'Em Aprovação'
+                    // atualiza o status para 'Em Aprovaï¿½ï¿½o'
                     $dadosComprovante = array(
                         'dsParecerComprovante'   => $parecer,
                         'stParecerComprovante'   => 'EA',
@@ -1047,7 +1047,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 $this->view->parecer      = $parecer;
             }
         } // fecha if
-        // quando a página é aberta
+        // quando a pï¿½gina ï¿½ aberta
         else {
             // recebe os dados via get
             $get    = Zend_Registry::get("get");
@@ -1059,7 +1059,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($pronac) || empty($doc)) {
                     throw new Exception("Por favor, informe o PRONAC e o Comprovante!");
                 } else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca o PRONAC no banco
                     $resultPronac = ProjetoDAO::buscar($pronac);
@@ -1067,17 +1067,17 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     // busca o Comprovante de acordo com o id no banco
                     $resultComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultPronac[0]->IdPRONAC, $doc);
 
-                    // caso o PRONAC ou o Comprovante não estejam cadastrados
+                    // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                     if (!$resultPronac || !$resultComprovante) {
-                        throw new Exception("Registro não encontrado!");
+                        throw new Exception("Registro nï¿½o encontrado!");
                     }
                     // caso o PRONAC esteja cadastrado
                     else {
-                        // assim que o técnico clica em 'Avaliar', o status é alterado para 'Em Avaliação'
+                        // assim que o tï¿½cnico clica em 'Avaliar', o status ï¿½ alterado para 'Em Avaliaï¿½ï¿½o'
                         $dadosComprovante   = array('stParecerComprovante' => 'AV');
                         $alterarComprovante = ComprovanteExecucaoFisicaDAO::alterar($dadosComprovante, $doc);
 
-                        // busca o comprovante anterior caso seja um comprovante substituído
+                        // busca o comprovante anterior caso seja um comprovante substituï¿½do
                         $resultComprovanteSubstituido = ComprovanteExecucaoFisicaDAO::buscarUltimoComprovanteAprovado($resultPronac[0]->IdPRONAC, $doc, $resultComprovante[0]->idComprovanteAnterior);
                         $this->view->buscarComprovanteSubstituido = $resultComprovanteSubstituido;
 
@@ -1106,15 +1106,15 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
 
 
     /**
-     * Método para buscar projetos com comprovantes aguardando aprovação
+     * Mï¿½todo para buscar projetos com comprovantes aguardando aprovaï¿½ï¿½o
      * @access public
      * @param void
      * @return void
      */
     public function aguardandoaprovacaoAction()
     {
-        // autenticação e permissões zend (AMBIENTE MINC)
-        // define as permissões
+        // autenticaï¿½ï¿½o e permissï¿½es zend (AMBIENTE MINC)
+        // define as permissï¿½es
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
         $PermissoesGrupo[] = 123; // Coordenador - Geral de Acompanhamento
@@ -1122,8 +1122,8 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
 
 
 
-        // caso o formulário seja enviado via post
-        // realiza a busca de acordo com os parâmetros enviados
+        // caso o formulï¿½rio seja enviado via post
+        // realiza a busca de acordo com os parï¿½metros enviados
         if ($this->getRequest()->isPost()) {
             // recebe o pronac via post
             $post      = Zend_Registry::get('post');
@@ -1146,15 +1146,15 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             $dt_end   = explode(" ", $dt_end);
 
             try {
-                // valida o número do pronac
+                // valida o nï¿½mero do pronac
                 if (!empty($pronac) && strlen($pronac) > 20) {
-                    throw new Exception("O Nº do PRONAC é inválido!");
+                    throw new Exception("O Nï¿½ do PRONAC ï¿½ invï¿½lido!");
                 }
                 // valida as datas
                 elseif (!empty($dt_inicio) && !Data::validarData(Data::dataBrasileira($dt_begin[0]))) {
-                    throw new Exception("A data inicial é inválida!");
+                    throw new Exception("A data inicial ï¿½ invï¿½lida!");
                 } elseif (!empty($dt_fim) && !Data::validarData(Data::dataBrasileira($dt_end[0]))) {
-                    throw new Exception("A data final é inválida!");
+                    throw new Exception("A data final ï¿½ invï¿½lida!");
                 } else {
                     // busca os projetos com comprovantes
                     $resultado = ComprovanteExecucaoFisicaDAO::buscarProjetos($pronac, $status, $dt_inicio, $dt_fim);
@@ -1170,19 +1170,19 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         } // fecha else
 
 
-        // ========== INÍCIO PAGINAÇÃO ==========
-        //criando a paginaçao
+        // ========== INï¿½CIO PAGINAï¿½ï¿½O ==========
+        //criando a paginaï¿½ao
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
         $paginator = Zend_Paginator::factory($resultado); // dados a serem paginados
 
-        // página atual e quantidade de ítens por página
+        // pï¿½gina atual e quantidade de ï¿½tens por pï¿½gina
         $currentPage = $this->_getParam('page', 1);
         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(20);
-        // ========== FIM PAGINAÇÃO ==========
+        // ========== FIM PAGINAï¿½ï¿½O ==========
 
 
-        // manda para a visão
+        // manda para a visï¿½o
         $this->view->paginacao = $paginator;
         $this->view->qtd       = count($resultado); // quantidade
     } // fecha aguardandoaprovacaoAction()
@@ -1190,15 +1190,15 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
 
 
     /**
-     * Método para buscar os documentos (comprovantes) do PRONAC 'Em Avaliação'
+     * Mï¿½todo para buscar os documentos (comprovantes) do PRONAC 'Em Avaliaï¿½ï¿½o'
      * @access public
      * @param void
      * @return void
      */
     public function comprovantesemaprovacaoAction()
     {
-        // autenticação e permissões zend (AMBIENTE MINC)
-        // define as permissões
+        // autenticaï¿½ï¿½o e permissï¿½es zend (AMBIENTE MINC)
+        // define as permissï¿½es
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
         $PermissoesGrupo[] = 123; // Coordenador - Geral de Acompanhamento
@@ -1215,69 +1215,69 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
             if (empty($pronac)) {
                 throw new Exception("Por favor, informe o PRONAC!");
             }
-            // valida o número do pronac
+            // valida o nï¿½mero do pronac
             elseif (strlen($pronac) > 20) {
-                throw new Exception("O Nº do PRONAC é inválido!");
+                throw new Exception("O Nï¿½ do PRONAC ï¿½ invï¿½lido!");
             } else {
-                // integração MODELO e VISÃO
+                // integraï¿½ï¿½o MODELO e VISï¿½O
 
                 // busca o PRONAC de acordo com o id no banco
                 $resultPronac = ProjetoDAO::buscar($pronac);
 
-                // caso o PRONAC não esteja cadastrado
+                // caso o PRONAC nï¿½o esteja cadastrado
                 if (!$resultPronac) {
-                    throw new Exception("Registro não encontrado!");
+                    throw new Exception("Registro nï¿½o encontrado!");
                 }
-                // caso o PRONAC esteja cadastrado, vai para a página de busca
+                // caso o PRONAC esteja cadastrado, vai para a pï¿½gina de busca
                 // dos seus documentos (comprovantes)
                 else {
-                    // manda o pronac para a visão
+                    // manda o pronac para a visï¿½o
                     $this->view->buscarPronac = $resultPronac;
 
                     // pega o id do pronac
                     $idPronac = $resultPronac[0]->IdPRONAC;
 
                     // busca os documentos (comprovantes) do pronac
-                    // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARÂMETRO ==========
+                    // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARï¿½METRO ==========
                     $resultComprovantes = ComprovanteExecucaoFisicaDAO::buscarDocumentos($idPronac);
 
-                    // caso não existam comprovantes cadastrados
+                    // caso nï¿½o existam comprovantes cadastrados
                     if (!$resultComprovantes) {
-                        $this->view->message      = "Nenhum comprovante cadastrado para o PRONAC Nº " . $pronac . "!";
+                        $this->view->message      = "Nenhum comprovante cadastrado para o PRONAC Nï¿½ " . $pronac . "!";
                         $this->view->message_type = "ALERT";
                     } else {
-                        // busca o histórico dos comprovantes
+                        // busca o histï¿½rico dos comprovantes
                         for ($i = 0; $i < sizeof($resultComprovantes); $i++) :
                             // adiciona os comprovantes no novo array
                             $arrayComprovantes[$i] = array('comprovantes' => $resultComprovantes[$i]);
 
-                        // histórico
+                        // histï¿½rico
                         $resultHistorico = ComprovanteExecucaoFisicaDAO::buscarHistorico(
                                 $resultComprovantes[$i]->idComprovante,
                                 $resultComprovantes[$i]->idComprovanteAnterior
                             );
-                        // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARÂMETRO ==========
+                        // ========== LEMBRAR DE PASSAR DEPOIS O ID DO PROPONENTE COMO PARï¿½METRO ==========
 
-                        // adiciona o histórico no seu respectivo comprovante
+                        // adiciona o histï¿½rico no seu respectivo comprovante
                         if (sizeof($resultHistorico) > 0) :
                                 array_push($arrayComprovantes[$i], array('historicos' => $resultHistorico));
                         endif;
                         endfor;
 
 
-                        // ========== INÍCIO PAGINAÇÃO ==========
-                        //criando a paginaçao
+                        // ========== INï¿½CIO PAGINAï¿½ï¿½O ==========
+                        //criando a paginaï¿½ao
                         Zend_Paginator::setDefaultScrollingStyle('Sliding');
                         Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
                         $paginator = Zend_Paginator::factory($arrayComprovantes); // dados a serem paginados
 
-                        // página atual e quantidade de ítens por página
+                        // pï¿½gina atual e quantidade de ï¿½tens por pï¿½gina
                         $currentPage = $this->_getParam('page', 1);
                         $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(20);
-                        // ========== FIM PAGINAÇÃO ==========
+                        // ========== FIM PAGINAï¿½ï¿½O ==========
 
 
-                        // manda os comprovantes e seu histórico para a visão
+                        // manda os comprovantes e seu histï¿½rico para a visï¿½o
                         //$this->view->buscarComprovantes = $arrayComprovantes;
                         $this->view->paginacao          = $paginator;
                         $this->view->qtdComprovantes    = count($resultComprovantes); // quantidade de comprovantes
@@ -1288,20 +1288,20 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
         catch (Exception $e) {
             parent::message($e->getMessage(), "execucaofisicadoprojeto/aguardandoaprovacao", "ERROR");
         }
-    } // fecha método comprovantesemaprovacaoAction()
+    } // fecha mï¿½todo comprovantesemaprovacaoAction()
 
 
 
     /**
-     * Método para aprovar (deferir ou indeferir) os comprovantes
+     * Mï¿½todo para aprovar (deferir ou indeferir) os comprovantes
      * @access public
      * @param void
      * @return void
      */
     public function aprovarcomprovanteAction()
     {
-        // autenticação e permissões zend (AMBIENTE MINC)
-        // define as permissões
+        // autenticaï¿½ï¿½o e permissï¿½es zend (AMBIENTE MINC)
+        // define as permissï¿½es
         $PermissoesGrupo = array();
         $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
         $PermissoesGrupo[] = 123; // Coordenador - Geral de Acompanhamento
@@ -1309,7 +1309,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
 
 
 
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         if ($this->getRequest()->isPost()) {
             // recebe os dados via post
             $post                  = Zend_Registry::get("post");
@@ -1325,7 +1325,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($pronac) || empty($doc)) {
                     throw new Exception("Por favor, informe o PRONAC e o Comprovante!");
                 } else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca o PRONAC no banco
                     $resultPronac = ProjetoDAO::buscar($pronac);
@@ -1333,13 +1333,13 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     // busca o Comprovante de acordo com o id no banco
                     $resultComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultPronac[0]->IdPRONAC, $doc);
 
-                    // caso o PRONAC ou o Comprovante não estejam cadastrados
+                    // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                     if (!$resultPronac || !$resultComprovante) {
-                        parent::message("Registro não encontrado!", "execucaofisicadoprojeto/aguardandoaprovacao", "ERROR");
+                        parent::message("Registro nï¿½o encontrado!", "execucaofisicadoprojeto/aguardandoaprovacao", "ERROR");
                     }
                     // caso o PRONAC esteja cadastrado
                     else {
-                        // busca o comprovante anterior caso seja um comprovante substituído
+                        // busca o comprovante anterior caso seja um comprovante substituï¿½do
                         $resultComprovanteSubstituido = ComprovanteExecucaoFisicaDAO::buscarUltimoComprovanteAprovado($resultPronac[0]->IdPRONAC, $doc, $resultComprovante[0]->idComprovanteAnterior);
                         $this->view->buscarComprovanteSubstituido = $resultComprovanteSubstituido;
 
@@ -1352,10 +1352,10 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($parecer) || $parecer == 'Digite a justificativa...') {
                     throw new Exception("Por favor, informe a justificativa!");
                 } elseif (strlen($parecer) < 20 || strlen($parecer) > 500) {
-                    throw new Exception("A Justificativa é inválida! São permitidos entre 20 e 500 caracteres!");
+                    throw new Exception("A Justificativa ï¿½ invï¿½lida! Sï¿½o permitidos entre 20 e 500 caracteres!");
                 } else {
                     // caso o comprovante seja DEFERIDO,
-                    // coloca o último aprovado como deferido
+                    // coloca o ï¿½ltimo aprovado como deferido
                     if ($status == 'AD') {
                         $buscarUltimoAprovado = ComprovanteExecucaoFisicaDAO::buscarUltimoComprovanteAprovado($resultPronac[0]->IdPRONAC, $doc, $idComprovanteAnterior);
                         $dadosStatus          = array('stParecerComprovante' => 'CS');
@@ -1397,7 +1397,7 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                 if (empty($pronac) || empty($doc)) {
                     throw new Exception("Por favor, informe o PRONAC e o Comprovante!");
                 } else {
-                    // integração MODELO e VISÃO
+                    // integraï¿½ï¿½o MODELO e VISï¿½O
 
                     // busca o PRONAC de acordo com o id no banco
                     $resultPronac = ProjetoDAO::buscar($pronac);
@@ -1405,13 +1405,13 @@ class ExecucaofisicadoprojetoController extends MinC_Controller_Action_Abstract
                     // busca o Comprovante de acordo com o id no banco
                     $resultComprovante = ComprovanteExecucaoFisicaDAO::buscar($resultPronac[0]->IdPRONAC, $doc);
 
-                    // caso o PRONAC ou o Comprovante não estejam cadastrados
+                    // caso o PRONAC ou o Comprovante nï¿½o estejam cadastrados
                     if (!$resultPronac || !$resultComprovante) {
-                        throw new Exception("Registro não encontrado!");
+                        throw new Exception("Registro nï¿½o encontrado!");
                     }
                     // caso o PRONAC esteja cadastrado
                     else {
-                        // busca o comprovante anterior caso seja um comprovante substituído
+                        // busca o comprovante anterior caso seja um comprovante substituï¿½do
                         $resultComprovanteSubstituido = ComprovanteExecucaoFisicaDAO::buscarUltimoComprovanteAprovado($resultPronac[0]->IdPRONAC, $doc, $resultComprovante[0]->idComprovanteAnterior);
                         $this->view->buscarComprovanteSubstituido = $resultComprovanteSubstituido;
 

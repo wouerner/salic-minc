@@ -61,7 +61,7 @@ class Proposta_DiligenciarController extends Proposta_GenericController
      */
     public function indexAction()
     {
-        $this->_forward("listardiligenciaproponente");
+        $this->forward("listardiligenciaproponente");
     }
 
     /**

@@ -97,7 +97,7 @@ class ControlarmovimentacaobancariaController extends MinC_Controller_Action_Abs
      */
     public function indexAction()
     {
-        $this->_forward('form'); // redireciona para o formul�rio
+        $this->forward('form'); // redireciona para o formul�rio
     } // fecha m�todo indexAction()
 
 

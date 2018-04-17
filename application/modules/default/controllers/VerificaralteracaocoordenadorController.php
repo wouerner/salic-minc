@@ -711,7 +711,7 @@ class VerificarAlteracaoCoordenadorController extends MinC_Controller_Action_Abs
 
         $query = tbPedidoAlteracaoProjetoCoordDAO::updateDadosProjeto($parecerCoordenador, $idpedidoalteracao);
         if ($query) {
-            $this->_redirect('verificaralteracaocoordenador/');
+            $this->redirect('verificaralteracaocoordenador/');
             $this->_helper->viewRenderer->setNoRender(true);
         }
     }
@@ -730,7 +730,7 @@ class VerificarAlteracaoCoordenadorController extends MinC_Controller_Action_Abs
         $query = tbPedidoAlteracaoProjetoCoordDAO::UpdateAvaliacaoProjeto($parecerCoordenador, $idpedidoalteracao, $dtparecertecnico);
 
         if ($query) {
-            $this->_redirect('verificaralteracaocoordenador/');
+            $this->redirect('verificaralteracaocoordenador/');
             $this->_helper->viewRenderer->setNoRender(true);
         }
     }
