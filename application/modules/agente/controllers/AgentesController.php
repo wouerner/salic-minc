@@ -87,7 +87,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      * Funcao para tratar data
      * @access private
      * @param Date
-     * @return Date
+     * @return string
      */
     private function formatadata($data)
     {

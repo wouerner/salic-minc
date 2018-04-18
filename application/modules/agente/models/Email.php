@@ -10,7 +10,7 @@
 class Agente_Model_Email extends MinC_Db_Table_Abstract
 {
     /**
-     * @var nome da tabela
+     * @var $_name nome da tabela
      */
     protected $_name = 'internet'; // nome da tabela
     protected $_schema = 'agentes'; // nome da tabela
