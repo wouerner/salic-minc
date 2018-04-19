@@ -280,19 +280,6 @@
                                 </a>
                             <?php } ?>
 
-                            <?php if ($this->isPropostaEnquadrada
-                                && Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE != $this->codGrupo) { ?>
-                                <a class="btn waves-effect waves-light btn modal-trigger pulse cyan valign-wrapper"
-                                   data-id_preprojeto="<?php echo $this->idPreProjeto; ?>"
-                                   href="#dialogoEncaminharProposta">
-                                    Encaminhar <i class="material-icons"
-                                                  title="Encaminhar An&aacute;lise de Proposta"
-                                                  alt="Encaminhar An&aacute;lise de Proposta">forward</i></button>
-                                </a>
-                            <?php } ?>
-
-
-
                         </div>
                     </div>
 
@@ -1102,7 +1089,7 @@
                         </table>
 
                         <table>
-                            <tr onclick="abrirDinamico('#localRealizacao', $(this)); abrirDinamico('#deslocamento', $(this))"
+                            <tr onclick="abrirDinamico('#localRealizacao', $(this)) abrirDinamico('#deslocamento', $(this))"
                                 style="cursor:pointer">
                                 <th>
                                     <img src="<?php echo $this->baseUrl(); ?>/public/img/navigation-right.png"
