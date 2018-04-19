@@ -54,7 +54,9 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $PermissoesGrupo[] = 151;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COMPONENTE_COMISSAO;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO;
 
+        //parent::perfil(1, $PermissoesGrupo);
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
         parent::init();
 
@@ -76,7 +78,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     public function indexAction()
     {
-        $this->_redirect("/admissibilidade/admissibilidade/listar-propostas");
+        $this->redirect("/admissibilidade/admissibilidade/listar-propostas");
     }
 
     public function validarAcessoAdmissibilidade()
@@ -327,9 +329,9 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $resultado = UploadDAO::abrirdocumentosanexados($id, $tipoDoc);
         if (count($resultado) > 0) {
             if ($tipo == 1) {
-                $this->_forward("abrirdocumentosanexadosbinario", "upload", "", array('id' => $id, 'busca' => $tipoDoc));
+                $this->forward("abrirdocumentosanexadosbinario", "upload", "", array('id' => $id, 'busca' => $tipoDoc));
             } else {
-                $this->_forward("abrirdocumentosanexados", "upload", "", array('id' => $id, 'busca' => $tipoDoc));
+                $this->forward("abrirdocumentosanexados", "upload", "", array('id' => $id, 'busca' => $tipoDoc));
             }
             $bln = "true";
         }
@@ -368,7 +370,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         $resultado = UploadDAO::abrirdocumentosanexados($id, $tipoDoc);
         if (count($resultado) > 0) {
-            $this->_forward("abrirdocumentosanexados", "upload", "", array('id' => $id, 'busca' => $tipoDoc));
+            $this->forward("abrirdocumentosanexados", "upload", "", array('id' => $id, 'busca' => $tipoDoc));
             $bln = "true";
         }
 
@@ -755,7 +757,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     public function arquivarAction()
     {
-        $dao = new Proposta_Model_AnalisarPropostaDAO();
         $post = Zend_Registry::get('post');
         Proposta_Model_AnalisarPropostaDAO::deletePreProjeto($post->idprojeto);
     }
@@ -1934,7 +1935,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
     public function resumoPropostasAnaliseVisualTecnicoAction()
     {
         if (!$_POST) {
-            $this->_redirect("/admissibilidade/admissibilidade/listar-propostas-analise-visual-tecnico");
+            $this->redirect("/admissibilidade/admissibilidade/listar-propostas-analise-visual-tecnico");
         }
         //x($_POST);
         $arrReavaliacao = array();
@@ -2084,7 +2085,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $this->_helper->viewRenderer->setNoRender();
         error_reporting(E_ERROR);
         if (!$_POST) {
-            $this->_redirect("/admissibilidade/admissibilidade/resumo-propostas-analise-visual-tecnico");
+            $this->redirect("/admissibilidade/admissibilidade/resumo-propostas-analise-visual-tecnico");
         }
 
         $grafico = new Grafico($_POST["cgTipoGrafico"]);
@@ -2954,5 +2955,5 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
     public function listarSolicitacoesDesarquivamentoAction()
     {
-    }    
+    }
 }

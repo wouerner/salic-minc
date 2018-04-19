@@ -50,7 +50,7 @@ class Proposta_DivulgacaoController extends Proposta_GenericController
     public function indexAction()
     {
         $this->verificarPermissaoAcesso(true, false, false);
-        $this->_redirect("/proposta/divulgacao/planodivulgacao?idPreProjeto=" . $this->idPreProjeto);
+        $this->redirect("/proposta/divulgacao/planodivulgacao?idPreProjeto=" . $this->idPreProjeto);
     }
 
     /**

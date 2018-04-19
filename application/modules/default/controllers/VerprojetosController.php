@@ -945,8 +945,8 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
             $this->view->projeto = $rsProjeto;
 
-            $tbReadequacao = new tbReadequacao();
-            $dadosReadequacoes = $tbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento <> ?'=>12))->toArray();
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+            $dadosReadequacoes = $Readequacao_Model_tbReadequacao->buscarDadosReadequacoes(array('a.idPronac = ?'=>$idPronac, 'a.siEncaminhamento <> ?'=>12))->toArray();
 
             $tbReadequacaoXParecer = new tbReadequacaoXParecer();
             foreach ($dadosReadequacoes as &$dr) {
@@ -988,9 +988,9 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             $resultado = UploadDAO::abrirdocumentosanexados($id, $tipoDoc);
             if (count($resultado) > 0) {
                 if ($tipo == 1) {
-                    $this->_forward("abrirdocumentosanexadosbinario", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->forward("abrirdocumentosanexadosbinario", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
                 } else {
-                    $this->_forward("abrirdocumentosanexados", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->forward("abrirdocumentosanexados", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
                 }
                 $bln = "true";
             }
@@ -998,7 +998,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             // busca o arquivo
             $resultado = UploadDAO::abrir($id);
             if (count($resultado) > 0) {
-                $this->_forward("abrir", "upload", "", array('id'=>$id));
+                $this->forward("abrir", "upload", "", array('id'=>$id));
                 $bln = "true";
             }
         }
@@ -2314,7 +2314,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             $tblAgente = new Agente_Model_DbTable_Agentes();
             $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
 
-            $tbReadequacao = new tbReadequacao();
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
             $dadosReadequacao = array();
             $dadosReadequacao['idPronac'] = $idPronac;
             $dadosReadequacao['idTipoReadequacao'] = 1;
@@ -2324,7 +2324,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             $dadosReadequacao['stAtendimento'] = 'D';
             $dadosReadequacao['siEncaminhamento'] = 11;
             $dadosReadequacao['stEstado'] = 0;
-            $idReadequacao = $tbReadequacao->inserir($dadosReadequacao);
+            $idReadequacao = $Readequacao_Model_tbReadequacao->inserir($dadosReadequacao);
 
             /*if($idReadequacao > 0){
                 $tbReadequacaoXtbTipoReadequacao = new tbReadequacaoXtbTipoReadequacao();

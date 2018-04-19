@@ -46,6 +46,8 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const COMPONENTE_COMISSAO = 118;
 
     const COORDENADOR_ATENDIMENTO = 127;
+    const TECNICO_DE_ATENDIMENTO = 155;
+
     const TECNICO_PORTARIA = 128;
 
     const COORDENADOR_FISCALIZACAO = 134;
@@ -60,6 +62,11 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
 
     const COORDENADOR_DO_PRONAC = 137;
     const COORDENADOR_DE_CONVENIO = 142;
+
+    const PROPONENTE = 1111;
+
+    const DIRETOR_DEPARTAMENTO = 148;
+    const PRESIDENTE_VINCULADA_SUBSTITUTO = 151;
 
     public function obterPerfisEncaminhamentoAvaliacaoProposta($id_perfil)
     {
@@ -93,5 +100,38 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
                 ]
             );
         }
+    }
+
+    public function obterTecnicos()
+    {
+        $tecnicos = [];
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_ANALISE;
+        $tecnicos[] = Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::PROTOCO_DOCUMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::PROTOCOLO_RECBIMENTO;
+        $tecnicos[] = Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO;
+
+        return $tecnicos;
+    }
+
+    public function buscarTecnicosPorOrgao($id_orgao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('g' => $this->_name), ['gru_codigo', 'gru_nome'], $this->_schema
+        );
+
+        $select->joinInner(['u' => 'UsuariosXOrgaosXGrupos'], 'u.uog_grupo = g.gru_codigo', ['uog_orgao'], $this->_schema );
+
+        $select->where('g.gru_codigo in (?)', $this->obterTecnicos());
+        $select->where('g.gru_status = ?', 1);
+        $select->where('u.uog_orgao = ?', $id_orgao);
+        $select->group(['gru_codigo', 'gru_nome','uog_orgao']);
+
+        return $this->fetchAll($select);
     }
 }

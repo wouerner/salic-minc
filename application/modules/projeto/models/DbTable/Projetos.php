@@ -52,6 +52,11 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
         return $this->_db->fetchRow($objQuery);
     }
 
+    /**
+     * @param $idPronac
+     * @return array
+     * @deprecated Utilizar a model fnVerificarProjetoAprovadoIN2017, metodo verificar
+     */
     public function verificarIN2017($idPronac)
     {
         $retorno = 0;
@@ -118,7 +123,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
     *
     * Substitui a fnVerificarExistenciaDaProposta
     */
-    public function verificarSeProjetoPossuiProposta($idPronac)
+    public function obterIdPreProjetoDoProjeto($idPronac)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->setFetchMode(Zend_DB::FETCH_OBJ);

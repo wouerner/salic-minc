@@ -10,19 +10,50 @@ class ConsultardadosprojetoControllerTest extends MinC_Test_ControllerActionTest
     public function setUp()
     {
         parent::setUp();
-        $this->idPronac = '209649';
 
-        $this->hashIdPronac = "501eac548e7d4fa987034573abc6e179MjAxNzEzZUA3NWVmUiEzNDUwb3RT";
-        
         $this->autenticar();
-        
+
         $this->resetRequest()
             ->resetResponse();
-        
+
         $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
-        
+
         $this->resetRequest()
             ->resetResponse();
+
+        $this->idPronac = $this->getIdPronacProjeto();
+        $this->hashIdPronac = Seguranca::encrypt($this->idPronac);
+    }
+    private function getIdPronacProjeto()
+    {
+        $config = new Zend_Config_Ini(
+            APPLICATION_PATH . '/configs/application.ini',
+            APPLICATION_ENV
+        );
+
+        $projetos = new Projetos();
+        $select = $projetos->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('p' => 'projetos'),
+            'p.IdPRONAC AS idPronac',
+            'sac.dbo'
+        );
+
+        $select->where('p.AnoProjeto > ?', 15);
+        $select->where('p.AnoProjeto < ?', date('y'));
+        $select->where('p.cgccpf = ?', $config->test->params->login);
+        $select->limit(1);
+
+
+        $result = $projetos->fetchAll($select);
+
+        if (count($result) > 0)
+        {
+            return $result[0]['idPronac'];
+        } else {
+            return false;
+        }
     }
 
     /**

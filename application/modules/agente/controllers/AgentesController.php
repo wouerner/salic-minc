@@ -157,7 +157,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             $this->getIdUsuario = UsuarioDAO::getIdUsuario($arrAuth['usu_codigo']);
             $this->getIdUsuario = ($this->getIdUsuario) ? $this->getIdUsuario["idAgente"] : 0;
         } else { // autenticacao scriptcase
-            $this->getIdUsuario = (isset($params["idusuario"])) ? $params["idusuario"] : 0;
+            $this->getIdUsuario = (isset($arrAuth['idusuario'])) ? $arrAuth['idusuario'] : 0;
         }
 
         $Cpflogado = $this->getIdUsuario;
@@ -562,12 +562,13 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      *
      * @access public
      * @return void
+     * @deprecated action nao utilizada (27/03/2018)
      */
-    public function incluiragenteexternoAction()
-    {
-        Zend_Layout::startMvc(array('layout' => 'open'));
-        $this->incluir();
-    }
+//    public function incluiragenteexternoAction()
+//    {
+//        Zend_Layout::startMvc(array('layout' => 'open'));
+//        $this->incluir();
+//    }
 
     /**
      * Metodo para visualizacao dos dados do agente
@@ -599,11 +600,11 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         }
 
         if (($this->GrupoAtivoSalic == 93) && ($idAgente == '')) {
-            $this->_redirect('agente/agentes/buscaragente');
+            $this->redirect('agente/agentes/buscaragente');
         }
 
         if (($idAgente == '')) {
-            $this->_redirect('agente/agentes/incluiragente');
+            $this->redirect('agente/agentes/incluiragente');
         }
 
         $tbInfo = new Agente_Model_DbTable_TbInformacaoProfissional();
@@ -2206,11 +2207,13 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->autenticacao();
         $this->salvaragente();
     }
-
-    public function salvaagentegeralexternoAction()
-    {
-        $this->salvaragente();
-    }
+    /**
+     * @deprecated action nao utilizada (27/03/2018)
+     */
+//    public function salvaagentegeralexternoAction()
+//    {
+//        $this->salvaragente();
+//    }
 
     /**
      * salvarAgenteRedirect Metodo para efetuar o redirecionamento apos o cadastro de agentes
@@ -2619,7 +2622,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                     throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
-                    $this->_redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
+                    $this->redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
                 }
             } catch (Exception $e) {
                 $this->view->message = $e->getMessage();

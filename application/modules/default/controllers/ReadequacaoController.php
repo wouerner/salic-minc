@@ -462,7 +462,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-        $this->_forward("proponente"); // despacha para o fluxo inicial
+        $this->forward("proponente"); // despacha para o fluxo inicial
     }
 
 
@@ -1734,7 +1734,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
      */
     public function custoAdministrativoAction()
     {
-        $this->_redirect('readequacao/custo/idpronac/' . $this->_idPronac . '/idproduto/0');
+        $this->redirect('readequacao/custo/idpronac/' . $this->_idPronac . '/idproduto/0');
     } // fecha m�todo custoAdministrativoAction()
 
 

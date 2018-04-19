@@ -176,9 +176,9 @@ class MantertermodecisaoController extends MinC_Controller_Action_Abstract
                 $msg = "Erro ao realizar opera&ccedil;&atilde;o. ".$e->getMessage();
                 $tipoMsg = "ERROR";
             }
-            $this->_forward("termodecisao", null, null, array('msg'=>$msg,'tipoMsg'=>$tipoMsg));
+            $this->forward("termodecisao", null, null, array('msg'=>$msg,'tipoMsg'=>$tipoMsg));
         } else {
-            $this->_forward("index");
+            $this->forward("index");
         }
         //parent::message("{$acao} com sucesso! ", "mantertermodecisao/index", "CONFIRM");
     }

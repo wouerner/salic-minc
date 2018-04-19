@@ -307,85 +307,30 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             $SolicitarProrrogacao = 1;
             $Marcas = 1;
 
-            /* ===== CHECAR SE EXISTE READEQUA��O DE 50% ===== */
-            $vReadequacao = $db->select()
-                ->from(
-                    array('a' => 'tbReadequacao'),
-                    array(new Zend_Db_Expr('TOP 1 idPronac')),
-                    $this->_schema
-                )
-                ->joinInner(
-                    array('b' => 'tbTipoReadequacao'),
-                    'a.idTipoReadequacao = b.idTipoReadequacao',
-                    array(''),
-                    $this->_schema
-                )
-                ->where('a.idPronac = ?', $idPronac)
-                ->where('b.idTipoReadequacao = ?', 2)
-                ->where('a.siEncaminhamento = ?', 15)
-                ->where('a.stEstado = ?', 1);
-            
-            $vReadequacao = $db->fetchAll($vReadequacao);
-            if (!$vReadequacao->idPronac) {
+            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
+            $existeReadequacaoEmAndamento = $Readequacao_Model_tbReadequacao->existeReadequacaoEmAndamento($idPronac);
+            $existeReadequacaoPlanilhaEmEdicao = $Readequacao_Model_tbReadequacao->existeReadequacaoPlanilhaEmEdicao($idPronac);
+            $existeReadequacaoParcialEmEdicao = $Readequacao_Model_tbReadequacao->existeReadequacaoParcialEmEdicao($idPronac);
+
+            if (!$existeReadequacaoEmAndamento && !$existeReadequacaoEmAndamento) {
                 $Readequacao_50 = 1;
-            } else {
-                $Readequacao_50 = 0;
-            }
-
-            /* ===== CHECAR SE EXISTE READEQUA��O DE PLANILHA OR�AMENT�RIA @todo melhoras as variaveis ===== */
-            $queryPlanilhaOrcamentaria_1 = $db->select()
-                ->from(
-                    array('a' => 'tbReadequacao'),
-                    array(new Zend_Db_Expr('TOP 1 a.idTipoReadequacao')),
-                    $this->_schema
-                )
-                ->joinInner(
-                    array('b' => 'tbTipoReadequacao'),
-                    'a.idTipoReadequacao = b.idTipoReadequacao',
-                    array(''),
-                    $this->_schema
-                )
-                ->where('a.idPronac = ?', $idPronac)
-                ->where('b.idTipoReadequacao = ?', 2)
-                ->where('a.siEncaminhamento <> ?', 12);
-            $readequacaoDiferente12 = $db->fetchOne($queryPlanilhaOrcamentaria_1);
-
-            $queryPlanilhaOrcamentaria_2 = $db->select()
-                ->from(
-                    array('a' => 'tbReadequacao'),
-                    array(new Zend_Db_Expr('TOP 1 a.idTipoReadequacao')),
-                    $this->_schema
-                )
-                ->joinInner(
-                    array('b' => 'tbTipoReadequacao'),
-                    'a.idTipoReadequacao = b.idTipoReadequacao',
-                    array(''),
-                    $this->_schema
-                )
-                ->where('a.idPronac = ?', $idPronac)
-                ->where('b.idTipoReadequacao = ?', 2)
-                ->where('a.siEncaminhamento = ?', 12);
-
-            $readequacaoIguala12 = $db->fetchOne($queryPlanilhaOrcamentaria_2);
-
-            if (empty($readequacaoDiferente12) or $readequacaoIguala12) {
                 $ReadequacaoPlanilha = 1;
-            } else {
+            } else if ($existeReadequacaoEmAndamento && $existeReadequacaoPlanilhaEmEdicao) {
+                $ReadequacaoPlanilha = 1;
+                $Readequacao_50 = 0;
+            } else if ($existeReadequacaoEmAndamento && $existeReadequacaoParcialEmEdicao) {
+                $ReadequacaoPlanilha = 0;
+                $Readequacao_50 = 1;
+            } else if ($existeReadequacaoEmAndamento && !$existeReadequacaoPlanilhaEmEdicao)  {
+                $Readequacao_50 = 0;
                 $ReadequacaoPlanilha = 0;
             }
 
-            /* ===== CHECAR SE EXISTE RELAT�RIO DE CUMPRIMENTO DO OBJETO PARA SER ENVIADO ===== */
-            $relatorioCumprimentoEnvio = $db->select()
-                ->from(
-                    'tbCumprimentoObjeto',
-                    array(new Zend_Db_Expr('TOP 1 idCumprimentoObjeto')),
-                    $this->_schema
-                )
-                ->where('siCumprimentoObjeto <> ?', 1)
-                ->where('idPronac = ?', $idPronac);
-            $relatorioCumprimentoEnvio = $db->fetchRow($relatorioCumprimentoEnvio);
+            $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+            $possuiRelatorioDeCumprimento = $tbCumprimentoObjeto->possuiRelatorioDeCumprimento($idPronac);
 
-            if ($relatorioCumprimentoEnvio->idCumprimentoObjeto) {
+            if ($possuiRelatorioDeCumprimento) {
                 $Readequacao_50 = 0;
                 $Readequacao = 0;
                 $ComprovacaoFinanceira = 0;
@@ -413,7 +358,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             $PrestacaoDeContas = 1;
             $Marcas = 0;
             $SolicitarProrrogacao = 0;
-            $Readequacao = 0;
+            $Readequacao = 1;
             $Readequacao_50 = 1;
             $ComprovacaoFinanceira = 1;
             $RelatorioTrimestral = 0;
@@ -426,19 +371,10 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                 $Readequacao = 1;
             }
 
-            /* ===== CHECAR SE EXISTE RELATORIO DE CUMPRIMENTO DO OBJETO PARA SER ENVIADO ===== */
-            $relatorioDeCumprimento = $db->select()
-                ->from(
-                    'tbCumprimentoobjeto',
-                    array(new Zend_Db_Expr('TOP 1 idCumprimentoObjeto')),
-                    $this->_schema
-                )
-                ->where('siCumprimentoObjeto <> ?', 1)
-                ->where('idPronac = ?', $idPronac);
+            $tbCumprimentoObjeto = new tbCumprimentoObjeto();
+            $possuiRelatorioDeCumprimento = $tbCumprimentoObjeto->possuiRelatorioDeCumprimento($idPronac);
 
-            $relatorioDeCumprimento = $db->fetchRow($relatorioDeCumprimento);
-
-            if ($relatorioDeCumprimento->idCumprimentoObjeto) {
+            if ($possuiRelatorioDeCumprimento) {
                 $ComprovacaoFinanceira = 0;
                 $Readequacao_50 = 0;
                 $RelatorioFinal = 0;
@@ -447,6 +383,8 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                 }
             } else {
                 /* ===== CHECAR SE EXISTE READEQUA�AO DE 50% ===== */
+
+                // VERIFICAR O QUE ESTÁ CHECANDO AQUI. É PRA LIBERAR A DE 50%
                 $readequacaoFase5 = $db->select()
                     ->from(
                         array('a' => 'tbReadequacao'),
@@ -460,10 +398,17 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                         $this->_schema
                     )
                     ->where('a.idPronac = ?', $idPronac)
-                    ->where('b.idTipoReadequacao = ?', 2)
-                    ->where('a.siEncaminhamento NOT IN (?)', array(2, 15))
+                                  ->where('b.idTipoReadequacao = ?', Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA)
+                                  ->where(
+                                      'a.siEncaminhamento NOT IN (?)',
+                                      array(
+                                          Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_INDEFERIDA,
+                                          Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA
+                                      )
+                                  )
                     ->where('a.stEstado = ?', 0);
                 $readequacaoFase5 = $db->fetchRow($readequacaoFase5);
+
                 if ($readequacaoFase5->idTipoReadequacao) {
                     $Readequacao_50 = 0;
                 } else {
@@ -471,49 +416,26 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                 }
             }
 
-            /* ===== CHECAR SE EXISTE READEQUA��O DE PLANILHA OR�AMENT�RIA @todo melhoras as variaveis ===== */
-            $queryPlanilhaOrcamentaria_1 = $db->select()
-                ->from(
-                    array('a' => 'tbReadequacao'),
-                    array(new Zend_Db_Expr('TOP 1 a.idTipoReadequacao')),
-                    $this->_schema
-                )
-                ->joinInner(
-                    array('b' => 'tbTipoReadequacao'),
-                    'a.idTipoReadequacao = b.idTipoReadequacao',
-                    array(''),
-                    $this->_schema
-                )
-                ->where('a.idPronac = ?', $idPronac)
-                ->where('b.idTipoReadequacao = ?', 2)
-                ->where('a.siEncaminhamento <> ?', 12);
-            $readequacaoDiferente12 = $db->fetchOne($queryPlanilhaOrcamentaria_1);
+            if (!$existeReadequacaoEmAndamento && !$existeReadequacaoEmAndamento) {
+                $Readequacao_50 = 1;
+            } else if ($existeReadequacaoEmAndamento && !$existeReadequacaoPlanilhaEmEdicao)  {
+                $Readequacao_50 = 0;
+            }
 
-            $queryPlanilhaOrcamentaria_2 = $db->select()
-                ->from(
-                    array('a' => 'tbReadequacao'),
-                    array(new Zend_Db_Expr('TOP 1 a.idTipoReadequacao')),
-                    $this->_schema
-                )
-                ->joinInner(
-                    array('b' => 'tbTipoReadequacao'),
-                    'a.idTipoReadequacao = b.idTipoReadequacao',
-                    array(''),
-                    $this->_schema
-                )
-                ->where('a.idPronac = ?', $idPronac)
-                ->where('b.idTipoReadequacao = ?', 2)
-                ->where('a.siEncaminhamento = ?', 12);
-
-            $readequacaoIguala12 = $db->fetchOne($queryPlanilhaOrcamentaria_2);
-
-            if (empty($readequacaoDiferente12) or $readequacaoIguala12) {
-                $ReadequacaoPlanilha = 1;
-            } else {
-                $ReadequacaoPlanilha = 0;
+            // caso projeto tenha diligencia de prestacao de contas não mostrar menu readequacão
+            if ($dadosProjeto->Situacao == 'E17') {
+                $Readequacao = 0;
+                $Readequacao_50 = 0;
             }
 
             $Fase = 5;
+        }
+
+        //Fases que não pode liberar menu Análise Técnica
+        if (in_array($dadosProjeto->Situacao, array('B11', 'B14', 'C10', 'C30', 'C20', 'D50', 'D51'))) {
+            $Analise = 0;
+        }else{
+            $Analise = 1;
         }
 
         $permissao = array('links'=>"$Permissao - $Fase - $Diligencia - $Recursos - $Readequacao - $ComprovacaoFinanceira - $RelatorioTrimestral - $RelatorioFinal - $Analise - $Execucao - $PrestacaoDeContas - $Readequacao_50 - $Marcas - $SolicitarProrrogacao - $ReadequacaoPlanilha");

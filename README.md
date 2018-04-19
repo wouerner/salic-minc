@@ -5,8 +5,9 @@ Bem vindo/a à documentação do SALIC! Aqui você vai encontrar diversas docume
 * [Esquema de desenvolvimento e banco](doc/Esquema_de_desenvolvimento_e_banco.md)
 * [Guia de operação e desenvolvimento](doc/Guia_de_operacao-desenvolvimento.md)
 * [Regras de versionamento](doc/Regras_versionamento.md)
-* [Roteiro de publicação de releases](doc/Roteiro_de_publicacao_de_releases.md)
+* [Roteiro de publicação de releases](doc/Roteiro_de_publicacao_de_releases.md) - contém o git workflow
 * [Teste e PHPUnit](doc/Teste_Manual.md)
+* [SQLs](https://github.com/culturagovbr/salic-minc-sql) de apoio ao desenvolvimento do Salic
 
 ## Docker
 Utilizamos o Docker como plataforma de desenvolvimento com o intuito de garantir o mesmo ambiente de desenvolvimento 

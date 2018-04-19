@@ -37,14 +37,14 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                 $sgcAcessoSave = $sgcAcesso->salvar($dados);
 
                 $email 		 = $scgAcessoDados['Email'];
-                $assunto 	 = "Alteração da senha de acesso";
+                $assunto 	 = utf8_decode(html_entity_decode("Altera&ccedil;&atilde;o da senha de acesso"));
                 $perfil 	 = "SALICWEB";
-                $mens  		 = "Ol&aacute; " . $nome . ",<br><br>";
+                $mens  		 = "Ol&aacute; " . $scgAcessoDados['Nome'] . ",<br><br>";
                 $mens 		.= "Senha....: " . $senhaFormatada . "<br><br>";
-                $mens 		.= "Esta &eacute; a sua senha tempor&aacute;ria de acesso ao Sistema de Apresentaç?o de Projetos via Web do ";
+                $mens 		.= "Esta &eacute; a sua senha tempor&aacute;ria de acesso ao Sistema de Apresenta&ccedil;&atilde;o de Projetos via Web do ";
                 $mens 		.= "Minist&eacute;rio da Cultura.<br><br>Lembramos que a mesma dever&aacute; ser ";
                 $mens 		.= "trocada no seu primeiro acesso ao sistema.<br><br>";
-                $mens 		.= "Esta &eacute; uma mensagem autom&aacute;tica. Por favor n?o responda.<br><br>";
+                $mens 		.= "Esta &eacute; uma mensagem autom&aacute;tica. Por favor n&atilde;o responda.<br><br>";
                 $mens 		.= "Atenciosamente,<br>Minist&eacute;rio da Cultura";
 
                 $enviaEmail = EmailDAO::enviarEmail($email, $assunto, $mens, $perfil);
@@ -331,7 +331,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                     $arrPerfis2[$orgaoUsuario->gru_codigo][] = $orgaoUsuario;
                     $arrPerfisNomes2[$orgaoUsuario->gru_codigo] = $orgaoUsuario->gru_nome;
                 }
-                $this->_forward(
+                $this->forward(
                     'gerar-pdf-permissao-salic',
                                 null,
                                 null,
@@ -506,7 +506,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                     $perfisNomes2 = "";
                 }
 
-                $this->_forward(
+                $this->forward(
                     'gerar-pdf-permissao-salic',
                                 null,
                                 null,
@@ -573,7 +573,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
                 $arrPerfisNomes2[$orgaoUsuario->gru_codigo] = $orgaoUsuario->gru_nome;
                 endforeach;
 
-                $this->_forward(
+                $this->forward(
                     'gerar-pdf-permissao-salic',
                                 null,
                                 null,
@@ -592,7 +592,7 @@ class ManterusuarioController extends MinC_Controller_Action_Abstract
         Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
         $this->_response->clearHeaders();
 
-        $dados = $this->_getAllParams();
+        $dados = $this->getAllParams();
         //x($dados['perfisNomes2']);
 
         $this->view->resultadoOrgaoUsuario2 = $dados['resultadoOrgaoUsuario2'];

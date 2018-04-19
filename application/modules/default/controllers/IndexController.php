@@ -183,7 +183,7 @@ class IndexController extends MinC_Controller_Action_Abstract
                                 $tbLoginTentativasAcesso->atualizaTentativa($username, $ip, $LoginAttempt->nrTentativa, $data->get('YYYY-MM-dd HH:mm:ss'));
                             }
 
-                            $this->_forward("login", "login");
+                            $this->forward("login", "login");
                             //throw new Exception("Usurio inexistente!");
                         }
                     } // fecha else
@@ -209,7 +209,7 @@ class IndexController extends MinC_Controller_Action_Abstract
         $auth->clearIdentity(); // limpa a autentica��o
         Zend_Session::destroy();
         unset($_SESSION);
-        $this->_redirect('index');
+        $this->redirect('index');
     } // fecha logoutAction
 
 
@@ -305,15 +305,24 @@ class IndexController extends MinC_Controller_Action_Abstract
     public function montarPlanilhaOrcamentariaAction()
     {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        $get = Zend_Registry::get('get');
-
+        
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $this->view->idPerfil = $GrupoAtivo->codGrupo;
 
-        $this->view->idPronac = $get->idPronac;
+        $idPronac = $this->_request->getParam('idPronac');
+        $tipoPlanilha = $this->_request->getParam('tipoPlanilha');
+        $link = ($this->_request->getParam('link')) ? true : false;
+        $view_edicao = ($this->_request->getParam('view_edicao')) ? true : false;
+        $this->view->idPronac = $idPronac;
+
+        $params = [];
+        $params['link'] = $link;
+        $params['view_edicao'] = $view_edicao;
+        
         $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
-        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($get->idPronac, $get->tipoPlanilha);
-        $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $get->tipoPlanilha);
+        $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipoPlanilha, $params);
+        
+        $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoPlanilha);
         // tipoPlanilha = 0 : Planilha Orcamentaria da Proposta
         // tipoPlanilha = 1 : Planilha Orcamentaria do Proponente
         // tipoPlanilha = 2 : Planilha Orcamentaria do Parecerista
@@ -321,13 +330,11 @@ class IndexController extends MinC_Controller_Action_Abstract
         // tipoPlanilha = 4 : Cortes Orcamentarios Aprovados
         // tipoPlanilha = 5 : Remanejamento menor que 20%
         // tipoPlanilha = 6 : Readequacao
-
-        $link = isset($get->link) ? true : false;
-
+        
         $this->montaTela(
             'index/montar-planilha-orcamentaria.phtml',
             array(
-            'tipoPlanilha' => $get->tipoPlanilha,
+            'tipoPlanilha' => $tipoPlanilha,
             'tpPlanilha' => (count($planilhaOrcamentaria)>0) ? isset($planilhaOrcamentaria[0]->tpPlanilha) ? $planilhaOrcamentaria[0]->tpPlanilha : '' : '',
             'planilha' => $planilha,
             'link' => $link

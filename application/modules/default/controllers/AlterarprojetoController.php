@@ -154,7 +154,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
         $this->view->comboestados = $mapperUF->fetchPairs('iduf', 'sigla');
         $this->view->combotiposenderecos = $mapperVerificacao->fetchPairs('idverificacao', 'descricao', array('idtipo' => 2));
         $this->view->combotiposlogradouros = $mapperVerificacao->fetchPairs('idverificacao', 'descricao', array('idtipo' => 13));
-        $this->view->comboareasculturais = $mapperArea->fetchPairs('codigo', 'descricao');
+        $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo', 'Descricao');
         $this->view->combotipostelefones = $mapperVerificacao->fetchPairs('idverificacao', 'descricao', array('idtipo' => 3));
         $this->view->combotiposemails = $mapperVerificacao->fetchPairs('idverificacao', 'descricao', array('idtipo' => 4, 'idverificacao' => array(28, 29)));
 
@@ -762,7 +762,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                     throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
-                    $this->_redirect("agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
+                    $this->redirect("agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
                 } // fecha else
             } 
             catch (Exception $e) {
@@ -833,7 +833,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("/alterarprojeto/consultarprojeto");
+        $this->redirect("/alterarprojeto/consultarprojeto");
     }
 
     public function consultarprojetoAction()
@@ -1037,10 +1037,11 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
             $this->view->parecer = $listaparecer[0];
             $this->view->pronac = Seguranca::encrypt($listaparecer[0]->pronac);
 
-            $this->view->comboareasculturais = $mapperArea->fetchPairs('codigo', 'descricao');
+            $this->view->comboareasculturais = $mapperArea->fetchPairs('Codigo', 'Descricao');
+            
             $objSegmentocultural = new Segmentocultural();
             $this->view->combosegmentosculturais = $objSegmentocultural->buscarSegmento($listaparecer[0]->Area);
-
+            
             $documentoDao = new tbHistoricoAlteracaoProjeto();
             $where = array(
                 "P.idPRONAC =?" => $listaparecer[0]->IdPRONAC,
@@ -1784,7 +1785,10 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
 
             $buscarIdPronac = $Projetos->buscarIdPronac($pronac);
             $idPronac = $buscarIdPronac->IdPRONAC;
-
+            
+            $objSegmentocultural = new Segmentocultural();
+            $this->view->combosegmentosculturais = $objSegmentocultural->buscarSegmento($listaparecer[0]->Area);
+            
             if (!empty($idPronac)) {
                 $planoDistribuicao = RealizarAnaliseProjetoDAO::planodedistribuicao($idPronac);
                 $this->view->planoDistribuicao = $planoDistribuicao;

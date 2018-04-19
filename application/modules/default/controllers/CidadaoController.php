@@ -38,7 +38,7 @@ class CidadaoController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect('/cidadao/consultar');
+        $this->redirect('/cidadao/consultar');
     }
 
     public function consultarAction()

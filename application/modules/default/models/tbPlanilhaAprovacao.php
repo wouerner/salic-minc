@@ -5,6 +5,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
     protected $_name = "tbPlanilhaAprovacao";
     protected $_primary = "idPlanilhaAprovacao";
 
+    
 
     public function init()
     {
@@ -53,6 +54,81 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
 
         return $this->fetchAll($slct);
     }
+
+    /**
+     * Função para buscar a planilha ativa
+     * @param integer $idPronac
+     * @return mixed
+     */
+    public function buscarPlanilhaAtiva($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('a' => $this->_name),
+            '*'
+        );
+        
+        $select->where('a.IdPRONAC = ?', $idPronac);
+        $select->where('a.StAtivo = ?', 'S');
+        
+        return $this->fetchAll($select);        
+    }
+
+    /**
+     * Função para buscar a planilha ativa sem excluidos ou zerados
+     * @param integer $idPronac
+     * @return mixed
+     */
+    public function buscarPlanilhaAtivaNaoExcluidos($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('a' => $this->_name),
+            '*'
+        );
+        
+        $select->where('a.IdPRONAC = ?', $idPronac);
+        $select->where('a.StAtivo = ?', 'S');
+        $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
+        $select->where(new Zend_Db_Expr('(a.qtItem * a.nrOcorrencia * a.vlUnitario) > ?'), '0');
+        
+        return $this->fetchAll($select);        
+    }
+
+    /**
+     * Função para buscar a planilha ativa
+     * @param integer $idPronac
+     * @param integer $idReadequacao
+     * @return mixed
+     */
+    public function buscarPlanilhaReadequadaEmEdicao($idPronac, $idReadequacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('a' => $this->_name),
+            '*'
+        );
+
+        $select->joinInner(
+            array('r' => 'tbReadequacao'),
+            'a.idReadequacao = r.idReadequacao',
+            array(''),
+            'SAC.dbo'
+        );
+        
+        $select->where('a.IdPRONAC = ?', $idPronac);
+        $select->where('a.StAtivo = ?', 'S');
+        $select->where('r.stEstado = ?', 0);
+
+        return $this->fetchAll($select);
+    }   
+    
 
     public function copiandoPlanilhaRecurso($idPronac)
     {
@@ -150,7 +226,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         foreach ($where as $key => $valor) {
             $select->where($key, $valor);
         }
-
+        
         return $this->fetchAll($select);
     }
 
@@ -193,5 +269,288 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         }
 
         return $this->fetchAll($select);
+    }
+
+    /**
+     * Método para verificar se existe algum item já cadastrado na mesma fonte, produto, etapa e município
+     * @access public
+     * @param integer $idPronac
+     * @param integer $nrFonteRecurso
+     * @param integer $idEtapa
+     * @param integer $idMunicipioDespesa
+     * @param integer $idPlanilhaItem
+     * @return boolean
+     */
+    public function itemJaAdicionado(
+        $idPronac,
+        $nrFonteRecurso,
+        $idProduto,
+        $idEtapa,
+        $idMunicipioDespesa,
+        $idPlanilhaItem
+    ) {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            'a.idPlanilhaAprovacao');
+        $select->joinInner(
+            array('r' => 'tbReadequacao'),
+            "a.idReadequacao = r.idReadequacao",
+            array(),
+            $this->_schema
+        );
+        
+        $select->where('a.IdPRONAC = ?', $idPronac);
+        $select->where('a.nrFonteRecurso = ?', $nrFonteRecurso);
+        $select->where('a.idProduto = ?', $idProduto);
+        $select->where('a.idEtapa = ?', $idEtapa);
+        $select->where('a.idMunicipioDespesa = ?', $idMunicipioDespesa);
+        $select->where('a.idPlanilhaItem = ?', $idPlanilhaItem);
+        
+        $result = $this->fetchAll($select);
+        
+        if (count($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método para retornar o valor total da planilha ativa
+     * @access public
+     * @param integer $idPronac
+     * @param array $nrFonteRecurso
+     * @return boolean
+     */
+    public function valorTotalPlanilhaAtiva($idPronac, $nrFonteRecurso = []) {
+        
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            array(
+                new Zend_Db_Expr('ROUND(SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario), 2) AS Total')
+            )
+        );
+        $select->where('a.idPronac = ?', $idPronac);
+        $select->where('a.stAtivo = ?', 'S');
+
+        if (!empty($nrFonteRecurso)) {
+            $select->where('a.nrFonteRecurso IN(?)', $nrFonteRecurso);
+        }
+                
+        return $this->fetchAll($select);
+    }
+
+    /**
+     * Método para retornar o valor total da planilha ativa
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idPlanilhaItem
+     * @return boolean
+     */
+    public function valorTotalPlanilhaAtivaNaoExcluidosPorEtapa($idPronac, $idEtapa) {
+        
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            array(
+                new Zend_Db_Expr('ROUND(SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario), 2) AS Total')
+            )
+        );
+        $select->where('a.idPronac = ?', $idPronac);
+        $select->where('a.stAtivo = ?', 'S');
+        $select->where(new Zend_Db_Expr('a.tpAcao <> ? OR a.tpAcao IS NULL'), 'E');
+        $select->where(new Zend_Db_Expr('(a.qtItem * a.nrOcorrencia * a.vlUnitario) > ?'), '0');
+        $select->where('a.idEtapa IN (?)', $idEtapa);
+                
+        return $this->fetchAll($select);
+    }
+
+    /**
+     * Método para retornar o valor total da planilha readequada
+     * @access public
+     * @param integer $idPronac
+     * @param integer $idReadequacao
+     * @param array $nrFonteRecurso
+     * @return boolean
+     */
+    public function valorTotalPlanilhaReadequada($idPronac, $idReadequacao, $nrFonteRecurso = []) {
+        
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => $this->_name),
+            array(
+                new Zend_Db_Expr('ROUND(SUM(a.qtItem*a.nrOcorrencia*a.vlUnitario), 2) AS Total')
+            )
+        );
+        
+        $select->where('a.tpPlanilha = ?', 'SR');
+        $select->where('a.stAtivo = ?', 'N');
+        $select->where('a.tpAcao != ?', 'E');
+        $select->where('a.idReadequacao = ?', $idReadequacao);
+        
+        if (!empty($nrFonteRecurso)) {
+            $select->where('a.nrFonteRecurso IN(?)', $nrFonteRecurso);   
+        }        
+        
+        return $this->fetchAll($select);
+    }
+    
+    /**
+     * Função para buscar item de planilha original
+     * @param integer $idPlanilhaAprovacao
+     * @return mixed
+     */
+    public function buscarItemPlanilhaOriginal($idPlanilhaAprovacao)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            array('a' => $this->_name),
+            '*'
+        );
+        $select->joinInner(
+            array('b' => $this->_name),
+            'a.idPlanilhaAprovacao = b.idPlanilhaAprovacaoPai',
+            array(''),
+            $this->_schema
+        );
+        
+        $select->where('b.idPlanilhaAprovacao = ?', $idPlanilhaAprovacao);
+        
+        return $this->fetchAll($select);        
+    }
+
+    /**
+     * Busca item ativo por idPlanilhaAprovacao
+     *
+     * @param integer $idPlanilhaAprovacao
+     * @return mixed
+     */
+    public function buscarItemAtivoId($idPlanilhaAprovacao)
+    {
+        $where = [];
+        $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
+        
+        $planilhaAtiva = $this->buscarDadosAvaliacaoDeItemRemanejamento($where);
+
+        if (count($planilhaAtiva) > 0) {
+            return $planilhaAtiva[0];
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * função para buscar valor comprovado do item
+     *
+     * @param mixed $planilhaAtiva
+     * @return mixed $resComprovado
+     */
+    public function buscarItemValorComprovado($planilhaAtiva)
+    {
+        $whereItemValorComprovado = [];
+        $whereItemValorComprovado['b.IdPRONAC = ?'] = $planilhaAtiva['idPRONAC'];
+        $whereItemValorComprovado['b.idPlanilhaItem = ?'] = $planilhaAtiva['idPlanilhaItem'];
+        $whereItemValorComprovado['b.idEtapa = ?'] = $planilhaAtiva['idEtapa'];
+        $whereItemValorComprovado['b.idProduto = ?'] = $planilhaAtiva['idProduto'];
+        $whereItemValorComprovado['b.idUFDespesa = ?'] = $planilhaAtiva['idUFDespesa'];
+        $whereItemValorComprovado['b.idMunicipioDespesa = ?'] = $planilhaAtiva['idMunicipioDespesa'];
+        $whereItemValorComprovado['b.nrFonteRecurso = ?'] = $planilhaAtiva['nrFonteRecurso'];
+        
+        $tbCompPagxPlanAprov = new tbComprovantePagamentoxPlanilhaAprovacao();
+        $resComprovado = $tbCompPagxPlanAprov->buscarValorComprovadoPorFonteProdutoEtapaLocalItem($whereItemValorComprovado);
+        
+        if (count($resComprovado) > 0) {
+            return $resComprovado;
+        } else {
+            return false;
+        }
+    }
+    
+
+    /**
+     * retorna item original da planilha
+     *
+     * @param mixed $planilhaAtiva
+     * @return mixed
+     */
+    public function buscarRemanejamentoPlanilhaOriginal($planilhaAtiva)
+    {
+        $whereItemPlanilhaOriginal = [];
+        $whereItemPlanilhaOriginal['tpPlanilha = ?'] = 'CO'; # CO - planilha do componente da comissao (original aprovada)
+        $whereItemPlanilhaOriginal['IdPRONAC = ?'] = $planilhaAtiva['idPRONAC'];
+        $whereItemPlanilhaOriginal['idPlanilhaItem = ?'] = $planilhaAtiva['idPlanilhaItem'];
+        $whereItemPlanilhaOriginal['idEtapa = ?'] = $planilhaAtiva['idEtapa'];
+        $whereItemPlanilhaOriginal['idProduto = ?'] = $planilhaAtiva['idProduto'];
+        $whereItemPlanilhaOriginal['idUFDespesa = ?'] = $planilhaAtiva['idUFDespesa'];
+        $whereItemPlanilhaOriginal['idMunicipioDespesa = ?'] = $planilhaAtiva['idMunicipioDespesa'];
+        $whereItemPlanilhaOriginal['nrFonteRecurso = ?'] = $planilhaAtiva['nrFonteRecurso'];
+        
+        $planilhaOriginal = $this->buscar($whereItemPlanilhaOriginal);
+
+        if (count($planilhaOriginal) > 0) {
+            return $planilhaOriginal[0];
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * retorna valores do item
+     */
+    public function buscarValoresItem($item, $valorComprovado)
+    {
+        $vlTotalItem = $item['qtItem']*$item['nrOcorrencia']*$item['vlUnitario'];
+        
+        //CALCULAR VALORES MINIMO E MAXIMO PARA VALIDACAO
+        $vlAtual = @number_format(
+            (
+                $item['qtItem'] * $item['nrOcorrencia'] * $item['vlUnitario']
+            ),
+            2,
+            '',
+            ''
+        );
+        $vlAtualPerc = $vlAtual* Readequacao_Model_tbReadequacao::PERCENTUAL_REMANEJAMENTO/100;
+        
+        //VALOR MINIMO E MAXIMO DO ITEM ORIGINAL
+        //SE TIVER VALOR COMPROVADO, DEVE SUBTRAIR O VALOR DO ITEM COMPROVADO DO VALOR UNITARIO
+        
+        $vlAtualMin = (
+            number_format(
+                $valorComprovado,
+                2,
+                '',
+                ''
+            ) > round($vlAtual-$vlAtualPerc)
+        )
+                    ? number_format(
+                        $valorComprovado,
+                        2,
+                        '',
+                        ''
+                    )
+                    : round($vlAtual-$vlAtualPerc);
+
+        $vlAtualMax = round($vlAtual+$vlAtualPerc);
+        
+        $valoresItem = [];
+        
+        $valoresItem['vlTotalItem'] = $vlTotalItem;
+        $valoresItem['vlAtual'] = $vlAtual;
+        $valoresItem['vlAtualPerc'] = $vlAtualPerc;
+        $valoresItem['vlAtualMin'] = $vlAtualMin;
+        $valoresItem['vlAtualMax'] = $vlAtualMax;
+        
+        return $valoresItem;
     }
 }
