@@ -5,32 +5,32 @@ class DesvincularagentesController extends MinC_Controller_Action_Abstract
 
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio às Leis de Incentivo à Cultura"; // título da página
-        $auth = Zend_Auth::getInstance(); // pega a autenticação
-        $Usuario = new UsuarioDAO(); // objeto usuário
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
+        $this->view->title = "Salic - Sistema de Apoio ï¿½s Leis de Incentivo ï¿½ Cultura"; // tï¿½tulo da pï¿½gina
+        $auth = Zend_Auth::getInstance(); // pega a autenticaï¿½ï¿½o
+        $Usuario = new UsuarioDAO(); // objeto usuï¿½rio
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessï¿½o com o grupo ativo
 
-        if ($auth->hasIdentity()) { // caso o usuário esteja autenticado
-            // verifica as permissões
+        if ($auth->hasIdentity()) { // caso o usuï¿½rio esteja autenticado
+            // verifica as permissï¿½es
             $PermissoesGrupo = array();
             $PermissoesGrupo[] = 93;  // Coordenador de Parecerista
-            $PermissoesGrupo[] = 103; // Coordenador de Análise
+            $PermissoesGrupo[] = 103; // Coordenador de Anï¿½lise
             $PermissoesGrupo[] = 120; // Coordenador Administrativo CNIC
             $PermissoesGrupo[] = 122; // Coordenador de Acompanhamento
-            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo está no array de permissões
-                parent::message("Você não tem permissão para acessar essa área do sistema!", "principal/index", "ALERT");
+            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo estï¿½ no array de permissï¿½es
+                parent::message("Vocï¿½ nï¿½o tem permissï¿½o para acessar essa ï¿½rea do sistema!", "principal/index", "ALERT");
             }
 
-            // pega as unidades autorizadas, orgãos e grupos do usuário (pega todos os grupos)
+            // pega as unidades autorizadas, orgï¿½os e grupos do usuï¿½rio (pega todos os grupos)
             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
 
-            // manda os dados para a visão
-            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuário para a visão
-            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuário para a visão
-            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuário para a visão
-            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o órgão ativo do usuário para a visão
+            // manda os dados para a visï¿½o
+            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuï¿½rio para a visï¿½o
+            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuï¿½rio para a visï¿½o
+            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuï¿½rio para a visï¿½o
+            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o ï¿½rgï¿½o ativo do usuï¿½rio para a visï¿½o
         } // fecha if
-        else { // caso o usuário não esteja autenticado
+        else { // caso o usuï¿½rio nï¿½o esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
 
@@ -46,10 +46,10 @@ class DesvincularagentesController extends MinC_Controller_Action_Abstract
     public function indexAction()
     {
         // despacha para buscaragentes.phtml
-        $this->_forward("buscaragentes");
+        $this->forward("buscaragentes");
     }
 
-    // fecha método buscaragentesAction()
+    // fecha mï¿½todo buscaragentesAction()
     public function desvincularagentesAction()
     {
         $filter = new Zend_Filter_StripTags();
@@ -107,23 +107,23 @@ class DesvincularagentesController extends MinC_Controller_Action_Abstract
     public function buscaragentesvinculadosAction()
     {
         
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         if ($this->getRequest()->isPOST()) {
             // recebe o cpf/cnpj via post
             $post = Zend_Registry::get('post');
             $cnpjcpf = Mascara::delMaskCNPJ($post->cnpjcpf);
             $nome = $post->nome;
          
-            // VALIDAÇÃO
+            // VALIDAï¿½ï¿½O
             try {
                 if (!$cnpjcpf && !$nome) {
                     throw new Exception("Por favor, informe o CNPJ/CPF ou o Nome!");
                 } else {
                     if ($cnpjcpf) {
                         if (strlen($cnpjcpf) == 11 && !Validacao::validarCPF($cnpjcpf)) {
-                            throw new Exception("O Nº do CPF é inválido!");
+                            throw new Exception("O Nï¿½ do CPF ï¿½ invï¿½lido!");
                         } elseif (strlen($cnpjcpf) > 11 && !Validacao::validarCNPJ($cnpjcpf)) {
-                            throw new Exception("O Nº do CNPJ é inválido!");
+                            throw new Exception("O Nï¿½ do CNPJ ï¿½ invï¿½lido!");
                         }
                         
                         if (strlen($cnpjcpf) < 11 || strlen($cnpjcpf) > 14) {
@@ -132,16 +132,16 @@ class DesvincularagentesController extends MinC_Controller_Action_Abstract
                         
                         if ($nome) {
                             if (strlen($nome) > 70) {
-                                throw new Exception("Nome inválido!");
+                                throw new Exception("Nome invï¿½lido!");
                             }
                         }
                     } else {
                         if (strlen($nome) > 70) {
-                            throw new Exception("Nome inválido!");
+                            throw new Exception("Nome invï¿½lido!");
                         }
                     }
                     
-                    $this->_redirect("desvincularagentes/mostraragentes?cnpjcpf=" . $cnpjcpf . "&nome=" . $nome);
+                    $this->redirect("desvincularagentes/mostraragentes?cnpjcpf=" . $cnpjcpf . "&nome=" . $nome);
                 }
             } catch (Exception $e) {
                 parent::message($e->getMessage(), "desvincularagentes/buscaragentes", "ERROR");
@@ -164,21 +164,21 @@ class DesvincularagentesController extends MinC_Controller_Action_Abstract
             try {
                 if ($tbentidade) {
         
-                    // ========== INÍCIO PAGINAÇÃO ==========
-                    //criando a paginaçao
+                    // ========== INï¿½CIO PAGINAï¿½ï¿½O ==========
+                    //criando a paginaï¿½ao
                     Zend_Paginator::setDefaultScrollingStyle('Sliding');
                     Zend_View_Helper_PaginationControl::setDefaultViewPartial('paginacao/paginacao.phtml');
                     $paginator = Zend_Paginator::factory($tbentidade); // dados a serem paginados
 
-                    // página atual e quantidade de ítens por página
+                    // pï¿½gina atual e quantidade de ï¿½tens por pï¿½gina
                     $currentPage = $this->_getParam('page', 1);
                     $paginator->setCurrentPageNumber($currentPage)->setItemCountPerPage(1);
-                    // ========== FIM PAGINAÇÃO ==========
+                    // ========== FIM PAGINAï¿½ï¿½O ==========
 
                     $this->view->entidade = $paginator;
                     $this->view->qtdEntidade    = count($tbentidade); // quantidade
                 } else {
-                    throw new Exception("Registro não encontrado!");
+                    throw new Exception("Registro nï¿½o encontrado!");
                 }
             } catch (Exception $e) {
                 parent::message($e->getMessage(), "desvincularagentes/buscaragentes", "ERROR");

@@ -38,7 +38,7 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
         $start = 0,
         $limit = 20,
         $search = null,
-        $stEstado = 1
+        $stEstado = 0
     )
     {
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -111,10 +111,14 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
             $sqlFinal->where('p.idpreprojeto like ? OR p.nomeprojeto like ? OR  p.nomeproponente like ?', '%'.$search['value'].'%');
         }
 
+        if (!empty($order)) {
+            $sqlFinal->order($order);
+        }
+
         if (!is_null($start) && $limit) {
-            $start = (int)$start;
-            $limit = (int)$limit;
-            $sqlFinal->limitPage($start, $limit);
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $sqlFinal->limit($limit, $start);
         }
 
         return $db->fetchAll($sqlFinal);
@@ -214,9 +218,7 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
         $where = array(),
         $order = array(),
         $start = 0,
-        $limit = 20,
-        $search = null,
-        $stEstado = 1
+        $limit = 20
     )
     {
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -256,10 +258,14 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
             $sql->where($coluna, $valor);
         }
 
+        if (!empty($order)) {
+            $sql->order($order);
+        }
+
         if (!is_null($start) && $limit) {
-            $start = (int)$start;
-            $limit = (int)$limit;
-            $sql->limitPage($start, $limit);
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $sql->limit($limit, $start);
         }
 
         return $db->fetchAll($sql);

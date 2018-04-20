@@ -988,9 +988,9 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             $resultado = UploadDAO::abrirdocumentosanexados($id, $tipoDoc);
             if (count($resultado) > 0) {
                 if ($tipo == 1) {
-                    $this->_forward("abrirdocumentosanexadosbinario", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->forward("abrirdocumentosanexadosbinario", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
                 } else {
-                    $this->_forward("abrirdocumentosanexados", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->forward("abrirdocumentosanexados", "anexospublicos", "", array('id'=>$id,'busca'=>$tipoDoc));
                 }
                 $bln = "true";
             }
@@ -998,7 +998,7 @@ class VerProjetosController extends MinC_Controller_Action_Abstract
             // busca o arquivo
             $resultado = UploadDAO::abrir($id);
             if (count($resultado) > 0) {
-                $this->_forward("abrir", "upload", "", array('id'=>$id));
+                $this->forward("abrir", "upload", "", array('id'=>$id));
                 $bln = "true";
             }
         }

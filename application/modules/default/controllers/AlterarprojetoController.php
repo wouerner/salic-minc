@@ -762,7 +762,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                     throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
-                    $this->_redirect("agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
+                    $this->redirect("agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
                 } // fecha else
             } 
             catch (Exception $e) {
@@ -833,7 +833,7 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("/alterarprojeto/consultarprojeto");
+        $this->redirect("/alterarprojeto/consultarprojeto");
     }
 
     public function consultarprojetoAction()
@@ -1810,8 +1810,8 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
         $erro = "";
         $valor = 0;
         $situacao = 0;
-        foreach ($capitacao as $capitacao) {
-            $valor = $valor + $capitacao->CaptacaoReal;
+        foreach ($capitacao as $capitacao_unitaria) {
+            $valor = $valor + $capitacao_unitaria->CaptacaoReal;
         }
         $tbl2 = new Situacao();
         $situacao = $tbl2->listasituacao(array($post->Situacao));

@@ -603,7 +603,7 @@ class VerificarAlteracaoTecnicoController extends MinC_Controller_Action_Abstrac
         $query = PedidoAlteracaoDAO::BuscaDsEspecificacaoTecnica($parecerTecnico);
 
         if ($query) {
-            $this->_redirect('verificaralteracaotecnico/'.$action);
+            $this->redirect('verificaralteracaotecnico/'.$action);
         }
     }
     public static function VerificarCpfCnpj($dado)

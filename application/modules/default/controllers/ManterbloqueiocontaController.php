@@ -59,7 +59,7 @@ class ManterbloqueiocontaController extends MinC_Controller_Action_Abstract
     */
     public function indexAction()
     {
-        $this->_forward("form-pesquisar-conta");
+        $this->forward("form-pesquisar-conta");
     }
 
     public function formPesquisarContaAction()
