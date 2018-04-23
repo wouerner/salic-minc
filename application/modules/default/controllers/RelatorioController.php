@@ -63,7 +63,7 @@ class RelatorioController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("relatorio/proposta");
+        $this->redirect("relatorio/proposta");
     }
 
 
@@ -946,7 +946,7 @@ class RelatorioController extends MinC_Controller_Action_Abstract
             }
 
             $rs = $tbl->extratorProjeto($arrBusca, $ordem, null, null);
-            $this->_forward(
+            $this->forward(
                 'preparar-xls-pdf',
                 null,
                 null,
@@ -1037,7 +1037,7 @@ class RelatorioController extends MinC_Controller_Action_Abstract
             $totalPag = 0;
             $fim = 0;
             $rs = $tbl->editalDesembolsoXProjeto($arrBusca, $ordem, $tamanho, $inicio);
-            $this->_forward(
+            $this->forward(
                 'preparar-xls-pdf',
                 null,
                 null,
@@ -1128,7 +1128,7 @@ class RelatorioController extends MinC_Controller_Action_Abstract
             $totalPag = 0;
             $fim = 0;
             $rs = $tbl->pontoCulturaRegiaoUfCidade($arrBusca, $ordem, $tamanho, $inicio);
-            $this->_forward(
+            $this->forward(
                 'preparar-xls-pdf',
                 null,
                 null,
@@ -1191,14 +1191,14 @@ class RelatorioController extends MinC_Controller_Action_Abstract
         $post   = Zend_Registry::get('post');
 
         $arrDados = array();
-        $this->_forward("listar-propostas-analise-visual-tecnico", "admissibilidade", "admissibilidade", array("view"=>"/relatorio/listarpropostasanalisevisualtecnico.phtml"));
+        $this->forward("listar-propostas-analise-visual-tecnico", "admissibilidade", "admissibilidade", array("view"=>"/relatorio/listarpropostasanalisevisualtecnico.phtml"));
     }
 
     public function prepararXlsAction()
     {
         Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
         $this->_response->clearHeaders();
-        $dados = $this->_getAllParams();
+        $dados = $this->getAllParams();
         $this->view->registros = $dados['dados'];
 
         if ($dados['view']) {

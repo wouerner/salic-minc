@@ -2,10 +2,10 @@
 
 /**
  * Description of Servico
- * Classe abstrata que trata dos serviços publicados como SOAP
- * sendo necessário apenas criar um controller que herde desta classe, a action
- * deve apenas e usar a função setServiceClass() passando uma classe que deve conter
- * os metodos que serão publicados pelo soap, o  com o phpdoc dos métodos desta classe
+ * Classe abstrata que trata dos serviï¿½os publicados como SOAP
+ * sendo necessï¿½rio apenas criar um controller que herde desta classe, a action
+ * deve apenas e usar a funï¿½ï¿½o setServiceClass() passando uma classe que deve conter
+ * os metodos que serï¿½o publicados pelo soap, o  com o phpdoc dos mï¿½todos desta classe
  * devem estar devidamente anotados, pois a class Zend_Soap_AutoDiscover faz uso
  * dos mesmos.
  * @author mikhail
@@ -24,9 +24,9 @@ abstract class ServicoController extends Zend_Controller_Action
     }
 
     /**
-     * Método executado após qualquer action.
-     * Responsável por instanciar a classe de soap correta e configurala
-     * disponibilizando assim o serviço para ser consumido.
+     * Mï¿½todo executado apï¿½s qualquer action.
+     * Responsï¿½vel por instanciar a classe de soap correta e configurala
+     * disponibilizando assim o serviï¿½o para ser consumido.
      */
     public function postDispatch()
     {
@@ -35,7 +35,7 @@ abstract class ServicoController extends Zend_Controller_Action
         $params = $request->getParams();
         $router = Zend_Controller_Front::getInstance()->getRouter();
 
-        if ($this->_hasParam('wsdl')) {
+        if ($this->hasParam('wsdl')) {
             $server = new Zend_Soap_AutoDiscover();
         } else {
             $server = new Zend_Soap_Server();
@@ -49,8 +49,8 @@ abstract class ServicoController extends Zend_Controller_Action
     }
 
     /**
-     * Seta a classe de serviço que será estudada (autodiscover) pelo phpdoc
-     * e disponibilizada como serviço para ser consumida
+     * Seta a classe de serviï¿½o que serï¿½ estudada (autodiscover) pelo phpdoc
+     * e disponibilizada como serviï¿½o para ser consumida
      * @param string $class
      */
     public function setServiceClass($class)

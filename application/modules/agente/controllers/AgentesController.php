@@ -87,7 +87,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
      * Funcao para tratar data
      * @access private
      * @param Date
-     * @return Date
+     * @return string
      */
     private function formatadata($data)
     {
@@ -600,11 +600,11 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         }
 
         if (($this->GrupoAtivoSalic == 93) && ($idAgente == '')) {
-            $this->_redirect('agente/agentes/buscaragente');
+            $this->redirect('agente/agentes/buscaragente');
         }
 
         if (($idAgente == '')) {
-            $this->_redirect('agente/agentes/incluiragente');
+            $this->redirect('agente/agentes/incluiragente');
         }
 
         $tbInfo = new Agente_Model_DbTable_TbInformacaoProfissional();
@@ -1718,7 +1718,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
 
             /* ********************************************************************************************** */
-            if ($impacto = 1) {
+            if ($impacto == 1) {
                 // Tem que pegar todos os produtos que estao como Parecerista e devolver para o Coord.
                 // Criar uma funcao para isso!
 
@@ -2622,7 +2622,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                     throw new Exception("O CNPJ informado &eacute; inv&aacute;lido!");
                 } else {
                     // redireciona para a pagina com a busca dos dados com paginacao
-                    $this->_redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
+                    $this->redirect("agente/agentes/listaragente?cpf=" . $cpf . "&nome=" . $nome);
                 }
             } catch (Exception $e) {
                 $this->view->message = $e->getMessage();

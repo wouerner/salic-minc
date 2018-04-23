@@ -305,7 +305,7 @@ class LocalizacaoFisicaController extends MinC_Controller_Action_Abstract
             if (!$this->getRequest()->getParam('localizacao')) {
                 $this->_helper->flashMessenger->addMessage("Erro ao salvar localiza&ccedil;&atilde;o f&iacute;sica do projeto. Preencha o campo obrigat&oacute;rio.");
                 $this->_helper->flashMessengerType->addMessage("ERROR");
-                $this->_redirect($_SERVER['HTTP_REFERER']);
+                $this->redirect($_SERVER['HTTP_REFERER']);
             }
             $projetoModel->update(
                 array('Logon' => $this->getRequest()->getParam('tecnico'),),
@@ -323,7 +323,7 @@ class LocalizacaoFisicaController extends MinC_Controller_Action_Abstract
             if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
                 $redirectUrl = $_SERVER['HTTP_REFERER'];
             }
-            $this->_redirect($redirectUrl);
+            $this->redirect($redirectUrl);
         }
     }
 

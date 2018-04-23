@@ -78,8 +78,11 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
                 $aux[$key] = $proposta;
             }
-//                        $recordsFiltered = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, $search);
-//                        $recordsTotal = $tblPreProjetoArquivado->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente);
+
+            $totalData = $tblPreProjetoArquivado->listar($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, null);
+            $recordsTotal = count($totalData);
+            $recordsFiltered = $recordsTotal;
+
         }
 
         $this->_helper->json(array(
@@ -310,28 +313,25 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         };
     }
 
-    public function listarSolicitacoesAction()
+    public function listarSolicitacoesAguardandoAvaliacaoAction()
     {
         $start = $this->getRequest()->getParam('start');
         $length = $this->getRequest()->getParam('length');
         $draw = (int)$this->getRequest()->getParam('draw');
-        $search = $this->getRequest()->getParam('search');
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
-        $order = new Zend_Db_Expr('"p"."idpreprojeto" DESC');
+
+        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["idpreprojeto desc"];
 
         $tblPreProjetoArquivado = new Proposta_Model_PreProjetoArquivado();
 
         $rsPreProjetoArquivado = $tblPreProjetoArquivado->listarSolicitacoes(
-            array(),
+            ['stDecisao ?' => new Zend_Db_Expr('IS NULL')],
             $order,
             $start,
-            $length,
-            $search
+            $length
         );
 
-        $recordsTotal = 0;
-        $recordsFiltered = 0;
         $aux = array();
         if (!empty($rsPreProjetoArquivado)) {
             foreach ($rsPreProjetoArquivado as $key => $proposta) {
@@ -340,6 +340,104 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
 
                 $aux[$key] = $proposta;
             }
+            $totalData = $tblPreProjetoArquivado->listarSolicitacoes(
+                ['stDecisao ?' => new Zend_Db_Expr('IS NULL')],
+                null,
+                null,
+                null);
+            $recordsTotal = count($totalData);
+
+            $recordsFiltered = $recordsTotal;
+        }
+
+        $this->_helper->json(array(
+            "data" => !empty($aux) ? $aux : 0,
+            'recordsTotal' => $recordsTotal ? $recordsTotal : 0,
+            'draw' => $draw,
+            'recordsFiltered' => $recordsFiltered ? $recordsFiltered : 0));
+    }
+
+    public function listarSolicitacoesAprovadasAction()
+    {
+        $start = $this->getRequest()->getParam('start');
+        $length = $this->getRequest()->getParam('length');
+        $draw = (int)$this->getRequest()->getParam('draw');
+        $order = $this->getRequest()->getParam('order');
+        $columns = $this->getRequest()->getParam('columns');
+
+        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["idpreprojeto desc"];
+
+        $tblPreProjetoArquivado = new Proposta_Model_PreProjetoArquivado();
+
+        $rsPreProjetoArquivado = $tblPreProjetoArquivado->listarSolicitacoes(
+            ['stDecisao = ?' => 1],
+            $order,
+            $start,
+            $length
+        );
+
+        $aux = array();
+        if (!empty($rsPreProjetoArquivado)) {
+            foreach ($rsPreProjetoArquivado as $key => $proposta) {
+                $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
+                $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
+
+                $aux[$key] = $proposta;
+            }
+            $totalData = $tblPreProjetoArquivado->listarSolicitacoes(
+                ['stDecisao = ?' => 1],
+                null,
+                null,
+                null
+            );
+            $recordsTotal = count($totalData);
+
+            $recordsFiltered = $recordsTotal;
+        }
+
+        $this->_helper->json(array(
+            "data" => !empty($aux) ? $aux : 0,
+            'recordsTotal' => $recordsTotal ? $recordsTotal : 0,
+            'draw' => $draw,
+            'recordsFiltered' => $recordsFiltered ? $recordsFiltered : 0));
+    }
+
+    public function listarSolicitacoesReprovadasAction()
+    {
+        $start = $this->getRequest()->getParam('start');
+        $length = $this->getRequest()->getParam('length');
+        $draw = (int)$this->getRequest()->getParam('draw');
+        $order = $this->getRequest()->getParam('order');
+        $columns = $this->getRequest()->getParam('columns');
+
+        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["idpreprojeto desc"];
+
+        $tblPreProjetoArquivado = new Proposta_Model_PreProjetoArquivado();
+
+        $rsPreProjetoArquivado = $tblPreProjetoArquivado->listarSolicitacoes(
+            ['stDecisao = ?' => 0],
+            $order,
+            $start,
+            $length
+        );
+
+        $aux = array();
+        if (!empty($rsPreProjetoArquivado)) {
+            foreach ($rsPreProjetoArquivado as $key => $proposta) {
+                $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
+                $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
+
+                $aux[$key] = $proposta;
+            }
+            $totalData = $tblPreProjetoArquivado->listarSolicitacoes(
+                ['stDecisao = ?' => 0],
+                null,
+                null,
+                null
+            );
+            $recordsTotal = count($totalData);
+
+            $recordsFiltered = $recordsTotal;
         }
 
         $this->_helper->json(array(
