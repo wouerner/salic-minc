@@ -28,3 +28,6 @@ composer.lock
 composer.phar
 .php_cs.cache
 .DS_Store
+package-lock.json
+node_modules/
+log/
