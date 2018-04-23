@@ -25,7 +25,5 @@ services:
       - XDEBUG_REMOTE_PORT=9000
       - XDEBUGINI_PATH=/usr/local/etc/php/conf.d/xdebug.ini
 
-        #PHP_IDE_CONFIG="serverName=Test"
       - XDEBUG_DEFAULT_ENABLE=1
       - XDEBUG_IDEKEY=PHPSTORM
-     # restart: always
