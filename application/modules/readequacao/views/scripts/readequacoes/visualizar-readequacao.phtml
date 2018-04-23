@@ -3,7 +3,7 @@
 
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
         <li class="second">Readequa&ccedil;&otilde;es</li>
         <li class="last">Visualizar Readequa&ccedil;&atilde;o <?php echo ( in_array($this->dados->idTipoReadequacao, array(2,9,11,14))) ? ' - '.$this->dados->dsReadequacao : ''; ?></li>
     </ul>

@@ -1,25 +1,9 @@
 <?php
-/**
- * Controller Readequacao (Proponente, Respons�vel / Procurador)
- * Considera��es importantes:
- *  1. O Projeto tem que estar na Fase de Execu��o (2)
- *  2. O Projeto tem que estar Aprovado (SAC.dbo.Aprovacao):
- * 		2.1. Os dados da Portaria tem que estar preenchidos
- * 		2.2. O Tipo de Aprova��o deve ser 1
- *  3. Os Projetos devem estar vinculados ao Proponente/Respons�vel/Procurador
- * @author emanuel.sampaio <emanuelonline@gmail.com>
- * @since 30/03/2012
- * @version 1.0
- * @package application
- * @subpackage application.controller
- * @link http://salic.cultura.gov.br
- * @copyright � 2012 - Minist�rio da Cultura - Todos os direitos reservados.
- */
 
 class ReadequacaoController extends MinC_Controller_Action_Abstract
 {
     /**
-     * Vari�veis globais utilizada em toda a controller
+     * Variaveis globais utilizada em toda a controller
      * @access private
      */
     private $_idResponsavel     = 0; // id do respons�vel logado, hoje obrigat�rio para acessar todas as p�ginas
@@ -42,7 +26,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
 
 
     /**
-     * Vari�veis com os objetos de banco utilizados na controle
+     * Variaveis com os objetos de banco utilizados na controle
      * @access private
      * @var object (tabelas utilizadas)
      */
@@ -78,13 +62,14 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
 
 
     /**
-     * M�todo para verificar se o usu�rio logado tem permiss�o para acessar o projeto
-     * OBS: SERVE APENAS PARA RESPONS�VEL E AGENTE (PROPONENTE E PROCURADOR)
+     * Metodo para verificar se o usuario logado tem permissao para acessar o projeto
+     * OBS: SERVE APENAS PARA RESPONSAVEL E AGENTE (PROPONENTE E PROCURADOR)
      * @access private
      * @param integer $idPronac
      * @param integer $idResponsavel
      * @param integer $idAgente (Proponente ou Procurador)
      * @return void
+     * @deprecated metodo não utilizado
      */
     private function verificarPermissaoProjetoProponente($idPronac = 0, $idResponsavel = 0, $idAgente = 0)
     {
@@ -174,19 +159,19 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         catch (Exception $e) {
             parent::message($e->getMessage(), 'principalproponente', 'ALERT');
         }
-    } // fecha m�todo verificarPermissaoProjetoProponente()
+    } // fecha metodo verificarPermissaoProjetoProponente()
 
 
 
     /**
-     * M�todo que retorna o tipo de readequa��o.
-     * O tipo � definido com base no valor aprovado do projeto e no valor que est� sendo solicitado pelo proponente na readequa��o:
-     * - Caso o Valor Solicitado seja menor que o Valor Aprovado, o tipo ser�: redu��o;
-     * - Caso o Valor Solicitado seja maior que o Valor Aprovado, o tipo ser�: complementa��o;
-     * - Caso o Valor Solicitado seja igual ao Valor Aprovado, o tipo ser�: remanejamento.
+     * Metodo que retorna o tipo de readequacao.
+     * O tipo � definido com base no valor aprovado do projeto e no valor que esta sendo solicitado pelo proponente na readequa��o:
+     * - Caso o Valor Solicitado seja menor que o Valor Aprovado, o tipo sera: redu��o;
+     * - Caso o Valor Solicitado seja maior que o Valor Aprovado, o tipo sera: complementa��o;
+     * - Caso o Valor Solicitado seja igual ao Valor Aprovado, o tipo sera: remanejamento.
      * @access private
      * @param void
-     * @return string (retorna a descri��o do tipo de readequa��o)
+     * @return string (retorna a descricao do tipo de readequacao)
      */
     private function verificarTipoReadequacao()
     {
@@ -233,12 +218,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             $this->_tipoReadequacao = $tpReadequacao[2];
         return $tpReadequacao[2];
         endif;
-    } // fecha m�todo verificarTipoReadequacao()
+    } // fecha metodo verificarTipoReadequacao()
 
 
 
     /**
-     * M�todo para salvar o pedido de solicita��o de readequa��o
+     * Metodo para salvar o pedido de solicita��o de readequa��o
      * @access private
      * @param $stPedidoAlteracao (andamento do pedido)
      * @param $siVerificacao (status do pedido)
@@ -269,12 +254,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             );
         $this->tbPedidoAlteracaoProjeto->alterar($dadosPedido, $whereItemPedido);
         endif;
-    } // fecha m�todo salvarPedido()
+    } // fecha metodo salvarPedido()
 
 
 
     /**
-     * M�todo para cadastrar os arquivos da solicita��o de readequa��o
+     * Metodo para cadastrar os arquivos da solicita��o de readequa��o
      * @access private
      * @param array $_FILES
      * @param integer $idPedidoAlteracao
@@ -333,12 +318,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endif;
         endfor;
         endif;
-    } // fecha m�todo cadastrarArquivos()
+    } // fecha metodo cadastrarArquivos()
 
 
 
     /**
-     * Reescreve o m�todo init()
+     * Reescreve o metodo init()
      * @access public
      * @param void
      * @return void
@@ -396,16 +381,16 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         parent::perfil(4); // perfil
 
         parent::init();
-    } // fecha m�todo init()
+    } // fecha metodo init()
 
 
 
     /**
-     * Reescreve o m�todo preDispatch()
-     * 1. Pega o id do Pronac via get uma �nica vez
-     * 2. Valida se o usu�rio possui permiss�o para acessar o projeto
-     * 3. Mostra/Oculta o bot�o 'Enviar Solicita��o'
-     * 4. Pega o tipo de readequa��o: redu��o, complementa��o ou remanejamento
+     * Reescreve o metodo preDispatch()
+     * 1. Pega o id do Pronac via get uma unica vez
+     * 2. Valida se o usuario possui permissao para acessar o projeto
+     * 3. Mostra/Oculta o botao 'Enviar Solicitacao'
+     * 4. Pega o tipo de readequacao: reducao, complementacao ou remanejamento
      * @access public
      * @param void
      * @return void
@@ -446,7 +431,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         $this->view->vlTotalAprovado   = $this->_vlTotalAprovado;
         $this->view->vlTotalSolicitado = $this->_vlTotalSolicitado;
         $this->view->pagina            = $this->_request->getActionName();
-    } // fecha m�todo preDispatch()
+    } // fecha metodo preDispatch()
 
 
 
@@ -467,7 +452,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
 
 
     /**
-     * M�todo respons�vel pela exclus�o dos arquivos da solicita��o de readequa��o
+     * Metodo respons�vel pela exclus�o dos arquivos da solicita��o de readequa��o
      * @access public
      * @param void
      * @return void
@@ -512,12 +497,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             parent::message($e->getMessage(), $this->_urlMod, 'ERROR');
         }
         endif;
-    } // fecha m�todo excluirArquivoAction()
+    } // fecha metodo excluirArquivoAction()
 
 
 
     /**
-     * M�todo respons�vel pelo envio da solicita��o de readequa��o
+     * Metodo respons�vel pelo envio da solicita��o de readequa��o
      * @access public
      * @param void
      * @return void
@@ -564,12 +549,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
                 parent::message($e->getMessage(), $this->_urlMod, 'ERROR');
             }
         }
-    } // fecha m�todo enviarSolicitacaoAction()
+    } // fecha metodo enviarSolicitacaoAction()
 
 
 
     /**
-     * M�todo para solicitar altera��o de dados do Proponente do Projeto
+     * Metodo para solicitar altera��o de dados do Proponente do Projeto
      * @access public
      * @param void
      * @return void
@@ -694,12 +679,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
             // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo proponenteAction()
+    } // fecha metodo proponenteAction()
 
 
 
     /**
-     * M�todo com a grid para solicitar cadastros e altera��es de novos Produtos (Plano de Distribui��o)
+     * Metodo com a grid para solicitar cadastros e altera��es de novos Produtos (Plano de Distribui��o)
      * @access public
      * @param void
      * @return void
@@ -724,12 +709,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             catch (Exception $e) {
                 parent::message($e->getMessage(), $this->_urlAtual, 'ERROR');
             }
-    } // fecha m�todo produtosAction()
+    } // fecha metodo produtosAction()
 
 
 
     /**
-     * M�todo para inclus�es de novos Produtos (Plano de Distribui��o)
+     * Metodo para inclus�es de novos Produtos (Plano de Distribui��o)
      * @access public
      * @param void
      * @return void
@@ -948,7 +933,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
 
 
     /**
-     * M�todo para solicitar altera��o na Ficha T�cnica do Projeto
+     * Metodo para solicitar altera��o na Ficha T�cnica do Projeto
      * @access public
      * @param void
      * @return void
@@ -1060,12 +1045,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
         // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo fichaTecnicaAction()
+    } // fecha metodo fichaTecnicaAction()
 
 
 
     /**
-     * M�todo para solicitar cadastros, altera��es e inclus�es de novos Locais de Realiza��o
+     * Metodo para solicitar cadastros, altera��es e inclus�es de novos Locais de Realiza��o
      * @access public
      * @param void
      * @return void
@@ -1215,12 +1200,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
         // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo localRealizacaoAction()
+    } // fecha metodo localRealizacaoAction()
 
 
 
     /**
-     * M�todo para solicitar altera��es no Nome do Projeto
+     * Metodo para solicitar altera��es no Nome do Projeto
      * @access public
      * @param void
      * @return void
@@ -1332,12 +1317,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
         // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo nomeProjetoAction()
+    } // fecha metodo nomeProjetoAction()
 
 
 
     /**
-     * M�todo para solicitar prorroga��o de Prazo de Execu��o do Projeto
+     * Metodo para solicitar prorroga��o de Prazo de Execu��o do Projeto
      * @access public
      * @param void
      * @return void
@@ -1451,12 +1436,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
         // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo prazoExecucaoAction()
+    } // fecha metodo prazoExecucaoAction()
 
 
 
     /**
-     * M�todo para solicitar prorroga��o de Prazo de Capta��o do Projeto
+     * Metodo para solicitar prorroga��o de Prazo de Capta��o do Projeto
      * @access public
      * @param void
      * @return void
@@ -1574,12 +1559,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
         // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo prazoCaptacaoAction()
+    } // fecha metodo prazoCaptacaoAction()
 
 
 
     /**
-     * M�todo para solicitar altera��o na Proposta Pedag�gica do Projeto
+     * Metodo para solicitar altera��o na Proposta Pedag�gica do Projeto
      * @access public
      * @param void
      * @return void
@@ -1693,12 +1678,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
         // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo propostaPedagogicaAction()
+    } // fecha metodo propostaPedagogicaAction()
 
 
 
     /**
-     * M�todo com a Planilha de Custos por Produtos do Projeto
+     * Metodo com a Planilha de Custos por Produtos do Projeto
      * @access public
      * @param void
      * @return void
@@ -1723,11 +1708,11 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             catch (Exception $e) {
                 parent::message($e->getMessage(), $this->_urlAtual, 'ERROR');
             }
-    } // fecha m�todo custoProdutosAction()
+    } // fecha metodo custoProdutosAction()
 
 
     /**
-     * M�todo com a Planilha de Custos Administrativo do Projeto
+     * Metodo com a Planilha de Custos Administrativo do Projeto
      * @access public
      * @param void
      * @return void
@@ -1735,12 +1720,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
     public function custoAdministrativoAction()
     {
         $this->redirect('readequacao/custo/idpronac/' . $this->_idPronac . '/idproduto/0');
-    } // fecha m�todo custoAdministrativoAction()
+    } // fecha metodo custoAdministrativoAction()
 
 
 
     /**
-     * M�todo com a Planilha de Custos (Tanto pra Produtos como para Administrativos)
+     * Metodo com a Planilha de Custos (Tanto pra Produtos como para Administrativos)
      * @access public
      * @param void
      * @return void
@@ -2042,12 +2027,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             }
         } // fecha if
             // ========== FIM: FORMUL�RIO ENVIADO VIA POST ==========
-    } // fecha m�todo custoAction()
+    } // fecha metodo custoAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o do proponente
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o do proponente
      * @access public
      * @param void
      * @return void
@@ -2108,12 +2093,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoProponenteAction()
+    } // fecha metodo historicoProponenteAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o de produto
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o de produto
      * @access public
      * @param void
      * @return void
@@ -2181,11 +2166,11 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoProdutosAction()
+    } // fecha metodo historicoProdutosAction()
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o da ficha t�cnica
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o da ficha t�cnica
      * @access public
      * @param void
      * @return void
@@ -2236,12 +2221,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoFichaTecnicaAction()
+    } // fecha metodo historicoFichaTecnicaAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o de locais de realiza��o
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o de locais de realiza��o
      * @access public
      * @param void
      * @return void
@@ -2313,12 +2298,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoLocalRealizacaoAction()
+    } // fecha metodo historicoLocalRealizacaoAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o do nome do projeto
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o do nome do projeto
      * @access public
      * @param void
      * @return void
@@ -2369,12 +2354,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoNomeProjetoAction()
+    } // fecha metodo historicoNomeProjetoAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o do prazo de execu��o
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o do prazo de execu��o
      * @access public
      * @param void
      * @return void
@@ -2427,12 +2412,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoPrazoExecucaoAction()
+    } // fecha metodo historicoPrazoExecucaoAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o do prazo de capta��o
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o do prazo de capta��o
      * @access public
      * @param void
      * @return void
@@ -2485,12 +2470,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoPrazoCaptacaoAction()
+    } // fecha metodo historicoPrazoCaptacaoAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o da proposta pedagogica
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o da proposta pedagogica
      * @access public
      * @param void
      * @return void
@@ -2537,12 +2522,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endfor;
 
         $this->view->dados = $dados; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoPropostaPedagogicaAction()
+    } // fecha metodo historicoPropostaPedagogicaAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o de custos por produtos
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o de custos por produtos
      * @access public
      * @param void
      * @return void
@@ -2597,12 +2582,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endforeach;
 
         $this->view->planSR = $plan; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoCustoProdutosAction()
+    } // fecha metodo historicoCustoProdutosAction()
 
 
 
     /**
-     * M�todo para buscar o hist�rico com as solicita��es de altera��o de custos administrativos
+     * Metodo para buscar o hist�rico com as solicita��es de altera��o de custos administrativos
      * @access public
      * @param void
      * @return void
@@ -2657,12 +2642,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         endforeach;
 
         $this->view->planSR = $plan; // manda as informa��es para a vis�o
-    } // fecha m�todo historicoCustoAdministrativoAction()
+    } // fecha metodo historicoCustoAdministrativoAction()
 
 
 
     /**
-     * M�todo para popular o formul�rio de cadastro de itens
+     * Metodo para popular o formul�rio de cadastro de itens
      * @access public
      * @param void
      * @return void
@@ -2703,12 +2688,12 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         echo $json;
         $this->_helper->viewRenderer->setNoRender(true);
         endif;
-    } // fecha m�todo popFormCustoAction()
+    } // fecha metodo popFormCustoAction()
 
 
 
     /**
-     * M�todo para popular a combo de itens de custo de acordo com uma etapa
+     * Metodo para popular a combo de itens de custo de acordo com uma etapa
      * @access public
      * @param void
      * @return void
@@ -2737,5 +2722,5 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         echo $json;
         $this->_helper->viewRenderer->setNoRender(true);
         endif;
-    } // fecha m�todo popItensCustoAction()
+    } // fecha metodo popItensCustoAction()
 } // fecha class

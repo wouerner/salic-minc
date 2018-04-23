@@ -10,7 +10,7 @@
  * @link http://salic.cultura.gov.br
  */
 
-echo $this->partial('inc/menu.inc.php', $this) // menu
+echo $this->partial('inc/menu.inc.php', $this); // menu
 // define os valores dos campos do formulário, se será lido o dado original ou o dado readequado
 $dadosAP = $this->dadosAP;
 $dadosSR = $this->dadosSR;
@@ -25,8 +25,8 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
 <!-- ========== INÍCIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principalproponente', 'action' => ''), null, true); ?>" title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => ''), null, true); ?><?php echo $urlPronac; ?>" title="Ir para In&iacute;cio" onclick="carregandoModal();">Consultar dados do Projeto</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'principalproponente', 'action' => ''), null, true); ?>" title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a></li>
+        <li class="second"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => ''), null, true); ?><?php echo $urlPronac; ?>" title="Ir para In&iacute;cio" onclick="carregandoModal();">Consultar dados do Projeto</a></li>
         <li>Readequa&ccedil;&atilde;o de projeto</li>
         <li class="last">Custo por produtos</li>
     </ul>
@@ -63,7 +63,7 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
             <td width="60"><?php echo $cont + 1; ?></td>
             <td align="left">
                 <strong>
-                    <a href="<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'custo', 'idpronac' => $idPronacCrip, 'idproduto' => $d->idProduto)) ?>" title="Solicitar inclus&atilde;o de itens para o produto <?php echo $d->dsProduto; ?>"><?php echo $d->dsProduto; ?></a>
+                    <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'custo', 'idpronac' => $idPronacCrip, 'idproduto' => $d->idProduto)) ?>" title="Solicitar inclus&atilde;o de itens para o produto <?php echo $d->dsProduto; ?>"><?php echo $d->dsProduto; ?></a>
                     <?php if (isset($d->stPrincipal) && $d->stPrincipal == 1) : ?>
                     <span class="red">(produto principal)</span>
                     <?php endif; ?>
@@ -78,7 +78,7 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
     <!-- ========== INÍCIO HISTÓRICO ========== -->
     <div id="historico"></div>
     <script type="text/javascript">
-        carregaDados('<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'historico-custo-produtos')); ?>', 'historico');
+        carregaDados('<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'historico-custo-produtos')); ?>', 'historico');
     </script>
     <!-- ========== FIM HISTÓRICO ========== -->
 

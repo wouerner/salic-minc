@@ -103,13 +103,14 @@
 
         function verificarVinculada(){
             var vinculada = $('#vinculada').val();
+          alert('teste');
             if(vinculada == 171 || vinculada == 262 || vinculada == 400){
                 $('#destinatario').removeAttr('disabled');
                 $('#destinatario').addClass('obrigatorio');
                 $('.asterisco_dinamico').removeClass('sumir');
                 $.ajax({
                     type: 'POST',
-                    url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'buscar-destinatarios')); ?>',
+                    url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'buscar-destinatarios')); ?>',
                     data: {
                         vinculada: vinculada,
                         idPronac: <?php echo $this->projeto->IdPRONAC; ?>
@@ -158,8 +159,8 @@
 
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
-        <li><a href="<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel'), '', true); ?>" title="Readequa&ccedil;&atilde;o">Readequa&ccedil;&otilde;es</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
+        <li><a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel'), '', true); ?>" title="Readequa&ccedil;&atilde;o">Readequa&ccedil;&otilde;es</a></li>
         <li>Aguardando An&aacute;lise</li>
 	<li class="last">Encaminhar para an&aacute;lise t&eacute;cnica<?php echo ( in_array($this->readequacao->idTipoReadequacao, array(2,9,11,14))) ? ' - '.$this->readequacao->dsReadequacao : ''; ?></li>
     </ul>
@@ -184,14 +185,14 @@
         </tr>
         <tr>
           <td align="center">
-            <a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo $this->projeto->IdPRONAC; ?>" target="_blank">
+            <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo $this->projeto->IdPRONAC; ?>" target="_blank">
               <?php echo $this->projeto->pronac; ?>
             </a>
           </td>
           <td align="center"><?php echo $this->projeto->NomeProjeto; ?></td>
         </tr>
       </table>
-      
+
       <table class="tabela" id="opcoesEncaminhar">
         <tr>
           <td class="destacar bold" width="130px;">Encaminhar para: <span class="asterisco">*</span></td>
@@ -218,7 +219,7 @@
           </td>
         </tr>
       </table>
-      
+
       <table class="tabela">
 	<tr>
 	  <th>ORIENTA&Ccedil;&Atilde;O <span class="red bold">*</span></th>
@@ -234,15 +235,15 @@
           </td>
         </tr>
       </table>
-      
+
       <input type="hidden" name="idReadequacao" value="<?php echo $this->readequacao->idReadequacao; ?>">
     </form>
-    
+
     <p align="center">
       <input type="button" class="btn_enviar" name="btn_enviar" id="btn_enviar">
       <input type="button" class="btn_voltar" name="btn_voltar" id="btn_voltar">
     </p>
-    
+
     <br clear="all" />
 </div>
 

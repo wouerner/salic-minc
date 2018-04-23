@@ -119,7 +119,7 @@ endif;
                         $.ajax({
                             type: 'POST',
                             data: dados,
-                            url: '<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'excluir-arquivo')); ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'excluir-arquivo')); ?>',
                             dataType: 'html',
                             beforeSend: function() {
                                 fecharModal('modal-excluir-arquivo');
@@ -185,7 +185,7 @@ endif;
                 title: 'Alerta!',
                 width: 320,
                 buttons: {
-                    N�o: function() {
+                    N\u00E3o: function() {
                         enviar_solicitacao('T');
                     },
                     'Sim': function() {
@@ -207,25 +207,6 @@ endif;
 	<?php endif; ?>
 
 	<?php if ($this->stPedidoAlteracao === 'I') : ?>
-	/*$('#projeto-em-analise').dialog
-	({
-		modal: true,
-		resizable: false,
-		draggable: false,
-		closeOnEscape: false,
-		title: 'Alerta!',
-		width: 320,
-		height: 200,
-		buttons:
-		{
-			'OK': function()
-			{
-				fecharModal('projeto-em-analise');
-				carregandoModal();
-				redirecionar('<?php //echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php //echo $this->idPronac;?>');
-			}
-		}
-	});
 	$('.ui-dialog-titlebar-close').remove();*/
 	messageTopo('H&aacute; pedido de readequa&ccedil;&atilde;o em an&aacute;lise. Favor aguardar.', 'ALERT');
 	$('#enviar_solicitacao, .btnsModReadequacao').hide(); // esconde os formul�rios e bot�es do sistema
@@ -282,7 +263,7 @@ endif;
                     width: 300,
                     height: 200,
                     buttons: {
-                        N�o: function() {
+                        N\u00E3o: function() {
                         fecharModal('msgConfirm0');
                         carregandoModal();
                             $('#stPedidoAlteracao').attr('value', 'A');
@@ -440,7 +421,7 @@ endif;
     <div id="espaco">
         <br />
         <br />
-        <form class="sumir" name="enviar_solicitacao" id="enviar_solicitacao" action="<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'enviar-solicitacao')); ?>" method="post">
+        <form class="sumir" name="enviar_solicitacao" id="enviar_solicitacao" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'enviar-solicitacao')); ?>" method="post">
             <input type="hidden" name="finalizarPedido" id="finalizarPedido" value="T" />
             <p align="center"><input type="submit" id="menu_enviar_readequacao" class="btn_enviar_solicitacao" style="width: 120px;" value=" " title="Enviar solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o" /></p>
         </form>

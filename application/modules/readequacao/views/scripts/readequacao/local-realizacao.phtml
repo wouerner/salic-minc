@@ -10,7 +10,7 @@
  * @link http://salic.cultura.gov.br
  */
 
-echo $this->partial('inc/menu.inc.php', $this) // menu
+echo $this->partial('inc/menu.inc.php', $this); // menu
 // define os valores dos campos do formulário, se será lido o dado original ou o dado readequado
 $dadosAP       = $this->dadosAP;
 $dadosSR       = $this->dadosSR;
@@ -120,8 +120,8 @@ $urlPronac = (isset($this->idPronac)) ? "?idPronac=".Seguranca::encrypt($this->i
 <!-- ========== INÍCIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principalproponente', 'action' => ''), null, true); ?>" title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => ''), null, true); ?><?php echo $urlPronac; ?>" title="Ir para In&iacute;cio" onclick="carregandoModal();">Consultar dados do Projeto</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'principalproponente', 'action' => ''), null, true); ?>" title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a></li>
+        <li class="second"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => ''), null, true); ?><?php echo $urlPronac; ?>" title="Ir para In&iacute;cio" onclick="carregandoModal();">Consultar dados do Projeto</a></li>
         <li>Readequa&ccedil;&atilde;o de projeto</li>
         <li class="last">Local de realiza&ccedil;&atilde;o</li>
     </ul>
@@ -142,7 +142,7 @@ $urlPronac = (isset($this->idPronac)) ? "?idPronac=".Seguranca::encrypt($this->i
     <!-- ========== FIM TOPO PROJETO ========== -->
 
     <!-- ========== INÍCIO FORMULÁRIO ========== -->
-    <form name="formReadequacao" id="formReadequacao" action="<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'local-realizacao')); ?>" method="post" enctype="multipart/form-data">
+    <form name="formReadequacao" id="formReadequacao" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'local-realizacao')); ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="stPedidoAlteracao" id="stPedidoAlteracao" value="T" />
         <input type="hidden" name="siVerificacao" id="siVerificacao" value="0" />
         <input type="hidden" name="tpAlteracaoProjeto" id="tpAlteracaoProjeto" value="4" />
@@ -283,7 +283,7 @@ $urlPronac = (isset($this->idPronac)) ? "?idPronac=".Seguranca::encrypt($this->i
     <!-- ========== INÍCIO HISTÓRICO ========== -->
     <div id="historico"></div>
     <script type="text/javascript">
-        carregaDados('<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'historico-local-realizacao')); ?>', 'historico');
+        carregaDados('<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'historico-local-realizacao')); ?>', 'historico');
     </script>
     <!-- ========== FIM HISTÓRICO ========== -->
 </div>

@@ -10,7 +10,7 @@
  * @link http://salic.cultura.gov.br
  */
 
-echo $this->partial('inc/menu.inc.php', $this) // menu
+echo $this->partial('inc/menu.inc.php', $this); // menu
 // define o tipo de custo
 $tpCusto = empty($this->idProduto) ? 'Custo administrativo' : 'Custo por produtos';
 $dsCusto = empty($this->idProduto) ? 'Custo administrativo' : 'Nome do produto: ' . $this->Produto;
@@ -175,7 +175,7 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
 	carregandoModal();
 	$.ajax({
             type: 'POST',
-            url: '<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'pop-form-custo')); ?>',
+            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'pop-form-custo')); ?>',
             data: {
                 idPlanilhaAprovacao: idPlanilhaAprovacao,
                 popularForm: 'S'
@@ -201,7 +201,7 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
                 // popula o formul�rio
                 $.ajax({
                     type: 'POST',
-                    url: '<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'pop-itens-custo')); ?>',
+                    url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'pop-itens-custo')); ?>',
                     data: {
                         idEtapa: data.idEtapa,
                         popularEtapas: 'S'
@@ -257,8 +257,8 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
 <!-- ========== IN�CIO BREADCRUMB (LINKS TOPO) ========== -->
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principalproponente', 'action' => ''), null, true); ?>" title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => ''), null, true); ?><?php echo $urlPronac; ?>" title="Ir para In&iacute;cio" onclick="carregandoModal();">Consultar dados do Projeto</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'principalproponente', 'action' => ''), null, true); ?>" title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a></li>
+        <li class="second"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => ''), null, true); ?><?php echo $urlPronac; ?>" title="Ir para In&iacute;cio" onclick="carregandoModal();">Consultar dados do Projeto</a></li>
         <li>Readequa&ccedil;&atilde;o de projeto</li>
         <li class="last"><?php echo $tpCusto; ?></li>
     </ul>
@@ -404,7 +404,7 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
 
 	<!-- ========== IN�CIO FORMUL�RIO ========== -->
 	<a name="ancora" id="ancora"></a>
-	<form name="formReadequacao" id="formReadequacao" action="<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'custo', 'idproduto' => $this->idProduto)); ?>" method="post" enctype="multipart/form-data">
+	<form name="formReadequacao" id="formReadequacao" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'custo', 'idproduto' => $this->idProduto)); ?>" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="stPedidoAlteracao" id="stPedidoAlteracao" value="T" />
 		<input type="hidden" name="siVerificacao" id="siVerificacao" value="0" />
 		<input type="hidden" name="tpAlteracaoProjeto" id="tpAlteracaoProjeto" value="10" />
@@ -695,9 +695,9 @@ $idPronacCrip = Seguranca::encrypt($this->idPronac);
 	<div id="historico"></div>
 	<script type="text/javascript">
 	<?php if (empty($this->idProduto)) : ?>
-	carregaDados('<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'historico-custo-administrativo')); ?>', 'historico');
+	carregaDados('<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'historico-custo-administrativo')); ?>', 'historico');
 	<?php else : ?>
-	carregaDados('<?php echo $this->url(array('controller' => 'readequacao', 'action' => 'historico-custo-produtos')); ?>', 'historico');
+	carregaDados('<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacao', 'action' => 'historico-custo-produtos')); ?>', 'historico');
 	<?php endif; ?>
 	</script>
 	<!-- ========== FIM HIST�RICO ========== -->

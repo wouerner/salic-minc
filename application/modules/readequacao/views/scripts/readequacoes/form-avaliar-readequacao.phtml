@@ -425,7 +425,7 @@
 
 <div id="breadcrumb">
     <ul>
-        <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
+        <li class="first"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
         <li><a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes'), '', true); ?>" title="Avaliar da Readequa&ccedil;&otilde;es">Avaliar Readequa&ccedil;&otilde;es</a></li>
         <li class="last">Avalia&ccedil;&atilde;o da Readequa&ccedil;&atilde;o <?php echo ( in_array($this->dados->idTipoReadequacao, array(2,9,11,14))) ? ' - '.$this->dados->dsReadequacao : ''; ?></li>
     </ul>

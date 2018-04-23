@@ -4262,7 +4262,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
             parent::message('Nenhum registro encontrado.', "readequacao/readequacoes/painel", "ERROR");
         }
 
-        $this->renderScript('readequacao/encaminhar-analise-tecnica.phtml');
+//        $this->renderScript('readequacao/encaminhar-analise-tecnica.phtml');
     }
 
 

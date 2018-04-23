@@ -16,7 +16,7 @@
                 data: {
                     agencia: nrAgencia
                 },
-                url: '<?php echo $this->url(array("controller" => "manterpropostaincentivofiscal", "action" => "validaagencia")); ?>',
+                url: '<?php echo $this->url(array("module" => "proposta", "controller" => "manterpropostaincentivofiscal", "action" => "validaagencia")); ?>',
                 success: function (data){
                     if(data != ''){
                         $("#msgAlerta").dialog("destroy");
@@ -85,7 +85,7 @@
                 data: {
                     cpf: cpfcnpj
                 },
-                url: '<?php echo $this->url(array("controller" => "agentes", "action" => "agentecadastrado")); ?>',
+                url: '<?php echo $this->url(array("module" => "agente", "controller" => "agentes", "action" => "agentecadastrado")); ?>',
                 success: function (data){
                     if(data[0].msgCPF == 'cadastrado'){
                         $('#nmAgenteCadastrado').html(data[0]['agente']['Nome']);
