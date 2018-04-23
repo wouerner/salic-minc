@@ -29,3 +29,4 @@ composer.phar
 .php_cs.cache
 package-lock.json
 node_modules/
+log/
