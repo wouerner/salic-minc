@@ -4,7 +4,7 @@
  * MensagemControllerTest
  *
  */
-class MensagemControllerTest extends MinC_Test_ControllerActionTestCase
+class Solicitacao_MensagemControllerTest extends MinC_Test_ControllerActionTestCase
 {
     public function setUp()
     {
