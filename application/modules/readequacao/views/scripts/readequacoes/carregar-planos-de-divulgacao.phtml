@@ -192,7 +192,7 @@
                     
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'incluir-planos-de-divulgacao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'incluir-planos-de-divulgacao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                             data: {
                                 newPeca: idPeca,
                                 newVeiculo: idVeiculo
@@ -248,7 +248,7 @@
                         $(this).dialog('close');
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'excluir-plano-de-divulgacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'excluir-plano-de-divulgacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                             data: {
                                 idPlanoDivulgacao: idPlanoDivulgacao
                             },
@@ -290,7 +290,7 @@
                         $(this).dialog("close");
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'alteracoes-tecnicas-no-plano-de-divulgacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'alteracoes-tecnicas-no-plano-de-divulgacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                             data: {
                                 idPlanoDivulgacao: idPlanoDivulgacao,
                                 tpAcao: tpAcao
@@ -299,7 +299,7 @@
                                 <?php if($this->idPerfil == 1111){ ?>
                                     atualizarDadosPlanosDeDivulgacao();
                                 <?php } else { ?>
-                                    jqAjaxLinkSemLoading('<?php echo $this->Url(array('controller' => 'readequacoes', 'action' => 'carregar-planos-de-divulgacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'planosDeDivulgacao');
+                                    jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-planos-de-divulgacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'planosDeDivulgacao');
                                 <?php } ?>
                             },
                             dataType : 'json'
@@ -332,7 +332,7 @@
                             $(this).dialog('close');
                             $.ajax({
                                 type: 'POST',
-                                url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'alteracoes-tecnicas-no-plano-de-divulgacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                                url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'alteracoes-tecnicas-no-plano-de-divulgacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                                 data: {
                                     idPlanoDivulgacao: idPlanoDivulgacao,
                                     tpAcao: tpAcao
@@ -341,7 +341,7 @@
                                     <?php if($this->idPerfil == 1111){ ?>
                                         atualizarDadosPlanosDeDivulgacao();
                                     <?php } else { ?>
-                                        jqAjaxLinkSemLoading('<?php echo $this->Url(array('controller' => 'readequacoes', 'action' => 'carregar-planos-de-divulgacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'planosDeDivulgacao');
+                                        jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-planos-de-divulgacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'planosDeDivulgacao');
                                     <?php } ?>
                                 },
                                 dataType : 'json'

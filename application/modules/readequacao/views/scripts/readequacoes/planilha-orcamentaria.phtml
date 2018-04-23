@@ -7,7 +7,7 @@
      atualizarDadosPlanilha();
      <?php endif; ?>
      $('#btn_voltar').click(function(){
-         window.location = "<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>";
+         window.location = "<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>";
      });
      
      $('#SalvarReadequacao').click(function(){
@@ -96,7 +96,7 @@
 	     $('#newProduto').val(dados.id_produto).prop('disabled', true);
 
              $.ajax({
-                 url : '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                 url : '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                  type: "POST",
                  data :{
                      iduf : dados.id_uf
@@ -115,7 +115,7 @@
 
 	     
              $.ajax({
-		 url : '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+		 url : '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
 		 type: "POST",
                  data :{
                      idEtapa : $('#newEtapa').val(),
@@ -214,7 +214,7 @@
                      } else {
                          $.ajax({
                              type: 'POST',
-                             url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'incluir-item-planilha-readequacao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                             url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'incluir-item-planilha-readequacao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                              data: {
                                  newRecursos: $('#newRecursos').val(),
                                  newUF: $('#newUF').val(),
@@ -271,7 +271,7 @@
          }
          else{
              $.ajax({
-                 url : '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                 url : '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                  type: "POST",
                  data :{
                      iduf : $(this).val()
@@ -300,7 +300,7 @@
          }
          else{
              $.ajax({
-                 url : '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                 url : '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                  type: "POST",
                  data :{
                      idEtapa : $('#newEtapa').val(),
@@ -359,7 +359,7 @@
 	 // verifica limites or�ament�rios
          $.ajax({
              type: 'POST',
-             url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'verificar-limites-orcamentarios'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+             url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'verificar-limites-orcamentarios'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
              data: {
                  idPronac: <?php echo $this->idPronac; ?>
              },
@@ -495,7 +495,7 @@
          //BUSCA OS DADOS DO ITEM PARA VISUALIZA��O DOS NA MODAL
          $.ajax({
              type: 'POST',
-             url: '<?php echo $this->url(array('module' => 'default', 'controller' => 'readequacoes', 'action' => 'alterar-item-solicitacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+             url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'alterar-item-solicitacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
              data: {
                  idPlanilha: idPlanilhaAprovacao
              },
@@ -601,7 +601,7 @@
                                  } else {
                                      $.ajax({
                                          type: 'POST',
-                                         url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'salvar-avaliacao-do-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                                         url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'salvar-avaliacao-do-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                                          data: {
                                              idPlanilha: idPlanilhaAprovacao,
                                              Unidade: Unidade,
@@ -652,7 +652,7 @@
                      //BUSCA OS DADOS DO ITEM PARA VISUALIZA��O DOS NA MODAL
                      $.ajax({
                          type: 'POST',
-                         url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'excluir-item-solicitacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                         url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'excluir-item-solicitacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                          data: {
                              idPlanilha: idPlanilhaAprovacao
                          },
@@ -789,7 +789,7 @@
                          $("#msgAlerta").dialog('close');
                          $.ajax({
                              type: 'POST',
-                             url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'alteracoes-tecnicas-no-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                             url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'alteracoes-tecnicas-no-item'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                              data: {
                                  idPlanilha: idPlanilha,
                                  tpAcao: tpAcao
@@ -845,13 +845,13 @@
  function finalizarformulario(){
      var idReadequacao = $('#idReadequacao').val();
      
-     window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'finalizar-solicitacao-readequacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>&idReadequacao=" + idReadequacao;
+     window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'finalizar-solicitacao-readequacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>&idReadequacao=" + idReadequacao;
  }
  
  function excluirReadequacao(){
      var idReadequacao = $('#idReadequacao').val();
      
-     window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'excluir-solicitacao-readequacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>&idReadequacao="+idReadequacao;
+     window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'excluir-solicitacao-readequacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>&idReadequacao="+idReadequacao;
  }
 
  function atualizarDadosPlanilha(){
@@ -875,7 +875,7 @@
      }
      // verifica se h� planilha ativa; se falso, cria uma nova planilha
      $.ajax({
-	 url: "<?php echo $this->Url(array('controller' => 'readequacoes', 'action' => 'verificar-planilha-ativa'), '', true) ?>",
+	 url: "<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'verificar-planilha-ativa'), '', true) ?>",
 	 type: 'POST',
 	 data: {
 	     idPronac: <?php echo $this->idPronac; ?>,
@@ -885,8 +885,8 @@
 	 
 	 // ap�s carregar a planilha, monta planilha
 	 success: function(data) {
-	     jqAjaxLinkSemLoading('<?php echo $this->Url(array('controller' => 'readequacoes', 'action' => 'carregar-valor-entre-planilhas'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'valorEntrePlanilhas');
-	     jqAjaxLinkSemLoading('<?php echo $this->Url(array('controller' => 'index', 'action' => 'montar-planilha-orcamentaria')) ?>?idPronac=<?php echo $this->idPronac; ?>&tipoPlanilha=6&link=true', '', 'planilhaOrcamentariaMontada');
+	     jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-valor-entre-planilhas'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'valorEntrePlanilhas');
+	     jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'default', 'controller' => 'index', 'action' => 'montar-planilha-orcamentaria')) ?>?idPronac=<?php echo $this->idPronac; ?>&tipoPlanilha=6&link=true', '', 'planilhaOrcamentariaMontada');
 
 	     /* data = JSON.parse(data); */
 	     $('#idReadequacao').val(data.idReadequacao);
@@ -905,7 +905,7 @@
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'principalproponente', 'action' => ''), null, true); ?>" title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a></li>
-        <li class="second"><a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'), null, true); ?><?php echo '?idPronac='. Seguranca::encrypt($this->idPronac); ?>" title="Ir para In&iacute;cio">Consultar dados do Projeto</a></li>
+        <li class="second"><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index'), null, true); ?><?php echo '?idPronac='. Seguranca::encrypt($this->idPronac); ?>" title="Ir para In&iacute;cio">Consultar dados do Projeto</a></li>
         <li class="last">Solicitar Readequa&ccedil;&atilde;o</li>
     </ul>
 </div>
@@ -925,7 +925,7 @@
 <div id="conteudo">
 
     <!-- ========== IN�CIO FORMUL�RIO ========== -->
-    <form name="formReadequacao" id="formReadequacao" action="<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'incluir-solicitacao-readequacao'), null, true); ?><?php echo '?idPronac='. Seguranca::encrypt($this->idPronac); ?>" method="post" enctype="multipart/form-data">
+    <form name="formReadequacao" id="formReadequacao" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'incluir-solicitacao-readequacao'), null, true); ?><?php echo '?idPronac='. Seguranca::encrypt($this->idPronac); ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" id="idReadequacao" name="idReadequacao" value="<?php if (count($this->readequacao) > 0) { echo $this->readequacao[0]->idReadequacao; } ?>">
     	<input type="hidden" id="tipoReadequacao" name="tipoReadequacao" value="2">
         <table class="tabela">
@@ -1004,7 +1004,7 @@
 	    <?php if (count($this->readequacao) > 0): ?>	    
 	    <?php if (!empty($this->readequacao[0]->idArquivo)): ?>
 	    <tr>
-              <td><a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $this->readequacao[0]->idArquivo; ?>"><?php echo $this->readequacao[0]->nmArquivo; ?></a></td>
+              <td><a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $this->readequacao[0]->idArquivo; ?>"><?php echo $this->readequacao[0]->nmArquivo; ?></a></td>
 	    </tr>
 	    <?php endif; ?>
 	    <?php endif; ?>	    

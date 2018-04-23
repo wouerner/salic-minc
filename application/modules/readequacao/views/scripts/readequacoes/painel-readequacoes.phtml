@@ -10,7 +10,7 @@
 
         $('.btn_ver').click(function(){
             var id = $(this).attr('idReadequacao');
-            window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'visualizar-readequacao')); ?>?id="+id;
+            window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'visualizar-readequacao')); ?>?id="+id;
         });
 
         function alertaModal(msg){
@@ -70,7 +70,7 @@
                             $(this).dialog('close');
                             $.ajax({
                                 type: 'POST',
-                                url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'encaminhar-readequacao'), '', true); ?>',
+                                url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'encaminhar-readequacao'), '', true); ?>',
                                 data: {
                                     parecerista: parecerista,
                                     idDistRead: idDistRead,
@@ -103,17 +103,17 @@
 
         $('.btn_avaliar').click(function(){
             var id = $(this).attr('readequacao');
-            window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'avaliar-readequacao')); ?>?id="+id + "&filtro=<?php echo $this->filtro; ?>";
+            window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'avaliar-readequacao')); ?>?id="+id + "&filtro=<?php echo $this->filtro; ?>";
         });
 
 	$('.btn_encaminhar').click(function(){
             var id = $(this).attr('readequacao');
-            window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'encaminhar-analise-tecnica')); ?>?id="+id + "&filtro=<?php echo $this->filtro; ?>";
+            window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'encaminhar-analise-tecnica')); ?>?id="+id + "&filtro=<?php echo $this->filtro; ?>";
         });
 
         $('.btn_analisar').click(function(){
             var id = $(this).attr('idReadequacao');
-            window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'form-avaliar-readequacao')); ?>?id="+id + "&filtro=<?php echo $this->filtro; ?>";
+            window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'form-avaliar-readequacao')); ?>?id="+id + "&filtro=<?php echo $this->filtro; ?>";
         });
 
         $('.btn_finalizar').click(function(){
@@ -134,7 +134,7 @@
                     'Sim' : function(){
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'coord-parecer-finalizar-readequacao'), '', true); ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'coord-parecer-finalizar-readequacao'), '', true); ?>',
                             data: {
                                 idDistProj: idDistProj,
                                 idReadequacao: idReadequacao
@@ -166,11 +166,11 @@
 
         $('.avaliacaoParecerista').click(function(){
             var id = $(this).attr('idReadequacao');
-            window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'form-avaliar-readequacao')); ?>?id="+id;
+            window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'form-avaliar-readequacao')); ?>?id="+id;
         });
 
         $('.comboFiltro').change(function(){
-            window.location = "<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')); ?>?tipoFiltro=" + $(this).val();
+            window.location = "<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')); ?>?tipoFiltro=" + $(this).val();
         });
 
     });
@@ -207,7 +207,7 @@ $situacoes = array(
 <!-- ========== INÍCIO CONTEÚDO ========== -->
 <div id="conteudo">
     <?php if($this->idPerfil == 93){ ?>
-    <form name="formPesquisa" id="formPesquisa" action="<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes'));?>" method="get">
+    <form name="formPesquisa" id="formPesquisa" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes'));?>" method="get">
         <table class="tabela">
             <tr>
                 <th colspan="4">Filtro de Pesquisa</th>
@@ -239,25 +239,25 @@ $situacoes = array(
         <tbody>
             <tr>
                 <td align="center">
-                <form name="form1" id="form1" action="<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes'));?>" method="get">
+                <form name="form1" id="form1" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes'));?>" method="get">
                     <?php if($this->paginacao['pag']>1) { ?>
                     <input class="btn_inicio" id="btn_inicio" type="button" class="btn_inicio"
-                           onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
+                           onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
                     <?php } ?>
                     <input id="btn_p_anterior" type="button"
                     <?php if($this->paginacao['pag']<=1) { ?> class="btn_p_anterior-off"
                     <?php }else { ?>
-                           class="btn_p_anterior" onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
+                           class="btn_p_anterior" onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
                     <?php } ?>>
                     <input id="btn_p_proximo" type="button"
                            <?php if($this->paginacao['pag']+1 > $this->paginacao['totalPag']) { ?>
                            class="btn_p_proximo-off"
                     <?php }else { ?>
-                           class="btn_p_proximo" onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
+                           class="btn_p_proximo" onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
                     <?php } ?>>
                     <?php if($this->paginacao['pag'] < $this->paginacao['totalPag']) { ?>
                     <input class="btn_ultimo" id="btn_ultimo" type="button"
-                           onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
+                           onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
                     <?php } ?>
                     Pág.:<select name="pag" id="pag" onchange="$('#form1').submit()" class="input_simples">
                         <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>
@@ -314,25 +314,25 @@ $situacoes = array(
                     <tbody>
                         <tr>
                             <td align="center">
-                            <form name="form2" id="form2" action="<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes'));?>" method="get">
+                            <form name="form2" id="form2" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes'));?>" method="get">
                                 <?php if($this->paginacao['pag']>1) { ?>
                                 <input class="btn_inicio" id="btn_inicio" type="button" class="btn_inicio"
-                                       onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
+                                       onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag=1'."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
                                 <?php } ?>
                                 <input id="btn_p_anterior" type="button"
                                 <?php if($this->paginacao['pag']<=1) { ?> class="btn_p_anterior-off"
                                 <?php }else { ?>
-                                       class="btn_p_anterior" onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
+                                       class="btn_p_anterior" onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] - 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
                                 <?php } ?>>
                                 <input id="btn_p_proximo" type="button"
                                        <?php if($this->paginacao['pag']+1 > $this->paginacao['totalPag']) { ?>
                                        class="btn_p_proximo-off"
                                 <?php }else { ?>
-                                       class="btn_p_proximo" onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
+                                       class="btn_p_proximo" onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['pag'] + 1)."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'"
                                 <?php } ?>>
                                 <?php if($this->paginacao['pag'] < $this->paginacao['totalPag']) { ?>
                                 <input class="btn_ultimo" id="btn_ultimo" type="button"
-                                       onclick="location.href='<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
+                                       onclick="location.href='<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')).'?pag='.($this->paginacao['totalPag'])."&qtde=".$this->paginacao['qtde'].$this->paginacao['ordenacao'].'&tipoFiltro='.$this->filtro.'&pronac='.$this->pronac; ?>'">
                                 <?php } ?>
                                 Pág.:<select name="pag" id="pag" onchange="$('#form2').submit()" class="input_simples">
                                     <?php for($i=1; $i<=$this->paginacao['totalPag']; $i++):?>

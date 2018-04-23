@@ -1,6 +1,6 @@
 <?php
 
-class ReadequacoesController extends MinC_Controller_Action_Abstract
+class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
 {
     private $intTamPag = 10;
     private $idAgente = 0;
@@ -1610,25 +1610,25 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
             $planilhaReadequada = $tbPlanilhaAprovacao->buscar(array('IdPRONAC = ?'=>$idPronac, 'tpPlanilha = ?'=>'SR', 'idReadequacao= ?' => $idReadequacao));
             if (count($planilhaReadequada)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o na planilha or&ccedil;ament&aacute;ria do projeto!', "readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o na planilha or&ccedil;ament&aacute;ria do projeto!', "readequacao/readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
             }
         } elseif ($idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_LOCAL_REALIZACAO) {
             $tbAbrangencia = new tbAbrangencia();
             $locaisReadequados = $tbAbrangencia->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($locaisReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', "readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
             }
         } elseif ($idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
             $tbPlanoDistribuicao = new tbPlanoDistribuicao();
             $planosReadequados = $tbPlanoDistribuicao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($planosReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', "readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
             }
         } elseif ($idReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
             $tbPlanoDivulgacao = new tbPlanoDivulgacao();
             $planosReadequados = $tbPlanoDivulgacao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($planosReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de divulga&ccedil;&atilde;o do projeto!', "readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de divulga&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
             }
         }
 
@@ -1735,11 +1735,11 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             if ($idReadequacao && $idTipoReadequacao != Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
                 $acaoErro = 'cadastrar';
 
-                parent::message("Solicita&ccedil;&atilde;o cadastrada com sucesso!", "readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                parent::message("Solicita&ccedil;&atilde;o cadastrada com sucesso!", "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
             } elseif ($idReadequacao && $idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
                 $acaoErro = 'alterar';
 
-                parent::message("Solicita&ccedil;&atilde;o alterada com sucesso!", "readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                parent::message("Solicita&ccedil;&atilde;o alterada com sucesso!", "readequacao/readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
             } else {
                 throw new Exception("Erro ao $acaoErro a readequação!");
             }
@@ -1774,10 +1774,20 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             if (!empty($dados->idDocumento)) {
                 $tbDocumento = new tbDocumento();
                 $dadosArquivo = $tbDocumento->buscar(array('idDocumento =?'=>$dados->idDocumento))->current();
+
                 if ($dadosArquivo) {
+                    $tbDocumento = new tbDocumento();
+                    $tbDocumento->excluir("idArquivo = {$dadosArquivo->idArquivo} and idDocumento= {$dados->idDocumento} ");
+
+                    $tbArquivoImagem = new tbArquivoImagem();
+                    $tbArquivoImagem->excluir("idArquivo =  {$dadosArquivo->idArquivo} ");
+
                     $tbArquivo = new tbArquivo();
-                    $exclusaoArquivos = $tbArquivo->excluirArquivosDocumentais($dadosArquivo->idArquivo, $dados->idDocumento);
-                    if (!$exclusaoArquivos) throw new Exception("Erro ao excluir o tipo de readequa&ccedil;&atilde;o!");
+                    $tbArquivo->excluir("idArquivo = {$dadosArquivo->idArquivo} ");
+
+//                    $tbArquivo = new tbArquivo();
+//                    $exclusaoArquivos = $tbArquivo->excluirArquivosDocumentais($dadosArquivo->idArquivo, $dados->idDocumento);
+//                    if (!$exclusaoArquivos) throw new Exception("Erro ao excluir o tipo de readequa&ccedil;&atilde;o!");
                 }
             }
 
@@ -1806,9 +1816,9 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
 
             if ($exclusao) {
                 if ($dados->idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
-                    parent::message('Tipo de readequa&ccedil;&atilde;o exclu&iacute;da com sucesso!', "readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                    parent::message('Tipo de readequa&ccedil;&atilde;o exclu&iacute;da com sucesso!', "readequacao/readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
                 } else {
-                    parent::message('Tipo de readequa&ccedil;&atilde;o exclu&iacute;da com sucesso!', "readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                    parent::message('Tipo de readequa&ccedil;&atilde;o exclu&iacute;da com sucesso!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
                 }
             } else {
                 throw new Exception("Erro ao excluir o tipo de readequa&ccedil;&atilde;o!");
@@ -1880,7 +1890,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             if ($atualizar) {
                 //altera a situação do projeto
                 //$alterarSituacao = ProjetoDAO::alterarSituacao($idPronac, 'D20');
-                parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "consultardadosprojeto/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "default/consultardadosprojeto/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
             } // fecha if
             else {
                 throw new Exception("Erro ao finalizar as readequa&ccedil;&otilde;es!");
@@ -2107,7 +2117,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $this->view->projeto = $p;
             $this->view->idPronac = $r->idPronac;
         } else {
-            parent::message('Nenhum registro encontrado.', "readequacoes/painel", "ERROR");
+            parent::message('Nenhum registro encontrado.', "readequacao/readequacoes/painel", "ERROR");
         }
     }
 
@@ -2257,15 +2267,15 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                 }
             }
             if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
-                parent::message('Dados salvos com sucesso!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
+                parent::message('Dados salvos com sucesso!', "readequacao/readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
             } else {
-                parent::message('Dados salvos com sucesso!', "readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
+                parent::message('Dados salvos com sucesso!', "readequacao/readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
             }
         } else {
             if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
-                parent::message('Nenhum registro encontrado.', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "ERROR");
+                parent::message('Nenhum registro encontrado.', "readequacao/readequacoes/painel-readequacoes?tipoFiltro=$filtro", "ERROR");
             } else {
-                parent::message('Nenhum registro encontrado.', "readequacoes/painel?tipoFiltro=$filtro", "ERROR");
+                parent::message('Nenhum registro encontrado.', "readequacao/readequacoes/painel?tipoFiltro=$filtro", "ERROR");
             }
         }
     }
@@ -2516,7 +2526,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $tbReadequacao = new Readequacao_Model_tbReadequacao();
         $dados = $tbReadequacao->buscarDadosReadequacoes(array('idReadequacao = ?'=>$idReadequacao))->current();
         if (!$dados) {
-            parent::message("Readequa&ccedil;&atilde;o n&atilde;o encontrada!", "readequacoes/painel-readequacoes", "ERROR");
+            parent::message("Readequa&ccedil;&atilde;o n&atilde;o encontrada!", "readequacao/readequacoes/painel-readequacoes", "ERROR");
         }
         $this->view->dados = $dados;
         $this->view->idPronac = $dados->idPronac;
@@ -2674,13 +2684,13 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                     $where = "idReadequacao = $idReadequacao";
                     $tbReadequacao->update($dados, $where);
                 }
-                parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacoes/painel-readequacoes", "CONFIRM");
+                parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacao/readequacoes/painel-readequacoes", "CONFIRM");
             }
             $idReadequacao = Seguranca::encrypt($idReadequacao);
-            parent::message("Dados salvos com sucesso!", "readequacoes/form-avaliar-readequacao?id=$idReadequacao", "CONFIRM");
+            parent::message("Dados salvos com sucesso!", "readequacao/readequacoes/form-avaliar-readequacao?id=$idReadequacao", "CONFIRM");
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "readequacoes/form-avaliar-readequacao?id=$idReadequacao", "ERROR");
+            parent::message($e->getMessage(), "readequacao/readequacoes/form-avaliar-readequacao?id=$idReadequacao", "ERROR");
         }
     }
 
@@ -2732,7 +2742,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         }
         $tbReadequacao->update($dados, $where);
 
-        parent::message("Readequa&ccedil;&atilde;o devolvida com sucesso!", "readequacoes/painel?tipoFiltro=analisados", "CONFIRM");
+        parent::message("Readequa&ccedil;&atilde;o devolvida com sucesso!", "readequacao/readequacoes/painel?tipoFiltro=analisados", "CONFIRM");
     }
 
     /*
@@ -3456,16 +3466,16 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                         $tbDistribuirReadequacao->update($dados, $where);
                     }
 
-                    parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso!", "readequacoes/analisar-readequacoes-cnic", "CONFIRM");
+                    parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso!", "readequacao/readequacoes/analisar-readequacoes-cnic", "CONFIRM");
                 } else {
                     parent::message("Erro ao avaliar a readequa&ccedil;&atilde;o!", "form-avaliar-readequacao-cnic?id=$idReadequacao", "ERROR");
                 }
             }
             $idReadequacao = Seguranca::encrypt($idReadequacao);
-            parent::message("Dados salvos com sucesso!", "readequacoes/form-avaliar-readequacao-cnic?id=$idReadequacao", "CONFIRM");
+            parent::message("Dados salvos com sucesso!", "readequacao/readequacoes/form-avaliar-readequacao-cnic?id=$idReadequacao", "CONFIRM");
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "readequacoes/form-avaliar-readequacao-cnic?id=$idReadequacao", "ERROR");
+            parent::message($e->getMessage(), "readequacao/readequacoes/form-avaliar-readequacao-cnic?id=$idReadequacao", "ERROR");
         }
     }
 
@@ -3953,9 +3963,9 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
         $return2 = $tbDistribuirReadequacao->update($dados, $where);
 
         if (!$return && !$return2) {
-            parent::message("N&atilde;o foi poss&iacute;vel encaminhar a readequa&ccedil;&atilde;o para o Checklist de Publica&ccedil;&atilde;o", "readequacoes/painel?tipoFiltro=analisados" . $urlComplemento, "ERROR");
+            parent::message("N&atilde;o foi poss&iacute;vel encaminhar a readequa&ccedil;&atilde;o para o Checklist de Publica&ccedil;&atilde;o", "readequacao/readequacoes/painel?tipoFiltro=analisados" . $urlComplemento, "ERROR");
         }
-        parent::message("Readequa&ccedil;&atilde;o finalizada com sucesso!", "readequacoes/painel?tipoFiltro=analisados" . $urlComplemento, "CONFIRM");
+        parent::message("Readequa&ccedil;&atilde;o finalizada com sucesso!", "readequacao/readequacoes/painel?tipoFiltro=analisados" . $urlComplemento, "CONFIRM");
     }
 
 
@@ -4249,7 +4259,7 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
             $this->view->idPronac = $r->idPronac;
             $this->view->cnic = $cnic;
         } else {
-            parent::message('Nenhum registro encontrado.', "readequacoes/painel", "ERROR");
+            parent::message('Nenhum registro encontrado.', "readequacao/readequacoes/painel", "ERROR");
         }
 
         $this->renderScript('readequacao/encaminhar-analise-tecnica.phtml');
@@ -4305,9 +4315,9 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                 $tbReadequacao->update($dados, $where);
 
                 if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
-                    parent::message('Dados salvos com sucesso!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
+                    parent::message('Dados salvos com sucesso!', "readequacao/readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
                 } else {
-                    parent::message('Dados salvos com sucesso!', "readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
+                    parent::message('Dados salvos com sucesso!', "readequacao/readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
                 }
             } else {
                 // MUDANÇA DE VINCULADA
@@ -4333,16 +4343,16 @@ class ReadequacoesController extends MinC_Controller_Action_Abstract
                 $u = $tbReadequacao->update($dadosReadequacao, $where);
 
                 if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
-                    parent::message('Dados salvos com sucesso!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
+                    parent::message('Dados salvos com sucesso!', "readequacao/readequacoes/painel-readequacoes?tipoFiltro=$filtro", "CONFIRM");
                 } else {
-                    parent::message('Dados salvos com sucesso!', "readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
+                    parent::message('Dados salvos com sucesso!', "readequacao/readequacoes/painel?tipoFiltro=$filtro", "CONFIRM");
                 }
             }
         } catch (Exception $e) {
             if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
-                parent::message('Erro ao encaminhar readequa&ccedil;&atilde;o!', "readequacoes/painel-readequacoes?tipoFiltro=$filtro", "ERROR");
+                parent::message('Erro ao encaminhar readequa&ccedil;&atilde;o!', "readequacao/readequacoes/painel-readequacoes?tipoFiltro=$filtro", "ERROR");
             } else {
-                parent::message('Erro ao encaminhar readequa&ccedil;&atilde;o!', "readequacoes/painel?tipoFiltro=$filtro", "ERROR");
+                parent::message('Erro ao encaminhar readequa&ccedil;&atilde;o!', "readequacao/readequacoes/painel?tipoFiltro=$filtro", "ERROR");
             }
         }
     }

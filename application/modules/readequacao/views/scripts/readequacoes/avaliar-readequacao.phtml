@@ -109,7 +109,7 @@
                 $('.asterisco_dinamico').removeClass('sumir');
                 $.ajax({
                     type: 'POST',
-                    url: '<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'buscar-destinatarios')); ?>',
+                    url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'buscar-destinatarios')); ?>',
                     data: {
                         vinculada: vinculada,
                         idPronac: <?php echo $this->projeto->IdPRONAC; ?>
@@ -159,7 +159,7 @@
 <div id="breadcrumb">
     <ul>
         <li class="first"><a href="<?php echo $this->url(array('controller' => 'principal', 'action' => '')); ?>" title="Ir para In&iacute;cio">In&iacute;cio</a></li>
-        <li><a href="<?php echo $this->url(array('controller' => 'readequacoes', 'action' => 'painel'), '', true); ?>" title="Readequa&ccedil;&atilde;o">Readequa&ccedil;&otilde;es</a></li>
+        <li><a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel'), '', true); ?>" title="Readequa&ccedil;&atilde;o">Readequa&ccedil;&otilde;es</a></li>
         <li>Aguardando An&aacute;lise</li>
         <li class="last">Avalia&ccedil;&atilde;o de Readequa&ccedil;&atilde;o <?php echo ( in_array($this->readequacao->idTipoReadequacao, array(2,9,11,14))) ? ' - '.$this->readequacao->dsReadequacao : ''; ?></li>
     </ul>
@@ -175,7 +175,7 @@
 
 <!-- ========== INÍCIO CONTEÚDO ========== -->
 <div id="conteudo">
-    <form name="formAvaliacao" id="formAvaliacao" action="<?php echo $this->baseUrl(); ?>/readequacoes/salvar-avaliacao" method="post">
+    <form name="formAvaliacao" id="formAvaliacao" action="<?php echo $this->baseUrl(); ?>/readequacao/readequacoes/salvar-avaliacao" method="post">
       <input type="hidden" name="filtro" value="<?php echo $this->filtro; ?>" />
       <table class="tabela">
         <tr>
@@ -184,7 +184,7 @@
         </tr>
         <tr>
           <td align="center">
-            <a href="<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo $this->projeto->IdPRONAC; ?>" target="_blank">
+            <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index'));?>?idPronac=<?php echo $this->projeto->IdPRONAC; ?>" target="_blank">
               <?php echo $this->projeto->pronac; ?>
             </a>
           </td>
