@@ -143,6 +143,12 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
+            return data.tipo_recurso;
+        }
+    })
+    colunas.push({
+        data: null,
+        render: function (data, type, row) {
             return '<a class="btn waves-effect waves-darrk white black-text" href="'
                 + $('#base_url').val()
                 + '/admissibilidade/admissibilidade/exibirpropostacultural?idPreProjeto='

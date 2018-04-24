@@ -96,7 +96,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $search = null,
         Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta = null
     )
-    {
+    { 
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from('vwPainelAvaliarPropostas',
@@ -186,6 +186,21 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             ],
             $this->getSchema('sac')
         );
+        $select->joinLeft(
+            ['tbRecursoProposta'],
+            'tbRecursoProposta.idPreProjeto = vwPainelAvaliarPropostas.idProjeto',
+            [
+                'tipo_recurso' => new Zend_Db_Expr(
+                    "CASE WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO 
+                    . " THEN '1 - Pedido de Reconsidera&ccedil;&atilde;o' "
+                    . " WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO 
+                    . " THEN '2 - Recurso' "
+                    . " ELSE '-' END"
+                )
+            ],
+            $this->getSchema('sac')
+        );
+        // Recurso_Model_TbRecursoProposta::tpRecurso
 
         if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
             || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
