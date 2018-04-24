@@ -125,19 +125,19 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            return (data.descricao_area != null && data.descricao_area != '') ? data.descricao_area : ' - ';
+            return (data.descricao_area != null && data.descricao_area != '') ? data.descricao_area : data.descricao_area_inicial;
         }
     })
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            return (data.descricao_segmento != null && data.descricao_segmento != '') ? data.descricao_segmento : ' - ';
+            return (data.descricao_segmento != null && data.descricao_segmento != '') ? data.descricao_segmento : data.descricao_segmento_inicial;
         }
     })
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            return (data.enquadramento != null && data.enquadramento != '') ? data.enquadramento : ' - ';
+            return (data.enquadramento != null && data.enquadramento != '') ? data.enquadramento : data.enquadramento_inicial;
         }
     })
     colunas.push({

@@ -126,8 +126,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $select->joinLeft(
             ['sugestao_enquadramento']
             , "sugestao_enquadramento.id_preprojeto = vwPainelAvaliarPropostas.idProjeto
-                    and sugestao_enquadramento.id_orgao_superior = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}
-                    and sugestao_enquadramento.id_perfil_usuario = {$distribuicaoAvaliacaoProposta->getIdPerfil()}"
+                and sugestao_enquadramento.ultima_sugestao = " . Admissibilidade_Model_DbTable_SugestaoEnquadramento::ULTIMA_SUGESTAO_ATIVA
             , [
                 'sugestao_enquadramento.id_area',
                 'sugestao_enquadramento.id_segmento',
@@ -135,6 +134,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             ]
             , $this->getSchema('sac')
         );
+
         $select->joinLeft(
             ['Segmento'],
             'Segmento.Codigo = sugestao_enquadramento.id_segmento',
@@ -155,6 +155,38 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             ],
             $this->getSchema('sac')
         );
+
+        $select->joinInner(
+            ['PlanoDistribuicaoProduto'],
+            'PlanoDistribuicaoProduto.idProjeto = vwPainelAvaliarPropostas.idProjeto and PlanoDistribuicaoProduto.stPrincipal = 1',
+            [
+                'id_area_inicial' => 'PlanoDistribuicaoProduto.Area',
+                'id_segmento_inicial' => 'PlanoDistribuicaoProduto.Segmento'
+            ],
+            $this->getSchema('sac')
+        );
+
+        $select->joinInner(
+            ['SegmentoInicial' => 'Segmento'],
+            'SegmentoInicial.Codigo = PlanoDistribuicaoProduto.Segmento',
+            [
+                'enquadramento_inicial' => new Zend_Db_Expr(
+                    "CASE WHEN SegmentoInicial.tp_enquadramento = 1 THEN 'Artigo 26' "
+                    . " WHEN SegmentoInicial.tp_enquadramento = 2 THEN 'Artigo 18' END"
+                ),
+                'descricao_segmento_inicial' => 'SegmentoInicial.Descricao'
+            ],
+            $this->getSchema('sac')
+        );
+        $select->joinInner(
+            ['AreaInicial' => 'Area'],
+            'AreaInicial.Codigo = PlanoDistribuicaoProduto.Area',
+            [
+                'descricao_area_inicial' => 'AreaInicial.Descricao'
+            ],
+            $this->getSchema('sac')
+        );
+
         if ($distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE
             || $distribuicaoAvaliacaoProposta->getIdPerfil() == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO) {
 
@@ -191,7 +223,6 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                     $agente = $rsAgente->current()->toArray();
                     $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
                 }
-                $select->where('sugestao_enquadramento.ultima_sugestao = ?', Admissibilidade_Model_DbTable_SugestaoEnquadramento::ULTIMA_SUGESTAO_ATIVA);
                 $select->where('distribuicao_avaliacao_proposta.avaliacao_atual = ?', Admissibilidade_Model_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA);
             }
         }

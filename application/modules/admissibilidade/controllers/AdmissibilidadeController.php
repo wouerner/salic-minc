@@ -2895,6 +2895,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $proposta->DtMovimentacao = $zDate->toString('dd/MM/y h:m');
                 $proposta->descricao_segmento = utf8_encode($proposta->descricao_segmento);
                 $proposta->descricao_area = utf8_encode($proposta->descricao_area);
+                $proposta->descricao_segmento_inicial = utf8_encode($proposta->descricao_segmento_inicial);
+                $proposta->descricao_area_inicial = utf8_encode($proposta->descricao_area_inicial);
                 $sugestaoEnquadramento->setIdPreprojeto($proposta->idProjeto);
                 $sugestaoEnquadramento->setIdOrgao($this->grupoAtivo->codOrgao);
                 $sugestaoEnquadramento->setIdPerfilUsuario($this->grupoAtivo->codGrupo);
