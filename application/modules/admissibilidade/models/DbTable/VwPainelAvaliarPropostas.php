@@ -1,10 +1,5 @@
 <?php
 
-/**
- * View para painel de avaliação das propostas e tranformação em projetos.
- *
- * @link http://salic.cultura.gov.br
- */
 class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Table_Abstract
 {
     protected $_schema = 'sac';
@@ -196,6 +191,8 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                     $agente = $rsAgente->current()->toArray();
                     $select->where('tbtitulacaoconselheiro.idAgente = ?', $agente['idAgente']);
                 }
+                $select->where('sugestao_enquadramento.ultima_sugestao = ?', Admissibilidade_Model_DbTable_SugestaoEnquadramento::ULTIMA_SUGESTAO_ATIVA);
+                $select->where('distribuicao_avaliacao_proposta.avaliacao_atual = ?', Admissibilidade_Model_DistribuicaoAvaliacaoProposta::AVALIACAO_ATUAL_ATIVA);
             }
         }
 
