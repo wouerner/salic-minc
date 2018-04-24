@@ -31,3 +31,6 @@ composer.phar
 package-lock.json
 node_modules/
 log/
+package-lock.json
+node_modules/
+log/
