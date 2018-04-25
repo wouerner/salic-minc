@@ -1,6 +1,6 @@
-Vue.component('salic-proposta-plano-distribuicao', {
+Vue.component('plano-distribuicao-listagem', {
     template: `
-    <div class="plano-distribuicao card" v-if="produtos">
+    <div class="plano-distribuicao-listagem card" v-if="produtos">
         <div v-if="produtos.length <= 0" class="padding10">
             <b>Aguarde! Carregando....</b>
         </div>
@@ -100,9 +100,11 @@ Vue.component('salic-proposta-plano-distribuicao', {
                         </tbody>
                     </table>
                     
-                    <salic-proposta-detalhamento-plano-distribuicao 
-                        :arrayDetalhamentos="detalhamentosByID(detalhamentos, produto.idPlanoDistribuicao)">
-                    </salic-proposta-detalhamento-plano-distribuicao>
+                    <component
+                        v-bind:is="componenteDetalhamento"
+                        :disabled="disabled"
+                        :array-detalhamentos="detalhamentosByID(detalhamentos, produto.idPlanoDistribuicao)"
+                    ></component>
                 </div>
             </li>
         </ul>
@@ -117,21 +119,22 @@ Vue.component('salic-proposta-plano-distribuicao', {
             radio: 'n'
         }
     },
-    props: [
-        'idpreprojeto',
-        'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
-        'arrayProdutos',
-        'arrayDetalhamentos'
-    ],
+    props: {
+        'idProjeto': null,
+        'arrayProdutos': {},
+        'arrayDetalhamentos': {},
+        'componenteFilho': {
+            default: 'salic-proposta-detalhamento-plano-distribuicao',
+            type: String
+        },
+        'disabled': false
+    },
     computed: {
-
+        componenteDetalhamento: function () {
+            return this.componenteFilho;
+        }
     },
     watch: {
-        idpreprojeto: function (value) {
-            this.fetch(value);
-        },
         arrayProdutos: function (value) {
             this.produtos = value;
         },
@@ -140,10 +143,6 @@ Vue.component('salic-proposta-plano-distribuicao', {
         }
     },
     mounted: function () {
-        if (typeof this.idpreprojeto != 'undefined') {
-            this.fetch(this.idpreprojeto);
-        }
-
         if (typeof this.arrayProdutos != 'undefined') {
             this.produtos = this.arrayProdutos;
         }
@@ -155,21 +154,6 @@ Vue.component('salic-proposta-plano-distribuicao', {
         this.iniciarCollapsible();
     },
     methods: {
-        fetch: function () {
-            let vue = this;
-
-            $3.ajax({
-                type: "GET",
-                url: "/proposta/visualizar/obter-plano-distribuicacao",
-                data: {
-                    idPreProjeto: vue.idpreprojeto
-                }
-            }).done(function (response) {
-                let dados = response.data;
-                vue.produtos = dados.planodistribuicaoproduto;
-                vue.detalhamentos = dados.tbdetalhaplanodistribuicao;
-            });
-        },
         detalhamentosByID: function (lista, id) {
 
             let novaLista = [];
