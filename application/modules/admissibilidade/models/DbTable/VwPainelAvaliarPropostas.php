@@ -188,10 +188,11 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         );
         $select->joinLeft(
             ['tbRecursoProposta'],
-            'tbRecursoProposta.idPreProjeto = vwPainelAvaliarPropostas.idProjeto',
+            'tbRecursoProposta.idPreProjeto = vwPainelAvaliarPropostas.idProjeto and tbRecursoProposta.stAtivo = '
+            . Recurso_Model_TbRecursoProposta::SITUACAO_RECURSO_ATIVO,
             [
                 'tipo_recurso' => new Zend_Db_Expr(
-                    "CASE WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO 
+                    "CASE WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO
                     . " THEN '1 - Pedido de Reconsidera&ccedil;&atilde;o' "
                     . " WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO 
                     . " THEN '2 - Recurso' "
