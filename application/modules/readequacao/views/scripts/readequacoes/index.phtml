@@ -869,17 +869,9 @@
                 <td id="planosDeDistribuicao">
 
                 </td>
-                <div id="dynamic-component-demo" class="demo">
-                    <a
-                        href="javascript:void(0)"
-                        v-for="tab in tabs"
-                        v-bind:key="tab"
-                        v-bind:class="['tab-button', { active: currentTab === tab }]"
-                        v-on:click="currentTab = tab"
-                    >{{ tab }}
-                    </a>
+                <div id="dynamic-component" class="demo">
                     <component
-                        v-bind:is="currentComponente"
+                        v-bind:is="currentComponent"
                         :id-pronac="idPreProjeto"
                         class="tab"
                     ></component>
@@ -1190,50 +1182,16 @@
 <script src="/public/scripts/readequacao/readequacao-plano-distribuicao-detalhamentos.vue.js" type="text/javascript"></script>
 <script src="/public/scripts/plano-distribuicao/plano-distribuicao-detalhamentos-formulario.vue.js" type="text/javascript"></script>
 <script src="/public/scripts/plano-distribuicao/plano-distribuicao-detalhamentos-listagem.vue.js" type="text/javascript"></script>
+<script src="/public/scripts/plano-distribuicao/plano-distribuicao-visualizar-produto-cabecalho.vue.js" type="text/javascript"></script>
 <script src="/public/scripts/proposta/visualizar/salic-proposta-detalhamento-plano-distribuicao.vue.js" type="text/javascript"></script>
 
 <script>
 
-    Vue.component('tab-home', {
-        template: '<div>Home component</div>',
-        mounted: function(){
-            console.log("mounted home");
-            this.$emit('eventoHome', true);
-        }
-    })
-    Vue.component('tab-posts', {
-        template: '<div>Posts component</div>',
-        mounted: function(){
-            console.log("mounted posts");
-            this.$emit('eventoposts', true);
-        }
-    })
-    Vue.component('tab-archive', {
-        template: '<div>Archive component</div>',
-        mounted: function() {
-            console.log("mounted archive");
-            this.$emit('eventoarchive', true);
-        },
-        destroid: function() {
-            console.log('archive destroi')
-        }
-    })
-
     new Vue({
-        el: '#dynamic-component-demo',
+        el: '#dynamic-component',
         data: {
-            currentTab: 'Home',
-            currentComponent: false,
+            currentComponent: '',
             idPreProjeto: <?= $this->projeto->idProjeto;?>,
-            tabs: ['Home', 'Posts', 'Archive']
-        },
-        computed: {
-            currentTabComponent: function () {
-                return 'tab-' + this.currentTab.toLowerCase()
-            },
-            currentComponente: function () {
-                return this.currentComponent;
-            }
         },
         mounted: function() {
             this.carregarComponenteSelecionado();
@@ -1257,26 +1215,3 @@
         }
     })
 </script>
-
-<style>
-    .tab-button {
-        padding: 6px 10px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        background: #f0f0f0;
-        margin-bottom: -1px;
-        margin-right: -1px;
-    }
-    .tab-button:hover {
-        background: #e0e0e0;
-    }
-    .tab-button.active {
-        background: #e0e0e0;
-    }
-    .tab {
-        border: 1px solid #ccc;
-        padding: 10px;
-    }
-</style>

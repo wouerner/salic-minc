@@ -198,8 +198,8 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
         },
         editar: function(detalhamento, index) {
 
-            let elm = $3("div[formIdMunicipio='"+ detalhamento.idMunicipio + "']" );
-            console.log('editar', elm);
+            let elm = $3("div[formIdMunicipio='"+ detalhamento.idMunicipio + "']");
+            console.error('editar', "div[formIdMunicipio='"+ detalhamento.idMunicipio + "']", elm,detalhamento.idMunicipio);
             $3("html, body").animate({
                 scrollTop: $3(elm).offset().top + 30
             }, 600);

@@ -3,22 +3,22 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
         <div class="readequacao-plano-distribuicao-detalhamentos">
             <plano-distribuicao-detalhamentos-listagem
                 :disabled="disabled"
-                :idplanodistribuicao="idplanodistribuicao"
-                :idpreprojeto="idpreprojeto"
-                :iduf="iduf"
-                :idmunicipioibge="idmunicipioibge"
+                :idplanodistribuicao="produto.idPlanoDistribuicao"
+                :idpreprojeto="produto.idProjeto"
+                :iduf="local.idUF"
+                :idmunicipioibge="local.idMunicipioIBGE"
                 :detalhamentos="detalhamentos"
-                :canalaberto="canalaberto"
+                :canalaberto="produto.canalAberto"
                  v-on:eventoRemoverDetalhamento="removerDetalhamento"
                  v-on:eventoEditarDetalhamento="editarDetalhamento"
                 >
             </plano-distribuicao-detalhamentos-listagem>
             <plano-distribuicao-detalhamentos-formulario
                 :disabled="disabled"
-                :idplanodistribuicao="idplanodistribuicao"
-                :idpreprojeto="idpreprojeto"
-                :iduf="iduf"
-                :idmunicipioibge="idmunicipioibge"
+                :idplanodistribuicao="produto.idPlanoDistribuicao"
+                :idpreprojeto="produto.idProjeto"
+                :iduf="local.idUF"
+                :idmunicipioibge="local.idMunicipioIBGE"
                 :editarDetalhamento="detalhamento"
                 v-on:eventoSalvarDetalhamento="salvarDetalhamento"
                 >
@@ -33,13 +33,10 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
     },
     mixins: [utils],
     props: [
-        'idpreprojeto',
-        'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
-        'disabled',
-        'canalaberto',
-        'arrayDetalhamentos'
+        'produto',
+        'local',
+        'arrayDetalhamentos',
+        'disabled'
     ],
     mounted: function () {
         this.obterDetalhamentos();
@@ -50,10 +47,10 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
             if (confirm("Tem certeza que deseja deletar o item?")) {
                 $3.ajax({
                     type: "POST",
-                    url: "/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/" + this.idpreprojeto,
+                    url: "/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/" + this.produto.idProjeto,
                     data: {
                         idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
-                        idPlanoDistribuicao: this.idplanodistribuicao
+                        idPlanoDistribuicao: this.produto.idPlanoDistribuicao
                     }
                 }).done(function (response) {
                     if (response.success == 'true') {

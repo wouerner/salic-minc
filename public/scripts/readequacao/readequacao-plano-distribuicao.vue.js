@@ -6,7 +6,8 @@ Vue.component('readequacao-plano-distribuicao', {
                 :disabled="disabled"
                 :array-produtos="produtos"
                 :array-detalhamentos="detalhamentos"
-                :componente-filho="componenteDetalhamento"
+                :componente-detalhamento="componenteDetalhamento"
+                :array-locais="locais"
             ></plano-distribuicao-listagem>
         </div>
     `,
@@ -14,6 +15,7 @@ Vue.component('readequacao-plano-distribuicao', {
         return {
             produtos: {},
             detalhamentos: {},
+            locais: {},
             disabled: false,
             componenteDetalhamento: "readequacao-plano-distribuicao-detalhamentos"
         }
@@ -23,17 +25,17 @@ Vue.component('readequacao-plano-distribuicao', {
     ],
     watch: {
         idPronac: function (value) {
-            console.log('id', value);
             this.fetch(value);
         }
     },
     mounted: function () {
         if (typeof this.idPronac != 'undefined') {
-            this.fetch(this.idPronac);
+            this.obterPlanoDistribuicao(this.idPronac);
+            this.obterLocaisRealizacao(this.idPronac);
         }
     },
     methods: {
-        fetch: function (id) {
+        obterPlanoDistribuicao: function (id) {
             let vue = this;
 
             $3.ajax({
@@ -46,6 +48,18 @@ Vue.component('readequacao-plano-distribuicao', {
                 let dados = response.data;
                 vue.produtos = dados.planodistribuicaoproduto;
                 vue.detalhamentos = dados.tbdetalhaplanodistribuicao;
+            });
+        },
+        obterLocaisRealizacao: function (id) {
+            let vue = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/plano-distribuicao/obter-abrangencias-readequacao-ajax",
+                data: {
+                    idPreProjeto: id
+                }
+            }).done(function (response) {
+                vue.locais  = response.data;
             });
         }
     }

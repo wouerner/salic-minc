@@ -17,7 +17,7 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
             <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="idmunicipioibge" class="row center-align" ref="containerForm">
                 <a 
                     href="javascript:void(0)"
-                    class="btn waves-effect waves-light" 
+                    class="btn waves-effect waves-light white-text" 
                     ref="mostrarForm"
                     @click="mostrarFormulario(_uid + '_form_detalhamento')">
                     Novo detalhamento
@@ -342,7 +342,7 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
                             <br>
                             <a 
                                 href="javascript:void(0)"
-                                class="btn waves-effect waves-light" 
+                                class="btn waves-effect waves-light white-text" 
                                 ref="add" 
                                 v-on:click.prevent="salvar">
                                 Salvar <i class="material-icons right">send</i>
@@ -672,7 +672,6 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
             }
 
             this.$emit('eventoSalvarDetalhamento', this.distribuicao);
-
         }
     }
 });

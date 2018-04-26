@@ -10,101 +10,30 @@ Vue.component('plano-distribuicao-listagem', {
                     <i class="material-icons">perm_media</i> {{produto.Produto}}
                 </div>
                 <div class="collapsible-body no-padding margin10 scroll-x">
-                    <table class="bordered">
-                        <thead>
-                           <tr>
-                                <th>&Aacute;rea</th>
-                                <th>Segmento</th>
-                                <th>Principal</th>
-                                <th>Canal aberto?</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{produto.DescricaoArea}}</td>
-                                <td>{{produto.DescricaoSegmento}}</td>
-                                <td>{{label_sim_ou_nao(produto.stPrincipal)}}</td>
-                                <td>{{label_sim_ou_nao(produto.canalAberto)}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="bordered">
-                        <thead>
-                            <tr>
-                                <th colspan="3" class="center-align gratuito padding10">Quantidade Distribui&ccedil;&atilde;o Gratuita</th>
-                            </tr>
-                            <tr>
-                                <td class="gratuito">Divulga&ccedil;&atilde;o</td>
-                                <td class="gratuito">Patrocinador</td>
-                                <td class="gratuito">Popula&ccedil;&atilde;o</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="gratuito">{{produto.QtdeProponente}}</td>
-                                <td class="gratuito">{{produto.QtdePatrocinador}}</td>
-                                <td class="gratuito">{{produto.QtdeOutros}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="bordered">
-                        <thead>
-                            <tr>
-                                <th colspan="3" class="center-align popular padding10">Pre&ccedil;o Popular</th>
-                            </tr>
-                            <tr>
-                                <td class="popular">Quantidade Inteira</td>
-                                <td class="popular">Quantidade Meia</td>
-                                <td class="popular">Valor m&eacute;dio</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="popular">{{produto.QtdeVendaPopularNormal}}</td>
-                                <td class="popular">{{produto.QtdeVendaPopularPromocional}}</td>
-                                <td class="popular">{{produto.ReceitaPopularNormal}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="bordered">
-                        <thead>
-                            <tr>
-                                <th colspan="3" class="center-align proponente padding10">Proponente</th>
-                            </tr>
-                            <tr>
-                                <td class="proponente">Quantidade Inteira</td>
-                                <td class="proponente">Quantidade Meia</td>
-                                <td class="proponente">Valor m&eacute;dio</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="proponente">{{produto.QtdeVendaNormal}}</td>
-                                <td class="proponente">{{produto.QtdeVendaPromocional}}</td>
-                                <td class="proponente">{{produto.PrecoUnitarioNormal}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="bordered">
-                        <thead>
-                           <tr>
-                                <th class="center-align">Quantidade Total</th>
-                                <th class="center-align">Receita Prevista Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="right-align">{{produto.QtdeProduzida}}</td>
-                                <td class="right-align">{{produto.Receita}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <component
-                        v-bind:is="componenteDetalhamento"
-                        :disabled="disabled"
-                        :array-detalhamentos="detalhamentosByID(detalhamentos, produto.idPlanoDistribuicao)"
-                    ></component>
+                    <ul class="collapsible collapsible-locais no-padding" data-collapsible="expandable">
+                        <li v-for="local of locais">
+                            <div class="collapsible-header black-text">
+                                <i class="material-icons">place</i> {{local.uf}} - {{local.cidade}}
+                            </div>
+                            <div class="collapsible-body no-padding margin10 scroll-x">
+                                <component
+                                    v-bind:is="componenteProdutoCabecalho"
+                                    :produto="produto"
+                                ></component>
+                                <component
+                                    v-bind:is="componenteDetalhamento"
+                                    :disabled="disabled"
+                                    :produto="produto"
+                                    :local="local"
+                                    :array-detalhamentos="detalhamentosByID(detalhamentos, produto.idPlanoDistribuicao)"
+                                ></component>
+                                <component
+                                    v-bind:is="componenteProdutoRodape"
+                                    :produto="produto"
+                                ></component>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </li>
         </ul>
@@ -114,6 +43,7 @@ Vue.component('plano-distribuicao-listagem', {
         return {
             produtos: [],
             detalhamentos: [],
+            locais: [],
             active: false,
             icon: 'add',
             radio: 'n'
@@ -123,16 +53,22 @@ Vue.component('plano-distribuicao-listagem', {
         'idProjeto': null,
         'arrayProdutos': {},
         'arrayDetalhamentos': {},
-        'componenteFilho': {
+        'arrayLocais': {},
+        'componenteDetalhamento': {
             default: 'salic-proposta-detalhamento-plano-distribuicao',
+            type: String
+        },
+        'componenteProdutoCabecalho': {
+            default: 'plano-distribuicao-visualizar-produto-cabecalho',
+            type: String
+        },
+        'componenteProdutoRodape': {
+            default: '',
             type: String
         },
         'disabled': false
     },
     computed: {
-        componenteDetalhamento: function () {
-            return this.componenteFilho;
-        }
     },
     watch: {
         arrayProdutos: function (value) {
@@ -140,7 +76,13 @@ Vue.component('plano-distribuicao-listagem', {
         },
         arrayDetalhamentos: function (value) {
             this.detalhamentos = value;
+        },
+        arrayLocais: function (value) {
+            this.locais = value;
         }
+    },
+    updated: function(){
+        this.iniciarCollapsible();
     },
     mounted: function () {
         if (typeof this.arrayProdutos != 'undefined') {
@@ -151,7 +93,9 @@ Vue.component('plano-distribuicao-listagem', {
             this.detalhamentos = this.arrayDetalhamentos;
         }
 
-        this.iniciarCollapsible();
+        if (typeof this.arrayLocais != 'undefined') {
+            this.locais = this.arrayLocais;
+        }
     },
     methods: {
         detalhamentosByID: function (lista, id) {
