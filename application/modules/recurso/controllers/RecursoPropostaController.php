@@ -145,9 +145,9 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             );
         } catch(Exception $exception) {
             if($id_preprojeto) {
-                parent::message($objException->getMessage(), "/recurso/recurso-proposta/visao-proponente/idPreProjeto/{$id_preprojeto}");
+                parent::message($exception->getMessage(), "/recurso/recurso-proposta/visao-proponente/idPreProjeto/{$id_preprojeto}");
             }
-            parent::message($objException->getMessage(), "/proposta/manterpropostaincentivofiscal/listarproposta");
+            parent::message($exception->getMessage(), "/proposta/manterpropostaincentivofiscal/listarproposta");
         }
     }
 
