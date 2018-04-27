@@ -37,12 +37,11 @@ Vue.component('readequacao-plano-distribuicao', {
     methods: {
         obterPlanoDistribuicao: function (id) {
             let vue = this;
-
             $3.ajax({
                 type: "GET",
-                url: "/proposta/visualizar/obter-plano-distribuicacao",
+                url: "/readequacao/plano-distribuicao/obter-plano-distribuicao-readequacao-ajax",
                 data: {
-                    idPreProjeto: id
+                    idPronac: id
                 }
             }).done(function (response) {
                 let dados = response.data;
@@ -54,9 +53,9 @@ Vue.component('readequacao-plano-distribuicao', {
             let vue = this;
             $3.ajax({
                 type: "GET",
-                url: "/readequacao/plano-distribuicao/obter-abrangencias-readequacao-ajax",
+                url: "/readequacao/local-realizacao/obter-locais-readequacao-ajax",
                 data: {
-                    idPreProjeto: id
+                    idPronac: id
                 }
             }).done(function (response) {
                 vue.locais  = response.data;
