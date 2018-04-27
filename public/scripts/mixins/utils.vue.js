@@ -29,6 +29,13 @@ const utils = {
         formatarValor: function (valor) {
             valor = parseFloat(valor);
             return numeral(valor).format();
+        },
+        label_sim_ou_nao: function (valor) {
+            if (valor == 1) {
+                return 'Sim';
+            }
+
+            return 'N\xE3o';
         }
     }
 }

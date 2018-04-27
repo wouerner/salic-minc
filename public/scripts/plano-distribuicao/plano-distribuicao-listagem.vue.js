@@ -11,7 +11,7 @@ Vue.component('plano-distribuicao-listagem', {
                 </div>
                 <div class="collapsible-body no-padding margin10 scroll-x">
                     <ul class="collapsible collapsible-locais no-padding" data-collapsible="expandable">
-                        <li v-for="local of locais">
+                        <li v-for="local of locais" v-if="local.idMunicipioIBGE">
                             <div class="collapsible-header black-text">
                                 <i class="material-icons">place</i> {{local.uf}} - {{local.cidade}}
                             </div>
@@ -25,7 +25,7 @@ Vue.component('plano-distribuicao-listagem', {
                                     :disabled="disabled"
                                     :produto="produto"
                                     :local="local"
-                                    :array-detalhamentos="detalhamentosByID(detalhamentos, produto.idPlanoDistribuicao)"
+                                    :array-detalhamentos="filtrarDetalhamentos(detalhamentos, produto.idPlanoDistribuicao, local.idMunicipioIBGE)"
                                 ></component>
                                 <component
                                     v-bind:is="componenteProdutoRodape"
@@ -68,8 +68,8 @@ Vue.component('plano-distribuicao-listagem', {
         },
         'disabled': false
     },
-    computed: {
-    },
+    mixins: [utils],
+    computed: {},
     watch: {
         arrayProdutos: function (value) {
             this.produtos = value;
@@ -81,7 +81,7 @@ Vue.component('plano-distribuicao-listagem', {
             this.locais = value;
         }
     },
-    updated: function(){
+    updated: function () {
         this.iniciarCollapsible();
     },
     mounted: function () {
@@ -98,27 +98,19 @@ Vue.component('plano-distribuicao-listagem', {
         }
     },
     methods: {
-        detalhamentosByID: function (lista, id) {
-
+        filtrarDetalhamentos: function (detalhamentos, idPlano, idMunicipio) {
             let novaLista = [];
-
-            if(typeof lista != 'undefined') {
-                Object.keys(lista)
-                    .map(function(key) {
-                        if(lista[key].idPlanoDistribuicao == id) {
-                            novaLista.push(lista[key]);
+            if (typeof detalhamentos != 'undefined') {
+                Object.keys(detalhamentos)
+                    .map(function (key) {
+                        if (detalhamentos[key].idPlanoDistribuicao == idPlano && detalhamentos[key].idMunicipio == idMunicipio) {
+                            novaLista.push(detalhamentos[key]);
                         }
                     });
 
                 return novaLista;
             }
-            return lista;
-        },
-        label_sim_ou_nao: function (valor) {
-            if (valor == 1)
-                return 'Sim';
-            else
-                return 'N\xE3o';
+            return detalhamentos;
         },
         iniciarCollapsible: function () {
             $3('.collapsible').each(function () {

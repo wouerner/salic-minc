@@ -14,7 +14,7 @@ const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
 Vue.component('plano-distribuicao-detalhamentos-formulario', {
     template: `
         <div class="detalhamento-distribuicao-dos-produtos">
-            <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="idmunicipioibge" class="row center-align" ref="containerForm">
+            <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="local.idMunicipioIBGE + this.idplanodistribuicao" class="row center-align" ref="containerForm">
                 <a 
                     href="javascript:void(0)"
                     class="btn waves-effect waves-light white-text" 
@@ -30,7 +30,7 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
             >
                 <div v-show="visualizarFormulario" class="card">
                     <form class="card-content">
-                        <span class="card-title">Cadastrar novo detalhamento</span>
+                        <span class="card-title">Cadastro detalhamento</span>
                         <div class="row">
                             <div class="col s12 m6 l6">
                                 <span>
@@ -358,8 +358,8 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
             distribuicao: {
                 idDetalhaPlanoDistribuicao: null,
                 idPlanoDistribuicao: this.idplanodistribuicao,
-                idUF: this.iduf,
-                idMunicipio: this.idmunicipioibge,
+                idUF: this.local.idUF,
+                idMunicipio: this.local.idMunicipioIBGE,
                 dsProduto: '',
                 qtExemplares: 0,
                 qtGratuitaDivulgacao: 0,
@@ -396,17 +396,15 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
     },
     mixins: [utils],
     props: [
-        'idpreprojeto',
         'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
+        'local',
         'disabled',
         'editarDetalhamento'
     ],
-    created: function() {
+    created: function () {
         let vue = this;
         detalhamentoEventBus.$on('callBackSalvarDetalhamento', function (response) {
-            if(response == true) {
+            if (response == true) {
                 vue.limparFormulario();
             }
         });
@@ -501,9 +499,9 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
             this.distribuicao.qtGratuitaPatrocinador = parseInt(this.distribuicao.qtExemplares * 0.1);
             this.distribuicao.qtGratuitaPopulacao = this.qtGratuitaPopulacaoMinimo;
         },
-        editarDetalhamento: function(object) {
+        editarDetalhamento: function (object) {
             let vue = this;
-            if(object.idDetalhaPlanoDistribuicao != null) {
+            if (object.idDetalhaPlanoDistribuicao != null) {
                 vue.limparFormulario();
                 vue.visualizarFormulario = true;
 
@@ -522,7 +520,7 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
                 vue.inputUnitarioPopularIntegral = vue.formatarValor(object.vlUnitarioPopularIntegral);
                 vue.inputUnitarioProponenteIntegral = vue.formatarValor(object.vlUnitarioProponenteIntegral);
 
-                if(object.vlUnitarioPopularIntegral == 0 && object.vlUnitarioProponenteIntegral == 0) {
+                if (object.vlUnitarioPopularIntegral == 0 && object.vlUnitarioProponenteIntegral == 0) {
                     vue.distribuicaoGratuita = SIM;
                 }
             }
@@ -624,7 +622,7 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
         mostrarFormulario: function (id) {
 
             this.visualizarFormulario = !this.visualizarFormulario;
-            this.icon =  this.visualizarFormulario ? 'visibility_off' : 'add';
+            this.icon = this.visualizarFormulario ? 'visibility_off' : 'add';
 
             if (this.visualizarFormulario == true) {
                 let elm = $3("#" + id);

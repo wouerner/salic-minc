@@ -3,12 +3,9 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
         <div class="readequacao-plano-distribuicao-detalhamentos">
             <plano-distribuicao-detalhamentos-listagem
                 :disabled="disabled"
-                :idplanodistribuicao="produto.idPlanoDistribuicao"
-                :idpreprojeto="produto.idProjeto"
-                :iduf="local.idUF"
-                :idmunicipioibge="local.idMunicipioIBGE"
                 :detalhamentos="detalhamentos"
                 :canalaberto="produto.canalAberto"
+                :local="local"
                  v-on:eventoRemoverDetalhamento="removerDetalhamento"
                  v-on:eventoEditarDetalhamento="editarDetalhamento"
                 >
@@ -16,9 +13,7 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
             <plano-distribuicao-detalhamentos-formulario
                 :disabled="disabled"
                 :idplanodistribuicao="produto.idPlanoDistribuicao"
-                :idpreprojeto="produto.idProjeto"
-                :iduf="local.idUF"
-                :idmunicipioibge="local.idMunicipioIBGE"
+                :local="local"
                 :editarDetalhamento="detalhamento"
                 v-on:eventoSalvarDetalhamento="salvarDetalhamento"
                 >

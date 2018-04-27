@@ -24,12 +24,5 @@ Vue.component('plano-distribuicao-visualizar-produto-cabecalho', {
     props: {
         'produto': {}
     },
-    methods: {
-        label_sim_ou_nao: function (valor) {
-            if (valor == 1)
-                return 'Sim';
-            else
-                return 'N\xE3o';
-        }
-    }
+    mixins: [utils]
 });

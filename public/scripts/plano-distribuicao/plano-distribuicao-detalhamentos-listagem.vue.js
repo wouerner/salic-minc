@@ -5,26 +5,20 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                 <thead v-if="detalhamentos && detalhamentos.length > 0">
                     <tr>
                         <th rowspan="2">Categoria</th>
-                        <th rowspan="2">Quantidade</th>
-                        <th class="proponente" colspan="3">
-                            Proponente
-                        </th>
-                        <th class="popular" colspan="3">
-                            Pre&ccedil;o Popular
-                        </th>
-                        <th class="gratuito" rowspan="2">
-                            Distribui&ccedil;&atilde;o <br>Gratuita
-                        </th>
+                        <th rowspan="2" class="center-align">Quantidade</th>
+                        <th colspan="3" class="proponente center-align">Proponente</th>
+                        <th colspan="3" class="popular center-align">Pre&ccedil;o Popular</th>
+                        <th rowspan="2" class="gratuito center-align">Distribui&ccedil;&atilde;o <br>Gratuita</th>
                         <th rowspan="2" class="center-align">Receita <br> Prevista</th>
                         <th rowspan="2" colspan="2" width="10%" class="center-align">A&ccedil;&otildees</th>
                     </tr>
                     <tr>
-                        <th class="proponente">Qtd. Inteira</th>
-                        <th class="proponente">Qtd. Meia</th>
-                        <th class="proponente">Pre&ccedil;o <br> Unitario</th>
-                        <th class="popular">Qtd. Inteira</th>
-                        <th class="popular">Qtd. Meia</th>
-                        <th class="popular">Pre&ccedil;o <br> Unitario</th>
+                        <th class="proponente center-align">Qtd. Inteira</th>
+                        <th class="proponente center-align">Qtd. Meia</th>
+                        <th class="proponente center-align">Pre&ccedil;o <br> Unitario</th>
+                        <th class="popular center-align">Qtd. Inteira</th>
+                        <th class="popular center-align">Qtd. Meia</th>
+                        <th class="popular center-align">Pre&ccedil;o <br> Unitario</th>
                     </tr>
                 </thead>
                 <tbody v-if="detalhamentos && detalhamentos.length > 0">
@@ -40,11 +34,15 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                         <td class="center-align">{{ detalhamento.qtPopularParcial }}</td>
                         <td class="right-align">{{ formatarValor(detalhamento.vlUnitarioPopularIntegral) }}</td>
                         <!-- Distribuicao Gratuita-->
-                        <td class="center-align">{{ parseInt(detalhamento.qtGratuitaDivulgacao) +
-                            parseInt(detalhamento.qtGratuitaPatrocinador) + parseInt(detalhamento.qtGratuitaPopulacao) }}
+                        <td class="center-align">
+                            {{ 
+                                parseInt(detalhamento.qtGratuitaDivulgacao) +
+                                parseInt(detalhamento.qtGratuitaPatrocinador) + 
+                                parseInt(detalhamento.qtGratuitaPopulacao) 
+                            }}
                         </td>
                         <td class="right-align">{{ formatarValor(detalhamento.vlReceitaPrevista) }}</td>
-                        <td>
+                        <td class="center-align">
                              <a 
                                 href="javascript:void(0)"
                                 class="btn small waves-effect waves-light tooltipped btn-primary btn-editar"
@@ -55,7 +53,7 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                                 <i class="material-icons">edit</i>
                             </a>
                         </td>
-                        <td>
+                        <td class="center-align">
                             <a
                                 href="javascript:void(0)"
                                 class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item"
@@ -64,7 +62,6 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                                     @click.prevent="excluir(detalhamento, index)">
                                 <i class="material-icons">delete</i>
                             </a>
-                            
                         </td>
                     </tr>
                 </tbody>
@@ -73,27 +70,12 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                         <td colspan="12" class="center-align">Nenhum detalhamento cadastrado</td>
                     </tr>
                 </tbody>
-                <tfoot v-if="detalhamentos && detalhamentos.length > 0" style="opacity: 0.5">
-                    <tr>
-                        <td><b>Totais</b></td>
-                        <td class="center-align"><b>{{ qtExemplaresTotal }}</b></td>
-                        <!--Fim: Preço Popular -->
-                        <td class="center-align"><b>{{ qtProponenteIntegralTotal }}</b></td>
-                        <td class="center-align"><b>{{ qtProponenteParcialTotal }}</b></td>
-                        <td class="right-align"> -</td>
-                        <!--Preço Popular -->
-                        <td class="center-align"><b>{{ qtPopularIntegralTotal }}</b></td>
-                        <td class="center-align"><b>{{ qtPopularParcialTotal }}</b></td>
-                        <td class="right-align"> -</td>
-                        <td class="center-align"><b>{{ qtDistribuicaoGratuitaTotal }}</b>
-                        </td>
-                        <td class="right-align"><b>{{ receitaPrevistaTotal }}</b></td>
-                        <td></td>
-                    </tr>
-                </tfoot>
+                
+                <plano-distribuicao-detalhamentos-consolidacao
+                    :detalhamentos="detalhamentos"
+                ></plano-distribuicao-detalhamentos-consolidacao>
             </table>
-            
-            <table style="max-width: 300px" v-if="detalhamentos && detalhamentos.length > 0">
+            <table style="max-width: 300px; margin: 0;" v-if="detalhamentos && detalhamentos.length > 0">
                 <tr>
                     <th>
                         <b>Valor m&eacute;dio </b>
@@ -106,9 +88,12 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
             </table>
         </div>
     `,
-    data: function () {
-        return {}
-    },
+    props: [
+        'disabled',
+        'canalaberto',
+        'local',
+        'detalhamentos'
+    ],
     mixins: [utils],
     watch: {
         detalhamentos: function () {
@@ -119,58 +104,7 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
             }
         }
     },
-    props: [
-        'idpreprojeto',
-        'idplanodistribuicao',
-        'idmunicipioibge',
-        'iduf',
-        'disabled',
-        'canalaberto',
-        'detalhamentos'
-    ],
     computed: {
-        qtExemplaresTotal: function () {
-            return this.detalhamentos.reduce(function (total, value) {
-                return total + parseInt(value.qtExemplares);
-            }, 0);
-        },
-        qtDistribuicaoGratuitaTotal: function () {
-            return this.detalhamentos.reduce(function (total, value) {
-                return total + (
-                    parseInt(value.qtGratuitaDivulgacao) +
-                    parseInt(value.qtGratuitaPatrocinador) +
-                    parseInt(value.qtGratuitaPopulacao));
-            }, 0);
-        },
-        qtPopularIntegralTotal: function () {
-            return this.detalhamentos.reduce(function (total, value) {
-                return total + parseInt(value.qtPopularIntegral);
-            }, 0);
-        },
-        qtPopularParcialTotal: function () {
-            return this.detalhamentos.reduce(function (total, value) {
-                return total + parseInt(value.qtPopularParcial);
-            }, 0);
-        },
-        qtProponenteIntegralTotal: function () {
-            return this.detalhamentos.reduce(function (total, value) {
-                return total + parseInt(value.qtProponenteIntegral);
-            }, 0);
-        },
-        qtProponenteParcialTotal: function () {
-            return this.detalhamentos.reduce(function (total, value) {
-                return total + parseInt(value.qtProponenteParcial);
-            }, 0);
-        },
-        receitaPrevistaTotal: function () {
-            var soma = numeral();
-
-            soma.add(this.detalhamentos.reduce(function (total, value) {
-                return total + parseFloat(value.vlReceitaPrevista);
-            }, 0));
-
-            return soma.format();
-        },
         valorMedioProponente: function () {
             var vlReceitaProponenteIntegral = numeral();
             var vlReceitaProponenteParcial = numeral();
@@ -196,10 +130,10 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
         excluir: function (detalhamento, index) {
             this.$emit('eventoRemoverDetalhamento', detalhamento, index);
         },
-        editar: function(detalhamento, index) {
+        editar: function (detalhamento, index) {
+            console.log('editar', detalhamento);
+            let elm = $3("div[formIdMunicipio='" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "']");
 
-            let elm = $3("div[formIdMunicipio='"+ detalhamento.idMunicipio + "']");
-            console.error('editar', "div[formIdMunicipio='"+ detalhamento.idMunicipio + "']", elm,detalhamento.idMunicipio);
             $3("html, body").animate({
                 scrollTop: $3(elm).offset().top + 30
             }, 600);
