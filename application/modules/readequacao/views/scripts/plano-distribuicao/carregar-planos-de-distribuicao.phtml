@@ -166,7 +166,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'incluir-planos-de-distribuicao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                        url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'plano-distribuicao', 'action' => 'incluir-planos-de-distribuicao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                         data: {
                             newPlanoDistribuicao: $('#idProduto-' + idProduto).val(),
                             newArea: $('#areaCultural-' + idProduto).val(),

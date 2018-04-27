@@ -23,7 +23,5 @@ class Readequacao_LocalRealizacaoController extends MinC_Controller_Action_Abstr
         }
 
         $this->_helper->json(array('data' => $locais, 'success' => 'true'));
-
     }
-
 }

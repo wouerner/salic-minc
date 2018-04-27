@@ -567,7 +567,7 @@
         <td colspan="3">
             <?php /***** CARREGA PLANOS DE DISTRIBUIÇÃO *****/ ?>
             <script type="text/javascript"> 
-                jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-planos-de-distribuicao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->dados->idPronac; ?>&idReadequacao=<?php echo $this->dados->idReadequacao; ?>&link', '', 'planosDeDistribuicao');
+                jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'plano-distribuicao', 'action' => 'carregar-planos-de-distribuicao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->dados->idPronac; ?>&idReadequacao=<?php echo $this->dados->idReadequacao; ?>&link', '', 'planosDeDistribuicao');
             </script>
             <div id="planosDeDistribuicao"></div>
             <?php /****** FIM PLANOS DE DISTRIBUIÇÃO ******/ ?>
