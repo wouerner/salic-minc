@@ -622,7 +622,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+        $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
         $editarItem = $tbPlanoDistribuicao->buscar(array('idPlanoDistribuicao=?'=>$_POST['idPlanoDistribuicao']))->current();
 
         if ($this->idPerfil == Autenticacao_Model_Grupos::PARECERISTA || $this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
@@ -1204,7 +1204,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
                 parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
             }
         } elseif ($idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
-            $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
             $planosReadequados = $tbPlanoDistribuicao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($planosReadequados)==0) {
                 parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
@@ -1311,7 +1311,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
                 $tbPlanilhaAprovacao->update($dadosPlanilha, $wherePlanilha);
 
                 if (!empty($idReadequacao) && $idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
-                    $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+                    $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                     $whereDistribuicao = "idPronac = {$idPronac} AND tpSolicitacao = 'A' AND idReadequacao IS NULL";
                     $tbPlanoDistribuicao->update(['idReadequacao' => $idReadequacao], $whereDistribuicao);
                 }
@@ -1388,7 +1388,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
             }
 
             if ($dados->idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
-                $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+                $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                 $tbPlanoDistribuicao->delete(array('idPronac = ?'=>$idPronac, 'stAtivo = ?'=>'S'));
             }
 
@@ -1459,7 +1459,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
                     $whereAb = "idPronac = $idPronac AND stAtivo = 'S' AND idReadequacao is null";
                     $tbAbrangencia->update($dadosAb, $whereAb);
                 } elseif ($r->idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
-                    $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+                    $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                     $dadosPDDist = array();
                     $dadosPDDist['idReadequacao'] = $r->idReadequacao;
                     $wherePDDist = "idPronac = $idPronac AND stAtivo = 'S' AND idReadequacao is null";
@@ -2852,7 +2852,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
 
                             } elseif ($read->idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) { //Se for readequação de plano de distribuição, atualiza os dados na SAC.dbo.PlanoDistribuicaoProduto.
                                 $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-                                $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+                                $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                                 $planosDistribuicao = $tbPlanoDistribuicao->buscar(array('idReadequacao=?'=>$idReadequacao));
 
                                 foreach ($planosDistribuicao as $plano) {
@@ -3284,7 +3284,7 @@ class Readequacao_ReadequacoesController extends MinC_Controller_Action_Abstract
 
             } elseif ($read->idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) { //Se for readequação de plano de distribuição, atualiza os dados na SAC.dbo.PlanoDistribuicaoProduto.
                 $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-                $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+                $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                 $planosDistribuicaoReadequados = $tbPlanoDistribuicao->buscar(array('idReadequacao=?'=>$idReadequacao));
 
                 $Projetos = new Projetos();

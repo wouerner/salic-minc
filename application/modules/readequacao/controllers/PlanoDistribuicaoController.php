@@ -45,7 +45,7 @@ class Readequacao_PlanodistribuicaoController extends MinC_Controller_Action_Abs
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+        $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
         $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($idPronac, 'tbPlanoDistribuicao');
 
         if (count($planosDistribuicao) == 0) {
@@ -89,7 +89,7 @@ class Readequacao_PlanodistribuicaoController extends MinC_Controller_Action_Abs
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
-        $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+        $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
         $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoConsolidadoReadequacao($idReadequacao);
 
         $tbReadequacao = new Readequacao_Model_tbReadequacao();
@@ -120,7 +120,7 @@ class Readequacao_PlanodistribuicaoController extends MinC_Controller_Action_Abs
         }
 
         //VERIFICA SE JA POSSUI OS PLANOS DE DISTRIBUIÇÃO NA TABELA tbPlanoDistribuicao (READEQUACAO), SE NÃO TIVER, COPIA DA ORIGINAL, E DEPOIS INCLUI O ITEM DESEJADO.
-        $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+        $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
         $readequacaoPDDist = $tbPlanoDistribuicao->buscar(array('idPronac=?' => $idPronac, 'stAtivo=?' => 'S'));
 
         $planosAtivos = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($idPronac);
@@ -196,7 +196,7 @@ class Readequacao_PlanodistribuicaoController extends MinC_Controller_Action_Abs
         }
 
         //VERIFICA SE JA POSSUI OS PLANOS DE DISTRIBUIÇÃO NA TABELA tbPlanoDistribuicao (READEQUACAO), SE NÃO TIVER, COPIA DA ORIGINAL, E DEPOIS INCLUI O ITEM DESEJADO.
-        $tbPlanoDistribuicao = new tbPlanoDistribuicao();
+        $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
         $readequacaoPDDist = $tbPlanoDistribuicao->buscar(array('idPronac=?' => $idPronac, 'stAtivo=?' => 'S'));
         $planosAtivos = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($idPronac);
 
