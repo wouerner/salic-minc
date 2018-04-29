@@ -1965,19 +1965,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             "urlResumo" => $this->_urlPadrao . "/admissibilidade/admissibilidade/resumo-propostas"
         );
 
-//        if ($this->codGrupo == Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE
-//            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE
-//            || $this->codGrupo == Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO
-//            || $this->codGrupo == Autenticacao_Model_Grupos::COMPONENTE_COMISSAO
-//        ) {
-//            $arrDados['liberarEncaminhamento'] = true;
-//        }
-//
-//        if ($this->codGrupo) {
-//            $gruposDbTable = new Autenticacao_Model_Grupos();
-//            $this->view->perfis = $gruposDbTable->obterPerfisEncaminhamentoAvaliacaoProposta($this->codGrupo);
-//        }
-
         $this->montaTela("admissibilidade/listarpropostas.phtml", $arrDados);
     }
 
