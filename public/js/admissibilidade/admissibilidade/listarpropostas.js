@@ -125,19 +125,14 @@ function obterColunasListagem () {
     colunas.push({
         data: null,
         render: function (data, type, row) {
-            return (data.descricao_area != null && data.descricao_area != '') ? data.descricao_area : data.descricao_area_inicial;
-        }
-    })
-    colunas.push({
-        data: null,
-        render: function (data, type, row) {
-            return (data.descricao_segmento != null && data.descricao_segmento != '') ? data.descricao_segmento : data.descricao_segmento_inicial;
-        }
-    })
-    colunas.push({
-        data: null,
-        render: function (data, type, row) {
-            return (data.enquadramento != null && data.enquadramento != '') ? data.enquadramento : data.enquadramento_inicial;
+            let area = (data.descricao_area != null && data.descricao_area != '') ? data.descricao_area : data.descricao_area_inicial;
+            let segmento = (data.descricao_segmento != null && data.descricao_segmento != '') ? data.descricao_segmento : data.descricao_segmento_inicial;
+            let enquadramento = (data.enquadramento != null && data.enquadramento != '') ? data.enquadramento : data.enquadramento_inicial;
+            let texto = '<b>&Aacute;rea:</b> ' + area;
+            texto += '<br/><b>Segmento:</b> ' + segmento;
+            texto += '<br/><b>' + enquadramento + '</b>'
+
+            return texto;
         }
     })
     colunas.push({
