@@ -212,7 +212,7 @@
                     
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'incluir-local-de-realizacao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'incluir-local-de-realizacao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                             data: {
                                 newPaisLR: idPais,
                                 newUFLR: idUF,
@@ -270,7 +270,7 @@
                     'Sim' : function(){
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'excluir-local-de-realizacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
+                            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'excluir-local-de-realizacao'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>',
                             data: {
                                 idAbrangencia: idAbrangencia
                             },
@@ -317,7 +317,7 @@
             }
             else{
                 $.ajax({
-                    url : '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-locais-de-realizacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
+                    url : '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'carregar-locais-de-realizacao'), null, true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
                     type: "POST",
                     data :{
                         iduf : $(this).val()
@@ -370,7 +370,7 @@
                                 <?php if($this->idPerfil == 1111){ ?>
                                     atualizarDadosLocaisRealizacao();
                                 <?php } else { ?>
-                                    jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-locais-de-realizacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'locaisParaRealizacao');
+                                    jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'carregar-locais-de-realizacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'locaisParaRealizacao');
                                 <?php } ?>
                             },
                             dataType : 'json'
@@ -412,7 +412,7 @@
                                     <?php if($this->idPerfil == 1111){ ?>
                                         atualizarDadosLocaisRealizacao();
                                     <?php } else { ?>
-                                        jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-locais-de-realizacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'locaisParaRealizacao');
+                                        jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'carregar-locais-de-realizacao-readequacoes'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>&idReadequacao=<?php echo $this->idReadequacao; ?>', '', 'locaisParaRealizacao');
                                     <?php } ?>
                                 },
                                 dataType : 'json'

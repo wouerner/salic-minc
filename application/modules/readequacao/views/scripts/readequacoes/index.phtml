@@ -749,7 +749,7 @@
     }
 
     function atualizarDadosLocaisRealizacao(){
-        jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'carregar-locais-de-realizacao'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'locaisParaRealizacao');
+        jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'carregar-locais-de-realizacao'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'locaisParaRealizacao');
    }
 
     function atualizarDadosPlanosDeDivulgacao(){
@@ -869,11 +869,10 @@
                 <td id="planosDeDistribuicao">
 
                 </td>
-                <div id="dynamic-component" class="demo">
+                <div id="dynamic-component">
                     <component
                         v-bind:is="currentComponent"
-                        :id-pronac="idPreProjeto"
-                        class="tab"
+                        :id-pronac="idPronac"
                     ></component>
                 </div>
             </tr>
@@ -1191,7 +1190,7 @@
         el: '#dynamic-component',
         data: {
             currentComponent: '',
-            idPreProjeto: <?= $this->projeto->idProjeto;?>,
+            idPronac: <?= $this->projeto->IdPRONAC;?>,
         },
         mounted: function() {
             this.carregarComponenteSelecionado();
