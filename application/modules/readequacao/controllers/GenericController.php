@@ -2,16 +2,21 @@
 
 abstract class Readequacao_GenericController extends MinC_Controller_Action_Abstract
 {
-    private $idAgente = 0;
-    private $idUsuario = 0;
-    private $idOrgao = 0;
-    private $idPerfil = 0;
+    protected $idAgente = 0;
+    protected $idUsuario = 0;
+    protected $idOrgao = 0;
+    protected $idPerfil = 0;
+
+    protected $idPronac;
+    protected $projeto;
 
     public function init()
     {
+        parent::init();
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
         $this->idOrgao = $GrupoAtivo->codOrgao;
         $this->idPerfil = $GrupoAtivo->codGrupo;
+        $this->view->usuarioInterno = false;
 
         // verifica as permissoes
         $PermissoesGrupo = array();
@@ -19,15 +24,17 @@ abstract class Readequacao_GenericController extends MinC_Controller_Action_Abst
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_VINCULADA_SUBSTITUTO;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO;
 
-        // pega o idAgente do usuário logado
-        $auth = Zend_Auth::getInstance(); // pega a autenticação
-        $this->view->usuarioInterno = false;
+        $auth = Zend_Auth::getInstance();
+
+        if (!$auth->hasIdentity()) {
+            $url = Zend_Controller_Front::getInstance()->getBaseUrl();
+            $this->redirect($url);
+        }
 
         if (isset($auth->getIdentity()->usu_codigo)) { // autenticacao novo salic
             $this->view->usuarioInterno = true;
             $this->idUsuario = $auth->getIdentity()->usu_codigo;
 
-            //Recupera todos os grupos do Usuario
             $Usuario = new Autenticacao_Model_Usuario(); // objeto usuário
             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
             foreach ($grupos as $grupo) {
@@ -41,17 +48,20 @@ abstract class Readequacao_GenericController extends MinC_Controller_Action_Abst
             parent::perfil(4, $PermissoesGrupo);
             $this->idUsuario = (isset($_GET["idusuario"])) ? $_GET["idusuario"] : 0;
 
-            /* =============================================================================== */
-            /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE AO PROJETO ====== */
-            /* =============================================================================== */
             $this->verificarPermissaoAcesso(false, true, false);
         }
-        parent::init();
 
-        $idPronac = $this->_request->getParam("idPronac"); // pega o id do pronac via get
+        $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
         $this->view->idPronac = $idPronac;
+        $this->idPronac = $idPronac;
+
+        if($idPronac) {
+            $tbProjetos = new Projeto_Model_DbTable_Projetos();
+            $this->projeto = $tbProjetos->findBy(['idPronac' => $idPronac]);
+        }
+
     }
 }
