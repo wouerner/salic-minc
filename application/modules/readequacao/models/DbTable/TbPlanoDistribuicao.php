@@ -1,13 +1,9 @@
 <?php
 /**
- * DAO tbPlanoDistribuicao
+ * tbPlanoDistribuicao
  * OBS:
- *    -> A tabela SAC.dbo.PlanoDistribuicaoProduto armazena os produtos do projeto originais (aprovados)
- *  -> A tabela SAC.dbo.tbPlanoDistribuicao armazena os produtos do projeto que foram solicitados na readequa��o
- * @author emanuel.sampaio <emanuelonline@gmail.com>
- * @since 20/04/2012
- * @version 1.0
- * @link http://salic.cultura.gov.br
+ *  -> A tabela SAC.dbo.PlanoDistribuicaoProduto armazena os produtos do projeto originais (aprovados)
+ *  -> A tabela SAC.dbo.tbPlanoDistribuicao armazena os produtos do projeto que foram solicitados na readequacao
  */
 
 class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstract
@@ -21,7 +17,7 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
      * Busca os produtos originais (aprovados)
      * @access public
      * @param array $where (filtros)
-     * @param array $order (ordena��o)
+     * @param array $order (ordenacao)
      * @return object
      */
     public function buscarProdutosAprovados($where = array(), $order = array())
@@ -171,7 +167,7 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
         endforeach;
 
         $select->order($order);
-                
+
         return $this->fetchAll($select);
     }
 
@@ -180,7 +176,7 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
      * Busca o produtos avaliados e deferidos pelo tecnico de acompanhamento na readequacao
      * @access public
      * @param array $where (filtros)
-     * @param array $order (ordena��o)
+     * @param array $order (ordenacao)
      * @return object
      */
     public function produtosAvaliadosReadequacao($idPedidoAlteracao, $idAvaliacaoItem)
@@ -218,7 +214,7 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
     /*
      * Criada em 31/03/2014
      * @author: Jefferson Alessandro
-     * Fun��o utilizada para buscar os planos de distribui��o do projeto para readequa��o.
+     * Funcao utilizada para buscar os planos de distribuicao do projeto para readequacao.
      */
     public function buscarPlanosDistribuicaoReadequacao($idPronac, $tabela = 'PlanoDistribuicaoProduto')
     {

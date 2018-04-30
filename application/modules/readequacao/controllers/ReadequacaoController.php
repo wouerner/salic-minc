@@ -1065,7 +1065,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
             $this->Pais                            = new Pais();
             $this->Uf                              = new Uf();
             $this->PreProjeto                      = new Proposta_Model_DbTable_PreProjeto();
-            $this->tbAbrangencia                   = new tbAbrangencia();
+            $this->tbAbrangencia                   = new Readequacao_Model_DbTable_TbAbrangencia();
             $this->tbPedidoAlteracaoXTipoAlteracao = new tbPedidoAlteracaoXTipoAlteracao();
             $this->tbPedidoAltProjetoXArquivo      = new tbPedidoAltProjetoXArquivo();
 
@@ -2236,7 +2236,7 @@ class ReadequacaoController extends MinC_Controller_Action_Abstract
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
 
         // objetos
-        $this->tbAbrangencia              = new tbAbrangencia();
+        $this->tbAbrangencia              = new Readequacao_Model_DbTable_TbAbrangencia();
         $this->tbPedidoAltProjetoXArquivo = new tbPedidoAltProjetoXArquivo();
 
         // busca os dados do hist�rico

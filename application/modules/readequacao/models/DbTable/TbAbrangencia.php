@@ -4,16 +4,10 @@
  * OBS:
  * 	-> A tabela SAC.dbo.Abrangencia armazena os locais de realizacao do projeto originais (aprovados)
  *  -> A tabela SAC.dbo.tbAbrangencia armazena os locais de realizacao do projeto que foram solicitados na readequacao
- * @author emanuel.sampaio <emanuelonline@gmail.com>
  * @since 18/04/2012
- * @version 1.0
- * @package application
- * @subpackage application.model
- * @copyright  2012 - Ministerio da Cultura - Todos os direitos reservados.
- * @link http://salic.cultura.gov.br
  */
 
-class tbAbrangencia extends MinC_Db_Table_Abstract
+class Readequacao_Model_DbTable_TbAbrangencia extends MinC_Db_Table_Abstract
 {
     protected $_schema  = "sac";
     protected $_name    = "tbAbrangencia";
