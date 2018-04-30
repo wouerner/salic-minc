@@ -1,6 +1,6 @@
 <?php
 
-class Readequacao_LocalRealizacaoController extends MinC_Controller_Action_Abstract
+class Readequacao_LocalRealizacaoController extends Readequacao_GenericController
 {
     public function init()
     {
@@ -25,9 +25,35 @@ class Readequacao_LocalRealizacaoController extends MinC_Controller_Action_Abstr
         $this->_helper->json(array('data' => $locais, 'success' => 'true'));
     }
 
+    public function obterLocaisDeRealizacaoAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $this->view->idPerfil = $GrupoAtivo->codGrupo;
+
+        try {
+            $idPronac = $this->_request->getParam("idPronac");
+            if (strlen($idPronac) > 7) {
+                $idPronac = Seguranca::dencrypt($idPronac);
+            }
+            $tbAbrangencia = new Readequacao_Model_DbTable_TbAbrangencia();
+            $locais = $tbAbrangencia->buscarLocaisParaReadequacao($idPronac, 'tbAbrangencia');
+            if (count($locais)==0) {
+                $locais = $tbAbrangencia->buscarLocaisParaReadequacao($idPronac, 'Abrangencia');
+            }
+
+            $locais = $locais->toArray();
+            foreach ($locais as $key => $dado) {
+                $locais[$key] = array_map('utf8_encode', $dado);
+            }
+
+            $this->_helper->json(['msg' => '', 'data' => $locais, 'success' => 'true']);
+        } catch(Exception $e) {
+            $this->_helper->json(['msg' => utf8_encode($e->getMessage()), 'data' => $locais, 'success' => 'false']);
+        }
+    }
+
     /*
-     * Criada em 19/03/2014
-     * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
      * Essa função é usada para carregar os dados do locais de realização do projeto.
      */
     public function carregarLocaisDeRealizacaoAction()
@@ -44,7 +70,7 @@ class Readequacao_LocalRealizacaoController extends MinC_Controller_Action_Abstr
             $a = 0;
             $cidadeArray = array();
             foreach ($cidade as $DadosCidade) {
-                $cidadeArray[$a]['idCidade'] = $DadosCidade->id;
+                $cidadeArray[$a]['idMunicipio'] = $DadosCidade->id;
                 $cidadeArray[$a]['nomeCidade'] = utf8_encode($DadosCidade->Descricao);
                 $a++;
             }
@@ -145,7 +171,7 @@ class Readequacao_LocalRealizacaoController extends MinC_Controller_Action_Abstr
                 $locaisCopiados['idReadequacao'] = null;
                 $locaisCopiados['idPais'] = $value->idPais;
                 $locaisCopiados['idUF'] = $value->idUF;
-                $locaisCopiados['idMunicipioIBGE'] = $value->idCidade;
+                $locaisCopiados['idMunicipioIBGE'] = $value->idMunicipio;
                 $locaisCopiados['tpSolicitacao'] = 'N';
                 $locaisCopiados['stAtivo'] = 'S';
                 $locaisCopiados['idPronac'] = $idPronac;
@@ -211,7 +237,7 @@ class Readequacao_LocalRealizacaoController extends MinC_Controller_Action_Abstr
                 $locaisCopiados['idReadequacao'] = null;
                 $locaisCopiados['idPais'] = $value->idPais;
                 $locaisCopiados['idUF'] = $value->idUF;
-                $locaisCopiados['idMunicipioIBGE'] = $value->idCidade;
+                $locaisCopiados['idMunicipioIBGE'] = $value->idMunicipio;
                 $locaisCopiados['tpSolicitacao'] = 'N';
                 $locaisCopiados['stAtivo'] = 'S';
                 $locaisCopiados['idPronac'] = $idPronac;

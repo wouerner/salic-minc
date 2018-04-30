@@ -11,9 +11,9 @@ Vue.component('plano-distribuicao-listagem', {
                 </div>
                 <div class="collapsible-body no-padding margin10 scroll-x">
                     <ul class="collapsible collapsible-locais no-padding" data-collapsible="expandable">
-                        <li v-for="local of locais" v-if="local.idMunicipioIBGE">
+                        <li v-for="local of locais" v-if="local.idMunicipio">
                             <div class="collapsible-header black-text">
-                                <i class="material-icons">place</i> {{local.uf}} - {{local.cidade}}
+                                <i class="material-icons">place</i> {{local.uf}} - {{local.municipio}}
                             </div>
                             <div class="collapsible-body no-padding margin10 scroll-x">
                                 <component
@@ -25,7 +25,7 @@ Vue.component('plano-distribuicao-listagem', {
                                     :disabled="disabled"
                                     :produto="produto"
                                     :local="local"
-                                    :array-detalhamentos="filtrarDetalhamentos(detalhamentos, produto.idPlanoDistribuicao, local.idMunicipioIBGE)"
+                                    :array-detalhamentos="filtrarDetalhamentos(detalhamentos, produto.idPlanoDistribuicao, local.idMunicipio)"
                                 ></component>
                                 <component
                                     v-bind:is="componenteProdutoRodape"
