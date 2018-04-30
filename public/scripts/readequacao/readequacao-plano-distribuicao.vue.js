@@ -39,21 +39,21 @@ Vue.component('readequacao-plano-distribuicao', {
             let vue = this;
             $3.ajax({
                 type: "GET",
-                url: "/readequacao/plano-distribuicao/obter-plano-distribuicao-readequacao-ajax",
+                url: "/readequacao/plano-distribuicao/obter-plano-distribuicao-detalhamentos-ajax",
                 data: {
                     idPronac: id
                 }
             }).done(function (response) {
                 let dados = response.data;
-                vue.produtos = dados.planodistribuicaoproduto;
-                vue.detalhamentos = dados.tbdetalhaplanodistribuicao;
+                vue.produtos = dados.planodistribuicao;
+                vue.detalhamentos = dados.detalhamentos;
             });
         },
         obterLocaisRealizacao: function (id) {
             let vue = this;
             $3.ajax({
                 type: "GET",
-                url: "/readequacao/local-realizacao/obter-locais-readequacao-ajax",
+                url: "/readequacao/local-realizacao/obter-locais-de-realizacao-ajax",
                 data: {
                     idPronac: id
                 }

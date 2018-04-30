@@ -1,37 +1,36 @@
 <?php
 
-class Readequacao_PlanodistribuicaoController extends MinC_Controller_Action_Abstract
+class Readequacao_PlanodistribuicaoController extends Readequacao_GenericController
 {
     public function init()
     {
         parent::init();
     }
 
-    public function obterPlanoDistribuicaoReadequacaoAjaxAction()
+    public function obterPlanoDistribuicaoDetalhamentosAjaxAction()
     {
-        $this->_helper->layout->disableLayout();
-
-        $dados = [];
-
-        $this->_helper->layout->disableLayout();
-
-        $idPreProjeto = $this->_request->getParam('idPronac');
+        $this->view->idPerfil = $this->idPerfil;
 
         try {
+            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
+            $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'tbPlanoDistribuicao');
 
-            if (empty($idPreProjeto)) {
-                throw new Exception("Proposta inv&aacute;lida");
+            if (count($planosDistribuicao) == 0) {
+                $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'PlanoDistribuicaoProduto');
             }
 
+            $dados['planodistribuicao'] = $planosDistribuicao->toArray();
             $tbPlanoDistribuicao = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-            $dados['planodistribuicaoproduto'] = $tbPlanoDistribuicao->buscar(['idProjeto = ?' => $idPreProjeto])->toArray();
-            $dados['tbdetalhaplanodistribuicao'] = $tbPlanoDistribuicao->buscarPlanoDistribuicaoDetalhadoByIdProjeto($idPreProjeto);
+            $dados['detalhamentos'] = $tbPlanoDistribuicao->buscarPlanoDistribuicaoDetalhadoByIdProjeto(263402);
+//            $dados['planodistribuicaoproduto'] = $tbPlanoDistribuicao->buscar(['idProjeto = ?' => 263402])->toArray();
+
             $dados = TratarArray::prepararArrayMultiParaJson($dados);
 
             $this->_helper->json(['data' => $dados, 'success' => 'true']);
         } catch (Exception $e) {
             $this->_helper->json(['msg' => utf8_encode($e->getMessage()), 'data' => $dados, 'success' => 'false']);
         }
+
     }
 
     public function carregarPlanosDeDistribuicaoAction()
