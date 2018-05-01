@@ -222,7 +222,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         );
     }
 
-    public function salvarSugestaoEnquadramento(array $dadosSugestaoEnquadramento)
+    public function salvarSugestaoEnquadramento(array $dadosSugestaoEnquadramento, $isCadastrarRecurso = true)
     {
         $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento([
             'id_perfil_usuario' => $dadosSugestaoEnquadramento['id_perfil']
@@ -298,7 +298,7 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
                 'id_sugestao_enquadramento = ?' => $dadosBuscaPorSugestao['id_sugestao_enquadramento']
             ]);
         }
-        if ($this->isPermitidoCadastrarRecurso($dadosSugestaoEnquadramento['id_perfil'])) {
+        if ($isCadastrarRecurso && $this->isPermitidoCadastrarRecurso($dadosSugestaoEnquadramento['id_perfil'])) {
             $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
             $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugestaoEnquadramento['id_preprojeto']);
         }

@@ -5,13 +5,14 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
 
     private $authIdentity;
     private $grupoAtivo;
+    private $auth;
 
     public function init()
     {
         parent::init();
 
-        $auth = Zend_Auth::getInstance();
-        $this->authIdentity = array_change_key_case((array)$auth->getIdentity());
+        $this->auth = Zend_Auth::getInstance();
+        $this->authIdentity = array_change_key_case((array)$this->auth->getIdentity());
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
         $this->view->id_perfil = $this->grupoAtivo->codGrupo;
@@ -212,6 +213,22 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
                 Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO
             );
         }
+
+        $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+        $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($this->idPreProjeto);
+
+        $dadosSugestaoEnquadramento = [];
+        $dadosSugestaoEnquadramento['id_orgao'] = $this->grupoAtivo->codOrgao;
+        $dadosSugestaoEnquadramento['id_perfil'] = $this->grupoAtivo->codGrupo;
+        $dadosSugestaoEnquadramento['id_usuario_avaliador'] = $this->auth->getIdentity()->usu_codigo;
+        $dadosSugestaoEnquadramento['id_preprojeto'] = $id_preprojeto;
+        $dadosSugestaoEnquadramento['descricao_motivacao'] = $dsAvaliacaoTecnica;
+        $dadosSugestaoEnquadramento['id_area'] = $enquadramentoInicialProponente['id_area'];
+        $dadosSugestaoEnquadramento['id_segmento'] = $enquadramentoInicialProponente['id_segmento'];
+
+        $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($dadosSugestaoEnquadramento, false);
+
 
         parent::message(
             'Dados armazenados com sucesso.',
