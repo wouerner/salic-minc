@@ -214,21 +214,22 @@ class Recurso_RecursoPropostaController extends Proposta_GenericController
             );
         }
 
-        $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-        $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($this->idPreProjeto);
-
-        $dadosSugestaoEnquadramento = [];
-        $dadosSugestaoEnquadramento['id_orgao'] = $this->grupoAtivo->codOrgao;
-        $dadosSugestaoEnquadramento['id_perfil'] = $this->grupoAtivo->codGrupo;
-        $dadosSugestaoEnquadramento['id_usuario_avaliador'] = $this->auth->getIdentity()->usu_codigo;
-        $dadosSugestaoEnquadramento['id_preprojeto'] = $id_preprojeto;
-        $dadosSugestaoEnquadramento['descricao_motivacao'] = $dsAvaliacaoTecnica;
-        $dadosSugestaoEnquadramento['id_area'] = $enquadramentoInicialProponente['id_area'];
-        $dadosSugestaoEnquadramento['id_segmento'] = $enquadramentoInicialProponente['id_segmento'];
-
-        $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-        $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($dadosSugestaoEnquadramento, false);
-
+        if((string)$recursoEnquadramento['stAtendimento'] == (string)Recurso_Model_TbRecursoProposta::SITUACAO_ATENDIMENTO_DEFERIDO) {
+            $planoDistribuicaoProdutoDbTable = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+            $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($this->idPreProjeto);
+    
+            $dadosSugestaoEnquadramento = [];
+            $dadosSugestaoEnquadramento['id_orgao'] = $this->grupoAtivo->codOrgao;
+            $dadosSugestaoEnquadramento['id_perfil'] = $this->grupoAtivo->codGrupo;
+            $dadosSugestaoEnquadramento['id_usuario_avaliador'] = $this->auth->getIdentity()->usu_codigo;
+            $dadosSugestaoEnquadramento['id_preprojeto'] = $id_preprojeto;
+            $dadosSugestaoEnquadramento['descricao_motivacao'] = $dsAvaliacaoTecnica;
+            $dadosSugestaoEnquadramento['id_area'] = $enquadramentoInicialProponente['id_area'];
+            $dadosSugestaoEnquadramento['id_segmento'] = $enquadramentoInicialProponente['id_segmento'];
+    
+            $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+            $sugestaoEnquadramentoDbTable->salvarSugestaoEnquadramento($dadosSugestaoEnquadramento, false);
+        }
 
         parent::message(
             'Dados armazenados com sucesso.',
