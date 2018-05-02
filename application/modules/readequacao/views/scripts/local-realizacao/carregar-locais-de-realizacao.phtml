@@ -42,9 +42,9 @@
         }
     ?>
     <tr style="color: <?php echo $corLinha; ?> !important;">
-        <td><?php echo $l->Pais; ?></td>
-        <td><?php echo $l->UF; ?></td>
-        <td><?php echo $l->Cidade; ?></td>
+        <td><?php echo $l->pais; ?></td>
+        <td><?php echo $l->uf; ?></td>
+        <td><?php echo $l->municipio; ?></td>
         <td class="centro">
             <?php if($this->idPerfil == 1111){
                     if($l['tpSolicitacao'] == 'E'){
@@ -192,13 +192,13 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('#adicionarLocalRealizacao').unbind('click').click(function(){
-            
+
             $('#newPaisLR').val('31');
             $('#newPaisLR').change();
             
             $("#modalInclusaoLR").dialog({
                 resizable: false,
-                title: 'Inclusão de Local de Realização!',
+                title: 'Inclus\u00E3o de Local de Realiza\u00E7\u00E3o!',
                 width: 800,
                 modal: true,
                 buttons : {
@@ -209,7 +209,7 @@
                         var idPais = $('#newPaisLR').val(),
                             idUF = $('#newUFLR').val(),
                             idMunicipio = $('#newMunicipioLR').val();
-                    
+
                         $.ajax({
                             type: 'POST',
                             url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'incluir-local-de-realizacao'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>',
@@ -326,7 +326,7 @@
                         $("#newMunicipioLR").html('<option value=""> - Selecione - </option>');
 
                         for(a in valor){
-                            $("#newMunicipioLR").append('<option value="'+valor[a].idCidade+'">'+valor[a].nomeCidade+'</option>');
+                            $("#newMunicipioLR").append('<option value="'+valor[a].idMunicipio+'">'+valor[a].nomeCidade+'</option>');
                         }
                     },
                     type : 'post',

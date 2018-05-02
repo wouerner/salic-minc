@@ -212,8 +212,6 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
 
 
     /*
-     * Criada em 31/03/2014
-     * @author: Jefferson Alessandro
      * Funcao utilizada para buscar os planos de distribuicao do projeto para readequacao.
      */
     public function buscarPlanosDistribuicaoReadequacao($idPronac, $tabela = 'PlanoDistribuicaoProduto')
@@ -229,10 +227,22 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
                 array('b' => 'PlanoDistribuicaoProduto'),
                 'a.idProjeto = b.idProjeto AND b.stPlanoDistribuicaoProduto = 1',
                 array(new Zend_Db_Expr("
-                    b.idPlanoDistribuicao, b.idProjeto, b.idProduto, b.Area as idArea, b.Segmento as idSegmento, b.idPosicaoDaLogo,
+                    b.idPlanoDistribuicao,
+                    b.idProjeto,
+                    b.idProduto,
+                    b.Area as idArea,
+                    b.Segmento as idSegmento,
+                    b.idPosicaoDaLogo,
                     (b.QtdeVendaNormal+b.QtdeVendaPromocional+b.QtdePatrocinador+b.QtdeOutros+b.QtdeProponente) as QtdeProduzida,
-                    b.QtdePatrocinador,b.QtdeProponente,b.QtdeOutros,b.QtdeVendaNormal,b.QtdeVendaPromocional,b.PrecoUnitarioNormal,
-                    b.PrecoUnitarioPromocional, b.stPrincipal,b.Usuario,'N' as tpSolicitacao")
+                    b.QtdePatrocinador,
+                    b.QtdeProponente,
+                    b.QtdeOutros,
+                    b.QtdeVendaNormal,
+                    b.QtdeVendaPromocional,
+                    b.PrecoUnitarioNormal,
+                    b.PrecoUnitarioPromocional,
+                    b.stPrincipal,
+                    b.Usuario,'N' as tpSolicitacao")
                 ),
                 'SAC.dbo'
             );
@@ -242,11 +252,23 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
                 "a.IdPRONAC = b.idPronac AND stAtivo='S'",
                 array(
                     new Zend_Db_Expr("
-                        b.idPlanoDistribuicao,a.idProjeto,b.cdArea as idArea, b.cdSegmento as idSegmento,b.idPosicaoLogo as idPosicaoDaLogo,
+                        b.idPlanoDistribuicao,
+                        a.idProjeto,
+                        b.cdArea as idArea,
+                        b.cdSegmento as idSegmento,
+                        b.idPosicaoLogo as idPosicaoDaLogo,
                         (b.qtVendaNormal+b.qtVendaPromocional+b.qtPatrocinador+b.qtOutros+b.qtProponente) as QtdeProduzida,
-                        b.qtPatrocinador as QtdePatrocinador, b.qtProponente as QtdeProponente, b.qtOutros as QtdeOutros, b.qtVendaNormal as QtdeVendaNormal,
-                        b.qtVendaPromocional as QtdeVendaPromocional, b.vlUnitarioNormal as PrecoUnitarioNormal, b.vlUnitarioPromocional as PrecoUnitarioPromocional,
-                        b.stPrincipal, '0' as Usuario, b.tpSolicitacao, b.idProduto
+                        b.qtPatrocinador as QtdePatrocinador,
+                        b.qtProponente as QtdeProponente,
+                        b.qtOutros as QtdeOutros,
+                        b.qtVendaNormal as QtdeVendaNormal,
+                        b.qtVendaPromocional as QtdeVendaPromocional,
+                        b.vlUnitarioNormal as PrecoUnitarioNormal,
+                        b.vlUnitarioPromocional as PrecoUnitarioPromocional,
+                        b.stPrincipal,
+                        '0' as Usuario,
+                        b.tpSolicitacao,
+                        b.idProduto
                     ")
                 ),
                 'SAC.dbo'
@@ -264,26 +286,26 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
             $select->joinInner(
                 array('d' => 'Area'),
                 'b.Area = d.Codigo',
-                array('d.Descricao as Area'),
+                array('d.Descricao as DescricaoArea'),
                 'SAC.dbo'
             );
             $select->joinInner(
                 array('e' => 'Segmento'),
                 'b.Segmento = e.Codigo',
-                array('e.Descricao as Segmento'),
+                array('e.Descricao as DescricaoSegmento'),
                 'SAC.dbo'
             );
         } else {
             $select->joinInner(
                 array('d' => 'Area'),
                 'b.cdArea = d.Codigo',
-                array('d.Descricao as Area'),
+                array('d.Descricao as DescricaoArea'),
                 'SAC.dbo'
             );
             $select->joinInner(
                 array('e' => 'Segmento'),
                 'b.cdSegmento = e.Codigo',
-                array('e.Descricao as Segmento'),
+                array('e.Descricao as DescricaoSegmento'),
                 'SAC.dbo'
             );
         }

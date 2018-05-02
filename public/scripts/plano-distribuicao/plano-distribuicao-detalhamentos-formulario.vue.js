@@ -14,7 +14,7 @@ const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
 Vue.component('plano-distribuicao-detalhamentos-formulario', {
     template: `
         <div class="detalhamento-distribuicao-dos-produtos">
-            <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="local.idMunicipioIBGE + this.idplanodistribuicao" class="row center-align" ref="containerForm">
+            <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="local.idMunicipio + this.idplanodistribuicao" class="row center-align" ref="containerForm">
                 <a 
                     href="javascript:void(0)"
                     class="btn waves-effect waves-light white-text" 
@@ -359,7 +359,7 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
                 idDetalhaPlanoDistribuicao: null,
                 idPlanoDistribuicao: this.idplanodistribuicao,
                 idUF: this.local.idUF,
-                idMunicipio: this.local.idMunicipioIBGE,
+                idMunicipio: this.local.idMunicipio,
                 dsProduto: '',
                 qtExemplares: 0,
                 qtGratuitaDivulgacao: 0,
