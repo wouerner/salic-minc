@@ -27,23 +27,51 @@
             <div class="card">
                 <div class="card-content">
                     <div class="row">
-                        <div class="col s12">
-                            <b>Pronac: </b>{{ readequacao.pronac }}<br>
+                        <div class="col s3">
+                            <b>Pronac: </b>{{ projeto.pronac }}<br>
                         </div>
-                        <div class="col s12">
-                            <b>Projeto: </b>{{ readequacao.nomeProjeto }}
+                        <div class="col s3">
+                            <b>Projeto: </b>{{ projeto.nomeProjeto }}
                         </div>
-                        <div class="col s12">
-                            <b>Vl. a Comprovar: </b>{{ readequacao.valorComprovar }}
+                        <div class="col s3">
+                            <b>Vl. a Comprovar: </b>{{ projeto.valorComprovar }}
                         </div>
-                        <div class="col s12">
-                            <b>Saldo dispon&iacute;vel: </b>{{ saldoDisponivel }}
+                        <div class="col s3">
+                            <b>Saldo dispon&iacute;vel: </b>R$ {{ saldoDisponivel }}
                         </div>
                     </div>
 		</div>
             </div>
 	    
-	    <div class="card">
+	    <div class="card">		
+		<div class="card-content">
+		    <h3>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</h3>
+		    <div class="row">
+			<div class="input-field col s12">
+			    <textarea
+				id="textarea1"
+				class="materialize-textarea"
+				v-model="readequacao.justificativa"></textarea>
+			    <label for="textarea1">Justificativa</label>
+			</div>
+			<div class="center-align padding20 col s3">
+			    <a href="javascript:void(0)"
+			       v-on:click="salvarReadequacao"
+			       class="btn">Salvar</a>
+			</div>
+			<div class="center-align padding20 col s3">
+			    <a href="javascript:void(0)"
+			       v-on:click="finalizarReadequacao"
+			       v-show="disponivelFinalizar"
+			       class="btn">Finalizar</a>
+			</div>
+
+		    </div>
+		</div>
+	    </div>
+	    
+	    <div class="card"
+		 v-show="disponivelAdicionarRecebedores">
 		<div class="card-content">
 		    <table>
 			<thead>
@@ -69,7 +97,9 @@
 			</tbody>
 			<tfoot>
 			    <tr>
-				<td colspan="4">R$ {{ totalRecebido }} </td>
+				<td colspan="2"></td>
+				<td class="right">Total transferido: </td>
+				<td>R$ {{ totalRecebido }} </td>
 			    </tr>
 			</tfoot>
 		    </table>
@@ -94,11 +124,10 @@
 			    </select>
 			</div>
  			<div class="input-field col s3">
-			    <input placeholder="Valor recebido"
-						id="valor_recebido"
-						type="text"
-						class="validate"
-						v-model="projetoRecebedor.valorRecebido">
+			    <input-money
+                                v-on:ev="projetoRecebedor.valorRecebido = $event"
+                                v-bind:value="projetoRecebedor.valorRecebido">
+			    </input-money>
 			    <label for="valor_recebido">Valor recebido</label>
 			</div>		
 			<div class="center-align padding20 col s3">
@@ -113,7 +142,10 @@
     </div>
 </div>
 <script src="/public/js/vue.js" type="text/javascript"></script>
-
+<script src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js" type="text/javascript"></script>
+<script src="/public/scripts/plugins/numeral.js" type="text/javascript"></script>
+<script src="/public/scripts/mixins/utils.vue.js" type="text/javascript"></script>
+<script src="/public/scripts/components/input-money.vue.js" type="text/javascript"></script>
 <script>
  new Vue({
      /* template: `
@@ -126,13 +158,16 @@
       * `,*/
      el: '#vue-container',
      data: {
-	 readequacao: {
+	 projeto: {
 	     pronac: 164783,
 	     idPronac: 289999,
-	     idReadequacao: 1234,
 	     nomeProjeto: 'Expedição gastronimica',
 	     valorComprovar: 1234,
 	     saldoDisponivel: 1234
+	 },
+	 readequacao: {
+	     justificativa: '',
+	     idReadequacao: null
 	 },
 	 projetoRecebedor: {
 	     idPronac: null,
@@ -140,47 +175,45 @@
 	     tipoTransferencia: '',
 	     valorRecebido: 0.00
 	 },
-	 projetosRecebedores: [
-	     {
-		 idPronac: 171234,
-		 nomeProjeto: 'Projeto abc',
-		 tipoTransferencia: 'não homologado',
-		 valorRecebido: 100.00
-	     },
-	     {
-		 idPronac: 155234,
-		 nomeProjeto: 'Projeto def',
-		 tipoTransferencia: 'não homologado',
-		 valorRecebido: 100.00
-	     },
-	     {
-		 idPronac: 161236,
-		 nomeProjeto: 'Projeto gegeg',
-		 tipoTransferencia: 'não homologado',
-		 valorRecebido: 100.00
-	     }
-	 ],
+	 projetosRecebedores: []
      },
      mounted: function() {
      },
      methods: {
 	 incluirRecebedor: function() {
-	     this.projetosRecebedores.push(
-		 this.projetoRecebedor
-	     );
-	     this.projetoRecebedor = {
-		 idPronac: null,
-		 nomeProjeto: '',
-		 tipoTransferencia: '',
-		 valorRecebido: 0.00
-	     };
-	     // persistir dado ajax
+	     if (
+		 this.projetosRecebedores.idPronac != '' &&
+		 this.projetosRecebedores.nomeProjeto != '' &&
+		 this.projetosRecebedores.tipoTransferencia != ''
+	     ) {
+		 this.projetosRecebedores.push(
+		     this.projetoRecebedor
+		 );
+		 this.projetoRecebedor = {
+		     idPronac: null,
+		     nomeProjeto: '',
+		     tipoTransferencia: '',
+		     valorRecebido: 0.00
+		 };
+		 // persistir dado ajax
+	     } else {
+		 this.mensagemAlerta("\xC9 obrigat\xF3rio informar todos os dados");
+                 this.$refs.dsProduto.focus();
+                 return;
+	     }
 	 },
 	 excluirRecebedor: function(id) {
 	     Vue.delete(this.projetosRecebedores, id);
 	     // remover dado ajax
+	 },
+	 salvarReadequacao: function() {
+	     this.readequacao.idReadequacao = 1234;
+	     // adicionar via ajax
+	 },
+	 finalizarReadequacao: function() {
 	 }
      },
+     mixins: [utils],
      computed: {
 	 totalRecebido: function() {
 	     return this.projetosRecebedores.reduce(function (total, projeto) {
@@ -188,9 +221,24 @@
              }, 0);
 	 },
 	 saldoDisponivel: function() {
-	     return this.readequacao.valorComprovar - this.totalRecebido;
+	     return this.projeto.valorComprovar - this.totalRecebido;
 	 },
-	 
+	 disponivelAdicionarRecebedores: function() {
+	     if (this.readequacao.idReadequacao != null) {
+		 return true;
+	     } else {
+		 return false;
+	     }
+	 },	 
+	 disponivelFinalizar: function() {
+	     if (this.projetosRecebedores.length > 0 &&
+		 this.totalRecebido <= this.projeto.saldoDisponivel
+	     ) {
+		 return true;
+	     } else {
+		 return false;
+	     }
+	 }	 
      }
  })
 </script>

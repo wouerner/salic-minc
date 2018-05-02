@@ -24,14 +24,24 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         )->current();
     }
 
-    public function listarRecebedoresAction()
+    public function listarProjetosRecebedoresAction()
     {
         $this->_helper->layout->disableLayout();
         
-        $this->arrResult = [];        
+        $this->view->arrResult = [];        
+    }
+
+    public function incluirProjetoRecebedorAction()
+    {
+        
     }
     
-    public function incluirSolicitacaoTransferenciaRecursosAction()
+    public function excluirProjetoRecebedorAction()
+    {
+        
+    }
+    
+    public function finalizarSolicitacaoTransferenciaRecursosAction()
     {
         try {
             $tbReadequacao = new Readequacao_Model_tbReadequacao();
