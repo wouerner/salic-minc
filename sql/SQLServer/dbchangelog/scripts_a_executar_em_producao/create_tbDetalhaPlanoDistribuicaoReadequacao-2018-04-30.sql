@@ -24,7 +24,7 @@ CREATE TABLE SAC.dbo.tbDetalhaPlanoDistribuicaoReadequacao (
 	tpLocal char(1),
 	tpEspaco char(1),
 	tpVenda char(1),
-	tpReadequacao char(1),
+	tpSolicitacao char(1),
 	stAtivo char(1) DEFAULT ('S') NOT NULL,
 	idPronac int NOT NULL,
 	CONSTRAINT PK_tbDetalhaPlanoDistribuicaoReadequacao PRIMARY KEY (idDetalhaPlanoDistribuicao),

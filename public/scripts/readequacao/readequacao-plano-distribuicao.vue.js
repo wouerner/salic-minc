@@ -23,6 +23,7 @@ Vue.component('readequacao-plano-distribuicao', {
     props: [
         'idPronac'
     ],
+    mixins:[utils],
     watch: {
         idPronac: function (value) {
             this.fetch(value);
@@ -47,6 +48,8 @@ Vue.component('readequacao-plano-distribuicao', {
                 let dados = response.data;
                 vue.produtos = dados.planodistribuicao;
                 vue.detalhamentos = dados.detalhamentos;
+            }).fail(function(response) {
+                vue.mensagemErro(response.responseJSON.msg)
             });
         },
         obterLocaisRealizacao: function (id) {
@@ -59,6 +62,8 @@ Vue.component('readequacao-plano-distribuicao', {
                 }
             }).done(function (response) {
                 vue.locais  = response.data;
+            }).fail(function(response) {
+              vue.mensagemErro(response.responseJSON.msg)
             });
         }
     }

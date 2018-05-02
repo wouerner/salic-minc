@@ -25,6 +25,7 @@ Vue.component('plano-distribuicao-listagem', {
                                     :disabled="disabled"
                                     :produto="produto"
                                     :local="local"
+                                    :id="idProjeto"
                                     :array-detalhamentos="filtrarDetalhamentos(detalhamentos, produto.idPlanoDistribuicao, local.idMunicipio)"
                                 ></component>
                                 <component

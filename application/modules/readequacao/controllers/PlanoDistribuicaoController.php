@@ -7,32 +7,6 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         parent::init();
     }
 
-    public function obterPlanoDistribuicaoDetalhamentosAjaxAction()
-    {
-        $this->view->idPerfil = $this->idPerfil;
-
-        try {
-            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-            $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'tbPlanoDistribuicao');
-
-            if (count($planosDistribuicao) == 0) {
-                $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'PlanoDistribuicaoProduto');
-            }
-
-            $dados['planodistribuicao'] = $planosDistribuicao->toArray();
-            $tbPlanoDistribuicao = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-            $dados['detalhamentos'] = $tbPlanoDistribuicao->buscarPlanoDistribuicaoDetalhadoByIdProjeto(263402);
-//            $dados['planodistribuicaoproduto'] = $tbPlanoDistribuicao->buscar(['idProjeto = ?' => 263402])->toArray();
-
-            $dados = TratarArray::prepararArrayMultiParaJson($dados);
-
-            $this->_helper->json(['data' => $dados, 'success' => 'true']);
-        } catch (Exception $e) {
-            $this->_helper->json(['msg' => utf8_encode($e->getMessage()), 'data' => $dados, 'success' => 'false']);
-        }
-
-    }
-
     public function carregarPlanosDeDistribuicaoAction()
     {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
@@ -255,5 +229,71 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
             $this->_helper->json(array('resposta' => false));
         }
         $this->_helper->viewRenderer->setNoRender(true);
+    }
+
+    public function obterPlanoDistribuicaoDetalhamentosAjaxAction()
+    {
+        $this->view->idPerfil = $this->idPerfil;
+
+        try {
+            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
+            $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'tbPlanoDistribuicao');
+
+            if (count($planosDistribuicao) == 0) {
+                $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'PlanoDistribuicaoProduto');
+            }
+
+            $dados['planodistribuicao'] = $planosDistribuicao->toArray();
+
+            $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+            $dados['detalhamentos'] = $detalhamentoMapper->obterDetalhamentosParaReadequacao($this->projeto);
+
+            $this->_helper->json(
+                [
+                    'data' => TratarArray::prepararArrayMultiParaJson($dados),
+                    'success' => 'true'
+                ]
+            );
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json(
+                [
+                    'msg' => "Plano de Distribui&ccedil;&atilde;o - " . $e->getMessage(),
+                    'data' => [],
+                    'success' => 'false'
+                ]
+            );
+        }
+    }
+
+    public function salvarDetalhamentoAjaxAction()
+    {
+        $dados = $this->getRequest()->getPost();
+
+        try {
+            $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+            $dados = $detalhamentoMapper->salvarDetalhamento($dados, $this->projeto);
+
+            $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento salvo com sucesso!'));
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
+        }
+    }
+
+    public function excluirDetalhamentoAjaxAction()
+    {
+        $dados = $this->getRequest()->getPost();
+
+        try {
+            $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+            $dados['tpSolicitacao'] = 'I';
+            $dados = $detalhamentoMapper->salvarDetalhamento($dados, $this->projeto);
+
+            $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento exclu&iacute;do com sucesso!'));
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
+        }
     }
 }

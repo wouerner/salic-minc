@@ -28,6 +28,7 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
     },
     mixins: [utils],
     props: [
+        'id',
         'produto',
         'local',
         'arrayDetalhamentos',
@@ -38,34 +39,31 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
     },
     methods: {
         removerDetalhamento(detalhamento, index) {
-            var vue = this;
-            if (confirm("Tem certeza que deseja deletar o item?")) {
-                $3.ajax({
-                    type: "POST",
-                    url: "/proposta/plano-distribuicao/detalhar-excluir/idPreProjeto/" + this.produto.idProjeto,
-                    data: {
-                        idDetalhaPlanoDistribuicao: detalhamento.idDetalhaPlanoDistribuicao,
-                        idPlanoDistribuicao: this.produto.idPlanoDistribuicao
-                    }
-                }).done(function (response) {
-                    if (response.success == 'true') {
-                        Vue.delete(vue.detalhamentos, index);
-                        vue.mensagemSucesso(response.msg);
-                    }
-                }).fail(function (response) {
-                    vue.mensagemErro(response.responseJSON.msg);
-                });
-            }
+            let vue = this;
+            $3.ajax({
+                type: "POST",
+                url: "/readequacao/plano-distribuicao/excluir-detalhamento-ajax/idPronac/" + vue.id,
+                data: detalhamento
+            }).done(function (response) {
+                if (response.success == 'true') {
+                    let index = vue.$data.detalhamentos.map(item => item.idDetalhaPlanoDistribuicao).indexOf(response.data.idDetalhaPlanoDistribuicao);
+                    Vue.delete(vue.detalhamentos, index);
+                    vue.$data.detalhamentos.push(response.data);
+                    vue.mensagemSucesso(response.msg);
+                    detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
+                }
+            }).fail(function (response) {
+                vue.mensagemErro(response.responseJSON.msg);
+            });
         },
         editarDetalhamento(detalhamento, index) {
             this.detalhamento = detalhamento;
         },
         salvarDetalhamento(detalhamento) {
-
             let vue = this;
             $3.ajax({
                 type: "POST",
-                url: "/proposta/plano-distribuicao/detalhar-salvar/idPreProjeto/" + this.idpreprojeto,
+                url: "/readequacao/plano-distribuicao/salvar-detalhamento-ajax/idPronac/" + vue.id,
                 data: detalhamento
             }).done(function (response) {
                 if (response.success == 'true') {
@@ -81,16 +79,6 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
         },
         obterDetalhamentos: function () {
             var vue = this;
-
-            // url = "/proposta/plano-distribuicao/obter-detalhamentos/idPreProjeto/" + this.idpreprojeto + "?idPlanoDistribuicao=" + this.idplanodistribuicao + "&idMunicipio=" + this.idmunicipioibge + "&idUF=" + this.iduf
-            // $3.ajax({
-            //     type: "GET",
-            //     url: url
-            // }).done(function (data) {
-            //     vue.$data.detalhamentos = data.data;
-            // }).fail(function () {
-            //     vue.mensagemErro('Erro ao buscar detalhamento');
-            // });
             vue.$data.detalhamentos =  this.arrayDetalhamentos;
         }
     }
