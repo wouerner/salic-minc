@@ -51,9 +51,12 @@
 			    <textarea
 				id="textarea1"
 				class="materialize-textarea"
+				ref="readequacaoJustificativa"
 				v-model="readequacao.justificativa"></textarea>
 			    <label for="textarea1">Justificativa</label>
 			</div>
+		    </div>
+		    <div class="row">
 			<div class="file-field input-field">
 			    <div class="btn">
 				<span>File</span>
@@ -63,16 +66,18 @@
 				<input class="file-path validate" type="text">
 			    </div>
 			</div>
+		    </div>
+		    <div class="row">
 			<div class="center-align padding20 col s3">
-			    <a href="javascript:void(0)"
-			       v-on:click="salvarReadequacao"
-			       class="btn">Salvar</a>
+			    <button
+				v-on:click="salvarReadequacao"
+			       class="btn">Salvar</button>
 			</div>
 			<div class="center-align padding20 col s3">
-			    <a href="javascript:void(0)"
-			       v-on:click="finalizarReadequacao"
-			       v-show="disponivelFinalizar"
-			       class="btn">Finalizar</a>
+			    <button
+				v-on:click="finalizarReadequacao"
+				:disabled="!disponivelFinalizar"
+				class="btn">Finalizar</button>
 			</div>
 
 		    </div>
@@ -81,8 +86,9 @@
 	    
 	    <div class="card"
 		 v-show="disponivelAdicionarRecebedores">
+		<h4>Projetos recebedores</h4>
 		<div class="card-content">
-		    <table>
+		    <table v-show="exibeProjetosRecebedores">
 			<thead>
 			    <th>Pronac</th>
 			    <th>Nome do projeto</th>
@@ -116,7 +122,10 @@
 		    <form class="row">
 			<div class="col s3">
 			    <label>Projeto recebedor</label>
-			    <select class="browser-default" v-model="projetoRecebedor.idPronac">
+			    <select class="browser-default"
+				    v-model="projetoRecebedor.idPronac"
+				    ref="projetoRecebedorIdPronac"
+				    :disabled="!disponivelAdicionarRecebedor">
 				<option value="" disabled selected>Selecione o projeto</option>
 				<option value="173321">173321 - Projeto abc</option>
 				<option value="163321">163321 - Projeto def</option>
@@ -125,7 +134,10 @@
 			</div>
 			<div class="col s3">
 			    <label>Tipo da transfer&ecirc;ncia</label>
-			    <select class="browser-default" v-model="projetoRecebedor.tipoTransferencia">
+			    <select class="browser-default"
+				    v-model="projetoRecebedor.tipoTransferencia"
+				    ref="projetoRecebedorTipoTransferencia"
+				    :disabled="!disponivelAdicionarRecebedor">
 				<option value="" disabled selected>Selecione o tipo da transfer&ecirc;ncia</option>
 				<option value="1">N&atilde;o homologados</option>
 				<option value="2">Homologados</option>
@@ -134,14 +146,17 @@
 			</div>
  			<div class="input-field col s3">
 			    <input-money
+				ref="projetoRecebedorValorRecebido"
                                 v-on:ev="projetoRecebedor.valorRecebido = $event"
-                                v-bind:value="projetoRecebedor.valorRecebido">
+                                v-bind:value="projetoRecebedor.valorRecebido"
+				     :disabled="!disponivelAdicionarRecebedor">
 			    </input-money>
 			    <label for="valor_recebido">Valor recebido</label>
 			</div>		
 			<div class="center-align padding20 col s3">
 			    <a href="javascript:void(0)"
 			       v-on:click="incluirRecebedor"
+			       :disabled="!disponivelAdicionarRecebedor"
 			       class="btn">Adicionar recebedor</a>
 			</div>
 		    </form>
