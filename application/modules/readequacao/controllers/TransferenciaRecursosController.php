@@ -16,12 +16,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
 
     public function indexAction()
     {
-        $projetos = new Projetos();
-        $this->view->projeto = $projetos->buscar(
-            [
-                'IdPRONAC = ?' => $this->idPronac
-            ]
-        )->current();
+        $this->view->projeto = $this->projeto;
     }
 
     public function listarProjetosRecebedoresAction()

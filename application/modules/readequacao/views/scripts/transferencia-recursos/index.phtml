@@ -31,7 +31,7 @@
                             <b>Pronac: </b>{{ projeto.pronac }}<br>
                         </div>
                         <div class="col s3">
-                            <b>Projeto: </b>{{ projeto.nomeProjeto }}
+                            <b>Projeto: </b><span v-html="projeto.nomeProjeto"></span>
                         </div>
                         <div class="col s3">
                             <b>Vl. a Comprovar: </b>{{ projeto.valorComprovar }}
@@ -53,6 +53,15 @@
 				class="materialize-textarea"
 				v-model="readequacao.justificativa"></textarea>
 			    <label for="textarea1">Justificativa</label>
+			</div>
+			<div class="file-field input-field">
+			    <div class="btn">
+				<span>File</span>
+				<input type="file">
+			    </div>
+			    <div class="file-path-wrapper">
+				<input class="file-path validate" type="text">
+			    </div>
 			</div>
 			<div class="center-align padding20 col s3">
 			    <a href="javascript:void(0)"
@@ -146,99 +155,4 @@
 <script src="/public/scripts/plugins/numeral.js" type="text/javascript"></script>
 <script src="/public/scripts/mixins/utils.vue.js" type="text/javascript"></script>
 <script src="/public/scripts/components/input-money.vue.js" type="text/javascript"></script>
-<script>
- new Vue({
-     /* template: `
-	<tr v-for="projeto in projetosRecebedores">
-      * <td>{{ projeto.idPronac }}</td>
-      * <td></td>
-	<td></td>
-	<td></td>
-	</tr>
-      * `,*/
-     el: '#vue-container',
-     data: {
-	 projeto: {
-	     pronac: 164783,
-	     idPronac: 289999,
-	     nomeProjeto: 'Expedição gastronimica',
-	     valorComprovar: 1234,
-	     saldoDisponivel: 1234
-	 },
-	 readequacao: {
-	     justificativa: '',
-	     idReadequacao: null
-	 },
-	 projetoRecebedor: {
-	     idPronac: null,
-	     nomeProjeto: '',
-	     tipoTransferencia: '',
-	     valorRecebido: 0.00
-	 },
-	 projetosRecebedores: []
-     },
-     mounted: function() {
-     },
-     methods: {
-	 incluirRecebedor: function() {
-	     if (
-		 this.projetosRecebedores.idPronac != '' &&
-		 this.projetosRecebedores.nomeProjeto != '' &&
-		 this.projetosRecebedores.tipoTransferencia != ''
-	     ) {
-		 this.projetosRecebedores.push(
-		     this.projetoRecebedor
-		 );
-		 this.projetoRecebedor = {
-		     idPronac: null,
-		     nomeProjeto: '',
-		     tipoTransferencia: '',
-		     valorRecebido: 0.00
-		 };
-		 // persistir dado ajax
-	     } else {
-		 this.mensagemAlerta("\xC9 obrigat\xF3rio informar todos os dados");
-                 this.$refs.dsProduto.focus();
-                 return;
-	     }
-	 },
-	 excluirRecebedor: function(id) {
-	     Vue.delete(this.projetosRecebedores, id);
-	     // remover dado ajax
-	 },
-	 salvarReadequacao: function() {
-	     this.readequacao.idReadequacao = 1234;
-	     // adicionar via ajax
-	 },
-	 finalizarReadequacao: function() {
-	 }
-     },
-     mixins: [utils],
-     computed: {
-	 totalRecebido: function() {
-	     return this.projetosRecebedores.reduce(function (total, projeto) {
-                 return total + parseFloat(projeto.valorRecebido);
-             }, 0);
-	 },
-	 saldoDisponivel: function() {
-	     return this.projeto.valorComprovar - this.totalRecebido;
-	 },
-	 disponivelAdicionarRecebedores: function() {
-	     if (this.readequacao.idReadequacao != null) {
-		 return true;
-	     } else {
-		 return false;
-	     }
-	 },	 
-	 disponivelFinalizar: function() {
-	     if (this.projetosRecebedores.length > 0 &&
-		 this.totalRecebido <= this.projeto.saldoDisponivel
-	     ) {
-		 return true;
-	     } else {
-		 return false;
-	     }
-	 }	 
-     }
- })
-</script>
+<script src="/public/scripts/readequacao/readequacao-transferencia-recursos.vue.js" type="text/javascript"></script>
