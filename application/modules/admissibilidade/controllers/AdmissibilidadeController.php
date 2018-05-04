@@ -305,7 +305,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
             ];
 
-            if($this->isPropostaEnquadradoArtigo18($this->view->ultimaSugestaoEnquadramento)) {
+            if(is_array($this->view->ultimaSugestaoEnquadramento) 
+                && $this->isPropostaEnquadradoArtigo18($this->view->ultimaSugestaoEnquadramento)) {
                 $this->view->isRecursoAvaliado = true;
             }
 
