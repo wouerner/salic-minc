@@ -1,6 +1,6 @@
 Vue.component('readequacao-plano-distribuicao', {
     template: `
-        <div class="readequacao-plano-distribuicao">
+        <div class="readequacao-plano-distribuicao padding10">
             <plano-distribuicao-listagem
                 :id-projeto="idPronac"
                 :disabled="disabled"
@@ -9,6 +9,16 @@ Vue.component('readequacao-plano-distribuicao', {
                 :componente-detalhamento="componenteDetalhamento"
                 :array-locais="locais"
             ></plano-distribuicao-listagem>
+            
+            <div class="center-align">
+                <a 
+                    class="waves-effect waves-light btn white-text"
+                    @click="consolidarPlanoDistribuicao(idPronac)"
+                >
+                    <i class="material-icons right">send</i>
+                    Salvar
+                </a>
+            </div>
         </div>
     `,
     data: function () {
@@ -37,7 +47,7 @@ Vue.component('readequacao-plano-distribuicao', {
     },
     methods: {
         obterPlanoDistribuicao: function (id) {
-            let vue = this;
+            let self = this;
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/plano-distribuicao/obter-plano-distribuicao-detalhamentos-ajax",
@@ -46,14 +56,14 @@ Vue.component('readequacao-plano-distribuicao', {
                 }
             }).done(function (response) {
                 let dados = response.data;
-                vue.produtos = dados.planodistribuicao;
-                vue.detalhamentos = dados.detalhamentos;
+                self.produtos = dados.planodistribuicao;
+                self.detalhamentos = dados.detalhamentos;
             }).fail(function(response) {
-                vue.mensagemErro(response.responseJSON.msg)
+                self.mensagemErro(response.responseJSON.msg)
             });
         },
         obterLocaisRealizacao: function (id) {
-            let vue = this;
+            let self = this;
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/local-realizacao/obter-locais-de-realizacao-ajax",
@@ -61,10 +71,25 @@ Vue.component('readequacao-plano-distribuicao', {
                     idPronac: id
                 }
             }).done(function (response) {
-                vue.locais  = response.data;
+                self.locais  = response.data;
             }).fail(function(response) {
-              vue.mensagemErro(response.responseJSON.msg)
+              self.mensagemErro(response.responseJSON.msg)
             });
+        },
+        consolidarPlanoDistribuicao: function(id) {
+            let self = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/plano-distribuicao/consolidar-plano-distribuicao-ajax",
+                data: {
+                    idPronac: id
+                }
+            }).done(function (response) {
+                self.mensagemSucesso(response.msg)
+            }).fail(function(response) {
+                self.mensagemErro(response.responseJSON.msg)
+            });
+
         }
     }
 });

@@ -323,7 +323,24 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         }
     }
 
-    public function consolidarPlanoDistribuicaoAjaxAction() {
+    public function consolidarPlanoDistribuicaoAjaxAction()
+    {
+        $dados = $this->getRequest()->getPost();
+
+        try {
+
+            if (empty($this->projeto)) {
+                throw new Exception("Projeto &eacute; obrigat&oacute;rio para salvar o plano de distribui&ccedil;&atilde;o");
+            }
+
+            $planoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+            $dados = $planoMapper->consolidarPlanosDeDistribuicaoReadequado($this->projeto);
+
+            $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Plano de distribui&ccedil;&atilde;o salvo com sucesso!'));
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
+        }
 
     }
 }
