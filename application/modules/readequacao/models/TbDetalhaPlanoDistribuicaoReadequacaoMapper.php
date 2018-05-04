@@ -24,34 +24,84 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
             'stAtivo = ?' => 'S'
         ];
 
-        $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos)->toArray();
+        $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar(
+            $paramsBuscarDetalhamentos,
+            ['tpSolicitacao DESC', 'dsProduto']
+        )->toArray();
 
         if (count($detalhamentosReadequacao) == 0) {
-            $tbDetalhaPlanoDistribuicao = new Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao();
-            $detalhamentosReadequacao = $tbDetalhaPlanoDistribuicao->obterDetalhamentosDaProposta($projeto->getidProjeto());
-
-            try {
-                $this->beginTransaction();
-                foreach ($detalhamentosReadequacao as $key => $detalhamento) {
-                    unset($detalhamento['idDetalhaPlanoDistribuicao']);
-                    $detalhamento['idReadequacao'] = null;
-                    $detalhamento['tpSolicitacao'] = 'N';
-                    $detalhamento['stAtivo'] = 'S';
-                    $detalhamento['idPronac'] = $projeto->getIdPRONAC();
-
-                    $this->save(new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao($detalhamento));
-                }
-                $this->commit();
-
-                $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos)->toArray();
-
-            } catch (Exception $e) {
-                $this->rollBack();
-                throw new $e;
-            }
+            $detalhamentosReadequacao = $this->copiarDetalhamentosDaProposta($projeto, $paramsBuscarDetalhamentos);
         }
 
+        $detalhamentosReadequacao = $this->zerarValoresItensExcluidos($detalhamentosReadequacao);
+
         return $detalhamentosReadequacao;
+    }
+
+    public function copiarDetalhamentosDaProposta(Projeto_Model_TbProjetos $projeto, $paramsBuscarDetalhamentos)
+    {
+        $tbDetalhaPlanoDistribuicao = new Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao();
+        $tbDetalhaReadequacao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
+        $detalhamentosDaProposta = $tbDetalhaPlanoDistribuicao->obterDetalhamentosDaProposta($projeto->getidProjeto());
+
+        if (empty($detalhamentosDaProposta)) {
+            return [];
+        }
+
+        try {
+            $this->beginTransaction();
+            foreach ($detalhamentosDaProposta as $key => $detalhamento) {
+                unset($detalhamento['idDetalhaPlanoDistribuicao']);
+                $detalhamento['idReadequacao'] = null;
+                $detalhamento['tpSolicitacao'] = 'N';
+                $detalhamento['stAtivo'] = 'S';
+                $detalhamento['idPronac'] = $projeto->getIdPRONAC();
+
+                $this->save(new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao($detalhamento));
+            }
+            $this->commit();
+
+            return $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos, ['tpSolicitacao DESC', 'dsProduto'])->toArray();
+
+        } catch (Exception $e) {
+            $this->rollBack();
+            throw new $e;
+        }
+    }
+
+    public function zerarValoresItensExcluidos($detalhamentos)
+    {
+        if (count($detalhamentos) == 0) {
+            return [];
+        }
+
+        $novosDetalhamentos = [];
+        foreach ($detalhamentos as $detalhamento) {
+
+            if ($detalhamento["tpSolicitacao"] == "E") {
+                $detalhamento["qtProduzida"] = 0;
+                $detalhamento["qtPatrocinador"] = 0;
+                $detalhamento["qtExemplares"] = 0;
+                $detalhamento["qtGratuitaDivulgacao"] = 0;
+                $detalhamento["qtGratuitaPatrocinador"] = 0;
+                $detalhamento["qtGratuitaPopulacao"] = 0;
+                $detalhamento["qtPopularIntegral"] = 0;
+                $detalhamento["qtPopularParcial"] = 0;
+                $detalhamento["vlUnitarioPopularIntegral"] = 0;
+                $detalhamento["vlReceitaPopularIntegral"] = 0;
+                $detalhamento["vlReceitaPopularParcial"] = 0;
+                $detalhamento["qtProponenteIntegral"] = 0;
+                $detalhamento["qtProponenteParcial"] = 0;
+                $detalhamento["vlUnitarioProponenteIntegral"] = 0;
+                $detalhamento["vlReceitaProponenteIntegral"] = 0;
+                $detalhamento["vlReceitaProponenteParcial"] = 0;
+                $detalhamento["vlReceitaPrevista"] = 0;
+            }
+
+            $novosDetalhamentos[] = $detalhamento;
+        }
+
+        return $novosDetalhamentos;
     }
 
     public function salvarDetalhamento($dados, Projeto_Model_TbProjetos $projeto)
@@ -68,10 +118,6 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
         $dados['stAtivo'] = 'S';
         $dados['idPronac'] = $projeto->getIdPRONAC();
 
-        if($dados['tpSolicitacao'] !== 'I') {
-            $dados['tpSolicitacao'] = 'A';
-        }
-
         if (empty($dados['idDetalhaPlanoDistribuicao'])) {
             unset($dados['idDetalhaPlanoDistribuicao']);
             $dados['tpSolicitacao'] = 'I';
@@ -84,5 +130,37 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
         }
 
         return $dados;
+    }
+
+    public function alterarSituacaoDetalhamento($idDetalhamento, $situacao)
+    {
+        if (empty($idDetalhamento)) {
+            throw new Exception("Id do detalhamento &eacute; obrigat&oacute;rio");
+        }
+
+        $tbDetalhaReadequacao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
+
+        $where = $tbDetalhaReadequacao->getAdapter()->quoteInto('idDetalhaPlanoDistribuicao = ?', $idDetalhamento);
+
+        $id = $tbDetalhaReadequacao->update(
+            ['tpSolicitacao' => $situacao],
+            $where
+        );
+
+        if (empty($id)) {
+            throw new Exception("Erro ao atualizar item");
+        }
+
+        $detalhamento = $tbDetalhaReadequacao->buscar([
+            'idDetalhaPlanoDistribuicao = ?' => $idDetalhamento
+        ])->toArray();
+
+        if ($situacao == 'E') {
+            $detalhamento = $this->zerarValoresItensExcluidos($detalhamento);
+        }
+
+        $detalhamento = array_map('utf8_encode', reset($detalhamento));
+
+        return $detalhamento;
     }
 }

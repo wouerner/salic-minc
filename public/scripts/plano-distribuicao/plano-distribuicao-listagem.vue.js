@@ -8,6 +8,7 @@ Vue.component('plano-distribuicao-listagem', {
             <li v-for="produto of produtos">
                 <div class="collapsible-header green-text">
                     <i class="material-icons">perm_media</i> {{produto.Produto}}
+                    <span v-if="produto.stPrincipal == 1" class='badge'>Produto Principal</span>
                 </div>
                 <div class="collapsible-body no-padding margin10 scroll-x">
                     <ul class="collapsible collapsible-locais no-padding" data-collapsible="expandable">
@@ -117,6 +118,6 @@ Vue.component('plano-distribuicao-listagem', {
             $3('.collapsible').each(function () {
                 $3(this).collapsible();
             });
-        },
+        }
     }
 });

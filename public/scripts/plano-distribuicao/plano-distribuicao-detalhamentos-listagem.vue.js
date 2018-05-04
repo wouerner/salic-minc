@@ -22,7 +22,7 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                     </tr>
                 </thead>
                 <tbody v-if="detalhamentos && detalhamentos.length > 0">
-                    <tr v-for="( detalhamento, index ) in detalhamentos">
+                    <tr v-for="( detalhamento, index ) in detalhamentos" :class="definirClassesDaLinha(detalhamento)">
                         <td>{{ detalhamento.dsProduto }}</td>
                         <td class="center-align">{{ detalhamento.qtExemplares }}</td>
                         <!--Preço Proponente -->
@@ -42,26 +42,14 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                             }}
                         </td>
                         <td class="right-align">{{ formatarValor(detalhamento.vlReceitaPrevista) }}</td>
-                        <td class="center-align">
-                             <a 
-                                href="javascript:void(0)"
-                                class="btn small waves-effect waves-light tooltipped btn-primary btn-editar"
-                                :class="_uid + '_teste'"
-                                data-tooltip="Editar detalhamento"
-                                v-bind:disabled="disabled"
-                                @click.prevent="editar(detalhamento, index)">
-                                <i class="material-icons">edit</i>
-                            </a>
-                        </td>
-                        <td class="center-align">
-                            <a
-                                href="javascript:void(0)"
-                                class="btn small waves-effect waves-light tooltipped btn-danger btn-excluir-item"
-                                data-tooltip="Excluir detalhamento"
-                                v-bind:disabled="disabled"
-                                    @click.prevent="excluir(detalhamento, index)">
-                                <i class="material-icons">delete</i>
-                            </a>
+                        <td colspan="2">
+                            <component
+                                v-bind:is="componenteDetalhamento"
+                                :disabled="disabled"
+                                :detalhamento="detalhamento"
+                                :index="index"
+                                v-on:eventoBotao="emitirEvento"
+                            ></component>
                         </td>
                     </tr>
                 </tbody>
@@ -88,12 +76,16 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
             </table>
         </div>
     `,
-    props: [
-        'disabled',
-        'canalaberto',
-        'local',
-        'detalhamentos'
-    ],
+    props: {
+        'disabled': false,
+        'canalaberto': null,
+        'local': {},
+        'detalhamentos': {},
+        'componenteDetalhamento': {
+            default: 'detalhamento-botoes-padroes',
+            type: String
+        }
+    },
     mixins: [utils],
     watch: {
         detalhamentos: function () {
@@ -127,18 +119,75 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
         }
     },
     methods: {
-        excluir: function (detalhamento, index) {
-            this.$emit('eventoRemoverDetalhamento', detalhamento, index);
+        emitirEvento: function (callback, detalhamento, index) {
+
+            this.$emit('eventoListagem', callback, detalhamento, index);
+
+            if (callback == 'editarItem') {
+                let elm = $3("div[formIdMunicipio='" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "']");
+
+                $3("html, body").animate({
+                    scrollTop: $3(elm).offset().top + 30
+                }, 600);
+            }
         },
-        editar: function (detalhamento, index) {
-            console.log('editar', detalhamento);
-            let elm = $3("div[formIdMunicipio='" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "']");
+        definirClassesDaLinha(detalhamento) {
+            return {
+                'linha-excluida': (detalhamento.tpSolicitacao && detalhamento.tpSolicitacao == 'E'),
+                'linha-incluida': (detalhamento.tpSolicitacao && detalhamento.tpSolicitacao == 'I'),
+                'linha-atualizada': (detalhamento.tpSolicitacao && detalhamento.tpSolicitacao == 'A')
+            }
+        }
+    }
+});
 
-            $3("html, body").animate({
-                scrollTop: $3(elm).offset().top + 30
-            }, 600);
+Vue.component('detalhamento-botoes-padroes', {
+    template: `
+    <div style="width: 100%;" class="center-align">
+         <a v-if="!mostrarBotaoRestaurarItem"
+            href="javascript:void(0)"
+            class="btn small waves-effect waves-light btn-primary btn-editar"
+            :class="_uid + '_teste'"
+            title="Editar detalhamento"
+            v-bind:disabled="disabled"
+            @click.prevent="emitirEvento('editarItem', detalhamento, index)">
+            <i class="material-icons">edit</i>
+        </a>
+        <a v-if="!mostrarBotaoRestaurarItem"
+            href="javascript:void(0)"
+            class="btn small waves-effect waves-light btn-danger btn-excluir-item"
+            title="Excluir detalhamento"
+            v-bind:disabled="disabled"
+            @click.prevent="emitirEvento('excluirItem', detalhamento, index)">
+            <i class="material-icons">delete</i>
+        </a>
+        <a v-if="mostrarBotaoRestaurarItem"
+            href="javascript:void(0)"
+            class="btn small waves-effect waves-light btn-default btn-excluir-item"
+            title="Restaurar item"
+            v-bind:disabled="disabled"
+                @click.prevent="emitirEvento('restaurarItem', detalhamento, index)">
+            <i class="material-icons">settings_backup_restore</i>
+        </a>
+    </div>
+    `,
+    props: [
+        'disabled',
+        'index',
+        'detalhamento'
+    ],
+    computed: {
+        mostrarBotaoRestaurarItem: function () {
+            if (this.detalhamento.tpSolicitacao && this.detalhamento.tpSolicitacao == 'E') {
+                return true;
+            }
 
-            this.$emit('eventoEditarDetalhamento', detalhamento, index);
+            return false;
+        }
+    },
+    methods: {
+        emitirEvento: function (callbackParent, detalhamento, index) {
+            this.$emit('eventoBotao', callbackParent, detalhamento, index);
         }
     }
 });

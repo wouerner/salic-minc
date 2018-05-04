@@ -272,6 +272,9 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
 
         try {
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+            $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
+
+            $dados['tpSolicitacao'] = $mdlDetalhaReadequacao::TP_SOLICITACAO_ATUALIZAR;
             $dados = $detalhamentoMapper->salvarDetalhamento($dados, $this->projeto);
 
             $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento salvo com sucesso!'));
@@ -286,14 +289,41 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         $dados = $this->getRequest()->getPost();
 
         try {
+            $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
-            $dados['tpSolicitacao'] = 'I';
-            $dados = $detalhamentoMapper->salvarDetalhamento($dados, $this->projeto);
+
+            $dados = $detalhamentoMapper->alterarSituacaoDetalhamento(
+                $dados['idDetalhaPlanoDistribuicao'],
+                $mdlDetalhaReadequacao::TP_SOLICITACAO_EXCLUIR
+            );
 
             $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento exclu&iacute;do com sucesso!'));
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
         }
+    }
+
+    public function restaurarDetalhamentoAjaxAction()
+    {
+        $dados = $this->getRequest()->getPost();
+
+        try {
+            $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
+            $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+            $dados = $detalhamentoMapper->alterarSituacaoDetalhamento(
+                $dados['idDetalhaPlanoDistribuicao'],
+                $mdlDetalhaReadequacao::TP_SOLICITACAO_NAO_ALTERADO
+            );
+
+            $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento restaurado com sucesso!'));
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
+        }
+    }
+
+    public function consolidarPlanoDistribuicaoAjaxAction() {
+
     }
 }
