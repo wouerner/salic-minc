@@ -58,9 +58,13 @@ abstract class Readequacao_GenericController extends MinC_Controller_Action_Abst
         $this->view->idPronac = $idPronac;
         $this->idPronac = $idPronac;
 
+        $this->view->in2017 = false;
         if($idPronac) {
             $tbProjetos = new Projeto_Model_DbTable_Projetos();
             $this->projeto = (new Projeto_Model_TbProjetos($tbProjetos->findBy(['idPronac' => $idPronac])));
+
+            $fnIN2017 = new fnVerificarProjetoAprovadoIN2017();
+            $this->view->in2017 = $fnIN2017->verificar($idPronac);
         }
     }
 }

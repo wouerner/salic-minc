@@ -30,7 +30,7 @@
                 $('.planosDeDivulgacao').addClass('sumir');
                 $('#campoAdicionadoPorTipoReadequacao').addClass('sumir');
                 $('#campoCriadoTipoReadequacao').html('');
-                atualizarDadosPlanosDeDistribuicao();
+//                atualizarDadosPlanosDeDistribuicao();
             } else if(valor == 14){
                 $('.planosDeDivulgacao').removeClass('sumir');
                 $('.localRealizacao').addClass('sumir');
@@ -813,7 +813,8 @@
 
     <!-- ========== IN�CIO FORMUL�RIO ========== -->
     <form name="formReadequacao" id="formReadequacao" action="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'incluir-solicitacao-readequacao'), null, true); ?><?php echo '?idPronac='. Seguranca::encrypt($this->idPronac); ?>" method="post" enctype="multipart/form-data">
-	<input type="hidden" id="idReadequacao" name="idReadequacao" value="<?php echo ''; ?>">
+        <input type="hidden" id="idReadequacao" name="idReadequacao" value="<?php echo ''; ?>">
+        <input type="hidden" id="pertenceIn2017" name="pertenceIn2017" value="<?php echo $this->in2017; ?>">
         <table class="tabela">
             <tr>
                 <th style="width: 30%">PRONAC</th>
@@ -867,14 +868,13 @@
             </tr>
             <tr>
                 <td id="planosDeDistribuicao">
-
+                    <div id="dynamic-component">
+                        <component
+                            v-bind:is="currentComponent"
+                            :id-pronac="idPronac"
+                        ></component>
+                    </div>
                 </td>
-                <div id="dynamic-component">
-                    <component
-                        v-bind:is="currentComponent"
-                        :id-pronac="idPronac"
-                    ></component>
-                </div>
             </tr>
         </table>
         
@@ -1152,19 +1152,10 @@
     <?php //MODAL DE INCLUS�O DE ITEM ?>
 
 </div>
-<!-- ========== FIM CONTE�DO ========== -->
 
-<!-- ========== IN�CIO RODAP� DO CONTE�DO ========== -->
-<div id="rodapeConteudo"><span></span></div>
-<!-- ========== FIM RODAP� DO CONTE�DO ========== -->
-<br clear="all" />
-<!--<script src="https://unpkg.com/vue"></script>-->
 <script src="/public/js/vue.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.1.0/addon/merge/dep/diff_match_patch.js" type="text/javascript"></script>
-<script src="/public/js/jquery.pretty-text-diff.js" type="text/javascript"></script>
-<script src="http://momentjs.com/downloads/moment-with-locales.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js" type="text/javascript"></script>
-
+<script src="/public/scripts/plugins/moment-with-locales.js"></script>
+<script src="/public/scripts/plugins/numeral.min.js" type="text/javascript"></script>
 
 <script src="/public/js/componentes/salic-table-easy.js" type="text/javascript"></script>
 <script src="/public/js/componentes/salic-texto-simples.vue.js" type="text/javascript"></script>
@@ -1197,19 +1188,31 @@
         },
         methods: {
             carregarComponenteSelecionado: function() {
-                let vue = this;
+                let self = this;
+                componente = false;
                 $('.comboReadequacoes').change(function(){
                     let componente = '';
                     let tipoReadequacao = $(this).val();
                     switch(tipoReadequacao) {
-                        case "11":
-                            componente = "readequacao-plano-distribuicao";
+                        case "11": // plano distribuicao
+                            if (self.projetoPertenceIN2017) {
+                                componente = "readequacao-plano-distribuicao";
+                            } else {
+                                self.carregarPlanoDistribuicaoAntigaIN();
+                            }
                             break;
                         default:
-                            componente = false;
+                            componente = '';
                     }
-                    vue.currentComponent = componente;
+                    self.currentComponent = componente;
                 });
+            },
+            projetoPertenceIN2017: function() {
+                alert($("#pertenceIn2017").val());
+                return $("#pertenceIn2017").val();
+            },
+            carregarPlanoDistribuicaoAntigaIN: function() {
+                atualizarDadosPlanosDeDistribuicao();
             }
         }
     })
