@@ -6,6 +6,10 @@
     composer update --ignore-platform-reqs
 ```
 
+## Autenticação
+
+Utilizamos o componente [jwt-auth](https://github.com/tymondesigns/jwt-auth) JSON Web Token (JWT) específico para Laravel e Lumen, para fornecer nosso método de autenticação.
+
 ### @todo
 - Adicionar o comando ```composer update --ignore-platform-reqs``` no entry-point da imagem do php-fpm
 - Adicionar Midware para JWT
