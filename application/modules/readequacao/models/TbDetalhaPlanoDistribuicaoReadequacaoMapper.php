@@ -41,7 +41,6 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
     public function copiarDetalhamentosDaProposta(Projeto_Model_TbProjetos $projeto, $paramsBuscarDetalhamentos)
     {
         $tbDetalhaPlanoDistribuicao = new Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao();
-        $tbDetalhaReadequacao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
         $detalhamentosDaProposta = $tbDetalhaPlanoDistribuicao->obterDetalhamentosDaProposta($projeto->getidProjeto());
 
         if (empty($detalhamentosDaProposta)) {
@@ -61,6 +60,7 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
             }
             $this->commit();
 
+            $tbDetalhaReadequacao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
             return $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos, ['tpSolicitacao DESC', 'dsProduto'])->toArray();
 
         } catch (Exception $e) {

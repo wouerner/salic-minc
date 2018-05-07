@@ -236,11 +236,17 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         $this->view->idPerfil = $this->idPerfil;
 
         try {
+
+            if (empty($this->projeto)) {
+                throw new Exception("Projeto &eacute; obrigat&oacute;rio obter os planos de distribui&ccedil;&atilde;o");
+            }
+
             $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-            $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'tbPlanoDistribuicao');
+            $planosDistribuicao = $tbPlanoDistribuicao->obterPlanosDistribuicaoReadequacao($this->idPronac);
 
             if (count($planosDistribuicao) == 0) {
-                $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoReadequacao($this->idPronac, 'PlanoDistribuicaoProduto');
+                $modelPlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
+                $planosDistribuicao = $modelPlanoDistribuicaoProduto->buscar(['idProjeto = ?' => $this->projeto->idProjeto]);
             }
 
             $dados['planodistribuicao'] = $planosDistribuicao->toArray();

@@ -100,7 +100,6 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
         atualizarItemNaListagem(response) {
             let self = this;
             if (response.success == 'true') {
-
                 let index = self.$data.detalhamentos.map(
                     item => item.idDetalhaPlanoDistribuicao
                 ).indexOf(response.data.idDetalhaPlanoDistribuicao);

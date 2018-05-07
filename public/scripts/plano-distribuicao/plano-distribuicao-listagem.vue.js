@@ -11,16 +11,18 @@ Vue.component('plano-distribuicao-listagem', {
                     <span v-if="produto.stPrincipal == 1" class='badge'>Produto Principal</span>
                 </div>
                 <div class="collapsible-body no-padding margin10 scroll-x">
+                
+                     <component
+                        v-bind:is="componenteProdutoCabecalho"
+                        :produto="produto"
+                    ></component>
+                
                     <ul class="collapsible collapsible-locais no-padding" data-collapsible="expandable">
                         <li v-for="local of locais" v-if="local.idMunicipio">
                             <div class="collapsible-header black-text">
                                 <i class="material-icons">place</i> {{local.uf}} - {{local.municipio}}
                             </div>
                             <div class="collapsible-body no-padding margin10 scroll-x">
-                                <component
-                                    v-bind:is="componenteProdutoCabecalho"
-                                    :produto="produto"
-                                ></component>
                                 <component
                                     v-bind:is="componenteDetalhamento"
                                     :disabled="disabled"
@@ -29,13 +31,14 @@ Vue.component('plano-distribuicao-listagem', {
                                     :id="idProjeto"
                                     :array-detalhamentos="filtrarDetalhamentos(detalhamentos, produto.idPlanoDistribuicao, local.idMunicipio)"
                                 ></component>
-                                <component
-                                    v-bind:is="componenteProdutoRodape"
-                                    :produto="produto"
-                                ></component>
                             </div>
                         </li>
                     </ul>
+                    
+                    <component
+                        v-bind:is="componenteProdutoRodape"
+                        :produto="produto"
+                    ></component>
                 </div>
             </li>
         </ul>
@@ -65,7 +68,7 @@ Vue.component('plano-distribuicao-listagem', {
             type: String
         },
         'componenteProdutoRodape': {
-            default: '',
+            default: 'plano-distribuicao-visualizar-produto-resumido',
             type: String
         },
         'disabled': false

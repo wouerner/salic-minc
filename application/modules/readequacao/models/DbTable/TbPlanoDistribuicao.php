@@ -419,6 +419,7 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
                 $this->_schema
             )
             ->where('idPlanoDistribuicao = ?', $idPlanoDistribuicao)
+            ->where('tpSolicitacao <> ?', 'E')
         ;
 
         $dados = $this->fetchRow($sql)->toArray();
@@ -426,5 +427,75 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
 
         $where = $this->getAdapter()->quoteInto('idPlanoDistribuicao = ?', $idPlanoDistribuicao);
         return $this->update($dados, $where);
+    }
+
+    /*
+    * busca os dados fazendo alias com a tabela original
+    */
+    public function obterPlanosDistribuicaoReadequacao($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array('a' => 'Projetos'),
+            array('a.idProjeto')
+        );
+
+        $select->joinInner(
+            array('b' => $this->_name),
+            "a.IdPRONAC = b.idPronac AND stAtivo='S'",
+            array(
+                new Zend_Db_Expr("
+                    b.idPlanoDistribuicao,
+                    b.cdArea as idArea,
+                    b.cdSegmento as idSegmento,
+                    b.idPosicaoLogo as idPosicaoDaLogo,
+                    b.stPrincipal,
+                    '0' as Usuario,
+                    b.tpSolicitacao,
+                    b.canalAberto,
+                    b.idProduto,
+                    FORMAT(b.qtProponente,'0,0','pt-br') as QtdeProponente,
+                    FORMAT(b.qtOutros,'0,0','pt-br') as QtdeOutros,
+                    FORMAT(b.qtProduzida,'0,0','pt-br') as QtdeProduzida,
+                    FORMAT(b.qtPatrocinador,'0,0','pt-br') as QtdePatrocinador,
+                    FORMAT(b.qtVendaNormal,'0,0','pt-br') as QtdeVendaNormal,
+                    FORMAT(b.qtVendaPromocional,'0,0','pt-br') as QtdeVendaPromocional,
+                    FORMAT(b.vlUnitarioNormal,'0,0','pt-br') as vlUnitarioNormal,
+                    FORMAT(b.PrecoUnitarioNormal,'0,0','pt-br') as PrecoUnitarioNormal,
+                    FORMAT(b.qtdeVendaPopularNormal,'0,0','pt-br') as QtdeVendaPopularNormal,
+                    FORMAT(b.qtdeVendaPopularPromocional,'0,0','pt-br') as QtdeVendaPopularPromocional,
+                    FORMAT(b.vlUnitarioPopularNormal,'0,0','pt-br') as vlUnitarioPopularNormal,
+                    FORMAT(b.receitaPopularNormal,'0,0','pt-br') as ReceitaPopularNormal,
+                    FORMAT(b.vlReceitaTotalPrevista,'0,0','pt-br') as Receita 
+                ")
+            ),
+            $this->_schema
+        );
+
+        $select->joinInner(
+            array('c' => 'Produto'),
+            'c.Codigo = b.idProduto',
+            array('c.Descricao as Produto'),
+            $this->_schema
+        );
+
+        $select->joinInner(
+            array('d' => 'Area'),
+            'b.cdArea = d.Codigo',
+            array('d.Descricao as DescricaoArea'),
+            $this->_schema
+        );
+
+        $select->joinInner(
+            array('e' => 'Segmento'),
+            'b.cdSegmento = e.Codigo',
+            array('e.Descricao as DescricaoSegmento'),
+            $this->_schema
+        );
+
+        $select->where('a.IdPRONAC = ?', $idPronac);
+
+        return $this->fetchAll($select);
     }
 }
