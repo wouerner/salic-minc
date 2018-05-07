@@ -84,75 +84,95 @@
                                                     'idComprovantePagamento' => $comprovante->idComprovantePagamento,
                                                 )
                                             );
-                                            ?>"
-                                        >
-                                            <i class="material-icons">edit</i>
-                                        </a>
-                                    <?php elseif ($comprovante->stItemAvaliado == ComprovantePagamentoxPlanilhaAprovacao::RECUSADO): ?>
-                                        <a
-                                            class="small btn btn-primary"
-                                            href="
-                                                <?php echo $this->url(
-                                                array(
-                                                    'module' => 'prestacao-contas',
-                                                    'controller' => 'gerenciar',
-                                                    'action' => 'comprovar',
-                                                    'idComprovantePagamento' => $comprovante->idComprovantePagamento,
-                                                )
-                                            );
-                                            ?>"
-                                        >
-                                            <i class="material-icons">edit</i>
-                                        </a>
-                                    <?php endif; ?>
-                                </td>
-                                <td>
-                                    <?php if ($this->situacao == 'E12'): ?>
-                                        <a
-                                            class="small waves-effect waves-darken btn  btn-danger exclusao"
-                                            href="
-                                                <?php echo $this->url(
-                                                array(
-                                                    'module' => 'default',
-                                                    'controller' => 'comprovar-pagamento',
-                                                    'action' => 'deletar',
-                                                    'comprovante' => $comprovante->idComprovantePagamento,
-                                                )
-                                            );
-                                            ?>">
-                                            <i class="material-icons">delete</i>
-                                        </a>
-                                        <?php else: ?>
-                                            <span class="bold"><?php echo $comprovacaoTexto[$comprovante->stItemAvaliado]; ?></span>
-                                        <?php endif; ?>
-                                    <?php else: ?>
-                                    <?php if(!$this->diligenciaTodosItens): ?>
-                                        <a
-                                            class="small waves-effect waves-darken btn  btn-danger exclusao"
-                                            href="
-                                                <?php echo $this->url(
-                                                array(
-                                                    'module' => 'default',
-                                                    'controller' => 'comprovar-pagamento',
-                                                    'action' => 'deletar',
-                                                    'comprovante' => $comprovante->idComprovantePagamento,
-                                                ),
-                                                null,
-                                                true
-                                            );
-                                            ?>">
-                                            <i class="material-icons">delete</i>
-                                        </a>
-                                            <?php else: ?>
-                                                <span class="bold"><?php echo $comprovacaoTexto[$comprovante->stItemAvaliado]; ?></span>
+                                        ?>
+                                        <?php if ($comprovante->stItemAvaliado == 4 || $comprovante->stItemAvaliado == 3): /* n¿o analisado ou recusado */ ?>
+                                            <?php if ($comprovante->stItemAvaliado == 3): ?>
+                                                <span class="bold"> <?php echo $comprovacaoTexto[$comprovante->stItemAvaliado]; ?></span>
                                             <?php endif; ?>
-                                    <?php endif;  ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                                        <td>
+                                            <?php if ($this->situacao == 'E12'): ?>
+                                                <a
+                                                    class="small btn btn-primary"
+                                                    href="
+                                                        <?php echo $this->url(
+                                                        array(
+                                                            'module' => 'prestacao-contas',
+                                                            'controller' => 'gerenciar',
+                                                            'action' => 'comprovar',
+                                                            'idComprovantePagamento' => $comprovante->idComprovantePagamento,
+                                                        )
+                                                    );
+                                                    ?>"
+                                                >
+                                                    <i class="material-icons">edit</i>
+                                                </a>
+                                            <?php elseif ($comprovante->stItemAvaliado == ComprovantePagamentoxPlanilhaAprovacao::RECUSADO): ?>
+                                                <a
+                                                    class="small btn btn-primary"
+                                                    href="
+                                                        <?php echo $this->url(
+                                                        array(
+                                                            'module' => 'prestacao-contas',
+                                                            'controller' => 'gerenciar',
+                                                            'action' => 'comprovar',
+                                                            'idComprovantePagamento' => $comprovante->idComprovantePagamento,
+                                                        )
+                                                    );
+                                                    ?>"
+                                                >
+                                                    <i class="material-icons">edit</i>
+                                                </a>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($this->situacao == 'E12'): ?>
+                                                <a
+                                                    class="small waves-effect waves-darken btn  btn-danger exclusao"
+                                                    href="
+                                                        <?php echo $this->url(
+                                                        array(
+                                                            'module' => 'default',
+                                                            'controller' => 'comprovar-pagamento',
+                                                            'action' => 'deletar',
+                                                            'comprovante' => $comprovante->idComprovantePagamento,
+                                                        )
+                                                    );
+                                                    ?>">
+                                                    <i class="material-icons">delete</i>
+                                                    <?php else: ?>
+                                                        <span
+                                                            class="bold"><?php echo $comprovacaoTexto[$comprovante->stItemAvaliado]; ?></span>
+                                                    <?php endif; ?>
+                                            <?php else: ?>
+                                            <?php if(!$this->diligenciaTodosItens): ?>
+                                                <a
+                                                    class="small waves-effect waves-darken btn  btn-danger exclusao"
+                                                    href="
+                                                        <?php echo $this->url(
+                                                        array(
+                                                            'module' => 'default',
+                                                            'controller' => 'comprovar-pagamento',
+                                                            'action' => 'deletar',
+                                                            'comprovante' => $comprovante->idComprovantePagamento,
+                                                        ),
+                                                        null,
+                                                        true
+                                                    );
+                                                    ?>">
+                                                    <i class="material-icons">delete</i>
+                                                    <?php else: ?>
+                                                        <span class="bold"><?php echo $comprovacaoTexto[$comprovante->stItemAvaliado]; ?></span>
+                                                    <?php endif; ?>
+                                            <?php endif;  ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
