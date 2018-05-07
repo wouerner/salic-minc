@@ -24,8 +24,10 @@
             </div>
         </div>
         <div class="content">
+
             <div class="card">
                 <div class="card-content">
+		    <h3>Projeto transferidor</h3>
                     <div class="row">
                         <div class="col s3">
                             <b>Pronac: </b>{{ projeto.pronac }}<br>
@@ -45,7 +47,7 @@
 	    
 	    <div class="card">		
 		<div class="card-content">
-		    <h3>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</h3>
+		    <h5>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</h5>
 		    <div class="row">
 			<div class="input-field col s12">
 			    <textarea
@@ -57,27 +59,39 @@
 			</div>
 		    </div>
 		    <div class="row">
-			<div class="file-field input-field">
-			    <div class="btn">
-				<span>File</span>
-				<input type="file">
-			    </div>
-			    <div class="file-path-wrapper">
-				<input class="file-path validate" type="text">
+			<div class="col s3">
+			    <h6>Tipo de transfer&ecirc;ncia</h6>
+			    <select
+				class="browser-default"
+				       ref="readequacaoTipoTransferencia"
+				       v-model="readequacao.tipoTransferencia">
+				<option v-for="tipo in tiposTransferencia" v-bind:value="tipo.id">{{tipo.nome}}</option>
+			    </select>
+			</div>
+			<div class="col s3">
+			    <h6>Anexar arquivo</h6>
+			    <div class="file-field input-field">
+				<div class="btn">
+				    <span>File</span>
+				    <input type="file">
+				</div>
+				<div class="file-path-wrapper">
+				    <input class="file-path validate" type="text">
+				</div>
 			    </div>
 			</div>
 		    </div>
 		    <div class="row">
-			<div class="center-align padding20 col s3">
+			<div class="center-align padding20 col s6">
 			    <button
 				v-on:click="salvarReadequacao"
 			       class="btn">Salvar</button>
 			</div>
-			<div class="center-align padding20 col s3">
+			<div class="center-align padding20 col s6">
 			    <button
 				v-on:click="finalizarReadequacao"
-				:disabled="!disponivelFinalizar"
-				class="btn">Finalizar</button>
+					    :disabled="!disponivelFinalizar"
+					    class="btn">Finalizar</button>
 			</div>
 
 		    </div>
@@ -86,20 +100,18 @@
 	    
 	    <div class="card"
 		 v-show="disponivelAdicionarRecebedores">
-		<h4>Projetos recebedores</h4>
 		<div class="card-content">
+		    <h4>Projetos recebedores</h4>
 		    <table v-show="exibeProjetosRecebedores">
 			<thead>
 			    <th>Pronac</th>
 			    <th>Nome do projeto</th>
-			    <th>Tipo da transfer&ecirc;ncia</th>
 			    <th>Vl. transfer&ecirc;ncia</th>
 			</thead>
 			<tbody>
 			    <tr v-for="(projeto, index) in projetosRecebedores">
 				<td>{{ projeto.idPronac }}</td>
 				<td>{{ projeto.nomeProjeto}}</td>
-				<td>{{ projeto.tipoTransferencia}}</td>
 				<td>R$ {{ projeto.valorRecebido}}</td>
 				<td>
 				    <a href="javascript:void(0)"
@@ -120,7 +132,7 @@
 		    </table>
 		    
 		    <form class="row">
-			<div class="col s3">
+			<div class="col s6">
 			    <label>Projeto recebedor</label>
 			    <select class="browser-default"
 				    v-model="projetoRecebedor.idPronac"
@@ -132,24 +144,12 @@
 				<option value="153321">153321 - Projeto gehehe</option>
 			    </select>
 			</div>
-			<div class="col s3">
-			    <label>Tipo da transfer&ecirc;ncia</label>
-			    <select class="browser-default"
-				    v-model="projetoRecebedor.tipoTransferencia"
-				    ref="projetoRecebedorTipoTransferencia"
-				    :disabled="!disponivelAdicionarRecebedor">
-				<option value="" disabled selected>Selecione o tipo da transfer&ecirc;ncia</option>
-				<option value="1">N&atilde;o homologados</option>
-				<option value="2">Homologados</option>
-				<option value="3">Recursos remanescentes</option>
-			    </select>
-			</div>
  			<div class="input-field col s3">
 			    <input-money
 				ref="projetoRecebedorValorRecebido"
                                 v-on:ev="projetoRecebedor.valorRecebido = $event"
                                 v-bind:value="projetoRecebedor.valorRecebido"
-				     :disabled="!disponivelAdicionarRecebedor">
+				:disabled="!disponivelAdicionarRecebedor">
 			    </input-money>
 			    <label for="valor_recebido">Valor recebido</label>
 			</div>		
@@ -162,6 +162,7 @@
 		    </form>
 		</div>
 	    </div>
+	    
         </div>
     </div>
 </div>

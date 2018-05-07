@@ -4,15 +4,32 @@ new Vue({
 	projeto: {
 	    idPronac: null,
 	    nomeProjeto: '',
-	    tipoTransferencia: '',
 	    valorRecebido: 0.00
 	},
 	readequacao:  {
 	    justificativa: '',
+	    tipoTransferencia: null,
 	    idReadequacao: null
 	},
-	projetoRecebedor: {},
-	projetosRecebedores: []
+	projetoRecebedor:  {
+	    idPronac: null,
+	    valorRecebido: 0.00 		
+	},
+	projetosRecebedores: [],
+	tiposTransferencia: [
+	    {
+		'id': 1,
+		'nome': 'N\xE3o homologados'
+	    },
+	    {
+		'id': 2,
+		'nome': 'Homologados'
+	    },
+	    {
+		'id': 3,
+		'nome': 'Recursos remanescentes'
+	    }
+	]
     },
     created: function() {
 	this.obterDadosProjeto();
@@ -29,13 +46,6 @@ new Vue({
 		this.$refs.projetoRecebedorIdPronac.focus();
                 return;		
 	    }
-	    if (this.projetoRecebedor.tipoTransferencia == '' ||
-		this.projetoRecebedor.tipoTransferencia == undefined
-	    ) {
-		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o tipo da transfer\xEAncia!");
-		this.$refs.projetoRecebedorTipoTransferencia.focus();
-                return;		
-	    }
 	    if (this.projetoRecebedor.valorRecebido == '' ||
 		this.projetoRecebedor.valorRecebido == undefined
 	    ) {
@@ -46,6 +56,8 @@ new Vue({
 	    
 	    var valorRecebido = parseFloat(this.projetoRecebedor.valorRecebido.replace(",", "."));
 	    valorRecebido = valorRecebido.toFixed(2);
+	    this.projetoRecebedor.valorRecebido = valorRecebido.replace(".", ",");
+	    
 	    var somaTransferencia = parseFloat(this.projetoRecebedor.valorRecebido.replace(",", ".")) + parseFloat(this.totalRecebido);
 	    somaTransferencia = somaTransferencia.toFixed(2);
 	    var saldoDisponivel = parseFloat(this.projeto.saldoDisponivel);
@@ -59,7 +71,11 @@ new Vue({
 	    this.projetosRecebedores.push(
 		this.projetoRecebedor
 	    );
-	    this.projetoRecebedor = {};
+
+	    this.projetoRecebedor = {
+		idPronac: null,
+		valorRecebido: 0.00 		
+	    };
 	    // persistir dado ajax
 	},
 	excluirRecebedor: function(id) {
@@ -67,15 +83,22 @@ new Vue({
 	    // remover dado ajax
 	},
 	salvarReadequacao: function() {
-	    if (this.readequacao.justificativa.length > 1) {
-		this.obterDadosReadequacao();
-		// adicionar via ajax
-		
-	    } else {
+	    if (this.readequacao.tipoTransferencia == '' ||
+		this.readequacao.tipoTransferencia == undefined
+	    ) {
+		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o tipo da transfer\xEAncia!");
+		this.$refs.readequacaoTipoTransferencia.focus();
+                return;		
+	    }
+	    
+	    if (this.readequacao.justificativa.length == 0) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o!");
 		this.$refs.readequacaoJustificativa.focus();		     
 		return;
 	    }
+	    
+	    this.obterDadosReadequacao();
+	    // adicionar via ajax
 	},
 	finalizarReadequacao: function() {
 	},
@@ -92,7 +115,9 @@ new Vue({
 	obterDadosReadequacao: function(idPronac) {    
 	    this.readequacao = {
 		idReadequacao: 2345,
-		idTipoReadequacao: 23
+		idTipoReadequacao: 23,
+		tipoTransferencia: 1,
+		justificativa: 'ababababa'
 	    };
 	}
     },
@@ -109,7 +134,6 @@ new Vue({
 	    return saldo.toFixed(2);
 	},
 	disponivelAdicionarRecebedores: function() {
-	    console.log(this.readequacao);
 	    if (this.readequacao.idReadequacao != null) {
 		return true;
 	    } else {
