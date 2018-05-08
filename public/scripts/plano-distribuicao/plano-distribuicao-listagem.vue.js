@@ -1,44 +1,50 @@
 Vue.component('plano-distribuicao-listagem', {
     template: `
     <div class="plano-distribuicao-listagem card" v-if="produtos">
-        <div v-if="produtos.length <= 0" class="padding10">
-            <b>Aguarde! Carregando....</b>
-        </div>
-        <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
+        <ul class="collapsible collapsible-produto no-padding" data-collapsible="accordion">
             <li v-for="produto of produtos">
-                <div class="collapsible-header green-text">
-                    <i class="material-icons">perm_media</i> {{produto.Produto}}
+                <div class="collapsible-header green-text" :class="{ active: produto.stPrincipal == 1 }">
+                    <i class="material-icons">perm_media</i>{{produto.Produto}} 
+                    <span v-if="produto.tpSolicitacao == 'A'" class="orange-text">(alterado)</span>
                     <span v-if="produto.stPrincipal == 1" class='badge'>Produto Principal</span>
                 </div>
                 <div class="collapsible-body no-padding margin10 scroll-x">
-                
-                     <component
-                        v-bind:is="componenteProdutoCabecalho"
-                        :produto="produto"
-                    ></component>
-                
-                    <ul class="collapsible collapsible-locais no-padding" data-collapsible="expandable">
-                        <li v-for="local of locais" v-if="local.idMunicipio">
-                            <div class="collapsible-header black-text">
-                                <i class="material-icons">place</i> {{local.uf}} - {{local.municipio}}
-                            </div>
-                            <div class="collapsible-body no-padding margin10 scroll-x">
-                                <component
-                                    v-bind:is="componenteDetalhamento"
-                                    :disabled="disabled"
-                                    :produto="produto"
-                                    :local="local"
-                                    :id="idProjeto"
-                                    :array-detalhamentos="filtrarDetalhamentos(detalhamentos, produto.idPlanoDistribuicao, local.idMunicipio)"
-                                ></component>
-                            </div>
-                        </li>
-                    </ul>
-                    
-                    <component
-                        v-bind:is="componenteProdutoRodape"
-                        :produto="produto"
-                    ></component>
+                     <component :is="componenteProdutoCabecalho" :produto="produto"></component>
+                    <div style="width: 100%; margin-bottom: 20px" class="center-align">
+                        <a 
+                            class="btn waves-effect waves-light white-text" 
+                            href="javascript:void(0)"
+                            title="Editar detalhamentos do produto"
+                            @click.prevent="visualizarOcultarDetalhamentos()"
+                        >
+                            <span v-if="active">Editar<i class="material-icons right">edit</i></span>
+                            <span v-if="!active">Visualizar resumo<i class="material-icons right">visibility</i></span>
+                        </a>
+                    </div>
+                   <transition name="custom-classes-transition" enter-active-class="animated bounceInUp">
+                        <div v-show="active" class="produto">
+                            <component :is="componenteProdutoRodape":produto="produto"></component>
+                        </div>
+                   </transition>
+                   <transition name="custom-classes-transition" enter-active-class="animated bounceInUp">
+                        <ul v-show="!active" class="collapsible collapsible-locais no-padding" data-collapsible="expandable">
+                            <li v-for="local of locais" v-if="local.idMunicipio">
+                                <div class="collapsible-header black-text active">
+                                    <i class="material-icons">place</i> {{local.uf}} - {{local.municipio}}
+                                </div>
+                                <div class="collapsible-body no-padding margin10 scroll-x">
+                                    <component
+                                        :is="componenteDetalhamento"
+                                        :disabled="disabled"
+                                        :produto="produto"
+                                        :local="local"
+                                        :id="idProjeto"
+                                        :array-detalhamentos="filtrarDetalhamentos(detalhamentos, produto.idPlanoDistribuicao, local.idMunicipio)"
+                                    ></component>
+                                </div>
+                            </li>
+                        </ul>
+                   </transition>
                 </div>
             </li>
         </ul>
@@ -49,7 +55,7 @@ Vue.component('plano-distribuicao-listagem', {
             produtos: [],
             detalhamentos: [],
             locais: [],
-            active: false,
+            active: true,
             icon: 'add',
             radio: 'n'
         }
@@ -121,6 +127,12 @@ Vue.component('plano-distribuicao-listagem', {
             $3('.collapsible').each(function () {
                 $3(this).collapsible();
             });
+        },
+        visualizarOcultarDetalhamentos: function () {
+            if (!this.active) {
+                detalhamentoEventBus.$emit('busAtualizarProdutos', true);
+            }
+            this.active = !this.active;
         }
     }
 });

@@ -24,13 +24,11 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
             'stAtivo = ?' => 'S'
         ];
 
-        $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar(
-            $paramsBuscarDetalhamentos,
-            ['tpSolicitacao DESC', 'dsProduto']
-        )->toArray();
+        $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos)->toArray();
 
         if (count($detalhamentosReadequacao) == 0) {
-            $detalhamentosReadequacao = $this->copiarDetalhamentosDaProposta($projeto, $paramsBuscarDetalhamentos);
+            $this->copiarDetalhamentosDaProposta($projeto);
+            $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos)->toArray();
         }
 
         $detalhamentosReadequacao = $this->zerarValoresItensExcluidos($detalhamentosReadequacao);
@@ -38,7 +36,7 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
         return $detalhamentosReadequacao;
     }
 
-    public function copiarDetalhamentosDaProposta(Projeto_Model_TbProjetos $projeto, $paramsBuscarDetalhamentos)
+    public function copiarDetalhamentosDaProposta(Projeto_Model_TbProjetos $projeto)
     {
         $tbDetalhaPlanoDistribuicao = new Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao();
         $detalhamentosDaProposta = $tbDetalhaPlanoDistribuicao->obterDetalhamentosDaProposta($projeto->getidProjeto());
@@ -60,8 +58,7 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
             }
             $this->commit();
 
-            $tbDetalhaReadequacao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
-            return $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos, ['tpSolicitacao DESC', 'dsProduto'])->toArray();
+            return true;
 
         } catch (Exception $e) {
             $this->rollBack();
@@ -127,20 +124,25 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
 
         if (!empty($id)) {
             $dados['idDetalhaPlanoDistribuicao'] = $id;
+
+            if($dados['idPlanoDistribuicao']) {
+                $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
+                $tbPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
+            }
         }
 
         return $dados;
     }
 
-    public function alterarSituacaoDetalhamento($idDetalhamento, $situacao)
+    public function alterarSituacaoDetalhamento($dados, $situacao, $projeto)
     {
-        if (empty($idDetalhamento)) {
+        if (empty($dados['idDetalhaPlanoDistribuicao'])) {
             throw new Exception("Id do detalhamento &eacute; obrigat&oacute;rio");
         }
 
         $tbDetalhaReadequacao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
 
-        $where = $tbDetalhaReadequacao->getAdapter()->quoteInto('idDetalhaPlanoDistribuicao = ?', $idDetalhamento);
+        $where = $tbDetalhaReadequacao->getAdapter()->quoteInto('idDetalhaPlanoDistribuicao = ?', $dados['idDetalhaPlanoDistribuicao']);
 
         $id = $tbDetalhaReadequacao->update(
             ['tpSolicitacao' => $situacao],
@@ -151,8 +153,13 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
             throw new Exception("Erro ao atualizar item");
         }
 
+        if($dados['idPlanoDistribuicao']) {
+            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
+            $tbPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
+        }
+
         $detalhamento = $tbDetalhaReadequacao->buscar([
-            'idDetalhaPlanoDistribuicao = ?' => $idDetalhamento
+            'idDetalhaPlanoDistribuicao = ?' => $dados['idDetalhaPlanoDistribuicao']
         ])->toArray();
 
         if ($situacao == 'E') {

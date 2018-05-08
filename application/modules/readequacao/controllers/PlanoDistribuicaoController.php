@@ -241,18 +241,13 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 throw new Exception("Projeto &eacute; obrigat&oacute;rio obter os planos de distribui&ccedil;&atilde;o");
             }
 
-            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-            $planosDistribuicao = $tbPlanoDistribuicao->obterPlanosDistribuicaoReadequacao($this->idPronac);
-
-            if (count($planosDistribuicao) == 0) {
-                $modelPlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-                $planosDistribuicao = $modelPlanoDistribuicaoProduto->buscar(['idProjeto = ?' => $this->projeto->idProjeto]);
-            }
-
-            $dados['planodistribuicao'] = $planosDistribuicao->toArray();
-
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
             $dados['detalhamentos'] = $detalhamentoMapper->obterDetalhamentosParaReadequacao($this->projeto);
+
+            if($dados['detalhamentos']) {
+                $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+                $dados['planodistribuicao'] = $tbPlanoDistribuicaoMapper->obterPlanosDistribuicao($this->projeto);
+            }
 
             $this->_helper->json(
                 [
@@ -277,6 +272,11 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         $dados = $this->getRequest()->getPost();
 
         try {
+
+            if (empty($this->projeto)) {
+                throw new Exception("Projeto &eacute; obrigat&oacute;rio");
+            }
+
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
 
@@ -295,12 +295,18 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         $dados = $this->getRequest()->getPost();
 
         try {
+
+            if (empty($this->projeto)) {
+                throw new Exception("Projeto &eacute; obrigat&oacute;rio");
+            }
+
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
 
             $dados = $detalhamentoMapper->alterarSituacaoDetalhamento(
-                $dados['idDetalhaPlanoDistribuicao'],
-                $mdlDetalhaReadequacao::TP_SOLICITACAO_EXCLUIR
+                $dados,
+                $mdlDetalhaReadequacao::TP_SOLICITACAO_EXCLUIR,
+                $this->projeto
             );
 
             $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento exclu&iacute;do com sucesso!'));
@@ -315,11 +321,17 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         $dados = $this->getRequest()->getPost();
 
         try {
+
+            if (empty($this->projeto)) {
+                throw new Exception("Projeto &eacute; obrigat&oacute;rio");
+            }
+
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
             $dados = $detalhamentoMapper->alterarSituacaoDetalhamento(
                 $dados['idDetalhaPlanoDistribuicao'],
-                $mdlDetalhaReadequacao::TP_SOLICITACAO_NAO_ALTERADO
+                $mdlDetalhaReadequacao::TP_SOLICITACAO_NAO_ALTERADO,
+                $this->projeto
             );
 
             $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Detalhamento restaurado com sucesso!'));
@@ -329,24 +341,4 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         }
     }
 
-    public function consolidarPlanoDistribuicaoAjaxAction()
-    {
-        $dados = $this->getRequest()->getPost();
-
-        try {
-
-            if (empty($this->projeto)) {
-                throw new Exception("Projeto &eacute; obrigat&oacute;rio para salvar o plano de distribui&ccedil;&atilde;o");
-            }
-
-            $planoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
-            $dados = $planoMapper->consolidarPlanosDeDistribuicaoReadequado($this->projeto);
-
-            $this->_helper->json(array('data' => $dados, 'success' => 'true', 'msg' => 'Plano de distribui&ccedil;&atilde;o salvo com sucesso!'));
-        } catch (Exception $e) {
-            $this->getResponse()->setHttpResponseCode(412);
-            $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
-        }
-
-    }
 }

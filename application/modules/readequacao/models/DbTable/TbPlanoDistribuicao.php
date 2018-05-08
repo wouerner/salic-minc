@@ -423,10 +423,15 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
         ;
 
         $dados = $this->fetchRow($sql)->toArray();
-        $dados['tpSolicitacao'] = 'A';
 
-        $where = $this->getAdapter()->quoteInto('idPlanoDistribuicao = ?', $idPlanoDistribuicao);
-        return $this->update($dados, $where);
+        $response = false;
+        if($dados) {
+            $dados['tpSolicitacao'] = 'A';
+            $where = $this->getAdapter()->quoteInto('idPlanoDistribuicao = ?', $idPlanoDistribuicao);
+            $response = $this->update($dados, $where);
+        }
+
+        return $response;
     }
 
     /*

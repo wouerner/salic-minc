@@ -54,6 +54,7 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
         },
         editarDetalhamento(detalhamento, index) {
             this.detalhamento = detalhamento;
+            $3("#" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "_modal").modal('open');
         },
         salvarDetalhamento(detalhamento) {
             let self = this;
@@ -68,6 +69,7 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
                     self.$data.detalhamentos.push(response.data);
                     self.mensagemSucesso(response.msg);
                     detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
+                    $3("#" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "_modal").modal('close');
                 }
             }).fail(function (response) {
                 vue.mensagemErro(response.responseJSON.msg);

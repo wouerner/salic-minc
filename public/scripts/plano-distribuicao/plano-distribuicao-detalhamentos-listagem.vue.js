@@ -10,7 +10,7 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
                         <th colspan="3" class="popular center-align">Pre&ccedil;o Popular</th>
                         <th rowspan="2" class="gratuito center-align">Distribui&ccedil;&atilde;o <br>Gratuita</th>
                         <th rowspan="2" class="center-align">Receita <br> Prevista</th>
-                        <th rowspan="2" colspan="2" width="10%" class="center-align">A&ccedil;&otildees</th>
+                        <th rowspan="2" colspan="2" width="12%" class="center-align">A&ccedil;&otildees</th>
                     </tr>
                     <tr>
                         <th class="proponente center-align">Qtd. Inteira</th>
@@ -120,16 +120,7 @@ Vue.component('plano-distribuicao-detalhamentos-listagem', {
     },
     methods: {
         emitirEvento: function (callback, detalhamento, index) {
-
             this.$emit('eventoListagem', callback, detalhamento, index);
-
-            if (callback == 'editarItem') {
-                let elm = $3("div[formIdMunicipio='" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "']");
-
-                $3("html, body").animate({
-                    scrollTop: $3(elm).offset().top + 30
-                }, 600);
-            }
         },
         definirClassesDaLinha(detalhamento) {
             return {
