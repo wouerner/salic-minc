@@ -276,7 +276,7 @@
                                 <i class="material-icons ">print</i>
                             </button>
                             <?php if ($this->isPropostaEnquadrada
-                                && Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE != $this->codGrupo) { ?>
+                                && $this->distribuicaoAvaliacaoProposta['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) { ?>
                                 <a class="btn waves-effect waves-light btn modal-trigger pulse cyan valign-wrapper"
                                    data-id_preprojeto="<?php echo $this->idPreProjeto; ?>"
                                    href="#dialogoEncaminharProposta">
