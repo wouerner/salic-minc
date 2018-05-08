@@ -352,7 +352,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             return true;
         }
 
-        if (count($recursoEnquadramento) > 0 && (string) $recursoEnquadramento['tpSolicitacao'] == (string) Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
+        if (count($recursoEnquadramento) > 0 
+            && (string) $recursoEnquadramento['tpSolicitacao'] == (string) Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL
+            && !empty($recursoEnquadramento['dsRecursoProponente'])
+            ) {
             return true;
         }
         return false;
