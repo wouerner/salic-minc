@@ -10,7 +10,7 @@
  * @copyright � 2011 - Minist�rio da Cultura - Todos os direitos reservados.
  * @link http://www.cultura.gov.br
  */
-class Readequacao_Model_tbReadequacao extends MinC_Db_Table_Abstract
+class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
 {
     protected $_schema = "sac";
     protected $_name = "tbReadequacao";
