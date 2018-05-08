@@ -299,12 +299,6 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $recursoEnquadramento = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
 
             $this->view->isRecursoAvaliado = false;
-
-            $perfisAutorizadosTransformarPropostaEmProjeto = [
-                (int) Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
-                (int) Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE,
-            ];
-
             if (is_array($this->view->ultimaSugestaoEnquadramento)
                 && $this->isPropostaEnquadradoArtigo18($this->view->ultimaSugestaoEnquadramento)) {
                 $this->view->isRecursoAvaliado = true;
@@ -324,20 +318,44 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 }
             }
 
-            $this->view->isPermitidoTransformarPropostaEmProjeto = $this->isAutorizado(
-                $perfisAutorizadosTransformarPropostaEmProjeto,
-                (int) $this->codGrupo
-            )
-            && $this->view->isRecursoAvaliado;
+            $this->view->isPermitidoTransformarPropostaEmProjeto = $this->_isPermitidoTransformarPropostaEmProjeto(
+                $recursoEnquadramento,
+                $this->codGrupo,
+                $this->view->isRecursoAvaliado
+            );
 
             $this->view->isPermitidoEncaminharAvaliacao = false;
             if (count($distribuicaoAvaliacaoProposta) > 0
-                && $distribuicaoAvaliacaoProposta['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE 
+                && $distribuicaoAvaliacaoProposta['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
                 && $this->view->isPropostaEnquadrada) {
                 $this->view->isPermitidoEncaminharAvaliacao = true;
             }
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
+    }
+
+    private function _isPermitidoTransformarPropostaEmProjeto(
+        $recursoEnquadramento,
+        $id_perfil,
+        $isRecursoAvaliado
+    ) {
+        $perfisAutorizadosTransformarPropostaEmProjeto = [
+            (int) Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE,
+            (int) Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE,
+        ];
+        if ($this->isAutorizado(
+            $perfisAutorizadosTransformarPropostaEmProjeto,
+            (int) $id_perfil
+        )
+            && $isRecursoAvaliado
+        ) {
+            return true;
+        }
+
+        if (count($recursoEnquadramento) > 0 && (string) $recursoEnquadramento['tpSolicitacao'] == (string) Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL) {
+            return true;
+        }
+        return false;
     }
 
     private function isPropostaEnquadradoArtigo18(array $sugestaoEnquadramento)
