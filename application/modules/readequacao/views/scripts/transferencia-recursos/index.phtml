@@ -1,4 +1,4 @@
-<div class="container-fluid" id="vue-container">
+<div class="container-fluid">
     <div class="row">
         <div class="page-title">
             <div class="row">
@@ -23,146 +23,11 @@
                 </div>
             </div>
         </div>
-        <div class="content">
-
-            <div class="card">
-                <div class="card-content">
-		    <h3>Projeto transferidor</h3>
-                    <div class="row">
-                        <div class="col s3">
-                            <b>Pronac: </b>{{ projeto.pronac }}<br>
-                        </div>
-                        <div class="col s3">
-                            <b>Projeto: </b><span v-html="projeto.nomeProjeto"></span>
-                        </div>
-                        <div class="col s3">
-                            <b>Vl. a Comprovar: </b>{{ projeto.valorComprovar }}
-                        </div>
-                        <div class="col s3">
-                            <b>Saldo dispon&iacute;vel: </b>R$ {{ saldoDisponivel }}
-                        </div>
-                    </div>
-		</div>
-            </div>
-	    
-	    <div class="card">		
-		<div class="card-content">
-		    <h5>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</h5>
-		    <div class="row">
-			<div class="input-field col s12">
-			    <textarea
-				id="textarea1"
-				class="materialize-textarea"
-				ref="readequacaoJustificativa"
-				v-model="readequacao.justificativa"></textarea>
-			    <label for="textarea1">Justificativa</label>
-			</div>
-		    </div>
-		    <div class="row">
-			<div class="col s3">
-			    <h6>Tipo de transfer&ecirc;ncia</h6>
-			    <select
-				class="browser-default"
-				       ref="readequacaoTipoTransferencia"
-				       v-model="readequacao.tipoTransferencia">
-				<option v-for="tipo in tiposTransferencia" v-bind:value="tipo.id">{{tipo.nome}}</option>
-			    </select>
-			</div>
-			<div class="col s3">
-			    <h6>Anexar arquivo</h6>
-			    <div class="file-field input-field">
-				<div class="btn">
-				    <span>File</span>
-				    <input type="file">
-				</div>
-				<div class="file-path-wrapper">
-				    <input class="file-path validate" type="text">
-				</div>
-			    </div>
-			</div>
-		    </div>
-		    <div class="row">
-			<div class="center-align padding20 col s6">
-			    <button
-				v-on:click="salvarReadequacao"
-			       class="btn">Salvar</button>
-			</div>
-			<div class="center-align padding20 col s6">
-			    <button
-				v-on:click="finalizarReadequacao"
-					    :disabled="!disponivelFinalizar"
-					    class="btn">Finalizar</button>
-			</div>
-
-		    </div>
-		</div>
-	    </div>
-	    
-	    <div class="card"
-		 v-show="disponivelAdicionarRecebedores">
-		<div class="card-content">
-		    <h4>Projetos recebedores</h4>
-		    <table v-show="exibeProjetosRecebedores">
-			<thead>
-			    <th>Pronac</th>
-			    <th>Nome do projeto</th>
-			    <th>Vl. transfer&ecirc;ncia</th>
-			</thead>
-			<tbody>
-			    <tr v-for="(projeto, index) in projetosRecebedores">
-				<td>{{ projeto.idPronac }}</td>
-				<td>{{ projeto.nomeProjeto}}</td>
-				<td>R$ {{ projeto.valorRecebido}}</td>
-				<td>
-				    <a href="javascript:void(0)"
-				       v-on:click="excluirRecebedor(index)"
-				       class="btn small">
-					<i class="material-icons">delete</i>					
-				    </a>
-				</td>
-			    </tr>
-			</tbody>
-			<tfoot>
-			    <tr>
-				<td colspan="2"></td>
-				<td class="right">Total transferido: </td>
-				<td>R$ {{ totalRecebido }} </td>
-			    </tr>
-			</tfoot>
-		    </table>
-		    
-		    <form class="row">
-			<div class="col s6">
-			    <label>Projeto recebedor</label>
-			    <select class="browser-default"
-				    v-model="projetoRecebedor.idPronac"
-				    ref="projetoRecebedorIdPronac"
-				    :disabled="!disponivelAdicionarRecebedor">
-				<option value="" disabled selected>Selecione o projeto</option>
-				<option value="173321">173321 - Projeto abc</option>
-				<option value="163321">163321 - Projeto def</option>
-				<option value="153321">153321 - Projeto gehehe</option>
-			    </select>
-			</div>
- 			<div class="input-field col s3">
-			    <input-money
-				ref="projetoRecebedorValorRecebido"
-                                v-on:ev="projetoRecebedor.valorRecebido = $event"
-                                v-bind:value="projetoRecebedor.valorRecebido"
-				:disabled="!disponivelAdicionarRecebedor">
-			    </input-money>
-			    <label for="valor_recebido">Valor recebido</label>
-			</div>		
-			<div class="center-align padding20 col s3">
-			    <a href="javascript:void(0)"
-			       v-on:click="incluirRecebedor"
-			       :disabled="!disponivelAdicionarRecebedor"
-			       class="btn">Adicionar recebedor</a>
-			</div>
-		    </form>
-		</div>
-	    </div>
-	    
+        <div class="content" id="readequacao-transferencia-recursos">
+	    <readequacao-transferencia-recursos
+                id-pronac="<?= $this->idPronac; ?>"
+		id-tipo-readequacao="<?= $this->idTipoReadequacao ?>"
+	    ></readequacao-transferencia-recursos>	    
         </div>
     </div>
 </div>
@@ -172,3 +37,8 @@
 <script src="/public/scripts/mixins/utils.vue.js" type="text/javascript"></script>
 <script src="/public/scripts/components/input-money.vue.js" type="text/javascript"></script>
 <script src="/public/scripts/readequacao/readequacao-transferencia-recursos.vue.js" type="text/javascript"></script>
+<script>
+ new Vue({
+     el: '#readequacao-transferencia-recursos'
+ })
+</script>

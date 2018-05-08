@@ -1,22 +1,156 @@
-new Vue({
-    el: '#vue-container',
-    data: {
-	projeto: {
-	    idPronac: null,
-	    nomeProjeto: '',
-	    valorRecebido: 0.00
-	},
-	readequacao:  {
-	    justificativa: '',
-	    tipoTransferencia: null,
-	    idReadequacao: null
-	},
-	projetoRecebedor:  {
-	    idPronac: null,
-	    valorRecebido: 0.00 		
-	},
-	projetosRecebedores: [],
-	tiposTransferencia: [
+Vue.component('readequacao-transferencia-recursos', {
+    template: `
+<div class='readequacao-transferencia-recursos'>
+            <div class="card">
+                <div class="card-content">
+		    <span class="card-title">Projeto transferidor</span>
+                    <div class="row">
+                        <div class="col s3">
+                            <b>Pronac: </b>{{ projeto.pronac }}<br>
+                        </div>
+                        <div class="col s3">
+                            <b>Projeto: </b><span v-html="projeto.nomeProjeto"></span>
+                        </div>
+                        <div class="col s3">
+                            <b>Vl. a Comprovar: </b>{{ projeto.valorComprovar }}
+                        </div>
+                        <div class="col s3">
+                            <b>Saldo dispon&iacute;vel: </b>R$ {{ saldoDisponivel }}
+                        </div>
+                    </div>
+		</div>
+            </div>
+	    
+	    <div class="card">		
+		<div class="card-content">
+		    <span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
+                    <input type="hidden" v-model="readequacao.idReadequacao" />
+		    <div class="row">
+			<div class="input-field col s12">
+			    <textarea
+				id="textarea1"
+				class="materialize-textarea"
+				ref="readequacaoJustificativa"
+				v-model="readequacao.justificativa"></textarea>
+			    <label for="textarea1">Justificativa</label>
+			</div>
+		    </div>
+		    <div class="row">
+			<div class="col s3">
+			    <span>Tipo de transfer&ecirc;ncia</span>
+			    <select
+				class="browser-default"
+				       ref="readequacaoTipoTransferencia"
+				       v-model="readequacao.tipoTransferencia">
+				<option v-for="tipo in tiposTransferencia" v-bind:value="tipo.id">{{tipo.nome}}</option>
+			    </select>
+			</div>
+			<div class="col s3">
+                            <span>Anexar arquivo</span>
+			    <div class="file-field input-field">
+				<div class="btn">
+				    <span>File</span>
+				    <input type="file">
+				</div>
+				<div class="file-path-wrapper">
+				    <input class="file-path validate" type="text">
+				</div>
+			    </div>
+			</div>
+		    </div>
+		    <div class="row">
+			<div class="center-align padding20 col s6">
+			    <button
+				v-on:click="salvarReadequacao"
+			       class="btn">Salvar</button>
+			</div>
+			<div class="center-align padding20 col s6">
+			    <button
+				v-on:click="finalizarReadequacao"
+					    :disabled="!disponivelFinalizar"
+					    class="btn">Finalizar</button>
+			</div>
+
+		    </div>
+		</div>
+	    </div>
+	    
+	    <div class="card"
+		 v-show="disponivelAdicionarRecebedores">
+		<div class="card-content">
+		    <span class="card-title">Projetos recebedores</span>
+		    <table v-show="exibeProjetosRecebedores">
+			<thead>
+			    <th>Pronac</th>
+			    <th>Nome do projeto</th>
+			    <th>Vl. transfer&ecirc;ncia</th>
+			</thead>
+			<tbody>
+			    <tr v-for="(projeto, index) in projetosRecebedores">
+				<td>{{ projeto.idPronac }}</td>
+				<td>{{ projeto.nomeProjeto}}</td>
+				<td>R$ {{ projeto.valorRecebido}}</td>
+				<td>
+				    <a href="javascript:void(0)"
+				       v-on:click="excluirRecebedor(index)"
+				       class="btn small">
+					<i class="material-icons">delete</i>					
+				    </a>
+				</td>
+			    </tr>
+			</tbody>
+			<tfoot>
+			    <tr>
+				<td colspan="2"></td>
+				<td class="right">Total transferido: </td>
+				<td>R$ {{ totalRecebido }} </td>
+			    </tr>
+			</tfoot>
+		    </table>
+		    
+		    <form class="row">
+			<div class="col s6">
+			    <label>Projeto recebedor</label>
+			    <select class="browser-default"
+				    v-model="projetoRecebedor.idPronac"
+				    ref="projetoRecebedorIdPronac"
+				    :disabled="!disponivelAdicionarRecebedor">
+				<option value="" disabled selected>Selecione o projeto</option>
+				<option value="173321">173321 - Projeto abc</option>
+				<option value="163321">163321 - Projeto def</option>
+				<option value="153321">153321 - Projeto gehehe</option>
+			    </select>
+			</div>
+ 			<div class="input-field col s3">
+			    <input-money
+				ref="projetoRecebedorValorRecebido"
+                                v-on:ev="projetoRecebedor.valorRecebido = $event"
+                                v-bind:value="projetoRecebedor.valorRecebido"
+				:disabled="!disponivelAdicionarRecebedor">
+			    </input-money>
+			    <label for="valor_recebido">Valor recebido</label>
+			</div>		
+			<div class="center-align padding20 col s3">
+			    <a href="javascript:void(0)"
+			       v-on:click="incluirRecebedor"
+			       :disabled="!disponivelAdicionarRecebedor"
+			       class="btn">Adicionar recebedor</a>
+			</div>
+		    </form>
+		</div>
+	    </div>
+</div>
+	    `,
+    props: [
+	'id-pronac',
+	'id-tipo-readequacao'	
+    ],
+    data: function() {
+	var projeto = {};
+	var readequacao = {};
+	var projetoRecebedor =  {};
+	var projetosRecebedores = [];
+	var tiposTransferencia = [
 	    {
 		'id': 1,
 		'nome': 'N\xE3o homologados'
@@ -29,11 +163,19 @@ new Vue({
 		'id': 3,
 		'nome': 'Recursos remanescentes'
 	    }
-	]
+	];
+
+	return {
+	    projeto,
+	    readequacao,
+	    projetoRecebedor,
+	    projetosRecebedores,
+	    tiposTransferencia
+	}	
     },
     created: function() {
 	this.obterDadosProjeto();
-	//this.obterDadosReadequacao();
+	this.obterDadosReadequacao();
     },
     mounted: function() {
     },
@@ -96,29 +238,47 @@ new Vue({
 		this.$refs.readequacaoJustificativa.focus();		     
 		return;
 	    }
+
+	    let vue = this;
 	    
-	    this.obterDadosReadequacao();
-	    // adicionar via ajax
+            $3.ajax({
+                type: "POST",
+                url: "/readequacao/transferencia-recursos/salvar-readequacao",
+		data: {
+		    idPronac: this.idPronac,
+		    idReadequacao: this.readequacao.idReadequacao,
+		    justificativa: this.readequacao.justificativa,
+		    tipoTransferencia: this.readequacao.tipoTransferencia
+		}
+            }).done(function (response) {
+                vue.readequacao = response.readequacao;
+            });
 	},
 	finalizarReadequacao: function() {
 	},
 	obterDadosProjeto: function() {
-	    // obtem dados via ajax
-	    this.projeto = {
-		pronac: 164783,
-		idPronac: 289999,
-		nomeProjeto: 'Expedição gastronimica',
-		valorComprovar: 1234.00,
-		saldoDisponivel: 1234.00
-	    };
+	    let vue = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/transferencia-recursos/dados-projeto-transferidor",
+		data: {
+		    idPronac: this.idPronac
+		}
+            }).done(function (response) {
+                vue.projeto = response.projeto;
+            });
 	},
-	obterDadosReadequacao: function(idPronac) {    
-	    this.readequacao = {
-		idReadequacao: 2345,
-		idTipoReadequacao: 23,
-		tipoTransferencia: 1,
-		justificativa: 'ababababa'
-	    };
+	obterDadosReadequacao: function(idPronac) {
+	    let vue = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/transferencia-recursos/dados-readequacao",
+		data: {
+		    idPronac: this.idPronac
+		}
+            }).done(function (response) {
+                vue.readequacao = response.readequacao;
+            });
 	}
     },
     mixins: [utils],
@@ -137,7 +297,7 @@ new Vue({
 	    if (this.readequacao.idReadequacao != null) {
 		return true;
 	    } else {
-		return false;
+		return true;
 	    }
 	},
 	disponivelFinalizar: function() {
