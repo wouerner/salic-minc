@@ -1,7 +1,7 @@
 Vue.component('plano-distribuicao-visualizar-produto-resumido', {
     template: `
-    <div class="plano-distribuicao-visualizar-produto-rodape " v-if="produto">
-        <table class="resumo-distribuicao planoDistribuicao bordered responsive-table ">
+    <div class="plano-distribuicao-visualizar-produto-resumido " v-if="produto">
+        <table class="resumo-distribuicao planoDistribuicao bordered responsive-table" style="margin-bottom: 20px">
             <thead>
                 <tr>
                     <th class="center-align" rowspan="2">Quantidade</th>
