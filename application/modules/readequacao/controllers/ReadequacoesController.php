@@ -913,7 +913,12 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
         } elseif ($idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
             $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-            $planosReadequados = $tbPlanoDistribuicao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
+            $planosReadequados = $tbPlanoDistribuicao->buscar(array(
+                'idPronac = ?'=>$idPronac,
+                'tpSolicitacao <> ?' => 'N',
+                'idReadequacao is null'=>''
+            ));
+
             if (count($planosReadequados)==0) {
                 parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
             }
@@ -1019,9 +1024,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $tbPlanilhaAprovacao->update($dadosPlanilha, $wherePlanilha);
 
                 if (!empty($idReadequacao) && $idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
-                    $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-                    $whereDistribuicao = "idPronac = {$idPronac} AND tpSolicitacao = 'A' AND idReadequacao IS NULL";
-                    $tbPlanoDistribuicao->update(['idReadequacao' => $idReadequacao], $whereDistribuicao);
+                    $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+                    $tbPlanoDistribuicaoMapper->incluirIdReadequacaoNasSolicitacoesAtivas($idPronac, $idReadequacao);
+
+                    $tbDistribuicaoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+                    $tbDistribuicaoMapper->incluirIdReadequacaoNasSolicitacoesAtivas($idPronac, $idReadequacao);
                 }
             }
 
@@ -1098,6 +1105,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             if ($dados->idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
                 $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                 $tbPlanoDistribuicao->delete(array('idPronac = ?'=>$idPronac, 'stAtivo = ?'=>'S'));
+
+                $tbDetalhaPlanoDistribuicao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
+                $tbDetalhaPlanoDistribuicao->delete(array('idPronac = ?'=>$idPronac, 'stAtivo = ?'=>'S'));
             }
 
             if ($dados->idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {

@@ -26,11 +26,6 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
 
         $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos)->toArray();
 
-        if (count($detalhamentosReadequacao) == 0) {
-            $this->copiarDetalhamentosDaProposta($projeto);
-            $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos)->toArray();
-        }
-
         $detalhamentosReadequacao = $this->zerarValoresItensExcluidos($detalhamentosReadequacao);
 
         return $detalhamentosReadequacao;
@@ -38,6 +33,18 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
 
     public function copiarDetalhamentosDaProposta(Projeto_Model_TbProjetos $projeto)
     {
+        $tbDetalhaReadequacao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
+        $paramsBuscarDetalhamentos = [
+            'idPronac = ?' => $projeto->getIdPRONAC(),
+            'stAtivo = ?' => 'S'
+        ];
+
+        $detalhamentosReadequacao = $tbDetalhaReadequacao->buscar($paramsBuscarDetalhamentos)->toArray();
+
+        if (count($detalhamentosReadequacao) > 0) {
+            return [];
+        }
+
         $tbDetalhaPlanoDistribuicao = new Proposta_Model_DbTable_TbDetalhaPlanoDistribuicao();
         $detalhamentosDaProposta = $tbDetalhaPlanoDistribuicao->obterDetalhamentosDaProposta($projeto->getidProjeto());
 
@@ -125,7 +132,7 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
         if (!empty($id)) {
             $dados['idDetalhaPlanoDistribuicao'] = $id;
 
-            if($dados['idPlanoDistribuicao']) {
+            if ($dados['idPlanoDistribuicao']) {
                 $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                 $tbPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
             }
@@ -153,7 +160,7 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
             throw new Exception("Erro ao atualizar item");
         }
 
-        if($dados['idPlanoDistribuicao']) {
+        if ($dados['idPlanoDistribuicao']) {
             $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
             $tbPlanoDistribuicao->updateConsolidacaoPlanoDeDistribuicao($dados['idPlanoDistribuicao']);
         }
@@ -169,5 +176,12 @@ class Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper extends MinC
         $detalhamento = array_map('utf8_encode', reset($detalhamento));
 
         return $detalhamento;
+    }
+
+    public function incluirIdReadequacaoNasSolicitacoesAtivas($idPronac, $idReadequacao)
+    {
+        $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
+        $whereDistribuicao = "idPronac = {$idPronac} AND idReadequacao IS NULL";
+        return $tbPlanoDistribuicao->update(['idReadequacao' => $idReadequacao], $whereDistribuicao);
     }
 }

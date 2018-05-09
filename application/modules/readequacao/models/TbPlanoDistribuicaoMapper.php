@@ -18,6 +18,10 @@ class Readequacao_Model_TbPlanoDistribuicaoMapper extends MinC_Db_Mapper
         $planosDistribuicao = $tbPlanoDistribuicao->obterPlanosDistribuicaoReadequacao($projeto->getIdPRONAC());
 
         if (count($planosDistribuicao) == 0) {
+
+            $tbDetalhaPlanoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+            $tbDetalhaPlanoMapper->copiarDetalhamentosDaProposta($projeto);
+
             $this->copiarPlanoDistribuicaoDaProposta($projeto);
             $planosDistribuicao = $tbPlanoDistribuicao->obterPlanosDistribuicaoReadequacao($projeto->getIdPRONAC());
         }
@@ -79,5 +83,11 @@ class Readequacao_Model_TbPlanoDistribuicaoMapper extends MinC_Db_Mapper
         }
 
         return true;
+    }
+
+    public function incluirIdReadequacaoNasSolicitacoesAtivas($idPronac, $idReadequacao) {
+        $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
+        $whereDistribuicao = "idPronac = {$idPronac} AND idReadequacao IS NULL";
+        return $tbPlanoDistribuicao->update(['idReadequacao' => $idReadequacao], $whereDistribuicao);
     }
 }
