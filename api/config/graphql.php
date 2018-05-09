@@ -124,7 +124,7 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
-
+                'foo' => 'App\GraphQL\Query\FooQuery'
             ],
             'mutation' => [
 
@@ -181,7 +181,7 @@ return [
      * ]
      */
     'types' => [
-
+          'App\GraphQL\Type\FooType'
     ],
 
     /*
