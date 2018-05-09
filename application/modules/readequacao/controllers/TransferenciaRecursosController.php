@@ -114,7 +114,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         
             try {
                 $idReadequacao = $Readequacao_Model_DbTable_TbReadequacao->inserir($dados);
-
+                
                 $this->_helper->json(
                     [
                         'readequacao' => [
@@ -137,8 +137,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         } else if ($idReadequacao) {
             $dados['dsJustificativa'] = $this->_request->getParam('justificativa');
             $dados['dsSolicitacao'] = $this->_request->getParam('tipoTransferencia');
-           
-            // update
+            
             try {
                 $update = $Readequacao_Model_DbTable_TbReadequacao->update(
                     $dados,
@@ -165,8 +164,47 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                 ]);
                 $this->_helper->viewRenderer->setNoRender(true);
             }            
-        }
+        }        
+    }
+    
+    public function uploadReadequacaoAction()
+    {
+        $this->_helper->layout->disableLayout();
         
+        $mensagem = '';
+        $dados = [];
+        $idReadequacao = $this->_request->getParam('idReadequacao');
+        $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        
+        try {
+            $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $dados['idDocumento'] = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
+            
+            print_r($dados);die;
+            $update = $Readequacao_Model_DbTable_TbReadequacao->update(
+                $dados,
+                [
+                    'idReadequacao = ?' => $idReadequacao
+                ]
+            );
+            
+            $this->_helper->json(
+                [
+                    'readequacao' => [
+                        'idReadequacao' => $idReadequacao,
+                        'idDocumento' => $dados['idDocumento']                        
+                    ],
+                    'mensagem' => 'Readequação atualizada com sucesso.'
+                ]
+            );                       
+            
+        } catch (Exception $objException) {
+            $this->_helper->json([
+                'mensagem' => 'Houve um erro ao subir o arquivo da readequação.',
+                'error' => $objException->getMessage()
+            ]);
+            $this->_helper->viewRenderer->setNoRender(true);
+        }
     }
     
     public function listarProjetosRecebedoresAction()
