@@ -1805,6 +1805,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $itemModel = new PlanilhaItem();
 
         $itemPlanilhaAprovacao = $planilhaItemModel->buscarItemDaAprovacao($idPlanilhaAprovacao);
+/* vwComprovacaoFinanceiraProjeto */
 
         $produto = $produtoModel->find($itemPlanilhaAprovacao->idProduto)->current();
         $etapa = $etapaModel->find($itemPlanilhaAprovacao->idEtapa)->current();
@@ -1936,10 +1937,36 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $idpronac = $this->getRequest()->getParam('idpronac');
 
         try {
-
             $planilhaItemModel = new PlanilhaItem();
 
             $itemPlanilhaAprovacao = $planilhaItemModel->buscarItemDaAprovacao($idPlanilhaAprovacao);
+
+            $planilhaAprovacao = new PlanilhaAprovacao();
+            $planilhaAprovacaoItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                $idpronac,
+                null,
+                null,
+                null,
+                $idComprovantePagamento
+            );
+            /* var_dump($planilhaAprovacaoItem[0]); */
+            /* die; */
+            $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto(
+                $idpronac,
+                null, //$planilhaAprovacaoItem->current()->cdUF,
+                $planilhaAprovacaoItem->current()->cdEtapa,
+                $planilhaAprovacaoItem->current()->cdProduto,
+                $planilhaAprovacaoItem->current()->cdCidade,
+
+                /* $planilhaAprovacaoItem->current()->idComprovantePagamento, */
+                null,
+                $planilhaAprovacaoItem->current()->idPlanilhaItem
+            );
+
+            $this->view->valores = $valoresItem->current();
+
+            /* var_dump($valoresItem->current()->vlAprovado); */
+            /* die; */
 
             if (empty($itemPlanilhaAprovacao)) {
                 throw new Exception("Erro! O item para comprova&ccedil;&atilde;o n&atilde;o foi encontrado!");
@@ -1979,7 +2006,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             $fornecedor = $fornecedorModel->pesquisarFornecedor($comprovantePagamento->idFornecedor);
 
             if ($fornecedor) {
-
                 $cpfCnpj = $fornecedor->CNPJCPF;
                 $fornecedorUsaCnpj = 14 == strlen($cpfCnpj);
                 $fornecedor->CNPJCPF = $fornecedorUsaCnpj ? Mascara::addMaskCNPJ($cpfCnpj) : Mascara::addMaskCPF($cpfCnpj);
@@ -1990,7 +2016,8 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             }
 
             $dataEmissao = $comprovantePagamento->dtEmissao ? new DateTime(data::dataAmericana($comprovantePagamento->dtEmissao)) : new DateTime();
-            $dataPagamento = $comprovantePagamento->dtPagamento ? new DateTime($comprovantePagamento->dtPagamento) : new DateTime();
+            $dataPagamento = $comprovantePagamento->dtPagamento ? DateTime::createFromFormat('d/m/Y', $comprovantePagamento->dtPagamento) : new DateTime();
+
             $this->view->tpDocumento = $comprovantePagamento->tpDocumento;
             $this->view->nrComprovante = $comprovantePagamento->nrComprovante;
             $this->view->nrSerie = $comprovantePagamento->nrSerie;
@@ -2003,6 +2030,14 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             $this->view->nomeArquivo = $comprovantePagamento->nmArquivo;
             $this->view->JustificativaTecnico = $comprovantePagamento->JustificativaTecnico;
             $this->view->pagCompRecusado = true;
+
+            $tblProjetos = new Projetos();
+            $projeto = $tblProjetos->buscarTodosDadosProjeto($idpronac);
+            $this->view->projeto = $projeto->current();
+
+            $diligencia = new Diligencia();
+            $diligencia = $diligencia->aberta($idpronac);
+            $this->view->idTipoDiligencia = $diligencia->idTipoDiligencia;
 
             $this->render('comprovacaopagamento');
         } catch(Exception $e) {
