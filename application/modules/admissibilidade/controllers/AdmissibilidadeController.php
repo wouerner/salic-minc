@@ -325,8 +325,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             );
 
             $this->view->isPermitidoEncaminharAvaliacao = false;
-            if (count($distribuicaoAvaliacaoProposta) > 0
-                && $distribuicaoAvaliacaoProposta['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+            if (count($distribuicaoAvaliacaoPropostaAtual) > 0
+                && $distribuicaoAvaliacaoPropostaAtual['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
                 && $this->view->isPropostaEnquadrada) {
                 $this->view->isPermitidoEncaminharAvaliacao = true;
             }
