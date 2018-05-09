@@ -62,9 +62,18 @@ $app->singleton(
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
+
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
 ]);
+
+/*
+|--------------------------------------------------------------------------
+| Register Config GraphQL
+|--------------------------------------------------------------------------
+|*/
+
+$app->configure('graphql');
 
 /*
 |--------------------------------------------------------------------------
@@ -82,7 +91,7 @@ $app->routeMiddleware([
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
-
+$app->register(Folklore\GraphQL\LumenServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
