@@ -2697,11 +2697,25 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $idPronac,
                 $uf,
                 null,
-                $codigoProduto != 0 ? $codigoProduto :  null,
+                /* $codigoProduto != 0 ? $codigoProduto :  null, */
+                $codigoProduto,
                 $municipio,
                 null,
                 $idPlanilhaItem
             );
+        /* var_dump( */
+        /*         $idPronac, */
+        /*         $uf, */
+        /*         null, */
+        /*         $codigoProduto, */
+        /*         $municipio, */
+        /*         null, */
+        /*         $idPlanilhaItem */
+        /* ); */
+        /* var_dump( */
+        /*         $codigoProduto */
+        /*     ); */
+        /* die; */
 
 
         if (!$projeto) {
@@ -2712,8 +2726,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->tipoComprovante = $this->tipoDocumento;
 
             $comprovantes = $planilhaAprovacaoModel
-                ->vwComprovacaoFinanceiraProjetoPorItemOrcamentario($idPronac, $idPlanilhaItem, $stItemAvaliado)
-                ;
+                ->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                    $idPronac, 
+                    $idPlanilhaItem, 
+                    $stItemAvaliado,
+                    $codigoProduto
+                );
         }
 
         $this->view->idPronac = $idPronac;
@@ -2722,6 +2740,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->projeto = $projeto[0];
         $this->view->comprovantesPagamento = $comprovantes;
         $this->view->stItemAvaliado = $stItemAvaliado;
+
+        $this->view->uf = $uf;
+        $this->view->municipio = $municipio;
+        $this->view->idPlanilhaEtapa = $idPlanilhaEtapa;
+        $this->view->codigoProduto = $codigoProduto;
+
     }
 
     /**
@@ -2763,6 +2787,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $idPronac = $this->_request->getParam("idPronac");
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
         $stItemAvaliado = $this->_request->getParam("stItemAvaliado");
+
+        $uf = $this->getRequest()->getParam('uf');
+        $municipio = $this->getRequest()->getParam('idmunicipio');
+        $idPlanilhaEtapa = $this->getRequest()->getParam('idplanilhaetapa');
+        $codigoProduto = $this->getRequest()->getParam('produto');
+
         $redirector = $this->_helper->getHelper('Redirector');
         $redirector
             ->setExit(false)
@@ -2775,6 +2805,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     'idPlanilhaAprovacao' => $idPlanilhaAprovacao,
                     'idPlanilhaItem' => $idPlanilhaItem,
                     'stItemAvaliado' => $stItemAvaliado,
+                    'produto' => $codigoProduto,
+                    'uf' => $uf,
+                    'idmunicipio' => $municipio
                 )
             );
 
