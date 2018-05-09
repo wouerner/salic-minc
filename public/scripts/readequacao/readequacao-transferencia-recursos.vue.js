@@ -10,7 +10,7 @@ Vue.component('readequacao-transferencia-recursos', {
                             <b>Pronac: </b>{{ projeto.pronac }}<br>
                         </div>
                         <div class="col s3">
-                            <b>Projeto: </b><span v-html="projeto.nomeProjeto"></span>
+                            <b>Projeto: </b><span v-html="projeto.nome"></span>
                         </div>
                         <div class="col s3">
                             <b>Vl. a Comprovar: </b>{{ projeto.valorComprovar }}
@@ -89,8 +89,8 @@ Vue.component('readequacao-transferencia-recursos', {
 			    <tr v-for="(projeto, index) in projetosRecebedores" class="animated fadeIn">
 				<td>{{ projeto.idPronac }}</td>
 				<td>{{ projeto.nome}}</td>
-				<td>R$ {{ projeto.valorRecebido}}</td>
-				<td>
+				<td colspan="2">R$ {{ projeto.valorRecebido}}</td>
+				<td class="right">
 				    <a href="javascript:void(0)"
 				       v-on:click="excluirRecebedor(index)"
 				       class="btn small">
@@ -116,10 +116,7 @@ Vue.component('readequacao-transferencia-recursos', {
 				    ref="projetoRecebedorIdPronac"
                                     @change="updateRecebedor"
 				    :disabled="!disponivelAdicionarRecebedor">
-				<option value="" disabled selected>Selecione o projeto</option>
-				<option value="173321">173321 - Projeto abc</option>
-				<option value="163321">163321 - Projeto def</option>
-				<option value="153321">153321 - Projeto gehehe</option>
+				<option v-for="(projeto, index) in projetosDisponiveis" v-bind:value="projeto.idPronac" v-bind:data-nome="projeto.nome">{{ projeto.pronac }} - {{ projeto.nome}}</option>
 			    </select>
 			</div>
  			<div class="input-field col s3">
@@ -157,11 +154,14 @@ Vue.component('readequacao-transferencia-recursos', {
 	'id-tipo-readequacao'	
     ],
     data: function() {
-	var projeto = {};
-	var readequacao = {};
-	var projetoRecebedor =  {};
-	var projetosRecebedores = [];
-	var tiposTransferencia = [
+	var projeto = {},
+	    readequacao = {},
+	    projetoRecebedor = function() {
+		return defaultProjetoRecebedor();
+	    },
+	    projetosRecebedores = [],
+	    projetosDisponiveis = [],
+	    tiposTransferencia = [
 	    {
 		'id': 1,
 		'nome': 'N\xE3o homologados'
@@ -181,16 +181,25 @@ Vue.component('readequacao-transferencia-recursos', {
 	    readequacao,
 	    projetoRecebedor,
 	    projetosRecebedores,
+	    projetosDisponiveis,
 	    tiposTransferencia
 	}	
     },
     created: function() {
 	this.obterDadosProjeto();
+	this.obterProjetosDisponiveis();
 	this.obterDadosReadequacao();
     },
     mounted: function() {
     },
     methods: {
+	defaultProjetoRecebedor: function() {
+	    return {
+		nome: "",
+		idPronac: "",
+		valorRecebido: "0.00"
+	    };
+	},
 	incluirRecebedor: function() {
 	    if (this.projetoRecebedor.idPronac == '' ||
 		this.projetoRecebedor.idPronac == undefined
@@ -211,8 +220,6 @@ Vue.component('readequacao-transferencia-recursos', {
 	    valorRecebido = valorRecebido.toFixed(2);
 	    this.projetoRecebedor.valorRecebido = valorRecebido.replace(".", ",");
 	    
-	    //this.projetoRecebedor.nome = this.$refs.projetoRecebedor.nome;
-	    
 	    var somaTransferencia = parseFloat(this.projetoRecebedor.valorRecebido.replace(",", ".")) + parseFloat(this.totalRecebido);
 	    somaTransferencia = somaTransferencia.toFixed(2);
 	    var saldoDisponivel = parseFloat(this.projeto.saldoDisponivel);
@@ -223,23 +230,16 @@ Vue.component('readequacao-transferencia-recursos', {
 		this.$refs.projetoRecebedorValorRecebido.$refs.input.focus();
                 return;
 	    }
-	    this.projetosRecebedores.push(
+	    
+	    this.$data.projetosRecebedores.push(
 		this.projetoRecebedor
 	    );
 
-	    this.projetoRecebedor = {
-		idPronac: null,
-		valorRecebido: 0
-	    };
-	    // persistir dado ajax
+	    this.projetoRecebedor = this.defaultProjetoRecebedor();
 	},
 	excluirRecebedor: function(id) {
 	    Vue.delete(this.projetosRecebedores, id);
-	    // remover dado ajax
-	},
-	toggleSanfona: function() {
-//	    var instance = $3.Collapsible.getInstance('.collapsible');
-//	    instance.open(1);
+	    // TODO remover dado ajax
 	},
 	salvarReadequacao: function() {
 	    if (this.readequacao.tipoTransferencia == '' ||
@@ -288,19 +288,14 @@ Vue.component('readequacao-transferencia-recursos', {
 	},
 	finalizarReadequacao: function() {
 	},
-	salvarRecebedores: function() {
-	    // fecha sanfona e abre da readequacao
-	    // ideia do ananji - fecha uma abre outra
-	    // ideia do moises - fecha as duas
-	},
 	obterDadosProjeto: function() {
 	    let vue = this;
 	    this.projeto = {
 		pronac: 164783,
 		idPronac: 166121,
-		nomeProjeto: 'Expedição gastronimica',
-		valorComprovar: 1234.00,
-		saldoDisponivel: 1234.00
+		nome: 'Expedição gastronimica',
+		valorComprovar: 5234.00,
+		saldoDisponivel: 5234.00
 	    }
 	    /*
             $3.ajax({
@@ -312,6 +307,26 @@ Vue.component('readequacao-transferencia-recursos', {
             }).done(function (response) {
                 vue.projeto = response.projeto;
             });*/
+	},
+	obterProjetosDisponiveis: function(idPronac) {
+	    // TODO: buscar projetos disponíveis do mesmo proponente ajax
+	    this.projetosDisponiveis = [
+		{
+		    'idPronac': '201112',
+		    'pronac': '167531',
+		    'nome': 'Projeto xyz'
+		},
+		{
+		    'idPronac': '261712',
+		    'pronac': '167512',
+		    'nome': 'Outro projeto'
+		},
+		{
+		    'idPronac': '261114',
+		    'pronac': '157511',
+		    'nome': 'Mais um projeto'
+		}
+	    ];
 	},
 	obterDadosReadequacao: function(idPronac) {
 	    let vue = this;
@@ -327,7 +342,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	},
 	updateRecebedor: function(e) {
 	    if(e.target.options.selectedIndex > -1) {
-		console.log(e.target.options[e.target.options.selectedIndex].text);
+		this.projetoRecebedor.nome = e.target.options[e.target.options.selectedIndex].dataset.nome;
             }
 	}
     },
