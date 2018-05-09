@@ -324,14 +324,25 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $this->view->isRecursoAvaliado
             );
 
-            $this->view->isPermitidoEncaminharAvaliacao = false;
-            if (count($distribuicaoAvaliacaoPropostaAtual) > 0
-                && $distribuicaoAvaliacaoPropostaAtual['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
-                && $this->view->isPropostaEnquadrada) {
-                $this->view->isPermitidoEncaminharAvaliacao = true;
-            }
+            $this->view->isPermitidoEncaminharAvaliacao = $this->_isPermitidoEncaminharAvaliacao(
+                $distribuicaoAvaliacaoPropostaAtual,
+                $this->view->isPropostaEnquadrada
+            );
             $this->montaTela("admissibilidade/proposta-por-incentivo-fiscal.phtml");
         }
+    }
+
+    private function _isPermitidoEncaminharAvaliacao(
+        array $distribuicaoAvaliacaoPropostaAtual,
+        $isPropostaEnquadrada
+    )
+    {
+        if (count($distribuicaoAvaliacaoPropostaAtual) > 0
+            && $distribuicaoAvaliacaoPropostaAtual['id_perfil'] != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE
+            && $isPropostaEnquadrada) {
+            return true;
+        }
+        return false;
     }
 
     private function _isPermitidoTransformarPropostaEmProjeto(
@@ -352,10 +363,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             return true;
         }
 
-        if (count($recursoEnquadramento) > 0 
+        if (count($recursoEnquadramento) > 0
             && (string) $recursoEnquadramento['tpSolicitacao'] == (string) Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL
             && !empty($recursoEnquadramento['dsRecursoProponente'])
-            ) {
+        ) {
             return true;
         }
         return false;
