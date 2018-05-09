@@ -14,10 +14,10 @@ const PROPONENTE_PERCENTUAL_PADRAO = 0.5;
 Vue.component('plano-distribuicao-detalhamentos-formulario', {
     template: `
     <div class="detalhamento-distribuicao-dos-produtos">
-        <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="local.idMunicipio + this.idplanodistribuicao" class="row center-align" ref="containerForm">
+        <div :id="_uid + '_form_detalhamento'" :formIdMunicipio="local.idMunicipio + idplanodistribuicao" class="row center-align" ref="containerForm">
             <a 
-                class="btn waves-effect waves-light white-text modal-trigger margin20" 
-                :href="'#' + local.idMunicipio + this.idplanodistribuicao + '_modal'"
+                class="btn waves-effect waves-light white-text margin20" 
+                @click="mostrarFormulario(local.idMunicipio, idplanodistribuicao)"
                 ref="mostrarForm">
                 Adicionar detalhamento
                 <i class="material-icons right">{{icon}}</i>
@@ -618,19 +618,10 @@ Vue.component('plano-distribuicao-detalhamentos-formulario', {
 
             return parseInt((this.distribuicao.qtExemplares * percentualDistribuicao) * divisao);
         },
-        mostrarFormulario: function (id) {
-
-            this.visualizarFormulario = !this.visualizarFormulario;
-            this.icon = this.visualizarFormulario ? 'visibility_off' : 'add';
-
-            if (this.visualizarFormulario == true) {
-                let elm = $3("#" + id);
-                $3("html, body").animate({
-                    scrollTop: $3(elm).offset().top + 30
-                }, 600);
-            } else {
-                this.limparFormulario();
-            }
+        mostrarFormulario: function (idMunicipio, idPlanoDistribuicao) {
+            this.limparFormulario();
+            $3('.modal').modal('close');
+            $3("#" + idMunicipio + idPlanoDistribuicao + "_modal").modal('open');
         },
         limparFormulario: function () {
             Object.assign(this.$data, this.$options.data.apply(this))
