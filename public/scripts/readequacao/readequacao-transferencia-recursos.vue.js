@@ -1,6 +1,7 @@
 Vue.component('readequacao-transferencia-recursos', {
     template: `
 <div class='readequacao-transferencia-recursos'>
+
             <div class="card">
                 <div class="card-content">
 		    <span class="card-title">Projeto transferidor</span>
@@ -20,8 +21,12 @@ Vue.component('readequacao-transferencia-recursos', {
                     </div>
 		</div>
             </div>
-	    
-	    <div class="card">		
+
+  <ul class="collapsible">
+      <li id="collapsible-first">
+          <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
+          <div class="collapsible-body card">
+
 		<div class="card-content">
 		    <span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
                     <input type="hidden" v-model="readequacao.idReadequacao" />
@@ -32,12 +37,12 @@ Vue.component('readequacao-transferencia-recursos', {
 				class="materialize-textarea"
 				ref="readequacaoJustificativa"
 				v-model="readequacao.justificativa"></textarea>
-			    <label for="textarea1">Justificativa</label>
+			    <label for="textarea1">Justificativa *</label>
 			</div>
 		    </div>
 		    <div class="row">
-			<div class="col s3">
-			    <span>Tipo de transfer&ecirc;ncia</span>
+			<div class="col s12">
+			    <span>Tipo de transfer&ecirc;ncia *</span>
 			    <select
 				class="browser-default"
 				       ref="readequacaoTipoTransferencia"
@@ -45,12 +50,12 @@ Vue.component('readequacao-transferencia-recursos', {
 				<option v-for="tipo in tiposTransferencia" v-bind:value="tipo.id">{{tipo.nome}}</option>
 			    </select>
 			</div>
-			<div class="col s3">
+			<div class="col s12">
                             <span>Anexar arquivo</span>
 			    <div class="file-field input-field">
 				<div class="btn">
 				    <span>File</span>
-				    <input type="file">
+				    <input type="file" name="arquivo" id="arquivo" @change="processarArquivo($event)">
 				</div>
 				<div class="file-path-wrapper">
 				    <input class="file-path validate" type="text">
@@ -59,36 +64,31 @@ Vue.component('readequacao-transferencia-recursos', {
 			</div>
 		    </div>
 		    <div class="row">
-			<div class="center-align padding20 col s6">
+			<div class="right-align padding20 col s12">
 			    <button
 				v-on:click="salvarReadequacao"
 			       class="btn">Salvar</button>
 			</div>
-			<div class="center-align padding20 col s6">
-			    <button
-				v-on:click="finalizarReadequacao"
-					    :disabled="!disponivelFinalizar"
-					    class="btn">Finalizar</button>
-			</div>
-
 		    </div>
 		</div>
 	    </div>
-	    
-	    <div class="card"
+      </li>
+      <li>
+	  <div class="collapsible-header"><i class="material-icons">list</i>Projetos recebedores</div>
+	  <div class="collapsible-body card" 
 		 v-show="disponivelAdicionarRecebedores">
 		<div class="card-content">
 		    <span class="card-title">Projetos recebedores</span>
-		    <table v-show="exibeProjetosRecebedores">
+		    <table v-show="exibeProjetosRecebedores" class="animated fadeIn">
 			<thead>
 			    <th>Pronac</th>
 			    <th>Nome do projeto</th>
 			    <th>Vl. transfer&ecirc;ncia</th>
 			</thead>
 			<tbody>
-			    <tr v-for="(projeto, index) in projetosRecebedores">
+			    <tr v-for="(projeto, index) in projetosRecebedores" class="animated fadeIn">
 				<td>{{ projeto.idPronac }}</td>
-				<td>{{ projeto.nomeProjeto}}</td>
+				<td>{{ projeto.nome}}</td>
 				<td>R$ {{ projeto.valorRecebido}}</td>
 				<td>
 				    <a href="javascript:void(0)"
@@ -107,13 +107,14 @@ Vue.component('readequacao-transferencia-recursos', {
 			    </tr>
 			</tfoot>
 		    </table>
-		    
+		    		    
 		    <form class="row">
 			<div class="col s6">
 			    <label>Projeto recebedor</label>
 			    <select class="browser-default"
 				    v-model="projetoRecebedor.idPronac"
 				    ref="projetoRecebedorIdPronac"
+                                    @change="updateRecebedor"
 				    :disabled="!disponivelAdicionarRecebedor">
 				<option value="" disabled selected>Selecione o projeto</option>
 				<option value="173321">173321 - Projeto abc</option>
@@ -139,6 +140,16 @@ Vue.component('readequacao-transferencia-recursos', {
 		    </form>
 		</div>
 	    </div>
+      </li>
+      <div class="card">
+      	   <div class="right-align padding20 col s12">
+	       <button
+	            v-on:click="finalizarReadequacao"
+		    :disabled="!disponivelFinalizar"
+		    class="btn">Finalizar</button>
+	   </div>
+      </div>
+  </ul>
 </div>
 	    `,
     props: [
@@ -200,6 +211,8 @@ Vue.component('readequacao-transferencia-recursos', {
 	    valorRecebido = valorRecebido.toFixed(2);
 	    this.projetoRecebedor.valorRecebido = valorRecebido.replace(".", ",");
 	    
+	    //this.projetoRecebedor.nome = this.$refs.projetoRecebedor.nome;
+	    
 	    var somaTransferencia = parseFloat(this.projetoRecebedor.valorRecebido.replace(",", ".")) + parseFloat(this.totalRecebido);
 	    somaTransferencia = somaTransferencia.toFixed(2);
 	    var saldoDisponivel = parseFloat(this.projeto.saldoDisponivel);
@@ -216,13 +229,17 @@ Vue.component('readequacao-transferencia-recursos', {
 
 	    this.projetoRecebedor = {
 		idPronac: null,
-		valorRecebido: 0.00 		
+		valorRecebido: 0
 	    };
 	    // persistir dado ajax
 	},
 	excluirRecebedor: function(id) {
 	    Vue.delete(this.projetosRecebedores, id);
 	    // remover dado ajax
+	},
+	toggleSanfona: function() {
+//	    var instance = $3.Collapsible.getInstance('.collapsible');
+//	    instance.open(1);
 	},
 	salvarReadequacao: function() {
 	    if (this.readequacao.tipoTransferencia == '' ||
@@ -240,7 +257,6 @@ Vue.component('readequacao-transferencia-recursos', {
 	    }
 
 	    let vue = this;
-	    
             $3.ajax({
                 type: "POST",
                 url: "/readequacao/transferencia-recursos/salvar-readequacao",
@@ -252,12 +268,41 @@ Vue.component('readequacao-transferencia-recursos', {
 		}
             }).done(function (response) {
                 vue.readequacao = response.readequacao;
+		
+		$3.ajax({
+		    type: "POST",
+                    url: "/readequacao/transferencia-recursos/upload-readequacao/" + vue.readequacao.idReadequacao,
+		    data: vue.readequacao.arquivo,
+		    cache: false,
+		    contentType: false,
+		    processData: false
+		}).done(function(response) {
+		    $3('.collapsible').collapsible('close', 0);
+		    $3('.collapsible').collapsible('open', 1);
+		});
             });
+	},
+	processarArquivo: function(event) {
+	    var formData = new FormData(event.target.files);
+	    this.readequacao.arquivo = formData;
 	},
 	finalizarReadequacao: function() {
 	},
+	salvarRecebedores: function() {
+	    // fecha sanfona e abre da readequacao
+	    // ideia do ananji - fecha uma abre outra
+	    // ideia do moises - fecha as duas
+	},
 	obterDadosProjeto: function() {
 	    let vue = this;
+	    this.projeto = {
+		pronac: 164783,
+		idPronac: 166121,
+		nomeProjeto: 'Expedição gastronimica',
+		valorComprovar: 1234.00,
+		saldoDisponivel: 1234.00
+	    }
+	    /*
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/dados-projeto-transferidor",
@@ -266,7 +311,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		}
             }).done(function (response) {
                 vue.projeto = response.projeto;
-            });
+            });*/
 	},
 	obterDadosReadequacao: function(idPronac) {
 	    let vue = this;
@@ -279,6 +324,11 @@ Vue.component('readequacao-transferencia-recursos', {
             }).done(function (response) {
                 vue.readequacao = response.readequacao;
             });
+	},
+	updateRecebedor: function(e) {
+	    if(e.target.options.selectedIndex > -1) {
+		console.log(e.target.options[e.target.options.selectedIndex].text);
+            }
 	}
     },
     mixins: [utils],
@@ -297,7 +347,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	    if (this.readequacao.idReadequacao != null) {
 		return true;
 	    } else {
-		return true;
+		return false
 	    }
 	},
 	disponivelFinalizar: function() {
