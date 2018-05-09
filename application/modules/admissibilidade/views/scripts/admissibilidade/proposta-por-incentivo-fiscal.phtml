@@ -225,7 +225,7 @@
                             <?php 
                         } ?>
 
-                            <?php if (count($this->recursoEnquadramento) > 0) { ?>
+                            <?php if (count($this->recursoEnquadramento) > 0 && $this->isRecursoDesistidoDePrazoRecursal == false) { ?>
                                 <a href="<?php echo $this->url([
                                             'module' => 'recurso',
                                             'controller' => 'recurso-proposta',

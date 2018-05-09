@@ -286,6 +286,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     'ultima_sugestao' => Admissibilidade_Model_DbTable_SugestaoEnquadramento::ULTIMA_SUGESTAO_ATIVA,
                 ]
             );
+
             $distribuicaoAvaliacaoProposta = new Admissibilidade_Model_DistribuicaoAvaliacaoProposta(['id_perfil' => $this->codGrupo]);
             $gruposDbTable = new Autenticacao_Model_Grupos();
             $this->view->isPropostaEnquadrada = $sugestaoEnquadramentoDbTable->isPropostaEnquadrada($sugestaoEnquadramento);
@@ -304,7 +305,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $this->view->isRecursoAvaliado = true;
             }
 
+            
+            $this->view->isRecursoDesistidoDePrazoRecursal = false;
             if ($recursoEnquadramento) {
+                $this->view->isRecursoDesistidoDePrazoRecursal = $this->isRecursoDesistidoDePrazoRecursal($recursoEnquadramento);
                 if ($this->isRecursoEnviadoPorProponente($recursoEnquadramento) ||
                     $this->isRecursoPossuiAvaliacaoAvaliador($recursoEnquadramento)) {
                     $this->view->recursoEnquadramento = $recursoEnquadramento;
