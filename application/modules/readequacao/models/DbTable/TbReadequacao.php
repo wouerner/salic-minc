@@ -1354,4 +1354,63 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             return false;
         }
     }
+
+    public function insereArquivo()
+    {
+        $tbArquivoDAO = new tbArquivo();
+        $tbArquivoImagemDAO = new tbArquivoImagem();
+        $tbDocumentoDAO = new tbDocumento();
+        
+        // ==================== Dados do arquivo de upload ===============================
+        $arquivoNome = $_FILES['arquivo']['name']; // nome
+        $arquivoTemp = $_FILES['arquivo']['tmp_name']; // nome temporário
+        $arquivoTipo = $_FILES['arquivo']['type']; // tipo
+        $arquivoTamanho = $_FILES['arquivo']['size']; // tamanho
+        
+        $idDocumento = null;
+        if (!empty($arquivoTemp)) {
+            $arquivoExtensao = Upload::getExtensao($arquivoNome); // extensão
+            $arquivoBinario = Upload::setBinario($arquivoTemp); // binário
+            $arquivoHash = Upload::setHash($arquivoTemp); // hash
+
+            if ($arquivoExtensao != 'pdf' && $arquivoExtensao != 'PDF') { // extensão do arquivo
+                throw new Exception('A extens&atilde;o do arquivo &eacute; inv&aacute;lida, envie somente arquivos <strong>.pdf</strong>!');
+            } elseif ($arquivoTamanho > 5242880) { // tamanho máximo do arquivo: 5MB
+                throw new Exception('O arquivo n&atilde;o pode ser maior do que <strong>5MB</strong>!');
+            }
+
+            $dadosArquivo = array(
+                'nmArquivo' => $arquivoNome,
+                'sgExtensao' => $arquivoExtensao,
+                'dsTipoPadronizado' => $arquivoTipo,
+                'nrTamanho' => $arquivoTamanho,
+                'dtEnvio' => new Zend_Db_Expr('GETDATE()'),
+                'dsHash' => $arquivoHash,
+                'stAtivo' => 'A'
+            );
+            $idArquivo = $tbArquivoDAO->inserir($dadosArquivo);
+
+            // ==================== Insere na Tabela tbArquivoImagem ===============================
+            $dadosBinario = array(
+                'idArquivo' => $idArquivo,
+                'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
+            );
+            $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
+            
+            // ==================== Insere na Tabela tbDocumento ===============================
+            $dados = array(
+                'idTipoDocumento' => 38,
+                'idArquivo' => $idArquivo,
+                'dsDocumento' => 'Solicitação de Readequação',
+                'dtEmissaoDocumento' => null,
+                'dtValidadeDocumento' => null,
+                'idTipoEventoOrigem' => null,
+                'nmTitulo' => 'Readequacao'
+            );
+            
+            $idDocumento = $tbDocumentoDAO->inserir($dados);
+            
+            return $idDocumento['idDocumento'];
+        }
+    }
 }
