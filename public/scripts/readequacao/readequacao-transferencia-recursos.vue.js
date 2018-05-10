@@ -55,7 +55,7 @@ Vue.component('readequacao-transferencia-recursos', {
 			    <div class="file-field input-field">
 				<div class="btn">
 				    <span>File</span>
-				    <input type="file" name="arquivo" id="arquivo" @change="processarArquivo($event)">
+				    <input type="file" name="arquivo" id="arquivo">
 				</div>
 				<div class="file-path-wrapper">
 				    <input class="file-path validate" type="text">
@@ -155,34 +155,44 @@ Vue.component('readequacao-transferencia-recursos', {
     ],
     data: function() {
 	var projeto = {},
-	    readequacao = {},
+	    readequacao = {
+		'idPronac': null,
+		'idReadequacao': null,
+		'justificativa': '',
+		'arquivo': null,
+		'idTipoReadequacao': null,
+		'tipoTransferencia': ''	
+	    },
 	    projetoRecebedor = function() {
 		return defaultProjetoRecebedor();
 	    },
 	    projetosRecebedores = [],
 	    projetosDisponiveis = [],
 	    tiposTransferencia = [
-	    {
-		'id': 1,
-		'nome': 'N\xE3o homologados'
-	    },
-	    {
-		'id': 2,
-		'nome': 'Homologados'
-	    },
-	    {
-		'id': 3,
-		'nome': 'Recursos remanescentes'
-	    }
-	];
-
+		{
+		    'id': 1,
+		    'nome': 'N\xE3o homologados'
+		},
+		{
+		    'id': 2,
+		    'nome': 'Homologados'
+		},
+		{
+		    'id': 3,
+		    'nome': 'Recursos remanescentes'
+		},
+	    ],
+	    tiposAceitos = ['pdf'],
+	    tamanhoMaximo = 5000000;
+	
 	return {
 	    projeto,
 	    readequacao,
 	    projetoRecebedor,
 	    projetosRecebedores,
 	    projetosDisponiveis,
-	    tiposTransferencia
+	    tiposTransferencia,
+	    tiposAceitos
 	}	
     },
     created: function() {
@@ -230,12 +240,18 @@ Vue.component('readequacao-transferencia-recursos', {
 		this.$refs.projetoRecebedorValorRecebido.$refs.input.focus();
                 return;
 	    }
-	    
-	    this.$data.projetosRecebedores.push(
-		this.projetoRecebedor
-	    );
-
-	    this.projetoRecebedor = this.defaultProjetoRecebedor();
+	    var vue = this;
+	    $3.ajax({
+		type: "POST",
+		url: "/readequacao/transferencia-recursos/incluir-projeto-recebedor",
+		data: {}		
+	    }).done(function(response) {
+		vue.$data.projetosRecebedores.push(
+		    vue.projetoRecebedor
+		);
+		vue.projetoRecebedor = vue.defaultProjetoRecebedor();
+		vue.obterProjetosDisponiveis();
+	    });
 	},
 	excluirRecebedor: function(id) {
 	    Vue.delete(this.projetosRecebedores, id);
@@ -267,28 +283,62 @@ Vue.component('readequacao-transferencia-recursos', {
 		    tipoTransferencia: this.readequacao.tipoTransferencia
 		}
             }).done(function (response) {
-                vue.readequacao = response.readequacao;
-		
-		$3.ajax({
-		    type: "POST",
-                    url: "/readequacao/transferencia-recursos/upload-readequacao/" + vue.readequacao.idReadequacao,
-		    data: vue.readequacao.arquivo,
-		    cache: false,
-		    contentType: false,
-		    processData: false
-		}).done(function(response) {
-		    $3('.collapsible').collapsible('close', 0);
-		    $3('.collapsible').collapsible('open', 1);
-		});
+		var arquivo = $('#arquivo')[0].files[0];
+		console.log(arquivo);
+		if (typeof arquivo != 'undefined') {
+		    vue.subirArquivo(
+			arquivo,
+			response,
+			function() {
+			    $3('.collapsible').collapsible('close', 0);
+			    $3('.collapsible').collapsible('open', 1);
+			}
+		    );
+		}
             });
 	},
-	processarArquivo: function(event) {
-	    var formData = new FormData(event.target.files);
-	    this.readequacao.arquivo = formData;
+	validarArquivo: function(arquivo) {
+	    if (!this.tiposAceitos.includes(arquivo.name.split(".").pop().toLowerCase())) {
+		this.mensagemAlerta("Extens\xE3o de arquivo inv\xE1lida. Envie arquivos nos tipos: " + this.tiposAceitos.join(','));
+		return;
+	    }
+
+	    if (arquivo.size > this.tamanhoMaximo) {
+		this.mensagemAlerta("Arquivo ultrapassou o limite de " + this.tamanhoMaximo);
+		return;
+	    }	    
 	},
+	subirArquivo: function(arquivo, response, callback) {
+	    let vue = this;
+	    vue.readequacao = response.readequacao;
+
+	    if (!this.validarArquivo(arquivo)) {
+		return;
+	    }
+	    	    
+	    var formData = new FormData();
+	    formData.append('arquivo', arquivo);
+	    
+	    $3.ajax(
+		Object.assign(
+		    {},
+		    {
+			type: "POST",
+			url: "/readequacao/transferencia-recursos/upload-readequacao/" + vue.readequacao.idReadequacao,
+			processData: false, 
+			contentType: false, 			
+		    },
+		    {
+			data: formData
+		    }
+		)
+	    ).done(function(response) {
+		callback;
+	    });
+	},	
 	finalizarReadequacao: function() {
 	},
-	obterDadosProjeto: function() {
+	obterDadosProjeto: function() {	    
 	    let vue = this;
 	    this.projeto = {
 		pronac: 164783,
