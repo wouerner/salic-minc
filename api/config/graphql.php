@@ -124,7 +124,8 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
-                'foo' => 'App\GraphQL\Query\FooQuery'
+                'foo' => 'App\GraphQL\Query\FooQuery',
+                'UsuarioInterno' => 'App\Conta\Consulta\UsuarioInterno'
             ],
             'mutation' => [
 
@@ -181,7 +182,8 @@ return [
      * ]
      */
     'types' => [
-          'App\GraphQL\Type\FooType'
+          'App\GraphQL\Type\FooType',
+          'App\Conta\Tipo\UsuarioInterno',
     ],
 
     /*
