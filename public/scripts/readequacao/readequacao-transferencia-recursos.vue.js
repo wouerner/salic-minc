@@ -7,13 +7,13 @@ Vue.component('readequacao-transferencia-recursos', {
 		    <span class="card-title">Projeto transferidor</span>
                     <div class="row">
                         <div class="col s3">
-                            <b>Pronac: </b>{{ projeto.pronac }}<br>
+                            <b>Pronac: </b>{{ projetoTransferidor.pronac }}<br>
                         </div>
                         <div class="col s3">
-                            <b>Projeto: </b><span v-html="projeto.nome"></span>
+                            <b>Projeto: </b><span v-html="projetoTransferidor.nome"></span>
                         </div>
                         <div class="col s3">
-                            <b>Vl. a Comprovar: </b>{{ projeto.valorComprovar }}
+                            <b>Vl. a Comprovar: </b>{{ projetoTransferidor.valorComprovar }}
                         </div>
                         <div class="col s3">
                             <b>Saldo dispon&iacute;vel: </b>R$ {{ saldoDisponivel }}
@@ -155,17 +155,19 @@ Vue.component('readequacao-transferencia-recursos', {
 	'id-tipo-readequacao'	
     ],
     data: function() {
-	var projeto = {},
-	    readequacao = {
-		'idPronac': null,
-		'idReadequacao': null,
-		'justificativa': '',
-		'arquivo': null,
-		'idTipoReadequacao': null,
-		'tipoTransferencia': '',
-		'idArquivo' : null,
-		'nomeArquivo': null
-	    },
+	var readequacao = {
+	    'idPronac': null,
+	    'idReadequacao': null,
+	    'justificativa': '',
+	    'arquivo': null,
+	    'idTipoReadequacao': null,
+	    'tipoTransferencia': '',
+	    'idArquivo' : null,
+	    'nomeArquivo': null
+	},
+	    projetoTransferidor = function() {
+		return defaultProjetoTransferidor();
+	    },	    
 	    projetoRecebedor = function() {
 		return defaultProjetoRecebedor();
 	    },
@@ -189,7 +191,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	    tamanhoMaximo = 5000000;
 	
 	return {
-	    projeto,
+	    projetoTransferidor,
 	    readequacao,
 	    projetoRecebedor,
 	    projetosRecebedores,
@@ -200,7 +202,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	}	
     },
     created: function() {
-	this.obterDadosProjeto();
+	this.obterDadosProjetoTransferidor();
 	this.obterProjetosDisponiveis();
 	this.obterDadosReadequacao();
     },
@@ -214,6 +216,15 @@ Vue.component('readequacao-transferencia-recursos', {
 		valorRecebido: "0.00"
 	    };
 	},
+	defaultProjetoTransferidor: function() {
+	    return {
+		pronac: null,
+		idPronac: null,
+		nome: '',
+		valorComprovar: 0.00,
+		saldoDisponivel: 0.00
+	    }
+	},	
 	incluirRecebedor: function() {
 	    if (this.projetoRecebedor.idPronac == '' ||
 		this.projetoRecebedor.idPronac == undefined
@@ -236,10 +247,10 @@ Vue.component('readequacao-transferencia-recursos', {
 	    
 	    var somaTransferencia = parseFloat(this.projetoRecebedor.valorRecebido.replace(",", ".")) + parseFloat(this.totalRecebido);
 	    somaTransferencia = somaTransferencia.toFixed(2);
-	    var saldoDisponivel = parseFloat(this.projeto.saldoDisponivel);
+	    var saldoDisponivel = parseFloat(this.projetoTransferidor.saldoDisponivel);
 	    saldoDisponivel = saldoDisponivel.toFixed(2)
 	    
-	    if (parseFloat(somaTransferencia) > parseFloat(this.projeto.saldoDisponivel)) {
+	    if (parseFloat(somaTransferencia) > parseFloat(this.projetoTransferidor.saldoDisponivel)) {
 		this.mensagemAlerta("Voc\xEA ultrapassou o saldo dispon\xEDvel para transfer\xEAncia, que \xE9 de R$ " + saldoDisponivel + "!");
 		this.$refs.projetoRecebedorValorRecebido.$refs.input.focus();
                 return;
@@ -248,7 +259,11 @@ Vue.component('readequacao-transferencia-recursos', {
 	    $3.ajax({
 		type: "POST",
 		url: "/readequacao/transferencia-recursos/incluir-projeto-recebedor",
-		data: {}		
+		data: {
+		    idPronacTransferidor: vue.projetoTransferidor.idPronac,
+		    idPronacRecebedor: vue.projetoRecebedor.idPronac,
+		    valorRecebido: vue.projetoRecebedor.valorRecebido
+		}		
 	    }).done(function(response) {
 		vue.$data.projetosRecebedores.push(
 		    vue.projetoRecebedor
@@ -351,9 +366,9 @@ Vue.component('readequacao-transferencia-recursos', {
 	},	
 	finalizarReadequacao: function() {
 	},
-	obterDadosProjeto: function() {	    
+	obterDadosProjetoTransferidor: function() {	    
 	    let vue = this;
-	    this.projeto = {
+	    this.projetoTransferidor = {
 		pronac: 164783,
 		idPronac: 166121,
 		nome: 'Expedição gastronimica',
@@ -418,7 +433,7 @@ Vue.component('readequacao-transferencia-recursos', {
             }, 0);
 	},
 	saldoDisponivel: function() {
-	    var saldo = parseFloat(this.projeto.valorComprovar) - parseFloat(this.totalRecebido);
+	    var saldo = parseFloat(this.projetoTransferidor.valorComprovar) - parseFloat(this.totalRecebido);
 	    return saldo.toFixed(2);
 	},
 	disponivelAdicionarRecebedores: function() {
@@ -430,7 +445,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	},
 	disponivelFinalizar: function() {
 	    if (this.projetosRecebedores.length > 0 &&
-		this.totalRecebido <= this.projeto.saldoDisponivel
+		this.totalRecebido <= this.projetoTransferidor.saldoDisponivel
 	    ) {
 		return true;
 	    } else {
@@ -438,7 +453,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	    }
 	},
 	disponivelAdicionarRecebedor: function() {
-	    if (this.totalRecebido == this.projeto.saldoDisponivel) {
+	    if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
 		return false;
 	    } else {
 		return true;

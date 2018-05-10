@@ -5,7 +5,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
     public function init()
     {
         parent::init();
-        
+
         $idPronac = $this->_request->getParam('idPronac');
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
@@ -232,7 +232,32 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
 
     public function incluirProjetoRecebedorAction()
     {
+        $this->_helper->layout->disableLayout();
+
+        $dados = [];        
+        $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
         
+        try {
+            // inclui
+
+            $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
+            $dados['idPronacRecebedor'] = $this->_request->getParam('idPronacRecebedor');
+            $dados['vlRecebido'] = $this->_request->getParam('valorRecebido');
+            $idReadequacao = $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos->inserir($dados);
+                            
+            $this->_helper->json(
+                [
+                    'resposta' => true
+                ]
+            );
+        } catch (Exception $objException) {
+            $this->_helper->json(
+                [
+                    'error ' => $objException->getMessage(),
+                    'resposta' => false
+                ]
+            );
+        }        
     }
     
     public function excluirProjetoRecebedorAction()
