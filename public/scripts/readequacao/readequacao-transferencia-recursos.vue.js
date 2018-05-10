@@ -61,6 +61,7 @@ Vue.component('readequacao-transferencia-recursos', {
 				    <input class="file-path validate" type="text">
 				</div>
 			    </div>
+                            <a v-bind:href="'/upload/abrir?id=' + readequacao.idArquivo" v-if="readequacao.idArquivo !=''">{{ readequacao.nomeArquivo }} </a>
 			</div>
 		    </div>
 		    <div class="row">
@@ -161,7 +162,9 @@ Vue.component('readequacao-transferencia-recursos', {
 		'justificativa': '',
 		'arquivo': null,
 		'idTipoReadequacao': null,
-		'tipoTransferencia': ''	
+		'tipoTransferencia': '',
+		'idArquivo' : null,
+		'nomeArquivo': null
 	    },
 	    projetoRecebedor = function() {
 		return defaultProjetoRecebedor();
@@ -192,7 +195,8 @@ Vue.component('readequacao-transferencia-recursos', {
 	    projetosRecebedores,
 	    projetosDisponiveis,
 	    tiposTransferencia,
-	    tiposAceitos
+	    tiposAceitos,
+	    tamanhoMaximo
 	}	
     },
     created: function() {
@@ -284,16 +288,21 @@ Vue.component('readequacao-transferencia-recursos', {
 		}
             }).done(function (response) {
 		var arquivo = $('#arquivo')[0].files[0];
-		console.log(arquivo);
+
+		var callback = function() {
+		    $3('.collapsible').collapsible('close', 0);
+		    $3('.collapsible').collapsible('open', 1);
+		    vue.mensagemSucesso('Readequa\xE7\xE3o gravada com sucesso!');
+		}
+		
 		if (typeof arquivo != 'undefined') {
 		    vue.subirArquivo(
 			arquivo,
 			response,
-			function() {
-			    $3('.collapsible').collapsible('close', 0);
-			    $3('.collapsible').collapsible('open', 1);
-			}
+			callback
 		    );
+		} else {
+		    callback();
 		}
             });
 	},
@@ -302,11 +311,13 @@ Vue.component('readequacao-transferencia-recursos', {
 		this.mensagemAlerta("Extens\xE3o de arquivo inv\xE1lida. Envie arquivos nos tipos: " + this.tiposAceitos.join(','));
 		return;
 	    }
-
+	    
 	    if (arquivo.size > this.tamanhoMaximo) {
 		this.mensagemAlerta("Arquivo ultrapassou o limite de " + this.tamanhoMaximo);
 		return;
-	    }	    
+	    }
+	    
+	    return true;
 	},
 	subirArquivo: function(arquivo, response, callback) {
 	    let vue = this;
@@ -324,7 +335,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		    {},
 		    {
 			type: "POST",
-			url: "/readequacao/transferencia-recursos/upload-readequacao/" + vue.readequacao.idReadequacao,
+			url: "/readequacao/transferencia-recursos/upload-readequacao/idreadequacao/" + vue.readequacao.idReadequacao,
 			processData: false, 
 			contentType: false, 			
 		    },
@@ -333,7 +344,9 @@ Vue.component('readequacao-transferencia-recursos', {
 		    }
 		)
 	    ).done(function(response) {
-		callback;
+		
+		vue.readequacao = response.readequacao;
+		callback();
 	    });
 	},	
 	finalizarReadequacao: function() {

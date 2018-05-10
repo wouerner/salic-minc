@@ -20,21 +20,26 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         $this->view->projeto = $this->projeto;
     }
 
-    public function dadosReadequacaoAction()
+    private function obterReadequacao($idReadequacao = '', $idPronac = '')
     {
-        $this->_helper->layout->disableLayout();
-
         $mensagem = '';
         $readequacaoArray = [];
         
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $readequacao = $tbReadequacao->buscar(
-            [
-                'idPronac = ?' => $this->idPronac,
-                'idTipoReadequacao = ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
-                'stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
-            ]
-        );
+
+        $where = [
+                'a.idTipoReadequacao = ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
+                'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
+        ];
+
+        if ($idPronac) {
+            $where['a.idPronac = ?'] = $idPronac;
+        }
+        if ($idReadequacao) {
+            $where['a.idReadequacao = ?'] = $idReadequacao;   
+        }
+        
+        $readequacao = $tbReadequacao->readequacoesCadastradasProponente($where);
         
         if (count($readequacao) > 0) {
             $readequacaoArray = [
@@ -42,17 +47,29 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                 'idPronac' => $readequacao[0]['idPronac'],
                 'idTipoReadequacao' => $readequacao[0]['idTipoReadequacao'],
                 'tipoTransferencia' => $readequacao[0]['dsSolicitacao'],
-                'justificativa' => $readequacao[0]['dsJustificativa']
+                'justificativa' => $readequacao[0]['dsJustificativa'],
+                'idArquivo' => $readequacao[0]['idArquivo'],
+                'nomeArquivo' => $readequacao[0]['nmArquivo']                
             ];
         } else {
             $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
         }
         
+        return [
+            'readequacao' => $readequacaoArray,
+            'mensagem' => $mensagem
+        ];
+    }
+    
+    public function dadosReadequacaoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idReadequacao = $this->_request->getParam('idReadequacao');
+        
+        $retorno = $this->obterReadequacao($idReadequacao, $idPronac);
+        
         $this->_helper->json(
-            [
-                'readequacao' => $readequacaoArray,
-                'mensagem' => $mensagem
-            ]
+            $retorno
         );        
     }
     
@@ -173,31 +190,30 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         
         $mensagem = '';
         $dados = [];
-        $idReadequacao = $this->_request->getParam('idReadequacao');
+        $idReadequacao = $this->_request->getParam('idreadequacao');
         $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         
         try {
             $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
             $dados['idDocumento'] = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
             
-            print_r($dados);die;
             $update = $Readequacao_Model_DbTable_TbReadequacao->update(
                 $dados,
                 [
                     'idReadequacao = ?' => $idReadequacao
                 ]
             );
+
+            $readequacao = $this->obterReadequacao($idReadequacao);
             
-            $this->_helper->json(
-                [
-                    'readequacao' => [
-                        'idReadequacao' => $idReadequacao,
-                        'idDocumento' => $dados['idDocumento']                        
-                    ],
-                    'mensagem' => 'Readequação atualizada com sucesso.'
-                ]
-            );                       
-            
+            if (count($readequacao) > 0) {
+                $this->_helper->json(
+                    [
+                        'readequacao' => $readequacao['readequacao'],
+                        'mensagem' => 'Readequação atualizada com sucesso.'
+                    ]
+                );
+            }            
         } catch (Exception $objException) {
             $this->_helper->json([
                 'mensagem' => 'Houve um erro ao subir o arquivo da readequação.',
