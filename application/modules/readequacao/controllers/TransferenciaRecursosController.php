@@ -236,15 +236,19 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
 
         $dados = [];        
         $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+        print (float) str_replace(',', '.', $this->_request->getParam('valorRecebido'));
         
         try {
-            // inclui
-
             $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
+            $dados['tpTransferencia'] = $this->_request->getParam('tipoTransferencia');            
             $dados['idPronacRecebedor'] = $this->_request->getParam('idPronacRecebedor');
-            $dados['vlRecebido'] = $this->_request->getParam('valorRecebido');
-            $idReadequacao = $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos->inserir($dados);
-                            
+            $dados['vlRecebido'] = (float) str_replace(',', '.', $this->_request->getParam('valorRecebido'));
+            $dados['siAnaliseTecnica'] = '';
+            $dados['siAnaliseComissao'] = '';
+            $dados['stEstado'] = 0;
+            
+            $idSolicitacaoTransferenciaRecursos = $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos->inserir($dados);
+            
             $this->_helper->json(
                 [
                     'resposta' => true

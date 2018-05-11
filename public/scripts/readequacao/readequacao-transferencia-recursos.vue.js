@@ -260,6 +260,8 @@ Vue.component('readequacao-transferencia-recursos', {
 		type: "POST",
 		url: "/readequacao/transferencia-recursos/incluir-projeto-recebedor",
 		data: {
+		    idReadequacao: vue.readequacao.idReadequacao,
+		    tipoTransferencia: vue.readequacao.tipoTransferencia,
 		    idPronacTransferidor: vue.projetoTransferidor.idPronac,
 		    idPronacRecebedor: vue.projetoRecebedor.idPronac,
 		    valorRecebido: vue.projetoRecebedor.valorRecebido
