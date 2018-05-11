@@ -455,7 +455,7 @@ class UploadController extends MinC_Controller_Action_Abstract
                 $this->_response->clearHeaders();               // Limpa os headers do Zend
 
                 $hashArquivo = ($r->biArquivo) ? $r->biArquivo : $r->biArquivo2;
-
+ 
                 $this->getResponse()
                     ->setHeader('Content-Type', 'application/pdf')
                     ->setHeader('Content-Disposition', 'attachment; filename="' . $r->nmArquivo . '"')
@@ -965,8 +965,8 @@ class UploadController extends MinC_Controller_Action_Abstract
 
     public function downloadAnexoRecursoPropostaAction()
     {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
+        // $this->_helper->layout->disableLayout();
+        // $this->_helper->viewRenderer->setNoRender(true);
 
         $get = $this->getRequest()->getParams();
 
@@ -981,7 +981,7 @@ class UploadController extends MinC_Controller_Action_Abstract
         }
 
         $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
-        $recursoProposta = $recursoPropostaDbTable->obterRecursoAtualVisaoAvaliador($id_preprojeto);
+        $recursoProposta = $recursoPropostaDbTable->obterRecursoAtual($id_preprojeto);
 
         if (count($recursoProposta) < 1) {
             throw new Exception("Informa&ccedil;&otilde;es do Arquivo e Proposta Cultural n&atilde;o coincidem.");
@@ -1010,20 +1010,18 @@ class UploadController extends MinC_Controller_Action_Abstract
         if (!$dadosArquivo) {
             throw new Exception("Arquivo especificado inexistente.");
         }
-
-        Zend_Layout::getMvcInstance()->disableLayout();
-        $this->_response->clearBody();
-        $this->_response->clearHeaders();
+ 
         $this->_helper->layout->disableLayout();        // Desabilita o Zend Layout
         $this->_helper->viewRenderer->setNoRender();    // Desabilita o Zend Render
+        Zend_Layout::getMvcInstance()->disableLayout(); // Desabilita o Zend MVC
+        $this->_response->clearBody();                  // Limpa o corpo html
+        $this->_response->clearHeaders();               // Limpa os headers do Zend
+
         if ($tbArquivo->getAdapter() instanceof Zend_Db_Adapter_Pdo_Mssql) {
             $this->getResponse()
-                ->setHeader('Content-Type', $dadosArquivo->dsTipoPadronizado)
-                ->setHeader('Content-Disposition', 'attachment; filename="' . $dadosArquivo->nmArquivo . '"')
-//                ->setHeader("Connection", "close")
-//                ->setHeader("Content-transfer-encoding", "binary")
-//                ->setHeader("Cache-control", "private")
-                ->setBody($dadosArquivo->biArquivo);
+            ->setHeader('Content-Type', 'application/pdf')
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $dadosArquivo->nmArquivo . '"')
+            ->setBody($dadosArquivo->biArquivo);
         } else {
             $this->getResponse()
                 ->setHeader('Content-Type', $dadosArquivo->dsTipoPadronizado)
