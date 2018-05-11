@@ -1757,6 +1757,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $p = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $d->idPronac))->current();
         $this->view->projeto = $p;
 
+        $fnIN2017 = new fnVerificarProjetoAprovadoIN2017();
+
+        $this->in2017 = $fnIN2017->verificar($d->idPronac);
+        $this->view->in2017 = $this->in2017;
+
         $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
         $this->view->Parecer = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?'=>$id, 'idTipoAgente =?'=>1))->current();
     }

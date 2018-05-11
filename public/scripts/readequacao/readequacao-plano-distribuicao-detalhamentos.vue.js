@@ -10,6 +10,7 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
                 >
             </plano-distribuicao-detalhamentos-listagem>
             <plano-distribuicao-detalhamentos-formulario
+                v-if="!disabled"
                 :disabled="disabled"
                 :idplanodistribuicao="produto.idPlanoDistribuicao"
                 :local="local"

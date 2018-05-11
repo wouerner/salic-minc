@@ -69,19 +69,32 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         $dadosReadequacao = $tbReadequacao->buscar(array('idReadequacao=?' => $idReadequacao))->current();
         $siEncaminhamento = $dadosReadequacao->siEncaminhamento;
 
+        $Produtos = new Produto();
+        $produtos = $Produtos->buscar(array('stEstado=?' => 0), array('Descricao'));
+
+        $Verificacao = new Verificacao();
+        $posicoesLogomarca = $Verificacao->buscar(array('idTipo=?' => 3), array('Descricao'));
+
+        $Area = new Area();
+        $areas = $Area->buscar(array('Codigo != ?' => 7), array('Descricao'));
+
         $get = Zend_Registry::get('get');
         $link = isset($get->link) ? true : false;
 
         $this->montaTela(
-            'plano-distribuicao/carregar-planos-de-distribuicao.phtml',
+            'plano-distribuicao/visualizar-planos-de-distribuicao.phtml',
             array(
                 'idPronac' => $idPronac,
-                'planosDeDistribuicao' => $planosDistribuicao,
-                'link' => $link,
+                'planosDistribuicao' => $planosDistribuicao,
+                'produtos' => $produtos,
+                'posicoesLogomarca' => $posicoesLogomarca,
+                'areas' => $areas,
                 'idReadequacao' => $idReadequacao,
+                'link' => $link,
                 'siEncaminhamento' => $siEncaminhamento
             )
         );
+
     }
 
     public function incluirPlanosDeDistribuicaoAction()
