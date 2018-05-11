@@ -408,16 +408,29 @@ Vue.component('readequacao-transferencia-recursos', {
 		}
 	    ];
 	},
+	obterProjetosRecebedores: function(idReadequacao) {
+	    let vue = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/transferencia-recursos/listar-projetos-recebedores",
+		data: {
+		    idReadequacao: vue.readequacao.idReadequacao
+		}
+            }).done(function (response) {
+                console.log(response);
+            });
+	},
 	obterDadosReadequacao: function(idPronac) {
 	    let vue = this;
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/dados-readequacao",
 		data: {
-		    idPronac: this.idPronac
+		    idPronac: vue.idPronac
 		}
             }).done(function (response) {
                 vue.readequacao = response.readequacao;
+		vue.obterProjetosRecebedores();
             });
 	},
 	updateRecebedor: function(e) {

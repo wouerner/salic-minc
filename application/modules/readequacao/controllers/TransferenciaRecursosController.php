@@ -79,27 +79,35 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
 
         $mensagem = '';
         $projetos = new Projetos();
-        $projeto = $projetos->buscarPorPronac($this->idPronac);
-        
-        if (count($projeto) > 0) {
-            $projetoArr = [
-                'pronac' => $projeto->Pronac,
-                'idPronac' => $projeto->IdPRONAC,
-                'nomeProjeto' => utf8_encode($projeto->NomeProjeto),
-                'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado, ## receber de 
-                'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado
-            ];
-        } else {
-            $projetoArr = [];
-            $mensagem = "Não existe nenhum projeto com o idPronac forncedido!";
+
+        try {
+            $projeto = $projetos->buscarPorPronac($this->idPronac);
+            
+            if (count($projeto) > 0) {
+                $projetoArr = [
+                    'pronac' => $projeto->Pronac,
+                    'idPronac' => $projeto->IdPRONAC,
+                    'nomeProjeto' => utf8_encode($projeto->NomeProjeto),
+                    'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado, ## receber de 
+                    'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado
+                ];
+            } else {
+                $projetoArr = [];
+                $mensagem = "Não existe nenhum projeto com o idPronac forncedido!";
+            }
+            
+            $this->_helper->json(
+                [
+                    'projeto' => $projetoArr,
+                    'mensagem' => $mensagem
+                ]
+            );
+        } catch (Exception $objException) {
+            $this->_helper->json([
+                'mensagem' => 'Houve um erro na consulta do projeto transferidor.',
+                'error' => $objException->getMessage()
+            ]);
         }
-        
-        $this->_helper->json(
-            [
-                'projeto' => $projetoArr,
-                'mensagem' => $mensagem
-            ]
-        );
     }
     
     public function salvarReadequacaoAction()
@@ -226,8 +234,38 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
     public function listarProjetosRecebedoresAction()
     {
         $this->_helper->layout->disableLayout();
+        $this->view->arrResult = [];
         
-        $this->view->arrResult = [];        
+        $idReadequacao = $this->_request->getParam('idReadequacao');
+        $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+        
+        try {
+            $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($idReadequacao);
+            
+            if (count($projetosRecebedores) > 0) {
+                $projetosRecebedores = [
+                    'idPronacRecebedor' => $projetosRecebedores->idPronacRecebedor,
+                    'nome' => utf8_encode($projeto->NomeProjeto),
+                    'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado, ## receber de 
+                    'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado
+                ];
+            } else {
+                $projetoArr = [];
+                $mensagem = "Não existe nenhum projeto com o idPronac forncedido!";
+            }
+            
+            $this->_helper->json(
+                [
+                    'projeto' => $projetoArr,
+                    'mensagem' => $mensagem
+                ]
+            );
+        } catch (Exception $objException) {
+            $this->_helper->json([
+                'mensagem' => 'Houve um erro na consulta do projeto transferidor.',
+                'error' => $objException->getMessage()
+            ]);
+        }
     }
 
     public function incluirProjetoRecebedorAction()
@@ -236,7 +274,6 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
 
         $dados = [];        
         $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
-        print (float) str_replace(',', '.', $this->_request->getParam('valorRecebido'));
         
         try {
             $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
