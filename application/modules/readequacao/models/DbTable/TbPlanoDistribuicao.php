@@ -500,6 +500,7 @@ class Readequacao_Model_DbTable_TbPlanoDistribuicao extends MinC_Db_Table_Abstra
         );
 
         $select->where('a.IdPRONAC = ?', $idPronac);
+        $select->order('b.stPrincipal DESC');
 
         return $this->fetchAll($select);
     }
