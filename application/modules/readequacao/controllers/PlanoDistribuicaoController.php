@@ -255,7 +255,7 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
             }
 
             $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
-            $dados['planodistribuicao'] = $tbPlanoDistribuicaoMapper->obterPlanosDistribuicao($this->projeto);
+            $dados['planodistribuicao'] = $tbPlanoDistribuicaoMapper->obterPlanosDistribuicao($this->projeto, $this->idPerfil);
 
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
             $dados['detalhamentos'] = $detalhamentoMapper->obterDetalhamentosParaReadequacao($this->projeto);
@@ -289,6 +289,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 throw new Exception("Projeto &eacute; obrigat&oacute;rio");
             }
 
+            if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Acesso negado!");
+            }
+
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
 
@@ -310,6 +314,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
 
             if (empty($this->projeto)) {
                 throw new Exception("Projeto &eacute; obrigat&oacute;rio");
+            }
+
+            if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Acesso negado!");
             }
 
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
@@ -336,6 +344,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
 
             if (empty($this->projeto)) {
                 throw new Exception("Projeto &eacute; obrigat&oacute;rio");
+            }
+
+            if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Acesso negado!");
             }
 
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
