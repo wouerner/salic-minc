@@ -20,56 +20,23 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         $this->view->projeto = $this->projeto;
     }
 
-    private function obterReadequacao($idReadequacao = '', $idPronac = '')
-    {
-        $mensagem = '';
-        $readequacaoArray = [];
-        
-        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-
-        $where = [
-                'a.idTipoReadequacao = ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
-                'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
-        ];
-
-        if ($idPronac) {
-            $where['a.idPronac = ?'] = $idPronac;
-        }
-        if ($idReadequacao) {
-            $where['a.idReadequacao = ?'] = $idReadequacao;   
-        }
-        
-        $readequacao = $tbReadequacao->readequacoesCadastradasProponente($where);
-        
-        if (count($readequacao) > 0) {
-            $readequacaoArray = [
-                'idReadequacao' => $readequacao[0]['idReadequacao'],
-                'idPronac' => $readequacao[0]['idPronac'],
-                'idTipoReadequacao' => $readequacao[0]['idTipoReadequacao'],
-                'tipoTransferencia' => $readequacao[0]['dsSolicitacao'],
-                'justificativa' => $readequacao[0]['dsJustificativa'],
-                'idArquivo' => $readequacao[0]['idArquivo'],
-                'nomeArquivo' => $readequacao[0]['nmArquivo']                
-            ];
-        } else {
-            $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
-        }
-        
-        return [
-            'readequacao' => $readequacaoArray,
-            'mensagem' => $mensagem
-        ];
-    }
-    
     public function dadosReadequacaoAction()
     {
         $this->_helper->layout->disableLayout();
         $idReadequacao = $this->_request->getParam('idReadequacao');
+
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos($idReadequacao, $idPronac);
         
-        $retorno = $this->obterReadequacao($idReadequacao, $idPronac);
+        if (empty($readequacao)) {
+            $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
+        }
         
         $this->_helper->json(
-            $retorno
+            [
+                'readequacao' => $readequacao,
+                'mensagem' => $mensagem
+            ]
         );        
     }
     
@@ -212,12 +179,12 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                 ]
             );
 
-            $readequacao = $this->obterReadequacao($idReadequacao);
+            $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos($idReadequacao);
             
             if (count($readequacao) > 0) {
                 $this->_helper->json(
                     [
-                        'readequacao' => $readequacao['readequacao'],
+                        'readequacao' => $readequacao,
                         'mensagem' => 'Readequação atualizada com sucesso.'
                     ]
                 );
@@ -229,6 +196,12 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
             ]);
             $this->_helper->viewRenderer->setNoRender(true);
         }
+    }
+
+    public function listarProjetosRecebedoresDisponiveisAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->view->arrResult = [];
     }
     
     public function listarProjetosRecebedoresAction()

@@ -30,7 +30,7 @@ class Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos extends MinC_
         );
         
         $select->where('idReadequacao = ?', $idReadequacao);
-        print $select->assemble();die;
+        
         return $this->fetchAll($select);
     }
 }

@@ -1413,4 +1413,35 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             return $idDocumento['idDocumento'];
         }
     }
+
+    public function obterReadequacaoTransferenciaRecursos($idReadequacao = '', $idPronac = '')
+    {
+        $where = [
+                'a.idTipoReadequacao = ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
+                'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
+        ];
+        
+        if ($idPronac) {
+            $where['a.idPronac = ?'] = $idPronac;
+        }
+        if ($idReadequacao) {
+            $where['a.idReadequacao = ?'] = $idReadequacao;   
+        }
+        
+        $readequacao = $this->visualizarReadequacao($where);
+        
+        if (count($readequacao) > 0) {
+            $readequacaoArray = [
+                'idReadequacao' => $readequacao[0]['idReadequacao'],
+                'idPronac' => $readequacao[0]['idPronac'],
+                'idTipoReadequacao' => $readequacao[0]['idTipoReadequacao'],
+                'tipoTransferencia' => $readequacao[0]['dsSolicitacao'],
+                'justificativa' => $readequacao[0]['dsJustificativa'],
+                'idArquivo' => $readequacao[0]['idArquivo'],
+                'nomeArquivo' => $readequacao[0]['nmArquivo']                
+            ];
+        }
+       
+        return $readequacaoArray;
+    }
 }
