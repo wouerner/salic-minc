@@ -87,7 +87,7 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
         $planosDistribuicao = $tbPlanoDistribuicao->buscarPlanosDistribuicaoConsolidadoReadequacao($idReadequacao);
 
-        $tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         $dadosReadequacao = $tbReadequacao->buscar(array('idReadequacao=?' => $idReadequacao))->current();
         $siEncaminhamento = $dadosReadequacao->siEncaminhamento;
 
