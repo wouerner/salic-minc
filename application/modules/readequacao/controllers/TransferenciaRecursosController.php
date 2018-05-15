@@ -45,22 +45,24 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         $this->_helper->layout->disableLayout();
 
         $mensagem = '';
-        $projetos = new Projetos();
 
         try {
+            $projetos = new Projetos();
+                        
             $projeto = $projetos->buscarPorPronac($this->idPronac);
             
             if (count($projeto) > 0) {
                 $projetoArr = [
                     'pronac' => $projeto->Pronac,
                     'idPronac' => $projeto->IdPRONAC,
-                    'nomeProjeto' => utf8_encode($projeto->NomeProjeto),
-                    'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado, ## receber de 
-                    'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado
+                    'nome' => utf8_encode($projeto->NomeProjeto),
+                    'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado,
+                    'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado,
+                    'area' => utf8_encode($projeto->Area)
                 ];
             } else {
                 $projetoArr = [];
-                $mensagem = "Não existe nenhum projeto com o idPronac forncedido!";
+                $mensagem = "Nao existe nenhum projeto com o idPronac fornecido!";
             }
             
             $this->_helper->json(

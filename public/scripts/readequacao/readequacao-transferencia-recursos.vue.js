@@ -6,16 +6,19 @@ Vue.component('readequacao-transferencia-recursos', {
                 <div class="card-content">
 		    <span class="card-title">Projeto transferidor</span>
                     <div class="row">
-                        <div class="col s3">
+                        <div class="col s2">
                             <b>Pronac: </b>{{ projetoTransferidor.pronac }}<br>
                         </div>
-                        <div class="col s3">
+                        <div class="col s4">
                             <b>Projeto: </b><span v-html="projetoTransferidor.nome"></span>
                         </div>
-                        <div class="col s3">
+                        <div class="col s2">
+                            <b>&Aacute;rea: </b><span v-html="projetoTransferidor.area"></span>
+                        </div>
+                        <div class="col s2">
                             <b>Vl. a Comprovar: </b>{{ projetoTransferidor.valorComprovar }}
                         </div>
-                        <div class="col s3">
+                        <div class="col s2">
                             <b>Saldo dispon&iacute;vel: </b>R$ {{ saldoDisponivel }}
                         </div>
                     </div>
@@ -370,6 +373,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	},
 	obterDadosProjetoTransferidor: function() {	    
 	    let vue = this;
+	    /*
 	    this.projetoTransferidor = {
 		pronac: 164783,
 		idPronac: 166121,
@@ -377,7 +381,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		valorComprovar: 5234.00,
 		saldoDisponivel: 5234.00
 	    }
-	    /*
+	    */
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/dados-projeto-transferidor",
@@ -385,8 +389,8 @@ Vue.component('readequacao-transferencia-recursos', {
 		    idPronac: this.idPronac
 		}
             }).done(function (response) {
-                vue.projeto = response.projeto;
-            });*/
+                vue.projetoTransferidor = response.projeto;
+            });
 	},
 	obterProjetosDisponiveis: function(idPronac) {
 	    // TODO: buscar projetos disponíveis do mesmo proponente ajax
