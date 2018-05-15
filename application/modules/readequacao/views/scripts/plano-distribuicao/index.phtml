@@ -1,3 +1,5 @@
+<?php $class = (empty($this->readequacao) && !$this->podeEditar) ? 'sumir' : ''; ?>
+
 <div class="container-fluid" id="vue-container">
     <div class="row">
         <div class="page-title">
@@ -19,11 +21,29 @@
             </div>
         </div>
         <div class="content">
-            <div class="card">
+            <?php if (empty($this->readequacao)) : ?>
+                <div id="mensagem" class="card">
+                    <div class="card-content">
+                        <p class="center-align">Aqui você pode readequar os detalhamentos do seu plano de
+                            distribuição.</p>
+                        <br>
+                        <p class="center-align bold">
+                            <a class="waves-effect waves-light btn white-text btn-incluir-novo-item"
+                               id="iniciar-readequacao">
+                                <i class="material-icons left">add</i>
+                                <strong>Iniciar readequa&ccedil;&atilde;o</strong>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <div id="cabecalho" class="card <?= $class; ?>">
                 <div class="card-content">
                     <div class="row">
                         <div class="col s12">
-                            <b>Pronac: </b> <?php echo $this->projeto->anoProjeto . $this->projeto->sequencial; ?><br>
+                            <b>Pronac: </b> <?php echo $this->projeto->anoProjeto . $this->projeto->sequencial; ?>
+                            <br>
                         </div>
                         <div class="col s12">
                             <b>Projeto: </b><?php echo $this->projeto->nomeProjeto; ?>
@@ -32,8 +52,8 @@
                 </div>
             </div>
 
-<!--            <div class="card">-->
-<!--                <div class="card-content">-->
+            <div id="readequacao" class="card <?= $class; ?>">
+                <div class="card-content">
                     <input type="hidden" id="pertenceIn2017" name="pertenceIn2017" value="<?php echo $this->in2017; ?>">
                     <div id="planosDeDistribuicao">
                         <div id="dynamic-component">
@@ -43,9 +63,10 @@
                             ></component>
                         </div>
                     </div>
-<!--                </div>-->
-<!--            </div>-->
-            <div class="card">
+                </div>
+            </div>
+
+            <div id="formulario" class="card <?= $class; ?>">
                 <div class="card-content">
                     <?php echo $this->partial("partials/formulario-salvar-readequacao.phtml", $this); ?>
                 </div>
@@ -84,20 +105,64 @@
 <script src="/public/scripts/proposta/visualizar/salic-proposta-detalhamento-plano-distribuicao.vue.js"
         type="text/javascript"></script>
 
+
 <script>
+    function carregarFormularioAntigaIN() {
+        jqAjaxLinkSemLoading('<?php echo $this->Url(array('module' => 'readequacao', 'controller' => 'plano-distribuicao', 'action' => 'carregar-planos-de-distribuicao'), '', true) ?>?idPronac=<?php echo $this->idPronac; ?>', '', 'planosDeDistribuicao');
+    }
+
+    function atualizarDadosPlanosDeDistribuicao() {
+
+        $.ajax({
+            url: '<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'consultar-readequacao'), '', true); ?>',
+            type: "POST",
+            data: {
+                idPronac: <?php echo $this->idPronac; ?>,
+                idTipoReadequacao: 11,
+                idReadequacao: $("#idReadequacao").val()
+            },
+            success: function (data) {
+                var readequacoes = data.readequacoes;
+
+                // @todo remove
+                var readequacao = (typeof readequacoes.length != 'undefined') ? readequacoes[0] : readequacoes;
+
+                if (typeof readequacao !== 'undefined') {
+                    $('#idReadequacao').val(readequacao.idReadequacao);
+                    tinyMCE.get('descJustificativa').setContent(readequacao.dsJustificativa);
+                }
+            }
+        });
+    }
+
     new Vue({
         el: '#dynamic-component',
         data: {
             currentComponent: '',
-            idPronac: <?= $this->projeto->IdPRONAC;?>,
+            active: false,
+            idPronac: <?= $this->projeto->IdPRONAC;?>
         },
         mounted: function () {
-            this.carregarComponenteSelecionado();
+            this.iniciarReadequacao();
         },
         methods: {
-            carregarComponenteSelecionado: function () {
-                let self = this, componente = '';
+            iniciarReadequacao: function () {
+                let self = this;
+                $("#iniciar-readequacao").on("click", function () {
+                    $("#mensagem").fadeOut('fast');
+                    $(".card.sumir").fadeIn().removeClass('sumir');
 
+                    self.carregarComponenteSelecionado();
+                });
+
+                if($("#idReadequacao").val() != "") {
+                    self.carregarComponenteSelecionado();
+                }
+            },
+            carregarComponenteSelecionado: function () {
+                let self = this;
+
+                let componente = '';
                 if (self.projetoPertenceIN2017() == 1) {
                     componente = "readequacao-plano-distribuicao";
                 } else {
@@ -109,7 +174,8 @@
                 return $("#pertenceIn2017").val();
             },
             carregarPlanoDistribuicaoAntigaIN: function () {
-                atualizarDadosPlanosDeDistribuicao();
+                carregarFormularioAntigaIN();
+//                atualizarDadosPlanosDeDistribuicao();
             }
         }
     })

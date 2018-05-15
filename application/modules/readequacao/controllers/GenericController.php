@@ -8,6 +8,7 @@ abstract class Readequacao_GenericController extends MinC_Controller_Action_Abst
     protected $idPerfil = 0;
 
     protected $idPronac;
+    protected $idPronacHash;
     protected $projeto;
     protected $in2017;
 
@@ -53,11 +54,15 @@ abstract class Readequacao_GenericController extends MinC_Controller_Action_Abst
         }
 
         $idPronac = $this->_request->getParam("idPronac");
+
+        $this->idPronacHash = Seguranca::encrypt($idPronac);
         if (strlen($idPronac) > 7) {
+            $this->idPronacHash = $idPronac;
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-        $this->view->idPronac = $idPronac;
         $this->idPronac = $idPronac;
+        $this->view->idPronac = $idPronac;
+
 
         $this->view->in2017 = false;
         if($idPronac) {

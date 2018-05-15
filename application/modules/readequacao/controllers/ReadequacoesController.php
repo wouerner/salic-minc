@@ -897,9 +897,15 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $idPronac = Seguranca::dencrypt($idPronac);
         }
 
+        $urlCallback = $this->_request->getParam('urlCallback');
+
+        if (empty($urlCallback)) {
+            $urlCallback = "readequacao/readequacoes/index?idPronac=" . Seguranca::encrypt($idPronac);
+        }
+
         $descJustificativa = $this->_request->getParam('descJustificativa');
         if (empty($descJustificativa)) {
-            parent::message('Justificativa &eacute; obrigat&oacute;ria!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ALERT");
+            parent::message('Justificativa &eacute; obrigat&oacute;ria!', $urlCallback, "ALERT");
         }
 
         $idReadequacao = filter_var($this->_request->getParam("idReadequacao"), FILTER_SANITIZE_NUMBER_INT);
@@ -918,7 +924,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $tbAbrangencia = new Readequacao_Model_DbTable_TbAbrangencia();
             $locaisReadequados = $tbAbrangencia->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($locaisReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
             }
         } elseif ($idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
             $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
@@ -929,13 +935,13 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             ));
 
             if (count($planosReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
             }
         } elseif ($idReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
             $tbPlanoDivulgacao = new tbPlanoDivulgacao();
             $planosReadequados = $tbPlanoDivulgacao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($planosReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de divulga&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de divulga&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
             }
         }
 
@@ -1044,17 +1050,17 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             if ($idReadequacao && $idTipoReadequacao != Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
                 $acaoErro = 'cadastrar';
 
-                parent::message("Solicita&ccedil;&atilde;o cadastrada com sucesso!", "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                parent::message("Solicita&ccedil;&atilde;o cadastrada com sucesso!", $urlCallback, "CONFIRM");
             } elseif ($idReadequacao && $idTipoReadequacao == Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
                 $acaoErro = 'alterar';
 
-                parent::message("Solicita&ccedil;&atilde;o alterada com sucesso!", "readequacao/readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                parent::message("Solicita&ccedil;&atilde;o alterada com sucesso!", $urlCallback, "CONFIRM");
             } else {
                 throw new Exception("Erro ao $acaoErro a readequação!");
             }
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "readequacoes?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+            parent::message($e->getMessage(), $urlCallback, "ERROR");
         }
     }
 
