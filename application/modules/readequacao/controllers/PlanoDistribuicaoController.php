@@ -10,7 +10,7 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
     public function indexAction()
     {
         $this->view->projeto = $this->projeto;
-        $this->view->idTipoReadequacao = Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO;
+        $this->view->idTipoReadequacao = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO;
 
         $idReadequacao = $this->_request->getParam("idReadequacao");
 
@@ -21,10 +21,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
             $where['a.idReadequacao = ?'] = $idReadequacao;
         }
 
-        $where['a.idTipoReadequacao = ?'] = Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO;
+        $where['a.idTipoReadequacao = ?'] = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO;
         $where['a.siEncaminhamento = ?'] = TbTipoEncaminhamento::SOLICITACAO_CADASTRADA_PELO_PROPONENTE;
 
-        $tbReadequacao = new Readequacao_Model_tbReadequacao();
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         $this->view->readequacao = $tbReadequacao->buscarDadosReadequacoes($where)->current();
         $this->view->urlCallback = '/readequacao/plano-distribuicao/index/?idPronac=' . $this->idPronacHash;
     }
