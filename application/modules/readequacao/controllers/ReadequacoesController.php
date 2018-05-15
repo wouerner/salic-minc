@@ -903,11 +903,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $urlCallback = "readequacao/readequacoes/index?idPronac=" . Seguranca::encrypt($idPronac);
         }
 
-        $descJustificativa = $this->_request->getParam('descJustificativa');
-        if (empty($descJustificativa)) {
-            parent::message('Justificativa &eacute; obrigat&oacute;ria!', $urlCallback, "ALERT");
-        }
-
         $idReadequacao = filter_var($this->_request->getParam("idReadequacao"), FILTER_SANITIZE_NUMBER_INT);
         $idTipoReadequacao = filter_var($this->_request->getParam("tipoReadequacao"), FILTER_SANITIZE_NUMBER_INT);
 
@@ -980,11 +975,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $dados['stEstado'] = 0;
                 $idReadequacao = $tbReadequacao->inserir($dados);
 
-                $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-                $dadosPlanilha = array();
-                $dadosPlanilha['idReadequacao'] = $idReadequacao;
-                $wherePlanilha = "IdPRONAC = $idPronac AND tpPlanilha = 'SR' AND idReadequacao is null";
-                $tbPlanilhaAprovacao->update($dadosPlanilha, $wherePlanilha);
+//                $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+//                $dadosPlanilha = array();
+//                $dadosPlanilha['idReadequacao'] = $idReadequacao;
+//                $wherePlanilha = "IdPRONAC = $idPronac AND tpPlanilha = 'SR' AND idReadequacao is null";
+//                $tbPlanilhaAprovacao->update($dadosPlanilha, $wherePlanilha);
 
                 if (!empty($idReadequacao) && $idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
                     $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
