@@ -1,0 +1,377 @@
+<script src="/public/js/vue.js"></script>
+<script src="/public/scripts/prestacao-contas/components/page-title.vue.js"></script>
+
+<?php $actionForm = $this->url(
+        array(
+            'controller' => 'realizarprestacaodecontas',
+            'action' => 'validaritem',
+            'idPronac' => $this->idPronac,
+            'idPlanilhaAprovacao' => $this->idPlanilhaAprovacao,
+            'idPlanilhaItem' => $this->idPlanilhaItem,
+            'stItemAvaliado' => $this->stItemAvaliado,
+            'produto' => $this->codigoProduto,
+            'uf' => $this->uf,
+            'idmunicipio' => $this->municipio
+        ),
+        '',
+        true
+    );
+?>
+
+<div class="container-fluid" id="app-comprovante">
+    <page-title></page-title>
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <table class="tabela">
+                        <tbody>
+                            <tr>
+                                <td ><b>Produto:</b></td>
+                                <td><?php //var_dump($this->projeto) ?><?php echo $this->projeto->Produto;?></td>
+                                <td ><b>Etapa:</b></td>
+                                <td><?php echo $this->projeto->Etapa;?></td>
+                                <td ><b>Item de Custo:</b></td>
+                                <td><?php echo $this->projeto->NomeItem;?></td>
+                            </tr>
+                            <tr>
+                                <td ><b>Valor Aprovado:</b></td>
+                                <td>R$ <?php echo number_format($this->projeto->vlAprovado, 2, ',', '.');?></td>
+                                <td ><b>Valor Comprovado:</b></td>
+                                <td>R$ <?php echo number_format($vlcpTotal, 2, ',', '.');?></td>
+                                <td ><b>Comprovação Validada:</b></td>
+                                <td>R$ <?php echo number_format($this->projeto->vlComprovado, 2, ',', '.');?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+       <div class="col s12">
+        <dados-comprovante> </dados-comprovante>
+
+          <!-- ul class="collapsible" data-collapsible="accordion">
+            <?php
+                $editable = false;
+                /* var_dump($this->comprovantesPagamento ); */
+                /* die; */
+                foreach ($this->comprovantesPagamento as $index => $comprovante):
+                    $comprovanteNodeId = "comprovantePagamento{$comprovante->idComprovantePagamento}";
+                    $editable = true;
+                    //Inserindo mascara de CPF ou CNPJ
+                    if(strlen($comprovante->CNPJCPF) <= 11){
+                        $cnpjcpf = mascara("###.###.###-##",$comprovante->CNPJCPF);
+                    } else {
+                        $cnpjcpf = mascara("##.###.###/####-##",$comprovante->CNPJCPF);
+                    }
+            ?>
+                <li>
+                  <div class="collapsible-header">
+                        <?php  echo $comprovante->Descricao . ' - ' . $cnpjcpf; ?>
+                         - R$ <?php echo number_format($comprovante->vlComprovacao, 2, ',', '.'); ?>
+                  </div>
+                  <div class="collapsible-body">
+                    <span>
+                        <div class="card">
+                            <div class="card-content">
+                                <table class="bordered">
+                                    <tbody id="<?php echo $comprovanteNodeId; ?>">
+                                        <tr>
+                                            <td><b>Fornecedor</b></td>
+                                            <td><?php  echo $comprovante->Descricao; ?></td>
+                                            <td><b>CNPJ/CPF</b></td>
+                                            <td colspan="5"><?php echo $cnpjcpf; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Comprovante</b></td>
+                                            <td><?php echo $comprovante->tpDocumento;?></td>
+                                            <td><b>Número</b></td>
+                                            <td><?php echo $comprovante->nrComprovante;?></td>
+                                            <td><b id="nmSerieTxt">S&eacute;rie</b></td>
+                                            <td colspan="3"><?php echo $comprovante->nrSerie;?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Dt. Emiss&atilde;o do comprovante de despesa</td>
+                                            <td><?php echo date_format(new DateTime($comprovante->dtEmissao), "d/m/Y") ?></td>
+                                            <td><b>Forma de Pagamento</td>
+                                            <td>
+                                                <?php echo $comprovante->tpFormaDePagamento; ?>
+                                            </td>
+                                            <td><b>Data do Pagamento</td>
+                                            <td><?php echo date_format(new DateTime($comprovante->dtPagamento), "d/m/Y") ?></td>
+                                            <td style="width: 155px;"><b>N&ordm; Documento Pagamento</td>
+                                            <td><?php echo $comprovante->nrDocumentoDePagamento;?></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Valor</b></td>
+                                            <td>R$ <?php echo number_format($comprovante->vlComprovacao, 2, ',', '.'); ?></td>
+                                            <td><b>Arquivo</b></td>
+                                            <td colspan="5">
+                                                <?php
+                                                    $urlComprovanteAnexo = $this->url(
+                                                        array('controller' => 'upload', 'action' => 'abrir', 'id' => $comprovante->idArquivo)
+                                                    );
+                                                    echo "<a href='{$urlComprovanteAnexo}'>{$comprovante->nmArquivo}</a>";
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Justificativa do Proponente</b></td>
+                                            <td colspan="7"><?php echo $comprovante->dsJustificativa;?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Avalia&ccedil;&atilde;o</span>
+                                <form id="frmValidar" name="frmValidar" action="<?php echo $actionForm; ?>" method="post">
+                                    <input type="hidden" name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][idComprovantePagamento]" value="<?php echo $comprovante->idComprovantePagamento;?>" />
+                                    <input type="hidden" name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][idPlanilhaAprovacao]" value="<?php echo $comprovante->idPlanilhaAprovacao;?>" />
+                                    <input type="hidden" value="<?php echo $this->stItemAvaliado; ?>" name="stItemAvaliado">
+                                    <p>
+                                       <input
+                                            type="radio"
+                                            id="situacao-1-<?php echo $comprovanteNodeId; ?>"
+                                            name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][situacao]"
+                                            value="1"
+                                            <?php echo 1 == $comprovante->stItemAvaliado ? 'checked="checked"': ''; ?>
+                                       >
+                                       <label for="situacao-1-<?php echo $comprovanteNodeId; ?>">Validadar</label>
+                                       <input
+                                            type="radio"
+                                            id="situacao-3-<?php echo $comprovanteNodeId; ?>"
+                                            name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][situacao]"
+                                            value="3"
+                                            <?php echo 3 == $comprovante->stItemAvaliado ? 'checked="checked"': ''; ?>
+                                        >
+                                        <label for="situacao-3-<?php echo $comprovanteNodeId; ?>">Recusar</label>
+                                    </p>
+                                    <div class="row">
+                                         <div class="input-field col s12">
+                                            <textarea
+                                                name="comprovantePagamento[<?php echo $comprovante->idPlanilhaAprovacao; ?>][observacao]"
+                                                id="comprovantePagamento_<?php echo $comprovante->idPlanilhaAprovacao; ?>_observacao"
+                                                rows="10" cols="100"
+                                                class="materialize-textarea"><?php echo $comprovante->ocorrencia; ?>
+                                            </textarea>
+                                            <label><b>Ocorrência do Técnico</b></label>
+                                        </div>
+                                    </div>
+                                    <div class="card-action">
+                                        <button type="submit" class="waves-effect waves-light btn-flat" value="">salvar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </span>
+                  </div>
+                </li>
+            <?php endforeach; ?>
+          </ul-->
+       </div>
+    </div>
+</div>
+
+<script>
+    const comprovanteForm = {
+        template: `
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Avalia&ccedil;&atilde;o</span>
+                    <form>
+                        <p>
+                            <input
+                                v-model="avaliacao.situacao"
+                                type="radio"
+                                id="situacao-1"
+                                value="1"
+                           >
+                           <label for="situacao-1">Validadar</label>
+                           <input
+                                v-model="avaliacao.situacao"
+                                type="radio"
+                                id="situacao-3"
+                                value="3"
+                            >
+                            <label for="situacao-3">Recusar</label>
+                        </p>
+                        <div class="row">
+                             <div class="input-field col s12">
+                                <textarea v-model="avaliacao.observacao"
+                                    id="comprovantePagamento_observacao"
+                                    rows="10" cols="100"
+                                    class="materialize-textarea">
+                                    ocorrencia
+                                </textarea>
+                                <label><b>Ocorrência do Técnico</b></label>
+                            </div>
+                        </div>
+                        <div class="card-action">
+                            <button @click.prevent="salvar" type="submit" class="waves-effect waves-light btn-flat" value="">
+                                salvar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `,
+        props:['idcomprovantepagamento', 'idpronac'],
+        data: function() {
+            return {
+                avaliacao: {
+                    observacao: '',
+                    idpronac: this.idpronac,
+                    idcomprovantepagemento: this.idcomprovantepagamento,
+                    situacao: ''
+                }
+            }
+        },
+        methods: {
+            salvar: function() {
+                vue = this;
+                url = '/prestacao-contas/comprovante-pagamento';
+                $3.ajax({
+                  type: "POST",
+                  url:url,
+                  data: this.avaliacao
+                })
+                .done(function(data) {
+                })
+                .fail(function(jqXHR) {
+                    alert('error');
+                });
+            }
+        }
+    }
+
+    const comprovantes = {
+        template: `
+            <div>
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li v-for="dado in dados">
+                      <div class="collapsible-header">
+                          Fornecedor: {{dado.Descricao}}
+                      </div>
+                      <div class="collapsible-body">
+                            <div class="card">
+                                <div class="card-content">
+                                    <table class="bordered">
+                                        <tbody>
+                                            <tr>
+                                                <th>Fornecedor</th>
+                                                <td>{{dado.Descricao}}</td>
+                                                <th>CNPJ/CPF</th>
+                                                <td colspan="5">{{dado.CNPJCPF}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Comprovante</th>
+                                                <td>{{dado.tpDocumento}}</td>
+                                                <th>Número</th>
+                                                <td>{{dado.nrComprovante}}</td>
+                                                <th>S&eacute;rie</th>
+                                                <td colspan="3">{{dado.nrSerie}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Dt. Emiss&atilde;o do comprovante de despesa</th>
+                                                <td>{{dado.dtEmissao}}</td>
+                                                <th>Forma de Pagamento</th>
+                                                <td>{{dado.tpFormaDePagamento}}</td>
+                                                <th>Data do Pagamento</th>
+                                                <td>{{dado.dtPagamento}}</td>
+                                                <th>N&ordm; Documento Pagamento</th>
+                                                <td>{{dado.nrDocumentoDePagamento}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Valor</th>
+                                                <td>R$  {{dado.vlComprovacao}}</td>
+                                                <th>Arquivo</th>
+                                                <td colspan="5">
+                                                    {{dado.nmArquivo}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Justificativa do Proponente</th>
+                                                <td colspan="7">{{dado.dsJustificativa}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <comprovante-form 
+                                :idpronac="dado.IdPRONAC" 
+                                :idcomprovantepagamento="dado.idComprovantePagamento">
+                            </comprovante-form>
+                      </div>
+                    </li>
+                </ul>
+            </div>
+        `,
+        components:{ 'comprovante-form': comprovanteForm },
+        props: ['dados']
+    }
+
+    const dadosComprovante = {
+        template: `
+            <div>
+                <comprovantes :dados="dados">
+                </comprovantes>
+            </div>
+        `,
+        components:{
+            'comprovantes': comprovantes
+        },
+        mounted: function () {
+            vue = this;
+            url = '/prestacao-contas/comprovante-pagamento';
+            $3.ajax({
+              type: "GET",
+              url:url,
+              data:{ idPronac: '132451', idPlanilhaItem: 130, produto: 0, stItemAvaliado: 4 }
+            })
+            .done(function(data) {
+                /* console.log(vue.$data); */
+                vue.$data.dados = data.data;
+            })
+            .fail(function(jqXHR) {
+                alert('error');
+            });
+
+        },
+        data: function () {
+            return {
+                dados:[]
+            }
+        }
+    }
+
+    const appComprovante = new Vue({
+            components: { 'dados-comprovante': dadosComprovante }
+        }).$mount('#app-comprovante');
+</script>
+
+<?php
+function mascara($mask,$str){
+
+    $str = str_replace(" ","",$str);
+
+    for($i=0;$i<strlen($str);$i++){
+        $mask[strpos($mask,"#")] = $str[$i];
+    }
+    return $mask;
+}
+?>
+<div id="conteudo">
+    <?php
+        $vlcpTotal=0;
+        foreach ($this->comprovantesPagamento as $valoresComprovados) {
+            $vlUn = $valoresComprovados->vlComprovacao+$vlcpTotal;
+            $vlcpTotal = $vlUn;
+        }
+    ?>
+</div>
