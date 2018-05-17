@@ -187,19 +187,21 @@
                     <form>
                         <p>
                             <input
+                                :checked="avaliacao.situacao == situacao"
                                 v-model="avaliacao.situacao"
                                 type="radio"
-                                id="situacao-1"
+                                :id="('situacao-1_' + idcomprovantepagamento)"
                                 value="1"
                            >
-                           <label for="situacao-1">Validadar</label>
+                           <label :for="('situacao-1_' + idcomprovantepagamento)">Validadar</label>
                            <input
+                                :checked="avaliacao.situacao == situacao"
                                 v-model="avaliacao.situacao"
                                 type="radio"
-                                id="situacao-3"
+                                :id="('situacao-3_' + idcomprovantepagamento)"
                                 value="3"
                             >
-                            <label for="situacao-3">Recusar</label>
+                            <label :for="('situacao-3_' + idcomprovantepagamento)">Recusar</label>
                         </p>
                         <div class="row">
                              <div class="input-field col s12">
@@ -221,14 +223,14 @@
                 </div>
             </div>
         `,
-        props:['idcomprovantepagamento', 'idpronac'],
+        props:['idcomprovantepagamento', 'idpronac', 'situacao'],
         data: function() {
             return {
                 avaliacao: {
                     observacao: '',
                     idpronac: this.idpronac,
-                    idcomprovantepagemento: this.idcomprovantepagamento,
-                    situacao: ''
+                    idcomprovantepagamento: this.idcomprovantepagamento,
+                    situacao: this.situacao 
                 }
             }
         },
@@ -242,6 +244,7 @@
                   data: this.avaliacao
                 })
                 .done(function(data) {
+                    console.log(data);
                 })
                 .fail(function(jqXHR) {
                     alert('error');
@@ -305,7 +308,9 @@
                             </div>
                             <comprovante-form 
                                 :idpronac="dado.IdPRONAC" 
-                                :idcomprovantepagamento="dado.idComprovantePagamento">
+                                :idcomprovantepagamento="dado.idComprovantePagamento"
+                                :situacao="dado.stItemAvaliado"
+                            >
                             </comprovante-form>
                       </div>
                     </li>
@@ -335,13 +340,11 @@
               data:{ idPronac: '132451', idPlanilhaItem: 130, produto: 0, stItemAvaliado: 4 }
             })
             .done(function(data) {
-                /* console.log(vue.$data); */
                 vue.$data.dados = data.data;
             })
             .fail(function(jqXHR) {
                 alert('error');
             });
-
         },
         data: function () {
             return {

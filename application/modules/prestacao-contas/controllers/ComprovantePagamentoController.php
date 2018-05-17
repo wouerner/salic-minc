@@ -42,6 +42,11 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
 
     public function postAction()
     {
+        $idPronac = $this->getRequest()->getParam('idpronac');
+        $observacao = $this->getRequest()->getParam('observacao');
+        $situacao = $this->getRequest()->getParam('situacao');
+        $idComprovantePagamento = $this->getRequest()->getParam('idcomprovantepagamento');
+
         if (!$idPronac) {
             throw new Exception('Falta pronac');
         }
@@ -52,28 +57,23 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         /* $this->view->assign('data',['message' => 'criado!']); */
         /* $this->getResponse()->setHttpResponseCode(201); */
 
-        $this->getRequest()->getParam('comprovantePagamento');
-        foreach ($this->getRequest()->getParam('comprovantePagamento') as $comprovantePagamento) {
-            try {
-                $rsComprovantePag = $tblComprovantePag
-                    ->buscar(
-                        array(
-                            'idComprovantePagamento = ?' => $comprovantePagamento['idComprovantePagamento'],
-                        )
-                    )
-                    ->current();
+        $tblComprovantePag = new ComprovantePagamentoxPlanilhaAprovacao();
+        $rsComprovantePag = $tblComprovantePag
+            ->buscar( [ 'idComprovantePagamento = ?' => $idComprovantePagamento] )
+            ->current();
+        /* echo '<pre>'; */
+        /* var_dump($idComprovantePagamento, $rsComprovantePag);die; */
 
-                $rsComprovantePag->dtValidacao = date('Y/m/d H:i:s');
-                $rsComprovantePag->dsJustificativa = isset($comprovantePagamento['observacao']) ? $comprovantePagamento['observacao'] : null;
-                $rsComprovantePag->stItemAvaliado = $comprovantePagamento['situacao'];
-                $rsComprovantePag->save();
-                $itemValidado = true;
-            } catch (Exception $e) {
-                $this->_helper->flashMessenger->addMessage($e->getMessage());
-                $this->_helper->flashMessengerType->addMessage('ERROR');
-                $tblComprovantePag->getAdapter()->rollBack();
-                $redirector->redirectAndExit();
-            }
+        $rsComprovantePag->dtValidacao = date('Y/m/d H:i:s');
+        $rsComprovantePag->dsJustificativa = $comprovantePagamento['observacao'];
+        $rsComprovantePag->stItemAvaliado = $situacao;
+
+        try {
+            $rsComprovantePag->save();
+            $this->view->assign('data',['message' => 'criado!']);
+            $this->getResponse()->setHttpResponseCode(200);
+        } catch (Exception $e) {
+            $tblComprovantePag->getAdapter()->rollBack();
         }
 
     }
