@@ -49,7 +49,7 @@ Vue.component('readequacao-transferencia-recursos', {
 			    <select
 				class="browser-default"
 				       ref="readequacaoTipoTransferencia"
-				       v-model="readequacao.tipoTransferencia">
+				       v-model="readequacao.dsSolicitacao">
 				<option v-for="tipo in tiposTransferencia" v-bind:value="tipo.id">{{tipo.nome}}</option>
 			    </select>
 			</div>
@@ -164,7 +164,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	    'justificativa': '',
 	    'arquivo': null,
 	    'idTipoReadequacao': null,
-	    'tipoTransferencia': '',
+	    'dsSolicitacao': '',
 	    'idArquivo' : null,
 	    'nomeArquivo': null
 	},
@@ -264,7 +264,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		url: "/readequacao/transferencia-recursos/incluir-projeto-recebedor",
 		data: {
 		    idReadequacao: vue.readequacao.idReadequacao,
-		    tipoTransferencia: vue.readequacao.tipoTransferencia,
+		    dsSolicitacao: vue.readequacao.dsSolicitacao,
 		    idPronacTransferidor: vue.projetoTransferidor.idPronac,
 		    idPronacRecebedor: vue.projetoRecebedor.idPronac,
 		    valorRecebido: vue.projetoRecebedor.valorRecebido
@@ -282,8 +282,8 @@ Vue.component('readequacao-transferencia-recursos', {
 	    // TODO remover dado ajax
 	},
 	salvarReadequacao: function() {
-	    if (this.readequacao.tipoTransferencia == '' ||
-		this.readequacao.tipoTransferencia == undefined
+	    if (this.readequacao.dsSolicitacao == '' ||
+		this.readequacao.dsSolicitacao == undefined
 	    ) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o tipo da transfer\xEAncia!");
 		this.$refs.readequacaoTipoTransferencia.focus();
@@ -304,7 +304,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		    idPronac: this.idPronac,
 		    idReadequacao: this.readequacao.idReadequacao,
 		    justificativa: this.readequacao.justificativa,
-		    tipoTransferencia: this.readequacao.tipoTransferencia
+		    dsSolicitacao: this.readequacao.dsSolicitacao
 		}
             }).done(function (response) {
 		var arquivo = $('#arquivo')[0].files[0];

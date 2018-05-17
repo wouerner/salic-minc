@@ -26,7 +26,11 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         $idReadequacao = $this->_request->getParam('idReadequacao');
 
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos($idReadequacao, $idPronac);
+        $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos(
+            Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
+            $idReadequacao,
+            $idPronac
+        );
         
         if (empty($readequacao)) {
             $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
@@ -100,7 +104,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
             $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
             $dados['idSolicitante'] = $rsAgente->idAgente;
             $dados['dsJustificativa'] = $this->_request->getParam('justificativa');
-            $dados['dsSolicitacao'] = $this->_request->getParam('tipoTransferencia');
+            $dados['dsSolicitacao'] = $this->_request->getParam('dsSolicitacao');
             $dados['stAtendimento'] = 'D';
             $dados['idDocumento'] = null;
             $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
@@ -114,7 +118,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                         'readequacao' => [
                             'idReadequacao' => $idReadequacao,
                             'justificativa' => $this->_request->getParam('justificativa'),
-                            'tipoTransferencia' => $this->_request->getParam('tipoTransferencia'),
+                            'dsSolicitacao' => $this->_request->getParam('dsSolicitacao'),
                         ],
                         'mensagem' => 'Readequação inserida com sucesso.'
                     ]
@@ -130,7 +134,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
             
         } else if ($idReadequacao) {
             $dados['dsJustificativa'] = $this->_request->getParam('justificativa');
-            $dados['dsSolicitacao'] = $this->_request->getParam('tipoTransferencia');
+            $dados['dsSolicitacao'] = $this->_request->getParam('dsSolicitacao');
             
             try {
                 $update = $Readequacao_Model_DbTable_TbReadequacao->update(
@@ -145,7 +149,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                         'readequacao' => [
                             'idReadequacao' => $idReadequacao,
                             'justificativa' => $this->_request->getParam('justificativa'),
-                            'tipoTransferencia' => $this->_request->getParam('tipoTransferencia'),
+                            'dsSolicitacao' => $this->_request->getParam('dsSolicitacao'),
                         ],
                         'mensagem' => 'Readequação atualizada com sucesso.'
                     ]
@@ -180,8 +184,11 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                     'idReadequacao = ?' => $idReadequacao
                 ]
             );
-
-            $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos($idReadequacao);
+            
+            $readequacao = $Readequacao_Model_DbTable_TbReadequacao->obterReadequacaoTransferenciaRecursos(
+                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
+                $idReadequacao
+            );
             
             if (count($readequacao) > 0) {
                 $this->_helper->json(
@@ -252,7 +259,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         
         try {
             $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
-            $dados['tpTransferencia'] = $this->_request->getParam('tipoTransferencia');            
+            $dados['tpTransferencia'] = $this->_request->getParam('dsSolicitacao');
             $dados['idPronacRecebedor'] = $this->_request->getParam('idPronacRecebedor');
             $dados['vlRecebido'] = (float) str_replace(',', '.', $this->_request->getParam('valorRecebido'));
             $dados['siAnaliseTecnica'] = '';

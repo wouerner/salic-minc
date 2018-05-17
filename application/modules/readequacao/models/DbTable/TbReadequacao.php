@@ -1414,11 +1414,23 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         }
     }
 
-    public function obterReadequacaoTransferenciaRecursos($idReadequacao = '', $idPronac = '')
+    /**
+     * obterReadequacaoTransferenciaRecursos
+     * 
+     * @param integer $idTipoReadequacao
+     * @param integer $idReadequacao
+     * @param integer $idPronac
+     * @return array
+     */
+    public function obterReadequacaoTransferenciaRecursos(
+        $idTipoReadequacao,
+        $idReadequacao = '',
+        $idPronac = ''
+    )
     {
         $where = [
-                'a.idTipoReadequacao = ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
-                'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
+            'a.idTipoReadequacao = ?' => $idTipoReadequacao,
+            'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
         ];
         
         if ($idPronac) {
@@ -1435,7 +1447,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'idReadequacao' => $readequacao[0]['idReadequacao'],
                 'idPronac' => $readequacao[0]['idPronac'],
                 'idTipoReadequacao' => $readequacao[0]['idTipoReadequacao'],
-                'tipoTransferencia' => $readequacao[0]['dsSolicitacao'],
+                'dsSolicitacao' => $readequacao[0]['dsSolicitacao'],
                 'justificativa' => $readequacao[0]['dsJustificativa'],
                 'idArquivo' => $readequacao[0]['idArquivo'],
                 'nomeArquivo' => $readequacao[0]['nmArquivo']                
