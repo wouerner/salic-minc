@@ -5,8 +5,8 @@ Vue.component('readequacao-transferencia-recursos', {
             <div class="card">
                 <div class="card-content">
 		    <span class="card-title">Projeto transferidor</span>
-                    <div class="row">
-                        <div class="col s2">
+			<div class="row">
+                            <div class="col s2">
                             <b>Pronac: </b>{{ projetoTransferidor.pronac }}<br>
                         </div>
                         <div class="col s4">
@@ -34,7 +34,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		    <span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
                     <input type="hidden" v-model="readequacao.idReadequacao" />
 		    <div class="row">
-			<div class="input-field col s12">
+                       <div class="input-field col s12">
 			    <textarea
 				id="textarea1"
 				class="materialize-textarea"
@@ -80,7 +80,7 @@ Vue.component('readequacao-transferencia-recursos', {
       <li>
 	  <div class="collapsible-header"><i class="material-icons">list</i>Projetos recebedores</div>
 	  <div class="collapsible-body card" 
-		 v-show="disponivelAdicionarRecebedores">
+		 v-show="possuiReadequacaoCriada">
 		<div class="card-content">
 		    <span class="card-title">Projetos recebedores</span>
 		    <table v-show="exibeProjetosRecebedores" class="animated fadeIn">
@@ -112,8 +112,12 @@ Vue.component('readequacao-transferencia-recursos', {
 			</tfoot>
 		    </table>
 		    		    
-		    <form class="row">
-			<div class="col s6">
+		<form class="row">
+		    <div class="col s6">
+			<div v-if="areasEspeciais">
+			    <input type="text" v-model="projetoRecebedor.idPronac" />
+            		</div>
+			<div v-else>
 			    <label>Projeto recebedor</label>
 			    <select class="browser-default"
 				    v-model="projetoRecebedor.idPronac"
@@ -122,6 +126,7 @@ Vue.component('readequacao-transferencia-recursos', {
 				    :disabled="!disponivelAdicionarRecebedor">
 				<option v-for="(projeto, index) in projetosDisponiveis" v-bind:value="projeto.idPronac" v-bind:data-nome="projeto.nome">{{ projeto.pronac }} - {{ projeto.nome}}</option>
 			    </select>
+			</div>
 			</div>
  			<div class="input-field col s3">
 			    <input-money
@@ -157,6 +162,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	'id-pronac',
 	'id-tipo-readequacao'	
     ],
+    mixins: [utils],
     data: function() {
 	var readequacao = {
 	    'idPronac': null,
@@ -224,6 +230,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		pronac: null,
 		idPronac: null,
 		nome: '',
+		area: '',
 		valorComprovar: 0.00,
 		saldoDisponivel: 0.00
 	    }
@@ -373,15 +380,16 @@ Vue.component('readequacao-transferencia-recursos', {
 	},
 	obterDadosProjetoTransferidor: function() {	    
 	    let vue = this;
-	    /*
+	    
 	    this.projetoTransferidor = {
 		pronac: 164783,
 		idPronac: 166121,
 		nome: 'Expedição gastronimica',
+		area: '7',
 		valorComprovar: 5234.00,
 		saldoDisponivel: 5234.00
 	    }
-	    */
+	    
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/dados-projeto-transferidor",
@@ -391,26 +399,40 @@ Vue.component('readequacao-transferencia-recursos', {
             }).done(function (response) {
                 vue.projetoTransferidor = response.projeto;
             });
+	    
 	},
 	obterProjetosDisponiveis: function(idPronac) {
 	    // TODO: buscar projetos disponíveis do mesmo proponente ajax
-	    this.projetosDisponiveis = [
-		{
-		    'idPronac': '201112',
-		    'pronac': '167531',
-		    'nome': 'Projeto xyz'
-		},
-		{
-		    'idPronac': '261712',
-		    'pronac': '167512',
-		    'nome': 'Outro projeto'
-		},
-		{
-		    'idPronac': '261114',
-		    'pronac': '157511',
-		    'nome': 'Mais um projeto'
+	    var vue = this;
+	    $3.ajax({
+		type: "GET",
+		url: "/readequacao/transferencia-recursos/listar-projetos-recebedores-disponiveis",
+		data: {
+		    idPronac: this.idPronac
 		}
-	    ];
+	    }).done(function(response) {
+		vue.projetosDisponiveis = response.projetos;
+	    });
+	    
+	    /*
+	       this.projetosDisponiveis = [
+	       {
+	       'idPronac': '201112',
+	       'pronac': '167531',
+	       'nome': 'Projeto xyz'
+	       },
+	       {
+	       'idPronac': '261712',
+	       'pronac': '167512',
+	       'nome': 'Outro projeto'
+	       },
+	       {
+	       'idPronac': '261114',
+	       'pronac': '157511',
+	       'nome': 'Mais um projeto'
+	       }
+	       ];
+	     */
 	},
 	obterProjetosRecebedores: function(idReadequacao) {
 	    let vue = this;
@@ -443,8 +465,18 @@ Vue.component('readequacao-transferencia-recursos', {
             }
 	}
     },
-    mixins: [utils],
     computed: {
+	areasEspeciais: function() {    
+	    var areasMultiplos = [];
+	    areasMultiplos[7] = 'Patrimônio cultural';
+	    areasMultiplos[9] = 'Museus e memória';
+	    
+	    if (areasMultiplos.hasOwnProperty(this.projetoTransferidor.area)) {
+		return true;
+	    } else {
+		return;
+	    }
+	},	
 	totalRecebido: function() {
 	    return this.projetosRecebedores.reduce(function (total, projeto) {
                 var resultado = parseFloat(total) + parseFloat(projeto.valorRecebido);
@@ -455,11 +487,29 @@ Vue.component('readequacao-transferencia-recursos', {
 	    var saldo = parseFloat(this.projetoTransferidor.valorComprovar) - parseFloat(this.totalRecebido);
 	    return saldo.toFixed(2);
 	},
-	disponivelAdicionarRecebedores: function() {
+	possuiReadequacaoCriada: function() {
 	    if (this.readequacao.idReadequacao != null) {
 		return true;
 	    } else {
-		return false
+		return;
+	    }
+	},
+	disponivelAdicionarRecebedores: function() {
+
+	    // parei aqui - estou criando cada caso para a interface
+
+	    // prop diferente: busca de pronac 
+	    // prop igual: select 
+	    
+	    
+	    if (!this.areaMultiplosProjeto &&
+		this.projetosRecebedores.length == 0) {
+		return true;
+	    } else if (this.areaMultiplosProjeto &&
+		       this.projetosRecebedores.length > 0) {
+		return true;		   
+	    } else {
+		return false;
 	    }
 	},
 	disponivelFinalizar: function() {
@@ -475,7 +525,13 @@ Vue.component('readequacao-transferencia-recursos', {
 	    if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
 		return false;
 	    } else {
-		return true;
+		if (!this.areaMultiplosProjeto &&
+		    this.projetosRecebedores.length == 0) {
+		    return true;
+		} else if (this.areaMultiplosProjeto &&
+			   this.projetosRecebedores.length > 0) {
+		    return true;		   
+		}
 	    }
 	},
 	exibeProjetosRecebedores: function() {

@@ -52,17 +52,19 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
 
         try {
             $projetos = new Projetos();
-                        
-            $projeto = $projetos->buscarPorPronac($this->idPronac);
+            
+            $projeto = $projetos->buscarProjetoTransferidor($this->idPronac);
             
             if (count($projeto) > 0) {
                 $projetoArr = [
-                    'pronac' => $projeto->Pronac,
-                    'idPronac' => $projeto->IdPRONAC,
-                    'nome' => utf8_encode($projeto->NomeProjeto),
-                    'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado,
-                    'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado,
-                    'area' => utf8_encode($projeto->Area)
+                    'pronac' => $projeto->pronac,
+                    'idPronac' => $projeto->idPronac,
+                    'nome' => utf8_encode($projeto->nomeProjeto),
+                    'valorComprovar' => $projeto->valorAComprovar,
+                    'saldoDisponivel' => $projeto->valorAComprovar,
+                    'area' => utf8_encode($projeto->area),
+                    'idArea' => utf8_encode($projeto->codArea)
+                    
                 ];
             } else {
                 $projetoArr = [];
@@ -210,7 +212,30 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
     public function listarProjetosRecebedoresDisponiveisAction()
     {
         $this->_helper->layout->disableLayout();
-        $this->view->arrResult = [];
+        $idPronac = $this->_request->getParam('idPronac');
+        
+        try {
+            $projeto = new Projetos();
+            $projetosDisponiveis = $projeto->buscarProjetosRecebedoresDisponiveis($idPronac);
+            $projetosDisponiveisMontado = [];
+
+            foreach ($projetosDisponiveis as $projeto) {
+                $projetosDisponiveisMontado[] = [
+                    'idPronac' => $projeto->IdPRONAC,
+                    'pronac' => $projeto->AnoProjeto . $projeto->Sequencial,
+                    'nome' => utf8_encode($projeto->NomeProjeto)
+                ];
+            }
+            
+            $this->_helper->json([
+                'projetos' => $projetosDisponiveisMontado
+            ]);
+        } catch (Exception $objException) {
+            $this->_helper->json([
+                'mensagem' => 'Não há projetos disponíveis para o pronac fornecido.',
+                'error' => $objException->getMessage()
+            ]);
+        }
     }
     
     public function listarProjetosRecebedoresAction()
