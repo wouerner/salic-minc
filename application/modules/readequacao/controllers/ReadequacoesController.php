@@ -889,8 +889,18 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
 
         $idPronac = $this->_request->getParam("idPronac");
+        if (empty($idPronac)) {
+            parent::message("PRONAC &eacute; obrigat&oacute;rio", "principalproponente", "ALERT");
+        }
+
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
+        }
+
+        $urlCallback = $this->_request->getParam('urlCallback');
+
+        if (empty($urlCallback)) {
+            $urlCallback = "readequacao/readequacoes/index?idPronac=" . Seguranca::encrypt($idPronac);
         }
 
         $idReadequacao = filter_var($this->_request->getParam("idReadequacao"), FILTER_SANITIZE_NUMBER_INT);
@@ -909,19 +919,24 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $tbAbrangencia = new Readequacao_Model_DbTable_TbAbrangencia();
             $locaisReadequados = $tbAbrangencia->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($locaisReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
             }
         } elseif ($idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
             $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-            $planosReadequados = $tbPlanoDistribuicao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
+            $planosReadequados = $tbPlanoDistribuicao->buscar(array(
+                'idPronac = ?'=>$idPronac,
+                'tpSolicitacao <> ?' => 'N',
+                'idReadequacao is null'=>''
+            ));
+
             if (count($planosReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
             }
         } elseif ($idReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
             $tbPlanoDivulgacao = new tbPlanoDivulgacao();
             $planosReadequados = $tbPlanoDivulgacao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($planosReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de divulga&ccedil;&atilde;o do projeto!', "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de divulga&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
             }
         }
 
@@ -961,33 +976,35 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $dados['stEstado'] = 0;
                 $idReadequacao = $tbReadequacao->inserir($dados);
 
-                $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-                $dadosPlanilha = array();
-                $dadosPlanilha['idReadequacao'] = $idReadequacao;
-                $wherePlanilha = "IdPRONAC = $idPronac AND tpPlanilha = 'SR' AND idReadequacao is null";
-                $tbPlanilhaAprovacao->update($dadosPlanilha, $wherePlanilha);
+//                $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+//                $dadosPlanilha = array();
+//                $dadosPlanilha['idReadequacao'] = $idReadequacao;
+//                $wherePlanilha = "IdPRONAC = $idPronac AND tpPlanilha = 'SR' AND idReadequacao is null";
+//                $tbPlanilhaAprovacao->update($dadosPlanilha, $wherePlanilha);
 
                 if (!empty($idReadequacao) && $idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
-                    $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-                    $whereDistribuicao = "idPronac = {$idPronac} AND tpSolicitacao = 'A' AND idReadequacao IS NULL";
-                    $tbPlanoDistribuicao->update(['idReadequacao' => $idReadequacao], $whereDistribuicao);
+                    $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+                    $tbPlanoDistribuicaoMapper->incluirIdReadequacaoNasSolicitacoesAtivas($idPronac, $idReadequacao);
+
+                    $tbDistribuicaoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
+                    $tbDistribuicaoMapper->incluirIdReadequacaoNasSolicitacoesAtivas($idPronac, $idReadequacao);
                 }
             }
 
             if ($idReadequacao && $idTipoReadequacao != Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
                 $acaoErro = 'cadastrar';
 
-                parent::message("Solicita&ccedil;&atilde;o cadastrada com sucesso!", "readequacao/readequacoes/index?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                parent::message("Solicita&ccedil;&atilde;o cadastrada com sucesso!", $urlCallback, "CONFIRM");
             } elseif ($idReadequacao && $idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
                 $acaoErro = 'alterar';
 
-                parent::message("Solicita&ccedil;&atilde;o alterada com sucesso!", "readequacao/readequacoes/planilha-orcamentaria?idPronac=".Seguranca::encrypt($idPronac), "CONFIRM");
+                parent::message("Solicita&ccedil;&atilde;o alterada com sucesso!", $urlCallback, "CONFIRM");
             } else {
                 throw new Exception("Erro ao $acaoErro a readequação!");
             }
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "readequacoes?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+            parent::message($e->getMessage(), $urlCallback, "ERROR");
         }
     }
 
@@ -1047,6 +1064,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             if ($dados->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
                 $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
                 $tbPlanoDistribuicao->delete(array('idPronac = ?'=>$idPronac, 'stAtivo = ?'=>'S'));
+
+                $tbDetalhaPlanoDistribuicao = new Readequacao_Model_DbTable_TbDetalhaPlanoDistribuicaoReadequacao();
+                $tbDetalhaPlanoDistribuicao->delete(array('idPronac = ?'=>$idPronac, 'stAtivo = ?'=>'S'));
             }
 
             if ($dados->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
@@ -1687,6 +1707,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $p = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $d->idPronac))->current();
         $this->view->projeto = $p;
 
+        $fnIN2017 = new fnVerificarProjetoAprovadoIN2017();
+
+        $this->in2017 = $fnIN2017->verificar($d->idPronac);
+        $this->view->in2017 = $this->in2017;
+
         $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
         $this->view->Parecer = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?'=>$id, 'idTipoAgente =?'=>1))->current();
     }
@@ -1772,7 +1797,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
         $this->view->dados = $dados;
         $this->view->idPronac = $dados->idPronac;
-
         $this->view->nmPagina = $dados->dsReadequacao;
         $d = array();
         $d['ProvidenciaTomada'] = 'Readequa&ccedil;&atilde;o enviado para avalia&ccedil;&atilde;o t&eacute;cnica.';
@@ -1787,6 +1811,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
         $this->view->Parecer = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?'=>$idReadequacao, 'b.idTipoAgente = ?'=>1))->current();
+
+        $fnIN2017 = new fnVerificarProjetoAprovadoIN2017();
+
+        $this->in2017 = $fnIN2017->verificar($dados->idPronac);
+        $this->view->in2017 = $this->in2017;
 
         //DADOS DO PROJETO
         $p = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $dados->idPronac))->current();
@@ -3647,7 +3676,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->json(array('mensagens' => $resultado));
     }
 
-    
+
     public function obterDadosReadequacaoAction()
     {
         $this->_helper->layout->disableLayout();
@@ -3663,11 +3692,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $idPronac,
                 $idReadequacao
             );
-            
+
             if (empty($readequacao)) {
                 $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
             }
-            
+
             $this->_helper->json(
                 [
                     'readequacao' => $readequacao,
@@ -3676,7 +3705,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             );
         } catch (Exception $objException) {
             $this->getResponse()->setHttpResponseCode(412);
-            
+
             $this->_helper->json(
                 [
                     'mensagem' => 'Não foi possível obter a readequação. Erro: ' . $objException->getMessage()
@@ -3684,18 +3713,18 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             );
         }
     }
-    
+
     public function uploadAnexoAction()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        
+
         $mensagem = '';
         $dados = [];
         $idReadequacao = $this->_request->getParam('idreadequacao');
-        
+
         $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        
+
         try {
             $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
             $documento = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
@@ -3724,5 +3753,5 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             ]);
 
         }
-    }    
+    }
 }

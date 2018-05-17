@@ -6,11 +6,11 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
                 :detalhamentos="detalhamentos"
                 :canalaberto="produto.canalAberto"
                 :local="local"
-                 v-on:eventoRemoverDetalhamento="removerDetalhamento"
-                 v-on:eventoEditarDetalhamento="editarDetalhamento"
+                 v-on:eventoListagem="tratarEvento"
                 >
             </plano-distribuicao-detalhamentos-listagem>
             <plano-distribuicao-detalhamentos-formulario
+                v-if="!disabled"
                 :disabled="disabled"
                 :idplanodistribuicao="produto.idPlanoDistribuicao"
                 :local="local"
@@ -38,48 +38,83 @@ Vue.component('readequacao-plano-distribuicao-detalhamentos', {
         this.obterDetalhamentos();
     },
     methods: {
-        removerDetalhamento(detalhamento, index) {
-            let vue = this;
-            $3.ajax({
-                type: "POST",
-                url: "/readequacao/plano-distribuicao/excluir-detalhamento-ajax/idPronac/" + vue.id,
-                data: detalhamento
-            }).done(function (response) {
-                if (response.success == 'true') {
-                    let index = vue.$data.detalhamentos.map(item => item.idDetalhaPlanoDistribuicao).indexOf(response.data.idDetalhaPlanoDistribuicao);
-                    Vue.delete(vue.detalhamentos, index);
-                    vue.$data.detalhamentos.push(response.data);
-                    vue.mensagemSucesso(response.msg);
-                    detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
-                }
-            }).fail(function (response) {
-                vue.mensagemErro(response.responseJSON.msg);
-            });
+        tratarEvento: function(evento, dados, index) {
+            switch (evento) {
+                case 'editarItem':
+                    this.editarDetalhamento(dados, index);
+                    break;
+                case 'excluirItem':
+                    this.excluirDetalhamento(dados, index);
+                    break;
+                case 'restaurarItem':
+                    this.restaurarDetalhamento(dados, index);
+                    break;
+                default:
+                    console.error("Evento n\u00E3o definido na listagem");
+            }
         },
         editarDetalhamento(detalhamento, index) {
             this.detalhamento = detalhamento;
+            $3("#" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "_modal").modal('open');
         },
         salvarDetalhamento(detalhamento) {
-            let vue = this;
+            let self = this;
             $3.ajax({
                 type: "POST",
-                url: "/readequacao/plano-distribuicao/salvar-detalhamento-ajax/idPronac/" + vue.id,
+                url: "/readequacao/plano-distribuicao/salvar-detalhamento-ajax/idPronac/" + self.id,
                 data: detalhamento
             }).done(function (response) {
                 if (response.success == 'true') {
-                    let index = vue.$data.detalhamentos.map(item => item.idDetalhaPlanoDistribuicao).indexOf(response.data.idDetalhaPlanoDistribuicao);
-                    Vue.delete(vue.detalhamentos, index);
-                    vue.$data.detalhamentos.push(response.data);
-                    vue.mensagemSucesso(response.msg);
+                    let index = self.$data.detalhamentos.map(item => item.idDetalhaPlanoDistribuicao).indexOf(response.data.idDetalhaPlanoDistribuicao);
+                    Vue.delete(self.detalhamentos, index);
+                    self.$data.detalhamentos.push(response.data);
+                    self.mensagemSucesso(response.msg);
                     detalhamentoEventBus.$emit('callBackSalvarDetalhamento', true);
+                    $3("#" + detalhamento.idMunicipio + detalhamento.idPlanoDistribuicao + "_modal").modal('close');
                 }
             }).fail(function (response) {
-                vue.mensagemErro(response.responseJSON.msg);
+                self.mensagemErro(response.responseJSON.msg);
             });
         },
+        excluirDetalhamento(detalhamento, index) {
+            let self = this;
+            $3.ajax({
+                type: "POST",
+                url: "/readequacao/plano-distribuicao/excluir-detalhamento-ajax/idPronac/" + self.id,
+                data: detalhamento
+            }).done(function (response) {
+                self.atualizarItemNaListagem(response);
+            }).fail(function (response) {
+                self.mensagemErro(response.responseJSON.msg);
+            });
+        },
+        restaurarDetalhamento(detalhamento, index) {
+            let self = this;
+            $3.ajax({
+                type: "POST",
+                url: "/readequacao/plano-distribuicao/restaurar-detalhamento-ajax/idPronac/" + self.id,
+                data: detalhamento
+            }).done(function (response) {
+                self.atualizarItemNaListagem(response);
+            }).fail(function (response) {
+                self.mensagemErro(response.responseJSON.msg);
+            });
+        },
+        atualizarItemNaListagem(response) {
+            let self = this;
+            if (response.success == 'true') {
+                let index = self.$data.detalhamentos.map(
+                    item => item.idDetalhaPlanoDistribuicao
+                ).indexOf(response.data.idDetalhaPlanoDistribuicao);
+
+                Vue.set(self.detalhamentos, index, response.data);
+                self.mensagemSucesso(response.msg);
+                return true;
+            }
+        },
         obterDetalhamentos: function () {
-            var vue = this;
-            vue.$data.detalhamentos =  this.arrayDetalhamentos;
+            var self = this;
+            self.$data.detalhamentos =  this.arrayDetalhamentos;
         }
     }
 });

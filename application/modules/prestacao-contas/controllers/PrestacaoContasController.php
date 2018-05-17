@@ -69,11 +69,22 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         if (!$tipoAvaliacao) {
            throw new Exception('Não existe tipoAvaliacao');
         }
-        $idPronac = $this->_request->getParam("idPronac");
         $comprovantes = new PrestacaoContas_Model_spComprovantes();
         $comprovantes = $comprovantes->exec($idPronac, $tipoAvaliacao);
-        $this->view->idPronac = $this->_request->getParam("idPronac");
+        $this->view->idPronac = $idPronac;
         $this->view->comprovantes = $comprovantes;
+
+
+        $projeto = new Projetos();
+        $projeto = $projeto->buscarTodosDadosProjeto($idPronac);
+        $projeto = $projeto->current();
+
+        $this->view->nomeProjeto = $projeto->NomeProjeto;
+        $this->view->pronac = $projeto->pronac;
+        $this->view->idPronac = $projeto->IdPRONAC;
+
+        $diligencia = new Diligencia();
+        $this->view->existeDiligenciaAberta = $diligencia->existeDiligenciaAberta($idPronac, null);
     }
 
     public function salvarAnaliseAction()
@@ -94,7 +105,59 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         $rsComprovantePag->stItemAvaliado = $situacao;
         $rsComprovantePag->save();
         $this->_helper->json(['idComprovantePagamento' => $idComprovantePagamento]);
-        /* $this->redirect('/prestacao-contas/prestacao-contas/amostragem/idPronac/' . $idPronac . '/tipoAvaliacao/90'); */
     }
 
+    public function planilhaAction()
+    {
+        $idpronac = (int)$this->_request->getParam('idpronac');
+
+        if ($idpronac == 0) {
+            throw new Exception('idpronac não informado!');
+        }
+
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $planilha = $planilhaAprovacaoModel->vwComprovacaoFinanceiraProjeto($idpronac); 
+
+        $planilhaJSON = null;
+
+        foreach($planilha as $item) {
+            $planilhaJSON
+                [$item->cdProduto]
+                ['etapa']
+                [$item->cdEtapa]
+                ['UF']
+                [$item->cdUF]
+                ['cidade']
+                [$item->cdCidade]
+                ['item']
+                [$item->idPlanilhaItens] = [
+                    'item' => utf8_encode($item->Item),
+                    'varlorAprovado' => $item->vlAprovado,
+                    'varlorComprovado' => $item->vlComprovado,
+                    'comprovacaoValidada' => $item->ComprovacaoValidada,
+            ];
+
+            $planilhaJSON[$item->cdProduto] += [
+                    'produto' => utf8_encode($item->Produto),
+                    'cdProduto' => $item->cdProduto, 
+            ];
+
+            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa] += [
+                utf8_encode($item->Etapa),
+                $item->cdEtapa
+            ];
+
+            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa]['UF'][$item->cdUF] += [
+                $item->cdUF,
+                $item->Uf
+            ];
+
+            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa]['UF'][$item->cdUF]['cidade'][$item->cdCidade] += [
+                $item->cdCidade,
+                utf8_encode($item->Cidade),
+            ];
+        }
+
+        $this->_helper->json($planilhaJSON);
+    }
 }
