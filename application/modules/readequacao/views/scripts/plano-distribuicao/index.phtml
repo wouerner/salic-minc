@@ -1,4 +1,4 @@
-<?php $class = (empty($this->readequacao) && !$this->podeEditar) ? 'sumir' : ''; ?>
+<?php $class = (empty($this->readequacao) && !$this->podeEditar) ? 'sumir' : '';?>
 
 <div class="container-fluid" id="vue-container">
     <div class="row">
@@ -21,22 +21,7 @@
             </div>
         </div>
         <div class="content">
-            <?php if (empty($this->readequacao)) : ?>
-                <div id="mensagem" class="card">
-                    <div class="card-content">
-                        <p class="center-align">Aqui você pode readequar os detalhamentos do seu plano de
-                            distribuição.</p>
-                        <br>
-                        <p class="center-align bold">
-                            <a class="waves-effect waves-light btn white-text btn-incluir-novo-item"
-                               id="iniciar-readequacao">
-                                <i class="material-icons left">add</i>
-                                <strong>Iniciar readequa&ccedil;&atilde;o</strong>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            <?php endif; ?>
+            <input type="hidden" id="pertenceIn2017" name="pertenceIn2017" value="<?php echo $this->in2017; ?>">
 
             <div id="cabecalho" class="card <?= $class; ?>">
                 <div class="card-content">
@@ -52,28 +37,33 @@
                 </div>
             </div>
 
-            <div id="readequacao" class="card <?= $class; ?>">
-                <div class="card-content">
-                    <input type="hidden" id="pertenceIn2017" name="pertenceIn2017" value="<?php echo $this->in2017; ?>">
-                    <div id="planosDeDistribuicao">
-                        <div id="dynamic-component">
-                            <component
-                                v-bind:is="currentComponent"
-                                :id-pronac="idPronac"
-                            ></component>
+            <div id="dynamic-component">
+                <component
+                    v-bind:is="currentComponent"
+                    :id-pronac="idPronac"
+                    :id-readequacao="idReadequacao"
+                ></component>
+            </div>
+
+            <?php if(!$this->in2017) : ?>
+                <div id="readequacao" class="card <?= $class; ?>">
+                    <div class="card-content">
+                        <div id="planosDeDistribuicao">
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="formulario" class="card <?= $class; ?>">
-                <div class="card-content">
-                    <?php echo $this->partial("partials/formulario-salvar-readequacao.phtml", $this); ?>
+                <div id="formulario" class="card <?= $class; ?>">
+                    <div class="card-content">
+                        <?php echo $this->partial("partials/formulario-salvar-readequacao.phtml", $this); ?>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
+
+
 
 <script src="/public/js/vue.js" type="text/javascript"></script>
 <script src="/public/scripts/plugins/moment-with-locales.js"></script>
@@ -103,6 +93,8 @@
 <script src="/public/scripts/plano-distribuicao/plano-distribuicao-visualizar-produto-resumido.vue.js"
         type="text/javascript"></script>
 <script src="/public/scripts/proposta/visualizar/salic-proposta-detalhamento-plano-distribuicao.vue.js"
+        type="text/javascript"></script>
+<script src="/public/scripts/readequacao/readequacao-formulario.vue.js"
         type="text/javascript"></script>
 
 
@@ -140,7 +132,8 @@
         data: {
             currentComponent: '',
             active: false,
-            idPronac: <?= $this->projeto->IdPRONAC;?>
+            idPronac: <?= $this->projeto->IdPRONAC;?>,
+            idReadequacao: <?= $this->readequacao->idReadequacao; ?>
         },
         mounted: function () {
             this.iniciarReadequacao();
@@ -148,13 +141,6 @@
         methods: {
             iniciarReadequacao: function () {
                 let self = this;
-                $("#iniciar-readequacao").on("click", function () {
-                    $("#mensagem").fadeOut('fast');
-                    $(".card.sumir").fadeIn().removeClass('sumir');
-
-                    self.carregarComponenteSelecionado();
-                });
-
                 if($("#idReadequacao").val() != "") {
                     self.carregarComponenteSelecionado();
                 }
@@ -175,7 +161,6 @@
             },
             carregarPlanoDistribuicaoAntigaIN: function () {
                 carregarFormularioAntigaIN();
-//                atualizarDadosPlanosDeDistribuicao();
             }
         }
     })

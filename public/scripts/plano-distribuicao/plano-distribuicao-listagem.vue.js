@@ -1,7 +1,11 @@
 Vue.component('plano-distribuicao-listagem', {
     template: `
-    <div class="plano-distribuicao-listagem card" v-if="produtos">
-        <ul class="collapsible collapsible-produto no-padding" data-collapsible="accordion">
+    <div class="plano-distribuicao-listagem">
+       <div v-if="!produtos.length" class="padding20 center-align">
+            <b>Aguarde! Carregando....</b>
+        </div>
+    
+        <ul v-if="produtos" class="collapsible collapsible-produto no-padding" data-collapsible="accordion">
             <li v-for="produto of produtos">
                 <div class="collapsible-header green-text" :class="{ active: produto.stPrincipal == 1 }">
                     <i class="material-icons">perm_media</i>{{produto.Produto}} 
