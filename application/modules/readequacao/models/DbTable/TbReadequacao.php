@@ -1379,7 +1379,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 throw new Exception('O arquivo n&atilde;o pode ser maior do que <strong>5MB</strong>!');
             }
 
-            $dadosArquivo = array(
+            $dadosArquivo = [
                 'nmArquivo' => $arquivoNome,
                 'sgExtensao' => $arquivoExtensao,
                 'dsTipoPadronizado' => $arquivoTipo,
@@ -1387,18 +1387,18 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'dtEnvio' => new Zend_Db_Expr('GETDATE()'),
                 'dsHash' => $arquivoHash,
                 'stAtivo' => 'A'
-            );
+            ];
             $idArquivo = $tbArquivoDAO->inserir($dadosArquivo);
 
             // ==================== Insere na Tabela tbArquivoImagem ===============================
-            $dadosBinario = array(
+            $dadosBinario = [
                 'idArquivo' => $idArquivo,
                 'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
-            );
+            ];
             $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
             
             // ==================== Insere na Tabela tbDocumento ===============================
-            $dados = array(
+            $dados = [
                 'idTipoDocumento' => 38,
                 'idArquivo' => $idArquivo,
                 'dsDocumento' => 'Solicitação de Readequação',
@@ -1406,26 +1406,29 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'dtValidadeDocumento' => null,
                 'idTipoEventoOrigem' => null,
                 'nmTitulo' => 'Readequacao'
-            );
+            ];
+
+            $documento = $tbDocumentoDAO->inserir($dados);
             
-            $idDocumento = $tbDocumentoDAO->inserir($dados);
-            
-            return $idDocumento['idDocumento'];
+            return [
+                'nomeArquivo' => $arquivoNome,
+                'idDocumento' => $documento['idDocumento']
+            ];
         }
     }
 
     /**
-     * obterReadequacaoTransferenciaRecursos
+     * obterReadequacao
      * 
      * @param integer $idTipoReadequacao
      * @param integer $idReadequacao
      * @param integer $idPronac
      * @return array
      */
-    public function obterReadequacaoTransferenciaRecursos(
+    public function obterDadosReadequacao(
         $idTipoReadequacao,
-        $idReadequacao = '',
-        $idPronac = ''
+        $idPronac = '',
+        $idReadequacao = ''
     )
     {
         $where = [

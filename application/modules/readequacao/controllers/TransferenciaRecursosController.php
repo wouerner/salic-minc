@@ -20,30 +20,6 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         $this->view->projeto = $this->projeto;
     }
 
-    public function dadosReadequacaoAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $idReadequacao = $this->_request->getParam('idReadequacao');
-
-        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos(
-            Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
-            $idReadequacao,
-            $idPronac
-        );
-        
-        if (empty($readequacao)) {
-            $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
-        }
-        
-        $this->_helper->json(
-            [
-                'readequacao' => $readequacao,
-                'mensagem' => $mensagem
-            ]
-        );        
-    }
-    
     public function dadosProjetoTransferidorAction()
     {
         $this->_helper->layout->disableLayout();
@@ -167,48 +143,6 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         }        
     }
     
-    public function uploadReadequacaoAction()
-    {
-        $this->_helper->layout->disableLayout();
-        
-        $mensagem = '';
-        $dados = [];
-        $idReadequacao = $this->_request->getParam('idreadequacao');
-        $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        
-        try {
-            $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-            $dados['idDocumento'] = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
-            
-            $update = $Readequacao_Model_DbTable_TbReadequacao->update(
-                $dados,
-                [
-                    'idReadequacao = ?' => $idReadequacao
-                ]
-            );
-            
-            $readequacao = $Readequacao_Model_DbTable_TbReadequacao->obterReadequacaoTransferenciaRecursos(
-                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
-                $idReadequacao
-            );
-            
-            if (count($readequacao) > 0) {
-                $this->_helper->json(
-                    [
-                        'readequacao' => $readequacao,
-                        'mensagem' => 'Readequação atualizada com sucesso.'
-                    ]
-                );
-            }            
-        } catch (Exception $objException) {
-            $this->_helper->json([
-                'mensagem' => 'Houve um erro ao subir o arquivo da readequação.',
-                'error' => $objException->getMessage()
-            ]);
-            $this->_helper->viewRenderer->setNoRender(true);
-        }
-    }
-
     public function listarProjetosRecebedoresDisponiveisAction()
     {
         $this->_helper->layout->disableLayout();

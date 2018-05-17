@@ -927,7 +927,8 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         try {
             $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-            $idDocumento = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
+            $documento = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
+            $idDocumento = $documento['idDocumento'];
             
             $auth = Zend_Auth::getInstance(); // pega a autenticação
             $tblAgente = new Agente_Model_DbTable_Agentes();
@@ -3645,4 +3646,83 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
         $this->_helper->json(array('mensagens' => $resultado));
     }
+
+    
+    public function obterDadosReadequacaoAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        $idTipoReadequacao = $this->_request->getParam('idTipoReadequacao');
+        $idReadequacao = $this->_request->getParam('idReadequacao');
+        $idPronac = $this->_request->getParam('idPronac');
+
+        try {
+            $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $readequacao = $tbReadequacao->obterDadosReadequacao(
+                $idTipoReadequacao,
+                $idPronac,
+                $idReadequacao
+            );
+            
+            if (empty($readequacao)) {
+                $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
+            }
+            
+            $this->_helper->json(
+                [
+                    'readequacao' => $readequacao,
+                    'mensagem' => $mensagem
+                ]
+            );
+        } catch (Exception $objException) {
+            $this->getResponse()->setHttpResponseCode(412);
+            
+            $this->_helper->json(
+                [
+                    'mensagem' => 'Não foi possível obter a readequação. Erro: ' . $objException->getMessage()
+                ]
+            );
+        }
+    }
+    
+    public function uploadAnexoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        
+        $mensagem = '';
+        $dados = [];
+        $idReadequacao = $this->_request->getParam('idreadequacao');
+        
+        $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        
+        try {
+            $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $documento = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
+
+            $dados['idDocumento'] = $documento['idDocumento'];
+            $update = $Readequacao_Model_DbTable_TbReadequacao->update(
+                $dados,
+                [
+                    'idReadequacao = ?' => $idReadequacao
+                ]
+            );
+
+            $this->_helper->json(
+                [
+                    'readequacao' => [
+                        'idDocumento' => $documento['idDocumento'],
+                        'nomeArquivo' => $documento['nomeArquivo']
+                    ],
+                    'mensagem' => 'Readequação atualizada com sucesso.'
+                ]
+            );
+        } catch (Exception $objException) {
+            $this->_helper->json([
+                'mensagem' => utf8_encode('Houve um erro ao subir o arquivo da readequação.'),
+                'error' => $objException->getMessage()
+            ]);
+
+        }
+    }    
 }

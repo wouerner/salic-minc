@@ -28,54 +28,13 @@ Vue.component('readequacao-transferencia-recursos', {
   <ul class="collapsible">
       <li id="collapsible-first">
           <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
-          <div class="collapsible-body card">
-
-		<div class="card-content">
-		    <span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
-                    <input type="hidden" v-model="readequacao.idReadequacao" />
-		    <div class="row">
-                       <div class="input-field col s12">
-			    <textarea
-				id="textarea1"
-				class="materialize-textarea"
-				ref="readequacaoJustificativa"
-				v-model="readequacao.justificativa"></textarea>
-			    <label for="textarea1">Justificativa *</label>
-			</div>
-		    </div>
-		    <div class="row">
-			<div class="col s12">
-			    <span>Tipo de transfer&ecirc;ncia *</span>
-			    <select
-				class="browser-default"
-				       ref="readequacaoTipoTransferencia"
-				       v-model="readequacao.dsSolicitacao">
-				<option v-for="tipo in tiposTransferencia" v-bind:value="tipo.id">{{tipo.nome}}</option>
-			    </select>
-			</div>
-			<div class="col s12">
-                            <span>Anexar arquivo</span>
-			    <div class="file-field input-field">
-				<div class="btn">
-				    <span>File</span>
-				    <input type="file" name="arquivo" id="arquivo">
-				</div>
-				<div class="file-path-wrapper">
-				    <input class="file-path validate" type="text">
-				</div>
-			    </div>
-                            <a v-bind:href="'/upload/abrir?id=' + readequacao.idArquivo" v-if="readequacao.idArquivo !=''">{{ readequacao.nomeArquivo }} </a>
-			</div>
-		    </div>
-		    <div class="row">
-			<div class="right-align padding20 col s12">
-			    <button
-				v-on:click="salvarReadequacao"
-			       class="btn">Salvar</button>
-			</div>
-		    </div>
-		</div>
-	    </div>
+	      <readequacao-formulario
+		  ref="formulario"
+		  :id-pronac="projetoTransferidor.idPronac"
+		  :id-tipo-readequacao="idTipoReadequacao"
+		  :componente-ds-solicitacao='componente'
+		  v-on:eventoSalvarReadequacao="salvarReadequacao">
+	      </readequacao-formulario>
       </li>
       <li>
 	  <div class="collapsible-header"><i class="material-icons">list</i>Projetos recebedores</div>
@@ -159,8 +118,8 @@ Vue.component('readequacao-transferencia-recursos', {
 </div>
 	    `,
     props: [
-	'id-pronac',
-	'id-tipo-readequacao'	
+	'idPronac',
+	'idTipoReadequacao'
     ],
     mixins: [utils],
     data: function() {
@@ -180,8 +139,6 @@ Vue.component('readequacao-transferencia-recursos', {
 	    projetoRecebedor = function() {
 		return defaultProjetoRecebedor();
 	    },
-	    projetosRecebedores = [],
-	    projetosDisponiveis = [],
 	    tiposTransferencia = [
 		{
 		    'id': 1,
@@ -195,25 +152,24 @@ Vue.component('readequacao-transferencia-recursos', {
 		    'id': 3,
 		    'nome': 'Recursos remanescentes'
 		},
-	    ],
-	    tiposAceitos = ['pdf'],
-	    tamanhoMaximo = 5000000;
+	    ];
 	
 	return {
 	    projetoTransferidor,
 	    readequacao,
 	    projetoRecebedor,
-	    projetosRecebedores,
-	    projetosDisponiveis,
 	    tiposTransferencia,
-	    tiposAceitos,
-	    tamanhoMaximo
+	    projetosRecebedores: [],
+	    projetosDisponiveis: [],
+	    tiposAceitos: ['pdf'],
+	    tamanhoMaximo: 5000000,
+	    componente: 'readequacao-transferencia-recursos-tipo-transferencia'
 	}	
     },
     created: function() {
-	this.obterDadosProjetoTransferidor();
-	this.obterProjetosDisponiveis();
-	this.obterDadosReadequacao();
+	//	this.obterDadosProjetoTransferidor();
+	//	this.obterProjetosDisponiveis();
+	//	this.obterDadosReadequacao();
     },
     mounted: function() {
     },
@@ -288,18 +244,19 @@ Vue.component('readequacao-transferencia-recursos', {
 	    Vue.delete(this.projetosRecebedores, id);
 	    // TODO remover dado ajax
 	},
-	salvarReadequacao: function() {
-	    if (this.readequacao.dsSolicitacao == '' ||
-		this.readequacao.dsSolicitacao == undefined
-	    ) {
-		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o tipo da transfer\xEAncia!");
-		this.$refs.readequacaoTipoTransferencia.focus();
-                return;		
-	    }
+	salvarReadequacao: function(readequacao) {
+	    /* if (readequacao.dsSolicitacao == '' ||
+	       readequacao.dsSolicitacao == undefined
+	       ) {
+	       this.mensagemAlerta("\xC9 obrigat\xF3rio informar o tipo da transfer\xEAncia!");
+	       this.$refs.readequacaoTipoTransferencia.focus();
+	     *     return;		
+	       }*/
 	    
-	    if (this.readequacao.justificativa.length == 0) {
+	    if (readequacao.justificativa.length == 0) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o!");
-		this.$refs.readequacaoJustificativa.focus();		     
+		this.$refs.formulario.$refs.readequacaoJustificativa.focus();
+		
 		return;
 	    }
 
@@ -308,10 +265,10 @@ Vue.component('readequacao-transferencia-recursos', {
                 type: "POST",
                 url: "/readequacao/transferencia-recursos/salvar-readequacao",
 		data: {
-		    idPronac: this.idPronac,
-		    idReadequacao: this.readequacao.idReadequacao,
-		    justificativa: this.readequacao.justificativa,
-		    dsSolicitacao: this.readequacao.dsSolicitacao
+		    idPronac: readequacao.idPronac,
+		    idReadequacao: readequacao.idReadequacao,
+		    justificativa: readequacao.justificativa,
+		    dsSolicitacao: readequacao.dsSolicitacao
 		}
             }).done(function (response) {
 		var arquivo = $('#arquivo')[0].files[0];
@@ -362,7 +319,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		    {},
 		    {
 			type: "POST",
-			url: "/readequacao/transferencia-recursos/upload-readequacao/idreadequacao/" + vue.readequacao.idReadequacao,
+			url: "/readequacao/readequacoes/upload-anexo/idreadequacao/" + vue.readequacao.idReadequacao,
 			processData: false, 
 			contentType: false, 			
 		    },
@@ -371,8 +328,8 @@ Vue.component('readequacao-transferencia-recursos', {
 		    }
 		)
 	    ).done(function(response) {
-		
-		vue.readequacao = response.readequacao;
+		vue.readequacao.idDocumento = response.readequacao.idDocumento;		
+		vue.readequacao.nomeArquivo = response.readequacao.nomeArquivo;
 		callback();
 	    });
 	},	
@@ -452,10 +409,11 @@ Vue.component('readequacao-transferencia-recursos', {
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/dados-readequacao",
 		data: {
+		    idTipoReadequacao: 23, // TODO 
 		    idPronac: vue.idPronac
 		}
             }).done(function (response) {
-                vue.readequacao = response.readequacao;
+                vue.readequacao = response.readequacao;  // TODO: substituir vue por self
 		vue.obterProjetosRecebedores();
             });
 	},
