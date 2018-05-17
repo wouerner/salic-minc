@@ -167,9 +167,9 @@ Vue.component('readequacao-transferencia-recursos', {
 	}	
     },
     created: function() {
-	//	this.obterDadosProjetoTransferidor();
-	//	this.obterProjetosDisponiveis();
-	//	this.obterDadosReadequacao();
+	this.obterDadosProjetoTransferidor();
+//		this.obterProjetosDisponiveis();
+//	this.obterDadosReadequacao();
     },
     mounted: function() {
     },
@@ -221,23 +221,23 @@ Vue.component('readequacao-transferencia-recursos', {
 		this.$refs.projetoRecebedorValorRecebido.$refs.input.focus();
                 return;
 	    }
-	    var vue = this;
+	    var self = this;
 	    $3.ajax({
 		type: "POST",
 		url: "/readequacao/transferencia-recursos/incluir-projeto-recebedor",
 		data: {
-		    idReadequacao: vue.readequacao.idReadequacao,
-		    dsSolicitacao: vue.readequacao.dsSolicitacao,
-		    idPronacTransferidor: vue.projetoTransferidor.idPronac,
-		    idPronacRecebedor: vue.projetoRecebedor.idPronac,
-		    valorRecebido: vue.projetoRecebedor.valorRecebido
+		    idReadequacao: self.readequacao.idReadequacao,
+		    dsSolicitacao: self.readequacao.dsSolicitacao,
+		    idPronacTransferidor: self.projetoTransferidor.idPronac,
+		    idPronacRecebedor: self.projetoRecebedor.idPronac,
+		    valorRecebido: self.projetoRecebedor.valorRecebido
 		}		
 	    }).done(function(response) {
-		vue.$data.projetosRecebedores.push(
+		self.$data.projetosRecebedores.push(
 		    vue.projetoRecebedor
 		);
-		vue.projetoRecebedor = vue.defaultProjetoRecebedor();
-		vue.obterProjetosDisponiveis();
+		self.projetoRecebedor = vue.defaultProjetoRecebedor();
+		self.obterProjetosDisponiveis();
 	    });
 	},
 	excluirRecebedor: function(id) {
@@ -304,8 +304,8 @@ Vue.component('readequacao-transferencia-recursos', {
 	    return true;
 	},
 	subirArquivo: function(arquivo, response, callback) {
-	    let vue = this;
-	    vue.readequacao = response.readequacao;
+	    let self = this;
+	    self.readequacao = response.readequacao;
 
 	    if (!this.validarArquivo(arquivo)) {
 		return;
@@ -319,7 +319,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		    {},
 		    {
 			type: "POST",
-			url: "/readequacao/readequacoes/upload-anexo/idreadequacao/" + vue.readequacao.idReadequacao,
+			url: "/readequacao/readequacoes/upload-anexo/idreadequacao/" + self.readequacao.idReadequacao,
 			processData: false, 
 			contentType: false, 			
 		    },
@@ -328,15 +328,15 @@ Vue.component('readequacao-transferencia-recursos', {
 		    }
 		)
 	    ).done(function(response) {
-		vue.readequacao.idDocumento = response.readequacao.idDocumento;		
-		vue.readequacao.nomeArquivo = response.readequacao.nomeArquivo;
+		self.readequacao.idDocumento = response.readequacao.idDocumento;		
+		self.readequacao.nomeArquivo = response.readequacao.nomeArquivo;
 		callback();
 	    });
 	},	
 	finalizarReadequacao: function() {
 	},
 	obterDadosProjetoTransferidor: function() {	    
-	    let vue = this;
+	    let self = this;
 	    
 	    this.projetoTransferidor = {
 		pronac: 164783,
@@ -346,21 +346,20 @@ Vue.component('readequacao-transferencia-recursos', {
 		valorComprovar: 5234.00,
 		saldoDisponivel: 5234.00
 	    }
-	    
-            $3.ajax({
+
+	    $3.ajax({
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/dados-projeto-transferidor",
 		data: {
-		    idPronac: this.idPronac
+		    idPronac: self.idPronac
 		}
             }).done(function (response) {
-                vue.projetoTransferidor = response.projeto;
+                self.projetoTransferidor = response.projeto;
             });
-	    
 	},
 	obterProjetosDisponiveis: function(idPronac) {
 	    // TODO: buscar projetos disponíveis do mesmo proponente ajax
-	    var vue = this;
+	    var self = this;
 	    $3.ajax({
 		type: "GET",
 		url: "/readequacao/transferencia-recursos/listar-projetos-recebedores-disponiveis",
@@ -368,7 +367,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		    idPronac: this.idPronac
 		}
 	    }).done(function(response) {
-		vue.projetosDisponiveis = response.projetos;
+		self.projetosDisponiveis = response.projetos;
 	    });
 	    
 	    /*
@@ -397,7 +396,7 @@ Vue.component('readequacao-transferencia-recursos', {
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/listar-projetos-recebedores",
 		data: {
-		    idReadequacao: vue.readequacao.idReadequacao
+		    idReadequacao: self.readequacao.idReadequacao
 		}
             }).done(function (response) {
                 console.log(response);
@@ -410,11 +409,11 @@ Vue.component('readequacao-transferencia-recursos', {
                 url: "/readequacao/transferencia-recursos/dados-readequacao",
 		data: {
 		    idTipoReadequacao: 23, // TODO 
-		    idPronac: vue.idPronac
+		    idPronac: self.idPronac
 		}
             }).done(function (response) {
-                vue.readequacao = response.readequacao;  // TODO: substituir vue por self
-		vue.obterProjetosRecebedores();
+                self.readequacao = response.readequacao;  // TODO: substituir vue por self
+		self.obterProjetosRecebedores();
             });
 	},
 	updateRecebedor: function(e) {
