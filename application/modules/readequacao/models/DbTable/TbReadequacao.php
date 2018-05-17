@@ -1379,7 +1379,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 throw new Exception('O arquivo n&atilde;o pode ser maior do que <strong>5MB</strong>!');
             }
 
-            $dadosArquivo = array(
+            $dadosArquivo = [
                 'nmArquivo' => $arquivoNome,
                 'sgExtensao' => $arquivoExtensao,
                 'dsTipoPadronizado' => $arquivoTipo,
@@ -1387,18 +1387,18 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'dtEnvio' => new Zend_Db_Expr('GETDATE()'),
                 'dsHash' => $arquivoHash,
                 'stAtivo' => 'A'
-            );
+            ];
             $idArquivo = $tbArquivoDAO->inserir($dadosArquivo);
 
             // ==================== Insere na Tabela tbArquivoImagem ===============================
-            $dadosBinario = array(
+            $dadosBinario = [
                 'idArquivo' => $idArquivo,
                 'biArquivo' => new Zend_Db_Expr("CONVERT(varbinary(MAX), {$arquivoBinario})")
-            );
+            ];
             $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
             
             // ==================== Insere na Tabela tbDocumento ===============================
-            $dados = array(
+            $dados = [
                 'idTipoDocumento' => 38,
                 'idArquivo' => $idArquivo,
                 'dsDocumento' => 'Solicitação de Readequação',
@@ -1406,19 +1406,34 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'dtValidadeDocumento' => null,
                 'idTipoEventoOrigem' => null,
                 'nmTitulo' => 'Readequacao'
-            );
+            ];
+
+            $documento = $tbDocumentoDAO->inserir($dados);
             
-            $idDocumento = $tbDocumentoDAO->inserir($dados);
-            
-            return $idDocumento['idDocumento'];
+            return [
+                'nomeArquivo' => $arquivoNome,
+                'idDocumento' => $documento['idDocumento']
+            ];
         }
     }
 
-    public function obterReadequacaoTransferenciaRecursos($idReadequacao = '', $idPronac = '')
+    /**
+     * obterReadequacao
+     * 
+     * @param integer $idTipoReadequacao
+     * @param integer $idReadequacao
+     * @param integer $idPronac
+     * @return array
+     */
+    public function obterDadosReadequacao(
+        $idTipoReadequacao,
+        $idPronac = '',
+        $idReadequacao = ''
+    )
     {
         $where = [
-                'a.idTipoReadequacao = ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
-                'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
+            'a.idTipoReadequacao = ?' => $idTipoReadequacao,
+            'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
         ];
         
         if ($idPronac) {
@@ -1435,7 +1450,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'idReadequacao' => $readequacao[0]['idReadequacao'],
                 'idPronac' => $readequacao[0]['idPronac'],
                 'idTipoReadequacao' => $readequacao[0]['idTipoReadequacao'],
-                'tipoTransferencia' => $readequacao[0]['dsSolicitacao'],
+                'dsSolicitacao' => $readequacao[0]['dsSolicitacao'],
                 'justificativa' => $readequacao[0]['dsJustificativa'],
                 'idArquivo' => $readequacao[0]['idArquivo'],
                 'nomeArquivo' => $readequacao[0]['nmArquivo']                

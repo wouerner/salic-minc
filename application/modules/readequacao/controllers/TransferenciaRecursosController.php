@@ -20,26 +20,6 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         $this->view->projeto = $this->projeto;
     }
 
-    public function dadosReadequacaoAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $idReadequacao = $this->_request->getParam('idReadequacao');
-
-        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos($idReadequacao, $idPronac);
-        
-        if (empty($readequacao)) {
-            $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
-        }
-        
-        $this->_helper->json(
-            [
-                'readequacao' => $readequacao,
-                'mensagem' => $mensagem
-            ]
-        );        
-    }
-    
     public function dadosProjetoTransferidorAction()
     {
         $this->_helper->layout->disableLayout();
@@ -48,17 +28,19 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
 
         try {
             $projetos = new Projetos();
-                        
-            $projeto = $projetos->buscarPorPronac($this->idPronac);
+            
+            $projeto = $projetos->buscarProjetoTransferidor($this->idPronac);
             
             if (count($projeto) > 0) {
                 $projetoArr = [
-                    'pronac' => $projeto->Pronac,
-                    'idPronac' => $projeto->IdPRONAC,
-                    'nome' => utf8_encode($projeto->NomeProjeto),
-                    'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado,
-                    'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado,
-                    'area' => utf8_encode($projeto->Area)
+                    'pronac' => $projeto->pronac,
+                    'idPronac' => $projeto->idPronac,
+                    'nome' => utf8_encode($projeto->nomeProjeto),
+                    'valorComprovar' => $projeto->valorAComprovar,
+                    'saldoDisponivel' => $projeto->valorAComprovar,
+                    'area' => utf8_encode($projeto->area),
+                    'idArea' => utf8_encode($projeto->codArea)
+                    
                 ];
             } else {
                 $projetoArr = [];
@@ -100,7 +82,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
             $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
             $dados['idSolicitante'] = $rsAgente->idAgente;
             $dados['dsJustificativa'] = $this->_request->getParam('justificativa');
-            $dados['dsSolicitacao'] = $this->_request->getParam('tipoTransferencia');
+            $dados['dsSolicitacao'] = $this->_request->getParam('dsSolicitacao');
             $dados['stAtendimento'] = 'D';
             $dados['idDocumento'] = null;
             $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
@@ -114,7 +96,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                         'readequacao' => [
                             'idReadequacao' => $idReadequacao,
                             'justificativa' => $this->_request->getParam('justificativa'),
-                            'tipoTransferencia' => $this->_request->getParam('tipoTransferencia'),
+                            'dsSolicitacao' => $this->_request->getParam('dsSolicitacao'),
                         ],
                         'mensagem' => 'Readequação inserida com sucesso.'
                     ]
@@ -130,7 +112,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
             
         } else if ($idReadequacao) {
             $dados['dsJustificativa'] = $this->_request->getParam('justificativa');
-            $dados['dsSolicitacao'] = $this->_request->getParam('tipoTransferencia');
+            $dados['dsSolicitacao'] = $this->_request->getParam('dsSolicitacao');
             
             try {
                 $update = $Readequacao_Model_DbTable_TbReadequacao->update(
@@ -145,7 +127,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
                         'readequacao' => [
                             'idReadequacao' => $idReadequacao,
                             'justificativa' => $this->_request->getParam('justificativa'),
-                            'tipoTransferencia' => $this->_request->getParam('tipoTransferencia'),
+                            'dsSolicitacao' => $this->_request->getParam('dsSolicitacao'),
                         ],
                         'mensagem' => 'Readequação atualizada com sucesso.'
                     ]
@@ -161,49 +143,33 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         }        
     }
     
-    public function uploadReadequacaoAction()
-    {
-        $this->_helper->layout->disableLayout();
-        
-        $mensagem = '';
-        $dados = [];
-        $idReadequacao = $this->_request->getParam('idreadequacao');
-        $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        
-        try {
-            $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-            $dados['idDocumento'] = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
-            
-            $update = $Readequacao_Model_DbTable_TbReadequacao->update(
-                $dados,
-                [
-                    'idReadequacao = ?' => $idReadequacao
-                ]
-            );
-
-            $readequacao = $tbReadequacao->obterReadequacaoTransferenciaRecursos($idReadequacao);
-            
-            if (count($readequacao) > 0) {
-                $this->_helper->json(
-                    [
-                        'readequacao' => $readequacao,
-                        'mensagem' => 'Readequação atualizada com sucesso.'
-                    ]
-                );
-            }            
-        } catch (Exception $objException) {
-            $this->_helper->json([
-                'mensagem' => 'Houve um erro ao subir o arquivo da readequação.',
-                'error' => $objException->getMessage()
-            ]);
-            $this->_helper->viewRenderer->setNoRender(true);
-        }
-    }
-
     public function listarProjetosRecebedoresDisponiveisAction()
     {
         $this->_helper->layout->disableLayout();
-        $this->view->arrResult = [];
+        $idPronac = $this->_request->getParam('idPronac');
+        
+        try {
+            $projeto = new Projetos();
+            $projetosDisponiveis = $projeto->buscarProjetosRecebedoresDisponiveis($idPronac);
+            $projetosDisponiveisMontado = [];
+
+            foreach ($projetosDisponiveis as $projeto) {
+                $projetosDisponiveisMontado[] = [
+                    'idPronac' => $projeto->IdPRONAC,
+                    'pronac' => $projeto->AnoProjeto . $projeto->Sequencial,
+                    'nome' => utf8_encode($projeto->NomeProjeto)
+                ];
+            }
+            
+            $this->_helper->json([
+                'projetos' => $projetosDisponiveisMontado
+            ]);
+        } catch (Exception $objException) {
+            $this->_helper->json([
+                'mensagem' => 'Não há projetos disponíveis para o pronac fornecido.',
+                'error' => $objException->getMessage()
+            ]);
+        }
     }
     
     public function listarProjetosRecebedoresAction()
@@ -252,7 +218,7 @@ class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action
         
         try {
             $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
-            $dados['tpTransferencia'] = $this->_request->getParam('tipoTransferencia');            
+            $dados['tpTransferencia'] = $this->_request->getParam('dsSolicitacao');
             $dados['idPronacRecebedor'] = $this->_request->getParam('idPronacRecebedor');
             $dados['vlRecebido'] = (float) str_replace(',', '.', $this->_request->getParam('valorRecebido'));
             $dados['siAnaliseTecnica'] = '';
