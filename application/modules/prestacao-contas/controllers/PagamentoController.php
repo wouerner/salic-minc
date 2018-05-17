@@ -1,5 +1,5 @@
 <?php
-class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_Abstract
+class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstract
 {
     public function init()
     {
