@@ -1,14 +1,14 @@
 Vue.component('readequacao-plano-distribuicao', {
     template: `
         <div class="readequacao-plano-distribuicao">
-            <div v-show="!mostrarFormulario" id="mensagem" class="card">
+            <div v-if="mostrarMensagem" id="mensagem" class="card">
                 <div class="card-content">
-                    <p class="center-align">Aqui você pode readequar os detalhamentos do seu plano de
-                        distribuição.</p>
+                    <p class="center-align">Aqui voc&ecirc; pode readequar os detalhamentos do seu plano de
+                        distribui&ccedil;&atilde;o.</p>
                     <br>
                     <p class="center-align bold">
                         <a class="waves-effect waves-light btn white-text btn-incluir-novo-item"
-                           @click="mostrarFormulario = !mostrarFormulario"
+                           @click.prevent="criarReadequacao"
                            >
                             <i class="material-icons left">add</i>
                             <strong>Iniciar readequa&ccedil;&atilde;o</strong>
@@ -18,7 +18,7 @@ Vue.component('readequacao-plano-distribuicao', {
             </div>
             <ul v-if="mostrarFormulario" class="collapsible no-padding" data-collapsible="accordion">
                 <li>
-                    <div class="collapsible-header active"><i class="material-icons">edit</i>Alterar Plano de Distribui&ccedil;&atilde;o</div>
+                    <div class="collapsible-header active"><i class="material-icons">edit</i>Readequar Plano de Distribui&ccedil;&atilde;o</div>
                     <div class="collapsible-body padding10">
                         <plano-distribuicao-listagem
                             :id-projeto="idPronac"
@@ -32,7 +32,7 @@ Vue.component('readequacao-plano-distribuicao', {
                     </div>
                 </li>
                 <li>
-                    <div class="collapsible-header"><i class="material-icons">assignment</i>Salvar Solicita&ccedil;&atilde;o</div>
+                    <div class="collapsible-header"><i class="material-icons">assignment</i>Justificar readequa&ccedil;&atilde;o</div>
                     <div class="collapsible-body padding10">
                         <readequacao-formulario
                             v-if="mostrarFormulario"
@@ -45,14 +45,22 @@ Vue.component('readequacao-plano-distribuicao', {
                     </div>
                 </li>
             </ul>
-            <readequacao-botoes-footer
-                v-if="mostrarFormulario"
-                :disabled="disabled"
-                :active="active"
-                :id-pronac="idPronac"
-                :id-tipo-readequacao="idTipoReadequacao"
-                v-on:eventoBotoes="tratarEventoBotoes"
-            ></readequacao-botoes-footer>
+            <div v-if="mostrarFormulario" class="readequacao-plano-distribuicao padding20 center-align">
+                <a
+                    href="javascript:void(0)"
+                    class="btn waves-effect waves-light btn-danger btn-excluir"
+                    title="Excluir readequa\u00E7\u00E3o"
+                    @click="excluirReadequacao"
+                >Excluir <i class="material-icons right">delete</i>
+                </a>
+                <a
+                    href="javascript:void(0)"
+                    class="waves-effect waves-light btn btn-secondary"
+                    title="Finalizar readequa\u00E7\u00E3o e enviar para o MinC"
+                    @click="finalizarReadequacao"
+                >Finalizar<i class="material-icons right">send</i>
+                </a>
+            </div>
         </div>
     `,
     data: function () {
@@ -62,34 +70,33 @@ Vue.component('readequacao-plano-distribuicao', {
             locais: {},
             active: true,
             mostrarFormulario: false,
+            mostrarMensagem: false,
             idTipoReadequacao: 11,
             componenteDetalhamento: "readequacao-plano-distribuicao-detalhamentos"
         }
     },
     props: {
         'idPronac': '',
-        'idReadequacao': '',
         'disabled': false
     },
     mixins: [utils],
     watch: {
-        mostrarFormulario: function (value) {
-            if (value === true) {
-                this.obterPlanoDistribuicao(this.idPronac);
-                this.obterLocaisRealizacao(this.idPronac);
+        produtos: function (value) {
+            if (value.length > 0) {
+                this.mostrarFormulario = true;
+                this.obterLocaisRealizacao()
+            } else {
+                this.mostrarMensagem = true;
             }
         }
     },
     created: function () {
         let self = this;
         detalhamentoEventBus.$on('busAtualizarProdutos', function (response) {
-            self.obterPlanoDistribuicao(self.idPronac);
+            self.obterPlanoDistribuicao();
         });
 
-        if (this.idReadequacao != '') {
-            console.log('teste');
-            this.mostrarFormulario = true;
-        }
+        this.obterPlanoDistribuicao();
 
         $3(document).ajaxStart(function () {
             $3('#container-loading').fadeIn('slow');
@@ -99,13 +106,29 @@ Vue.component('readequacao-plano-distribuicao', {
         });
     },
     methods: {
-        obterPlanoDistribuicao: function (id) {
+        criarReadequacao: function () {
+            let self = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/plano-distribuicao/criar-readequacao-ajax",
+                data: {
+                    idPronac: self.idPronac
+                }
+            }).done(function (response) {
+                self.obterPlanoDistribuicao(self.idPronac);
+                self.mostrarMensagem = false;
+                self.mostrarFormulario = true;
+            }).fail(function (response) {
+                self.mensagemErro(response.responseJSON.msg)
+            });
+        },
+        obterPlanoDistribuicao: function () {
             let self = this;
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/plano-distribuicao/obter-plano-distribuicao-detalhamentos-ajax",
                 data: {
-                    idPronac: id
+                    idPronac: self.idPronac
                 }
             }).done(function (response) {
                 let dados = response.data;
@@ -115,13 +138,13 @@ Vue.component('readequacao-plano-distribuicao', {
                 self.mensagemErro(response.responseJSON.msg)
             });
         },
-        obterLocaisRealizacao: function (id) {
+        obterLocaisRealizacao: function () {
             let self = this;
             $3.ajax({
                 type: "GET",
                 url: "/readequacao/local-realizacao/obter-locais-de-realizacao-ajax",
                 data: {
-                    idPronac: id
+                    idPronac: self.idPronac
                 }
             }).done(function (response) {
                 self.locais = response.data;
@@ -132,33 +155,26 @@ Vue.component('readequacao-plano-distribuicao', {
         salvarReadequacao: function (readequacao) {
             console.log(readequacao);
         },
-        tratarEventoBotoes: function () {
-            console.log('eventooo');
-        }
-    }
-});
+        excluirReadequacao: function () {
+            let self = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/plano-distribuicao/excluir-readequacao-planoDistribuicao-ajax",
+                data: {
+                    idPronac: self.idPronac
+                }
+            }).done(function (response) {
+                self.restaurarFormulario();
+                self.mensagemSucesso(response.msg);
+            }).fail(function (response) {
+                self.mensagemErro(response.responseJSON.msg)
+            });
+        },
+        finalizarReadequacao: function() {
 
-Vue.component('readequacao-botoes-footer', {
-    template: `
-        <div class="readequacao-plano-distribuicao padding20 center-align">
-            <a
-                href="javascript:void(0)"
-                class="btn waves-effect waves-light btn-danger btn-excluir"
-                title="Excluir readequa&ccedil;&atilde;o"
-                readequacao="<?php echo $this->readequacao->idReadequacao; ?>"
-            >Excluir <i class="material-icons right">delete</i>
-            </a>
-            <a
-                href="javascript:void(0)"
-                class="waves-effect waves-light btn btn-secondary"
-                id="btn_finalizar"
-            >
-                <i class="material-icons right">send</i>Finalizar
-            </a>
-        </div>
-    `,
-    props: {
-        'idPronac': '',
-        'disabled': false
+        },
+        restaurarFormulario: function () {
+            Object.assign(this.$data, this.$options.data.apply(this))
+        },
     }
 });

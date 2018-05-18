@@ -1,4 +1,4 @@
-<?php $class = (empty($this->readequacao) && !$this->podeEditar) ? 'sumir' : '';?>
+<?php $class = (empty($this->readequacao) && !$this->podeEditar) ? 'sumir' : ''; ?>
 
 <div class="container-fluid" id="vue-container">
     <div class="row">
@@ -41,11 +41,10 @@
                 <component
                     v-bind:is="currentComponent"
                     :id-pronac="idPronac"
-                    :id-readequacao="idReadequacao"
                 ></component>
             </div>
 
-            <?php if(!$this->in2017) : ?>
+            <?php if (!$this->in2017) : ?>
                 <div id="readequacao" class="card <?= $class; ?>">
                     <div class="card-content">
                         <div id="planosDeDistribuicao">
@@ -62,7 +61,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script src="/public/js/vue.js" type="text/javascript"></script>
@@ -132,8 +130,7 @@
         data: {
             currentComponent: '',
             active: false,
-            idPronac: <?= $this->projeto->IdPRONAC;?>,
-            idReadequacao: <?= $this->readequacao->idReadequacao; ?>
+            idPronac: <?= $this->projeto->IdPRONAC;?>
         },
         mounted: function () {
             this.iniciarReadequacao();
@@ -141,7 +138,7 @@
         methods: {
             iniciarReadequacao: function () {
                 let self = this;
-                if($("#idReadequacao").val() != "") {
+                if ($("#idReadequacao").val() != "") {
                     self.carregarComponenteSelecionado();
                 }
             },
