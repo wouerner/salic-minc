@@ -405,7 +405,8 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 CAST(b.dsEncaminhamento AS TEXT) AS dsEncaminhamento,
                 a.stEstado,
                 e.idArquivo,
-                e.nmArquivo
+                e.nmArquivo,
+                d.idDocumento
             "),
             'SAC.dbo'
         );
@@ -1453,7 +1454,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'idTipoReadequacao' => $readequacao[0]['idTipoReadequacao'],
                 'dsSolicitacao' => $readequacao[0]['dsSolicitacao'],
                 'justificativa' => $readequacao[0]['dsJustificativa'],
-                'idArquivo' => $readequacao[0]['idArquivo'],
+                'idDocumento' => $readequacao[0]['idDocumento'],
                 'nomeArquivo' => $readequacao[0]['nmArquivo']                
             ];
         }

@@ -1,6 +1,6 @@
 <?php
 
-class Readequacao_TransferenciaRecursosController extends MinC_Controller_Action_Abstract
+class Readequacao_TransferenciaRecursosController extends Readequacao_GenericController 
 {
     public function init()
     {

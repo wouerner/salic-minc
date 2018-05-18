@@ -33,7 +33,13 @@ Vue.component('readequacao-formulario', {
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
                         </div>
+      			<input type="hidden" v-model="readequacao.idDocumento"/>
                     </div>
+                    <div class="col s11">
+			<a v-bind:href="'/upload/abrir?id=' + readequacao.idDocumento" v-if="readequacao.idDocumento !=''">
+                            {{readequacao.nomeArquivo }} 
+			</a>
+		    </div>
 		    <div class="col s1">
 			<a
 			  v-show="readequacao.idDocumento"
@@ -41,11 +47,6 @@ Vue.component('readequacao-formulario', {
 			  class="btn small waves-effect waves-light btn-danger">
 			    <i class="material-icons">delete</i>Salvar
 			</a>		
-		    </div>
-                    <div class="col s11">
-			<a v-bind:href="'/upload/abrir?id=' + readequacao.idDocumento" v-if="readequacao.idDocumento !=''">
-                            {{readequacao.nomeArquivo }} 
-			</a>
 		    </div>
                 </div>
             </div>
@@ -64,14 +65,14 @@ Vue.component('readequacao-formulario', {
     data: function () {
         return {
             readequacao: {
-                'idPronac': null,
-                'idReadequacao': null,
+                'idPronac': '',
+                'idReadequacao': '',
                 'justificativa': '',
-                'arquivo': null,
-                'idTipoReadequacao': null,
+                'arquivo': '',
+                'idTipoReadequacao': '',
                 'dsSolicitacao': '',
-                'idDocumento': null,
-                'nomeArquivo': null
+                'idDocumento': '',
+                'nomeArquivo': ''
             },
 	    arquivo: {
 		tamanhoMaximo: 500000,
@@ -89,7 +90,7 @@ Vue.component('readequacao-formulario', {
         this.obterDadosReadequacao();
     },
     methods: {
-        obterDadosReadequacao: function (idPronac) {
+        obterDadosReadequacao: function () {
             let self = this;
             $3.ajax({
                 type: "GET",
@@ -99,7 +100,9 @@ Vue.component('readequacao-formulario', {
                     idPronac: self.idPronac
                 }
             }).done(function (response) {
-                self.readequacao = response.readequacao;
+		if (response.readequacao != null) {
+                    self.readequacao = response.readequacao;
+		}
             });
         },
         salvarReadequacao: function () {
@@ -118,20 +121,20 @@ Vue.component('readequacao-formulario', {
 	    if (!this.validarDocumento(arquivo)) {
 		return;
 	    }
-	    
+	    console.log(self.readequacao);
 	    var formData = new FormData();
 	    formData.append('arquivo', arquivo);
 	    formData.append('idPronac', self.idPronac);
 	    formData.append('idReadequacao', self.readequacao.idReadequacao);
-	    formData.append('idDocumentoAtual', self.arquivo.idDocumento);
-	    formData.append('idTipoReadequacao', self.readequacao.idTipoReadequacao);
+	    formData.append('idTipoReadequacao', self.idTipoReadequacao);
+	    formData.append('idDocumentoAtual', self.readequacao.idDocumento);
 	    
 	    $3.ajax(
 		Object.assign(
 		    {},
 		    {
 			type: "POST",
-			url: "/readequacao/readequacoes/salvar-arquivo/idPronac/" + self.idPronac,
+			url: "/readequacao/readequacoes/salvar-documento/idPronac/" + self.idPronac,
 			processData: false, 
 			contentType: false, 			
 		    },
@@ -140,15 +143,28 @@ Vue.component('readequacao-formulario', {
 		    }
 		)
 	    ).done(function(response) {
-		self.readequacao.idDocumento = response.documento.idDocumento;
-		self.readequacao.nomeArquivo = response.documento.nomeArquivo;
+		console.log(response);
+		self.readequacao.idDocumento = response.readequacao.idDocumento;
+		self.readequacao.nomeArquivo = response.readequacao.nomeArquivo;
 		self.readequacao.idReadequacao = response.readequacao.idReadequacao;
 	    });
 	},
 	excluirDocumento: function() {
-	    
-	},
-	validarDocumento: function(arquivo) {
+	    let self = this;
+	    $3.ajax({
+                type: "GET",
+                url: "/readequacao/readequacoes/excluir-documento",
+                data: {
+		    idDocumento: self.readequacao.idDocumento,
+		    idPronac: self.idPronac,
+		    idReadequacao: self.readequacao.idReadequacao
+                }
+	    }).done(function (response) {
+		self.mensagemSucesso("Documento excluido com sucesso.");
+	    }).fail(function (response) {
+		self.mensagemAlerta(response.mensagem);
+	    });
+	},validarDocumento: function(arquivo) {
 	    if (!this.arquivo.tiposAceitos.includes(arquivo.name.split(".").pop().toLowerCase())) {
 		this.mensagemAlerta("Extens\xE3o de arquivo inv\xE1lida. Envie arquivos nos tipos: " + this.arquivo.tiposAceitos.join(','));
 		return;

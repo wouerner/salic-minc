@@ -30,7 +30,7 @@ Vue.component('readequacao-transferencia-recursos', {
           <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
 	      <readequacao-formulario
 		  ref="formulario"
-		  :id-pronac="projetoTransferidor.idPronac"
+		  :id-pronac="idPronac"
 		  :id-tipo-readequacao="idTipoReadequacao"
 		  :componente-ds-solicitacao='componente'
 		  v-on:eventoSalvarReadequacao="salvarReadequacao">
@@ -292,7 +292,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	},
 	obterDadosProjetoTransferidor: function() {	    
 	    let self = this;
-	    
+	    /*
 	    this.projetoTransferidor = {
 		pronac: 164783,
 		idPronac: 166121,
@@ -300,8 +300,8 @@ Vue.component('readequacao-transferencia-recursos', {
 		area: '7',
 		valorComprovar: 5234.00,
 		saldoDisponivel: 5234.00
-	    }
-
+	    }*/
+	    
 	    $3.ajax({
                 type: "GET",
                 url: "/readequacao/transferencia-recursos/dados-projeto-transferidor",

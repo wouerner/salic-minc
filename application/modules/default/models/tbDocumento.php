@@ -95,14 +95,13 @@ class tbDocumento extends MinC_Db_Table_Abstract
     public function excluirDocumento($idDocumento)
     {
         try {
-            $dadosArquivo = $tbDocumento->buscar(
+            $dadosArquivo = $this->buscar(
                 [
                     'idDocumento =?'=>$idDocumento
                 ])->current();
             
             if ($dadosArquivo) {
-                $tbDocumento = new tbDocumento();
-                $tbDocumento->excluir("idArquivo = {$dadosArquivo->idArquivo} and idDocumento= {$idDocumento} ");
+                $this->excluir("idArquivo = {$dadosArquivo->idArquivo} and idDocumento= {$idDocumento} ");
                 
                 $tbArquivoImagem = new tbArquivoImagem();
                 $tbArquivoImagem->excluir("idArquivo =  {$dadosArquivo->idArquivo} ");

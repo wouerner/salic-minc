@@ -32,7 +32,7 @@ abstract class Readequacao_GenericController extends MinC_Controller_Action_Abst
             $url = Zend_Controller_Front::getInstance()->getBaseUrl();
             $this->redirect($url);
         }
-
+        
         if (isset($auth->getIdentity()->usu_codigo)) { // autenticacao novo salic
             $this->view->usuarioInterno = true;
             $this->idUsuario = $auth->getIdentity()->usu_codigo;
@@ -49,12 +49,12 @@ abstract class Readequacao_GenericController extends MinC_Controller_Action_Abst
         } else { // autenticacao scriptcase
             parent::perfil(4, $PermissoesGrupo);
             $this->idUsuario = (isset($_GET["idusuario"])) ? $_GET["idusuario"] : 0;
-
+            
             $this->verificarPermissaoAcesso(false, true, false);
         }
 
         $idPronac = $this->_request->getParam("idPronac");
-
+        
         $this->idPronacHash = Seguranca::encrypt($idPronac);
         if (strlen($idPronac) > 7) {
             $this->idPronacHash = $idPronac;

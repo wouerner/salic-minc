@@ -3665,7 +3665,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     public function obterDadosReadequacaoAction()
     {
         $this->_helper->layout->disableLayout();
-
+        
         $idTipoReadequacao = $this->_request->getParam('idTipoReadequacao');
         $idReadequacao = $this->_request->getParam('idReadequacao');
         $idPronac = $this->_request->getParam('idPronac');
@@ -3699,22 +3699,21 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
     }
 
-    public function excluirArquivoAction()
+    public function excluirDocumentoAction()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
         
         $idPronac = $this->_request->getParam('idPronac');
-        $idDocumentoAtual = $this->_request->getParam('idDocumentoAtual');
+        $idDocumento = $this->_request->getParam('idDocumento');
         $idReadequacao = $this->_request->getParam('idReadequacao');
-
+        
         try {
             $tbDocumento = new tbDocumento();
             $tbDocumento->excluirDocumento($idDocumento);
             
             $arrData = [];
             $arrData['idPronac'] = $idPronac;
-            $arrData['idTipoReadequacao'] = $idTipoReadequacao;
             $arrData['idDocumento'] = null;
             $arrData['idReadequacao'] = $idReadequacao;
             
@@ -3722,6 +3721,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($arrData);
             
         } catch (Exception $objException) {
+            $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json([
                 'mensagem' => utf8_encode('Houve um erro ao excluir o documento.'),
                 'error' => $objException->getMessage()
@@ -3729,7 +3729,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
     }
     
-    public function salvarArquivoAction()
+    public function salvarDocumentoAction()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
@@ -3749,7 +3749,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             
             if ($idDocumentoAtual) {
                 $tbDocumento = new tbDocumento();
-                $tbDocumento->excluirDocumento($idDocumento);                             
+                $tbDocumento->excluirDocumento($idDocumentoAtual);
             }
             
             $arrData = [];
