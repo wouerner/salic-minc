@@ -161,8 +161,6 @@ Vue.component('readequacao-transferencia-recursos', {
 	    tiposTransferencia,
 	    projetosRecebedores: [],
 	    projetosDisponiveis: [],
-	    tiposAceitos: ['pdf'],
-	    tamanhoMaximo: 5000000,
 	    componente: 'readequacao-transferencia-recursos-tipo-transferencia'
 	}	
     },
@@ -290,49 +288,6 @@ Vue.component('readequacao-transferencia-recursos', {
 		}
             });
 	},
-	validarArquivo: function(arquivo) {
-	    if (!this.tiposAceitos.includes(arquivo.name.split(".").pop().toLowerCase())) {
-		this.mensagemAlerta("Extens\xE3o de arquivo inv\xE1lida. Envie arquivos nos tipos: " + this.tiposAceitos.join(','));
-		return;
-	    }
-	    
-	    if (arquivo.size > this.tamanhoMaximo) {
-		this.mensagemAlerta("Arquivo ultrapassou o limite de " + this.tamanhoMaximo);
-		return;
-	    }
-	    
-	    return true;
-	},
-	subirArquivo: function(arquivo, response, callback) {
-	    let self = this;
-	    self.readequacao = response.readequacao;
-
-	    if (!this.validarArquivo(arquivo)) {
-		return;
-	    }
-	    	    
-	    var formData = new FormData();
-	    formData.append('arquivo', arquivo);
-	    
-	    $3.ajax(
-		Object.assign(
-		    {},
-		    {
-			type: "POST",
-			url: "/readequacao/readequacoes/upload-anexo/idreadequacao/" + self.readequacao.idReadequacao,
-			processData: false, 
-			contentType: false, 			
-		    },
-		    {
-			data: formData
-		    }
-		)
-	    ).done(function(response) {
-		self.readequacao.idDocumento = response.readequacao.idDocumento;		
-		self.readequacao.nomeArquivo = response.readequacao.nomeArquivo;
-		callback();
-	    });
-	},	
 	finalizarReadequacao: function() {
 	},
 	obterDadosProjetoTransferidor: function() {	    

@@ -25,15 +25,28 @@ Vue.component('readequacao-formulario', {
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>File</span>
-                            <input type="file" name="arquivo" id="arquivo">
+				<input type="file" 
+				       name="arquivo" 
+				       id="arquivo"
+				@change="subirDocumento">
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
                         </div>
                     </div>
-                    <a v-bind:href="'/upload/abrir?id=' + readequacao.idDocumento" v-if="readequacao.idDocumento !=''">
-                        {{readequacao.nomeArquivo }} 
-                    </a>
+		    <div class="col s1">
+			<a
+			  v-show="readequacao.idDocumento"
+			    v-on:click="excluirDocumento"
+			  class="btn small waves-effect waves-light btn-danger">
+			    <i class="material-icons">delete</i>Salvar
+			</a>		
+		    </div>
+                    <div class="col s11">
+			<a v-bind:href="'/upload/abrir?id=' + readequacao.idDocumento" v-if="readequacao.idDocumento !=''">
+                            {{readequacao.nomeArquivo }} 
+			</a>
+		    </div>
                 </div>
             </div>
             <div class="row">
@@ -59,7 +72,11 @@ Vue.component('readequacao-formulario', {
                 'dsSolicitacao': '',
                 'idDocumento': null,
                 'nomeArquivo': null
-            }
+            },
+	    arquivo: {
+		tamanhoMaximo: 500000,
+		tiposAceitos: ['pdf']
+	    }
         }
     },
     props: {
@@ -93,6 +110,56 @@ Vue.component('readequacao-formulario', {
             }
 
             this.$emit('eventoSalvarReadequacao', this.readequacao);
-        }
-    }
+        },
+	subirDocumento: function() {
+	    let arquivo = $('#arquivo')[0].files[0],
+		self = this;
+	    
+	    if (!this.validarDocumento(arquivo)) {
+		return;
+	    }
+	    
+	    var formData = new FormData();
+	    formData.append('arquivo', arquivo);
+	    formData.append('idPronac', self.idPronac);
+	    formData.append('idReadequacao', self.readequacao.idReadequacao);
+	    formData.append('idDocumentoAtual', self.arquivo.idDocumento);
+	    formData.append('idTipoReadequacao', self.readequacao.idTipoReadequacao);
+	    
+	    $3.ajax(
+		Object.assign(
+		    {},
+		    {
+			type: "POST",
+			url: "/readequacao/readequacoes/salvar-arquivo/idPronac/" + self.idPronac,
+			processData: false, 
+			contentType: false, 			
+		    },
+		    {
+			data: formData,
+		    }
+		)
+	    ).done(function(response) {
+		self.readequacao.idDocumento = response.documento.idDocumento;
+		self.readequacao.nomeArquivo = response.documento.nomeArquivo;
+		self.readequacao.idReadequacao = response.readequacao.idReadequacao;
+	    });
+	},
+	excluirDocumento: function() {
+	    
+	},
+	validarDocumento: function(arquivo) {
+	    if (!this.arquivo.tiposAceitos.includes(arquivo.name.split(".").pop().toLowerCase())) {
+		this.mensagemAlerta("Extens\xE3o de arquivo inv\xE1lida. Envie arquivos nos tipos: " + this.arquivo.tiposAceitos.join(','));
+		return;
+	    }
+	    
+	    if (arquivo.size > this.arquivo.tamanhoMaximo) {
+		this.mensagemAlerta("Arquivo ultrapassou o limite de " + this.arquivo.tamanhoMaximo);
+		return;
+	    }
+	    
+	    return true;
+	}
+    },
 });

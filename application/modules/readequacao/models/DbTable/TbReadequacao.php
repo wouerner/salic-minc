@@ -1355,7 +1355,8 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         }
     }
 
-    public function insereArquivo()
+    // TODO: quase abstraido - mover para controller / módulo / serviço específico de gerenciamento arquivo
+    public function inserirDocumento()
     {
         $tbArquivoDAO = new tbArquivo();
         $tbArquivoImagemDAO = new tbArquivoImagem();
@@ -1397,7 +1398,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             ];
             $idArquivo = $tbArquivoImagemDAO->inserir($dadosBinario);
             
-            // ==================== Insere na Tabela tbDocumento ===============================
+            // TODO especifico / abstrair
             $dados = [
                 'idTipoDocumento' => 38,
                 'idArquivo' => $idArquivo,

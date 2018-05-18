@@ -942,7 +942,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         try {
             $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-            $documento = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
+            $documento = $Readequacao_Model_DbTable_TbReadequacao->inserirDocumento();
             $idDocumento = $documento['idDocumento'];
             
             $auth = Zend_Auth::getInstance(); // pega a autenticação
@@ -1032,22 +1032,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
             if (!empty($dados->idDocumento)) {
                 $tbDocumento = new tbDocumento();
-                $dadosArquivo = $tbDocumento->buscar(array('idDocumento =?'=>$dados->idDocumento))->current();
-
-                if ($dadosArquivo) {
-                    $tbDocumento = new tbDocumento();
-                    $tbDocumento->excluir("idArquivo = {$dadosArquivo->idArquivo} and idDocumento= {$dados->idDocumento} ");
-
-                    $tbArquivoImagem = new tbArquivoImagem();
-                    $tbArquivoImagem->excluir("idArquivo =  {$dadosArquivo->idArquivo} ");
-
-                    $tbArquivo = new tbArquivo();
-                    $tbArquivo->excluir("idArquivo = {$dadosArquivo->idArquivo} ");
-
-//                    $tbArquivo = new tbArquivo();
-//                    $exclusaoArquivos = $tbArquivo->excluirArquivosDocumentais($dadosArquivo->idArquivo, $dados->idDocumento);
-//                    if (!$exclusaoArquivos) throw new Exception("Erro ao excluir o tipo de readequa&ccedil;&atilde;o!");
-                }
+                $tbDocumento->excluirDocumento($dados->idDocumento);
             }
 
             if ($dados->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA) {
@@ -3714,44 +3699,90 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
     }
 
-    public function uploadAnexoAction()
+    public function excluirArquivoAction()
     {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
-        $mensagem = '';
-        $dados = [];
-        $idReadequacao = $this->_request->getParam('idreadequacao');
-
-        $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        
+        $idPronac = $this->_request->getParam('idPronac');
+        $idDocumentoAtual = $this->_request->getParam('idDocumentoAtual');
+        $idReadequacao = $this->_request->getParam('idReadequacao');
 
         try {
-            $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-            $documento = $Readequacao_Model_DbTable_TbReadequacao->insereArquivo();
+            $tbDocumento = new tbDocumento();
+            $tbDocumento->excluirDocumento($idDocumento);
+            
+            $arrData = [];
+            $arrData['idPronac'] = $idPronac;
+            $arrData['idTipoReadequacao'] = $idTipoReadequacao;
+            $arrData['idDocumento'] = null;
+            $arrData['idReadequacao'] = $idReadequacao;
+            
+            $TbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
+            $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($arrData);
+            
+        } catch (Exception $objException) {
+            $this->_helper->json([
+                'mensagem' => utf8_encode('Houve um erro ao excluir o documento.'),
+                'error' => $objException->getMessage()
+            ]);
+        }
+    }
+    
+    public function salvarArquivoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        
+        $idPronac = $this->_request->getParam('idPronac');
+        $idDocumentoAtual = $this->_request->getParam('idDocumentoAtual');
+        $idReadequacao = $this->_request->getParam('idReadequacao');
+        $idTipoReadequacao = $this->_request->getParam('idTipoReadequacao');
+        
+        $mensagem = '';
+        $dados = [];
+        
+        try {
+            $TbReadequacao_DbTable = new Readequacao_Model_DbTable_TbReadequacao();
 
-            $dados['idDocumento'] = $documento['idDocumento'];
-            $update = $Readequacao_Model_DbTable_TbReadequacao->update(
-                $dados,
-                [
-                    'idReadequacao = ?' => $idReadequacao
-                ]
-            );
-
+            $documento = $TbReadequacao_DbTable->inserirDocumento();
+            
+            if ($idDocumentoAtual) {
+                $tbDocumento = new tbDocumento();
+                $tbDocumento->excluirDocumento($idDocumento);                             
+            }
+            
+            $arrData = [];
+            $arrData['idPronac'] = $idPronac;
+            $arrData['idTipoReadequacao'] = $idTipoReadequacao;
+            $arrData['idDocumento'] = $documento['idDocumento'];
+            
+            if ($idReadequacao) {
+                $arrData['idReadequacao'] = $idReadequacao;
+            } else {
+                $arrData['dsJustificativa'] = '';
+            }
+            
+            $TbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
+            $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($arrData);
+            
             $this->_helper->json(
                 [
-                    'readequacao' => [
+                    'documento' => [
                         'idDocumento' => $documento['idDocumento'],
                         'nomeArquivo' => $documento['nomeArquivo']
                     ],
-                    'mensagem' => 'Readequação atualizada com sucesso.'
+                    'readequacao' => [
+                        'idReadequacao' => $idReadequacao
+                    ],
+                    'mensagem' => 'Arquivo inserido com sucesso.'
                 ]
             );
         } catch (Exception $objException) {
             $this->_helper->json([
-                'mensagem' => utf8_encode('Houve um erro ao subir o arquivo da readequação.'),
+                'mensagem' => utf8_encode('Houve um erro ao subir o documento.'),
                 'error' => $objException->getMessage()
             ]);
-
         }
     }
 }
