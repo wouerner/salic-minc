@@ -3719,7 +3719,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             
             $TbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
             $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($arrData);
-            
+
+            $this->_helper->json([
+                'mensagem' => utf8_encode('Houve um erro ao excluir o documento.'),
+            ]);
+                
         } catch (Exception $objException) {
             $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json([
@@ -3743,14 +3747,13 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $dados = [];
         
         try {
-            $TbReadequacao_DbTable = new Readequacao_Model_DbTable_TbReadequacao();
-
-            $documento = $TbReadequacao_DbTable->inserirDocumento();
-            
             if ($idDocumentoAtual) {
                 $tbDocumento = new tbDocumento();
                 $tbDocumento->excluirDocumento($idDocumentoAtual);
             }
+            
+            $TbReadequacao_DbTable = new Readequacao_Model_DbTable_TbReadequacao();
+            $documento = $TbReadequacao_DbTable->inserirDocumento();
             
             $arrData = [];
             $arrData['idPronac'] = $idPronac;
@@ -3770,7 +3773,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 [
                     'documento' => [
                         'idDocumento' => $documento['idDocumento'],
-                        'nomeArquivo' => $documento['nomeArquivo']
+                        'nomeArquivo' => utf8_encode($documento['nomeArquivo'])
                     ],
                     'readequacao' => [
                         'idReadequacao' => $idReadequacao

@@ -121,7 +121,7 @@ Vue.component('readequacao-formulario', {
 	    if (!this.validarDocumento(arquivo)) {
 		return;
 	    }
-	    console.log(self.readequacao);
+	    
 	    var formData = new FormData();
 	    formData.append('arquivo', arquivo);
 	    formData.append('idPronac', self.idPronac);
@@ -144,8 +144,8 @@ Vue.component('readequacao-formulario', {
 		)
 	    ).done(function(response) {
 		console.log(response);
-		self.readequacao.idDocumento = response.readequacao.idDocumento;
-		self.readequacao.nomeArquivo = response.readequacao.nomeArquivo;
+		self.readequacao.idDocumento = response.documento.idDocumento;
+		self.readequacao.nomeArquivo = response.documento.nomeArquivo;
 		self.readequacao.idReadequacao = response.readequacao.idReadequacao;
 	    });
 	},
@@ -161,6 +161,8 @@ Vue.component('readequacao-formulario', {
                 }
 	    }).done(function (response) {
 		self.mensagemSucesso("Documento excluido com sucesso.");
+		self.readequacao.nomeArquivo = '';
+		self.readequacao.idDocumento = '';
 	    }).fail(function (response) {
 		self.mensagemAlerta(response.mensagem);
 	    });
