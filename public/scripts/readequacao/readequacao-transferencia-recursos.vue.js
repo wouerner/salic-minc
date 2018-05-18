@@ -232,9 +232,9 @@ Vue.component('readequacao-transferencia-recursos', {
 		}		
 	    }).done(function(response) {
 		self.$data.projetosRecebedores.push(
-		    vue.projetoRecebedor
+		    self.projetoRecebedor
 		);
-		self.projetoRecebedor = vue.defaultProjetoRecebedor();
+		self.projetoRecebedor = self.defaultProjetoRecebedor();
 		self.obterProjetosDisponiveis();
 	    });
 	},
@@ -258,7 +258,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		return;
 	    }
 
-	    let vue = this;
+	    let self = this;
             $3.ajax({
                 type: "POST",
                 url: "/readequacao/transferencia-recursos/salvar-readequacao",
@@ -269,23 +269,9 @@ Vue.component('readequacao-transferencia-recursos', {
 		    dsSolicitacao: readequacao.dsSolicitacao
 		}
             }).done(function (response) {
-		var arquivo = $('#arquivo')[0].files[0];
-
-		var callback = function() {
-		    $3('.collapsible').collapsible('close', 0);
-		    $3('.collapsible').collapsible('open', 1);
-		    vue.mensagemSucesso('Readequa\xE7\xE3o gravada com sucesso!');
-		}
-		
-		if (typeof arquivo != 'undefined') {
-		    vue.subirArquivo(
-			arquivo,
-			response,
-			callback
-		    );
-		} else {
-		    callback();
-		}
+		$3('.collapsible').collapsible('close', 0);
+		$3('.collapsible').collapsible('open', 1);
+		self.mensagemSucesso('Readequa\xE7\xE3o gravada com sucesso!');
             });
 	},
 	finalizarReadequacao: function() {
