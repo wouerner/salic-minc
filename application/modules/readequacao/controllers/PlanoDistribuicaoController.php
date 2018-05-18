@@ -301,7 +301,8 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         }
     }
 
-    public function criarReadequacaoAjaxAction() {
+    public function criarReadequacaoAjaxAction()
+    {
 
         try {
 
@@ -418,11 +419,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         }
     }
 
-    public function salvarReadequacaoPlanoDistribuicao()
+    public function atualizarReadequacaoAjaxAction()
     {
-        $params = $this->getRequest()->getParams();
-
         try {
+            $params = $this->getRequest()->getParams();
 
             if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
                 throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!");
@@ -432,33 +432,24 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 throw new Exception("PRONAC &eacute; obrigat&oacute;rio");
             }
 
-            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-            $planosReadequados = $tbPlanoDistribuicao->buscar(array(
-                'idPronac = ?' => $this->idPronac,
-                'tpSolicitacao <> ?' => 'N',
-                'idReadequacao is null' => ''
-            ));
-
-            if (count($planosReadequados) == 0) {
-                throw new Exception('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!');
-            }
-
+            $dados = [
+                'idReadequacao' => $params['idReadequacao'],
+                'idPronac' => $params['idPronac'],
+                'idTipoReadequacao' => $params['idTipoReadequacao'],
+                'dsJustificativa' => $params['justificativa'],
+                'idDocumento' => $params['idDocumento']
+            ];
             $TbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
-            $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($params);
+            $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($dados);
 
-            $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
-            $tbPlanoDistribuicaoMapper->incluirIdReadequacaoNasSolicitacoesAtivas($this->idPronac, $idReadequacao);
-
-            $tbDistribuicaoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
-            $tbDistribuicaoMapper->incluirIdReadequacaoNasSolicitacoesAtivas($this->idPronac, $idReadequacao);
-
+            $this->_helper->json(array('data' => $idReadequacao, 'success' => 'true', 'msg' => 'Detalhamento atualizado com sucesso!'));
         } catch (Exception $e) {
-            throw $e;
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => $params, 'success' => 'false', 'msg' => $e->getMessage()));
         }
-
     }
 
-    public function excluirReadequacaoPlanodistribuicaoAjaxAction()
+    public function excluirReadequacaoPlanoDistribuicaoAjaxAction()
     {
         try {
 
@@ -480,4 +471,44 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
         }
     }
 
+    public function finalizarReadequacaoPlanoDistribuicaoAjaxAction()
+    {
+        try {
+            $params = $this->getRequest()->getParams();
+
+            if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!");
+            }
+
+            if(empty($this->idPronac) || empty($params['idTipoReadequacao'])) {
+                throw new Exception('Dados obrigat&oacute;rios n&atilde;o informados');
+            }
+
+            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
+            $planosReadequados = $tbPlanoDistribuicao->buscar(array(
+                'idPronac = ?' => $this->idPronac,
+                'tpSolicitacao <> ?' => 'N',
+                'stAtivo = ?' => 'S',
+                'idReadequacao is not null' => ''
+            ));
+
+            if (count($planosReadequados) == 0) {
+                throw new Exception('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!');
+            }
+
+            $tbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
+            $status = $tbReadequacaoMapper->finalizarSolicitacaoReadequacao(
+                $this->idPronac, $params['idTipoReadequacao']
+            );
+
+            if($status == false) {
+                throw new Exception("N&atilde;o foi poss&iacute;vel finalizar a solicita&ccedil;&atilde;o");
+            }
+
+            $this->_helper->json(array('data' => $status, 'success' => 'true', 'msg' => 'Readequa&ccedil;&atilde;o finalizada com sucesso!'));
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => $params, 'success' => 'false', 'msg' => $e->getMessage()));
+        }
+    }
 }

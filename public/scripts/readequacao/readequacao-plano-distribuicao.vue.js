@@ -40,7 +40,7 @@ Vue.component('readequacao-plano-distribuicao', {
                             ref="formulario"
                             :id-pronac="idPronac"
                             :id-tipo-readequacao="idTipoReadequacao"
-                            v-on:eventoSalvarReadequacao="salvarReadequacao"
+                            v-on:eventoSalvarReadequacao="atualizarReadequacao"
                         ></readequacao-formulario>
                     </div>
                 </li>
@@ -122,6 +122,18 @@ Vue.component('readequacao-plano-distribuicao', {
                 self.mensagemErro(response.responseJSON.msg)
             });
         },
+        atualizarReadequacao: function (readequacao) {
+            let self = this;
+            $3.ajax({
+                type: "POST",
+                url: "/readequacao/plano-distribuicao/atualizar-readequacao-ajax",
+                data: readequacao
+            }).done(function (response) {
+                self.mensagemSucesso(response.msg);
+            }).fail(function (response) {
+                self.mensagemErro(response.responseJSON.msg)
+            });
+        },
         obterPlanoDistribuicao: function () {
             let self = this;
             $3.ajax({
@@ -152,14 +164,11 @@ Vue.component('readequacao-plano-distribuicao', {
                 self.mensagemErro(response.responseJSON.msg)
             });
         },
-        salvarReadequacao: function (readequacao) {
-            console.log(readequacao);
-        },
         excluirReadequacao: function () {
             let self = this;
             $3.ajax({
                 type: "GET",
-                url: "/readequacao/plano-distribuicao/excluir-readequacao-planoDistribuicao-ajax",
+                url: "/readequacao/plano-distribuicao/excluir-readequacao-plano-distribuicao-ajax",
                 data: {
                     idPronac: self.idPronac
                 }
@@ -170,11 +179,25 @@ Vue.component('readequacao-plano-distribuicao', {
                 self.mensagemErro(response.responseJSON.msg)
             });
         },
-        finalizarReadequacao: function() {
-
+        finalizarReadequacao: function () {
+            let self = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/plano-distribuicao/finalizar-readequacao-plano-distribuicao-ajax",
+                data: {
+                    idPronac: self.idPronac,
+                    idTipoReadequacao: self.idTipoReadequacao
+                }
+            }).done(function (response) {
+                self.mensagemSucesso(response.msg);
+                self.active = false;
+                self.mostrarFormulario = false;
+            }).fail(function (response) {
+                self.mensagemErro(response.responseJSON.msg)
+            });
         },
         restaurarFormulario: function () {
             Object.assign(this.$data, this.$options.data.apply(this))
-        },
+        }
     }
 });
