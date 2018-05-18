@@ -28,6 +28,7 @@ Vue.component('readequacao-transferencia-recursos', {
   <ul class="collapsible">
       <li id="collapsible-first">
           <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
+          <div class="collapsible-body">
 	      <readequacao-formulario
 		  ref="formulario"
 		  :id-pronac="idPronac"
@@ -35,6 +36,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		  :componente-ds-solicitacao='componente'
 		  v-on:eventoSalvarReadequacao="salvarReadequacao">
 	      </readequacao-formulario>
+          </div>
       </li>
       <li>
 	  <div class="collapsible-header"><i class="material-icons">list</i>Projetos recebedores</div>
@@ -353,7 +355,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		    idPronac: self.idPronac
 		}
             }).done(function (response) {
-                self.readequacao = response.readequacao;  // TODO: substituir vue por self
+                self.readequacao = response.readequacao;
 		self.obterProjetosRecebedores();
             });
 	},
