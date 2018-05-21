@@ -20,12 +20,12 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
 
     public function indexAction()
     {
-        $this->view->projeto = $this->projeto;
-        $this->view->idTipoReadequacao = $this->_idTipoReadequacao;
         try {
+            $this->view->projeto = $this->projeto;
+            $this->view->idTipoReadequacao = $this->_idTipoReadequacao;
             $this->view->urlCallback = '/readequacao/plano-distribuicao/index/?idPronac=' . $this->idPronacHash;
         } catch (Exception $e) {
-            parent::message($e->getMessage(), "/default/consultardadosprojeto/index?idPronac=". $this->idPronacHash, "ERROR");
+            parent::message($e->getMessage(), "/default/consultardadosprojeto/index?idPronac=" . $this->idPronacHash, "ERROR");
         }
     }
 
@@ -303,7 +303,6 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
 
     public function criarReadequacaoAjaxAction()
     {
-
         try {
 
             if (empty($this->projeto)) {
@@ -313,13 +312,14 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
             if ($this->idPerfil !== Autenticacao_Model_Grupos::PROPONENTE) {
                 throw new Exception("Voc&ecirc; n&atilde;o pode criar uma readequa&ccedil;&atilde;o");
             }
+
+            if ($this->_existeSolicitacaoEmAnalise) {
+                throw new Exception("Readequa&ccedil;&atilde;o em an&aacute;lise");
+            }
+
             $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper($this->projeto);
-
             $status = $tbPlanoDistribuicaoMapper->criarReadequacaoPlanoDistribuicao($this->projeto);
-
-            $this->_helper->json(
-                ['data' => ['status' => $status], 'success' => 'true']
-            );
+            $this->_helper->json(['data' => ['status' => $status], 'success' => 'true']);
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json(
@@ -330,7 +330,6 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 ]
             );
         }
-
     }
 
     public function salvarDetalhamentoAjaxAction()
@@ -374,6 +373,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 throw new Exception("Acesso negado!");
             }
 
+            if ($this->_existeSolicitacaoEmAnalise) {
+                throw new Exception("Readequa&ccedil;&atilde;o em an&aacute;lise");
+            }
+
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
 
@@ -404,6 +407,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 throw new Exception("Acesso negado!");
             }
 
+            if ($this->_existeSolicitacaoEmAnalise) {
+                throw new Exception("Readequa&ccedil;&atilde;o em an&aacute;lise");
+            }
+
             $mdlDetalhaReadequacao = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacao();
             $detalhamentoMapper = new Readequacao_Model_TbDetalhaPlanoDistribuicaoReadequacaoMapper();
             $dados = $detalhamentoMapper->alterarSituacaoDetalhamento(
@@ -432,6 +439,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 throw new Exception("PRONAC &eacute; obrigat&oacute;rio");
             }
 
+            if ($this->_existeSolicitacaoEmAnalise) {
+                throw new Exception("Readequa&ccedil;&atilde;o em an&aacute;lise");
+            }
+
             $dados = [
                 'idReadequacao' => $params['idReadequacao'],
                 'idPronac' => $params['idPronac'],
@@ -442,7 +453,7 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
             $TbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
             $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($dados);
 
-            $this->_helper->json(array('data' => $idReadequacao, 'success' => 'true', 'msg' => 'Detalhamento atualizado com sucesso!'));
+            $this->_helper->json(array('data' => $idReadequacao, 'success' => 'true', 'msg' => 'Solicita&ccedil;&atilde;o atualizada com sucesso!'));
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json(array('data' => $params, 'success' => 'false', 'msg' => $e->getMessage()));
@@ -459,6 +470,10 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
 
             if (empty($this->idPronac)) {
                 throw new Exception("PRONAC &eacute; obrigat&oacute;rio");
+            }
+
+            if ($this->_existeSolicitacaoEmAnalise) {
+                throw new Exception("Readequa&ccedil;&atilde;o em an&aacute;lise");
             }
 
             $tbReadequacaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
@@ -480,8 +495,12 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!");
             }
 
-            if(empty($this->idPronac) || empty($params['idTipoReadequacao'])) {
+            if (empty($this->idPronac) || empty($params['idTipoReadequacao'])) {
                 throw new Exception('Dados obrigat&oacute;rios n&atilde;o informados');
+            }
+
+            if ($this->_existeSolicitacaoEmAnalise) {
+                throw new Exception("Readequa&ccedil;&atilde;o em an&aacute;lise");
             }
 
             $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
@@ -501,7 +520,7 @@ class Readequacao_PlanodistribuicaoController extends Readequacao_GenericControl
                 $this->idPronac, $params['idTipoReadequacao']
             );
 
-            if($status == false) {
+            if ($status == false) {
                 throw new Exception("N&atilde;o foi poss&iacute;vel finalizar a solicita&ccedil;&atilde;o");
             }
 

@@ -15,7 +15,6 @@ class Readequacao_Model_TbPlanoDistribuicaoMapper extends MinC_Db_Mapper
     public function criarReadequacaoPlanoDistribuicao(Projeto_Model_TbProjetos $projeto)
     {
         $TbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
-
         $readequacaoAtiva = $TbReadequacaoMapper->findBy([
             'idPronac = ?' => $projeto->getIdPRONAC(),
             'idTipoReadequacao = ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO,
@@ -26,7 +25,7 @@ class Readequacao_Model_TbPlanoDistribuicaoMapper extends MinC_Db_Mapper
             $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao([
                 'idPronac' => $projeto->getIdPRONAC(),
                 'idTipoReadequacao' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO,
-                'descJustificativa' => ' ',
+                'dsJustificativa' => ' ',
             ]);
         } else {
             $idReadequacao = $readequacaoAtiva['idReadequacao'];

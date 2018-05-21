@@ -20,6 +20,7 @@
         </div>
         <div class="content">
             <input type="hidden" id="pertenceIn2017" name="pertenceIn2017" value="<?php echo $this->in2017; ?>">
+            <input type="hidden" id="idPronacHash" name="idPronacHash" value="<?php echo $this->idPronacHash; ?>">
             <div id="cabecalho" class="card">
                 <div class="card-content">
                     <div class="row">
@@ -33,23 +34,28 @@
                     </div>
                 </div>
             </div>
-
-            <?php if ($this->existeSolicitacaoEmAnalise) : ?>
-                <div class="card">
-                    <div class="card-content">
-                        <p class="">Voc&ecirc; j&aacute; possui uma readequa&ccedil;&atilde;o de distribui&ccedil;&atilde;o
-                            em andamento.</p>
-                        <p class="">Uma nova solicita&ccedil;&atilde;o poder&aacute; ser feita ap&oacute;s an&aacute;lise
-                            da solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o atual.</p>
+            <div class="card <?php echo ($this->existeSolicitacaoEmAnalise) ? '' : 'sumir'; ?>">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col s1 right-align"><i class="medium orange-text material-icons">warning</i></div>
+                        <div class="col s11">
+                            <p>Voc&ecirc; j&aacute; possui uma readequa&ccedil;&atilde;o de distribui&ccedil;&atilde;o em
+                                andamento.</p>
+                            <p>Para acompanhar, acesse o menu lateral "Execu&ccedil;&atilde;o -> Dados das readequa&ccedil;&otilde;es"
+                                em <a href="/default/consultardadosprojeto/index?idPronac=<?php echo $this->idPronacHash; ?>">
+                                    consultar dados do projeto</a>.</p>
+                            <p>Uma nova solicita&ccedil;&atilde;o poder&aacute; ser feita ap&oacute;s an&aacute;lise
+                                da solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o atual.</p>
+                        </div>
                     </div>
                 </div>
-            <?php endif; ?>
+            </div>
 
             <?php if ($this->in2017 && !$this->existeSolicitacaoEmAnalise) : ?>
                 <div id="dynamic-component">
                     <component
-                            v-bind:is="currentComponent"
-                            :id-pronac="idPronac"
+                        v-bind:is="currentComponent"
+                        :id-pronac="idPronac"
                     ></component>
                 </div>
             <?php endif; ?>

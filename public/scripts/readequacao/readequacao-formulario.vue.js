@@ -89,9 +89,6 @@ Vue.component('readequacao-formulario', {
         'componenteDsSolicitacao': ''
     },
     mixins: [utils],
-    created: function () {
-
-    },
     mounted: function () {
         if (typeof this.objReadequacao == 'undefined') {
             this.obterDadosReadequacao();
@@ -106,20 +103,19 @@ Vue.component('readequacao-formulario', {
     },
     methods: {
         obterDadosReadequacao: function () {
-            console.log('teste filhoooo');
-            // let self = this;
-            // $3.ajax({
-            //     type: "GET",
-            //     url: "/readequacao/readequacoes/obter-dados-readequacao",
-            //     data: {
-            //         idTipoReadequacao: self.idTipoReadequacao,
-            //         idPronac: self.idPronac
-            //     }
-            // }).done(function (response) {
-            //     if (response.readequacao != null) {
-            //         self.readequacao = response.readequacao;
-            //     }
-            // });
+            let self = this;
+            $3.ajax({
+                type: "GET",
+                url: "/readequacao/readequacoes/obter-dados-readequacao",
+                data: {
+                    idTipoReadequacao: self.idTipoReadequacao,
+                    idPronac: self.idPronac
+                }
+            }).done(function (response) {
+                if (response.readequacao != null) {
+                    self.readequacao = response.readequacao;
+                }
+            });
         },
         salvarReadequacao: function () {
             if (this.readequacao.justificativa.length == 0) {
