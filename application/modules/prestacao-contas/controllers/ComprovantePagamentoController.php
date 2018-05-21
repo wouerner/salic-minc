@@ -18,6 +18,8 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
         $codigoProduto = $this->getRequest()->getParam('produto');
         $stItemAvaliado = $this->getRequest()->getParam('stItemAvaliado');
+        $UF = $this->getRequest()->getParam('uf');
+        $idmunicipio = $this->getRequest()->getParam('idmunicipio');
 
         $vwComprovacoes = new PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario();
         $comprovantes = $vwComprovacoes->comprovacoes(
@@ -29,7 +31,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
 
         $data = [];
 
-        foreach($comprovantes->toArray() as $key => $value){
+        foreach($comprovantes->toArray() as $key => $value) {
             $data[] =  array_map('utf8_encode', $value);
         }
 
@@ -51,21 +53,21 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             throw new Exception('Falta pronac');
         }
 
-        /* $this->view->assign('data',['message' => 'Existe dilig&ecirc;ncia aguardando resposta!']); */
-        /* $this->getResponse()->setHttpResponseCode(405); */
+        if (!$observacao) {
+            throw new Exception('Falta pronac');
+        }
 
-        /* $this->view->assign('data',['message' => 'criado!']); */
-        /* $this->getResponse()->setHttpResponseCode(201); */
+        if (!$idComprovantePagamento) {
+            throw new Exception('Falta Comprovante Pagamento');
+        }
 
         $tblComprovantePag = new ComprovantePagamentoxPlanilhaAprovacao();
         $rsComprovantePag = $tblComprovantePag
             ->buscar( [ 'idComprovantePagamento = ?' => $idComprovantePagamento] )
             ->current();
-        /* echo '<pre>'; */
-        /* var_dump($idComprovantePagamento, $rsComprovantePag);die; */
 
         $rsComprovantePag->dtValidacao = date('Y/m/d H:i:s');
-        $rsComprovantePag->dsJustificativa = $comprovantePagamento['observacao'];
+        $rsComprovantePag->dsJustificativa = $observacao;
         $rsComprovantePag->stItemAvaliado = $situacao;
 
         try {
@@ -75,7 +77,6 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         } catch (Exception $e) {
             $tblComprovantePag->getAdapter()->rollBack();
         }
-
     }
 
     public function putAction()

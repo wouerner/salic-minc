@@ -36,40 +36,9 @@ class PrestacaoContas_AnalisarController extends MinC_Controller_Action_Abstract
         $codigoProduto = $this->getRequest()->getParam('produto');
         $stItemAvaliado = $this->getRequest()->getParam('stItemAvaliado');
 
-        $planilhaAprovacaoModel = new PlanilhaAprovacao();
-
-        $projeto = $planilhaAprovacaoModel
-            ->vwComprovacaoFinanceiraProjeto(
-                $idPronac,
-                $uf,
-                null,
-                /* $codigoProduto != 0 ? $codigoProduto :  null, */
-                $codigoProduto,
-                $municipio,
-                null,
-                $idPlanilhaItem
-            );
-
-        if (!$projeto) {
-            $this->_helper->flashMessengerType->addMessage('ALERT');
-            $this->_helper->flashMessenger->addMessage('N&atilde;o houve comprova&ccedil;&atilde;o para este item.');
-            $this->redirect("realizarprestacaodecontas/planilhaorcamentaria/idPronac/{$idPronac}");
-        } else {
-            $this->view->tipoComprovante = $this->tipoDocumento;
-
-            $vwComprovacoes = new PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario();
-            $comprovantes = $vwComprovacoes->comprovacoes(
-                    $idPronac, 
-                    $idPlanilhaItem, 
-                    $stItemAvaliado,
-                    $codigoProduto
-            );
-        }
-
         $this->view->idPronac = $idPronac;
         $this->view->idPlanilhaItem = $idPlanilhaItem;
         $this->view->idPlanilhaAprovacao = $idPlanilhaAprovacao;
-        $this->view->projeto = $projeto[0];
         $this->view->comprovantesPagamento = $comprovantes;
         $this->view->stItemAvaliado = $stItemAvaliado;
 

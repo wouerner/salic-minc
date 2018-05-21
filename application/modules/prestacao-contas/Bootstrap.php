@@ -17,9 +17,14 @@ class PrestacaoContas_Bootstrap extends Zend_Application_Module_Bootstrap
         /* $frontController->getRouter()->addRoute('comprovacao-pagamento', $route); */
 
         $restRoute = new Zend_Rest_Route(
-            $frontController, 
-            array(),
-            array('prestacao-contas' => ['comprovante-pagamento'])
+            $frontController,
+            [],
+            [
+                'prestacao-contas' => [
+                    'comprovante-pagamento',
+                    'planilha-aprovacao'
+                ]
+            ]
         );
 
         $frontController->getRouter()->addRoute('rest', $restRoute);
