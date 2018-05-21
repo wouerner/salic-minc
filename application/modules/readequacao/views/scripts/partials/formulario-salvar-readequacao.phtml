@@ -1,79 +1,37 @@
 <form name="formReadequacao"
       id="formReadequacao"
-      action="<?php echo $this->url(
-          [
-              'module' => 'readequacao',
-              'controller' => 'readequacoes',
-              'action' => 'incluir-solicitacao-readequacao'
-          ], null, true); ?><?php echo '?idPronac=' . Seguranca::encrypt($this->idPronac); ?>"
+      action="<?php echo $this->action; ?>"
       method="post"
       enctype="multipart/form-data">
     <input type="hidden" id="idReadequacao" name="idReadequacao"
-           value="<?php echo $this->readequacao->idReadequacao; ?>">
-    <input type="hidden" id="pertenceIn2017" name="pertenceIn2017" value="<?php echo $this->in2017; ?>">
+           value="<?php echo $this->readequacao['idReadequacao']; ?>">
     <input type="hidden" id="tipoReadequacao" name="tipoReadequacao" value="<?php echo $this->idTipoReadequacao; ?>">
     <input type="hidden" id="urlCallback" name="urlCallback" value="<?php echo $this->urlCallback; ?>">
     <div class="row">
         <div class="col s12">
             <span>Justificativa da Solicita&ccedil;&atilde;o </span><span class="red-text">*</span>
             <textarea cols="80" class="editor" id="descJustificativa" name="descJustificativa" rows="10">
-                <?php echo $this->readequacao->dsJustificativa; ?>
+                <?php echo $this->readequacao['justificativa']; ?>
             </textarea>
         </div>
-
-        <div class="row">
-            <div class="col s12">
-                <div id="anexarDocumento" class="card-panel">
-
-                    <?php if ($this->readequacao->idArquivo): ?>
-                        <label for="arquivo" style="width: 100px; ">Anexar arquivo: </label>
-                        <span id="file_name"
-                              style="margin-right:20px "><?= utf8_decode(htmlentities($this->dataForm['arquivo']['nmArquivo'])); ?></span>
-                        <a class="waves-effect waves-light btn tooltipped" id="file_upload" data-position="top"
-                           data-delay="50" data-tooltip="Upload" href="#"><i class="tiny material-icons">file_upload</i></a>
-                        <a class="waves-effect waves-light btn tooltipped" data-position="top" data-delay="50"
-                           data-tooltip="Download" href="<?= $this->url(
-                            array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir'), null, true); ?>?id=<?= $this->readequacao->idArquivo; ?>"><i
-                                class="tiny material-icons">file_download</i></a>
-                        <a class="waves-effect waves-light btn  red darken-4 tooltipped" data-position="top"
-                           data-delay="50" data-tooltip="Excluir" href="#" id="file_delete"><i
-                                class="tiny material-icons">delete_forever</i></a>
-                        <input type="file" name="arquivo" id="arquivo" class="hiddenfile">
-                    <?php else: ?>
-                        <label for="arquivo" style="width: 100px; ">Anexar arquivo: </label>
-                        <input type="file" name="arquivo" id="arquivo" class="input_simples">
-                    <?php endif; ?>
-
-                    <div id="arquivoinvalido" style="color:#FF0000"></div>
-                </div>
-            </div>
-        </div>
-
-        <table class="tabela solicitacoesSimples sumir">
+        <table class="tabela solicitacoesSimples">
             <tr>
-                <td class="destacar bold" style="font-size: 13px;">Anexo</td>
-            </tr>
-            <?php if (count($this->readequacao) > 0): ?>
-                <?php if (!empty($this->readequacao->idArquivo)): ?>
-                    <tr>
-                        <td>
-                            <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $this->readequacao[0]->idArquivo; ?>"><?php echo $this->readequacao[0]->nmArquivo; ?></a>
-                        </td>
-                    </tr>
-                <?php endif; ?>
-            <?php endif; ?>
-            <tr>
-                <td><input type="file" name="arquivo" class="input_simples"> <span style="margin-left: 10px;"
-                                                                                   class="red-text">Somente arquivos .pdf</span>
+                <td>
+                    <label for="arquivo" style="width: 100px; ">Anexar arquivo: </label>
+                    <input type="file" name="arquivo" id="arquivo" class="input_simples">
                 </td>
             </tr>
+            <?php if (!empty($this->readequacao['idDocumento'])): ?>
+                <tr>
+                    <td>
+                        Anexo: <a href="<?= $this->url(
+                            array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'abrir-documento-readequacao'), null, true); ?>?id=<?= $this->readequacao['idDocumento']; ?>">
+                            <?php echo $this->readequacao['nomeArquivo']; ?>
+                        </a>
+                    </td>
+                </tr>
+            <?php endif; ?>
         </table>
-
-        <div class="col s12">
-            <span>Anexo</span><br>
-            <input type="file" name="arquivo" class="input_simples">
-            <span style="margin-left: 10px;" class="red-text">Somente arquivos .pdf</span>
-        </div>
     </div>
     <div class="padding20 center-align">
         <a
@@ -87,12 +45,12 @@
             <i class="material-icons right">send</i>Finalizar
         </a>
 
-        <?php if ($this->readequacao->idReadequacao) : ?>
+        <?php if ($this->readequacao['idReadequacao']) : ?>
             <a
                 href="javascript:void(0)"
                 class="btn waves-effect waves-light btn-danger btn-excluir"
                 title="Excluir readequa&ccedil;&atilde;o"
-                readequacao="<?php echo $this->readequacao->idReadequacao; ?>"
+                readequacao="<?php echo $this->readequacao['idReadequacao']; ?>"
             > Excluir
                 <i class="material-icons right">delete</i>
             </a>

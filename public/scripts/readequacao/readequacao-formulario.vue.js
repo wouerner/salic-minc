@@ -39,7 +39,7 @@ Vue.component('readequacao-formulario', {
                       <div class="indeterminate"></div>
                     </div>
                     <div class="col s12">
-                        <a v-bind:href="'/upload/abrir?id=' + readequacao.idDocumento" v-if="readequacao.idDocumento !=''">
+                        <a v-bind:href="'/readequacao/readequacoes/abrir-documento-readequacao?id=' + readequacao.idDocumento" v-if="readequacao.idDocumento !=''">
                             {{readequacao.nomeArquivo }}
                         </a>
                         <a

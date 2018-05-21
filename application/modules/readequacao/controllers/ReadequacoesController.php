@@ -3788,4 +3788,29 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             ]);
         }
     }
+
+    public function abrirDocumentoReadequacaoAction()
+    {
+        $idDocumento = $this->getRequest()->getParam('id', null);
+
+        try {
+            $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $readequacao = $tbReadequacao->findBy(
+                ['idDocumento = ?' => $idDocumento]
+            );
+
+            if (empty($readequacao))
+                throw new Exception('Documento n&atilde;o encontrado!');
+
+            $permissao = parent::verificarPermissaoAcesso(false, $readequacao['idPronac'], false, true);
+
+            if ($permissao['status'] === false)
+                throw new Exception('Voc&ecirc; n&atilde;o tem permiss&atilde;o para baixar esse arquivo!');
+
+            parent::abrirDocumento($idDocumento);
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }

@@ -229,6 +229,7 @@ Vue.component('readequacao-plano-distribuicao', {
             }).done(function (response) {
                 self.mensagemSucesso(response.msg);
                 self.restaurarFormulario();
+                self.mostrarMensagemInicial = false;
                 self.mostrarMensagemFinal = true;
             }).fail(function (response) {
                 self.mensagemErro(response.responseJSON.msg)

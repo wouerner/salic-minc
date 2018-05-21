@@ -14,35 +14,38 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
 
     public function salvarSolicitacaoReadequacao($arrData)
     {
-
         try {
+
             $auth = Zend_Auth::getInstance();
             $tblAgente = new Agente_Model_DbTable_Agentes();
             $rsAgente = $tblAgente->buscar(array('CNPJCPF=?' => $auth->getIdentity()->Cpf))->current();
 
-            $dados = array();
-            $dados['idReadequacao'] = $arrData['idReadequacao'];
-            $dados['idPronac'] = $arrData['idPronac'];
-            $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
-            $dados['idSolicitante'] = $rsAgente->idAgente;
-            $dados['stAtendimento'] = 'N';
-            $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
-            $dados['stEstado'] = 0;
+            $objReadequacao = new Readequacao_Model_TbReadequacao();
+            $objReadequacao->setIdReadequacao($arrData['idReadequacao']);
+            $objReadequacao->setIdPronac($arrData['idPronac']);
+            $objReadequacao->setDtSolicitacao(new Zend_Db_Expr('GETDATE()'));
+            $objReadequacao->setIdSolicitante($rsAgente->idAgente);
+            $objReadequacao->setStAtendimento('N');
+            $objReadequacao->setSiEncaminhamento(Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE);
+            $objReadequacao->setStEstado(0);
 
             if (isset($arrData['idTipoReadequacao'])) {
-                $dados['idTipoReadequacao'] = $arrData['idTipoReadequacao'];
-            }
-            if (isset($arrData['dsJustificativa'])) {
-                $dados['dsJustificativa'] = $arrData['dsJustificativa'];
-            }
-            if (isset($arrData['dsSolicitacao'])) {
-                $dados['dsSolicitacao'] = $arrData['dsSolicitacao'];
-            }
-            if (isset($arrData['idDocumento'])) {
-                $dados['idDocumento'] = $arrData['idDocumento'];
+                $objReadequacao->setIdTipoReadequacao($arrData['idTipoReadequacao']);
             }
 
-            $id = $this->save(new Readequacao_Model_TbReadequacao($dados));
+            if (isset($arrData['dsJustificativa'])) {
+                $objReadequacao->setDsJustificativa($arrData['dsJustificativa']);
+            }
+
+            if (isset($arrData['dsSolicitacao'])) {
+                $objReadequacao->setDsSolicitacao($arrData['dsSolicitacao']);
+            }
+
+            if ($arrData['idDocumento']) {
+                $objReadequacao->setIdDocumento($arrData['idDocumento']);
+            }
+
+            $id = $this->save($objReadequacao);
             if ($this->getMessage()) {
                 throw new Exception($this->getMessage());
             }
