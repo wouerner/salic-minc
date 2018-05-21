@@ -39,6 +39,7 @@ Vue.component('readequacao-plano-distribuicao', {
                             :id-tipo-readequacao="idTipoReadequacao"
                             :objReadequacao="readequacao"
                             v-on:eventoAtualizarReadequacao="atualizarReadequacao"
+                            v-on:eventoSalvarReadequacao="salvarReadequacao"
                         ></readequacao-formulario>
                     </div>
                 </li>
@@ -154,7 +155,7 @@ Vue.component('readequacao-plano-distribuicao', {
                 }
             });
         },
-        atualizarReadequacao: function (readequacao) {
+        salvarReadequacao: function (readequacao) {
             let self = this;
             $3.ajax({
                 type: "POST",
@@ -166,6 +167,9 @@ Vue.component('readequacao-plano-distribuicao', {
             }).fail(function (response) {
                 self.mensagemErro(response.responseJSON.msg)
             });
+        },
+        atualizarReadequacao: function (readequacao) {
+            this.readequacao = readequacao;
         },
         obterPlanoDistribuicao: function () {
             let self = this;

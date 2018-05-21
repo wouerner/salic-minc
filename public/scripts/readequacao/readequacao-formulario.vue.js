@@ -124,7 +124,7 @@ Vue.component('readequacao-formulario', {
                 return;
             }
 
-            this.$emit('eventoAtualizarReadequacao', this.readequacao);
+            this.$emit('eventoSalvarReadequacao', this.readequacao);
         },
         subirDocumento: function () {
             let arquivo = $('#arquivo')[0].files[0],
