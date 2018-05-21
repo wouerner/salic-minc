@@ -85,4 +85,19 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
             throw $e;
         }
     }
+
+    public function existeSolicitacaoEmAnalise($idPronac, $idTipoReadequacao = null) {
+
+        $whereSolicitacaoEmAndamento = [];
+        $whereSolicitacaoEmAndamento['idPronac = ?'] = $idPronac;
+        $whereSolicitacaoEmAndamento['siEncaminhamento <> ?'] = TbTipoEncaminhamento::SOLICITACAO_CADASTRADA_PELO_PROPONENTE;
+        $whereSolicitacaoEmAndamento['stEstado = ?'] = 0;
+
+        if ($idTipoReadequacao) {
+            $whereSolicitacaoEmAndamento['idTipoReadequacao = ?'] = $idTipoReadequacao;
+        }
+
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        return (count($tbReadequacao->buscar($whereSolicitacaoEmAndamento)->toArray()) > 0);
+    }
 }

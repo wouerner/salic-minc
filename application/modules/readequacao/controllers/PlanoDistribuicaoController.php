@@ -2,31 +2,31 @@
 
 class Readequacao_PlanodistribuicaoController extends Readequacao_GenericController
 {
+    private $_siEncaminhamento = null;
+    private $_idTipoReadequacao = null;
+    private $_existeSolicitacaoEmAnalise = false;
+
     public function init()
     {
         parent::init();
+
+        $this->_siEncaminhamento = TbTipoEncaminhamento::SOLICITACAO_CADASTRADA_PELO_PROPONENTE;
+        $this->_idTipoReadequacao = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO;
+
+        $tbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
+        $this->_existeSolicitacaoEmAnalise = $tbReadequacaoMapper->existeSolicitacaoEmAnalise($this->idPronac, $this->_idTipoReadequacao);
+        $this->view->existeSolicitacaoEmAnalise = $this->_existeSolicitacaoEmAnalise;
     }
 
     public function indexAction()
     {
         $this->view->projeto = $this->projeto;
-        $this->view->idTipoReadequacao = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO;
-
-        $idReadequacao = $this->_request->getParam("idReadequacao");
-
-        $where = array();
-        $where['a.idPronac = ?'] = $this->idPronac;
-
-        if ($idReadequacao) {
-            $where['a.idReadequacao = ?'] = $idReadequacao;
+        $this->view->idTipoReadequacao = $this->_idTipoReadequacao;
+        try {
+            $this->view->urlCallback = '/readequacao/plano-distribuicao/index/?idPronac=' . $this->idPronacHash;
+        } catch (Exception $e) {
+            parent::message($e->getMessage(), "/default/consultardadosprojeto/index?idPronac=". $this->idPronacHash, "ERROR");
         }
-
-        $where['a.idTipoReadequacao = ?'] = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO;
-        $where['a.siEncaminhamento = ?'] = TbTipoEncaminhamento::SOLICITACAO_CADASTRADA_PELO_PROPONENTE;
-
-        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $this->view->readequacao = $tbReadequacao->buscarDadosReadequacoes($where)->current();
-        $this->view->urlCallback = '/readequacao/plano-distribuicao/index/?idPronac=' . $this->idPronacHash;
     }
 
     public function carregarPlanosDeDistribuicaoAction()
