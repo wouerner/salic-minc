@@ -50,12 +50,12 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             $this->_helper->json(
                 [
                     'projeto' => $projetoArr,
-                    'mensagem' => $mensagem
+                    'msg' => $mensagem
                 ]
             );
         } catch (Exception $objException) {
             $this->_helper->json([
-                'mensagem' => 'Houve um erro na consulta do projeto transferidor.',
+                'msg' => 'Houve um erro na consulta do projeto transferidor.',
                 'error' => $objException->getMessage()
             ]);
         }
@@ -98,13 +98,13 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
                             'justificativa' => $this->_request->getParam('justificativa'),
                             'dsSolicitacao' => $this->_request->getParam('dsSolicitacao'),
                         ],
-                        'mensagem' => 'Readequação inserida com sucesso.'
+                        'msg' => 'Readequação inserida com sucesso.'
                     ]
                 );
                 
             } catch (Exception $objException) {            
                 $this->_helper->json([
-                    'mensagem' => 'Houve um erro na criação do registro de tbReadequacao',
+                    'msg' => 'Houve um erro na criação do registro de tbReadequacao',
                     'error' => $objException->getMessage()
                 ]);
                 $this->_helper->viewRenderer->setNoRender(true);
@@ -129,13 +129,13 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
                             'justificativa' => $this->_request->getParam('justificativa'),
                             'dsSolicitacao' => $this->_request->getParam('dsSolicitacao'),
                         ],
-                        'mensagem' => 'Readequação atualizada com sucesso.'
+                        'msg' => 'Readequação atualizada com sucesso.'
                     ]
                 );
                 
             } catch (Exception $objException) {            
                 $this->_helper->json([
-                    'mensagem' => 'Houve um erro na atualização do registro de tbReadequacao',
+                    'msg' => 'Houve um erro na atualização do registro de tbReadequacao',
                     'error' => $objException->getMessage()
                 ]);
                 $this->_helper->viewRenderer->setNoRender(true);
@@ -166,7 +166,7 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             ]);
         } catch (Exception $objException) {
             $this->_helper->json([
-                'mensagem' => 'Não há projetos disponíveis para o pronac fornecido.',
+                'msg' => 'Não há projetos disponíveis para o pronac fornecido.',
                 'error' => $objException->getMessage()
             ]);
         }
@@ -177,6 +177,7 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
         $this->_helper->layout->disableLayout();
         $this->view->arrResult = [];
         
+        $projetoArr = [];
         $idReadequacao = $this->_request->getParam('idReadequacao');
         $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
         
@@ -184,12 +185,16 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($idReadequacao);
             
             if (count($projetosRecebedores) > 0) {
-                $projetosRecebedores = [
-                    'idPronacRecebedor' => $projetosRecebedores->idPronacRecebedor,
-                    'nome' => utf8_encode($projeto->NomeProjeto),
-                    'valorComprovar' => $projeto->ValorCaptado - $projeto->ValorAprovado, ## receber de 
-                    'saldoDisponivel' => $projeto->ValorCaptado - $projeto->ValorAprovado
-                ];
+                foreach($projetosRecebedores as $projeto) {
+                    $projetoArr[] = [
+                        'idPronacRecebedor' => $projeto->idPronacRecebedor,
+                        'nome' => utf8_encode($projeto->NomeProjeto),
+                        'pronac' => $projeto->pronac,
+                        'valorComprovar' => 10000,
+                        'saldoDisponivel' => 10000
+                    ];
+                }
+                $mensagem = "Projetos retornados: " . count($projetosRecebedores);
             } else {
                 $projetoArr = [];
                 $mensagem = "Não existe nenhum projeto com o idPronac forncedido!";
@@ -197,13 +202,13 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             
             $this->_helper->json(
                 [
-                    'projeto' => $projetoArr,
-                    'mensagem' => $mensagem
+                    'projetos' => $projetoArr,
+                    'msg' => $mensagem
                 ]
             );
         } catch (Exception $objException) {
             $this->_helper->json([
-                'mensagem' => 'Houve um erro na consulta do projeto transferidor.',
+                'msg' => 'Houve um erro na consulta do projeto transferidor.',
                 'error' => $objException->getMessage()
             ]);
         }
@@ -219,7 +224,7 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
         try {
             $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
             $dados['tpTransferencia'] = $this->_request->getParam('dsSolicitacao');
-            $dados['idPronacRecebedor'] = $this->_request->getParam('idPronacRecebedor');
+            $dados['idPronacRecebedor'] = $this->_request->getParam('idPronac');
             $dados['vlRecebido'] = (float) str_replace(',', '.', $this->_request->getParam('valorRecebido'));
             $dados['siAnaliseTecnica'] = '';
             $dados['siAnaliseComissao'] = '';

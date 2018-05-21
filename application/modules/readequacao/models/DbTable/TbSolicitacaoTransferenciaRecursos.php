@@ -25,7 +25,12 @@ class Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos extends MinC_
         $select->joinInner(
             array('b' => 'projetos'),
             'a.idPronacRecebedor = b.IdPRONAC',
-            array('NomeProjeto'),
+            array(
+                new Zend_Db_Expr("
+                    b.NomeProjeto,
+                    b.AnoProjeto + b.Sequencial AS pronac"
+                )
+            ),
             'SAC.dbo'
         );
         
