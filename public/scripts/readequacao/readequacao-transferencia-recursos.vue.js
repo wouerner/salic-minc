@@ -179,6 +179,7 @@ Vue.component('readequacao-transferencia-recursos', {
     methods: {
 	defaultProjetoRecebedor: function() {
 	    return {
+		idSolicitacaoTransferenciaRecursos: "",
 		nome: "",
 		idPronac: "",
 		valorRecebido: "0.00",
@@ -247,8 +248,22 @@ Vue.component('readequacao-transferencia-recursos', {
 		self.obterProjetosDisponiveis();
 	    });
 	},
-	excluirRecebedor: function(id) {
-	    Vue.delete(this.projetosRecebedores, id);
+	excluirRecebedor: function(index) {
+	    var self = this;
+	    $3.ajax({
+		type: "POST",
+		url: "/readequacao/transferencia-recursos/excluir-projeto-recebedor",
+		data: {
+		    idPronac: self.idPronac,
+		    idSolicitacaoTransferenciaRecursos: self.projetoTransferidor.idSolicitacaoTransferenciaRecursos
+		}
+	    }).done(function(response) {
+		if (response.resposta) {
+		    Vue.delete(self.projetosRecebedores, index);
+		    self.mensagemSucesso(response.msg);
+		}
+	    });
+	    
 	    // TODO remover dado ajax
 	},
 	salvarReadequacao: function(readequacao) {
