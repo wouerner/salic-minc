@@ -187,6 +187,7 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             if (count($projetosRecebedores) > 0) {
                 foreach($projetosRecebedores as $projeto) {
                     $projetoArr[] = [
+                        'idSolicitacaoTransferenciaRecursos' => $projeto->idSolicitacao,
                         'idPronacRecebedor' => $projeto->idPronacRecebedor,
                         'nome' => utf8_encode($projeto->NomeProjeto),
                         'pronac' => $projeto->pronac,
@@ -219,9 +220,10 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
         $this->_helper->layout->disableLayout();
 
         $dados = [];        
-        $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
         
         try {
+            $TbSolicitacaoTransferenciaRecursosDbTable = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+            
             $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
             $dados['tpTransferencia'] = $this->_request->getParam('dsSolicitacao');
             $dados['idPronacRecebedor'] = $this->_request->getParam('idPronac');
@@ -230,26 +232,46 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             $dados['siAnaliseComissao'] = '';
             $dados['stEstado'] = 0;
             
-            $idSolicitacaoTransferenciaRecursos = $Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos->inserir($dados);
+            $idSolicitacaoTransferenciaRecursos = $TbSolicitacaoTransferenciaRecursosDbTable->inserir($dados);
             
             $this->_helper->json(
                 [
+                    'msg' => 'Projeto incluido com sucesso.',
                     'resposta' => true
                 ]
             );
         } catch (Exception $objException) {
             $this->_helper->json(
                 [
-                    'error ' => $objException->getMessage(),
+                    'msg' => $objException->getMessage(),
                     'resposta' => false
                 ]
             );
-        }        
+        }
     }
     
     public function excluirProjetoRecebedorAction()
     {
-        
+        try {
+            $TbSolicitacaoTransferenciaRecursosDbTable = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+            
+            $idSolicitacaoTransferenciaRecursos = $this->_request->getParam('idSolicitacaoTransferenciaRecursos');
+            $TbSolicitacaoTransferenciaRecursosDbTable->delete($idSolicitacaoTransferenciaRecursos);
+            
+            $this->_helper->json(
+                [
+                    'msg' => 'Projeto excluido com sucesso.',
+                    'resposta' => true
+                ]
+            );
+        } catch (Exception $objException) {
+            $this->_helper->json(
+                [
+                    'msg ' => $objException->getMessage(),
+                    'resposta' => false
+                ]
+            );
+        }
     }
     
     public function finalizarSolicitacaoTransferenciaRecursosAction()
