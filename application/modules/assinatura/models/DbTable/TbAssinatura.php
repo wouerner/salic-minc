@@ -10,6 +10,8 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     const TIPO_ATO_ANALISE_INICIAL = 630;
     const TIPO_ATO_ANALISE_CNIC = 631;
     const TIPO_ATO_HOMOLOGAR_PROJETO = 643;
+    const TIPO_ATO_READEQUACAO_COM_PORTARIA = 643; // @todo readequacao atualizar
+    const TIPO_ATO_READEQUACAO_SEM_PORTARIA = 643; // @todo readequacao atualizar
 
     /**
     * Esse metodo deve retornar Objeto
