@@ -876,6 +876,51 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     }
 
     /*
+    * Criada em 27/03/2014
+    * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
+    * Essa função é usada para carregar os dados dos planos de divulgação do projeto.
+    */
+    public function carregarPlanosDeDivulgacaoReadequacoesAction()
+    {
+        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
+        $this->view->idPerfil = $GrupoAtivo->codGrupo;
+
+        $idPronac = $this->_request->getParam("idPronac");
+        $idReadequacao = $this->_request->getParam("idReadequacao");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+
+        $tbPlanoDivulgacao = new tbPlanoDivulgacao();
+        $planosDivulgacao = $tbPlanoDivulgacao->buscarPlanosDivulgacaoConsolidadoReadequacao($idReadequacao);
+
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        $dadosReadequacao = $tbReadequacao->buscar(array('idReadequacao=?'=>$idReadequacao))->current();
+        $siEncaminhamento = $dadosReadequacao->siEncaminhamento;
+
+        $Verificacao = new Verificacao();
+        $pecas = $Verificacao->buscar(array('idTipo=?'=>1), array('Descricao'));
+        $veiculos = $Verificacao->buscar(array('idTipo=?'=>2), array('Descricao'));
+
+        $get = Zend_Registry::get('get');
+        $link = isset($get->link) ? true : false;
+
+        $this->montaTela(
+            'readequacoes/carregar-planos-de-divulgacao.phtml',
+            array(
+                'idPronac' => $idPronac,
+                'planosDeDivulgacao' => $planosDivulgacao,
+                'pecas' => $pecas,
+                'veiculos' => $veiculos,
+                'link' => $link,
+                'idReadequacao' => $idReadequacao,
+                'siEncaminhamento' => $siEncaminhamento
+            )
+        );
+    }
+
+    /*
      * Criada em 14/03/2014
      * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
      * Essa função para incluir uma solicitação de readequação.
