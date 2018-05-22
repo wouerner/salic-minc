@@ -3684,7 +3684,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
             $this->_helper->json(
                 [
-                    'readequacao' => $readequacao,
+                    'readequacao' => array_map('utf8_encode', $readequacao),
                     'mensagem' => $mensagem
                 ]
             );
@@ -3693,7 +3693,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
             $this->_helper->json(
                 [
-                    'mensagem' => 'Não foi possível obter a readequação. Erro: ' . $objException->getMessage()
+                    'mensagem' => 'N&atilde;o foi poss&iacute;vel obter a readequa&ccedil;&atilde;o. Erro: ' . $objException->getMessage()
                 ]
             );
         }
