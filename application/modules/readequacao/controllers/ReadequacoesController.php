@@ -966,18 +966,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             if (count($locaisReadequados)==0) {
                 parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos locais de realiza&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
             }
-        } elseif ($idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
-            $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-            $planosReadequados = $tbPlanoDistribuicao->buscar(array(
-                'idPronac = ?'=>$idPronac,
-                'tpSolicitacao <> ?' => 'N',
-                'idReadequacao is null'=>''
-            ));
-
-            if (count($planosReadequados)==0) {
-                parent::message('N&atilde;o houve nenhuma altera&ccedil;&atilde;o nos planos de distribui&ccedil;&atilde;o do projeto!', $urlCallback, "ERROR");
-            }
-        } elseif ($idReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
+        }   elseif ($idReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DIVULGACAO) {
             $tbPlanoDivulgacao = new tbPlanoDivulgacao();
             $planosReadequados = $tbPlanoDivulgacao->buscar(array('idPronac = ?'=>$idPronac, 'idReadequacao is null'=>''));
             if (count($planosReadequados)==0) {

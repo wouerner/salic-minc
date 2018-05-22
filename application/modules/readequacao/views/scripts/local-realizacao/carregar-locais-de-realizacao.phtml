@@ -43,9 +43,9 @@
         }
         ?>
         <tr style="color: <?php echo $corLinha; ?> !important;">
-            <td><?php echo $l->Pais; ?></td>
-            <td><?php echo $l->UF; ?></td>
-            <td><?php echo $l->Cidade; ?></td>
+            <td><?php echo $l->pais; ?></td>
+            <td><?php echo $l->uf; ?></td>
+            <td><?php echo $l->municipio; ?></td>
             <td class="centro">
                 <?php if ($this->idPerfil == 1111) {
                     if ($l['tpSolicitacao'] == 'E') {
@@ -276,7 +276,7 @@
                 resizable: false,
                 title: 'Alerta!',
                 width: 390,
-                height: 170,
+                height: 200,
                 modal: true,
                 buttons: {
                     'Não': function () {
