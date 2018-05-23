@@ -26,5 +26,8 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
 
     public function indexAction()
     {
+        $idpronac = $this->_request->getParam('idpronac');
+
+        $this->view->idpronac = $idpronac;
     }
 }
