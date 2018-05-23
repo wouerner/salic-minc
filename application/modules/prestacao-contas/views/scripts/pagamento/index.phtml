@@ -39,7 +39,17 @@
                                                         :key="etapa.id">
                                                 </etapas-pagamento>
                                                 <div class="collapsible-body">
-                                                    <span>Aqui vem a UF e Tabela.</span>
+                                                    <ul class="collapsible" data-collapsible="expandable">
+                                                        <li  v-for="uf in ufs">
+                                                            <ufs-pagamento
+                                                                    v-bind:item="uf"
+                                                                    :key="uf.id">
+                                                            </ufs-pagamento>
+                                                            <div class="collapsible-body">
+                                                                <span>Funcionou</span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </li>
                                         </ul>
@@ -71,6 +81,13 @@
         '<i class="material-icons">label</i>' +
         '{{ item.text }}</div>'
     })
+    Vue.component('ufs-pagamento', {
+        props: ['item'],
+        template: '<div class="collapsible-header blue-text">' +
+        '<i class="material-icons">place</i>' +
+        '{{ item.text }}</div>'
+    })
+
     var app7 = new Vue({
         el: '#app-7',
         data: {
@@ -83,6 +100,10 @@
             etapas: [
                 { id: 0, text:'Pré-Produção'  },
                 { id: 1, text:'Produção'  }
+            ],
+            ufs: [
+                { id: 0, text:'SP - São Paulo'  },
+                { id: 1, text:'DF - Brasília'  }
             ]
         }
     })
