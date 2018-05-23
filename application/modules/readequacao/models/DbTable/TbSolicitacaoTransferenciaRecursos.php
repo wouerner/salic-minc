@@ -28,7 +28,9 @@ class Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos extends MinC_
             array(
                 new Zend_Db_Expr("
                     b.NomeProjeto,
-                    b.AnoProjeto + b.Sequencial AS pronac"
+                    b.AnoProjeto + b.Sequencial AS pronac,
+                    b.CgcCpf
+                    "
                 )
             ),
             'SAC.dbo'
