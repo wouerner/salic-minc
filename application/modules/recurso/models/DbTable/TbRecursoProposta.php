@@ -56,14 +56,28 @@ class Recurso_Model_DbTable_TbRecursoProposta extends MinC_Db_Table_Abstract
     private function enviarEmailAberturaDePrazoRecursal($id_preprojeto)
     {
         $mensagemEmail = <<<MENSAGEM_EMAIL
-Foi aberto o prazo para entrada com Recurso ou Desist&ecirc;ncia do Prazo Recursal.
-Ao acessar a Proposta {$id_preprojeto} a op&ccedil;&atilde;o "Enquadramento" no menu lateral estar&aacute; dispon&iacute;vel.
+Senhor(a) Proponente,
+<br />
+<br />
+Conforme disp&otilde;e o artigo 24 da Instru&ccedil;&atilde;o Normativa n&ordm; 05/2017 do MinC, informamos que sua proposta ser&aacute; enquadrada nos termos da Lei n&ordm; 8.313/1991.
+<br />
+<br />
+Caso discorde do enquadramento poder&aacute; solicitar sua revis&atilde;o acessando a proposta no Salic e clicando no item "Enquadramento" localizado no menu lateral esquerdo.
+<br />
+<br />
+Mensagem autom&aacute;tica gerada pelo Sistema Salic. Favor N&Atilde;O RESPONDER.
+<br />
+<br />
+Atenciosamente,
+<br />
+<br />
+Minist&eacute;rio da Cultura
 MENSAGEM_EMAIL;
 
         $preprojetoDbTable = new Proposta_Model_DbTable_PreProjeto();
         $preprojetoDbTable->enviarEmailProponente(
             $id_preprojeto,
-            'Recurso',
+            'Sugestao de Enquadramento',
             $mensagemEmail
         );
     }
@@ -108,4 +122,31 @@ MENSAGEM_EMAIL;
         ]);
     }
 
+    public function obterHistoricoRecurso($idPreProjeto)
+    {
+        $table = $this->select();
+        $table->setIntegrityCheck(false);
+        $table->from(
+            ['TbRecursoProposta' => $this->_name],
+            ['*'],
+            $this->getSchema('sac')
+        );
+        $table->joinLeft(
+            ['UsuarioAvaliador' => 'Usuarios'],
+            'UsuarioAvaliador.usu_codigo = TbRecursoProposta.idAvaliadorTecnico',
+            ['nome_avaliador' => 'usu_nome'],
+            $this->getSchema('tabelas')
+        );
+        $table->joinLeft(
+            ['NomeProponente' => 'Nomes'],
+            'NomeProponente.idAgente = TbRecursoProposta.idProponente',
+            ['nome_proponente' => 'Descricao'],
+            $this->getSchema('Agentes')
+        );
+
+        $table->where('idPreProjeto = ?', $idPreProjeto);
+        $table->where('stRascunho = ?', Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO);
+        $table->order('idRecursoProposta asc');
+        return $this->fetchAll($table);
+    }
 }
