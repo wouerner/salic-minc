@@ -19,6 +19,7 @@ class Projetos extends MinC_Db_Table_Abstract
         if ($objParam->idUsuario) {
             $consulta->where('p.IdUsuario = ?', $objParam->idUsuario);
         }
+        
         if ($objParam->idProponente) {
             $consulta->where('p.idAgente = ?', (int)$objParam->idProponente);
         }
@@ -9130,7 +9131,8 @@ class Projetos extends MinC_Db_Table_Abstract
                     p.IdPRONAC AS idPronac,
                     (p.AnoProjeto+p.Sequencial) AS pronac,
                     p.nomeProjeto,
-                    100000 AS valorAComprovar
+                    p.CgcCpf,
+                    (SELECT sac.dbo.fnVlAComprovarProjeto(idPronac)) AS valorAComprovar
                 ")
             )
         );
@@ -9153,7 +9155,6 @@ class Projetos extends MinC_Db_Table_Abstract
             return false;
         }
     }
-
     
     public function buscarProjetosRecebedoresDisponiveis($idPronac)
     {

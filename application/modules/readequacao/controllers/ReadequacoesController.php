@@ -3719,7 +3719,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $this->_helper->json(
                 [
                     'readequacao' => array_map('utf8_encode', $readequacao),
-                    'mensagem' => $mensagem
+                    'msg' => $mensagem
                 ]
             );
         } catch (Exception $objException) {
@@ -3727,7 +3727,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
             $this->_helper->json(
                 [
-                    'mensagem' => 'N&atilde;o foi poss&iacute;vel obter a readequa&ccedil;&atilde;o. Erro: ' . $objException->getMessage()
+                    'msg' => 'N&atilde;o foi poss&iacute;vel obter a readequa&ccedil;&atilde;o. Erro: ' . $objException->getMessage()
                 ]
             );
         }

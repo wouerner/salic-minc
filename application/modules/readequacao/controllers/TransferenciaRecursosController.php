@@ -2,6 +2,12 @@
 
 class Readequacao_TransferenciaRecursosController extends Readequacao_GenericController 
 {
+
+    public $areasMultiplasTransferencias = [
+        AREA_PATRIMONIO_CULTURAL,
+        AREA_MUSEUS_MEMORIA
+    ];
+    
     public function init()
     {
         parent::init();
@@ -191,7 +197,7 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
                         'idPronacRecebedor' => $projeto->idPronacRecebedor,
                         'nome' => utf8_encode($projeto->NomeProjeto),
                         'pronac' => $projeto->pronac,
-                        'valorComprovar' => 10000,
+                        'vlRecebido' => $projeto->vlRecebido,
                         'saldoDisponivel' => 10000
                     ];
                 }
@@ -227,15 +233,17 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             $dados['idReadequacao'] = $this->_request->getParam('idReadequacao');
             $dados['tpTransferencia'] = $this->_request->getParam('dsSolicitacao');
             $dados['idPronacRecebedor'] = $this->_request->getParam('idPronac');
-            $dados['vlRecebido'] = (float) str_replace(',', '.', $this->_request->getParam('valorRecebido'));
+            $dados['vlRecebido'] = (float) str_replace(',', '.', $this->_request->getParam('vlRecebido'));
             $dados['siAnaliseTecnica'] = '';
             $dados['siAnaliseComissao'] = '';
             $dados['stEstado'] = 0;
             
             $idSolicitacaoTransferenciaRecursos = $TbSolicitacaoTransferenciaRecursosDbTable->inserir($dados);
+            $dados['idSolicitacaoTransferenciaRecursos'] = $idSolicitacaoTransferenciaRecursos;
             
             $this->_helper->json(
                 [
+                    'projetoRecebedor' => $dados,
                     'msg' => 'Projeto incluido com sucesso.',
                     'resposta' => true
                 ]
@@ -277,21 +285,64 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
     public function finalizarSolicitacaoTransferenciaRecursosAction()
     {
         try {
-            $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $params = $this->getRequest()->getParams();
+            
+            if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!");
+            }
+            
+            if (empty($this->idPronac)) {
+                throw new Exception('Dados obrigat&oacute;rios n&atilde;o informados');
+            }
 
-            // inclui
+            if ($this->_existeSolicitacaoEmAnalise) {
+                throw new Exception("Readequa&ccedil;&atilde;o em an&aacute;lise");
+            }
+
+            $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+            $tbReadequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
+            $projetos = new Projetos();
+            
+            $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($params['idReadequacao']);
+            
+            $projetoTransferidor = $projetos->buscarProjetoTransferidor($this->idPronac);
+            
+            if (!in_array($projeto->codArea, $this->areasMultiplasTransferencias)) {
+                if (count($projetosRecebedores) > 1) {
+                    throw new Exception('Para projetos da &aacute;rea selecionada, n&atilde;o &eacute; poss&iacute;vel transferir recursos para mais de um projeto.');
+                }
+
+                if ($projetosRecebedores[0]->CgcCpf != $projetoTransferidor->CgcCpf) {
+                    throw new Exception('S&oacute; &eacute; poss&iacute;vel transferir recursos para projetos de um mesmo proponente!');
+                }
+                
+            }
+
+            // TODO: 
+            // soma dos valores dos projetos recebedores não pode ultrapassar o valor a comprovar do projeto transferidor
+            
+            $status = $tbReadequacaoMapper->finalizarSolicitacaoReadequacao(
+                $this->idPronac, $params['idTipoReadequacao']
+            );
+
+            if ($status == false) {
+                throw new Exception("N&atilde;o foi poss&iacute;vel finalizar a solicita&ccedil;&atilde;o");
+            }
             
             $this->_helper->json(
                 [
                     'readequacao' => $readequacao,
-                    'resposta' => true
+                    'resposta' => true,
+                    'msg' => 'Readequa&ccedil;&atilde;o finalizada com sucesso!'
                 ]
             );
         } catch (Exception $objException) {
+            $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json(
                 [
                     'error ' => $objException->getMessage(),
-                    'resposta' => false
+                    'resposta' => false,
+                    'msg' => $objException->getMessage()
                 ]
             );
         }
