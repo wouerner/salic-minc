@@ -24,22 +24,22 @@
                             <i class="material-icons">beenhere</i>
                             <p>Incentivo Fiscal Federal</p>
                         </div>
-                        <div class="collapsible-body">
-                            <ul class="collapsible" data-collapsible="expandable">
+                        <div class="collapsible-body no-padding">
+                            <ul class="collapsible no-margin no-border" data-collapsible="expandable">
                                 <li  v-for="produto in produtos">
                                     <produtos-pagamento
                                         v-bind:item="produto"
                                         :key="produto.id">
                                     </produtos-pagamento>
-                                    <div class="collapsible-body">
-                                        <ul class="collapsible" data-collapsible="expandable">
+                                    <div class="collapsible-body no-padding">
+                                        <ul class="collapsible no-margin no-border" data-collapsible="expandable">
                                             <li  v-for="etapa in etapas">
                                                 <etapas-pagamento
                                                         v-bind:item="etapa"
                                                         :key="etapa.id">
                                                 </etapas-pagamento>
-                                                <div class="collapsible-body">
-                                                    <ul class="collapsible" data-collapsible="expandable">
+                                                <div class="collapsible-body no-padding">
+                                                    <ul class="collapsible no-margin no-border" data-collapsible="expandable">
                                                         <li  v-for="uf in ufs">
                                                             <ufs-pagamento
                                                                     v-bind:item="uf"
