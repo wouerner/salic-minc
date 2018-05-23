@@ -220,7 +220,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $planilhaItemModel = new PlanilhaItem();
 
-        $resposta   = $planilhaAprovacaoModel->buscarItensPagamento($this->view->idpronac); //Alysson - Altera��o da Query para n�o mostrar os itens excluidos
+        /* $resposta = $planilhaAprovacaoModel->buscarItensPagamento($this->view->idpronac); //Alysson - Altera��o da Query para n�o mostrar os itens excluidos */
+
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada($this->view->idpronac); //Alysson - Altera��o da Query para n�o mostrar os itens excluidos
 
         $arrayA =   array();
         $arrayP =   array();
@@ -228,46 +230,70 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
                 $modalidade = '';
-                if ($val->idCotacao != '') {
-                    $modalidade = 'Cota&ccedil;&atilde;o';
-                    $idmod      =   'cot'.$val->idCotacao.'_'.$val->idFornecedorCotacao;
-                }
-                if ($val->idDispensaLicitacao != '') {
-                    $modalidade = 'Dispensa';
-                    $idmod      =   'dis'.$val->idDispensaLicitacao;
-                }
-                if ($val->idLicitacao != '') {
-                    $modalidade =   'Licita&ccedil;&atilde;o';
-                    $idmod      =   'lic'.$val->idLicitacao;
-                }
-                if ($val->idContrato != '') {
-                    if ($modalidade != '') {
-                        $modalidade .=   ' /';
-                    }
-                    $modalidade .=   ' Contrato';
-                    $idmod      =   'con'.$val->idContrato;
-                }
-                if ($modalidade == '') {
-                    $modalidade =   '-';
-                    $idmod      =   'sem';
-                }
+                /* if ($val->idCotacao != '') { */
+                /*     $modalidade = 'Cota&ccedil;&atilde;o'; */
+                /*     $idmod      =   'cot'.$val->idCotacao.'_'.$val->idFornecedorCotacao; */
+                /* } */
+                /* if ($val->idDispensaLicitacao != '') { */
+                /*     $modalidade = 'Dispensa'; */
+                /*     $idmod      =   'dis'.$val->idDispensaLicitacao; */
+                /* } */
+                /* if ($val->idLicitacao != '') { */
+                /*     $modalidade =   'Licita&ccedil;&atilde;o'; */
+                /*     $idmod      =   'lic'.$val->idLicitacao; */
+                /* } */
+                /* if ($val->idContrato != '') { */
+                /*     if ($modalidade != '') { */
+                /*         $modalidade .=   ' /'; */
+                /*     } */
+                /*     $modalidade .=   ' Contrato'; */
+                /*     $idmod      =   'con'.$val->idContrato; */
+                /* } */
+                /* if ($modalidade == '') { */
+                /*     $modalidade =   '-'; */
+                /*     $idmod      =   'sem'; */
+                /* } */
 
+/* die(); */
                 $itemComprovacao = $planilhaItemModel->pesquisar($val->idPlanilhaAprovacao);
-
+/* x($val); */
                 if ($val->tpCusto == 'A') {
-                    $arrayA[$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaAprovacao] = array(
-                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->vlComprovado, $modalidade, $idmod
+                    $arrayA[$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaItens] = array(
+                        $val->descItem,
+                        (float)$val->vlAprovado,
+                        null,
+                        (float)$val->vlComprovado,
+                        $modalidade, 
+                        $idmod,
+                        $val->idPlanilhaItens,
+                        $val->uf,
+                        $val->cdProduto,
+                        $val->cdCidade,
+                        $val->cdEtapa
                     );
                 }
+
                 if ($val->tpCusto == 'P') {
-                    $arrayP[$val->Descricao][$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaAprovacao] = array(
-                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->vlComprovado, $modalidade, $idmod
+                    $arrayP[$val->Descricao][$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaItens] = array(
+                        $val->descItem, 
+                        (float)$val->vlAprovado, 
+                        null,
+                        (float)$val->vlComprovado,
+                        $modalidade, 
+                        $idmod,
+                        $val->idPlanilhaItens,
+                        $val->uf,
+                        $val->cdProduto,
+                        $val->cdCidade,
+                        $val->cdEtapa
                     );
                 }
             }
         }
+        /* die; */
 
         $this->view->incFiscaisA   = array('Administra&ccedil;&atilde;o do Projeto' =>$arrayA);
+/* xd($this->view->incFiscaisA); */
         $this->view->incFiscaisP   = array('Custo por Produto' =>$arrayP);
     }
 
@@ -1815,23 +1841,18 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->listacontrato = $array;
     }
 
-    /**
-     * Altera��o realizada por pedido da �rea Finalistica em 16/02/2016 as 10:48
-     * Author: Alysson Vicu�a de Oliveira
-     * @access public
-     * @param void
-     * @return void
-     * @throws Zend_Db_Table_Exception
-     */
     public function comprovacaopagamentoAction()
     {
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
-
-        //Adicionado para ser usado como novo parametro do metodo pesquisarComprovantePorItem
         $idPronac = $this->getRequest()->getParam('idpronac');
+        $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
+        $idPlanilhaItens = $this->getRequest()->getParam('idPlanilhaItens');
         $idComprovantePagamento = $this->getRequest()->getParam('idComprovantePagamento');
+        $uf = $this->getRequest()->getParam('uf');
+        $cdproduto = $this->getRequest()->getParam('produto');
+        $cdcidade = $this->getRequest()->getParam('cidade');
+        $cdetapa = $this->getRequest()->getParam('etapa');
 
         $tblProjetos = new Projetos();
         $projeto = $tblProjetos->buscarTodosDadosProjeto($idPronac);
@@ -1845,33 +1866,57 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
         $produto = $produtoModel->find($itemPlanilhaAprovacao->idProduto)->current();
         $etapa = $etapaModel->find($itemPlanilhaAprovacao->idEtapa)->current();
-        $item = $itemModel->find($itemPlanilhaAprovacao->idPlanilhaItem)->current();
+        $item = $itemModel->find($idPlanilhaItens)->current();
+        /* xd($item->toArray()); */
 
         /*todo*/
         $planilhaAprovacao = new PlanilhaAprovacao();
-        $planilhaAprovacaoItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
-            $idPronac,
-            null,
-            null,
-            null,
-            $idComprovantePagamento
-        );
+        /* $planilhaAprovacaoItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario( */
+        /*     $idPronac, */
+        /*     $idPlanilhaItens, */
+        /*     null, */
+        /*     null, */
+        /*     $idComprovantePagamento ? $idComprovantePagamento : null */
+        /* ); */
         /* var_dump($planilhaAprovacaoItem[0]); */
         /* die; */
-        $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto(
-            $idPronac,
-            null, //$planilhaAprovacaoItem->current()->cdUF,
-            $planilhaAprovacaoItem->current()->cdEtapa,
-            $planilhaAprovacaoItem->current()->cdProduto,
-            $planilhaAprovacaoItem->current()->cdCidade,
+        /* $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto( */
+        /*     $idPronac, */
+        /*     /1* $planilhaAprovacaoItem->current()->cdEtapa, *1/ */
+        /*     $Produto, */
+        /*     $planilhaAprovacaoItem->current()->cdCidade, */
 
-            /* $planilhaAprovacaoItem->current()->idComprovantePagamento, */
+        /*     /1* $planilhaAprovacaoItem->current()->idComprovantePagamento, *1/ */
+        /*     null, */
+        /*     null, */
+        /*     null, */
+        /*     null, */
+        /*     null, */
+        /*     $idPlanilhaItens */
+        /* ); */
+
+        $valoresItem = $planilhaAprovacao->planilhaAprovada(
+            $idPronac, 
+            $uf,
+            $cdetapa,
+            $cdproduto,
+            $cdcidade,
             null,
-            $planilhaAprovacaoItem->current()->idPlanilhaItem
-        );
+            $idPlanilhaItens
+        ); 
+        /* var_dump( */
+        /*     $idPronac, */ 
+        /*     $uf, */
+        /*     $etapa, */
+        /*     $produto, */
+        /*     $cidade, */
+        /*     null, */
+        /*     $idPlanilhaItens */
+        /* ); */
+        /* die; */
+        /* xd($valoresItem); */
 
         $this->view->valores = $valoresItem->current();
-        /*todo*/
 
         $fornecedorModel = new FornecedorModel();
         $fornecedor = $fornecedorModel->pesquisarFornecedorItem($idPlanilhaAprovacao);
@@ -1887,7 +1932,24 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
 
         $comprovantePagamentoModel = new ComprovantePagamento();
-        $comprovantesDePagamento = $comprovantePagamentoModel->pesquisarComprovantePorItem($item->idPlanilhaItens, $idPronac, $etapa->idPlanilhaEtapa, $itemPlanilhaAprovacao->idProduto, $itemPlanilhaAprovacao->idUFDespesa, $itemPlanilhaAprovacao->idMunicipioDespesa); //ID Recuperado
+        $comprovantesDePagamento = $comprovantePagamentoModel
+            ->pesquisarComprovantePorItem(
+                $item->idPlanilhaItens, 
+                $idPronac, 
+                $etapa->idPlanilhaEtapa, 
+                $itemPlanilhaAprovacao->idProduto, 
+                $itemPlanilhaAprovacao->idUFDespesa, 
+                $itemPlanilhaAprovacao->idMunicipioDespesa); //ID Recuperado
+
+        $comprovantesDePagamento = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                $idPronac,
+                $idPlanilhaItens,
+                null,
+                $cdproduto,
+                null,
+                $cdcidade
+            )->toArray();
+        /* xd($comprovantesDePagamento);die; */
 
         array_walk($comprovantesDePagamento, function (&$comprovanteDePagamento) use ($fornecedorModel) {
             $comprovanteDePagamento = (object) $comprovanteDePagamento;
