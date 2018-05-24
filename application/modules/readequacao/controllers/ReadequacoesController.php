@@ -1817,12 +1817,17 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->view->dados = $dados;
         $this->view->idPronac = $dados->idPronac;
         $this->view->nmPagina = $dados->dsReadequacao;
-        $d = array();
-        $d['ProvidenciaTomada'] = 'Readequa&ccedil;&atilde;o enviado para avalia&ccedil;&atilde;o t&eacute;cnica.';
-        $d['dtSituacao'] = new Zend_Db_Expr('GETDATE()');
-        $where = "IdPRONAC = $dados->idPronac";
         $Projetos = new Projetos();
-        $Projetos->update($d, $where);
+
+        //DADOS DO PROJETO
+        $p = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $dados->idPronac))->current();
+        $this->view->projeto = $p;
+
+//        $d = array();
+//        $d['ProvidenciaTomada'] = 'Readequa&ccedil;&atilde;o enviada para avalia&ccedil;&atilde;o t&eacute;cnica.';
+//        $d['dtSituacao'] = new Zend_Db_Expr('GETDATE()');
+//        $where = "IdPRONAC = $dados->idPronac";
+//        $Projetos->update($d, $where);
 
         $TbPlanilhaUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
         $buscarUnidade = $TbPlanilhaUnidade->buscarUnidade();
@@ -1835,10 +1840,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         $this->in2017 = $fnIN2017->verificar($dados->idPronac);
         $this->view->in2017 = $this->in2017;
-
-        //DADOS DO PROJETO
-        $p = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $dados->idPronac))->current();
-        $this->view->projeto = $p;
     }
 
     /*
