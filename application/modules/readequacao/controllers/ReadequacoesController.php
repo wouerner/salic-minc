@@ -1849,14 +1849,17 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     */
     public function salvarParecerTecnicoAction()
     {
-        if ($this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA
+            && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
-        $idPronac = $_POST['idPronac'];
-        $idReadequacao = $_POST['idReadequacao'];
-        $dsParecer = $_POST['dsParecer'];
-        $parecerProjeto = $_POST['parecerProjeto'];
+        $params = $this->getRequest()->getParams();
+
+        $idPronac = $params['idPronac'];
+        $idReadequacao = $params['idReadequacao'];
+        $dsParecer = $params['dsParecer'];
+        $parecerProjeto = $params['parecerProjeto'];
         $campoTipoParecer = 8;
         $vlPlanilha = 0;
 
@@ -1889,10 +1892,15 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
         }
 
+        if ($dadosRead->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
+            $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+            $tbPlanoDistribuicaoMapper->atualizarAnaliseTecnica($this->idPronac, $idReadequacao, $this->idPerfil, $parecerProjeto);
+        }
+
         try {
-            //ATUALIAZA A SITUAÇÃO, ÁREA E SEGMENTO DO PROJETO
+            //ATUALIZA A SITUAÇÃO, ÁREA E SEGMENTO DO PROJETO
             $d = array();
-            $d['ProvidenciaTomada'] = 'Readequação em análise pela área técnica.';
+            $d['ProvidenciaTomada'] = 'Readequa&ccedil;&atilde;o em an&aacute;lise pela &aacute;rea t&eacute;cnica.';
             //$d['dtSituacao'] = new Zend_Db_Expr('GETDATE()');
             $where = "IdPRONAC = $idPronac";
             $Projetos = new Projetos();
@@ -1923,14 +1931,12 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     'Logon' => $this->idUsuario
                 );
 
-                foreach ($dadosParecer as $dp) {
-                    $parecerAntigo = array(
-                        'Atendimento' => 'S',
-                        'stAtivo' => 0
-                    );
-                    $whereUpdateParecer = 'IdPRONAC = '.$idPronac;
-                    $alteraParecer = $parecerDAO->alterar($parecerAntigo, $whereUpdateParecer);
-                }
+                $parecerAntigo = array(
+                    'Atendimento' => 'S',
+                    'stAtivo' => 0
+                );
+                $whereUpdateParecer = 'IdPRONAC = '.$idPronac;
+                $alteraParecer = $parecerDAO->alterar($parecerAntigo, $whereUpdateParecer);
 
                 $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
                 $buscarParecer = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?'=>$idReadequacao))->current();
@@ -1954,7 +1960,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 }
             }
 
-            if (isset($_POST['finalizarAvaliacao']) && $_POST['finalizarAvaliacao'] == 1) {
+            if (isset($params['finalizarAvaliacao']) && $params['finalizarAvaliacao'] == 1) {
                 $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
                 $dDP = $tbDistribuirReadequacao->buscar(array('idReadequacao = ?'=>$idReadequacao));
 
@@ -2276,6 +2282,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
         }
 
+        if ($dadosRead->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
+            $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+            $tbPlanoDistribuicaoMapper->atualizarAnaliseTecnica($idPronac, $idReadequacao, $this->idPerfil, $parecerProjeto);
+        }
+
         try {
             $Projetos = new Projetos();
             $enquadramentoDAO = new Admissibilidade_Model_Enquadramento();
@@ -2562,53 +2573,8 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                                 $idAprovacao = $tbAprovacao->inserir($dadosAprovacao);
 
                             } elseif ($read->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) { //Se for readequação de plano de distribuição, atualiza os dados na SAC.dbo.PlanoDistribuicaoProduto.
-                                //@todo finalizar comissao
-                                $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-                                $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-                                $planosDistribuicao = $tbPlanoDistribuicao->buscar(array('idReadequacao=?'=>$idReadequacao));
-
-                                foreach ($planosDistribuicao as $plano) {
-                                    $Projetos = new Projetos();
-                                    $dadosPrj = $Projetos->buscar(array('IdPRONAC=?'=>$read->idPronac))->current();
-
-                                    //Se não houve avalição do conselheiro, pega a avaliação técnica como referencia.
-                                    $avaliacao = $plano->tpAnaliseComissao;
-                                    if ($plano->tpAnaliseComissao == 'N') {
-                                        $avaliacao = $plano->tpAnaliseTecnica;
-                                    }
-
-                                    //Se a avaliação foi deferida, realiza as mudanças necessárias na tabela original.
-                                    if ($avaliacao == 'D') {
-                                        if ($plano->tpSolicitacao == 'E') { //Se o plano de distribuição foi excluído, atualiza os status do plano na SAC.dbo.PlanoDistribuicaoProduto
-                                            $PlanoDistribuicaoProduto->delete(array('idProjeto = ?'=>$dadosPrj->idProjeto, 'idProduto = ?'=>$plano->idProduto, 'Area = ?'=>$plano->cdArea, 'Segmento = ?'=>$plano->cdSegmento));
-                                        } elseif ($plano->tpSolicitacao == 'I') { //Se o plano de distribuição foi incluído, cria um novo registro na tabela SAC.dbo.PlanoDistribuicaoProduto
-                                            $novoPlanoDistRead = array();
-                                            $novoPlanoDistRead['idProjeto'] = $dadosPrj->idProjeto;
-                                            $novoPlanoDistRead['idProduto'] = $plano->idProduto;
-                                            $novoPlanoDistRead['Area'] = $plano->cdArea;
-                                            $novoPlanoDistRead['Segmento'] = $plano->cdSegmento;
-                                            $novoPlanoDistRead['idPosicaoDaLogo'] = $plano->idPosicaoLogo;
-                                            $novoPlanoDistRead['QtdeProduzida'] = $plano->qtProduzida;
-                                            $novoPlanoDistRead['QtdePatrocinador'] = $plano->qtPatrocinador;
-                                            $novoPlanoDistRead['QtdeProponente'] = $plano->qtProponente;
-                                            $novoPlanoDistRead['QtdeOutros'] = $plano->qtOutros;
-                                            $novoPlanoDistRead['QtdeVendaNormal'] = $plano->qtVendaNormal;
-                                            $novoPlanoDistRead['QtdeVendaPromocional'] = $plano->qtVendaPromocional;
-                                            $novoPlanoDistRead['PrecoUnitarioNormal'] = $plano->vlUnitarioNormal;
-                                            $novoPlanoDistRead['PrecoUnitarioPromocional'] = $plano->vlUnitarioPromocional;
-                                            $novoPlanoDistRead['stPrincipal'] = 0;
-                                            $novoPlanoDistRead['Usuario'] = $this->idUsuario;
-                                            $novoPlanoDistRead['dsJustificativaPosicaoLogo'] = null;
-                                            $novoPlanoDistRead['stPlanoDistribuicaoProduto'] = 1;
-                                            $PlanoDistribuicaoProduto->inserir($novoPlanoDistRead);
-                                        }
-                                    }
-                                }
-
-                                $dadosPDD = array();
-                                $dadosPDD['stAtivo'] = 'N';
-                                $wherePDD = "idPronac = $read->idPronac AND idReadequacao = $idReadequacao";
-                                $tbPlanoDistribuicao->update($dadosPDD, $wherePDD);
+                                $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
+                                $tbPlanoDistribuicaoMapper->finalizarReadequacaoPlanoDistribuicao($read->idPronac, $idReadequacao);
 
                             } elseif ($read->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO) { //Se for readequação de nome do projeto, insere o registo na tela de Checklist de Publicação.
                                 $Projetos = new Projetos();
@@ -3002,73 +2968,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             } elseif ($read->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) { //Se for readequação de plano de distribuição, atualiza os dados na SAC.dbo.PlanoDistribuicaoProduto.
 
                 $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
-                $tbPlanoDistribuicaoMapper->consolidarDadosPlanoDistribuicao($read->idPronac, $idReadequacao);
-                //                $PlanoDistribuicaoProduto = new Proposta_Model_DbTable_PlanoDistribuicaoProduto();
-//                $tbPlanoDistribuicao = new Readequacao_Model_DbTable_TbPlanoDistribuicao();
-//                $planosDistribuicaoReadequados = $tbPlanoDistribuicao->buscar(array('idReadequacao=?'=>$idReadequacao));
-//
-//                $Projetos = new Projetos();
-//                $dadosPrj = $Projetos->buscar(array('IdPRONAC=?'=>$read->idPronac))->current();
-//
-//                // lista todos os planos originais
-//                $planosDistribuicaoOriginais = $PlanoDistribuicaoProduto->buscar(array('idProjeto=?' => $dadosPrj->idProjeto));
-//                $planosExistentes = array();
-//                foreach ($planosDistribuicaoOriginais as $planoOriginal) {
-//                    $planosExistentes[] = $planoOriginal->idPlanoDistribuicao;
-//                }
-//
-//                foreach ($planosDistribuicaoReadequados as $planoReadequado) {
-//
-//                    //Se não houve avalição do conselheiro, pega a avaliação técnica como referencia.
-//                    $avaliacao = $planoReadequado->tpAnaliseComissao;
-//                    if ($planoReadequado->tpAnaliseComissao == 'N') {
-//                        $avaliacao = $planoReadequado->tpAnaliseTecnica;
-//                    }
-//
-//                    //Se a avaliação foi deferida, realiza as mudanças necessárias na tabela original.
-//                    if ($avaliacao == 'D') {
-//                        $registroExiste = false;
-//
-//                        if (in_array($planoReadequado->idPlanoDistribuicao, $planosExistentes)) {
-//                            $registroExiste = true;
-//                        }
-//                        // workaround para barrar update de projetos antigos: faz update somente quando tem o id na tabela
-//
-//                        if ($registroExiste) {
-//                            // pega dados da tabela temporria (tbPlanoDistribuicao) e faz update em PlanoDistribuicaoProduto
-//                            $updatePlanoDistr = array();
-//                            $updatePlanoDistr['idProjeto'] = $dadosPrj->idProjeto;
-//                            $updatePlanoDistr['idProduto'] = $planoReadequado->idProduto;
-//                            $updatePlanoDistr['Area'] = $planoReadequado->cdArea;
-//                            $updatePlanoDistr['Segmento'] = $planoReadequado->cdSegmento;
-//                            $updatePlanoDistr['idPosicaoDaLogo'] = $planoReadequado->idPosicaoLogo;
-//                            $updatePlanoDistr['QtdeProduzida'] = $planoReadequado->qtProduzida;
-//                            $updatePlanoDistr['QtdePatrocinador'] = $planoReadequado->qtPatrocinador;
-//                            $updatePlanoDistr['QtdeProponente'] = $planoReadequado->qtProponente;
-//                            $updatePlanoDistr['QtdeOutros'] = $planoReadequado->qtOutros;
-//                            $updatePlanoDistr['QtdeVendaNormal'] = $planoReadequado->qtVendaNormal;
-//                            $updatePlanoDistr['QtdeVendaPromocional'] = $planoReadequado->qtVendaPromocional;
-//                            $updatePlanoDistr['PrecoUnitarioNormal'] = $planoReadequado->vlUnitarioNormal;
-//                            $updatePlanoDistr['PrecoUnitarioPromocional'] = $planoReadequado->vlUnitarioPromocional;
-//                            $updatePlanoDistr['stPrincipal'] = 0;
-//                            $updatePlanoDistr['Usuario'] = $auth->getIdentity()->usu_codigo;
-//                            $updatePlanoDistr['dsJustificativaPosicaoLogo'] = null;
-//                            $updatePlanoDistr['stPlanoDistribuicaoProduto'] = 1;
-//
-//                            $wherePlanoDistr = array();
-//                            $wherePlanoDistr['idPlanoDistribuicao = ?'] = $planoOriginal->idPlanoDistribuicao;
-//
-//                            $PlanoDistribuicaoProduto->update($updatePlanoDistr, $wherePlanoDistr);
-//                        }
-//                    }
-//                }
-//
-//                $dadosPDD = array();
-//                $dadosPDD['stAtivo'] = 'N';
-//                $wherePDD = array();
-//                $wherePDD['idPronac = ? '] = $read->idPronac;
-//                $wherePDD['idReadequacao = ?'] = $idReadequacao;
-//                $tbPlanoDistribuicao->update($dadosPDD, $wherePDD);
+                $tbPlanoDistribuicaoMapper->finalizarReadequacaoPlanoDistribuicao($read->idPronac, $idReadequacao);
 
             } elseif ($read->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO) { //Se for readequação de nome do projeto, insere o registo na tela de Checklist de Publicação.
                 $Projetos = new Projetos();
