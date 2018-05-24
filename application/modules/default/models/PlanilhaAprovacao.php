@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of PlanilhaAprovacao
- *
- * @author augusto
- */
 class PlanilhaAprovacao extends MinC_Db_Table_Abstract
 {
     protected $_name = 'tbPlanilhaAprovacao';
@@ -2501,15 +2496,6 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         $idComprovantePagamento = null,
         $cidade = null
     ) {
-/* var_dump( */
-/*         $idpronac, */
-/*         $idPlanilhaItem  , */
-/*         $stItemAvaliado , */
-/*         $codigoProduto , */
-/*         $idComprovantePagamento */ 
-/*     ); */
-/* die; */
-
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -2519,7 +2505,9 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
                 'nmFornecedor as Descricao',
                 'nrCNPJCPF as CNPJCPF',
                 'dsJustificativaProponente as dsJustificativa',
-                'dsOcorrenciaDoTecnico as ocorrencia'
+                'dsOcorrenciaDoTecnico as ocorrencia',
+                'tpDocumento as tipoDocumentoNome',
+                'nrcnpjcpf as CNPJCPF'
             ],
             $this->_schema
         );
@@ -2826,10 +2814,9 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
 
         if ($codigoProduto != 0 && !is_null($codigoProduto)) {
             $select->where('d.codigo = ?', $codigoProduto);
-        } else if($codigoProduto == 0){
+        } else if($codigoProduto == 0 && !is_null($codigoProduto)){
             $select->where('d.codigo is null');
         }
-
         /* $select->order('tpCusto desc'); */
         /* $select->order('Produto'); */
         /* $select->order('cdEtapa'); */
