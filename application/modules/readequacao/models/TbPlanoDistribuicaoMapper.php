@@ -237,22 +237,23 @@ class Readequacao_Model_TbPlanoDistribuicaoMapper extends MinC_Db_Mapper
                     # adiciona os novos
                     $detalhamentos = array_walk($detalhamentosReadequados, function($detalhamento) {
 
-                        if ($detalhamento['idPlanoDistribuicao'] == $planoReadequado->idPlanoDistribuicao)
-                        unset($detalhamento['tpSolicitacao']);
-                        unset($detalhamento['stAtivo']);
-                        unset($detalhamento['idPronac']);
-                        $detalhamento['idPlanoDistribuicao'] = $planoOriginal->idPlanoDistribuicao;
+                        if ($detalhamento['idPlanoDistribuicao'] == $planoReadequado->idPlanoDistribuicao) {
+                            unset($detalhamento['tpSolicitacao']);
+                            unset($detalhamento['stAtivo']);
+                            unset($detalhamento['idPronac']);
+                            $detalhamento['idPlanoDistribuicao'] = $planoOriginal->idPlanoDistribuicao;
+                        }
                         x($detalhamento);
+
 //                        $tbDetalhaPlanoDistribuicao->inserir($detalhamento);
                     });
 
-xd('teste');
 //                    $PlanoDistribuicaoProduto->update($updatePlanoDistr, $wherePlanoDistr);
                 }
+
             }
         }
 
-xd('ttes222');
         $dadosPDD = array();
         $dadosPDD['stAtivo'] = 'N';
         $wherePDD = array();
