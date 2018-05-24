@@ -9173,13 +9173,14 @@ class Projetos extends MinC_Db_Table_Abstract
             Area::AREA_PATRIMONIO_CULTURAL,
             Area::AREA_MUSEUS_MEMORIA
         ];
-        
+
         $select = $this->select();
         $select->where('idPronac != ?', $projetoAtual->IdPRONAC);
         
-        if (in_array($projetoAtual->Area, $areasProjetosOutrosProponentes)) {
-            $select->limit(10);
-        } else {
+        $select->where(new Zend_Db_Expr('DtInicioExecucao > GETDATE() AND DtFimExecucao < GETDATE()'));
+        $select->where(new Zend_Db_Expr('(SELECT SAC.DBO.fnNrPortariaAprovacao(AnoProjeto,Sequencial)) IS NOT NULL'));
+        
+        if (!in_array($projetoAtual->Area, $areasProjetosOutrosProponentes)) {
             $select->where('CgcCpf = ?', $projetoAtual->CgcCpf);
         }
         
