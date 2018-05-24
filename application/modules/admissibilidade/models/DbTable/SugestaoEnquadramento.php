@@ -101,7 +101,20 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
         $tableSelect->setIntegrityCheck(false);
         $tableSelect->from(
             [$this->_name => $this->_name],
-            '*',
+            [
+                'id_sugestao_enquadramento',
+                'id_preprojeto',
+                'id_orgao',
+                'id_perfil_usuario',
+                'id_usuario_avaliador',
+                'descricao_motivacao' => new Zend_Db_Expr('CAST(descricao_motivacao AS TEXT)'),
+                'data_avaliacao',
+                'id_area',
+                'id_segmento',
+                'id_orgao_superior',
+                'ultima_sugestao',
+                'id_distribuicao_avaliacao_proposta',
+            ],
             $this->_schema
         );
         $tableSelect->joinInner(
