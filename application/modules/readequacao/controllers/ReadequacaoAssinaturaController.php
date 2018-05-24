@@ -24,7 +24,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_SEM_PORTARIA;
+        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
     }
 
     public function indexAction()
