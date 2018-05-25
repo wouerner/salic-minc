@@ -3618,17 +3618,20 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $idTipoReadequacao = $this->_request->getParam('idTipoReadequacao');
         $idReadequacao = $this->_request->getParam('idReadequacao');
         $idPronac = $this->_request->getParam('idPronac');
-
+        $siEncaminhamento = $this->_request->getParam('siEncaminhamento');
+        
         try {
             $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
             $readequacao = $tbReadequacao->obterDadosReadequacao(
                 $idTipoReadequacao,
                 $idPronac,
-                $idReadequacao
+                $idReadequacao,
+                $siEncaminhamento
             );
-
+            
             if (empty($readequacao)) {
                 $mensagem = 'Nenhuma readequa&ccedil;&atilde;o para o idPronac ' . $this->idPronac;
+                $readequacao = [];
             }
 
             $this->_helper->json(
