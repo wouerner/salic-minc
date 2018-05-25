@@ -146,7 +146,14 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                 if (!$existeReadequacaoEmAndamento
                     || $existeReadequacaoEmEdicao
                 ) {
-                    $ReadequacaoTransferenciaRecursos = 1;
+                    $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+                    $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores(
+                        '',
+                        $idPronac
+                    );
+                    if (count($projetosRecebedores) > 0) {
+                        $ReadequacaoTransferenciaRecursos = 1;
+                    } 
                 }
             }            
         }
