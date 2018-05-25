@@ -446,7 +446,6 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
 
         //adicionando linha order ao select
         $select->order($order);
-
         
         return $this->fetchAll($select);
     }
@@ -1430,13 +1429,14 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
     public function obterDadosReadequacao(
         $idTipoReadequacao,
         $idPronac = '',
-        $idReadequacao = ''
+        $idReadequacao = '',
+        $siEncaminhamento = self::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE
     )
     {
         $where = [
             'a.idTipoReadequacao = ?' => $idTipoReadequacao,
             'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO,
-            'a.siEncaminhamento = ?' => Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE
+            'a.siEncaminhamento = ?' => $siEncaminhamento
         ];
         
         if ($idPronac) {
@@ -1459,7 +1459,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
                 'nomeArquivo' => $readequacao[0]['nmArquivo']                
             ];
         }
-       
+        
         return $readequacaoArray;
     }
 }
