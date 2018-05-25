@@ -96,6 +96,10 @@ Vue.component('readequacao-plano-distribuicao', {
     },
     props: {
         'idPronac': '',
+        'siEncaminhamento': {
+            default: '12',
+            type: String
+        },
         'disabled': false
     },
     mixins: [utils],
@@ -169,7 +173,8 @@ Vue.component('readequacao-plano-distribuicao', {
                 url: "/readequacao/readequacoes/obter-dados-readequacao",
                 data: {
                     idTipoReadequacao: self.idTipoReadequacao,
-                    idPronac: self.idPronac
+                    idPronac: self.idPronac,
+                    siEncaminhamento: self.siEncaminhamento
                 }
             }).done(function (response) {
                 if (response.readequacao != null) {
