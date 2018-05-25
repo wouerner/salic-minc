@@ -2793,7 +2793,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
              'sac.dbo'
         );
 
-        $select->where('a.tpplanilha = ?', 'SR');
+        /* $select->where('a.tpplanilha = ?', 'SR'); */
         $select->where('a.tpacao <> ?', 'E');
         $select->where('a.IdPRONAC = ?', $idpronac);
         $select->where('a.nrFonteRecurso = 109');
