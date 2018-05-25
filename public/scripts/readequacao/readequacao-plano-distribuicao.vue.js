@@ -59,6 +59,7 @@ Vue.component('readequacao-plano-distribuicao', {
                 >Excluir <i class="material-icons right">delete</i></a>
                 <a
                     href="javascript:void(0)"
+                    :disabled="desativarBotaoFinalizar"
                     class="waves-effect waves-light btn btn-secondary"
                     title="Finalizar readequa\u00E7\u00E3o e enviar para o MinC"
                     @click="finalizarReadequacao"
@@ -130,6 +131,18 @@ Vue.component('readequacao-plano-distribuicao', {
     computed: {
         idPronacHash: function () {
             return $("#idPronacHash").val();
+        },
+        desativarBotaoFinalizar: function () {
+
+            if(typeof this.readequacao.idReadequacao == 'undefined') {
+                return true;
+            }
+
+            if(this.readequacao.justificativa.length < 3) {
+                return true;
+            }
+
+            return false;
         }
     },
     methods: {
@@ -230,15 +243,11 @@ Vue.component('readequacao-plano-distribuicao', {
         },
         finalizarReadequacao: function () {
             let self = this;
-
             if (confirm("Tem certeza que deseja finalizar a redequa\u00E7\u00E3o?")) {
                 $3.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "/readequacao/plano-distribuicao/finalizar-readequacao-plano-distribuicao-ajax",
-                    data: {
-                        idPronac: self.idPronac,
-                        idTipoReadequacao: self.idTipoReadequacao
-                    }
+                    data: self.readequacao
                 }).done(function (response) {
                     self.mensagemSucesso(response.msg);
                     self.restaurarFormulario();
