@@ -3807,4 +3807,49 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
     }
+
+    public function encaminharProjetosParaAssinaturaAction()
+    {
+        try {
+            $this->salvarEncaminhamentoAssinatura();
+            $this->carregarListaEncaminhamentoAssinatura();
+        } catch (Exception $objException) {
+            parent::message(
+                $objException->getMessage(),
+                '/admissibilidade/enquadramento/encaminhar-assinatura'
+            );
+        }
+    }
+
+    private function salvarEncaminhamentoAssinatura()
+    {
+        $get = $this->getRequest()->getParams();
+        $post = $this->getRequest()->getPost();
+        $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
+
+        if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
+            $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
+            $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
+            parent::message('Projeto encaminhado com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
+        } elseif (isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
+            foreach ($post['IdPRONAC'] as $idPronac) {
+                $servicoDocumentoAssinatura->idPronac = $idPronac;
+                $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
+            }
+            parent::message('Projetos encaminhados com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
+        }
+    }
+
+    private function carregarListaEncaminhamentoAssinatura()
+    {
+        $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
+        $enquadramento = new Admissibilidade_Model_Enquadramento();
+
+        $this->view->dados = array();
+        $ordenacao = array("dias desc");
+        $this->view->dados = $enquadramento->obterProjetosEnquadradosParaAssinatura($this->grupoAtivo->codOrgao, $ordenacao);
+
+        $this->view->codGrupo = $this->grupoAtivo->codGrupo;
+        $this->view->codOrgao = $this->grupoAtivo->codOrgao;
+    }
 }
