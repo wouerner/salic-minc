@@ -10,7 +10,6 @@
 </div>
 
 <div class="row" id="app-7">
-    <dados idpronac="<?php echo $this->idpronac ?>"></dados>
     <div class="col s12 m12">
         <div class="card">
             <div class="card-content">
@@ -18,74 +17,8 @@
                     <div class="center-align card-content grey lighten-4">
                         <span class="card-title">PLANILHA DE ORÇAMENTO APROVADA</span>
                     </div>
+                    <dados idpronac="<?php echo $this->idpronac ?>"></dados>
                 </div>
-                <ul class="collapsible no-margin" data-collapsible="expandable">
-                    <li class="active">
-                        <div class="collapsible-header red-text active">
-                            <i class="material-icons">beenhere</i>
-                            <p>Incentivo Fiscal Federal</p>
-                        </div>
-                        <div class="collapsible-body no-padding">
-                            <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                                <li  v-for="produto in produtos">
-                                    <produtos-pagamento
-                                        v-bind:item="produto"
-                                        :key="produto.id">
-                                    </produtos-pagamento>
-                                    <div class="collapsible-body no-padding">
-                                        <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                                            <li  v-for="etapa in etapas">
-                                                <etapas-pagamento
-                                                        v-bind:item="etapa"
-                                                        :key="etapa.id">
-                                                </etapas-pagamento>
-                                                <div class="collapsible-body no-padding">
-                                                    <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                                                        <li  v-for="uf in ufs">
-                                                            <ufs-pagamento
-                                                                    v-bind:item="uf"
-                                                                    :key="uf.id">
-                                                            </ufs-pagamento>
-                                                            <div class="collapsible-body">
-                                                                <table class="bordered">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Item de Custo</th>
-                                                                            <th>Valor Aprovado</th>
-                                                                            <th>Valor Comprovado</th>
-                                                                            <th>Valor a Comprovar</th>
-                                                                            <th>Modalidade Vinculada</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                           <td>Combustivel</td>
-                                                                           <td>R$ 1.721,00</td>
-                                                                           <td>R$ 798,00</td>
-                                                                           <td>R$ 451,00</td>
-                                                                           <td></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Postagem</td>
-                                                                            <td>R$ 3.863,00</td>
-                                                                            <td>R$ 2.005,00</td>
-                                                                            <td>R$ 677,00</td>
-                                                                            <td></td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -105,7 +38,8 @@
                         </div>
                         <div class="collapsible-body">
                             <etapas-pagamento :item="etapa"
-                                       v-for="etapa in item.etapa" ></etapas-pagamento>
+                                       v-for="(etapa, index) in item.etapa"
+                                       :key="index"></etapas-pagamento>
                         </div>
                    </li>`,
         mounted: function () {
@@ -113,24 +47,59 @@
     })
     Vue.component('etapas-pagamento', {
         props: ['item'],
-        template: '<div class="collapsible-header orange-text">' +
-        '<i class="material-icons">label</i>' +
-        '{{ item[0] }}</div>'
+        template: `<ul class="collapsible" data-collapsible="expandable">
+                     <li>
+                        <div class="collapsible-header orange-text">
+                            <i class="material-icons">label</i>
+                            {{ item[0] }}
+                        </div>
+                        <div class="collapsible-body">
+                            <ul class="collapsible" data-collapsible="expandable">
+                                    <ufs-pagamento :item="UF"
+                                       v-for="(UF, index) in item.UF"
+                                       :key="index"></ufs-pagamento>
+                            </ul>
+                        </div>
+                    </li>
+                   </ul>
+                   `
     })
     Vue.component('ufs-pagamento', {
         props: ['item'],
-        template: '<div class="collapsible-header blue-text">' +
-        '<i class="material-icons">place</i>' +
-        '{{ item.text }}</div>'
+        template: ` <li>
+                        <div class="collapsible-header blue-text">
+                            <i class="material-icons">place</i>
+                            {{ item[1] }}
+                        </div>
+                        <div class="collapsible-body">
+                            <span>Teste</span>
+                        </div>
+                    </li>
+                     `,
+        created: function () {
+            this.iniciarCollapsible();
+        },
+        methods: {
+            iniciarCollapsible: function () {
+                $3('.collapsible').each(function() {
+                    $3(this).collapsible();
+                    console.log(this);
+                });
+            }
+        }
     })
     Vue.component('dados', {
         props: ['idpronac'],
         template: `<div>
-                    <ul class="collapsible" data-collapsible="accordion">
+                    <ul class="collapsible" data-collapsible="expandable">
                             <produtos-pagamento :item="produto"
-                                        v-for="produto in produtos"></produtos-pagamento>
+                                        v-for="(produto, index) in produtos"
+                                        :key="index"></produtos-pagamento>
                     </ul>
                     </div>`,
+        created: function () {
+                this.iniciarCollapsible();
+        },
         mounted: function () {
             let vue = this;
             $3.ajax({
@@ -143,7 +112,16 @@
             return {
                 produtos: []
             };
+        },
+        methods: {
+            iniciarCollapsible: function () {
+                $3('.collapsible').each(function() {
+                    $3(this).collapsible();
+                    console.log(this);
+                });
+            }
         }
+
     })
 
     var app7 = new Vue({
