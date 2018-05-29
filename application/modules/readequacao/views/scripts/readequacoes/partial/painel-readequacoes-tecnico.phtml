@@ -2,7 +2,7 @@
     <thead>
     <tr class="titulo_tabela">
         <th style="width: 80px;"><a
-                href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=3&ordem=' . $this->paginacao['novaOrdem']; ?>">PRONAC</a>
+                    href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=3&ordem=' . $this->paginacao['novaOrdem']; ?>">PRONAC</a>
         </th>
         <th>
             <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=4&ordem=' . $this->paginacao['novaOrdem']; ?>">Nome
@@ -12,11 +12,11 @@
                 de Readequa&ccedil;&atilde;o</a></th>
 
         <th style="width: 130px;" nowrap><a
-                href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=5&ordem=' . $this->paginacao['novaOrdem']; ?>">Dt
+                    href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=5&ordem=' . $this->paginacao['novaOrdem']; ?>">Dt
                 Distribui&ccedil;&atilde;o</a></th>
 
         <th style="width: 130px;" nowrap><a
-                href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=7&ordem=' . $this->paginacao['novaOrdem']; ?>">Qtde
+                    href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=7&ordem=' . $this->paginacao['novaOrdem']; ?>">Qtde
                 dias em avalia&ccedil;&atilde;o</a></th>
         <th>Dilig&ecirc;ncia</th>
         <?php if ($this->idPerfil == 121): ?>
@@ -24,7 +24,11 @@
             <th style="width: 100px;">Encaminhar</th>
         <?php endif; ?>
         <th style="width: 80px;">Analisar</th>
-
+        <th>
+            Encaminhar
+            <br/>
+            p/ Assinatura
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -63,30 +67,29 @@
                 $title = $arrPrazo['iconeDiligencia']['title']; ?>
                 <a target="_blank"
                    href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'diligenciar', 'action' => 'listardiligenciaanalista')) . '?idPronac=' . $d->idPronac . '&situacao=E59&tpDiligencia=' . $tpDiligencia; ?>"><img
-                        src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>"
-                        title="<?php echo $title; ?>" width="30px"/></a><br>
+                            src="<?php echo $this->baseUrl(); ?>/public/img/<?php echo $icone; ?>"
+                            title="<?php echo $title; ?>" width="30px"/></a><br>
             </td>
 
             <?php if ($this->idPerfil == 121): ?>
                 <td align="center">
                     <a
-                        href="javascript:void(0)"
-                        class="btn-avaliar btn small waves-effect waves-light white-text tooltipped btn-info"
-                        data-tooltip="Receber, rejeitar ou devolver para o proponente"
-                        readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
-                        pronac="<?php echo $d->PRONAC; ?>"
-                        nomeprojeto="<?php echo $d->NomeProjeto; ?>"
-                    >
+                            href="javascript:void(0)"
+                            class="btn-avaliar btn small waves-effect waves-light white-text tooltipped btn-info"
+                            data-tooltip="Receber, rejeitar ou devolver para o proponente"
+                            readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
+                            pronac="<?php echo $d->PRONAC; ?>"
+                            nomeprojeto="<?php echo $d->NomeProjeto; ?>">
                         <i class="material-icons">save_alt</i>
                     </a>
                 </td>
 
                 <td align="center">
                     <a
-                        href="javascript:void(0)"
-                        class="btn-encaminhar btn small waves-effect waves-light tooltipped white-text btn-secondary"
-                        data-tooltip="Encaminhar para an&aacute;lise t&eacute;cnica"
-                        readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
+                            href="javascript:void(0)"
+                            class="btn-encaminhar btn small waves-effect waves-light tooltipped white-text btn-secondary"
+                            data-tooltip="Encaminhar para an&aacute;lise t&eacute;cnica"
+                            readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
                     >
                         <i class="material-icons">forward</i>
                     </a>
@@ -94,15 +97,23 @@
             <?php endif; ?>
 
             <td align="center">
-                <a
-                    href="javascript:void(0)"
-                    class="btn-analisar analisarReadequacao btn small waves-effect waves-light tooltipped btn-primary"
-                    data-tooltip="Avaliar readequa&ccedil;&atilde;o"
-                    readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
-                    pronac="<?php echo $d->PRONAC; ?>"
-                    nomeprojeto="<?php echo $d->NomeProjeto; ?>"
-                    idReadequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
-                >
+                <a href="javascript:void(0)"
+                   class="btn-analisar analisarReadequacao btn small waves-effect waves-light tooltipped btn-primary"
+                   data-tooltip="Avaliar readequa&ccedil;&atilde;o"
+                   readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
+                   pronac="<?php echo $d->PRONAC; ?>"
+                   nomeprojeto="<?php echo $d->NomeProjeto; ?>"
+                   idReadequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>">
+                    <i class="material-icons">gavel</i>
+                </a>
+            </td>
+
+            <td align="center">
+                <a href="#encaminhar-assinatura-modal"
+                   class="btn-encaminhar-assinatura btn modal-trigger small waves-effect waves-light tooltipped btn-primary"
+                   data-tooltip="Encaminhar Projeto para Assinatura"
+                   data-pronac="<?php echo $d->PRONAC; ?>"
+                   data-id-pronac="<?php echo $d->idPronac; ?>">
                     <i class="material-icons">gavel</i>
                 </a>
             </td>
@@ -111,3 +122,39 @@
     <?php endforeach; ?>
     </tbody>
 </table>
+
+<div id="encaminhar-assinatura-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>Confirma&ccedil;&atilde;o</h4>
+        <p>Tem certeza que deseja encaminhar o projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
+    </div>
+    <div class="modal-footer">
+        <form name="formEncaminharParaAssinatura"
+              id="formEncaminharParaAssinatura"
+              action="<?php echo $this->url(
+                      [
+                          'module' => 'readequacao',
+                          'controller' => 'readequacoes',
+                          'action' => 'painel-readequacoes'
+                      ]
+              ); ?>"
+              method="post">
+            <input type="hidden" id="id-pronac" name="id-pronac" value="" />
+        </form>
+        <a href="#!" id="botaoConfirmacaoEncaminhamento" class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">N&atilde;o</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $3(document).ready(function () {
+        $3('.modal').modal();
+        $3('.btn-encaminhar-assinatura').click(function () {
+            $3("#id-pronac").val(
+                $3(this).data('id-pronac')
+            );
+            $3("#nrPronacConfirmacao").text(
+                $3(this).data('pronac')
+            );
+        });
+    });
+</script>

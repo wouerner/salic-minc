@@ -37,7 +37,11 @@ class Readequacao_ReadequacaoDocumentoAssinaturaController implements MinC_Assin
             $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
 
             $enquadramento = new Admissibilidade_Model_Enquadramento();
-            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto($this->idPronac, $dadosProjeto['AnoProjeto'], $dadosProjeto['Sequencial']);
+            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto(
+                $this->idPronac,
+                $dadosProjeto['AnoProjeto'],
+                $dadosProjeto['Sequencial']
+            );
 
             $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
@@ -45,8 +49,12 @@ class Readequacao_ReadequacaoDocumentoAssinaturaController implements MinC_Assin
             $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
             $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
-            $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
-            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
+            $objModelDocumentoAssinatura->setCdSituacao(
+                Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+            );
+            $objModelDocumentoAssinatura->setStEstado(
+                Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+            );
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
 
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
