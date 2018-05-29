@@ -24,11 +24,6 @@
             <th style="width: 100px;">Encaminhar</th>
         <?php endif; ?>
         <th style="width: 80px;">Analisar</th>
-        <th>
-            Encaminhar
-            <br/>
-            p/ Assinatura
-        </th>
     </tr>
     </thead>
     <tbody>
@@ -89,8 +84,7 @@
                             href="javascript:void(0)"
                             class="btn-encaminhar btn small waves-effect waves-light tooltipped white-text btn-secondary"
                             data-tooltip="Encaminhar para an&aacute;lise t&eacute;cnica"
-                            readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
-                    >
+                            readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>">
                         <i class="material-icons">forward</i>
                     </a>
                 </td>
@@ -108,53 +102,7 @@
                 </a>
             </td>
 
-            <td align="center">
-                <a href="#encaminhar-assinatura-modal"
-                   class="btn-encaminhar-assinatura btn modal-trigger small waves-effect waves-light tooltipped btn-primary"
-                   data-tooltip="Encaminhar Projeto para Assinatura"
-                   data-pronac="<?php echo $d->PRONAC; ?>"
-                   data-id-pronac="<?php echo $d->idPronac; ?>">
-                    <i class="material-icons">gavel</i>
-                </a>
-            </td>
-
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-
-<div id="encaminhar-assinatura-modal" class="modal modal-fixed-footer">
-    <div class="modal-content">
-        <h4>Confirma&ccedil;&atilde;o</h4>
-        <p>Tem certeza que deseja encaminhar o projeto <span class="bold" id="nrPronacConfirmacao"></span> ?</p>
-    </div>
-    <div class="modal-footer">
-        <form name="formEncaminharParaAssinatura"
-              id="formEncaminharParaAssinatura"
-              action="<?php echo $this->url(
-                      [
-                          'module' => 'readequacao',
-                          'controller' => 'readequacoes',
-                          'action' => 'painel-readequacoes'
-                      ]
-              ); ?>"
-              method="post">
-            <input type="hidden" id="id-pronac" name="id-pronac" value="" />
-        </form>
-        <a href="#!" id="botaoConfirmacaoEncaminhamento" class="modal-action modal-close waves-effect waves-green btn-flat">Sim</a>
-        <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">N&atilde;o</a>
-    </div>
-</div>
-<script type="text/javascript">
-    $3(document).ready(function () {
-        $3('.modal').modal();
-        $3('.btn-encaminhar-assinatura').click(function () {
-            $3("#id-pronac").val(
-                $3(this).data('id-pronac')
-            );
-            $3("#nrPronacConfirmacao").text(
-                $3(this).data('pronac')
-            );
-        });
-    });
-</script>
