@@ -106,7 +106,7 @@
                                                     /* xd($valor); */
                                                     $vlrImpugnado = $valor[1] - $valor[3];
                                                     $vlrTotalImpugnado = $vlrTotalImpugnado+$vlrImpugnado;
-                                                    $urlComprovarItemArray['idPlanilhaAprovacao'] = $key;
+                                                    $urlComprovarItemArray['idPlanilhaAprovacao'] = $valor[11];
                                                     $urlComprovarItemArray['idPlanilhaItens'] = $valor[6];
                                                     $urlComprovarItemArray['uf'] = $valor[7];
                                                     $urlComprovarItemArray['produto'] = $valor[8];
@@ -174,7 +174,7 @@
                                                 foreach($tabelaItem as $key=>$valor) {
                                                     $vlrImpugnado = $valor[1] - $valor[3];
                                                     $vlrTotalImpugnado = $vlrTotalImpugnado+$vlrImpugnado;
-                                                    $urlComprovarItemArray['idPlanilhaAprovacao'] = $key;
+                                                    $urlComprovarItemArray['idPlanilhaAprovacao'] = $valor[11];
                                                     $urlComprovarItemArray['idPlanilhaItens'] = $valor[6];
                                                     $urlComprovarItemArray['uf'] = $valor[7];
                                                     $urlComprovarItemArray['produto'] = $valor[8];
