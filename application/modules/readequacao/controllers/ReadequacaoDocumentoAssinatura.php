@@ -16,7 +16,7 @@ class Readequacao_ReadequacaoDocumentoAssinaturaController implements MinC_Assin
     public function encaminharProjetoParaAssinatura()
     {
         if (!$this->idPronac) {
-            throw new Exception("Identificador do Projeto não informado.");
+            throw new Exception("Identificador do Projeto n&atilde;o informado.");
         }
 
         $objTbProjetos = new Projeto_Model_DbTable_Projetos();
@@ -25,10 +25,6 @@ class Readequacao_ReadequacaoDocumentoAssinaturaController implements MinC_Assin
         if (!$dadosProjeto) {
             throw new Exception("Projeto n&atilde;o encontrado.");
         }
-
-//        if ($dadosProjeto['Situacao'] != 'B02' && $dadosProjeto['Situacao'] != 'B03') {
-//            throw new Exception("Situa&ccedil;&atilde;o do projeto inv&aacute;lida!");
-//        }
 
         $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
