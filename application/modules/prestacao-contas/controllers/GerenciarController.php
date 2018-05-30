@@ -13,11 +13,18 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
     {
         $idPronac = $this->getRequest()->getParam('idpronac');
 
+        $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
+        $idPlanilhaItens = $this->getRequest()->getParam('idPlanilhaItens');
+        $idComprovantePagamento = $this->getRequest()->getParam('idComprovantePagamento');
+        $uf = $this->getRequest()->getParam('uf');
+        $cdproduto = $this->getRequest()->getParam('produto');
+        $cdcidade = $this->getRequest()->getParam('cidade');
+        $cdetapa = $this->getRequest()->getParam('etapa');
+
         $diligencia = new Diligencia();
         $diligencia = $diligencia->aberta($idPronac);
 
         $this->view->diligenciaTodosItens = $diligencia;
-        /* var_dump($diligencia);die; */
 
         $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
 
@@ -31,23 +38,16 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
         $itemPlanilhaAprovacao = $planilhaItemModel->buscarItemDaAprovacao($idPlanilhaAprovacao);
 
-        /*todos*/
+        /*todo*/
         $planilhaAprovacao = new PlanilhaAprovacao();
-        $planilhaAprovacaoItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+        $valoresItem = $planilhaAprovacao->planilhaAprovada(
             $idPronac,
+            $uf,
+            $cdetapa,
+            $cdproduto,
+            $cdcidade,
             null,
-            null,
-            null,
-            $idComprovantePagamento
-        );
-        $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto(
-            $idPronac,
-            null,
-            $planilhaAprovacaoItem->current()->cdEtapa,
-            $planilhaAprovacaoItem->current()->cdProduto,
-            $planilhaAprovacaoItem->current()->cdCidade,
-            null,
-            $planilhaAprovacaoItem->current()->idPlanilhaItem
+            $idPlanilhaItens
         );
         $this->view->valores = $valoresItem->current();
         /*todos*/
@@ -70,7 +70,16 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         }
 
         $comprovantePagamentoModel = new ComprovantePagamento();
-        $comprovantesDePagamento = $comprovantePagamentoModel->pesquisarComprovantePorItem($item->idPlanilhaItens, $idPronac, $etapa->idPlanilhaEtapa, $itemPlanilhaAprovacao->idProduto, $itemPlanilhaAprovacao->idUFDespesa, $itemPlanilhaAprovacao->idMunicipioDespesa); //ID Recuperado
+        /* $comprovantesDePagamento = $comprovantePagamentoModel->pesquisarComprovantePorItem($item->idPlanilhaItens, $idPronac, $etapa->idPlanilhaEtapa, $itemPlanilhaAprovacao->idProduto, $itemPlanilhaAprovacao->idUFDespesa, $itemPlanilhaAprovacao->idMunicipioDespesa); //ID Recuperado */
+
+        $comprovantesDePagamento = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                $idPronac,
+                $idPlanilhaItens,
+                null,
+                $cdproduto,
+                null,
+                $cdcidade
+            )->toArray();
 
         array_walk($comprovantesDePagamento, function (&$comprovanteDePagamento) use ($fornecedorModel) {
             $comprovanteDePagamento = (object) $comprovanteDePagamento;
@@ -175,6 +184,12 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
         $this->view->idpronac = $this->getRequest()->getParam('idpronac');
         $this->view->tipoDocumentoConteudo = $this->tipoDocumento;
+
+        $this->view->uf = $this->getRequest()->getParam('uf');
+        $this->view->cdproduto = $this->getRequest()->getParam('produto');
+        $this->view->cdcidade = $this->getRequest()->getParam('cidade');
+        $this->view->cdetapa = $this->getRequest()->getParam('etapa');
+        $this->view->idplanilhaitens = $this->getRequest()->getParam('idPlanilhaItens');
     }
 
     public function cadastrarcomprovacaopagamentoAction()
@@ -430,5 +445,76 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
             $this->view->message_type = 'ERROR';
             $this->forward('comprovacaopagamento-recusado');
         }
+    }
+
+    public function comprovarPagamentoAction()
+    { }
+
+    public function cadastrarAction()
+    {
+        $comprovante = new PrestacaoContas_Model_ComprovantePagamento();
+
+        /* var_dump($this->getRequest()->getPost()); */
+        /* die; */
+        $comprovante->preencher($this->getRequest()->getPost());
+
+            /* $request->getParam('idAgente'), */
+            /* $request->getParam('itemId'), */
+            /* $request->getParam('tpDocumento'), */
+            /* $request->getParam('nrComprovante'), */
+            /* $request->getParam('nrSerie'), */
+            /* $request->getParam('dtEmissao') ? new DateTime(data::dataAmericana($request->getParam('dtEmissao'))) : null, */
+            /* $arquivoModel->getId(), */
+            /* $request->getParam('tpFormaDePagamento'), */
+            /* $dtPagamento, */
+            /* str_replace(',', '.', str_replace('.', '', $request->getParam('vlComprovado'))), */
+            /* $request->getParam('nrDocumentoDePagamento'), */
+            /* $request->getParam('dsJustificativa') */
+
+        try {
+            $comprovante->cadastrar();
+        } catch (Exception $e) {
+            $this->view->message = $e->getMessage();
+        }
+    }
+
+    public function fornecedorAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        $agentesDao = new Agente_Model_DbTable_Agentes();
+
+        $cnpjcpf = preg_replace('/\.|-|\/|\?/', '', utf8_decode($this->getRequest()->getParam('cnpjcpf')));
+
+        $fornecedor = $agentesDao->buscarFornecedor(array(' A.CNPJCPF = ? '=>$cnpjcpf))->current();
+
+        if ($fornecedor) {
+            $fornecedor = array(
+                'retorno'=>true,
+                'idAgente'=>$fornecedor->idAgente,
+                'nome'=>utf8_encode($fornecedor->nome)
+            );
+        } else {
+            $fornecedor = array('retorno'=>false, 'CNPJCPF'=>$cnpjcpf);
+        }
+
+        $this->_helper->json($fornecedor);
+    }
+
+    public function paisAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        $pais = new Pais();
+
+        $paises = $pais->buscar();
+        /* var_dump($paises);die; */
+        $data = [];
+        foreach($paises as $key => $pais) {
+            $data[$key]['id']  = $pais['idPais'];
+            $data[$key]['nome']  = utf8_encode($pais['Descricao']);
+        }
+
+        $this->_helper->json($data);
     }
 }

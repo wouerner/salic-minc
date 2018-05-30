@@ -1,216 +1,111 @@
 <?php
-class ComprovantePagamento extends MinC_Db_Table_Abstract
+final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abstract
 {
-    protected $comprovantePagamento;
-    protected $fornecedor;
-    protected $item;
-    protected $tipo;
-    protected $numero;
-    protected $serie;
-    protected $dataEmissao;
-    protected $arquivo;
-
-    protected $comprovanteTipo;
-    protected $comprovanteData;
-    protected $comprovanteValor;
-    protected $comprovanteNumero;
-    protected $comprovanteJustificativa;
-
-    protected $_banco = 'bdcorporativo';
     protected $_schema = 'bdcorporativo.scSAC';
     protected $_name = 'tbComprovantePagamento';
 
     public function __construct(
-        $comprovantePagamento = null,
-        $fornecedor = null,
-        $item = null,
-        $tipo = null,
-        $numero = null,
-        $serie = null,
-        $dataEmissao = null,
-        $arquivo = null,
-        $comprovanteTipo = null,
-        $comprovanteData = null,
-        $comprovanteValor = null,
-        $comprovanteNumero = null,
-        $comprovanteJustificativa = null
     ) {
         parent::__construct();
-        $this->comprovantePagamento = $comprovantePagamento;
-        $this->fornecedor = $fornecedor;
-        $this->item = $item;
-        $this->tipo = $tipo;
-        $this->numero = $numero;
-        $this->serie = $serie;
-        $this->dataEmissao = $dataEmissao;
-        $this->arquivo = $arquivo;
-        $this->comprovanteTipo = $comprovanteTipo;
-        $this->comprovanteData = $comprovanteData;
-        $this->comprovanteValor = $comprovanteValor;
-        $this->comprovanteNumero = $comprovanteNumero;
-        $this->comprovanteJustificativa = $comprovanteJustificativa;
     }
 
-    public function getComprovantePagamento()
+    protected function setDataEmissao($data, $format) {
+        $d = DateTime::createFromFormat($format, $data);
+        if (!$d) {
+            throw new Exception('Sem data de emissão');
+        }
+
+        $this->dataEmissao = $d;
+    }
+
+    protected function setDataPagamento($data, $format) {
+        $d = DateTime::createFromFormat($format, $data);
+        if (!$d) {
+            throw new Exception('Sem data de pagamento');
+        }
+
+        $this->dataPagamento = $d;
+    }
+
+    protected function setTipoDocumento($data) {
+        if (!$data || !is_numeric($data)) {
+            throw new Exception('Sem tipo de documento');
+        }
+
+        $this->tipoDocumento = $data;
+    }
+
+    public function preencher($request) {
+        $obj = (json_decode(current($request)));
+
+        $this->setTipoDocumento($obj->tipo);
+        /* $this->tpDocumento = $request['numero']; */
+        $this->serie = $obj->serie;
+        $this->dsJustificativa = $obj->justificativa;
+        $this->vlComprovacao = $obj->valor; // not null
+        $this->setDataEmissao($obj->dataEmissao, 'd/m/Y');
+        $this->setDataPagamento($obj->dataPagamento, 'd/m/Y');
+        $this->idFornecedor = $obj->fornecedor;
+        $this->tpFormaDePagamento = $obj->forma;
+        $this->nrDocumentoDePagamento = $obj->numeroPagamento;
+    }
+
+    public function cadastrar()
     {
-        return $this->comprovantePagamento;
+        /* $this->validarCadastrar(); */
+
+        $arquivoId = $this->upload();
+        if (!$arquivoId) {
+            throw new Exception('Não existe arquivo.');
+        }
+
+        $dados = [
+            'idFornecedor' => $this->fornecedor,
+            'tpDocumento' => $this->tipoDocumento,
+            'nrComprovante' => $this->numero,
+            'nrSerie' => $this->serie,
+            'dtEmissao' => $this->dataEmissao->format('Y-m-d h:i:s'),
+            'idArquivo' => $arquivoId,
+            'vlComprovacao' => $this->vlComprovacao,
+            'dtPagamento' => $this->dataPagamento->format('Y-m-d h:i:s'),
+            'dsJustificativa' => $this->comprovanteJustificativa,
+            'tpFormaDePagamento' => $this->comprovanteTipo,
+            'nrDocumentoDePagamento' => $this->comprovanteNumero,
+        ];
+
+        /* $this->comprovarPlanilhaCadastrar(); */
+        return $this->insert($dados);
     }
 
-    public function getFornecedor()
+    public function upload()
     {
-        return $this->fornecedor;
+        $arquivoModel = new ArquivoModel();
+        $arquivoModel->cadastrar('arquivo');
+        $idArquivo = $arquivoModel->getId();
+        if (empty($idArquivo)) {
+            throw new Exception('O arquivo deve ser PDF.');
+        }
+        return $idArquivo;
     }
 
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    public function getTipoDocumento()
-    {
-        return $this->tipo;
-    }
-
-    public function getNumero()
-    {
-        return $this->numero;
-    }
-
-    public function getSerie()
-    {
-        return $this->serie;
-    }
-
-    public function getDataEmissao()
-    {
-        return $this->dataEmissao;
-    }
-
-    public function getArquivo()
-    {
-        return $this->arquivo;
-    }
-
-    public function getComprovanteTipo()
-    {
-        return $this->comprovanteTipo;
-    }
-
-    public function getComprovanteData()
-    {
-        return $this->comprovanteData;
-    }
-
-    public function getComprovanteValor()
-    {
-        return $this->comprovanteValor;
-    }
-
-    public function getComprovanteNumero()
-    {
-        return $this->comprovanteNumero;
-    }
-
-    public function getComprovanteJustificativa()
-    {
-        return $this->comprovanteJustificativa;
-    }
-
-    public function setComprovantePagamento($comprovantePagamento)
-    {
-        $this->comprovantePagamento = $comprovantePagamento;
-    }
-
-    public function setFornecedor($fornecedor)
-    {
-        $this->fornecedor = $fornecedor;
-    }
-
-    public function setItem($item)
-    {
-        $this->item = $item;
-    }
-
-    public function setTipo($tipo)
-    {
-        $this->tipo = $tipo;
-    }
-
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-    }
-
-    public function setSerie($serie)
-    {
-        $this->serie = $serie;
-    }
-
-    public function setDataEmissao($dataEmissao)
-    {
-        $this->dataEmissao = $dataEmissao;
-    }
-
-    public function setArquivo($arquivo)
-    {
-        $this->arquivo = $arquivo;
-    }
-
-    public function setComprovanteTipo($comprovanteTipo)
-    {
-        $this->comprovanteTipo = $comprovanteTipo;
-    }
-
-    public function setComprovanteData($comprovanteData)
-    {
-        $this->comprovanteData = $comprovanteData;
-    }
-
-    public function setComprovanteValor($comprovanteValor)
-    {
-        $this->comprovanteValor = $comprovanteValor;
-    }
-
-    public function setComprovanteNumero($comprovanteNumero)
-    {
-        $this->comprovanteNumero = $comprovanteNumero;
-    }
-
-    public function setComprovanteJustificativa($comprovanteJustificativa)
-    {
-        $this->comprovanteJustificativa = $comprovanteJustificativa;
-    }
-
-    /**
-     *
-     */
     public function inserirComprovantePagamento($data)
     {
         $insert = $this->insert($data);
         return $insert;
     }
 
-    /**
-     *
-     */
     public function alterarComprovantePagamento($data, $where)
     {
         $update = $this->update($data, $where);
         return $update;
     }
 
-    /**
-     *
-     */
     public function deletarComprovantePagamento($where)
     {
         $delete = $this->delete($where);
         return $delete;
     }
 
-    /**
-     *
-     */
     private function validarCadastrar($exterior = false)
     {
         if (!$this->fornecedor) {
@@ -255,26 +150,6 @@ class ComprovantePagamento extends MinC_Db_Table_Abstract
      * @todo usar objeto de arquivo quando disponivel (cadastro)
      * @todo usar objeto de planilha comprovante quando disponivel (cadastro)
      */
-    public function cadastrar()
-    {
-        $this->validarCadastrar();
-
-        $dados =[
-                'idFornecedor' => $this->fornecedor,
-                'tpDocumento' => $this->tipo,
-                'nrComprovante' => $this->numero,
-                'nrSerie' => $this->serie,
-                'dtEmissao' => $this->dataEmissao->format('Y-m-d h:i:s'),
-                'idArquivo' => $this->arquivo,
-                'vlComprovacao' => $this->comprovanteValor,
-                'dtPagamento' => $this->comprovanteData->format('Y-m-d h:i:s'),
-                'dsJustificativa' => $this->comprovanteJustificativa,
-                'tpFormaDePagamento' => $this->comprovanteTipo,
-                'nrDocumentoDePagamento' => $this->comprovanteNumero,
-            ];
-        $this->comprovantePagamento = $this->insert($dados);
-        $this->comprovarPlanilhaCadastrar();
-    }
 
     /**
      *
