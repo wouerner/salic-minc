@@ -84,12 +84,13 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     /**
      * @return Readequacao_ReadequacaoDocumentoAssinaturaController
      */
-    public function obterServicoDocumentoAssinatura()
+    public function obterServicoDocumentoAssinatura($idTipoDoAtoAdministrativo)
     {
         if (!isset($this->servicoDocumentoAssinatura)) {
             require_once __DIR__ . DIRECTORY_SEPARATOR . "ReadequacaoDocumentoAssinatura.php";
             $this->servicoDocumentoAssinatura = new Readequacao_ReadequacaoDocumentoAssinaturaController(
-                $this->getRequest()->getPost()
+                $this->getRequest()->getPost(),
+                $idTipoDoAtoAdministrativo
             );
         }
         return $this->servicoDocumentoAssinatura;
@@ -3804,29 +3805,24 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
     }
 
-    public function encaminharProjetoParaAssinaturaAction()
+    public function encaminharProjetoParaAssinatura()
     {
-        try {
-            $this->salvarEncaminhamentoAssinatura();
-            $post = $this->getRequest()->getPost();
-            $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
+        $post = $this->getRequest()->getPost();
 
-            if (isset($post['IdPRONAC']) && !empty($post['IdPRONAC']) && $post['encaminhar'] == 'true') {
-                $servicoDocumentoAssinatura->idPronac = $post['IdPRONAC'];
-                $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
-                parent::message('Projeto encaminhado com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
-            } elseif (isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
-                foreach ($post['IdPRONAC'] as $idPronac) {
-                    $servicoDocumentoAssinatura->idPronac = $idPronac;
-                    $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
-                }
-                parent::message('Projetos encaminhados com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
-            }
-        } catch (Exception $objException) {
-            parent::message(
-                $objException->getMessage(),
-                '/admissibilidade/enquadramento/encaminhar-assinatura'
-            );
+        if (!isset($post['IdPRONAC']) || empty($post['IdPRONAC'])) {
+            throw new Exception("Identificador do projeto n&atilde;o informado");
         }
+
+        if (!isset($post['idTipoDoAtoAdministrativo']) || empty($post['idTipoDoAtoAdministrativo'])) {
+            throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
+        }
+
+        if (!isset($post['idParecer']) || empty($post['idParecer'])) {
+            throw new Exception("Identificador do Parecer n&atilde;o informado");
+        }
+
+        $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
+        $servicoDocumentoAssinatura->idPronac = $post['IdPRONAC'];
+        $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
     }
 }

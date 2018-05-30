@@ -7,10 +7,10 @@ class Readequacao_ReadequacaoDocumentoAssinaturaController implements MinC_Assin
 
     private $post;
 
-    public function __construct($post)
+    public function __construct($post, $idTipoDoAtoAdministrativo)
     {
         $this->post = $post;
-        $this->idTipoDoAtoAdministrativo =  Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_SEM_PORTARIA;
+        $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
     }
 
     public function encaminharProjetoParaAssinatura()
@@ -34,43 +34,26 @@ class Readequacao_ReadequacaoDocumentoAssinaturaController implements MinC_Assin
 
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
+
+            /**
+             * @todo Campo 'idAtoDeGestao' está definido como null porque o Rômulo ainda não informou qual informação
+             * deve ser armazenada.
+             */
+            $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura([
+                'IdPRONAC' => $this->idPronac,
+                'idTipoDoAtoAdministrativo' => $this->idTipoDoAtoAdministrativo,
+                'conteudo' => $this->gerarDocumentoAssinatura(),
+                'dt_criacao' => $objTbProjetos->getExpressionDate(),
+                'idCriadorDocumento' => $auth->getIdentity()->usu_codigo,
+                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+                'idAtoDeGestao' => NULL,
+                'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
+            ]);
+
             $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
-
-            $enquadramento = new Admissibilidade_Model_Enquadramento();
-            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto(
-                $this->idPronac,
-                $dadosProjeto['AnoProjeto'],
-                $dadosProjeto['Sequencial']
-            );
-
-            $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
-            $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
-            $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($this->idTipoDoAtoAdministrativo);
-            $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
-            $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
-            $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
-            $objModelDocumentoAssinatura->setCdSituacao(
-                Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
-            );
-            $objModelDocumentoAssinatura->setStEstado(
-                Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-            );
-            $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
-
-            $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
-            $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+            $objDocumentoAssinatura->obterServicoDocumento()->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
         }
 
-//        $objProjeto = new Projetos();
-//        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto em an&aacute;lise documental.');
-
-//        $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
-//        $objOrgaos = new Orgaos();
-//        $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
-//        if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-//            $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
-//        }
-//        $objTbProjetos->alterarOrgao($orgaoDestino, $this->idPronac);
     }
 
     /**
