@@ -41,13 +41,14 @@ Vue.component('readequacao-transferencia-recursos', {
 	      </readequacao-formulario>
           </div>
       </li>
-      <li v-show="disponivelAdicionarRecebedores">
+      <li>
 	  <div class="collapsible-header"><i class="material-icons">list</i>Projetos recebedores</div>
-	  <div class="collapsible-body card" 
-		 v-show="possuiReadequacaoCriada">
+<template v-if="disponivelAdicionarRecebedores()">
+
+	  <div class="collapsible-body card" >
 		<div class="card-content">
 		    <span class="card-title">Projetos recebedores</span>
-		    <table v-show="exibeProjetosRecebedores" class="animated fadeIn">
+		    <table v-show="exibeProjetosRecebedores()" class="animated fadeIn">
 			<thead>
 			    <th>Pronac</th>
 			    <th>Nome do projeto</th>
@@ -121,12 +122,18 @@ Vue.component('readequacao-transferencia-recursos', {
 		    </form>
 		</div>
 	    </div>
+         </template>
+         <template v-else>
+             <div class="collapsible-body card">
+                 <span>N&atilde;o h&aacute; projetos dispon&iacute;veis a receber recursos deste projeto.</span>
+             </div>
+         </template>
       </li>
       <div class="card">
       	   <div class="right-align padding20 col s12">
 	       <button
 	            v-on:click="finalizarReadequacao"
-		    :disabled="!disponivelFinalizar"
+		    :disabled="!disponivelFinalizar()"
 		    class="btn">Finalizar</button>
 	   </div>
       </div>
