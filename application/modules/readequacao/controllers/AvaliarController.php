@@ -23,7 +23,7 @@ class Readequacao_AvaliarController extends Readequacao_GenericController implem
     public function obterServicoDocumentoAssinatura()
     {
         if (!isset($this->servicoDocumentoAssinatura)) {
-            require_once __DIR__ . DIRECTORY_SEPARATOR . "ReadequacaoDocumentoAssinatura.php";
+            require_once __DIR__ . DIRECTORY_SEPARATOR;
             $this->servicoDocumentoAssinatura = new Readequacao_ReadequacaoDocumentoAssinaturaController(
                 $this->getRequest()->getPost()
             );

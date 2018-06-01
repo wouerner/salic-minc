@@ -1,6 +1,8 @@
 <?php
 
-class Readequacao_ReadequacaoDocumentoAssinaturaController implements MinC_Assinatura_Documento_IDocumentoAssinatura
+namespace Application\Modules\Readequacao\Service;
+
+class DocumentoAssinatura implements MinC_Assinatura_Documento_IDocumentoAssinatura
 {
     public $idPronac;
     private $idTipoDoAtoAdministrativo;

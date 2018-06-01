@@ -14,6 +14,12 @@
     "autoload" : {
         "psr-0" : {
             "MinC" : "library/"
+        },
+        "psr-4" : {
+            "Application\\": "application/",
+            "Application\\Modules\\": "application/modules/",
+            "Application\\Modules\\Readequacao": "application/modules/readequacao/",
+            "Application\\Modules\\Readequacao\\Service": "application/modules/readequacao/Service/"
         }
     },
     "archive": {

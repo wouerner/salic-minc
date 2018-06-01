@@ -82,13 +82,13 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     }
 
     /**
-     * @return Readequacao_ReadequacaoDocumentoAssinaturaController
+     * @return Application\Modules\Readequacao\Service\DocumentoAssinatura
      */
     public function obterServicoDocumentoAssinatura($idTipoDoAtoAdministrativo)
     {
         if (!isset($this->servicoDocumentoAssinatura)) {
-            require_once __DIR__ . DIRECTORY_SEPARATOR . "ReadequacaoDocumentoAssinatura.php";
-            $this->servicoDocumentoAssinatura = new Readequacao_ReadequacaoDocumentoAssinaturaController(
+            require_once __DIR__ . DIRECTORY_SEPARATOR;
+            $this->servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\DocumentoAssinatura(
                 $this->getRequest()->getPost(),
                 $idTipoDoAtoAdministrativo
             );
@@ -3782,20 +3782,20 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $cnic = $this->_request->getParam('cnic');
 
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $r = $tbReadequacao->buscarDadosReadequacoes(array('idReadequacao = ?'=>$idReadequacao))->current();
+        $readequacao = $tbReadequacao->buscarDadosReadequacoes(array('idReadequacao = ?'=>$idReadequacao))->current();
 
-        if($r->siEncaminhamento <> '10') {
+        if($readequacao->siEncaminhamento <> '10') {
             parent::message("Este projeto n&atilde;o pode ser encaminhado!", "/readequacao/readequacoes/painel", "ERROR");
         }
 
-        if ($r) {
+        if ($readequacao) {
             $Projetos = new Projetos();
-            $p = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $r->idPronac))->current();
+            $dadosProjetos = $Projetos->buscarProjetoXProponente(array('idPronac = ?' => $readequacao->idPronac))->current();
 
             $this->view->filtro = $this->_request->getParam('filtro');
-            $this->view->readequacao = $r;
-            $this->view->projeto = $p;
-            $this->view->idPronac = $r->idPronac;
+            $this->view->readequacao = $readequacao;
+            $this->view->projeto = $dadosProjetos;
+            $this->view->idPronac = $readequacao->idPronac;
             $this->view->cnic = $cnic;
         }
 
