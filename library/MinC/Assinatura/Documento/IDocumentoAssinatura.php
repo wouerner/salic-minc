@@ -4,7 +4,7 @@ namespace MinC\Assinatura\Documento;
 
 interface IDocumentoAssinatura
 {
-    function gerarDocumentoAssinatura();
+    function criarDocumento();
 
-    function encaminharProjetoParaAssinatura();
+    function iniciarFluxo();
 }

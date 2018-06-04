@@ -11,7 +11,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \Min
         $this->post = $post;
     }
 
-    public function encaminharProjetoParaAssinatura()
+    public function iniciarFluxo()
     {
         if (!$this->idPronac) {
             throw new Exception("Identificador do Projeto não informado.");
@@ -50,7 +50,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \Min
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
             $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
             $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
-            $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
+            $objModelDocumentoAssinatura->setConteudo($this->criarDocumento());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
             $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
@@ -75,7 +75,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \Min
     /**
      * @return string
      */
-    public function gerarDocumentoAssinatura()
+    public function criarDocumento()
     {
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-documento-assinatura');

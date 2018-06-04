@@ -15,7 +15,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Documento\IDocumentoAssina
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
     }
 
-    public function encaminharProjetoParaAssinatura()
+    public function iniciarFluxo()
     {
         $auth = \Zend_Auth::getInstance();
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -27,7 +27,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Documento\IDocumentoAssina
         $objModelDocumentoAssinatura = new \Assinatura_Model_TbDocumentoAssinatura([
             'IdPRONAC' => $this->idPronac,
             'idTipoDoAtoAdministrativo' => $this->idTipoDoAtoAdministrativo,
-            'conteudo' => $this->gerarDocumentoAssinatura(),
+            'conteudo' => $this->criarDocumento(),
             'dt_criacao' => $objDbTableDocumentoAssinatura->getExpressionDate(),
             'idCriadorDocumento' => $auth->getIdentity()->usu_codigo,
             'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
@@ -41,16 +41,19 @@ class DocumentoAssinatura implements \MinC\Assinatura\Documento\IDocumentoAssina
         );
         $objDocumentoAssinatura->obterServicoDocumento()
                                ->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
-
     }
 
     /**
      * @return string
      */
-    public function gerarDocumentoAssinatura()
+    public function criarDocumento()
     {
         $view = new \Zend_View();
-        $view->setScriptPath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules/readequacao/views/scripts/enquadramento-documento-assinatura');
+        $view->setScriptPath(
+            APPLICATION_PATH
+            . DIRECTORY_SEPARATOR
+            . 'modules/readequacao/views/scripts/enquadramento-documento-assinatura'
+        );
 
         $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
 

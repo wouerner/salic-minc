@@ -13,7 +13,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatu
         $this->post = $post;
     }
 
-    public function encaminharProjetoParaAssinatura()
+    public function iniciarFluxo()
     {
         if (!$this->idPronac) {
             throw new Exception("Identificador do Projeto não informado.");
@@ -48,7 +48,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatu
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
             $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
             $objModelDocumentoAssinatura->setIdAtoDeGestao($idAtoAdministrativo);
-            $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
+            $objModelDocumentoAssinatura->setConteudo($this->criarDocumento());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
@@ -62,7 +62,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatu
     /**
      * @return string
      */
-    public function gerarDocumentoAssinatura()
+    public function criarDocumento()
     {
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/analise-cnic-documento-assinatura');

@@ -49,12 +49,12 @@ class Readequacao_AvaliarController extends Readequacao_GenericController implem
 
         if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC']) && $get['encaminhar'] == 'true') {
             $servicoDocumentoAssinatura->idPronac = $get['IdPRONAC'];
-            $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
+            $servicoDocumentoAssinatura->iniciarFluxo();
             parent::message('Projeto encaminhado com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
         } elseif (isset($post['IdPRONAC']) && is_array($post['IdPRONAC']) && count($post['IdPRONAC']) > 0) {
             foreach ($post['IdPRONAC'] as $idPronac) {
                 $servicoDocumentoAssinatura->idPronac = $idPronac;
-                $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
+                $servicoDocumentoAssinatura->iniciarFluxo();
             }
             parent::message('Projetos encaminhados com sucesso.', '/admissibilidade/enquadramento/encaminhar-assinatura', 'CONFIRM');
         }

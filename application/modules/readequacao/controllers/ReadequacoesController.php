@@ -3822,6 +3822,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         $servicoDocumentoAssinatura = $this->obterServicoDocumentoAssinatura();
         $servicoDocumentoAssinatura->idPronac = $post['IdPRONAC'];
-        $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
+        $servicoDocumentoAssinatura->iniciarFluxo();
     }
 }

@@ -13,7 +13,7 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements \MinC\Assin
         $this->post = $post;
     }
 
-    public function encaminharProjetoParaAssinatura()
+    public function iniciarFluxo()
     {
         if (!$this->idPronac) {
             throw new Exception("Identificador do Projeto não informado.");
@@ -69,7 +69,7 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements \MinC\Assin
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
             $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
             $objModelDocumentoAssinatura->setIdAtoDeGestao($idAtoAdministrativo);
-            $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
+            $objModelDocumentoAssinatura->setConteudo($this->criarDocumento());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
             $objModelDocumentoAssinatura->setCdSituacao(
                 Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
@@ -87,7 +87,7 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements \MinC\Assin
     /**
      * @return string
      */
-    public function gerarDocumentoAssinatura()
+    public function criarDocumento()
     {
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/analise-inicial-documento-assinatura');

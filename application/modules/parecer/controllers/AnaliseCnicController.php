@@ -68,7 +68,7 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract impl
             
             if (isset($idPronac) && !empty($idPronac) && $get['encaminhar'] == 'true') {
                 $servicoDocumentoAssinatura->idPronac = $idPronac;
-                $servicoDocumentoAssinatura->encaminharProjetoParaAssinatura();
+                $servicoDocumentoAssinatura->iniciarFluxo();
                 
                 $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
                 $idDocumentoAssinatura = $this->getIdDocumentoAssinatura($idPronac, $idTipoDoAtoAdministrativo);
