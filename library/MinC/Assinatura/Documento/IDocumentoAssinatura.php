@@ -1,8 +1,8 @@
 <?php
 
-//namespace MinC\Assinatura\Documento;
+namespace MinC\Assinatura\Documento;
 
-interface MinC_Assinatura_Documento_IDocumentoAssinatura
+interface IDocumentoAssinatura
 {
     function gerarDocumentoAssinatura();
 

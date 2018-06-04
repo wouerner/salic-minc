@@ -4,7 +4,7 @@ class Admissibilidade_EnquadramentoController extends MinC_Controller_Action_Abs
 {
     private $idPronac;
     /**
-     * @var MinC_Assinatura_Documento_IDocumentoAssinatura $servicoDocumentoAssinatura
+     * @var \MinC\Assinatura\Documento\IDocumentoAssinatura $servicoDocumentoAssinatura
      */
     private $servicoDocumentoAssinatura;
 

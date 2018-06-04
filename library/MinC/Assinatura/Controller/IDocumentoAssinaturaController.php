@@ -9,7 +9,7 @@
 interface MinC_Assinatura_Controller_IDocumentoAssinaturaController
 {
     /**
-     * @return MinC_Assinatura_Documento_IDocumentoAssinatura
+     * @return \MinC\Assinatura\Documento\IDocumentoAssinatura
      */
     function obterServicoDocumentoAssinatura();
 }

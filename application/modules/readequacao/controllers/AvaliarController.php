@@ -5,7 +5,7 @@ class Readequacao_AvaliarController extends Readequacao_GenericController implem
     private $idPronac;
 
     /**
-     * @var MinC_Assinatura_Documento_IDocumentoAssinatura $servicoDocumentoAssinatura
+     * @var \MinC\Assinatura\Documento\IDocumentoAssinatura $servicoDocumentoAssinatura
      */
     private $servicoDocumentoAssinatura;
 

@@ -1,6 +1,6 @@
 <?php
 
-class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC_Assinatura_Documento_IDocumentoAssinatura
+class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \MinC\Assinatura\Documento\IDocumentoAssinatura
 {
     public $idPronac;
 
