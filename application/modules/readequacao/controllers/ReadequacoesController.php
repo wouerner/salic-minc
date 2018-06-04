@@ -82,12 +82,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     }
 
     /**
-     * @return Application\Modules\Readequacao\Service\DocumentoAssinatura
+     * @return \Application\Modules\Readequacao\Service\DocumentoAssinatura
      */
     public function obterServicoDocumentoAssinatura($idTipoDoAtoAdministrativo)
     {
         if (!isset($this->servicoDocumentoAssinatura)) {
-            require_once __DIR__ . DIRECTORY_SEPARATOR;
             $this->servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\DocumentoAssinatura(
                 $this->getRequest()->getPost(),
                 $idTipoDoAtoAdministrativo

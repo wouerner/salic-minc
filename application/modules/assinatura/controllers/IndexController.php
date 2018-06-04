@@ -212,7 +212,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             }
 
             $post = $this->getRequest()->getPost();
-            $objAssinatura = new MinC_Assinatura_Servico_Assinatura(
+            $objAssinatura = new \MinC_Assinatura_Servico_Assinatura(
                 $post,
                 $this->auth->getIdentity(),
                 $idTipoDoAtoAdministrativo
@@ -368,7 +368,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 )
             );
 
-            $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura(
+            $servicoAssinatura = new \MinC_Assinatura_Servico_Assinatura(
                 $this->post,
                 $this->auth->getIdentity()
             );

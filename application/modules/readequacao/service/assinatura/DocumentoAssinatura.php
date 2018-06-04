@@ -2,7 +2,7 @@
 
 namespace Application\Modules\Readequacao\Service;
 
-class DocumentoAssinatura implements MinC_Assinatura_Documento_IDocumentoAssinatura
+class DocumentoAssinatura implements \MinC_Assinatura_Documento_IDocumentoAssinatura
 {
     public $idPronac;
     private $idTipoDoAtoAdministrativo;
@@ -17,44 +17,29 @@ class DocumentoAssinatura implements MinC_Assinatura_Documento_IDocumentoAssinat
 
     public function encaminharProjetoParaAssinatura()
     {
-        if (!$this->idPronac) {
-            throw new Exception("Identificador do Projeto n&atilde;o informado.");
-        }
+        $auth = Zend_Auth::getInstance();
+        $objDbTableDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
 
-        $objTbProjetos = new Projeto_Model_DbTable_Projetos();
-        $dadosProjeto = $objTbProjetos->findBy(array('IdPRONAC' => $this->idPronac));
+        /**
+         * @todo Campo 'idAtoDeGestao' está definido como null porque o Rômulo ainda não informou qual informação
+         * deve ser armazenada.
+         */
+        $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura([
+            'IdPRONAC' => $this->idPronac,
+            'idTipoDoAtoAdministrativo' => $this->idTipoDoAtoAdministrativo,
+            'conteudo' => $this->gerarDocumentoAssinatura(),
+            'dt_criacao' => $objDbTableDocumentoAssinatura->getExpressionDate(),
+            'idCriadorDocumento' => $auth->getIdentity()->usu_codigo,
+            'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+            'idAtoDeGestao' => NULL,
+            'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
+        ]);
 
-        if (!$dadosProjeto) {
-            throw new Exception("Projeto n&atilde;o encontrado.");
-        }
-
-        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
-            $this->idPronac,
-            $this->idTipoDoAtoAdministrativo
+        $objDocumentoAssinatura = new \MinC_Assinatura_Servico_Assinatura(
+            $this->post,
+            $auth->getIdentity()
         );
-
-        if (!$isProjetoDisponivelParaAssinatura) {
-            $auth = Zend_Auth::getInstance();
-
-            /**
-             * @todo Campo 'idAtoDeGestao' está definido como null porque o Rômulo ainda não informou qual informação
-             * deve ser armazenada.
-             */
-            $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura([
-                'IdPRONAC' => $this->idPronac,
-                'idTipoDoAtoAdministrativo' => $this->idTipoDoAtoAdministrativo,
-                'conteudo' => $this->gerarDocumentoAssinatura(),
-                'dt_criacao' => $objTbProjetos->getExpressionDate(),
-                'idCriadorDocumento' => $auth->getIdentity()->usu_codigo,
-                'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-                'idAtoDeGestao' => NULL,
-                'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
-            ]);
-
-            $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
-            $objDocumentoAssinatura->obterServicoDocumento()->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
-        }
+        $objDocumentoAssinatura->obterServicoDocumento()->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
 
     }
 
@@ -64,7 +49,7 @@ class DocumentoAssinatura implements MinC_Assinatura_Documento_IDocumentoAssinat
     public function gerarDocumentoAssinatura()
     {
         $view = new Zend_View();
-        $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-documento-assinatura');
+        $view->setScriptPath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules/readequacao/views/scripts/enquadramento-documento-assinatura');
 
         $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
 

@@ -35,7 +35,7 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements MinC_Assinatur
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
-            $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura(
+            $objDocumentoAssinatura = new \MinC_Assinatura_Servico_Assinatura(
                 $this->post,
                 $auth->getIdentity(),
                 $idTipoDoAtoAdministrativo

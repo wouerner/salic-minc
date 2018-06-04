@@ -37,7 +37,7 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements MinC
 
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
-            $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura(
+            $objDocumentoAssinatura = new \MinC_Assinatura_Servico_Assinatura(
                 $this->post,
                 $auth->getIdentity(),
                 $idTipoDoAtoAdministrativo

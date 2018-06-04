@@ -18,8 +18,9 @@
         "psr-4" : {
             "Application\\": "application/",
             "Application\\Modules\\": "application/modules/",
-            "Application\\Modules\\Readequacao": "application/modules/readequacao/",
-            "Application\\Modules\\Readequacao\\Service": "application/modules/readequacao/Service/"
+            "Application\\Modules\\Readequacao\\": "application/modules/readequacao/",
+            "Application\\Modules\\Readequacao\\Service\\": "application/modules/readequacao/Service/",
+            "MinC\\Assinatura\\Servico\\": "library/MinC/Assinatura/Servico/"
         }
     },
     "archive": {

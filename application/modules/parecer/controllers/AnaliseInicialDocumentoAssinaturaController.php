@@ -52,14 +52,18 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
-            $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura(
+            $objDocumentoAssinatura = new \MinC_Assinatura_Servico_Assinatura(
                 $this->post,
                 $auth->getIdentity(),
                 $idTipoDoAtoAdministrativo
             );
 
             $parecer = new Parecer();
-            $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];
+            $parecerTecnico = $parecer->getIdAtoAdministrativoParecerTecnico(
+                $this->idPronac,
+                self::ID_TIPO_AGENTE_PARCERISTA
+            )->current();
+            $idAtoAdministrativo = $parecerTecnico['idParecer'];
             
             $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
@@ -67,9 +71,13 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
             $objModelDocumentoAssinatura->setIdAtoDeGestao($idAtoAdministrativo);
             $objModelDocumentoAssinatura->setConteudo($this->gerarDocumentoAssinatura());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
-            $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
+            $objModelDocumentoAssinatura->setCdSituacao(
+                Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+            );
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
-            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
+            $objModelDocumentoAssinatura->setStEstado(
+                Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+            );
 
             $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
             $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);

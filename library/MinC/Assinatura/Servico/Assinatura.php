@@ -47,7 +47,7 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
     }
 
     /**
-     * @return \MinC\Assinatura\Servico\DocumentoAssinatura\DocumentoAssinatura
+     * @return DocumentoAssinatura
      */
     public function obterServicoDocumento() {
         if(!isset($this->servicoDocumentoAssinatura)) {
