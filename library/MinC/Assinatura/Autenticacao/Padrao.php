@@ -1,6 +1,8 @@
 <?php
 
-class MinC_Assinatura_Autenticacao_Padrao implements \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter
+namespace MinC\Assinatura\Autenticacao;
+
+class Padrao implements IAutenticacaoAdapter
 {
     /**
      * @var \Autenticacao_Model_DbTable_Usuario $usuario
@@ -30,7 +32,9 @@ class MinC_Assinatura_Autenticacao_Padrao implements \MinC\Assinatura\Autenticac
      */
     public function obterInformacoesAssinante()
     {
-        $usuariosBuscar = $this->usuario->buscar(array('usu_identificacao = ?' => $this->usuario->getUsuIdentificacao()))->current();
+        $usuariosBuscar = $this->usuario->buscar(
+            ['usu_identificacao = ?' => $this->usuario->getUsuIdentificacao()]
+        )->current();
         return $usuariosBuscar->toArray();
     }
 

@@ -34,7 +34,7 @@ class MinC_Assinatura_Servico_Autenticacao implements MinC_Assinatura_Servico_IS
         }
 
         $metodoAutenticacao =  ucfirst($this->configuracoesAplicacao['Assinatura']['Autenticacao']['Metodo']);
-        if(!class_exists("MinC_Assinatura_Autenticacao_{$metodoAutenticacao}")) {
+        if(!class_exists("\MinC\Assinatura\Autenticacao\{$metodoAutenticacao}")) {
             throw new \Exception("Classe definida no arquivo de configura&ccedil;&atilde;o do sistema inexistente.");
         }
 
@@ -45,7 +45,7 @@ class MinC_Assinatura_Servico_Autenticacao implements MinC_Assinatura_Servico_IS
      */
     public function obterMetodoAutenticacao() {
         $metodoAutenticacao =  ucfirst($this->configuracoesAplicacao['Assinatura']['Autenticacao']['Metodo']);
-        $classeDeAutenticacao = "MinC_Assinatura_Autenticacao_{$metodoAutenticacao}";
+        $classeDeAutenticacao = "\MinC\Assinatura\Autenticacao\{$metodoAutenticacao}";
 
         return new $classeDeAutenticacao($this->post, $this->identidadeUsuarioLogado);
     }

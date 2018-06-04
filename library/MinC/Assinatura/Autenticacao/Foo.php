@@ -1,6 +1,8 @@
 <?php
 
-class MinC_Assinatura_Autenticacao_Foo implements \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter
+namespace MinC\Assinatura\Autenticacao;
+
+class Foo implements IAutenticacaoAdapter
 {
     /**
      * @var \Autenticacao_Model_DbTable_Usuario $usuario
