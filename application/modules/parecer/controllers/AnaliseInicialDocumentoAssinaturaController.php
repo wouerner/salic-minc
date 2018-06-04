@@ -51,8 +51,12 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements MinC_Assina
 
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
-            $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_INICIAL;
+            $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura(
+                $this->post,
+                $auth->getIdentity(),
+                $idTipoDoAtoAdministrativo
+            );
 
             $parecer = new Parecer();
             $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_PARCERISTA)->current()['idParecer'];

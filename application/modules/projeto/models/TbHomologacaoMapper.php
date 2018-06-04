@@ -102,6 +102,7 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
                 ];
                 $tbProjetosMapper = new Projeto_Model_TbProjetosMapper();
                 $modelTbProjetos = new Projeto_Model_TbProjetos($arrProjeto);
+                $booStatus = false;
                 if ($tbProjetosMapper->save($modelTbProjetos)) {
                     $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
                     $objModelDocumentoAssinatura
@@ -114,16 +115,22 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
                         ->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO)
                         ->setDtCriacao($objTbProjetos->getExpressionDate());
 
-                    $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura($this->post, $auth->getIdentity());
+                    $objDocumentoAssinatura = new MinC_Assinatura_Servico_Assinatura(
+                        $this->post,
+                        $auth->getIdentity(),
+                        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO
+                    );
                     $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
                     $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
 
                     $this->setMessage('Documento gerado e encaminhado com sucesso!');
                     $booStatus = true;
                 } else {
-                    $this->setMessage('N&atilde;o foi poss&iacute;vel alterar a situa&ccedil;&atilde;o do projeto.', 'IdPRONAC');
+                    $this->setMessage(
+                        'N&atilde;o foi poss&iacute;vel alterar a situa&ccedil;&atilde;o do projeto.',
+                        'IdPRONAC'
+                    );
                     $this->setMessage($tbProjetosMapper->getMessages());
-                    $booStatus = false;
                 }
             }
         }

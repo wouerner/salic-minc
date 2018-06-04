@@ -212,7 +212,11 @@ class Assinatura_IndexController extends Assinatura_GenericController
             }
 
             $post = $this->getRequest()->getPost();
-            $objAssinatura = new MinC_Assinatura_Servico_Assinatura($post, $this->auth->getIdentity());
+            $objAssinatura = new MinC_Assinatura_Servico_Assinatura(
+                $post,
+                $this->auth->getIdentity(),
+                $idTipoDoAtoAdministrativo
+            );
             $objAssinatura->isMovimentarProjetoPorOrdemAssinatura = false;
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -364,7 +368,10 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 )
             );
 
-            $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura();
+            $servicoAssinatura = new MinC_Assinatura_Servico_Assinatura(
+                $this->post,
+                $this->auth->getIdentity()
+            );
 
             $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
             $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);

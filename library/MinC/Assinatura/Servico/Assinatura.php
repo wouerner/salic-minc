@@ -1,5 +1,7 @@
 <?php
 
+use MinC\Assinatura\Servico\DocumentoAssinatura\DocumentoAssinatura;
+
 class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_IServico
 {
     /**
@@ -8,7 +10,7 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
     private $servicoAutenticacao;
 
     /**
-     * @var MinC_Assinatura_Servico_DocumentoAssinatura $servicoDocumentoAssinatura
+     * @var \MinC\Assinatura\Servico\DocumentoAssinatura\DocumentoAssinatura $servicoDocumentoAssinatura
      */
     private $servicoDocumentoAssinatura;
 
@@ -16,12 +18,19 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
 
     public $identidadeUsuarioLogado;
 
+    protected $idTipoDoAtoAdministrativo;
+
     public $isMovimentarProjetoPorOrdemAssinatura = true;
 
-    function __construct($post, $identidadeUsuarioLogado)
+    function __construct(
+        $post,
+        $identidadeUsuarioLogado,
+        $idTipoDoAtoAdministrativo = null
+    )
     {
         $this->post = $post;
         $this->identidadeUsuarioLogado = $identidadeUsuarioLogado;
+        $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
     }
 
     /**
@@ -29,17 +38,23 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
      */
     public function obterServicoAutenticacao() {
         if(!isset($this->servicoAutenticacao)) {
-            $this->servicoAutenticacao = new MinC_Assinatura_Servico_Autenticacao($this->post, $this->identidadeUsuarioLogado);
+            $this->servicoAutenticacao = new MinC_Assinatura_Servico_Autenticacao(
+                $this->post,
+                $this->identidadeUsuarioLogado
+            );
         }
         return $this->servicoAutenticacao;
     }
 
     /**
-     * @return MinC_Assinatura_Servico_DocumentoAssinatura
+     * @return \MinC\Assinatura\Servico\DocumentoAssinatura\DocumentoAssinatura
      */
     public function obterServicoDocumento() {
         if(!isset($this->servicoDocumentoAssinatura)) {
-            $this->servicoDocumentoAssinatura = new MinC_Assinatura_Servico_DocumentoAssinatura();
+            $this->servicoDocumentoAssinatura = new DocumentoAssinatura(
+                $this->post,
+                $this->idTipoDoAtoAdministrativo
+            );
         }
         return $this->servicoDocumentoAssinatura;
     }
