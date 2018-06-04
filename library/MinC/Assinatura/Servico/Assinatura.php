@@ -5,7 +5,7 @@ use MinC\Assinatura\Servico\DocumentoAssinatura;
 class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_IServico
 {
     /**
-     * @var MinC_Assinatura_Autenticacao_IAutenticacaoAdapter $servicoAutenticacao
+     * @var \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter $servicoAutenticacao
      */
     private $servicoAutenticacao;
 

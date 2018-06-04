@@ -1,6 +1,8 @@
 <?php
 
-interface MinC_Assinatura_Autenticacao_IAutenticacaoAdapter
+namespace MinC\Assinatura\Autenticacao;
+
+interface IAutenticacaoAdapter
 {
     /**
      * @return boolean

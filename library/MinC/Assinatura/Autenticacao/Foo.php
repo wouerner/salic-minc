@@ -1,15 +1,15 @@
 <?php
 
-class MinC_Assinatura_Autenticacao_Foo implements MinC_Assinatura_Autenticacao_IAutenticacaoAdapter
+class MinC_Assinatura_Autenticacao_Foo implements \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter
 {
     /**
-     * @var Autenticacao_Model_DbTable_Usuario $usuario
+     * @var \Autenticacao_Model_DbTable_Usuario $usuario
      */
     private $usuario;
 
     public function __construct($post, $identidadeUsuarioLogado)
     {
-        $this->usuario = new Autenticacao_Model_DbTable_Usuario();
+        $this->usuario = new \Autenticacao_Model_DbTable_Usuario();
         $this->usuario->setUsuIdentificacao($identidadeUsuarioLogado->usu_identificacao);
         $this->usuario->setUsuSenha($post['password']);
     }
@@ -19,7 +19,7 @@ class MinC_Assinatura_Autenticacao_Foo implements MinC_Assinatura_Autenticacao_I
      */
     public function autenticar()
     {
-        throw new Exception ("Implementar esse m&eacute;todo.");
+        throw new \Exception ("Implementar esse m&eacute;todo.");
     }
 
     /**
@@ -27,7 +27,7 @@ class MinC_Assinatura_Autenticacao_Foo implements MinC_Assinatura_Autenticacao_I
      */
     public function obterInformacoesAssinante()
     {
-        throw new Exception ("Implementar esse m&eacute;todo.");
+        throw new \Exception ("Implementar esse m&eacute;todo.");
     }
 
     /**
@@ -37,7 +37,7 @@ class MinC_Assinatura_Autenticacao_Foo implements MinC_Assinatura_Autenticacao_I
      */
     public function obterTemplateAutenticacao()
     {
-        $view = new Zend_View();
+        $view = new \Zend_View();
         $view->setScriptPath(APPLICATION_PATH . '/../library/MinC/Assinatura/Autenticacao/templates');
         return $view->render('foo.phtml');
     }
