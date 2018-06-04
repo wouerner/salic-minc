@@ -1,6 +1,6 @@
 <?php
 
-use MinC\Assinatura\Servico\DocumentoAssinatura\DocumentoAssinatura;
+use MinC\Assinatura\Servico\DocumentoAssinatura;
 
 class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_IServico
 {
@@ -10,7 +10,7 @@ class MinC_Assinatura_Servico_Assinatura implements MinC_Assinatura_Servico_ISer
     private $servicoAutenticacao;
 
     /**
-     * @var \MinC\Assinatura\Servico\DocumentoAssinatura\DocumentoAssinatura $servicoDocumentoAssinatura
+     * @var \MinC\Assinatura\Servico\DocumentoAssinatura $servicoDocumentoAssinatura
      */
     private $servicoDocumentoAssinatura;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace MinC\Assinatura\Servico\DocumentoAssinatura;
+namespace MinC\Assinatura\Servico;
 
 use Mockery\Exception;
 
