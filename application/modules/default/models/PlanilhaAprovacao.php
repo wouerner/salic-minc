@@ -2793,8 +2793,17 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
              'sac.dbo'
         );
 
+        /* $select->where('a.tpplanilha = ?', 'SR'); */
+        $select->where(new Zend_Db_Expr('
+            sac.dbo.fnVlAprovado_Fonte_Produto_Etapa_Local_Item
+                (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
+                a.idMunicipioDespesa,a.idPlanilhaItem) > 0
+            '));
+        $select->where("a.tpacao <> 'E' OR a.tpacao is null");
         $select->where('a.IdPRONAC = ?', $idpronac);
         $select->where('a.nrFonteRecurso = 109');
+        $select->where('a.stAtivo = ? ', 'S');
+ 
 
         if ($uf) {
             $select->where('sigla = ?', $uf);
@@ -2817,12 +2826,8 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         } else if($codigoProduto == 0 && !is_null($codigoProduto)){
             $select->where('d.codigo is null');
         }
-        /* $select->order('tpCusto desc'); */
-        /* $select->order('Produto'); */
-        /* $select->order('cdEtapa'); */
-        /* $select->order('Uf'); */
-        /* $select->order('Cidade'); */
-        /* echo $select;die; */
+        $select->order('c.Descricao');
+
         return $this->fetchAll($select);
     }
 }
