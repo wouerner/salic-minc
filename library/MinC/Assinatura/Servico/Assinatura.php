@@ -1,8 +1,8 @@
 <?php
 
-use MinC\Assinatura\Servico\DocumentoAssinatura;
+namespace MinC\Assinatura\Servico;
 
-class MinC_Assinatura_Servico_Assinatura implements \MinC\Assinatura\Servico\IServico
+class Assinatura implements IServico
 {
     /**
      * @var \MinC\Assinatura\Autenticacao\IAdapter $servicoAutenticacao
