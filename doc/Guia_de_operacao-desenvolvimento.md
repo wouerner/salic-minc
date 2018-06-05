@@ -75,6 +75,10 @@ Cada desenvolvedor criará uma branch a partir da `develop`.
                 \                     /
                  o---o----o------o---o --- feature/nome-da-funcionalidade ---
     
+### 5 - Excluir a branch criada
+ 
+ Após o merge para a branch `develop` delete sua branch no [github](https://github.com/culturagovbr/salic-minc/branches).
+ 
 ## Hmg - Homologando seu trabalho
 
   Para o cliente testar e homologar o seu trabalho, você deve fazer o merge da sua branch para a branch `hmg`.
