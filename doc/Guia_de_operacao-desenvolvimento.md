@@ -36,13 +36,13 @@ Cada desenvolvedor criará uma branch a partir da `develop`.
     $ git commit -m '[UPDATE]: modulo: funcionalidade y #numero_da_issue'
     $ git push origin feature/nome-da-funcionalidade
 ```
-    Para visualizar uma lista completa do padrão de versionamento de código [clique aqui](https://github.com/devbrotherhood/codeversioningpattern).
+ Para visualizar uma lista completa do padrão de versionamento de código [clique aqui](https://github.com/devbrotherhood/codeversioningpattern).
    
-   master   o-----------------------------------------
-              \
-               o---------------- develop ----------
-                \
-                 o---o----o----- feature/nome-da-funcionalidade ---
+    master   o-----------------------------------------
+               \
+                o---------------- develop ----------
+                 \
+                  o---o----o----- feature/nome-da-funcionalidade ---
 
 ### 3 - Atualizando sua branch com as alterações mais recentes da develop
 
@@ -100,6 +100,7 @@ Cada desenvolvedor criará uma branch a partir da `develop`.
   Hotfix é uma alteração emergencial, que deve ser aplicada imediatamente em produção. Envolve poucos commits e dificilmente dura mais que um dia.
 
 Para criar um hotfix, siga os passos abaixo:
+
 ```sh
     $ git checkout master
     $ git checkout -b hotfix/nome-da-correcao
