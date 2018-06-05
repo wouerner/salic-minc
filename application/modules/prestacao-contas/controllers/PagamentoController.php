@@ -28,17 +28,15 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
     {
         $idpronac = $this->_request->getParam('idpronac');
 
-        $this->view->idusuario = $this->idUsuario;
         $this->view->idpronac = $idpronac;
     }
 
     public function planilhaPagamentoAction()
     {
         $idpronac = (int)$this->_request->getParam('idpronac');
-        $this->view->idpronac = $idpronac;
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $resposta = $planilhaAprovacaoModel->planilhaAprovada($this->view->idpronac);
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
 
         $planilhaJSON = null;
 
@@ -51,7 +49,7 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
             [$item->cdUF]
             ['cidade']
             [$item->cdCidade]
-            ['item']
+            ['itens']
             [$item->idPlanilhaItens] = [
                 'item' => utf8_encode($item->Item),
                 'varlorAprovado' => $item->vlAprovado,
