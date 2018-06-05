@@ -132,7 +132,9 @@
                                        v-for="(item, index) in item.item"
                                        :key="index"
                                        v-if="isObject(item)">
-                                        <td> {{ item.item }} </td>
+                                        <td>
+                                            {{ item.item }}
+                                        </td>
                                         <td> R$ {{ item.varlorAprovado }} </td>
                                         <td> R$ {{ item.varlorComprovado }} </td>
                                         <td> R$ {{ item.comprovacaoValidada }} </td>
@@ -171,7 +173,7 @@
         mounted: function () {
             let vue = this;
             $3.ajax({
-                url: "/prestacao-contas/prestacao-contas/planilha/idpronac/" + this.idpronac
+                url: "/prestacao-contas/pagamento/planilha-pagamento/idpronac/" + this.idpronac
             }).done(function( data ) {
                     vue.$data.produtos = data;
                 });
