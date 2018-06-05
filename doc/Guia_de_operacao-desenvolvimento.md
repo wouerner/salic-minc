@@ -110,8 +110,8 @@ Para criar um hotfix, siga os passos abaixo:
 
 **No github:**  
 
-  1. crie um pull request da branch hotfix/nome-da-correcao para a **master** em no [github](https://github.com/culturagovbr/salic-minc/pulls).
-  2. solicite a colega que revise e aprove seu código.   
+  1. crie um pull request da branch hotfix/nome-da-correcao para a **master** no [github](https://github.com/culturagovbr/salic-minc/pulls).
+  2. solicite a um colega que revise e aprove seu código.   
 
 # 3 - Publicando uma versão para a master
 
