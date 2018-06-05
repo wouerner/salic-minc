@@ -4,18 +4,13 @@ namespace MinC\Assinatura\Servico;
 
 use Mockery\Exception;
 
-class DocumentoAssinatura implements MinC_Assinatura_Servico_IServico
+class DocumentoAssinatura implements IServico
 {
     public $idPronac;
 
     private $idTipoDoAtoAdministrativo;
 
     private $post;
-
-    /**
-     * @var Assinatura_Model_TbDocumentoAssinatura $objModelDocumentoAssinatura
-     */
-//    private $objModelDocumentoAssinatura;
 
     public function __construct($post, $idTipoDoAtoAdministrativo)
     {
@@ -38,7 +33,7 @@ class DocumentoAssinatura implements MinC_Assinatura_Servico_IServico
             throw new Exception("Projeto n&atilde;o encontrado.");
         }
 
-        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $objModelDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $objModelDocumentoAssinatura->getIdPRONAC(),
             $objModelDocumentoAssinatura->getIdTipoDoAtoAdministrativo()
