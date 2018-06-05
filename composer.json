@@ -12,15 +12,13 @@
         "sentry/sentry": "^1.8"
     },
     "autoload" : {
-        "psr-0" : {
-            "MinC" : "library/"
-        },
         "psr-4" : {
             "Application\\": "application/",
             "Application\\Modules\\": "application/modules/",
             "Application\\Modules\\Readequacao\\": "application/modules/readequacao/",
-            "Application\\Modules\\Readequacao\\Service\\": "application/modules/readequacao/Service/",
-            "MinC\\Assinatura\\Servico\\": "library/MinC/Assinatura/Servico/"
+            "Application\\Modules\\Readequacao\\Service\\": "application/modules/readequacao/service/",
+            "Application\\Modules\\Readequacao\\Service\\Assinatura\\": "application/modules/readequacao/service/Assinatura",
+            "MinC\\Assinatura\\Servico\\": "library/MinC/Assinatura/"
         }
     },
     "archive": {
@@ -28,7 +26,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.3.3"
+            "php": "7.0"
         }
     },
     "before_script" : {
