@@ -24,24 +24,28 @@
     </div>
 </div>
 <!-- vendor -->
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="/public/js/vue.js"></script>
 <!-- vendor -->
 
 <!-- views -->
 <script>
     Vue.component('produtos-pagamento', {
-        props: ['itens'],
+        props: ['produtos', 'idpronac'],
         template: `<ul class="collapsible no-margin" data-collapsible="expandable" id="produtos-collapsible">
-                        <li class="active" v-for="item in itens">
+                        <li class="active" v-for="produto in produtos">
                             <div class="collapsible-header green-text active">
                                 <i class="material-icons">perm_media</i>
-                                {{ item.produto }}
+                                {{ produto.produto }}
                             </div>
                             <div class="collapsible-body no-padding">
                                 <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                                    <etapas-pagamento :item="etapa"
-                                           v-for="(etapa, index) in item.etapa"
-                                           :key="index"></etapas-pagamento>
+                                    <etapas-pagamento
+                                            :etapa="etapa"
+                                            v-for="(etapa, index) in produto.etapa"
+                                            :idpronac="idpronac"
+                                            :cdProduto="produto.cdProduto"
+                                            :key="index"
+                                    ></etapas-pagamento>
                                 </ul>
                             </div>
                         </li>
@@ -58,17 +62,22 @@
         }
     })
     Vue.component('etapas-pagamento', {
-        props: ['item'],
+        props: ['etapa', 'cdProduto', 'idpronac'],
         template: `<li class="active">
                         <div class="collapsible-header orange-text active" style="padding-left: 30px;">
                             <i class="material-icons">label</i>
-                            {{ item.etapa }}
+                            {{ etapa.etapa }}
                         </div>
                         <div class="collapsible-body no-padding">
                             <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                                    <ufs-pagamento :item="UF"
-                                       v-for="(UF, index) in item.UF"
-                                       :key="index"></ufs-pagamento>
+                                    <ufs-pagamento
+                                        v-for="(estado, index) in etapa.UF"
+                                        :idpronac="idpronac"
+                                        :estado="estado"
+                                        :cdEtapa="etapa.cdEtapa"
+                                        :cdProduto="cdProduto"
+                                        :key="index"
+                                    ></ufs-pagamento>
                             </ul>
                         </div>
                     </li>
@@ -86,17 +95,24 @@
         }
     })
     Vue.component('ufs-pagamento', {
-        props: ['item'],
+        props: ['estado', 'cdEtapa', 'cdProduto', 'idpronac'],
         template: ` <li class="active">
                         <div class="collapsible-header blue-text active" style="padding-left: 50px;">
                             <i class="material-icons">place</i>
-                            {{ item.Uf }}
+                            {{ estado.Uf }}
                         </div>
                         <div class="collapsible-body no-padding">
                             <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                                    <cidades-pagamento :item="cidade"
-                                       v-for="(cidade, index) in item.cidade"
-                                       :key="index"></cidades-pagamento>
+                                    <cidades-pagamento
+                                        v-for="(cidade, index) in estado.cidade"
+                                        :cidade="cidade"
+                                        :idpronac="idpronac"
+                                        :uf="estado.Uf"
+                                        :cdEtapa="cdEtapa"
+                                        :cdProduto="cdProduto"
+                                        :key="estado.cdUf"
+                                        :id="estado.cdUf"
+                                    ></cidades-pagamento>
                             </ul>
                         </div>
                     </li>
@@ -111,11 +127,11 @@
         }
     })
     Vue.component('cidades-pagamento', {
-        props: ['item'],
+        props: ['cidade', 'cdEtapa', 'uf', 'cdProduto', 'idpronac'],
         template: ` <li class="active">
                         <div class="collapsible-header blue-text active" style="padding-left: 70px;">
                             <i class="material-icons">place</i>
-                            {{ item.cidade }}
+                            {{ cidade.cidade }}
                         </div>
                         <div class="collapsible-body no-padding margin20 scroll-x">
                             <table class="bordered">
@@ -129,11 +145,19 @@
                                 </thead>
                                 <tbody>
                                     <tr :item="item"
-                                       v-for="(item, index) in item.item"
+                                       v-for="(item, index) in cidade.itens"
                                        :key="index"
                                        v-if="isObject(item)">
                                         <td>
-                                            {{ item.item }}
+                                           <a :href="'/comprovarexecucaofinanceira/comprovacaopagamento'
+                                               + '/idpronac/' + idpronac
+                                               + '/uf/' + uf
+                                               + '/produto/' + cdProduto
+                                               + '/cidade/' + cidade.cdCidade
+                                               + '/etapa/' + cdEtapa
+                                               + '/idPlanilhaAprovacao/' + item.idPlanilhaAprovacao
+                                               + '/idPlanilhaItens/' + item.idPlanilhaItens"
+                                           >{{ item.item }}</a>
                                         </td>
                                         <td> R$ {{ item.varlorAprovado }} </td>
                                         <td> R$ {{ item.varlorComprovado }} </td>
@@ -165,7 +189,7 @@
     Vue.component('dados', {
         props: ['idpronac'],
         template: `<div>
-                            <produtos-pagamento :itens="produtos"></produtos-pagamento>
+                            <produtos-pagamento :produtos="produtos" :idpronac="idpronac"></produtos-pagamento>
                     </div>`,
         created: function () {
                 // this.iniciarCollapsible();
