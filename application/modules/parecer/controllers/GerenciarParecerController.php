@@ -1,6 +1,6 @@
 <?php
 
-class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract implements MinC_Assinatura_Controller_IDocumentoAssinaturaController
+class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IDocumentoAssinatura
 {
     private $idPronac;
     private $intTamPag = 10;
