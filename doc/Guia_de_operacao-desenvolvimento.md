@@ -64,7 +64,7 @@ Cada desenvolvedor criará uma branch a partir da `develop`.
   
   **No github:**  
  
-  Para fazer o merge da sua branch você deverá criar um `pull request` no [github](/culturagovbr/salic-minc/pulls).
+  Para fazer o merge da sua branch você deverá criar um `pull request` no [github](https://github.com/culturagovbr/salic-minc/pulls).
   Após criar o `pull request`, solicite a um colega que revise e aprove o seu código.
 
   Importante: o merge para develop só pode acontecer se o seu trabalho já tiver sido homologado pelo cliente(próximo passo).
@@ -110,9 +110,9 @@ Para criar um hotfix, siga os passos abaixo:
 
 **No github:**  
 
-  1. crie um pull request da branch hotfix/nome-da-correcao para a **master** em no [github]  (https://github.com/culturagovbr/salic-minc/pulls).
+  1. crie um pull request da branch hotfix/nome-da-correcao para a **master** em no [github](https://github.com/culturagovbr/salic-minc/pulls).
   2. solicite a colega que revise e aprove seu código.   
 
 # 3 - Publicando uma versão para a master
 
-  Para publicar para a master siga o [roteiro para publicação de release](doc/Roteiro_de_publicacao_de_releases.md)
+  Para publicar para a master siga o [roteiro para publicação de release](Roteiro_de_publicacao_de_releases.md)
