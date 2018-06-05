@@ -2,7 +2,6 @@
 
 class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IDocumentoAssinatura
 {
-    private $idPronac;
     private $intTamPag = 10;
 
     const ID_TIPO_AGENTE_PARCERISTA = 1;

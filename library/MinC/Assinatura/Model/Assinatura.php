@@ -1,6 +1,8 @@
 <?php
 
-class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAssinatura
+namespace MinC\Assinatura\Model;
+
+class Assinatura implements IModel
 {
     /**
      * @var int $idPronac
@@ -67,7 +69,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $idOrgaoSuperiorDoAssinante
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setIdOrgaoSuperiorDoAssinante($idOrgaoSuperiorDoAssinante)
     {
@@ -85,7 +87,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param array $dadosDocumentoAssinatura
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setDadosDocumentoAssinatura($dadosDocumentoAssinatura)
     {
@@ -103,7 +105,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $idAtoAdministrativo
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setIdAtoAdministrativo($idAtoAdministrativo)
     {
@@ -121,7 +123,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $idDocumentoAssinatura
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setIdDocumentoAssinatura($idDocumentoAssinatura)
     {
@@ -139,7 +141,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $idAssinante
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setIdAssinante($idAssinante)
     {
@@ -157,7 +159,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $idOrdemDaAssinatura
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setIdOrdemDaAssinatura($idOrdemDaAssinatura)
     {
@@ -175,7 +177,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $cod_grupo
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setCodGrupo($cod_grupo)
     {
@@ -193,7 +195,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $cod_orgao
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setCodOrgao($cod_orgao)
     {
@@ -211,7 +213,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $idPronac
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setIdPronac($idPronac)
     {
@@ -229,7 +231,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter $servicoAutenticacao
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setServicoAutenticacao($servicoAutenticacao)
     {
@@ -247,7 +249,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param string $dsManifestacao
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setDsManifestacao($dsManifestacao)
     {
@@ -265,7 +267,7 @@ class MinC_Assinatura_Model_Assinatura implements MinC_Assinatura_Model_IModelAs
 
     /**
      * @param int $idTipoDoAtoAdministrativo
-     * @return \MinC_Assinatura_Model_Assinatura
+     * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo)
     {

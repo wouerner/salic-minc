@@ -248,7 +248,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             )
                         );
 
-                        $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
+                        $modelAssinatura = new \MinC\Assinatura\Model\Assinatura();
                         $modelAssinatura->setCodGrupo($this->grupoAtivo->codGrupo)
                             ->setCodOrgao($this->grupoAtivo->codOrgao)
                             ->setIdPronac($idPronac)
@@ -347,7 +347,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             if (!filter_input(INPUT_GET, 'idTipoDoAtoAdministrativo')) {
                 throw new Exception("Identificador do tipo do ato administrativo &eacute; necess&aacute;rio para acessar essa funcionalidade.");
             }
-            $modelAssinatura = new MinC_Assinatura_Model_Assinatura();
+            $modelAssinatura = new \MinC\Assinatura\Model\Assinatura();
             $modelAssinatura->setIdPronac($get->IdPRONAC);
             $modelAssinatura->setIdTipoDoAtoAdministrativo($get->idTipoDoAtoAdministrativo);
 
