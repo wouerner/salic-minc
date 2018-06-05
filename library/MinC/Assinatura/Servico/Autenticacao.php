@@ -43,7 +43,7 @@ class Autenticacao implements IServico
     }
 
     /**
-     * @return \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter
+     * @return \MinC\Assinatura\Autenticacao\IAdapter
      */
     public function obterMetodoAutenticacao() {
         $metodoAutenticacao =  ucfirst($this->configuracoesAplicacao['Assinatura']['Autenticacao']['Metodo']);

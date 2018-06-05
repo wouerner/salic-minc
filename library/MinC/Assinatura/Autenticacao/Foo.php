@@ -2,7 +2,7 @@
 
 namespace MinC\Assinatura\Autenticacao;
 
-class Foo implements IAutenticacaoAdapter
+class Foo implements IAdapter
 {
     /**
      * @var \Autenticacao_Model_DbTable_Usuario $usuario

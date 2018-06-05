@@ -222,7 +222,7 @@ class Assinatura implements IModel
     }
 
     /**
-     * @return \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter
+     * @return \MinC\Assinatura\Autenticacao\IAdapter
      */
     public function getServicoAutenticacao()
     {
@@ -230,7 +230,7 @@ class Assinatura implements IModel
     }
 
     /**
-     * @param \MinC\Assinatura\Autenticacao\IAutenticacaoAdapter $servicoAutenticacao
+     * @param \MinC\Assinatura\Autenticacao\IAdapter $servicoAutenticacao
      * @return \MinC\Assinatura\Model\Assinatura
      */
     public function setServicoAutenticacao($servicoAutenticacao)

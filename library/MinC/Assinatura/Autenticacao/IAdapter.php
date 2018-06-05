@@ -2,7 +2,7 @@
 
 namespace MinC\Assinatura\Autenticacao;
 
-interface IAutenticacaoAdapter
+interface IAdapter
 {
     /**
      * @return boolean
