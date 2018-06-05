@@ -34,11 +34,11 @@ class MinC_Assinatura_Servico_Assinatura implements \MinC\Assinatura\Servico\ISe
     }
 
     /**
-     * @return MinC_Assinatura_Servico_Autenticacao
+     * @return \MinC\Assinatura\Servico\Autenticacao
      */
     public function obterServicoAutenticacao() {
         if(!isset($this->servicoAutenticacao)) {
-            $this->servicoAutenticacao = new \MinC_Assinatura_Servico_Autenticacao(
+            $this->servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
                 $this->post,
                 $this->identidadeUsuarioLogado
             );
@@ -47,11 +47,11 @@ class MinC_Assinatura_Servico_Assinatura implements \MinC\Assinatura\Servico\ISe
     }
 
     /**
-     * @return DocumentoAssinatura
+     * @return \MinC\Assinatura\Servico\DocumentoAssinatura
      */
     public function obterServicoDocumento() {
         if(!isset($this->servicoDocumentoAssinatura)) {
-            $this->servicoDocumentoAssinatura = new DocumentoAssinatura(
+            $this->servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura(
                 $this->post,
                 $this->idTipoDoAtoAdministrativo
             );

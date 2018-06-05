@@ -1,6 +1,8 @@
 <?php
 
-class MinC_Assinatura_Servico_Autenticacao implements \MinC\Assinatura\Servico\IServico
+namespace MinC\Assinatura\Servico;
+
+class Autenticacao implements IServico
 {
     private $post;
     private $identidadeUsuarioLogado;
