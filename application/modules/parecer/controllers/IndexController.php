@@ -1,6 +1,6 @@
 <?php
 
-class Parecer_IndexController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IDocumentoAssinatura
+class Parecer_IndexController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IServicoDocumento
 {
     private $idPronac;
     /**

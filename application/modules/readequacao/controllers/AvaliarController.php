@@ -1,6 +1,6 @@
 <?php
 
-class Readequacao_AvaliarController extends Readequacao_GenericController implements \MinC\Assinatura\Servico\IDocumentoAssinatura
+class Readequacao_AvaliarController extends Readequacao_GenericController implements \MinC\Assinatura\Servico\IServicoDocumento
 {
     private $idPronac;
 

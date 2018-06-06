@@ -1,6 +1,6 @@
 <?php
 
-class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IDocumentoAssinatura
+class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IServicoDocumento
 {
     private $idPronac;
     private $idUsuario = 0;

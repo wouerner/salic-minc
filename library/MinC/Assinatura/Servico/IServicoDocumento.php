@@ -2,7 +2,7 @@
 
 namespace MinC\Assinatura\Servico;
 
-interface IDocumentoAssinatura
+interface IServicoDocumento
 {
     /**
      * @return \MinC\Assinatura\Documento\IDocumentoAssinatura
