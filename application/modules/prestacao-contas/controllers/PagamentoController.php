@@ -60,7 +60,7 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
             ];
 
             $planilhaJSON[$item->cdProduto] += [
-                'produto' => utf8_encode($item->Produto),
+                'produto' => html_entity_decode(utf8_encode($item->Produto)),
                 'cdProduto' => $item->cdProduto,
             ];
 
