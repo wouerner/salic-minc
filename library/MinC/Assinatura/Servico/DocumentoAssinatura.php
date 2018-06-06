@@ -6,17 +6,6 @@ use Mockery\Exception;
 
 class DocumentoAssinatura implements IServico
 {
-    public $idPronac;
-
-    private $idTipoDoAtoAdministrativo;
-
-    private $post;
-
-    public function __construct($post, $idTipoDoAtoAdministrativo)
-    {
-        $this->post = $post;
-        $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
-    }
 
     public function registrarDocumentoAssinatura(\Assinatura_Model_TbDocumentoAssinatura $objModelDocumentoAssinatura)
     {

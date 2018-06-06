@@ -4,15 +4,31 @@ namespace Application\Modules\Readequacao\Service;
 
 class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatura
 {
-    public $idPronac;
+    private $idPronac;
     private $idTipoDoAtoAdministrativo;
+    private $idAtoDeGestao;
 
-    private $post;
-
-    public function __construct($post, $idTipoDoAtoAdministrativo)
+    public function __construct(
+        $idPronac,
+        $idTipoDoAtoAdministrativo,
+        $idAtoDeGestao
+    )
     {
-        $this->post = $post;
+        if (!isset($idPronac) || empty($idPronac)) {
+            throw new Exception("Identificador do projeto n&atilde;o informado");
+        }
+
+        if (!isset($idTipoDoAtoAdministrativo) || empty($idTipoDoAtoAdministrativo)) {
+            throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
+        }
+
+        if (!isset($idAtoDeGestao) || empty($idAtoDeGestao)) {
+            throw new Exception("Identificador do Ato de Gest&atilde;o n&atilde;o informado");
+        }
+
+        $this->idPronac = $idPronac;
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
+        $this->idAtoDeGestao = $idAtoDeGestao;
     }
 
     public function iniciarFluxo()
@@ -20,10 +36,6 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
         $auth = \Zend_Auth::getInstance();
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
 
-        /**
-         * @todo Campo 'idAtoDeGestao' está definido como null porque o Rômulo ainda não informou qual informação
-         * deve ser armazenada.
-         */
         $objModelDocumentoAssinatura = new \Assinatura_Model_TbDocumentoAssinatura([
             'IdPRONAC' => $this->idPronac,
             'idTipoDoAtoAdministrativo' => $this->idTipoDoAtoAdministrativo,
@@ -31,16 +43,12 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             'dt_criacao' => $objDbTableDocumentoAssinatura->getExpressionDate(),
             'idCriadorDocumento' => $auth->getIdentity()->usu_codigo,
             'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-            'idAtoDeGestao' => NULL,
+            'idAtoDeGestao' => $this->idAtoDeGestao,
             'stEstado' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
         ]);
 
-        $objDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-            $this->post,
-            $auth->getIdentity()
-        );
-        $objDocumentoAssinatura->obterServicoDocumento()
-                               ->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+        $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
+        $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
     }
 
     /**
