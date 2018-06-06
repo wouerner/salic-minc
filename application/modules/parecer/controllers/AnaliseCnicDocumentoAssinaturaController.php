@@ -1,6 +1,6 @@
 <?php
 
-class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatura\Documento\IDocumentoAssinatura
+class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatura\Servico\IDocumentoAssinatura
 {
     public $idPronac;
 

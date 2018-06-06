@@ -4,7 +4,7 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract implements
 {
     private $idPronac;
     /**
-     * @var \MinC\Assinatura\Documento\IDocumentoAssinatura $servicoDocumentoAssinatura
+     * @var \MinC\Assinatura\Servico\IDocumentoAssinatura $servicoDocumentoAssinatura
      */
     private $servicoDocumentoAssinatura;
     

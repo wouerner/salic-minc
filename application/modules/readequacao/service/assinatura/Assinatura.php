@@ -2,7 +2,7 @@
 
 namespace Application\Modules\Readequacao\Service;
 
-class Assinatura implements \MinC\Assinatura\Documento\IDocumentoAssinatura
+class Assinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatura
 {
     public $idPronac;
     private $idTipoDoAtoAdministrativo;

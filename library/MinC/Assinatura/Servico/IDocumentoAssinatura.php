@@ -1,6 +1,6 @@
 <?php
 
-namespace MinC\Assinatura\Documento;
+namespace MinC\Assinatura\Servico;
 
 interface IDocumentoAssinatura
 {
