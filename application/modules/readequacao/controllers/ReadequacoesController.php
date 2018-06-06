@@ -3811,7 +3811,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             throw new Exception("Identificador do Parecer n&atilde;o informado");
         }
 
-        $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\DocumentoAssinatura(
+        $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
             $idPronac,
             $idTipoDoAtoAdministrativo,
             $idAtoGestao

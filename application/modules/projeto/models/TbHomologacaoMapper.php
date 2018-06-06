@@ -115,11 +115,6 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
                         ->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO)
                         ->setDtCriacao($objTbProjetos->getExpressionDate());
 
-                    $objDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                        $this->post,
-                        $auth->getIdentity(),
-                        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO
-                    );
                     $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
                     $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
 
