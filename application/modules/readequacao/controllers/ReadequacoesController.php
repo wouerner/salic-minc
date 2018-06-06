@@ -72,7 +72,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 array(
                     'a.idPronac = ?'=>$idPronac,
                     'a.siEncaminhamento = ?'=> Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE,
-                    'a.idTipoReadequacao != ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+                    'a.stEstado = ?' => 0,
+                    'b.stEstado = ?' => Readequacao_Model_TbTipoReadequacao::TIPO_READEQUACAO_ATIVO,
+                    'b.siReadequacao = ?' => Readequacao_Model_TbTipoReadequacao::SI_READEQUACAO_DIVERSA
                 ),
                 array(1)
             );
