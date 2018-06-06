@@ -35,12 +35,8 @@ class Assinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatura
             'stEstado' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
         ]);
 
-        $objDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-            $this->post,
-            $auth->getIdentity()
-        );
-        $objDocumentoAssinatura->obterServicoDocumento()
-                               ->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+        $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
+        $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
     }
 
     /**

@@ -35,11 +35,6 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatu
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
-            $objDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                $this->post,
-                $auth->getIdentity(),
-                $idTipoDoAtoAdministrativo
-            );
 
             $parecer = new Parecer();
             $idAtoAdministrativo = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_COMPONENTE_CNIC)[0]['idParecer'];
@@ -54,8 +49,8 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatu
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
             $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
 
-            $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
-            $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+            $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
+            $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
         }
     }
 

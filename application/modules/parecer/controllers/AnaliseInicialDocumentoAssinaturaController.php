@@ -79,8 +79,8 @@ class Parecer_AnaliseInicialDocumentoAssinaturaController implements \MinC\Assin
                 Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
             );
 
-            $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
-            $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+            $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
+            $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
         }
     }
 

@@ -56,8 +56,8 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \Min
             $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
 
-            $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
-            $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+            $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
+            $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
         }
 
         $objProjeto = new Projetos();

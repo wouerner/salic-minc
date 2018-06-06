@@ -51,10 +51,7 @@ class Assinatura implements IServico
      */
     public function obterServicoDocumento() {
         if(!isset($this->servicoDocumentoAssinatura)) {
-            $this->servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura(
-                $this->post,
-                $this->idTipoDoAtoAdministrativo
-            );
+            $this->servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
         }
         return $this->servicoDocumentoAssinatura;
     }

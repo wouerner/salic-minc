@@ -120,8 +120,8 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
                         $auth->getIdentity(),
                         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO
                     );
-                    $servicoDocumento = $objDocumentoAssinatura->obterServicoDocumento();
-                    $servicoDocumento->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+                    $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
+                    $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
 
                     $this->setMessage('Documento gerado e encaminhado com sucesso!');
                     $booStatus = true;
