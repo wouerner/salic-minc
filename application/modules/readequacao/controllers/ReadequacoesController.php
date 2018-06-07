@@ -1108,7 +1108,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "readequacoes?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+            parent::message($e->getMessage(), "readequacao/readequacoes?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
         }
     }
 
@@ -1185,7 +1185,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
         }
         catch (Exception $e) {
-            parent::message($e->getMessage(), "/readequacao/readequacoes?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
+            parent::message($e->getMessage(), "readequacao/readequacoes?idPronac=".Seguranca::encrypt($idPronac), "ERROR");
         }
     }
 
@@ -2771,7 +2771,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
                     parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso!", "readequacao/readequacoes/analisar-readequacoes-cnic", "CONFIRM");
                 } else {
-                    parent::message("Erro ao avaliar a readequa&ccedil;&atilde;o!", "form-avaliar-readequacao-cnic?id=$idReadequacao", "ERROR");
+                    parent::message("Erro ao avaliar a readequa&ccedil;&atilde;o!", "readequacao/readequacoes/form-avaliar-readequacao-cnic?id=$idReadequacao", "ERROR");
                 }
             }
             $idReadequacao = Seguranca::encrypt($idReadequacao);
@@ -3856,7 +3856,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $r = $tbReadequacao->buscarDadosReadequacoes(array('idReadequacao = ?'=>$idReadequacao))->current();
 
         if($r->siEncaminhamento <> '10') {
-            parent::message("Este projeto n&atilde;o pode ser encaminhado!", "/readequacao/readequacoes/painel", "ERROR");
+            parent::message("Este projeto n&atilde;o pode ser encaminhado!", "readequacao/readequacoes/painel", "ERROR");
         }
 
         if ($r) {
