@@ -67,48 +67,27 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
             $objTbProjetos = new Projeto_Model_DbTable_Projetos();
 
-            $this->view->projeto = $objTbProjetos->findBy(array(
+            $projeto = $objTbProjetos->findBy(array(
                 'IdPRONAC' => $get->IdPRONAC
             ));
 
             $post = $this->getRequest()->getPost();
             if ($post) {
-                if (!$post['motivoDevolucao']) {
-                    throw new Exception("Campo 'Motivação da Devolução para nova avaliação' não informado.");
+
+                if (!filter_input(INPUT_POST, 'idTipoDoAtoAdministrativo')) {
+                    throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
                 }
-                $objTbDepacho = new Proposta_Model_DbTable_TbDespacho();
-                $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura($get->IdPRONAC, $post['motivoDevolucao']);
+                $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
 
-                $objOrgaos = new Orgaos();
-                $orgaoSuperior = $objOrgaos->obterOrgaoSuperior($this->view->projeto['Orgao']);
-
-                $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
-                if ($orgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-                    $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
+                if (!filter_input(INPUT_POST, 'motivoDevolucao')) {
+                    throw new Exception("Campo 'Motivação da Devolução para nova avaliação' n&atilde;o informado.");
                 }
 
-                $objTbProjetos->alterarOrgao($orgaoDestino, $get->IdPRONAC);
-                $objProjetos = new Projetos();
-                $objProjetos->alterarSituacao(
+                $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
                     $get->IdPRONAC,
-                    null,
-                    Projeto_Model_Situacao::PROJETO_DEVOLVIDO_PARA_ENQUADRAMENTO,
-                    'Projeto encaminhado para nova avalia&ccedil;&atilde;o do readequacao'
+                    $idTipoDoAtoAdministrativo
                 );
-
-                $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-                $data = array(
-                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
-                    'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
-                );
-                $where = array(
-                    'IdPRONAC = ?' => $get->IdPRONAC,
-                    'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-                    'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-                    'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-                );
-
-                $objModelDocumentoAssinatura->update($data, $where);
+                $servicoDocumentoAssinatura->devolverProjeto($post['motivoDevolucao']);
 
                 parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/readequacao-assinatura/gerenciar-assinaturas", 'CONFIRM');
             }
@@ -123,19 +102,19 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
             $mapperArea = new Agente_Model_AreaMapper();
             $this->view->areaCultural = $mapperArea->findBy(array(
-                'Codigo' => $this->view->projeto['Area']
+                'Codigo' => $projeto['Area']
             ));
 
             $objSegmentocultural = new Segmentocultural();
             $this->view->segmentoCultural = $objSegmentocultural->findBy(array(
-                'Codigo' => $this->view->projeto['Segmento']
+                'Codigo' => $projeto['Segmento']
             ));
 
             $objEnquadramento = new Admissibilidade_Model_Enquadramento();
             $arrayPesquisa = array(
-                'AnoProjeto' => $this->view->projeto['AnoProjeto'],
-                'Sequencial' => $this->view->projeto['Sequencial'],
-                'IdPRONAC' => $this->view->projeto['IdPRONAC']
+                'AnoProjeto' => $projeto['AnoProjeto'],
+                'Sequencial' => $projeto['Sequencial'],
+                'IdPRONAC' => $projeto['IdPRONAC']
             );
             $this->view->dadosEnquadramento = $objEnquadramento->findBy($arrayPesquisa);
 
