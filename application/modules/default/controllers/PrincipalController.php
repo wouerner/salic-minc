@@ -12,7 +12,7 @@ class PrincipalController extends MinC_Controller_Action_Abstract
     {
         $this->view->title = "Salic - Sistema de Apoio ás Leis de Incentivo é Cultura"; // tetulo da pegina
         $auth              = Zend_Auth::getInstance(); // pega a autenticaeeo
-        $usuario           = new Autenticacao_Model_Usuario(); // objeto usuerio
+        $usuario           = new Autenticacao_Model_DbTable_Usuario(); // objeto usuerio
         $grupoAtivo        = new Zend_Session_Namespace('GrupoAtivo'); // cria a sesseo com o grupo ativo
         parent::perfil();
 
@@ -147,7 +147,7 @@ class PrincipalController extends MinC_Controller_Action_Abstract
             $proj = new Projetos();
             $resp = $proj->buscarIdPronac($Pronac);
             if (!empty($resp)) {
-                $this->_redirect('consultardadosprojeto/index?idPronac='.$resp->IdPRONAC);
+                $this->redirect('consultardadosprojeto/index?idPronac='.$resp->IdPRONAC);
             } else {
                 parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "principal/index", "ERROR");
             }

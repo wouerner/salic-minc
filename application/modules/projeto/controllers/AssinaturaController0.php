@@ -38,7 +38,7 @@ class Projeto_AssinaturasssController extends Assinatura_GenericController
             $cpf = isset($arrIdentity['usu_codigo']) ? $arrIdentity['usu_identificacao'] : $arrIdentity['cpf'];
 
             if (is_null($cpf)) {
-                $this->_redirect('/');
+                $this->redirect('/');
             }
 
             // Busca na SGCAcesso
@@ -47,7 +47,7 @@ class Projeto_AssinaturasssController extends Assinatura_GenericController
 
             // Busca na Usuarios
             //Excluir ProposteExcluir Proposto
-            $usuarioDAO   = new Autenticacao_Model_Usuario();
+            $usuarioDAO   = new Autenticacao_Model_DbTable_Usuario();
             $arrUsuario = $usuarioDAO->findBy(array('usu_identificacao' => $cpf));
 
             // Busca na Agentes

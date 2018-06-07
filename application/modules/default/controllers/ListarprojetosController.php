@@ -41,7 +41,7 @@ class ListarprojetosController extends MinC_Controller_Action_Abstract
         $buscaAcesso = $sgcAcesso->buscar(array('Cpf = ?' => $cpf));
 
         // Busca na Usuarios
-        $usuarioDAO = new Autenticacao_Model_Usuario();
+        $usuarioDAO = new Autenticacao_Model_DbTable_Usuario();
         $buscaUsuario = $usuarioDAO->buscar(array('usu_identificacao = ?' => $cpf));
 
         // Busca na Agentes
@@ -85,7 +85,7 @@ class ListarprojetosController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        $this->_redirect("Listarprojetos/listarprojetos");
+        $this->redirect("Listarprojetos/listarprojetos");
     }
 
     public function listarprojetosAction()

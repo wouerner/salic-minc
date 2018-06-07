@@ -65,7 +65,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $this->view->usuarioInterno = true;
 
             //Recupera todos os grupos do Usuario
-            $Usuario = new Autenticacao_Model_Usuario(); // objeto usuario
+            $Usuario = new Autenticacao_Model_DbTable_Usuario(); // objeto usuario
             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
             foreach ($grupos as $grupo) {
                 $PermissoesGrupo[] = $grupo->gru_codigo;
@@ -142,6 +142,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 'ReadequacaoPlanilha' => $linksGeral[14]
             );
             $this->view->fnLiberarLinks = $arrayLinks;
+            $projetos = new Projeto_Model_DbTable_Projetos();
+            $this->view->isAdequarARealidade = $projetos->fnChecarLiberacaoDaAdequacaoDoProjeto($idPronac);
 
             $r = new tbRelatorio();
             $rt = new tbRelatorioTrimestral();
@@ -1061,9 +1063,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $resultado = UploadDAO::abrirdocumentosanexados($id, $tipoDoc);
             if (count($resultado) > 0) {
                 if ($tipo == 1) {
-                    $this->_forward("abrirdocumentosanexadosbinario", "upload", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->forward("abrirdocumentosanexadosbinario", "upload", "", array('id'=>$id,'busca'=>$tipoDoc));
                 } else {
-                    $this->_forward("abrirdocumentosanexados", "upload", "", array('id'=>$id,'busca'=>$tipoDoc));
+                    $this->forward("abrirdocumentosanexados", "upload", "", array('id'=>$id,'busca'=>$tipoDoc));
                 }
                 $bln = "true";
             }
@@ -1071,7 +1073,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             // busca o arquivo
             $resultado = UploadDAO::abrir($id);
             if (count($resultado) > 0) {
-                $this->_forward("abrir", "upload", "", array('id'=>$id));
+                $this->forward("abrir", "upload", "", array('id'=>$id));
                 $bln = "true";
             }
         }
@@ -2267,7 +2269,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function remanejamentoMenorAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'index',
             'remanejamento-menor',
             'readequacao'
@@ -2277,7 +2279,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function remanejamentoMenorFinalizarAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'finalizar',
             'remanejamento-menor',
             'readequacao'
@@ -2287,7 +2289,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function carregarValorPorGrupoRemanejamentoAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'carregar-valor-por-grupo-remanejamento',
             'remanejamento-menor',
             'readequacao'
@@ -2297,7 +2299,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function carregarValorEntrePlanilhasAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'carregar-valor-entre-planilhas',
             'remanejamento-menor',
             'readequacao'
@@ -2307,7 +2309,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function remanejamentoReintegrarItemAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'reintegrar-item',
             'remanejamento-menor',
             'readequacao'
@@ -2317,7 +2319,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function remanejamentoReintegrarPlanilhaAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'reintegrar-planilha',
             'remanejamento-menor',
             'readequacao'
@@ -2327,7 +2329,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function remanejamentoAlterarItemAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'alterar-item',
             'remanejamento-menor',
             'readequacao'
@@ -2337,7 +2339,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     public function salvarAvaliacaoDoItemRemanejamentoAction()
     {
         // MOVIDA -> application/modules/readequacao/controllers/RemanejamentoMenorController.php
-        $this->_forward(
+        $this->forward(
             'salvar-avaliacao-do-item-remanejamento',
             'remanejamento-menor',
             'readequacao'

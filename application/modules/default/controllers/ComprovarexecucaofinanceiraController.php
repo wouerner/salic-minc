@@ -103,14 +103,8 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             ->addActionContext('cadastrarcomprovacaopagamento', 'json')
             ->initContext()
         ;
-    } // fecha mï¿½todo init()
+    } 
 
-    /*
-     * Pï¿½gina index
-     * @access public
-     * @param void
-     * @return void
-     */
     public function indexAction()
     {
         /* =============================================================================== */
@@ -129,13 +123,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de menu
-     * * verificar real necessidade da funï¿½ï¿½o *
-     * @access public
-     * @param void
-     * @return void
-     */
     public function menuAction()
     {
         //verificar data da licitaï¿½ï¿½o se antes de 2009
@@ -143,29 +130,8 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
         $post       = Zend_Registry::get('post');
         $this->view->idpronac   = $post->idpronac;
-        /*
-        $dao      = new ComprovarexecucaofinanceiraDao();
-        $resposta = $dao->selectTable('SAC.dbo.Projetos',array('DtProtocolo'),array('IdPRONAC'=>" = {$this->view->idpronac}"));
-
-        $anoLicitacao = date('Y',strtotime($resposta[0]->DtProtocolo));
-        if($anoLicitacao <= 2009){
-            $this->view->anoAntes = 'true';
-            $this->view->veriCEF  = 'false';
-        }
-        else{
-            $this->view->anoAntes = 'false';
-            $this->view->veriCEF  = 'true';
-        }
-         *
-         */
     }
 
-    /*
-     * Funï¿½ï¿½o de dados do projeto
-     * @access public
-     * @param void
-     * @return void
-     */
     public function dadosProjeto()
     {
 
@@ -220,7 +186,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $planilhaItemModel = new PlanilhaItem();
 
-        $resposta   = $planilhaAprovacaoModel->buscarItensPagamento($this->view->idpronac); //Alysson - Alteraï¿½ï¿½o da Query para nï¿½o mostrar os itens excluidos
+        /* $resposta = $planilhaAprovacaoModel->buscarItensPagamento($this->view->idpronac); //Alysson - Alteraï¿½ï¿½o da Query para nï¿½o mostrar os itens excluidos */
+
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada($this->view->idpronac);
 
         $arrayA =   array();
         $arrayP =   array();
@@ -228,40 +196,40 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         if (is_object($resposta)) {
             foreach ($resposta as $val) {
                 $modalidade = '';
-                if ($val->idCotacao != '') {
-                    $modalidade = 'Cota&ccedil;&atilde;o';
-                    $idmod      =   'cot'.$val->idCotacao.'_'.$val->idFornecedorCotacao;
-                }
-                if ($val->idDispensaLicitacao != '') {
-                    $modalidade = 'Dispensa';
-                    $idmod      =   'dis'.$val->idDispensaLicitacao;
-                }
-                if ($val->idLicitacao != '') {
-                    $modalidade =   'Licita&ccedil;&atilde;o';
-                    $idmod      =   'lic'.$val->idLicitacao;
-                }
-                if ($val->idContrato != '') {
-                    if ($modalidade != '') {
-                        $modalidade .=   ' /';
-                    }
-                    $modalidade .=   ' Contrato';
-                    $idmod      =   'con'.$val->idContrato;
-                }
-                if ($modalidade == '') {
-                    $modalidade =   '-';
-                    $idmod      =   'sem';
-                }
 
                 $itemComprovacao = $planilhaItemModel->pesquisar($val->idPlanilhaAprovacao);
 
                 if ($val->tpCusto == 'A') {
-                    $arrayA[$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaAprovacao] = array(
-                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->vlComprovado, $modalidade, $idmod
+                    $arrayA[$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaItens] = array(
+                        $val->descItem,
+                        (float)$val->vlAprovado,
+                        null,
+                        (float)$val->vlComprovado,
+                        $modalidade,
+                        $idmod,
+                        $val->idPlanilhaItens,
+                        $val->uf,
+                        $val->cdProduto,
+                        $val->cdCidade,
+                        $val->cdEtapa,
+                        $val->idPlanilhaAprovacao
                     );
                 }
+
                 if ($val->tpCusto == 'P') {
-                    $arrayP[$val->Descricao][$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaAprovacao] = array(
-                        $val->descItem, $val->Total, $val->tpDocumento, $itemComprovacao->vlComprovado, $modalidade, $idmod
+                    $arrayP[$val->Descricao][$val->descEtapa][$val->uf.' '.$val->cidade][$val->idPlanilhaItens] = array(
+                        $val->descItem,
+                        (float)$val->vlAprovado,
+                        null,
+                        (float)$val->vlComprovado,
+                        $modalidade,
+                        $idmod,
+                        $val->idPlanilhaItens,
+                        $val->uf,
+                        $val->cdProduto,
+                        $val->cdCidade,
+                        $val->cdEtapa,
+                        $val->idPlanilhaAprovacao
                     );
                 }
             }
@@ -272,27 +240,14 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
     }
 
     public function vincularcomprovacaoAction()
-    {
-    }
+    {}
 
-    /*
-     * Pï¿½gina de licitaï¿½ï¿½o anterior
-     * @access public
-     * @param void
-     * @return void
-     */
     public function licitacaoanteriorAction()
     {
         $this->_helper->layout->disableLayout();
         $this->view->etapaconteudo = array(array('id'=>1,'nome'=>'aaaaaaaaa'),array('id'=>2,'nome'=>'bbbbbbb'));
     }
 
-    /*
-     * Pï¿½gina de cadastrar licitaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function cadastrarlicitacaoAction()
     {
         $valido = true;
@@ -352,12 +307,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de cadastrar cotaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function cadastrarcotacaoAction()
     {
         try {
@@ -473,16 +422,10 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
             $this->view->message_type = 'ERROR';
-            $this->_forward('incluircotacao');
+            $this->forward('incluircotacao');
         }
     }
 
-    /*
-     * Pï¿½gina de inserir fornecedor
-     * @access public
-     * @param void
-     * @return string Json contendo idAgente, mensagem e fechar
-     */
     public function inserirfornecedorAction()
     {
         $this->_helper->layout->disableLayout();
@@ -522,12 +465,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de cadastrar contrato
-     * @access public
-     * @param void
-     * @return void
-     */
     public function cadastrarcontratoAction()
     {
         $this->_helper->layout->disableLayout();
@@ -634,12 +571,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Funï¿½ï¿½o de cadastrar vï¿½nculo com fornecedor
-     * @access private
-     * @param array $dados Array com dados de idAgente, idContrato, idCotacao, idLicitaï¿½ï¿½o ou dispensaLicitaï¿½ï¿½o
-     * @return mixed Retorna true/false ou idAgente
-     */
     private function cadastrarVinculoFornecedor($dados)
     {
         if ($dados['idAgente'] == '') {
@@ -702,9 +633,10 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
     public function cadastrarcomprovacaopagamentoAction()
     {
         $dtPagamento = $this->getRequest()->getParam('dtPagamento') ? new DateTime(data::dataAmericana($this->getRequest()->getParam('dtPagamento'))) : null;
+        /* xd(empty($dtPagamento->__toString())); */
+        $this->verificarPermissaoAcesso(false, true, false);
 
         try {
-            $this->verificarPermissaoAcesso(false, true, false);
             $request = $this->getRequest();
 
             $pais = $this->getRequest()->getParam('pais');
@@ -717,7 +649,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             if ($pais == 'Brasil') {
 
                 if (empty($dtPagamento)) {
-                    throw new Exception('A data do pagamento é obrigatória.');
+                    throw new Exception('A data do pagamento ï¿½ obrigatï¿½ria.');
                 }
 
                 $arquivoModel->cadastrar('arquivo');
@@ -771,7 +703,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
             $this->_helper->flashMessenger('Comprovante cadastrado com sucesso.');
             $this->_helper->flashMessengerType('CONFIRM');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -788,18 +720,55 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovacaopagamento');
+            $this->forward('comprovacaopagamento');
         }
     }
 
     public function atualizarcomprovacaopagamentoAction()
     {
+        $request = $this->getRequest();
+        $idComprovantePagamento = $request->getParam('idComprovantePagamento');
+        $idPronac = $request->getParam('idpronac');
+
+        /*todos*/
+        $planilhaAprovacao = new PlanilhaAprovacao();
+        $planilhaAprovacaoItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+            $idPronac,
+            null,
+            null,
+            null,
+            $idComprovantePagamento
+        );
+
+        $valorComprovadoAntigo = $planilhaAprovacaoItem->current()->vlComprovacao;
+        $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto(
+            $idPronac,
+            null,
+            $planilhaAprovacaoItem->current()->cdEtapa,
+            $planilhaAprovacaoItem->current()->cdProduto,
+            $planilhaAprovacaoItem->current()->cdCidade,
+            null,
+            $planilhaAprovacaoItem->current()->idPlanilhaItem
+        );
+        $this->view->valores = $valoresItem->current();
+
+        $valorAprovadoAtual = $valoresItem->current()->vlAprovado;
+        $valorComprovadoAtual = $valoresItem->current()->vlComprovado;
+
+        $valorComprovadoNovo = ($valorComprovadoAtual - $valorComprovadoAntigo) + $vlComprovadoNovo;
+        /* var_dump($valorComprovadoNovo); */
+
+        if ($valorComprovadoNovo > $valorAprovadoAtual) {
+            throw new Exception('Valor comprovado acima do permitido!');
+            return;
+        }
+        /*todo*/
+
         try {
             //$this->verificarPermissaoAcesso(false, true, false);
             $request = $this->getRequest();
             $pais = $request->getParam('pais');
 
-            $idComprovantePagamento = $request->getParam('idComprovantePagamento');
             $paginaRedirecionar = $request->getParam('paginaRedirecionar');
             $redirectsValidos = array('comprovacaopagamento');
             if (!in_array($paginaRedirecionar, $redirectsValidos)) {
@@ -828,7 +797,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
                 if ($_FILES['arquivo']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se não houver novo upload
+                    // nao atualiza arquivo se nï¿½o houver novo upload
                     $comprovantePagamentoModel->atualizar(4);
                 }
 
@@ -864,7 +833,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
                 if ($_FILES['arquivoInternacional']['name'] != '') {
                     $comprovantePagamentoModel->atualizar(4, true);
                 } else {
-                    // nao atualiza arquivo se não houver novo upload
+                    // nao atualiza arquivo se nï¿½o houver novo upload
                     $comprovantePagamentoModel->atualizar(4);
                 }
             }
@@ -874,7 +843,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
             $this->_helper->flashMessenger('Comprovante enviado com sucesso.');
             $this->_helper->flashMessengerType('CONFIRM');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -898,16 +867,10 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             }
             $this->view->message = $message;
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovacaopagamento-recusado');
+            $this->forward('comprovacaopagamento-recusado');
         }
     }
 
-    /*
-     * Pï¿½gina de excluir comprovaï¿½ï¿½o de pagamento
-     * @access public
-     * @param void
-     * @return void
-     */
     public function excluircomprovacaopagamentoAction()
     {
         $this->_helper->layout->disableLayout();
@@ -951,18 +914,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    /*
-     * Pï¿½gina de cadastrar dispensa
-     * @access public
-     * @param void
-     * @return void
-     */
     public function cadastrardispensaAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->_helper->layout->disableLayout();
@@ -1033,12 +987,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de vincular item de custo
-     * @access public
-     * @param void
-     * @return void
-     */
     public function vincularitemcustoAction()
     {
         $this->_helper->layout->disableLayout();
@@ -1056,12 +1004,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de cadastrar vï¿½nculo de item de cust
-     * @access private
-     * @param array $dados
-     * @return void
-     */
     private function cadastravinculoitemcusto($dados = array())
     {
         $post = Zend_Registry::get('post');
@@ -1124,17 +1066,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de incluir cotaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function incluircotacaoAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->view->idcotacao = $this->getRequest()->getParam('idcotacao');
@@ -1205,17 +1139,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de incluir dispensa
-     * @access public
-     * @param void
-     * @return void
-     */
     public function incluirdispensaAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $get = Zend_Registry::get('get');
@@ -1244,17 +1170,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de incluir contrato
-     * @access public
-     * @param void
-     * @return void
-     */
     public function incluircontratoAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->view->tipoAquisicaoConteudo = $this->tipoAquisicao;
@@ -1295,12 +1213,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de incluir itens de custo
-     * @access public
-     * @param void
-     * @return void
-     */
     public function incluiritenscustoAction()
     {
         $this->_helper->layout->disableLayout();
@@ -1322,12 +1234,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->dataAssinatura             = '01/01/2011';
     }
 
-    /*
-     * Pï¿½gina de detalhar licitaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function detalharlicitacaoAction()
     {
         //$this->_helper->layout->disableLayout();
@@ -1369,21 +1275,10 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->documentosAnexados = $ArquivoLicitacaoDao->buscarArquivos($this->view->idlicitacao);
     }
 
-    /*
-     * Pï¿½gina de detalhar cotaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function detalharcotacaoAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
-
-        // $this->_helper->layout->disableLayout();
 
         $get = Zend_Registry::get('get');
         $this->view->idcotacao = $get->idcotacao;
@@ -1424,21 +1319,10 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->documentosAnexados = $ArquivoCotacaoDao->buscarArquivos($this->view->idcotacao);
     }
 
-    /*
-     * Pï¿½gina de detalhar contrato
-     * @access public
-     * @param void
-     * @return void
-     */
     public function detalharcontratoAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
-
-        //$this->_helper->layout->disableLayout();
 
         $this->view->tipoAquisicaoConteudo = $this->tipoAquisicao;
 
@@ -1475,21 +1359,11 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->documentosAnexados = $ArquivoContrataoDao->buscarArquivos($this->view->idcontrato);
     }
 
-    /*
-     * Pï¿½gina de detalhar dispensa
-     * @access public
-     * @param void
-     * @return void
-     */
     public function detalhardispensaAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
-//        $this->_helper->layout->disableLayout();
         $post = Zend_Registry::get('get');
         $this->view->iddispensa = $post->iddispensa;
         $this->view->idpronac   =  $post->idpronac;
@@ -1513,20 +1387,11 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->documentosAnexados = $ArquivoDispensaLicitacaoDao->buscarArquivos($this->view->iddispensa);
     }
 
-    /*
-     * Pï¿½gina de alterar licitaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function alterarlicitacaoAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
-        //$this->_helper->layout->disableLayout();
         $this->view->modalidadeConteudo         = $this->modalidade;
         $this->view->tipoLicitacaoConteudo      = $this->tipoLicitacao;
         $this->view->tipoCompraConteudo         = $this->tipoCompra;
@@ -1570,12 +1435,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de excluir itens de custo
-     * @access public
-     * @param void
-     * @return void
-     */
     public function excluiritenscustoAction()
     {
         $this->_helper->layout->disableLayout();
@@ -1616,6 +1475,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
         $this->_helper->viewRenderer->setNoRender(true);
     }
+
     public function excluirdocumentoAction()
     {
         $this->_helper->layout->disableLayout();
@@ -1653,17 +1513,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de cotaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function cotacaoAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
         $this->dadosProjeto();
         $this->view->idpronac   = $this->getRequest()->getParam('idpronac');
@@ -1684,17 +1536,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->listacotacao = $array;
     }
 
-    /*
-     * Pï¿½gina de licitaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function licitacaoAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->dadosProjeto();
@@ -1716,17 +1560,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->listaLicitacao = $array;
     }
 
-    /*
-     * Pï¿½gina de dispensa
-     * @access public
-     * @param void
-     * @return void
-     */
     public function dispensaAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->dadosProjeto();
@@ -1748,17 +1584,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->listadispensa = $array;
     }
 
-    /*
-     * Pï¿½gina de contrato
-     * @access public
-     * @param void
-     * @return void
-     */
     public function contratoAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
         $this->dadosProjeto();
         $this->view->idpronac   = $this->getRequest()->getParam('idpronac');
@@ -1778,23 +1606,21 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->listacontrato = $array;
     }
 
-    /**
-     * Alteraï¿½ï¿½o realizada por pedido da ï¿½rea Finalistica em 16/02/2016 as 10:48
-     * Author: Alysson Vicuï¿½a de Oliveira
-     * @access public
-     * @param void
-     * @return void
-     * @throws Zend_Db_Table_Exception
-     */
     public function comprovacaopagamentoAction()
     {
         $this->verificarPermissaoAcesso(false, true, false);
 
-        $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
-
-        //Adicionado para ser usado como novo parametro do metodo pesquisarComprovantePorItem
         $idPronac = $this->getRequest()->getParam('idpronac');
+        $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
+        $idPlanilhaItens = $this->getRequest()->getParam('idPlanilhaItens');
         $idComprovantePagamento = $this->getRequest()->getParam('idComprovantePagamento');
+        $uf = $this->getRequest()->getParam('uf');
+        $cdproduto = $this->getRequest()->getParam('produto');
+        $cdcidade = $this->getRequest()->getParam('cidade');
+        $cdetapa = $this->getRequest()->getParam('etapa');
+
+        $tblProjetos = new Projetos();
+        $projeto = $tblProjetos->buscarTodosDadosProjeto($idPronac);
 
         $planilhaItemModel = new PlanilhaItem();
         $produtoModel = new Produto();
@@ -1805,7 +1631,21 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
         $produto = $produtoModel->find($itemPlanilhaAprovacao->idProduto)->current();
         $etapa = $etapaModel->find($itemPlanilhaAprovacao->idEtapa)->current();
-        $item = $itemModel->find($itemPlanilhaAprovacao->idPlanilhaItem)->current();
+        $item = $itemModel->find($idPlanilhaItens)->current();
+
+        /*todo*/
+        $planilhaAprovacao = new PlanilhaAprovacao();
+        $valoresItem = $planilhaAprovacao->planilhaAprovada(
+            $idPronac,
+            $uf,
+            $cdetapa,
+            $cdproduto,
+            $cdcidade,
+            null,
+            $idPlanilhaItens
+        );
+
+        $this->view->valores = $valoresItem->current();
 
         $fornecedorModel = new FornecedorModel();
         $fornecedor = $fornecedorModel->pesquisarFornecedorItem($idPlanilhaAprovacao);
@@ -1821,7 +1661,23 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
 
         $comprovantePagamentoModel = new ComprovantePagamento();
-        $comprovantesDePagamento = $comprovantePagamentoModel->pesquisarComprovantePorItem($item->idPlanilhaItens, $idPronac, $etapa->idPlanilhaEtapa, $itemPlanilhaAprovacao->idProduto, $itemPlanilhaAprovacao->idUFDespesa, $itemPlanilhaAprovacao->idMunicipioDespesa); //ID Recuperado
+        /* $comprovantesDePagamento = $comprovantePagamentoModel */
+        /*     ->pesquisarComprovantePorItem( */
+        /*         $item->idPlanilhaItens, */
+        /*         $idPronac, */
+        /*         $etapa->idPlanilhaEtapa, */
+        /*         $itemPlanilhaAprovacao->idProduto, */
+        /*         $itemPlanilhaAprovacao->idUFDespesa, */
+        /*         $itemPlanilhaAprovacao->idMunicipioDespesa); //ID Recuperado */
+
+        $comprovantesDePagamento = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                $idPronac,
+                $idPlanilhaItens,
+                null,
+                $cdproduto,
+                null,
+                $cdcidade
+            )->toArray();
 
         array_walk($comprovantesDePagamento, function (&$comprovanteDePagamento) use ($fornecedorModel) {
             $comprovanteDePagamento = (object) $comprovanteDePagamento;
@@ -1921,6 +1777,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             }
         }
 
+        $this->view->situacao = $projeto->current()->Situacao;
         $this->view->idpronac = $this->getRequest()->getParam('idpronac');
         $this->view->tipoDocumentoConteudo = $this->tipoDocumento;
     }
@@ -1932,10 +1789,30 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $idpronac = $this->getRequest()->getParam('idpronac');
 
         try {
-
             $planilhaItemModel = new PlanilhaItem();
 
             $itemPlanilhaAprovacao = $planilhaItemModel->buscarItemDaAprovacao($idPlanilhaAprovacao);
+
+            $planilhaAprovacao = new PlanilhaAprovacao();
+            $planilhaAprovacaoItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                $idpronac,
+                null,
+                null,
+                null,
+                $idComprovantePagamento
+            );
+
+            $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto(
+                $idpronac,
+                null,
+                $planilhaAprovacaoItem->current()->cdEtapa,
+                $planilhaAprovacaoItem->current()->cdProduto,
+                $planilhaAprovacaoItem->current()->cdCidade,
+                null,
+                $planilhaAprovacaoItem->current()->idPlanilhaItem
+            );
+
+            $this->view->valores = $valoresItem->current();
 
             if (empty($itemPlanilhaAprovacao)) {
                 throw new Exception("Erro! O item para comprova&ccedil;&atilde;o n&atilde;o foi encontrado!");
@@ -1975,7 +1852,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             $fornecedor = $fornecedorModel->pesquisarFornecedor($comprovantePagamento->idFornecedor);
 
             if ($fornecedor) {
-
                 $cpfCnpj = $fornecedor->CNPJCPF;
                 $fornecedorUsaCnpj = 14 == strlen($cpfCnpj);
                 $fornecedor->CNPJCPF = $fornecedorUsaCnpj ? Mascara::addMaskCNPJ($cpfCnpj) : Mascara::addMaskCPF($cpfCnpj);
@@ -1986,7 +1862,8 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             }
 
             $dataEmissao = $comprovantePagamento->dtEmissao ? new DateTime(data::dataAmericana($comprovantePagamento->dtEmissao)) : new DateTime();
-            $dataPagamento = $comprovantePagamento->dtPagamento ? new DateTime($comprovantePagamento->dtPagamento) : new DateTime();
+            $dataPagamento = $comprovantePagamento->dtPagamento ? DateTime::createFromFormat('d/m/Y', $comprovantePagamento->dtPagamento) : new DateTime();
+
             $this->view->tpDocumento = $comprovantePagamento->tpDocumento;
             $this->view->nrComprovante = $comprovantePagamento->nrComprovante;
             $this->view->nrSerie = $comprovantePagamento->nrSerie;
@@ -2000,18 +1877,20 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             $this->view->JustificativaTecnico = $comprovantePagamento->JustificativaTecnico;
             $this->view->pagCompRecusado = true;
 
+            $tblProjetos = new Projetos();
+            $projeto = $tblProjetos->buscarTodosDadosProjeto($idpronac);
+            $this->view->projeto = $projeto->current();
+
+            $diligencia = new Diligencia();
+            $diligencia = $diligencia->aberta($idpronac);
+            $this->view->idTipoDiligencia = $diligencia->idTipoDiligencia;
+
             $this->render('comprovacaopagamento');
         } catch(Exception $e) {
             parent::message($e->getMessage(), '/comprovarexecucaofinanceira/comprovantes-recusados/idpronac/' . $idpronac, 'ERROR');
         }
     }
 
-    /*
-     * Pï¿½gina de descrever item
-     * @access public
-     * @param void
-     * @return void
-     */
     public function descreveritemAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2020,17 +1899,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->idpronac               = $post->idpronac;
     }
 
-    /*
-     * Pï¿½gina de descriï¿½ï¿½o de item
-     * @access public
-     * @param void
-     * @return void
-     */
     public function descricaoitemAction()
     {
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->_helper->layout->disableLayout();
@@ -2045,12 +1916,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de cadastrar descriï¿½ï¿½o de item
-     * @access public
-     * @param void
-     * @return void
-     */
     public function cadastrardescricaoitemAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2087,18 +1952,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->_helper->json($report);
     }
 
-    /*
-     * Pï¿½gina de anexar
-     * @access public
-     * @param void
-     * @return void
-     */
     public function anexarAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->_helper->layout->disableLayout();
@@ -2110,18 +1966,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->idpronac       = $post->idpronac;
     }
 
-    /*
-     * Pï¿½gina de cadastro de anexos
-     * @access public
-     * @param void
-     * @return void
-     */
     public function cadastraranexoAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->_helper->layout->disableLayout();
@@ -2191,11 +2038,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
 
                     parent::message('Anexado com sucesso!', '/comprovarexecucaofinanceira/incluircotacao'.'?idusuario='.$this->view->idusuario.'&idpronac='.$idpronac.'&idcotacao='.$idcotacao, 'CONFIRM');
                 }
-                /*$this->view->idlicitacao    = $idlicitacao;
-                $this->view->iddispensa     = $iddispensa;
-                $this->view->idcontrato     = $idcontrato;
-                $this->view->idcotacao      = $idcotacao;
-                $this->view->idpronac       = $idpronac;*/
             } else {
                 if ($idlicitacao) {
                     parent::message('Arquivo com extens&atilde;o invï¿½lida!', '/comprovarexecucaofinanceira/alterarlicitacao'.'?idusuario='.$this->view->idusuario.'&idpronac='.$idpronac.'&idlicitacao='.$idlicitacao, 'ERROR');
@@ -2216,18 +2058,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de descrever itens de custo
-     * @access public
-     * @param void
-     * @return void
-     */
     public function descreveritenscustoAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->_helper->layout->disableLayout();
@@ -2259,18 +2092,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de verificar valores de comprovaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function verificarvaloresajaxAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->_helper->layout->disableLayout();
@@ -2312,12 +2136,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de carregar select de planilha
-     * @access public
-     * @param void
-     * @return void
-     */
     public function carregaselectajaxAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2410,18 +2228,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de carregar contrato
-     * @access public
-     * @param void
-     * @return void
-     */
     public function carregacontratoajaxAction()
     {
-
-        /* =============================================================================== */
         /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
-        /* =============================================================================== */
         $this->verificarPermissaoAcesso(false, true, false);
 
         $this->_helper->layout->disableLayout();
@@ -2435,12 +2244,8 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de buscar fornecedor
-     * @access public
-     * @param void
-     * @return void
-     */
+    /**
+    * deprecated*/
     public function buscarfornecedorAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2458,12 +2263,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de buscar fornecedor da base da receita
-     * @access public
-     * @param void
-     * @return void
-     */
     public function buscarfornecedorDaReceitaAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2519,12 +2318,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         }
     }
 
-    /*
-     * Pï¿½gina de remover fornecedor
-     * @access public
-     * @param void
-     * @return void
-     */
     public function removerfornecedorAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2543,12 +2336,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->_helper->json($resposta);
     }
 
-    /*
-     * Pï¿½gina de fornecedor vencedor
-     * @access public
-     * @param void
-     * @return void
-     */
     public function fornecedorvencedorAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2569,12 +2356,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->_helper->json($resposta);
     }
 
-    /*
-     * Pï¿½gina de finalizar comprovaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function finalizarAction()
     {
         $this->_helper->layout->disableLayout();
@@ -2601,15 +2382,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             'idusuario' => $this->getRequest()->getParam('idusuario'),
             'idpronac' => $this->getRequest()->getParam('idpronac'),
         ), null, true);
-        $this->_redirect(str_replace($this->view->baseUrl(), '', $url));
+        $this->redirect(str_replace($this->view->baseUrl(), '', $url));
     }
 
-    /*
-     * Pï¿½gina de comprovaï¿½ï¿½o finalizada
-     * @access public
-     * @param void
-     * @return void
-     */
     public function finalizadoAction()
     {
         $get = Zend_Registry::get('get');
@@ -2618,15 +2393,9 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } else {
             $this->view->mensagem = 'A comprova&ccedil;&atilde;o j&aacute; foi finalizada!';
         }
-        $this->_redirect("comprovarexecucaofinanceira/pagamento?idusuario=".$_GET['idusuario']."&idpronac=".$_GET['idpronac']);
+        $this->redirect("comprovarexecucaofinanceira/pagamento?idusuario=".$_GET['idusuario']."&idpronac=".$_GET['idpronac']);
     }
 
-    /*
-     * Pï¿½gina de apagar licitaï¿½ï¿½o
-     * @access public
-     * @param void
-     * @return void
-     */
     public function deletarLicitacaoAction()
     {
         try {
@@ -2645,7 +2414,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             'idusuario' => $this->getRequest()->getParam('idusuario'),
             'idpronac' => $this->getRequest()->getParam('idpronac'),
         ), null, true);
-        $this->_redirect(str_replace($this->view->baseUrl(), '', $url));
+        $this->redirect(str_replace($this->view->baseUrl(), '', $url));
     }
 
     public function comprovantesRecusadosAction()
@@ -2661,14 +2430,6 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         $this->view->idusuario = Zend_Auth::getInstance()->getIdentity()->IdUsuario;
     }
 
-
-    /**
-     * Função criada a pedido da Área Finalistica em 13/04/2016
-     * @author: Fernão Lopes Ginez de Lara
-     * @access public
-     * @param void
-     * @return void
-     */
     public function enviarcomprovacaopagamentoAction()
     {
         $idPronac = $this->getRequest()->getParam('idPronac');
@@ -2678,7 +2439,7 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
             $comprovantePagamento = $comprovantePagamentoModel->atualizarComprovanteRecusado($idPronac);
 
             $this->_helper->flashMessenger('Comprovantes enviados com sucesso!');
-            $this->_redirect(
+            $this->redirect(
                 str_replace(
                     $this->view->baseUrl(),
                     '',
@@ -2695,11 +2456,11 @@ class ComprovarexecucaofinanceiraController extends MinC_Controller_Action_Abstr
         } catch (Exception $e) {
             $message = $e->getMessage();
             if (strpos($e->getMessage(), 'DateTime::__construct()') !== false) {
-                $message = 'Não foi possível enviar os comprovantes de pagamento!';
+                $message = 'Nï¿½o foi possï¿½vel enviar os comprovantes de pagamento!';
             }
             $this->view->message = $message;
             $this->view->message_type = 'ERROR';
-            $this->_forward('comprovacaopagamento-recusado');
+            $this->forward('comprovacaopagamento-recusado');
         }
     }
 }

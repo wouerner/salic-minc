@@ -27,6 +27,8 @@ class LocalizacaoFisicaControllerTest extends MinC_Test_ControllerActionTestCase
     public function testindexAction()
     {
         $this->alterarPerfil(Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI);
+        $this->alterarPerfil(Autenticacao_Model_Grupos::GESTOR_SALIC, Orgaos::ORGAO_SUPERIOR_SEFIC);
+
         $this->dispatch('/localizacao-fisica?idPronac=' . $this->idPronac);
         $this->assertUrl('default', 'localizacao-fisica', 'index');
     }

@@ -132,7 +132,7 @@ class Admissibilidade_GerenciarparecertecnicoController extends MinC_Controller_
                 if (empty($rsProjeto)) {
                     parent::message("Pronac inexistente na base de dados!", "/admissibilidade/gerenciarparecertecnico/imprimiretiqueta", "ERROR");
                 } else {
-                    $this->_redirect('/admissibilidade/gerenciarparecertecnico/dadosetiqueta?pronac='.$pronac.'&etiqueta='.$etiquetaApenas);
+                    $this->redirect('/admissibilidade/gerenciarparecertecnico/dadosetiqueta?pronac='.$pronac.'&etiqueta='.$etiquetaApenas);
                 }
             } else {
                 parent::message("Pronac inexistente na base de dados!", "/admissibilidade/gerenciarparecertecnico/imprimiretiqueta", "ERROR");
@@ -390,7 +390,7 @@ class Admissibilidade_GerenciarparecertecnicoController extends MinC_Controller_
             if (empty($busca)) {
                 parent::message("Pronac Inexistente na Base de Dados!", "/admissibilidade/gerenciarparecertecnico/imprimirparecertecnico", "ALERT");
             } else {
-                $this->_redirect('/admissibilidade/gerenciarparecertecnico/dadoshtml?pronac='.$pronac);
+                $this->redirect('/admissibilidade/gerenciarparecertecnico/dadoshtml?pronac='.$pronac);
             }
         }
         
@@ -463,7 +463,7 @@ class Admissibilidade_GerenciarparecertecnicoController extends MinC_Controller_
 
             $parecer = new Admissibilidade_Model_DbTable_Gerenciarparecertecnico();
             $validapronac = $parecer->VerificaPronac($arrBusca);
-            if ($validapronac = 1) {
+            if ($validapronac == 1) {
                 $arrBusca = array( //busca para pegar os dados do projeto
                         'tbr.anoprojeto =?' => $ano,
                         'tbr.sequencial =?' => $sequencial,

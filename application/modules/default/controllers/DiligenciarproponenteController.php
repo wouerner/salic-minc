@@ -3,39 +3,39 @@
 class DiligenciarProponenteController extends MinC_Controller_Action_Abstract
 {
     /**
-     * Reescreve o método init()
+     * Reescreve o mï¿½todo init()
      * @access public
      * @param void
      * @return void
      */
     public function init()
     {
-        $this->view->title = "Salic - Sistema de Apoio às Leis de Incentivo à Cultura"; // título da página
-        $auth = Zend_Auth::getInstance(); // pega a autenticação
-        $Usuario = new UsuarioDAO(); // objeto usuário
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessão com o grupo ativo
+        $this->view->title = "Salic - Sistema de Apoio ï¿½s Leis de Incentivo ï¿½ Cultura"; // tï¿½tulo da pï¿½gina
+        $auth = Zend_Auth::getInstance(); // pega a autenticaï¿½ï¿½o
+        $Usuario = new UsuarioDAO(); // objeto usuï¿½rio
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessï¿½o com o grupo ativo
 
-        if ($auth->hasIdentity()) { // caso o usuário esteja autenticado
-            // verifica as permissões
+        if ($auth->hasIdentity()) { // caso o usuï¿½rio esteja autenticado
+            // verifica as permissï¿½es
             $PermissoesGrupo = array();
             // $PermissoesGrupo[] = 93;
             $PermissoesGrupo[] = 118;
             // $PermissoesGrupo[] = 119;
            // $PermissoesGrupo[] = 120;
-            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo está no array de permissões
-                parent::message("Você não tem permissão para acessar essa área do sistema!", "principal/index", "ALERT");
+            if (!in_array($GrupoAtivo->codGrupo, $PermissoesGrupo)) { // verifica se o grupo ativo estï¿½ no array de permissï¿½es
+                parent::message("Vocï¿½ nï¿½o tem permissï¿½o para acessar essa ï¿½rea do sistema!", "principal/index", "ALERT");
             }
 
-            // pega as unidades autorizadas, orgãos e grupos do usuário (pega todos os grupos)
+            // pega as unidades autorizadas, orgï¿½os e grupos do usuï¿½rio (pega todos os grupos)
             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
 
-            // manda os dados para a visão
-            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuário para a visão
-            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuário para a visão
-            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuário para a visão
-            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o órgão ativo do usuário para a visão
+            // manda os dados para a visï¿½o
+            $this->view->usuario = $auth->getIdentity(); // manda os dados do usuï¿½rio para a visï¿½o
+            $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuï¿½rio para a visï¿½o
+            $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuï¿½rio para a visï¿½o
+            $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o ï¿½rgï¿½o ativo do usuï¿½rio para a visï¿½o
         } // fecha if
-        else { // caso o usuário não esteja autenticado
+        else { // caso o usuï¿½rio nï¿½o esteja autenticado
             return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout'), null, true);
         }
 
@@ -44,11 +44,11 @@ class DiligenciarProponenteController extends MinC_Controller_Action_Abstract
     public function indexAction()
     {
         $auth              = Zend_Auth::getInstance(); // pega a autenticação
-        $Usuario = new Autenticacao_Model_Usuario(); // objeto usuário
+        $Usuario = new Autenticacao_Model_DbTable_Usuario(); // objeto usuário
         $idagente = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idagente = $idagente['idAgente'];
 
-        // caso o formulário seja enviado via post
+        // caso o formulï¿½rio seja enviado via post
         // atualiza a planilha
         if ($this->getRequest()->isPost()) {
             // recebe os dados via post
@@ -64,7 +64,7 @@ class DiligenciarProponenteController extends MinC_Controller_Action_Abstract
                 } elseif (strlen($justificativa) < 20) {
                     throw new Exception("A justificativa deve conter no mï¿½nimo 20 caracteres!");
                 } else {
-                    // verifica se já está na pauta
+                    // verifica se jï¿½ estï¿½ na pauta
                     $projetos = new Projetos();
                     $reuniao = new Reuniao();
                     $diligencia = new Diligencia();
@@ -83,7 +83,7 @@ class DiligenciarProponenteController extends MinC_Controller_Action_Abstract
                     $whereAltProjetos = "IdPRONAC = $idPronac";
 
                     $alterarSituacao = $projetos->alterar($dadosAltProjetos, $whereAltProjetos);
-                    $this->_redirect('areadetrabalho/index');
+                    $this->redirect('areadetrabalho/index');
                 } // fecha else
             } // fecha try
             catch (Exception $e) {
@@ -110,7 +110,7 @@ class DiligenciarProponenteController extends MinC_Controller_Action_Abstract
 
                     $respostaDiligencia = $diligencia->buscar(array('idPronac = ?'=>$idpronac));
 
-                    // manda os dados para a visão
+                    // manda os dados para a visï¿½o
                     //$this->view->buscar          = $buscar;
 
                     $this->view->pronac          = $buscarPronac;
@@ -139,7 +139,7 @@ class DiligenciarProponenteController extends MinC_Controller_Action_Abstract
                             }
                         }
                     } else {
-                        parent::message("Não existe CNIC aberta no momento. Favor aguardar!", "principal/index", "ERROR");
+                        parent::message("Nï¿½o existe CNIC aberta no momento. Favor aguardar!", "principal/index", "ERROR");
                     }
                 } // fecha else
             } // fecha try
@@ -147,5 +147,5 @@ class DiligenciarProponenteController extends MinC_Controller_Action_Abstract
                 parent::message($e->getMessage(), "diligenciarproponente/index", "ERROR");
             }
         } // fecha else
-    } // fecha método indexAction()
+    } // fecha mï¿½todo indexAction()
 } // fecha class

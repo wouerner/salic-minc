@@ -17,11 +17,11 @@ class CargoAssinanteController extends Zend_Controller_Action
         } catch (InvalidArgumentException $exception) {
             $mensagem = $exception->getMessage();
         } catch (InvalidArgumentException $exception) {
-            $mensagem = 'Não foi possível cadastrar o cargo!';
+            $mensagem = 'Nï¿½o foi possï¿½vel cadastrar o cargo!';
         }
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->flashMessenger->addMessage($mensagem);
         $this->_helper->flashMessengerType->addMessage($tipo);
-        $this->_redirect("realizarprestacaodecontas/manter-assinantes?tipoFiltro={$this->getRequest()->getParam('tipoFiltro')}");
+        $this->redirect("realizarprestacaodecontas/manter-assinantes?tipoFiltro={$this->getRequest()->getParam('tipoFiltro')}");
     }
 }

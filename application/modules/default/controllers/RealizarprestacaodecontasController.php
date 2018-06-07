@@ -1227,7 +1227,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 }
             }
 
-            $this->_forward('gerarpdf');
+            $this->forward('gerarpdf');
         } catch (Exception $e) {
             parent::message('Erro ao gravar laudo final!', "realizarprestacaodecontas/laudofinal?idPronac=" . $idPronac, 'ERROR');
             return;
@@ -1646,7 +1646,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         // caso o formulario seja enviado via post
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $auth               = Zend_Auth::getInstance();
-        $Usuario            = new Autenticacao_Model_Usuario();
+        $Usuario            = new Autenticacao_Model_DbTable_Usuario();
         $idagente           = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem     = $idagente['idAgente'];
         $idPerfilDestino    = (null === $this->_request->getParam('idPerfilDestino')) ? 124 : $this->_request->getParam('idPerfilDestino'); // se nao receber idPerfilDestino, define como 124 por padrao (tecnico)
@@ -1924,6 +1924,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $totalPag = (int)(($total % $this->intTamPag == 0)?($total/$this->intTamPag):(($total/$this->intTamPag)+1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
         $busca = $Projetos->buscarPainelTecPrestacaoDeContas($where, $order, $tamanho, $inicio, false);
+        /* var_dump($busca);die; */
 
         $paginacao = array(
             "pag"=>$pag,
@@ -2247,9 +2248,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
             $this->_helper->flashMessenger->addMessage('Parecer salvo com sucesso!');
             $this->_helper->flashMessengerType->addMessage('CONFIRM');
-            $this->_redirect("realizarprestacaodecontas/emitirparecertecnico/idPronac/{$idPronac}");
+            $this->redirect("realizarprestacaodecontas/emitirparecertecnico/idPronac/{$idPronac}");
         } catch (Exception $e) {
-            $this->_redirect("realizarprestacaodecontas/dadosprojeto?idPronac=".$idPronac."&tipoMsg=ERROR&msg=Erro ao gravar Parecer t�cnico!");
+            $this->redirect("realizarprestacaodecontas/dadosprojeto?idPronac=".$idPronac."&tipoMsg=ERROR&msg=Erro ao gravar Parecer t�cnico!");
             return;
         }
     }
@@ -2318,21 +2319,21 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $cadastrar                     = $EncaminhamentoPrestacaoContas->inserir($dados);
 
                 if ($this->codOrgao == 177) {
-                    $this->_redirect("realizarprestacaodecontas/aeciprestacaocontas?tipoMsg=CONFIRM&msg=Consultoria enviada com sucesso!");
+                    $this->redirect("realizarprestacaodecontas/aeciprestacaocontas?tipoMsg=CONFIRM&msg=Consultoria enviada com sucesso!");
                 } elseif ($this->codOrgao == 12) {
-                    $this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=CONFIRM&msg=Consultoria enviada com sucesso!");
+                    $this->redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=CONFIRM&msg=Consultoria enviada com sucesso!");
                 }
                 return;
             } catch (Exception $e) {
                 if ($this->codOrgao == 177) {
-                    $this->_redirect("realizarprestacaodecontas/aeciprestacaocontas?tipoMsg=ERROR&msg=Erro ao enviar o Projeto.");
+                    $this->redirect("realizarprestacaodecontas/aeciprestacaocontas?tipoMsg=ERROR&msg=Erro ao enviar o Projeto.");
                 } elseif ($this->codOrgao == 12) {
-                    $this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Erro ao enviar o Projeto.");
+                    $this->redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Erro ao enviar o Projeto.");
                 }
                 return;
             }
         } else {
-            $this->_redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Dados obrigat&oacute;rios n&atilde;o informados");
+            $this->redirect("realizarprestacaodecontas/conjurprestacaocontas?tipoMsg=ERROR&msg=Dados obrigat&oacute;rios n&atilde;o informados");
         }
     }
 
@@ -2612,7 +2613,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
     {
         $auth = Zend_Auth::getInstance();
 
-        $Usuario = new Autenticacao_Model_Usuario();
+        $Usuario = new Autenticacao_Model_DbTable_Usuario();
 
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
@@ -2633,7 +2634,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $auth = Zend_Auth::getInstance();
         $auth->getIdentity();
 
-        $Usuario = new Autenticacao_Model_Usuario();
+        $Usuario = new Autenticacao_Model_DbTable_Usuario();
 
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
@@ -2651,7 +2652,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      */
     public function pareceristaprestacaocontasAction()
     {
-        $Usuario        = new Autenticacao_Model_Usuario();
+        $Usuario        = new Autenticacao_Model_DbTable_Usuario();
         $auth           = Zend_Auth::getInstance();
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
@@ -2669,7 +2670,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
      */
     public function coordenadorpareceristaprestacaocontasAction()
     {
-        $Usuario        = new Autenticacao_Model_Usuario();
+        $Usuario        = new Autenticacao_Model_DbTable_Usuario();
         $auth           = Zend_Auth::getInstance();
         $idagente       = $Usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $idAgenteOrigem = $idagente['idAgente'];
@@ -2697,23 +2698,41 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 $idPronac,
                 $uf,
                 null,
-                $codigoProduto != 0 ? $codigoProduto :  null,
+                /* $codigoProduto != 0 ? $codigoProduto :  null, */
+                $codigoProduto,
                 $municipio,
                 null,
                 $idPlanilhaItem
             );
+        /* var_dump( */
+        /*         $idPronac, */
+        /*         $uf, */
+        /*         null, */
+        /*         $codigoProduto, */
+        /*         $municipio, */
+        /*         null, */
+        /*         $idPlanilhaItem */
+        /* ); */
+        /* var_dump( */
+        /*         $codigoProduto */
+        /*     ); */
+        /* die; */
 
 
         if (!$projeto) {
             $this->_helper->flashMessengerType->addMessage('ALERT');
             $this->_helper->flashMessenger->addMessage('N&atilde;o houve comprova&ccedil;&atilde;o para este item.');
-            $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria/idPronac/{$idPronac}");
+            $this->redirect("realizarprestacaodecontas/planilhaorcamentaria/idPronac/{$idPronac}");
         } else {
             $this->view->tipoComprovante = $this->tipoDocumento;
 
             $comprovantes = $planilhaAprovacaoModel
-                ->vwComprovacaoFinanceiraProjetoPorItemOrcamentario($idPronac, $idPlanilhaItem, $stItemAvaliado)
-                ;
+                ->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                    $idPronac, 
+                    $idPlanilhaItem, 
+                    $stItemAvaliado,
+                    $codigoProduto
+                );
         }
 
         $this->view->idPronac = $idPronac;
@@ -2722,6 +2741,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $this->view->projeto = $projeto[0];
         $this->view->comprovantesPagamento = $comprovantes;
         $this->view->stItemAvaliado = $stItemAvaliado;
+
+        $this->view->uf = $uf;
+        $this->view->municipio = $municipio;
+        $this->view->idPlanilhaEtapa = $idPlanilhaEtapa;
+        $this->view->codigoProduto = $codigoProduto;
+
     }
 
     /**
@@ -2752,7 +2777,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             $this->view->idPlanilhaAprovacao   = $idPlanilhaAprovacao;
             $this->view->idPlanilhaItem        = $idPlanilhaItem;
         } else {
-            $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$idPronac}&tipoMsg=ALERT&msg=N&atilde;o houve comprova&ccedil;&atilde;o para este item.");
+            $this->redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$idPronac}&tipoMsg=ALERT&msg=N&atilde;o houve comprova&ccedil;&atilde;o para este item.");
         }
     }
 
@@ -2763,6 +2788,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
         $idPronac = $this->_request->getParam("idPronac");
         $idPlanilhaItem = $this->_request->getParam("idPlanilhaItem");
         $stItemAvaliado = $this->_request->getParam("stItemAvaliado");
+
+        $uf = $this->getRequest()->getParam('uf');
+        $municipio = $this->getRequest()->getParam('idmunicipio');
+        $idPlanilhaEtapa = $this->getRequest()->getParam('idplanilhaetapa');
+        $codigoProduto = $this->getRequest()->getParam('produto');
+
         $redirector = $this->_helper->getHelper('Redirector');
         $redirector
             ->setExit(false)
@@ -2775,6 +2806,9 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     'idPlanilhaAprovacao' => $idPlanilhaAprovacao,
                     'idPlanilhaItem' => $idPlanilhaItem,
                     'stItemAvaliado' => $stItemAvaliado,
+                    'produto' => $codigoProduto,
+                    'uf' => $uf,
+                    'idmunicipio' => $municipio
                 )
             );
 
@@ -2908,14 +2942,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     'idSituacao'        => 'E27',
                     'stAtivo'           => 1);
                 $tblEncaminhamento->inserir($dados);
-                $this->_redirect("realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
+                $this->redirect("realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
                 return;
             } catch (Exception $e) {
-                $this->_redirect("realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoMsg=ERROR&msg={$e->getMessage()}");
+                $this->redirect("realizarprestacaodecontas/chefedivisaoprestacaocontas?tipoMsg=ERROR&msg={$e->getMessage()}");
                 return;
             }
         } else {
-            $this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
+            $this->redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
         }
     }
 
@@ -2963,14 +2997,14 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                     'stAtivo'           => 1);
                 $tblEncaminhamento->inserir($dados);
 
-                $this->_redirect("realizarprestacaodecontas/tecnicoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
+                $this->redirect("realizarprestacaodecontas/tecnicoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
                 return;
             } catch (Exception $e) {
-                $this->_redirect("realizarprestacaodecontas/tecnicoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
+                $this->redirect("realizarprestacaodecontas/tecnicoprestacaocontas?tipoMsg=CONFIRM&msg=Finalizado com sucesso!");
                 return;
             }
         } else {
-            $this->_redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
+            $this->redirect("realizarprestacaodecontas/emitirparecertecnico?idPronac={$pronac}&tipoMsg=ALERT&msg=Para Finalizar a An&aacute;lise � necess�rio Emitir parecer.");
         }
     }
 
@@ -3009,12 +3043,12 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
                 'idSituacao'        => $rsEPC->idSituacao);
 
             if ($tblEncaminhamentoPrestacaoContas->inserir($dados)) {
-                $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=CONFIRM&msg=Projeto em an&aacute;lise!");
+                $this->redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=CONFIRM&msg=Projeto em an&aacute;lise!");
             } else {
-                $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=ERROR&msg=Falha ao alterar status do Projeto!");
+                $this->redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=ERROR&msg=Falha ao alterar status do Projeto!");
             }
         } else {
-            $this->_redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=ALERT&msg=PRONAC inexistente!");
+            $this->redirect("realizarprestacaodecontas/planilhaorcamentaria?idPronac={$pronac}&tipoMsg=ALERT&msg=PRONAC inexistente!");
         }
     }
 

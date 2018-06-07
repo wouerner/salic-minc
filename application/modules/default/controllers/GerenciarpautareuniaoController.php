@@ -847,7 +847,8 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract
         $arrPronacs = array();
         $diretorio =  getcwd() . "/public/plenaria/";
         try {
-            if ($handle = opendir($diretorio)) {
+            $handle = opendir($diretorio);
+            if ($handle) {
                 while (false !== ($file = readdir($handle))) {
                     if ($file != "." && $file != "..") {
                         $arq = strstr($file, 'votacao_');
@@ -885,7 +886,7 @@ class GerenciarPautaReuniaoController extends MinC_Controller_Action_Abstract
         $area = new Area();
         $tc = new TitulacaoConselheiro();
         $usuariosorgao = new Usuariosorgaosgrupos();
-        $usuario = new Autenticacao_Model_Usuario();
+        $usuario = new Autenticacao_Model_DbTable_Usuario();
         $auth = Zend_Auth::getInstance(); // pega a autenticacao
         $Agente = $usuario->getIdUsuario($auth->getIdentity()->usu_codigo);
         $buscarReuniaoAberta = $reuniao->buscarReuniaoAberta();

@@ -1,3 +1,4 @@
+DROP  PROCEDURE dbo.spPlanilhaOrcamentaria;
 CREATE PROCEDURE dbo.spPlanilhaOrcamentaria (@idPronac int, @TipoPlanilha char(1))
 AS  
 
@@ -187,7 +188,10 @@ ELSE
 -- =========================================================================================
 IF @TipoPlanilha = 5
    BEGIN
-      IF NOT EXISTS( SELECT TOP 1 * FROM tbPlanilhaAprovacao WHERE idPronac = @idPronac AND stAtivo = 'S' AND tpPlanilha = 'RP')
+      IF  EXISTS( SELECT TOP 1 * FROM tbPlanilhaAprovacao a
+	                                INNER JOIN tbReadequacao b on (a.idReadequacao = b.idReadequacao)
+	                                WHERE a.idPronac = @idPronac AND stAtivo = 'N' AND tpPlanilha = 'RP'
+									      AND b.stEstado  = 0)
          BEGIN
            SELECT a.idPronac,a.AnoProjeto+a.Sequencial as PRONAC,a.NomeProjeto,k.idProduto,k.idPlanilhaAprovacao,k.idPlanilhaAprovacaoPai,
 				  CASE 
@@ -210,7 +214,7 @@ IF @TipoPlanilha = 5
 			               AND c1.idPlanilhaItem     = k.idPlanilhaItem 
 			               AND c1.idPronac           = k.idPronac 
                      GROUP BY c1.nrFonteRecurso,c1.idProduto,c1.idEtapa,c1.idUFDespesa,c1.idMunicipioDespesa,c1.idPlanilhaItem ) as vlComprovado,
-				     k.QtDias as QtdeDias,f.UF,f.Municipio,k.dsJustificativa,k.idAgente
+				     k.QtDias as QtdeDias,f.UF,f.Municipio,k.dsJustificativa,k.idAgente,k.tpAcao
 			    FROM Projetos                       a
 			    INNER JOIN tbPlanilhaAprovacao      k on (a.idPronac       = k.idPronac)
 			    LEFT JOIN Produto                   c on (k.idProduto      = c.Codigo)
@@ -219,16 +223,16 @@ IF @TipoPlanilha = 5
 			    INNER JOIN tbPlanilhaItens          i on (k.idPlanilhaItem = i.idPlanilhaItens)
 			    INNER JOIN Verificacao              x on (k.nrFonteRecurso = x.idVerificacao)
 			    INNER JOIN agentes.dbo.vUfMunicipio f on (k.idUfDespesa    = f.idUF and k.idMunicipioDespesa = f.idMunicipio)
-			   INNER JOIN tbReadequacao             h on (k.idReadequacao  = h .idReadequacao) 
-			    WHERE     k.stAtivo = 'N' 
-				   	  AND k.tpPlanilha = 'RP'
+			    INNER JOIN tbReadequacao            h on (k.idReadequacao  = h .idReadequacao) 
+			    WHERE     k.stAtivo            = 'N' 
+				   	  AND k.tpPlanilha         = 'RP'
 					  AND ((ROUND((k.qtItem * k.nrOcorrencia * k.vlUnitario),2) <> 0)
 					        OR (k.dsJustificativa IS NOT NULL))
    				      AND h.idTipoReadequacao = 1 
-                      AND h.siEncaminhamento  = 11
+            AND h.siEncaminhamento  = 11
 				      AND h.stAtendimento     = 'D'
-		              AND h.stEstado = 0
-					  AND a.idPronac = @idPronac
+		              AND h.stEstado          = 0
+					  AND a.idPronac          = @idPronac
 			    ORDER BY x.Descricao,c.Descricao DESC,CONVERT(VARCHAR(8),d.idPlanilhaEtapa) + ' - ' + d.Descricao,f.UF,f.Municipio,i.Descricao
 	     END
 	  ELSE
@@ -254,7 +258,7 @@ IF @TipoPlanilha = 5
 			               AND c1.idPlanilhaItem     = k.idPlanilhaItem 
 			               AND c1.idPronac           = k.idPronac 
                      GROUP BY c1.nrFonteRecurso,c1.idProduto,c1.idEtapa,c1.idUFDespesa,c1.idMunicipioDespesa,c1.idPlanilhaItem ) as vlComprovado,
-				 k.QtDias as QtdeDias,f.UF,f.Municipio,k.dsJustificativa,k.idAgente
+				 k.QtDias as QtdeDias,f.UF,f.Municipio,k.dsJustificativa,k.idAgente,k.tpAcao
 			   FROM Projetos a
 			   INNER JOIN tbPlanilhaAprovacao      k on (a.idPronac = k.idPronac)
 			   LEFT JOIN Produto                   c on (k.idProduto = c.Codigo)
@@ -291,7 +295,7 @@ IF @TipoPlanilha = 6
 	
 	 -- IF NOT EXISTS(SELECT TOP 1 idPronac FROM tbPlanilhaAprovacao WHERE  stAtivo = 'S' AND tpPlanilha = 'SR' AND IdPRONAC = @idPronac) 
          BEGIN
-           SELECT a.idPronac,a.AnoProjeto+a.Sequencial as PRONAC,a.NomeProjeto,b.idProduto,b.idPlanilhaAprovacao,b.idPlanilhaAprovacaoPai,
+  SELECT a.idPronac,a.AnoProjeto+a.Sequencial as PRONAC,a.NomeProjeto,b.idProduto,b.idPlanilhaAprovacao,b.idPlanilhaAprovacaoPai,
 				 CASE 
 				   WHEN b.idProduto = 0
 						THEN 'Administração do Projeto'

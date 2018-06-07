@@ -279,7 +279,7 @@ class VerificarAlteracaoProjetoController extends MinC_Controller_Action_Abstrac
 
         $query = tbPedidoAlteracaoProjetoCoordDAO::updateDadosProjeto($parecerCoordenador, $idpedidoalteracao);
         if ($query) {
-            $this->_redirect('verificaralteracaocoordenador/');
+            $this->redirect('verificaralteracaocoordenador/');
             $this->_helper->viewRenderer->setNoRender(true);
         }
     }
@@ -298,7 +298,7 @@ class VerificarAlteracaoProjetoController extends MinC_Controller_Action_Abstrac
         $query = tbPedidoAlteracaoProjetoCoordDAO::UpdateAvaliacaoProjeto($parecerCoordenador, $idpedidoalteracao, $dtparecertecnico);
 
         if ($query) {
-            $this->_redirect('verificaralteracaocoordenador/');
+            $this->redirect('verificaralteracaocoordenador/');
             $this->_helper->viewRenderer->setNoRender(true);
         }
     }
@@ -307,12 +307,12 @@ class VerificarAlteracaoProjetoController extends MinC_Controller_Action_Abstrac
     {
         $qtdcarecteres = strlen($dado);
         switch ($qtdcarecteres) {
-            case 11: {
+            case 11:
                 $retorno = Mascara::addMaskCPF($dado);
-            }
-            case 14: {
+                break;
+            case 14:
                 $retorno = Mascara::addMaskCNPJ($dado);
-            }
+                break;
         }
         return $retorno;
     }

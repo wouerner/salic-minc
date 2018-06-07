@@ -17,7 +17,7 @@ class LocalizacaoFisicaController extends MinC_Controller_Action_Abstract
         //Da permissao de acesso a todos os grupos do usuario logado afim de atender o UC75
         if (isset($auth->getIdentity()->usu_codigo)) {
             //Recupera todos os grupos do Usuario
-            $Usuario = new Autenticacao_Model_Usuario(); // objeto usu�rio
+            $Usuario = new Autenticacao_Model_DbTable_Usuario(); // objeto usu�rio
             $grupos = $Usuario->buscarUnidades($auth->getIdentity()->usu_codigo, 21);
             foreach ($grupos as $grupo) {
                 if (!in_array($grupo->gru_codigo, $this->permissoesGrupo)) {
@@ -305,7 +305,7 @@ class LocalizacaoFisicaController extends MinC_Controller_Action_Abstract
             if (!$this->getRequest()->getParam('localizacao')) {
                 $this->_helper->flashMessenger->addMessage("Erro ao salvar localiza&ccedil;&atilde;o f&iacute;sica do projeto. Preencha o campo obrigat&oacute;rio.");
                 $this->_helper->flashMessengerType->addMessage("ERROR");
-                $this->_redirect($_SERVER['HTTP_REFERER']);
+                $this->redirect($_SERVER['HTTP_REFERER']);
             }
             $projetoModel->update(
                 array('Logon' => $this->getRequest()->getParam('tecnico'),),
@@ -323,7 +323,7 @@ class LocalizacaoFisicaController extends MinC_Controller_Action_Abstract
             if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
                 $redirectUrl = $_SERVER['HTTP_REFERER'];
             }
-            $this->_redirect($redirectUrl);
+            $this->redirect($redirectUrl);
         }
     }
 
