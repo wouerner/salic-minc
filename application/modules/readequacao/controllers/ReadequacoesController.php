@@ -1904,6 +1904,27 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $tbPlanoDistribuicaoMapper->atualizarAnaliseTecnica($this->idPronac, $idReadequacao, $this->idPerfil, $parecerProjeto);
         }
 
+        if ($dadosRead->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS) {
+            $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+            $tbSolicitacaoTransferenciaRecursosMapper = new Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
+            $projetos = new Projetos();
+            
+            $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($dadosRead->idReadequacao);
+            $projetoTransferidor = $projetos->buscarProjetoTransferidor($dadosRead->idPronac);
+            
+            foreach($projetosRecebedores as $projetoRecebedor) {
+                $arrData = [];
+                $arrData['idSolicitacaoTransferenciaRecursos'] = $projetoRecebedor['idSolicitacao'];
+                $arrData['siAnaliseTecnica'] = $parecerProjeto;
+                
+                $statusSolicitacaoTransferenciaRecursos = $tbSolicitacaoTransferenciaRecursosMapper->salvarParecerTecnico($arrData);
+                
+                if (!$statusSolicitacaoTransferenciaRecursos) {
+                    throw new Exception("N&atilde;o foi poss&iacute;vel incluir os projetos recebedores da solicita&ccedil;&atilde;o");
+                }
+            }
+        }
+        
         try {
             //ATUALIZA A SITUAÇÃO, ÁREA E SEGMENTO DO PROJETO
             $d = array();
