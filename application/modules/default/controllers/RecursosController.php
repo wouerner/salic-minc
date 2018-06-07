@@ -7,7 +7,7 @@
  * @link http://www.cultura.gov.br
  */
 
-class RecursoController extends MinC_Controller_Action_Abstract
+class RecursosController extends MinC_Controller_Action_Abstract
 {
     private $idUsuario = 0;
     private $idOrgao = 0;
@@ -287,7 +287,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             $this->view->recurso = $r;
             $this->view->projeto = $p;
         } else {
-            parent::message('Nenhum registro encontrado.', "recurso", "ERROR");
+            parent::message('Nenhum registro encontrado.', "recursos", "ERROR");
         }
     }
 
@@ -378,9 +378,9 @@ class RecursoController extends MinC_Controller_Action_Abstract
                 );
                 $tb = $tbDistribuirProjeto->inserir($dados);
             }
-            parent::message('Dados salvos com sucesso!', "recurso", "CONFIRM");
+            parent::message('Dados salvos com sucesso!', "recursos", "CONFIRM");
         } else {
-            parent::message('Nenhum registro encontrado.', "recurso", "ERROR");
+            parent::message('Nenhum registro encontrado.', "recursos", "ERROR");
         }
     }
 
@@ -912,13 +912,13 @@ class RecursoController extends MinC_Controller_Action_Abstract
                     $tbRecurso = new tbRecurso();
                     $tbRecurso->update($dados, $where);
                 }
-                parent::message("A avalia&ccedil;&atilde;o do recurso foi finalizada com sucesso! ", "recurso/painel-recursos", "CONFIRM");
+                parent::message("A avalia&ccedil;&atilde;o do recurso foi finalizada com sucesso! ", "recursos/painel-recursos", "CONFIRM");
             }
 
-            parent::message("Dados salvos com sucesso!", "recurso/form-avaliar-recurso?id=$idRecurso", "CONFIRM");
+            parent::message("Dados salvos com sucesso!", "recursos/form-avaliar-recurso?id=$idRecurso", "CONFIRM");
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "recurso/form-avaliar-recurso?id=$idRecurso", "ERROR");
+            parent::message($e->getMessage(), "recursos/form-avaliar-recurso?id=$idRecurso", "ERROR");
         }
     }
 
@@ -1057,13 +1057,13 @@ class RecursoController extends MinC_Controller_Action_Abstract
                     $tbRecurso = new tbRecurso();
                     $tbRecurso->update($dados, $where);
                 }
-                parent::message("A avalia&ccedil;&atilde;o do recurso foi finalizada com sucesso!", "recurso/analisar-recursos-cnic", "CONFIRM");
+                parent::message("A avalia&ccedil;&atilde;o do recurso foi finalizada com sucesso!", "recursos/analisar-recursos-cnic", "CONFIRM");
             }
 
-            parent::message("Dados salvos com sucesso!", "recurso/form-avaliar-recurso-cnic?recurso=$idRecurso", "CONFIRM");
+            parent::message("Dados salvos com sucesso!", "recursos/form-avaliar-recurso-cnic?recurso=$idRecurso", "CONFIRM");
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "recurso/form-avaliar-recurso-cnic?recurso=$idRecurso", "ERROR");
+            parent::message($e->getMessage(), "recursos/form-avaliar-recurso-cnic?recurso=$idRecurso", "ERROR");
         }
     }
 
@@ -1483,13 +1483,13 @@ class RecursoController extends MinC_Controller_Action_Abstract
                 $where = "idRecurso = $idRecurso";
                 $tbRecurso = new tbRecurso();
                 $tbRecurso->update($dados, $where);
-                parent::message("A avalia&ccedil;&atilde;o do recurso foi finalizada com sucesso! ", "recurso/analisar-recursos-cnic", "CONFIRM");
+                parent::message("A avalia&ccedil;&atilde;o do recurso foi finalizada com sucesso! ", "recursos/analisar-recursos-cnic", "CONFIRM");
             }
 
-            parent::message("Dados salvos com sucesso!", "recurso/form-avaliar-recurso-cnic?recurso=$idRecurso", "CONFIRM");
+            parent::message("Dados salvos com sucesso!", "recursos/form-avaliar-recurso-cnic?recurso=$idRecurso", "CONFIRM");
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "recurso/form-avaliar-recurso-cnic?recurso=$idRecurso", "ERROR");
+            parent::message($e->getMessage(), "recursos/form-avaliar-recurso-cnic?recurso=$idRecurso", "ERROR");
         }
     }
 
@@ -1559,10 +1559,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
             }
             $analisedeConteudoDAO->update($dados, $where);
 
-            parent::message("Dados salvos com sucesso!", "recurso/form-avaliar-recurso?id=$idRecurso", "CONFIRM");
+            parent::message("Dados salvos com sucesso!", "recursos/form-avaliar-recurso?id=$idRecurso", "CONFIRM");
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "recurso/form-avaliar-recurso?id=$idRecurso", "ERROR");
+            parent::message($e->getMessage(), "recursos/form-avaliar-recurso?id=$idRecurso", "ERROR");
         }
     }
 
@@ -1617,10 +1617,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
             }
             $analisedeConteudoDAO->update($dados, $where);
 
-            parent::message("Dados salvos com sucesso!", "recurso/form-avaliar-recurso-cnic?recurso=$idRecurso", "CONFIRM");
+            parent::message("Dados salvos com sucesso!", "recursos/form-avaliar-recurso-cnic?recurso=$idRecurso", "CONFIRM");
         } // fecha try
         catch (Exception $e) {
-            parent::message($e->getMessage(), "recurso/form-avaliar-recurso-cnic?recurso=$idRecurso", "ERROR");
+            parent::message($e->getMessage(), "recursos/form-avaliar-recurso-cnic?recurso=$idRecurso", "ERROR");
         }
     }
 
@@ -1898,14 +1898,14 @@ class RecursoController extends MinC_Controller_Action_Abstract
                     }
                     $alterarAtendimento = RecursoDAO::avaliarRecurso($dados, $idRecurso);
                     if ($alterarAtendimento) { // caso tenha sido alterado com sucesso
-                        parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "recurso", "CONFIRM");
+                        parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "recursos", "CONFIRM");
                     } else {
                         throw new Exception("Erro ao $msg recurso!");
                     }
                 } // fecha else
             } // fecha try
             catch (Exception $e) {
-                parent::message($e->getMessage(), "recurso/indeferidos?idPronac=" . $idPronac, "ERROR");
+                parent::message($e->getMessage(), "recursos/indeferidos?idPronac=" . $idPronac, "ERROR");
             }
         } // fecha if
     } // fecha metodo indeferidosAction()
@@ -1974,14 +1974,14 @@ class RecursoController extends MinC_Controller_Action_Abstract
                     $alterarEnquadramento = RecursoDAO::recursoReenquadramento($dadosEnquadramento, $idEnquadramento);
 
                     if ($alterarAtendimento && $alterarEnquadramento) { // caso tenha sido alterado com sucesso
-                        parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "recurso", "CONFIRM");
+                        parent::message("Solicita&ccedil;&atilde;o enviada com sucesso!", "recursos", "CONFIRM");
                     } else {
                         throw new Exception("Erro ao $msg recurso!");
                     }
                 } // fecha else
             } // fecha try
             catch (Exception $e) {
-                parent::message($e->getMessage(), "recurso/reenquadramento?idPronac=" . $idPronac, "ERROR");
+                parent::message($e->getMessage(), "recursos/reenquadramento?idPronac=" . $idPronac, "ERROR");
             }
         } // fecha if
         else {
@@ -2037,7 +2037,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             // altera a situacao do projeto
             $alterarSituacao = ProjetoDAO::alterarSituacao($idPronac, $situacao);
 
-            parent::message("Projeto consolidado com sucesso!", "recurso", "CONFIRM");
+            parent::message("Projeto consolidado com sucesso!", "recursos", "CONFIRM");
         } else {
             $tborcamento = RecursoDAO::buscarRecursoOrcamento($idPronac, $idRecurso);
             $this->view->tbrecurso = $tborcamento;
@@ -2143,13 +2143,13 @@ class RecursoController extends MinC_Controller_Action_Abstract
                 $cadastrarPlanilha = RecursoDAO::cadastrarPlanilhaAprovacao($dadosPlanilha);
 
                 if ($cadastrarPlanilha) {
-                    parent::message("Dados inseridos com sucesso!", "recurso/orcamento?idPronac=".$idPronac."&idRecurso=".$idRecurso, "CONFIRM");
+                    parent::message("Dados inseridos com sucesso!", "recursos/orcamento?idPronac=".$idPronac."&idRecurso=".$idRecurso, "CONFIRM");
                 } else {
                     throw new Exception("Erro ao alterar planilha!");
                 }
             } // fecha try
             catch (Exception $e) {
-                parent::message($e->getMessage(), "recurso/orcamento?idPronac=".$idPronac."&idRecurso=".$idRecurso, "ERROR");
+                parent::message($e->getMessage(), "recursos/orcamento?idPronac=".$idPronac."&idRecurso=".$idRecurso, "ERROR");
             }
         }// fecha if
         else {
@@ -2199,7 +2199,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             $this->view->recurso = $r;
             $this->view->projeto = $p;
         } else {
-            parent::message('Nenhum registro encontrado.', "recurso", "ERROR");
+            parent::message('Nenhum registro encontrado.', "recursos", "ERROR");
         }
     }
 
@@ -2216,10 +2216,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
         $dsAvaliacao = $this->getRequest()->getParam('dsAvaliacao');
 
         if (empty($dsAvaliacao)) {
-            parent::message('Avaliação não preenchida!', "recurso/avaliar-recurso-enquadramento?recurso=$idRecurso", "ERROR");
+            parent::message('Avaliação não preenchida!', "recursos/avaliar-recurso-enquadramento?recurso=$idRecurso", "ERROR");
         }
         if (empty($idRecurso)) {
-            parent::message('Recurso não encontrado!', "recurso/avaliar-recurso-enquadramento?recurso=$idRecurso", "ERROR");
+            parent::message('Recurso não encontrado!', "recursos/avaliar-recurso-enquadramento?recurso=$idRecurso", "ERROR");
         }
 
         $tbRecurso = new tbRecurso();
@@ -2252,7 +2252,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             }
 
             $recurso->save();
-            parent::message('Dados salvos com sucesso!', "recurso/recurso-enquadramento", "CONFIRM");
+            parent::message('Dados salvos com sucesso!', "recursos/recurso-enquadramento", "CONFIRM");
         }
     }
 
@@ -2322,7 +2322,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             $this->view->recurso = $r;
             $this->view->projeto = $p;
         } else {
-            parent::message('Nenhum registro encontrado.', "recurso", "ERROR");
+            parent::message('Nenhum registro encontrado.', "recursos", "ERROR");
         }
     }
 
@@ -2333,10 +2333,10 @@ class RecursoController extends MinC_Controller_Action_Abstract
         $dsAvaliacao = $this->getRequest()->getParam('dsAvaliacao');
 
         if (empty($dsAvaliacao)) {
-            parent::message('Avaliação não preenchida!', "recurso", "ERROR");
+            parent::message('Avaliação não preenchida!', "recursos", "ERROR");
         }
         if (empty($idRecurso)) {
-            parent::message('Recurso não encontrado!', "recurso", "ERROR");
+            parent::message('Recurso não encontrado!', "recursos", "ERROR");
         }
 
         $tbRecurso = new tbRecurso();
@@ -2369,7 +2369,7 @@ class RecursoController extends MinC_Controller_Action_Abstract
             }
 
             $recurso->save();
-            parent::message('Dados salvos com sucesso!', "recurso/recurso-enquadramento", "CONFIRM");
+            parent::message('Dados salvos com sucesso!', "recursos/recurso-enquadramento", "CONFIRM");
         }
     }
 }
