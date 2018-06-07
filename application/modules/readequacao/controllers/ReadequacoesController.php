@@ -3114,6 +3114,40 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $dadosPreProjeto = $PrePropojeto->find(array('idPreProjeto=?'=>$dadosPrj->idProjeto))->current();
                 $dadosPreProjeto->FichaTecnica = $read->dsSolicitacao;
                 $dadosPreProjeto->save();
+            } elseif ($read->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS) {
+                
+                $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+                $tbProjetoRecebedorRecursoMapper = new Readequacao_Model_TbProjetoRecebedorRecursoMapper();
+                $tbSolicitacaoTransferenciaRecursosMapper = new Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
+                $projetos = new Projetos();
+            
+                $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($dadosRead->idReadequacao);
+                $projetoTransferidor = $projetos->buscarProjetoTransferidor($dadosRead->idPronac);
+            
+                foreach($projetosRecebedores as $projetoRecebedor) {
+                
+                    $arrData = [];
+                    $arrData['idSolicitacaoTransferenciaRecursos'] = $projetoRecebedor['idSolicitacao'];
+                    $arrData['idPronacTransferidor'] = $projetoTransferidor['idPronac'];
+                    $arrData['idPronacRecebedor'] = $projetoRecebedor['idPronacRecebedor'];
+                    $arrData['tpTransferencia'] = $projetoRecebedor['tpTransferencia'];
+                    $arrData['dtRecebimento'] = new Zend_Db_Expr('GETDATE()');
+                    $arrData['vlRecebido'] = $projetoRecebedor['vlRecebido'];
+                
+                    $statusProjetoRecebedorRecurso = $tbProjetoRecebedorRecursoMapper->finalizarSolicitacaoReadequacao($arrData);
+
+                    $arrData = [];
+                    $arrData['stEstado'] = 1;
+                    $arrData['idSolicitacaoTransferenciaRecursos'] = $projetoRecebedor['idSolicitacao'];
+                    // TODO: dando pau aqui
+                    $statusSolicitacaoTransferenciaRecursos = $tbSolicitacaoTransferenciaRecursosMapper->save($arrData);
+                
+                    if ($statusProjetoRecebedorRecurso == false
+                        || $statusSolicitacaoTransferenciaRecursos == false
+                    ) {
+                        throw new Exception("N&atilde;o foi poss&iacute;vel incluir os projetos recebedores da solicita&ccedil;&atilde;o");
+                    }
+                }
             }
         }
 
