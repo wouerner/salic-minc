@@ -1692,7 +1692,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
     /**
      * Função acessada pelo Coordenador de Parecer, Coordenador de Acompanhamento, e Coordenador Geral de Acomapanhamento.
-    */
+     */
     public function visualizarReadequacaoAction()
     {
         if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
@@ -1719,8 +1719,8 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     }
 
     /**
-    * Função acessada pelo Coordenador de Parecer para encaminhar a readequação para o Parecerista.
-    */
+     * Função acessada pelo Coordenador de Parecer para encaminhar a readequação para o Parecerista.
+     */
     public function encaminharReadequacaoAction()
     {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
@@ -1775,7 +1775,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
     /**
      * Função acessada pelo Parecerista ou Técnico de acompanhamento para avaliar a readequação.
-    */
+     */
     public function formAvaliarReadequacaoAction()
     {
         $perfisAcesso = array(Autenticacao_Model_Grupos::PARECERISTA, Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO);
@@ -1823,7 +1823,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
     /**
      * Função acessada pelo Parecerista ou Técnico de acompanhamento para avaliar a readequação.
-    */
+     */
     public function salvarParecerTecnicoAction()
     {
         if ($this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA
@@ -1837,22 +1837,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $idReadequacao = $params['idReadequacao'];
         $dsParecer = $params['dsParecer'];
         $parecerProjeto = $params['parecerProjeto'];
-
-
-//        $post = $this->getRequest()->getPost();
-//        $idPronac = $post['IdPRONAC'];
-//        $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
-//        $idAtoGestao = $post['idParecer'];
-        $servicoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
-            148374,
-            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
-// somente para teste $parecerProjeto
-//            $idParecer
-            9999
-        );
-        $servicoAssinatura->iniciarFluxo();
-xd(1);
-
 
         $campoTipoParecer = 8;
         $vlPlanilha = 0;
@@ -1904,56 +1888,55 @@ xd(1);
             $buscaEnquadramento = $enquadramentoDAO->buscarDados($idPronac, null, false);
 
             $dadosProjeto = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac));
-            if (count($dadosProjeto) > 0) {
+            if (count($dadosProjeto) < 1) {
+                throw new Exception("Projeto Cultural n&atilde;o encontrado.");
+            }
 
-                //CADASTRA OU ATUALIZA O PARECER DO TECNICO
-                $parecerDAO = new Parecer();
-                $dadosParecer = array(
-                    'idPRONAC' => $idPronac,
-                    'AnoProjeto' => $dadosProjeto[0]->AnoProjeto,
-                    'Sequencial' => $dadosProjeto[0]->Sequencial,
-                    'TipoParecer' => $campoTipoParecer,
-                    'ParecerFavoravel' => $parecerProjeto,
-                    'DtParecer' => MinC_Db_Expr::date(),
-                    'NumeroReuniao' => null,
-                    'ResumoParecer' => $dsParecer,
-                    'SugeridoReal' => $vlPlanilha,
-                    'Atendimento' => 'S',
-                    'idEnquadramento' => $buscaEnquadramento['IdEnquadramento'],
-                    'stAtivo' => 1,
-                    'idTipoAgente' => 1,
-                    'Logon' => $this->idUsuario
+            //CADASTRA OU ATUALIZA O PARECER DO TECNICO
+            $parecerDAO = new Parecer();
+            $dadosParecer = array(
+                'idPRONAC' => $idPronac,
+                'AnoProjeto' => $dadosProjeto[0]->AnoProjeto,
+                'Sequencial' => $dadosProjeto[0]->Sequencial,
+                'TipoParecer' => $campoTipoParecer,
+                'ParecerFavoravel' => $parecerProjeto,
+                'DtParecer' => MinC_Db_Expr::date(),
+                'NumeroReuniao' => null,
+                'ResumoParecer' => $dsParecer,
+                'SugeridoReal' => $vlPlanilha,
+                'Atendimento' => 'S',
+                'idEnquadramento' => $buscaEnquadramento['IdEnquadramento'],
+                'stAtivo' => 1,
+                'idTipoAgente' => 1,
+                'Logon' => $this->idUsuario
+            );
+
+            $parecerAntigo = array(
+                'Atendimento' => 'S',
+                'stAtivo' => 0
+            );
+            $whereUpdateParecer = 'IdPRONAC = ' . $idPronac;
+            $alteraParecer = $parecerDAO->alterar($parecerAntigo, $whereUpdateParecer);
+
+            $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
+            $buscarParecer = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?' => $idReadequacao))->current();
+
+            if ($buscarParecer) {
+                $whereUpdateParecer = 'IdParecer = ' . $buscarParecer->IdParecer;
+                $parecerDAO->alterar($dadosParecer, $whereUpdateParecer);
+                $idParecer = $buscarParecer->IdParecer;
+            } else {
+                $idParecer = $parecerDAO->inserir($dadosParecer);
+            }
+
+            $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
+            $parecerReadequacao = $tbReadequacaoXParecer->buscar(array('idReadequacao = ?' => $idReadequacao, 'idParecer =?' => $idParecer));
+            if (count($parecerReadequacao) == 0) {
+                $dadosInclusao = array(
+                    'idReadequacao' => $idReadequacao,
+                    'idParecer' => $idParecer
                 );
-
-                $parecerAntigo = array(
-                    'Atendimento' => 'S',
-                    'stAtivo' => 0
-                );
-                $whereUpdateParecer = 'IdPRONAC = ' . $idPronac;
-                $alteraParecer = $parecerDAO->alterar($parecerAntigo, $whereUpdateParecer);
-
-                $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
-                $buscarParecer = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?' => $idReadequacao))->current();
-
-                if ($buscarParecer) {
-                    $whereUpdateParecer = 'IdParecer = ' . $buscarParecer->IdParecer;
-                    $parecerDAO->alterar($dadosParecer, $whereUpdateParecer);
-                    $idParecer = $buscarParecer->IdParecer;
-                } else {
-                    $idParecer = $parecerDAO->inserir($dadosParecer);
-                }
-
-                $tbReadequacaoXParecer = new Readequacao_Model_DbTable_TbReadequacaoXParecer();
-                $parecerReadequacao = $tbReadequacaoXParecer->buscar(array('idReadequacao = ?' => $idReadequacao, 'idParecer =?' => $idParecer));
-                if (count($parecerReadequacao) == 0) {
-                    $dadosInclusao = array(
-                        'idReadequacao' => $idReadequacao,
-                        'idParecer' => $idParecer
-                    );
-                    $idReadequacaoXParecer = $tbReadequacaoXParecer->inserir($dadosInclusao);
-                } else {
-                    $idReadequacaoXParecer = $parecerReadequacao->idReadequacaoXParecer;
-                }
+                $tbReadequacaoXParecer->inserir($dadosInclusao);
             }
 
             if (isset($params['finalizarAvaliacao']) && $params['finalizarAvaliacao'] == 1) {
@@ -1978,12 +1961,11 @@ xd(1);
                     $tbReadequacao->update($dados, $where);
                 }
 
-                $servicoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
+                $this->iniciarFluxoAssinaturaParaAssinatura(
                     $idPronac,
                     Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
                     $idParecer
                 );
-                $servicoAssinatura->iniciarFluxo();
 
                 parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacao/readequacoes/painel-readequacoes", "CONFIRM");
             }
@@ -3832,7 +3814,7 @@ xd(1);
         $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
             $idPronac,
             $idTipoDoAtoAdministrativo,
-            $idAtoGestao
+            $idParecer
         );
         $servicoDocumentoAssinatura->iniciarFluxo();
     }
