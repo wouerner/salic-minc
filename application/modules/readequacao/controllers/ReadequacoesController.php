@@ -1690,7 +1690,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->view->idOrgao = $this->idOrgao;
     }
 
-    /*
+    /**
      * Função acessada pelo Coordenador de Parecer, Coordenador de Acompanhamento, e Coordenador Geral de Acomapanhamento.
     */
     public function visualizarReadequacaoAction()
@@ -1718,9 +1718,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->view->Parecer = $tbReadequacaoXParecer->buscarPareceresReadequacao(array('a.idReadequacao = ?' => $id, 'idTipoAgente =?' => 1))->current();
     }
 
-    /*
-    * Alterada em 13/03/14
-    * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
+    /**
     * Função acessada pelo Coordenador de Parecer para encaminhar a readequação para o Parecerista.
     */
     public function encaminharReadequacaoAction()
@@ -1775,9 +1773,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    /*
-     * Criada em 12/03/14
-     * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
+    /**
      * Função acessada pelo Parecerista ou Técnico de acompanhamento para avaliar a readequação.
     */
     public function formAvaliarReadequacaoAction()
@@ -1825,9 +1821,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->view->in2017 = $this->in2017;
     }
 
-    /*
-     * Criada em 12/03/14
-     * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
+    /**
      * Função acessada pelo Parecerista ou Técnico de acompanhamento para avaliar a readequação.
     */
     public function salvarParecerTecnicoAction()
@@ -1843,6 +1837,23 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $idReadequacao = $params['idReadequacao'];
         $dsParecer = $params['dsParecer'];
         $parecerProjeto = $params['parecerProjeto'];
+
+
+//        $post = $this->getRequest()->getPost();
+//        $idPronac = $post['IdPRONAC'];
+//        $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
+//        $idAtoGestao = $post['idParecer'];
+        $servicoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
+            148374,
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
+// somente para teste $parecerProjeto
+//            $idParecer
+            9999
+        );
+        $servicoAssinatura->iniciarFluxo();
+xd(1);
+
+
         $campoTipoParecer = 8;
         $vlPlanilha = 0;
 
@@ -1939,7 +1950,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                         'idReadequacao' => $idReadequacao,
                         'idParecer' => $idParecer
                     );
-                    $tbReadequacaoXParecer->inserir($dadosInclusao);
+                    $idReadequacaoXParecer = $tbReadequacaoXParecer->inserir($dadosInclusao);
+                } else {
+                    $idReadequacaoXParecer = $parecerReadequacao->idReadequacaoXParecer;
                 }
             }
 
@@ -1964,6 +1977,14 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     $where = "idReadequacao = $idReadequacao";
                     $tbReadequacao->update($dados, $where);
                 }
+
+                $servicoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
+                    $idPronac,
+                    Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
+                    $idParecer
+                );
+                $servicoAssinatura->iniciarFluxo();
+
                 parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacao/readequacoes/painel-readequacoes", "CONFIRM");
             }
             $idReadequacao = Seguranca::encrypt($idReadequacao);
@@ -1996,11 +2017,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    /*
-     * Alterada em 12/03/14
-     * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
+    /**
      * Função acessada pelos coordenadores para devolver para análise técnica.
-    */
+     */
     public function devolverReadequacaoAction()
     {
         $dados = array();
@@ -3792,21 +3811,20 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
     }
 
-    public function iniciarFluxoAssinaturaParaAssinatura()
+    public function iniciarFluxoAssinaturaParaAssinatura(
+        $idPronac,
+        $idTipoDoAtoAdministrativo,
+        $idParecer
+    )
     {
-        $post = $this->getRequest()->getPost();
-
-        $idPronac = $post['IdPRONAC'];
         if (!isset($idPronac) || empty($idPronac)) {
             throw new Exception("Identificador do projeto n&atilde;o informado");
         }
 
-        $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
         if (!isset($idTipoDoAtoAdministrativo) || empty($idTipoDoAtoAdministrativo)) {
             throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
         }
 
-        $idAtoGestao = $post['idParecer'];
         if (!isset($idParecer) || empty($idParecer)) {
             throw new Exception("Identificador do Parecer n&atilde;o informado");
         }

@@ -2,6 +2,8 @@
 
 namespace Application\Modules\Readequacao\Service\Assinatura;
 
+use Mockery\Exception;
+
 class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatura
 {
     private $idPronac;
@@ -52,6 +54,10 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
      */
     public function criarDocumento()
     {
+        if(!isset($this->idAtoDeGestao) || is_null($this->idAtoDeGestao || empty($this->idAtoDeGestao))) {
+            throw new Exception("Identificador do ato de gest&atilde;o n&atilde;o informado.");
+        }
+
         $view = new \Zend_View();
         $view->setScriptPath(
             __DIR__
@@ -59,13 +65,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             . 'template'
         );
 
-        $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
-
-        $objPlanoDistribuicaoProduto = new \Projeto_Model_vwPlanoDeDistribuicaoProduto();
-        $view->dadosProducaoProjeto = $objPlanoDistribuicaoProduto->obterProducaoProjeto(array(
-            'IdPRONAC = ?' => $this->idPronac
-        ));
-
+        $view->titulo = 'Parecer T&eacute;cnico de Readequa&ccedil;&atilde;o do Projeto';
         $view->IdPRONAC = $this->idPronac;
 
         $objProjeto = new \Projeto_Model_DbTable_Projetos();
@@ -77,37 +77,31 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
 
         $view->nomeAgente = (count($arrayDadosAgente) > 0) ? $arrayDadosAgente['nome'] : ' - ';
 
-        $mapperArea = new \Agente_Model_AreaMapper();
-        $view->areaCultural = $mapperArea->findBy(array(
-            'Codigo' => $view->projeto['Area']
-        ));
-        $objSegmentocultural = new \Segmentocultural();
-        $view->segmentoCultural = $objSegmentocultural->findBy(
-            array(
-                'Codigo' => $view->projeto['Segmento']
-            )
-        );
-        $view->valoresProjeto = $objProjeto->obterValoresProjeto($this->idPronac);
-
-        $objProjeto = new \Projeto_Model_DbTable_Projetos();
-        $dadosProjeto = $objProjeto->findBy(array(
-            'IdPRONAC' => $this->idPronac
-        ));
-
-        $objEnquadramento = new \Admissibilidade_Model_Enquadramento();
-        $arrayPesquisa = array(
-            'AnoProjeto' => $dadosProjeto['AnoProjeto'],
-            'Sequencial' => $dadosProjeto['Sequencial'],
-            'IdPRONAC' => $this->idPronac
-        );
-
-        $view->dadosEnquadramento = $objEnquadramento->findBy($arrayPesquisa);
-
         $auth = \Zend_Auth::getInstance();
         $dadosUsuarioLogado = $auth->getIdentity();
         $view->orgaoSuperior = $dadosUsuarioLogado->usu_org_max_superior;
 
-        return $view->render('documento-assinatura.phtml');
+        $tbParecer = new \Parecer();
+        $parecer = $tbParecer->buscar([
+            'IdParecer = ?' => $this->idAtoDeGestao
+        ])->current();
+
+
+        switch ((string)$parecer->ParecerFavoravel === '1') {
+            case '1':
+                $view->parecer = 'Desfavor&aacute;vel';
+                break;
+            case '2':
+                $view->parecer = 'Favor&aacute;vel';
+                break;
+            default:
+                $view->parecer = 'N&atilde;o definido';
+                break;
+        }
+
+        $documentoRenderizado = $view->render('documento-assinatura.phtml');
+
+        return $documentoRenderizado;
     }
 
     public function finalizarFluxo()
