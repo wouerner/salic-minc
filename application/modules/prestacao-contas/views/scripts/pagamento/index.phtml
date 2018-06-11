@@ -129,10 +129,10 @@
                                 <thead>
                                     <tr>
                                         <th>Item de Custo</th>
-                                        <th>Valor Aprovado</th>
-                                        <th>Valor Comprovado</th>
-                                        <th>Valor a Comprovar</th>
-                                        <th>#</th>
+                                        <th style="text-align: right">Valor Aprovado</th>
+                                        <th style="text-align: right">Valor Comprovado</th>
+                                        <th style="text-align: right">Valor a Comprovar</th>
+                                        <th style="text-align: center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,10 +143,11 @@
                                         <td>
                                             {{ item.item }}
                                         </td>
-                                        <td> R$ {{ item.varlorAprovado }} </td>
-                                        <td> R$ {{ item.varlorComprovado }} </td>
-                                        <td> R$ {{ item.comprovacaoValidada }} </td>
-                                        <td> <a :href="'/comprovarexecucaofinanceira/comprovacaopagamento'
+                                        <td style="text-align: right"> R$ {{ item.varlorAprovado }} </td>
+                                        <td style="text-align: right"> R$ {{ item.varlorComprovado }} </td>
+                                        <td style="text-align: right"> R$ {{ item.varlorAprovado - item.varlorComprovado  }} </td>
+                                        <td style="text-align: right"><a class="tooltipped" data-position="bottom" data-tooltip="I am a tooltip"
+                                            :href="'/comprovarexecucaofinanceira/comprovacaopagamento'
                                                + '/idpronac/' + idpronac
                                                + '/uf/' + uf
                                                + '/produto/' + cdProduto
