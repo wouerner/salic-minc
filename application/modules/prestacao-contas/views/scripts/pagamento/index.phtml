@@ -1,21 +1,11 @@
-<!--<div id="app" class="container-fluid">-->
-<!--    <v-app>-->
-<!--        <v-content>-->
-<!--            <page-title></page-title>-->
-<!--            <v-container>-->
-<!--                <router-view></router-view>-->
-<!--            </v-container>-->
-<!--        </v-content>-->
-<!--    </v-app>-->
-<!--</div>-->
-
 <div class="row" id="app">
     <div class="col s12 m12">
         <div class="card">
             <div class="card-content">
                 <div class="card">
                     <div class="center-align card-content grey lighten-4">
-                        <span class="card-title">PLANILHA DE ORÇAMENTO APROVADA</span>
+                        <span class="card-title">COMPROVAÇÃO FINANCEIRA</span>
+                        <span class="voltar"><a href="javascript:voltar();" title="Ir para p&aacute;gina anterior">Voltar</a></span>
                     </div>
                     <dados idpronac="<?php echo $this->idpronac ?>"></dados>
                 </div>
@@ -29,6 +19,7 @@
 
 <!-- views -->
 <script>
+
     Vue.component('produtos-pagamento', {
         props: ['produtos', 'idpronac'],
         template: `<ul class="collapsible no-margin" data-collapsible="expandable" id="produtos-collapsible">
@@ -141,6 +132,7 @@
                                         <th>Valor Aprovado</th>
                                         <th>Valor Comprovado</th>
                                         <th>Valor a Comprovar</th>
+                                        <th>#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,7 +141,12 @@
                                        :key="index"
                                        v-if="isObject(item)">
                                         <td>
-                                           <a :href="'/comprovarexecucaofinanceira/comprovacaopagamento'
+                                            {{ item.item }}
+                                        </td>
+                                        <td> R$ {{ item.varlorAprovado }} </td>
+                                        <td> R$ {{ item.varlorComprovado }} </td>
+                                        <td> R$ {{ item.comprovacaoValidada }} </td>
+                                        <td> <a :href="'/comprovarexecucaofinanceira/comprovacaopagamento'
                                                + '/idpronac/' + idpronac
                                                + '/uf/' + uf
                                                + '/produto/' + cdProduto
@@ -157,11 +154,7 @@
                                                + '/etapa/' + cdEtapa
                                                + '/idPlanilhaAprovacao/' + item.idPlanilhaAprovacao
                                                + '/idPlanilhaItens/' + item.idPlanilhaItens"
-                                           >{{ item.item }}</a>
-                                        </td>
-                                        <td> R$ {{ item.varlorAprovado }} </td>
-                                        <td> R$ {{ item.varlorComprovado }} </td>
-                                        <td> R$ {{ item.comprovacaoValidada }} </td>
+                                           ><i class="material-icons small">attach_money</i></a></td>
                                     </tr>
                                 </tbody>
                             </table>
