@@ -6,6 +6,11 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     protected $_name = 'tbAssinatura';
     protected $_primary = 'idAssinatura';
 
+    /**
+     * @var $modelAssinatura Assinatura_Model_TbAssinatura $modelAssinatura
+     */
+    private $modelAssinatura;
+
     const TIPO_ATO_ENQUADRAMENTO = 626;
     const TIPO_ATO_ANALISE_INICIAL = 630;
     const TIPO_ATO_ANALISE_CNIC = 631;
@@ -15,6 +20,11 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 
     const TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO = 653;
     const TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO = 654;
+
+    public function definirModeloAssinatura(array $dados) {
+        $this->modelAssinatura = new Assinatura_Model_TbAssinatura($dados);
+        return $this;
+    }
 
     /**
     * Esse metodo deve retornar Objeto
@@ -188,5 +198,45 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         $ordenacao[] = 'tbDocumentoAssinatura.dt_criacao desc';
         $objQuery->order($ordenacao);
         return $this->_db->fetchAll($objQuery);
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     * @uses Assinatura_Model_TbAssinatura $modelAssinatura
+     */
+    public function isProjetoAssinado()
+    {
+        if(!$this->modelAssinatura) {
+            throw new Exception("&Eacute; necess&aacute;rio definir uma entidade de Assinatura.");
+        }
+
+        if(is_null($this->modelAssinatura->getIdPronac())) {
+            throw new Exception("Identificador do Projeto Cultural n&atilde;o informado.");
+        }
+
+        if(is_null($this->modelAssinatura->getIdAtoAdministrativo())) {
+            throw new Exception("Identificador do Ato Administrativo n&atilde;o informado.");
+        }
+
+        if(is_null($this->modelAssinatura->getIdAssinante())) {
+            throw new Exception("Identificador do Assinante n&atilde;o informado.");
+        }
+
+        if(is_null($this->modelAssinatura->getIdDocumentoAssinatura())) {
+            throw new Exception("Identificador do Documento de Assinatura n&atilde;o informado.");
+        }
+
+        $assinaturaExistente = $this->buscar(array(
+            'idPronac = ?' => $this->modelAssinatura->getIdPronac(),
+            'idAtoAdministrativo = ?' => $this->modelAssinatura->getIdAtoAdministrativo(),
+            'idAssinante = ?' => $this->modelAssinatura->getIdAssinante(),
+            'idDocumentoAssinatura = ?' => $this->modelAssinatura->getIdDocumentoAssinatura()
+        ));
+
+        if($assinaturaExistente->current()) {
+            return true;
+        }
+        return false;
     }
 }

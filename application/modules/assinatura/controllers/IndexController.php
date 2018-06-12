@@ -282,8 +282,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 }
             }
 
-
-
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
             $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
                 $idTipoDoAtoAdministrativo,

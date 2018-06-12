@@ -5,12 +5,13 @@ namespace MinC\Assinatura\Servico;
 class Assinatura implements IServico
 {
     public $post;
-
     public $identidadeUsuarioLogado;
-
-    protected $idTipoDoAtoAdministrativo;
-
     public $isMovimentarProjetoPorOrdemAssinatura = true;
+    /**
+     * @var \Assinatura_Model_DbTable_TbAssinatura $dbTableTbAssinatura
+     */
+    private $dbTableTbAssinatura;
+    protected $idTipoDoAtoAdministrativo;
 
     function __construct(
         $post,
@@ -21,6 +22,7 @@ class Assinatura implements IServico
         $this->post = $post;
         $this->identidadeUsuarioLogado = $identidadeUsuarioLogado;
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
+        $this->dbTableTbAssinatura = new \Assinatura_Model_DbTable_TbAssinatura();
     }
 
     public function assinarProjeto(\MinC\Assinatura\Model\Assinatura $modelAssinatura)
@@ -49,22 +51,29 @@ class Assinatura implements IServico
         }
 
         $usuario = $metodoAutenticacao->obterInformacoesAssinante();
-        $modelAssinatura->setIdAssinante($usuario['usu_codigo']);
-
         $objTbAtoAdministrativo = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
         $dadosAtoAdministrativoAtual = $objTbAtoAdministrativo->obterAtoAdministrativoAtual(
             $modelAssinatura->getIdTipoDoAtoAdministrativo(),
             $modelAssinatura->getCodGrupo(),
             $modelAssinatura->getCodOrgao()
         );
-        $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
-        $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
 
         if (!$dadosAtoAdministrativoAtual) {
             throw new \Exception ("Usu&aacute;rio sem autoriza&ccedil;&atilde;o para assinar o documento.");
         }
 
-        if($this->isProjetoAssinado($modelAssinatura)) {
+
+        $modelAssinatura->setIdAssinante($usuario['usu_codigo']);
+        $modelAssinatura->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
+        $modelAssinatura->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
+
+        $this->dbTableTbAssinatura->definirModeloAssinatura([
+            'idAssinante' => $modelAssinatura->getIdAssinante(),
+            'idPronac' => $modelAssinatura->getIdPronac(),
+            'idAtoAdministrativo' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
+            'idDocumentoAssinatura' => $modelAssinatura->getIdDocumentoAssinatura()
+        ]);
+        if($this->dbTableTbAssinatura->isProjetoAssinado()) {
             throw new \Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
         }
 
@@ -77,8 +86,8 @@ class Assinatura implements IServico
             'idDocumentoAssinatura' => $modelAssinatura->getIdDocumentoAssinatura()
         );
 
-        $objTbAssinatura = new \Assinatura_Model_DbTable_TbAssinatura();
-        $objTbAssinatura->inserir($dadosInclusaoAssinatura);
+
+        $this->dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
         $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
             $modelAssinatura->getIdTipoDoAtoAdministrativo(),
             $modelAssinatura->getIdOrdemDaAssinatura(),
@@ -96,7 +105,8 @@ class Assinatura implements IServico
             throw new \Exception("A fase atual do projeto n&atilde;o permite movimentar o projeto.");
         }
 
-        if(!$this->isProjetoAssinado($modelAssinatura)) {
+
+        if(!$this->dbTableTbAssinatura->isProjetoAssinado($modelAssinatura)) {
             throw new \Exception ("O documento precisa ser assinado para que consiga ser movimentado.");
         }
 
@@ -112,22 +122,6 @@ class Assinatura implements IServico
 
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objTbProjetos->alterarOrgao($codigoOrgaoDestino, $modelAssinatura->getIdPronac());
-    }
-
-    public function isProjetoAssinado(\MinC\Assinatura\Model\Assinatura $modelAssinatura) {
-
-        $objTbAssinatura = new \Assinatura_Model_DbTable_TbAssinatura();
-        $assinaturaExistente = $objTbAssinatura->buscar(array(
-            'idPronac = ?' => $modelAssinatura->getIdPronac(),
-            'idAtoAdministrativo = ?' => $modelAssinatura->getIdAtoAdministrativo(),
-            'idAssinante = ?' => $modelAssinatura->getIdAssinante(),
-            'idDocumentoAssinatura = ?' => $modelAssinatura->getIdDocumentoAssinatura()
-        ));
-
-        if($assinaturaExistente->current()) {
-            return true;
-        }
-        return false;
     }
 
 }
