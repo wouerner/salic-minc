@@ -1,0 +1,119 @@
+<thead>
+<tr class="">
+    <th>#</th>
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=3&ordem=' . $this->paginacao['novaOrdem']; ?>">PRONAC</a>
+    </th>
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=4&ordem=' . $this->paginacao['novaOrdem']; ?>">Nome
+            do Projeto</a></th>
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=11&ordem=' . $this->paginacao['novaOrdem']; ?>">Tipo
+            de readequa&ccedil;&atilde;o</a></th>
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=5&ordem=' . $this->paginacao['novaOrdem']; ?>">Dt
+            Envio</a></th>
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=6&ordem=' . $this->paginacao['novaOrdem']; ?>">Dt
+            Distribui&ccedil;&atilde;o</a></th>
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=7&ordem=' . $this->paginacao['novaOrdem']; ?>">Dt
+            Devolu&ccedil;&atilde;o</a></th>
+    <!--	<th><a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=8&ordem=' . $this->paginacao['novaOrdem']; ?>">Qt dias p/ distribuir</a></th>-->
+    <!--	<th><a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=9&ordem=' . $this->paginacao['novaOrdem']; ?>">Qt dias p/ avaliar</a></th>-->
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=10&ordem=' . $this->paginacao['novaOrdem']; ?>">Total
+            em dias p/ avaliar</a></th>
+    <th>
+        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel')) . '?pag=1&qtde=' . $this->paginacao['qtde'] . '&tipoFiltro=' . $this->filtro . '&pronac=' . $this->pronac . '&campo=12&ordem=' . $this->paginacao['novaOrdem']; ?>">T&eacute;cnico
+    </th>
+    <th>Visualizar</th>
+    <th>Encaminhar</th>
+    <th>Finalizar</th>
+    <th>CNIC</th>
+</tr>
+</thead>
+<tbody>
+<?php $count = 1;
+foreach ($this->dados as $d): ?>
+    <tr>
+        <td align="center" style="width: 1px;"><?php echo $count; ?></td>
+        <td align="center">
+            <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index')); ?>?idPronac=<?php echo($d->idPronac); ?>"
+               target="_blank">
+                <?php echo $d->PRONAC; ?>
+            </a>
+        </td>
+        <td><?php echo $d->NomeProjeto; ?></td>
+        <td><?php echo $d->tpReadequacao; ?></td>
+        <td align="center"><?php if ($d->dtEnvio == '') {
+                echo '---';
+            } else {
+                echo Data::tratarDataZend($d->dtEnvio, 'Brasileira');
+            } ?></td>
+        <td align="center"><?php if ($d->dtDistribuicao == '') {
+                echo '---';
+            } else {
+                echo Data::tratarDataZend($d->dtDistribuicao, 'Brasileira');
+            } ?></td>
+        <td align="center">
+            <?php if ($d->dtDevolucao == '') {
+                echo '---';
+            } else {
+                echo Data::tratarDataZend($d->dtDevolucao, 'Brasileira');
+            } ?></td>
+        <!--        <td align="center"><?php echo $d->qtDiasDistribuir; ?></td>-->
+        <!--        <td align="center"><?php echo $d->qtDiasAvaliar; ?></td>-->
+        <td align="center"><?php echo $d->qtTotalDiasAvaliar; ?></td>
+        <td align="center"><?php echo $d->nmTecnicoParecerista; ?></td>
+        <td align="center">
+            <a
+                href="javascript:void(0)"
+                class="btn-ver btn small waves-effect waves-light tooltipped white-text btn-info"
+                data-tooltip="Visualizar Readequa&ccedil;&atilde;o"
+                idReadequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
+            >
+                <i class="material-icons">visibility</i>
+            </a>
+        </td>
+        <td align="center">
+            <a
+                href="javascript:void(0)"
+                class="btn-encaminhar btn small waves-effect waves-light tooltipped white-text btn-secondary"
+                data-tooltip="Encaminhar para an&aacute;lise t&eacute;cnica"
+                readequacao="<?php echo Seguranca::encrypt($d->idReadequacao); ?>"
+                pronac="<?php echo $d->PRONAC; ?>"
+                nomeprojeto="<?php echo $d->NomeProjeto; ?>"
+            >
+                <i class="material-icons">forward</i>
+            </a>
+        </td>
+        <td align="center">
+            <a
+                href="javascript:void(0)"
+                class="btn-finalizar finalizarAnaliseReadequacao btn small waves-effect waves-light white-text tooltipped btn-primary"
+                data-tooltip="Finalizar a análise"
+                idReadequacao="<?php echo $d->idReadequacao; ?>"
+            >
+                <i class="material-icons">send</i>
+            </a>
+        </td>
+        <td align="center" style="width: 290px">
+            <a
+                href="<?php echo $this->url([
+                    'module' => 'readequacao',
+                    'controller' => 'readequacoes',
+                    'action' => 'encaminhar-para-cnic',
+                    'id' => Seguranca::encrypt($d->idReadequacao),
+                    'idPronac' => $d->idPronac,
+                ], '', true); ?>"
+                class="btn small waves-effect waves-light white-text tooltipped btn-secondary"
+                data-tooltip="Enviar para um membro da comiss&atilde;o"
+                idReadequacao="<?php echo $d->idReadequacao; ?>"
+            >
+                <i class="material-icons">mail</i>
+            </a>
+        </td>
+    </tr>
+    <?php $count++; ?>
+<?php endforeach; ?>

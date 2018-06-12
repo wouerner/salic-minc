@@ -19,6 +19,7 @@ class Projetos extends MinC_Db_Table_Abstract
         if ($objParam->idUsuario) {
             $consulta->where('p.IdUsuario = ?', $objParam->idUsuario);
         }
+        
         if ($objParam->idProponente) {
             $consulta->where('p.idAgente = ?', (int)$objParam->idProponente);
         }
@@ -9116,4 +9117,109 @@ class Projetos extends MinC_Db_Table_Abstract
 
         return $this->fetchAll($select);
     }
+
+    public function buscarProjetoTransferidor($idPronac)
+    {
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        
+        $select->from(
+            array('p' => $this->_name),
+            array(
+                new Zend_Db_Expr("
+                    p.IdPRONAC AS idPronac,
+                    (p.AnoProjeto+p.Sequencial) AS pronac,
+                    p.nomeProjeto,
+                    p.CgcCpf,
+                    (SELECT sac.dbo.fnVlAComprovarProjeto(idPronac)) AS valorAComprovar
+                ")
+            )
+        );
+
+        $select->joinInner(
+            ['a' => 'Area'],
+            'a.Codigo = p.Area',
+            [
+                'a.Descricao as area',
+                'a.Codigo as codArea'
+            ]
+        );
+
+        $select->where('idPronac = ?', $idPronac);
+        
+        $projeto = $this->fetchAll($select);
+        if (count($projeto) > 0) {
+            return $projeto->current();
+        } else {
+            return false;
+        }
+    }
+    
+    public function buscarProjetosRecebedoresDisponiveis($idPronac)
+    {
+        $projetos = [];
+        try {
+            $select = $this->select();
+            $select->where('idPronac = ?', $idPronac);      
+            $projetoAtual = $this->fetchAll($select)->current();
+            
+        } catch (Exception $objException) {
+            $this->view->message = $objException->getMessage();
+            return [];
+        }
+
+        $areasProjetosOutrosProponentes = [
+            Area::AREA_PATRIMONIO_CULTURAL,
+            Area::AREA_MUSEUS_MEMORIA
+        ];
+
+        $select = $this->select();
+        $select->where('idPronac != ?', $projetoAtual->IdPRONAC);
+        
+        $select->where(new Zend_Db_Expr('DtInicioExecucao > GETDATE() AND DtFimExecucao < GETDATE()'));
+        $select->where(new Zend_Db_Expr('(SELECT SAC.DBO.fnNrPortariaAprovacao(AnoProjeto,Sequencial)) IS NOT NULL'));
+        
+        if (!in_array($projetoAtual->Area, $areasProjetosOutrosProponentes)) {
+            $select->where('CgcCpf = ?', $projetoAtual->CgcCpf);
+        }
+        
+        $projetos = $this->fetchAll($select);
+        
+        return $projetos;
+    }
+
+    public function verificarPronacDisponivelReceber(
+        $idPronac,
+        $pronacRecebedor
+    )
+    {
+        try {
+            $select = $this->select();
+            
+            //            $select->where(new Zend_Db_Expr('DtInicioExecucao > GETDATE() AND DtFimExecucao < GETDATE()'));
+            $select->where(new Zend_Db_Expr('(SELECT SAC.DBO.fnNrPortariaAprovacao(AnoProjeto,Sequencial)) IS NOT NULL'));
+            $select->where('IdPRONAC != ?', $idPronac);
+            $select->where(new Zend_Db_Expr('AnoProjeto + Sequencial = ?'), $pronacRecebedor);
+            
+            $projeto = $this->fetchAll($select);
+            $saida = [];
+            
+            if (count($projeto) > 0) {
+                $saida['disponivel'] = true;
+                $saida['nomeProjeto'] = $projeto->current()['NomeProjeto'];
+                $saida['idPronac'] = $projeto->current()['IdPRONAC'];
+            } else {
+                $saida['disponivel'] = false;
+                $saida['nomeProjeto'] = '';
+            }
+            
+            return $saida;
+            
+        } catch (Exception $objException) {
+            throw $objException;
+        } 
+    }
+        
+    
 }
