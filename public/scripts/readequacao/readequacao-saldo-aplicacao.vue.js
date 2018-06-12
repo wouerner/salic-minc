@@ -1,51 +1,54 @@
 Vue.component('readequacao-saldo-aplicacao', {
     template: `
-<div class='readequacao-saldo-aplicacao'>
-	<div class="card">
+	<div class='readequacao-saldo-aplicacao'>
+	    <div class="card">
 		<div class="card-content">
-			<div class="col s2">
-				<b>Pronac: </b>{{ pronac }}<br>
-			</div>
-			<div class="col s8">
+		    <div class="col s2">
+			<b>Pronac: </b>{{ pronac }}<br>
+		    </div>
+			    <div class="col s8">
 				<b>Projeto: </b><span v-html="nomeProjeto"></span>
-			</div>
-			<br/>
+			    </div>
+				    <br/>
 		</div>
-	</div>
-
-  <ul v-if="!disabled"  class="collapsible">
-    <li id="collapsible-first">
-      <div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
-      <div class="collapsible-body">
-	      <readequacao-formulario
-					ref="formulario"
-					:id-pronac="idPronac"
-					:disabled="disabled"
-					:id-tipo-readequacao="idTipoReadequacao"
-					:componente-ds-solicitacao='componente'
-					:objReadequacao="readequacao"
-					v-on:eventoAtualizarReadequacao="atualizarReadequacao"
-					v-on:eventoSalvarReadequacao="salvarReadequacao"
-					>
-	      </readequacao-formulario>
-      </div>
-    </li>
-		<li>
-			<div class="collapsible-header"><i class="material-icons">list</i>Editar planilha or&ccedil;ment&aacute;ria</div>
-			<div class="collapsible-body card" >
-				<div class="card-content">
+	    </div>
+				    
+				    <div v-if="!iniciado">
 					<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
-									name=""
-									v-on:click="criarSolicitacao()"
-									id="novo">
-						<i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
+						name=""
+					    v-on:click="criarSolicitacao()"
+						id="novo">
+					    <i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
 					</button>
-				</div>	
-			</div>
-		</li>
-	</ul>
-</div>
-	    `,
+				    </div>
+						
+						<ul v-if="!disabled"  class="collapsible" v-show="iniciado">
+						    <li id="collapsible-first">
+							<div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
+							    <div class="collapsible-body">
+								<readequacao-formulario
+									    ref="formulario"
+								    :id-pronac="idPronac"
+								    :disabled="disabled"
+								    :id-tipo-readequacao="idTipoReadequacao"
+								    :componente-ds-solicitacao='componente'
+								    :objReadequacao="readequacao"
+								    v-on:eventoAtualizarReadequacao="atualizarReadequacao"
+								    v-on:eventoSalvarReadequacao="salvarReadequacao"
+								    >
+								</readequacao-formulario>
+							    </div>
+						    </li>
+								    <li>
+									<div class="collapsible-header"><i class="material-icons">list</i>Editar planilha or&ccedil;ament&aacute;ria</div>
+									    <div class="collapsible-body card" >
+										<div class="card-content">
+										</div>	
+									    </div>
+								    </li>
+						</ul>
+	</div>
+    `,
     props: {
 	'idPronac': '',
 	'idTipoReadequacao': '',
@@ -69,6 +72,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 	
 	return {
 	    readequacao,
+	    iniciado: false,
 	    componente: 'readequacao-saldo-aplicacao-saldo'
 	}
     },
@@ -91,27 +95,33 @@ Vue.component('readequacao-saldo-aplicacao', {
             }).done(function (response) {
 		if (_.isObject(response.readequacao)) {
                     self.readequacao = response.readequacao;
+		    if (typeof response.readequacao.idReadequacao != 'undefined') {
+			self.iniciado = true;
+		    }
 		}
             });
         },	
 	criarSolicitacao: function() {
-	    $3.ajax({
-		type: 'POST',
-		url: "/readequacao/saldo-aplicacao/criar-solicitacao",
-		data: {
-		    idPronac: self.idPronac,
-		    idReadequacao: self.idReadequacao
-		}
-	    }).done(function (response) {
-		
-	    });
+	    this.iniciado = true;
+	    //	    $3('.collapsible').collapsible('open', 0);
+	    /*
+	       $3.ajax({
+	       type: 'POST',
+	       url: "/readequacao/saldo-aplicacao/criar-solicitacao",
+	       data: {
+	       idPronac: self.idPronac,
+	       idReadequacao: self.idReadequacao
+	       }
+	       }).done(function (response) {
+	       
+	       });*/
 	},
 	salvarReadequacao: function(readequacao) {
 	    if (readequacao.dsSolicitacao == '' ||
 		readequacao.dsSolicitacao == undefined
 	    ) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel.!");
-		this.$refs.readequacaoSaldo.focus();
+		this.$refs.formulario.$children[0].$refs.readequacaoSaldo.focus();
 		return;		
 	    }
 	    

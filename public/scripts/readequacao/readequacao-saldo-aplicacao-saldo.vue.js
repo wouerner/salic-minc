@@ -6,7 +6,7 @@ Vue.component('readequacao-saldo-aplicacao-saldo', {
 		    <input type="text" 
 			   ref="readequacaoSaldo"
 			   v-model="valorSaldo" 
-		    @blur="alterarSaldo"
+		    @change="alterarSaldo"
 		    />
 	    </template>
 		    <template v-else>
