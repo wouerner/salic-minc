@@ -4,6 +4,7 @@ class Projeto_HomologacaoController extends Proposta_GenericController
 {
 
     private $arrBreadCrumb = [];
+    private $situacaoParaHomologacao = Projeto_Model_Situacao::PROJETO_APRECIADO_PELA_CNIC;
 
     public function init()
     {
@@ -96,21 +97,22 @@ class Projeto_HomologacaoController extends Proposta_GenericController
             $arrPost['stDecisao'] = (isset($arrPost['stDecisao'])) ? 2 : 1;
             $this->_helper->json(array('status' => $mapper->save($arrPost), 'msg' => $mapper->getMessages(), 'close' => 1));
         } else {
-            $arrValue = [];
-            $dbTableEnquadramentoProjeto = new Projeto_Model_DbTable_VwVisualizarHomologacao();
+            $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
             $this->view->urlAction = '/projeto/homologacao/homologar';
             $intId = $this->getRequest()->getParam('id');
             $dbTable = new Projeto_Model_DbTable_TbHomologacao();
+
             $arrValue = $dbTable->getBy(['idPronac' => $intId, 'tpHomologacao' => '1']);
-
             if (empty($arrValue)) {
-                $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
                 $arrValue = $dbTableEnquadramento->obterProjetosApreciadosCnic(['a.IdPRONAC = ?' => $intId])->current()->toArray();
-
                 $arrValue['idPronac'] = $arrValue['IdPRONAC'];
                 $arrValue['tpHomologacao'] = 1;
             }
-            $arrValue['enquadramentoProjeto'] = $dbTableEnquadramentoProjeto->findBy($intId);
+
+            $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
+                [ 'a.IdPRONAC = ?' => $intId, 'a.Situacao = ?' => $this->situacaoParaHomologacao]
+            )->current()->toArray();
+
             $this->view->dataForm = $arrValue;
         }
     }
@@ -121,8 +123,6 @@ class Projeto_HomologacaoController extends Proposta_GenericController
     private function prepareData($intIdPronac)
     {
         # PARTE 1
-        $dbTablePainelHomologacao = new Projeto_Model_DbTable_VwPainelDeHomologacaoDeProjetos();
-        $dbTableEnquadramentoProjeto = new Projeto_Model_DbTable_VwVisualizarHomologacao();
         # PARTE 2 # PARTE 4
         $dbTableParecer = new Parecer();
         # PARTE 3
@@ -134,7 +134,7 @@ class Projeto_HomologacaoController extends Proposta_GenericController
         $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
             [
                 'a.IdPRONAC = ?' => $intIdPronac,
-                'a.Situacao = ?' => Projeto_Model_Situacao::PROJETO_APRECIADO_PELA_CNIC
+                'a.Situacao = ?' => $this->situacaoParaHomologacao
             ]
         )->current()->toArray();
 

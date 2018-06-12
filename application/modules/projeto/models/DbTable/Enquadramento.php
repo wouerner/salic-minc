@@ -8,7 +8,7 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
 
     public function obterProjetoAreaSegmento($where, $order = array())
     {
-        if (empty($where)) {
+        if (empty($where) || !is_array($where)) {
             return [];
         }
 
@@ -67,13 +67,6 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             $this->_schema
         );
 
-//        $sql->join(
-//            ['e' => 'Orgaos'],
-//            'a.OrgaoOrigem = e.Codigo',
-//            ['e.idSecretaria AS idOrgaoSuperior'],
-//            $this->_schema
-//        );
-
         foreach ($where as $coluna => $valor) {
             $sql->where($coluna, $valor);
         }
@@ -81,7 +74,6 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
         if ($order) {
             $sql->order($order);
         }
-
         return $this->fetchAll($sql);
     }
 
