@@ -13,16 +13,16 @@ Vue.component('readequacao-saldo-aplicacao', {
 		</div>
 	    </div>
 				    
-				    <div v-if="!iniciado">
+				    <div v-show="exibirBotaoSolicitarUsoreadequacaoObtida">
 					<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
 						name=""
-					    v-on:click="criarSolicitacao()"
+					    v-on:click="solicitarUsoSaldo()"
 						id="novo">
 					    <i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
 					</button>
 				    </div>
 						
-						<ul v-if="!disabled"  class="collapsible" v-show="iniciado">
+						<ul v-if="!disabled"  class="collapsible" v-show="solicitacaoIniciada">
 						    <li id="collapsible-first">
 							<div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
 							    <div class="collapsible-body">
@@ -72,7 +72,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 	
 	return {
 	    readequacao,
-	    iniciado: false,
+	    solicitacaoIniciada: false,
 	    componente: 'readequacao-saldo-aplicacao-saldo'
 	}
     },
@@ -96,25 +96,26 @@ Vue.component('readequacao-saldo-aplicacao', {
 		if (_.isObject(response.readequacao)) {
                     self.readequacao = response.readequacao;
 		    if (typeof response.readequacao.idReadequacao != 'undefined') {
-			self.iniciado = true;
+			self.solicitacaoIniciada = true;
 		    }
 		}
             });
-        },	
-	criarSolicitacao: function() {
-	    this.iniciado = true;
-	    //	    $3('.collapsible').collapsible('open', 0);
-	    /*
-	       $3.ajax({
-	       type: 'POST',
-	       url: "/readequacao/saldo-aplicacao/criar-solicitacao",
-	       data: {
-	       idPronac: self.idPronac,
-	       idReadequacao: self.idReadequacao
-	       }
-	       }).done(function (response) {
-	       
-	       });*/
+        },
+	solicitarUsoSaldo: function() {
+	    self = this;
+	    this.solicitacaoIniciada = true;
+	    
+	    $3.ajax({
+		url: "/readequacao/saldo-aplicacao/solicitar-uso-saldo",
+		type: 'POST',
+		data: {
+		    idPronac: self.idPronac
+		},
+		done: function(data) {
+		    self.readequacao = data.readequacao;
+		}
+	    });
+	    
 	},
 	salvarReadequacao: function(readequacao) {
 	    if (readequacao.dsSolicitacao == '' ||
@@ -154,5 +155,13 @@ Vue.component('readequacao-saldo-aplicacao', {
         }
     },
     computed: {
+	exibirBotaoSolicitarUsoreadequacaoObtida: function() {
+	    if ((typeof this.readequacao.idReadequacao == 'null'
+	       ||typeof this.readequacao.idReadequacao == 'undefined'
+	    )
+		&& (!this.solicitacaoIniciada)) {
+		return true;
+	    }
+	}
     }
 });
