@@ -271,8 +271,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             "/{$this->moduleName}/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&isMovimentarAssinatura={$get->isMovimentarAssinatura}&origin={$this->view->origin}",
                             'CONFIRM'
                         );
-                        die;
                     }
+                    die;
                 } catch (Exception $objException) {
                     parent::message(
                         $objException->getMessage(),
@@ -316,7 +316,12 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 'idVerificacao = ?' => $idTipoDoAtoAdministrativo
             ));
 
-            $this->view->templateAutenticacao = $objAssinatura->obterServicoAutenticacao()->obterMetodoAutenticacao()->obterTemplateAutenticacao();
+            $servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
+                $post,
+                $this->auth->getIdentity()
+            );
+
+            $this->view->templateAutenticacao = $servicoAutenticacao->obterMetodoAutenticacao()->obterTemplateAutenticacao();
             $this->view->idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
             $this->view->isMovimentarAssinatura = false;
 

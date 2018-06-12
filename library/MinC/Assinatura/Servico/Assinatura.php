@@ -4,16 +4,6 @@ namespace MinC\Assinatura\Servico;
 
 class Assinatura implements IServico
 {
-    /**
-     * @var \MinC\Assinatura\Autenticacao\IAdapter $servicoAutenticacao
-     */
-    private $servicoAutenticacao;
-
-    /**
-     * @var \MinC\Assinatura\Servico\DocumentoAssinatura $servicoDocumentoAssinatura
-     */
-    private $servicoDocumentoAssinatura;
-
     public $post;
 
     public $identidadeUsuarioLogado;
@@ -33,29 +23,6 @@ class Assinatura implements IServico
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
     }
 
-    /**
-     * @return \MinC\Assinatura\Servico\Autenticacao
-     */
-    public function obterServicoAutenticacao() {
-        if(!isset($this->servicoAutenticacao)) {
-            $this->servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
-                $this->post,
-                $this->identidadeUsuarioLogado
-            );
-        }
-        return $this->servicoAutenticacao;
-    }
-
-    /**
-     * @return \MinC\Assinatura\Servico\DocumentoAssinatura
-     */
-    public function obterServicoDocumento() {
-        if(!isset($this->servicoDocumentoAssinatura)) {
-            $this->servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
-        }
-        return $this->servicoDocumentoAssinatura;
-    }
-
     public function assinarProjeto(\MinC\Assinatura\Model\Assinatura $modelAssinatura)
     {
 
@@ -71,7 +38,10 @@ class Assinatura implements IServico
             throw new \Exception ("O Tipo do Ato Administrativo &eacute; obrigat&oacute;rio.");
         }
 
-        $servicoAutenticacao = $this->obterServicoAutenticacao();
+        $servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
+            $this->post,
+            $this->identidadeUsuarioLogado
+        );
         $metodoAutenticacao = $servicoAutenticacao->obterMetodoAutenticacao();
 
         if(!$metodoAutenticacao->autenticar()) {
