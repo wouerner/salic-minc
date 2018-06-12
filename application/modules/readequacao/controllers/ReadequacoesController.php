@@ -1992,6 +1992,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $return = $tbReadequacao->update($dados, $where);
 
         if ($return) {
+
             $this->_helper->json(array('resposta' => true));
         } else {
             $this->_helper->json(array('resposta' => false));
