@@ -1533,4 +1533,40 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         
         return $readequacaoArray;
     }
+
+    /**
+     * Método criar readequação de planilha (orçamentária/saldo aplicação
+     * @access private
+     * @param integer $idPronac
+     * @param integer $idTipoReadequacao
+     * @return Bool
+     */
+    public function criarReadequacaoPlanilha(
+        $idPronac,
+        $idTipoReadequacao
+    )
+    {
+        $auth = Zend_Auth::getInstance();
+        $tblAgente = new Agente_Model_DbTable_Agentes();
+        $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
+
+        $dados = array();
+        $dados['idPronac'] = $idPronac;
+        $dados['idTipoReadequacao'] = $idTipoReadequacao;
+        $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
+        $dados['idSolicitante'] = $rsAgente->idAgente;
+        $dados['dsJustificativa'] = '';
+        $dados['dsSolicitacao'] = '';
+        $dados['idDocumento'] = null;
+        $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
+        $dados['stEstado'] = 0;
+
+        $idReadequacao = $this->inserir($dados);
+        
+        if (!$idReadequacao) {
+            throw new Exception("Houve um erro na cria&ccedil;&atilde;o das planilhas");
+        }
+        
+        return $idReadequacao;
+    }    
 }

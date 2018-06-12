@@ -3322,93 +3322,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
 
     /**
-     * Método que copia planilha associando a um idReadequacao
-     * @access private
-     * @param integer $idPronac
-     * @param integer $idReadequacao
-     * @return Bool
-     */
-    private function copiarPlanilhas($idPronac, $idReadequacao)
-    {
-        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $planilhaSR = array();
-
-        try {
-            $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtivaNaoExcluidos($idPronac);
-
-            foreach ($planilhaAtiva as $value) {
-                $planilhaSR['tpPlanilha'] = 'SR';
-                $planilhaSR['dtPlanilha'] = new Zend_Db_Expr('GETDATE()');
-                $planilhaSR['idPlanilhaProjeto'] = $value['idPlanilhaProjeto'];
-                $planilhaSR['idPlanilhaProposta'] = $value['idPlanilhaProposta'];
-                $planilhaSR['IdPRONAC'] = $value['IdPRONAC'];
-                $planilhaSR['idProduto'] = $value['idProduto'];
-                $planilhaSR['idEtapa'] = $value['idEtapa'];
-                $planilhaSR['idPlanilhaItem'] = $value['idPlanilhaItem'];
-                $planilhaSR['dsItem'] = $value['dsItem'];
-                $planilhaSR['idUnidade'] = $value['idUnidade'];
-                $planilhaSR['qtItem'] = $value['qtItem'];
-                $planilhaSR['nrOcorrencia'] = $value['nrOcorrencia'];
-                $planilhaSR['vlUnitario'] = $value['vlUnitario'];
-                $planilhaSR['qtDias'] = $value['qtDias'];
-                $planilhaSR['tpDespesa'] = $value['tpDespesa'];
-                $planilhaSR['tpPessoa'] = $value['tpPessoa'];
-                $planilhaSR['nrContraPartida'] = $value['nrContraPartida'];
-                $planilhaSR['nrFonteRecurso'] = $value['nrFonteRecurso'];
-                $planilhaSR['idUFDespesa'] = $value['idUFDespesa'];
-                $planilhaSR['idMunicipioDespesa'] = $value['idMunicipioDespesa'];
-                $planilhaSR['dsJustificativa'] = null;
-                $planilhaSR['idAgente'] = 0;
-                $planilhaSR['idPlanilhaAprovacaoPai'] = $value['idPlanilhaAprovacao'];
-                $planilhaSR['idReadequacao'] = $idReadequacao;
-                $planilhaSR['tpAcao'] = 'N';
-                $planilhaSR['idRecursoDecisao'] = $value['idRecursoDecisao'];
-                $planilhaSR['stAtivo'] = 'N';
-
-                $tbPlanilhaAprovacao->inserir($planilhaSR);
-            }
-            return true;
-        } catch (Zend_Exception $e) {
-            $this->_helper->json(array('msg' => 'Houve um erro na cria&ccedil;&atilde;o das planilhas SR'));
-        }
-    }
-
-    /**
-     * Método criar readequação de planilha orçamentária
-     * @access private
-     * @param integer $idPronac
-     * @return Bool
-     */
-    private function criarReadequacaoPlanilha($idPronac)
-    {
-        $auth = Zend_Auth::getInstance();
-        $tblAgente = new Agente_Model_DbTable_Agentes();
-        $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
-
-        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $dados = array();
-        $dados['idPronac'] = $idPronac;
-        $dados['idTipoReadequacao'] = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA;
-        $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
-        $dados['idSolicitante'] = $rsAgente->idAgente;
-        $dados['dsJustificativa'] = '';
-        $dados['dsSolicitacao'] = '';
-        $dados['idDocumento'] = null;
-        $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
-        $dados['stEstado'] = 0;
-
-        try {
-            $idReadequacao = $tbReadequacao->inserir($dados);
-
-            return $idReadequacao;
-
-        } catch (Zend_Exception $e) {
-            $this->_helper->json(array('msg' => 'Houve um erro na criação do registro de tbReadequacao'));
-            $this->_helper->viewRenderer->setNoRender(true);
-        }
-    }
-
-    /**
      * Função para verificar e criar planilha orçamentária. Recebe flag opcional para criar a planilha
      * Criada em 31/05/2016
      * @author: Fernão Lopes Ginez de Lara fernao.lara@cultura.gov.br
@@ -3423,17 +3336,19 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $idPronac = $this->_request->getParam('idPronac');
         $idReadequacao = $this->_request->getParam('idReadequacao');
 
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        
         if (!$idReadequacao || $idReadequacao == 0) {
-            $idReadequacao = $this->criarReadequacaoPlanilha($idPronac);
+            $idReadequacao = $tbReadequacao->criarReadequacaoPlanilha($idPronac, Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA);
 
             $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-            // TODO: verificar se funciona e replicar no resto do código
+            
             $verificarPlanilhaReadequadaAtual = $tbPlanilhaAprovacao->buscarPlanilhaReadequadaEmEdicao($idPronac, $idReadequacao);
 
             if (count($verificarPlanilhaReadequadaAtual) == 0) {
                 $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtiva($idPronac);
-                $criarPlanilha = $this->copiarPlanilhas($idPronac, $idReadequacao);
-
+                $criarPlanilha = $tbPlanilhaAprovacao->copiarPlanilhas($idPronac, $idReadequacao);
+                
                 if ($criarPlanilha) {
                     $this->_helper->json(array(
                         'msg' => 'Planilha copiada corretamente',

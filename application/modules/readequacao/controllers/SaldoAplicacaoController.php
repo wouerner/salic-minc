@@ -20,15 +20,50 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
         $this->view->projeto = $this->projeto;
     }
 
-    public function criarSolicicacaoAction()
+    public function solicitarUsoSaldoAction()
     {
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->layout->disableLayout();
         
+        $dados = $this->getRequest()->getPost();
+        $idPronac = $dados['idPronac'];
+
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        
+        $idReadequacao = $tbReadequacao->criarReadequacaoPlanilha($idPronac, Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO);
+
+        $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        $readequacao = $tbReadequacao->obterDadosReadequacao(
+            Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO,
+            $idPronac,
+            $idReadequacao
+        );
+        
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $verificarPlanilhaReadequadaAtual = $tbPlanilhaAprovacao->buscarPlanilhaReadequadaEmEdicao($idPronac, $idReadequacao);
+        
+        if (count($verificarPlanilhaReadequadaAtual) == 0) {
+            $planilhaAtiva = $tbPlanilhaAprovacao->buscarPlanilhaAtiva($idPronac);
+            $criarPlanilha = $tbPlanilhaAprovacao->copiarPlanilhas($idPronac, $idReadequacao);
+            
+            if ($criarPlanilha) {
+                $this->_helper->json(array(
+                    'msg' => 'Planilha copiada corretamente',
+                    'readequacao' => $readequacao
+                ));
+            } else {
+                $this->_helper->json(array(
+                    'msg' => 'Houve um erro ao tentar copiar a planilha',
+                    'readequacao' => $readequacao
+                ));
+            }
+        }
     }
 
     public function salvarReadequacaoAction()
     {
         $dados = $this->getRequest()->getPost();
-
+        
         try {
             
             if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
