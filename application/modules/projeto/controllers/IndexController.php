@@ -2,106 +2,46 @@
 
 class Projeto_IndexController extends Projeto_GenericController
 {
-    private $getIdUsuario = 0;
-    private $getCNPJCPF = 0;
-    private $idResponsavel = 0;
-    private $idAgente = 0;
-    private $idUsuario = 0;
-    private $cpfLogado = 0;
+//    private $getIdUsuario = 0;
+//    private $getCNPJCPF = 0;
+//    private $idResponsavel = 0;
+//    private $idAgente = 0;
+//    private $idUsuario = 0;
+//    private $cpfLogado = 0;
 
 
     public function init()
     {
-        ini_set('memory_limit', '128M');
-        $auth = Zend_Auth::getInstance(); // pega a autenticacao
-        // define as permissoes
-        $PermissoesGrupo = array();
-        $PermissoesGrupo[] = 97;  // Gestor Salic
-        $PermissoesGrupo[] = 93;  // Acompanhamento
-        $PermissoesGrupo[] = 134; // Coordenador de Fiscalizacao
-        //SE CAIU A SECAO REDIRECIONA
-        if (!$auth->hasIdentity()) {
-            $url = Zend_Controller_Front::getInstance()->getBaseUrl();
-            JS::redirecionarURL($url);
-        }
-
-        /*         * ****************************************************************************************************** */
-        $cpf = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_identificacao : $auth->getIdentity()->Cpf;
-
-        $this->cpfLogado = $cpf;
-
-        // Busca na SGCAcesso
-        $sgcAcesso = new Autenticacao_Model_Sgcacesso();
-        $buscaAcesso = $sgcAcesso->buscar(array('Cpf = ?' => $cpf));
-
-        // Busca na Usuarios
-        $usuarioDAO = new Autenticacao_Model_DbTable_Usuario();
-        $buscaUsuario = $usuarioDAO->buscar(array('usu_identificacao = ?' => $cpf));
-
-        // Busca na Agentes
-        $agentesDAO = new Agente_Model_DbTable_Agentes();
-        $buscaAgente = $agentesDAO->BuscaAgente($cpf);
-
-
-        if (count($buscaAcesso) > 0) {
-            $this->idResponsavel = $buscaAcesso[0]->IdUsuario;
-        }
-        if (count($buscaAgente) > 0) {
-            $this->idAgente = $buscaAgente[0]->idAgente;
-        }
-        if (count($buscaUsuario) > 0) {
-            $this->idUsuario = $buscaUsuario[0]->usu_codigo;
-        }
-
-        $this->view->idAgenteLogado = $this->idAgente;
-        /*         * ****************************************************************************************************** */
-
-        // pega o idAgente do usuario logado
-        if (isset($auth->getIdentity()->usu_codigo)) {
-            parent::perfil(1, $PermissoesGrupo);
-
-            $this->getCNPJCPF = $auth->getIdentity()->usu_identificacao;
-
-            $this->getIdUsuario = UsuarioDAO::getIdUsuario($auth->getIdentity()->usu_codigo);
-            if ($this->getIdUsuario) {
-                $this->getIdUsuario = $this->getIdUsuario["idAgente"];
-            } else {
-                $this->getIdUsuario = 0;
-            }
-        } else {
-            parent::perfil(4, $PermissoesGrupo);
-            $this->getCNPJCPF = $auth->getIdentity()->Cpf;
-            $this->getIdUsuario = $auth->getIdentity()->IdUsuario;
-        }
-
         parent::init();
     }
 
     public function indexAction()
     {
-        $this->redirect("Listarprojetos/listarprojetos");
+        $this->redirect("/projeto/index/listar");
     }
 
-    public function listarprojetosAction()
+    public function listarAction()
     {
-        /***************************************************************************** */
-        $tblVinculo = new Agente_Model_DbTable_TbVinculo();
-        $dadosCombo = array();
+        $dbTableVinculo = new Agente_Model_DbTable_TbVinculo();
+        $proponenteVinculados = $dbTableVinculo->buscarProponenteResponsavel($this->idUsuarioExterno);
 
-        $rsVinculo = $tblVinculo->buscarProponenteResponsavel($this->idResponsavel);
-
-        $i = 1;
-        foreach ($rsVinculo as $rs) {
-            $dadosCombo[$i]['idAgenteProponente'] = $rs->idAgente;
-            $dadosCombo[$i]['CPF'] = $rs->CNPJCPF;
-            $dadosCombo[$i]['Nome'] = $rs->NomeProponente;
-            $i++;
+        $proponentes = [];
+        foreach ($proponenteVinculados as $key => $proponenteVinculado) {
+            $proponentes[$key]['idAgenteProponente'] = $proponenteVinculado->idAgente;
+            $proponentes[$key]['CPF'] = $proponenteVinculado->CNPJCPF;
+            $proponentes[$key]['Nome'] = $proponenteVinculado->NomeProponente;
         }
 
-        $this->view->buscaProponente = $dadosCombo;
-        $this->view->idResponsavel = $this->idResponsavel;
-        $this->view->idUsuario = $this->idUsuario;
+        $this->view->buscaProponente = $proponentes;
 
+        $this->view->proponentes = $proponentes;
+        $this->view->idResponsavel = $this->idUsuarioExterno;
+        $this->view->idUsuario = $this->idUsuarioExterno;
+        $this->view->idAgente = $this->idAgente;
+
+    }
+
+    public function listarax() {
         /*****************************************************************************/
 
         if (!isset($_POST['idProponente']) || empty($_POST['idProponente'])) {
@@ -139,6 +79,73 @@ class Projeto_IndexController extends Projeto_GenericController
                 parent::message($e->getMessage(), "listarprojetos/listarprojetos", "ERROR");
             }
         }
+    }
+
+    public function listarProjetosAjaxAction()
+    {
+        $idProponente = $this->getRequest()->getParam('id');
+        $mecanismo = $this->getRequest()->getParam('mecanismo');
+        $start = $this->getRequest()->getParam('start');
+        $length = $this->getRequest()->getParam('length');
+        $draw = (int)$this->getRequest()->getParam('draw');
+        $search = $this->getRequest()->getParam('search');
+        $order = $this->getRequest()->getParam('order');
+        $columns = $this->getRequest()->getParam('columns');
+
+        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["idPronac desc"];
+
+        $idProponente = ((int)$idProponente == 0) ? $this->idAgente : (int)$idProponente;
+
+        if (empty($idProponente)) {
+            $this->_helper->json(array(
+                "data" => 0,
+                'recordsTotal' => 0,
+                'draw' => 0,
+                'recordsFiltered' => 0));
+        }
+        $tbProjetos = new Projeto_Model_DbTable_Projetos();
+        $projetos = $tbProjetos->obterProjetosPorProponente(
+            $this->idUsuarioExterno,
+            $idProponente,
+            $mecanismo,
+            [],
+            $order,
+            $start,
+            $length,
+            $search
+        );
+
+//        $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
+
+//        $rsPreProjeto = $tblPreProjeto->propostas($this->idAgente, $this->idResponsavel, $idAgente, array(), $order, $start, $length, $search);
+
+//        $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
+
+        $recordsTotal = 0;
+        $recordsFiltered = 0;
+        $dados = array();
+        if (!empty($projetos)) {
+            foreach ($projetos as $key => $projeto) {
+                $novoProjeto = new stdClass();
+                $novoProjeto->pronac = utf8_encode($projeto->Pronac);
+                $novoProjeto->idPronac = utf8_encode($projeto->IdPRONAC);
+                $novoProjeto->mecanismo = utf8_encode($projeto->Mecanismo);
+                $novoProjeto->nomeprojeto = utf8_encode($projeto->NomeProjeto);
+                $novoProjeto->periodo = utf8_encode($projeto->DtInicioDeExecucao) . ' - ' . utf8_encode($projeto->DtFinalDeExecucao);
+                $novoProjeto->situacao = utf8_encode($projeto->Situacao) . ' ' . utf8_encode($projeto->Descricao);
+
+                $dados[$key] = $novoProjeto;
+            }
+//            $recordsFiltered = $tblPreProjeto->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, $search);
+//            $recordsTotal = $tblPreProjeto->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente);
+        }
+
+        $this->_helper->json(array(
+            "data" => !empty($dados) ? $dados : 0,
+            'recordsTotal' => $recordsTotal ? $recordsTotal : 0,
+            'draw' => $draw,
+            'recordsFiltered' => $recordsFiltered ? $recordsFiltered : 0
+        ));
     }
 
     public function buscarProponentesComboAction()
@@ -223,7 +230,7 @@ class Projeto_IndexController extends Projeto_GenericController
             die;
         }
 
-        $retorno = (array) $tbProjetos->spClonarProjeto($idPronac, $this->idResponsavel);
+        $retorno = (array)$tbProjetos->spClonarProjeto($idPronac, $this->idResponsavel);
 
         $return['msg'] = $retorno['Mensagem'];
         $return['status'] = false;
