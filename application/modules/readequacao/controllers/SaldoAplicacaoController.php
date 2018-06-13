@@ -49,17 +49,59 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
             if ($criarPlanilha) {
                 $this->_helper->json(array(
                     'msg' => 'Planilha copiada corretamente',
+                    'success' => 'true',
                     'readequacao' => $readequacao
                 ));
             } else {
                 $this->_helper->json(array(
                     'msg' => 'Houve um erro ao tentar copiar a planilha',
+                    'success' => 'false',
                     'readequacao' => $readequacao
                 ));
             }
         }
     }
 
+    public function carregarValorEntrePlanilhasAction()
+    {
+        $auth = Zend_Auth::getInstance();
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->_request->getParam("idPronac");
+        
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        
+        try {
+            $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            
+            $valorEntrePlanilhas = $tbReadequacao->carregarValorEntrePlanilhas(
+                $idPronac,
+                Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO
+            );
+            $valorEntrePlanilhas['vlDiferencaPlanilhas'] = 'R$ '. number_format(
+                ($valorEntrePlanilhas['PlanilhaReadequadaTotal'] - $valorEntrePlanilhas['PlanilhaAtivaTotal']
+                ),
+                2,
+                ',',
+                '.'
+            );
+                                                         
+            $this->_helper->json([
+                'valorEntrePlanilhas' => $valorEntrePlanilhas,
+                'success' => 'true',
+                'msg' => 'Readequa&ccedil;&atilde;o salva com sucesso!'
+            ]);
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json([
+                'data' => $valorEntrePlanilhas,
+                'success' => 'false',
+                'msg' => $e->getMessage()
+            ]);
+        }
+    }
+    
     public function salvarReadequacaoAction()
     {
         $dados = $this->getRequest()->getPost();

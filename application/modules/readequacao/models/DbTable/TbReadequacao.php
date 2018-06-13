@@ -1568,5 +1568,47 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         }
         
         return $idReadequacao;
+    }
+
+    
+    public function carregarValorEntrePlanilhas($idPronac, $idTipoReadequacao) {
+        $idReadequacao = $this->buscarIdReadequacaoAtiva(
+            $idPronac,
+            $idTipoReadequacao
+        );
+        
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilhaAtiva(
+            $idPronac,
+            [
+                Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL
+            ]
+        )->current();
+        
+        $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilhaReadequada(
+                            $idPronac,
+                            $idReadequacao,
+                            [
+                                Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL
+                            ]
+        )->current();
+        
+        $retorno = [];
+        
+        if ($PlanilhaReadequada['Total'] > 0) {
+            if ($PlanilhaAtiva['Total'] == $PlanilhaReadequada['Total']) {
+                $retorno['statusPlanilha'] = 'neutro';
+            } elseif ($PlanilhaAtiva['Total'] > $PlanilhaReadequada['Total']) {
+                $retorno['statusPlanilha'] = 'positivo';
+            } else {
+                $retorno['statusPlanilha'] = 'negativo';
+            }
+        } else {
+            $retorno['PlanilhaAtivaTotal'] = 0;
+            $retorno['PlanilhaReadequadaTotal'] = 0;
+            $retorno['statusPlanilha'] = 'neutro';
+        }
+        
+        return $retorno;
     }    
 }

@@ -790,48 +790,19 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         if (strlen($idPronac) > 7) {
             $idPronac = Seguranca::dencrypt($idPronac);
         }
-
+        
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        $idReadequacao = $tbReadequacao->buscarIdReadequacaoAtiva(
+        
+        $valorEntrePlanilhas = $tbReadequacao->carregarValorEntrePlanilhas(
             $idPronac,
             Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
         );
-
-        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilhaAtiva(
-            $idPronac,
-            [
-                Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL
-            ]
-        )->current();
-
-        $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilhaReadequada(
-                            $idPronac,
-                            $idReadequacao,
-                            [
-                                Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL
-                            ]
-        )->current();
-
-        if ($PlanilhaReadequada['Total'] > 0) {
-            if ($PlanilhaAtiva['Total'] == $PlanilhaReadequada['Total']) {
-                $statusPlanilha = 'neutro';
-            } elseif ($PlanilhaAtiva['Total'] > $PlanilhaReadequada['Total']) {
-                $statusPlanilha = 'positivo';
-            } else {
-                $statusPlanilha = 'negativo';
-            }
-        } else {
-            $PlanilhaAtiva['Total'] = 0;
-            $PlanilhaReadequada['Total'] = 0;
-            $statusPlanilha = 'neutro';
-        }
-
+        
         $this->montaTela(
             'readequacoes/carregar-valor-entre-planilhas.phtml',
             array(
-            'statusPlanilha' => $statusPlanilha,
-            'vlDiferencaPlanilhas' => 'R$ '.number_format(($PlanilhaReadequada->Total-$PlanilhaAtiva->Total), 2, ',', '.')
+            'statusPlanilha' => $valorEntrePlanilhas['statusPlanilha'],
+            'vlDiferencaPlanilhas' => 'R$ '.number_format(($valorEntrePlanilhas['PlanilhaReadequadaTotal'] - $valorEntrePlanilhas['PlanilhaAtivaTotal']), 2, ',', '.')
             )
         );
     }
@@ -3790,4 +3761,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
     }
+
+    
 }
