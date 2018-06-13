@@ -38,7 +38,6 @@ $(document).ready(function () {
         });
     }
 
-
     $("#lista-de-projetos tbody").on('click', '.clonar-projeto', function () {
 
         var idPronac = $(this).attr('id-pronac');
@@ -87,15 +86,6 @@ $(document).ready(function () {
             $('#container-loading').fadeOut();
         });
 
-        $(document).ready(function () {
-            $('#example').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'print'
-                ]
-            });
-        });
-
         var table = $('#lista-de-projetos').DataTable(
             {
                 "language": {
@@ -114,10 +104,6 @@ $(document).ready(function () {
                     },
                     type: "POST"
                 },
-                dom: 'Bfrtip',
-                buttons: [
-                    'print'
-                ],
                 "processing": true,
                 "serverSide": true,
                 "bFilter": false,
