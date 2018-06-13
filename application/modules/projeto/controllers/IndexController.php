@@ -13,6 +13,22 @@ class Projeto_IndexController extends Projeto_GenericController
     public function init()
     {
         parent::init();
+        $this->validarPerfis();
+    }
+
+    private function validarPerfis()
+    {
+        $auth = Zend_Auth::getInstance();
+
+        $PermissoesGrupo = array();
+        $PermissoesGrupo[] = 147;
+        $PermissoesGrupo[] = 148;
+        $PermissoesGrupo[] = 149;
+        $PermissoesGrupo[] = 150;
+        $PermissoesGrupo[] = 151;
+        $PermissoesGrupo[] = 152;
+
+//         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
 
     public function indexAction()
@@ -41,7 +57,8 @@ class Projeto_IndexController extends Projeto_GenericController
 
     }
 
-    public function listarax() {
+    public function listarax()
+    {
         /*****************************************************************************/
 
         if (!isset($_POST['idProponente']) || empty($_POST['idProponente'])) {
@@ -115,29 +132,38 @@ class Projeto_IndexController extends Projeto_GenericController
             $search
         );
 
-//        $tblPreProjeto = new Proposta_Model_DbTable_PreProjeto();
-
-//        $rsPreProjeto = $tblPreProjeto->propostas($this->idAgente, $this->idResponsavel, $idAgente, array(), $order, $start, $length, $search);
-
-//        $Movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-
         $recordsTotal = 0;
         $recordsFiltered = 0;
         $dados = array();
         if (!empty($projetos)) {
             foreach ($projetos as $key => $projeto) {
                 $novoProjeto = new stdClass();
-                $novoProjeto->pronac = utf8_encode($projeto->Pronac);
-                $novoProjeto->idPronac = utf8_encode($projeto->IdPRONAC);
-                $novoProjeto->mecanismo = utf8_encode($projeto->Mecanismo);
+                $novoProjeto->pronac = $projeto->Pronac;
+                $novoProjeto->idPronac = $projeto->IdPRONAC;
+                $novoProjeto->idProjeto = $projeto->idProjeto;
+                $novoProjeto->idPronacHash = Seguranca::encrypt($projeto->IdPRONAC);
+                $novoProjeto->mecanismo = utf8_encode($this->obterMecanismo($projeto->Mecanismo));
                 $novoProjeto->nomeprojeto = utf8_encode($projeto->NomeProjeto);
-                $novoProjeto->periodo = utf8_encode($projeto->DtInicioDeExecucao) . ' - ' . utf8_encode($projeto->DtFinalDeExecucao);
+                $novoProjeto->periodo = Data::mostrarPeriodoDeDatas($projeto->DtInicioDeExecucao, $projeto->DtFinalDeExecucao);
                 $novoProjeto->situacao = utf8_encode($projeto->Situacao) . ' ' . utf8_encode($projeto->Descricao);
-
+                $novoProjeto->podeClonarProjeto = !empty($projeto->idProjeto) ? true : false;
+                $novoProjeto->podeAdequarProjeto = (boolean) $tbProjetos->fnChecarLiberacaoDaAdequacaoDoProjeto($projeto->IdPRONAC);
                 $dados[$key] = $novoProjeto;
             }
-//            $recordsFiltered = $tblPreProjeto->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente, array(), null, null, null, $search);
-//            $recordsTotal = $tblPreProjeto->propostasTotal($this->idAgente, $this->idResponsavel, $idAgente);
+
+            $recordsTotal = $tbProjetos->obterProjetosPorProponente(
+                $this->idUsuarioExterno,
+                $idProponente,
+                $mecanismo,
+                [],
+                $order,
+                $start,
+                $length,
+                $search,
+                true
+            );
+
+            $recordsFiltered = $recordsTotal;
         }
 
         $this->_helper->json(array(
@@ -148,33 +174,24 @@ class Projeto_IndexController extends Projeto_GenericController
         ));
     }
 
-    public function buscarProponentesComboAction()
+    public function obterMecanismo($id)
     {
-        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        $mecanismo = $_POST['mecanismo'];
-
-        $tblVinculo = new Agente_Model_DbTable_TbVinculo();
-        $rsVinculo = $tblVinculo->buscarProponenteResponsavel($this->idResponsavel, $mecanismo);
-        $agente = array();
-
-        $i = 1;
-        if (count($rsVinculo) > 0) {
-            foreach ($rsVinculo as $rs) {
-                $dadosCombo[$i]['idAgenteProponente'] = $rs->idAgente;
-                if (strlen($rs->CNPJCPF) == 11) {
-                    $proponente = '[' . Mascara::addMaskCPF($rs->CNPJCPF) . '] - ' . utf8_encode($rs->NomeProponente);
-                } else {
-                    $proponente = '[' . Mascara::addMaskCNPJ($rs->CNPJCPF) . '] - ' . utf8_encode($rs->NomeProponente);
-                }
-                $dadosCombo[$i]['proponente'] = $proponente;
-                $i++;
-            }
-            $jsonEncode = json_encode($dadosCombo);
-            $this->_helper->json(array('resposta' => true, 'conteudo' => $dadosCombo));
-        } else {
-            $this->_helper->json(array('resposta' => false));
+        switch ($id) {
+            case 1:
+                $mecanismo = "Incentivo Fiscal Federal";
+                break;
+            case 2:
+                $mecanismo = "FNC";
+                break;
+            case 3:
+                $mecanismo = "Recurso do Tesouro";
+                break;
+            default:
+                $mecanismo = "Não definido";
+                break;
         }
-        $this->_helper->viewRenderer->setNoRender(true);
+
+        return $mecanismo;
     }
 
     public function gerarpdfAction()
@@ -198,50 +215,47 @@ class Projeto_IndexController extends Projeto_GenericController
     {
         $params = $this->getRequest()->getParams();
 
-        $return['msg'] = '';
-        $return['status'] = false;
 
-        $idPronac = isset($params['idPronac']) ? $params['idPronac'] : '';
+        $dados['status'] = false;
+        try {
 
-        $permissaoProjeto = $this->verificarPermissaoAcesso(false, $idPronac, false, true);
+            $idPronac = isset($params['idPronac']) ? $params['idPronac'] : '';
 
-        if (true !== $permissaoProjeto['status']) {
-            $this->_helper->json($permissaoProjeto);
+            $permissaoProjeto = $this->verificarPermissaoAcesso(false, $idPronac, false, true);
+
+            if (true !== $permissaoProjeto['status']) {
+                throw new Exception($permissaoProjeto['msg']);
+            }
+
+            if (empty($this->idUsuarioExterno)) {
+                throw new Exception("Usu&aacute;rio inv&aacute;lido!");
+            }
+
+            $tbProjetos = new Projeto_Model_DbTable_Projetos();
+            $idPreProjeto = $tbProjetos->obterIdPreProjetoDoProjeto($idPronac);
+
+            if (empty($idPreProjeto)) {
+                throw new Exception("Erro ao Clonar! Este projeto n&atilde;o possui proposta!");
+            }
+
+            $retorno = (array)$tbProjetos->spClonarProjeto($idPronac, $this->idUsuarioExterno);
+
+            $dados['msg'] = $retorno['Mensagem'];
+            $dados['status'] = false;
+
+            if ($retorno['stEstado'] == 'TRUE') {
+                $dados['idPreProjeto'] = $retorno['Mensagem'];
+                $dados['msg'] = 'Sucesso! Voc&ecirc; ser&aacute; redirecionado para a proposta!';
+                $dados['status'] = true;
+            }
+
+            $this->_helper->json($dados);
+            die;
+        } catch(Exception $e) {
+            $dados['msg'] =  utf8_encode($e->getMessage());
+            $dados['status'] = false;
+            $this->_helper->json($dados);
             die;
         }
-
-        if (empty($this->idResponsavel)) {
-            $return['msg'] = 'Usu&aacute;rio inv&aacute;lido!';
-            $return['status'] = false;
-
-            $this->_helper->json($return);
-            die;
-        }
-
-        $tbProjetos = new Projeto_Model_DbTable_Projetos();
-
-        $idPreProjeto = $tbProjetos->obterIdPreProjetoDoProjeto($idPronac);
-
-        if (empty($idPreProjeto)) {
-            $return['msg'] = 'Erro ao Clonar! Este projeto n&atilde;o possui proposta!';
-            $return['status'] = false;
-
-            $this->_helper->json($return);
-            die;
-        }
-
-        $retorno = (array)$tbProjetos->spClonarProjeto($idPronac, $this->idResponsavel);
-
-        $return['msg'] = $retorno['Mensagem'];
-        $return['status'] = false;
-
-        if ($retorno['stEstado'] == 'TRUE') {
-            $return['idPreProjeto'] = $retorno['Mensagem'];
-            $return['msg'] = 'Sucesso! Voc&ecirc; ser&aacute; redirecionado para a proposta!';
-            $return['status'] = true;
-        }
-
-        $this->_helper->json($return);
-        die;
     }
 }

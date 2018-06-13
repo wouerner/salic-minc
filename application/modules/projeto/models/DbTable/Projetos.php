@@ -229,7 +229,8 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
         $order = [],
         $start = 0,
         $limit = 20,
-        $search = null)
+        $search = null,
+        $total = false)
     {
         $a = $this->select();
         $a->setIntegrityCheck(false);
@@ -336,7 +337,6 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
             $b->where('b.idAgente = ?', $idProponente);
         }
 
-
         $c = $this->select();
         $c->setIntegrityCheck(false);
         $c->from(
@@ -403,6 +403,11 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
         $db->setFetchMode(Zend_DB::FETCH_OBJ);
 
         $sql = $db->select()->union(array($a , $b,  $c), Zend_Db_Select::SQL_UNION);
+
+        if ($total) {
+            $sqlFinal = $db->select()->from(array("p" => $sql), array('count(distinct IdPRONAC)'));
+            return $db->fetchOne($sqlFinal);
+        }
 
         $sqlFinal = $db->select()->from(array("p" => $sql));
 

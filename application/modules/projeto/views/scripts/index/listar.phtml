@@ -7,13 +7,13 @@
 
         <div class="content">
             <div class="row card-panel">
-                <div class="col s12 m12 l2">
+                <div class="col s12 m12 l3">
                     <label for="mecanismo"><b>Mecanismo</b></label></br>
                     <select name="mecanismo" id="mecanismo" class="browser-default">
-                        <option value="1">IncentivoFiscal Federal</option>
+                        <option value="1">Incentivo Fiscal Federal</option>
                     </select>
                 </div>
-                <div class="col s12 m12 l10">
+                <div class="col s12 m12 l9">
                     <label><b>CPF/CNPJ Proponente:</b></label></br>
                     <select name="idProponente" id="idProponente" class="browser-default">
                         <option value="">Selecione</option>
@@ -27,7 +27,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row card-panel">
+            <div class="row card-panel padding10">
                 <div class="col s12 m12 l12">
                     <div id="listar-projetos-cadastrados">
                         <table
@@ -60,54 +60,13 @@
 <div id="mensagem-modal" class="sumir"></div>
 
 <form name="frmGerarRelatorio" id="frmGerarRelatorio" class="sumir" method="post"
-      action="<?php echo $this->url(array('controller' => 'mantercalendariocnic', 'action' => 'gerarpdf')); ?>">
+      action="<?php echo $this->url(array('module' => 'defauult','controller' => 'mantercalendariocnic', 'action' => 'gerarpdf')); ?>">
     <input type="hidden" id="html" name="html" value="">
     <input type="hidden" id="formato" name="formato" value="">
 </form>
 
-
 <div id="conteudo">
-    <form method="POST"
-          action="<?php echo $this->url(array('controller' => 'listarprojetos', 'action' => 'listarprojetos')); ?>"
-          name="localiza" id="localiza">
-        <table class="tabela">
-            <tr class="centro">
-                <th>Filtro</th>
-            </tr>
-            <tr>
-                <td align="left">Mecanismo:&nbsp;
-                    <select name="mecanismo" id="mecanismo" class="input_simples w200">
-                        <!--                        <option value="">- Selecione -</option>-->
-                        <option value="1" <?php echo ($this->mecanismo == 1) ? 'selected="selected"' : ''; ?>>Incentivo
-                            Fiscal Federal
-                        </option>
-                        <?php /* ?>
-                        <option value="2" <?php //echo ($this->mecanismo == 2) ? 'selected="selected"' : ''; ?>>FNC</option>
-                        <option value="6" <?php //echo ($this->mecanismo == 6) ? 'selected="selected"' : ''; ?>>Recurso do Tesouro</option>
-                        <?php */ ?>
-                    </select>
-                    CPF/CNPJ Proponente: &nbsp;&nbsp;
-                    <select name="idProponenste" id="idPrsoponente" class="input_simples">
-                        <option value="">Selecione</option>
-                        <?php foreach ($this->proponentes as $proponente) : ?>
-                            <option
-                                value="<?= $proponente['idAgenteProponente'] ?>"
-                                <?= ($this->agenteId == $proponente['idAgenteProponente']) ? 'selected="selected"' : ''; ?>
-                            ><?= "[" . Validacao::mascaraCPFCNPJ($proponente['CPF']) . "] - " . $proponente['Nome'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td align="center">
-                    <button class="btn-localizar waves-effect waves-light btn btn-default small" type="submit"
-                            name="localizar" id="localizar">
-                        <i class="material-icons left">search</i>Localizar
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </form>
+
     <div id="corpo_impressao">
         <?php
         $i = 0;
@@ -279,92 +238,14 @@
 
 <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
         crossorigin="anonymous"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script type="text/javascript" src="/public/scripts/projeto/index/listar.datatable.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css"/>
 
 <script type="text/javascript">
-
-    $(document).ready(function () {
-
-        function obterProponentes(mecanismo) {
-            $.ajax({
-                type: 'POST',
-                url: '/projetos/index/buscar-proponentes-ajax',
-                data: {
-                    mecanismo: mecanismo
-                },
-                success: function (data) {
-                    var recebe = $('#idProponente');
-                    $('#idProponente option.proponente').remove();
-
-                    if (data.resposta) {
-                        for (i in data.conteudo) {
-                            recebe.append('<option class="proponente" value="' + data.conteudo[i].idAgenteProponente + '">' + data.conteudo[i].proponente + '</option>');
-                        }
-                    }
-                },
-                dataType: 'json'
-            });
-        }
-
-        $('#mecanismo').change(function () {
-            var mecanismo = $(this).val();
-            obterProponentes(mecanismo)
-        });
-
-        $("form#localiza").validate({
-            rules: {
-                idProponente: {required: true}
-            },
-            messages: {
-                idProponente: {
-                    required: function () {
-                        return " Proponente &eacute; obrigat&oacute;rio "
-                    }
-                }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
-        });
-
-
-        $(".clonar-projeto").click(function () {
-
-            var idPronac = $(this).attr('id-pronac');
-            var pronac = $(this).attr('pronac');
-            var titulo_projeto = $(this).attr('titulo');
-            var el = '#mensagem-modal';
-
-            titulo = 'Clonar Projeto';
-            largura = 400;
-            altura = 220;
-
-            $(el).html('Tem certeza que deseja clonar o projeto <br>(' + pronac + ') ' + titulo_projeto + '?');
-
-            $(el).dialog("destroy");
-
-            $(el).dialog
-            ({
-                modal: true,
-                resizable: false,
-                width: largura,
-                height: altura,
-                title: titulo,
-                buttons: {
-                    "N\u00e3o": function () {
-                        $(this).dialog("close");
-                        return false;
-                    },
-                    "Sim": function () {
-                        $(this).dialog("close");
-                        clonar_projeto(idPronac);
-                    }
-                }
-            });
-        });
-    });
 
     function gerar_pdf(formato) {
         $("#html").val("<html><style>table {width:798px;} table td { background-color:#EEE; padding:3px; text-align:center}table th { background-color:#CCC; padding:3px; text-align:center}</style><center><h2>Listar Projetos</h2></center>");
@@ -413,12 +294,6 @@
     //        $3('.modal-pre-loader').modal();
     //    });
 
-    $3(document).ajaxStart(function () {
-        $3('#container-loading').fadeIn();
-    });
 
-    $3(document).ajaxComplete(function () {
-        $3('#container-loading').fadeOut();
-    });
 
 </script>
