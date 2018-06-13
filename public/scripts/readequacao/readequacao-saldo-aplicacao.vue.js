@@ -1,28 +1,27 @@
 Vue.component('readequacao-saldo-aplicacao', {
     template: `
-	<div class='readequacao-saldo-aplicacao'>
-	    <div class="card">
+<div class='readequacao-saldo-aplicacao'>
+	<div class="card">
 		<div class="card-content">
-		    <div class="col s2">
-			<b>Pronac: </b>{{ pronac }}<br>
-		    </div>
-			    <div class="col s8">
+		  <div class="col s2">
+				<b>Pronac: </b>{{ pronac }}<br>
+		  </div>
+			<div class="col s8">
 				<b>Projeto: </b><span v-html="nomeProjeto"></span>
-			    </div>
-				    <br/>
+			</div>
+			<br/>
 		</div>
-	    </div>
-				    
-				    <div v-show="exibirBotaoSolicitarUsoreadequacaoObtida">
-					<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
+	</div>
+	
+	<div v-show="exibirBotaoIniciar">
+		<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
 						name=""
 					    v-on:click="solicitarUsoSaldo()"
 						id="novo">
 					    <i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
 					</button>
 				    </div>
-						
-						<ul v-if="!disabled"  class="collapsible" v-show="solicitacaoIniciada">
+						<ul v-if="!disabled" class="collapsible" v-show="exibirPaineis">
 						    <li id="collapsible-first">
 							<div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
 							    <div class="collapsible-body">
@@ -43,10 +42,37 @@ Vue.component('readequacao-saldo-aplicacao', {
 									<div class="collapsible-header"><i class="material-icons">list</i>Editar planilha or&ccedil;ament&aacute;ria</div>
 									    <div class="collapsible-body card" >
 										<div class="card-content">
-										</div>	
+										    <span class="bold" v-bind:class="{ 'blue-text': statusPlanilhaPositivo, 'red-text':  statusPlanilhaNegativo }" >{{vlDiferencaEntrePlanilhas}}</span>
+											<span v-if="statusPlanilhaNeutro">(Remanejamento)</span>
+											    <span v-if="statusPlanilhaPositivo">(Complementa&ccedil;&atilde;o)</span>
+												<span v-if="statusPlanilhaNegativo">(Redu&ccedil;&atilde;o)</span>
+										</div>
 									    </div>
+												    
+												    <div class="card" >
+													<div class="card-content">
+													    <planilha-orcamentaria
+														:id-pronac="idPronac"
+														:tipo-planilha="tipoPlanilha"
+														:link="1"
+														>														
+													    </planilha-orcamentaria>
+													</div>
+												    </div>
 								    </li>
 						</ul>
+														<div class="card" v-show="readequacao.idReadequacao">
+														    <div class="card-content">
+															<div class="row">
+															    
+															    <div class="right-align padding20 col s12">
+																<button
+																    v-on:click="excluirReadequacao"
+																       class="btn red">Excluir</button>
+															    </div>
+															</div>
+														    </div>
+														</div>
 	</div>
     `,
     props: {
@@ -72,7 +98,11 @@ Vue.component('readequacao-saldo-aplicacao', {
 	
 	return {
 	    readequacao,
+	    exibirBotaoIniciar: false,
+	    exibirPaineis: false,
 	    solicitacaoIniciada: false,
+	    valorEntrePlanilhas: [],
+	    tipoPlanilha: 7,
 	    componente: 'readequacao-saldo-aplicacao-saldo'
 	}
     },
@@ -97,12 +127,13 @@ Vue.component('readequacao-saldo-aplicacao', {
                     self.readequacao = response.readequacao;
 		    if (typeof response.readequacao.idReadequacao != 'undefined') {
 			self.solicitacaoIniciada = true;
+			self.carregarValorEntrePlanilhas();
 		    }
 		}
             });
         },
 	solicitarUsoSaldo: function() {
-	    self = this;
+	    let self = this;
 	    this.solicitacaoIniciada = true;
 	    
 	    $3.ajax({
@@ -111,9 +142,10 @@ Vue.component('readequacao-saldo-aplicacao', {
 		data: {
 		    idPronac: self.idPronac
 		},
-		done: function(data) {
-		    self.readequacao = data.readequacao;
-		}
+	    }).done( function(response) {
+		self.readequacao = response.readequacao;
+		self.exibirPaineis = true;
+		self.exibirBotaoIniciar = false;
 	    });
 	    
 	},
@@ -152,14 +184,87 @@ Vue.component('readequacao-saldo-aplicacao', {
 	},
 	atualizarReadequacao: function (readequacao) {
             this.readequacao = readequacao;
-        }
+        },
+	carregarValorEntrePlanilhas: function() {
+	    let self = this;
+	    $3.ajax({
+		type: "GET",
+		url: "/readequacao/saldo-aplicacao/carregar-valor-entre-planilhas",
+		data: {
+		    idPronac: self.idPronac
+		}
+	    }).done(function(response) {
+		self.valorEntrePlanilhas = response.valorEntrePlanilhas;
+	    });
+	},
+	excluirReadequacao: function () {   
+	    let self = this;
+	    if (confirm("Tem certeza que deseja excluir a redequa\u00E7\u00E3o?")) {
+		$3.ajax({
+		    type: "GET",
+		    url: "/readequacao/saldo-aplicacao/excluir-readequacao",
+		    data: {
+			idPronac: self.idPronac,
+			idReadequacao: self.readequacao.idReadequacao
+		    }
+		}).done(function (response) {
+		    self.restaurarFormulario();
+                    self.mensagemSucesso(response.msg);
+		    $3('.collapsible').collapsible('open', 0);
+		    $3('.collapsible').collapsible('close', 0);
+		    self.solicitacaoIniciada = false;
+		    self.exibirBotaoIniciar = true;
+		    self.exibirPaineis = false;
+                }).fail(function (response) {
+                    self.mensagemErro(response.responseJSON.msg)
+                });
+	    }
+	},
+	restaurarFormulario: function() {
+	    this.readequacao = {
+		'idPronac': null,
+		'idReadequacao': null,
+		'justificativa': '',
+		'arquivo': null,
+		'idTipoReadequacao': null,
+		'dsSolicitacao': '',
+		'idArquivo' : null,
+		'nomeArquivo': null
+	    };
+
+	}
+    },
+    watch: {
+	readequacao: function() {
+	    if ((this.readequacao.idReadequacao == null
+	       ||this.readequacao.idReadequacao == undefined)
+		&& (!this.solicitacaoIniciada)) {
+		this.exibirBotaoIniciar = true;
+	    }
+
+	    if (typeof this.readequacao.idReadequacao == 'string') {
+		this.exibirPaineis = true;
+	    }
+	}
     },
     computed: {
-	exibirBotaoSolicitarUsoreadequacaoObtida: function() {
-	    if ((typeof this.readequacao.idReadequacao == 'null'
-	       ||typeof this.readequacao.idReadequacao == 'undefined'
-	    )
-		&& (!this.solicitacaoIniciada)) {
+	vlDiferencaEntrePlanilhas: function() {
+	    if (typeof this.valorEntrePlanilhas.vlDiferencaPlanilhas != 'undefined') {
+		return this.valorEntrePlanilhas.vlDiferencaPlanilhas;
+	    }
+	},
+	statusPlanilhaPositivo: function() {
+	    if (typeof this.valorEntrePlanilhas.statusPlanilha == 'positivo') {
+		return true;
+	    }
+	},
+	statusPlanilhaNegativo: function() {
+	    if (typeof this.valorEntrePlanilhas.statusPlanilha == 'negativo') {
+		return true;
+	    }
+	},
+	statusPlanilhaNeutro: function() {
+	    if (typeof this.valorEntrePlanilhas.statusPlanilha == 'neutro') {
 		return true;
 	    }
 	}
