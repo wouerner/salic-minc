@@ -300,22 +300,46 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         );
 
         $valorComprovadoAntigo = $planilhaAprovacaoItem->current()->vlComprovacao;
-        $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto(
+
+        /* $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto( */
+        /*     $idPronac, */
+        /*     null, */
+        /*     $planilhaAprovacaoItem->current()->cdEtapa, */
+        /*     $planilhaAprovacaoItem->current()->cdProduto, */
+        /*     $planilhaAprovacaoItem->current()->cdCidade, */
+        /*     null, */
+        /*     $planilhaAprovacaoItem->current()->idPlanilhaItem */
+        /* ); */
+        /* $this->view->valores = $valoresItem->current(); */
+
+        /* $valorAprovadoAtual = $valoresItem->current()->vlAprovado; */
+        /* $valorComprovadoAtual = $valoresItem->current()->vlComprovado; */
+
+        /* $valorComprovadoNovo = ($valorComprovadoAtual - $valorComprovadoAntigo) + $vlComprovadoNovo; */
+        /* var_dump($valorComprovadoNovo , $valorAprovadoAtual);die; */
+
+        /*todo*/
+        $planilhaAprovacao = new PlanilhaAprovacao();
+        $valoresItem = $planilhaAprovacao->planilhaAprovada(
             $idPronac,
             null,
-            $planilhaAprovacaoItem->current()->cdEtapa,
-            $planilhaAprovacaoItem->current()->cdProduto,
-            $planilhaAprovacaoItem->current()->cdCidade,
+            $this->getRequest()->getParam('etapa'),
+            $this->getRequest()->getParam('produto'),
+            $this->getRequest()->getParam('cidade'),
             null,
-            $planilhaAprovacaoItem->current()->idPlanilhaItem
+            $this->getRequest()->getParam('idPlanilhaItens')
         );
+
         $this->view->valores = $valoresItem->current();
 
         $valorAprovadoAtual = $valoresItem->current()->vlAprovado;
+        $valorAprovadoAtual = round($valorAprovadoAtual, 2);
         $valorComprovadoAtual = $valoresItem->current()->vlComprovado;
 
         $valorComprovadoNovo = ($valorComprovadoAtual - $valorComprovadoAntigo) + $vlComprovadoNovo;
+        $valorComprovadoNovo = round($valorComprovadoNovo,2);
 
+        /*todos*/
         if ($valorComprovadoNovo > $valorAprovadoAtual) {
             throw new Exception('Valor comprovado acima do permitido!');
         }
@@ -410,6 +434,10 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
                                 'action' => 'comprovar',
                                 'idusuario' => $this->view->idusuario,
                                 'idpronac' => $request->getParam('idpronac'),
+                                'idPlanilhaItens' => $request->getParam('idPlanilhaItens'),
+                                'etapa' => $request->getParam('etapa'),
+                                'produto' => $request->getParam('produto'),
+                                'cidade' => $request->getParam('cidade'),
                                 'idPlanilhaAprovacao' => $request->getParam('idPlanilhaAprovacao'),
                             ),
                             null,
@@ -454,28 +482,20 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
     {
         $comprovante = new PrestacaoContas_Model_ComprovantePagamento();
 
-        /* var_dump($this->getRequest()->getPost()); */
-        /* die; */
-        $comprovante->preencher($this->getRequest()->getPost());
+        $comprovante->preencher($this->getRequest()->getPost()['comprovante']);
 
-            /* $request->getParam('idAgente'), */
-            /* $request->getParam('itemId'), */
-            /* $request->getParam('tpDocumento'), */
-            /* $request->getParam('nrComprovante'), */
-            /* $request->getParam('nrSerie'), */
-            /* $request->getParam('dtEmissao') ? new DateTime(data::dataAmericana($request->getParam('dtEmissao'))) : null, */
-            /* $arquivoModel->getId(), */
             /* $request->getParam('tpFormaDePagamento'), */
-            /* $dtPagamento, */
             /* str_replace(',', '.', str_replace('.', '', $request->getParam('vlComprovado'))), */
             /* $request->getParam('nrDocumentoDePagamento'), */
-            /* $request->getParam('dsJustificativa') */
-
+        $data = [];
         try {
-            $comprovante->cadastrar();
+            $id = $comprovante->cadastrar();
+            $data = ['success' => true, 'idComprovantePagamento' => $id];
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
+            echo $e->getMessage();die;
         }
+        $this->_helper->json($data);
     }
 
     public function fornecedorAction()
@@ -508,7 +528,6 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         $pais = new Pais();
 
         $paises = $pais->buscar();
-        /* var_dump($paises);die; */
         $data = [];
         foreach($paises as $key => $pais) {
             $data[$key]['id']  = $pais['idPais'];
