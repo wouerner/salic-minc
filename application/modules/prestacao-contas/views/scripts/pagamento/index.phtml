@@ -20,7 +20,22 @@
                     </div>
                     <div class="card-panel teal">
                         <span class="white-text" style="font-weight: bold; font-size: medium">
-                            Valor total a Comprovar: R$ <?php echo number_format($this->vlTotalComprovar, 2, ',', '.') ?>
+                             <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Valor Aprovado</td>
+                                        <td>R$ <?php echo number_format($this->vlAprovado, 2, ',', '.') ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Valor Comprovado</td>
+                                        <td>R$ <?php echo number_format($this->vlComprovado, 2, ',', '.') ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Valor a Comprovar</td>
+                                        <td>R$ <?php echo number_format($this->vlTotalComprovar, 2, ',', '.') ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </span>
                     </div>
                     <div class="card-action">
@@ -40,12 +55,6 @@
             <div class="card-panel teal">
                 <span class="white-text" style="font-weight: bold; font-size: medium">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Condição</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <tr>
                                 <td>Valor Aprovado</td>
