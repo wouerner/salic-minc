@@ -2,13 +2,6 @@
 
 class Projeto_IndexController extends Projeto_GenericController
 {
-//    private $getIdUsuario = 0;
-//    private $getCNPJCPF = 0;
-//    private $idResponsavel = 0;
-//    private $idAgente = 0;
-//    private $idUsuario = 0;
-//    private $cpfLogado = 0;
-
 
     public function init()
     {
@@ -55,47 +48,6 @@ class Projeto_IndexController extends Projeto_GenericController
         $this->view->idUsuario = $this->idUsuarioExterno;
         $this->view->idAgente = $this->idAgente;
 
-    }
-
-    public function listarax()
-    {
-        /*****************************************************************************/
-
-        if (!isset($_POST['idProponente']) || empty($_POST['idProponente'])) {
-            $this->view->listarprojetos = 0;
-        } else {
-            try {
-                $post = Zend_Registry::get('post');
-
-                $idProponente = !empty($post->idProponente) ? $post->idProponente : ''; // deleta a m�scara
-                $mecanismo = $_POST['mecanismo'];
-                $idResponsavel = $this->idResponsavel;
-
-                $a = new Projetos();
-                $ProjetosVinculados = $a->listarProjetosConsulta($idResponsavel, $idProponente, $mecanismo)->toArray();
-
-                $tbProjetos = new Projeto_Model_DbTable_Projetos();
-                $projetos = [];
-
-                if (count($ProjetosVinculados) > 0) {
-                    foreach ($ProjetosVinculados as $projeto) {
-
-                        $idPreProjeto = $tbProjetos->obterIdPreProjetoDoProjeto($projeto['IdPRONAC']);
-                        $projeto['podeClonarProjeto'] = !empty($idPreProjeto) ? true : false;
-                        $projeto['liberarEdicao'] = $tbProjetos->fnChecarLiberacaoDaAdequacaoDoProjeto($projeto['IdPRONAC']);
-
-                        $projetos[] = $projeto;
-                    }
-                    $this->view->listarprojetos = $projetos;
-                    $this->view->mecanismo = $mecanismo;
-                    $this->view->agenteId = $idProponente;
-                } else {
-                    parent::message("Nenhum projeto encontrado!", "listarprojetos/listarprojetos", "ALERT");
-                }
-            } catch (Exception $e) {
-                parent::message($e->getMessage(), "listarprojetos/listarprojetos", "ERROR");
-            }
-        }
     }
 
     public function listarProjetosAjaxAction()
