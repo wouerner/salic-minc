@@ -46,6 +46,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
         $SolicitarProrrogacao = 0;
         $Marcas = 0;
         $ReadequacaoPlanilha = 0;
+        $ReadequacaoTransferenciaRecursos = 0;
 
         # Verificar permiss�o
         $db = Zend_Db_Table::getDefaultAdapter();
@@ -125,7 +126,38 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
         $PercentualCaptado = $db->fetchRow($PercentualCaptado);
 
         $PercentualCaptado = ($PercentualCaptado->dado) ? $PercentualCaptado->dado : 0;
-
+        $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+        
+        if ($PercentualCaptado > 20) {
+            $fnVlAcomprovar = new Zend_Db_Expr("SELECT sac.dbo.fnVlAComprovarProjeto($idPronac) AS vlAComprovar");
+            $vlAComprovar = $db->fetchOne($fnVlAcomprovar);
+            
+            if ($vlAComprovar > 0) {
+                $existeReadequacaoEmAndamento = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmAndamento(
+                    $idPronac,
+                    Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS
+                );
+                
+                $existeReadequacaoEmEdicao = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmEdicao(
+                    $idPronac,
+                    Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS
+                );
+                
+                if (!$existeReadequacaoEmAndamento
+                    || $existeReadequacaoEmEdicao
+                ) {
+                    $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+                    $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores(
+                        '',
+                        $idPronac
+                    );
+                    if (count($projetosRecebedores) > 0) {
+                        $ReadequacaoTransferenciaRecursos = 1;
+                    } 
+                }
+            }            
+        }
+        
         # Verificar se h� dilig�ncia para responder
         $vDiligencia = $db->select()
            ->from(
@@ -308,10 +340,9 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             $Marcas = 1;
 
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-            $Readequacao_Model_tbReadequacao = new Readequacao_Model_tbReadequacao();
-            $existeReadequacaoEmAndamento = $Readequacao_Model_tbReadequacao->existeReadequacaoEmAndamento($idPronac);
-            $existeReadequacaoPlanilhaEmEdicao = $Readequacao_Model_tbReadequacao->existeReadequacaoPlanilhaEmEdicao($idPronac);
-            $existeReadequacaoParcialEmEdicao = $Readequacao_Model_tbReadequacao->existeReadequacaoParcialEmEdicao($idPronac);
+            $existeReadequacaoEmAndamento = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmAndamento($idPronac);
+            $existeReadequacaoPlanilhaEmEdicao = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoPlanilhaEmEdicao($idPronac);
+            $existeReadequacaoParcialEmEdicao = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoParcialEmEdicao($idPronac);
 
             if (!$existeReadequacaoEmAndamento && !$existeReadequacaoEmAndamento) {
                 $Readequacao_50 = 1;
@@ -398,7 +429,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                         $this->_schema
                     )
                     ->where('a.idPronac = ?', $idPronac)
-                                  ->where('b.idTipoReadequacao = ?', Readequacao_Model_tbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA)
+                                  ->where('b.idTipoReadequacao = ?', Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA)
                                   ->where(
                                       'a.siEncaminhamento NOT IN (?)',
                                       array(
@@ -438,7 +469,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             $Analise = 1;
         }
 
-        $permissao = array('links'=>"$Permissao - $Fase - $Diligencia - $Recursos - $Readequacao - $ComprovacaoFinanceira - $RelatorioTrimestral - $RelatorioFinal - $Analise - $Execucao - $PrestacaoDeContas - $Readequacao_50 - $Marcas - $SolicitarProrrogacao - $ReadequacaoPlanilha");
+        $permissao = array('links'=>"$Permissao - $Fase - $Diligencia - $Recursos - $Readequacao - $ComprovacaoFinanceira - $RelatorioTrimestral - $RelatorioFinal - $Analise - $Execucao - $PrestacaoDeContas - $Readequacao_50 - $Marcas - $SolicitarProrrogacao - $ReadequacaoPlanilha - $ReadequacaoTransferenciaRecursos");
 
         return (object) $permissao;
     }

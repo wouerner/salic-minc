@@ -20,7 +20,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
 
     protected function setDataPagamento($data, $format) {
         $d = DateTime::createFromFormat($format, $data);
-        if (!$d) {
+        if (!$d ) {
             throw new Exception('Sem data de pagamento');
         }
 
@@ -36,18 +36,40 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
     }
 
     public function preencher($request) {
-        $obj = (json_decode(current($request)));
+        $obj = (json_decode($request));
 
+        $this->eInternacional = $obj->fornecedor->eInternacional;
+        if($obj->fornecedor->eInternacional) {
+            $this->fornecedorInternacional($obj);
+        } else {
+            $this->fornecedorNacional($obj);
+        }
+    }
+
+    protected function fornecedorNacional($obj) {
         $this->setTipoDocumento($obj->tipo);
-        /* $this->tpDocumento = $request['numero']; */
+        $this->nrComprovante = $obj->numero;
         $this->serie = $obj->serie;
         $this->dsJustificativa = $obj->justificativa;
         $this->vlComprovacao = $obj->valor; // not null
         $this->setDataEmissao($obj->dataEmissao, 'd/m/Y');
         $this->setDataPagamento($obj->dataPagamento, 'd/m/Y');
-        $this->idFornecedor = $obj->fornecedor;
+        $this->idFornecedor = $obj->fornecedor->idAgente;
         $this->tpFormaDePagamento = $obj->forma;
-        $this->nrDocumentoDePagamento = $obj->numeroPagamento;
+        $this->nrDocumentoDePagamento = $obj->numeroDocumento;
+    }
+
+    protected function fornecedorInternacional($obj) {
+        $this->fornecedor['nome'] = $obj->fornecedor->nome;
+        $this->fornecedor['endereco'] = $obj->fornecedor->endereco;
+        $this->fornecedor['pais'] = $obj->fornecedor->nacionalidade;
+        $this->nrDocumentoDePagamento = $obj->numeroDocumento;
+        $this->setTipoDocumento($obj->tipo);
+        $this->setDataEmissao($obj->dataEmissao, 'd/m/Y');
+        $this->setDataPagamento($obj->dataPagamento, 'd/m/Y');
+        $this->vlComprovacao = $obj->valor; // not null
+        $this->dsJustificativa = $obj->justificativa;
+        $this->serie = $obj->serie;
     }
 
     public function cadastrar()
@@ -59,19 +81,39 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             throw new Exception('Não existe arquivo.');
         }
 
+        if($this->eInternacional) {
+            $fornecedorInternacional = new PrestacaoContas_Model_FornecedorInternacional();
+
+            $fornecedorInternacional->nome = $this->fornecedor['nome'];
+            $fornecedorInternacional->endereco = $this->fornecedor['endereco'];
+            $fornecedorInternacional->pais = $this->fornecedor['pais'];
+
+            $this->idFornecedorExterior =  $fornecedorInternacional->save();
+        }
+
         $dados = [
-            'idFornecedor' => $this->fornecedor,
             'tpDocumento' => $this->tipoDocumento,
-            'nrComprovante' => $this->numero,
-            'nrSerie' => $this->serie,
             'dtEmissao' => $this->dataEmissao->format('Y-m-d h:i:s'),
             'idArquivo' => $arquivoId,
             'vlComprovacao' => $this->vlComprovacao,
             'dtPagamento' => $this->dataPagamento->format('Y-m-d h:i:s'),
-            'dsJustificativa' => $this->comprovanteJustificativa,
-            'tpFormaDePagamento' => $this->comprovanteTipo,
-            'nrDocumentoDePagamento' => $this->comprovanteNumero,
+            'dsJustificativa' => $this->dsJustificativa,
+            'nrDocumentoDePagamento' => $this->nrDocumentoDePagamento,
+            'nrSerie' => $this->serie,
         ];
+
+        if(!$this->eInternacional) {
+            $dados += [
+                'nrComprovante' => $this->nrComprovante,
+                'tpFormaDePagamento' => $this->tpFormaDePagamento,
+                'idFornecedor' => $this->idFornecedor,
+            ];
+        } else {
+            $dados += [
+                'idFornecedorExterior' => $this->idFornecedorExterior,
+            ];
+        }
+        /* var_dump($dados);die; */
 
         /* $this->comprovarPlanilhaCadastrar(); */
         return $this->insert($dados);
