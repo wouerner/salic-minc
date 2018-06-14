@@ -103,7 +103,7 @@
                             </td>
                             <td>
                                 <div style="float: right;">
-                                    <?php echo($value["percentualProponente"]); ?>%
+                                    <?php echo(!empty($value["percentualProponente"]) ? $value["percentualProponente"] : '0'); ?>%
                                 </div>
                             </td>
                         </tr>
