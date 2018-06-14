@@ -1,10 +1,20 @@
 <?php
 
+/**
+ * Class Assinatura_Model_DbTable_TbAtoAdministrativo
+ * @var Assinatura_Model_TbAtoAdministrativo $dbTableTbAtoAdministrativo
+ */
 class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstract
 {
+    public $modelAtoAdministrativo;
     protected $_schema = 'sac';
     protected $_name = 'tbAtoAdministrativo';
     protected $_primary = 'idAtoAdministrativo';
+
+    public function definirModeloAssinatura(array $dados) {
+        $this->modelAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($dados);
+        return $this;
+    }
 
     public function obterPerfilAssinante($idOrgaoDoAssinante, $idPerfilDoAssinante, $idTipoDoAto)
     {

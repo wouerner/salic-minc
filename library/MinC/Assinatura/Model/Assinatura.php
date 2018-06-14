@@ -2,61 +2,56 @@
 
 namespace MinC\Assinatura\Model;
 
+/**
+ * Class Assinatura
+ * @package MinC\Assinatura\Model
+ *
+ * @var int $idPronac
+ * @var string $dsManifestacao
+ * @var int $idTipoDoAtoAdministrativo
+ * @var int $cod_grupo
+ * @var int $cod_orgao
+ * @var int $idOrdemDaAssinatura
+ * @var int $idDocumentoAssinatura
+ * @var int $idAssinante
+ * @var int $idAtoAdministrativo
+ * @var array $dadosDocumentoAssinatura
+ * @var int $idOrgaoSuperiorDoAssinante
+ * @var \Assinatura_Model_TbAssinatura $modelTbAssinatura
+ * @var \Assinatura_Model_TbAtoAdministrativo $modelTbAtoAdministrativo
+ */
 class Assinatura implements IModel
 {
-    /**
-     * @var int $idPronac
-     */
+    public $modeloTbAssinatura;
+    public $modeloTbAtoAdministrativo;
+
+    public function __construct(array $dadosModelo = [])
+    {
+        $this->modeloTbAssinatura = new \Assinatura_Model_TbAssinatura($dadosModelo);
+        $this->modeloTbAtoAdministrativo = new \Assinatura_Model_TbAtoAdministrativo($dadosModelo);
+    }
+
+    public function definirModeloTbAssinatura(array $dados)
+    {
+        $this->modeloTbAssinatura = new \Assinatura_Model_TbAssinatura($dados);
+        return $this;
+    }
+
+    public function definirModeloTbAtoAdministrativo(array $dados)
+    {
+        $this->modeloTbAtoAdministrativo = new \Assinatura_Model_TbAtoAdministrativo($dados);
+        return $this;
+    }
+
     private $idPronac;
-
-    /**
-     * @var string $dsManifestacao
-     */
     private $dsManifestacao;
-
-    /**
-     * @var int $idTipoDoAtoAdministrativo
-     */
     private $idTipoDoAtoAdministrativo;
-
-    /**
-     * @var int $cod_grupo
-     */
     private $cod_grupo;
-
-    /**
-     * @var int $cod_orgao
-     */
     private $cod_orgao;
-
-    /**
-     * @var int $idOrdemDaAssinatura
-     */
     private $idOrdemDaAssinatura;
-
-    /**
-     * @var int $idDocumentoAssinatura
-     */
     private $idDocumentoAssinatura;
-
-    /**
-     * @var int $idAssinante
-     */
     private $idAssinante;
-
-    /**
-     * @var int $idAtoAdministrativo
-     */
     private $idAtoAdministrativo;
-
-    /**
-     * @var array $dadosDocumentoAssinatura
-     */
-    private $dadosDocumentoAssinatura;
-
-    /**
-     * @var int $idOrgaoSuperiorDoAssinante
-     */
     private $idOrgaoSuperiorDoAssinante;
 
     /**
@@ -74,24 +69,6 @@ class Assinatura implements IModel
     public function setIdOrgaoSuperiorDoAssinante($idOrgaoSuperiorDoAssinante)
     {
         $this->idOrgaoSuperiorDoAssinante = $idOrgaoSuperiorDoAssinante;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDadosDocumentoAssinatura()
-    {
-        return $this->dadosDocumentoAssinatura;
-    }
-
-    /**
-     * @param array $dadosDocumentoAssinatura
-     * @return \MinC\Assinatura\Model\Assinatura
-     */
-    public function setDadosDocumentoAssinatura($dadosDocumentoAssinatura)
-    {
-        $this->dadosDocumentoAssinatura = $dadosDocumentoAssinatura;
         return $this;
     }
 

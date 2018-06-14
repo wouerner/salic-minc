@@ -1,15 +1,17 @@
 <?php
 
+/**
+ * Class Assinatura_Model_DbTable_TbAssinatura
+ */
 class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 {
+    /**
+     * @var Assinatura_Model_TbAssinatura $modeloTbAssinatura
+     */
+    public $modeloTbAssinatura;
     protected $_schema = 'sac';
     protected $_name = 'tbAssinatura';
     protected $_primary = 'idAssinatura';
-
-    /**
-     * @var $modelAssinatura Assinatura_Model_TbAssinatura $modelAssinatura
-     */
-    private $modelAssinatura;
 
     const TIPO_ATO_ENQUADRAMENTO = 626;
     const TIPO_ATO_ANALISE_INICIAL = 630;
@@ -17,23 +19,24 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     const TIPO_ATO_HOMOLOGAR_PROJETO = 643;
     const TIPO_ATO_READEQUACAO_COM_PORTARIA = 643; // @todo readequacao atualizar
     const TIPO_ATO_READEQUACAO_SEM_PORTARIA = 643; // @todo readequacao atualizar
-
     const TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO = 653;
     const TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO = 654;
 
-    public function definirModeloAssinatura(array $dados) {
-        $this->modelAssinatura = new Assinatura_Model_TbAssinatura($dados);
+    public function preencherModeloAssinatura(array $dados)
+    {
+        $this->modeloTbAssinatura = new Assinatura_Model_TbAssinatura($dados);
         return $this;
     }
 
     /**
-    * Esse metodo deve retornar Objeto
-    */
+     * Esse metodo deve retornar Objeto
+     */
     public function obterAssinaturas(
         $idPronac,
         $idTipoDoAtoAdministrativo,
         $idDocumentoAssinatura = null
-    ) {
+    )
+    {
         $query = $this->select();
         $query->setIntegrityCheck(false);
 
@@ -110,7 +113,8 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     public function obterProjetosAssinados(
         $idOrgaoSuperiorDoAssinante,
         $idAssinante = null
-    ) {
+    )
+    {
         $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
 
@@ -188,7 +192,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         if ($idAssinante) {
             $objQuery->where(new Zend_Db_Expr(
 
-            'tbDocumentoAssinatura.idDocumentoAssinatura IN (
+                'tbDocumentoAssinatura.idDocumentoAssinatura IN (
                 SELECT distinct idDocumentoAssinatura from "sac"."dbo"."tbAssinatura"
                  where "sac"."dbo"."tbAssinatura".idAssinante = ' . $idAssinante . '
              )'
@@ -207,34 +211,34 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
      */
     public function isProjetoAssinado()
     {
-        if(!$this->modelAssinatura) {
+        if (!$this->modeloTbAssinatura) {
             throw new Exception("&Eacute; necess&aacute;rio definir uma entidade de Assinatura.");
         }
 
-        if(is_null($this->modelAssinatura->getIdPronac())) {
+        if (is_null($this->modeloTbAssinatura->getIdPronac())) {
             throw new Exception("Identificador do Projeto Cultural n&atilde;o informado.");
         }
 
-        if(is_null($this->modelAssinatura->getIdAtoAdministrativo())) {
+        if (is_null($this->modeloTbAssinatura->getIdAtoAdministrativo())) {
             throw new Exception("Identificador do Ato Administrativo n&atilde;o informado.");
         }
 
-        if(is_null($this->modelAssinatura->getIdAssinante())) {
+        if (is_null($this->modeloTbAssinatura->getIdAssinante())) {
             throw new Exception("Identificador do Assinante n&atilde;o informado.");
         }
 
-        if(is_null($this->modelAssinatura->getIdDocumentoAssinatura())) {
+        if (is_null($this->modeloTbAssinatura->getIdDocumentoAssinatura())) {
             throw new Exception("Identificador do Documento de Assinatura n&atilde;o informado.");
         }
 
         $assinaturaExistente = $this->buscar(array(
-            'idPronac = ?' => $this->modelAssinatura->getIdPronac(),
-            'idAtoAdministrativo = ?' => $this->modelAssinatura->getIdAtoAdministrativo(),
-            'idAssinante = ?' => $this->modelAssinatura->getIdAssinante(),
-            'idDocumentoAssinatura = ?' => $this->modelAssinatura->getIdDocumentoAssinatura()
+            'idPronac = ?' => $this->modeloTbAssinatura->getIdPronac(),
+            'idAtoAdministrativo = ?' => $this->modeloTbAssinatura->getIdAtoAdministrativo(),
+            'idAssinante = ?' => $this->modeloTbAssinatura->getIdAssinante(),
+            'idDocumentoAssinatura = ?' => $this->modeloTbAssinatura->getIdDocumentoAssinatura()
         ));
 
-        if($assinaturaExistente->current()) {
+        if ($assinaturaExistente->current()) {
             return true;
         }
         return false;
