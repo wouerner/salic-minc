@@ -262,13 +262,13 @@ $arrMenu['acompanhamento']['menu'][] = array(
 );
 $arrMenu['acompanhamento']['menu'][] = array(
     'grupo' => array(122, 123, 148, 151),
-    'url' => $this->url(array('controller' => 'readequacoes', 'action' => 'painel'), '', true),
+    'url' => $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel'), '', true),
     'title' => 'Readequa&ccedil;&otilde;es',
     'label' => 'Readequa&ccedil;&otilde;es'
 );
 $arrMenu['acompanhamento']['menu'][] = array(
     'grupo' => array(93, 121),
-    'url' => $this->url(array('controller' => 'readequacoes', 'action' => 'painel-readequacoes'), '', true),
+    'url' => $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes'), '', true),
     'title' => 'Avaliar Readequa&ccedil;&otilde;es',
     'label' => 'Avaliar Readequa&ccedil;&otilde;es'
 );
@@ -443,7 +443,7 @@ $arrMenu['admissibilidade']['menu'][] = array(
 );
 $arrMenu['admissibilidade']['menu'][] = array(
     'grupo' => array(92, 97, 131),
-    'url' => $this->url(array('controller' => 'recurso', 'action' => 'recurso-enquadramento'), '', true),
+    'url' => $this->url(array('controller' => 'recursos', 'action' => 'recurso-enquadramento'), '', true),
     'title' => 'Ir para Recurso',
     'label' => 'Recurso'
 );
