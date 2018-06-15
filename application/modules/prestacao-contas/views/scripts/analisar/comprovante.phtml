@@ -64,7 +64,8 @@
         },
         mounted: function () {
             var vue = this;
-            url = '/prestacao-contas/planilha-aprovacao/idpronac/' + this.idpronac;
+            
+            url = '/prestacao-contas/planilha-aprovacao/get';
             $3.ajax({
                 type: "GET",
                 url: url,
