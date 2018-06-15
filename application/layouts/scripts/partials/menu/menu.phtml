@@ -130,6 +130,27 @@ $arrMenu['assinatura']['menu'][] = array(
 );
 
 $arrMenu['assinatura']['menu'][] = array(
+    'grupo' => [
+        Autenticacao_Model_Grupos::PARECERISTA,
+        Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA,
+        Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO,
+        Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA,
+        Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO,
+        Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO,
+        Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO,
+        Autenticacao_Model_Grupos::SECRETARIO,
+    ],
+    'url' => $this->url(
+        array(
+            'module' => 'readequacao',
+            'controller' => 'readequacao-assinatura',
+            'action' => 'gerenciar-assinaturas'
+        ), '', true),
+    'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
+    'label' => 'Readequa&ccedil;&atilde;o - Gerenciar Assinaturas'
+);
+
+$arrMenu['assinatura']['menu'][] = array(
     'grupo' => array(97),
     'url' => $this->url(
         array(
