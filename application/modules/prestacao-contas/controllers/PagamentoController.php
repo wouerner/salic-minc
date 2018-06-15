@@ -106,6 +106,13 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
     public function dadosProjetoAction()
     {
         $idpronac = $this->_request->getParam('idpronac');
+        $uf = $this->_request->getParam('uf');
+        $produto = $this->_request->getParam('produto');
+        $cidade = $this->_request->getParam('cidade');
+        $etapa = $this->_request->getParam('etapa');
+        $idPlanilhaAprovaçao = $this->_request->getParam('idPlanilhaAprovaçao');
+        $idPlanilhaItens = $this->_request->getParam('idPlanilhaItens');
+
         $this->view->idpronac = $idpronac;
     }
     public function planilhaDadosProjetoAction()
