@@ -3,7 +3,7 @@
 class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericController
 {
 
-    private $arrayIdTipoDoAtoAdministrativos = [
+    private $idTiposAtoAdministrativos = [
         653,
         654,
         655
@@ -50,17 +50,17 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->grupoAtivo->codOrgao,
             $this->grupoAtivo->codGrupo,
             $this->auth->getIdentity()->usu_org_max_superior,
-            $this->arrayIdTipoDoAtoAdministrativos
+            $this->idTiposAtoAdministrativos
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
 
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
         $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-            $this->idTipoDoAtoAdministrativo,
+            $this->idTiposAtoAdministrativos,
             $this->auth->getIdentity()->usu_org_max_superior
         );
-        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+//        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
     }
 
     public function devolverProjetoAction()
@@ -102,7 +102,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $this->view->abertoParaDevolucao = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
                 $get->IdPRONAC,
-                $this->idTipoDoAtoAdministrativo
+                $this->idTiposAtoAdministrativos
             );
 
             $this->view->IdPRONAC = $get->IdPRONAC;

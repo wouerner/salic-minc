@@ -247,7 +247,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $where = array(
             'IdPRONAC = ?' => $idPronac,
-            'idTipoDoAtoAdministrativo = ?' => $idTipoDoAtoAdministrativo,
+            'idTipoDoAtoAdministrativo in (?)' => $idTipoDoAtoAdministrativo,
             'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
             'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
         );
