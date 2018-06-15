@@ -62,7 +62,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                                 <td>{{row.Seq}}</td>
                                 <td>
 																	<template v-if="editarItem(row)">
-																		<a href="">{{row.Item}}</a>
+																		<a class="modal-trigger" href="#modalEditar">{{row.Item}}</a>
 																	</template>
 																	<template v-else>
 																		{{row.Item}}
@@ -107,6 +107,12 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	<div class="card-action">
 		<span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total}}</span>			
 	</div>
+	<div id="modalEditar" class="modal">
+		<div class="modal-content center-align">
+			<h4>Edi&ccedil;&atilde;o de item</h4>
+		</div>
+	</div>						
+
 </div>
 <div v-else>Nenhuma planilha encontrada</div>
     `,
@@ -191,6 +197,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
         objPlanilha: function (value) {
             this.planilha = value;
             this.iniciarCollapsible();
+	    $3('#modalEditar').modal();
         }
     },
     computed: {
