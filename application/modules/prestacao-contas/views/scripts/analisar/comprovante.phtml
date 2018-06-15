@@ -37,11 +37,11 @@
                             </tr>
                             <tr>
                                 <th>Valor Aprovado:</th>
-                                <td>R$ {{ projeto.vlAprovado ? projeto.vlAprovado : 0 }}</td>
+                                <td>R$ {{ formatValues(projeto.vlAprovado) }}</td>
                                 <th>Valor Comprovado:</th>
-                                <td>R$ {{ projeto.vlComprovado ? projeto.vlComprovado : 0 }}</td>
+                                <td>R$ {{ formatValues(projeto.vlComprovado) }}</td>
                                 <th>Comprovação Validada:</th>
-                                <td>R$ {{ projeto.ComprovacaoValidada ? projeto.ComprovacaoValidada : 0 }}</td>
+                                <td>R$ {{ formatValues(projeto.ComprovacaoValidada) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -83,7 +83,22 @@
                 .fail(function (jqXHR) {
                     alert('error');
                 });
-        }
+        },
+        methods: {
+            formatValues: function (value) {
+                if (value === undefined) {
+                    return '0';
+                }
+
+                if (value.indexOf('.') === -1) {
+                    value = value.concat('.00');
+                }
+
+                const valueChangedPointByComma = value.replace('.', ',');
+
+                return valueChangedPointByComma.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+        },
     }
 
     const comprovanteForm = {
