@@ -117,11 +117,18 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
 
         $planilhaJSON = null;
 
+        $vlAprovado += $item->vlAprovado;
+        $vlComprovado += $item->vlComprovado;
 
         foreach($resposta as $item) {
+            $vlComprovar = $item->vlAprovado - $item->vlComprovado;
+            $vlTotalComprovar += $vlComprovar;
             $planilhaJSON = [
                 'NomeProjeto' => html_entity_decode(utf8_encode($item->NomeProjeto)),
-                'Pronac' => $item->Pronac
+                'Pronac' => $item->Pronac,
+                'vlAprovado' => $item->vlAprovado,
+                'vlComprovado' => $item->vlComprovado,
+                'vlComprovar' => $vlTotalComprovar
             ];
         }
         $this->_helper->json($planilhaJSON);
