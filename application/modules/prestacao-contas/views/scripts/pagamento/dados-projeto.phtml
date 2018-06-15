@@ -9,13 +9,33 @@
 <script>
     Vue.component('dados', {
         props: ['idpronac'],
-        template: `<div class="col s12 m12">
+        template: `<div class="col s12 m12" :informacoes = "informacoes">
                         <div class="card horizontal">
                             <div class="card-stacked">
                                 <div class="center-align card-content  lighten-4">
                                     <span class="card-title"
-                                          :informacoes = "informacoes">
+                                          >
                                           {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
+                                    </span>
+                                </div>
+                                <div class="card-panel teal">
+                                    <span class="white-text" style="font-weight: bold; font-size: medium">
+                                         <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Valor Aprovado</td>
+                                                    <td>R$ {{ informacoes.vlAprovado }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Valor Comprovado</td>
+                                                    <td>R$ {{ informacoes.vlComprovado }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Valor a Comprovar</td>
+                                                    <td>R$ {{ informacoes.vlComprovar }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </span>
                                 </div>
                                 <div class="card-action">
