@@ -58,24 +58,35 @@ Vue.component('readequacao-saldo-aplicacao', {
 														:componente-planilha="componentePlanilha"
 														:perfil="perfil"
 														:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-														:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha">
+														:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"														>
 													    </planilha-orcamentaria>
 													</div>
 												    </div>
 								    </li>
 						</ul>
-														<div class="card" v-show="readequacao.idReadequacao">
-														    <div class="card-content">
-															<div class="row">
-															    
-															    <div class="right-align padding20 col s12">
-																<button
-																    v-on:click="excluirReadequacao"
-																       class="btn red">Excluir</button>
-															    </div>
-															</div>
-														    </div>
-														</div>
+						<div class="card" v-show="readequacao.idReadequacao">
+							<div class="card-content">
+								<div class="row">
+									<div class="right-align padding20 col s12">
+										<a class="waves-light waves-effect btn red modal-trigger" href="#modalExcluir">Excluir</a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+ 						<div id="modalExcluir" class="modal">
+							<div class="modal-content center-align">
+								<h4>Tem certeza que deseja excluir a redequa&ccedil;&atilde;o?</h4>
+							</div>
+							<div class="modal-footer">
+								<a class="waves-effect waves-green btn-flat red white-text"
+									 v-on:click="excluirReadequacao">Excluir
+								</a>
+								<a class="modal-close waves-effect waves-green btn-flat"
+									 href="#!">Cancelar
+								</a>												
+							</div>
+						</div>						
 	</div>
     `,
     props: {
@@ -134,6 +145,7 @@ Vue.component('readequacao-saldo-aplicacao', {
                     self.readequacao = response.readequacao;
 		    if (typeof response.readequacao.idReadequacao != 'undefined') {
 			self.solicitacaoIniciada = true;
+			
 			self.carregarValorEntrePlanilhas();
 		    }
 		}
@@ -204,28 +216,32 @@ Vue.component('readequacao-saldo-aplicacao', {
 		self.valorEntrePlanilhas = response.valorEntrePlanilhas;
 	    });
 	},
-	excluirReadequacao: function () {   
+	excluirReadequacao: function () {
+	    $3('#modalExcluir .modal-content h4').html('');
+	    $3('#modalExcluir .modal-footer').html('<h5>Removendo os dados, aguarde...</h5>');
+	    
 	    let self = this;
-	    if (confirm("Tem certeza que deseja excluir a redequa\u00E7\u00E3o?")) {
-		$3.ajax({
-		    type: "GET",
-		    url: "/readequacao/saldo-aplicacao/excluir-readequacao",
-		    data: {
-			idPronac: self.idPronac,
-			idReadequacao: self.readequacao.idReadequacao
-		    }
-		}).done(function (response) {
-		    self.restaurarFormulario();
-                    self.mensagemSucesso(response.msg);
-		    $3('.collapsible').collapsible('open', 0);
-		    $3('.collapsible').collapsible('close', 0);
-		    self.solicitacaoIniciada = false;
-		    self.exibirBotaoIniciar = true;
-		    self.exibirPaineis = false;
-                }).fail(function (response) {
-                    self.mensagemErro(response.responseJSON.msg)
-                });
-	    }
+	    
+	    $3.ajax({
+		type: "GET",
+		url: "/readequacao/saldo-aplicacao/excluir-readequacao",
+		data: {
+		    idPronac: self.idPronac,
+		    idReadequacao: self.readequacao.idReadequacao
+		}
+	    }).done(function (response) {
+		self.restaurarFormulario();
+                self.mensagemSucesso(response.msg);
+		$3('.collapsible').collapsible('open', 0);
+		$3('.collapsible').collapsible('close', 0);
+		self.solicitacaoIniciada = false;
+		self.exibirBotaoIniciar = true;
+		self.exibirPaineis = false;
+		$3('#modalExcluir').modal('close');
+            }).fail(function (response) {
+                self.mensagemErro(response.responseJSON.msg)
+		$3('#modalExcluir').modal('close');
+            });
 	},
 	restaurarFormulario: function() {
 	    this.readequacao = {
@@ -252,6 +268,9 @@ Vue.component('readequacao-saldo-aplicacao', {
 	    if (typeof this.readequacao.idReadequacao == 'string') {
 		this.exibirPaineis = true;
 	    }
+	},
+	solicitacaoIniciada: function() {
+	    $3('#modalExcluir').modal();
 	}
     },
     computed: {
