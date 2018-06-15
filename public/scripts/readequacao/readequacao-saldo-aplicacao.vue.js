@@ -1,20 +1,20 @@
 Vue.component('readequacao-saldo-aplicacao', {
     template: `
-<div class='readequacao-saldo-aplicacao'>
-	<div class="card">
+	<div class='readequacao-saldo-aplicacao'>
+	    <div class="card">
 		<div class="card-content">
-		  <div class="col s2">
-				<b>Pronac: </b>{{ pronac }}<br>
-		  </div>
-			<div class="col s8">
+		    <div class="col s2">
+			<b>Pronac: </b>{{ pronac }}<br>
+		    </div>
+			    <div class="col s8">
 				<b>Projeto: </b><span v-html="nomeProjeto"></span>
-			</div>
-			<br/>
+			    </div>
+				    <br/>
 		</div>
-	</div>
-	
-	<div v-show="exibirBotaoIniciar">
-		<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
+	    </div>
+				    
+				    <div v-show="exibirBotaoIniciar">
+					<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
 						name=""
 					    v-on:click="solicitarUsoSaldo()"
 						id="novo">
@@ -30,7 +30,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 								    :id-pronac="idPronac"
 								    :disabled="disabled"
 								    :id-tipo-readequacao="idTipoReadequacao"
-								    :componente-ds-solicitacao='componente'
+								    :componente-ds-solicitacao='componenteFormulario'
 								    :objReadequacao="readequacao"
 								    v-on:eventoAtualizarReadequacao="atualizarReadequacao"
 								    v-on:eventoSalvarReadequacao="salvarReadequacao"
@@ -49,13 +49,16 @@ Vue.component('readequacao-saldo-aplicacao', {
 										</div>
 									    </div>
 												    
-												    <div class="card" >
+												    <div class="card" v-if="solicitacaoIniciada">
 													<div class="card-content">
 													    <planilha-orcamentaria
 														:id-pronac="idPronac"
 														:tipo-planilha="tipoPlanilha"
 														:link="1"
-														>														
+														:componente-planilha="componentePlanilha"
+														:perfil="perfil"
+														:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
+														:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha">
 													    </planilha-orcamentaria>
 													</div>
 												    </div>
@@ -81,6 +84,9 @@ Vue.component('readequacao-saldo-aplicacao', {
 	'nomeProjeto': '',
 	'pronac' : '',
 	'siEncaminhamento': '',
+	'perfil': '',
+	'disponivelParaAdicaoItensReadequacaoPlanilha': '',
+	'disponivelParaEdicaoReadequacaoPlanilha': '',
 	'disabled': false
     },
     mixins: [utils],
@@ -103,7 +109,8 @@ Vue.component('readequacao-saldo-aplicacao', {
 	    solicitacaoIniciada: false,
 	    valorEntrePlanilhas: [],
 	    tipoPlanilha: 7,
-	    componente: 'readequacao-saldo-aplicacao-saldo'
+	    componenteFormulario: 'readequacao-saldo-aplicacao-saldo',
+	    componentePlanilha: 'readequacao-saldo-planilha-orcamentaria'
 	}
     },
     created: function() {

@@ -13,6 +13,7 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
         $this->idPronac = $idPronac;
         $this->view->idTipoReadequacao = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO;
         $this->view->idPronac = $idPronac;
+        $this->view->idPerfil = $this->idPerfil;
     }
 
     public function indexAction()

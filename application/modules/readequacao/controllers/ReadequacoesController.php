@@ -3761,6 +3761,37 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
     }
-
     
+    
+    public function obterPlanilhaOrcamentariaAction()
+    {
+        $this->_helper->layout->disableLayout();
+        
+        $idPronac = $this->_request->getParam('idPronac');
+        $tipoPlanilha = $this->_request->getParam('tipoPlanilha');
+        
+        $params = [];
+        $params['link'] = $this->_request->getParam('link');
+        
+        try {
+            if (empty($idPronac)) {
+                throw new Exception("N&uacute;mero do idPronac &eacute; obrigat&oacute;ria");
+            }
+            $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
+            $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipoPlanilha, $params);
+            $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoPlanilha);
+            $planilhaPreparada = TratarArray::utf8EncodeArray($planilha);
+
+            $this->_helper->json([
+                'planilhaOrcamentaria' => $planilhaPreparada,
+                'success' => 'true'
+            ]);
+        } catch (Exception $e) {
+            $this->_helper->json([
+                'success' => 'false',
+                'msg' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
 }
