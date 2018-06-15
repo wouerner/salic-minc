@@ -70,9 +70,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
             $this->view->readequacoesCadastradas = $tbReadequacao->readequacoesCadastradasProponente(
                 array(
-                    'a.idPronac = ?' => $idPronac,
-                    'a.siEncaminhamento = ?' => Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE,
-                    'a.idTipoReadequacao != ?' => Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
+                    'a.idPronac = ?'=>$idPronac,
+                    'a.siEncaminhamento = ?'=> Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE,
+                    'a.stEstado = ?' => 0,
+                    'b.stEstado = ?' => Readequacao_Model_TbTipoReadequacao::TIPO_READEQUACAO_ATIVO,
+                    'b.siReadequacao = ?' => Readequacao_Model_TbTipoReadequacao::SI_READEQUACAO_DIVERSA
                 ),
                 array(1)
             );
@@ -270,7 +272,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $whereIdPlanilha = "idPlanilhaAprovacaoPai = $idPlanilhaAprovacao";
 
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
-        $itemTipoPlanilha = $tbPlanilhaAprovacao->buscar(array('idPlanilhaAprovacao=?' => $idPlanilhaAprovacao))->current();
+        $itemTipoPlanilha = $tbPlanilhaAprovacao->buscar(array('idPlanilhaAprovacao=?'=>$idPlanilhaAprovacao))->current();
 
         if ($itemTipoPlanilha->tpAcao == 'I') {
             $exclusaoLogica = $tbPlanilhaAprovacao->delete(array('idPlanilhaAprovacao = ?' => $idPlanilhaAprovacao));
@@ -1126,27 +1128,36 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         try {
             $arrayBuscaReadequacao = array(
-                'idPronac = ?' => $idPronac,
-                'siEncaminhamento = ?' => Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE,
-                'stEstado = ?' => 0
+                'a.idPronac = ?' => $idPronac,
+                'a.siEncaminhamento = ?' => Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE,
+                'a.stEstado = ?' => 0,
             );
+
             if ($idReadequacao) {
-                $arrayBuscaReadequacao['idReadequacao = ?'] = $idReadequacao;
+                $arrayBuscaReadequacao['a.idReadequacao = ?'] = $idReadequacao;
+            } else {
+                $arrayBuscaReadequacao['b.siReadequacao = ?'] = Readequacao_Model_TbTipoReadequacao::SI_READEQUACAO_DIVERSA;
             }
 
             $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-            $readequacoes = $tbReadequacao->buscar(
-                $arrayBuscaReadequacao
-            );
-
+            $readequacoes = $tbReadequacao->readequacoesCadastradasProponente($arrayBuscaReadequacao, array(1), false);
             $dados = array();
             $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_ENVIADO_MINC;
             $dados['dtEnvio'] = new Zend_Db_Expr('GETDATE()');
             $where = "idPronac = $idPronac AND siEncaminhamento = " . Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE . " AND stEstado = 0";
+
             if ($idReadequacao) {
                 $where .= " AND idReadequacao = $idReadequacao";
+            } else {
+                $idsTiposReadequacoesDiversas = array_column($readequacoes->toArray(), 'idTipoReadequacao');
+                $idsTiposReadequacoesDiversas = implode(',', $idsTiposReadequacoesDiversas);
+                $where .= " AND idTipoReadequacao IN ($idsTiposReadequacoesDiversas)";
             }
             $atualizar = $tbReadequacao->update($dados, $where);
+
+            if (!$atualizar) {
+                throw new Exception ("Erro ao finalizar as readequa&ccedil;&otilde;es!");
+            }
 
             foreach ($readequacoes as $r) {
                 if ($r->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_LOCAL_REALIZACAO) {
@@ -1170,14 +1181,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 }
             }
             if ($atualizar) {
-                //altera a situação do projeto
-                //$alterarSituacao = ProjetoDAO::alterarSituacao($idPronac, 'D20');
                 parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "default/consultardadosprojeto/index?idPronac=" . Seguranca::encrypt($idPronac), "CONFIRM");
-            } // fecha if
-            else {
-                throw new Exception("Erro ao finalizar as readequa&ccedil;&otilde;es!");
             }
-        } // fecha try
+        }
         catch (Exception $e) {
             parent::message($e->getMessage(), "/readequacao/readequacoes?idPronac=" . Seguranca::encrypt($idPronac), "ERROR");
         }
@@ -1785,7 +1791,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
 
         $idReadequacao = (strlen($this->_request->getParam('id')) > 7) ? (int)Seguranca::dencrypt($this->_request->getParam('id')) : $this->_request->getParam('id');
-
         $this->view->idReadequacao = $idReadequacao;
 
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
@@ -1873,6 +1878,33 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         if ($dadosRead->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANO_DISTRIBUICAO) {
             $tbPlanoDistribuicaoMapper = new Readequacao_Model_TbPlanoDistribuicaoMapper();
             $tbPlanoDistribuicaoMapper->atualizarAnaliseTecnica($this->idPronac, $idReadequacao, $this->idPerfil, $parecerProjeto);
+        }
+
+        if ($dadosRead->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS) {
+            $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+            $tbSolicitacaoTransferenciaRecursosMapper = new Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
+            $projetos = new Projetos();
+
+            $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($dadosRead->idReadequacao);
+            $projetoTransferidor = $projetos->buscarProjetoTransferidor($dadosRead->idPronac);
+
+            foreach($projetosRecebedores as $projetoRecebedor) {
+                $arrData = [];
+                $arrData['idSolicitacaoTransferenciaRecursos'] = $projetoRecebedor['idSolicitacao'];
+                if ($parecerProjeto == 2) {
+                    $arrData['siAnaliseTecnica'] = 'D';
+                } else if ($parecerProjeto == 1) {
+                    $arrData['siAnaliseTecnica'] = 'D';
+                } else {
+                    $arrData['siAnaliseTecnica'] = 'N';
+                }
+
+                $statusSolicitacaoTransferenciaRecursos = $tbSolicitacaoTransferenciaRecursosMapper->salvarParecerTecnico($arrData);
+
+                if (!$statusSolicitacaoTransferenciaRecursos) {
+                    throw new Exception("N&atilde;o foi poss&iacute;vel incluir os projetos recebedores da solicita&ccedil;&atilde;o");
+                }
+            }
         }
 
         try {
@@ -3099,6 +3131,40 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $dadosPreProjeto = $PrePropojeto->find(array('idPreProjeto=?' => $dadosPrj->idProjeto))->current();
                 $dadosPreProjeto->FichaTecnica = $read->dsSolicitacao;
                 $dadosPreProjeto->save();
+            } elseif ($read->idTipoReadequacao == Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS) {
+
+                $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
+                $tbProjetoRecebedorRecursoMapper = new Readequacao_Model_TbProjetoRecebedorRecursoMapper();
+                $tbSolicitacaoTransferenciaRecursosMapper = new Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
+                $projetos = new Projetos();
+
+                $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores($dadosRead->idReadequacao);
+                $projetoTransferidor = $projetos->buscarProjetoTransferidor($dadosRead->idPronac);
+
+                foreach($projetosRecebedores as $projetoRecebedor) {
+
+                    $arrData = [];
+                    $arrData['idSolicitacaoTransferenciaRecursos'] = $projetoRecebedor['idSolicitacao'];
+                    $arrData['idPronacTransferidor'] = $projetoTransferidor['idPronac'];
+                    $arrData['idPronacRecebedor'] = $projetoRecebedor['idPronacRecebedor'];
+                    $arrData['tpTransferencia'] = $projetoRecebedor['tpTransferencia'];
+                    $arrData['dtRecebimento'] = new Zend_Db_Expr('GETDATE()');
+                    $arrData['vlRecebido'] = $projetoRecebedor['vlRecebido'];
+
+                    $statusProjetoRecebedorRecurso = $tbProjetoRecebedorRecursoMapper->finalizarSolicitacaoReadequacao($arrData);
+
+                    $arrData = [];
+                    $arrData['stEstado'] = 1;
+                    $arrData['idSolicitacaoTransferenciaRecursos'] = $projetoRecebedor['idSolicitacao'];
+                    // TODO: dando pau aqui
+                    $statusSolicitacaoTransferenciaRecursos = $tbSolicitacaoTransferenciaRecursosMapper->save($arrData);
+
+                    if ($statusProjetoRecebedorRecurso == false
+                        || $statusSolicitacaoTransferenciaRecursos == false
+                    ) {
+                        throw new Exception("N&atilde;o foi poss&iacute;vel incluir os projetos recebedores da solicita&ccedil;&atilde;o");
+                    }
+                }
             }
         }
 
@@ -3301,7 +3367,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $auth = Zend_Auth::getInstance();
         $tblAgente = new Agente_Model_DbTable_Agentes();
         $rsAgente = $tblAgente->buscar(array('CNPJCPF=?' => $auth->getIdentity()->Cpf))->current();
-
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         $dados = array();
         $dados['idPronac'] = $idPronac;
