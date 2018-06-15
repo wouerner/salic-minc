@@ -28,7 +28,7 @@
                     <table class="tabela">
                         <tbody>
                             <tr>
-                                <td ><b>Produto:</b></td>
+                                <th>Produto:</th>
                                 <td>{{projeto.Produto}}</td>
                                 <th>Etapa:</th>
                                 <td>{{projeto.Etapa}}</td>
@@ -37,11 +37,11 @@
                             </tr>
                             <tr>
                                 <th>Valor Aprovado:</th>
-                                <td>R$ {{projeto.vlAprovado}}</td>
+                                <td>R$ {{ projeto.vlAprovado ? projeto.vlAprovado : 0 }}</td>
                                 <th>Valor Comprovado:</th>
-                                <td>R$ {{projeto.vlComprovado}}</td>
+                                <td>R$ {{ projeto.vlComprovado ? projeto.vlComprovado : 0 }}</td>
                                 <th>Comprovação Validada:</th>
-                                <td>R$ </td>
+                                <td>R$ {{ projeto.ComprovacaoValidada ? projeto.ComprovacaoValidada : 0 }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -64,7 +64,7 @@
         },
         mounted: function () {
             var vue = this;
-            
+
             url = '/prestacao-contas/planilha-aprovacao/get';
             $3.ajax({
                 type: "GET",
