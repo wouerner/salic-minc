@@ -2,18 +2,26 @@
 
 class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericController
 {
-    private $idTipoDoAtoAdministrativo;
+
+    private $arrayIdTipoDoAtoAdministrativos = [
+        653,
+        654,
+        655
+    ];
 
     private function validarPerfis()
     {
         $auth = Zend_Auth::getInstance();
 
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO;
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::PARECERISTA;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::SECRETARIO;
 
         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
@@ -24,7 +32,6 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-        $this->idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
     }
 
     public function indexAction()
@@ -43,7 +50,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->grupoAtivo->codOrgao,
             $this->grupoAtivo->codGrupo,
             $this->auth->getIdentity()->usu_org_max_superior,
-            $this->idTipoDoAtoAdministrativo
+            $this->arrayIdTipoDoAtoAdministrativos
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
