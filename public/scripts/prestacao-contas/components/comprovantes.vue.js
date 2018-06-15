@@ -13,6 +13,7 @@ const comprovantes = {
                         <div class="card">
                             <div class="card-content">
                                 <comprovante-table :dados="dado"></comprovante-table>
+                                <sl-comprovar-form></sl-comprovar-form>
                             </div>
                         </div>
                   </div>
@@ -21,7 +22,8 @@ const comprovantes = {
         </div>
     `,
     components:{
-        'comprovante-table': comprovanteTable
+        'comprovante-table': comprovanteTable,
+        // 'componenteform': slComprovarForm
     },
     props: [
         'idpronac',
@@ -30,7 +32,8 @@ const comprovantes = {
         'uf',
         'idmunicipio',
         'idplanilhaitem',
-        'etapa'
+        'etapa',
+        'componenteform'
     ],
     mounted: function() {
         console.log('teste') ;
