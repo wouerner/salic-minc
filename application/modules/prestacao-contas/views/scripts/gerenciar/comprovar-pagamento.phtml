@@ -6,12 +6,14 @@
 
 <div class="container-fluid" id="app-comprovante">
     <page-title></page-title>
-    <div class="card ">
-        <div class="card-content ">
-          <span class="card-title">Comprovante de Pagamento</span>
-          <sl-pc-comprovar-form></sl-pc-comprovar-form>
+    <template v-if="visivel">
+        <div class="card ">
+            <div class="card-content ">
+              <span class="card-title">Comprovante de Pagamento</span>
+              <sl-pc-comprovar-form></sl-pc-comprovar-form>
+            </div>
         </div>
-    </div>
+    </template>
     <comprovantes
         idpronac="<?php echo $this->idpronac ?>"
         produto="<?php echo $this->cdproduto ?>"
