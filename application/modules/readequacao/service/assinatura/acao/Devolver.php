@@ -4,7 +4,7 @@ namespace Application\Modules\Readequacao\Service\Assinatura\Acao;
 
 use MinC\Assinatura\Acao\IAcao;
 
-class Devolver implements IAcao
+class Devolver implements IAcao, IAcaoDevolver
 {
     private $assinatura;
 

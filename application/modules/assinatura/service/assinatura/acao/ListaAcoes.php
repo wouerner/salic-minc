@@ -9,7 +9,7 @@ use Assinatura_Model_DbTable_TbAssinatura as TbAssinaturaDbTable,
 class ListaAcoes implements IListaAcoes
 {
 
-    public function __invoke(): array
+    public function obterListaAcoes(): array
     {
         return [
             TbAssinaturaDbTable::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO => new ListaAcoesReadequacao()

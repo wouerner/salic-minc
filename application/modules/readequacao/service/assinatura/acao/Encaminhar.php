@@ -4,7 +4,7 @@ namespace Application\Modules\Readequacao\Service\Assinatura\Acao;
 
 use MinC\Assinatura\Acao\IAcao;
 
-class Encaminhar implements IAcao
+class Encaminhar implements IAcao, IAcaoEncaminhar
 {
     private $assinatura;
 

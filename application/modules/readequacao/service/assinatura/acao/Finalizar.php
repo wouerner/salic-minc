@@ -4,7 +4,7 @@ namespace Application\Modules\Readequacao\Service\Assinatura\Acao;
 
 use MinC\Assinatura\Acao\IAcao;
 
-class Finalizar implements IAcao
+class Finalizar implements IAcao, IAcaoFinalizar
 {
     private $assinatura;
 

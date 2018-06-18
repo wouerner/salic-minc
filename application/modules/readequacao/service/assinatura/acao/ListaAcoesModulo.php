@@ -7,13 +7,13 @@ use MinC\Assinatura\Acao\IListaAcoesModulo;
 class ListaAcoesModulo implements IListaAcoesModulo
 {
 
-    public function __invoke(\MinC\Assinatura\Model\Assinatura $assinatura): array
+    public function obterListaAcoesModulo(\MinC\Assinatura\Model\Assinatura $assinatura): array
     {
         return [
-            'assinar' => new Assinar($assinatura),
-            'encaminhar' => new Encaminhar($assinatura),
-            'devolver' => new Devolver($assinatura),
-            'finalizar' => new Finalizar($assinatura)
+            new Assinar($assinatura),
+            new Encaminhar($assinatura),
+            new Devolver($assinatura),
+            new Finalizar($assinatura)
         ];
     }
 }

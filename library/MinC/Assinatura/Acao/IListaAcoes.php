@@ -4,5 +4,5 @@ namespace MinC\Assinatura\Acao;
 
 interface IListaAcoes
 {
-    public function __invoke(): array;
+    public function obterListaAcoes(): array;
 }

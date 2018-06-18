@@ -4,5 +4,5 @@ namespace MinC\Assinatura\Acao;
 
 interface IListaAcoesModulo
 {
-    public function __invoke(\MinC\Assinatura\Model\Assinatura $assinatura): array;
+    public function obterListaAcoesModulo(\MinC\Assinatura\Model\Assinatura $assinatura): array;
 }
