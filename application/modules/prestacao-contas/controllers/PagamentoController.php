@@ -110,7 +110,7 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $produto = $this->_request->getParam('produto');
         $cidade = $this->_request->getParam('cidade');
         $etapa = $this->_request->getParam('etapa');
-        $idPlanilhaAprovaçao = $this->_request->getParam('idPlanilhaAprovaçao');
+        $idPlanilhaAprovacao = $this->_request->getParam('idPlanilhaAprovacao');
         $idPlanilhaItens = $this->_request->getParam('idPlanilhaItens');
 
         $this->view->idpronac = $idpronac;
