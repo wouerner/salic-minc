@@ -57,7 +57,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                               <tr v-for="row of locais" 
                                   :key="row.idPlanilhaProposta"  
                                   v-if="isObject(row)"
-                                  v-bind:class="{'orange lighten-2': ultrapassaValor(row)}"
+                                  v-bind:class="{'orange lighten-2': ultrapassaValor(row), 'grey-text lighten-3': itemExcluido(row)}"
                                   >
                                 <td>{{row.Seq}}</td>
                                 <td>
@@ -78,13 +78,19 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                                 <td>{{row.dsJustificativa}}</td>
                                 <td class="center-align">
 																	<template v-if="itemExcluido(row)">
-																		<span class="grey-text lighten-3">item exclu&iacute;do</span>
+																		<span class="grey-text lighten-3">restaurar</span><br/>
+																		<a
+																			v-on:click="restaurarItem(row)"
+																			title="Restaurar item"
+																			class=" small waves-effect waves-light grey-text lighten-3">
+																			<i class="material-icons">restore</i>
+																		</a>
 																	</template>
-																	<template v-if="exibirExcluir(row)">
+																	<template v-if="exibirExcluirItem(row)">
 																		<a
 																			v-on:click="excluirItem(row)"
 																			title="Excluir item"
-																			class=" small waves-effect waves-light red-text lighten-2">
+																			class="small waves-effect waves-light red-text lighten-2">
 																			<i class="material-icons">delete</i>
 																		</a>
 																	</template>
@@ -146,7 +152,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
             return row.stCustoPraticado == true;
 
         },
-	exibirExcluir: function(item) {
+	exibirExcluirItem: function(item) {
 	    if (this.perfil != 1111) {
 		return false;
 	    }
@@ -176,7 +182,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	    }
 	},
 	excluirItem: function(item) {
-	    if (confirm("Tem certeza que deseja excluir o item?")) {
+	    if (confirm("Tem certeza que deseja exclir o item?")) {
 		let self = this;
 		
 		$3.ajax({
@@ -186,11 +192,25 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 			idPronac: self.idPronac,
 			idPlanilha: item.idPlanilhaAprovacao
 		    }
-                }).done(function(response) {
+		}).done(function() {
 		    item.tpAcao = 'E';
 		    self.mensagemSucesso("Item exlui&iacute;do com sucesso");
 		});
 	    }
+	},
+	restaurarItem: function(item) {
+	    let self = this;
+	    $3.ajax({
+		type: 'POST',
+		url: '/readequacao/readequacoes/alteracoes-tecnicas-no-item',
+		data: {
+		    idPlanilha: item.idPlanilhaAprovacao,
+		    tpAcao: item.tpAcao
+		},
+	    }).done(function(){
+		item.tpAcao = 'N';
+		self.mensagemSucesso("Item restaurado com sucesso");
+            });
 	}
     },
     watch: {
