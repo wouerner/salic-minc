@@ -1,6 +1,7 @@
 <?php
 
 namespace MinC\Assinatura\Servico;
+use MinC\Assinatura\Acao\IAcaoEncaminhar;
 
 /**
  * @var \Assinatura_Model_DbTable_TbAssinatura $dbTableTbAssinatura
@@ -34,9 +35,9 @@ class Assinatura implements IServico
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dados);
     }
 
-    public function definirListaDeAcoes(\MinC\Assinatura\Acao\IListaAcoes $listaAcoes)
+    public function definirListaDeAcoes(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
     {
-        $this->listaAcoes = $listaAcoes->obterListaAcoes();
+        $this->listaAcoes = $listaAcoes->obterLista();
     }
 
     public function assinarProjeto()
@@ -140,7 +141,15 @@ class Assinatura implements IServico
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objTbProjetos->alterarOrgao($codigoOrgaoDestino, $modeloTbAssinatura->getIdPronac());
 
-
+        foreach($this->listaAcoes as $acao) {
+            /**
+             * @var \MinC\Assinatura\Acao\IAcao $acao
+             */
+            if($acao instanceof \MinC\Assinatura\Acao\IAcao
+                && $acao instanceof \MinC\Assinatura\Acao\IAcaoEncaminhar) {
+                $acao->executar();
+            }
+        }
     }
 
     /**
@@ -148,8 +157,14 @@ class Assinatura implements IServico
      */
     public function devolver()
     {
-
-
+        foreach($this->listaAcoes as $acao) {
+            /**
+             * @var \MinC\Assinatura\Acao\IAcao $acao
+             */
+            if($acao instanceof \MinC\Assinatura\Acao\IAcao && $acao instanceof \MinC\Assinatura\Acao\IAcaoDevolver) {
+                $acao->executar();
+            }
+        }
     }
 
     /**

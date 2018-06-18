@@ -7,7 +7,7 @@ use MinC\Assinatura\Acao\IListaAcoesModulo;
 class ListaAcoesModulo implements IListaAcoesModulo
 {
 
-    public function obterListaAcoesModulo(\MinC\Assinatura\Model\Assinatura $assinatura): array
+    public function obterLista(\MinC\Assinatura\Model\Assinatura $assinatura): array
     {
         return [
             new Assinar($assinatura),
