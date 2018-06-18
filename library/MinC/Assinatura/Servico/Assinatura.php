@@ -5,6 +5,7 @@ namespace MinC\Assinatura\Servico;
 /**
  * @var \Assinatura_Model_DbTable_TbAssinatura $dbTableTbAssinatura
  * @var \MinC\Assinatura\Model\Assinatura $viewModelAssinatura
+ * @var \MinC\Assinatura\Acao\IListaAcoesModulo[] $listaAcoes
  */
 class Assinatura implements IServico
 {
@@ -31,6 +32,11 @@ class Assinatura implements IServico
     public function definirModeloAssinatura(array $dados = [])
     {
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dados);
+    }
+
+    public function definirListaDeAcoes(\MinC\Assinatura\Acao\IListaAcoes $listaAcoes)
+    {
+        $this->listaAcoes = $listaAcoes->obterListaAcoes();
     }
 
     public function assinarProjeto()
@@ -133,6 +139,8 @@ class Assinatura implements IServico
 
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objTbProjetos->alterarOrgao($codigoOrgaoDestino, $modeloTbAssinatura->getIdPronac());
+
+
     }
 
     /**
