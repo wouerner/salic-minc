@@ -13,7 +13,8 @@ const comprovantes = {
                         <div class="card">
                             <div class="card-content">
                                 <comprovante-table :dados="dado"></comprovante-table>
-                                <sl-comprovar-form></sl-comprovar-form>
+                                <button class="btn">editar</button>
+                                <sl-comprovar-form :dados="dado"></sl-comprovar-form>
                             </div>
                         </div>
                   </div>
@@ -33,7 +34,7 @@ const comprovantes = {
         'idmunicipio',
         'idplanilhaitem',
         'etapa',
-        'componenteform'
+        'componenteform',
     ],
     mounted: function() {
         console.log('teste') ;

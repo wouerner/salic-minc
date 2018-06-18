@@ -369,7 +369,44 @@ Vue.component('sl-comprovar-form',
     `,
     mounted: function() {
         this.paises();
+        if (this.dados) {
+            console.log(this.dados); 
+            this.comprovante.fornecedor.CNPJCPF = this.dados.CNPJCPF;
+            this.pesquisarFornecedor();
+            this.inputCNPJCPF(this.dados.CNPJCPF);
+            this.comprovante.numero = this.dados.nrComprovante;
+            this.comprovante.serie = this.dados.nrSerie;
+            this.comprovante.dataEmissao = this.dados.dtEmissao;
+            this.comprovante.dataPagamento = this.dados.dtPagamento;
+            this.comprovante.valor = this.dados.vlComprovacao;
+            this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
+            this.comprovante.arquivo = { name: this.dados.nmArquivo };
+            this.comprovante.justificativa = this.dados.dsJustificativaProponente;
+
+            // comprovante: {
+            //     fornecedor: {
+            //         nacionalidade: 31,
+            //         tipoPessoa: 1,
+            //         CNPJCPF: '',
+            //         cnpjcpfMask: '',
+            //         nome: '',
+            //         idAgente: '',
+            //         eInternacional: false,
+            //     },
+            //     tipo: 1,
+            //     numero: '',
+            //     serie: '',
+            //     dataEmissao: '',
+            //     dataPagamento:'',
+            //     forma: 1,
+            //     numeroDocumento: '',
+            //     valor: '',
+            //     arquivo: '',
+            //     justificativa: ''
+            // }
+        }
     },
+    props: ['dados'],
     data: function() {
         return this.data();
     },
