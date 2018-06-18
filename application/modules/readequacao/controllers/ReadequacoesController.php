@@ -159,6 +159,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     {
         $this->_helper->layout->disableLayout();
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
+        $idPronac = $this->_request->getParam("idPronac");
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
 
         /* DADOS DO ITEM ATIVO */
@@ -186,7 +187,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         /* PROJETO */
         $Projetos = new Projetos();
-        $projeto = $Projetos->buscar(array('IdPRONAC = ?' => $_GET['idPronac']))->current();
+        $projeto = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
         $dadosProjeto = array(
             'IdPRONAC' => $projeto->IdPRONAC,
             'PRONAC' => $projeto->AnoProjeto.$projeto->Sequencial,

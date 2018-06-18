@@ -271,6 +271,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 	},
 	solicitacaoIniciada: function() {
 	    $3('#modalExcluir').modal();
+	    $3('#modalExcluir').css('height', '20%');
 	}
     },
     computed: {

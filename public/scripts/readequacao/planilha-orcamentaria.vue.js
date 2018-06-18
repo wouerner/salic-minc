@@ -3,6 +3,7 @@ Vue.component('planilha-orcamentaria', {
 	<div id="planilhaOrcamentariaMontada">
 	    <component
 		v-bind:is="componentePlanilha"
+		:idPronac="idPronac"
 		:objPlanilha="planilhaOrcamentaria"
 		:perfil="perfil"
 		:link="link"

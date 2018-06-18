@@ -61,9 +61,12 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                                   >
                                 <td>{{row.Seq}}</td>
                                 <td>
-																	<template v-if="editarItem(row)">
-																		<a class="modal-trigger" href="#modalEditar">{{row.Item}}</a>
+																	<template v-if="podeEditarItem(row)">
+																		<a style="cursor: pointer"
+																			 v-on:click="editarItem(row)"																			 
+																			 >{{row.Item}}</a>
 																	</template>
+																	
 																	<template v-else>
 																		{{row.Item}}
 																	</template>
@@ -114,15 +117,21 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		<span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total}}</span>			
 	</div>
 	<div id="modalEditar" class="modal">
-		<div class="modal-content center-align">
-			<h4>Edi&ccedil;&atilde;o de item</h4>
+		<div class="modal-header">
+			<h4 class="center-align">Alterar item</h4>
 		</div>
-	</div>						
-
+		<div class="modal-content center-align">
+		    <planilha-orcamentaria-alterar-item
+			:idPronac="idPronac"
+			v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao">
+		    </planilha-orcamentaria-alterar-item>
+		</div>
+	</div>
 </div>
 <div v-else>Nenhuma planilha encontrada</div>
     `,
     props: {
+	idPronac: '',
 	objPlanilha: {},
 	perfil: '',
 	link: '',
@@ -132,7 +141,8 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
     mixins: [utils],
     data: function() {
 	return {
-	    planilha: {}
+	    planilha: {},
+	    idPlanilhaAprovacaoEdicao: ''
 	};
     },
     mounted: function () {
@@ -167,6 +177,10 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	    }
 	},
 	editarItem: function(item) {
+	    $3('#modalEditar').modal('open');
+	    this.idPlanilhaAprovacaoEdicao = item.idPlanilhaAprovacao;
+	},
+	podeEditarItem: function(item) {
 	    if (this.perfil == 1111
 		&& this.link
 		&& item.vlComprovado < item.vlAprovado
@@ -217,7 +231,9 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
         objPlanilha: function (value) {
             this.planilha = value;
             this.iniciarCollapsible();
+	    let self = this;
 	    $3('#modalEditar').modal();
+	    $3('#modalEditar').css('height', '100%');
         }
     },
     computed: {
