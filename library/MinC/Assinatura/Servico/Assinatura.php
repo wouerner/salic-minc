@@ -8,12 +8,11 @@ namespace MinC\Assinatura\Servico;
  */
 class Assinatura implements IServico
 {
-    public $post;
-    public $identidadeUsuarioLogado;
     public $isEncaminharParaProximoAssinanteAoAssinar = true;
-    public $dbTableTbAssinatura;
     public $viewModelAssinatura;
     protected $idTipoDoAtoAdministrativo;
+    protected $servicoAutenticacao;
+    protected $listaAcoes;
 
     function __construct(
         $post,
@@ -21,10 +20,11 @@ class Assinatura implements IServico
         $idTipoDoAtoAdministrativo = null
     )
     {
-        $this->post = $post;
-        $this->identidadeUsuarioLogado = $identidadeUsuarioLogado;
+        $this->servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
+            $this->post,
+            $this->identidadeUsuarioLogado
+        );
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
-        $this->dbTableTbAssinatura = new \Assinatura_Model_DbTable_TbAssinatura();
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura();
     }
 
@@ -49,11 +49,7 @@ class Assinatura implements IServico
             throw new \Exception ("O Tipo do Ato Administrativo &eacute; obrigat&oacute;rio.");
         }
 
-        $servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
-            $this->post,
-            $this->identidadeUsuarioLogado
-        );
-        $metodoAutenticacao = $servicoAutenticacao->obterMetodoAutenticacao();
+        $metodoAutenticacao = $this->servicoAutenticacao->obterMetodoAutenticacao();
 
         if(!$metodoAutenticacao->autenticar()) {
             throw new \Exception ("Os dados utilizados para autentica&ccedil;&atilde;o s&atilde;o inv&aacute;lidos.");
@@ -75,14 +71,14 @@ class Assinatura implements IServico
         $modeloTbAtoAdministrativo->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
         $modeloTbAtoAdministrativo->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
 
-        $this->dbTableTbAssinatura->preencherModeloAssinatura([
+        $this->viewModelAssinatura->dbTableTbAssinatura->preencherModeloAssinatura([
             'idAssinante' => $modeloTbAssinatura->getIdAssinante(),
             'idPronac' => $modeloTbAssinatura->getIdPronac(),
             'idAtoAdministrativo' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ]);
 
-        if($this->dbTableTbAssinatura->isProjetoAssinado()) {
+        if($this->viewModelAssinatura->dbTableTbAssinatura->isProjetoAssinado()) {
             throw new \Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
         }
 
@@ -95,7 +91,7 @@ class Assinatura implements IServico
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ];
 
-        $this->dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
+        $this->viewModelAssinatura->dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
         $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
@@ -119,8 +115,8 @@ class Assinatura implements IServico
         }
 
         $modeloTbAssinatura = $this->viewModelAssinatura->modeloTbAssinatura;
-        $this->dbTableTbAssinatura->modeloTbAssinatura = $modeloTbAssinatura;
-        if(!$this->dbTableTbAssinatura->isProjetoAssinado()) {
+        $this->viewModelAssinatura->dbTableTbAssinatura->modeloTbAssinatura = $modeloTbAssinatura;
+        if(!$this->viewModelAssinatura->dbTableTbAssinatura->isProjetoAssinado()) {
             throw new \Exception ("O documento precisa ser assinado para que consiga ser movimentado.");
         }
 
@@ -137,6 +133,23 @@ class Assinatura implements IServico
 
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objTbProjetos->alterarOrgao($codigoOrgaoDestino, $modeloTbAssinatura->getIdPronac());
+    }
+
+    /**
+     * @uses \MinC\Assinatura\Model\Assinatura
+     */
+    public function devolver()
+    {
+
+
+    }
+
+    /**
+     * @uses \MinC\Assinatura\Model\Assinatura
+     */
+    public function finalizar()
+    {
+
     }
 
 }
