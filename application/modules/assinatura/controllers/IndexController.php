@@ -3,10 +3,9 @@
 class Assinatura_IndexController extends Assinatura_GenericController
 {
     private $idTipoDoAtoAdministrativo;
-
     private $grupoAtivo;
-
     private $cod_usuario;
+    public $moduloDeOrigem;
 
     public function init()
     {
@@ -14,7 +13,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-
         $this->cod_usuario = $this->auth->getIdentity()->usu_codigo;
 
         isset($this->auth->getIdentity()->usu_codigo) ? parent::perfil() : parent::perfil(4);
@@ -31,6 +29,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
         if (!empty($get->origin) || !empty($post->origin)) {
             $this->view->origin = (!empty($post->origin)) ? $post->origin : $get->origin;
         }
+        $this->moduloDeOrigem = $this->view->origin;
     }
 
     public function indexAction()
@@ -255,7 +254,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             )
                         );
 
-                        $servicoAssinatura->preencherModelAssinatura([
+                        $servicoAssinatura->definirModeloAssinatura([
                             'idPronac' => $idPronac,
                             'idAtoAdministrativo' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
                             'idAssinante' => $this->auth->getIdentity()->usu_codigo,
@@ -266,6 +265,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
                             'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior
                         ]);
+
                         $servicoAssinatura->assinarProjeto();
                     }
 
@@ -382,7 +382,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 $modelAssinatura->getIdTipoDoAtoAdministrativo()
             );
 
-            $servicoAssinatura->preencherModelAssinatura([
+            $servicoAssinatura->definirModeloAssinatura([
                 'idAtoAdministrativo' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
                 'idTipoDoAto' => $get->idTipoDoAtoAdministrativo,
                 'idOrdemDaAssinatura' => $dadosAtoAdministrativoAtual['idOrdemDaAssinatura'],
@@ -407,6 +407,9 @@ class Assinatura_IndexController extends Assinatura_GenericController
         }
     }
 
+    /**
+     * @todo Mover esse método para outro local.
+     */
     public function gerarPdfAction()
     {
         ini_set("memory_limit", "5000M");
