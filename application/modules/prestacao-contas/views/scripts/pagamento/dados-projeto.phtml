@@ -4,18 +4,75 @@
 
 <!-- vendor -->
 <script src="/public/js/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js" type="text/javascript"></script>
 <!-- vendor -->
 
 <script>
+    (function (global, factory) {
+        if (typeof define === 'function' && define.amd) {
+            define(['../numeral'], factory);
+        } else if (typeof module === 'object' && module.exports) {
+            factory(require('../numeral'));
+        } else {
+            factory(global.numeral);
+        }
+    }(this, function (numeral) {
+        numeral.register('locale', 'pt-br', {
+            delimiters: {
+                thousands: '.',
+                decimal: ','
+            },
+            abbreviations: {
+                thousand: 'mil',
+                million: 'milhões',
+                billion: 'b',
+                trillion: 't'
+            },
+            ordinal: function (number) {
+                return 'º';
+            },
+            currency: {
+                symbol: 'R$'
+            }
+        });
+    }));
+
+    numeral.locale('pt-br');
+
+    function converteParaReal(value) {
+        value = parseFloat(value);
+        return numeral(value).format('0,0.00');
+    }
+
     Vue.component('dados', {
         props: ['idpronac'],
-        template: `<div class="col s12 m12">
+        template: `<div class="col s12 m12" :informacoes = "informacoes">
                         <div class="card horizontal">
                             <div class="card-stacked">
                                 <div class="center-align card-content  lighten-4">
                                     <span class="card-title"
-                                          :informacoes = "informacoes">
+                                          >
                                           {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
+                                    </span>
+                                </div>
+                                <div class="card-panel teal">
+                                    <span class="white-text" style="font-weight: bold; font-size: medium">
+                                         <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Valor Aprovado</td>
+                                                    <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Valor Comprovado</td>
+                                                    <td>R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Valor a Comprovar</td>
+                                                    <td>R$ {{ converterParaReal(informacoes.vlComprovar) }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </span>
                                 </div>
                                 <div class="card-action">
@@ -38,6 +95,12 @@
             return {
                 informacoes: []
             };
+        },
+        methods:{
+            converterParaReal: function (value) {
+                value = parseFloat(value);
+                return numeral(value).format('0,0.00');
+            }
         }
     })
 
