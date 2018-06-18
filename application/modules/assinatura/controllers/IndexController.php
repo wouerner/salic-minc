@@ -22,7 +22,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     private function definirModuloDeOrigem()
     {
-//        $this->view->module = $this->moduleName;
         $get = Zend_Registry::get('get');
         $post = (object)$this->getRequest()->getPost();
         $this->view->origin = "{$this->moduleName}/index";
@@ -135,12 +134,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 $idDocumentoAssinatura
             );
 
-//            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
-//            $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-//                $this->view->idTipoDoAtoAdministrativo,
-//                $this->auth->getIdentity()->usu_org_max_superior
-//            );
-
             $moduleAndControllerArray = explode('/', $this->view->origin);
             $this->view->moduleOrigin = $moduleAndControllerArray[0];
             $this->view->controllerOrigin = $moduleAndControllerArray[1];
@@ -184,7 +177,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/{$this->view->origin}/gerenciar-assinaturas");
         }
-
 
         try {
             $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
@@ -405,33 +397,5 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 "/{$this->view->origin}/gerenciar-assinaturas"
             );
         }
-    }
-
-    /**
-     * @todo Mover esse método para outro local.
-     */
-    public function gerarPdfAction()
-    {
-        ini_set("memory_limit", "5000M");
-        set_time_limit(30);
-
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
-        $cssContents = file_get_contents(APPLICATION_PATH . '/../public/library/materialize/css/materialize.css');
-        $cssContents .= file_get_contents(APPLICATION_PATH . '/../public/library/materialize/css/materialize-custom.css');
-        $html = $_POST['html'];
-
-        $pdf = new mPDF('pt', 'A4', 12, '', 8, 8, 5, 14, 9, 9, 'P');
-        $pdf->allow_charset_conversion = true;
-        $pdf->WriteHTML($cssContents, 1);
-        $pdf->charset_in = 'ISO-8859-1';
-
-        if (!mb_check_encoding($html, 'ISO-8859-1')) {
-            $pdf->charset_in = 'UTF-8';
-        }
-
-        $pdf->WriteHTML($html, 2);
-        $pdf->Output();
-        die;
     }
 }
