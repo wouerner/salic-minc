@@ -28,7 +28,7 @@ class Assinatura implements IServico
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura();
     }
 
-    public function preencherModelAssinatura(array $dados = [])
+    public function definirModeloAssinatura(array $dados = [])
     {
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dados);
     }
