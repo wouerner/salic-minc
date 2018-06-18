@@ -10,6 +10,7 @@ class ListaAcoesModulo implements IListaAcoesModulo
     public function __invoke(\MinC\Assinatura\Model\Assinatura $assinatura): array
     {
         return [
+            'assinar' => new Assinar($assinatura),
             'encaminhar' => new Encaminhar($assinatura),
             'devolver' => new Devolver($assinatura),
             'finalizar' => new Finalizar($assinatura)
