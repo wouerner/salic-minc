@@ -1,0 +1,60 @@
+<div class="row" id="app">
+    <item idpronac="<?php echo $this->idpronac ?>"></item>
+</div>
+
+<!-- vendor -->
+<script src="/public/js/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js" type="text/javascript"></script>
+<!-- vendor -->
+<script>
+    Vue.component('item', {
+        props: ['idpronac'],
+        template: `<div class="col s12 m12" :informacoes = "informacoes">
+                        <div class="card horizontal">
+                            <div class="card-stacked">
+                                <div class="center-align card-title lighten-4">
+                                    Vincular Item de Custo
+                                </div>
+                                <div class="card-content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>UF</th>
+                                                <th>Cidade</th>
+                                                <th>Produto</th>
+                                                <th>Etapa</th>
+                                                <th>Itens de Custo</th>
+                                                <th style="text-align: right">Valor Aprovado</th>
+                                                <th style="text-align: right">Total Comprovado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Teste</td>
+                                                <td>Teste</td>
+                                                <td>Teste</td>
+                                                <td>Teste</td>
+                                                <td>Teste</td>
+                                                <td style="text-align: right">Teste</td>
+                                                <td style="text-align: right">Teste</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`,
+        mounted: function () {
+            let vue = this;
+            $3.ajax({
+                url: "/prestacao-contas/pagamento/planilha-pagamento/idpronac/" + this.idpronac
+            }).done(function( data ) {
+                vue.$data.produtos = data;
+            });
+        }
+    })
+
+    var app = new Vue ({
+        el: '#app'
+    })
+</script>
