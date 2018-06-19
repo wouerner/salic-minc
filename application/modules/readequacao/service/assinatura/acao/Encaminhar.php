@@ -6,16 +6,8 @@ use MinC\Assinatura\Acao\IAcao;
 
 class Encaminhar implements IAcao, IAcaoEncaminhar
 {
-    private $assinatura;
-
-    public function __construct(\MinC\Assinatura\Model\Assinatura $assinatura)
-    {
-        $this->assinatura = $assinatura;
-    }
-
-    public function executar()
+    public function executar(\MinC\Assinatura\Model\Assinatura $assinatura)
     {
 
     }
-
 }
