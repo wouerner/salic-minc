@@ -14,6 +14,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js" type="text/javascript"></script>
 <!-- vendor -->
 <script>
+    (function (global, factory) {
+        if (typeof define === 'function' && define.amd) {
+            define(['../numeral'], factory);
+        } else if (typeof module === 'object' && module.exports) {
+            factory(require('../numeral'));
+        } else {
+            factory(global.numeral);
+        }
+    }(this, function (numeral) {
+        numeral.register('locale', 'pt-br', {
+            delimiters: {
+                thousands: '.',
+                decimal: ','
+            },
+            abbreviations: {
+                thousand: 'mil',
+                million: 'milhões',
+                billion: 'b',
+                trillion: 't'
+            },
+            ordinal: function (number) {
+                return 'º';
+            },
+            currency: {
+                symbol: 'R$'
+            }
+        });
+    }));
+
+    numeral.locale('pt-br');
+
+    function converteParaReal(value) {
+        value = parseFloat(value);
+        return numeral(value).format('0,0.00');
+    }
     Vue.component('item', {
         props: ['idpronac', 'uf', 'etapa', 'cidade', 'produto', 'idplanilhaitens'],
         template: `<div class="col s12 m12" :informacoes = "informacoes">
@@ -42,8 +77,8 @@
                                                 <td>{{ informacoes.Produto }}</td>
                                                 <td>{{ informacoes.Etapa }}</td>
                                                 <td>{{ informacoes.Item }}</td>
-                                                <td style="text-align: right">{{ informacoes.vlAprovado }}</td>
-                                                <td style="text-align: right">{{ informacoes.vlComprovado }}</td>
+                                                <td style="text-align: right">{{ converterParaReal(informacoes.vlAprovado) }}</td>
+                                                <td style="text-align: right">{{ converterParaReal(informacoes.vlComprovado) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -68,6 +103,12 @@
             return {
                 informacoes: []
             };
+        },
+        methods:{
+            converterParaReal: function (value) {
+                value = parseFloat(value);
+                return numeral(value).format('0,0.00');
+            }
         }
     })
 
