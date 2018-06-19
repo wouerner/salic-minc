@@ -49,9 +49,15 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	<h6>Dados para a readequa&ccedil;&atilde;o</h6>
 	<form class="col s12">
 		<div class="row">
-			<div class="input-field col s3">
-				<input placeholder="Unidade" id="unidade" type="text" class="validate" v-model="dadosPlanilhaEditavel.idUnidade">
-				<label for="unidade">Unidade</label>
+			<div class="col s3">
+				<span>Unidade</span>
+			  <select
+					class="browser-default"
+					ref="itemPlanilhaUnidade"
+					v-model="dadosPlanilhaEditavel.idUnidade"
+					>
+					<option v-for="unidade in unidades" v-bind:value="unidade.idUnidade">{{unidade.Descricao}}</option>
+				</select>
 			</div>	
 
 			<div class="input-field col s2">
@@ -101,7 +107,8 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	`,
     props: {
 	idPronac: '',
-	idPlanilhaAprovacao: ''
+	idPlanilhaAprovacao: '',
+	unidades: {}
     },
     data: function() {
 	return {

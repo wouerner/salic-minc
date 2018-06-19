@@ -117,12 +117,13 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		<span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total}}</span>			
 	</div>
 	<div id="modalEditar" class="modal">
-		<div class="modal-header">
+		<div class="modal-header margin20">
 			<h4 class="center-align">Alterar item</h4>
 		</div>
 		<div class="modal-content center-align">
 		    <planilha-orcamentaria-alterar-item
 			:idPronac="idPronac"
+			:unidades="unidades"
 			v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao">
 		    </planilha-orcamentaria-alterar-item>
 		</div>
@@ -142,12 +143,28 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
     data: function() {
 	return {
 	    planilha: {},
+	    unidades: [],
 	    idPlanilhaAprovacaoEdicao: ''
 	};
+    },
+    created: function() {
+	this.obterUnidades();
     },
     mounted: function () {
     },
     methods: {
+	obterUnidades: function() {
+	    let self = this;
+	    $3.ajax({
+		type: 'GET',
+		url: '/readequacao/saldo-aplicacao/carregar-unidades',
+		data: {
+		    idPronac: self.idPronac
+		}
+	    }).done(function(response) {
+		self.unidades = response.unidades;
+	    });
+	},
 	iniciarCollapsible: function () {
             $3('.planilha-orcamentaria .collapsible').each(function() {
                 $3(this).collapsible();
@@ -233,7 +250,8 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
             this.iniciarCollapsible();
 	    let self = this;
 	    $3('#modalEditar').modal();
-	    $3('#modalEditar').css('height', '100%');
+	    $3('#modalEditar').css('height', '85%');
+	    $3('#modalEditar').css('max-height', '85%');
         }
     },
     computed: {

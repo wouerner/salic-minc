@@ -63,6 +63,38 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
         }
     }
 
+    public function carregarUnidadesAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->layout->disableLayout();
+        
+        try {
+            $TbPlanilhaUnidade = new Proposta_Model_DbTable_TbPlanilhaUnidade();
+            $unidades = $TbPlanilhaUnidade->buscarUnidade();
+            
+            $unidadesOut = [];
+            foreach ($unidades as $unidade) {
+                $unidadeObj = new StdClass();
+                $unidadeObj->idUnidade = $unidade->idUnidade;
+                $unidadeObj->Sigla = utf8_encode($unidade->Sigla);
+                $unidadeObj->Descricao = utf8_encode($unidade->Descricao);
+                $unidadesOut[] = $unidadeObj;
+            }
+            
+            $this->_helper->json(array(
+                'msg' => 'Tabela de unidades',
+                'success' => 'true',
+                'unidades' => $unidadesOut
+            ));
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json([
+                'success' => 'false',
+                'msg' => $e->getMessage()
+            ]);
+        }
+    }   
+    
     public function carregarValorEntrePlanilhasAction()
     {
         $auth = Zend_Auth::getInstance();
