@@ -49,12 +49,12 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	<h6>Dados para a readequa&ccedil;&atilde;o</h6>
 	<form class="col s12">
 		<div class="row">
-			<div class="input-field col s2">
+			<div class="input-field col s3">
 				<input placeholder="Unidade" id="unidade" type="text" class="validate" v-model="dadosPlanilhaEditavel.idUnidade">
 				<label for="unidade">Unidade</label>
 			</div>	
 
-			<div class="input-field col s1">
+			<div class="input-field col s2">
 				<input placeholder="Qtd" id="qtd" type="text" class="validate" v-model="dadosPlanilhaEditavel.Quantidade">
 				<label for="qtd">Qtd</label>
 			</div>
@@ -65,7 +65,10 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 			</div>
 			
 			<div class="input-field col s2">
-				<input placeholder="Vl. Unit\xE1rio" id="vl_unitario" type="text" class="validate" v-model="dadosPlanilhaEditavel.ValorUnitario">
+        <input-money
+          v-bind:value="dadosPlanilhaEditavel.ValorUnitario"
+					v-on:ev="dadosPlanilhaEditavel.ValorUnitario = $event">
+        </input-money>
 				<label for="vl_unitario">Vl. Unit&atilde;rio</label>
 			</div>
 			
@@ -75,13 +78,8 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 			</div>
 			
 			<div class="input-field col s2">
-				<input placeholder="Total" id="total" type="text" class="validate" v-model="dadosPlanilhaEditavel.TotalSolicitado">
-				<label for="total">Total</label>
-			</div>
-			
-			<div class="input-field col s2">
 				<span>Total</span><br/>
-				<span>{{dadosPlanilhaEditavel.TotalSolicitado}}</span>
+				<span>R$ {{totalItemFormatado}}</span>
 			</div>
 			
 		</div>
@@ -126,10 +124,10 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	    },
 	    dadosPlanilhaEditavel: {
 		Justificativa: '',
-		Ocorrencia: '',
+		Ocorrencia: 0,
 		QtdeDias: '',
-		Quantidade: '',
-		TotalSolicitado: '',
+		Quantidade: 0,
+		TotalSolicitado: 0,
 		ValorUnitario: '',
 		descEtapa: '',
 		descItem: '',
@@ -153,6 +151,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	    }
 	}
     },
+    mixins: [utils],
     methods: {
 	obterDadosItem: function() {
 	    let self = this;
@@ -176,6 +175,21 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	    if (this.idPlanilhaAprovacao != '') {
 		this.obterDadosItem();
 	    }
+	}
+    },
+    computed: {
+	totalItem: function() {
+	    if (this.dadosPlanilhaEditavel.Ocorrencia > 0
+		&& this.dadosPlanilhaEditavel.Quantidade > 0
+		&& this.dadosPlanilhaEditavel.ValorUnitario != ''
+	    ) {
+		return this.dadosPlanilhaEditavel.Ocorrencia * this.dadosPlanilhaEditavel.Quantidade * numeral(this.dadosPlanilhaEditavel.ValorUnitario).value();
+	    } else {
+		return 0;
+	    }
+	},
+	totalItemFormatado: function() {
+	    return this.converterParaMoedaPontuado(this.totalItem);
 	}
     }
 });
