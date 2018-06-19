@@ -49,6 +49,7 @@
         value = parseFloat(value);
         return numeral(value).format('0,0.00');
     }
+
     Vue.component('item', {
         props: ['idpronac', 'uf', 'etapa', 'cidade', 'produto', 'idplanilhaitens'],
         template: `<div class="col s12 m12" :informacoes = "informacoes">
@@ -77,8 +78,8 @@
                                                 <td>{{ informacoes.Produto }}</td>
                                                 <td>{{ informacoes.Etapa }}</td>
                                                 <td>{{ informacoes.Item }}</td>
-                                                <td style="text-align: right">{{ converterParaReal(informacoes.vlAprovado) }}</td>
-                                                <td style="text-align: right">{{ converterParaReal(informacoes.vlComprovado) }}</td>
+                                                <td style="text-align: right">R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
+                                                <td style="text-align: right">R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
