@@ -140,8 +140,8 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $idpronac = $this->_request->getParam('idpronac');
         $uf = $this->_request->getParam('uf');
         $idPlanilhaEtapa = $this->_request->getParam('etapa');
-        $idMunicipio = $this->_request->getParam('idMunicipio');
-        $codigoProduto = $this->_request->getParam('codigoProduto');
+        $idMunicipio = $this->_request->getParam('cidade');
+        $codigoProduto = $this->_request->getParam('produto');
         $idPlanilhaItem = $this->_request->getParam('idPlanilhaItem');
 
         $this->view->idpronac = $idpronac;
@@ -152,8 +152,7 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $this->view->idPlanilhaItem = $idPlanilhaItem;
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac,$uf,null,$codigoProduto,$idMunicipio,null,$idPlanilhaItem);
-
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac,$uf,$idPlanilhaEtapa,$codigoProduto,$idMunicipio,null,$idPlanilhaItem);
     }
 
 }
