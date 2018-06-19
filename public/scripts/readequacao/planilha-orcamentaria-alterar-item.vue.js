@@ -175,10 +175,60 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 		self.dadosProjeto = response.dadosProjeto;
 		self.valoresDoItem = response.valoresDoItem;
 	    });
+	},
+	resetData: function() {
+	    this.dadosPlanilhaAtiva = {
+		Justificativa: '',
+		Ocorrencia: '',
+		QtdeDias: '',
+		Quantidade: '',
+		TotalSolicitado: '',
+		ValorUnitario: '',
+		descEtapa: '',
+		descItem: '',
+		descProduto: '',
+		descUnidade: '',
+		idEtapa: '',
+		idPlanilhaAprovacao: '',
+		idPlanilhaItem: '',
+		idProduto: '',
+		idUnidade: '',
+	    };
+
+	    this.dadosPlanilhaEditavel = {
+		Justificativa: '',
+		Ocorrencia: 0,
+		QtdeDias: '',
+		Quantidade: 0,
+		TotalSolicitado: 0,
+		ValorUnitario: '',
+		descEtapa: '',
+		descItem: '',
+		descProduto: '',
+		descUnidade: '',
+		idAgente: '',
+		idEtapa: '',
+		idPlanilhaAprovacao: '',
+		idPlanilhaItem: '',
+		idProduto: '',
+		idUnidade: '',
+	    };
+
+	    this.dadosProjeto = {
+		    IdPRONAC: '',
+		    NomePRojeto: '',
+		    PRONAC: ''
+	    };
+	    
+	    this.valoresDoItem = {
+		vlComprovadoDoItem: '',
+		vlComprovadoDoItemValidacao: ''
+	    }
 	}
     },
     watch: {
 	idPlanilhaAprovacao: function() {
+	    this.resetData();
 	    if (this.idPlanilhaAprovacao != '') {
 		this.obterDadosItem();
 	    }
