@@ -1,16 +1,16 @@
-#Documentação Prestação de Contas
+#DocumentaÃ§Ã£o PrestaÃ§Ã£o de Contas
 
-## Como acessar a prestação de contas no perfil proponente
+## Como acessar a prestaÃ§Ã£o de contas no perfil proponente
 
 * primeira passo precisa esta logado como propronete 
-* Segundo passo vá em projeto->listar projetos 
+* Segundo passo vÃ¡ em projeto->listar projetos 
 * Terceiro passo escolha um proponente para prestar contas dos seus devidos projetos. 
-* Quarto passo para prestar contas vc deve acessar um projeto que esteja na situação(E12,E13,E17)
+* Quarto passo para prestar contas vc deve acessar um projeto que esteja na situaÃ§Ã£o(E12,E13,E17)
 ## Consultar dados do Projeto
-* Realizar comprovação Financeira
-* Na pagina de comprovação financeira ,tem uma tabela com o itens de custo ,com o valor aprovado,valor comprovado,valor a comprovar  
+* Realizar comprovaÃ§Ã£o Financeira
+* Na pagina de comprovaÃ§Ã£o financeira ,tem uma tabela com o itens de custo ,com o valor aprovado,valor comprovado,valor a comprovar  
 * Cada cidade pode ter tabelas em diferentes niveis,como por exemplo pode ter em uma ou mais etapas assim como produtos 
 ### Comprovar Item
 *para comprovar o item 
 
- 
+ ![Image of Yaktocat](https://raw.githubusercontent.com/culturagovbr/salic-minc/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/comprovar_item.png)
