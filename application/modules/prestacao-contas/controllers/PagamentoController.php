@@ -135,6 +135,7 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         }
         $this->_helper->json($planilhaJSON);
     }
+
     public function dadosItemAction()
     {
         $idpronac = $this->_request->getParam('idpronac');
@@ -142,7 +143,7 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $idPlanilhaEtapa = $this->_request->getParam('etapa');
         $idMunicipio = $this->_request->getParam('cidade');
         $codigoProduto = $this->_request->getParam('produto');
-        $idPlanilhaItem = $this->_request->getParam('idPlanilhaItem');
+        $idPlanilhaItem = $this->_request->getParam('idPlanilhaItens');
 
         $this->view->idpronac = $idpronac;
         $this->view->uf = $uf;
@@ -150,9 +151,22 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $this->view->idMunicipio = $idMunicipio;
         $this->view->codigoProduto = $codigoProduto;
         $this->view->idPlanilhaItem = $idPlanilhaItem;
-
-        $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac,$uf,$idPlanilhaEtapa,$codigoProduto,$idMunicipio,null,$idPlanilhaItem);
     }
 
+    public function itemAction()
+    {
+        $idpronac = $this->_request->getParam('idpronac');
+        $uf = $this->_request->getParam('uf');
+        $idPlanilhaEtapa = $this->_request->getParam('etapa');
+        $idMunicipio = $this->_request->getParam('cidade');
+        $codigoProduto = $this->_request->getParam('produto');
+        $idPlanilhaItem = $this->_request->getParam('idPlanilhaItens');
+
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac,$uf,$idPlanilhaEtapa,
+            $codigoProduto,$idMunicipio,null, $idPlanilhaItem);
+
+        var_dump($resposta->toArray());die;
+        $this->_helper->json($resposta);
+    }
 }
