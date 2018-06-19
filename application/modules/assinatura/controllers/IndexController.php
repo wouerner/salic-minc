@@ -203,11 +203,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             }
 
             $post = $this->getRequest()->getPost();
-            $servicoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                $post,
-                $this->auth->getIdentity(),
-                $idTipoDoAtoAdministrativo
-            );
+            $servicoAssinatura = new \MinC\Assinatura\Servico\Assinatura($idTipoDoAtoAdministrativo);
             $servicoAssinatura->isEncaminharParaProximoAssinanteAoAssinar = false;
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -258,7 +254,10 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior
                         ]);
 
-                        $servicoAssinatura->assinarProjeto();
+                        $servicoAssinatura->assinarProjeto(
+                            $post,
+                            $this->auth->getIdentity()
+                        );
                     }
 
                     if (count($arrayIdPronacs) > 1) {
@@ -369,8 +368,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
             );
 
             $servicoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                $this->post,
-                $this->auth->getIdentity(),
                 $modelAssinatura->getIdTipoDoAtoAdministrativo()
             );
 
@@ -384,7 +381,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 'idDocumentoAssinatura' => $dadosDocumentoAssinatura['idDocumentoAssinatura']
             ]);
 
-            $servicoAssinatura->encaminharParaProximoAssinante();
+            $servicoAssinatura->encaminhar();
 
             parent::message(
                 'Projeto Movimentado com sucesso!',

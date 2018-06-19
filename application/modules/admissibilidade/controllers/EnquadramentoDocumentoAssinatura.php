@@ -37,11 +37,6 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \Min
 
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
-            $objDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                $this->post,
-                $auth->getIdentity(),
-                $idTipoDoAtoAdministrativo
-            );
 
             $enquadramento = new Admissibilidade_Model_Enquadramento();
             $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto($this->idPronac, $dadosProjeto['AnoProjeto'], $dadosProjeto['Sequencial']);

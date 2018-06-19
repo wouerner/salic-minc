@@ -147,8 +147,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $post = $this->getRequest()->getPost();
             $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
 
-            $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
-                $idPronac,
+            $servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
                 $idTipoDoAtoAdministrativo
             );
             $servicoDocumentoAssinatura->finalizarFluxo();
