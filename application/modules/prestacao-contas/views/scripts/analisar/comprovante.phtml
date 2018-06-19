@@ -125,15 +125,24 @@
                             >
                             <label :for="('situacao-3_' + idcomprovantepagamento)">Recusar</label>
                         </p>
-                        <div class="row">
-                             <div class="input-field col s12">
-                                <textarea v-model="avaliacao.observacao"
-                                    id="comprovantePagamento_observacao"
-                                    rows="10" cols="100"
-                                    class="materialize-textarea">
-                                    ocorrencia
-                                </textarea>
-                                <label><b>Ocorrência do Técnico</b></label>
+                        <div style="margin-top: 10px">
+                            <div class="form-group">
+                                <div class="row">
+                                     <div class="input-field col s12">
+                                        <label class="label label-primary">
+                                            <h4>
+                                                Ocorrência do Técnico
+                                            </h4>
+                                        </label>
+                                        <textarea v-model="avaliacao.observacao"
+                                            id="comprovantePagamento_observacao"
+                                            rows="10" cols="100"
+                                            class="form-control materialize-textarea"
+                                            style="margin-top: 20px">
+                                            ocorrencia
+                                        </textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-action">
