@@ -4,8 +4,8 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 {
 
     private $idTiposAtoAdministrativos = [
-        653,
-        654,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
         655
     ];
 
@@ -90,11 +90,10 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' n&atilde;o informado.");
                 }
 
-                $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
-                    $get->IdPRONAC,
+                $servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
                     $idTipoDoAtoAdministrativo
                 );
-                $servicoDocumentoAssinatura->devolverProjeto($post['motivoDevolucao']);
+                $servicoDocumentoAssinatura->devolver();
 
                 parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/readequacao-assinatura/gerenciar-assinaturas", 'CONFIRM');
             }
