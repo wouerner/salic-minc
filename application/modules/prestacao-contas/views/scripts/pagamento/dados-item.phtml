@@ -1,5 +1,12 @@
 <div class="row" id="app">
-    <item idpronac="<?php echo $this->idpronac ?>"></item>
+    <item
+            idpronac="<?php echo $this->idpronac ?>"
+            uf="<?php echo $this->uf ?>"
+            etapa="<?php echo $this->idPlanilhaEtapa ?>"
+            cidade="<?php echo $this->idMunicipio ?>"
+            produto="<?php echo $this->codigoProduto ?>"
+            idplanilhaitens="<?php echo $this->idPlanilhaItem ?>">
+    </item>
 </div>
 
 <!-- vendor -->
@@ -8,7 +15,7 @@
 <!-- vendor -->
 <script>
     Vue.component('item', {
-        props: ['idpronac'],
+        props: ['idpronac', 'uf', 'etapa', 'cidade', 'produto', 'idplanilhaitens'],
         template: `<div class="col s12 m12" :informacoes = "informacoes">
                         <div class="card horizontal">
                             <div class="card-stacked">
@@ -30,13 +37,13 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Teste</td>
-                                                <td>Teste</td>
-                                                <td>Teste</td>
-                                                <td>Teste</td>
-                                                <td>Teste</td>
-                                                <td style="text-align: right">Teste</td>
-                                                <td style="text-align: right">Teste</td>
+                                                <td>{{ informacoes.uf }}</td>
+                                                <td>{{ informacoes.cidade }}</td>
+                                                <td>{{ informacoes.Produto }}</td>
+                                                <td>{{ informacoes.Etapa }}</td>
+                                                <td>{{ informacoes.Item }}</td>
+                                                <td style="text-align: right">{{ informacoes.vlAprovado }}</td>
+                                                <td style="text-align: right">{{ informacoes.vlComprovado }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -47,10 +54,20 @@
         mounted: function () {
             let vue = this;
             $3.ajax({
-                url: "/prestacao-contas/pagamento/planilha-pagamento/idpronac/" + this.idpronac
+                url: "/prestacao-contas/pagamento/item/idpronac/" + this.idpronac
+                + "/uf/" + this.uf
+                + "/etapa/" + this.etapa
+                + "/cidade/" + this.cidade
+                + "/produto/"+ this.produto
+                + "/idPlanilhaItens/" + this.idplanilhaitens
             }).done(function( data ) {
-                vue.$data.produtos = data;
+                vue.$data.informacoes = data;
             });
+        },
+        data: function () {
+            return {
+                informacoes: []
+            };
         }
     })
 

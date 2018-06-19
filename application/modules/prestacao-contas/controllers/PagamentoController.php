@@ -163,10 +163,26 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $idPlanilhaItem = $this->_request->getParam('idPlanilhaItens');
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac,$uf,$idPlanilhaEtapa,
-            $codigoProduto,$idMunicipio,null, $idPlanilhaItem);
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada(
+            $idpronac,
+            $uf,
+            $idPlanilhaEtapa,
+            $codigoProduto,
+            $idMunicipio,
+            null,
+            $idPlanilhaItem
+        );
 
-        var_dump($resposta->toArray());die;
-        $this->_helper->json($resposta);
+        $planilhaJSON = [
+            'Etapa' => html_entity_decode(utf8_encode($resposta[0]['Etapa'])),
+            'Produto' => html_entity_decode(utf8_encode($resposta[0]['Produto'])),
+            'Item' => $resposta[0]['Item'],
+            'vlAprovado' => $resposta[0]['vlAprovado'],
+            'vlComprovado' => $resposta[0]['vlComprovado'],
+            'uf' => $resposta[0]['uf'],
+            'cidade' => $resposta[0]['cidade'],
+        ];
+
+        $this->_helper->json($planilhaJSON);
     }
 }
