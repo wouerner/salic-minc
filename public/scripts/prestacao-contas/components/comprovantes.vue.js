@@ -12,9 +12,13 @@ const comprovantes = {
                   <div :class="['collapsible-body lighten-5', badgeCSS(dado.stItemAvaliado)]">
                         <div class="card">
                             <div class="card-content">
-                                <comprovante-table :dados="dado"></comprovante-table>
-                                <button class="btn">editar</button>
-                                <sl-comprovar-form :dados="dado"></sl-comprovar-form>
+                                <template v-if="!formVisivel" >
+                                    <comprovante-table :dados="dado"></comprovante-table>
+                                </template>
+                                <button v-if="!formVisivel" v-on:click="mostrarForm()" class="btn">editar</button>
+                                <template v-if="formVisivel" >
+                                    <sl-comprovar-form :dados="dado"></sl-comprovar-form>
+                                </template>
                             </div>
                         </div>
                   </div>
@@ -91,11 +95,15 @@ const comprovantes = {
                     estado =  'N\xE3o avaliado';
             }
             return estado;
+        },
+        mostrarForm: function() {
+            this.formVisivel = true;
         }
     },
     data: function(){
         return {
-            dados:{}
+            dados:{},
+            formVisivel: false
         }
     }
 }
