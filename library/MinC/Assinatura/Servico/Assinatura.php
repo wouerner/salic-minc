@@ -14,18 +14,10 @@ class Assinatura implements IServico
     public $viewModelAssinatura;
     protected $idTipoDoAtoAdministrativo;
     protected $servicoAutenticacao;
-    protected $listaAcoes;
+    protected $listaAcoes = [];
 
-    function __construct(
-        $post,
-        $identidadeUsuarioLogado,
-        $idTipoDoAtoAdministrativo = null
-    )
+    function __construct($idTipoDoAtoAdministrativo)
     {
-        $this->servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
-            $this->post,
-            $this->identidadeUsuarioLogado
-        );
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura();
     }
@@ -37,10 +29,25 @@ class Assinatura implements IServico
 
     public function definirListaDeAcoes(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
     {
-        $this->listaAcoes = $listaAcoes->obterLista();
+        $listaAcoesAssinatura = $listaAcoes->obterLista();
+        if(count($listaAcoesAssinatura) > 0 && $listaAcoesAssinatura[$this->idTipoDoAtoAdministrativo]) {
+            $this->listaAcoes = $listaAcoesAssinatura[$this->idTipoDoAtoAdministrativo];
+        }
     }
 
-    public function assinarProjeto()
+    protected function executarAcoes(string $tipoAcao)
+    {
+        foreach($this->listaAcoes as $acao) {
+            /**
+             * @var \MinC\Assinatura\Acao\IAcao $acao
+             */
+            if($acao instanceof \MinC\Assinatura\Acao\IAcao && $acao instanceof $tipoAcao) {
+                $acao->executar($this->viewModelAssinatura);
+            }
+        }
+    }
+
+    public function assinarProjeto($post, $identidadeUsuarioLogado)
     {
         $modeloTbAssinatura = $this->viewModelAssinatura->modeloTbAssinatura;
         $modeloTbAtoAdministrativo = $this->viewModelAssinatura->modeloTbAtoAdministrativo;
@@ -56,7 +63,11 @@ class Assinatura implements IServico
             throw new \Exception ("O Tipo do Ato Administrativo &eacute; obrigat&oacute;rio.");
         }
 
-        $metodoAutenticacao = $this->servicoAutenticacao->obterMetodoAutenticacao();
+        $servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
+            $post,
+            $identidadeUsuarioLogado
+        );
+        $metodoAutenticacao = $servicoAutenticacao->obterMetodoAutenticacao();
 
         if(!$metodoAutenticacao->autenticar()) {
             throw new \Exception ("Os dados utilizados para autentica&ccedil;&atilde;o s&atilde;o inv&aacute;lidos.");
@@ -106,15 +117,17 @@ class Assinatura implements IServico
         );
 
         if($this->isEncaminharParaProximoAssinanteAoAssinar && $codigoOrgaoDestino) {
-            $this->encaminharParaProximoAssinante();
+            $this->encaminhar();
         }
+
+        $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoAssinar');
     }
 
     /**
      * @throws \Exception
      * @uses \MinC\Assinatura\Model\Assinatura
      */
-    public function encaminharParaProximoAssinante()
+    public function encaminhar()
     {
         $modeloTbAtoAdministrativo = $this->viewModelAssinatura->modeloTbAtoAdministrativo;
         if (!$modeloTbAtoAdministrativo->getIdOrdemDaAssinatura()) {
@@ -141,38 +154,17 @@ class Assinatura implements IServico
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objTbProjetos->alterarOrgao($codigoOrgaoDestino, $modeloTbAssinatura->getIdPronac());
 
-        foreach($this->listaAcoes as $acao) {
-            /**
-             * @var \MinC\Assinatura\Acao\IAcao $acao
-             */
-            if($acao instanceof \MinC\Assinatura\Acao\IAcao
-                && $acao instanceof \MinC\Assinatura\Acao\IAcaoEncaminhar) {
-                $acao->executar();
-            }
-        }
+        $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoEncaminhar');
     }
 
-    /**
-     * @uses \MinC\Assinatura\Model\Assinatura
-     */
     public function devolver()
     {
-        foreach($this->listaAcoes as $acao) {
-            /**
-             * @var \MinC\Assinatura\Acao\IAcao $acao
-             */
-            if($acao instanceof \MinC\Assinatura\Acao\IAcao && $acao instanceof \MinC\Assinatura\Acao\IAcaoDevolver) {
-                $acao->executar();
-            }
-        }
+        $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoDevolver');
     }
 
-    /**
-     * @uses \MinC\Assinatura\Model\Assinatura
-     */
     public function finalizar()
     {
-
+        $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoFinalizar');
     }
 
 }
