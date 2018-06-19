@@ -2,7 +2,7 @@
 
 namespace MinC\Assinatura\Acao;
 
-interface IAcao
+interface IAcaoAssinar
 {
     public function __construct(\MinC\Assinatura\Model\Assinatura $assinatura);
 
