@@ -136,4 +136,53 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $this->_helper->json($planilhaJSON);
     }
 
+    public function dadosItemAction()
+    {
+        $idpronac = $this->_request->getParam('idpronac');
+        $uf = $this->_request->getParam('uf');
+        $idPlanilhaEtapa = $this->_request->getParam('etapa');
+        $idMunicipio = $this->_request->getParam('cidade');
+        $codigoProduto = $this->_request->getParam('produto');
+        $idPlanilhaItem = $this->_request->getParam('idPlanilhaItens');
+
+        $this->view->idpronac = $idpronac;
+        $this->view->uf = $uf;
+        $this->view->idPlanilhaEtapa = $idPlanilhaEtapa;
+        $this->view->idMunicipio = $idMunicipio;
+        $this->view->codigoProduto = $codigoProduto;
+        $this->view->idPlanilhaItem = $idPlanilhaItem;
+    }
+
+    public function itemAction()
+    {
+        $idpronac = $this->_request->getParam('idpronac');
+        $uf = $this->_request->getParam('uf');
+        $idPlanilhaEtapa = $this->_request->getParam('etapa');
+        $idMunicipio = $this->_request->getParam('cidade');
+        $codigoProduto = $this->_request->getParam('produto');
+        $idPlanilhaItem = $this->_request->getParam('idPlanilhaItens');
+
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada(
+            $idpronac,
+            $uf,
+            $idPlanilhaEtapa,
+            $codigoProduto,
+            $idMunicipio,
+            null,
+            $idPlanilhaItem
+        );
+
+        $planilhaJSON = [
+            'Etapa' => html_entity_decode(utf8_encode($resposta[0]['Etapa'])),
+            'Produto' => html_entity_decode(utf8_encode($resposta[0]['Produto'])),
+            'Item' => $resposta[0]['Item'],
+            'vlAprovado' => $resposta[0]['vlAprovado'],
+            'vlComprovado' => $resposta[0]['vlComprovado'],
+            'uf' => $resposta[0]['uf'],
+            'cidade' => $resposta[0]['cidade'],
+        ];
+
+        $this->_helper->json($planilhaJSON);
+    }
 }
