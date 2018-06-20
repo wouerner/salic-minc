@@ -55,15 +55,16 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                             </thead>
                             <tbody>
                               <tr v-for="row of locais" 
-                                  :key="row.idPlanilhaProposta"  
+                                  :key="row.idPlanilhaProposta"
                                   v-if="isObject(row)"
-                                  v-bind:class="{'orange lighten-2': ultrapassaValor(row), 'grey-text lighten-3': itemExcluido(row)}"
+                                  v-bind:class="defineCorLinha(row)"
                                   >
                                 <td>{{row.Seq}}</td>
                                 <td>
 																	<template v-if="podeEditarItem(row)">
 																		<a style="cursor: pointer"
-																			 v-on:click="editarItem(row)"																			 
+																			 v-bind:class="defineCorLinha(row)"
+																			 v-on:click="editarItem(row)"
 																			 >{{row.Item}}</a>
 																	</template>
 																	
@@ -122,9 +123,12 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		</div>
 		<div class="modal-content center-align">
 		    <planilha-orcamentaria-alterar-item
-			:idPronac="idPronac"
-			:unidades="unidades"
-			v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao">
+					:idPronac="idPronac"
+					:unidades="unidades"
+					v-on:fechar="fecharModal"
+					v-on:atualizarItem="atualizarItem"
+					v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao"
+					v-bind:item="itemEdicao">
 		    </planilha-orcamentaria-alterar-item>
 		</div>
 	</div>
@@ -144,7 +148,10 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	return {
 	    planilha: {},
 	    unidades: [],
-	    idPlanilhaAprovacaoEdicao: ''
+	    idPlanilhaAprovacaoEdicao: '',
+	    itemEdicao: {},
+	    perfilProponente: 1111,
+	    fonteRecursosFederais: 109
 	};
     },
     created: function() {
@@ -175,12 +182,8 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                        .replace(/&/g, '-and-')
                        .replace(/[\s\W-]+/g, '-');
         },
-	ultrapassaValor: function (row) {
-            return row.stCustoPraticado == true;
-
-        },
 	exibirExcluirItem: function(item) {
-	    if (this.perfil != 1111) {
+	    if (this.perfil != this.perfilProponente) {
 		return false;
 	    }
 	    
@@ -193,19 +196,48 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		}
 	    }
 	},
+	defineCorLinha: function(item) {
+	    let cor = '';
+	    switch (item.tpAcao) {
+		case 'E':
+		    if (this.perfil == this.perfilProponente) {
+                        cor = 'grey-text lighten-3';
+                    } else {
+			cor = 'red-text lighten-3';
+		    }
+		    break;
+		case 'I':
+		    cor = 'green-text lighten-3';
+		    break;
+		case 'A':
+		    cor = 'blue-text lighten-3';
+		    break;
+		default:
+		    cor = 'black-text';
+		    break;
+	    }
+	    return cor;
+	},
 	editarItem: function(item) {
-	    $3('#modalEditar').modal('open');
 	    this.idPlanilhaAprovacaoEdicao = item.idPlanilhaAprovacao;
+	    this.itemEdicao = item;
+	    $3('#modalEditar').modal('open');
 	},
 	podeEditarItem: function(item) {
-	    if (this.perfil == 1111
+	    if (this.perfil == this.perfilProponente
 		&& this.link
 		&& item.vlComprovado < item.vlAprovado
 		&& this.disponivelParaEdicaoReadequacaoPlanilha
 		&& (item.tpAcao != 'E'
-		 && item.idFonte == 109)) {
+		 && item.idFonte == this.fonteRecursosFederais)) {
 		return true;
 	    }
+	},
+	atualizarItem: function(item) {
+	    item.tpAcao = 'A';
+	},
+	fecharModal: function() {
+	    $3('#modalEditar').modal('close');
 	},
 	itemExcluido: function(item) {
 	    if (item.tpAcao == 'E') {

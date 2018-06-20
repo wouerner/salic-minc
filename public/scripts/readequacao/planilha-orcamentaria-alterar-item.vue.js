@@ -139,6 +139,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
     props: {
 	idPronac: '',
 	idPlanilhaAprovacao: '',
+	item: {},
 	unidades: {}
     },
     data: function() {
@@ -228,13 +229,12 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 		this.$refs.itemJustificativa.focus();
                 return;
 	    }
-	    // verificar 
-            //var TotalCalculadoComponente = $('#TotalCalculado').html().replace(/[^\d]/g, "");
-            //if(parseInt(TotalCalculadoComponente) < parseInt(vlComprovadoDoItemValidacao)){
-            //$('#TotalCalculado').css('color','red');
-            //mensagem += '- O valor total do item n&atilde;o pode ser menor do que o valor comprovado de '+data.valoresDoItem.vlComprovadoDoItem+'.<br/>';
-            //erros++;
-            //}
+	    
+            if (this.totalItem < parseInt(this.valoresDoItem.vlComprovadoDoItem)){
+		this.mensagemAlerta("O valor total do item n\xE3o pode ser menor do que o valor comprovado de " + this.valoresDoItem.vlComprovadoDoItem);
+		return;
+	    }
+            
 	    let self = this;	    
 	    $3.ajax({
                 type: 'POST',
@@ -250,10 +250,12 @@ Vue.component('planilha-orcamentaria-alterar-item', {
                     Justificativa: self.dadosPlanilhaEditavel.Justificativa,
                     valorSolicitado: self.dadosPlanilhaAtiva.TotalSolicitado
                 }
-	    });  
+	    });
+	    this.$emit('fechar');
+	    this.$emit('atualizarItem', this.item);
 	},
 	cancelar: function() {
-
+	    this.$emit('fechar');
 	},
 	resetData: function() {
 	    this.dadosPlanilhaAtiva = {
