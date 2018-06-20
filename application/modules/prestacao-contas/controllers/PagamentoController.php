@@ -174,14 +174,15 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         );
 
         $planilhaJSON = [
-            'Etapa' => html_entity_decode(utf8_encode($resposta[0]['Etapa'])),
-            'Produto' => html_entity_decode(utf8_encode($resposta[0]['Produto'])),
-            'Item' => $resposta[0]['Item'],
+            'Etapa' => (utf8_encode($resposta[0]['Etapa'])),
+            'Produto' => (utf8_encode($resposta[0]['Produto'])),
+            'Item' => utf8_encode($resposta[0]['Item']),
             'vlAprovado' => $resposta[0]['vlAprovado'],
             'vlComprovado' => $resposta[0]['vlComprovado'],
             'uf' => $resposta[0]['uf'],
-            'cidade' => $resposta[0]['cidade'],
+            'cidade' => utf8_encode($resposta[0]['cidade']),
         ];
+        /* var_dump($planilhaJSON);die; */
 
         $this->_helper->json($planilhaJSON);
     }
