@@ -633,6 +633,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 $tblProposta = new Proposta_Model_DbTable_PreProjeto();
                 $rsProposta = $tblProposta->buscar(array('idPreProjeto=?'=>$rsProjeto->idProjeto))->current();
                 $this->view->proposta = $rsProposta;
+                $tbCustosVinculadosMapper = new Proposta_Model_TbCustosVinculadosMapper();
+                $this->view->itensCustosVinculados = $tbCustosVinculadosMapper->obterCustosVinculados($rsProjeto->idProjeto);
             }
         }
     }
@@ -1087,6 +1089,16 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             JS::redirecionarURL($url);
             $this->_helper->viewRenderer->setNoRender(true);
         }
+    }
+
+    public function ultimaTramitacaoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->_request->getParam("idPronac");
+
+        $tblProjetos = new Projetos();
+        $rst = $tblProjetos->buscarDadosUC75($idPronac);
+        $this->view->projeto = $rst[0];
     }
 
     public function tramitacaoAction()

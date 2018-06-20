@@ -162,6 +162,14 @@ function format_cnpj(v) // formato: 99.999.999/9999-99
     return v;
 }
 
+function formatCpfOrCnpj(cpfOrCnpj) {
+    if (cpfOrCnpj.length() == 11) {
+        return format_cpf(cpfOrCnpj);
+    }
+
+    return format_cnpj(cpfOrCnpj);
+}
+
 function format_float(v) // formato: 9999999.99
 {
     v = v.replace(/\D/g, "");
