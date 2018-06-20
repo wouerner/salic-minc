@@ -20,4 +20,4 @@
 * Na pagina de comprovar pagamento,Tem uma tabela com itens produto,etapa,itens de custo,valor aprovado,total comprovado.
 * Na segunda tabela ,apresenta os seguintes itens: Situação,CPF/CNPJ,Numero tipo do doc,Data Emissão,Documento,Valor Comprovado,Editar e Excluir.
  
-![tela](https://raw.githubusercontent.com/culturagovbr/salic-minc/f/prestacaohttps://raw.githubusercontent.com/culturagovbr/salic-minc/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_situa%C3%A7ao.png-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_situaçao.png)
+![tela](https://raw.githubusercontent.com/culturagovbr/salic-minc/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_situacao.png)
