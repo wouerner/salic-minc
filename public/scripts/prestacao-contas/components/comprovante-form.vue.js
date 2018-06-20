@@ -370,14 +370,20 @@ Vue.component('sl-comprovar-form',
     mounted: function() {
         this.paises();
         if (this.dados) {
-            console.log(this.dados); 
+            if (this.dados.idComprovantePagamento) {
+                this.comprovante.id = this.dados.idComprovantePagamento;
+            }
+
+            this.comprovante.id = this.dados.idComprovantePagamento;
             this.comprovante.fornecedor.CNPJCPF = this.dados.CNPJCPF;
             this.pesquisarFornecedor();
             this.inputCNPJCPF(this.dados.CNPJCPF);
             this.comprovante.numero = this.dados.nrComprovante;
             this.comprovante.serie = this.dados.nrSerie;
-            this.comprovante.dataEmissao = this.dados.dtEmissao;
-            this.comprovante.dataPagamento = this.dados.dtPagamento;
+
+            this.comprovante.dataEmissao = moment(this.dados.dtEmissao).format('DD/MM/YYYY');
+            this.comprovante.dataPagamento = moment(this.dados.dtPagamento).format('DD/MM/YYYY');
+
             this.comprovante.valor = this.dados.vlComprovacao;
             this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
             this.comprovante.arquivo = { name: this.dados.nmArquivo };
@@ -406,24 +412,28 @@ Vue.component('sl-comprovar-form',
             // }
         }
     },
-    props: ['dados'],
+    props: ['dados', 'url', 'messages', 'tipoform'],
     data: function() {
         return this.data();
     },
     computed: {
     },
-    methods:{
+    methods: {
         salvar: function() {
-            if( this.validar()) {
+            if (this.validar()) {
                 var vue = this;
-                var url = '/prestacao-contas/gerenciar/cadastrar' ;
+                var url = this.url;
 
                 let formData = new FormData();
-                formData.append('arquivo', this.comprovante.arquivo);
+
+                if (this.comprovante.foiAtualizado) {
+                    formData.append('arquivo', this.comprovante.arquivo);
+                }
+
                 formData.append('comprovante', JSON.stringify(this.comprovante));
 
                 $3.ajax({
-                url: url,
+                    url: url,
                     method: 'POST',
                     data: formData,
                     contentType: 'multipart/form-data',
@@ -431,57 +441,63 @@ Vue.component('sl-comprovar-form',
                     contentType: false,
                }).done(function(data){
                    Materialize.toast('Salvo com sucesso!', 4000, 'green');
+                    if (vue.tipoform == 'cadastro') {
+                       vue.$root.$emit('comprovante-novo', vue.comprovante);
 
-                   vue.c = {
-                        fornecedor: {
-                            CNPJCPF: {
-                                css:'',
-                            },
-                        },
-                        numero: {
-                            css: ''
-                        },
-                        serie: '',
-                        dataEmissao: {
-                            css:'',
-                        },
-                        dataPagamento:{
-                            css:'',
-                        },
-                        numeroDocumento: {
-                            css:'',
-                        } ,
-                        valor: {
-                            css:'',
-                        },
-                        arquivo: {
-                            css: '',
-                        },
+                       vue.c = {
+                           fornecedor: {
+                               CNPJCPF: {
+                                   css:'',
+                               },
+                           },
+                           numero: {
+                               css: ''
+                           },
+                           serie: '',
+                           dataEmissao: {
+                               css:'',
+                           },
+                           dataPagamento:{
+                               css:'',
+                           },
+                           numeroDocumento: {
+                               css:'',
+                           } ,
+                           valor: {
+                               css:'',
+                           },
+                           arquivo: {
+                               css: '',
+                           },
+                       }
+                       vue.comprovante =  {
+                           fornecedor: {
+                               nacionalidade: 31,
+                               tipoPessoa: 1,
+                               CNPJCPF: '',
+                               cnpjcpfMask: '',
+                               nome: '',
+                               idAgente: '',
+                               eInternacional: false,
+                           },
+                           tipo: 1,
+                           numero: '',
+                           serie: '',
+                           dataEmissao: '',
+                           dataPagamento:'',
+                           forma: 1,
+                           numeroDocumento: '',
+                           valor: '',
+                           arquivo: '',
+                           justificativa: ''
+                       }
+
                     }
 
-                    vue.comprovante =  {
-                        fornecedor: {
-                            nacionalidade: 31,
-                            tipoPessoa: 1,
-                            CNPJCPF: '',
-                            cnpjcpfMask: '',
-                            nome: '',
-                            idAgente: '',
-                            eInternacional: false,
-                        },
-                        tipo: 1,
-                        numero: '',
-                        serie: '',
-                        dataEmissao: '',
-                        dataPagamento:'',
-                        forma: 1,
-                        numeroDocumento: '',
-                        valor: '',
-                        arquivo: '',
-                        justificativa: ''
+                    if (vue.tipoform == 'edicao'){
+                        vue.$root.$emit('comprovante-atualizado', vue.comprovante);
                     }
                 });
-
             }
         },
         validar: function() {
@@ -531,6 +547,7 @@ Vue.component('sl-comprovar-form',
         },
         file: function() {
             this.comprovante.arquivo = this.$refs.arquivo.files[0];
+            this.comprovante.foiAtualizado = true;
             this.c.arquivo.css = '';
         },
         pesquisarFornecedor: function(){
@@ -648,7 +665,8 @@ Vue.component('sl-comprovar-form',
                     numeroDocumento: '',
                     valor: '',
                     arquivo: '',
-                    justificativa: ''
+                    justificativa: '',
+                    foiAtualizado: false
                 },
                 pais: '',
                 c: {

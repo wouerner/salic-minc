@@ -16,8 +16,13 @@ const comprovantes = {
                                     <comprovante-table :dados="dado"></comprovante-table>
                                 </template>
                                 <button v-if="!formVisivel" v-on:click="mostrarForm()" class="btn">editar</button>
-                                <template v-if="formVisivel" >
-                                    <sl-comprovar-form :dados="dado"></sl-comprovar-form>
+                                <template v-if="formVisivel">
+                                    <sl-comprovar-form
+                                        :dados="dado"
+                                        url="/prestacao-contas/gerenciar/atualizar"
+                                        tipoform="edicao"
+                                    >
+                                    </sl-comprovar-form>
                                 </template>
                             </div>
                         </div>
@@ -40,9 +45,18 @@ const comprovantes = {
         'etapa',
         'componenteform',
     ],
-    mounted: function() {
-        console.log('teste') ;
+    created() {
+        vue = this;
+        this.$root.$on('comprovante-novo', function(data) {
+            vue.formVisivel = false;
+            vue.dados.push(data);
+        })
 
+        this.$root.$on('comprovante-atualizado', function(data) {
+            vue.formVisivel = false;
+        })
+    },
+    mounted: function() {
         var vue = this;
         url = '/prestacao-contas/comprovante-pagamento';
         $3.ajax({

@@ -10,7 +10,10 @@
     <div class="card ">
         <div v-show="visivelForm" class="card-content ">
           <span class="card-title">Comprovante de Pagamento</span>
-          <sl-comprovar-form></sl-comprovar-form>
+            <sl-comprovar-form
+                url="/prestacao-contas/gerenciar/cadastrar"
+                tipoform="cadastro"
+            ></sl-comprovar-form>
         </div>
     </div>
     <comprovantes
@@ -35,7 +38,6 @@
 
     const appComprovante = new Vue({
     components: {
-        /* 'sl-pc-comprovar-form': slComprovarForm, */
         'comprovantes' : comprovantes
     },
     data : {
@@ -43,6 +45,7 @@
     },
     methods: {
         visivel: function() {
+            console.log('teste 11');
             this.visivelForm  = (!this.visivelForm);
         }
     }
