@@ -1,26 +1,15 @@
 <?php
 
-class Parecer_IndexController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IServicoDocumento
+class Parecer_IndexController extends MinC_Controller_Action_Abstract
 {
     private $idPronac;
-    /**
-     * @var \MinC\Assinatura\Servico\IDocumentoAssinatura $servicoDocumentoAssinatura
-     */
-    private $servicoDocumentoAssinatura;
-    
+
     public function init()
     {
         parent::perfil();
         parent::init();
         $this->auth = Zend_Auth::getInstance();
         $this->grupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-    }
-
-    /**
-     * @return Parecer_DocumentoAssinaturaController
-     */
-    public function obterServicoDocumentoAssinatura()
-    {
     }
 
     public function indexAction()

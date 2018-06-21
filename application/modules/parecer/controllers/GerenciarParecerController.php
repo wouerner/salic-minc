@@ -1,6 +1,6 @@
 <?php
 
-class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract implements \MinC\Assinatura\Servico\IServicoDocumento
+class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
 {
     private $intTamPag = 10;
 
@@ -43,10 +43,6 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
     {
     }
 
-    public function obterServicoDocumentoAssinatura()
-    {
-    }
-
     public function indexAction()
     {
         $idusuario = $this->auth->getIdentity()->usu_codigo;
@@ -67,29 +63,23 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         if ($this->_request->getParam("qtde")) {
             $this->intTamPag = $this->_request->getParam("qtde");
         }
-        $order = array();
 
+        $ordem = "ASC";
+        $novaOrdem = "ASC";
         if ($this->_request->getParam("ordem")) {
             $ordem = $this->_request->getParam("ordem");
             if ($ordem == "ASC") {
                 $novaOrdem = "DESC";
-            } else {
-                $novaOrdem = "ASC";
             }
-        } else {
-            $ordem = "ASC";
-            $novaOrdem = "ASC";
         }
 
+        $campo = null;
+        $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
+        $ordenacao = null;
         if ($this->_request->getParam("campo")) {
             $campo = $this->_request->getParam("campo");
             $order = array($campo . " " . $ordem);
             $ordenacao = "&campo=" . $campo . "&ordem=" . $ordem;
-        } else {
-            $campo = null;
-            $order = array('DtEnvioMincVinculada', 'NomeProjeto', 'stPrincipal desc');
-
-            $ordenacao = null;
         }
 
         $pag = 1;
