@@ -1,14 +1,32 @@
 <?php
 
-class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \MinC\Assinatura\Servico\IDocumentoAssinatura
+namespace Application\Modules\Admissibilidade\Service\Assinatura;
+
+use Mockery\Exception;
+
+class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatura
 {
-    public $idPronac;
+    private $idPronac;
+    private $idTipoDoAtoAdministrativo;
+    private $idAtoDeGestao;
 
-    private $post;
-
-    public function __construct($post)
+    public function __construct(
+        $idPronac,
+        $idTipoDoAtoAdministrativo,
+        $idAtoDeGestao = null
+    )
     {
-        $this->post = $post;
+        if (!isset($idPronac) || empty($idPronac)) {
+            throw new \Exception("Identificador do projeto n&atilde;o informado");
+        }
+
+        if (!isset($idTipoDoAtoAdministrativo) || empty($idTipoDoAtoAdministrativo)) {
+            throw new \Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
+        }
+
+        $this->idPronac = $idPronac;
+        $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
+        $this->idAtoDeGestao = $idAtoDeGestao;
     }
 
     public function iniciarFluxo()
@@ -29,26 +47,33 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \Min
         }
 
         $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ENQUADRAMENTO;
         $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $this->idPronac,
-            $idTipoDoAtoAdministrativo
+            $this->idTipoDoAtoAdministrativo
         );
 
         if (!$isProjetoDisponivelParaAssinatura) {
             $auth = Zend_Auth::getInstance();
 
             $enquadramento = new Admissibilidade_Model_Enquadramento();
-            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto($this->idPronac, $dadosProjeto['AnoProjeto'], $dadosProjeto['Sequencial']);
+            $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto(
+                $this->idPronac,
+                $dadosProjeto['AnoProjeto'],
+                $dadosProjeto['Sequencial']
+            );
 
             $objModelDocumentoAssinatura = new Assinatura_Model_TbDocumentoAssinatura();
             $objModelDocumentoAssinatura->setIdPRONAC($this->idPronac);
-            $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($idTipoDoAtoAdministrativo);
+            $objModelDocumentoAssinatura->setIdTipoDoAtoAdministrativo($this->idTipoDoAtoAdministrativo);
             $objModelDocumentoAssinatura->setIdAtoDeGestao($dadosEnquadramento['IdEnquadramento']);
             $objModelDocumentoAssinatura->setConteudo($this->criarDocumento());
             $objModelDocumentoAssinatura->setIdCriadorDocumento($auth->getIdentity()->usu_codigo);
-            $objModelDocumentoAssinatura->setCdSituacao(Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
-            $objModelDocumentoAssinatura->setStEstado(Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
+            $objModelDocumentoAssinatura->setCdSituacao(
+                Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA
+            );
+            $objModelDocumentoAssinatura->setStEstado(
+                Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+            );
             $objModelDocumentoAssinatura->setDtCriacao($objTbProjetos->getExpressionDate());
 
             $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
@@ -56,7 +81,12 @@ class Admissibilidade_EnquadramentoDocumentoAssinaturaController implements \Min
         }
 
         $objProjeto = new Projetos();
-        $objProjeto->alterarSituacao($this->idPronac, null, 'B04', 'Projeto em an&aacute;lise documental.');
+        $objProjeto->alterarSituacao(
+            $this->idPronac,
+            null,
+            'B04',
+            'Projeto em an&aacute;lise documental.'
+        );
 
         $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
         $objOrgaos = new Orgaos();

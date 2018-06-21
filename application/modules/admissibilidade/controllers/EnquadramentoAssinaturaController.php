@@ -77,39 +77,13 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 if (!$post['motivoDevolucao']) {
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' não informado.");
                 }
-                $objTbDepacho = new Proposta_Model_DbTable_TbDespacho();
-                $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura($get->IdPRONAC, $post['motivoDevolucao']);
 
-                $objOrgaos = new Orgaos();
-                $orgaoSuperior = $objOrgaos->obterOrgaoSuperior($this->view->projeto['Orgao']);
-
-                $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
-                if ($orgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-                    $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
-                }
-
-                $objTbProjetos->alterarOrgao($orgaoDestino, $get->IdPRONAC);
-                $objProjetos = new Projetos();
-                $objProjetos->alterarSituacao(
-                    $get->IdPRONAC,
-                    null,
-                    Projeto_Model_Situacao::PROJETO_DEVOLVIDO_PARA_ENQUADRAMENTO,
-                    'Projeto encaminhado para nova avalia&ccedil;&atilde;o do enquadramento'
-                );
-
-                $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-                $data = array(
-                    'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
-                    'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
-                );
-                $where = array(
-                    'IdPRONAC = ?' => $get->IdPRONAC,
-                    'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-                    'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-                    'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-                );
-
-                $objModelDocumentoAssinatura->update($data, $where);
+                $assinaturaService = new \MinC\Assinatura\Servico\Assinatura($this->idTipoDoAtoAdministrativo);
+                $assinaturaService->definirModeloAssinatura([
+                    'Despacho' => $post['motivoDevolucao'],
+                    'idPronac' => $get->IdPRONAC
+                ]);
+                $assinaturaService->devolver();
 
                 parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas", 'CONFIRM');
             }
