@@ -55,6 +55,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 														:id-pronac="idPronac"
 														:tipo-planilha="tipoPlanilha"
 														:link="1"
+														:id-readequacao="readequacao.idReadequacao"
 														:componente-planilha="componentePlanilha"
 														:perfil="perfil"
 														:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"

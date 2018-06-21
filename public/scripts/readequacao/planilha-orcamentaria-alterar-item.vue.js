@@ -87,7 +87,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
           v-bind:value="dadosPlanilhaEditavel.ValorUnitario"
 					v-on:ev="dadosPlanilhaEditavel.ValorUnitario = $event">
         </input-money>
-				<label for="vl_unitario">Vl. Unit&atilde;rio</label>
+				<label for="vl_unitario">Vl. Unit&aacute;rio</label>
 			</div>
 			
 			<div class="input-field col s1">
@@ -222,7 +222,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
                 return;		
 	    }
 	    if (this.dadosPlanilhaEditavel.ValorUnitario == '') {
-		this.mensagemAlerta("\xC9 obrigat\xF3rio informar a valor unit&atilde;rio!");
+		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o valor unit&aacute;rio!");
 		this.$refs.itemValorUnitario.focus();
                 return;		
 	    }
@@ -252,21 +252,22 @@ Vue.component('planilha-orcamentaria-alterar-item', {
                     Justificativa: self.dadosPlanilhaEditavel.Justificativa,
                     valorSolicitado: self.dadosPlanilhaAtiva.TotalSolicitado
                 }
+	    }).done(function() {
+		self.itemForm.idUnidade = self.dadosPlanilhaEditavel.idUnidade;
+		self.itemForm.Unidade = self.dadosPlanilhaEditavel.descUnidade;
+		self.itemForm.QtdeDias = self.dadosPlanilhaEditavel.QtdeDias;
+		self.itemForm.Quantidade = self.dadosPlanilhaEditavel.Quantidade;
+		self.itemForm.Ocorrencia = self.dadosPlanilhaEditavel.Ocorrencia;
+		self.itemForm.ValorUnitario = self.dadosPlanilhaEditavel.ValorUnitario;
+		self.itemForm.dsJustificativa = self.dadosPlanilhaEditavel.Justificativa;
+		self.itemForm.tpAcao = 'A';    	    
+		self.$emit('atualizarUnidade');
+		self.$emit('fecharAtualizar');
 	    });
-	    
-	    this.itemForm.idUnidade = self.dadosPlanilhaEditavel.idUnidade;
-	    this.itemForm.Unidade = self.dadosPlanilhaEditavel.descUnidade;
-	    this.itemForm.QtdeDias = this.dadosPlanilhaEditavel.QtdeDias;
-	    this.itemForm.Quantidade = this.dadosPlanilhaEditavel.Quantidade;
-	    this.itemForm.Ocorrencia = this.dadosPlanilhaEditavel.Ocorrencia;
-	    this.itemForm.ValorUnitario = this.dadosPlanilhaEditavel.ValorUnitario;
-	    this.itemForm.dsJustificativa = this.dadosPlanilhaEditavel.Justificativa;
-	    this.itemForm.tpAcao = 'A';    	    
-	    this.$emit('atualizarItem', this.itemForm);
-	    this.$emit('fechar');
 	},
 	cancelar: function() {
-	    this.$emit('fechar');
+	    this.resetData();
+	    this.$emit('fecharAtualizar');
 	},
 	atualizarUnidade: function(e){
 	    this.dadosPlanilhaEditavel.descUnidade = this.unidades[e.target.options.selectedIndex].Descricao;

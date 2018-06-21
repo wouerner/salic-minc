@@ -27,15 +27,13 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                         </div>
                         <div class="collapsible-body no-padding margin20 scroll-x">
 													<div class="center-align margin20">
-														<a class="waves-effect waves-light btn white-text btn-incluir-novo-item"
-															 id_fonte="row.idFonte"
-															 id_produto="row.idProduto"
-															 id_etapa="row.idEtapa"
-															 id_uf="row.idUF"
-															 id_municipio="row.idMunicipio" >
-															<i class="material-icons left">add</i>
-															incluir item neste munic&iacute;pio
-														</a>
+														<template v-if="podeIncluirItem()">
+															<a class="waves-effect waves-light btn white-text btn-incluir-novo-item"
+																 v-on:click="incluirItem(locais, local, etapa, produto)">
+																<i class="material-icons left">add</i>
+																incluir item neste munic&iacute;pio
+															</a>
+														</template>
 													</div>
                           <table class="bordered">
                             <thead>
@@ -125,11 +123,27 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		    <planilha-orcamentaria-alterar-item
 					:idPronac="idPronac"
 					:unidades="unidades"
-					v-on:fechar="fecharModal"
+					v-on:fecharAlterar="fecharModalAlterar"
 					v-on:atualizarItem="atualizarItem"
 					v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao"
 					v-bind:item="itemEdicao">
 		    </planilha-orcamentaria-alterar-item>
+		</div>
+	</div>
+	<div id="modalIncluir" class="modal">
+		<div class="modal-header margin20">
+			<h4 class="center-align">Incluir item</h4>
+		</div>
+		<div class="modal-content center-align">
+		    <planilha-orcamentaria-incluir-item
+					:idPronac="idPronac"
+					:idReadequacao="idReadequacao"
+					:unidades="unidades"
+					:dados="dadosIncluir"
+					v-on:fecharIncluir="fecharModalIncluir"
+					v-on:atualizarIncluir="atualizarIncluir"
+					v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao">
+		    </planilha-orcamentaria-incluir-item>
 		</div>
 	</div>
 </div>
@@ -137,6 +151,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
     `,
     props: {
 	idPronac: '',
+	idReadequacao: '',
 	objPlanilha: {},
 	perfil: '',
 	link: '',
@@ -150,6 +165,14 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	    unidades: [],
 	    idPlanilhaAprovacaoEdicao: '',
 	    itemEdicao: {},
+	    dadosIncluir: {
+	    	recurso: '',
+		uf: '',
+		municipio: '',
+		etapa: '',
+		produto: '',
+		listaItens: []
+	    },
 	    perfilProponente: 1111,
 	    fonteRecursosFederais: 109
 	};
@@ -243,8 +266,65 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	    this.itemEdicao.dsJustificativa = itemModificado.dsJustificativa;
 	    this.itemEdicao.tpAcao = itemModificado.tpAcao;
 	},
-	fecharModal: function() {
+	podeIncluirItem: function() {
+	    if (this.perfil == this.perfilProponente
+		&& this.disponivelParaAdicaoItensReadequacaoPlanilha
+		&& this.link) {
+		return true;
+	    }
+	},
+	incluirItem: function(info, local, etapa, produto) {
+	    let firstKey = Object.keys(info)[0],
+		instance = info[firstKey],
+		uf = local.split(' - ')[0],
+		municipio = local.split(' - ')[1];
+
+	    etapa = etapa.split(' - ')[1];    
+	    
+	    this.dadosIncluir = {
+	    	recurso: instance.FonteRecurso,
+		etapa: etapa,
+		uf: uf,
+		municipio: municipio,
+		produto: produto,
+		idRecurso: instance.idFonte,
+		idUnidade: instance.idUnidade,
+		idMunicipio: instance.idMunicipio,
+		idUF: instance.idUF,
+		idProduto: instance.idProduto,
+		idEtapa: instance.idEtapa,
+		idReadequacao: self.idReadequacao,
+		Ocorrencia: '',
+		ValorUnitario: '',
+		Dias: '',
+		listaItens: []
+	    };
+	    this.obterItens(instance.idMunicipio, instance.idProduto, instance.idEtapa);
+	    $3('#modalIncluir').modal('open');
+	},
+	obterItens: function(idMunicipio, idProduto, idEtapa) {
+	    let self = this;
+	    $3.ajax({
+		type: 'POST',
+		url: '/readequacao/readequacoes',
+		data: {
+		    idPronac: self.idPronac,
+		    idMunicipio: idMunicipio,
+		    idProduto: idProduto,
+		    idEtapa: idEtapa
+		}
+	    }).done(function(data) {
+		self.dadosIncluir.listaItens = data;
+	    });
+	},
+	fecharModalAlterar: function() {
 	    $3('#modalEditar').modal('close');
+	},
+	fecharModalIncluir: function() {
+	    $3('#modalIncluir').modal('close');
+	},
+	atualizarIncluir: function() {
+	    this.$emit('atualizarPlanilha');
 	},
 	itemExcluido: function(item) {
 	    if (item.tpAcao == 'E') {
@@ -291,6 +371,12 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	    $3('#modalEditar').modal();
 	    $3('#modalEditar').css('height', '85%');
 	    $3('#modalEditar').css('max-height', '85%');
+
+	    if (this.podeIncluirItem()) {
+		$3('#modalIncluir').modal();
+		$3('#modalIncluir').css('height', '85%');
+		$3('#modalIncluir').css('max-height', '85%');
+	    }
         }
     },
     computed: {

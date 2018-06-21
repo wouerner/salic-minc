@@ -7,14 +7,17 @@ Vue.component('planilha-orcamentaria', {
 		:objPlanilha="planilhaOrcamentaria"
 		:perfil="perfil"
 		:link="link"
+		:idReadequacao="idReadequacao"
 		:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
 		:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"
+		v-on:atualizarPlanilha="montarPlanilhaOrcamentaria"
 		>
 	    </component>
 	</div>
     `,
     props: {
 	idPronac: '',
+	idReadequacao: '',
 	tipoPlanilha: '',
 	link: false,
 	componentePlanilha: '',
