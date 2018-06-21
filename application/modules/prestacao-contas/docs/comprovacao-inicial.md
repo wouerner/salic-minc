@@ -23,3 +23,5 @@
 ![tela](https://raw.githubusercontent.com/culturagovbr/salic-minc/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_situacao.png)
 ##### Indentificação do Contratado
 * Na tela de indentificação do contratado ,todas as opções sao obrigatórias a serem preenchidas,ao inserir o cpf/cnpj que nao esteja cadastrado em seguida  vai abrir  uma tela de cadastro. 
+![tela_indetificacao](https://github.com/culturagovbr/salic-minc/blob/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_indentificacao.png?raw=true)
+![tela de cadastro](https://github.com/culturagovbr/salic-minc/blob/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_cadastro1.png?raw=true)
