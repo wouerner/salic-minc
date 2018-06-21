@@ -55,6 +55,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 					class="browser-default"
 					ref="itemPlanilhaUnidade"
 					v-model="dadosPlanilhaEditavel.idUnidade"
+			    @change="atualizarUnidade"
 					>
 					<option v-for="unidade in unidades" v-bind:value="unidade.idUnidade">{{unidade.Descricao}}</option>
 				</select>
@@ -144,6 +145,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
     },
     data: function() {
 	return {
+	    itemForm: Object.assign({}, this.item),
 	    dadosPlanilhaAtiva: {
 		Justificativa: '',
 		Ocorrencia: '',
@@ -251,11 +253,23 @@ Vue.component('planilha-orcamentaria-alterar-item', {
                     valorSolicitado: self.dadosPlanilhaAtiva.TotalSolicitado
                 }
 	    });
+	    
+	    this.itemForm.idUnidade = self.dadosPlanilhaEditavel.idUnidade;
+	    this.itemForm.Unidade = self.dadosPlanilhaEditavel.descUnidade;
+	    this.itemForm.QtdeDias = this.dadosPlanilhaEditavel.QtdeDias;
+	    this.itemForm.Quantidade = this.dadosPlanilhaEditavel.Quantidade;
+	    this.itemForm.Ocorrencia = this.dadosPlanilhaEditavel.Ocorrencia;
+	    this.itemForm.ValorUnitario = this.dadosPlanilhaEditavel.ValorUnitario;
+	    this.itemForm.dsJustificativa = this.dadosPlanilhaEditavel.Justificativa;
+	    this.itemForm.tpAcao = 'A';    	    
+	    this.$emit('atualizarItem', this.itemForm);
 	    this.$emit('fechar');
-	    this.$emit('atualizarItem', this.item);
 	},
 	cancelar: function() {
 	    this.$emit('fechar');
+	},
+	atualizarUnidade: function(e){
+	    this.dadosPlanilhaEditavel.descUnidade = this.unidades[e.target.options.selectedIndex].Descricao;
 	},
 	resetData: function() {
 	    this.dadosPlanilhaAtiva = {

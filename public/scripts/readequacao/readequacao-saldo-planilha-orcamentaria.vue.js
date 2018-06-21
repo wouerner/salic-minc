@@ -233,8 +233,15 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		return true;
 	    }
 	},
-	atualizarItem: function(item) {
-	    item.tpAcao = 'A';
+	atualizarItem: function(itemModificado) {
+	    this.itemEdicao.idUnidade = itemModificado.idUnidade;
+	    this.itemEdicao.Unidade = itemModificado.Unidade;
+	    this.itemEdicao.QtdeDia = itemModificado.QtdeDia;
+	    this.itemEdicao.Quantidade = itemModificado.Quantidade;
+	    this.itemEdicao.Ocorrencia = itemModificado.Ocorrencia;
+	    this.itemEdicao.ValorUnitario = itemModificado.ValorUnitario;
+	    this.itemEdicao.dsJustificativa = itemModificado.dsJustificativa;
+	    this.itemEdicao.tpAcao = itemModificado.tpAcao;
 	},
 	fecharModal: function() {
 	    $3('#modalEditar').modal('close');
