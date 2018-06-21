@@ -455,28 +455,30 @@ Vue.component('sl-comprovar-form',
                                css: '',
                            },
                        }
-                       vue.comprovante =  {
-                           fornecedor: {
-                               nacionalidade: 31,
-                               tipoPessoa: 1,
-                               CNPJCPF: '',
-                               cnpjcpfMask: '',
-                               nome: '',
-                               idAgente: '',
-                               eInternacional: false,
-                           },
-                           tipo: 1,
-                           numero: '',
-                           serie: '',
-                           dataEmissao: '',
-                           dataPagamento:'',
-                           forma: 1,
-                           numeroDocumento: '',
-                           valor: '',
-                           arquivo: '',
-                           justificativa: ''
-                       }
 
+                       vue.comprovante = {
+                            fornecedor: {
+                                nacionalidade: 31,
+                                tipoPessoa: 1,
+                                CNPJCPF: '',
+                                cnpjcpfMask: '',
+                                nome: '',
+                                idAgente: '',
+                                eInternacional: false,
+                            },
+                            item: vue.item,
+                            tipo: 1,
+                            numero: '',
+                            serie: '',
+                            dataEmissao: '',
+                            dataPagamento:'',
+                            forma: 1,
+                            numeroDocumento: '',
+                            valor: '',
+                            arquivo: '',
+                            justificativa: '',
+                            foiAtualizado: false,
+                        }
                     }
 
                     if (vue.tipoform == 'edicao'){
@@ -656,7 +658,6 @@ Vue.component('sl-comprovar-form',
                     arquivo: '',
                     justificativa: '',
                     foiAtualizado: false,
-                    item: 0 
                 },
                 pais: '',
                 c: {

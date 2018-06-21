@@ -190,6 +190,30 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         return $idArquivo;
     }
 
+    public function excluir()
+    {
+        if (!$this->idComprovantePagamento) {
+            throw new Exception('Comprovante nao informado.');
+        }
+        $tbComprovantePagamentoxPlanilhaAprovacao = new ComprovantePagamentoxPlanilhaAprovacao();
+        $tbComprovantePagamentoxPlanilhaAprovacao->delete(array('idComprovantePagamento = ?' => $this->idComprovantePagamento));
+        $vwAnexarComprovantes = new vwAnexarComprovantes();
+        $vwAnexarComprovantes->excluirArquivo($this->idComprovantePagamento);
+
+        $tbComprovantePagamento = new ComprovantePagamento();
+        $comprovantePagamentoRow = $tbComprovantePagamento->fetchRow(array('idComprovantePagamento = ?' => $this->idComprovantePagamento));
+
+        if ($comprovantePagamentoRow && $comprovantePagamentoRow->idFornecedorExterior) {
+            $idfornecedorInvoice = $comprovantePagamentoRow->idFornecedorExterior;
+        }
+        $comprovantePagamentoRow->delete();
+        if (isset($idfornecedorInvoice)) {
+            $fornecedorInvoiceTable = new FornecedorInvoice();
+            $fornecedorInvoiceTable->getAdapter()->getProfiler()->setEnabled(true);
+            $fornecedorInvoiceTable->delete(array('idFornecedorExterior = ?' => $idfornecedorInvoice));
+        }
+    }
+
     public function inserirComprovantePagamento($data)
     {
         $insert = $this->insert($data);
