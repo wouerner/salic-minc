@@ -39,16 +39,20 @@ class Projeto_FncController extends Projeto_GenericController
         $this->redirect("/projeto/index/listar");
     }
 
-    public function visualizarAction()
+    public function visualizarNovoAction()
     {
        $vwDadosProjeto = new Projeto_Model_DbTable_VwConsultarDadosDoProjetoFNC();
        $this->view->dados = $vwDadosProjeto->obterDadosFnc($this->idPronac);
     }
 
-    public function visualizarTabelasAction()
+    public function visualizarAction()
     {
         $vwDadosProjeto = new Projeto_Model_DbTable_VwConsultarDadosDoProjetoFNC();
         $this->view->dados = $vwDadosProjeto->obterDadosFnc($this->idPronac);
+
+        $dbTableInabilitado = new Inabilitado();
+        $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto->CgcCPf);
+        $this->view->ProponenteInabilitado = ($proponenteInabilitado->Habilitado == 'I');
     }
 
     public function obterMenuAction() {
