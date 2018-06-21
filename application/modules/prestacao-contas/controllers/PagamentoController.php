@@ -161,7 +161,6 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
             'uf' => $resposta[0]['uf'],
             'cidade' => utf8_encode($resposta[0]['cidade']),
         ];
-        /* var_dump($planilhaJSON);die; */
 
         $this->_helper->json($planilhaJSON);
     }
