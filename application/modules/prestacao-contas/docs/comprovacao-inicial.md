@@ -25,3 +25,9 @@
 * Na tela de indentificação do contratado ,todas as opções sao obrigatórias a serem preenchidas,ao inserir o cpf/cnpj que nao esteja cadastrado em seguida  vai abrir  uma tela de cadastro. 
 ![tela_indetificacao](https://github.com/culturagovbr/salic-minc/blob/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_indentificacao.png?raw=true)
 ![tela de cadastro](https://github.com/culturagovbr/salic-minc/blob/f/prestacao-contas/dev-marcos/application/modules/prestacao-contas/docs/imagens/tela_cadastro1.png?raw=true)
+
+#### Dados da Comprovação de Pagamento
+* Na tela de comprovação ,o comprovante pode ser justificado com cupom fiscal,guia de recolhimento,nota fiscal/fatura,Recibo de pagaento e RPA. 
+* A data de emissão do comprovante de despesa e data de pagamento ,ambas precisam estar dentro da data de execução do projeto.
+* A forma de pagamento pode ser paga atraves de cheque,transferencia bancária,saque/dinheiro.
+* Comprovante precisa ser enviado em pdf. 
