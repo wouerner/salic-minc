@@ -60,7 +60,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->idTiposAtoAdministrativos,
             $this->auth->getIdentity()->usu_org_max_superior
         );
-//        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
     }
 
     public function devolverProjetoAction()
