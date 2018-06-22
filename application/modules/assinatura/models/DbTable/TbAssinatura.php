@@ -21,6 +21,10 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     const TIPO_ATO_READEQUACAO_SEM_PORTARIA = 643; // @todo readequacao atualizar
     const TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO = 653;
     const TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO = 654;
+    /**
+     * @todo Atualizar nome dessa constante: TIPO_ATO_READEQUACAO_XXXXXXXXXX
+     */
+    const TIPO_ATO_READEQUACAO_XXXXXXXXXX = 655;
 
     public function preencherModeloAssinatura(array $dados)
     {
