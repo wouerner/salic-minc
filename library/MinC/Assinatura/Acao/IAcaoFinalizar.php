@@ -2,6 +2,6 @@
 
 namespace MinC\Assinatura\Acao;
 
-interface IAcaoFinalizar
+interface IAcaoFinalizar extends IAcao
 {
 }

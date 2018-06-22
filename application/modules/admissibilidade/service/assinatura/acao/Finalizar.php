@@ -2,9 +2,9 @@
 
 namespace Application\Modules\Admissibilidade\Service\Assinatura\Acao;
 
-use MinC\Assinatura\Acao\IAcao;
+use MinC\Assinatura\Acao\IAcaoFinalizar;
 
-class Finalizar implements IAcao, IAcaoFinalizar
+class Finalizar implements IAcaoFinalizar
 {
     public function executar(\MinC\Assinatura\Model\Assinatura $assinatura)
     {

@@ -2,6 +2,6 @@
 
 namespace MinC\Assinatura\Acao;
 
-interface IAcaoEncaminhar
+interface IAcaoEncaminhar extends IAcao
 {
 }

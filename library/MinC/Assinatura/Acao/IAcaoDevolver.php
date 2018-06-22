@@ -2,6 +2,6 @@
 
 namespace MinC\Assinatura\Acao;
 
-interface IAcaoDevolver
+interface IAcaoDevolver extends IAcao
 {
 }

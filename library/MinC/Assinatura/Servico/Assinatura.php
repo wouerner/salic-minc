@@ -11,7 +11,7 @@ class Assinatura implements IServico
 {
     public $isEncaminharParaProximoAssinanteAoAssinar = true;
     public $viewModelAssinatura;
-    public static $listaAcoesGerais = [];
+    private static $listaAcoesGerais = [];
     private $listaAcoes = [];
     private $idTipoDoAtoAdministrativo;
 
@@ -47,7 +47,7 @@ class Assinatura implements IServico
             /**
              * @var \MinC\Assinatura\Acao\IAcao $acao
              */
-            if($acao instanceof \MinC\Assinatura\Acao\IAcao && $acao instanceof $tipoAcao) {
+            if($acao instanceof $tipoAcao) {
                 $acao->executar($this->viewModelAssinatura);
             }
         }
