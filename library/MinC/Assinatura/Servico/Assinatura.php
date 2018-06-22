@@ -1,7 +1,6 @@
 <?php
 
 namespace MinC\Assinatura\Servico;
-use MinC\Assinatura\Acao\IAcaoEncaminhar;
 
 /**
  * @var \Assinatura_Model_DbTable_TbAssinatura $dbTableTbAssinatura
@@ -12,13 +11,14 @@ class Assinatura implements IServico
 {
     public $isEncaminharParaProximoAssinanteAoAssinar = true;
     public $viewModelAssinatura;
-    protected $idTipoDoAtoAdministrativo;
-    protected $servicoAutenticacao;
-    protected $listaAcoes = [];
+    public static $listaAcoesGerais = [];
+    private $listaAcoes = [];
+    private $idTipoDoAtoAdministrativo;
 
     function __construct($idTipoDoAtoAdministrativo)
     {
         $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
+        $this->isolarAcoesPorTipoDeAto();
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura();
     }
 
@@ -27,15 +27,21 @@ class Assinatura implements IServico
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dados);
     }
 
-    public function definirListaDeAcoes(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
+    public static function definirAcoesGerais(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
     {
-        $listaAcoesAssinatura = $listaAcoes->obterLista();
-        if(count($listaAcoesAssinatura) > 0 && $listaAcoesAssinatura[$this->idTipoDoAtoAdministrativo]) {
-            $this->listaAcoes = $listaAcoesAssinatura[$this->idTipoDoAtoAdministrativo];
+        if(!isset(self::$listaAcoesGerais)) {
+            self::$listaAcoesGerais = $listaAcoes->obterLista();
         }
     }
 
-    protected function executarAcoes(string $tipoAcao)
+    private function isolarAcoesPorTipoDeAto()
+    {
+        if(count(self::$listaAcoesGerais) > 0 && isset(self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo])) {
+            $this->listaAcoes = self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo];
+        }
+    }
+
+    private function executarAcoes(string $tipoAcao)
     {
         foreach($this->listaAcoes as $acao) {
             /**
@@ -89,14 +95,15 @@ class Assinatura implements IServico
         $modeloTbAtoAdministrativo->setIdOrdemDaAssinatura($dadosAtoAdministrativoAtual['idOrdemDaAssinatura']);
         $modeloTbAtoAdministrativo->setIdAtoAdministrativo($dadosAtoAdministrativoAtual['idAtoAdministrativo']);
 
-        $this->viewModelAssinatura->dbTableTbAssinatura->preencherModeloAssinatura([
+        $dbTableTbAssinatura = $this->viewModelAssinatura->dbTableTbAssinatura;
+        $dbTableTbAssinatura->preencherModeloAssinatura([
             'idAssinante' => $modeloTbAssinatura->getIdAssinante(),
             'idPronac' => $modeloTbAssinatura->getIdPronac(),
             'idAtoAdministrativo' => $dadosAtoAdministrativoAtual['idAtoAdministrativo'],
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ]);
 
-        if($this->viewModelAssinatura->dbTableTbAssinatura->isProjetoAssinado()) {
+        if($dbTableTbAssinatura->isProjetoAssinado()) {
             throw new \Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
         }
 
@@ -109,7 +116,7 @@ class Assinatura implements IServico
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ];
 
-        $this->viewModelAssinatura->dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
+        $dbTableTbAssinatura->inserir($dadosInclusaoAssinatura);
         $codigoOrgaoDestino = $objTbAtoAdministrativo->obterProximoOrgaoDeDestino(
             $modeloTbAtoAdministrativo->getIdTipoDoAto(),
             $modeloTbAtoAdministrativo->getIdOrdemDaAssinatura(),
@@ -135,8 +142,9 @@ class Assinatura implements IServico
         }
 
         $modeloTbAssinatura = $this->viewModelAssinatura->modeloTbAssinatura;
-        $this->viewModelAssinatura->dbTableTbAssinatura->modeloTbAssinatura = $modeloTbAssinatura;
-        if(!$this->viewModelAssinatura->dbTableTbAssinatura->isProjetoAssinado()) {
+        $dbTableTbAssinatura = $this->viewModelAssinatura->dbTableTbAssinatura;
+        $dbTableTbAssinatura->modeloTbAssinatura = $modeloTbAssinatura;
+        if(!$dbTableTbAssinatura->isProjetoAssinado()) {
             throw new \Exception ("O documento precisa ser assinado para que consiga ser movimentado.");
         }
 

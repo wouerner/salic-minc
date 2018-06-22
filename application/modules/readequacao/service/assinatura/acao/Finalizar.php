@@ -3,6 +3,7 @@
 namespace Application\Modules\Readequacao\Service\Assinatura\Acao;
 
 use MinC\Assinatura\Acao\IAcao;
+use MinC\Assinatura\Acao\IAcaoFinalizar;
 
 class Finalizar implements IAcao, IAcaoFinalizar
 {
