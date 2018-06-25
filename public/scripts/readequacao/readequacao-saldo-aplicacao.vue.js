@@ -166,6 +166,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 		self.readequacao = response.readequacao;
 		self.exibirPaineis = true;
 		self.exibirBotaoIniciar = false;
+		self.verificarDisponivelParaEdicaoReadequacaoPlanilha();
 	    });
 	    
 	},
@@ -205,13 +206,26 @@ Vue.component('readequacao-saldo-aplicacao', {
 	atualizarReadequacao: function (readequacao) {
             this.readequacao = readequacao;
         },
+	verificarDisponivelParaEdicaoReadequacaoPlanilha: function() {
+	    let self = this;
+	    $3.ajax({
+		type: "GET",
+		url: "/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha",
+		data: {
+		    idPronac: self.idPronac
+		}
+	    }).done(function(response) {
+		self.disponivelParaEdicaoReadequacaoPlanilha = response.disponivelParaEdicaoReadequacaoPlanilha;
+	    });
+	},
 	carregarValorEntrePlanilhas: function() {
 	    let self = this;
 	    $3.ajax({
 		type: "GET",
 		url: "/readequacao/saldo-aplicacao/carregar-valor-entre-planilhas",
 		data: {
-		    idPronac: self.idPronac
+		    idPronac: self.idPronac,
+		    idTipoReadequacao: 22
 		}
 	    }).done(function(response) {
 		self.valorEntrePlanilhas = response.valorEntrePlanilhas;

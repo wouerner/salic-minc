@@ -1609,6 +1609,9 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             $retorno['statusPlanilha'] = 'neutro';
         }
         
+        $retorno['PlanilhaReadequadaTotal'] = $PlanilhaReadequada['Total'];
+        $retorno['PlanilhaAtivaTotal'] = $PlanilhaAtiva['Total'];
+
         return $retorno;
     }    
 }

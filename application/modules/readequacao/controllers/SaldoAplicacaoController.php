@@ -206,4 +206,32 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
             ]);
         }
     }
+
+    public function verificarDisponivelParaEdicaoReadequacaoPlanilhaAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->_request->getParam("idPronac");
+        
+        if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
+            parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
+        }
+        
+        try {
+            $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
+            $disponivelParaEdicaoReadequacaoPlanilha = $Readequacao_Model_DbTable_TbReadequacao->disponivelParaEdicaoReadequacaoPlanilha($idPronac, $idAgente);
+            
+            $this->_helper->json([
+                'success' => 'true',
+                'disponivelParaEdicaoReadequacaoPlanilha' => $disponivelParaEdicaoReadequacaoPlanilha,
+                'msg' => 'Dispon&iacute;vel para edi&ccedil;&atilde;o de itens.'
+            ]);
+        } catch (Exception $e) {
+            $this->getResponse()->setHttpResponseCode(412);
+            $this->_helper->json([
+                'success' => 'false',
+                'msg' => $e->getMessage()
+            ]);
+        }
+                                                                                                  
+    }
 }

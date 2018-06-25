@@ -253,21 +253,13 @@ Vue.component('planilha-orcamentaria-alterar-item', {
                     valorSolicitado: self.dadosPlanilhaAtiva.TotalSolicitado
                 }
 	    }).done(function() {
-		self.itemForm.idUnidade = self.dadosPlanilhaEditavel.idUnidade;
-		self.itemForm.Unidade = self.dadosPlanilhaEditavel.descUnidade;
-		self.itemForm.QtdeDias = self.dadosPlanilhaEditavel.QtdeDias;
-		self.itemForm.Quantidade = self.dadosPlanilhaEditavel.Quantidade;
-		self.itemForm.Ocorrencia = self.dadosPlanilhaEditavel.Ocorrencia;
-		self.itemForm.ValorUnitario = self.dadosPlanilhaEditavel.ValorUnitario;
-		self.itemForm.dsJustificativa = self.dadosPlanilhaEditavel.Justificativa;
-		self.itemForm.tpAcao = 'A';    	    
-		self.$emit('atualizarUnidade');
-		self.$emit('fecharAtualizar');
+		self.$emit('atualizarItem');
+		self.$emit('fecharAlterar');
 	    });
 	},
 	cancelar: function() {
 	    this.resetData();
-	    this.$emit('fecharAtualizar');
+	    this.$emit('fecharAlterar');
 	},
 	atualizarUnidade: function(e){
 	    this.dadosPlanilhaEditavel.descUnidade = this.unidades[e.target.options.selectedIndex].Descricao;

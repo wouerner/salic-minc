@@ -1,19 +1,19 @@
 Vue.component('readequacao-saldo-aplicacao-saldo', {
     template: `
-	<div class="col s12">
-	    <template v-if="!disabled">
+<div class="col s3">
+	<template v-if="!disabled">
 		<label>Saldo dispon&iacute;vel *</label>
-		    <input type="text" 
-			   ref="readequacaoSaldo"
-			   v-model="valorSaldo" 
-		    @change="alterarSaldo"
-		    />
-	    </template>
-		    <template v-else>
-			<span>Saldo dispon&iacute;vel</span>
-			    {{readequacao.saldo }}
-		    </template>
-	</div>
+    <input-money
+			ref="readequacaoSaldo"
+			v-model="valorSaldo"
+			@change="alterarSaldo">
+		</input-money>
+	</template>
+	<template v-else>
+		<span>Saldo dispon&iacute;vel</span>
+		{{readequacao.saldo }}
+	</template>
+</div>
     `,
     props: [
 	'dsSolicitacao',

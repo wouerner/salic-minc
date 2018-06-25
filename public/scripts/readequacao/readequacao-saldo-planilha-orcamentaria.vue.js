@@ -124,7 +124,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 					:idPronac="idPronac"
 					:unidades="unidades"
 					v-on:fecharAlterar="fecharModalAlterar"
-					v-on:atualizarItem="atualizarItem"
+					v-on:atualizarItem="atualizarItens"
 					v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao"
 					v-bind:item="itemEdicao">
 		    </planilha-orcamentaria-alterar-item>
@@ -141,7 +141,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 					:unidades="unidades"
 					:dados="dadosIncluir"
 					v-on:fecharIncluir="fecharModalIncluir"
-					v-on:atualizarIncluir="atualizarIncluir"
+					v-on:atualizarIncluir="atualizarItens"
 					v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao">
 		    </planilha-orcamentaria-incluir-item>
 		</div>
@@ -256,16 +256,6 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		return true;
 	    }
 	},
-	atualizarItem: function(itemModificado) {
-	    this.itemEdicao.idUnidade = itemModificado.idUnidade;
-	    this.itemEdicao.Unidade = itemModificado.Unidade;
-	    this.itemEdicao.QtdeDia = itemModificado.QtdeDia;
-	    this.itemEdicao.Quantidade = itemModificado.Quantidade;
-	    this.itemEdicao.Ocorrencia = itemModificado.Ocorrencia;
-	    this.itemEdicao.ValorUnitario = itemModificado.ValorUnitario;
-	    this.itemEdicao.dsJustificativa = itemModificado.dsJustificativa;
-	    this.itemEdicao.tpAcao = itemModificado.tpAcao;
-	},
 	podeIncluirItem: function() {
 	    if (this.perfil == this.perfilProponente
 		&& this.disponivelParaAdicaoItensReadequacaoPlanilha
@@ -323,7 +313,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 	fecharModalIncluir: function() {
 	    $3('#modalIncluir').modal('close');
 	},
-	atualizarIncluir: function() {
+	atualizarItens: function() {
 	    this.$emit('atualizarPlanilha');
 	},
 	itemExcluido: function(item) {
