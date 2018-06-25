@@ -1,94 +1,94 @@
 Vue.component('readequacao-saldo-aplicacao', {
     template: `
-	<div class='readequacao-saldo-aplicacao'>
-	    <div class="card">
+<div class='readequacao-saldo-aplicacao'>
+	<div class="card">
 		<div class="card-content">
-		    <div class="col s2">
-			<b>Pronac: </b>{{ pronac }}<br>
-		    </div>
-			    <div class="col s8">
+		  <div class="col s2">
+				<b>Pronac: </b>{{ pronac }}<br>
+		  </div>
+			<div class="col s8">
 				<b>Projeto: </b><span v-html="nomeProjeto"></span>
-			    </div>
-				    <br/>
+			</div>
+			<br/>
 		</div>
-	    </div>
-				    
-				    <div v-show="exibirBotaoIniciar">
-					<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
-						name=""
-					    v-on:click="solicitarUsoSaldo()"
-						id="novo">
-					    <i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
-					</button>
-				    </div>
-						<ul v-if="!disabled" class="collapsible" v-show="exibirPaineis">
-						    <li id="collapsible-first">
-							<div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
-							    <div class="collapsible-body">
-								<readequacao-formulario
-									    ref="formulario"
-								    :id-pronac="idPronac"
-								    :disabled="disabled"
-								    :id-tipo-readequacao="idTipoReadequacao"
-								    :componente-ds-solicitacao='componenteFormulario'
-								    :objReadequacao="readequacao"
-								    v-on:eventoAtualizarReadequacao="atualizarReadequacao"
-								    v-on:eventoSalvarReadequacao="salvarReadequacao"
-								    >
-								</readequacao-formulario>
-							    </div>
-						    </li>
-								    <li>
-									<div class="collapsible-header"><i class="material-icons">list</i>Editar planilha or&ccedil;ament&aacute;ria</div>
-									    <div class="collapsible-body card" >
-										<div class="card-content">
-										    <span class="bold" v-bind:class="{ 'blue-text': statusPlanilhaPositivo, 'red-text':  statusPlanilhaNegativo }" >{{vlDiferencaEntrePlanilhas}}</span>
-											<span v-if="statusPlanilhaNeutro">(Remanejamento)</span>
-											    <span v-if="statusPlanilhaPositivo">(Complementa&ccedil;&atilde;o)</span>
-												<span v-if="statusPlanilhaNegativo">(Redu&ccedil;&atilde;o)</span>
-										</div>
-									    </div>
-												    
-												    <div class="card" v-if="solicitacaoIniciada">
-													<div class="card-content">
-													    <planilha-orcamentaria
-														:id-pronac="idPronac"
-														:tipo-planilha="tipoPlanilha"
-														:link="1"
-														:id-readequacao="readequacao.idReadequacao"
-														:componente-planilha="componentePlanilha"
-														:perfil="perfil"
-														:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-														:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"														>
-													    </planilha-orcamentaria>
-													</div>
-												    </div>
-								    </li>
-						</ul>
-						<div class="card" v-show="readequacao.idReadequacao">
-							<div class="card-content">
-								<div class="row">
-									<div class="right-align padding20 col s12">
-										<a class="waves-light waves-effect btn red modal-trigger" href="#modalExcluir">Excluir</a>
-									</div>
-								</div>
-							</div>
-						</div>
-
- 						<div id="modalExcluir" class="modal">
-							<div class="modal-content center-align">
-								<h4>Tem certeza que deseja excluir a redequa&ccedil;&atilde;o?</h4>
-							</div>
-							<div class="modal-footer">
-								<a class="waves-effect waves-green btn-flat red white-text"
-									 v-on:click="excluirReadequacao">Excluir
-								</a>
-								<a class="modal-close waves-effect waves-green btn-flat"
-									 href="#!">Cancelar
-								</a>												
-							</div>
-						</div>						
 	</div>
+	
+	<div v-show="exibirBotaoIniciar">
+		<button class="waves-effect waves-light btn btn-primary small btn-novaproposta"
+						name=""
+					  v-on:click="solicitarUsoSaldo()"
+						id="novo">
+			<i class="material-icons left">border_color</i>Solicitar uso do saldo de aplica&ccedil;&atilde;o
+		</button>
+	</div>
+	<ul v-if="!disabled" class="collapsible" v-show="exibirPaineis">
+		<li id="collapsible-first">
+			<div class="collapsible-header active"><i class="material-icons">assignment</i>Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</div>
+			<div class="collapsible-body">
+				<readequacao-formulario
+					ref="formulario"
+					:id-pronac="idPronac"
+					:disabled="disabled"
+					:id-tipo-readequacao="idTipoReadequacao"
+					:componente-ds-solicitacao='componenteFormulario'
+					:objReadequacao="readequacao"
+					v-on:eventoAtualizarReadequacao="atualizarReadequacao"
+					v-on:eventoSalvarReadequacao="salvarReadequacao"
+					>
+				</readequacao-formulario>
+			</div>
+		</li>
+		<li>
+			<div class="collapsible-header"><i class="material-icons">list</i>Editar planilha or&ccedil;ament&aacute;ria</div>
+			<div class="collapsible-body card" >
+				<div class="card-content">
+					<span class="bold" v-bind:class="{ 'blue-text': statusPlanilhaPositivo, 'red-text':  statusPlanilhaNegativo }" >{{vlDiferencaEntrePlanilhas}}</span>
+					<span v-if="statusPlanilhaNeutro">(Remanejamento)</span>
+					<span v-if="statusPlanilhaPositivo">(Complementa&ccedil;&atilde;o)</span>
+					<span v-if="statusPlanilhaNegativo">(Redu&ccedil;&atilde;o)</span>
+				</div>
+			</div>
+			
+			<div class="card" v-if="solicitacaoIniciada">
+				<div class="card-content">
+					<planilha-orcamentaria
+						:id-pronac="idPronac"
+						:tipo-planilha="tipoPlanilha"
+						:link="1"
+						:id-readequacao="readequacao.idReadequacao"
+						:componente-planilha="componentePlanilha"
+						:perfil="perfil"
+						:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
+						:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"														>
+					</planilha-orcamentaria>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<div class="card" v-show="readequacao.idReadequacao">
+		<div class="card-content">
+			<div class="row">
+				<div class="right-align padding20 col s12">
+					<a class="waves-light waves-effect btn red modal-trigger" href="#modalExcluir">Excluir</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+ 	<div id="modalExcluir" class="modal">
+		<div class="modal-content center-align">
+			<h4>Tem certeza que deseja excluir a redequa&ccedil;&atilde;o?</h4>
+		</div>
+		<div class="modal-footer">
+			<a class="waves-effect waves-green btn-flat red white-text"
+				 v-on:click="excluirReadequacao">Excluir
+			</a>
+			<a class="modal-close waves-effect waves-green btn-flat"
+				 href="#!">Cancelar
+			</a>												
+		</div>
+	</div>						
+</div>
     `,
     props: {
 	'idPronac': '',
