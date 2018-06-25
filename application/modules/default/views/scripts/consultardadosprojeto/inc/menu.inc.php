@@ -151,7 +151,7 @@
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'dados-complementares')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Dados complementares do projeto">Dados complementares do projeto</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'documentos-anexados')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Documentos anexados">Documentos anexados</a>
                     <a href='#' class="no_seta" onclick="carregaDados('<?php echo $this->url(array('module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-documentos-assinatura-ajax', 'idPronac' => $this->idPronac)); ?>','conteudo'); return false" title="Ir para Documentos assinados">Documentos assinados</a>
-                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'diligencias')); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Dilig&ecirc;ncias do projeto">Dilig&ecirc;ncias do projeto</a>
+                    <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'diligencias'), null, true); ?><?php echo $codPronac;?>','conteudo'); return false"  title="Ir para Dilig&ecirc;ncias do projeto">Dilig&ecirc;ncias do projeto</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'local-realizacao-deslocamento')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Local de realiza&ccedil;&atilde;o/ Deslocamento">Local de realiza&ccedil;&atilde;o/ Deslocamento</a>
                     <a id="planoDistribuicaoId" href='#' title="Ir para Plano de distribui&ccedil;&atilde;o">Plano de distribui&ccedil;&atilde;o</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'plano-de-divulgacao')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Plano de divulga&ccedil;&atilde;o">Plano de divulga&ccedil;&atilde;o</a>
@@ -235,39 +235,45 @@
 
                 <!-- ======================= Readequação  =======================   -->
                 <?php if ($this->blnProponente && ($this->fnLiberarLinks['Readequacao'] || $this->fnLiberarLinks['Readequacao_50'])) {
-            ?>
-                <div class="sanfonaDiv" style="display:none;"></div>
-                <a href="#" title="Execução" class="ancoraExecucao" onclick="return false;">Readequa&ccedil;&atilde;o</a>
-                <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
-                    <?php if ($this->fnLiberarLinks['Readequacao_50']) {
-                ?>
-                    <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Ir para Remanejamento &le; 50%">Remanejamento &le; 50%</a>
-                    <?php
-            } ?>
+                    ?>
+                    <div class="sanfonaDiv" style="display:none;"></div>
+                    <a href="#" title="Execução" class="ancoraExecucao" onclick="return false;">Readequa&ccedil;&atilde;o</a>
+                    <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
+                        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
+                           title="Readequar Local de realizaca&ccedil;&atilde;o"
+                        >Local de realiza&ccedil;&atilde;o</a>
+                        <?php if ($this->fnLiberarLinks['ReadequacaoPlanilha']) {
+                            ?>
+                            <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'planilha-orcamentaria'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
+                               title="Ir para Solicita&ccedil;&otilde;es Gerais">Planilha orçament&aacute;ria</a>
+                            <?php
+                        } ?>
+                        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'plano-distribuicao', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
+                           title="Readequar Plano de Distribui&ccedil;&atilde;o"
+                        >Plano de Distribui&ccedil;&atilde;o</a>
 
-                    <?php if ($this->fnLiberarLinks['ReadequacaoPlanilha']) {
-                ?>
-			<a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'planilha-orcamentaria'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Ir para Planilha or&cedil;&aacute;ria">Planilha orçament&aacute;ria</a>
-		    <?php
-		    } ?>
+                        <?php if ($this->fnLiberarLinks['Readequacao_50']) {
+                            ?>
+                            <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'remanejamento-menor', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
+                               title="Ir para Remanejamento &le; 50%">Remanejamento &le; 50%</a>
+                            <?php
+                        } ?>
+
+                        <?php if ($this->fnLiberarLinks['ReadequacaoTransferenciaRecursos']) : ?>
+                            <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'transferencia-recursos', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
+                               title="Transfer&ecirc;ncia de recursos">Transfer&ecirc;ncia de recursos</a>
+                        <?php endif; ?>
                     <?php if ($this->fnLiberarLinks['ReadequacaoSaldoAplicacao']) {
                     ?>
 			<a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'saldo-aplicacao', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Ir para Saldo de aplica&ccedil;&atilde;o">Saldo de aplica&ccedil;&atilde;o</a>
 		    <?php
 		    } ?>
-		    <?php if ($this->fnLiberarLinks['Readequacao']) {
-                    ?>
-                <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'local-realizacao', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Readequar Local de realizaca&ccedil;&atilde;o">Local de realiza&ccedil;&atilde;o</a>
-                <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'plano-distribuicao', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Readequar Plano de Distribui&ccedil;&atilde;o">Plano de Distribui&ccedil;&atilde;o</a>
-                <?php if ($this->fnLiberarLinks['ReadequacaoTransferenciaRecursos']) : ?> 
-                    <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'transferencia-recursos', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Transfer&ecirc;ncia de recursos">Transfer&ecirc;ncia de recursos</a>
-		    <?php endif; ?>
-                <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Ir para Solicita&ccedil;&otilde;es Gerais">Solicita&ccedil;&otilde;es Gerais</a>
+		    <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
+                           title="Ir para Solicita&ccedil;&otilde;es Gerais"
+                        >Diversas</a>
+                    </div>
                     <?php
-            } ?>
-                </div>
-                <?php
-        } ?>
+                } ?>
                 <!-- ==================== FIM - Readequação  =======================   -->
 
                 <!-- ======================= SOLICITAR PRAZO CAPTAÇÃO  =======================   -->
@@ -306,7 +312,12 @@
 
                 <!-- ======================= SOLICITAR RECURSO  =======================   -->
                 <?php if ($this->fnLiberarLinks['Recursos']): ?>
-                    <?php if ($this->codSituacao == 'B02'): ?>
+                    <?php if ($this->codSituacao == 'B02'):
+                        /**
+                         * @dreprecated: a rotina de recurso do enquadramento foi substituida,
+                         * atualmente é feita na proposta, remover controllers e scripts utilizados.
+                         */
+                        ?>
                         <div class="sanfonaDiv" style="display:none;"></div>
                         <a href="#" title="Recurso" class="ancoraRecurso" onclick="return false;">Recurso</a>
                         <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
