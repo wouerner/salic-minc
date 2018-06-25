@@ -126,6 +126,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 					v-on:fecharAlterar="fecharModalAlterar"
 					v-on:atualizarItem="atualizarItens"
 					v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao"
+					v-on:atualizarSaldoEntrePlanilhas="atualizarSaldoEntrePlanilhas"
 					v-bind:item="itemEdicao">
 		    </planilha-orcamentaria-alterar-item>
 		</div>
@@ -142,6 +143,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 					:dados="dadosIncluir"
 					v-on:fecharIncluir="fecharModalIncluir"
 					v-on:atualizarIncluir="atualizarItens"
+					v-on:atualizarSaldoEntrePlanilhas="atualizarSaldoEntrePlanilhas"
 					v-bind:idPlanilhaAprovacao="idPlanilhaAprovacaoEdicao">
 		    </planilha-orcamentaria-incluir-item>
 		</div>
@@ -351,6 +353,9 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 		item.tpAcao = 'N';
 		self.mensagemSucesso("Item restaurado com sucesso");
             });
+	},
+	atualizarSaldoEntrePlanilhas: function() {
+	    this.$emit('atualizarSaldoEntrePlanilhas');
 	}
     },
     watch: {

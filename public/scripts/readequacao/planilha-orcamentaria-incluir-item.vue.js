@@ -228,6 +228,7 @@ Vue.component('planilha-orcamentaria-incluir-item', {
 		}
 	    }).done(function() {
 		self.$emit('atualizarIncluir');
+		this.$emit('atualizarSaldoEntrePlanilhas');
 		self.$emit('fecharIncluir');
 		self.resetData();
 	    });

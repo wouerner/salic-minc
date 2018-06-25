@@ -40,16 +40,12 @@ Vue.component('readequacao-saldo-aplicacao', {
 		</li>
 		<li>
 			<div class="collapsible-header"><i class="material-icons">list</i>Editar planilha or&ccedil;ament&aacute;ria</div>
-			<div class="collapsible-body card" >
-				<div class="card-content">
-					<span class="bold" v-bind:class="{ 'blue-text': statusPlanilhaPositivo, 'red-text':  statusPlanilhaNegativo }" >{{vlDiferencaEntrePlanilhas}}</span>
-					<span v-if="statusPlanilhaNeutro">(Remanejamento)</span>
-					<span v-if="statusPlanilhaPositivo">(Complementa&ccedil;&atilde;o)</span>
-					<span v-if="statusPlanilhaNegativo">(Redu&ccedil;&atilde;o)</span>
+			<div class="collapsible-body card" v-if="solicitacaoIniciada">
+				<div>
+					<h6>Saldo dispon&iacute;vel</h6>
+					<span style="font-weight:bold" v-bind:class="{ 'blue-text': statusPlanilhaPositivo, 'red-text':  statusPlanilhaNegativo }" >R$ {{saldoDisponivelParaUso}}</span>
 				</div>
-			</div>
-			
-			<div class="card" v-if="solicitacaoIniciada">
+			  
 				<div class="card-content">
 					<planilha-orcamentaria
 						:id-pronac="idPronac"
@@ -59,7 +55,9 @@ Vue.component('readequacao-saldo-aplicacao', {
 						:componente-planilha="componentePlanilha"
 						:perfil="perfil"
 						:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-						:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"														>
+						:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"
+						v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
+						>
 					</planilha-orcamentaria>
 				</div>
 			</div>
@@ -98,7 +96,6 @@ Vue.component('readequacao-saldo-aplicacao', {
 	'siEncaminhamento': '',
 	'perfil': '',
 	'disponivelParaAdicaoItensReadequacaoPlanilha': '',
-	'disponivelParaEdicaoReadequacaoPlanilha': '',
 	'disabled': false
     },
     mixins: [utils],
@@ -122,7 +119,8 @@ Vue.component('readequacao-saldo-aplicacao', {
 	    valorEntrePlanilhas: [],
 	    tipoPlanilha: 7,
 	    componenteFormulario: 'readequacao-saldo-aplicacao-saldo',
-	    componentePlanilha: 'readequacao-saldo-planilha-orcamentaria'
+	    componentePlanilha: 'readequacao-saldo-planilha-orcamentaria',
+	    disponivelParaEdicaoReadequacaoPlanilha: ''
 	}
     },
     created: function() {
@@ -146,7 +144,7 @@ Vue.component('readequacao-saldo-aplicacao', {
                     self.readequacao = response.readequacao;
 		    if (typeof response.readequacao.idReadequacao != 'undefined') {
 			self.solicitacaoIniciada = true;
-			
+			self.verificarDisponivelParaEdicaoReadequacaoPlanilha();
 			self.carregarValorEntrePlanilhas();
 		    }
 		}
@@ -167,6 +165,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 		self.exibirPaineis = true;
 		self.exibirBotaoIniciar = false;
 		self.verificarDisponivelParaEdicaoReadequacaoPlanilha();
+		self.carregarValorEntrePlanilhas();
 	    });
 	    
 	},
@@ -197,8 +196,6 @@ Vue.component('readequacao-saldo-aplicacao', {
 		    dsSolicitacao: readequacao.dsSolicitacao
 		}
             }).done(function (response) {
-		$3('.collapsible').collapsible('close', 0);
-		$3('.collapsible').collapsible('open', 1);
 		self.readequacao = readequacao;
                 self.mensagemSucesso(response.msg);
             });
@@ -296,19 +293,25 @@ Vue.component('readequacao-saldo-aplicacao', {
 	    }
 	},
 	statusPlanilhaPositivo: function() {
-	    if (typeof this.valorEntrePlanilhas.statusPlanilha == 'positivo') {
+	    if (this.saldoDisponivelParaUso > 0) {
 		return true;
 	    }
 	},
 	statusPlanilhaNegativo: function() {
-	    if (typeof this.valorEntrePlanilhas.statusPlanilha == 'negativo') {
+	    if (this.saldoDisponivelParaUso < 0) {
 		return true;
 	    }
 	},
 	statusPlanilhaNeutro: function() {
-	    if (typeof this.valorEntrePlanilhas.statusPlanilha == 'neutro') {
+	    if (this.saldoDisponivelParaUso == 0) {
 		return true;
 	    }
+	},
+	valorEntrePlanilhasLimpo: function() {
+	    return (this.valorEntrePlanilhas.PlanilhaAtivaTotal - this.valorEntrePlanilhas.PlanilhaReadequadaTotal).toFixed(2);
+	},
+	saldoDisponivelParaUso: function() {
+	    return (this.readequacao.dsSolicitacao - (this.valorEntrePlanilhasLimpo * -1)).toFixed(2);
 	}
     }
 });

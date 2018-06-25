@@ -254,6 +254,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
                 }
 	    }).done(function() {
 		self.$emit('atualizarItem');
+		self.$emit('atualizarSaldoEntrePlanilhas');
 		self.$emit('fecharAlterar');
 	    });
 	},

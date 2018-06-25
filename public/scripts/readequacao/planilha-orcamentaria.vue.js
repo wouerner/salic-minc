@@ -10,6 +10,7 @@ Vue.component('planilha-orcamentaria', {
 		:idReadequacao="idReadequacao"
 		:disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
 		:disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"
+		v-on:atualizarSaldoEntrePlanilhas="atualizarSaldoEntrePlanilhas"
 		v-on:atualizarPlanilha="montarPlanilhaOrcamentaria"
 		>
 	    </component>
@@ -47,6 +48,9 @@ Vue.component('planilha-orcamentaria', {
 	    }).done(function(response) {
 		self.planilhaOrcamentaria = response.planilhaOrcamentaria;
 	    });
+	},
+	atualizarSaldoEntrePlanilhas: function() {
+	    this.$emit('atualizarSaldoEntrePlanilhas');
 	}
     }
 });
