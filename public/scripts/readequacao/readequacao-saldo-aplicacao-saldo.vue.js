@@ -5,7 +5,7 @@ Vue.component('readequacao-saldo-aplicacao-saldo', {
 		<label>Saldo dispon&iacute;vel *</label>
     <input-money
 			ref="readequacaoSaldo"
-			v-model="dsSolicitacao"
+			v-model="saldoDisponivel"
 			v-on:ev="alterarSaldo">
 		</input-money>
 	</template>
@@ -19,12 +19,19 @@ Vue.component('readequacao-saldo-aplicacao-saldo', {
 	'dsSolicitacao',
 	'disabled'
     ],
-    mounted: function() {
-	this.$refs.readequacaoSaldo.updateMoney(this.dsSolicitacao);
+    data: function() {
+	return {
+	    saldoDisponivel: 0
+	}
     },
     methods: {
 	alterarSaldo: function(valor) {
 	    this.$emit('eventoAtualizarDsSolicitacao', valor);
+	}
+    },
+    watch: {
+	dsSolicitacao: function(valor) {
+	    this.saldoDisponivel = valor;
 	}
     }
 });

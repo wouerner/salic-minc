@@ -67,7 +67,13 @@ Vue.component('readequacao-saldo-aplicacao', {
 		<div class="card-content">
 			<div class="row">
 				<div class="right-align padding20 col s12">
-					<a class="waves-light waves-effect btn red modal-trigger" href="#modalExcluir">Excluir</a>
+					<a
+						class="waves-light waves-effect btn red modal-trigger"
+						href="#modalExcluir">Excluir</a>
+					<a
+						class="waves-light waves-effect btn modal-trigger"
+						:disabled="!podeFinalizarReadequacao()"
+						href="#modalFinalizar">Finalizar</a>
 				</div>
 			</div>
 		</div>
@@ -86,6 +92,21 @@ Vue.component('readequacao-saldo-aplicacao', {
 			</a>												
 		</div>
 	</div>						
+ 	<div id="modalFinalizar" class="modal">
+		<div class="modal-content center-align">
+			<h4>Tem certeza que deseja finalizar a redequa&ccedil;&atilde;o?</h4>
+		</div>
+		<div class="modal-footer">
+			<a 
+			  class="waves-effect waves-green btn-flat green white-text"
+				v-on:click="finalizarReadequacao">Finalizar
+			</a>
+			<a class="modal-close waves-effect waves-green btn-flat"
+				 href="#!">Cancelar
+			</a>												
+		</div>
+	</div>						
+
 </div>
     `,
     props: {
@@ -255,6 +276,15 @@ Vue.component('readequacao-saldo-aplicacao', {
 		$3('#modalExcluir').modal('close');
             });
 	},
+	podeFinalizarReadequacao: function() {
+	    if (this.saldoDisponivelParaUso >= 0) {
+		// TODO só calcular depois de salvar a readequacao
+		return true;
+	    }
+	},
+	finalizarReadequacao: function() {
+	    // TODO
+	},
 	restaurarFormulario: function() {
 	    this.readequacao = {
 		'idPronac': null,
@@ -284,6 +314,8 @@ Vue.component('readequacao-saldo-aplicacao', {
 	solicitacaoIniciada: function() {
 	    $3('#modalExcluir').modal();
 	    $3('#modalExcluir').css('height', '20%');
+	    $3('#modalFinalizar').modal();
+	    $3('#modalFinalizar').css('height', '20%');
 	}
     },
     computed: {
