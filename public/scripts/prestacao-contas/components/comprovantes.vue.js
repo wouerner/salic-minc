@@ -16,11 +16,13 @@ const comprovantes = {
                                     <comprovante-table :dados="dado"></comprovante-table>
                                 </template>
                                 <button v-if="!formVisivel" v-on:click="mostrarForm()" class="btn">editar</button>
+                                <button v-if="!formVisivel" type="button" class="btn red white-text" @click.prevent="excluir(dado.idComprovantePagamento, dado.idArquivo)">excluir</button>
                                 <template v-if="formVisivel">
                                     <sl-comprovar-form
                                         :dados="dado"
                                         url="/prestacao-contas/gerenciar/atualizar"
                                         tipoform="edicao"
+                                        :item="dado.idPlanilhaItem"
                                     >
                                     </sl-comprovar-form>
                                 </template>
@@ -33,7 +35,6 @@ const comprovantes = {
     `,
     components:{
         'comprovante-table': comprovanteTable,
-        // 'componenteform': slComprovarForm
     },
     props: [
         'idpronac',
@@ -112,6 +113,22 @@ const comprovantes = {
         },
         mostrarForm: function() {
             this.formVisivel = true;
+        },
+        excluir: function(id, idArquivo) {
+            var vue = this;
+            url = '/prestacao-contas/gerenciar/excluir';
+            $3.ajax({
+              type: "POST",
+              url:url,
+              data:{
+                  comprovante: {idComprovantePagamento: id},
+              }
+            })
+            .done(function(data) {
+            })
+            .fail(function(jqXHR) {
+                alert('error');
+            });
         }
     },
     data: function(){
