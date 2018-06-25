@@ -1993,17 +1993,23 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     $tbReadequacao->update($dados, $where);
                 }
 
-                $this->iniciarFluxoAssinaturaParaAssinatura(
+                $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
                     $idPronac,
                     Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
                     $idParecer
                 );
+                $servicoDocumentoAssinatura->iniciarFluxo();
 
                 parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacao/readequacoes/painel-readequacoes", "CONFIRM");
             }
+
             $idReadequacao = Seguranca::encrypt($idReadequacao);
-            parent::message("Dados salvos com sucesso!", "readequacao/readequacoes/form-avaliar-readequacao?id=$idReadequacao", "CONFIRM");
-        } // fecha try
+            parent::message(
+                "Dados salvos com sucesso!",
+                "readequacao/readequacoes/form-avaliar-readequacao?id=$idReadequacao",
+                "CONFIRM"
+            );
+        }
         catch (Exception $e) {
             parent::message($e->getMessage(), "readequacao/readequacoes/form-avaliar-readequacao?id=$idReadequacao", "ERROR");
         }
@@ -3859,29 +3865,4 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
     }
 
-    public function iniciarFluxoAssinaturaParaAssinatura(
-        $idPronac,
-        $idTipoDoAtoAdministrativo,
-        $idParecer
-    )
-    {
-        if (!isset($idPronac) || empty($idPronac)) {
-            throw new Exception("Identificador do projeto n&atilde;o informado");
-        }
-
-        if (!isset($idTipoDoAtoAdministrativo) || empty($idTipoDoAtoAdministrativo)) {
-            throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
-        }
-
-        if (!isset($idParecer) || empty($idParecer)) {
-            throw new Exception("Identificador do Parecer n&atilde;o informado");
-        }
-
-        $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
-            $idPronac,
-            $idTipoDoAtoAdministrativo,
-            $idParecer
-        );
-        $servicoDocumentoAssinatura->iniciarFluxo();
-    }
 }
