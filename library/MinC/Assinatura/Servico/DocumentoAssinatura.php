@@ -22,8 +22,8 @@ class DocumentoAssinatura implements IServico
             throw new Exception("Projeto n&atilde;o encontrado.");
         }
 
-        $objModelDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
+        $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $isProjetoDisponivelParaAssinatura = $objDbTableDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $objModelDocumentoAssinatura->getIdPRONAC(),
             $objModelDocumentoAssinatura->getIdTipoDoAtoAdministrativo()
         );
