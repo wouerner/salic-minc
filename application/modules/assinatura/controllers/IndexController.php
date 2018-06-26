@@ -147,7 +147,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $get = Zend_Registry::get('get');
         $idDocumentoAssinatura = $get->idDocumentoAssinatura;
 
-        self::obterDocumentoAssinado($idDocumentoAssinatura);
+        $this->obterDocumentoAssinado($idDocumentoAssinatura);
     }
 
     public function visualizarDocumentoAssinadoAction()
@@ -157,7 +157,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $get = Zend_Registry::get('get');
         $idDocumentoAssinatura = $get->idDocumentoAssinatura;
 
-        self::obterDocumentoAssinado($idDocumentoAssinatura);
+        $this->obterDocumentoAssinado($idDocumentoAssinatura);
     }
 
     public function assinarProjetoAction()
