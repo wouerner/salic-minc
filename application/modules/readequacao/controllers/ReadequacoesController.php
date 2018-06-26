@@ -2030,7 +2030,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         if ($return) {
 
-            $idTipoDoAtoAdministrativo = $this->obterIdTipoAtoAdministativoPorOrgaoSuperior($this->idOrgao);
+            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->idOrgao);
             $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $idDocumentoAssinatura = $objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
                 $idPronac,
@@ -3875,19 +3875,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
-    }
-
-    private function obterIdTipoAtoAdministativoPorOrgaoSuperior($idOrgao)
-    {
-        $orgaoDbTable = new Orgaos();
-        $resultadoOrgaoSuperior = $orgaoDbTable->obterOrgaoSuperior($idOrgao);
-        $orgaoSuperior = $resultadoOrgaoSuperior['Codigo'];
-        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_XXXXXXXXXX;
-        if($orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SAV && $orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
-        }
-
-        return $idTipoDoAtoAdministrativo;
     }
 
 }

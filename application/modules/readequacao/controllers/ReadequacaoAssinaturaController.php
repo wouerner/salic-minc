@@ -60,7 +60,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->idTiposAtoAdministrativos,
             $this->auth->getIdentity()->usu_org_max_superior
         );
-        $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
+        $this->view->idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
     }
 
     public function devolverProjetoAction()
@@ -155,5 +155,19 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/{$this->moduleName}/readequacao-assinatura/finalizar-assinatura?IdPRONAC={$idPronac}");
         }
+    }
+
+
+    public static function obterIdTipoAtoAdministativoPorOrgaoSuperior($idOrgao)
+    {
+        $orgaoDbTable = new Orgaos();
+        $resultadoOrgaoSuperior = $orgaoDbTable->obterOrgaoSuperior($idOrgao);
+        $orgaoSuperior = $resultadoOrgaoSuperior['Codigo'];
+        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_XXXXXXXXXX;
+        if($orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SAV && $orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SEFIC) {
+            $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
+        }
+
+        return $idTipoDoAtoAdministrativo;
     }
 }
