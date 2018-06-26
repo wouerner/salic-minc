@@ -42,6 +42,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
     public function gerenciarAssinaturasAction()
     {
+        $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
         $this->validarPerfis();
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
         $documentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -50,7 +51,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->grupoAtivo->codOrgao,
             $this->grupoAtivo->codGrupo,
             $this->auth->getIdentity()->usu_org_max_superior,
-            $this->idTiposAtoAdministrativos
+            $idTipoDoAtoAdministrativo
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
@@ -61,6 +62,10 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->auth->getIdentity()->usu_org_max_superior
         );
         $this->view->idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
+        $this->view->isPermitidoDevolver = true;
+        if($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
+            $this->view->isPermitidoDevolver = false;
+        }
     }
 
     public function devolverProjetoAction()
@@ -70,6 +75,12 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         try {
             if (!filter_input(INPUT_GET, 'IdPRONAC')) {
                 throw new Exception("Identificador do projeto é necessário para acessar essa funcionalidade.");
+            }
+
+            if($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
+                throw new Exception(
+                    "O Perfil Parecerista n&atilde;o possui permiss&atilde;o para executar a a&ccedil;&atilde;o de devolver."
+                );
             }
 
             $objTbProjetos = new Projeto_Model_DbTable_Projetos();
