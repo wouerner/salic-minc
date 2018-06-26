@@ -41,11 +41,26 @@ Vue.component('readequacao-saldo-aplicacao', {
 		<li>
 			<div class="collapsible-header"><i class="material-icons">list</i>Editar planilha or&ccedil;ament&aacute;ria</div>
 			<div class="collapsible-body card" v-if="solicitacaoIniciada">
-				<div>
-					<h6>Saldo dispon&iacute;vel</h6>
-					<span style="font-weight:bold" v-bind:class="{ 'blue-text': statusPlanilhaPositivo, 'red-text':  statusPlanilhaNegativo }" >R$ {{saldoDisponivelParaUso}}</span>
+				<div class="row center-align">
+					<h4>Saldo</h4>
+					<div class="col s4 center-align green lighten-3">
+						<h6>Rendimento declarado</h6>
+						<span style="font-weight:bold">R$ {{valorSaldoAplicacaoFormatado}}</span>
+					</div>					
+					<div class="col s4 center-align" v-bind:class="{ 'blue lighten-3': valorSaldoDisponivelParaUsoPositivo, 'red lighten-3': valorSaldoDisponivelParaUsoNegativo }">
+						<h6>Dispon&iacute;vel</h6>
+						<span style="font-weight:bold">R$ {{valorSaldoDisponivelParaUsoFormatado}}</span>
+					</div>
+					<div class="col s4 center-align" v-bind:class="{ 'blue lighten-3': valorSaldoUtilizadoPositivo, 'red lighten-3': valorSaldoUtilizadoNegativo }">
+						<h6>Utilizado</h6>
+						<span style="font-weight:bold">R$ {{valorSaldoUtilizadoFormatado}}</span>
+					</div>
 				</div>
-			  
+				<div class="row center-align" v-show="valorSaldoDisponivelParaUsoNegativo">
+					<div class="col s12 center-align">
+						<span style="font-weight:bold" class="">Diminua os valores da planilha em R$ {{valorSaldoDisponivelParaUsoMensagem}}</span>
+					</div>
+				</div>
 				<div class="card-content">
 					<planilha-orcamentaria
 						:id-pronac="idPronac"
@@ -60,6 +75,30 @@ Vue.component('readequacao-saldo-aplicacao', {
 						>
 					</planilha-orcamentaria>
 				</div>
+
+				<div class="row center-align">
+					<h4>Saldo</h4>
+					<div class="col s4 center-align">
+						<h6>Rendimento declarado</h6>
+						<span style="font-weight:bold">R$ {{valorSaldoAplicacaoFormatado}}</span>
+					</div>					
+					<div class="col s4 center-align" v-bind:class="{ 'blue lighten-3': valorSaldoDisponivelParaUsoPositivo, 'red lighten-3': valorSaldoDisponivelParaUsoNegativo }">
+						<h6>Dispon&iacute;vel</h6>
+						<span style="font-weight:bold">R$ {{valorSaldoDisponivelParaUsoFormatado}}</span>
+					</div>
+					<div class="col s4 center-align" v-bind:class="{ 'blue lighten-3': valorSaldoUtilizadoPositivo, 'red lighten-3': valorSaldoUtilizadoNegativo }">
+						<h6>Utilizado</h6>
+						<span style="font-weight:bold">R$ {{valorSaldoUtilizadoFormatado}}</span>
+					</div>
+				</div>
+				<div class="row center-align" v-show="valorSaldoDisponivelParaUsoNegativo">
+					<div class="col s12 center-align">
+						<span style="font-weight:bold" class="">Diminua os valores da planilha em R$ {{valorSaldoDisponivelParaUsoMensagem}}</span>
+					</div>
+				</div>				
+			</div>
+			<div class="collapsible-body card" v-else>
+				<span>Preencha o valor do saldo dispon&iacute;vel para poder iniciar as altera&ccedil;&atilde;oes na planilha or&ccedil;ament&aacute;ria.</span>
 			</div>
 		</li>
 	</ul>
@@ -72,7 +111,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 						href="#modalExcluir">Excluir</a>
 					<a
 						class="waves-light waves-effect btn modal-trigger"
-						:disabled="!podeFinalizarReadequacao()"
+						:disabled="!podeFinalizarReadequacao"
 						href="#modalFinalizar">Finalizar</a>
 				</div>
 			</div>
@@ -127,7 +166,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 	    'justificativa': '',
 	    'arquivo': null,
 	    'idTipoReadequacao': null,
-	    'dsSolicitacao': '',
+	    'dsSolicitacao': 0,
 	    'idArquivo' : null,
 	    'nomeArquivo': null
 	};
@@ -164,16 +203,21 @@ Vue.component('readequacao-saldo-aplicacao', {
 		if (_.isObject(response.readequacao)) {
                     self.readequacao = response.readequacao;
 		    if (typeof response.readequacao.idReadequacao != 'undefined') {
-			self.solicitacaoIniciada = true;
 			self.verificarDisponivelParaEdicaoReadequacaoPlanilha();
 			self.carregarValorEntrePlanilhas();
+			
+			if (self.readequacao.dsSolicitacao > 0
+			    && (typeof self.readequacao.idReadequacao != undefined
+			     || self.readequacao.idReadequacao > 0)
+			) {
+			    self.solicitacaoIniciada = true;
+			}
 		    }
 		}
             });
         },
 	solicitarUsoSaldo: function() {
 	    let self = this;
-	    this.solicitacaoIniciada = true;
 	    
 	    $3.ajax({
 		url: "/readequacao/saldo-aplicacao/solicitar-uso-saldo",
@@ -191,8 +235,9 @@ Vue.component('readequacao-saldo-aplicacao', {
 	    
 	},
 	salvarReadequacao: function(readequacao) {
-	    if (readequacao.dsSolicitacao == '' ||
-		readequacao.dsSolicitacao == undefined
+	    if (readequacao.dsSolicitacao == ''
+		|| readequacao.dsSolicitacao == undefined
+		|| readequacao.dsSolicitacao == 0
 	    ) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel.!");
 		this.$refs.formulario.$children[0].$refs.readequacaoSaldo.focus();
@@ -218,6 +263,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 		}
             }).done(function (response) {
 		self.readequacao = readequacao;
+		self.solicitacaoIniciada = true;
                 self.mensagemSucesso(response.msg);
             });
 	},
@@ -276,12 +322,6 @@ Vue.component('readequacao-saldo-aplicacao', {
 		$3('#modalExcluir').modal('close');
             });
 	},
-	podeFinalizarReadequacao: function() {
-	    if (this.saldoDisponivelParaUso >= 0) {
-		// TODO só calcular depois de salvar a readequacao
-		return true;
-	    }
-	},
 	finalizarReadequacao: function() {
 	    // TODO
 	},
@@ -296,7 +336,15 @@ Vue.component('readequacao-saldo-aplicacao', {
 		'idArquivo' : null,
 		'nomeArquivo': null
 	    };
-
+	},
+	corValor: function(valor) {
+	    let cor = '';
+	    if (valor > 0) {
+		cor = 'positivo';
+	    } else if (valor < 0) {
+		cor = 'negativo';
+	    }
+	    return cor;
 	}
     },
     watch: {
@@ -324,26 +372,67 @@ Vue.component('readequacao-saldo-aplicacao', {
 		return this.valorEntrePlanilhas.vlDiferencaPlanilhas;
 	    }
 	},
-	statusPlanilhaPositivo: function() {
-	    if (this.saldoDisponivelParaUso > 0) {
-		return true;
-	    }
-	},
-	statusPlanilhaNegativo: function() {
-	    if (this.saldoDisponivelParaUso < 0) {
-		return true;
-	    }
-	},
-	statusPlanilhaNeutro: function() {
-	    if (this.saldoDisponivelParaUso == 0) {
-		return true;
-	    }
-	},
 	valorEntrePlanilhasLimpo: function() {
 	    return (this.valorEntrePlanilhas.PlanilhaAtivaTotal - this.valorEntrePlanilhas.PlanilhaReadequadaTotal).toFixed(2);
 	},
-	saldoDisponivelParaUso: function() {
-	    return (this.readequacao.dsSolicitacao - (this.valorEntrePlanilhasLimpo * -1)).toFixed(2);
+	valorSaldoAplicacao: function() {
+	    let valorSaldoAplicacao = parseFloat(this.readequacao.dsSolicitacao);
+	    return valorSaldoAplicacao;
+	},
+	valorSaldoAplicacaoFormatado: function() {
+	    return numeral(this.valorSaldoAplicacao).format();
+	},
+	valorSaldoDisponivelParaUso: function() {
+	    return this.valorSaldoAplicacao  + parseFloat(this.valorEntrePlanilhasLimpo);
+	},
+	valorSaldoDisponivelParaUsoPositivo: function() {
+	    if (this.valorSaldoDisponivelParaUso > 0) {
+		return true;
+	    }
+	},
+	valorSaldoDisponivelParaUsoNeutro: function() {
+	    if (this.valorSaldoDisponivelParaUso == 0) {
+		return true;
+	    }
+	},
+	valorSaldoDisponivelParaUsoNegativo: function() {
+	    if (this.valorSaldoDisponivelParaUso < 0) {
+		return true;
+	    }
+	},
+	valorSaldoDisponivelParaUsoMensagem: function() {
+	    return numeral(this.valorSaldoDisponivelParaUso * -1).format();
+	},
+	valorSaldoDisponivelParaUsoFormatado: function() {
+	    return numeral(this.valorSaldoDisponivelParaUso).format();
+	},
+	valorSaldoUtilizado: function() {
+	    return this.valorEntrePlanilhas.PlanilhaReadequadaTotal - this.valorEntrePlanilhas.PlanilhaAtivaTotal;
+	},
+	valorSaldoUtilizadoPositivo: function() {
+	    if (this.valorSaldoUtilizado > 0) {
+		return true;
+	    } else {
+		return false;
+	    }
+	},
+	valorSaldoUtilizadoNegativo: function() {
+	    if (this.valorSaldoUtilizado < 0) {
+		return true;
+	    } else {
+		return false;
+	    }
+	},
+	valorSaldoUtilizadoFormatado: function() {
+	    return numeral(this.valorSaldoUtilizado).format();
+	},
+	podeFinalizarReadequacao: function() {
+	    if (this.valorSaldoDisponivelParaUsoPositivo
+		|| this.valorSaldoDisponivelParaUsoNeutro) {
+		return true;
+	    } else {
+		return false;
+	    }
 	}
     }
 });
