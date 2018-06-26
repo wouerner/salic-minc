@@ -4,7 +4,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 {
     private $intTamPag = 10;
 
-
     public function init()
     {
         parent::init();
@@ -111,6 +110,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbItensPlanilhaProduto = new tbItensPlanilhaProduto();
         $itens = $tbItensPlanilhaProduto->itensPorItemEEtapaReadequacao($idEtapa, $idProduto);
 
+        $a = 0;
         if ($idPronac && $idMunicipio) {
             $itensAtuais = $tbItensPlanilhaProduto->itensPorProdutoItemEtapaMunicipioReadequacao(
                 $idEtapa,
@@ -119,7 +119,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $idPronac
             );
 
-            $a = 0;
             $itensArray = array();
 
             foreach ($itens as $item) {
@@ -138,7 +137,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
 
         } else {
-            // old
             foreach ($itens as $item) {
                 $itensArray[$a]['idPlanilhaItens'] = $item->idPlanilhaItens;
                 $itensArray[$a]['Item'] = utf8_encode($item->Item);
@@ -150,9 +148,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    /*
-     * Criada em 06/03/14
-     * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
+    /**
      * Essa função é acessada para alterar o item da planilha orçamentária.
      */
     public function alterarItemSolicitacaoAction()
@@ -162,14 +158,15 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
 
         /* DADOS DO ITEM ATIVO */
-        $itemTipoPlanilha = $tbPlanilhaAprovacao->buscar(array('idPlanilhaAprovacao=?' => $idPlanilhaAprovacao))->current();
+        $itemTipoPlanilha = $tbPlanilhaAprovacao->buscar(array(
+            'idPlanilhaAprovacao = ?' => $idPlanilhaAprovacao
+        ))->current();
         $where = array();
+        $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
+        $idPlan = $idPlanilhaAprovacao;
         if ($itemTipoPlanilha->tpPlanilha == 'SR') {
             $where['idPlanilhaAprovacao = ?'] = !empty($itemTipoPlanilha->idPlanilhaAprovacaoPai) ? $itemTipoPlanilha->idPlanilhaAprovacaoPai : $itemTipoPlanilha->idPlanilhaAprovacao;
             $idPlan = !empty($itemTipoPlanilha->idPlanilhaAprovacaoPai) ? $itemTipoPlanilha->idPlanilhaAprovacaoPai : $itemTipoPlanilha->idPlanilhaAprovacao;
-        } else {
-            $where['idPlanilhaAprovacao = ?'] = $idPlanilhaAprovacao;
-            $idPlan = $idPlanilhaAprovacao;
         }
         $where['stAtivo = ?'] = 'S';
         $planilhaAtiva = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
@@ -182,7 +179,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $planilhaEditaval = $tbPlanilhaAprovacao->buscarDadosAvaliacaoDeItemRemanejamento($where);
 
         $dadosPlanilhaAtiva = array();
-        $dadosPlanilhaEditavel = array();
 
         /* PROJETO */
         $Projetos = new Projetos();
@@ -212,6 +208,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $dadosPlanilhaAtiva['Justificativa'] = utf8_encode($registro['Justificativa']);
         }
 
+        $dadosPlanilhaEditavel = $dadosPlanilhaAtiva;
         if (count($planilhaEditaval) > 0) {
             foreach ($planilhaEditaval as $registroEditavel) {
                 $dadosPlanilhaEditavel['idPlanilhaAprovacao'] = $registroEditavel['idPlanilhaAprovacao'];
@@ -231,10 +228,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $dadosPlanilhaEditavel['Justificativa'] = utf8_encode($registroEditavel['Justificativa']);
                 $dadosPlanilhaEditavel['idAgente'] = $registroEditavel['idAgente'];
             }
-        } else {
-            $dadosPlanilhaEditavel = $dadosPlanilhaAtiva;
         }
-
         if (count($planilhaEditaval) > 0 && count($planilhaAtiva) == 0) {
             $dadosPlanilhaAtiva = $dadosPlanilhaEditavel;
         }
@@ -246,14 +240,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             'vlComprovadoDoItemValidacao' => utf8_encode(number_format($res->vlComprovado, 2, '', ''))
         );
 
-        //$jsonEncode = json_encode($dadosPlanilha);
         $this->_helper->json(array('resposta' => true, 'dadosPlanilhaAtiva' => $dadosPlanilhaAtiva, 'dadosPlanilhaEditavel' => $dadosPlanilhaEditavel, 'valoresDoItem' => $valoresDoItem, 'dadosProjeto' => $dadosProjeto));
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    /*
-     * Criada em 14/03/14
-     * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
+    /**
      * Esse função é usada pelo proponente para solicitar a exclusão de um item da planilha orçamentária.
      */
     public function excluirItemSolicitacaoAction()
@@ -2028,6 +2019,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         $post = Zend_Registry::get('post');
         $idReadequacao = (int)$post->idReadequacao;
+        $idPronac = (int)$post->idPronac;
 
         //Atualiza a tabela Readequacao_Model_DbTable_TbReadequacao
         $dados = array();
@@ -2038,7 +2030,20 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         if ($return) {
 
-            $this->_helper->json(array('resposta' => true));
+            $idTipoDoAtoAdministrativo = $this->obterIdTipoAtoAdministativoPorOrgaoSuperior($this->idOrgao);
+            $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $idDocumentoAssinatura = $objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
+                $idPronac,
+                $idTipoDoAtoAdministrativo
+            );
+
+            $linkAssinatura = '';
+            if($idDocumentoAssinatura) {
+                $origin = "readequacao/readequacao-assinatura";
+                $linkAssinatura = "/assinatura/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&origin={$origin}";
+            }
+
+            $this->_helper->json(array('resposta' => true, $linkAssinatura));
         } else {
             $this->_helper->json(array('resposta' => false));
         }
@@ -3870,6 +3875,19 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
+    }
+
+    private function obterIdTipoAtoAdministativoPorOrgaoSuperior($idOrgao)
+    {
+        $orgaoDbTable = new Orgaos();
+        $resultadoOrgaoSuperior = $orgaoDbTable->obterOrgaoSuperior($idOrgao);
+        $orgaoSuperior = $resultadoOrgaoSuperior['Codigo'];
+        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_XXXXXXXXXX;
+        if($orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SAV && $orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SEFIC) {
+            $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
+        }
+
+        return $idTipoDoAtoAdministrativo;
     }
 
 }
