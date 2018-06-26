@@ -1998,9 +1998,16 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
                     $idParecer
                 );
-                $servicoDocumentoAssinatura->iniciarFluxo();
+                $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
 
-                parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacao/readequacoes/painel-readequacoes", "CONFIRM");
+                $origin = "readequacao/readequacao-assinatura";
+
+                parent::message(
+                    "A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ",
+                    "/assinatura/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&origin={$origin}",
+                    "CONFIRM"
+                );
+//                parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacao/readequacoes/painel-readequacoes", "CONFIRM");
             }
 
             $idReadequacao = Seguranca::encrypt($idReadequacao);

@@ -256,6 +256,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
     }
 
 
+
     public function obterDocumentosAssinadosPorProjeto($idPronac)
     {
         $objQuery = $this->select();

@@ -29,7 +29,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
         $this->idAtoDeGestao = $idAtoDeGestao;
     }
 
-    public function iniciarFluxo()
+    public function iniciarFluxo() :int
     {
         $auth = \Zend_Auth::getInstance();
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
@@ -47,6 +47,11 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
 
         $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
         $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
+
+        return (int)$objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
+            $this->idPronac,
+            $this->idTipoDoAtoAdministrativo
+        );
     }
 
     /**

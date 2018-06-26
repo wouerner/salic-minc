@@ -29,7 +29,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
         $this->idAtoDeGestao = $idAtoDeGestao;
     }
 
-    public function iniciarFluxo()
+    public function iniciarFluxo() :int
     {
         if (!$this->idPronac) {
             throw new Exception("Identificador do Projeto não informado.");
@@ -46,8 +46,8 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             throw new Exception("Situa&ccedil;&atilde;o do projeto inv&aacute;lida!");
         }
 
-        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $isProjetoDisponivelParaAssinatura = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
+        $objDbTableDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $isProjetoDisponivelParaAssinatura = $objDbTableDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
             $this->idPronac,
             $this->idTipoDoAtoAdministrativo
         );
@@ -95,6 +95,11 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
         }
         $objTbProjetos->alterarOrgao($orgaoDestino, $this->idPronac);
+
+        return (int)$objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
+            $this->idPronac,
+            $this->idTipoDoAtoAdministrativo
+        );
     }
 
     /**

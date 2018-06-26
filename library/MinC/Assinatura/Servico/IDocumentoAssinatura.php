@@ -8,5 +8,5 @@ interface IDocumentoAssinatura
 
     function criarDocumento();
 
-    function iniciarFluxo();
+    function iniciarFluxo() : int;
 }
