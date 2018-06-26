@@ -313,12 +313,9 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $objQuery->where('stEstado = ?', 1);
         
         $result = $this->fetchRow($objQuery);
-        
-        if (!$result || empty($result)) {
-            return false;
-        } else {
-            $result = $result->toArray();
-            return $result['idDocumentoAssinatura'];
+        if ($result) {
+            $resultadoArray = $result->toArray();
+            return $resultadoArray['idDocumentoAssinatura'];
         }
     }    
 }
