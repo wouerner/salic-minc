@@ -1,130 +1,134 @@
 Vue.component('sl-comprovar-form',
 {
     template: `
-            <form>
-                <fieldset>
-                    <legend>Identifica&ccedil;&atilde;o do Contratado</legend>
-                    <div class="row">
-                        <div class=" col s8">
-                            <p>Nacionalidade do Fornecedor</p>
-                            <p>
-                                <input
-                                    v-model="comprovante.fornecedor.eInternacional"
-                                    type="radio"
-                                    name="nacionalidade"
-                                    :value="false"
-                                    id="nacionalidade_1"
-                                    v-on:click="forncedorNacional($event.target.value)"
-                                />
-                                <label for="nacionalidade_1">Brasil</label>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class=" col s1">
+        <form>
+            <fieldset>
+                <legend>Identifica&ccedil;&atilde;o do Contratado</legend>
+                <div class="row">
+                    <div class=" col s8">
+                        <p>Nacionalidade do Fornecedor</p>
+                        <p>
                             <input
                                 v-model="comprovante.fornecedor.eInternacional"
-                                :value="true"
                                 type="radio"
                                 name="nacionalidade"
-                                id="nacionalidade_2"
-                                v-on:click="fornecedorInternacional($event.target.value)"
+                                :value="false"
+                                :id="'nacionalidade_1_' + comprovante.id"
+                                v-on:click="forncedorNacional($event.target.value)"
                             />
-                            <label for="nacionalidade_2">Outros</label>
-                        </div>
-                        <template v-if="(comprovante.fornecedor.nacionalidadeInternacional)">
-                            <div class="col s4">
-                                <label class="" for="pais">Nacionalidade do Fornecedor</label>
-                                <select
-                                    v-model="comprovante.fornecedor.nacionalidade"
-                                    name="pais"
-                                    class=" browser-default "
-
-                                 >
-                                    <option v-for="p in pais" :value="p.id">
-                                        {{p.nome}}
-                                    </option>
-                                </select>
-                            </div>
-                        </template>
+                            <label 
+                                :for="'nacionalidade_1_' + comprovante.id"
+                            >Brasil</label>
+                        </p>
                     </div>
-                <template v-if="(comprovante.fornecedor.nacionalidade == 31)">
+                </div>
+                <div class="row">
+                    <div class=" col s1">
+                        <input
+                            v-model="comprovante.fornecedor.eInternacional"
+                            :value="true"
+                            type="radio"
+                            name="nacionalidade"
+                            :id="'nacionalidade_2_' + comprovante.id"
+                            v-on:click="fornecedorInternacional($event.target.value)"
+                        />
+                        <label
+                            :for="'nacionalidade_2_' + comprovante.id"
+                        >Outros</label>
+                    </div>
+                    <template v-if="(comprovante.fornecedor.eInternacional)">
+                        <div class="col s4">
+                            <label class="" for="pais">Nacionalidade do Fornecedor</label>
+                            <select
+                                v-model="comprovante.fornecedor.nacionalidade"
+                                name="pais"
+                                class=" browser-default "
+
+                             >
+                                <option v-for="p in pais" :value="p.id">
+                                    {{p.nome}}
+                                </option>
+                            </select>
+                        </div>
+                    </template>
+                </div>
+            <template v-if="(comprovante.fornecedor.nacionalidade == 31)">
+                <div class="row">
+                    <div class=" col s6">
+                        <p>Tipo do Fornecedor</p>
+                        <p>
+                            <input
+                                v-model="comprovante.fornecedor.tipoPessoa"
+                                type="radio"
+                                name="tipoPessoa"
+                                value="1"
+                                id="tipoPessoa_1"
+                                v-on:change="resetTipoPessoa"
+                            />
+                            <label for="tipoPessoa_1">CPF</label>
+                            <input
+                                v-model="comprovante.fornecedor.tipoPessoa"
+                                type="radio"
+                                name="tipoPessoa"
+                                value="2"
+                                id="tipoPessoa_2"
+                                v-on:change="resetTipoPessoa"
+                            />
+                            <label for="tipoPessoa_2">CNPJ</label>
+                        </p>
+                    </div>
+                </div>
+            </template>
+                <template v-if="(!comprovante.fornecedor.eInternacional)">
                     <div class="row">
-                        <div class=" col s6">
-                            <p>Tipo do Fornecedor</p>
-                            <p>
-                                <input
-                                    v-model="comprovante.fornecedor.tipoPessoa"
-                                    type="radio"
-                                    name="tipoPessoa"
-                                    value="1"
-                                    id="tipoPessoa_1"
-                                    v-on:change="resetTipoPessoa"
-                                />
-                                <label for="tipoPessoa_1">CPF</label>
-                                <input
-                                    v-model="comprovante.fornecedor.tipoPessoa"
-                                    type="radio"
-                                    name="tipoPessoa"
-                                    value="2"
-                                    id="tipoPessoa_2"
-                                    v-on:change="resetTipoPessoa"
-                                />
-                                <label for="tipoPessoa_2">CNPJ</label>
-                            </p>
+                        <div
+                            :class="[this.c.fornecedor.CNPJCPF.css, 'input-field col s6']" >
+                            <input
+                                type="text"
+                                ref="CNPJCPF"
+                                :value="comprovante.fornecedor.cnpjcpfMask"
+                                v-on:keyup.enter="pesquisarFornecedor()"
+                                v-on:input="inputCNPJCPF($event.target.value)"
+                                :class="[this.c.fornecedor.CNPJCPF.css]"
+                            />
+                            <template v-if="comprovante.fornecedor.tipoPessoa == 1">
+                            <label for="CNPJCPF"
+                                :class="['active', this.c.fornecedor.CNPJCPF.css]"
+                            >
+                            CPF *</label>
+                            </template>
+                            <template v-else >
+                                <label for="CNPJCPF"
+                                    :class="[this.c.fornecedor.CNPJCPF.css]"
+                                >CNPJ *</label>
+                            </template>
+                        </div>
+                        <div class="input-field col s1">
+                            <button v-on:click.prevent="pesquisarFornecedor()" class="btn">
+                                <i class="material-icons">search</i>
+                            </button>
+                        </div>
+                        <div class="input-field col s5">
+                            <input
+                                v-model="comprovante.fornecedor.nome"
+                                type="text"
+                                name="Descricao"
+                                id="Descricao"
+                                null="false"
+                                value=""
+                                disabled="true"
+                            />
+                            <template v-if="comprovante.fornecedor.tipoPessoa == 1">
+                                <label>Nome</label>
+                            </template>
+                            <template v-else >
+                                <label>Raz&atilde;o Social</label>
+                            </template>
                         </div>
                     </div>
                 </template>
-                    <template v-if="(!comprovante.fornecedor.eInternacional)">
-                        <div class="row">
-                            <div
-                                :class="[this.c.fornecedor.CNPJCPF.css, 'input-field col s6']" >
-                                <input
-                                    type="text"
-                                    ref="CNPJCPF"
-                                    :value="comprovante.fornecedor.cnpjcpfMask"
-                                    v-on:keyup.enter="pesquisarFornecedor()"
-                                    v-on:input="inputCNPJCPF($event.target.value)"
-                                    :class="[this.c.fornecedor.CNPJCPF.css]"
-                                />
-                                <template v-if="comprovante.fornecedor.tipoPessoa == 1">
-                                <label for="CNPJCPF"
-                                    :class="['active', this.c.fornecedor.CNPJCPF.css]"
-                                >
-                                CPF *</label>
-                                </template>
-                                <template v-else >
-                                    <label for="CNPJCPF"
-                                        :class="[this.c.fornecedor.CNPJCPF.css]"
-                                    >CNPJ *</label>
-                                </template>
-                            </div>
-                            <div class="input-field col s1">
-                                <button v-on:click.prevent="pesquisarFornecedor()" class="btn">
-                                    <i class="material-icons">search</i>
-                                </button>
-                            </div>
-                            <div class="input-field col s5">
-                                <input
-                                    v-model="comprovante.fornecedor.nome"
-                                    type="text"
-                                    name="Descricao"
-                                    id="Descricao"
-                                    null="false"
-                                    value=""
-                                    disabled="true"
-                                />
-                                <template v-if="comprovante.fornecedor.tipoPessoa == 1">
-                                    <label>Nome</label>
-                                </template>
-                                <template v-else >
-                                    <label>Raz&atilde;o Social</label>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
-                </fieldset>
-                <template v-if="(!comprovante.fornecedor.eInternacional)">
+            </fieldset>
+            <template v-if="(!comprovante.fornecedor.eInternacional)">
                 <fieldset>
                     <legend>Dados da Comprova&ccedil;&atilde;o de Pagamento</legend>
                     <div class="row">
@@ -257,118 +261,121 @@ Vue.component('sl-comprovar-form',
                         </div>
                     </div>
                 </fieldset>
-                </template>
-                <!-- Fonecedor Internacional -->
-                <template v-else>
-                    <fieldset>
-                        <legend>Dados da Comprova&ccedil;&atilde;o de Pagamento Internacional</legend>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input
-                                    v-model="comprovante.fornecedor.nome"
-                                    type="text"
-                                />
-                                <label for="nomeRazaoSocialInternacional">Nome da Empresa</label>
-                            </div>
-                            <div class="input-field col s6">
-                                <input
-                                    v-model="comprovante.fornecedor.endereco"
-                                    type="text"
-                                />
-                                <label for="enderecoInternacional">Endere&ccedil;o</label>
-                            </div>
+            </template>
+            <!-- Fonecedor Internacional -->
+            <template v-else>
+                <fieldset>
+                    <legend>Dados da Comprova&ccedil;&atilde;o de Pagamento Internacional</legend>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input
+                                v-model="comprovante.fornecedor.nome"
+                                type="text"
+                            />
+                            <label for="nomeRazaoSocialInternacional">Nome da Empresa</label>
                         </div>
+                        <div class="input-field col s6">
+                            <input
+                                v-model="comprovante.fornecedor.endereco"
+                                type="text"
+                            />
+                            <label for="enderecoInternacional">Endere&ccedil;o</label>
+                        </div>
+                    </div>
 
-                        <div class="row">
-                            <div class="input-field col s5">
-                                <input type="text" name="nif"
-                                    v-model="comprovante.numeroDocumento"
-                                />
-                                <label> N&uacute;mero do documento</label>
-                            </div>
-                            <div class="input-field col s4">
-                                <input type="text" name="nrSerie"
-                                    id="nrSerie" maxlength="8"
-                                        v-model="comprovante.serie"
-                                       value=""/>
-                                <label>S&eacute;rie</label>
-                            </div>
-                            <div class="col s3">
-                                <p>
-                                    <label>Tipo de Documento</label>
-                                </p>
-                                <p>
-                                    <input type="radio" value="6"
-                                        id="tipo_documento_invoice"
-                                        v-model="comprovante.tipo"
-                                    />
-                                    <label for="tipo_documento_invoice">Invoice</label>
-                                </p>
-                                <p>
-                                    <input type="radio" value="7"
-                                        id="tipo_documento_outros"
-                                            v-model="comprovante.tipo" />
-                                    <label for="tipo_documento_outros">Outros</label>
-                                </p>
-                            </div>
+                    <div class="row">
+                        <div class="input-field col s5">
+                            <input type="text" name="nif"
+                                v-model="comprovante.numeroDocumento"
+                            />
+                            <label> N&uacute;mero do documento</label>
                         </div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                <input
-                                    type="text"
-                                    name="dtEmissaoInternacional"
-                                    v-model="comprovante.dataEmissao"
-                                />
-                                <label for="dtEmissaoInternacional">Dt. do Documento</label>
-                            </div>
-                            <div class="input-field col s6">
-                                <input
-                                    type="text"
-                                    id="dtPagamentoInternacional"
-                                    v-model="comprovante.dataPagamento"
-                                />
-                                <label for="dtPagamentoInternacional">Dt. do Pagamento</label>
-                            </div>
+                        <div class="input-field col s4">
+                            <input type="text" name="nrSerie"
+                                id="nrSerie" maxlength="8"
+                                    v-model="comprovante.serie"
+                                   value=""/>
+                            <label>S&eacute;rie</label>
                         </div>
-                        <div class="row">
-                            <div class="input-field col s4">
-                                <input type="text" name="vlComprovadoInternacional"
-                                    v-model="comprovante.valor"
-                                    :class="c.valor.css"
-                                size="10" value=""/>
-                                <label for="vlComprovadoInternacional">Valor do Item</label>
+                        <div class="col s3">
+                            <p>
+                                <label>Tipo de Documento</label>
+                            </p>
+                            <p>
+                                <input type="radio" value="6"
+                                    id="tipo_documento_invoice"
+                                    v-model="comprovante.tipo"
+                                />
+                                <label for="tipo_documento_invoice">Invoice</label>
+                            </p>
+                            <p>
+                                <input type="radio" value="7"
+                                    id="tipo_documento_outros"
+                                        v-model="comprovante.tipo" />
+                                <label for="tipo_documento_outros">Outros</label>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input
+                                type="text"
+                                name="dtEmissaoInternacional"
+                                v-model="comprovante.dataEmissao"
+                            />
+                            <label for="dtEmissaoInternacional">Dt. do Documento</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input
+                                type="text"
+                                id="dtPagamentoInternacional"
+                                v-model="comprovante.dataPagamento"
+                            />
+                            <label for="dtPagamentoInternacional">Dt. do Pagamento</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <input type="text" name="vlComprovadoInternacional"
+                                v-model="comprovante.valor"
+                                :class="c.valor.css"
+                            size="10" value=""/>
+                            <label for="vlComprovadoInternacional">Valor do Item</label>
+                        </div>
+                        <div class="file-field input-field col s4"
+                            :class="c.arquivo.css"
+                        >
+                            <div class="btn">
+                                <span>Anexar comprovante</span>
+                                <input name="arquivo" id="arquivo" type="file" @change="file">
                             </div>
-                            <div class="file-field input-field col s4"
-                                :class="c.arquivo.css"
+                            <div
+                                :class="[c.arquivo.css, 'file-path-wrapper']"
                             >
-                                <div class="btn">
-                                    <span>Anexar comprovante</span>
-                                    <input name="arquivo" id="arquivo" type="file" @change="file">
-                                </div>
-                                <div
-                                    :class="[c.arquivo.css, file-path-wrapper]"
-                                >
-                                    <input class="file-path validate" type="text">
-                                </div>
+                                <input class="file-path validate" type="text">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <textarea id="dsJustificativaInternacionalId"
-                                    class="materialize-textarea" rows="5"
-                                    v-model="comprovante.justificativa"
-                                    name="dsJustificativaInternacional">
-                                </textarea>
-                                <label for="dsJustificativaInternacionalId">Justificativa</label>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="dsJustificativaInternacionalId"
+                                class="materialize-textarea" rows="5"
+                                v-model="comprovante.justificativa"
+                                name="dsJustificativaInternacional">
+                            </textarea>
+                            <label for="dsJustificativaInternacionalId">Justificativa</label>
                         </div>
-                    </fieldset>
-                </template>
-                <button type="button" class="btn" @click.prevent="salvar">salvar</button>
-            </form>
+                    </div>
+                </fieldset>
+            </template>
+            <button type="button" class="btn" @click.prevent="salvar">salvar</button>
+            <button type="button" class="btn white black-text" @click.prevent="cancelar()">cancelar</button>
+        </form>
     `,
     mounted: function() {
         this.paises();
+
+        this.comprovante.item = this.item;
         if (this.dados) {
             if (this.dados.idComprovantePagamento) {
                 this.comprovante.id = this.dados.idComprovantePagamento;
@@ -388,31 +395,9 @@ Vue.component('sl-comprovar-form',
             this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
             this.comprovante.arquivo = { name: this.dados.nmArquivo };
             this.comprovante.justificativa = this.dados.dsJustificativaProponente;
-
-            // comprovante: {
-            //     fornecedor: {
-            //         nacionalidade: 31,
-            //         tipoPessoa: 1,
-            //         CNPJCPF: '',
-            //         cnpjcpfMask: '',
-            //         nome: '',
-            //         idAgente: '',
-            //         eInternacional: false,
-            //     },
-            //     tipo: 1,
-            //     numero: '',
-            //     serie: '',
-            //     dataEmissao: '',
-            //     dataPagamento:'',
-            //     forma: 1,
-            //     numeroDocumento: '',
-            //     valor: '',
-            //     arquivo: '',
-            //     justificativa: ''
-            // }
         }
     },
-    props: ['dados', 'url', 'messages', 'tipoform'],
+    props: ['dados', 'url', 'messages', 'tipoform', 'item'],
     data: function() {
         return this.data();
     },
@@ -470,28 +455,30 @@ Vue.component('sl-comprovar-form',
                                css: '',
                            },
                        }
-                       vue.comprovante =  {
-                           fornecedor: {
-                               nacionalidade: 31,
-                               tipoPessoa: 1,
-                               CNPJCPF: '',
-                               cnpjcpfMask: '',
-                               nome: '',
-                               idAgente: '',
-                               eInternacional: false,
-                           },
-                           tipo: 1,
-                           numero: '',
-                           serie: '',
-                           dataEmissao: '',
-                           dataPagamento:'',
-                           forma: 1,
-                           numeroDocumento: '',
-                           valor: '',
-                           arquivo: '',
-                           justificativa: ''
-                       }
 
+                       vue.comprovante = {
+                            fornecedor: {
+                                nacionalidade: 31,
+                                tipoPessoa: 1,
+                                CNPJCPF: '',
+                                cnpjcpfMask: '',
+                                nome: '',
+                                idAgente: '',
+                                eInternacional: false,
+                            },
+                            item: vue.item,
+                            tipo: 1,
+                            numero: '',
+                            serie: '',
+                            dataEmissao: '',
+                            dataPagamento:'',
+                            forma: 1,
+                            numeroDocumento: '',
+                            valor: '',
+                            arquivo: '',
+                            justificativa: '',
+                            foiAtualizado: false,
+                        }
                     }
 
                     if (vue.tipoform == 'edicao'){
@@ -608,11 +595,11 @@ Vue.component('sl-comprovar-form',
         },
         forncedorNacional: function(e) {
             this.comprovante.fornecedor.nacionalidade = 31;
-            this.comprovante.fornecedor.nacionalidadeInternacional = false;
+            this.comprovante.fornecedor.eInternacional = false;
         },
         fornecedorInternacional: function(e) {
             this.comprovante.fornecedor.nacionalidade = 0;
-            this.comprovante.fornecedor.nacionalidadeInternacional = true;
+            this.comprovante.fornecedor.eInternacional = true;
         },
         resetTipoPessoa: function(e) {
             this.comprovante.fornecedor.nome = '';
@@ -644,6 +631,9 @@ Vue.component('sl-comprovar-form',
                this.c.valor.css = {};
             }
         },
+        cancelar: function () {
+            vue.$root.$emit('comprovante-atualizado');
+        },
         data: function () {
             return {
                 comprovante: {
@@ -656,6 +646,7 @@ Vue.component('sl-comprovar-form',
                         idAgente: '',
                         eInternacional: false,
                     },
+                    item: this.item,
                     tipo: 1,
                     numero: '',
                     serie: '',
@@ -666,7 +657,7 @@ Vue.component('sl-comprovar-form',
                     valor: '',
                     arquivo: '',
                     justificativa: '',
-                    foiAtualizado: false
+                    foiAtualizado: false,
                 },
                 pais: '',
                 c: {

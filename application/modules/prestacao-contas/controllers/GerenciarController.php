@@ -521,6 +521,23 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         $this->_helper->json($data);
     }
 
+    public function excluirAction()
+    {
+        $comprovante = new PrestacaoContas_Model_ComprovantePagamento();
+
+        $comprovante->idComprovantePagamento = $this->getRequest()->getPost()['comprovante']['idComprovantePagamento'];
+
+        $data = [];
+        try {
+            $comprovante->excluir();
+            $data = ['success' => true];
+        } catch (Exception $e) {
+            $this->view->message = $e->getMessage();
+            echo $e->getMessage();die;
+        }
+        $this->_helper->json($data);
+    }
+
     public function fornecedorAction()
     {
         $this->_helper->layout->disableLayout();
