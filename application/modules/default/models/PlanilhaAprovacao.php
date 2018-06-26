@@ -2700,10 +2700,6 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
             i.NomeProjeto,
             ISNULL(d.Codigo,0) as cdProduto,
             ISNULL(d.Descricao,'Administra&ccedil;&atilde;o do Projeto') AS Produto,
-            b.tpCusto,
-            b.idPlanilhaEtapa as cdEtapa,
-            b.Descricao AS Etapa,
-            b.Descricao AS descEtapa,
             a.idUFDespesa AS cdUF,
             e.Sigla AS Uf,
             e.Sigla AS uf,
@@ -2740,7 +2736,10 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         $select->join(
                 ['b' => 'tbPlanilhaEtapa'],
                 "(a.idEtapa = b.idPlanilhaEtapa)",
-                [],
+                ['b.tpCusto',
+            'b.idPlanilhaEtapa as cdEtapa',
+            'b.Descricao AS Etapa',
+            'b.Descricao AS descEtapa'],
                 'SAC.dbo'
         );
 
@@ -2775,7 +2774,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         $select->joinLeft(
                 ['g' => 'tbComprovantePagamentoxPlanilhaAprovacao'],
                 "(a.idPlanilhaAprovacao = g.idPlanilhaAprovacao)",
-                [],
+                ['g.stItemAvaliado'],
                 'BDCORPORATIVO.scSAC'
         );
 
