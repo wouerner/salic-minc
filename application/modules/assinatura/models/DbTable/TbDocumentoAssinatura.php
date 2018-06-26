@@ -119,7 +119,6 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $idTipoDoAtoAdministrativos = []
     ) {
 
-        // d($idOrgaoDoAssinante, $idPerfilDoAssinante, $idOrgaoSuperiorDoAssinante, $idTipoDoAtoAdministrativo);
         $query = $this->select();
         $query->setIntegrityCheck(false);
 
@@ -229,7 +228,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
             $this->_schema
         );
 
-        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
+        $query->where("TbAtoAdministrativo.idOrgaoDoAssinante = ?", $idOrgaoDoAssinante);
         $query->where("tbDocumentoAssinatura.cdSituacao = ?", Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
         $query->where("tbDocumentoAssinatura.stEstado = ?", Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
 
@@ -239,6 +238,7 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
 
         $ordenacao[] = 'possuiAssinatura asc';
         $query->order($ordenacao);
+
         return $this->_db->fetchAll($query);
     }
 
