@@ -92,7 +92,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
         ])->current();
 
 
-        switch ((string)$parecer->ParecerFavoravel === '1') {
+        switch ((string)$parecer->ParecerFavoravel) {
             case '1':
                 $view->parecer = 'Desfavor&aacute;vel';
                 break;
