@@ -2,9 +2,11 @@
 
 class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 {
+    private $projeto;
+    private $usuarioInterno;
 
     public function obterMenu($idPronac) {
-        return $this->obterArrayMenu($idPronac);
+        return $this->obterArrayMenuMecenato($idPronac);
     }
 
     public function liberarLink($idPronac)
@@ -48,7 +50,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
     }
 
-    public function obterArrayMenu($idPronac)
+    public function obterArrayMenuConvenio($idPronac)
     {
         $idPronacHash = Seguranca::encrypt($idPronac);
 
@@ -74,6 +76,140 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'submenu' => '',
             'grupo' => []
         );
+
+        return $menu;
+    }
+
+    public function obterArrayMenuMecenato($idPronac)
+    {
+        $idPronacHash = Seguranca::encrypt($idPronac);
+
+        $menu = [];
+        $menu['dadosprojeto'] = [
+            'id' => 'dadosdoprojeto',
+            'label' => 'Dados básicos',
+            'title' => '',
+            'link' => '/projeto/convenio/visualizar/idPronac/' . $idPronacHash,
+            'ajax' => false,
+            'icon' => 'home',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
+        $menu['proponente'] = [
+            'id' => 'proponente',
+            'label' => 'Proponente',
+            'title' => '',
+            'link' => '/default/consultardadosprojeto/dados-proponente/idPronac/' . $idPronacHash,
+            'ajax' => true,
+            'icon' => 'person',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes'] = [
+            'id' => 'outrasinformacoes',
+            'label' => 'Outras Informações',
+            'title' => 'Outras Informações',
+            'link' => '',
+            'ajax' => false,
+            'icon' => 'style',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
+         $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Certid&otilde;es Negativas',
+            'title' => 'Ir para Dados Certid&otilde;es Negativas',
+            'link' => '/default/consultardadosprojeto/certidoes-negativas/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+         $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Dados complementares do projeto',
+            'title' => 'Ir para Dados complementares do projeto',
+            'link' => '/default/consultardadosprojeto/dados-complementares/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+         
+          $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Documentos anexados',
+            'title' => 'Ir para  Documentos anexados',
+            'link' => '/default/consultardadosprojeto/documentos-anexados/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Documentos assinados',
+            'title' => 'Ir para Documentos assinados',
+            'link' => '/assinatura/index/visualizar-documentos-assinatura-ajax/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Dilig&ecirc;ncias do projeto',
+            'title' => 'Ir para Dilig&ecirc;ncias do projeto',
+            'link' => '/default/consultardadosprojeto/diligencias/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Local de realiza&ccedil;&atilde;o/Deslocamento',
+            'title' => 'Ir para Local de realiza&ccedil;&atilde;o/Deslocamento',
+            'link' => '/default/consultardadosprojeto/local-realizacao-deslocamento/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+
+        if ($this->IN2017) {
+            $menu['outrasinformacoes']['submenu'][] = [
+                'label' => 'Plano de distribui&ccedil;&atilde;o',
+                'title' => 'Ir para Plano de distribui&ccedil;&atilde;o',
+                'link' => '/default/consultardadosprojeto/plano-de-distribuicao/?idPronac=' . $idPronacHash,
+                'ajax' => true,
+                'grupo' => []
+            ];
+        } else {
+            $menu['outrasinformacoes']['submenu'][] = [
+                'label' => 'Plano de distribui&ccedil;&atilde;o',
+                'title' => 'Ir para Plano de distribui&ccedil;&atilde;o',
+                'link' => '/proposta/visualizar-plano-distribuicao/visualizar/idPreProjeto/' . $this->projeto->idProjeto,
+                'ajax' => true,
+                'grupo' => []
+            ];
+        }
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Provid&ecirc;ncia tomada',
+            'title' => 'Ir para Provid&ecirc;ncia tomada',
+            'link' => '/default/consultardadosprojeto/providencia-tomada/?idPronac=' . $idPronacHash,
+            'ajax' => false,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Tramita&ccedil;&atilde;o',
+            'title' => 'Ir para Tramita&ccedil;&atilde;o',
+            'link' => '/default/consultardadosprojeto/tramitacao/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        if ($this->usuarioInterno) {
+            $menu['outrasinformacoes']['submenu'][] = [
+                'label' => 'Hist&oacute;rico encaminhamento',
+                'title' => 'Ir para Hist&oacute;rico encaminhamento',
+                'link' => '/default/consultardadosprojeto/historico-encaminhamento/?idPronac=' . $idPronacHash,
+                'ajax' => true,
+                'grupo' => []
+            ];
+        }
 
         return $menu;
     }
