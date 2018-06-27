@@ -339,7 +339,7 @@ Vue.component('readequacao-saldo-aplicacao', {
 	},
 	finalizarReadequacao: function() {
 	    let self = this;
-
+	    
 	    $3.ajax({
 		type: "POST",
 		url: "/readequacao/saldo-aplicacao/finalizar-readequacao",
@@ -349,12 +349,11 @@ Vue.component('readequacao-saldo-aplicacao', {
 		}
 	    }).done(function (response) {
 		self.mensagemSucesso(response.msg);
-
 		self.exibirPaineis = false;
 		self.exibirBotaoIniciar = false;
 		self.mostrarMensagemFinal = true;
 		self.readequacao.idReadequacao = '';
-		$3('#modalFinalizar').close();
+		$3('#modalFinalizar').modal('close');
 		
             }).fail(function (response) {
                 self.mensagemErro(response.responseJSON.msg)
