@@ -80,6 +80,7 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
                 'idPlanilhaAprovacao' => $item->idPlanilhaAprovacao,
                 'idPlanilhaItens' => $item->idPlanilhaItens,
                 'ComprovacaoValidada' => $item->ComprovacaoValidada,
+                'stItemAvaliado' => $item->stItemAvaliado,
             ];
 
             $planilhaJSON[$item->cdProduto] += [
