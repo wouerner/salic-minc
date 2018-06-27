@@ -2714,9 +2714,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
             c.Descricao AS Item,
             c.Descricao AS descItem,
             d.Descricao ,
-            CONVERT(DECIMAL(38,2), sac.dbo.fnVlAprovado_Fonte_Produto_Etapa_Local_Item
-                   (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
-                    a.idMunicipioDespesa,a.idPlanilhaItem)) as vlAprovado,
+            CONVERT(DECIMAL(38,2), ISNULL((a.qtItem * a.nrOcorrencia * a.vlUnitario),0)) as vlAprovado,
             CONVERT(DECIMAL(38,2), sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item
                    (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
                     a.idMunicipioDespesa,a.idPlanilhaItem)) as vlComprovado,
