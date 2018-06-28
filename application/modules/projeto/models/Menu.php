@@ -483,10 +483,53 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'id' => 'prorrogacao',
                 'label' => 'Adequar &agrave; realidade',
                 'title' => 'Adequar &agrave; realidade ou Encaminhar projeto adequado para o MinC',
-                'link' => 'proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/' . $this->projeto->idProjeto,
+                'link' => '/proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/' . $this->projeto->idProjeto,
                 'ajax' => false,
                 'icon' => 'timer',
                 'submenu' => '',
+                'grupo' => []
+            ];
+        }
+
+        if ($this->fnLiberarLinks['Diligencia'] || $debug) {
+            $menu['diligencia'] = [
+                'id' => 'diligencia',
+                'label' => 'Dilig&ecirc;ncias',
+                'title' => 'Responder Dilig&ecirc;ncias',
+                'link' => '/proposta/diligenciar/listardiligenciaproponente?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'icon' => 'warning',
+                'badge' => '1',
+                'submenu' => '',
+                'grupo' => []
+            ];
+        }
+
+        if ($this->fnLiberarLinks['Recursos'] || $debug) {
+            $menu['recurso'] = [
+                'id' => 'recurso',
+                'label' => 'Recurso',
+                'title' => 'Solicitar recurso ou desistir',
+                'link' => '/proposta/diligenciar/listardiligenciaproponente?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'icon' => 'insert_comment',
+                'submenu' => '',
+                'grupo' => []
+            ];
+
+            $menu['recurso']['submenu'][] = [
+                'label' => 'Solicitar Recurso',
+                'title' => 'Ir para Solicitar Recurso',
+                'link' => '/default/solicitarrecursodecisao/recurso/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['recurso']['submenu'][] = [
+                'label' => 'Desistir do Recurso',
+                'title' => 'Ir para Desistir do Recurso',
+                'link' => '/default/solicitarrecursodecisao/recurso-desistir/?idPronac=' . $idPronacHash,
+                'ajax' => false,
                 'grupo' => []
             ];
         }

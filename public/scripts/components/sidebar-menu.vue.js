@@ -9,8 +9,9 @@ Vue.component('sidebar-menu', {
                            class="collapsible-header waves-effect waves-cyan"
                            href="javascript:void(0)"
                         >
-                            <i v-if="item.icon" class="material-icons left">{{ item.icon}}</i>
+                            <i v-if="item.icon" class="material-icons left">{{ item.icon }}</i>
                            <span v-html="item.label"></span>
+                           <span v-if="item.badge" class="new badge">{{ item.badge }}</span>
                         </a>
                         <div class="collapsible-body">
                             <ul>
@@ -29,7 +30,10 @@ Vue.component('sidebar-menu', {
                 <a  v-else 
                     href="javascript:void(0)"
                     v-on:click="carregarDados(item)"
-                    ><i v-if="item.icon" class="material-icons left">{{ item.icon}}</i><span v-html="item.label"></span>
+                    >
+                    <i v-if="item.icon" class="material-icons left">{{ item.icon}}</i>
+                    <span v-html="item.label"></span>
+                    <span v-if="item.badge" class="new badge">{{ item.badge }}</span>
                 </a>
             </li>
         </ul>
