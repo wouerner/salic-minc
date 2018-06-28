@@ -1,6 +1,8 @@
 <?php
 class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstract
 {
+    protected $idUsuario;
+
     public function init()
     {
         $PermissoesGrupo = [
@@ -33,6 +35,9 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $resposta = $planilhaAprovacaoModel->obterItensAprovados($idpronac);
 
+        $vlTotalComprovar = 0;
+        $vlComprovado = 0;
+        $vlAprovado = 0;
         foreach ($resposta as $item) {
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
             $vlTotalComprovar += $vlComprovar;

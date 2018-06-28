@@ -2831,48 +2831,47 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
-    public function obterItensAprovados($idPronac)
+    public function obterItensAprovados($idPronac, $where = [])
     {
-
         $cols = new Zend_Db_Expr("
-            a.IdPRONAC, 
+            a.IdPRONAC,
             i.AnoProjeto+i.Sequencial AS Pronac,
             i.NomeProjeto,
+            sac.dbo.fnIdentificarIdPlanilhaAprovacao(
+                a.idPronac,
+                a.nrFonteRecurso,
+                a.idProduto,
+                a.idEtapa,
+                a.idUFDespesa,
+                a.idMunicipioDespesa,
+                a.idPlanilhaItem) as idPlanilhaAprovacao,
             ISNULL(d.Codigo,0) as cdProduto,
             ISNULL(d.Descricao,'Administra&ccedil;&atilde;o do Projeto') AS Produto,
-            b.tpCusto,b.idPlanilhaEtapa as cdEtapa,
+            b.tpCusto,
+            b.idPlanilhaEtapa as cdEtapa,
             b.Descricao AS Etapa,
             b.nrOrdenacao,
             a.idUFDespesa AS cdUF,
             e.Sigla AS Uf,
-            a .idMunicipioDespesa as cdCidade,
+            a.idMunicipioDespesa as cdCidade,
             f.Descricao AS Cidade,
             c.idPlanilhaItens,
             c.Descricao AS Item,
-            sac.dbo.fnVlAprovado_Fonte_Produto_Etapa_Local_Item(
-                a.idPronac,
-                a.nrFonteRecurso,
-                a.idProduto,
-                a.idEtapa,
-                a.idUFDespesa,
-                a.idMunicipioDespesa,
-                a.idPlanilhaItem) as vlAprovado,
-            sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item(
-                a.idPronac,
-                a.nrFonteRecurso,
-                a.idProduto,
-                a.idEtapa,
-                a.idUFDespesa,
-                a.idMunicipioDespesa,
-                a.idPlanilhaItem) as vlComprovado,
-            sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item_Validado(
-                a.idPronac,
-                a.nrFonteRecurso,
-                a.idProduto,
-                a.idEtapa,
-                a.idUFDespesa,
-                a.idMunicipioDespesa,
-                a.idPlanilhaItem)  as ComprovacaoValidada"
+            d.Descricao,
+            g.stItemAvaliado,
+            CONVERT(DECIMAL(38,2), sac.dbo.fnVlAprovado_Fonte_Produto_Etapa_Local_Item
+                   (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
+                    a.idMunicipioDespesa,a.idPlanilhaItem)) as vlAprovado,
+            CONVERT(DECIMAL(38,2), sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item
+                   (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
+                    a.idMunicipioDespesa,a.idPlanilhaItem)) as vlComprovado,
+            CONVERT(DECIMAL(38,2), sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item_Validado
+                   (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
+                    a.idMunicipioDespesa,a.idPlanilhaItem))  as ComprovacaoValidada,
+            CONVERT(DECIMAL(38,2), sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item_Validado
+                   (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
+                    a.idMunicipioDespesa,a.idPlanilhaItem)) as Total
+                    "
         );
 
         $select = $this->select()->distinct();
@@ -2886,56 +2885,56 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
 
         $select->join(
             ['b' => 'tbPlanilhaEtapa'],
-            "(a.idEtapa = b.idPlanilhaEtapa)",
+            "(a . idEtapa = b . idPlanilhaEtapa)",
             [],
             'SAC.dbo'
         );
 
         $select->join(
             ['c' => 'tbPlanilhaItens'],
-            "(a.idPlanilhaItem  = c.idPlanilhaItens)",
+            "(a . idPlanilhaItem = c . idPlanilhaItens)",
             [],
             'SAC.dbo'
         );
 
         $select->joinLeft(
             ['d' => 'produto'],
-            "(a.idproduto = d.Codigo)",
+            "(a . idproduto = d . Codigo)",
             [],
             'SAC.dbo'
         );
 
         $select->join(
             ['e' => 'UF'],
-            "(a.idUFDespesa = e.idUF)",
+            "(a . idUFDespesa = e . idUF)",
             [],
             'AGENTES.dbo'
         );
 
         $select->join(
             ['f' => 'Municipios'],
-            "(a.idMunicipioDespesa = f.idMunicipioIBGE)",
+            "(a . idMunicipioDespesa = f . idMunicipioIBGE)",
             [],
             'AGENTES.dbo'
         );
 
         $select->joinLeft(
             ['g' => 'tbComprovantePagamentoxPlanilhaAprovacao'],
-            "(a.idPlanilhaAprovacao = g.idPlanilhaAprovacao)",
+            "(a . idPlanilhaAprovacao = g . idPlanilhaAprovacao)",
             [],
             'BDCORPORATIVO.scSAC'
         );
 
         $select->joinLeft(
             ['h' => 'tbComprovantePagamento'],
-            "(g.idComprovantePagamento = h.idComprovantePagamento)" ,
+            "(g . idComprovantePagamento = h . idComprovantePagamento)" ,
             [],
             'BDCORPORATIVO.scSAC'
         );
 
         $select->join(
             ['i' => 'Projetos'],
-            "(a.IdPRONAC = i.IdPRONAC)" ,
+            "(a . IdPRONAC = i . IdPRONAC)" ,
             [],
             'sac.dbo'
         );
@@ -2945,8 +2944,12 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         $select->where("a.tpacao <> 'E'");
         $select->where('a.IdPRONAC = ?', $idPronac);
 
+        foreach ($where as $coluna => $valor) {
+            $select->where($coluna, $valor);
+        }
+
         $select->order(['Produto DESC', 'e.Sigla', 'f.Descricao', 'b.nrOrdenacao', 'c.Descricao']);
-        echo $select; die;
+
         return $this->fetchAll($select);
     }
 }
