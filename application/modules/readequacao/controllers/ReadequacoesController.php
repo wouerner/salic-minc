@@ -2434,10 +2434,10 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                                 $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
 
                                 if ($PlanilhaAtiva->Total < $PlanilhaReadequada->Total) {
-                                    $TipoAprovacao = 2;
+                                    $TipoAprovacao = Aprovacao::TIPO_APROVACAO_COMPLEMENTACAO;
                                     $dadosPrj->Situacao = 'D28';
                                 } else {
-                                    $TipoAprovacao = 4;
+                                    $TipoAprovacao = Aprovacao::TIPO_APROVACAO_REDUCAO;
                                     $dadosPrj->Situacao = 'D29';
                                 }
                                 $dadosPrj->save();
@@ -2466,7 +2466,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                                     'IdPRONAC' => $read->idPronac,
                                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                                     'Sequencial' => $dadosPrj->Sequencial,
-                                    'TipoAprovacao' => 8,
+                                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                                     'Logon' => $this->idUsuario,
@@ -2580,7 +2580,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                                     'IdPRONAC' => $read->idPronac,
                                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                                     'Sequencial' => $dadosPrj->Sequencial,
-                                    'TipoAprovacao' => 8,
+                                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                                     'Logon' => $this->idUsuario,
@@ -2597,7 +2597,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                                     'IdPRONAC' => $read->idPronac,
                                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                                     'Sequencial' => $dadosPrj->Sequencial,
-                                    'TipoAprovacao' => 8,
+                                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                                     'Logon' => $this->idUsuario,
@@ -2667,7 +2667,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                                     'IdPRONAC' => $read->idPronac,
                                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                                     'Sequencial' => $dadosPrj->Sequencial,
-                                    'TipoAprovacao' => 8,
+                                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                                     'Logon' => $this->idUsuario,
@@ -2819,13 +2819,13 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
                 // complementacao
                 if ($TipoDeReadequacao[0]['TipoDeReadequacao'] == 'CO') {
-                    $TipoAprovacao = 2;
+                    $TipoAprovacao = Aprovacao::TIPO_APROVACAO_COMPLEMENTACAO;
                     $dadosPrj->Situacao = 'D28';
                     $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de complementação';
                     $dadosPrj->Logon = $auth->getIdentity()->usu_codigo;
                 } elseif ($TipoDeReadequacao[0]['TipoDeReadequacao'] == 'RE') {
                     // reducao
-                    $TipoAprovacao = 4;
+                    $TipoAprovacao = Aprovacao::TIPO_APROVACAO_REDUCAO;
                     $dadosPrj->Situacao = 'D29';
                     $dadosPrj->ProvidenciaTomada = 'Aguardando portaria de redução';
                     $dadosPrj->Logon = $auth->getIdentity()->usu_codigo;
@@ -2860,7 +2860,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     'IdPRONAC' => $read->idPronac,
                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                     'Sequencial' => $dadosPrj->Sequencial,
-                    'TipoAprovacao' => 8,
+                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                     'Logon' => $auth->getIdentity()->usu_codigo,
@@ -2974,7 +2974,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     'IdPRONAC' => $read->idPronac,
                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                     'Sequencial' => $dadosPrj->Sequencial,
-                    'TipoAprovacao' => 8,
+                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                     'Logon' => $auth->getIdentity()->usu_codigo,
@@ -2991,7 +2991,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     'IdPRONAC' => $read->idPronac,
                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                     'Sequencial' => $dadosPrj->Sequencial,
-                    'TipoAprovacao' => 8,
+                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                     'Logon' => $auth->getIdentity()->usu_codigo,
@@ -3059,7 +3059,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     'IdPRONAC' => $read->idPronac,
                     'AnoProjeto' => $dadosPrj->AnoProjeto,
                     'Sequencial' => $dadosPrj->Sequencial,
-                    'TipoAprovacao' => 8,
+                    'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_READEQUACAO,
                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                     'ResumoAprovacao' => 'Parecer favorável para readequação',
                     'Logon' => $auth->getIdentity()->usu_codigo,
@@ -3177,18 +3177,18 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $dados['stEstado'] = 1;
             } else {
                 // reducao ou complementacao orcamentaria
-
+                
                 // verificacao do tipo de parecer.
-        // $parecerTecnico->ParecerFavoravel
-        // 1 = desfavorável
-        // 2 = favorável
-        if ($parecerTecnico->ParecerFavoravel === '1') { // desfavoravel
-            $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA;
-            $dados['stEstado'] = 1;
-        } else {
-            $dados['stEstado'] = 0;
-            $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CHECKLIST_PUBLICACAO;
-        }
+                // $parecerTecnico->ParecerFavoravel
+                // 1 = desfavorável
+                // 2 = favorável
+                if ($parecerTecnico->ParecerFavoravel === '1') { // desfavoravel
+                    $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA;
+                    $dados['stEstado'] = 1;
+                } else {
+                    $dados['stEstado'] = 0;
+                    $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CHECKLIST_PUBLICACAO;
+                }
             }
         }
 
