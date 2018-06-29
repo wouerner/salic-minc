@@ -2701,6 +2701,10 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
             ISNULL(d.Codigo,0) as cdProduto,
             ISNULL(d.Descricao,'Administra&ccedil;&atilde;o do Projeto') AS Produto,
             a.idUFDespesa AS cdUF,
+            b.tpCusto,
+            b.idPlanilhaEtapa as cdEtapa,
+            b.Descricao AS Etapa,
+            b.Descricao AS descEtapa,
             e.Sigla AS Uf,
             e.Sigla AS uf,
             a.idMunicipioDespesa as cdCidade,
@@ -2710,6 +2714,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
             c.Descricao AS Item,
             c.Descricao AS descItem,
             d.Descricao ,
+            g.stItemAvaliado,
             CONVERT(DECIMAL(38,2), sac.dbo.fnVlAprovado_Fonte_Produto_Etapa_Local_Item
                    (a.idPronac,a.nrFonteRecurso,a.idProduto,a.idEtapa,a.idUFDespesa,
                     a.idMunicipioDespesa,a.idPlanilhaItem)) as vlAprovado,
@@ -2736,10 +2741,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         $select->join(
                 ['b' => 'tbPlanilhaEtapa'],
                 "(a.idEtapa = b.idPlanilhaEtapa)",
-                ['b.tpCusto',
-            'b.idPlanilhaEtapa as cdEtapa',
-            'b.Descricao AS Etapa',
-            'b.Descricao AS descEtapa'],
+                [],
                 'SAC.dbo'
         );
 
@@ -2774,7 +2776,7 @@ class PlanilhaAprovacao extends MinC_Db_Table_Abstract
         $select->joinLeft(
                 ['g' => 'tbComprovantePagamentoxPlanilhaAprovacao'],
                 "(a.idPlanilhaAprovacao = g.idPlanilhaAprovacao)",
-                ['g.stItemAvaliado'],
+                [],
                 'BDCORPORATIVO.scSAC'
         );
 
