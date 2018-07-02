@@ -60,6 +60,14 @@ Vue.component('sidebar-menu', {
 
         this.iniciarCollapsible();
     },
+    mounted: function() {
+        $(document).ajaxStart(function () {
+
+        });
+        $(document).ajaxComplete(function () {
+
+        });
+    },
     methods: {
         obterMenu: function () {
             let self = this;
@@ -105,9 +113,11 @@ Vue.component('sidebar-menu', {
             $3("#" + divRetorno).html('carregando...');
             $3(".page-title h1").html(item.label);
             $3("#migalhas .last").html(item.label);
+            $('#container-loading').fadeIn('slow');
             $3.ajax({
                 url: item.link,
                 success: function (data) {
+                    $('#container-loading').fadeOut('slow');
                     $("#" + divRetorno).html(data);
                 },
                 type: 'post'
