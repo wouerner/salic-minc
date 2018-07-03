@@ -1564,7 +1564,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     */
     public function painelReadequacoesAction()
     {
-        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER && $this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -1604,7 +1604,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $filtro = 'painel_do_tecnico';
         if ($this->_request->getParam('tipoFiltro') !== null) {
             $filtro = $this->_request->getParam('tipoFiltro');
-        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
+        } elseif ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER) {
             $filtro = 'aguardando_distribuicao';
         }
         $this->view->filtro = $filtro;
@@ -1622,7 +1622,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         $tbDistribuirReadequacao = new Readequacao_Model_tbDistribuirReadequacao();
 
-        if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
+        if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER) {
 
             switch ($filtro) {
                 case 'aguardando_distribuicao':
@@ -1649,7 +1649,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
 
-        if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA) {
+        if ($this->idPerfil == Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER) {
             switch ($filtro) {
                 case 'aguardando_distribuicao':
                     $busca = $tbDistribuirReadequacao->buscarReadequacaoCoordenadorParecerAguardandoAnalise($where, $order, $tamanho, $inicio, false);
@@ -1692,7 +1692,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
      */
     public function visualizarReadequacaoAction()
     {
-        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO) {
             parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
         }
 
@@ -2078,8 +2078,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     }
 
     /*
-     * Alterada em 14/03/14
-     * @author: Jefferson Alessandro - jeffersonassilva@gmail.com
      * Função acessada pelo coordenador de análise para finalizar a readequação e encaminhar para o componente da comissão.
     */
     public function coordAnaliseFinalizarReadequacaoAction()
@@ -2789,7 +2787,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     */
     public function encaminharReadequacaoChecklistAction()
     {
-        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA
+        if ($this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER
             && $this->idPerfil != Autenticacao_Model_Grupos::PARECERISTA
             && $this->idPerfil != Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO
             && $this->idPerfil != Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO

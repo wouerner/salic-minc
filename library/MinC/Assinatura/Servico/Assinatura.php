@@ -22,18 +22,6 @@ class Assinatura implements IServico
         $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura();
     }
 
-    public function definirModeloAssinatura(array $dados = [])
-    {
-        $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dados);
-    }
-
-    public static function definirAcoesGerais(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
-    {
-        if(!isset(self::$listaAcoesGerais)) {
-            self::$listaAcoesGerais = $listaAcoes->obterLista();
-        }
-    }
-
     private function isolarAcoesPorTipoDeAto()
     {
         if(count(self::$listaAcoesGerais) > 0 && isset(self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo])) {
@@ -50,6 +38,18 @@ class Assinatura implements IServico
             if($acao instanceof $tipoAcao) {
                 $acao->executar($this->viewModelAssinatura);
             }
+        }
+    }
+
+    public function definirModeloAssinatura(array $dados = [])
+    {
+        $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dados);
+    }
+
+    public static function definirAcoesGerais(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
+    {
+        if(!isset(self::$listaAcoesGerais)) {
+            self::$listaAcoesGerais = $listaAcoes->obterLista();
         }
     }
 
