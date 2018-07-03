@@ -5,25 +5,47 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
     private $projeto;
     private $usuarioInterno = false;
     private $usuarioExterno = false;
-    private $fnLiberarLink;
+    private $permissoesMenu;
+    private $debug = false;
+    private $situacaoProjeto = '';
 
     public function obterMenu($idPronac)
     {
-//        $this->liberarLink($idPronac);
-        return $this->obterArrayMenuMecenato($idPronac);
+        if (empty($idPronac)) {
+            return false;
+        }
+
+        $projeto = $this->obterProjeto($idPronac);
+        $arrMenu = $this->obterArrayMenuConvenio($idPronac);
+
+        if ($projeto['Mecanismo'] == 1) {
+            $this->obterPermissoesMenu($idPronac, $projeto['CgcCpf'], $projeto['Situacao']);
+            $arrMenu = $this->obterArrayMenuMecenato($idPronac);
+        }
+
+        return $arrMenu;
     }
 
-    public function liberarLink($idPronac)
+    public function obterProjeto($idPronac)
+    {
+        if (empty($idPronac)) {
+            return false;
+        }
+
+        $projetos = new Projeto_Model_DbTable_Projetos();
+        return $projetos->findBy(['IdPRONAC' => $idPronac]);
+
+    }
+
+    public function obterPermissoesMenu($idPronac, $cpf, $situacaoProjeto = null)
     {
         $auth = Zend_Auth::getInstance();
 
         if (!isset($auth->getIdentity()->usu_codigo)) {
             $this->usuarioExterno = true;
-
-            $proj = new Projetos();
-            $cpf = $proj->buscarProponenteProjeto($idPronac);
-            $cpf = $cpf->CgcCpf;
             $idUsuarioLogado = $auth->getIdentity()->IdUsuario;
+
+            $projetos = new Projeto_Model_DbTable_Projetos();
 
             $links = new fnLiberarLinks();
             $linksXpermissao = $links->links(2, $cpf, $idUsuarioLogado, $idPronac);
@@ -46,11 +68,11 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'Marcas' => $linksGeral[12],
                 'SolicitarProrrogacao' => $linksGeral[13],
                 'ReadequacaoPlanilha' => $linksGeral[14],
-                'ReadequacaoTransferenciaRecursos' => $linksGeral[15]
+                'ReadequacaoTransferenciaRecursos' => $linksGeral[15],
+                'AdequarExecucao' => $projetos->fnChecarLiberacaoDaAdequacaoDoProjeto($idPronac)
             );
-            $this->fnLiberarLink = $arrayLinks;
-            $projetos = new Projeto_Model_DbTable_Projetos();
-            $this->view->isAdequarARealidade = $projetos->fnChecarLiberacaoDaAdequacaoDoProjeto($idPronac);
+
+            $this->permissoesMenu = $arrayLinks;
         }
     }
 
@@ -74,7 +96,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'proponente',
             'label' => 'Proponente',
             'title' => '',
-            'link' => '/default/consultardadosprojeto/dados-proponente/idPronac/' . $idPronacHash,
+            'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
             'ajax' => true,
             'icon' => 'person',
             'submenu' => '',
@@ -87,14 +109,14 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
     public function obterArrayMenuMecenato($idPronac)
     {
         $idPronacHash = Seguranca::encrypt($idPronac);
-        $debug = true;
+        $debug = $this->debug;
 
         $menu = [];
         $menu['dadosprojeto'] = [
             'id' => 'dadosdoprojeto',
-            'label' => 'Dados básicos',
+            'label' => 'Dados do Projeto',
             'title' => '',
-            'link' => '/projeto/convenio/visualizar/idPronac/' . $idPronacHash,
+            'link' => '/projeto/convenio/visualizar/?idPronac=' . $idPronacHash,
             'ajax' => false,
             'icon' => 'home',
             'submenu' => '',
@@ -105,7 +127,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'proponente',
             'label' => 'Proponente',
             'title' => '',
-            'link' => '/default/consultardadosprojeto/dados-proponente/idPronac/' . $idPronacHash,
+            'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
             'ajax' => true,
             'icon' => 'person',
             'submenu' => '',
@@ -205,7 +227,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'grupo' => []
         ];
 
-        if ($this->usuarioInterno || $debug) {
+        if (!$this->usuarioExterno || $debug) {
             $menu['outrasinformacoes']['submenu'][] = [
                 'label' => 'Hist&oacute;rico encaminhamento',
                 'title' => 'Ir para Hist&oacute;rico encaminhamento',
@@ -216,7 +238,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Análise e Aprovação
-        if ($this->fnLiberarLinks['Analise'] || $this->usuarioInterno || $debug) {
+        if ($this->permissoesMenu['Analise'] || !$this->usuarioExterno || $debug) {
 
             $menu['analiseaprovacao'] = [
                 'id' => 'analiseaprovacao',
@@ -263,7 +285,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Execução
-        if ($this->fnLiberarLinks['Execucao'] || $this->usuarioInterno || $debug) {
+        if ($this->permissoesMenu['Execucao'] || !$this->usuarioExterno || $debug) {
 
             $menu['execucao'] = [
                 'id' => 'execucao',
@@ -276,7 +298,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if (in_array($this->fnLiberarLinks['FaseDoProjeto'], array('2', '3', '4', '5')) || $this->usuarioInterno || $debug) {
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $debug) {
 
                 $menu['execucao']['submenu'][] = [
                     'label' => 'Dados banc&aacute;rios',
@@ -322,7 +344,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Prestação de contas
-        if ($this->fnLiberarLinks['PrestacaoContas'] || $this->usuarioInterno || $debug) {
+        if ($this->permissoesMenu['PrestacaoContas'] || !$this->usuarioExterno || $debug) {
             $menu['prestacaodecontas'] = [
                 'id' => 'prestacaodecontas',
                 'label' => 'Presta&ccedil;&atilde;o de Contas',
@@ -374,7 +396,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if (in_array($this->fnLiberarLinks['FaseDoProjeto'], array('2', '3', '4', '5')) || $this->usuarioInterno || $debug) {
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $debug) {
                 $menu['prestacaodecontas']['submenu'][] = [
                     'label' => 'Relat&oacute;rios trimestrais',
                     'title' => 'Ir para Relat&oacute;rios trimestrais',
@@ -384,7 +406,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
             }
 
-            if (in_array($this->fnLiberarLinks['FaseDoProjeto'], array('4', '5')) || $this->usuarioInterno || $debug) {
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('4', '5')) || !$this->usuarioExterno || $debug) {
                 $menu['prestacaodecontas']['submenu'][] = [
                     'label' => 'Relat&oacute;rio de cumprimento do objeto',
                     'title' => 'Ir para Relat&oacute;rio de cumprimento do objeto',
@@ -396,7 +418,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Readequacao
-        if ($this->usuarioExterno && ($this->fnLiberarLinks['Readequacao'] || $this->fnLiberarLinks['Readequacao_50']) || $debug) {
+        if ($this->usuarioExterno && ($this->permissoesMenu['Readequacao'] || $this->permissoesMenu['Readequacao_50']) || $debug) {
             $menu['readequacao'] = [
                 'id' => 'readequacao',
                 'label' => 'Readequa&ccedil;&atilde;o',
@@ -416,7 +438,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if ($this->fnLiberarLinks['ReadequacaoPlanilha'] || $debug) {
+            if ($this->permissoesMenu['ReadequacaoPlanilha'] || $debug) {
 
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Planilha orçament&aacute;ria',
@@ -435,7 +457,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if ($this->fnLiberarLinks['Readequacao_50'] || $debug) {
+            if ($this->permissoesMenu['Readequacao_50'] || $debug) {
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Remanejamento &le; 50%',
                     'title' => 'Readequar Remanejamento &le; 50%',
@@ -445,7 +467,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
             }
 
-            if ($this->fnLiberarLinks['ReadequacaoTransferenciaRecursos'] || $debug) {
+            if ($this->permissoesMenu['ReadequacaoTransferenciaRecursos'] || $debug) {
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Transfer&ecirc;ncia de recursos',
                     'title' => 'Readequar Transfer&ecirc;ncia de recursos',
@@ -465,7 +487,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
         }
 
-        if ($this->fnLiberarLinks['SolicitarProrrogacao'] || $debug) {
+        if ($this->permissoesMenu['SolicitarProrrogacao'] || $debug) {
             $menu['prorrogacao'] = [
                 'id' => 'prorrogacao',
                 'label' => 'Solicitar Prorroga&ccedil;&atilde;o',
@@ -478,7 +500,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->isAdequarARealidade || $debug) {
+        if ($this->permissoesMenu['AdequarExecucao'] || $debug) {
             $menu['adequacao'] = [
                 'id' => 'prorrogacao',
                 'label' => 'Adequar &agrave; realidade',
@@ -491,12 +513,12 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->fnLiberarLinks['Diligencia'] || $debug) {
+        if ($this->permissoesMenu['Diligencia'] || $debug) {
             $menu['diligencia'] = [
                 'id' => 'diligencia',
                 'label' => 'Dilig&ecirc;ncias',
                 'title' => 'Responder Dilig&ecirc;ncias',
-                'link' => '/proposta/diligenciar/listardiligenciaproponente?idPronac=' . $idPronacHash,
+                'link' => '/proposta/diligenciar/listardiligenciaproponente/?idPronac=' . $idPronacHash,
                 'ajax' => false,
                 'icon' => 'warning',
                 'badge' => '1',
@@ -505,12 +527,12 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->fnLiberarLinks['Recursos'] || $debug) {
+        if ($this->permissoesMenu['Recursos'] || $debug) {
             $menu['recurso'] = [
                 'id' => 'recurso',
                 'label' => 'Recurso',
                 'title' => 'Solicitar recurso ou desistir',
-                'link' => '/proposta/diligenciar/listardiligenciaproponente?idPronac=' . $idPronacHash,
+                'link' => '/proposta/diligenciar/listardiligenciaproponente/?idPronac=' . $idPronacHash,
                 'ajax' => false,
                 'icon' => 'insert_comment',
                 'submenu' => '',
@@ -534,7 +556,117 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
+        if ($this->permissoesMenu['ComprovacaoFinanceira'] || $debug) {
+            $menu['comprovacaofinaceira'] = [
+                'id' => 'comprovacaofinaceira',
+                'label' => 'Comprova&ccedil;&atilde;o Financeira',
+                'title' => 'Ir para Realizar Comprova&ccedil;&atilde;o Financeira',
+                'link' => '/default/comprovarexecucaofinanceira/pagamento?idusuario=' . $this->usuario->IdUsuario . '&idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'icon' => 'attach_money',
+                'submenu' => '',
+                'grupo' => []
+            ];
+        }
+
+        if ($this->situacaoProjeto != 'E24' || $debug) {
+
+            if ($this->permissoesMenu['RelatorioTrimestral']
+                || $this->permissoesMenu['RelatorioFinal'] || $debug) {
+
+                $menu['comprovacaofisica'] = [
+                    'id' => 'comprovacaofisica',
+                    'label' => 'Comprova&ccedil;&atilde;o Física',
+                    'title' => 'Ir para Realizar Comprova&ccedil;&atilde;o Física',
+                    'link' => '',
+                    'ajax' => false,
+                    'icon' => 'attach_file',
+                    'submenu' => '',
+                    'grupo' => []
+                ];
+
+            }
+
+            if ($this->permissoesMenu['RelatorioTrimestral'] || $debug) {
+                $menu['comprovacaofisica']['submenu'][] = [
+                    'label' => 'Relat&oacute;rio Trimestral',
+                    'title' => 'Ir para Relat&oacute;rio Trimestral',
+                    'link' => '/default/comprovarexecucaofisica/relatoriotrimestral?idpronac =' . $idPronacHash,
+                    'ajax' => false,
+                    'grupo' => []
+                ];
+
+            }
+
+            if ($this->permissoesMenu['RelatorioFinal'] || $debug) {
+                $menu['comprovacaofisica']['submenu'][] = [
+                    'label' => 'Comprovar Realiza&ccedil;&atilde;o do Objeto',
+                    'title' => 'Ir para Comprovar Realiza&ccedil;&atilde;o do Objeto',
+                    'link' => '/default/comprovarexecucaofisica/etapas-de-trabalho-final?idpronac =' . $idPronacHash,
+                    'ajax' => false,
+                    'grupo' => []
+                ];
+            }
+        }
+
+        if ($this->usuarioExterno && $this->permissoesMenu['Marcas'] || $debug) {
+            $menu['marcas'] = [
+                'id' => 'marcas',
+                'label' => 'Marcas',
+                'title' => 'Ir para Marcas',
+                'link' => '/default/upload/form-enviar-arquivo-marca/?idPronac=' . $idPronac,
+                'ajax' => false,
+                'icon' => 'image',
+                'submenu' => '',
+                'grupo' => []
+            ];
+        }
+
+        if ($this->usuarioExterno || $debug) {
+            $menu['projetos'] = [
+                'id' => 'projetos',
+                'label' => 'Listar Projetos',
+                'title' => 'Ir para Listar Projetos',
+                'link' => '/default/listarprojetos/listarprojetos',
+                'ajax' => false,
+                'icon' => 'ballot',
+                'submenu' => '',
+                'grupo' => []
+            ];
+        }
+
+        $perfisMensagens = array(131, 92, 93, 122, 123, 121, 129, 94, 103, 110, 118, 126, 125, 124, 132, 136, 134, 135, 138, 139);
+        if (in_array($this->grupoAtivo, $perfisMensagens) || $debug) {
+
+            $menu['mensagens'] = [
+                'id' => 'mensagens',
+                'label' => 'Mensagens',
+                'title' => 'Ir para Mensagens',
+                'link' => '/default/mantermensagens/consultarmensagem/idpronac/' . $idPronac,
+                'ajax' => false,
+                'icon' => 'email',
+                'submenu' => '',
+                'grupo' => []
+            ];
+        }
+
+        $menu['solicitacoes'] = [
+            'id' => 'solicitacoes',
+            'label' => $this->usuarioExterno ? "Minhas solicita&ccedil;&otilde;es" : "Solicita&ccedil;&otilde;es",
+            'title' => 'Ir para Solicitações',
+            'link' => '/solicitacao/mensagem/index/listarTudo/true/idpronac/' . $idPronac,
+            'ajax' => false,
+            'icon' => 'contact_mail',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
         return $menu;
+    }
+
+    public function setDebug()
+    {
+        $this->debug = true;
     }
 
 }
