@@ -1,6 +1,8 @@
 <?php
 class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstract
 {
+    protected $idUsuario;
+
     public function init()
     {
         $PermissoesGrupo = [
@@ -31,8 +33,11 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $this->view->idpronac = $idpronac;
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
+        $resposta = $planilhaAprovacaoModel->obterItensAprovados($idpronac);
 
+        $vlTotalComprovar = 0;
+        $vlComprovado = 0;
+        $vlAprovado = 0;
         foreach ($resposta as $item) {
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
             $vlTotalComprovar += $vlComprovar;
@@ -57,21 +62,17 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         $idpronac = (int)$this->_request->getParam('idpronac');
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
+        $resposta = $planilhaAprovacaoModel->obterItensAprovados($idpronac);
 
         $planilhaJSON = null;
 
         foreach($resposta as $item) {
-            $planilhaJSON
-            [$item->cdProduto]
-            ['etapa']
-            [$item->cdEtapa]
-            ['UF']
-            [$item->cdUF]
-            ['cidade']
-            [$item->cdCidade]
-            ['itens']
-            [$item->idPlanilhaItens] = [
+
+            $produtoSlug = TratarString::criarSlug($item->Produto);
+            $etapaSlug = TratarString::criarSlug($item->Etapa);
+            $cidadeSlug = TratarString::criarSlug($item->Cidade);
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->Uf]['cidade'][$cidadeSlug]['itens'][] = [
                 'item' => utf8_encode($item->Item),
                 'varlorAprovado' => $item->vlAprovado,
                 'varlorComprovado' => $item->vlComprovado,
@@ -80,22 +81,22 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
                 'idPlanilhaItens' => $item->idPlanilhaItens,
             ];
 
-            $planilhaJSON[$item->cdProduto] += [
+            $planilhaJSON[$produtoSlug] += [
                 'produto' => html_entity_decode(utf8_encode($item->Produto)),
                 'cdProduto' => $item->cdProduto,
             ];
 
-            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa] += [
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug] += [
                 'etapa' => utf8_encode($item->Etapa),
                 'cdEtapa' =>  $item->cdEtapa
             ];
 
-            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa]['UF'][$item->cdUF] += [
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->Uf] += [
                 'Uf' => $item->Uf,
                 'cdUF' => $item->cdUF
             ];
 
-            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa]['UF'][$item->cdUF]['cidade'][$item->cdCidade] += [
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->Uf]['cidade'][$cidadeSlug] += [
                 'cidade' => utf8_encode($item->Cidade),
                 'cdCidade' => $item->cdCidade
             ];
@@ -131,7 +132,7 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
         }
         $this->_helper->json($planilhaJSON);
     }
-    
+
     public function itemAction()
     {
         $idpronac = $this->_request->getParam('idpronac');
