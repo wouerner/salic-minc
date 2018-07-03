@@ -378,7 +378,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior,
                 'idPronac' => $modelAssinatura->getIdPronac(),
                 'idAssinante' => $this->auth->getIdentity()->usu_codigo,
-                'idDocumentoAssinatura' => $dadosDocumentoAssinatura['idDocumentoAssinatura']
+                'idDocumentoAssinatura' => $dadosDocumentoAssinatura['idDocumentoAssinatura'],
+                'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
             ]);
 
             $servicoAssinatura->encaminhar();

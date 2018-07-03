@@ -3,6 +3,7 @@
 class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_GenericController
 {
     private $idTipoDoAtoAdministrativo;
+    private $grupoAtivo;
 
     private function validarPerfis()
     {
@@ -82,7 +83,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 $assinaturaService->definirModeloAssinatura([
                     'Despacho' => $post['motivoDevolucao'],
                     'idTipoDoAto' => $this->idTipoDoAtoAdministrativo,
-                    'idPronac' => $get->IdPRONAC
+                    'idPronac' => $get->IdPRONAC,
+                    'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
                 ]);
                 $assinaturaService->devolver();
 
@@ -133,7 +135,8 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
             $assinaturaService = new \MinC\Assinatura\Servico\Assinatura($this->idTipoDoAtoAdministrativo);
             $assinaturaService->definirModeloAssinatura([
                 'idTipoDoAto' => $this->idTipoDoAtoAdministrativo,
-                'idPronac' => $get->IdPRONAC
+                'idPronac' => $get->IdPRONAC,
+                'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
             ]);
             $assinaturaService->finalizar();
 

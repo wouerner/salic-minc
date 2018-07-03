@@ -30,7 +30,6 @@ class Encaminhar implements IAcaoEncaminhar
 
     private function atualizarSituacaoEncaminhamento($idReadequacao) {
 
-
         $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
         switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
             case \Autenticacao_Model_Grupos::PARECERISTA:
@@ -38,6 +37,21 @@ class Encaminhar implements IAcaoEncaminhar
                 break;
             case \Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_PRESIDENTE_DA_VINCULADA;
+                break;
+            case \Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_DIRETOR;
+
+                $objOrgaos = new \Orgaos();
+                $objTbProjetos = new Projeto_Model_DbTable_Projetos();
+                $dadosProjeto = $objTbProjetos->findBy(array(
+                    'IdPRONAC' => $this->assinatura->modeloTbAssinatura->getIdPronac()
+                ));
+                $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
+                $orgaoDestino = \Orgaos::ORGAO_SEFIC_DIC;
+                if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
+                    $orgaoDestino = 682;
+                }
+                $objTbProjetos->alterarOrgao($orgaoDestino, $this->assinatura->modeloTbAssinatura->getIdPronac());
                 break;
         }
         $dados = ['siEncaminhamento' => $siEncaminhamento];

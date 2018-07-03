@@ -3,6 +3,8 @@
 class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericController
 {
 
+    private $grupoAtivo;
+
     private $idTiposAtoAdministrativos = [
         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
@@ -85,13 +87,12 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
             $objTbProjetos = new Projeto_Model_DbTable_Projetos();
 
-            $projeto = $objTbProjetos->findBy(array(
+            $this->view->projeto = $objTbProjetos->findBy(array(
                 'IdPRONAC' => $get->IdPRONAC
             ));
 
             $post = $this->getRequest()->getPost();
             if ($post) {
-
                 if (!filter_input(INPUT_POST, 'idTipoDoAtoAdministrativo')) {
                     throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
                 }
@@ -101,43 +102,54 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' n&atilde;o informado.");
                 }
 
-                $servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                    $idTipoDoAtoAdministrativo
-                );
-                $servicoDocumentoAssinatura->devolver();
+                $assinaturaService = new \MinC\Assinatura\Servico\Assinatura($this->idTipoDoAtoAdministrativo);
+                $assinaturaService->definirModeloAssinatura([
+                    'Despacho' => $post['motivoDevolucao'],
+                    'idTipoDoAto' => $idTipoDoAtoAdministrativo,
+                    'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
+                    'idPronac' => $get->IdPRONAC
+                ]);
+                $assinaturaService->devolver();
 
-                parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/readequacao-assinatura/gerenciar-assinaturas", 'CONFIRM');
+                parent::message(
+                    'Projeto devolvido com sucesso.',
+                    "/{$this->moduleName}/readequacao-assinatura/gerenciar-assinaturas",
+                    'CONFIRM'
+                );
             }
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $this->view->abertoParaDevolucao = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
                 $get->IdPRONAC,
-                $this->idTiposAtoAdministrativos
+                $this->idTipoDoAtoAdministrativo
             );
 
             $this->view->IdPRONAC = $get->IdPRONAC;
 
             $mapperArea = new Agente_Model_AreaMapper();
             $this->view->areaCultural = $mapperArea->findBy(array(
-                'Codigo' => $projeto['Area']
+                'Codigo' => $this->view->projeto['Area']
             ));
 
             $objSegmentocultural = new Segmentocultural();
             $this->view->segmentoCultural = $objSegmentocultural->findBy(array(
-                'Codigo' => $projeto['Segmento']
+                'Codigo' => $this->view->projeto['Segmento']
             ));
 
             $objEnquadramento = new Admissibilidade_Model_Enquadramento();
             $arrayPesquisa = array(
-                'AnoProjeto' => $projeto['AnoProjeto'],
-                'Sequencial' => $projeto['Sequencial'],
-                'IdPRONAC' => $projeto['IdPRONAC']
+                'AnoProjeto' => $this->view->projeto['AnoProjeto'],
+                'Sequencial' => $this->view->projeto['Sequencial'],
+                'IdPRONAC' => $this->view->projeto['IdPRONAC']
             );
             $this->view->dadosEnquadramento = $objEnquadramento->findBy($arrayPesquisa);
 
             $this->view->titulo = "Devolver";
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), "/{$this->moduleName}/readequacao-assinatura/devolver-projeto?IdPRONAC={$get->IdPRONAC}");
+            parent::message(
+                $objException->getMessage(),
+                "/{$this->moduleName}/readequacao-assinatura/devolver-projeto?IdPRONAC={$get->IdPRONAC}"
+            );
         }
     }
 
