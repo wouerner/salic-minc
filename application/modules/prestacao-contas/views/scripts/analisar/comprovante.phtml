@@ -274,7 +274,7 @@
                 <ul class="collapsible" data-collapsible="accordion">
                     <li v-for="(dado, index) in dados">
                       <div class="collapsible-header">
-                          Fornecedor: {{dado.Descricao}} - {{dado.vlComprovacao}}
+                          Fornecedor: {{dado.Descricao}} - {{formatValue(dado.vlComprovacao)}}
                           <span :class="['badge white-text', badgeCSS(dado.stItemAvaliado)]">
                             {{situacao(dado.stItemAvaliado)}}
                           </span>
@@ -321,7 +321,7 @@
                     }
                 }
             },
-            situacao: function (id) {
+            situacao(id) {
                 estado = null;
                 switch (parseInt(id)) {
                     case 1:
@@ -334,7 +334,31 @@
                         estado = 'N\xE3o avaliado';
                 }
                 return estado;
-            }
+            },
+            formatValue(value) {
+                if (value === undefined) {
+                    return '0';
+                }
+
+                if (value.indexOf('.') === -1) {
+                    return this.formatValueWithoutCents(value);
+                }
+
+                return this.formatValueWithCents(value);
+            },
+            formatValueWithoutCents(value) {
+                const valueWithCents = value.concat(',00');
+                const result = valueWithCents.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                return result;
+            },
+            formatValueWithCents(value) {
+                const valueParsedToFloat = parseFloat(value).toFixed(2);
+                const valueParsedToString = valueParsedToFloat.toString();
+                const valueChangedPointByComma = valueParsedToString.replace('.', ',');
+                const result = valueChangedPointByComma.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+                return result;
+            },
         }
     }
 
