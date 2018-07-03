@@ -17,7 +17,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
 
     const SUPERINTENDENTE_DE_VINCULADA = 153;
     const PRESIDENTE_DE_VINCULADA = 154;
-    const COORDENADOR_DE_PARECERISTA = 93;
+    const COORDENADOR_DE_PARECER = 93;
     const PARECERISTA = 94;
 
     const CONSULTA = 95;

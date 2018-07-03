@@ -9,7 +9,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
     private function validarPerfis()
     {
         $PermissoesGrupo = array();
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::SUPERINTENDENTE_DE_VINCULADA;
 
@@ -33,7 +33,7 @@ class Parecer_GerenciarParecerController extends MinC_Controller_Action_Abstract
         case Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
             $this->redirect("/{$this->moduleName}/gerenciar-parecer/finalizar-parecer");
             break;
-        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA:
+        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
             $this->redirect("/{$this->moduleName}/gerenciar-parecer/index?tipoFiltro=validados");
             break;
         }

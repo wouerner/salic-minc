@@ -18,7 +18,7 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract
         case Autenticacao_Model_Grupos::PARECERISTA:
             $this->redirect("/{$this->moduleName}/analise-inicial");
             break;
-        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA:
+        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
             $this->redirect("/{$this->moduleName}/gerenciar-parecer/index");
             break;
         }
@@ -30,7 +30,7 @@ class Parecer_IndexController extends MinC_Controller_Action_Abstract
         case Autenticacao_Model_Grupos::PARECERISTA:
             $this->redirect("/{$this->moduleName}/analise-inicial");
             break;
-        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECERISTA:
+        case Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
             $this->redirect("/{$this->moduleName}/gerenciar-parecer/index");
             break;
         }
