@@ -9,36 +9,9 @@ class Devolver implements IAcaoDevolver
 
     public function executar(\MinC\Assinatura\Model\Assinatura $assinatura)
     {
-        $modeloTbAssinatura = $assinatura->modeloTbAssinatura;
-        $modeloTbDespacho = $assinatura->modeloTbDespacho;
-
-        $objTbDepacho = new \Proposta_Model_DbTable_TbDespacho();
-        $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura($modeloTbAssinatura->getIdPronac(), $modeloTbDespacho->getDespacho());
-
-        $objDbTableDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $data = array(
-            'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
-            'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
-        );
-        $where = array(
-            'IdPRONAC = ?' => $modeloTbAssinatura->getIdPronac(),
-            'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-            'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-            'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-        );
-
-        $objDbTableDocumentoAssinatura->update($data, $where);
-
-
-        $idDocumentoAssinatura = $this->assinatura->modeloTbAssinatura->getIdDocumentoAssinatura();
-        $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $documentoAssinatura = $documentoAssinaturaDbTable->findBy([
-            'idDocumentoAssinatura' => $idDocumentoAssinatura
-        ]);
-
         $tbReadequacaoXParecerDbTable = new \Readequacao_Model_DbTable_TbReadequacaoXParecer();
         $tbReadequacaoXParecer = $tbReadequacaoXParecerDbTable->findBy([
-            'idParecer' => $documentoAssinatura['idAtoDeGestao']
+            'idParecer' => $assinatura->modeloTbAtoAdministrativo->getIdTipoDoAto()
         ]);
 
         $this->atualizarSituacaoEncaminhamento($tbReadequacaoXParecer['idReadequacao']);

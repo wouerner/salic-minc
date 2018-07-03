@@ -16,6 +16,7 @@ class Assinatura implements IModel
     public $modeloTbAssinatura;
     public $modeloTbAtoAdministrativo;
     public $modeloTbDespacho;
+    public $modeloTbDocumentoAssinatura;
     public $dbTableTbAssinatura;
 
     public function __construct(array $dadosModelo = [])
@@ -23,24 +24,7 @@ class Assinatura implements IModel
         $this->modeloTbAssinatura = new \Assinatura_Model_TbAssinatura($dadosModelo);
         $this->modeloTbAtoAdministrativo = new \Assinatura_Model_TbAtoAdministrativo($dadosModelo);
         $this->modeloTbDespacho = new \Proposta_Model_TbDespacho($dadosModelo);
+        $this->modeloTbDocumentoAssinatura = new \Assinatura_Model_TbDocumentoAssinatura($dadosModelo);
         $this->dbTableTbAssinatura = new \Assinatura_Model_DbTable_TbAssinatura();
-    }
-
-    public function definirModeloTbAssinatura(array $dados)
-    {
-        $this->modeloTbAssinatura = new \Assinatura_Model_TbAssinatura($dados);
-        return $this;
-    }
-
-    public function definirModeloTbAtoAdministrativo(array $dados)
-    {
-        $this->modeloTbAtoAdministrativo = new \Assinatura_Model_TbAtoAdministrativo($dados);
-        return $this;
-    }
-
-    public function definirModeloTbDespacho(array $dados)
-    {
-        $this->modeloTbDespacho = new \Proposta_Model_TbDespacho($dados);
-        return $this;
     }
 }

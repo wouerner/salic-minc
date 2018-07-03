@@ -15,40 +15,39 @@ class Assinatura implements IServico
     private $listaAcoes = [];
     private $idTipoDoAtoAdministrativo;
 
-    function __construct($idTipoDoAtoAdministrativo)
+    function __construct(array $dadosViewModelAssinatura)
     {
-        $this->idTipoDoAtoAdministrativo = $idTipoDoAtoAdministrativo;
+        if(!$dadosViewModelAssinatura['idTipoDoAto']) {
+            throw new \Exception ("O Tipo do Ato Administrativo &eacute; obrigat&oacute;rio.");
+        }
+
+        $this->idTipoDoAtoAdministrativo = $dadosViewModelAssinatura['idTipoDoAto'];
         $this->isolarAcoesPorTipoDeAto();
-        $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura();
+        $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dadosViewModelAssinatura);
     }
 
     private function isolarAcoesPorTipoDeAto()
     {
-        if(count(self::$listaAcoesGerais) > 0 && isset(self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo])) {
+        if (count(self::$listaAcoesGerais) > 0 && isset(self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo])) {
             $this->listaAcoes = self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo];
         }
     }
 
     private function executarAcoes(string $tipoAcao)
     {
-        foreach($this->listaAcoes as $acao) {
+        foreach ($this->listaAcoes as $acao) {
             /**
              * @var \MinC\Assinatura\Acao\IAcao $acao
              */
-            if($acao instanceof $tipoAcao) {
+            if ($acao instanceof $tipoAcao) {
                 $acao->executar($this->viewModelAssinatura);
             }
         }
     }
 
-    public function definirModeloAssinatura(array $dados = [])
-    {
-        $this->viewModelAssinatura = new \MinC\Assinatura\Model\Assinatura($dados);
-    }
-
     public static function definirAcoesGerais(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
     {
-        if(!isset(self::$listaAcoesGerais)) {
+        if (!isset(self::$listaAcoesGerais)) {
             self::$listaAcoesGerais = $listaAcoes->obterLista();
         }
     }
@@ -65,17 +64,13 @@ class Assinatura implements IServico
             throw new \Exception ("O n&uacute;mero do projeto &eacute; obrigat&oacute;rio.");
         }
 
-        if (empty(trim($modeloTbAtoAdministrativo->getIdTipoDoAto()))) {
-            throw new \Exception ("O Tipo do Ato Administrativo &eacute; obrigat&oacute;rio.");
-        }
-
         $servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
             $post,
             $identidadeUsuarioLogado
         );
         $metodoAutenticacao = $servicoAutenticacao->obterMetodoAutenticacao();
 
-        if(!$metodoAutenticacao->autenticar()) {
+        if (!$metodoAutenticacao->autenticar()) {
             throw new \Exception ("Os dados utilizados para autentica&ccedil;&atilde;o s&atilde;o inv&aacute;lidos.");
         }
 
@@ -103,7 +98,7 @@ class Assinatura implements IServico
             'idDocumentoAssinatura' => $modeloTbAssinatura->getIdDocumentoAssinatura()
         ]);
 
-        if($dbTableTbAssinatura->isProjetoAssinado()) {
+        if ($dbTableTbAssinatura->isProjetoAssinado()) {
             throw new \Exception ("O documento j&aacute; foi assinado pelo usu&aacute;rio logado nesta fase atual.");
         }
 
@@ -123,7 +118,7 @@ class Assinatura implements IServico
             $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
         );
 
-        if($this->isEncaminharParaProximoAssinanteAoAssinar && $codigoOrgaoDestino) {
+        if ($this->isEncaminharParaProximoAssinanteAoAssinar && $codigoOrgaoDestino) {
             $this->encaminhar();
         }
 
@@ -144,7 +139,7 @@ class Assinatura implements IServico
         $modeloTbAssinatura = $this->viewModelAssinatura->modeloTbAssinatura;
         $dbTableTbAssinatura = $this->viewModelAssinatura->dbTableTbAssinatura;
         $dbTableTbAssinatura->modeloTbAssinatura = $modeloTbAssinatura;
-        if(!$dbTableTbAssinatura->isProjetoAssinado()) {
+        if (!$dbTableTbAssinatura->isProjetoAssinado()) {
             throw new \Exception ("O documento precisa ser assinado para que consiga ser movimentado.");
         }
 
@@ -167,6 +162,29 @@ class Assinatura implements IServico
 
     public function devolver()
     {
+        $modeloTbAssinatura = $this->viewModelAssinatura->modeloTbAssinatura;
+        $modeloTbDespacho = $this->viewModelAssinatura->modeloTbDespacho;
+
+        $objTbDepacho = new \Proposta_Model_DbTable_TbDespacho();
+        $objTbDepacho->devolverProjetoEncaminhadoParaAssinatura(
+            $modeloTbAssinatura->getIdPronac(),
+            $modeloTbDespacho->getDespacho()
+        );
+
+        $objDbTableDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $data = array(
+            'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
+            'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
+        );
+        $where = array(
+            'IdPRONAC = ?' => $modeloTbAssinatura->getIdPronac(),
+            'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
+            'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+            'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+        );
+
+        $objDbTableDocumentoAssinatura->update($data, $where);
+
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoDevolver');
     }
 

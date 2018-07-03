@@ -10,49 +10,49 @@ class Finalizar implements IAcaoFinalizar
     {
         $modeloTbAssinatura = $assinatura->modeloTbAssinatura;
 
-        $objProjetos = new Projetos();
+        $objProjetos = new \Projetos();
         $objProjetos->alterarSituacao(
             $modeloTbAssinatura->getIdPronac(),
             null,
-            Projeto_Model_Situacao::PROJETO_APROVADO_AGUARDANDO_ANALISE_DOCUMENTAL,
+            \Projeto_Model_Situacao::PROJETO_APROVADO_AGUARDANDO_ANALISE_DOCUMENTAL,
             'Projeto aprovado - aguardando an&aacute;lise documental'
         );
 
-        $objTbProjetos = new Projeto_Model_DbTable_Projetos();
+        $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $dadosProjeto = $objTbProjetos->findBy(array(
             'IdPRONAC' => $modeloTbAssinatura->getIdPronac()
         ));
 
-        $orgaoDestino = Orgaos::ORGAO_SAV_DAP;
-        $objOrgaos = new Orgaos();
+        $orgaoDestino = \Orgaos::ORGAO_SAV_DAP;
+        $objOrgaos = new \Orgaos();
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
 
-        if ($dadosOrgaoSuperior['Codigo'] == Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $orgaoDestino = Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
+        if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SEFIC) {
+            $orgaoDestino = \Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
         }
         $objTbProjetos->alterarOrgao($orgaoDestino, $modeloTbAssinatura->getIdPronac());
 
-        $enquadramento = new Admissibilidade_Model_Enquadramento();
+        $enquadramento = new \Admissibilidade_Model_Enquadramento();
         $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto(
             $modeloTbAssinatura->getIdPronac(),
             $dadosProjeto['AnoProjeto'],
             $dadosProjeto['Sequencial']
         );
 
-        $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $objModelDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $data = array(
-            'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
         );
         $where = array(
             'IdPRONAC = ?' => $modeloTbAssinatura->getIdPronac(),
-            'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
+            'idTipoDoAtoAdministrativo = ?' => $assinatura->modeloTbAtoAdministrativo->getIdTipoDoAto(),
             'idAtoDeGestao = ?' => $dadosEnquadramento['IdEnquadramento'],
-            'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-            'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
+            'cdSituacao = ?' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+            'stEstado = ?' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
         );
         $objModelDocumentoAssinatura->update($data, $where);
 
-        $auth = Zend_Auth::getInstance();
+        $auth = \Zend_Auth::getInstance();
 
         $valoresProjeto = $objTbProjetos->obterValoresProjeto($modeloTbAssinatura->getIdPronac());
 
@@ -66,12 +66,12 @@ class Finalizar implements IAcaoFinalizar
             'AprovadoReal' => $valoresProjeto['ValorProposta'],
             'Logon' => $auth->getIdentity()->usu_codigo,
         );
-        $objAprovacao = new Aprovacao();
+        $objAprovacao = new \Aprovacao();
         $idAprovacao = $objAprovacao->inserir($dadosInclusaoAprovacao);
 
-        $idTecnico = new Zend_Db_Expr("sac.dbo.fnPegarTecnico(110, {$orgaoDestino}, 3)");
+        $idTecnico = new \Zend_Db_Expr("sac.dbo.fnPegarTecnico(110, {$orgaoDestino}, 3)");
 
-        $tblVerificaProjeto = new tbVerificaProjeto();
+        $tblVerificaProjeto = new \tbVerificaProjeto();
         $dadosVP['idPronac'] = $modeloTbAssinatura->getIdPronac();
         $dadosVP['idOrgao'] = $orgaoDestino;
         $dadosVP['idAprovacao'] = $idAprovacao;

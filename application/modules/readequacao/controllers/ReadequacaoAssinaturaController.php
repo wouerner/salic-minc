@@ -65,7 +65,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         );
         $this->view->idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
         $this->view->isPermitidoDevolver = true;
-        if($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
+        if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
             $this->view->isPermitidoDevolver = false;
         }
     }
@@ -79,7 +79,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                 throw new Exception("Identificador do projeto é necessário para acessar essa funcionalidade.");
             }
 
-            if($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
+            if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
                 throw new Exception(
                     "O Perfil Parecerista n&atilde;o possui permiss&atilde;o para executar a a&ccedil;&atilde;o de devolver."
                 );
@@ -102,13 +102,14 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' n&atilde;o informado.");
                 }
 
-                $assinaturaService = new \MinC\Assinatura\Servico\Assinatura($this->idTipoDoAtoAdministrativo);
-                $assinaturaService->definirModeloAssinatura([
-                    'Despacho' => $post['motivoDevolucao'],
-                    'idTipoDoAto' => $idTipoDoAtoAdministrativo,
-                    'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
-                    'idPronac' => $get->IdPRONAC
-                ]);
+                $assinaturaService = new \MinC\Assinatura\Servico\Assinatura(
+                    [
+                        'Despacho' => $post['motivoDevolucao'],
+                        'idTipoDoAto' => $idTipoDoAtoAdministrativo,
+                        'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
+                        'idPronac' => $get->IdPRONAC
+                    ]
+                );
                 $assinaturaService->devolver();
 
                 parent::message(
@@ -170,7 +171,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
 
             $servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                $idTipoDoAtoAdministrativo
+                ['idTipoDoAto' => $idTipoDoAtoAdministrativo]
             );
             $servicoDocumentoAssinatura->finalizarFluxo();
 
@@ -187,7 +188,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         $resultadoOrgaoSuperior = $orgaoDbTable->obterOrgaoSuperior($idOrgao);
         $orgaoSuperior = $resultadoOrgaoSuperior['Codigo'];
         $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_XXXXXXXXXX;
-        if($orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SAV && $orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SEFIC) {
+        if ($orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SAV && $orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SEFIC) {
             $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
         }
 

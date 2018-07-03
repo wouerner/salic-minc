@@ -79,13 +79,14 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' não informado.");
                 }
 
-                $assinaturaService = new \MinC\Assinatura\Servico\Assinatura($this->idTipoDoAtoAdministrativo);
-                $assinaturaService->definirModeloAssinatura([
-                    'Despacho' => $post['motivoDevolucao'],
-                    'idTipoDoAto' => $this->idTipoDoAtoAdministrativo,
-                    'idPronac' => $get->IdPRONAC,
-                    'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
-                ]);
+                $assinaturaService = new \MinC\Assinatura\Servico\Assinatura(
+                    [
+                        'Despacho' => $post['motivoDevolucao'],
+                        'idTipoDoAto' => $this->idTipoDoAtoAdministrativo,
+                        'idPronac' => $get->IdPRONAC,
+                        'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
+                    ]
+                );
                 $assinaturaService->devolver();
 
                 parent::message('Projeto devolvido com sucesso.', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas", 'CONFIRM');
@@ -132,12 +133,13 @@ class Admissibilidade_EnquadramentoAssinaturaController extends Assinatura_Gener
                 throw new Exception("Identificador do projeto é necessário para acessar essa funcionalidade.");
             }
 
-            $assinaturaService = new \MinC\Assinatura\Servico\Assinatura($this->idTipoDoAtoAdministrativo);
-            $assinaturaService->definirModeloAssinatura([
-                'idTipoDoAto' => $this->idTipoDoAtoAdministrativo,
-                'idPronac' => $get->IdPRONAC,
-                'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
-            ]);
+            $assinaturaService = new \MinC\Assinatura\Servico\Assinatura(
+                [
+                    'idTipoDoAto' => $this->idTipoDoAtoAdministrativo,
+                    'idPronac' => $get->IdPRONAC,
+                    'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo
+                ]
+            );
             $assinaturaService->finalizar();
 
             parent::message('Projeto finalizado com sucesso!', "/{$this->moduleName}/enquadramento-assinatura/gerenciar-assinaturas", 'CONFIRM');
