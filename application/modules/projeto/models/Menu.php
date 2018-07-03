@@ -8,6 +8,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
     private $permissoesMenu;
     private $debug = false;
     private $situacaoProjeto = '';
+    private $IN2017 = false;
 
     public function obterMenu($idPronac)
     {
@@ -15,12 +16,13 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             return false;
         }
 
+        $this->obterVersaoInDoProjeto($idPronac);
         $projeto = $this->obterProjeto($idPronac);
-        $arrMenu = $this->obterArrayMenuConvenio($idPronac);
+        $arrMenu = $this->obterArrayMenuConvenio($idPronac, $projeto);
 
         if ($projeto['Mecanismo'] == 1) {
-            $this->obterPermissoesMenu($idPronac, $projeto['CgcCpf'], $projeto['Situacao']);
-            $arrMenu = $this->obterArrayMenuMecenato($idPronac);
+            $this->obterPermissoesMenu($idPronac, $projeto);
+            $arrMenu = $this->obterArrayMenuMecenato($idPronac, $projeto);
         }
 
         return $arrMenu;
@@ -37,7 +39,12 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
     }
 
-    public function obterPermissoesMenu($idPronac, $cpf, $situacaoProjeto = null)
+    public function obterVersaoInDoProjeto($idPronac) {
+        $tbProjetos = new Projeto_Model_DbTable_Projetos();
+        $this->IN2017 = $tbProjetos->verificarIN2017($idPronac);
+    }
+
+    public function obterPermissoesMenu($idPronac, $projeto)
     {
         $auth = Zend_Auth::getInstance();
 
@@ -48,7 +55,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $projetos = new Projeto_Model_DbTable_Projetos();
 
             $links = new fnLiberarLinks();
-            $linksXpermissao = $links->links(2, $cpf, $idUsuarioLogado, $idPronac);
+            $linksXpermissao = $links->links(2, $projeto['CgcCpf'], $idUsuarioLogado, $idPronac);
 
             $linksGeral = str_replace(' ', '', explode('-', $linksXpermissao->links));
 
@@ -76,12 +83,22 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
     }
 
-    public function obterArrayMenuConvenio($idPronac)
+    public function obterArrayMenuConvenio($idPronac, $projeto)
     {
         $idPronacHash = Seguranca::encrypt($idPronac);
-
+        $pronac = $projeto['AnoProjeto'] .''. $projeto['Sequencial'];
+        $versaoIN = ($this->IN2017) ? '[2017]' : '[2013]';
         $menu = [];
-        $menu['dadosprojeto'] = array(
+        $menu['informacoes'] = [
+            'id' => 'informacoes',
+            'titulo' => "Pronac {$pronac} {$versaoIN}",
+            'descricao' => utf8_encode($projeto['NomeProjeto']),
+            'icone_ativo' => 'info',
+            'ativo' => true,
+            'icone_inativo' => 'info'
+        ];
+
+        $menu['dadosprojeto'] = [
             'id' => 'dadosdoprojeto',
             'label' => 'Dados básicos',
             'title' => '',
@@ -90,9 +107,9 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'icon' => 'home',
             'submenu' => '',
             'grupo' => []
-        );
+        ];
 
-        $menu['proponente'] = array(
+        $menu['proponente'] = [
             'id' => 'proponente',
             'label' => 'Proponente',
             'title' => '',
@@ -101,22 +118,33 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'icon' => 'person',
             'submenu' => '',
             'grupo' => []
-        );
+        ];
 
         return $menu;
     }
 
-    public function obterArrayMenuMecenato($idPronac)
+    public function obterArrayMenuMecenato($idPronac, $projeto)
     {
         $idPronacHash = Seguranca::encrypt($idPronac);
         $debug = $this->debug;
 
+        $pronac = $projeto['AnoProjeto'] .''. $projeto['Sequencial'];
+        $versaoIN = ($this->IN2017) ? '[2017]' : '[2013]';
         $menu = [];
+        $menu['informacoes'] = [
+            'id' => 'informacoes',
+            'titulo' => "Pronac {$pronac} {$versaoIN}",
+            'descricao' => utf8_encode($projeto['NomeProjeto']),
+            'icone_ativo' => 'info',
+            'ativo' => true,
+            'icone_inativo' => 'info'
+        ];
+
         $menu['dadosprojeto'] = [
             'id' => 'dadosdoprojeto',
             'label' => 'Dados do Projeto',
             'title' => '',
-            'link' => '/projeto/convenio/visualizar/?idPronac=' . $idPronacHash,
+            'link' => '/default/consultardadosprojeto/index?idPronac=' . $idPronacHash,
             'ajax' => false,
             'icon' => 'home',
             'submenu' => '',

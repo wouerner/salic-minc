@@ -2,7 +2,20 @@ Vue.component('sidebar-menu', {
     template: `
     <div>
         <ul id="sidenav" class="sidenav-apoio side-nav fixed">
-            <li v-for="item in menu" :class="[item.submenu ? 'no-padding' : 'bold']">
+            <carregando v-if="loading"></carregando>
+            <li class="sidebar-info" v-if="menu.informacoes">
+                <div>
+                    <p>
+                        <i class="material-icons left tiny">
+                            <span v-if="menu.informacoes.ativo">{{menu.informacoes.icone_ativo}}</span>
+                            <span v-else>{{menu.informacoes.icone_inativo}}</span>
+                        </i>
+                        <b v-html="menu.informacoes.titulo"></b>
+                    </p>
+                    <p class="info-title" v-html="menu.informacoes.descricao"></p>
+                </div>
+            </li>
+            <li v-for="(item, index) in menu" v-if="index != 'informacoes'" :class="[item.submenu ? 'no-padding' : 'bold']">
                  <ul v-if="item.submenu"  class="collapsible collapsible-accordion">
                     <li class="bold">
                         <a 
@@ -45,58 +58,40 @@ Vue.component('sidebar-menu', {
             active: true,
             configs: {
                 idDivRetorno: 'conteudo'
-            }
+            },
+            loading: true,
+            menu: {}
         }
     },
     props: {
         id: 0,
         urlAjax: '',
-        menu: {},
+        arrayMenu: {},
     },
     updated: function () {
-        if(this.id != 0 && this.url != '') {
-            this.obterMenu();
-        }
-
         this.iniciarCollapsible();
     },
     mounted: function() {
-        $(document).ajaxStart(function () {
+        if(typeof this.urlAjax != 'undefined' && this.urlAjax != '') {
+            this.obterMenu();
+        }
 
-        });
-        $(document).ajaxComplete(function () {
-
-        });
+        if(typeof this.arrayMenu != 'undefined' && this.arrayMenu != '') {
+            this.menu = this.arrayMenu;
+        }
     },
     methods: {
         obterMenu: function () {
             let self = this;
             $3.ajax({
                 type: "GET",
-                url: self.urlAjax,
-                data: {
-                    id: self.id,
-                }
+                url: self.urlAjax
             }).done(function (response) {
                 if (response) {
-                    self.menu = response;
+                    self.loading = false;
+                    self.menu = response.data;
                 }
             });
-        },
-        obterMenuPrincipal: function () {
-            // let self = this;
-            // $3.ajax({
-            //     type: "GET",
-            //     url: "/projeto/menu/obter-menu/",
-            //     data: {
-            //         idPronac: self.id,
-            //     }
-            // }).done(function (response) {
-            //     console.log(response);
-            //     if (response) {
-            //         self.menu = response;
-            //     }
-            // });
         },
         carregarDados: function (item) {
 
