@@ -37,11 +37,11 @@
                             </tr>
                             <tr>
                                 <th>Valor Aprovado:</th>
-                                <td>R$ {{ formatValues(projeto.vlAprovado) }}</td>
+                                <td>R$ {{ formatValue(projeto.vlAprovado) }}</td>
                                 <th>Valor Comprovado:</th>
-                                <td>R$ {{ formatValues(projeto.vlComprovado) }}</td>
+                                <td>R$ {{ formatValue(projeto.vlComprovado) }}</td>
                                 <th>Comprovação Validada:</th>
-                                <td>R$ {{ formatValues(projeto.ComprovacaoValidada) }}</td>
+                                <td>R$ {{ formatValue(projeto.ComprovacaoValidada) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -85,19 +85,30 @@
                 });
         },
         methods: {
-            formatValues: function (value) {
+            formatValue(value) {
                 if (value === undefined) {
                     return '0';
                 }
 
                 if (value.indexOf('.') === -1) {
-                    value = value.concat('.00');
+                    return this.formatValueWithoutCents(value);
                 }
 
-                const valueChangedPointByComma = value.replace('.', ',');
+                return this.formatValueWithCents(value);
+            },
+            formatValueWithoutCents(value) {
+                const valueWithCents = value.concat(',00');
+                const result = valueWithCents.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                return result;
+            },
+            formatValueWithCents(value) {
+                const valueParsedToFloat = parseFloat(value).toFixed(2);
+                const valueParsedToString = valueParsedToFloat.toString();
+                const valueChangedPointByComma = valueParsedToString.replace('.', ',');
+                const result = valueChangedPointByComma.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-                return valueChangedPointByComma.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            }
+                return result;
+            },
         },
     }
 
