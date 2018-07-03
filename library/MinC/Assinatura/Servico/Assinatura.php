@@ -118,7 +118,7 @@ class Assinatura implements IServico
             $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
         );
 
-        if ($this->isEncaminharParaProximoAssinanteAoAssinar && $codigoOrgaoDestino) {
+        if ($codigoOrgaoDestino) {
             $this->encaminhar();
         }
 
