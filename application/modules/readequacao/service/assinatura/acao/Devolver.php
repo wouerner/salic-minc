@@ -24,6 +24,9 @@ class Devolver implements IAcaoDevolver
             case \Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_ENVIADO_ANALISE_TECNICA;
                 break;
+            case \Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_DE_PARECER_PELO_PRESIDENTE;
+                break;
         }
         $dados = ['siEncaminhamento' => $siEncaminhamento];
         $where = "idReadequacao = {$idReadequacao}";
