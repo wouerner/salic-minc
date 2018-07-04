@@ -36,7 +36,8 @@ class Autenticacao implements IServico
         }
 
         $metodoAutenticacao =  ucfirst($this->configuracoesAplicacao['Assinatura']['Autenticacao']['Metodo']);
-        if(!class_exists("\MinC\Assinatura\Autenticacao\{$metodoAutenticacao}")) {
+
+        if(!class_exists("\MinC\Assinatura\Autenticacao\\{$metodoAutenticacao}")) {
             throw new \Exception("Classe definida no arquivo de configura&ccedil;&atilde;o do sistema inexistente.");
         }
 
@@ -47,7 +48,7 @@ class Autenticacao implements IServico
      */
     public function obterMetodoAutenticacao() {
         $metodoAutenticacao =  ucfirst($this->configuracoesAplicacao['Assinatura']['Autenticacao']['Metodo']);
-        $classeDeAutenticacao = "\MinC\Assinatura\Autenticacao\{$metodoAutenticacao}";
+        $classeDeAutenticacao = "\MinC\Assinatura\Autenticacao\\{$metodoAutenticacao}";
 
         return new $classeDeAutenticacao($this->post, $this->identidadeUsuarioLogado);
     }
