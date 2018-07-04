@@ -93,7 +93,6 @@ class Assinatura_IndexController extends Assinatura_GenericController
                 array('idDocumentoAssinatura' => $idDocumentoAssinatura)
             );
 
-
             $this->view->idDocumentoAssinatura = $idDocumentoAssinatura;
             $this->view->IdPRONAC = $this->view->documentoAssinatura['IdPRONAC'];
             $this->view->idTipoDoAtoAdministrativo = $this->view->documentoAssinatura['idTipoDoAtoAdministrativo'];
@@ -137,6 +136,18 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $moduleAndControllerArray = explode('/', $this->view->origin);
             $this->view->moduleOrigin = $moduleAndControllerArray[0];
             $this->view->controllerOrigin = $moduleAndControllerArray[1];
+            $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
+
+            $this->view->perfilAssinante = $objTbAtoAdministrativo->obterPerfilAssinante(
+                $this->grupoAtivo->codOrgao,
+                $this->grupoAtivo->codGrupo,
+                $this->view->documentoAssinatura['idTipoDoAtoAdministrativo']
+            );
+
+            $this->view->isPermitidoAssinar = true;
+            if(!$this->view->perfilAssinante || $this->documentoAssinatura['cdSituacao'] != Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO) {
+                $this->view->isPermitidoAssinar = false;
+            }
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "/{$this->moduleName}/index/visualizar-documento-assinado?idDocumentoAssinatura={$idDocumentoAssinatura}&origin={$this->view->origin}");
         }
