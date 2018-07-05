@@ -7,7 +7,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
     private $intFaseProjeto = 0;
     private $intTamPag 	    = 10;
     private $cpfLogado 	    = 0;
-    private $idResponsavel  = 0;
+    protected $idResponsavel  = 0;
     protected $idAgente 	    = 0;
     private $bln_readequacao = "false";
     private $idPreProjeto   = 0;

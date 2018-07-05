@@ -4,7 +4,7 @@ class Projeto_AssinaturaController extends Assinatura_GenericController
 {
     private $idTipoDoAtoAdministrativo;
 
-    private $idResponsavel;
+    protected $idResponsavel;
     protected $idUsuario;
     protected $idAgente;
 
