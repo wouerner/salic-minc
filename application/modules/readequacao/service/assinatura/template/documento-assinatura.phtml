@@ -73,15 +73,9 @@
         <div class="center-align" style="font-size: 23px;">
             MINIST&Eacute;RIO DA CULTURA
         </div>
-        <?php if ($this->orgaoSuperior == Orgaos::ORGAO_SUPERIOR_SEFIC): ?>
             <div class="center-align" style="font-size: 23px; color: black;">
-                Secretaria de Fomento e Incentivo &agrave; Cultura - SEFIC
+            <?php echo $view->secretaria ?>
             </div>
-        <?php else: ?>
-            <div class="center-align" style="font-size: 23px;">
-                Secretaria do Audiovisual - SAv
-            </div>
-        <?php endif; ?>
     </div>
     <div class="col s1"></div>
 </div>

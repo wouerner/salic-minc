@@ -84,7 +84,12 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
 
         $auth = \Zend_Auth::getInstance();
         $dadosUsuarioLogado = $auth->getIdentity();
-        $view->orgaoSuperior = $dadosUsuarioLogado->usu_org_max_superior;
+        $orgaoSuperior = $dadosUsuarioLogado->usu_org_max_superior;
+
+        $view->secretaria = 'Secretaria do Audiovisual - SAv';
+        if((int)$orgaoSuperior == (int)\Orgaos::ORGAO_SUPERIOR_SEFIC) {
+            $view->secretaria = 'Secretaria de Fomento e Incentivo &agrave; Cultura - SEFIC';
+        }
 
         $tbParecer = new \Parecer();
         $parecer = $tbParecer->buscar([
