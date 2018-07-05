@@ -17,8 +17,12 @@ class Assinatura implements IServico
 
     function __construct(array $dadosViewModelAssinatura)
     {
-        if(!$dadosViewModelAssinatura['idTipoDoAto']) {
+        if (!$dadosViewModelAssinatura['idTipoDoAto']) {
             throw new \Exception ("O Tipo do Ato Administrativo &eacute; obrigat&oacute;rio.");
+        }
+
+        if (empty(trim($dadosViewModelAssinatura['idPronac']))) {
+            throw new \Exception ("O Identificador do projeto &eacute; obrigat&oacute;rio.");
         }
 
         $this->idTipoDoAtoAdministrativo = $dadosViewModelAssinatura['idTipoDoAto'];
@@ -58,10 +62,6 @@ class Assinatura implements IServico
         $modeloTbAtoAdministrativo = $this->viewModelAssinatura->modeloTbAtoAdministrativo;
         if (empty(trim($modeloTbAssinatura->getDsManifestacao()))) {
             throw new \Exception ("Campo \"De acordo do Assinante\" &eacute; de preenchimento obrigat&oacute;rio.");
-        }
-
-        if (empty(trim($modeloTbAssinatura->getIdPronac()))) {
-            throw new \Exception ("O n&uacute;mero do projeto &eacute; obrigat&oacute;rio.");
         }
 
         $servicoAutenticacao = new \MinC\Assinatura\Servico\Autenticacao(
@@ -171,17 +171,14 @@ class Assinatura implements IServico
             $modeloTbDespacho->getDespacho()
         );
 
-        $objDbTableDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $data = array(
-            'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
-            'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
+            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
+            'stEstado' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
         );
-        $where = array(
-            'IdPRONAC = ?' => $modeloTbAssinatura->getIdPronac(),
-            'idTipoDoAtoAdministrativo = ?' => $this->idTipoDoAtoAdministrativo,
-            'cdSituacao = ?' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-            'stEstado = ?' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-        );
+        $where = [
+            'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
+        ];
 
         $objDbTableDocumentoAssinatura->update($data, $where);
 
@@ -190,6 +187,15 @@ class Assinatura implements IServico
 
     public function finalizar()
     {
+        $data = [
+            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+        ];
+        $where = [
+            'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
+        ];
+        $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $documentoAssinaturaDbTable->update($data, $where);
+
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoFinalizar');
     }
 
