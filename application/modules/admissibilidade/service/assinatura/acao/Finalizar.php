@@ -39,19 +39,6 @@ class Finalizar implements IAcaoFinalizar
             $dadosProjeto['Sequencial']
         );
 
-        $objModelDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $data = array(
-            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
-        );
-        $where = array(
-            'IdPRONAC = ?' => $modeloTbAssinatura->getIdPronac(),
-            'idTipoDoAtoAdministrativo = ?' => $assinatura->modeloTbAtoAdministrativo->getIdTipoDoAto(),
-            'idAtoDeGestao = ?' => $dadosEnquadramento['IdEnquadramento'],
-            'cdSituacao = ?' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
-            'stEstado = ?' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-        );
-        $objModelDocumentoAssinatura->update($data, $where);
-
         $auth = \Zend_Auth::getInstance();
 
         $valoresProjeto = $objTbProjetos->obterValoresProjeto($modeloTbAssinatura->getIdPronac());
