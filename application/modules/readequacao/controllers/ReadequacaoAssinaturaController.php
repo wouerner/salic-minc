@@ -8,7 +8,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
     private $idTiposAtoAdministrativos = [
         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
-        655
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_XXXXXXXXXX
     ];
 
     private function validarPerfis()
@@ -171,7 +171,10 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
 
             $servicoDocumentoAssinatura = new \MinC\Assinatura\Servico\Assinatura(
-                ['idTipoDoAto' => $idTipoDoAtoAdministrativo]
+                [
+                    'idTipoDoAto' => $idTipoDoAtoAdministrativo,
+                    'idPronac' => $idPronac
+                ]
             );
             $servicoDocumentoAssinatura->finalizarFluxo();
 
