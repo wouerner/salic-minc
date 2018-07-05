@@ -99,15 +99,16 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
 
         switch ((string)$parecer->ParecerFavoravel) {
             case '1':
-                $view->parecer = 'Desfavor&aacute;vel';
+                $view->posicionamentoTecnico = 'Desfavor&aacute;vel';
                 break;
             case '2':
-                $view->parecer = 'Favor&aacute;vel';
+                $view->posicionamentoTecnico = 'Favor&aacute;vel';
                 break;
             default:
-                $view->parecer = 'N&atilde;o definido';
+                $view->posicionamentoTecnico = 'N&atilde;o definido';
                 break;
         }
+        $view->parecer = $parecer->ResumoParecer;
 
         return $view->render('documento-assinatura.phtml');
     }
