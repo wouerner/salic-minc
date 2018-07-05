@@ -3,7 +3,7 @@
 class PrincipalproponenteController extends MinC_Controller_Action_Abstract
 {
     private $idAgente = null;
-    private $idUsuario;
+    protected $idUsuario;
 
     public function init()
     {

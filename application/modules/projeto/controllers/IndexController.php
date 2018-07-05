@@ -6,7 +6,7 @@ class Projeto_IndexController extends Projeto_GenericController
     private $getCNPJCPF = 0;
     private $idResponsavel = 0;
     private $idAgente = 0;
-    private $idUsuario = 0;
+    protected $idUsuario = 0;
     private $cpfLogado = 0;
 
 
