@@ -6,7 +6,7 @@ class Projeto_AssinaturaController extends Assinatura_GenericController
 
     private $idResponsavel;
     protected $idUsuario;
-    private $idAgente;
+    protected $idAgente;
 
     private function validarPerfis()
     {

@@ -3,7 +3,7 @@
 class ProcuracaoController extends MinC_Controller_Action_Abstract
 {
     private $idResponsavel = 0;
-    private $idAgente      = 0;
+    protected $idAgente      = 0;
     protected $idUsuario     = 0;
 
     private $idPreProjeto  = null;
