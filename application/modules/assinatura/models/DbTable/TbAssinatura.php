@@ -271,6 +271,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                 'Projetos.Area as cdarea',
                 'Projetos.ResumoProjeto',
                 'Projetos.Orgao',
+                'dias' => 'DATEDIFF(DAY, projetos.DtSituacao, GETDATE())',
                 'tbDocumentoAssinatura.idDocumentoAssinatura',
                 'possuiProximaAssinatura' => new Zend_Db_Expr("
                     (
