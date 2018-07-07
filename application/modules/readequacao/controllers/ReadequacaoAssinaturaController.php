@@ -55,6 +55,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->auth->getIdentity()->usu_org_max_superior,
             $idTipoDoAtoAdministrativo
         );
+
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
 
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();

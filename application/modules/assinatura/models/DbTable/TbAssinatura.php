@@ -249,10 +249,17 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         $idPerfilDoAssinante,
         $idOrgaoSuperiorDoAssinante,
         $idTipoDoAtoAdministrativos = []
-    ) {
+    )
+    {
 
         $query = $this->select();
         $query->setIntegrityCheck(false);
+
+        $sqlQuantidadeAssinaturas = "(select count(*) 
+                     from TbAssinatura
+                    where idPronac = Projetos.IdPRONAC
+                      and idAtoAdministrativo = TbAtoAdministrativo.idAtoAdministrativo 
+                      and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura)";
 
         $query->from(
             array("Projetos" => "Projetos"),
@@ -265,7 +272,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                 'Projetos.ResumoProjeto',
                 'Projetos.Orgao',
                 'tbDocumentoAssinatura.idDocumentoAssinatura',
-                'possuiProximaAssinatura'=> new Zend_Db_Expr("
+                'possuiProximaAssinatura' => new Zend_Db_Expr("
                     (
                     
                     select top 1 {$this->_schema}.TbAtoAdministrativo.idOrdemDaAssinatura
@@ -285,7 +292,8 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                       )
                       order by idOrdemDaAssinatura asc
                     )
-                ")
+                "),
+                'quantidadeAssinaturas' => new Zend_Db_Expr($sqlQuantidadeAssinaturas)
             ),
             $this->_schema
         );
@@ -329,7 +337,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
              AND TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
              AND TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$idOrgaoSuperiorDoAssinante}
              AND TbAtoAdministrativo.idTipoDoAto = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
-            array(),
+            array('idOrdemDaAssinatura'),
             $this->_schema
         );
 
@@ -343,6 +351,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                and idAtoAdministrativo = TbAtoAdministrativo.idAtoAdministrativo 
                and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura
         )");
+        $query->where("{$sqlQuantidadeAssinaturas} + 1 = idOrdemDaAssinatura");
 
         if ($idTipoDoAtoAdministrativos) {
             $query->where("tbDocumentoAssinatura.idTipoDoAtoAdministrativo in (?)", $idTipoDoAtoAdministrativos);
