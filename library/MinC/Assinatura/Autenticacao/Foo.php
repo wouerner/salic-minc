@@ -16,18 +16,12 @@ class Foo implements IAdapter
         $this->usuario->setUsuSenha($post['password']);
     }
 
-    /**
-     * @return boolean
-     */
-    public function autenticar()
+    public function autenticar() : bool
     {
         throw new \Exception ("Implementar esse m&eacute;todo.");
     }
 
-    /**
-     * @return array
-     */
-    public function obterInformacoesAssinante()
+    public function obterInformacoesAssinante() : array
     {
         throw new \Exception ("Implementar esse m&eacute;todo.");
     }

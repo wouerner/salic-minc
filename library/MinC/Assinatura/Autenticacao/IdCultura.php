@@ -2,7 +2,7 @@
 
 namespace MinC\Assinatura\Autenticacao;
 
-class Padrao implements IAdapter
+class IdCultura implements IAdapter
 {
     /**
      * @var \Autenticacao_Model_DbTable_Usuario $usuario
@@ -18,19 +18,12 @@ class Padrao implements IAdapter
 
     public function autenticar() : bool
     {
-        $isUsuarioESenhaValidos = $this->usuario->isUsuarioESenhaValidos();
-        if ($isUsuarioESenhaValidos) {
-            return true;
-        }
-        return false;
+        throw new \Exception ("Implementar esse m&eacute;todo.");
     }
 
     public function obterInformacoesAssinante() : array
     {
-        $usuariosBuscar = $this->usuario->buscar(
-            ['usu_identificacao = ?' => $this->usuario->getUsuIdentificacao()]
-        )->current();
-        return $usuariosBuscar->toArray();
+        throw new \Exception ("Implementar esse m&eacute;todo.");
     }
 
     /**
@@ -41,7 +34,7 @@ class Padrao implements IAdapter
     public function obterTemplateAutenticacao()
     {
         $view = new \Zend_View();
-        $view->setScriptPath(__DIR__ . '/templates');
-        return $view->render('padrao.phtml');
+        $view->setScriptPath(APPLICATION_PATH . '/../library/MinC/Assinatura/Autenticacao/templates');
+        return $view->render('idcultura.phtml');
     }
 }
