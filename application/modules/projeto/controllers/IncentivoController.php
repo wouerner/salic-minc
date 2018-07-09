@@ -96,7 +96,9 @@ class Projeto_IncentivoController extends Projeto_GenericController
 
     private function carregarScripts() {
 //        $this->view->headScript()->offsetSetFile(100,'https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', 'text/javascript', array('language' => 'javascript'));
-        $this->view->headScript()->offsetSetFile(100,'/public/scripts/projeto/incentivo/visualizar.js',  'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(99,'/public/dist/js/manifest.js',  'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(100,'/public/dist/js/vendor.js',  'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(101,'/public/dist/js/projeto_visualizar.js',  'text/javascript', array('language' => 'javascript'));
     }
 
     public function visualizarAction()

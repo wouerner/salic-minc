@@ -25,7 +25,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     },
     watch: true,
     // cheap-module-eval-source-map is faster for development
-    devtool: config.dev.devtool,
+    devtool: config.build.productionSourceMap ? config.build.devtool : false,
     plugins: [
         new webpack.DefinePlugin({
             'process.env': require('../config/dev.env')
