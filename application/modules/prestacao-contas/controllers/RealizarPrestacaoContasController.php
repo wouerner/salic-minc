@@ -57,7 +57,7 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
 
     public function planilhaAnaliseAction()
     {
-        $idpronac = (int)$this->_request->getParam('idpronac');
+        $idpronac = (int)$this->_request->getParam('idPronac');
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
