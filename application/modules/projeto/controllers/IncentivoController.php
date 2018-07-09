@@ -2,15 +2,15 @@
 
 class Projeto_IncentivoController extends Projeto_GenericController
 {
-    private $blnProponente  = false;
-    private $blnProcurador  = false;
-    private $intFaseProjeto = 0;
-    private $intTamPag 	    = 10;
-    private $idResponsavel  = 0;
-    private $bln_readequacao = "false";
-    private $idPreProjeto   = 0;
-    private $projeto;
-    private $idPronac;
+    protected $blnProponente  = false;
+    protected $blnProcurador  = false;
+    protected $intFaseProjeto = 0;
+    protected $intTamPag 	    = 10;
+    protected $idResponsavel  = 0;
+    protected $bln_readequacao = "false";
+    protected $idPreProjeto   = 0;
+    protected $projeto;
+    protected $idPronac;
 
     /**
      * Reescreve o metodo init()
@@ -94,9 +94,16 @@ class Projeto_IncentivoController extends Projeto_GenericController
         }
     }
 
+    private function carregarScripts() {
+//        $this->view->headScript()->offsetSetFile(100,'https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', 'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(100,'/public/scripts/projeto/incentivo/visualizar.js',  'text/javascript', array('language' => 'javascript'));
+    }
+
     public function visualizarAction()
     {
         $params = $this->getRequest()->getParams();
+
+        $this->carregarScripts();
 
         try {
 

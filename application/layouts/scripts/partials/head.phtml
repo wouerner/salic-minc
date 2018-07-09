@@ -32,11 +32,10 @@
             $arrJsFiles[] = $strJsValue;
         }
     }
-
-//    $arrJsFiles = array_reverse($arrJsFiles);
+    $arrJsFiles = array_reverse($arrJsFiles);
     foreach ($arrJsFiles as $strJsValue) {
-        $this->headScript()->appendFile($configLayout->resources->js->path . '/' . $strJsValue, 'text/javascript', array('language' => 'javascript'));
-//        $this->headScript()->prependFile($configLayout->resources->js->path . '/' . $strJsValue, 'text/javascript', array('language' => 'javascript'));
+//        $this->headScript()->appendFile($configLayout->resources->js->path . '/' . $strJsValue, 'text/javascript', array('language' => 'javascript'));
+        $this->headScript()->prependFile($configLayout->resources->js->path . '/' . $strJsValue, 'text/javascript', array('language' => 'javascript'));
     }
 
     $arrCssFiles = array();
@@ -95,4 +94,3 @@
     echo $this->headScript();
     echo $this->headTitle();
     ?>
-    <link href="/public/css/_icons.css" rel="stylesheet">
