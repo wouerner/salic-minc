@@ -23,14 +23,7 @@ Vue.component('sl-planilha-itens',{
                         <td style="text-align: right"> R$ {{ converterParaReal(item.varlorComprovado) }} </td>
                         <td style="text-align: right"> R$ {{ converterParaReal(item.varlorAprovado - item.varlorComprovado)  }} </td>
                         <td style="text-align: right"><a class="btn" title="Comprovar item"
-                            :href="'/prestacao-contas/gerenciar/comprovar'
-                               + '/idpronac/' + idpronac
-                               + '/uf/' + uf
-                               + '/produto/' + cdproduto
-                               + '/cidade/' + cdcidade
-                               + '/etapa/' + cdetapa
-                               + '/idPlanilhaAprovacao/' + item.idPlanilhaAprovacao
-                               + '/idPlanilhaItens/' + item.idPlanilhaItens"
+                            :href="url(item.idPlanilhaAprovacao, item.idPlanilhaItens)"
                            ><i class="material-icons small">attach_money</i></a></td>
                     </tr>
                 </tbody>
@@ -44,6 +37,16 @@ Vue.component('sl-planilha-itens',{
         converterParaReal: function (value) {
             value = parseFloat(value);
             return numeral(value).format('0,0.00');
+        },
+        url: function (idPlanilhaAprovacao, idPlanilhaItens) {
+            return '/prestacao-contas/gerenciar/comprovar'
+            + '/idpronac/' + this.idpronac
+            + '/uf/' + this.uf
+            + '/produto/' + this.cdproduto
+            + '/cidade/' + this.cdcidade
+            + '/etapa/' + this.cdetapa
+            + '/idPlanilhaAprovacao/' + idPlanilhaAprovacao
+            + '/idPlanilhaItens/' + idPlanilhaItens;
         }
     }
 
