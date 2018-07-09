@@ -354,30 +354,6 @@
                 }
                 return estado;
             },
-            formatValue(value) {
-                if (value === undefined) {
-                    return '0,00';
-                }
-
-                if (value.indexOf('.') === -1) {
-                    return this.formatValueWithoutCents(value);
-                }
-
-                return this.formatValueWithCents(value);
-            },
-            formatValueWithoutCents(value) {
-                const valueWithCents = value.concat(',00');
-                const result = valueWithCents.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                return result;
-            },
-            formatValueWithCents(value) {
-                const valueParsedToFloat = parseFloat(value).toFixed(2);
-                const valueParsedToString = valueParsedToFloat.toString();
-                const valueChangedPointByComma = valueParsedToString.replace('.', ',');
-                const result = valueChangedPointByComma.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-                return result;
-            },
         },
     }
 
