@@ -2,13 +2,13 @@
 
 class Projeto_IncentivoController extends Projeto_GenericController
 {
-    protected $blnProponente  = false;
-    protected $blnProcurador  = false;
+    protected $blnProponente = false;
+    protected $blnProcurador = false;
     protected $intFaseProjeto = 0;
-    protected $intTamPag 	    = 10;
-    protected $idResponsavel  = 0;
+    protected $intTamPag = 10;
+    protected $idResponsavel = 0;
     protected $bln_readequacao = "false";
-    protected $idPreProjeto   = 0;
+    protected $idPreProjeto = 0;
     protected $projeto;
     protected $idPronac;
 
@@ -46,13 +46,11 @@ class Projeto_IncentivoController extends Projeto_GenericController
         } else { // autenticacao scriptcase
             $this->blnProponente = true;
             parent::perfil(4, $PermissoesGrupo);
-            
-            $this->getIdUsuario = $this->_request->getParam("idPronac", 0);
 
             /* =============================================================================== */
             /* ==== VERIFICA PERMISSAO DE ACESSO DO PROPONENTE A PROPOSTA OU AO PROJETO ====== */
             /* =============================================================================== */
-            $this->verificarPermissaoAcesso(false, true, false);
+//            $this->verificarPermissaoAcesso(false, true, false);
         }
         parent::init();
 
@@ -68,37 +66,40 @@ class Projeto_IncentivoController extends Projeto_GenericController
             $this->idPronac = Seguranca::dencrypt($this->idPronac);
         }
 
-        if (empty($this->idPronac)) {
-            parent::message("Pronac &eacute; obrigat&oacute;rio!", "listarprojetos/listarprojetos", "ERROR");
-        }
+//        if (empty($this->idPronac)) {
+//            parent::message("Pronac &eacute; obrigat&oacute;rio!", "listarprojetos/listarprojetos", "ERROR");
+//        }
 
-        $this->view->idPronac = $this->idPronac;
-        $this->view->idPronacHash = Seguranca::encrypt($this->idPronac);
-        $this->view->urlMenu = [
-            'module' => 'projeto',
-            'controller' => 'menu',
-            'action' => 'obter-menu-ajax',
-            'idPronac' => $this->view->idPronacHash
-        ];
-        
-        if (!isset($auth->getIdentity()->usu_codigo)) {
-            $this->view->blnProponente = $this->blnProponente;
+        if ($this->idPronac) {
+            $this->view->idPronac = $this->idPronac;
+            $this->view->idPronacHash = Seguranca::encrypt($this->idPronac);
+            $this->view->urlMenu = [
+                'module' => 'projeto',
+                'controller' => 'menu',
+                'action' => 'obter-menu-ajax',
+                'idPronac' => $this->view->idPronacHash
+            ];
 
-            $proj = new Projetos();
-            $this->projeto = $proj->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();
+            if (!isset($auth->getIdentity()->usu_codigo)) {
+                $this->view->blnProponente = $this->blnProponente;
 
-            if (empty($this->projeto)) {
-                parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
+                $proj = new Projetos();
+                $this->projeto = $proj->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();
+
+                if (empty($this->projeto)) {
+                    parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
+                }
+
             }
-
         }
     }
 
-    private function carregarScripts() {
+    private function carregarScripts()
+    {
 //        $this->view->headScript()->offsetSetFile(100,'https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', 'text/javascript', array('language' => 'javascript'));
-        $this->view->headScript()->offsetSetFile(99,'/public/dist/js/manifest.js',  'text/javascript', array('language' => 'javascript'));
-        $this->view->headScript()->offsetSetFile(100,'/public/dist/js/vendor.js',  'text/javascript', array('language' => 'javascript'));
-        $this->view->headScript()->offsetSetFile(101,'/public/dist/js/projeto_visualizar.js',  'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js', 'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js', 'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/projeto_visualizar.js', 'text/javascript', array('language' => 'javascript'));
     }
 
     public function visualizarAction()
@@ -109,24 +110,44 @@ class Projeto_IncentivoController extends Projeto_GenericController
 
         try {
 
-            $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
-            $projetoCompleto = $dbTableProjetos->obterProjetoIncentivoCompleto($this->idPronac);
-            $this->view->projeto = $projetoCompleto;
-                    
-            if (count($projetoCompleto) <= 0) {
-                throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
-            }
-
-            $dbTableInabilitado = new Inabilitado();
-            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projetoCompleto->CgcCPf);
-            $this->view->ProponenteInabilitado = ($proponenteInabilitado->Habilitado == 'I');
-
-            $Parecer = new Parecer();
-            $parecerAnaliseCNIC = $Parecer->verificaProjSituacaoCNIC($projetoCompleto->Pronac);
-            $this->view->emAnaliseNaCNIC= (count($parecerAnaliseCNIC) > 0) ? 1 : 0;
+//            $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
+//            $projetoCompleto = $dbTableProjetos->obterProjetoIncentivoCompleto($this->idPronac);
+//            $this->view->projeto = $projetoCompleto;
+//
+//            if (count($projetoCompleto) <= 0) {
+//                throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
+//            }
+//
+//            $dbTableInabilitado = new Inabilitado();
+//            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projetoCompleto->CgcCPf);
+//            $this->view->ProponenteInabilitado = ($proponenteInabilitado->Habilitado == 'I');
+//
+//            $Parecer = new Parecer();
+//            $parecerAnaliseCNIC = $Parecer->verificaProjSituacaoCNIC($projetoCompleto->Pronac);
+//            $this->view->emAnaliseNaCNIC= (count($parecerAnaliseCNIC) > 0) ? 1 : 0;
 
         } catch (Exception $e) {
             parent::message($e->getMessage(), "listarprojetos/listarprojetos", "ERROR");
         }
+    }
+
+    public function obterProjetoAjaxAction()
+    {
+        if (empty($this->idPronac)) {
+            return [];
+        }
+
+        $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
+        $projetoCompleto = $dbTableProjetos->obterProjetoIncentivoCompleto($this->idPronac);
+
+        $data = array_map('utf8_encode', $projetoCompleto->toArray());
+
+        $this->getResponse()->setHttpResponseCode(200);
+        $this->_helper->json(
+            [
+                'data' => $data,
+                'success' => 'true'
+            ]
+        );
     }
 }

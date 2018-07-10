@@ -1,21 +1,18 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Visualizar from './Visualizar'
-import Proponente from '../Agente/Proponente'
+import DadosProjeto from './DadosProjeto'
+import Proponente from '../agente/Proponente'
 
-Vue.use(Router)
-
-export default new Router({
-  routes: [
+export default [
     {
-      path: '/',
-      name: 'Visualizar',
-      component: Visualizar
+        path: '/projeto',
+        name: 'DadosProjeto',
+        component: DadosProjeto,
+        title: 'Dados do Projeto',
+        children: [
+            {
+                path: 'proponente',
+                name: 'proponente',
+                component: Proponente,
+            }
+        ],
     },
-    {
-        path: '/proponente/id',
-        name: 'Proponente',
-        component: Proponente
-    }
-  ]
-})
+];

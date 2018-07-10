@@ -3,8 +3,7 @@
 // Vue.config.productionTip = false
 import Vue from 'vue';
 import App from './App';
-import router from './router'
-// import { store, router } from './config';
+import { store, router } from '../../config';
 
 Vue.config.productionTip = false;
 
@@ -15,6 +14,7 @@ window.onload = function () {
     var main = new Vue({
         el: '#app',
         router,
+        store,
         components: { App },
         template: '<App/>',
         created:  function () {

@@ -1,14 +1,14 @@
-import PrestacaoDeContasAPI from '@/helpers/api/PrestacaoDeContas';
+import ProjetoHelperAPI from '@/helpers/api/Projeto';
 
 import * as types from './types';
 
-const prestacaoDeContasAPI = new PrestacaoDeContasAPI('projeto');
+const projetoAPI = new ProjetoHelperAPI('projeto');
 
-export const buscaProjeto = ({ commit }) => {
-  prestacaoDeContasAPI.buscaProjeto()
-    .then((response) => {
-      const data = response.data;
-      const projeto = data.data;
-      commit(types.SET_PROJETO, projeto);
-    });
+export const buscaProjeto = ({commit}, idPronac) => {
+    projetoAPI.buscaProjeto(idPronac)
+        .then((response) => {
+            const data = response.data;
+            const projeto = data.data;
+            commit(types.SET_PROJETO, projeto);
+        });
 };

@@ -160,14 +160,17 @@
         data: function () {
             return {
                 proponente: [],
-                identificacao: []
+                identificacao: [],
+                idAgente: 0,
             }
         },
-        props: ['idagente'],
+        props: ['id'],
         mounted: function () {
-            if (typeof this.idagente != 'undefined') {
-                this.fetch(this.idagente);
+            if (typeof this.id != 'undefined') {
+                this.fetch(this.id);
             }
+
+            console.log('idPronac', this.$route.query.idPronac);
         },
         watch: {
             id: function(value) {
