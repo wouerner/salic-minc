@@ -14,10 +14,10 @@ Vue.config.productionTip = false;
 window.onload = function () {
     var main = new Vue({
         el: '#app',
+        router,
         components: { App },
         template: '<App/>',
         created:  function () {
-            console.log(this);
         }
     });
 }
