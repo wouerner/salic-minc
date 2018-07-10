@@ -1,8 +1,10 @@
 Vue.component('planilha-orcamentaria-comprovada', {
     props: ['idpronac'],
-    template: `<div>
-                            <sl-planilha-produtos :produtos="produtos" :idpronac="idpronac"></sl-planilha-produtos>
-                    </div>`,
+    template: `
+        <div>
+            <sl-planilha-produtos :produtos="produtos" :idpronac="idpronac"></sl-planilha-produtos>
+        </div>
+    `,
     mounted: function () {
         let vue = this;
         $3.ajax({
