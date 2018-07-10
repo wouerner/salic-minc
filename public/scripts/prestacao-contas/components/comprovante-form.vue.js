@@ -29,11 +29,11 @@ Vue.component('sl-comprovar-form',
                             :value="true"
                             type="radio"
                             name="nacionalidade"
-                            :id="'nacionalidade_2_' + comprovante.id"
+                            :id="'nacionalidade_2_' + random"
                             v-on:click="fornecedorInternacional($event.target.value)"
                         />
                         <label
-                            :for="'nacionalidade_2_' + comprovante.id"
+                            :for="'nacionalidade_2_' + random"
                         >Outros</label>
                     </div>
                     <template v-if="(comprovante.fornecedor.eInternacional)">
@@ -376,6 +376,7 @@ Vue.component('sl-comprovar-form',
         this.paises();
 
         this.comprovante.item = this.item;
+        // this.comprovante.idPlanilhaAprovacao = this.idPlanilhaAprovacao;
         if (this.dados) {
             if (this.dados.idComprovantePagamento) {
                 this.comprovante.id = this.dados.idComprovantePagamento;
@@ -397,11 +398,12 @@ Vue.component('sl-comprovar-form',
             this.comprovante.justificativa = this.dados.dsJustificativaProponente;
         }
     },
-    props: ['dados', 'url', 'messages', 'tipoform', 'item'],
+    props: ['dados', 'url', 'messages', 'tipoform', 'item', 'idplanilhaaprovacao'],
+    mounted(){
+        this.random = (Math.random() * 10000000000000000);
+    },
     data: function() {
         return this.data();
-    },
-    computed: {
     },
     methods: {
         salvar: function() {
@@ -647,6 +649,7 @@ Vue.component('sl-comprovar-form',
                         eInternacional: false,
                     },
                     item: this.item,
+                    idPlanilhaAprovacao: this.idplanilhaaprovacao,
                     tipo: 1,
                     numero: '',
                     serie: '',
@@ -685,7 +688,8 @@ Vue.component('sl-comprovar-form',
                     arquivo: {
                         css: '',
                     },
-                }
+                },
+                random: ''
             }
         }
     }

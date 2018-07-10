@@ -38,7 +38,17 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         $dataAux = [];
         foreach($data as $key => $value) {
             $dataAux[$key] = $value;
+            $dataAux[$key]['tipo'] = $value['idTpDocumento'];
+            $dataAux[$key]['numero'] = $value['nrComprovante'];
+            $dataAux[$key]['serie'] = $value['nrSerie'];
+            $dataAux[$key]['forma'] = $value['idTpFormaPagamento'];
+            $dataAux[$key]['valor'] = $value['vlComprovacao'];
+            $dataAux[$key]['justificativa'] = $value['dsJustificativa'];
+            $dataAux[$key]['numeroDocumento'] = $value['nrDocumentoDePagamento'];
             $dataAux[$key]['fornecedor']['CNPJCPF'] = $value['CNPJCPF'];
+            $dataAux[$key]['fornecedor']['nome'] = $value['nmFornecedor'];
+            $dataAux[$key]['arquivo']['nome'] = $value['nmArquivo'];
+            $dataAux[$key]['arquivo']['id'] = $value['idArquivo'];
         }
         /* var_dump($data); */
         /* die; */

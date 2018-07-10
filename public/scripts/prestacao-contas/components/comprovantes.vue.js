@@ -4,7 +4,7 @@ const comprovantes = {
             <ul class="collapsible" data-collapsible="accordion">
                 <li v-for="(dado, index) in dados">
                   <div class="collapsible-header">
-                      Fornecedor: {{dado.Descricao}} - {{dado.vlComprovacao}}
+                      Fornecedor: {{dado.fornecedor.nome}} - {{dado.valor}}
                       <span :class="['badge white-text', badgeCSS(dado.stItemAvaliado)]">
                         {{situacao(dado.stItemAvaliado)}}
                       </span>
