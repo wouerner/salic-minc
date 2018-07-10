@@ -28,7 +28,14 @@ Vue.component('page-title', {
             const splitedUrl = window.location.href.split('/')
             const idPronac = splitedUrl[7];
             const hostname = window.location.hostname;
-            const url = 'http://' + hostname + '/prestacao-contas/realizar-prestacao-contas/index/idPronac/' + idPronac;
+            const cdProduto = splitedUrl[11];
+
+            const url = 'http://'
+                        + hostname
+                        + '/prestacao-contas/realizar-prestacao-contas/index/idPronac/'
+                        + idPronac
+                        + '?cdProduto='
+                        + cdProduto;
 
             return url;
         },
