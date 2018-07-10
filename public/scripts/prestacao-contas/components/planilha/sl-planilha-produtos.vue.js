@@ -3,7 +3,7 @@ Vue.component('sl-planilha-produtos', {
     template: `
         <ul class="collapsible no-margin" data-collapsible="expandable" id="produtos-collapsible">
             <li class="active" v-for="(produto, index) in produtos">
-                <div class="collapsible-header green-text">
+                <div class="collapsible-header green-text" v-bind:class="{ active: testee(produto.cdProduto) }" >
                     <i class="material-icons">perm_media</i>
                     {{ produto.produto }}
                 </div>
@@ -23,12 +23,20 @@ Vue.component('sl-planilha-produtos', {
     `,
     mounted: function () {
         this.iniciarCollapsible();
+        this.testee();
     },
     methods: {
         iniciarCollapsible: function () {
             $3('#produtos-collapsible.collapsible').each(function() {
                 $3(this).collapsible();
             });
+        },
+        testee: function(cdProduto) {
+            console.log(typeof cdProduto);
+            const url = new URL(window.location.href);
+            const cdProdutoByUrl = url.searchParams.get('cdProduto');
+
+            return cdProduto === Number(cdProdutoByUrl);
         },
     }
 })
