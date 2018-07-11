@@ -22,13 +22,13 @@ class Encaminhar implements IAcaoEncaminhar
 
         $idTipoDoAtoAdministrativo = $assinatura->modeloTbDocumentoAssinatura->getIdTipoDoAtoAdministrativo();
         if ((int)$idTipoDoAtoAdministrativo == (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS) {
-            $this->atualizarSituacaoEncaminhamentoVinculadas($tbReadequacaoXParecer['idReadequacao']);
+            $this->tratarEncaminhamentoVinculadas($tbReadequacaoXParecer['idReadequacao']);
         } elseif ((int)$idTipoDoAtoAdministrativo == (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO) {
-            $this->atualizarSituacaoEncaminhamentoAjusteProjeto($tbReadequacaoXParecer['idReadequacao']);
+            $this->tratarEncaminhamentoDeAjustesDoProjeto($tbReadequacaoXParecer['idReadequacao']);
         }
     }
 
-    private function atualizarSituacaoEncaminhamentoVinculadas($idReadequacao)
+    private function tratarEncaminhamentoVinculadas($idReadequacao)
     {
         $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
         $objTbProjetos = new Projeto_Model_DbTable_Projetos();
@@ -68,22 +68,19 @@ class Encaminhar implements IAcaoEncaminhar
             $objTbProjetos->alterarOrgao($orgaoDestino, $this->assinatura->modeloTbAssinatura->getIdPronac());
         }
 
-        $dados = ['siEncaminhamento' => $siEncaminhamento];
-        $where = "idReadequacao = {$idReadequacao}";
-        $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
-        $tbReadequacao->update($dados, $where);
+        if($siEncaminhamento) {
+            $dados = ['siEncaminhamento' => $siEncaminhamento];
+            $where = "idReadequacao = {$idReadequacao}";
+            $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
+            $tbReadequacao->update($dados, $where);
+        }
+
     }
 
-    private function atualizarSituacaoEncaminhamentoAjusteProjeto($idReadequacao)
+    private function tratarEncaminhamentoDeAjustesDoProjeto($idReadequacao)
     {
         $dados = [];
         $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
-        $objTbProjetos = new Projeto_Model_DbTable_Projetos();
-        $objOrgaos = new \Orgaos();
-        $dadosProjeto = $objTbProjetos->findBy(array(
-            'IdPRONAC' => $this->assinatura->modeloTbAssinatura->getIdPronac()
-        ));
-//        $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
 
         switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
             case \Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO:
@@ -102,13 +99,6 @@ class Encaminhar implements IAcaoEncaminhar
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA;
                 $dados['stEstado'] = \Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_FINALIZADO;
                 break;
-        }
-
-        if (isset($orgaoDestino)) {
-            $objTbProjetos->alterarOrgao(
-                $orgaoDestino,
-                $this->assinatura->modeloTbAssinatura->getIdPronac()
-            );
         }
 
         $dados['siEncaminhamento'] = $siEncaminhamento;
