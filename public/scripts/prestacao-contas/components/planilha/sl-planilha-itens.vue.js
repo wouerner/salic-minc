@@ -1,4 +1,4 @@
-Vue.component('sl-planilha-itens',{
+Vue.component('sl-planilha-itens', {
     props: ['itens','idpronac','uf',
         'cdproduto','cdcidade','cdetapa'],
     template: `<table class="bordered">
@@ -22,33 +22,48 @@ Vue.component('sl-planilha-itens',{
                         <td style="text-align: right"> R$ {{ converterParaReal(item.varlorAprovado) }} </td>
                         <td style="text-align: right"> R$ {{ converterParaReal(item.varlorComprovado) }} </td>
                         <td style="text-align: right"> R$ {{ converterParaReal(item.varlorAprovado - item.varlorComprovado)  }} </td>
-                        <td style="text-align: right"><a class="btn" title="Comprovar item"
-                            :href="url(item.idPlanilhaAprovacao, item.idPlanilhaItens)"
-                           ><i class="material-icons small">attach_money</i></a></td>
+                        <td style="text-align: right">
+                            <sl-planilha-button
+                                :typeButton="url(item.idPlanilhaAprovacao, item.idPlanilhaItens, item.stItemAvaliado)"
+                            >
+                            </sl-planilha-button>
+                        </td>
                     </tr>
                 </tbody>
             </table> `,
     methods: {
         isObject: function (el) {
-
             return typeof el === "object";
-
         },
         converterParaReal: function (value) {
             value = parseFloat(value);
             return numeral(value).format('0,0.00');
         },
-        url: function (idPlanilhaAprovacao, idPlanilhaItens) {
+        url: function(idPlanilhaAprovacao, idPlanilhaItens, stItemAvaliado) {
+            if (stItemAvaliado === undefined) {
+                return this.urlDoProponente(idPlanilhaAprovacao, idPlanilhaItens);
+            }
+
+            return this.urlDoTecnico(idPlanilhaAprovacao, idPlanilhaItens, stItemAvaliado);
+        },
+        urlDoTecnico: function(idPlanilhaAprovacao, idPlanilhaItens, stItemAvaliado) {
+            return '/prestacao-contas/analisar/comprovante'
+                + '/idPronac/' + this.idpronac
+                + '/uf/' + this.uf
+                + '/produto/' + this.cdproduto
+                + '/idmunicipio/' + this.cdcidade
+                + '/idPlanilhaItem/' + idPlanilhaItens
+                + '/stItemAvaliado/' + stItemAvaliado;
+        },
+        urlDoProponente: function(idPlanilhaAprovacao, idPlanilhaItens) {
             return '/prestacao-contas/gerenciar/comprovar'
-            + '/idpronac/' + this.idpronac
-            + '/uf/' + this.uf
-            + '/produto/' + this.cdproduto
-            + '/cidade/' + this.cdcidade
-            + '/etapa/' + this.cdetapa
-            + '/idPlanilhaAprovacao/' + idPlanilhaAprovacao
-            + '/idPlanilhaItens/' + idPlanilhaItens;
-        }
-    }
-
-
+                + '/idpronac/' + this.idpronac
+                + '/uf/' + this.uf
+                + '/produto/' + this.cdproduto
+                + '/cidade/' + this.cdcidade
+                + '/etapa/' + this.cdetapa
+                + '/idPlanilhaAprovacao/' + idPlanilhaAprovacao
+                + '/idPlanilhaItens/' + idPlanilhaItens;
+        },
+    },
 })

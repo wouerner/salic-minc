@@ -47,15 +47,19 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
     {
         $idPronac = $this->_request->getParam("idPronac");
         $avaliacao = $this->_request->getParam("avaliacao");
+
         if (!$idPronac) {
            throw new Exception('Não existe idPronac');
         }
+
         if (!$avaliacao) {
            throw new Exception('Não existe avaliacao');
         }
+
         if ($avaliacao == "todos") {
             $this->redirect('/realizarprestacaodecontas/planilhaorcamentaria/idPronac/' . $idPronac );
         }
+
         $this->redirect('/prestacao-contas/prestacao-contas/amostragem/idPronac/' . $idPronac . '/tipoAvaliacao/' . $avaliacao);
     }
 
@@ -116,7 +120,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         }
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $planilha = $planilhaAprovacaoModel->vwComprovacaoFinanceiraProjeto($idpronac); 
+        $planilha = $planilhaAprovacaoModel->vwComprovacaoFinanceiraProjeto($idpronac);
 
         $planilhaJSON = null;
 
@@ -139,7 +143,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
 
             $planilhaJSON[$item->cdProduto] += [
                     'produto' => utf8_encode($item->Produto),
-                    'cdProduto' => $item->cdProduto, 
+                    'cdProduto' => $item->cdProduto,
             ];
 
             $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa] += [
