@@ -3,8 +3,8 @@ Vue.component('sl-planilha-button', {
         'typeButton',
     ],
     template: `
-        <a class="btn red" title="Comprovar item" v-bind:href="typeButton">
-            <i class="material-icons small">gavel</i>
+        <a class="btn" v-bind:class="typeButton['colorButton']" title="Comprovar item" v-bind:href="typeButton['url']">
+            <i class="material-icons small">{{typeButton['icon']}}</i>
         </a>
     `
 });
