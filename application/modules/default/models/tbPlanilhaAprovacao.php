@@ -553,4 +553,148 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
         
         return $valoresItem;
     }
+
+    public function obterProjetosAnaliseFinanceiraVirtual(
+        $codGrupo,
+        $situacaoEncaminhamentoPrestacao,
+        $order = null,
+        $start = 0,
+        $limit = 20,
+        $search = null)
+    {
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->distinct();
+
+
+        switch ($situacaoEncaminhamentoPrestacao) {
+            case 1:
+                $colunasOrdenadas = [
+                    'd.AnoProjeto+d.Sequencial AS Pronac',
+                    'd.NomeProjeto',
+                    'd.Situacao as cdSituacao',
+                    'g.Descricao as dsSegmento',
+                    'f.Descricao as dsArea',
+                    'a.IdPRONAC'
+                ];
+                $select->where("l.idSituacaoEncPrestContas = 1");
+                break;
+            case 2:
+                $colunasOrdenadas = [
+                    'd.AnoProjeto+d.Sequencial AS Pronac',
+                    'd.NomeProjeto',
+                    'd.Situacao as cdSituacao',
+                    'k.usu_nome as nmTecnico',
+                    'J.dtFimEncaminhamento',
+                    'DATEDIFF(DAY,J.dtInicioEncaminhamento,J.dtFimEncaminhamento) as qtDiasEmAnalise',
+                    'a.IdPRONAC'
+                ];
+                $select->where("l.idSituacaoEncPrestContas = 2");
+                break;
+            case 3:
+                $colunasOrdenadas = [
+                    'd.AnoProjeto+d.Sequencial AS Pronac',
+                    'd.NomeProjeto',
+                    'd.Situacao as cdSituacao',
+                    'g.Descricao as dsSegmento',
+                    'f.Descricao as dsArea',
+                    'a.IdPRONAC'
+                ];
+                $select->where("l.idSituacaoEncPrestContas = 3");
+                break;
+        }
+
+        $colunasOrdenadas = implode(", ", $colunasOrdenadas);
+        $colunasOrdenadas = new Zend_Db_Expr($colunasOrdenadas);
+
+        $select->from(
+            ['a' => $this->_name],
+            [$colunasOrdenadas],
+            'SAC.dbo'
+        );
+        $select->joinInner(
+            ['b' => 'tbComprovantePagamentoxPlanilhaAprovacao'],
+            'a.idPlanilhaAprovacao    = b.idPlanilhaAprovacao',
+            [''],
+            'BDCORPORATIVO.scSAC'
+        );
+        $select->joinInner(
+            ['c' => 'tbComprovantePagamento'],
+            'b.idComprovantePagamento = c.idComprovantePagamento',
+            [''],
+            'BDCORPORATIVO.scSAC'
+        );
+        $select->joinInner(
+            ['d' => 'Projetos'],
+            'a.IdPRONAC = d.IdPRONAC',
+            [''],
+            'SAC.dbo'
+        );
+        $select->joinInner(
+            ['e' => 'tbCumprimentoObjeto'],
+            'd.IdPRONAC = e.idPronac',
+            [''],
+            'SAC.dbo'
+        );
+        $select->joinInner(
+            ['f' => 'Area'],
+            'd.Area = f.Codigo',
+            [''],
+            'SAC.dbo'
+        );
+
+        $select->joinInner(
+            ['g' => 'Segmento'],
+            'd.Segmento = g.Codigo',
+            [''],
+            'SAC.dbo'
+        );
+        $select->joinInner(
+            ['i' => 'Situacao'],
+            'd.Situacao = i.Codigo',
+            [''],
+            'SAC.dbo'
+        );
+
+        $select->joinLeft(
+            ['j' => 'tbEncaminhamentoPrestacaoContas'],
+            'd.IdPRONAC = J.idPronac AND J.stAtivo = 1',
+            [''],
+            'BDCORPORATIVO.scSAC'
+        );
+        $select->joinLeft(
+            ['k' => 'Usuarios'],
+            'j.idAgenteDestino = k.usu_codigo',
+            [''],
+            'Tabelas.dbo'
+        );
+        $select->joinLeft(
+            ['l' => 'tbSituacaoEncaminhamentoPrestacaoContas'],
+            'j.idSituacaoEncPrestContas = l.idSituacaoEncPrestContas',
+            [''],
+            'BDCORPORATIVO.scSAC'
+        );
+
+        $select->where('a.nrFonteRecurso = 109');
+        $select->where("d.Mecanismo = '1'");
+        $select->where("d.Situacao IN ('E17','E20','E27','E30','E68')");
+        $select->where("d.Orgao = ?", $codGrupo);
+
+        if (!empty($search['value'])) {
+            $select->where('d.AnoProjeto+d.Sequencial like ? OR d.NomeProjeto like ?', '%'.$search['value'].'%');
+        }
+
+        if (!empty($order)) {
+            $select->order($order);
+        }
+
+        if (!is_null($start) && $limit) {
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $select->limit($limit, $start);
+        }
+
+        return $this->fetchAll($select);
+    }
 }
