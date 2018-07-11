@@ -45,6 +45,7 @@ const comprovantes = {
         'idplanilhaitem',
         'etapa',
         'componenteform',
+        'tipo'
     ],
     created() {
         vue = this;
@@ -70,6 +71,7 @@ const comprovantes = {
               uf: this.uf,
               idmunicipio: this.idmunicipio,
               etapa: this.etapa,
+              tipo: vue.tipo
           }
         })
         .done(function(data) {

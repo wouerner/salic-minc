@@ -21,13 +21,27 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         $UF = $this->getRequest()->getParam('uf');
         $idmunicipio = $this->getRequest()->getParam('idmunicipio');
 
+        $tipo = $this->getRequest()->getParam('tipo');
+
         $vwComprovacoes = new PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario();
-        $comprovantes = $vwComprovacoes->comprovacoes(
-            $idPronac,
-            $idPlanilhaItem,
-            $stItemAvaliado,
-            $codigoProduto
-        );
+
+        if ($tipo == 'internacional') {
+            $comprovantes = $vwComprovacoes->comprovacoesInternacionais(
+                $idPronac,
+                $idPlanilhaItem,
+                $stItemAvaliado,
+                $codigoProduto
+            );
+        }
+
+        if ($tipo == 'nacional') {
+            $comprovantes = $vwComprovacoes->comprovacoes(
+                $idPronac,
+                $idPlanilhaItem,
+                $stItemAvaliado,
+                $codigoProduto
+            );
+        }
 
         $data = [];
 
