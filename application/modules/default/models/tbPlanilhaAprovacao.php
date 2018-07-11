@@ -5,7 +5,9 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
     protected $_name = "tbPlanilhaAprovacao";
     protected $_primary = "idPlanilhaAprovacao";
 
-    
+    const FILTRO_ANALISE_FINANCEIRA_VIRTUAL_AGUARDANDO_ANALISE = 1;
+    const FILTRO_ANALISE_FINANCEIRA_VIRTUAL_EM_ANALISE = 2;
+    const FILTRO_ANALISE_FINANCEIRA_VIRTUAL_ANALISADOS = 3;
 
     public function init()
     {
@@ -569,7 +571,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
 
 
         switch ($situacaoEncaminhamentoPrestacao) {
-            case 1:
+            case tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_AGUARDANDO_ANALISE :
                 $colunasOrdenadas = [
                     'd.AnoProjeto+d.Sequencial AS Pronac',
                     'd.NomeProjeto',
@@ -578,9 +580,16 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'f.Descricao as dsArea',
                     'a.IdPRONAC'
                 ];
-                $select->where("l.idSituacaoEncPrestContas = 1");
+                $select->where("d.Situacao IN ('E17','E20','E27','E30','E68')");
+                $select->where(
+                    "CASE
+                        WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
+                        ELSE J.idSituacaoEncPrestContas 
+                    END = ?",
+                    tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_AGUARDANDO_ANALISE
+                );
                 break;
-            case 2:
+            case tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_EM_ANALISE :
                 $colunasOrdenadas = [
                     'd.AnoProjeto+d.Sequencial AS Pronac',
                     'd.NomeProjeto',
@@ -590,9 +599,16 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'DATEDIFF(DAY,J.dtInicioEncaminhamento,J.dtFimEncaminhamento) as qtDiasEmAnalise',
                     'a.IdPRONAC'
                 ];
-                $select->where("l.idSituacaoEncPrestContas = 2");
+                $select->where("d.Situacao IN ('E17','E20','E27','E30')");
+                $select->where(
+                    "CASE
+                        WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
+                        ELSE J.idSituacaoEncPrestContas 
+                    END = ?",
+                    tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_EM_ANALISE
+                );
                 break;
-            case 3:
+            case tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_ANALISADOS :
                 $colunasOrdenadas = [
                     'd.AnoProjeto+d.Sequencial AS Pronac',
                     'd.NomeProjeto',
@@ -601,7 +617,14 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'f.Descricao as dsArea',
                     'a.IdPRONAC'
                 ];
-                $select->where("l.idSituacaoEncPrestContas = 3");
+                $select->where("d.Situacao IN ('E17','E20','E30','E68')");
+                $select->where(
+                    "CASE
+                        WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
+                        ELSE J.idSituacaoEncPrestContas 
+                    END = ?",
+                    tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_ANALISADOS
+                );
                 break;
         }
 
@@ -678,7 +701,6 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
 
         $select->where('a.nrFonteRecurso = 109');
         $select->where("d.Mecanismo = '1'");
-        $select->where("d.Situacao IN ('E17','E20','E27','E30','E68')");
         $select->where("d.Orgao = ?", $codGrupo);
 
         if (!empty($search['value'])) {

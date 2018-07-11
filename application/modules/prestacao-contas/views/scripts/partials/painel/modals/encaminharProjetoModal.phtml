@@ -3,7 +3,7 @@
         <h4>Encaminhar Projeto para An&aacute;lise</h4>
         <div class="row">
             <div class=" col s12">
-                <h2 id="dadosProjeto"></h2>
+                <h2 class="dadosProjeto"></h2>
             </div>
         </div>
         <div class="row">
@@ -70,16 +70,17 @@
 
             $3('#encaminharProjetoModal').on('click', '#enviarAnalise', () => {
                 if(!($3('#selecionarTecnicos').val() === null || $3('#dsJustificativa').val() === "")){
+                    var idSituacaoPrestContas = $('.tab').has('.active').data('situacaoprestcontas');
+                    idSituacaoPrestContas = (idSituacaoPrestContas == 3 || idSituacaoPrestContas == 2) ? idSituacaoPrestContas : idSituacaoPrestContas+1;
                     $3("#enviarAnalise").prop('disabled', true);
                     $3('#encaminharProjetoModal').modal('close');
-                            $3('#dsJustificativa').val('');
                     $3.ajax({
                         url : '<?php echo $this->url(array ('module' => 'default', 'controller' => 'realizarprestacaodecontas', 'action' => 'encaminharprestacaodecontas' )); ?>',
                         data : {
                             idPronac : $3('#idPronac').val(),
                             passaValor : <?= (new Zend_Session_Namespace('GrupoAtivo'))->codOrgao; ?>,
                             recebeValor: $3('#selecionarTecnicos').val(),
-                            idSituacaoPrestContas : 2,
+                            idSituacaoPrestContas : idSituacaoPrestContas,
                             dsjustificativa: $3('#dsJustificativa').val()
                         },
                         success: function(){
