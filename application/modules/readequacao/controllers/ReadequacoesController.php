@@ -1984,7 +1984,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     $tbReadequacao->update($dados, $where);
                 }
 
-                $idTipoDoAto = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
+                $idTipoDoAto = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS;
                 if($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
                     $idTipoDoAto = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO;
                 }

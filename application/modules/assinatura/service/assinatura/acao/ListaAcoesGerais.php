@@ -13,9 +13,9 @@ class ListaAcoesGerais implements IListaAcoesGerais
     public function obterLista(): array
     {
         return [
-            TbAssinaturaDbTable::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO => new ListaAcoesReadequacao(),
+            TbAssinaturaDbTable::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS => new ListaAcoesReadequacao(),
             TbAssinaturaDbTable::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO => new ListaAcoesReadequacao(),
-            TbAssinaturaDbTable::TIPO_ATO_READEQUACAO_XXXXXXXXXX => new ListaAcoesReadequacao(),
+            TbAssinaturaDbTable::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC => new ListaAcoesReadequacao(),
             TbAssinaturaDbTable::TIPO_ATO_ENQUADRAMENTO => new ListaAcoesEnquadramento(),
         ];
     }
