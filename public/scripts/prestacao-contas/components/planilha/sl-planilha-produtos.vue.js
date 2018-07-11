@@ -32,7 +32,6 @@ Vue.component('sl-planilha-produtos', {
             });
         },
         testee: function(cdProduto) {
-            console.log(typeof cdProduto);
             const url = new URL(window.location.href);
             const cdProdutoByUrl = url.searchParams.get('cdProduto');
 
