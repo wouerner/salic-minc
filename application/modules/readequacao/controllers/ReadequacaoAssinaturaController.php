@@ -44,7 +44,6 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
     public function gerenciarAssinaturasAction()
     {
-        $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
         $this->validarPerfis();
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
 
@@ -53,7 +52,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->grupoAtivo->codOrgao,
             $this->grupoAtivo->codGrupo,
             $this->auth->getIdentity()->usu_org_max_superior,
-            $idTipoDoAtoAdministrativo
+            $this->idTiposAtoAdministrativos
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;

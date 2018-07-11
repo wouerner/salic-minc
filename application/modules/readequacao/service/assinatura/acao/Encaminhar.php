@@ -68,7 +68,7 @@ class Encaminhar implements IAcaoEncaminhar
             $objTbProjetos->alterarOrgao($orgaoDestino, $this->assinatura->modeloTbAssinatura->getIdPronac());
         }
 
-        if($siEncaminhamento) {
+        if ($siEncaminhamento) {
             $dados = ['siEncaminhamento' => $siEncaminhamento];
             $where = "idReadequacao = {$idReadequacao}";
             $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
@@ -93,7 +93,6 @@ class Encaminhar implements IAcaoEncaminhar
                 $objReadequacao_ReadequacoesController->encaminharOuFinalizarReadequacaoChecklist(
                     $idReadequacao
                 );
-
                 break;
             case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA;
