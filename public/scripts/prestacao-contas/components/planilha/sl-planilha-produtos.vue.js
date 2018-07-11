@@ -23,7 +23,6 @@ Vue.component('sl-planilha-produtos', {
     `,
     mounted: function () {
         this.iniciarCollapsible();
-        this.testee();
     },
     methods: {
         iniciarCollapsible: function () {
