@@ -91,6 +91,63 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         $this->view->existeDiligenciaAberta = $diligencia->existeDiligenciaAberta($idPronac, null);
     }
 
+    public function comprovantesAmostragemAction()
+    {
+        $idPronac = $this->_request->getParam("idPronac");
+        $tipoAvaliacao = 90;
+
+        if (!$idPronac) {
+           throw new Exception('Não existe idPronac');
+        }
+
+        if (!$tipoAvaliacao) {
+           throw new Exception('Não existe tipoAvaliacao');
+        }
+
+        $comprovantes = new PrestacaoContas_Model_spComprovantes();
+        $comprovantes = $comprovantes->exec($idPronac, $tipoAvaliacao);
+        $this->view->idPronac = $idPronac;
+        $this->view->comprovantes = $comprovantes;
+
+        $comprovantesJSON = [];
+
+        foreach($comprovantes as $comprovante) {
+            array_push($comprovantesJSON,
+                array(
+                    'idPronac' => $comprovante->idPronac,
+                    'Produto' => $comprovante->Produto,
+                    'UF' => $comprovante->UF,
+                    'Municipio' => $comprovante->Municipio,
+                    'Etapa' => $comprovante->Etapa,
+                    'Item' => $comprovante->Item,
+                    'idComprovantePagamento' => $comprovante->idComprovantePagamento,
+                    'idPlanilhaAprovacao' => $comprovante->idPlanilhaAprovacao,
+                    'CNPJCPF' => $comprovante->CNPJCPF,
+                    'Fornecedor' => $comprovante->Fornecedor,
+                    'DtComprovacao' => $comprovante->DtComprovacao,
+                    'tpDocumento' => $comprovante->tpDocumento,
+                    'nrComprovante' => $comprovante->nrComprovante,
+                    'DtPagamento' => $comprovante->DtPagamento,
+                    'tpFormaDePagamento' => $comprovante->tpFormaDePagamento,
+                    'dsJustificativa' => $comprovante->dsJustificativa,
+                    'nrDocumentoDePagamento' => $comprovante->nrDocumentoDePagamento,
+                    'vlPagamento' => $comprovante->vlPagamento,
+                    'idArquivo' => $comprovante->idArquivo,
+                    'nmArquivo' => $comprovante->nmArquivo,
+                    'stEstado' => $comprovante->stEstado,
+                    'stEstadoId' => $comprovante->stEstadoId,
+                    'ocorrenciaTecnico' => $comprovante->ocorrenciaTecnico
+                )
+            );
+        }
+
+        array_walk($comprovantesJSON, function (&$value) {
+            $value = array_map('utf8_encode', $value);
+        });
+
+        $this->_helper->json($comprovantesJSON);
+    }
+
     public function salvarAnaliseAction()
     {
         $idPronac = $this->_request->getParam("idPronac");

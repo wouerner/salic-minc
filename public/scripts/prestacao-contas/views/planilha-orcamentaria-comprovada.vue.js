@@ -25,5 +25,4 @@ Vue.component('planilha-orcamentaria-comprovada', {
             });
         }
     }
-
 })
