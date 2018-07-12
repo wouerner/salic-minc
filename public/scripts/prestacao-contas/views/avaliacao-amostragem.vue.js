@@ -20,17 +20,11 @@ Vue.component('avaliacao-amostragem', {
             produtos: []
         };
     },
-    created() {
-        this.testando();
-    },
     methods: {
         iniciarCollapsible: function () {
             $3('.collapsible').each(function() {
                 $3(this).collapsible();
             });
-        },
-        testando: function() {
-            console.log('asdasdadasdasdasdasd');
         },
     }
 })
