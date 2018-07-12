@@ -2,8 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // Vue.config.productionTip = false
 import Vue from 'vue';
-import App from './App';
-import { store, router } from '../../config';
+import Index from './Index';
+import { store, router } from './config';
 
 Vue.config.productionTip = false;
 
@@ -15,8 +15,8 @@ window.onload = function () {
         el: '#app',
         router,
         store,
-        components: { App },
-        template: '<App/>',
+        components: { Index },
+        template: '<Index/>',
         created:  function () {
         }
     });

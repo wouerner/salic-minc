@@ -1,18 +1,49 @@
-import DadosProjeto from './DadosProjeto'
-import Proponente from '../agente/Proponente'
+import Vue from 'vue'
+import Router from 'vue-router'
+import DadosProjeto from './incentivo/DadosProjeto'
+import PlanilhaProposta from './incentivo/PlanilhaProposta'
+import ContainerAjax from './incentivo/ContainerAjax'
+import Proponente from './incentivo/Proponente'
+import CarregarTemplateAjax from  '@/components/CarregarTemplateAjax';
 
-export default [
+Vue.use(Router)
+
+const routes = [
     {
-        path: '/projeto',
-        name: 'DadosProjeto',
+        path: '/incentivo/:idPronac',
+        name: 'dadosprojeto',
         component: DadosProjeto,
-        title: 'Dados do Projeto',
-        children: [
-            {
-                path: 'proponente',
-                name: 'proponente',
-                component: Proponente,
-            }
-        ],
+        meta: {
+            title: 'Dados do Projeto'
+        },
     },
+    {
+        path: '/incentivo/:idPronac/proponente',
+        name: 'proponente',
+        component: Proponente,
+        meta: {
+            title: 'Proponente'
+        }
+    },
+    {
+        path: '/incentivo/:idPronac/planilha-proposta',
+        name: 'planilhaProposta',
+        component: PlanilhaProposta,
+        meta: {
+            title: 'Planilha Proposta'
+        }
+    } ,
+    {
+        path: '/incentivo/:idPronac/container-ajax',
+        name: 'container_ajax',
+        component: ContainerAjax,
+        meta: {
+            title: ''
+        }
+    }
 ];
+
+export default new Router({
+    routes,
+})
+

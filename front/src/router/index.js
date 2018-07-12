@@ -17,3 +17,5 @@ const routes = baseRoutes.concat(projetoRoutes);
 export default new Router({
   routes,
 })
+
+

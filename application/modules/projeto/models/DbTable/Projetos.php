@@ -529,6 +529,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
             "a.idProjeto = c.idPreProjeto",
             [
                 'c.idPreProjeto',
+                'c.idAgente',
                 new Zend_Db_Expr("
                     CASE 
                         WHEN c.stDataFixa = 1 THEN 'Sim' 
@@ -555,7 +556,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
         $sql->joinInner(
             array('e' => 'Segmento'),
             "a.Segmento = e.Codigo",
-            [],
+            ['e.Descricao AS Segmento'],
             $this->_schema
         );
 

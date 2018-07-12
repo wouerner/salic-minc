@@ -12,7 +12,7 @@ function resolve(dir) {
 module.exports = { 
     context: path.resolve(__dirname, '../'),
     entry: {
-        projeto_visualizar: './src/modules/projeto/projeto_visualizar.js'
+        projeto: './src/modules/projeto/main.js'
     },
     output: {
         path: config.build.assetsRoot,

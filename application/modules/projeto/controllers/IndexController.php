@@ -24,9 +24,16 @@ class Projeto_IndexController extends Projeto_GenericController
 //         isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
 
+    private function carregarScripts()
+    {
+        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js', 'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js', 'text/javascript', array('language' => 'javascript'));
+        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/projeto.js', 'text/javascript', array('language' => 'javascript'));
+    }
+
     public function indexAction()
     {
-        $this->redirect("/projeto/index/listar");
+        $this->carregarScripts();
     }
 
     public function listarAction()
