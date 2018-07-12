@@ -32,10 +32,8 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
                 $stItemAvaliado,
                 $codigoProduto
             );
-        }
-
-        if ($tipo == 'nacional') {
-            $comprovantes = $vwComprovacoes->comprovacoes(
+        } else {
+            $comprovantes = $vwComprovacoes->comprovacoesNacionais(
                 $idPronac,
                 $idPlanilhaItem,
                 $stItemAvaliado,
@@ -61,6 +59,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['numeroDocumento'] = $value['nrDocumentoDePagamento'];
             $dataAux[$key]['fornecedor']['CNPJCPF'] = $value['CNPJCPF'];
             $dataAux[$key]['fornecedor']['nome'] = $value['nmFornecedor'];
+            $dataAux[$key]['fornecedor']['endereco'] = $value['endereco'];
             $dataAux[$key]['arquivo']['nome'] = $value['nmArquivo'];
             $dataAux[$key]['arquivo']['id'] = $value['idArquivo'];
         }
