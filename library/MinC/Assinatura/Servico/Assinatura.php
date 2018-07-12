@@ -119,6 +119,8 @@ class Assinatura implements IServico
 
         if ($codigoOrgaoDestino) {
             $this->encaminhar();
+        } else {
+            $this->finalizar();
         }
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoAssinar');
@@ -154,7 +156,10 @@ class Assinatura implements IServico
         }
 
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
-        $objTbProjetos->alterarOrgao($codigoOrgaoDestino, $modeloTbAssinatura->getIdPronac());
+        $objTbProjetos->alterarOrgao(
+            $codigoOrgaoDestino,
+            $modeloTbAssinatura->getIdPronac()
+        );
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoEncaminhar');
     }
@@ -179,7 +184,9 @@ class Assinatura implements IServico
             'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
         ];
 
-        $objDbTableDocumentoAssinatura->update($data, $where);
+        $objDbTableDocumentoAssinatura->update(
+            $data,
+            $where);
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoDevolver');
     }

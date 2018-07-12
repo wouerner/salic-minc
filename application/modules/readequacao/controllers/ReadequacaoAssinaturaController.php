@@ -6,9 +6,9 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
     private $grupoAtivo;
 
     private $idTiposAtoAdministrativos = [
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS,
         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_XXXXXXXXXX
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC
     ];
 
     private function validarPerfis()
@@ -44,7 +44,6 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
     public function gerenciarAssinaturasAction()
     {
-        $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
         $this->validarPerfis();
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
 
@@ -53,7 +52,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->grupoAtivo->codOrgao,
             $this->grupoAtivo->codGrupo,
             $this->auth->getIdentity()->usu_org_max_superior,
-            $idTipoDoAtoAdministrativo
+            $this->idTiposAtoAdministrativos
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
@@ -190,9 +189,9 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         $orgaoDbTable = new Orgaos();
         $resultadoOrgaoSuperior = $orgaoDbTable->obterOrgaoSuperior($idOrgao);
         $orgaoSuperior = $resultadoOrgaoSuperior['Codigo'];
-        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_XXXXXXXXXX;
+        $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC;
         if ($orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SAV && $orgaoSuperior != Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_DE_PROJETO;
+            $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS;
         }
 
         return $idTipoDoAtoAdministrativo;

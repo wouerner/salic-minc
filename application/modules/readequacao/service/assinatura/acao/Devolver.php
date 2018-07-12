@@ -9,6 +9,7 @@ class Devolver implements IAcaoDevolver
 
     public function executar(\MinC\Assinatura\Model\Assinatura $assinatura)
     {
+        $idTipoDoAtoAdministrativo = $assinatura->modeloTbDocumentoAssinatura->getIdTipoDoAtoAdministrativo();
         $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $documentoAssinatura = $documentoAssinaturaDbTable->findBy(
             array(
@@ -24,10 +25,14 @@ class Devolver implements IAcaoDevolver
             'idParecer' => $documentoAssinatura['idAtoDeGestao']
         ]);
 
-        $this->atualizarSituacaoEncaminhamento($tbReadequacaoXParecer['idReadequacao']);
+        if ((int)$idTipoDoAtoAdministrativo == (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS) {
+            $this->tratarDevolucaoParaVinculadas($tbReadequacaoXParecer['idReadequacao']);
+        } elseif ((int)$idTipoDoAtoAdministrativo == (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO) {
+            $this->tratarDevolucaoDeAjustesDoProjeto($tbReadequacaoXParecer['idReadequacao']);
+        }
     }
 
-    private function atualizarSituacaoEncaminhamento($idReadequacao)
+    private function tratarDevolucaoParaVinculadas($idReadequacao)
     {
         $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
 
@@ -55,13 +60,33 @@ class Devolver implements IAcaoDevolver
                 break;
         }
 
-        if(isset($orgaoDestino)) {
+        if (isset($orgaoDestino)) {
             $objTbProjetos->alterarOrgao($orgaoDestino, $this->assinatura->modeloTbAssinatura->getIdPronac());
         }
 
-        $dados = ['siEncaminhamento' => $siEncaminhamento];
-        $where = "idReadequacao = {$idReadequacao}";
-        $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
-        $tbReadequacao->update($dados, $where);
+        if($siEncaminhamento) {
+            $dados = ['siEncaminhamento' => $siEncaminhamento];
+            $where = "idReadequacao = {$idReadequacao}";
+            $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
+            $tbReadequacao->update($dados, $where);
+        }
+    }
+
+    private function tratarDevolucaoDeAjustesDoProjeto($idReadequacao)
+    {
+        $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
+        switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
+            case \Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
+            case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_ENVIADO_ANALISE_TECNICA;
+                break;
+        }
+
+        if ($siEncaminhamento) {
+            $dados = ['siEncaminhamento' => $siEncaminhamento];
+            $where = "idReadequacao = {$idReadequacao}";
+            $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
+            $tbReadequacao->update($dados, $where);
+        }
     }
 }
