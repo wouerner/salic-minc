@@ -302,4 +302,29 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
         }
     }
+
+
+    public function obterPlanilhaPropostaCongeladaAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        try {
+
+            $idPreProjeto = $this->_request->getParam('idPreProjeto');
+
+            if (empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
+            }
+
+            $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
+            $planilha = $preProjetoMapper->obterPlanilhaPropostaCongelada($idPreProjeto);
+
+            $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $planilha));
+        } catch (Exception $e) {
+            $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
+        }
+    }
+
+
+
 }

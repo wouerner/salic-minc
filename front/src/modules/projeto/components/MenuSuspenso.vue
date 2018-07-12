@@ -31,9 +31,8 @@
                 idPronac: this.$route.params.idPronac
             }
         },
-        created() {
-   
-             this.irParaOTopo();
+        mounted() {
+            this.irParaOTopo();
         },
         methods: {
             imprimirProjeto(idPronac) {
@@ -43,10 +42,9 @@
 
                 $.ajax({
                     url: '/default/consultardadosprojeto/form-imprimir-projeto?idPronac=' + idPronac,
-                    data:
-                        {
-                            idPronac: idPronac
-                        },
+                    data: {
+                        idPronac: idPronac
+                    },
                     success: function (data) {
                         $('#boxImprimirProjeto').html(data);
                     },
@@ -87,10 +85,9 @@
                     var scrollTrigger = 100, // px
                         backToTop = function () {
                             var scrollTop = $3(window).scrollTop();
+                            $3('#ir-para-o-topo').parent().hide();
                             if (scrollTop > scrollTrigger) {
                                 $3('#ir-para-o-topo').parent().show();
-                            } else {
-                                $3('#ir-para-o-topo').parent().hide();
                             }
                         };
                     backToTop();

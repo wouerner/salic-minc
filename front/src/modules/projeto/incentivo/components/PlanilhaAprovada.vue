@@ -11,7 +11,7 @@
     export default {
         data() {
             return {
-                url: '/default/consultardadosprojeto/planilha-orcamentaria?idPronac=' + this.$route.params.idPronac
+                url: '/default/consultardadosprojeto/planilha-orcamentaria-aprovada?idPronac=' + this.$route.params.idPronac
             }
         },
         components: {
