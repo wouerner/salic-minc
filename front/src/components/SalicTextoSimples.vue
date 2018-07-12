@@ -5,8 +5,7 @@
 
 <script>
     export default {
-        name:'SalicTextoSimples',
+        name: 'SalicTextoSimples',
         props: ['texto']
     };
-
 </script>

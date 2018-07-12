@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    
+
     import Carregando from '@/components/Carregando';
 
     export default {

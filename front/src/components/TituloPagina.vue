@@ -8,7 +8,7 @@
                 <a @click="voltar()"
                    title="P&aacute;gina Anterior"
                    class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"
-                    ><i class="material-icons">arrow_back</i>
+                ><i class="material-icons">arrow_back</i>
                 </a>
             </div>
         </div>
@@ -28,7 +28,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

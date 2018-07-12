@@ -37,6 +37,8 @@
         },
         methods: {
             imprimirProjeto(idPronac) {
+                let self = this;
+
                 $('#boxImprimirProjeto').html("<br><br><center>Carregando dados...</center>");
 
                 $.ajax({
@@ -64,7 +66,7 @@
                             $(this).dialog('close');
                         },
                         'OK': function () {
-                            submeteForm();
+                            self.submeteForm();
                             //$('#frmOpcoesImpressao').submit();
                         }
                     }

@@ -204,7 +204,7 @@
                         </td>
                         <td class="right-align">
                             <b>
-                                <router-link :to="{ name: 'planilhaProposta', params: { idPronac: idPronac }}">{{ formatarValor(projeto.vlTotalPropostaOriginal) }}</router-link>
+                                <router-link :to="{ name: 'planilhaProposta', params: { idPronac: idPronac }}">{{ converterParaMoedaPontuado(projeto.vlTotalPropostaOriginal) }}</router-link>
                             </b>
                         </td>
                     </tr>
@@ -220,9 +220,9 @@
                         <td class="right-align"><b>Total Autorizado (F=D+E)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>{{ projeto.vlAutorizado }}</b></td>
-                        <td class="right-align"><b>{{ projeto.vlAutorizadoOutrasFontes }}</b></td>
-                        <td class="right-align"><b>{{ projeto.vlTotalAutorizado }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlAutorizado) }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlAutorizadoOutrasFontes) }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlTotalAutorizado) }}</b></td>
                     </tr>
                 </table>
 
@@ -236,9 +236,9 @@
                         <td class="right-align"><b>Total Adequado (I=G+H)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>{{ projeto.vlAdequadoIncentivo }}</b></td>
-                        <td class="right-align"><b>{{ projeto.vlAdequadoOutrasFontes }}</b></td>
-                        <td class="right-align"><b>{{ projeto.vlTotalAdequado }}</b>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlAdequadoIncentivo) }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlAdequadoOutrasFontes) }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlTotalAdequado) }}</b>
                         </td>
                     </tr>
                 </table>
@@ -253,9 +253,9 @@
                         <td class="right-align"><b>Total Homologado (L=J+K)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>{{ projeto.vlHomologadoIncentivo }}</b></td>
-                        <td class="right-align"><b>{{ projeto.vlHomologadoOutrasFontes }}</b></td>
-                        <td class="right-align"><b>{{ projeto.vlTotalHomologado }}</b>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlHomologadoIncentivo) }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlHomologadoOutrasFontes) }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlTotalHomologado) }}</b>
                         </td>
                     </tr>
                 </table>
@@ -270,10 +270,10 @@
                         <td class="right-align"><b>Total Readequado (O=M+N)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>{{ projeto.vlReadequadoIncentivo }}</b>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlReadequadoIncentivo) }}</b>
                         </td>
-                        <td class="right-align"><b>{{ projeto.vlReadequadoOutrasFontes }}</b></td>
-                        <td class="right-align"><b>{{ projeto.vlTotalReadequado }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlReadequadoOutrasFontes) }}</b></td>
+                        <td class="right-align"><b>{{ converterParaMoedaPontuado(projeto.vlTotalReadequado) }}</b></td>
                     </tr>
                 </table>
 

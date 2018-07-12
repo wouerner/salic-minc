@@ -8,8 +8,6 @@ import { store, router } from './config';
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
-
-
 window.onload = function () {
     var main = new Vue({
         el: '#app',

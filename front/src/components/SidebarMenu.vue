@@ -54,7 +54,7 @@
 </template>
 
 <script>
-    
+
     import Carregando from '@/components/Carregando';
 
     export default {
@@ -107,20 +107,18 @@
                     window.location.href = item.link;
                     return;
                 }
-                
-                /* @todo refatorar isso */
-                this.$router.push({ name: 'container_ajax', params: { idPronac: this.$route.params.idPronac }})
+
+                this.$router.push({name: 'container_ajax', params: {idPronac: this.$route.params.idPronac}})
 
                 let divRetorno = this.configs.idDivRetorno;
-                $3("#" + divRetorno).html('carregando...');
-                $3(".page-title h1").html(item.label);
-                $3("#migalhas .last").html(item.label);
                 $('#container-loading').fadeIn('slow');
                 $3.ajax({
                     url: item.link,
                     success: function (data) {
                         $('#container-loading').fadeOut('slow');
                         $("#" + divRetorno).html(data);
+                        $3(".page-title h1").html(item.label);
+                        $3("#migalhas .last").html(item.label);
                     },
                     type: 'post'
                 });

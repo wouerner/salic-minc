@@ -1,45 +1,60 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import DadosProjeto from './incentivo/DadosProjeto'
-import PlanilhaProposta from './incentivo/PlanilhaProposta'
-import ContainerAjax from './incentivo/ContainerAjax'
-import Proponente from './incentivo/Proponente'
-import CarregarTemplateAjax from  '@/components/CarregarTemplateAjax';
+import Index from './index/Index'
+import DadosProjeto from './incentivo/components/DadosProjeto'
+import IncentivoTemplate from './incentivo/Index'
+import PlanilhaProposta from './incentivo/components/PlanilhaProposta'
+import Proponente from './incentivo/components/Proponente'
 
 Vue.use(Router)
 
+const templateAjax = {
+    template: '<div id="conteudo"></div>'
+}
+
 const routes = [
     {
-        path: '/incentivo/:idPronac',
-        name: 'dadosprojeto',
-        component: DadosProjeto,
+        path: '/',
+        name: 'index',
+        component: Index,
         meta: {
-            title: 'Dados do Projeto'
+            title: 'Principal'
         },
     },
     {
-        path: '/incentivo/:idPronac/proponente',
-        name: 'proponente',
-        component: Proponente,
-        meta: {
-            title: 'Proponente'
-        }
-    },
-    {
-        path: '/incentivo/:idPronac/planilha-proposta',
-        name: 'planilhaProposta',
-        component: PlanilhaProposta,
-        meta: {
-            title: 'Planilha Proposta'
-        }
-    } ,
-    {
-        path: '/incentivo/:idPronac/conteudo-dinamico',
-        name: 'container_ajax',
-        component: ContainerAjax,
-        meta: {
-            title: 'Dados do projeto'
-        }
+        path: '/incentivo/:idPronac',
+        component: IncentivoTemplate,
+        children: [
+            {
+                path: '',
+                name: 'dadosprojeto',
+                component: DadosProjeto,
+                meta: {
+                    title: 'Dados do Projeto'
+                }
+            },
+            {
+                path: 'proponente',
+                name: 'proponente',
+                component: Proponente,
+                meta: {
+                    title: 'Proponente'
+                }
+            },
+            {
+                path: 'planilha-proposta',
+                name: 'planilhaProposta',
+                component: PlanilhaProposta,
+                meta: {
+                    title: 'Planilha Proposta'
+                }
+            },
+            {
+                path: 'conteudo-dinamico',
+                name: 'container_ajax',
+                component: templateAjax,
+            }
+        ]
     }
 ];
 

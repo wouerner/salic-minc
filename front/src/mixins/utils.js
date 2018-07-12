@@ -1,29 +1,3 @@
-import {numeral} from 'numeral';
-
-// load a locale
-numeral.register('locale', 'pt-br', {
-    delimiters: {
-        thousands: '.',
-        decimal: ','
-    },
-    abbreviations: {
-        thousand: 'mil',
-        million: 'milhões',
-        billion: 'b',
-        trillion: 't'
-    },
-    ordinal: function (number) {
-        return 'º';
-    },
-    currency: {
-        symbol: 'R$'
-    }
-});
-
-// switch between locales
-numeral.locale('pt-br');
-numeral.defaultFormat('0,0.00');
-
 export const utils = {
     methods: {
         converterParaMoedaAmericana: function (valor) {
@@ -44,7 +18,7 @@ export const utils = {
             return valor;
         },
         converterParaMoedaPontuado: function (num) {
-// funcao salic de conversao pontuada - trazida de moeda.js
+            // funcao salic de conversao pontuada - trazida de moeda.js
             var x = 0;
 
             if (num < 0) {
