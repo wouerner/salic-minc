@@ -1,7 +1,5 @@
 const comprovanteTable = {
-    props: [
-        'dados',
-    ],
+    props: ['dados'],
     template: `
         <div>
             <table class="bordered">

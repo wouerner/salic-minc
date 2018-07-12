@@ -13,7 +13,13 @@ const comprovantes = {
                         <div class="card">
                             <div class="card-content">
                                 <template v-if="!formVisivel" >
-                                    <comprovante-table :dados="dado"></comprovante-table>
+                                    <template v-if="(tipo == 'nacional')" >
+                                        <comprovante-table :dados="dado"></comprovante-table>
+                                    </template>
+                                    <template v-else >
+                                        <sl-comprovante-internacional-table :dados="dado">
+                                        </sl-comprovante-internacional-table>
+                                    </template>
                                 </template>
                                 <button v-if="!formVisivel" v-on:click="mostrarForm()" class="btn">editar</button>
                                 <button v-if="!formVisivel" type="button" class="btn red white-text" @click.prevent="excluir(dado.idComprovantePagamento, dado.idArquivo)">excluir</button>

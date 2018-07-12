@@ -546,8 +546,148 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         $select->join(
             ['i' => 'tbFonecedorExterior'],
             '(c.idFornecedorExterior = i.idFornecedorExterior)',
+            'i.dsEndereco as endereco',
+            'BDCORPORATIVO.scSAC'
+        );
+
+        $select->where('a.nrFonteRecurso = ?', 109);
+
+        $select->where(new Zend_Db_Expr('
+            (sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item
+            (a.idPronac,a.nrFonteRecurso,a.idProduto,
+            a.idEtapa,a.idUFDespesa,
+            a.idMunicipioDespesa,
+            a.idPlanilhaItem)) > 0'
+        ));
+
+        /* if ($stItemAvaliado) { */
+        /*     $select->where('stItemAvaliado = ?', $stItemAvaliado); */
+        /* } */
+
+        /* if ($codigoProduto || ($codigoProduto == 0 && !is_null($codigoProduto))) { */
+        /*     $select->where('cdProduto = ?', $codigoProduto); */
+        /* } */
+
+        /* if ($idComprovantePagamento) { */
+        /*     $select->where('idComprovantePagamento = ?', $idComprovantePagamento); */
+        /* } */
+
+        /* if ($idPlanilhaItem) { */
+        /*     $select->where('idPlanilhaItem = ?', $idPlanilhaItem); */
+        /* } */
+
+        $select->where('a.IdPRONAC = ?', $idpronac);
+        /* echo $select; die; */ 
+        return $this->fetchAll($select);
+    }
+
+    public function comprovacoesNacionais(
+        $idpronac,
+        $idPlanilhaItem = null ,
+        $stItemAvaliado = null,
+        $codigoProduto = null,
+        $idComprovantePagamento = null
+    ) {
+        $cols = [
+            "a.idPlanilhaAprovacao",
+            "c.idComprovantePagamento",
+            "a.IdPRONAC",
+            new Zend_Db_Expr("d.AnoProjeto+d.Sequencial AS Pronac"),
+            "d.NomeProjeto",
+            "a.nrFonteRecurso",
+            "a.idProduto as cdProduto",
+            "a.idEtapa as cdEtapa",
+            "a.idUFDespesa AS cdUF",
+            "a.idMunicipioDespesa as cdCidade",
+            "a.idPlanilhaItem",
+            "h.Descricao as Item",
+            "c.nrComprovante",
+            "c.nrSerie",
+            new Zend_Db_Expr("
+                CASE c.tpDocumento
+                 WHEN 1 THEN ('Cupom Fiscal')
+                 WHEN 2 THEN ('Guia de Recolhimento')
+                 WHEN 3 THEN ('Nota Fiscal/Fatura')
+                 WHEN 4 THEN ('Recibo de Pagamento')
+                 WHEN 5 THEN ('RPA') ELSE 'INVOICE'
+               END as tpDocumento"),
+            "c.dtPagamento",
+            new Zend_Db_Expr("
+            CASE
+             WHEN c.tpFormaDePagamento = '1' THEN 'Cheque'
+             WHEN c.tpFormaDePagamento = '2' THEN 'Transferencia Bancária'
+             WHEN c.tpFormaDePagamento = '3' THEN 'Saque/Dinheiro' ELSE ''
+            END as tpFormaDePagamento"),
+            "c.nrDocumentoDePagamento",
+            "c.idArquivo",
+            "g.nmArquivo",
+            "c.dsJustificativa as dsJustificativaProponente",
+           "b.dsJustificativa as dsOcorrenciaDoTecnico",
+           "b.stItemAvaliado",
+           new Zend_Db_Expr("CASE
+             WHEN stItemAvaliado = 1 THEN 'Validado'
+             WHEN stItemAvaliado = 3 THEN 'Impugnado'
+             WHEN stItemAvaliado = 4 THEN 'Aguardando análise'
+           END AS stAvaliacao"),
+           "c.vlComprovacao"
+       ];
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            ['a' => 'tbplanilhaaprovacao'],
+            $cols,
+            'SAC.dbo'
+        );
+
+        $select->join(
+            ['b' => 'tbComprovantePagamentoxPlanilhaAprovacao'],
+            '(a.idPlanilhaAprovacao    = b.idPlanilhaAprovacao)',
             null,
             'BDCORPORATIVO.scSAC'
+        );
+
+        $select->join(
+            ['c' => 'tbComprovantePagamento'],
+            '(b.idComprovantePagamento = c.idComprovantePagamento)',
+            null,
+            'BDCORPORATIVO.scSAC'
+        );
+
+        $select->join(
+            ['d' => 'Projetos'],
+            '(a.IdPRONAC = d.IdPRONAC)',
+            null,
+           'sac.dbo'
+        );
+
+        $select->joinLeft(
+            ['e' => 'Agentes'],
+            '(c.idFornecedor = e.idAgente)',
+            ['e.CNPJCPF'],
+            'Agentes.dbo'
+        );
+
+        $select->joinLeft(
+            ['f' => 'Nomes'],
+            '(c.idFornecedor = f.idAgente)',
+            ['f.Descricao as nmFornecedor', 'f.Descricao as nome'],
+            'Agentes.dbo'
+        );
+
+        $select->joinLeft(
+            ['g' => 'tbArquivo'],
+            '(c.idArquivo  = g.idArquivo)',
+            null,
+            'BDCORPORATIVO.scCorp'
+        );
+
+        $select->join(
+            ['h' => 'tbPlanilhaItens'],
+            '(a.idPlanilhaItem = h.idPlanilhaItens)',
+            null,
+            'sac.dbo'
         );
 
         $select->where('a.nrFonteRecurso = ?', 109);
