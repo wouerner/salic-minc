@@ -218,7 +218,8 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
         $where = array(),
         $order = array(),
         $start = 0,
-        $limit = 20
+        $limit = 20,
+        $search = null
     )
     {
         $sql = $this->select();
@@ -261,6 +262,10 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
             $sql->where('a.AreaAbrangencia = ?', 0);
         }
 
+        if (!empty($search['value'])) {
+            $sql->where('a.idpreprojeto like ? OR a.nomeprojeto like ?', '%' . $search['value'] . '%');
+        }
+
         foreach ($where as $coluna=>$valor) {
             $sql->where($coluna, $valor);
         }
@@ -274,7 +279,7 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
             $limit = (int) $limit;
             $sql->limit($limit, $start);
         }
-        
+
         return $this->fetchAll($sql);
     }
 }
