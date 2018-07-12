@@ -102,25 +102,14 @@
                     }
                 });
             },
-            addRoute: function() {
-                this.$router.addRoutes(
-                    [{
-                        path: '/incentivo/:idPronac/conteudo-ajax',
-                        name: 'conteudoajax',
-                        component: {
-                            template: '<div id="conteudo"></div>'
-                        }
-                    }]);
-                this.$router.push({ name: 'conteudoajax', params: { idPronac: this.$route.params.idPronac }})
-            },
             carregarDados: function (item) {
-                             console.log('teste', this.$route);
                 if (item.ajax != true) {
                     window.location.href = item.link;
                     return;
                 }
+                
                 /* @todo refatorar isso */
-                this.addRoute();
+                this.$router.push({ name: 'container_ajax', params: { idPronac: this.$route.params.idPronac }})
 
                 let divRetorno = this.configs.idDivRetorno;
                 $3("#" + divRetorno).html('carregando...');

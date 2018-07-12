@@ -7,19 +7,22 @@
                 <router-view></router-view>
             </keep-alive>
         </div>
+        <MenuSuspenso />
     </div>
 </template>
 
 <script>
     import SidebarMenu from '@/components/SidebarMenu';
     import TituloPagina from '@/components/TituloPagina';
+    import MenuSuspenso from './MenuSuspenso';
     import {mapActions, mapGetters} from 'vuex';
 
     export default {
         name: 'Index',
         components: {
             SidebarMenu,
-            TituloPagina
+            TituloPagina,
+            MenuSuspenso
         },
         data() {
             return {

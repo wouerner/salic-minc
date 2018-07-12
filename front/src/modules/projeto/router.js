@@ -34,11 +34,11 @@ const routes = [
         }
     } ,
     {
-        path: '/incentivo/:idPronac/container-ajax',
+        path: '/incentivo/:idPronac/conteudo-dinamico',
         name: 'container_ajax',
         component: ContainerAjax,
         meta: {
-            title: ''
+            title: 'Dados do projeto'
         }
     }
 ];

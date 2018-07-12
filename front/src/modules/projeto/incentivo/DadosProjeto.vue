@@ -204,7 +204,7 @@
                         </td>
                         <td class="right-align">
                             <b>
-                                <router-link :to="{ name: 'planilhaProposta', params: { idPronac: idPronac }}">{{ projeto.vlTotalPropostaOriginal }}</router-link>
+                                <router-link :to="{ name: 'planilhaProposta', params: { idPronac: idPronac }}">{{ formatarValor(projeto.vlTotalPropostaOriginal) }}</router-link>
                             </b>
                         </td>
                     </tr>
@@ -321,6 +321,13 @@
     import {mapActions, mapGetters} from 'vuex';
     import Carregando from '@/components/Carregando';
     import SalicTextoSimples from '@/components/SalicTextoSimples';
+    // var numeral = require('numeral');
+
+    // import utils from '@/mixins/utils';
+    // var utils = require('@/mixins/utils.js');
+    import { utils } from '@/mixins/utils';
+    // import { locale } from '@/plugins/numeral';
+    
 
     export default {
         data: function () {
@@ -331,6 +338,7 @@
                 emAnaliseNaCNIC: false
             }
         },
+        mixins: [utils],
         components: {
             Carregando,
             SalicTextoSimples

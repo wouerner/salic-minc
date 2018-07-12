@@ -176,6 +176,10 @@
             if (typeof this.id != 'undefined') {
                 this.fetch(this.id);
             }
+
+            if (typeof this.cpf != 'undefined') {
+                this.fetch(null, this.cpf);
+            }
         },
         watch: {
             id: function (value) {
