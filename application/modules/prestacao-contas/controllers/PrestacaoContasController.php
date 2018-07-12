@@ -106,46 +106,59 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
 
         $comprovantes = new PrestacaoContas_Model_spComprovantes();
         $comprovantes = $comprovantes->exec($idPronac, $tipoAvaliacao);
-        $this->view->idPronac = $idPronac;
-        $this->view->comprovantes = $comprovantes;
 
-        $comprovantesJSON = [];
+        $comprovantesJSON = $this->buildComprovantes($comprovantes);
+
+        $this->_helper->json($comprovantesJSON);
+    }
+
+    private function buildComprovantes($comprovantes)
+    {
+        $comprovantesJSON = array();
 
         foreach($comprovantes as $comprovante) {
-            array_push($comprovantesJSON,
-                array(
-                    'idPronac' => $comprovante->idPronac,
-                    'Produto' => $comprovante->Produto,
-                    'UF' => $comprovante->UF,
-                    'Municipio' => $comprovante->Municipio,
-                    'Etapa' => $comprovante->Etapa,
-                    'Item' => $comprovante->Item,
-                    'idComprovantePagamento' => $comprovante->idComprovantePagamento,
-                    'idPlanilhaAprovacao' => $comprovante->idPlanilhaAprovacao,
-                    'CNPJCPF' => $comprovante->CNPJCPF,
-                    'Fornecedor' => $comprovante->Fornecedor,
-                    'DtComprovacao' => $comprovante->DtComprovacao,
-                    'tpDocumento' => $comprovante->tpDocumento,
-                    'nrComprovante' => $comprovante->nrComprovante,
-                    'DtPagamento' => $comprovante->DtPagamento,
-                    'tpFormaDePagamento' => $comprovante->tpFormaDePagamento,
-                    'dsJustificativa' => $comprovante->dsJustificativa,
-                    'nrDocumentoDePagamento' => $comprovante->nrDocumentoDePagamento,
-                    'vlPagamento' => $comprovante->vlPagamento,
-                    'idArquivo' => $comprovante->idArquivo,
-                    'nmArquivo' => $comprovante->nmArquivo,
-                    'stEstado' => $comprovante->stEstado,
-                    'stEstadoId' => $comprovante->stEstadoId,
-                    'ocorrenciaTecnico' => $comprovante->ocorrenciaTecnico
-                )
-            );
+            array_push($comprovantesJSON, $this->buildComprovanteJSON($comprovante));
         }
 
+        return $this->utf8EncondeComprovantes($comprovantesJSON);
+    }
+
+    private function buildComprovanteJSON($comprovante)
+    {
+        return array(
+            'idPronac' => $comprovante->idPronac,
+            'Produto' => $comprovante->Produto,
+            'UF' => $comprovante->UF,
+            'Municipio' => $comprovante->Municipio,
+            'Etapa' => $comprovante->Etapa,
+            'Item' => $comprovante->Item,
+            'idComprovantePagamento' => $comprovante->idComprovantePagamento,
+            'idPlanilhaAprovacao' => $comprovante->idPlanilhaAprovacao,
+            'CNPJCPF' => $comprovante->CNPJCPF,
+            'Fornecedor' => $comprovante->Fornecedor,
+            'DtComprovacao' => $comprovante->DtComprovacao,
+            'tpDocumento' => $comprovante->tpDocumento,
+            'nrComprovante' => $comprovante->nrComprovante,
+            'DtPagamento' => $comprovante->DtPagamento,
+            'tpFormaDePagamento' => $comprovante->tpFormaDePagamento,
+            'dsJustificativa' => $comprovante->dsJustificativa,
+            'nrDocumentoDePagamento' => $comprovante->nrDocumentoDePagamento,
+            'vlPagamento' => $comprovante->vlPagamento,
+            'idArquivo' => $comprovante->idArquivo,
+            'nmArquivo' => $comprovante->nmArquivo,
+            'stEstado' => $comprovante->stEstado,
+            'stEstadoId' => $comprovante->stEstadoId,
+            'ocorrenciaTecnico' => $comprovante->ocorrenciaTecnico
+        );
+    }
+
+    private function utf8EncondeComprovantes($comprovantesJSON)
+    {
         array_walk($comprovantesJSON, function (&$value) {
             $value = array_map('utf8_encode', $value);
         });
 
-        $this->_helper->json($comprovantesJSON);
+        return $comprovantesJSON;
     }
 
     public function salvarAnaliseAction()
