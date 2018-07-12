@@ -351,10 +351,9 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $aux = array();
         if (!empty($rsPreProjetoArquivado)) {
             foreach ($rsPreProjetoArquivado as $key => $proposta) {
-                $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
-                $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
-
-                $aux[$key] = $proposta;
+                foreach ($proposta as $coluna => $valor){
+                    $aux[$key][$coluna] = utf8_encode($valor);
+                }
             }
             $totalData = $tblPreProjetoArquivado->listarSolicitacoes(
                 ['stDecisao ?' => new Zend_Db_Expr('IS NULL')],
@@ -395,10 +394,9 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $aux = array();
         if (!empty($rsPreProjetoArquivado)) {
             foreach ($rsPreProjetoArquivado as $key => $proposta) {
-                $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
-                $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
-
-                $aux[$key] = $proposta;
+                foreach ($proposta as $coluna => $valor){
+                    $aux[$key][$coluna] = utf8_encode($valor);
+                }
             }
             $totalData = $tblPreProjetoArquivado->listarSolicitacoes(
                 ['stDecisao = ?' => 1],
@@ -440,10 +438,9 @@ class Proposta_PreProjetoArquivadoController extends Proposta_GenericController
         $aux = array();
         if (!empty($rsPreProjetoArquivado)) {
             foreach ($rsPreProjetoArquivado as $key => $proposta) {
-                $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
-                $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
-
-                $aux[$key] = $proposta;
+                foreach ($proposta as $coluna => $valor){
+                    $aux[$key][$coluna] = utf8_encode($valor);
+                }
             }
             $totalData = $tblPreProjetoArquivado->listarSolicitacoes(
                 ['stDecisao = ?' => 0],
