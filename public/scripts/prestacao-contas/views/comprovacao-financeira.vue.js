@@ -17,6 +17,7 @@ Vue.component('comprovacao-financeira', {
             url: "/prestacao-contas/pagamento/planilha-pagamento/idpronac/" + this.idpronac
         }).done(function( data ) {
             vue.$data.produtos = data;
+            console.log('retorna');
         });
     },
     data: function () {

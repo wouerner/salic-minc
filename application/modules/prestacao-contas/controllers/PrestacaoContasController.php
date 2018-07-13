@@ -105,61 +105,46 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         }
 
         $comprovantes = new PrestacaoContas_Model_spComprovantes();
-        $comprovantes = $comprovantes->exec($idPronac, $tipoAvaliacao);
+        $resposta = $comprovantes->exec($idPronac, $tipoAvaliacao);
 
-        $comprovantesJSON = $this->buildComprovantes($comprovantes);
+        $planilhaJSON = null;
 
-        $this->_helper->json($comprovantesJSON);
-    }
+        foreach($resposta as $item) {
+            $produtoSlug = TratarString::criarSlug($item->Produto);
+            $etapaSlug = TratarString::criarSlug($item->cdEtapa);
+            $cidadeSlug = TratarString::criarSlug($item->Municipio);
 
-    private function buildComprovantes($comprovantes)
-    {
-        $comprovantesJSON = array();
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->cdUF]['cidade'][$cidadeSlug]['itens'][] = [
+                'item' => utf8_encode($item->Item),
+                'varlorAprovado' => 1,
+                'varlorComprovado' => 2,
+                'comprovacaoValidada' => 3,
+                'idPlanilhaAprovacao' => $item->idPlanilhaAprovacao,
+                'idPlanilhaItens' => $item->idPlanilhaItem,
+            ];
 
-        foreach($comprovantes as $comprovante) {
-            array_push($comprovantesJSON, $this->buildComprovanteJSON($comprovante));
+            $planilhaJSON[$produtoSlug] += [
+                'produto' => html_entity_decode(utf8_encode($item->Produto)),
+                'cdProduto' => html_entity_decode($item->cdProduto),
+            ];
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug] += [
+                'etapa' => utf8_encode($item->cdEtapa),
+                'cdEtapa' =>  utf8_encode($item->cdEtapa)
+            ];
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->Uf] += [
+                'Uf' => $item->cdUF,
+                'cdUF' => $item->cdUF
+            ];
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->Uf]['cidade'][$cidadeSlug] += [
+                'cidade' => utf8_encode($item->Municipio),
+                'cdCidade' => utf8_encode($item->Municipio)
+            ];
         }
 
-        return $this->utf8EncondeComprovantes($comprovantesJSON);
-    }
-
-    private function buildComprovanteJSON($comprovante)
-    {
-        return array(
-            'idPronac' => $comprovante->idPronac,
-            'cdProduto' => $comprovante->cdProduto,
-            'Produto' => $comprovante->Produto,
-            'UF' => $comprovante->UF,
-            'Municipio' => $comprovante->Municipio,
-            'Etapa' => $comprovante->Etapa,
-            'Item' => $comprovante->Item,
-            'idComprovantePagamento' => $comprovante->idComprovantePagamento,
-            'idPlanilhaAprovacao' => $comprovante->idPlanilhaAprovacao,
-            'CNPJCPF' => $comprovante->CNPJCPF,
-            'Fornecedor' => $comprovante->Fornecedor,
-            'DtComprovacao' => $comprovante->DtComprovacao,
-            'tpDocumento' => $comprovante->tpDocumento,
-            'nrComprovante' => $comprovante->nrComprovante,
-            'DtPagamento' => $comprovante->DtPagamento,
-            'tpFormaDePagamento' => $comprovante->tpFormaDePagamento,
-            'dsJustificativa' => $comprovante->dsJustificativa,
-            'nrDocumentoDePagamento' => $comprovante->nrDocumentoDePagamento,
-            'vlPagamento' => $comprovante->vlPagamento,
-            'idArquivo' => $comprovante->idArquivo,
-            'nmArquivo' => $comprovante->nmArquivo,
-            'stEstado' => $comprovante->stEstado,
-            'stEstadoId' => $comprovante->stEstadoId,
-            'ocorrenciaTecnico' => $comprovante->ocorrenciaTecnico
-        );
-    }
-
-    private function utf8EncondeComprovantes($comprovantesJSON)
-    {
-        array_walk($comprovantesJSON, function (&$value) {
-            $value = array_map('utf8_encode', $value);
-        });
-
-        return $comprovantesJSON;
+        $this->_helper->json($planilhaJSON);
     }
 
     public function salvarAnaliseAction()
