@@ -3,7 +3,8 @@ Vue.component('sl-planilha-produtos', {
     template: `
         <div>
             <div v-for="(produto, index) in produtos">
-                {{produto}}
+                1 - {{produto.Etapa}}<br>
+                2 - {{idpronac}}
             </div>
         </div>
     `,
