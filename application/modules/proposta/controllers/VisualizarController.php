@@ -246,7 +246,6 @@ class Proposta_VisualizarController extends Proposta_GenericController
 
     public function obterFonteDeRecursoAction()
     {
-
         $this->_helper->layout->disableLayout();
         $idPreProjeto = $this->_request->getParam('idPreProjeto');
 
@@ -303,8 +302,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
         }
     }
 
-
-    public function obterPlanilhaPropostaCongeladaAjaxAction()
+    public function obterPlanilhaPropostaOriginalAjaxAction()
     {
         $this->_helper->layout->disableLayout();
 
@@ -319,6 +317,15 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
             $planilha = $preProjetoMapper->obterPlanilhaPropostaCongelada($idPreProjeto);
 
+            if (empty($planilha)) {
+                $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
+                $planilha = $preProjetoMapper->obterPlanilhaPropostaAtual($idPreProjeto);
+            }
+
+            if (empty($planilha)) {
+                throw new Exception("Nenhuma planilha encontrada... ;(");
+            }
+
             $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $planilha));
         } catch (Exception $e) {
             $this->getResponse()
@@ -327,4 +334,44 @@ class Proposta_VisualizarController extends Proposta_GenericController
 
         }
     }
+
+    public function obterPlanilhaPropostaAdequadaAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        try {
+
+            $idPreProjeto = $this->_request->getParam('idPreProjeto');
+
+            if (empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
+            }
+
+            $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
+            $projeto = $dbTableProjetos->findBy(array(
+                'idProjeto' => $idPreProjeto
+            ));
+
+            $tbAvaliacao = new Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
+            $avaliacao = $tbAvaliacao->buscarUltimaAvaliacao($projeto->IdPRONAC);
+
+            $planilha = [];
+            if (!empty($avaliacao)) {
+                $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
+                $planilha = $preProjetoMapper->obterPlanilhaPropostaAtual($idPreProjeto);
+            }
+
+            if (empty($planilha)) {
+                throw new Exception("Nenhuma planilha encontrada... ;(");
+            }
+
+            $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $planilha));
+        } catch (Exception $e) {
+            $this->getResponse()
+                ->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => [], 'success' => 'false', 'msg' => $e->getMessage()));
+
+        }
+    }
+
 }

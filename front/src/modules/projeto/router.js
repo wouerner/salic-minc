@@ -3,9 +3,10 @@ import Router from 'vue-router'
 import Index from './index/Index'
 import DadosProjeto from './incentivo/components/DadosProjeto'
 import IncentivoTemplate from './incentivo/Index'
-import PlanilhaProposta from './incentivo/components/PlanilhaProposta'
-import PlanilhaAprovada from './incentivo/components/PlanilhaAprovada'
-import PlanilhaCongelada from './incentivo/components/PlanilhaCongelada'
+import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOriginal'
+import PlanilhaPropostaAutorizada from './incentivo/components/PlanilhaPropostaAutorizada'
+import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAdequada'
+import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada'
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos'
 import Proponente from './incentivo/components/Proponente'
 
@@ -47,25 +48,33 @@ const routes = [
             {
                 path: 'planilha-proposta',
                 name: 'planilhaproposta',
-                component: PlanilhaProposta,
+                component: PlanilhaPropostaOriginal,
                 meta: {
-                    title: 'Planilha Or&ccedil;ament&aacute;ria Proposta'
+                    title: 'Planilha Inicial da Proposta'
                 }
             },
             {
-                path: 'planilha-aprovada',
-                name: 'planilhaaprovada',
-                component: PlanilhaAprovada,
+                path: 'planilha-autorizada',
+                name: 'planilhaautorizada',
+                component: PlanilhaPropostaAutorizada,
                 meta: {
-                    title: 'Planilha Or&ccedil;ament&aacute;ria Aprovada'
+                    title: 'Planilha Aprovada para Capta&ccedil;&atilde;o'
                 }
             },
             {
-                path: 'planilha-congelada',
-                name: 'planilhacongelada',
-                component: PlanilhaCongelada,
+                path: 'planilha-adequada',
+                name: 'planilhaadequada',
+                component: PlanilhaPropostaAdequada,
                 meta: {
-                    title: 'Planilha Proposta'
+                    title: 'Planilha Adequada &agrave; Execu&ccedil;&atilde;o do Projeto'
+                }
+            },
+            {
+                path: 'planilha-homologada',
+                name: 'planilhahomologada',
+                component: PlanilhaHomologada,
+                meta: {
+                    title: 'Planilha Homologada para execu&ccedil;&atilde;o'
                 }
             },
             {

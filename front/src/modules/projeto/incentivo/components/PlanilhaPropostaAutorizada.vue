@@ -2,6 +2,7 @@
     <div id="planilha-congelada">
         <Carregando v-if="loading" :text="'Procurando planilha'"></Carregando>
         <PlanilhaOrcamentaria v-if="Object.keys(planilha).length > 0"
+                              :componenteTabelaItens="'ListaDeItensAutorizados'"
                               :arrayPlanilha="planilha"></PlanilhaOrcamentaria>
         <div v-if="semResposta" class="card-panel padding 20 center-align">{{ mensagem }}</div>
     </div>
@@ -13,7 +14,7 @@
     import {mapGetters} from 'vuex';
 
     export default {
-        name: "PlanilhaCongelada",
+        name: "PlanilhaPropostaAutorizada",
         data: function () {
             return {
                 planilha: [],
@@ -26,22 +27,27 @@
             Carregando,
             PlanilhaOrcamentaria
         },
+        mounted: function() {
+            if (typeof this.dadosProjeto != 'undefined') {
+                this.fetch(this.dadosProjeto.idPreProjeto);
+            }
+        },
         watch: {
-            projeto: function (projeto) {
-                if (typeof projeto != 'undefined') {
-                    this.fetch(projeto.idPreProjeto);
+            dadosProjeto: function (value) {
+                if (typeof value != 'undefined') {
+                    this.fetch(value.idPreProjeto);
                 }
             }
         },
         computed: {
             ...mapGetters({
-                projeto: 'projeto/projeto',
+                dadosProjeto: 'projeto/projeto',
             })
         },
         methods: {
             fetch: function (id) {
 
-                if (id.length == 0 || typeof id == 'undefined') {
+                if (typeof id == 'undefined') {
                     return
                 }
 

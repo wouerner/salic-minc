@@ -1,5 +1,5 @@
 <template>
-    <div id="apps">
+    <div class="incentivo">
         <SidebarMenu :url-ajax="urlAjax"></SidebarMenu>
         <div class="container-fluid">
             <TituloPagina :titulo="$route.meta.title"></TituloPagina>

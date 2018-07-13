@@ -10,7 +10,9 @@
                 <th class="center-align">Ocor.</th>
                 <th class="right-align">Vl. Unit&aacute;rio</th>
                 <th class="right-align">Vl. Solicitado</th>
-                <th class="center-align">Justificativa</th>
+                <th class="right-align">Vl. Aprovado</th>
+                <th class="center-align">Justif. Proponente</th>
+                <th class="center-align">Justif. do Parecerista</th>
             </tr>
             </thead>
             <tbody>
@@ -23,13 +25,11 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align">
-                    <SalicFormatarValor :valor="row.vlUnitario"/>
-                </td>
-                <td class="right-align">
-                    <SalicFormatarValor :valor="row.vlSolicitado"/>
-                </td>
+                <td class="right-align"><SalicFormatarValor :valor="row.vlUnitario"/></td>
+                <td class="right-align"><SalicFormatarValor :valor="row.vlSolicitado"/></td>
+                <td class="right-align"><SalicFormatarValor :valor="row.vlSolicitado"/></td>
                 <td class="justify" width="30%" v-html="row.JustProponente"></td>
+                <td class="justify" width="5%"></td>
             </tr>
             </tbody>
             <tfoot v-if="table && Object.keys(table).length > 0" style="opacity: 0.5">
@@ -38,6 +38,10 @@
                 <td class="right-align">
                     <b>{{ vlSolicitadoTotal }}</b>
                 </td>
+                <td class="right-align">
+                    <b>{{ vlSolicitadoTotal }}</b>
+                </td>
+                <td class="right-align"></td>
                 <td class="right-align"></td>
             </tr>
             </tfoot>
@@ -67,10 +71,6 @@
         components: {
             SalicFormatarValor
         },
-        created: function() {
-            numeral.locale('pt-br');
-            numeral.defaultFormat('0,0.00');
-        },
         computed: {
             vlSolicitadoTotal: function () {
                 var soma = numeral();
@@ -79,6 +79,8 @@
                         soma.add(parseFloat(cell.vlSolicitado));
                     }
                 });
+                numeral.locale('pt-br');
+                numeral.defaultFormat('0,0.00');
                 return soma.format();
             }
         },

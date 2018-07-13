@@ -350,6 +350,12 @@ table > tbody > tr {
     transition: background-color .25s ease;
 }
 
+.planilha-orcamentaria table.bordered tr > td,
+.planilha-orcamentaria table.bordered tr > th {
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+}
+
 table > tbody > tr:hover {
     /*background-color: #f2f2f2;*/
 }

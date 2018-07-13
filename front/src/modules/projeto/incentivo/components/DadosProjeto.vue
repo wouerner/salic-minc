@@ -3,15 +3,15 @@
         <div v-if="loading" class="row">
             <Carregando :text="'Carregando o projeto'"></Carregando>
         </div>
-        <div v-show="Object.keys(projeto).length > 0">
+        <div v-show="Object.keys(dadosProjeto).length > 0">
             <table class="tabela">
                 <tr class="destacar">
                     <td><b>PRONAC</b></td>
                     <td><b>Nome do Projeto</b></td>
                 </tr>
                 <tr>
-                    <td>{{ projeto.Pronac }}</td>
-                    <td>{{ projeto.NomeProjeto }}</td>
+                    <td>{{ dadosProjeto.Pronac }}</td>
+                    <td>{{ dadosProjeto.NomeProjeto }}</td>
                 </tr>
                 <tr class="destacar">
                     <td><b>CNPJ/CPF</b></td>
@@ -20,10 +20,10 @@
                 <tr>
                     <td>
                         <router-link :to="{ name: 'proponente', params: { idPronac: idPronac }}">
-                            <SalicFormatarCpfCnpj :cpf="projeto.CgcCPf"/>
+                            <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
                         </router-link>
                     </td>
-                    <td>{{ projeto.Proponente }}</td>
+                    <td>{{ dadosProjeto.Proponente }}</td>
                 </tr>
             </table>
             <div class="row" v-if="ProponenteInabilitado">
@@ -41,19 +41,19 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.UfProjeto"/>
+                        <SalicTextoSimples :texto="dadosProjeto.UfProjeto"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.Mecanismo"/>
+                        <SalicTextoSimples :texto="dadosProjeto.Mecanismo"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.Area"/>
+                        <SalicTextoSimples :texto="dadosProjeto.Area"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.Segmento"/>
+                        <SalicTextoSimples :texto="dadosProjeto.Segmento"/>
                     </td>
                     <td align="center" class="bold">
-                        <SalicTextoSimples :texto="projeto.Enquadramento"/>
+                        <SalicTextoSimples :texto="dadosProjeto.Enquadramento"/>
                     </td>
                 </tr>
             </table>
@@ -68,19 +68,19 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.idPreProjeto"/>
+                        <SalicTextoSimples :texto="dadosProjeto.idPreProjeto"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.DataFixa"/>
+                        <SalicTextoSimples :texto="dadosProjeto.DataFixa"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.Processo"/>
+                        <SalicTextoSimples :texto="dadosProjeto.Processo"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.ProrrogacaoAutomatica"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ProrrogacaoAutomatica"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.PlanoExecucaoImediata"/>
+                        <SalicTextoSimples :texto="dadosProjeto.PlanoExecucaoImediata"/>
                     </td>
                 </tr>
             </table>
@@ -101,18 +101,18 @@
                     <td class="centro"><b>Dt. Publica&ccedil;&atilde;o</b></td>
                 </tr>
                 <tr>
-                    <td align="center" class="bold">{{ projeto.DtInicioCaptacao | moment }}</td>
-                    <td align="center" class="bold">{{ projeto.DtFimCaptacao | moment }}</td>
-                    <td align="center" class="bold">{{ projeto.DtInicioExecucao | moment }}</td>
-                    <td align="center" class="bold">{{ projeto.DtFimExecucao | moment }}</td>
+                    <td align="center" class="bold">{{ dadosProjeto.DtInicioCaptacao | moment }}</td>
+                    <td align="center" class="bold">{{ dadosProjeto.DtFimCaptacao | moment }}</td>
+                    <td align="center" class="bold">{{ dadosProjeto.DtInicioExecucao | moment }}</td>
+                    <td align="center" class="bold">{{ dadosProjeto.DtFimExecucao | moment }}</td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.NrPortariaVigente"/>
+                        <SalicTextoSimples :texto="dadosProjeto.NrPortariaVigente"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.TipoPortariaVigente"/>
+                        <SalicTextoSimples :texto="dadosProjeto.TipoPortariaVigente"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.DtPublicacaoPortariaVigente"/>
+                        <SalicTextoSimples :texto="dadosProjeto.DtPublicacaoPortariaVigente"/>
                     </td>
                 </tr>
             </table>
@@ -133,19 +133,19 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.AgenciaBancaria"/>
+                        <SalicTextoSimples :texto="dadosProjeto.AgenciaBancaria"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.ContaCaptacao"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ContaCaptacao"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.ContaMovimentacao"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.ContaBancariaLiberada"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="projeto.DtLiberacaoDaConta"/>
+                        <SalicTextoSimples :texto="dadosProjeto.DtLiberacaoDaConta"/>
                     </td>
                 </tr>
             </table>
@@ -156,7 +156,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <SalicTextoSimples :texto="projeto.ResumoProjeto"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ResumoProjeto"/>
                     </td>
                 </tr>
             </table>
@@ -178,10 +178,10 @@
                     <td align="center"><b>Localiza&ccedil;&atilde;o atual</b></td>
                 </tr>
                 <tr>
-                    <td align="center">{{ projeto.DtSituacao | moment}}</td>
-                    <td class="left-align">{{ projeto.Situacao }}</td>
-                    <td class="left-align">{{ projeto.ProvidenciaTomada }}</td>
-                    <td align="center" class="bold">{{ projeto.LocalizacaoAtual }}</td>
+                    <td align="center">{{ dadosProjeto.DtSituacao | moment}}</td>
+                    <td class="left-align">{{ dadosProjeto.Situacao }}</td>
+                    <td class="left-align">{{ dadosProjeto.ProvidenciaTomada }}</td>
+                    <td align="center" class="bold">{{ dadosProjeto.LocalizacaoAtual }}</td>
                 </tr>
             </table>
 
@@ -194,12 +194,12 @@
                     <td align="center"><b>Dt. in&iacute;cio</b></td>
                 </tr>
                 <tr>
-                    <td class="left-align">{{ projeto.FaseProjeto }}</td>
-                    <td align="center">{{ projeto.dtInicioFase | moment }}</td>
+                    <td class="left-align">{{ dadosProjeto.FaseProjeto }}</td>
+                    <td align="center">{{ dadosProjeto.dtInicioFase | moment }}</td>
                 </tr>
             </table>
 
-            <table class="tabela" v-if="projeto.DtArquivamento">
+            <table class="tabela" v-if="dadosProjeto.DtArquivamento">
                 <caption style="color: red !important;">Arquivado Definitivamente</caption>
                 <tr class="destacar">
                     <td align="center"><b>Dt.Arquivamento</b></td>
@@ -207,9 +207,9 @@
                     <td align="center"><b>Cx.Final</b></td>
                 </tr>
                 <tr>
-                    <td align="center">{{ projeto.DtArquivamento }}</td>
-                    <td align="center">{{ projeto.CaixaInicio }}</td>
-                    <td align="center">{{ projeto.CaixaFinal }}</td>
+                    <td align="center">{{ dadosProjeto.DtArquivamento }}</td>
+                    <td align="center">{{ dadosProjeto.CaixaInicio }}</td>
+                    <td align="center">{{ dadosProjeto.CaixaFinal }}</td>
                 </tr>
             </table>
 
@@ -226,19 +226,19 @@
                     </tr>
                     <tr>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlSolicitadoOriginal"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlSolicitadoOriginal"/>
                         </b></td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlOutrasFontesPropostaOriginal"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlOutrasFontesPropostaOriginal"/>
                         </b>
                         </td>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.vlTotalPropostaOriginal > 0"
+                                <router-link v-if="dadosProjeto.vlTotalPropostaOriginal > 0"
                                              :to="{ name: 'planilhaproposta', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.vlTotalPropostaOriginal"/>
+                                    <SalicFormatarValor :valor="dadosProjeto.vlTotalPropostaOriginal"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.vlTotalPropostaOriginal"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalPropostaOriginal"/>
                             </b>
                         </td>
                     </tr>
@@ -255,18 +255,18 @@
                     </tr>
                     <tr>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlAutorizado"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlAutorizado"/>
                         </b></td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlAutorizadoOutrasFontes"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlAutorizadoOutrasFontes"/>
                         </b></td>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.vlTotalAutorizado > 0"
-                                             :to="{ name: 'planilhaaprovada', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.vlTotalAutorizado"/>
+                                <router-link v-if="dadosProjeto.vlTotalAutorizado > 0"
+                                             :to="{ name: 'planilhaautorizada', params: { idPronac: idPronac }}">
+                                    <SalicFormatarValor :valor="dadosProjeto.vlTotalAutorizado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.vlTotalAutorizado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalAutorizado"/>
                             </b>
                         </td>
                     </tr>
@@ -284,18 +284,18 @@
                     </tr>
                     <tr>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlAdequadoIncentivo"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlAdequadoIncentivo"/>
                         </b></td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlAdequadoOutrasFontes"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlAdequadoOutrasFontes"/>
                         </b></td>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.vlTotalAdequado > 0"
-                                             :to="{ name: 'planilhaaprovada', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.vlTotalAdequado"/>
+                                <router-link v-if="dadosProjeto.vlTotalAdequado > 0"
+                                             :to="{ name: 'planilhaadequada', params: { idPronac: idPronac }}">
+                                    <SalicFormatarValor :valor="dadosProjeto.vlTotalAdequado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.vlTotalAdequado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalAdequado"/>
                             </b>
                         </td>
                     </tr>
@@ -312,18 +312,18 @@
                     </tr>
                     <tr>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlHomologadoIncentivo"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlHomologadoIncentivo"/>
                         </b></td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlHomologadoOutrasFontes"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlHomologadoOutrasFontes"/>
                         </b></td>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.vlTotalHomologado > 0"
-                                             :to="{ name: 'planilhaaprovada', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.vlTotalHomologado"/>
+                                <router-link v-if="dadosProjeto.vlTotalHomologado > 0"
+                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                    <SalicFormatarValor :valor="dadosProjeto.vlTotalHomologado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.vlTotalHomologado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalHomologado"/>
                             </b>
                         </td>
                     </tr>
@@ -341,23 +341,23 @@
                     <tr>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.vlReadequadoIncentivo > 0"
-                                             :to="{ name: 'planilhaaprovada', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.vlReadequadoIncentivo"/>
+                                <router-link v-if="dadosProjeto.vlReadequadoIncentivo > 0"
+                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                    <SalicFormatarValor :valor="dadosProjeto.vlReadequadoIncentivo"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.vlReadequadoIncentivo"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlReadequadoIncentivo"/>
                             </b>
                         </td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlReadequadoOutrasFontes"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlReadequadoOutrasFontes"/>
                         </b></td>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.vlTotalReadequado > 0"
-                                             :to="{ name: 'planilhaaprovada', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.vlTotalReadequado"/>
+                                <router-link v-if="dadosProjeto.vlTotalReadequado > 0"
+                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                    <SalicFormatarValor :valor="dadosProjeto.vlTotalReadequado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.vlTotalReadequado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalReadequado"/>
                             </b>
                         </td>
                     </tr>
@@ -377,29 +377,29 @@
                     <tr>
                         <td class="right-align">
                             <b>
-                                <a v-if="projeto.vlCaptado > 0"
+                                <a v-if="dadosProjeto.vlCaptado > 0"
                                    :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
-                                    <SalicFormatarValor :valor="projeto.vlCaptado"/>
+                                    <SalicFormatarValor :valor="dadosProjeto.vlCaptado"/>
                                 </a>
-                                <SalicFormatarValor v-else :valor="projeto.vlCaptado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlCaptado"/>
                             </b>
                         </td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlTransferido"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>
                         </b></td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlRecebido"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlRecebido"/>
                         </b></td>
                         <td class="right-align"><b>
-                            <SalicFormatarValor :valor="projeto.vlSaldoACaptar"/>
+                            <SalicFormatarValor :valor="dadosProjeto.vlSaldoACaptar"/>
                         </b></td>
                         <td class="right-align">
                             <b>
-                                <a v-if="projeto.PercentualCaptado > 0"
+                                <a v-if="dadosProjeto.PercentualCaptado > 0"
                                    :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
-                                    <SalicFormatarValor :valor="projeto.PercentualCaptado"/>
+                                    <SalicFormatarValor :valor="dadosProjeto.PercentualCaptado"/>
                                 </a>
-                                <SalicFormatarValor v-else :valor="projeto.PercentualCaptado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.PercentualCaptado"/>
                             </b>
                         </td>
                     </tr>
@@ -416,21 +416,21 @@
                     <tr>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.vlComprovado > 0"
+                                <router-link v-if="dadosProjeto.vlComprovado > 0"
                                              :to="{ name: 'relacaodepagamentos', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.vlComprovado"/>
+                                    <SalicFormatarValor :valor="dadosProjeto.vlComprovado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.vlComprovado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlComprovado"/>
                             </b>
                         </td>
-                        <td class="right-align"><b>{{ projeto.PercentualComprovado }}</b></td>
+                        <td class="right-align"><b>{{ dadosProjeto.PercentualComprovado }}</b></td>
                         <td class="right-align">
                             <b>
-                                <router-link v-if="projeto.PercentualComprovado > 0"
+                                <router-link v-if="dadosProjeto.PercentualComprovado > 0"
                                              :to="{ name: 'relacaodepagamentos', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="projeto.PercentualComprovado"/>
+                                    <SalicFormatarValor :valor="dadosProjeto.PercentualComprovado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="projeto.PercentualComprovado"/>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.PercentualComprovado"/>
                             </b>
                         </td>
                     </tr>
@@ -465,12 +465,12 @@
             SalicFormatarCpfCnpj
         },
         created() {
-            if (Object.keys(this.projeto).length > 0) {
+            if (Object.keys(this.dadosProjeto).length > 0) {
                 this.loading = false;
             }
         },
         watch: {
-            projeto: function (value) {
+            dadosProjeto: function (value) {
 
                 if (Object.keys(value).length > 0) {
                     this.loading = false;
@@ -479,7 +479,7 @@
         },
         computed: {
             ...mapGetters({
-                projeto: 'projeto/projeto',
+                dadosProjeto: 'projeto/projeto',
             }),
         },
         filters: {

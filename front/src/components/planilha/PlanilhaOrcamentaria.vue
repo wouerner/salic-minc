@@ -42,7 +42,7 @@
                 </div>
             </li>
         </ul>
-        <div class="card-action">
+        <div class="card-action right-align">
             <span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total}}</span>
         </div>
     </div>
@@ -51,9 +51,11 @@
 
 <script>
     import numeral from 'numeral'
+    import 'numeral/locales';
     import moment from 'moment'
     import ListaDeItensPadrao from '@/components/planilha/ListaDeItensPadrao'
     import ListaDeItensCurtos from '@/components/planilha/ListaDeItensCurtos'
+    import ListaDeItensAutorizados from '@/components/planilha/ListaDeItensAutorizados'
     import ListaDeItensAprovados from '@/components/planilha/ListaDeItensAprovados'
 
     export default {
@@ -66,7 +68,8 @@
         components: {
             ListaDeItensPadrao,
             ListaDeItensCurtos,
-            ListaDeItensAprovados
+            ListaDeItensAprovados,
+            ListaDeItensAutorizados
         },
         props: {
             'arrayPlanilha':  {},
@@ -79,6 +82,9 @@
             if (typeof this.arrayPlanilha !== 'undefined') {
                 this.planilha = this.arrayPlanilha;
             }
+
+            numeral.locale('pt-br');
+            numeral.defaultFormat('0,0.00');
         },
         computed: {
             planilhaCompleta: function () {

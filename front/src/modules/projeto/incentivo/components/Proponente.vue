@@ -1,7 +1,7 @@
 <template>
     <div id="conteudo">
         <div class="row">
-            <Proponente :cpf="projeto.CgcCPf"></Proponente>
+            <Proponente :cpf="dadosProjeto.CgcCPf"></Proponente>
         </div>
     </div>
 </template>
@@ -20,7 +20,7 @@
         },
         computed: {
             ...mapGetters({
-                projeto: 'projeto/projeto',
+                dadosProjeto: 'projeto/projeto',
             }),
         }
     };

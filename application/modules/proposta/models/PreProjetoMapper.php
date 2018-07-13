@@ -249,17 +249,36 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
         }
 
         $TbPreProjetoMeta = new Proposta_Model_DbTable_TbPreProjetoMeta();
-        $response = unserialize($TbPreProjetoMeta->buscarMeta($idPreProjeto, $meta . '_tbplanilhaproposta'));
+        $planilha = unserialize($TbPreProjetoMeta->buscarMeta($idPreProjeto, $meta . '_tbplanilhaproposta'));
 
-        if (empty($response)) {
-            throw new Exception("Nenhuma planilha encontrada... ;(");
+        if (empty($planilha)) {
+            return false;
         }
-        
-        $response = $this->utf8EncodeArray($response);
-        $response = $this->montarPlanilhaProposta($response);
 
-        return $response;
+        $planilha = $this->utf8EncodeArray($planilha);
+        $planilha = $this->montarPlanilhaProposta($planilha);
 
+        return $planilha;
+
+    }
+
+    public function obterPlanilhaPropostaAtual($idPreProjeto) {
+
+        if (empty($idPreProjeto)) {
+            return false;
+        }
+
+        $tbPlanilhaProposta = new Proposta_Model_DbTable_TbPlanilhaProposta();
+        $planilha = $tbPlanilhaProposta->buscarPlanilhaCompleta($idPreProjeto);
+
+        if (empty($planilha)) {
+            return false;
+        }
+
+        $planilha = $this->utf8EncodeArray($planilha);
+        $planilha = $this->montarPlanilhaProposta($planilha);
+
+        return $planilha;
     }
 
 }
