@@ -51,12 +51,12 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $propostaHistorico = $preProjetoMapper->obterArrayVersaoPropostaCompleta($idPreProjeto, $tipo);
 
             $tbProjeto = new Projeto_Model_DbTable_Projetos();
-            $projeto = $tbProjeto->findBy(['idProjeto'=> $idPreProjeto]);
+            $projeto = $tbProjeto->findBy(['idProjeto' => $idPreProjeto]);
 
             if (!empty($projeto)) {
 
                 $pronac = $projeto['AnoProjeto'] . $projeto['Sequencial'];
-                $propostaAtual = array_merge($propostaAtual, ['PRONAC'=>$pronac, 'idPronac'=> $projeto['IdPRONAC']]);
+                $propostaAtual = array_merge($propostaAtual, ['PRONAC' => $pronac, 'idPronac' => $projeto['IdPRONAC']]);
 
             }
 
@@ -84,7 +84,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $objDateTime = new DateTime($dado->DtAvaliacao);
                 $newArray[$key]['Tipo'] = $dado->tipo;
                 $newArray[$key]['DtAvaliacao'] = $objDateTime->format('d/m/Y H:i:s');
-                $newArray[$key]['Avaliacao'] =  str_replace('<p>&nbsp;</p>','',$dado->Avaliacao);
+                $newArray[$key]['Avaliacao'] = str_replace('<p>&nbsp;</p>', '', $dado->Avaliacao);
             }
             $json['class'] = 'bordered striped';
             $json['lines'] = $newArray;
@@ -92,7 +92,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 'Tipo' => ['name' => 'Tipo'],
                 'DtAvaliacao' => ['name' => 'Data', 'class' => 'valig'],
                 'Avaliacao' => [
-                        'name' => html_entity_decode('Avalia&ccedil;&atilde;o')]
+                    'name' => html_entity_decode('Avalia&ccedil;&atilde;o')]
             ];
 
             $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $json));
@@ -277,14 +277,14 @@ class Proposta_VisualizarController extends Proposta_GenericController
         try {
 
             $tbCustosVinculados = new Proposta_Model_DbTable_TbCustosVinculados();
-            $dados= $tbCustosVinculados->buscarCustosVinculados(['idProjeto = ?' => $this->idPreProjeto])->toArray();
+            $dados = $tbCustosVinculados->buscarCustosVinculados(['idProjeto = ?' => $this->idPreProjeto])->toArray();
 
             $data = [];
             $newArray = [];
 
             foreach ($dados as $key => $dado) {
                 $objDateTime = new DateTime($dado['dtCadastro']);
-                $newArray[$key]['item'] =  utf8_encode($dado['item']);
+                $newArray[$key]['item'] = utf8_encode($dado['item']);
                 $newArray[$key]['dtCadastro'] = $objDateTime->format('d/m/Y');
                 $newArray[$key]['pcCalculo'] = $dado['pcCalculo'] . '%';
             }
@@ -321,10 +321,10 @@ class Proposta_VisualizarController extends Proposta_GenericController
 
             $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $planilha));
         } catch (Exception $e) {
-            $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
+            $this->getResponse()
+                ->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => [], 'success' => 'false', 'msg' => $e->getMessage()));
+
         }
     }
-
-
-
 }

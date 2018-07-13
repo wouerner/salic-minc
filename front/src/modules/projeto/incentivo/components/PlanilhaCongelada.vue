@@ -1,13 +1,16 @@
 <template>
     <div id="planilha-congelada">
         <Carregando v-if="loading" :text="'Procurando planilha'"></Carregando>
-        <SalicPlanilhaOrcamentariaSimples :arrayPlanilha="planilha"></SalicPlanilhaOrcamentariaSimples>
+        <PlanilhaOrcamentaria v-if="Object.keys(planilha).length > 0"
+                                          :arrayPlanilha="planilha"></PlanilhaOrcamentaria>
+
+        <div v-if="semResposta" class="card-panel padding 20 center-align">{{ mensagem }}</div>
     </div>
 </template>
 
 <script>
     import Carregando from '@/components/Carregando';
-    import SalicPlanilhaOrcamentariaSimples from '@/components/SalicPlanilhaOrcamentariaSimples';
+    import PlanilhaOrcamentaria from '@/components/planilha/PlanilhaOrcamentaria';
     import {mapGetters} from 'vuex';
 
     export default {
@@ -16,18 +19,13 @@
             return {
                 planilha: [],
                 loading: true,
+                semResposta: false,
+                mensagem: ''
             }
         },
         components: {
             Carregando,
-            SalicPlanilhaOrcamentariaSimples
-        },
-        props: ['id'],
-        mounted: function () {
-//            if (typeof this.id != 'undefined') {
-//                this.fetch(this.id);
-//            }
-
+            PlanilhaOrcamentaria
         },
         watch: {
             projeto: function (projeto) {
@@ -44,7 +42,7 @@
         methods: {
             fetch: function (id) {
 
-                if(id.length == 0 || typeof id == 'undefined') {
+                if (id.length == 0 || typeof id == 'undefined') {
                     return
                 }
 
@@ -56,13 +54,11 @@
                     }
                 }).done(function (response) {
                     self.planilha = response.data;
-                    console.log('teteste', response.data);
-
-                    if (self.planilha && self.planilha.identificacao) {
-                        self.identificacao = self.planilha.identificacao;
-                    }
+                }).fail(function (response) {
+                    self.semResposta = true;
+                    self.mensagem = response.responseJSON.msg;
+                }).always(function () {
                     self.loading = false;
-
                 });
             }
         }

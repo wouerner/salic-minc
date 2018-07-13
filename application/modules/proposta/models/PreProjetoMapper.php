@@ -128,12 +128,12 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
             );
         }
 
-        if($proposta['tbcustosvinculados']) {
+        if ($proposta['tbcustosvinculados']) {
             $newArray = [];
 
             foreach ($proposta['tbcustosvinculados'] as $key => $dado) {
                 $objDateTime = new DateTime($dado['dtCadastro']);
-                $newArray[$key]['item'] =  $dado['item'];
+                $newArray[$key]['item'] = $dado['item'];
                 $newArray[$key]['dtCadastro'] = $objDateTime->format('d/m/Y');
                 $newArray[$key]['pcCalculo'] = $dado['pcCalculo'] . '%';
             }
@@ -213,13 +213,14 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
         $arrayDetalhamentos = [];
 
         foreach ($detalhamentos as $key => $item) {
-            $arrayDetalhamentos[$item['idPlanoDistribuicao']][$item['DescricaoUf'] . ' - '. $item['DescricaoMunicipio']][] = $item;
+            $arrayDetalhamentos[$item['idPlanoDistribuicao']][$item['DescricaoUf'] . ' - ' . $item['DescricaoMunicipio']][] = $item;
         }
 
         return $arrayDetalhamentos;
     }
 
-    public static function utf8EncodeArray($input) {
+    public static function utf8EncodeArray($input)
+    {
 
         if (is_string($input)) {
             return utf8_encode($input);
@@ -250,8 +251,12 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
         $TbPreProjetoMeta = new Proposta_Model_DbTable_TbPreProjetoMeta();
         $response = unserialize($TbPreProjetoMeta->buscarMeta($idPreProjeto, $meta . '_tbplanilhaproposta'));
 
-        $response = $this->montarPlanilhaProposta($response);
+        if (empty($response)) {
+            throw new Exception("Nenhuma planilha encontrada... ;(");
+        }
+        
         $response = $this->utf8EncodeArray($response);
+        $response = $this->montarPlanilhaProposta($response);
 
         return $response;
 

@@ -196,7 +196,6 @@
         computed: {
             idusuario() {
                 // We will see what `params` is shortly
-                console.log(this.$route.params.idusuario);
                 return this.$route.params.idusuario
             },
             TipoPessoa: function () {

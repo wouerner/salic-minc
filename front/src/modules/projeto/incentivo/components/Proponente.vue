@@ -15,9 +15,6 @@
                 links: '/default/consultardadosprojeto/planilha-orcamentaria?idPronac=' + this.$route.params.idPronac
             }
         },
-        created() {
-                 console.log(this.$route);
-        },
         components: {
             Proponente
         },

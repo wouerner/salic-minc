@@ -29,45 +29,7 @@
                                                             class="badge">R$ {{locais.total}}</span>
                                                     </div>
                                                     <div class="collapsible-body no-padding margin20 scroll-x">
-                                                        <table class="bordered">
-                                                            <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>Item</th>
-                                                                <th>Dias</th>
-                                                                <th>Qtde</th>
-                                                                <th>Ocor.</th>
-                                                                <th>Vl. Unit&aacute;rio</th>
-                                                                <th>Vl. Solicitado</th>
-                                                                <th>#</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <tr v-for="row of locais"
-                                                                :key="row.idPlanilhaProposta"
-                                                                v-if="isObject(row)"
-                                                                v-bind:class="{'orange lighten-2': ultrapassaValor(row)}"
-                                                            >
-                                                                <td>{{row.Seq}}</td>
-                                                                <td>{{row.Item}}</td>
-                                                                <td>{{row.QtdeDias}}</td>
-                                                                <td>{{row.Quantidade}}</td>
-                                                                <td>{{row.Ocorrencia}}</td>
-                                                                <td>{{converterParaReal(row.vlUnitario)}}</td>
-                                                                <td>{{converterParaReal(row.vlSolicitado)}}</td>
-                                                                <td>
-                                                                    <a v-if="row.JustProponente.length > 3"
-                                                                       class="tooltipped"
-                                                                       data-position="left"
-                                                                       data-delay="50"
-                                                                       v-bind:data-tooltip="row.JustProponente"
-                                                                    ><i class="material-icons tiny">message</i>
-                                                                    </a>
-
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
+                                                        <component :is="componenteTabelaItens" :table="locais"></component>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -90,24 +52,31 @@
 <script>
     import numeral from 'numeral'
     import moment from 'moment'
+    import ListaDeItensPadrao from '@/components/planilha/ListaDeItensPadrao'
+    import ListaDeItensCurtos from '@/components/planilha/ListaDeItensCurtos'
+    import ListaDeItensAprovados from '@/components/planilha/ListaDeItensAprovados'
 
     export default {
-        name: 'SalicPlanilhaOrcamentariaSimples',
+        name: 'PlanilhaOrcamentaria',
         data: function () {
             return {
                 planilha: []
             }
         },
-        props: [
-            'idpreprojeto',
-            'arrayPlanilha'
-        ],
+        components: {
+            ListaDeItensPadrao,
+            ListaDeItensCurtos,
+            ListaDeItensAprovados
+        },
+        props: {
+            'arrayPlanilha':  {},
+            'componenteTabelaItens': {
+                default: 'ListaDeItensPadrao',
+                type: String
+            },
+        },
         mounted: function () {
-            if (typeof this.idpreprojeto != 'undefined') {
-                this.fetch(this.idpreprojeto);
-            }
-
-            if (typeof this.arrayPlanilha != 'undefined') {
+            if (typeof this.arrayPlanilha !== 'undefined') {
                 this.planilha = this.arrayPlanilha;
             }
         },
@@ -157,16 +126,6 @@
             }
         },
         methods: {
-            fetch: function (id) {
-                if (id) {
-                    let vue = this;
-                    $3.ajax({
-                        url: '/proposta/visualizar/obter-planilha-orcamentaria-proposta/idPreProjeto/' + id
-                    }).done(function (response) {
-                        vue.proposta = response.data;
-                    });
-                }
-            },
             formatar_data: function (date) {
 
                 date = moment(date).format('DD/MM/YYYY');
