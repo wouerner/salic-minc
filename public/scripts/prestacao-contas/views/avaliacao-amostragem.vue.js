@@ -1,6 +1,7 @@
 Vue.component('avaliacao-amostragem', {
     props: [
         'idpronac',
+        'avaliacao',
     ],
     template: `
         <div>
@@ -10,7 +11,7 @@ Vue.component('avaliacao-amostragem', {
     mounted: function () {
         let vue = this;
         $3.ajax({
-            url: "/prestacao-contas/prestacao-contas/comprovantes-amostragem/idPronac/" + this.idpronac
+            url: this.buildUrl()
         }).done(function( data ) {
             vue.$data.produtos = data;
         });
@@ -26,5 +27,11 @@ Vue.component('avaliacao-amostragem', {
                 $3(this).collapsible();
             });
         },
-    }
+        buildUrl: function() {
+            return '/prestacao-contas/prestacao-contas/comprovantes-amostragem/idPronac/'
+            + this.idpronac
+            + '/tipoAvaliacao/'
+            + this.avaliacao;
+        },
+    },
 })

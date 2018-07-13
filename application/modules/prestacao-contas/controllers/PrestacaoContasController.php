@@ -76,6 +76,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         $comprovantes = new PrestacaoContas_Model_spComprovantes();
         $comprovantes = $comprovantes->exec($idPronac, $tipoAvaliacao);
         $this->view->idPronac = $idPronac;
+        $this->view->tipoAvaliacao = $tipoAvaliacao;
         $this->view->comprovantes = $comprovantes;
 
 
@@ -94,7 +95,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
     public function comprovantesAmostragemAction()
     {
         $idPronac = $this->_request->getParam("idPronac");
-        $tipoAvaliacao = 90;
+        $tipoAvaliacao = $this->_request->getParam("tipoAvaliacao");;
 
         if (!$idPronac) {
            throw new Exception('Não existe idPronac');

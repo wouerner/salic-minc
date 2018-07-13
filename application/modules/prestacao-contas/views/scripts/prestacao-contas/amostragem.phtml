@@ -30,7 +30,7 @@
     <?php echo $this->partial('partials/card-projeto.phtml', 'prestacao-contas', $this); ?>
     <div class="row" id="app">
         <div class="col s12 m12">
-            <avaliacao-amostragem idpronac="<?php echo $this->idPronac ?>"></avaliacao-amostragem>
+            <avaliacao-amostragem idpronac="<?php echo $this->idPronac ?>" :avaliacao="<?php echo $this->tipoAvaliacao ?>"></avaliacao-amostragem>
         </div>
     </div>
     <?php echo $this->partial('partials/menu-fixo.phtml', 'prestacao-contas', $this); ?>
