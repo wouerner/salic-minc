@@ -52,7 +52,7 @@
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.Segmento"/>
                     </td>
-                    <td align="center" class="bold">
+                    <td align="center" class="bold destacar">
                         <SalicTextoSimples :texto="dadosProjeto.Enquadramento"/>
                     </td>
                 </tr>
@@ -79,7 +79,7 @@
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.ProrrogacaoAutomatica"/>
                     </td>
-                    <td align="center">
+                    <td align="center" class="destacar">
                         <SalicTextoSimples :texto="dadosProjeto.PlanoExecucaoImediata"/>
                     </td>
                 </tr>
@@ -101,10 +101,14 @@
                     <td class="centro"><b>Dt. Publica&ccedil;&atilde;o</b></td>
                 </tr>
                 <tr>
-                    <td align="center" class="bold">{{ dadosProjeto.DtInicioCaptacao | moment }}</td>
-                    <td align="center" class="bold">{{ dadosProjeto.DtFimCaptacao | moment }}</td>
-                    <td align="center" class="bold">{{ dadosProjeto.DtInicioExecucao | moment }}</td>
-                    <td align="center" class="bold">{{ dadosProjeto.DtFimExecucao | moment }}</td>
+                    <td align="center" class="bold destacar">{{ dadosProjeto.DtInicioCaptacao | formatarData }}</td>
+                    <td align="center" class="bold destacar">{{ dadosProjeto.DtFimCaptacao | formatarData }}</td>
+                    <td align="center" class="bold destacar">{{ dadosProjeto.DtInicioExecucao | formatarData }}</td>
+                    <td align="center" class="bold destacar">
+                        {{ dadosProjeto.DtFimExecucao | formatarData }}
+                        <br>
+                        {{diferencaData(dadosProjeto.DtFimExecucao)}}
+                    </td>
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.NrPortariaVigente"/>
                     </td>
@@ -141,7 +145,7 @@
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao"/>
                     </td>
-                    <td align="center">
+                    <td align="center destacar">
                         <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
                     </td>
                     <td align="center">
@@ -178,8 +182,8 @@
                     <td align="center"><b>Localiza&ccedil;&atilde;o atual</b></td>
                 </tr>
                 <tr>
-                    <td align="center">{{ dadosProjeto.DtSituacao | moment}}</td>
-                    <td class="left-align">{{ dadosProjeto.Situacao }}</td>
+                    <td align="center">{{ dadosProjeto.DtSituacao | formatarData }}</td>
+                    <td class="left-align destacar">{{ dadosProjeto.Situacao }}</td>
                     <td class="left-align">{{ dadosProjeto.ProvidenciaTomada }}</td>
                     <td align="center" class="bold">{{ dadosProjeto.LocalizacaoAtual }}</td>
                 </tr>
@@ -195,7 +199,24 @@
                 </tr>
                 <tr>
                     <td class="left-align">{{ dadosProjeto.FaseProjeto }}</td>
-                    <td align="center">{{ dadosProjeto.dtInicioFase | moment }}</td>
+                    <td align="center">{{ dadosProjeto.dtInicioFase | formatarData }}</td>
+                </tr>
+            </table>
+
+            <table class="tabela">
+                <tr class="destacar">
+                    <td align="center" colspan="3"><b>Normativo vigente na apresenta&ccedil;&atilde;o do projeto</b>
+                    </td>
+                </tr>
+                <tr class="destacar">
+                    <td class="left-align"><b>Normativo</b></td>
+                    <td align="center"><b>Dt. Publica&ccedil;&atilde;o</b></td>
+                    <td align="center"><b>Dt. Revoga&ccedil;&atilde;o</b></td>
+                </tr>
+                <tr>
+                    <td class="left-align destacar">{{ dadosProjeto.Normativo }}</td>
+                    <td align="center">{{ dadosProjeto.dtPublicacaoNormativo | formatarData }}</td>
+                    <td align="center">{{ dadosProjeto.dtRevogacaoNormativo | formatarData }}</td>
                 </tr>
             </table>
 
@@ -220,19 +241,19 @@
                         <td align="center" colspan="5"><b>Solicita&ccedil;&atilde;o da proposta original</b></td>
                     </tr>
                     <tr class="destacar">
-                        <td class="right-align"><b>Vl. Solicitado (A)</b></td>
-                        <td class="right-align"><b>Vl. Outras Fontes (B)</b></td>
-                        <td class="right-align"><b>Vl.Proposta (C = A + B)</b></td>
+                        <td class="right-align"><b>Solicitado (A)</b></td>
+                        <td class="right-align"><b>Outras Fontes (B)</b></td>
+                        <td class="right-align"><b>Total Proposta (C=A+B)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlSolicitadoOriginal"/>
                         </b></td>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto-secondary"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlOutrasFontesPropostaOriginal"/>
                         </b>
                         </td>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary">
                             <b>
                                 <router-link v-if="dadosProjeto.vlTotalPropostaOriginal > 0"
                                              :to="{ name: 'planilhaproposta', params: { idPronac: idPronac }}">
@@ -254,13 +275,13 @@
                         <td class="right-align"><b>Total Autorizado (F=D+E)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlAutorizado"/>
                         </b></td>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto-secondary"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlAutorizadoOutrasFontes"/>
                         </b></td>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary">
                             <b>
                                 <router-link v-if="dadosProjeto.vlTotalAutorizado > 0"
                                              :to="{ name: 'planilhaautorizada', params: { idPronac: idPronac }}">
@@ -283,13 +304,13 @@
                         <td class="right-align"><b>Total Adequado (I=G+H)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlAdequadoIncentivo"/>
                         </b></td>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto-secondary"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlAdequadoOutrasFontes"/>
                         </b></td>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary">
                             <b>
                                 <router-link v-if="dadosProjeto.vlTotalAdequado > 0"
                                              :to="{ name: 'planilhaadequada', params: { idPronac: idPronac }}">
@@ -311,13 +332,13 @@
                         <td class="right-align"><b>Total Homologado (L=J+K)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlHomologadoIncentivo"/>
                         </b></td>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto-secondary"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlHomologadoOutrasFontes"/>
                         </b></td>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary">
                             <b>
                                 <router-link v-if="dadosProjeto.vlTotalHomologado > 0"
                                              :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
@@ -339,7 +360,7 @@
                         <td class="right-align"><b>Total Readequado (O=M+N)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto">
                             <b>
                                 <router-link v-if="dadosProjeto.vlReadequadoIncentivo > 0"
                                              :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
@@ -348,10 +369,10 @@
                                 <SalicFormatarValor v-else :valor="dadosProjeto.vlReadequadoIncentivo"/>
                             </b>
                         </td>
-                        <td class="right-align"><b>
+                        <td class="right-align destaque-texto-secondary"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlReadequadoOutrasFontes"/>
                         </b></td>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary">
                             <b>
                                 <router-link v-if="dadosProjeto.vlTotalReadequado > 0"
                                              :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
@@ -375,7 +396,7 @@
                         <td class="right-align"><b>% Captado(T)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary destacar">
                             <b>
                                 <a v-if="dadosProjeto.vlCaptado > 0"
                                    :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
@@ -390,10 +411,10 @@
                         <td class="right-align"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlRecebido"/>
                         </b></td>
-                        <td class="right-align"><b>
+                        <td class="right-align destacar"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlSaldoACaptar"/>
                         </b></td>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary">
                             <b>
                                 <a v-if="dadosProjeto.PercentualCaptado > 0"
                                    :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
@@ -409,12 +430,12 @@
                         <td align="center" colspan="3"><b>Comprova&ccedil;&atilde;o</b></td>
                     </tr>
                     <tr class="destacar">
-                        <td class="right-align"><b>Comprovado(N)</b></td>
-                        <td class="right-align"><b>A Comprovar(O=G-N)</b></td>
-                        <td class="right-align"><b>% Comprovado(P)</b></td>
+                        <td class="right-align"><b>Comprovado(U)</b></td>
+                        <td class="right-align"><b>A Comprovar(V=S-U)</b></td>
+                        <td class="right-align"><b>% Comprovado(X)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align">
+                        <td class="right-align destaque-texto-primary destacar">
                             <b>
                                 <router-link v-if="dadosProjeto.vlComprovado > 0"
                                              :to="{ name: 'relacaodepagamentos', params: { idPronac: idPronac }}">
@@ -423,8 +444,12 @@
                                 <SalicFormatarValor v-else :valor="dadosProjeto.vlComprovado"/>
                             </b>
                         </td>
-                        <td class="right-align"><b>{{ dadosProjeto.PercentualComprovado }}</b></td>
-                        <td class="right-align">
+                        <td class="right-align destacar">
+                            <b>
+                                <SalicFormatarValor :valor="dadosProjeto.vlAComprovar"/>
+                            </b>
+                        </td>
+                        <td class="right-align destaque-texto-primary">
                             <b>
                                 <router-link v-if="dadosProjeto.PercentualComprovado > 0"
                                              :to="{ name: 'relacaodepagamentos', params: { idPronac: idPronac }}">
@@ -471,7 +496,6 @@
         },
         watch: {
             dadosProjeto: function (value) {
-
                 if (Object.keys(value).length > 0) {
                     this.loading = false;
                 }
@@ -482,8 +506,13 @@
                 dadosProjeto: 'projeto/projeto',
             }),
         },
+        methods: {
+            diferencaData: function (date) {
+                return moment().diff(date);
+            }
+        },
         filters: {
-            moment: function (date) {
+            formatarData: function (date) {
                 return moment(date).format('DD/MM/YYYY');
             }
         }

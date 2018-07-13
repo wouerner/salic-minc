@@ -87,11 +87,10 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
     {
         $idPronacHash = Seguranca::encrypt($idPronac);
         $pronac = $projeto['AnoProjeto'] .''. $projeto['Sequencial'];
-        $versaoIN = ($this->IN2017) ? '[2017]' : '[2013]';
         $menu = [];
         $menu['informacoes'] = [
             'id' => 'informacoes',
-            'titulo' => "Pronac {$pronac} {$versaoIN}",
+            'titulo' => "Pronac {$pronac}",
             'descricao' => utf8_encode($projeto['NomeProjeto']),
             'icone_ativo' => 'info',
             'ativo' => true,
@@ -129,11 +128,10 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $debug = $this->debug;
 
         $pronac = $projeto['AnoProjeto'] .''. $projeto['Sequencial'];
-        $versaoIN = ($this->IN2017) ? '[2017]' : '[2013]';
         $menu = [];
         $menu['informacoes'] = [
             'id' => 'informacoes',
-            'titulo' => "Pronac {$pronac} {$versaoIN}",
+            'titulo' => "Pronac {$pronac}",
             'descricao' => utf8_encode($projeto['NomeProjeto']),
             'icone_ativo' => 'info',
             'ativo' => true,

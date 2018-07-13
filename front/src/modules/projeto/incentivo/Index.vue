@@ -31,7 +31,7 @@
         },
         created: function () {
             if (typeof this.$route.params.idPronac != 'undefined'
-                    && Object.keys(this.projeto).length == 0) {
+                    && Object.keys(this.dadosProjeto).length == 0) {
                 this.buscaProjeto(this.$route.params.idPronac);
             }
         },
@@ -42,7 +42,7 @@
         },
         computed: {
             ...mapGetters({
-                projeto: 'projeto/projeto',
+                dadosProjeto: 'projeto/projeto',
             }),
         }
     }

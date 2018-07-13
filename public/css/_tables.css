@@ -356,6 +356,26 @@ table > tbody > tr {
     border: 1px solid #d0d0d0;
 }
 
+table tr td.destacar {
+    background-color: #fce4d7 !important;
+}
+
+table .destaque-texto,
+table .destaque-texto a {
+    color: #009900 !important;
+}
+
+#conteudo table td.destaque-texto-primary a:not(.btn),
+table .destaque-texto-primary,
+table .destaque-texto-primary a {
+    color: #0000FF !important;
+}
+
+table .destaque-texto-secondary,
+table .destaque-texto-secondary a {
+    color: #CC0000 !important;
+}
+
 table > tbody > tr:hover {
     /*background-color: #f2f2f2;*/
 }

@@ -631,6 +631,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
             array('m' => 'tbNormativos'),
             "l.idNormativo = m.idNormativo",
             [
+                'm.idNormativo',
                 'm.nmNormativo AS Normativo',
                 'm.dtPublicacao AS dtPublicacaoNormativo',
 		        'm.dtRevogacao AS dtRevogacaoNormativo',
@@ -642,6 +643,7 @@ class Projeto_Model_DbTable_Projetos extends MinC_Db_Table_Abstract
             array('n' => 'Verificacao'),
             "l.idFase = n.idVerificacao",
             [
+                'l.idFase',
                 'n.Descricao AS FaseProjeto'
             ],
             $this->_schema
