@@ -77,7 +77,12 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
         return $this->fetchAll($sql);
     }
 
-    public function obterProjetosApreciadosCnic($where, $order = [])
+    public function obterProjetosApreciadosCnic(
+        $where,
+        $order = null,
+        $start = 0,
+        $limit = 20,
+        $search = null)
     {
         if (empty($where)) {
             return [];
@@ -136,12 +141,22 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
 
         $sql->where('a.Situacao = ?', Projeto_Model_Situacao::PROJETO_APRECIADO_PELA_CNIC);
 
+        if (!empty($search['value'])) {
+            $sql->where('a.NomeProjeto like ? OR d.NrReuniao like ? OR a.AnoProjeto+a.Sequencial like ?', '%'.$search['value'].'%');
+        }
+
         foreach ($where as $coluna => $valor) {
             $sql->where($coluna, $valor);
         }
 
-        if ($order) {
+        if (!empty($order)) {
             $sql->order($order);
+        }
+
+        if (!is_null($start) && $limit) {
+            $start = (int) $start;
+            $limit = (int) $limit;
+            $sql->limit($limit, $start);
         }
 
         return $this->fetchAll($sql);

@@ -8,6 +8,10 @@ class Projeto_HomologacaoController extends Projeto_GenericController
 
     public function init()
     {
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
+        $this->codOrgao = $GrupoAtivo->codOrgao;
+        $this->codGrupo = $GrupoAtivo->codGrupo;
+
         $this->arrBreadCrumb[] = array('url' => '/principal', 'title' => 'In&iacute;cio', 'description' => 'Ir para in&iacute;cio');
         parent::init();
     }
@@ -20,11 +24,56 @@ class Projeto_HomologacaoController extends Projeto_GenericController
 
     public function listarAction()
     {
-        $this->_helper->layout->disableLayout();
-        $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
+        $start = $this->getRequest()->getParam('start');
+        $length = $this->getRequest()->getParam('length');
+        $draw = (int)$this->getRequest()->getParam('draw');
+        $search = $this->getRequest()->getParam('search');
+        $order = $this->getRequest()->getParam('order');
+        $columns = $this->getRequest()->getParam('columns');
 
-        $this->view->arrResult = $dbTableEnquadramento->obterProjetosApreciadosCnic(
-            ['a.Orgao = ?' => (int) $_SESSION['GrupoAtivo']['codOrgao']], ['NrReuniao', 'Pronac']
+
+        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["Pronac desc"];
+
+        $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
+        $projetos = $dbTableEnquadramento->obterProjetosApreciadosCnic(
+            ['a.Orgao = ?' => $this->codOrgao],
+            $order,
+            $start,
+            $length,
+            $search
+        );
+
+        if (count($projetos) > 0) {
+            foreach($projetos as $key => $item){
+                foreach($item as $coluna => $value){
+                    $projetosApreciados[$key][$coluna] = utf8_encode($value);
+                }
+            }
+
+            $recordsTotal = $dbTableEnquadramento->obterProjetosApreciadosCnic(
+                ['a.Orgao = ?' => $this->codOrgao],
+                null,
+                null,
+                null,
+                null
+            );
+            $recordsTotal = count($recordsTotal);
+            $recordsFiltered = $dbTableEnquadramento->obterProjetosApreciadosCnic(
+                ['a.Orgao = ?' => $this->codOrgao],
+                null,
+                null,
+                null,
+                $search);
+            $recordsFiltered = count($recordsFiltered);
+        }
+
+        $this->_helper->json(
+            [
+                "data" => !empty($projetosApreciados) ? $projetosApreciados : 0,
+                'recordsTotal' => $recordsTotal ? $recordsTotal : 0,
+                'draw' => $draw,
+                'recordsFiltered' => $recordsFiltered ? $recordsFiltered : 0,
+            ]
         );
     }
 
