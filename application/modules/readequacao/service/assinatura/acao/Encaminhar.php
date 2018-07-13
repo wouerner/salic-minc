@@ -140,12 +140,6 @@ class Encaminhar implements IAcaoEncaminhar
                     $orgaoDestino = \Orgaos::ORGAO_SUPERIOR_SAV;
                 }
                 break;
-            case \Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
-                $objReadequacao_ReadequacoesController = new \Readequacao_ReadequacoesController();
-                $objReadequacao_ReadequacoesController->encaminharOuFinalizarReadequacaoChecklist(
-                    $idReadequacao
-                );
-                break;
         }
 
         if (isset($orgaoDestino)) {
