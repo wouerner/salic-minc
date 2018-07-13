@@ -91,24 +91,24 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             $view->secretaria = 'Secretaria de Fomento e Incentivo &agrave; Cultura - SEFIC';
         }
 
-        $tbParecer = new \Parecer();
-        $parecer = $tbParecer->buscar([
-            'IdParecer = ?' => $this->idAtoDeGestao
+        $tbRelatorioTecnico = new \tbRelatorioTecnico();
+        $relatorioTecnico = $tbRelatorioTecnico->obterTodos([
+            'idRelatorioTecnico = ?' => $this->idAtoDeGestao
         ])->current();
 
 
-        switch ((string)$parecer->ParecerFavoravel) {
+        switch ((string)$relatorioTecnico->siManifestacao) {
             case '1':
-                $view->posicionamentoTecnico = 'Desfavor&aacute;vel';
+                $view->posicionamentoTecnico = 'Regular';
                 break;
-            case '2':
-                $view->posicionamentoTecnico = 'Favor&aacute;vel';
+            case '0':
+                $view->posicionamentoTecnico = 'Irregular';
                 break;
             default:
                 $view->posicionamentoTecnico = 'N&atilde;o definido';
                 break;
         }
-        $view->parecer = $parecer->ResumoParecer;
+        $view->parecer = $relatorioTecnico->meRelatorio;
 
         return $view->render('documento-assinatura.phtml');
     }
