@@ -691,6 +691,7 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         );
 
         $select->where('a.nrFonteRecurso = ?', 109);
+        $select->where('c.idFornecedorExterior is null');
 
         $select->where(new Zend_Db_Expr('
             (sac.dbo.fnVlComprovado_Fonte_Produto_Etapa_Local_Item

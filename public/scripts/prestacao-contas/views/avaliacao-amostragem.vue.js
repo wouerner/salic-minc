@@ -1,5 +1,7 @@
-Vue.component('planilha-orcamentaria-comprovada', {
-    props: ['idpronac'],
+Vue.component('avaliacao-amostragem', {
+    props: [
+        'idpronac',
+    ],
     template: `
         <div>
             <sl-planilha-produtos :produtos="produtos" :idpronac="idpronac"></sl-planilha-produtos>
@@ -8,7 +10,7 @@ Vue.component('planilha-orcamentaria-comprovada', {
     mounted: function () {
         let vue = this;
         $3.ajax({
-            url: "/prestacao-contas/realizar-prestacao-contas/planilha-analise/idPronac/" + this.idpronac
+            url: "/prestacao-contas/prestacao-contas/comprovantes-amostragem/idPronac/" + this.idpronac
         }).done(function( data ) {
             vue.$data.produtos = data;
         });
@@ -23,6 +25,6 @@ Vue.component('planilha-orcamentaria-comprovada', {
             $3('.collapsible').each(function() {
                 $3(this).collapsible();
             });
-        }
+        },
     }
 })

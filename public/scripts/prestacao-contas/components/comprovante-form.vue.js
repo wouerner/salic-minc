@@ -11,6 +11,7 @@ Vue.component('sl-comprovar-form',
             <div v-if="v" id="test1" class="col s12">
                 <sl-comprovante-nacional-form
                     tipoform="cadastro"
+                    url="/prestacao-contas/gerenciar/cadastrar"
                     :item="itemId"
                     :idplanilhaaprovacao="idplanilhaaprovacaoId"
                 >

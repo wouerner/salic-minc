@@ -9,6 +9,8 @@
 <script src="/public/scripts/prestacao-contas/components/planilha/sl-planilha-ufs.vue.js"></script>
 <script src="/public/scripts/prestacao-contas/components/planilha/sl-planilha-cidades.vue.js"></script>
 <script src="/public/scripts/prestacao-contas/components/planilha/sl-planilha-itens.vue.js"></script>
+<script src="/public/scripts/prestacao-contas/components/planilha/sl-planilha-button.vue.js"></script>
+<script src="/public/scripts/prestacao-contas/components/button-scroll-top.vue.js"></script>
 <script src="/public/scripts/prestacao-contas/views/planilha-orcamentaria-comprovada.vue.js"></script>
 <!-- vendor -->
 <div class="container-fluid" id="app">
@@ -58,36 +60,9 @@
             </div>
         </div>
     </div>
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large red">
-            <i class="large material-icons">menu</i>
-        </a>
-        <ul>
-            <li>
-                <a id="ir-para-o-topo" class="btn-floating yellow darken-1 tooltipped" data-tooltip="Ir para o topo">
-                    <i class="material-icons">arrow_upward</i>
-                </a>
-            </li>
-            <li>
-                <button <?php echo ($this->existeDiligenciaAberta  == true) ? 'disabled="true"': ''  ?>
-                        data-target="modal1" data-position="left" data-delay="50" data-tooltip="Diligenciar"
-                        class=" tooltipped btn-floating modal-trigger ">
-                    <i class="material-icons left">warning</i> Diligenciar
-                </button>
-            </li>
-            <li class="waves-effect waves-light">
-                <a data-position="left" data-delay="50" data-tooltip="Emitir Parecer"
-                   class=" tooltipped btn-floating " href="<?php echo $this->url(array('module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'emitirparecertecnico')).'?idPronac=' . $this->idPronac; ?>" title="Ir para Emitir Parecer">
-                    <i class="material-icons">gavel</i>
-                </a>
-            </li>
-            <li class="waves-effect waves-light">
-                <a class=" tooltipped btn-floating green" data-position="left" data-tooltip="Finalizar Análise" target="_blank" href="#" id="lnkDespacho">
-                    <i class="material-icons">done</i>
-                </a>
-            </li>
-        </ul>
-    </div>
+
+    <?php echo $this->partial('partials/menu-fixo.phtml', 'prestacao-contas', $this); ?>
+
     <div id="modal1" class="modal full">
         <div class="modal-content">
             <?php echo $this->partial("diligencia/cadastrar.phtml", 'diligencia', $this); ?>
