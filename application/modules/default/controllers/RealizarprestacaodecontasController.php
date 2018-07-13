@@ -2254,7 +2254,7 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
             } else {
                 $idRelatorioTecnico = $relatorioTecnico->inserir($dados);
 
-                $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
+                $servicoDocumentoAssinatura = new \Application\Modules\PrestacaoContas\Service\Assinatura\Laudo\DocumentoAssinatura(
                     $idPronac,
                     \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_LAUDO_PRESTACAO_CONTAS,
                     $idRelatorioTecnico
