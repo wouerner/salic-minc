@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\PrestacaoContas\Service\Assinatura\Acao;
+namespace Application\Modules\PrestacaoContas\Service\Assinatura\Laudo\Acao;
 
 use MinC\Assinatura\Acao\IAcaoDevolver;
 

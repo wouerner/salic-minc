@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\PrestacaoContas\Service\Assinatura;
+namespace Application\Modules\PrestacaoContas\Service\Assinatura\Laudo;
 
 use Mockery\Exception;
 
