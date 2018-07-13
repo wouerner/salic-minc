@@ -41,7 +41,7 @@ class tbRelatorioTecnico extends MinC_Db_Table_Abstract
         return $select;
     }
 
-    public function obterTodos(array $where = []) : array
+    public function obterTodos(array $where = [])
     {
         $select = $this->queryConsultaBasica($where);
         return $this->fetchAll($select);

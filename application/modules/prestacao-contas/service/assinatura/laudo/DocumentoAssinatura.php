@@ -40,9 +40,9 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             'conteudo' => $this->criarDocumento(),
             'dt_criacao' => $objDbTableDocumentoAssinatura->getExpressionDate(),
             'idCriadorDocumento' => $auth->getIdentity()->usu_codigo,
-            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
+            'cdSituacao' => (int)\Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
             'idAtoDeGestao' => $this->idAtoDeGestao,
-            'stEstado' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
+            'stEstado' => (int)\Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
         ]);
 
         $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
@@ -93,7 +93,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
 
         $tbRelatorioTecnico = new \tbRelatorioTecnico();
         $relatorioTecnico = $tbRelatorioTecnico->obterTodos([
-            'idRelatorioTecnico = ?' => $this->idAtoDeGestao
+            'idRelatorioTecnico' => $this->idAtoDeGestao
         ])->current();
 
 
