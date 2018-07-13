@@ -255,8 +255,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 
         $sqlQuantidadeAssinaturas = "(select count(*) 
                      from TbAssinatura
-                    where idPronac = Projetos.IdPRONAC
-                      and idAtoAdministrativo = TbAtoAdministrativo.idAtoAdministrativo 
+                    where idPronac = Projetos.IdPRONAC 
                       and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura)";
 
         $query->from(
@@ -317,9 +316,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         $query->joinInner(
             array('tbDocumentoAssinatura' => 'tbDocumentoAssinatura'),
             "tbDocumentoAssinatura.IdPRONAC = Projetos.IdPRONAC",
-            array(
-                "tbDocumentoAssinatura.idTipoDoAtoAdministrativo"
-            ),
+            array("tbDocumentoAssinatura.idTipoDoAtoAdministrativo"),
             $this->_schema
         );
 
