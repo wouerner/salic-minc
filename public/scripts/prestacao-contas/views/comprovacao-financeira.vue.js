@@ -31,5 +31,4 @@ Vue.component('comprovacao-financeira', {
             });
         }
     }
-
 })

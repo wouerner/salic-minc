@@ -5,6 +5,20 @@ Vue.component('sl-comprovante-internacional-form',
             <fieldset>
                 <legend>Dados da Comprova&ccedil;&atilde;o de Pagamento Internacional</legend>
                 <div class="row">
+                    <div class="col s4">
+                        <label class="" for="pais">Nacionalidade do Fornecedor</label>
+                        <select
+                            v-model="comprovante.fornecedor.nacionalidade"
+                            name="pais"
+                            class=" browser-default "
+                         >
+                            <option v-for="p in pais" :value="p.id">
+                                {{p.nome}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="input-field col s6">
                         <input
                             v-model="comprovante.fornecedor.nome"
@@ -127,7 +141,7 @@ Vue.component('sl-comprovante-internacional-form',
                 </div>
             </fieldset>
             <button type="button" class="btn" @click.prevent="salvar()">salvar</button>
-            <button type="button" class="btn white black-text" @click.prevent="cancelar()">cancelar</button>
+            <button type="button" class="modal-action modal-close btn white black-text" @click.prevent="cancelar()">cancelar</button>
         </form>
     `,
     mounted: function() {

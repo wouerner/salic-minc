@@ -40,16 +40,16 @@ Vue.component('item', {
                     <div class="card horizontal">
                         <div class="card-stacked">
                             <div class="center-align card-title lighten-4">
-                                Vincular Item de Custo
+                                Item
                             </div>
                             <div class="card-content">
-                                <table>
+                                <table class="bordered">
                                     <thead>
                                         <tr>
-                                            <th>UF</th>
-                                            <th>Cidade</th>
                                             <th>Produto</th>
                                             <th>Etapa</th>
+                                            <th>UF</th>
+                                            <th>Cidade</th>
                                             <th>Itens de Custo</th>
                                             <th style="text-align: right">Valor Aprovado</th>
                                             <th style="text-align: right">Total Comprovado</th>
@@ -57,10 +57,10 @@ Vue.component('item', {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ informacoes.uf }}</td>
-                                            <td>{{ informacoes.cidade }}</td>
                                             <td v-html="informacoes.Produto"></td>
                                             <td>{{ informacoes.Etapa }}</td>
+                                            <td>{{ informacoes.uf }}</td>
+                                            <td>{{ informacoes.cidade }}</td>
                                             <td>{{ informacoes.Item }}</td>
                                             <td style="text-align: right">R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
                                             <td style="text-align: right">R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>

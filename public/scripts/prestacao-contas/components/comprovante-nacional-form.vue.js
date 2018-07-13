@@ -5,55 +5,6 @@ Vue.component('sl-comprovante-nacional-form',
             <fieldset>
                 <legend>Identifica&ccedil;&atilde;o do Contratado</legend>
                 <div class="row">
-                    <div class=" col s8">
-                        <p>Nacionalidade do Fornecedor</p>
-                        <p>
-                            <input
-                                v-model="comprovante.fornecedor.eInternacional"
-                                type="radio"
-                                name="nacionalidade"
-                                :value="false"
-                                :id="'nacionalidade_1_' + random"
-                                v-on:click="forncedorNacional($event.target.value)"
-                            />
-                            <label 
-                                :for="'nacionalidade_1_' + random"
-                            >Brasil</label>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class=" col s1">
-                        <input
-                            v-model="comprovante.fornecedor.eInternacional"
-                            :value="true"
-                            type="radio"
-                            name="nacionalidade"
-                            :id="'nacionalidade_2_' + random"
-                            v-on:click="fornecedorInternacional($event.target.value)"
-                        />
-                        <label
-                            :for="'nacionalidade_2_' + random"
-                        >Outros</label>
-                    </div>
-                    <template v-if="(comprovante.fornecedor.eInternacional)">
-                        <div class="col s4">
-                            <label class="" for="pais">Nacionalidade do Fornecedor</label>
-                            <select
-                                v-model="comprovante.fornecedor.nacionalidade"
-                                name="pais"
-                                class=" browser-default "
-
-                             >
-                                <option v-for="p in pais" :value="p.id">
-                                    {{p.nome}}
-                                </option>
-                            </select>
-                        </div>
-                    </template>
-                </div>
-            <template v-if="(comprovante.fornecedor.nacionalidade == 31)">
-                <div class="row">
                     <div class=" col s6">
                         <p>Tipo do Fornecedor</p>
                         <p>
@@ -62,24 +13,22 @@ Vue.component('sl-comprovante-nacional-form',
                                 type="radio"
                                 name="tipoPessoa"
                                 value="1"
-                                id="tipoPessoa_1"
+                                :id="'tipoPessoa_1_' + _uid"
                                 v-on:change="resetTipoPessoa"
                             />
-                            <label for="tipoPessoa_1">CPF</label>
+                            <label :for="'tipoPessoa_1_' + _uid">CPF</label>
                             <input
                                 v-model="comprovante.fornecedor.tipoPessoa"
                                 type="radio"
                                 name="tipoPessoa"
                                 value="2"
-                                id="tipoPessoa_2"
+                                :id="'tipoPessoa_2' + _uid"
                                 v-on:change="resetTipoPessoa"
                             />
-                            <label for="tipoPessoa_2">CNPJ</label>
+                            <label :for="'tipoPessoa_2' + _uid">CNPJ</label>
                         </p>
                     </div>
                 </div>
-            </template>
-                <template v-if="(!comprovante.fornecedor.eInternacional)">
                     <div class="row">
                         <div
                             :class="[this.c.fornecedor.CNPJCPF.css, 'input-field col s6']" >
@@ -127,7 +76,6 @@ Vue.component('sl-comprovante-nacional-form',
                             </template>
                         </div>
                     </div>
-                </template>
             </fieldset>
             <template v-if="(!comprovante.fornecedor.eInternacional)">
                 <fieldset>
@@ -264,7 +212,7 @@ Vue.component('sl-comprovante-nacional-form',
                 </fieldset>
             </template>
             <button type="button" class="btn" @click.prevent="salvar">salvar</button>
-            <button type="button" class="btn white black-text" @click.prevent="cancelar()">cancelar</button>
+            <button type="button" class="modal-action modal-close btn white black-text" @click.prevent="cancelar()">cancelar</button>
         </form>
     `,
     mounted: function() {
@@ -321,10 +269,11 @@ Vue.component('sl-comprovante-nacional-form',
                     contentType: 'multipart/form-data',
                     processData: false,
                     contentType: false,
-               }).done(function(data){
-                   Materialize.toast('Salvo com sucesso!', 4000, 'green');
+               }).done(function(data) {
+                    Materialize.toast('Salvo com sucesso!', 4000, 'green');
+
                     if (vue.tipoform == 'cadastro') {
-                       vue.$root.$emit('comprovante-novo', vue.comprovante);
+                       vue.$root.$emit('novo-comprovante-nacional', vue.comprovante);
 
                        vue.c = {
                            fornecedor: {
