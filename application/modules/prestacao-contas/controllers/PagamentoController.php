@@ -63,7 +63,6 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $resposta = $planilhaAprovacaoModel->obterItensAprovados($idpronac);
-
         $planilhaJSON = null;
 
         foreach($resposta as $item) {

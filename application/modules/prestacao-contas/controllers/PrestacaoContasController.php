@@ -127,6 +127,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
     {
         return array(
             'idPronac' => $comprovante->idPronac,
+            'cdProduto' => $comprovante->cdProduto,
             'Produto' => $comprovante->Produto,
             'UF' => $comprovante->UF,
             'Municipio' => $comprovante->Municipio,
