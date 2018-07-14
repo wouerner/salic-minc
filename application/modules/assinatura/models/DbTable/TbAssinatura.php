@@ -255,7 +255,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         $sqlQuantidadeAssinaturas = "(select count(*) 
                      from TbAssinatura
                     where idPronac = Projetos.IdPRONAC
-                      and idAtoAdministrativo = TbAtoAdministrativo.idAtoAdministrativo 
                       and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura)";
 
         $query->from(

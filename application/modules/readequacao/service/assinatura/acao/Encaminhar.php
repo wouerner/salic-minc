@@ -40,14 +40,14 @@ class Encaminhar implements IAcaoEncaminhar
         ));
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
 
-        switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
-            case \Autenticacao_Model_Grupos::PARECERISTA:
+        switch ((string)$atoAdministrativo->getIdPerfilDoAssinante()) {
+            case (string)\Autenticacao_Model_Grupos::PARECERISTA:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDO_ANALISE_TECNICA;
                 break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
+            case (string)\Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_PRESIDENTE_DA_VINCULADA;
                 break;
-            case \Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
+            case (string)\Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_COORDENADOR_GERAL;
 
                 $orgaoDestino = \Orgaos::ORGAO_SEFIC_DIC;
@@ -56,7 +56,7 @@ class Encaminhar implements IAcaoEncaminhar
                 }
 
                 break;
-            case \Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
+            case (string)\Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_SECRETARIO;
 
                 $orgaoDestino = \Orgaos::ORGAO_SUPERIOR_SEFIC;
@@ -84,19 +84,13 @@ class Encaminhar implements IAcaoEncaminhar
         $dados = [];
         $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
 
-        switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
-            case \Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO:
+        switch ((string)$atoAdministrativo->getIdPerfilDoAssinante()) {
+            case (string)\Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_COORDENADOR_TECNICO;
                 break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
+            case (string)\Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_COORDENADOR_GERAL;
 
-                break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
-                $objReadequacao_ReadequacoesController = new \Readequacao_ReadequacoesController();
-                $objReadequacao_ReadequacoesController->encaminharOuFinalizarReadequacaoChecklist(
-                    $idReadequacao
-                );
                 break;
         }
 
@@ -117,21 +111,21 @@ class Encaminhar implements IAcaoEncaminhar
         ));
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
 
-        switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
-            case \Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO:
+        switch ((string)$atoAdministrativo->getIdPerfilDoAssinante()) {
+            case (string)\Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_COORDENADOR_TECNICO;
                 break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
+            case (string)\Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_COORDENADOR_GERAL;
                 break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
+            case (string)\Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_DIRETOR;
                 $orgaoDestino = \Orgaos::SEFIC_DEIPC;
                 if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
                     $orgaoDestino = \Orgaos::SAV_DPAV;
                 }
                 break;
-            case \Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
+            case (string)\Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_SECRETARIO;
                 $orgaoDestino = \Orgaos::ORGAO_SUPERIOR_SEFIC;
                 if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
