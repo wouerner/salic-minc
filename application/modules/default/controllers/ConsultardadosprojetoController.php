@@ -160,6 +160,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
         try {
 
             $idPronac = $params['idPronac'];
+            $debug = $params['debug'];
+
             if (strlen($idPronac) > 7) {
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
@@ -169,19 +171,36 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
             $where['IdPRONAC'] = $idPronac;
             $projeto = $tbProjetos->findBy($where);
 
-            if (empty($projeto)) {
+            if (empty($debug)) {
+                if (empty($projeto)) {
+                    throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
+                }
+
+                if ($projeto['Mecanismo'] == 1) {
+                    $this->redirect('/projeto/#/incentivo/' . $projeto['IdPRONAC']);
+                } else {
+                    $this->redirect('/projeto/convenio/visualizar/idPronac/' . $projeto['IdPRONAC']);
+                }
+            }
+
+            $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
+            $projeto = $dbTableProjetos->obterProjetoIncentivoCompleto($idPronac);
+            $this->view->projeto = $projeto;
+            if (count($projeto) <= 0) {
                 throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
             }
 
-            if ($projeto['Mecanismo'] == 1) {
-                $this->redirect('/projeto/#/incentivo/' . $projeto['IdPRONAC']);
-            } else {
-                $this->redirect('/projeto/convenio/visualizar/idPronac/' . $projeto['IdPRONAC']);
+            if($projeto->idMecanismo != 1) { #incentivo fiscal
+                $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronac);
             }
 
-            if (empty($params['idPronac'])) {
-                throw new Exception("PRONAC &eacute; obrigat&oacute;rio");
-            }
+            $dbTableInabilitado = new Inabilitado();
+            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto->CgcCPf);
+            $this->view->ProponenteInabilitado = ($proponenteInabilitado->Habilitado == 'I');
+
+            $Parecer = new Parecer();
+            $parecerAnaliseCNIC = $Parecer->verificaProjSituacaoCNIC($projeto->Pronac);
+            $this->view->emAnaliseNaCNIC= (count($parecerAnaliseCNIC) > 0) ? 1 : 0;
 
         } catch (Exception $e) {
             parent::message($e->getMessage(), "/projeto/index/listar", "ERROR");

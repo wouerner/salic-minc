@@ -154,8 +154,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'proponente',
             'label' => 'Proponente',
             'title' => '',
-            'link' => '/projeto/#/incentivo/' . $idPronacHash . '/proponente',
-            'ajax' => false,
+            'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
+            'ajax' => true,
             'icon' => 'person',
             'submenu' => '',
             'grupo' => []

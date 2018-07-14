@@ -79,6 +79,9 @@
         updated: function () {
             this.iniciarCollapsible();
         },
+        created: function () {
+            this.adicionarBotaoNoTopo();
+        },
         mounted: function () {
             if (typeof this.urlAjax != 'undefined' && this.urlAjax != '') {
                 this.obterMenu();
@@ -133,6 +136,35 @@
                 $3('.collapsible').each(function () {
                     $3(this).collapsible();
                 });
+            },
+            adicionarBotaoNoTopo: function () {
+
+                if ($3('#small-menu-button').length == 0) {
+
+                    $3('#navbar-header nav').prepend(
+                            '<a id="small-menu-button" href="javascript:void(0);" class="left hide-on-med-and-down">' +
+                            '<i class="material-icons">more_vert</i>' +
+                            '</a>' +
+                            '<a id="menu-left" href="javascript:void(0);" data-activates="sidenav" class="button-collapse left"><i class="material-icons">menu</i></a>'
+                    );
+
+                    $3('#menu-left').sideNav({edge: 'left', menuWidth: 250})
+
+                    $3('#small-menu-button').on('click', function () {
+                        $3(this).find('i').text('more_horiz')
+                        $3('body').toggleClass('small-menu')
+
+                        if ($3('body.small-menu').is(':visible')) {
+                            $3(this).find('i').text('more_horiz')
+                            setCookie('menu', 'small-menu', 365)
+                        } else {
+                            $3(this).find('i').text('more_vert')
+                            setCookie('menu', 'large-menu', 365)
+                        }
+
+                        return false
+                    })
+                }
             }
         }
     };
