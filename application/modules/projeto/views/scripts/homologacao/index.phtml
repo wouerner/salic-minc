@@ -1,9 +1,13 @@
+
 <div class="container-fluid">
     <div class="row">
 
         <?php $this->PageTitle('Homologar projetos', array(
             array('Homologar projetos' => '')
         )); ?>
+        <div id="container" class="container-full">
+            <a class="btn btn-primary" href="/projeto/homologacao/iniciar-fluxo-assinatura?idPronac=208452">Iniciar Fluxo Homologa&ccedil;&atilde;o</a>
+        </div>
 
         <div id="container-list" class="container-full" data-ajax-render='/projeto/homologacao/listar'></div>
         <?php if (isset($this->idPronac)): ?>

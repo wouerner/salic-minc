@@ -4,15 +4,9 @@ namespace MinC\Assinatura\Autenticacao;
 
 interface IAdapter
 {
-    /**
-     * @return boolean
-     */
-    public function autenticar();
+    public function autenticar() : bool;
 
-    /**
-     * @return array
-     */
-    public function obterInformacoesAssinante();
+    public function obterInformacoesAssinante() : array;
 
     /**
      * @return array

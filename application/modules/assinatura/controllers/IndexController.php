@@ -182,6 +182,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     public function assinarProjetoAction()
     {
+
         $get = Zend_Registry::get('get');
         $idPronac = $get->IdPRONAC;
         $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
