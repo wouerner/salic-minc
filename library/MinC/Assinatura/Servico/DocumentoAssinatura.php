@@ -23,13 +23,25 @@ class DocumentoAssinatura implements IServico
         }
 
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $isProjetoDisponivelParaAssinatura = $objDbTableDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
+        $documentoAssinatura = $objDbTableDocumentoAssinatura->obterProjetoDisponivelParaAssinatura(
             $objModelDocumentoAssinatura->getIdPRONAC(),
             $objModelDocumentoAssinatura->getIdTipoDoAtoAdministrativo()
         );
 
-        if ($isProjetoDisponivelParaAssinatura) {
-            throw new Exception("Atualmente o Projeto Cultural j&aacute; est&aacute; dispon&iacute;vel para assinatura");
+        if (count($documentoAssinatura) > 0) {
+            $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $data = [
+                'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
+                'stEstado' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
+            ];
+            $where = [
+                'idDocumentoAssinatura = ?' => $documentoAssinatura['idDocumentoAssinatura'],
+            ];
+
+            $objDbTableDocumentoAssinatura->update(
+                $data,
+                $where
+            );
         }
 
         $objDocumentoAssinaturaMapper = new \Assinatura_Model_TbDocumentoAssinaturaMapper();

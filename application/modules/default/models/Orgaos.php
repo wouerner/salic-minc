@@ -24,6 +24,9 @@ class Orgaos extends MinC_Db_Table_Abstract
     const ORGAO_FCRB = 95;
     const ORGAO_IBRAM = 335;
 
+    const SAV_DPAV = 682;
+    const SEFIC_DEIPC = 341;
+
     public function pesquisarTodosOrgaos()
     {
         $select = $this->select();

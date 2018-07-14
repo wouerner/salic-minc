@@ -38,12 +38,26 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     public function gerenciarAssinaturasAction()
     {
+
+        $get = Zend_Registry::get('get');
+        $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
+        $idTipoDoAtoAdministrativos = [];
+
+        $stringIdTipoDoAtoAdministrativos = $get->idTipoDoAtoAdministrativos;
+        if(!is_null($stringIdTipoDoAtoAdministrativos) || !empty($stringIdTipoDoAtoAdministrativos)) {
+            array_push($idTipoDoAtoAdministrativos, explode(',', $stringIdTipoDoAtoAdministrativos));
+        }
+
+        if(!is_null($idTipoDoAtoAdministrativo) || !empty($idTipoDoAtoAdministrativo)) {
+            $idTipoDoAtoAdministrativos[] = $idTipoDoAtoAdministrativo;
+        }
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
         $tbAssinaturaDbTable = new Assinatura_Model_DbTable_TbAssinatura();
         $this->view->dados = $tbAssinaturaDbTable->obterAssinaturasDisponiveis(
             $this->grupoAtivo->codOrgao,
             $this->grupoAtivo->codGrupo,
-            $this->auth->getIdentity()->usu_org_max_superior
+            $this->auth->getIdentity()->usu_org_max_superior,
+            $idTipoDoAtoAdministrativos
         );
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
@@ -272,6 +286,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             ]
                         );
 
+                        $servicoAssinatura->viewModelAssinatura->request = $this->getRequest();
+                        $servicoAssinatura->viewModelAssinatura->response = $this->getResponse();
                         $servicoAssinatura->assinarProjeto(
                             $post,
                             $this->auth->getIdentity()
