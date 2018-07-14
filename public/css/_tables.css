@@ -327,14 +327,11 @@ table.tablesorter .headerSortDown {
     background-position: bottom;
 }
 
-
 /*--------------------------------------------------------------
 x - Tabelas
 --------------------------------------------------------------*/
 
 .bordered {
-    /*border: 1px solid #d0d0d0;*/
-    /*border-left: 1px solid #d0d0d0;*/
     border: 1px solid #ccc;
     padding: 10px;
 }
@@ -357,7 +354,8 @@ table > tbody > tr {
 }
 
 table tr td.destacar {
-    background-color: #fce4d7 !important;
+    /*background-color: #fce4d7 !important;*/
+    background-color: #d6ecd8 !important;
 }
 
 table .destaque-texto,
@@ -374,10 +372,6 @@ table .destaque-texto-primary a {
 table .destaque-texto-secondary,
 table .destaque-texto-secondary a {
     color: #CC0000 !important;
-}
-
-table > tbody > tr:hover {
-    /*background-color: #f2f2f2;*/
 }
 
 

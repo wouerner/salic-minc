@@ -5,7 +5,7 @@
             <TituloPagina :titulo="$route.meta.title"></TituloPagina>
             <router-view></router-view>
         </div>
-        <MenuSuspenso />
+        <MenuSuspenso/>
     </div>
 </template>
 
@@ -15,6 +15,8 @@
     import MenuSuspenso from '../components/MenuSuspenso';
     import {mapActions, mapGetters} from 'vuex';
     import {utils} from '@/mixins/utils';
+
+    const URL_MENU = '/projeto/menu/obter-menu-ajax/idPronac/';
 
     export default {
         name: 'Index',
@@ -26,7 +28,20 @@
         mixins: [utils],
         data() {
             return {
-                urlAjax: '/projeto/menu/obter-menu-ajax/idPronac/' + this.$route.params.idPronac,
+                urlAjax: URL_MENU + this.$route.params.idPronac,
+            }
+        },
+        watch: {
+            '$route' (to, from) {
+                /**
+                 * se o alterar apenas o parametro na url, o vue não recarrega o componente.
+                 * aqui eu estou recarregando os dados do novo projeto se o idPronac for diferente
+                 * */
+                if (typeof to.params.idPronac != 'undefined'
+                        && to.params.idPronac != from.params.idPronac) {
+                    this.buscaProjeto(to.params.idPronac);
+                    this.urlAjax = URL_MENU + to.params.idPronac;
+                }
             }
         },
         created: function () {

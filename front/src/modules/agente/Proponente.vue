@@ -5,11 +5,10 @@
             <div v-if="identificacao" class="card">
                 <div class="card-content">
                     <h5>Identifica&ccedil;&atilde;o</h5>
-
                     <div class="row">
                         <div class="col s12 l4 m4">
                             <b>CNPJ/CPF</b><br>
-                            {{ identificacao.cnpjcpf }}
+                            <SalicFormatarCpfCnpj :cpf="identificacao.cnpjcpf"/>
                         </div>
                         <div class="col s12 l4 m4">
                             <b>Nome Proponente</b><br>
@@ -144,8 +143,10 @@
                         </thead>
                         <tbody>
                         <tr v-for="dirigente in proponente.dirigentes">
-                            <td align="center">{{ dirigente.cnpjcpfdirigente }}</td>
-                            <td align="left">{{ dirigente.nomedirigente }}</td>
+                            <td align="center">
+                                <SalicFormatarCpfCnpj :cpf="dirigente.cnpjcpfdirigente"/>
+                            </td>
+                            <td align="left" v-html="dirigente.nomedirigente"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -158,6 +159,7 @@
 
 <script>
     import Carregando from '@/components/Carregando';
+    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
 
     export default {
         name: "Proponente",
@@ -169,7 +171,8 @@
             }
         },
         components: {
-            Carregando
+            Carregando,
+            SalicFormatarCpfCnpj
         },
         props: ['id', 'cpf'],
         mounted: function () {
@@ -226,7 +229,7 @@
                     }
 
                     self.loading = false;
-                                            
+
                 });
             },
             label_tipo_pessoa: function (tipo) {
@@ -238,10 +241,10 @@
                 return string;
             },
             label_sim_ou_nao: function (valor) {
-                if (valor == 1)
+                if (valor == 1) {
                     return 'Sim';
-                else
-                    return 'Não';
+                }
+                return 'Não';
             }
         }
     };

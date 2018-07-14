@@ -54,7 +54,6 @@
 </template>
 
 <script>
-
     import Carregando from '@/components/Carregando';
 
     export default {
@@ -87,6 +86,13 @@
 
             if (typeof this.arrayMenu != 'undefined' && this.arrayMenu != '') {
                 this.menu = this.arrayMenu;
+            }
+        },
+        watch: {
+            urlAjax: function (value) {
+                if (typeof value != 'undefined' && value != '') {
+                    this.obterMenu();
+                }
             }
         },
         methods: {

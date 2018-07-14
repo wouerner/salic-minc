@@ -190,6 +190,8 @@ x - Menu lateral (legado)
     background-color: #2d2f40;
     padding: 10px;
     line-height: 12px;
+    max-height: 90px;
+    overflow: hidden;
 }
 
 #sidenav .sidebar-info.disabled {

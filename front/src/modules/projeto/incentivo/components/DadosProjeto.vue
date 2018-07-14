@@ -101,13 +101,25 @@
                     <td class="centro"><b>Dt. Publica&ccedil;&atilde;o</b></td>
                 </tr>
                 <tr>
-                    <td align="center" class="bold destacar">{{ dadosProjeto.DtInicioCaptacao | formatarData }}</td>
-                    <td align="center" class="bold destacar">{{ dadosProjeto.DtFimCaptacao | formatarData }}</td>
-                    <td align="center" class="bold destacar">{{ dadosProjeto.DtInicioExecucao | formatarData }}</td>
-                    <td align="center" class="bold destacar">
-                        {{ dadosProjeto.DtFimExecucao | formatarData }}
-                        <br>
-                        {{diferencaData(dadosProjeto.DtFimExecucao)}}
+                    <td align="center"
+                        class="bold destacar text-darken-2"
+                        :class="[ isDataExpirada(dadosProjeto.DtFimCaptacao) ? 'orange-text' : 'green-text' ]"
+                    >{{ dadosProjeto.DtInicioCaptacao | formatarData }}
+                    </td>
+                    <td align="center"
+                        class="bold destacar text-darken-2"
+                        :class="[ isDataExpirada(dadosProjeto.DtFimCaptacao) ? 'orange-text' : 'green-text' ]"
+                    >{{ dadosProjeto.DtFimCaptacao | formatarData }}
+                    </td>
+                    <td align="center"
+                        class="bold destacar text-darken-2"
+                        :class="[ isDataExpirada(dadosProjeto.DtFimExecucao) ? 'orange-text' : 'green-text' ]"
+                    >{{ dadosProjeto.DtInicioExecucao | formatarData }}
+                    </td>
+                    <td align="center"
+                        class="bold destacar text-darken-2"
+                        :class="[ isDataExpirada(dadosProjeto.DtFimExecucao) ? 'orange-text' : 'green-text' ]"
+                    >{{ dadosProjeto.DtFimExecucao | formatarData }}
                     </td>
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.NrPortariaVigente"/>
@@ -128,7 +140,7 @@
                 <tr class="destacar">
                     <td class="centro" rowspan="2"><b>Ag&ecirc;ncia</b></td>
                     <td class="centro" colspan="2"><b>N&uacute;meros das Contas</b></td>
-                    <td class="centro" rowspan="2"><b>Conta Liberada</b></td>
+                    <td class="centro" rowspan="2" width="10%"><b>Conta Liberada</b></td>
                     <td class="centro" rowspan="2"><b>Dt. Libera&ccedil;&atilde;o</b></td>
                 </tr>
                 <tr class="destacar">
@@ -145,7 +157,7 @@
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao"/>
                     </td>
-                    <td align="center destacar">
+                    <td align="center" class="destacar">
                         <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
                     </td>
                     <td align="center">
@@ -274,7 +286,7 @@
                         <td class="right-align"><b>Outras fontes (E)</b></td>
                         <td class="right-align"><b>Total Autorizado (F=D+E)</b></td>
                     </tr>
-                    <tr>
+                    <tr v-if="parseInt(dadosProjeto.idNormativo) > 6">
                         <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlAutorizado"/>
                         </b></td>
@@ -291,9 +303,26 @@
                             </b>
                         </td>
                     </tr>
+                    <tr v-else> // @todo pensar melhor essa parte para não duplicar o código
+                        <td class="right-align destaque-texto"><b>
+                            <SalicFormatarValor :valor="dadosProjeto.vlHomologadoIncentivo"/>
+                        </b></td>
+                        <td class="right-align destaque-texto-secondary"><b>
+                            <SalicFormatarValor :valor="dadosProjeto.vlHomologadoOutrasFontes"/>
+                        </b></td>
+                        <td class="right-align destaque-texto-primary">
+                            <b>
+                                <router-link v-if="dadosProjeto.vlTotalHomologado > 0"
+                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                    <SalicFormatarValor :valor="dadosProjeto.vlTotalHomologado"/>
+                                </router-link>
+                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalHomologado"/>
+                            </b>
+                        </td>
+                    </tr>
                 </table>
 
-                <table class="tabela">
+                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6">
                     <tr class="destacar">
                         <td align="center" colspan="3"><b>Adequado &agrave; realidade de execu&ccedil;&atilde;o pelo
                             proponente</b></td>
@@ -322,7 +351,7 @@
                     </tr>
                 </table>
 
-                <table class="tabela">
+                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6">
                     <tr class="destacar">
                         <td align="center" colspan="3"><b>Homologado para execu&ccedil;&atilde;o</b></td>
                     </tr>
@@ -507,8 +536,8 @@
             }),
         },
         methods: {
-            diferencaData: function (date) {
-                return moment().diff(date);
+            isDataExpirada: function (date) {
+                return moment().diff(date, 'days') > 0;
             }
         },
         filters: {

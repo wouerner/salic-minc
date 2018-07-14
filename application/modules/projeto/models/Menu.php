@@ -232,7 +232,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['outrasinformacoes']['submenu'][] = [
                 'label' => 'Plano de distribui&ccedil;&atilde;o',
                 'title' => 'Ir para Plano de distribui&ccedil;&atilde;o',
-                'link' => '/proposta/visualizar-plano-distribuicao/visualizar/idPreProjeto/' . $this->projeto->idProjeto,
+                'link' => '/proposta/visualizar-plano-distribuicao/visualizar/idPreProjeto/' . $projeto['idProjeto'],
                 'ajax' => true,
                 'grupo' => []
             ];
@@ -511,7 +511,6 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'ajax' => false,
                 'grupo' => []
             ];
-
         }
 
         if ($this->permissoesMenu['SolicitarProrrogacao'] || $debug) {
@@ -532,7 +531,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'id' => 'prorrogacao',
                 'label' => 'Adequar &agrave; realidade',
                 'title' => 'Adequar &agrave; realidade ou Encaminhar projeto adequado para o MinC',
-                'link' => '/proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/' . $this->projeto->idProjeto,
+                'link' => '/proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/' . $projeto['idProjeto'],
                 'ajax' => false,
                 'icon' => 'timer',
                 'submenu' => '',
