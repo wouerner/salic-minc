@@ -21,13 +21,25 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         $UF = $this->getRequest()->getParam('uf');
         $idmunicipio = $this->getRequest()->getParam('idmunicipio');
 
+        $tipo = $this->getRequest()->getParam('tipo');
+
         $vwComprovacoes = new PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario();
-        $comprovantes = $vwComprovacoes->comprovacoes(
-            $idPronac,
-            $idPlanilhaItem,
-            $stItemAvaliado,
-            $codigoProduto
-        );
+
+        if ($tipo == 'internacional') {
+            $comprovantes = $vwComprovacoes->comprovacoesInternacionais(
+                $idPronac,
+                $idPlanilhaItem,
+                $stItemAvaliado,
+                $codigoProduto
+            );
+        } else {
+            $comprovantes = $vwComprovacoes->comprovacoesNacionais(
+                $idPronac,
+                $idPlanilhaItem,
+                $stItemAvaliado,
+                $codigoProduto
+            );
+        }
 
         $data = [];
 
@@ -38,7 +50,20 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         $dataAux = [];
         foreach($data as $key => $value) {
             $dataAux[$key] = $value;
+            $dataAux[$key]['tipo'] = $value['tipo'];
+            $dataAux[$key]['numero'] = $value['numero'];
+            $dataAux[$key]['serie'] = $value['serie'];
+            $dataAux[$key]['forma'] = $value['forma'];
+            $dataAux[$key]['valor'] = $value['vlComprovacao'];
+            $dataAux[$key]['justificativa'] = $value['dsJustificativa'];
+            $dataAux[$key]['justificativa'] = $value['justificativa'];
+            $dataAux[$key]['numeroDocumento'] = $value['numeroDocumento'];
+            $dataAux[$key]['nrDocumentoDePagamento'] = $value['nrDocumentoDePagamento'];
             $dataAux[$key]['fornecedor']['CNPJCPF'] = $value['CNPJCPF'];
+            $dataAux[$key]['fornecedor']['nome'] = $value['nmFornecedor'];
+            $dataAux[$key]['fornecedor']['endereco'] = $value['endereco'];
+            $dataAux[$key]['arquivo']['nome'] = $value['nmArquivo'];
+            $dataAux[$key]['arquivo']['id'] = $value['idArquivo'];
         }
         /* var_dump($data); */
         /* die; */

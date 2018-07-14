@@ -1,4 +1,4 @@
-const comprovanteTable = {
+Vue.component('sl-comprovante-internacional-table', {
     props: ['dados'],
     template: `
         <div>
@@ -7,8 +7,8 @@ const comprovanteTable = {
                     <tr>
                         <th>Fornecedor</th>
                         <td>{{dados.fornecedor.nome}}</td>
-                        <th>CNPJ/CPF</th>
-                        <td colspan="5">{{CNPJCPF}}</td>
+                        <th>Endereço</th>
+                        <td colspan="5">{{dados.fornecedor.endereco}}</td>
                     </tr>
                     <tr>
                         <th>Tipo Comprovante</th>
@@ -52,8 +52,7 @@ const comprovanteTable = {
                 CNPJCPF = this.dados.fornecedor.CNPJCPF.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
             } else {
                 CNPJCPF = this.dados.fornecedor.CNPJCPF.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
-            }
-
+            } 
             return CNPJCPF;
         },
         dataEmissaoComprovante() {
@@ -70,6 +69,8 @@ const comprovanteTable = {
                 case 3: tipo = 'Nota Fiscal/Fatura'; break;
                 case 4: tipo = 'Recibo de Pagamento'; break;
                 case 5: tipo = 'RPA'; break;
+                case 6: tipo = 'INVOICE'; break;
+                case 7: tipo = 'OUTROS'; break;
             }
 
             return tipo;
@@ -91,4 +92,4 @@ const comprovanteTable = {
            return  this.dados.arquivo.nome;
         }
     }
-}
+});

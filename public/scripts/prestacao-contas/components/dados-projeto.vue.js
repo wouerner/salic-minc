@@ -42,28 +42,26 @@ Vue.component('dados-projeto', {
                             <div class="center-align card-content  lighten-4">
                                 <span class="card-title"
                                       >
-                                      {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
+                                      Projeto: {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
                                 </span>
                             </div>
                             <div class="card-content">
-                                <span style="font-weight: bold; font-size: medium">
-                                     <table>
-                                        <tbody>
-                                            <tr>
-                                                <td>Valor Aprovado</td>
-                                                <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Valor Comprovado</td>
-                                                <td>R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Valor a Comprovar</td>
-                                                <td>R$ {{ converterParaReal(informacoes.vlComprovar) }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </span>
+                                 <table class="bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th>Valor Aprovado</th>
+                                            <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Valor Comprovado</th>
+                                            <td>R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Valor a Comprovar</th>
+                                            <td>R$ {{ converterParaReal(informacoes.vlComprovar) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="card-action">
                                 <a  :href="'/consultardadosprojeto/index?idPronac=' + idpronac " target="_blank"

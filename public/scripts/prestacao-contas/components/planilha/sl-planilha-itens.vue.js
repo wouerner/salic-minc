@@ -60,7 +60,7 @@ Vue.component('sl-planilha-itens', {
             return { url: url, icon: 'gavel', colorButton: 'red' };
         },
         urlDoProponente: function(idPlanilhaAprovacao, idPlanilhaItens) {
-            const url = '/prestacao-contas/gerenciar/comprovar'
+            const url = '/prestacao-contas/gerenciar/comprovar-pagamento'
                 + '/idpronac/' + this.idpronac
                 + '/uf/' + this.uf
                 + '/produto/' + this.cdproduto
