@@ -271,6 +271,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
                             ]
                         );
 
+                        $servicoAssinatura->viewModelAssinatura->request = $this->getRequest();
+                        $servicoAssinatura->viewModelAssinatura->response = $this->getResponse();
                         $servicoAssinatura->assinarProjeto(
                             $post,
                             $this->auth->getIdentity()

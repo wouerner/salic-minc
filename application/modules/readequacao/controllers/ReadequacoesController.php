@@ -17,7 +17,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
     {
         $this->view->idPerfil = $this->idPerfil;
         if ($this->idPerfil != Autenticacao_Model_Grupos::PROPONENTE) {
-            parent::message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal", "ALERT");
+            parent::message(
+                "Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!",
+                "principal",
+                "ALERT"
+            );
         }
 
         $idUF = $this->_request->getParam('iduf');
