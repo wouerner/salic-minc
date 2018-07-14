@@ -4,7 +4,7 @@ class PrestacaoContas_Model_spComprovacaoFinanceiraProjeto extends MinC_Db_Table
 {
     protected $_name = 'spComprovacaoFinanceiraProjeto';
     protected $_schema = 'sac';
-    /* protected $_primary = 'IdPRONAC'; */
+
     public function exec($idPronac, $perc)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
