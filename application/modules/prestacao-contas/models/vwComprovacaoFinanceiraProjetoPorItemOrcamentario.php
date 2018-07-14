@@ -564,17 +564,17 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         /*     $select->where('stItemAvaliado = ?', $stItemAvaliado); */
         /* } */
 
-        /* if ($codigoProduto || ($codigoProduto == 0 && !is_null($codigoProduto))) { */
-        /*     $select->where('cdProduto = ?', $codigoProduto); */
-        /* } */
+        if ($codigoProduto || ($codigoProduto == 0 && !is_null($codigoProduto))) {
+            $select->where('a.idProduto = ?', $codigoProduto);
+        }
 
         /* if ($idComprovantePagamento) { */
         /*     $select->where('idComprovantePagamento = ?', $idComprovantePagamento); */
         /* } */
 
-        /* if ($idPlanilhaItem) { */
-        /*     $select->where('idPlanilhaItem = ?', $idPlanilhaItem); */
-        /* } */
+        if ($idPlanilhaItem) {
+            $select->where('a.idPlanilhaItem = ?', $idPlanilhaItem);
+        }
 
         $select->where('a.IdPRONAC = ?', $idpronac);
         /* echo $select; die; */ 
@@ -601,8 +601,6 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
             "a.idMunicipioDespesa as cdCidade",
             "a.idPlanilhaItem",
             "h.Descricao as Item",
-            "c.nrComprovante",
-            "c.nrSerie",
             new Zend_Db_Expr("
                 CASE c.tpDocumento
                  WHEN 1 THEN ('Cupom Fiscal')
@@ -651,7 +649,14 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         $select->join(
             ['c' => 'tbComprovantePagamento'],
             '(b.idComprovantePagamento = c.idComprovantePagamento)',
-            null,
+            [
+                "c.tpDocumento as tipo",
+                "c.nrComprovante as numero",
+                "c.nrSerie as serie",
+                "c.tpFormaDePagamento as forma",
+                "c.nrDocumentoDePagamento as numeroDocumento",
+                "c.dsJustificativa as justificativa",
+            ],
             'BDCORPORATIVO.scSAC'
         );
 
@@ -705,17 +710,17 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         /*     $select->where('stItemAvaliado = ?', $stItemAvaliado); */
         /* } */
 
-        /* if ($codigoProduto || ($codigoProduto == 0 && !is_null($codigoProduto))) { */
-        /*     $select->where('cdProduto = ?', $codigoProduto); */
-        /* } */
+        if ($codigoProduto || ($codigoProduto == 0 && !is_null($codigoProduto))) {
+            $select->where('a.idProduto = ?', $codigoProduto);
+        }
 
         /* if ($idComprovantePagamento) { */
         /*     $select->where('idComprovantePagamento = ?', $idComprovantePagamento); */
         /* } */
 
-        /* if ($idPlanilhaItem) { */
-        /*     $select->where('idPlanilhaItem = ?', $idPlanilhaItem); */
-        /* } */
+        if ($idPlanilhaItem) {
+            $select->where('a.idPlanilhaItem = ?', $idPlanilhaItem);
+        }
 
         $select->where('a.IdPRONAC = ?', $idpronac);
         /* echo $select; die; */ 

@@ -71,6 +71,16 @@ Vue.component('item', {
                         </div>
                     </div>
                 </div>`,
+    created: function () {
+        let vue = this;
+        this.$root.$on('novo-comprovante-nacional', function(data) {
+            vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('novo-comprovante-internacional', function(data) {
+            vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) + parseFloat(data.valor);
+        })
+    },
     mounted: function () {
         let vue = this;
         $3.ajax({

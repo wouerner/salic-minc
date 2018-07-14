@@ -8,7 +8,7 @@ Vue.component('sl-comprovar-form',
                 <li class="tab col s3"><a v-on:click="visivel()" href="#test2">Internacional</a></li>
               </ul>
             </div>
-            <div v-if="v" id="test1" class="col s12">
+            <div v-show="v" id="test1" class="col s12">
                 <sl-comprovante-nacional-form
                     tipoform="cadastro"
                     url="/prestacao-contas/gerenciar/cadastrar"
@@ -17,7 +17,7 @@ Vue.component('sl-comprovar-form',
                 >
                 </sl-comprovante-nacional-form>
             </div>
-            <div v-else id="test2" class="col s12">
+            <div v-show="!v" id="test2" class="col s12">
                 <sl-comprovante-internacional-form
                     tipoform="cadastro"
                     url="/prestacao-contas/gerenciar/cadastrar"

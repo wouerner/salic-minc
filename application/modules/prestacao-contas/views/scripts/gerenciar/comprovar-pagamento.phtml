@@ -12,8 +12,11 @@
 <script src="/public/js/moment.js"></script>
 
 <div class="container-fluid" id="app-comprovante">
+
     <page-title nome="Comprovantes"></page-title>
+
     <dados-projeto idpronac="<?php echo $this->idpronac ?>"></dados-projeto>
+
     <item
         idpronac="<?php echo $this->idpronac ?>"
         uf="<?php echo $this->uf ?>"
@@ -22,27 +25,19 @@
         produto="<?php echo $this->cdproduto ?>"
         idplanilhaitens="<?php echo $this->idPlanilhaItens ?>">
     </item>
-    <div class="card ">
-        <div v-show="visivelForm" class="card-content ">
-          <span class="card-title">Comprovante de Pagamento</span>
-            <sl-comprovar-form
-                url="/prestacao-contas/gerenciar/cadastrar"
-                tipoform="cadastro"
-                item="<?php echo $this->idPlanilhaItens ?>"
-                idPlanilhaAprovacao="<?php echo $this->idPlanilhaAprovacao ?>"
-            ></sl-comprovar-form>
-        </div>
-    </div>
+
     <h4>Comprovantes Nacionais</h4>
     <comprovantes
         idpronac="<?php echo $this->idpronac ?>"
         produto="<?php echo $this->cdproduto ?>"
         stitemavaliado="<?php echo $this->idPlanilhaItens ?>"
+        item="<?php echo $this->idPlanilhaItens ?>"
+        idplanilhaitem="<?php echo $this->idPlanilhaItens ?>"
         uf="<?php echo $this->uf ?>"
         idmunicipio="<?php echo $this->cdcidade ?>"
         etapa="<?php echo $this->cdetapa ?>"
-        componenteform="comprovante-form"
         tipo="nacional"
+        componenteform="sl-comprovante-nacional-form"
     ></comprovantes>
 
     <h4>Comprovantes Internacionais</h4>
@@ -50,11 +45,13 @@
         idpronac="<?php echo $this->idpronac ?>"
         produto="<?php echo $this->cdproduto ?>"
         stitemavaliado="<?php echo $this->idPlanilhaItens ?>"
+        idplanilhaitem="<?php echo $this->idPlanilhaItens ?>"
+        item="<?php echo $this->idPlanilhaItens ?>"
         uf="<?php echo $this->uf ?>"
         idmunicipio="<?php echo $this->cdcidade ?>"
         etapa="<?php echo $this->cdetapa ?>"
-        componenteform="comprovante-form"
         tipo="internacional"
+        componenteform="sl-comprovante-internacional-form"
     ></comprovantes>
 
     <div class="fixed-action-btn">
@@ -68,10 +65,10 @@
         <div class="modal-content">
           <h4>Cadastrar novo comprovante</h4>
           <sl-comprovar-form
-                url="/prestacao-contas/gerenciar/cadastrar"
-                tipoform="cadastro"
-                item="<?php echo $this->idPlanilhaItens ?>"
-                idplanilhaaprovacao="<?php echo $this->idPlanilhaAprovacao ?>"
+            url="/prestacao-contas/gerenciar/cadastrar"
+            tipoform="cadastro"
+            item="<?php echo $this->idPlanilhaItens ?>"
+            idplanilhaaprovacao="<?php echo $this->idPlanilhaAprovacao ?>"
           ></sl-comprovar-form>
         </div>
     </div>
@@ -81,9 +78,6 @@
 <script>
 
     const appComprovante = new Vue({
-    components: {
-        'comprovantes' : comprovantes
-    },
     data: {
         visivelForm: false
     },
@@ -95,6 +89,11 @@
             /* this.visivelForm  = (!this.visivelForm); */
             console.log(1213123);
             $3('#modal1').modal('open');
+        },
+
+         converteParaReal: function(value) {
+            value = parseFloat(value);
+            return numeral(value).format('0,0.00');
         }
     }
     }).$mount('#app-comprovante');

@@ -192,7 +192,7 @@ Vue.component('sl-comprovante-nacional-form',
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate" type="text"
-                                       v-model="comprovante.arquivo.name"
+                                       v-model="comprovante.arquivo.nome"
                                     placeholder="Selecionar arquivo">
                             </div>
                         </div>
@@ -212,7 +212,8 @@ Vue.component('sl-comprovante-nacional-form',
                 </fieldset>
             </template>
             <button type="button" class="btn" @click.prevent="salvar">salvar</button>
-            <button type="button" class="modal-action modal-close btn white black-text" @click.prevent="cancelar()">cancelar</button>
+            <button type="button" class="modal-action modal-close btn white black-text"
+                @click.prevent="cancelar()">cancelar</button>
         </form>
     `,
     mounted: function() {
@@ -223,28 +224,35 @@ Vue.component('sl-comprovante-nacional-form',
         if (this.dados) {
             if (this.dados.idComprovantePagamento) {
                 this.comprovante.id = this.dados.idComprovantePagamento;
+                this.comprovante.idComprovantePagamento = this.dados.idComprovantePagamento;
             }
 
             this.comprovante.id = this.dados.idComprovantePagamento;
-            this.comprovante.fornecedor.CNPJCPF = this.dados.CNPJCPF;
+
+            if (this.dados.fornecedor.CNPJCPF.length == 11) {
+                this.comprovante.fornecedor.tipoPessoa = 1;
+            } else {
+                this.comprovante.fornecedor.tipoPessoa = 2;
+            }
+
+            this.comprovante.fornecedor.CNPJCPF = this.dados.fornecedor.CNPJCPF;
             this.pesquisarFornecedor();
-            this.inputCNPJCPF(this.dados.CNPJCPF);
-            this.comprovante.numero = this.dados.nrComprovante;
-            this.comprovante.serie = this.dados.nrSerie;
+
+            this.inputCNPJCPF(this.dados.fornecedor.CNPJCPF);
+            this.comprovante.tipo = this.dados.tipo;
+            this.comprovante.numero = this.dados.numero;
+            this.comprovante.serie = this.dados.serie;
 
             this.comprovante.dataEmissao = moment(this.dados.dtEmissao).format('DD/MM/YYYY');
             this.comprovante.dataPagamento = moment(this.dados.dtPagamento).format('DD/MM/YYYY');
 
-            this.comprovante.valor = this.dados.vlComprovacao;
-            this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
-            this.comprovante.arquivo = { name: this.dados.nmArquivo };
-            this.comprovante.justificativa = this.dados.dsJustificativaProponente;
+            this.comprovante.valor = this.dados.valor;
+            this.comprovante.numeroDocumento = this.dados.numeroDocumento;
+            this.comprovante.arquivo = { nome: this.dados.nmArquivo };
+            this.comprovante.justificativa = this.dados.justificativa;
         }
     },
-    props: ['dados', 'url', 'messages', 'tipoform', 'item', 'idplanilhaaprovacao'],
-    mounted(){
-        this.random = (Math.random() * 10000000000000000);
-    },
+    props: ['dados', 'url', 'messages', 'tipoform', 'item', 'idplanilhaaprovacao', 'index'],
     data: function() {
         return this.data();
     },
@@ -271,6 +279,7 @@ Vue.component('sl-comprovante-nacional-form',
                     contentType: false,
                }).done(function(data) {
                     Materialize.toast('Salvo com sucesso!', 4000, 'green');
+                    $3('#modal1').modal('close');
 
                     if (vue.tipoform == 'cadastro') {
                        vue.$root.$emit('novo-comprovante-nacional', vue.comprovante);
@@ -328,15 +337,13 @@ Vue.component('sl-comprovante-nacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
-                        vue.$root.$emit('comprovante-atualizado', vue.comprovante);
+                        // vue.$root.$emit('comprovante-atualizado', vue.comprovante);
+                        vue.$root.$emit('comprovante-nacional-atualizado', vue.comprovante);
                     }
                 });
             }
         },
         validar: function() {
-            if(this.comprovante.eInternacional ) {
-            }
-
             if(!this.comprovante.fornecedor.CNPJCPF) {
                 this.c.fornecedor.CNPJCPF.css = 'invalid red-text';
                 this.$refs.CNPJCPF.focus();
@@ -407,7 +414,7 @@ Vue.component('sl-comprovante-nacional-form',
                });
            }
         },
-        paises: function(){
+        paises: function() {
            var vue = this;
            var url = '/prestacao-contas/gerenciar/pais' ;
 
@@ -479,7 +486,12 @@ Vue.component('sl-comprovante-nacional-form',
             }
         },
         cancelar: function () {
-            vue.$root.$emit('comprovante-atualizado');
+            // vue.$root.$emit('comprovante-nacional-atualizado');
+
+            if (this.tipoform == 'edicao'){
+                // vue.$root.$emit('comprovante-atualizado', vue.comprovante);
+                this.$root.$emit('comprovante-nacional-atualizado', vue.comprovante);
+            }
         },
         data: function () {
             return {
@@ -506,6 +518,7 @@ Vue.component('sl-comprovante-nacional-form',
                     arquivo: '',
                     justificativa: '',
                     foiAtualizado: false,
+                    _index: this.index
                 },
                 pais: '',
                 c: {

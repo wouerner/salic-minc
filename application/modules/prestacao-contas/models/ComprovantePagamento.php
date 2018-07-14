@@ -174,12 +174,12 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             ];
         }
 
-        $this->comprovarPlanilhaCadastrar();
-        $result =  $this->update(
+        /* $this->comprovarPlanilhaCadastrar(); */
+        $this->update(
             $dados,
             ['idComprovantePagamento = ?' => $this->idComprovantePagamento]
         );
-        return $result;
+        return $this->idComprovantePagamento;
     }
 
     public function upload()

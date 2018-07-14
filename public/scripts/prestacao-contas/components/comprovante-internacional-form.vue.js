@@ -199,9 +199,11 @@ Vue.component('sl-comprovante-internacional-form',
                     processData: false,
                     contentType: false,
                }).done(function(data){
-                   Materialize.toast('Salvo com sucesso!', 4000, 'green');
+                    Materialize.toast('Salvo com sucesso!', 4000, 'green');
+                    $3('#modal1').modal('close');
+
                     if (vue.tipoform == 'cadastro') {
-                       vue.$root.$emit('comprovante-novo', vue.comprovante);
+                       vue.$root.$emit('novo-comprovante-internacional', vue.comprovante);
 
                        vue.c = {
                            fornecedor: {
