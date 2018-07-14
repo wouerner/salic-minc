@@ -133,6 +133,15 @@ class Projeto_IncentivoController extends Projeto_GenericController
 
         $data = array_map('utf8_encode', $projetoCompleto->toArray());
 
+        $dbTableInabilitado = new Inabilitado();
+        $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projetoCompleto->CgcCPf);
+
+        $Parecer = new Parecer();
+        $parecerAnaliseCNIC = $Parecer->verificaProjSituacaoCNIC($projetoCompleto->Pronac);
+
+        $data['ProponenteInabilitado'] = ($proponenteInabilitado->Habilitado == 'I');
+        $data['EmAnaliseNaCNIC'] = (count($parecerAnaliseCNIC) > 0) ? true : false;
+
         $this->getResponse()->setHttpResponseCode(200);
         $this->_helper->json(
             [

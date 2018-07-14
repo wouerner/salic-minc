@@ -116,18 +116,19 @@ $(document).ready(function () {
                         data: null,
                         "name": "pronac",
                         render: function (data, type, row) {
-                            return '<a target="_blanck" class="btn waves-effect waves-darrk white black-text small" href="/default/consultardadosprojeto/index?idPronac=' + data.idPronacHash + '">'
+
+                            let url = '/projeto/#/incentivo/' + data.idPronacHash;
+                            if (data.idMecanismo != 1) {
+                                url = '/projeto/convenio/visualizar/idPronac/' + data.idPronacHash;
+                            }
+
+                            return '<a target="_blanck" class="btn waves-effect waves-darrk white black-text small" href="' + url + '">'
                                 + data.pronac + '</a>'
                         }
                     },
                     {
-                        data: null,
                         "name": "nomeprojeto",
-                        render: function (data, type, row) {
-                            return '<a target="_blanck" href="/default/consultardadosprojeto/index?idPronac=' + data.idPronacHash + '">'
-                                + data.nomeprojeto + '</a>'
-                        }
-
+                        "data": "nomeprojeto"
                     },
                     {
                         "name": "situacao",

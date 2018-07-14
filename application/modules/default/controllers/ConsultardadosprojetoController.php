@@ -159,41 +159,32 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
         try {
 
-            if (empty($params['idPronac'])) {
-                throw new Exception("PRONAC &eacute; obrigat&oacute;rio");
-            }
-
             $idPronac = $params['idPronac'];
             if (strlen($idPronac) > 7) {
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
 
-            $idPronac = (int) $idPronac;
-            if (!is_numeric($idPronac)) {
-                throw new Exception("N&uacute;mero Pronac inv&aacute;lido!");
-            }
+            $tbProjetos = new Projetos();
+            $where = [];
+            $where['IdPRONAC'] = $idPronac;
+            $projeto = $tbProjetos->findBy($where);
 
-            $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
-            $projeto = $dbTableProjetos->obterProjetoIncentivoCompleto($idPronac);
-            $this->view->projeto = $projeto;
-            if (count($projeto) <= 0) {
+            if (empty($projeto)) {
                 throw new Exception("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.");
             }
 
-            if($projeto->idMecanismo != 1) { #incentivo fiscal
-                $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronac);
+            if ($projeto['Mecanismo'] == 1) {
+                $this->redirect('/projeto/#/incentivo/' . $projeto['IdPRONAC']);
+            } else {
+                $this->redirect('/projeto/convenio/visualizar/idPronac/' . $projeto['IdPRONAC']);
             }
 
-            $dbTableInabilitado = new Inabilitado();
-            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto->CgcCPf);
-            $this->view->ProponenteInabilitado = ($proponenteInabilitado->Habilitado == 'I');
-
-            $Parecer = new Parecer();
-            $parecerAnaliseCNIC = $Parecer->verificaProjSituacaoCNIC($projeto->Pronac);
-            $this->view->emAnaliseNaCNIC= (count($parecerAnaliseCNIC) > 0) ? 1 : 0;
+            if (empty($params['idPronac'])) {
+                throw new Exception("PRONAC &eacute; obrigat&oacute;rio");
+            }
 
         } catch (Exception $e) {
-            parent::message($e->getMessage(), "listarprojetos/listarprojetos", "ERROR");
+            parent::message($e->getMessage(), "/projeto/index/listar", "ERROR");
         }
     }
 

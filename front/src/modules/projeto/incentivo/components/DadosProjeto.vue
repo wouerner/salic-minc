@@ -26,7 +26,7 @@
                     <td>{{ dadosProjeto.Proponente }}</td>
                 </tr>
             </table>
-            <div class="row" v-if="ProponenteInabilitado">
+            <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
                 <div style="background-color: #EF5350" class="darken-2 padding10 white-text">
                     <div><b>Proponente Inabilitado</b></div>
                 </div>
@@ -177,7 +177,7 @@
                 </tr>
             </table>
 
-            <div v-if="emAnaliseNaCNIC" class="row">
+            <div v-if="dadosProjeto.EmAnaliseNaCNIC" class="row">
                 <div style="background-color: #EF5350" class="darken-2 padding10 white-text">
                     A T E N &Ccedil; &Atilde; O: Projeto em an&aacute;lise pela Comiss&atilde;o Nacional
                     de Incentivo &agrave; Cultura-CNIC. Aguardar resultado da avalia&ccedil;&atilde;o.
@@ -303,7 +303,7 @@
                             </b>
                         </td>
                     </tr>
-                    <tr v-else> // @todo pensar melhor essa parte para não duplicar o código
+                    <tr v-else> <!--@todo pensar melhor essa parte para não duplicar o código -->
                         <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlHomologadoIncentivo"/>
                         </b></td>
