@@ -105,7 +105,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
            throw new Exception('Não existe tipoAvaliacao');
         }
 
-        $comprovantes = new PrestacaoContas_Model_spComprovantes();
+        $comprovantes = new PrestacaoContas_Model_spComprovacaoFinanceiraProjeto();
         $resposta = $comprovantes->exec($idPronac, $tipoAvaliacao);
 
         $planilhaJSON = null;
@@ -134,12 +134,12 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
                 'cdEtapa' =>  utf8_encode($item->cdEtapa)
             ];
 
-            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->Uf] += [
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->cdUF] += [
                 'Uf' => $item->cdUF,
                 'cdUF' => $item->cdUF
             ];
 
-            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->Uf]['cidade'][$cidadeSlug] += [
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->cdUF]['cidade'][$cidadeSlug] += [
                 'cidade' => utf8_encode($item->Municipio),
                 'cdCidade' => utf8_encode($item->Municipio)
             ];
