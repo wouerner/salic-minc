@@ -55,9 +55,17 @@ class Devolver implements IAcaoDevolver
             case \Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_DIRETOR;
 
-                $orgaoDestino = \Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
+                $orgaoDestino = \Orgaos::ORGAO_GEAR_SACAV;
                 if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
-                    $orgaoDestino = \Orgaos::ORGAO_SAV_DAP;
+                    $orgaoDestino = \Orgaos::ORGAO_SAV_CAP;
+                }
+                break;
+            case \Autenticacao_Model_Grupos::SECRETARIO:
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_SECRETARIO;
+
+                $orgaoDestino = \Orgaos::ORGAO_GEAR_SACAV;
+                if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
+                    $orgaoDestino = \Orgaos::ORGAO_SAV_CAP;
                 }
                 break;
         }
@@ -112,16 +120,16 @@ class Devolver implements IAcaoDevolver
                 break;
             case \Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_DIRETOR;
-                $orgaoDestino = \Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
+                $orgaoDestino = \Orgaos::ORGAO_GEAR_SACAV;
                 if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
-                    $orgaoDestino = \Orgaos::ORGAO_SAV_DAP;
+                    $orgaoDestino = \Orgaos::ORGAO_SAV_CAP;
                 }
                 break;
             case \Autenticacao_Model_Grupos::SECRETARIO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_SECRETARIO;
-                $orgaoDestino = \Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
+                $orgaoDestino = \Orgaos::ORGAO_GEAR_SACAV;
                 if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
-                    $orgaoDestino = \Orgaos::ORGAO_SAV_DAP;
+                    $orgaoDestino = \Orgaos::ORGAO_SAV_CAP;
                 }
                 break;
         }

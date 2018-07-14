@@ -47,6 +47,15 @@ class Encaminhar implements IAcaoEncaminhar
             case \Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_PRESIDENTE_DA_VINCULADA;
                 break;
+            case \Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_COORDENADOR_GERAL;
+
+                $orgaoDestino = \Orgaos::ORGAO_SEFIC_DIC;
+                if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
+                    $orgaoDestino = 682;
+                }
+
+                break;
             case \Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_SECRETARIO;
 
@@ -54,15 +63,6 @@ class Encaminhar implements IAcaoEncaminhar
                 if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
                     $orgaoDestino = \Orgaos::ORGAO_SUPERIOR_SAV;
                 }
-                break;
-            case \Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA:
-                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_DIRETOR;
-
-                $orgaoDestino = \Orgaos::ORGAO_SEFIC_DIC;
-                if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
-                    $orgaoDestino = 682;
-                }
-
                 break;
         }
 
@@ -91,14 +91,12 @@ class Encaminhar implements IAcaoEncaminhar
             case \Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_COORDENADOR_GERAL;
 
+                break;
+            case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
                 $objReadequacao_ReadequacoesController = new \Readequacao_ReadequacoesController();
                 $objReadequacao_ReadequacoesController->encaminharOuFinalizarReadequacaoChecklist(
                     $idReadequacao
                 );
-                break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
-                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_FINALIZADA_SEM_PORTARIA;
-                $dados['stEstado'] = \Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_FINALIZADO;
                 break;
         }
 
@@ -124,10 +122,10 @@ class Encaminhar implements IAcaoEncaminhar
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_COORDENADOR_TECNICO;
                 break;
             case \Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
-                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_DIRETOR;
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_COORDENADOR_GERAL;
                 break;
             case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
-                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_COORDENADOR_GERAL;
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_DIRETOR;
                 $orgaoDestino = \Orgaos::SEFIC_DEIPC;
                 if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SAV) {
                     $orgaoDestino = \Orgaos::SAV_DPAV;
