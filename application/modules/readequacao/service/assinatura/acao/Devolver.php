@@ -12,12 +12,12 @@ class Devolver implements IAcaoDevolver
         $idTipoDoAtoAdministrativo = $assinatura->modeloTbDocumentoAssinatura->getIdTipoDoAtoAdministrativo();
         $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $documentoAssinatura = $documentoAssinaturaDbTable->findBy(
-            array(
+            [
                 'IdPRONAC' => $assinatura->modeloTbAssinatura->getIdPronac(),
                 'idTipoDoAtoAdministrativo' => $assinatura->modeloTbAtoAdministrativo->getIdTipoDoAto(),
                 'cdSituacao' => Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA,
                 'stEstado' => Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO
-            )
+            ]
         );
 
         $tbReadequacaoXParecerDbTable = new \Readequacao_Model_DbTable_TbReadequacaoXParecer();
