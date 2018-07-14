@@ -46,7 +46,6 @@
                             <th class="center-align" align="center">Tipo</th>
                             <th class="center-align" align="center">Ver</th>
                             <th class="center-align" align="center">Assinar</th>
-                            <th class="center-align" align="center">Movimentar</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -114,28 +113,6 @@
                                            data-delay="50"
                                            data-tooltip="Assinar">
                                             <i class="material-icons">create</i>
-                                        </a>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="center-align" align="center">
-                                    <?php
-                                    $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}";
-                                    if (!is_null($dado['possuiProximaAssinatura'])):
-                                        ?>
-                                        <a class="btn waves-effect waves-light tooltipped small btn modal-trigger"
-                                           href="#modalConfirmacao"
-                                           data-redirect-url="<?php echo $this->url(
-                                                   array(
-                                                       'module' => 'assinatura',
-                                                       'controller' => 'index',
-                                                       'action' => 'movimentar-projeto'
-                                                   )
-                                               ) . $parametrosAssinatura ?>"
-                                           data-nrpronac="<?php echo $dado['pronac']; ?>"
-                                           data-position="top"
-                                           data-delay="50"
-                                           data-tooltip="Movimentar">
-                                            <i class="material-icons">arrow_forward</i>
                                         </a>
                                     <?php endif; ?>
                                 </td>
