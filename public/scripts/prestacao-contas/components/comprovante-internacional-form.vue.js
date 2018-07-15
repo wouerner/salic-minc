@@ -141,14 +141,14 @@ Vue.component('sl-comprovante-internacional-form',
                 </div>
             </fieldset>
             <button type="button" class="btn" @click.prevent="salvar()">salvar</button>
-            <button type="button" class="modal-action modal-close btn white black-text" @click.prevent="cancelar()">cancelar</button>
+            <button type="button" class="btn white black-text" @click="cancelar()">cancelar</button>
         </form>
     `,
     mounted: function() {
+        console.log(this.dados);
         this.paises();
 
         this.comprovante.item = this.item;
-        // this.comprovante.idPlanilhaAprovacao = this.idPlanilhaAprovacao;
         if (this.dados) {
             if (this.dados.idComprovantePagamento) {
                 this.comprovante.id = this.dados.idComprovantePagamento;
@@ -156,26 +156,79 @@ Vue.component('sl-comprovante-internacional-form',
 
             this.comprovante.id = this.dados.idComprovantePagamento;
             this.comprovante.fornecedor.CNPJCPF = this.dados.CNPJCPF;
-            this.pesquisarFornecedor();
-            this.inputCNPJCPF(this.dados.CNPJCPF);
-            this.comprovante.numero = this.dados.nrComprovante;
+            this.comprovante.fornecedor.nome = this.dados.fornecedor.nome;
+            this.comprovante.fornecedor.endereco = this.dados.fornecedor.endereco;
+            this.comprovante.numero = this.dados.numero;
             this.comprovante.serie = this.dados.nrSerie;
 
-            this.comprovante.dataEmissao = moment(this.dados.dtEmissao).format('DD/MM/YYYY');
-            this.comprovante.dataPagamento = moment(this.dados.dtPagamento).format('DD/MM/YYYY');
+            this.comprovante.dataEmissao = moment(this.dados.dataEmissao).format('DD/MM/YYYY');
+            this.comprovante.dataPagamento = moment(this.dados.dataPagamento).format('DD/MM/YYYY');
 
-            this.comprovante.valor = this.dados.vlComprovacao;
+            this.comprovante.valor = this.dados.valor;
             this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
             this.comprovante.arquivo = { name: this.dados.nmArquivo };
             this.comprovante.justificativa = this.dados.dsJustificativaProponente;
         }
     },
     props: ['dados', 'url', 'messages', 'tipoform', 'item', 'idplanilhaaprovacao'],
-    mounted(){
-        this.random = Math.floor(Math.random() * 10000000000000000);
-    },
-    data: function() {
-        return this.data();
+    data: function () {
+        return {
+            comprovante: {
+                fornecedor: {
+                    nacionalidade: 1,
+                    tipoPessoa: 1,
+                    CNPJCPF: '',
+                    cnpjcpfMask: '',
+                    nome: '',
+                    idAgente: '',
+                    eInternacional: true,
+                },
+                item: this.item,
+                idPlanilhaAprovacao: this.idplanilhaaprovacao,
+                tipo: 1,
+                numero: '',
+                serie: '',
+                dataEmissao: '',
+                dataPagamento:'',
+                forma: 1,
+                numeroDocumento: '',
+                valor: '',
+                arquivo: '',
+                justificativa: '',
+                foiAtualizado: false,
+            },
+            pais: '',
+            c: {
+                fornecedor: {
+                    CNPJCPF: {
+                        css:'',
+                    },
+                    nome: {
+                        css:'',
+                    },
+                },
+                numero: {
+                    css: ''
+                },
+                serie: '',
+                dataEmissao: {
+                    css:'',
+                },
+                dataPagamento:{
+                    css:'',
+                },
+                numeroDocumento: {
+                    css:'',
+                } ,
+                valor: {
+                    css:'',
+                },
+                arquivo: {
+                    css: '',
+                },
+            },
+            random: ''
+        }
     },
     methods: {
         salvar: function() {
@@ -261,7 +314,7 @@ Vue.component('sl-comprovante-internacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
-                        vue.$root.$emit('comprovante-atualizado', vue.comprovante);
+                        vue.$root.$emit('atualizado-comprovante-internacional', vue.comprovante);
                     }
                 });
             }
@@ -410,66 +463,8 @@ Vue.component('sl-comprovante-internacional-form',
             }
         },
         cancelar: function () {
-            vue.$root.$emit('comprovante-atualizado');
+            $3('#modal1').modal('close');
+            this.$root.$emit('atualizado-comprovante-internacional');
         },
-        data: function () {
-            return {
-                comprovante: {
-                    fornecedor: {
-                        nacionalidade: 31,
-                        tipoPessoa: 1,
-                        CNPJCPF: '',
-                        cnpjcpfMask: '',
-                        nome: '',
-                        idAgente: '',
-                        eInternacional: true,
-                    },
-                    item: this.item,
-                    idPlanilhaAprovacao: this.idplanilhaaprovacao,
-                    tipo: 1,
-                    numero: '',
-                    serie: '',
-                    dataEmissao: '',
-                    dataPagamento:'',
-                    forma: 1,
-                    numeroDocumento: '',
-                    valor: '',
-                    arquivo: '',
-                    justificativa: '',
-                    foiAtualizado: false,
-                },
-                pais: '',
-                c: {
-                    fornecedor: {
-                        CNPJCPF: {
-                            css:'',
-                        },
-                        nome: {
-                            css:'',
-                        },
-                    },
-                    numero: {
-                        css: ''
-                    },
-                    serie: '',
-                    dataEmissao: {
-                        css:'',
-                    },
-                    dataPagamento:{
-                        css:'',
-                    },
-                    numeroDocumento: {
-                        css:'',
-                    } ,
-                    valor: {
-                        css:'',
-                    },
-                    arquivo: {
-                        css: '',
-                    },
-                },
-                random: ''
-            }
-        }
     }
 });

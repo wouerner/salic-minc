@@ -14,6 +14,10 @@ Vue.component('sl-comprovar-form',
                     url="/prestacao-contas/gerenciar/cadastrar"
                     :item="itemId"
                     :idplanilhaaprovacao="idplanilhaaprovacaoId"
+                    :datainicio="datainicio"
+                    :datafim="datafim"
+                    :valoraprovado=valoraprovado
+                    :valorcomprovado="valorcomprovado"
                 >
                 </sl-comprovante-nacional-form>
             </div>
@@ -23,6 +27,10 @@ Vue.component('sl-comprovar-form',
                     url="/prestacao-contas/gerenciar/cadastrar"
                     :item="itemId"
                     :idplanilhaaprovacao="idplanilhaaprovacaoId"
+                    :datainicio="datainicio"
+                    :datafim="datainicio"
+                    :valoraprovado="valoraprovado"
+                    :valorcomprovado="valorcomprovado"
                 >
                 </sl-comprovante-internacional-form>
             </div>
@@ -30,7 +38,7 @@ Vue.component('sl-comprovar-form',
     `,
     mounted: function() {
     },
-    props: ['item', 'idplanilhaaprovacao'],
+    props: ['item', 'idplanilhaaprovacao', 'datainicio', 'datafim', 'valoraprovado', 'valorcomprovado'],
     mounted() {
         this.random = (Math.random() * 10000000000000000);
     },
@@ -43,7 +51,7 @@ Vue.component('sl-comprovar-form',
     },
     methods: {
         visivel: function () {
-            this.v = !this.v; 
+            this.v = !this.v;
         },
     }
 });
