@@ -3,7 +3,7 @@
 class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_Abstract
 {
     private $idPreProjeto = null;
-    private $idUsuario = null;
+    protected $idUsuario = null;
     private $intTamPag = 50;
     private $codOrgaoSuperior = null;
     private $codGrupo = null;
@@ -906,6 +906,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $ultimaSugestaoEnquadramento = $sugestaoEnquadramentoDbTable->obterUltimaSugestaoEnquadramentoProposta();
             $observacao = $ultimaSugestaoEnquadramento['descricao_motivacao'];
             $tpEnquadramento = $ultimaSugestaoEnquadramento['tp_enquadramento'];
+            $idArea = $ultimaSugestaoEnquadramento['id_area'];
+            $idSegmento = $ultimaSugestaoEnquadramento['id_segmento'];
             $recursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
             $recursoAtual = $recursoPropostaDbTable->obterRecursoAtual($rsProjeto->idProjeto);
             if (count($recursoAtual) > 0 && (string) $recursoAtual['tpSolicitacao'] == (string) Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_ENQUADRAMENTO) {
@@ -913,6 +915,8 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $enquadramentoInicialProponente = $planoDistribuicaoProdutoDbTable->obterEnquadramentoInicialProponente($rsProjeto->idProjeto);
                 if (!empty($recursoAtual['dsAvaliacaoTecnica']))  {
                     $tpEnquadramento = $enquadramentoInicialProponente['tp_enquadramento'];
+                    $idArea = $enquadramentoInicialProponente['id_area'];
+                    $idSegmento = $enquadramentoInicialProponente['id_segmento'];
                     $observacao = $recursoAtual['dsAvaliacaoTecnica'];
                 }
             }
@@ -934,6 +938,9 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $dadosProjeto = $objProjeto->findBy([
                 'IdPRONAC' => $rsProjeto->IdPRONAC,
             ]);
+
+            $dadosProjeto['Area'] = $idArea;
+            $dadosProjeto['Segmento'] = $idSegmento;
 
             $projetos = new Projeto_Model_DbTable_Projetos();
             $projetos->atualizarProjetoEnquadrado(

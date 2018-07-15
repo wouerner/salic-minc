@@ -118,4 +118,28 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $view->arrValue = self::prepareData($intIdPronac);
         return $view->render('homologacao/partials/documento-assinatura.phtml');
     }
+
+    /**
+     * @todo carregar corretamento o $idParecer
+     */
+    public function iniciarFluxoAssinaturaAction()
+    {
+        $get = Zend_Registry::get('get');
+        $idPronac = $get->idPronac;
+
+        $dbTableParecer = new Parecer();
+        $parecer = $dbTableParecer->findBy([
+            'TipoParecer' => '1',
+            'idTipoAgente' => '1',
+            'IdPRONAC' => $idPronac
+        ]);
+
+        $servicoDocumentoAssinatura = new \Application\Modules\Projeto\Service\Assinatura\DocumentoAssinatura(
+            $idPronac,
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO,
+            $parecer['IdParecer']
+        );
+        $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
+        xd($idDocumentoAssinatura);
+    }
 }
