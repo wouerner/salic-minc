@@ -138,11 +138,23 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             ['e.idSecretaria AS idOrgaoSuperior'],
             $this->_schema
         );
+        $sql->joinInner(
+            ['f' => 'Area'],
+            'f.Codigo = a.Area',
+            [new Zend_Db_Expr('f.Descricao as Area')],
+            $this->_schema
+        );
+        $sql->joinInner(
+            ['g' => 'Segmento'],
+            'g.Codigo = a.Segmento',
+            [new Zend_Db_Expr('g.Descricao as Segmento')],
+            $this->_schema
+        );
 
         $sql->where('a.Situacao = ?', Projeto_Model_Situacao::PROJETO_APRECIADO_PELA_CNIC);
 
         if (!empty($search['value'])) {
-            $sql->where('a.NomeProjeto like ? OR d.NrReuniao like ? OR a.AnoProjeto+a.Sequencial like ?', '%'.$search['value'].'%');
+            $sql->where('a.NomeProjeto like ? OR a.AnoProjeto+a.Sequencial like ?', '%'.$search['value'].'%');
         }
 
         foreach ($where as $coluna => $valor) {

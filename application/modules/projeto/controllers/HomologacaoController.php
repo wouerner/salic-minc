@@ -31,12 +31,45 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
 
-
         $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["Pronac desc"];
+//        $filtro = $columns[0]['search']['value'];
+//
+//        switch ($filtro) {
+//            case '':
+//                $where['a.Situacao = ?'] = 'D03';
+//                $where['NOT EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia WHERE idPronac = a.IdPRONAC AND idTipoDiligencia = 181 AND DtSolicitacao IS NOT NULL AND DtResposta IS NULL AND stEstado = 0 AND stEnviado = \'S\')'] = '';
+//                break;
+//            case 'desistencias':
+//                $where['NOT EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia WHERE idPronac = a.IdPRONAC AND idTipoDiligencia = 181 AND DtSolicitacao IS NOT NULL AND DtResposta IS NULL AND stEstado = 0 AND stEnviado = \'S\')'] = '';
+//                $where['EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbRecurso WHERE stEstado = 1 and siFaseProjeto = 2 and siRecurso = 0 AND idPronac = a.IdPRONAC)'] = '';
+//                break;
+//            case 'diligenciados':
+//                $where['a.Situacao = ?'] = 'D25';
+//                $where['EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia WHERE idPronac = a.IdPRONAC AND idTipoDiligencia = 181 AND DtSolicitacao IS NOT NULL AND DtResposta IS NULL AND stEstado = 0 AND stEnviado = \'S\')'] = '';
+//                break;
+//            case 'irregulares':
+//                $where['a.Situacao = ?'] = 'D11';
+//                break;
+//            case 'respondidos':
+//                $where['a.Situacao = ?'] = 'D03';
+//                $where['EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbDiligencia WHERE idPronac = a.IdPRONAC AND idTipoDiligencia = 181 AND DtSolicitacao IS NOT NULL AND DtResposta IS NOT NULL AND stEstado = 0)'] = '';
+//                break;
+//            case 'finalizados':
+//                $where['a.Situacao = ?'] = 'D03';
+//                break;
+//            case 'recursos':
+//                $where['EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbRecurso WHERE idPronac = a.IdPRONAC AND siRecurso = ?)'] = 9;
+//                $where['a.Situacao = ?'] = 'D20';
+//                break;
+//            case 'readequacoes':
+//                $where['EXISTS(SELECT TOP 1 * FROM SAC.dbo.tbReadequacao WHERE idPronac = a.IdPRONAC AND siEncaminhamento = ?)'] = 9;
+//                break;
+//        }
+        $where['a.Orgao = ?'] = $this->codOrgao;
 
         $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
         $projetos = $dbTableEnquadramento->obterProjetosApreciadosCnic(
-            ['a.Orgao = ?' => $this->codOrgao],
+            $where,
             $order,
             $start,
             $length,

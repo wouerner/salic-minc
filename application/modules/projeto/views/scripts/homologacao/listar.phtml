@@ -1,9 +1,28 @@
+<style>
+    .dt-button{
+        left: 234px;
+        top: 33px;
+    }
+</style>
+
+<div class="col s4">
+    <select class="browser-default" id="seletorSelect">
+        <option value="">Aguardando Análise Documental</option>
+        <option value="desistencias" selected="selected">Desistências do Recurso</option>
+        <option value="diligenciados">Proponente Diligenciado</option>
+        <option value="respondidos">Diligencia Respondida</option>
+        <option value="finalizados">Projetos Finalizados</option>
+        <option value="irregulares">Proponente Irregular</option>
+        <option value="recursos">Recursos Analisados</option>
+    </select>
+</div>
 <table id="listagemHomologacao">
     <thead>
     <tr>
         <th rowspan="2">&nbsp;</th>
         <th rowspan="2">PRONAC</th>
         <th rowspan="2">Nome do Projeto</th>
+        <th rowspan="2">&Aacute;rea/Segmento</th>
         <th rowspan="2">Enquadramento</th>
         <th colspan="2" class="center-align">Per&iacute;odo de Execu&ccedil;&atilde;o</th>
         <th rowspan="2">Nr.Reuni&atilde;o</th>
@@ -57,10 +76,35 @@
     numeral.locale('pt-br');
 
     (function ($) {
-        $3(document).ready(function () {
+        $(document).ready(function ($) {
             $3('.modal').modal();
-            var listagemHomologacao = $('#listagemHomologacao').DataTable({
 
+            var listagemHomologacao = $('#listagemHomologacao').DataTable({
+                dom: 'Blfrtip',
+                buttons: [
+                    {
+                        title: '',
+                        text: '<i class="material-icons">print</i>',
+                        orientation: 'landscape',
+                        extend: 'print',
+                        className: 'waves-effect waves-dark btn white black-text',
+                        exportOptions: {
+                            columns: [1,2,3,4,5,6,7,8]
+                        }
+                    }
+                ],
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        var column = this;
+                        var searchIndex = 0;
+                        $3("#seletorSelect").change(function() {
+                            if(column[0].includes(searchIndex)){
+                                column.search( $3("#seletorSelect").val()).draw();
+                            }
+                        });
+                    } );
+                },
+                "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json"
                 },
@@ -72,9 +116,12 @@
                 "autoWidth": false,
                 "serverSide": true,
                 "columnDefs": [
-                    { "width": "30%", "targets": 2 },
-                    {"className": "dt-center", "targets": [0,1,3,4,5,6,7,8]},
-                    {'bSortable': false, 'aTargets': [0, 8]},
+                    { "width": "1%", "targets": 0 },
+                    { "width": "20%", "targets": 2 },
+                    { "width": "10%", "targets": 3 },
+                    { "width": "5%", "targets": [5,6,7,9] },
+                    {"className": "dt-center", "targets": [0,1,3,4,5,6,7,8,9]},
+                    {'bSortable': false, 'aTargets': [0, 9]},
                 ],
                 "searchDelay": 350,
                 "columns": [
@@ -100,12 +147,20 @@
 
                     },
                     {
+                        "targets": 3,
+                        "data": null,
+                        "name": "Area",
+                        render: function (data) {
+                            return data.Area + '/' + data.Segmento;
+                        }
+                    },
+                    {
                         "name": "Enquadramento",
                         "data": "Enquadramento"
 
                     },
                     {
-                        "targets": 4,
+                        "targets": 5,
                         "data": null,
                         "name": "DtInicioExecucao",
                         render: function (data) {
@@ -113,7 +168,7 @@
                         }
                     },
                     {
-                        "targets": 5,
+                        "targets": 6,
                         "data": null,
                         "name": "DtFimExecucao",
                         render: function (data) {
@@ -132,13 +187,27 @@
                         }
                     },
                     {
-                        "targets": 8,
+                        "targets": 7,
                         "data": null,
                         render: function (data) {
-                            var homologar = '<button data-ajax-modal-full="true" class="btn small waves-effect waves-light btn-primary" data-ajax-modal="/projeto/homologacao/homologar/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
-                            var visualizarParecer = '<button data-ajax-modal-full="true" class="btn small waves-effect waves-light btn-secondary" data-ajax-modal="/projeto/homologacao/visualizar/id/'+ data.IdPRONAC +'"><i class="material-icons">visibility</i></button>';
-                            var diligenciar = '<a data-delay="50" data-position="top" data-tooltip="Dilig&ecirc;nciar" class="btn small waves-effect waves-light tooltipped" href="/proposta/diligenciar/listardiligenciaanalista/idPronac/'+ data.IdPRONAC +'/situacao/D25/tpDiligencia/181"><i class="material-icons">warning</i></a>';
-                            var homologacaoFluxo= '<a data-delay="50" data-position="top" data-tooltip="Iniciar fluxo de Homologação" class="btn btn-primary small tooltipped" href="/projeto/homologacao/iniciar-fluxo-assinatura?idPronac=' + data.IdPRONAC + '"><i class="material-icons">edit</i></a>';
+                            var homologar = '<button data-ajax-modal-full="true" title="Homologar" class="btn-floating waves-effect waves-light btn-primary" data-ajax-modal="/projeto/homologacao/homologar/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
+                            var visualizarParecer = '<button data-ajax-modal-full="true" title="Visualizar parecer" class="btn-floating waves-effect waves-light btn-secondary" data-ajax-modal="/projeto/homologacao/visualizar/id/'+ data.IdPRONAC +'"><i class="material-icons">visibility</i></button>';
+                            var diligenciar = '<a title="Dilig&ecirc;nciar" class="btn-floating waves-effect waves-light tooltipped" href="/proposta/diligenciar/listardiligenciaanalista/idPronac/'+ data.IdPRONAC +'/situacao/D25/tpDiligencia/181"><i class="material-icons">warning</i></a>';
+                            var homologacaoFluxo= '<a title="Iniciar fluxo de Homologação" class="btn-floating btn-primary tooltipped" href="/projeto/homologacao/iniciar-fluxo-assinatura?idPronac=' + data.IdPRONAC + '"><i class="material-icons">edit</i></a>';
+
+                            return '<div style="position: relative; height: 60px;">'
+                                + '<div class="fixed-action-btn horizontal" style="position: absolute; top: 0px; right: 0; z-index: 996; padding: 15px 0 0 15px;">'
+                                + '<a class="btn btn-primary small">'
+                                + '<i class="material-icons">more_vert</i></a>'
+                                + '<ul>'
+                                + '<li>'
+                                + homologar
+                                + visualizarParecer
+                                + diligenciar
+                                + homologacaoFluxo
+                                + '</a></li>'
+                                + '</ul>'
+                                + '</div></div>'
 
                             return homologar + visualizarParecer + diligenciar + homologacaoFluxo;
                         }
