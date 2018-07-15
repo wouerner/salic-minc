@@ -168,11 +168,11 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         return $view->render('homologacao/partials/documento-assinatura.phtml');
     }
 
-    /**
-     * @todo carregar corretamento o $idParecer
-     */
     public function iniciarFluxoAssinaturaAction()
     {
+        if (!filter_input(INPUT_GET, 'idPronac')) {
+            throw new Exception("Identificador do projeto é necess&aacute;rio para acessar essa funcionalidade.");
+        }
         $get = Zend_Registry::get('get');
         $idPronac = $get->idPronac;
 
