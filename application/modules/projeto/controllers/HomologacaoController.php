@@ -44,8 +44,8 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         );
 
         if (count($projetos) > 0) {
-            foreach($projetos as $key => $item){
-                foreach($item as $coluna => $value){
+            foreach ($projetos as $key => $item) {
+                foreach ($item as $coluna => $value) {
                     $projetosApreciados[$key][$coluna] = utf8_encode($value);
                 }
             }
@@ -134,7 +134,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
             }
 
             $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
-                [ 'a.IdPRONAC = ?' => $intId, 'a.Situacao = ?' => $this->situacaoParaHomologacao]
+                ['a.IdPRONAC = ?' => $intId, 'a.Situacao = ?' => $this->situacaoParaHomologacao]
             )->current()->toArray();
 
             $this->view->dataForm = $arrValue;
@@ -212,7 +212,11 @@ class Projeto_HomologacaoController extends Projeto_GenericController
             'IdPRONAC' => $idPronac
         ]);
 
-        //$parecer['IdParecer']
+        if (count($parecer) < 1 || empty($parecer['IdParecer'])) {
+            throw new Exception(
+                "É necessário ao menos um parecer para iniciar o fluxo de assinatura."
+            );
+        }
 
         $servicoDocumentoAssinatura = new \Application\Modules\Projeto\Service\Assinatura\DocumentoAssinatura(
             $idPronac,
