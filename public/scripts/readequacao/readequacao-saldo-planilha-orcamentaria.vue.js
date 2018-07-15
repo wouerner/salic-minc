@@ -11,7 +11,7 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
         <ul class="collapsible no-border no-margin" data-collapsible="expandable">
           <li v-for="(produtos, produto) of fontes" v-if="isObject(produtos)">
             <div class="collapsible-header active green-text" style="padding-left: 30px;" :class="converterStringParaClasseCss(produto)">
-              <i class="material-icons">perm_media</i>{{produto}}<span class="badge">R$ {{produtos.total}}</span>
+              <i class="material-icons">perm_media</i><span v-html="produto"></span><span class="badge">R$ {{produtos.total}}</span>
             </div>
             <div class="collapsible-body no-padding no-border">
               <ul class="collapsible no-border no-margin" data-collapsible="expandable">

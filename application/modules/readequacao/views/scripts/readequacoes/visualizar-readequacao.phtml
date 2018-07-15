@@ -57,22 +57,6 @@
                         $tiposReadequacoesComInfo = array(3, 4, 5, 6, 7, 8, 10, 12, 13, 15, 16, 17, 18, 19, 20, 21);
                         if (in_array($this->dados->idTipoReadequacao, $tiposReadequacoesComInfo)) { ?>
                             <tr>
-                                <td class="destacar bold">Tipo da Solicita&ccedil;&atilde;o</td>
-                                <td class="destacar bold">Arquivo</td>
-                                <td class="destacar bold">Dt. Solicita&ccedil;&atilde;o</td>
-                            </tr>
-                            <tr>
-                                <td><?php echo $this->dados->dsReadequacao; ?></td>
-                                <?php if (!empty($this->dados->idArquivo)) { ?>
-                                    <td>
-                                        <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $this->dados->idArquivo; ?>"><?php echo $this->dados->nmArquivo; ?></a>
-                                    </td>
-                                <?php } else { ?>
-                                    <td>-</td>
-                                <?php } ?>
-                                <td><?php echo Data::tratarDataZend($this->dados->dtSolicitacao, 'Brasileira'); ?></td>
-                            </tr>
-                            <tr>
                                 <td colspan="3" class="destacar bold">Informação que será considerada para readequação
                                     de <?php echo $this->dados->dsReadequacao; ?></td>
                             </tr>
@@ -86,6 +70,22 @@
                         </tr>
                         <tr>
                             <td colspan="3"><?php echo $this->dados->dsJustificativa; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="destacar bold">Tipo da Solicita&ccedil;&atilde;o</td>
+                            <td class="destacar bold">Arquivo</td>
+                            <td class="destacar bold">Dt. Solicita&ccedil;&atilde;o</td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->dados->dsReadequacao; ?></td>
+                            <?php if (!empty($this->dados->idArquivo)) { ?>
+                                <td>
+                                    <a href="<?php echo $this->url(array('module' => 'default', 'controller' => 'upload', 'action' => 'abrir')); ?>?id=<?php echo $this->dados->idArquivo; ?>"><?php echo $this->dados->nmArquivo; ?></a>
+                                </td>
+                            <?php } else { ?>
+                                <td>-</td>
+                            <?php } ?>
+                            <td><?php echo Data::tratarDataZend($this->dados->dtSolicitacao, 'Brasileira'); ?></td>
                         </tr>
                         <tr>
                             <td colspan="3">

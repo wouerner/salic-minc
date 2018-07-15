@@ -3772,6 +3772,22 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                 $Projetos = new Projetos();
                 $dadosPrj = $Projetos->find(array('IdPRONAC=?'=>$read->idPronac))->current();
 
+                $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+                $planilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilhaReadequada(
+                    $read->idPronac,
+                    $read->idReadequacao,
+                    [Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL]
+                )->current();
+
+
+                $where = array();
+                $where['a.IdPRONAC = ?'] = $read->idPronac;
+                $where['a.stAtivo = ?'] = 'S';
+                $where['a.nrFonteRecurso = ?'] = Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL;
+                $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilha($where)->current();
+
+                $valorDaReadequacao = $planilhaReadequada->Total - $PlanilhaAtiva->Total;
+
                 $tbAprovacao = new Aprovacao();
                 $dadosAprovacao = array(
                     'IdPRONAC' => $read->idPronac,
@@ -3779,6 +3795,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     'Sequencial' => $dadosPrj->Sequencial,
                     'TipoAprovacao' => Aprovacao::TIPO_APROVACAO_COMPLEMENTACAO,
                     'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
+                    'AprovadoReal' => $valorDaReadequacao,
                     'ResumoAprovacao' => $parecerTecnico->ResumoParecer,
                     'Logon' => $auth->getIdentity()->usu_codigo,
                     'idReadequacao' => $idReadequacao
