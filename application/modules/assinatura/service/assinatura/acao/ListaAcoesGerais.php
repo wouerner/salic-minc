@@ -5,7 +5,7 @@ namespace Application\Modules\Assinatura\Service\Assinatura\Acao;
 use MinC\Assinatura\Acao\IListaAcoesGerais;
 use \Assinatura_Model_DbTable_TbAssinatura as TbAssinaturaDbTable,
     \Application\Modules\Readequacao\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesReadequacao,
-    \Application\Modules\PrestacaoContas\Service\Assinatura\Laudo\Acao as ListaAcoesLaudoPrestacaoContas,
+    \Application\Modules\PrestacaoContas\Service\Assinatura\Laudo\Acao\ListaAcoesModulo as ListaAcoesLaudoPrestacaoContas,
     \Application\Modules\Admissibilidade\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesEnquadramento;
 
 class ListaAcoesGerais implements IListaAcoesGerais
