@@ -4,18 +4,18 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	<table class="bordered">
 		<thead>
 			<tr>
-				<th class="center-align">Produto</th>
-				<th class="center-align">Etapa</th>
-				<th class="center-align">Item</th>
+				<th class="left-align">Produto</th>
+				<th class="left-align">Etapa</th>
+				<th class="left-align">Item</th>
 				<th class="center-align">Vl. Comprovado</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>{{dadosPlanilhaAtiva.descProduto}}</td>
-				<td>{{dadosPlanilhaAtiva.descEtapa}}</td>
-				<td>{{dadosPlanilhaAtiva.descItem}}</td>
-				<td>{{valoresDoItem.vlComprovadoDoItem}}</td>
+				<td class="left-align">{{dadosPlanilhaAtiva.descProduto}}</td>
+				<td class="left-align">{{dadosPlanilhaAtiva.descEtapa}}</td>
+				<td class="left-align">{{dadosPlanilhaAtiva.descItem}}</td>
+				<td class="right-align">{{valoresDoItem.vlComprovadoDoItem}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -25,7 +25,7 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 	<table class="bordered">
 		<thead>
 			<tr>
-				<th class="center-align"Unidade></th>
+				<th class="left-align">Unidade</th>
 				<th class="center-align">Qtd</th>
 				<th class="center-align">Ocorr&ecirc;ncia</th>
 				<th class="center-align">Vl. Unit&aacute;rio</th>
@@ -35,12 +35,12 @@ Vue.component('planilha-orcamentaria-alterar-item', {
 		</thead>
 		<tbody>
 			<tr>
-				<td id="vlSolUnidade">{{dadosPlanilhaAtiva.descUnidade}}</td>
-				<td id="vlSolQtd">{{dadosPlanilhaAtiva.Quantidade}}</td>
-				<td id="vlSolOcor">{{dadosPlanilhaAtiva.Ocorrencia}}</td>
-				<td id="vlSolVlUnit">{{dadosPlanilhaAtiva.ValorUnitario}}</td>
-				<td id="vlSolDias">{{dadosPlanilhaAtiva.QtdeDias}}</td>
-				<td id="vlSolTotal">{{dadosPlanilhaAtiva.TotalSolicitado}}</td>
+				<td id="vlSolUnidade" class="left-align">{{dadosPlanilhaAtiva.descUnidade}}</td>
+				<td id="vlSolQtd" class="right-align">{{dadosPlanilhaAtiva.Quantidade}}</td>
+				<td id="vlSolOcor" class="right-align">{{dadosPlanilhaAtiva.Ocorrencia}}</td>
+				<td id="vlSolVlUnit" class="right-align">{{dadosPlanilhaAtiva.ValorUnitario}}</td>
+				<td id="vlSolDias" class="right-align">{{dadosPlanilhaAtiva.QtdeDias}}</td>
+				<td id="vlSolTotal" class="right-align">{{dadosPlanilhaAtiva.TotalSolicitado}}</td>
 			</tr>
 		</tbody>
 	</table>

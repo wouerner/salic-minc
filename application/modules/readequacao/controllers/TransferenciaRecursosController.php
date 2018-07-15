@@ -80,11 +80,12 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             $dados['idTipoReadequacao'] = Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS;
             $dados['stAtendimento'] = 'D';
             $dados['idDocumento'] = null;
+            $dados['dsJustificativa'] = utf8_decode($dados['justificativa']);
             
             $detalhamentoMapper = new Readequacao_Model_TbReadequacaoMapper();
-            $dados = $detalhamentoMapper->salvarDetalhamento($dados);
+            $id = $detalhamentoMapper->salvarSolicitacaoReadequacao($dados);
 
-            $this->_helper->json(array('readequacao' => $dados, 'success' => 'true', 'msg' => 'Readequa&ccedil;&atilde;o salva com sucesso!'));
+            $this->_helper->json(array('readequacao' => $id, 'success' => 'true', 'msg' => 'Readequa&ccedil;&atilde;o salva com sucesso!'));
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));

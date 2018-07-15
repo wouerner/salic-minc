@@ -39,15 +39,15 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
                             <thead>
                               <tr>
                                 <th>#</th>
-                                <th class="center-align">Item</th>
-                                <th class="center-align">Unidade</th>
-                                <th class="center-align">Dias</th>
-                                <th class="center-align">Qtde</th>
-                                <th class="center-align">Ocor.</th>
-                                <th class="center-align">Vl. Unit&aacute;rio</th>
-                                <th class="center-align">Vl. Aprovado</th>
-                                <th class="center-align">Vl. Comprovado</th>
-                                <th class="center-align">Justificativa</th>
+                                <th class="left-align">Item</th>
+                                <th class="left-align">Unidade</th>
+                                <th class="right-align">Dias</th>
+                                <th class="right-align">Qtde</th>
+                                <th class="right-align">Ocor.</th>
+                                <th class="right-align">Vl. Unit&aacute;rio</th>
+                                <th class="right-align">Vl. Aprovado</th>
+                                <th class="right-align">Vl. Comprovado</th>
+                                <th class="left-align">Justificativa</th>
                                 <th class="center-align" v-if="!disabled">A&ccedil;&atilde;o</th>
                               </tr>
                             </thead>
@@ -71,12 +71,12 @@ Vue.component('readequacao-saldo-planilha-orcamentaria', {
 																	</template>
 																</td>
                                 <td>{{row.Unidade}}</td>
-                                <td>{{row.QtdeDias}}</td>
-                                <td>{{row.Quantidade}}</td>
-                                <td>{{row.Ocorrencia}}</td>
-                                <td>{{converterParaReal(row.vlUnitario)}}</td>
-                                <td>{{converterParaReal(row.vlAprovado)}}</td>
-                                <td>{{converterParaReal(row.vlComprovado)}}</td>
+                                <td class="right-align">{{row.QtdeDias}}</td>
+                                <td class="right-align">{{row.Quantidade}}</td>
+                                <td class="right-align">{{row.Ocorrencia}}</td>
+                                <td class="right-align">{{converterParaReal(row.vlUnitario)}}</td>
+                                <td class="right-align">{{converterParaReal(row.vlAprovado)}}</td>
+                                <td class="right-align">{{converterParaReal(row.vlComprovado)}}</td>
                                 <td>{{row.dsJustificativa}}</td>
                                 <td v-if="!disabled" class="center-align">
 																	<template v-if="itemExcluido(row)">
