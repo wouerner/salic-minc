@@ -39,6 +39,9 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         $obj = (json_decode($request));
 
         $this->eInternacional = $obj->fornecedor->eInternacional;
+        $this->item = $obj->item;
+        $this->idPlanilhaAprovacao = $obj->idPlanilhaAprovacao;
+
         if($obj->fornecedor->eInternacional) {
             $this->fornecedorInternacional($obj);
         } else {
@@ -51,7 +54,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         $this->nrComprovante = $obj->numero;
         $this->serie = $obj->serie;
         $this->dsJustificativa = $obj->justificativa;
-        $this->vlComprovacao = $obj->valor; // not null
+        $this->vlComprovacao = $obj->valor;
         $this->setDataEmissao($obj->dataEmissao, 'd/m/Y');
         $this->setDataPagamento($obj->dataPagamento, 'd/m/Y');
         $this->idFornecedor = $obj->fornecedor->idAgente;
@@ -117,10 +120,12 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
                 'idFornecedorExterior' => $this->idFornecedorExterior,
             ];
         }
-        /* var_dump($dados);die; */
 
-        /* $this->comprovarPlanilhaCadastrar(); */
-        return $this->insert($dados);
+        $this->idComprovantePagamento = $this->insert($dados);
+
+        $this->comprovarPlanilhaCadastrar();
+
+        return $this->idComprovantePagamento;
     }
 
     public function atualizar()
@@ -170,11 +175,11 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         }
 
         /* $this->comprovarPlanilhaCadastrar(); */
-        $result =  $this->update(
+        $this->update(
             $dados,
             ['idComprovantePagamento = ?' => $this->idComprovantePagamento]
         );
-        return $result;
+        return $this->idComprovantePagamento;
     }
 
     public function upload()
@@ -186,6 +191,30 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             throw new Exception('O arquivo deve ser PDF.');
         }
         return $idArquivo;
+    }
+
+    public function excluir()
+    {
+        if (!$this->idComprovantePagamento) {
+            throw new Exception('Comprovante nao informado.');
+        }
+        $tbComprovantePagamentoxPlanilhaAprovacao = new ComprovantePagamentoxPlanilhaAprovacao();
+        $tbComprovantePagamentoxPlanilhaAprovacao->delete(array('idComprovantePagamento = ?' => $this->idComprovantePagamento));
+        $vwAnexarComprovantes = new vwAnexarComprovantes();
+        $vwAnexarComprovantes->excluirArquivo($this->idComprovantePagamento);
+
+        $tbComprovantePagamento = new ComprovantePagamento();
+        $comprovantePagamentoRow = $tbComprovantePagamento->fetchRow(array('idComprovantePagamento = ?' => $this->idComprovantePagamento));
+
+        if ($comprovantePagamentoRow && $comprovantePagamentoRow->idFornecedorExterior) {
+            $idfornecedorInvoice = $comprovantePagamentoRow->idFornecedorExterior;
+        }
+        $comprovantePagamentoRow->delete();
+        if (isset($idfornecedorInvoice)) {
+            $fornecedorInvoiceTable = new FornecedorInvoice();
+            $fornecedorInvoiceTable->getAdapter()->getProfiler()->setEnabled(true);
+            $fornecedorInvoiceTable->delete(array('idFornecedorExterior = ?' => $idfornecedorInvoice));
+        }
     }
 
     public function inserirComprovantePagamento($data)
@@ -305,9 +334,6 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         }
     }
 
-    /**
-     * @return Zend_Db_Table_Rowset_Abstract
-     */
     public function pesquisarComprovante($idComprovante, $fetchMode = Zend_DB::FETCH_ASSOC)
     {
         $select = "SELECT
@@ -525,9 +551,6 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         return $statement->fetchAll();
     }
 
-    /**
-     *
-     */
     public function toStdclass()
     {
         return (object) array(
@@ -535,24 +558,19 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         );
     }
 
-    /**
-     * @todo remover esse metodo apos implementacao ideal planilha comprovacao
-     */
     protected function comprovarPlanilhaCadastrar()
     {
-        $comprovantePlanilha = new ComprovantePagamentoxPlanilhaAprovacao();
+        $comprovantePlanilha = new PrestacaoContas_Model_ComprovantePagamentoxPlanilhaAprovacao();
+
         $dados =
            [
-                'idComprovantePagamento' => $this->comprovantePagamento,
-                'idPlanilhaAprovacao' => $this->item,
-                'vlComprovado' => $this->comprovanteValor,
+                'idComprovantePagamento' => $this->idComprovantePagamento,
+                'idPlanilhaAprovacao' => (int) $this->idPlanilhaAprovacao,
+                'vlComprovado' => $this->vlComprovacao,
             ];
-        $comprovantePlanilha->insert($dados);
+        $result = $comprovantePlanilha->insert($dados);
     }
 
-    /**
-     * @todo remover esse metodo apos implementacao ideal planilha comprovacao
-     */
     public function comprovarPlanilhaAtualizarStatus($status, $vlComprovado, $idComprovantePagamento)
     {
         $comprovantePlanilha = new ComprovantePagamentoxPlanilhaAprovacao();
