@@ -64,9 +64,9 @@ module.exports = {
             }
         ]
     },
-    plugins: [new EncodingPlugin({
-        encoding: 'iso-8859-1'
-    })],
+    // plugins: [new EncodingPlugin({
+    //     encoding: 'iso-8859-1'
+    // })],
     node    : {
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).
