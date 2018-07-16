@@ -1,13 +1,14 @@
 Vue.component('comprovantes', {
     template: `
         <div>
+            <template v-if="dados.length > 0 ">
             <ul class="collapsible" data-collapsible="accordion">
                 <li v-for="(dado, index) in dados">
                   <div class="collapsible-header">
-                          Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
-                      <span :class="['badge white-text', badgeCSS(dado.stItemAvaliado)]">
-                        {{situacao(dado.stItemAvaliado)}}
-                      </span>
+                        Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
+                        <span :class="['badge white-text', badgeCSS(dado.stItemAvaliado)]">
+                            {{situacao(dado.stItemAvaliado)}}
+                        </span>
                   </div>
                   <div :class="['collapsible-body lighten-5', badgeCSS(dado.stItemAvaliado)]">
                         <div class="card">
@@ -34,6 +35,11 @@ Vue.component('comprovantes', {
                                         url="/prestacao-contas/gerenciar/atualizar"
                                         tipoform="edicao"
                                         :item="idplanilhaitem"
+                                        :datainicio="datainicio"
+                                        :datafim="datafim"
+                                        :valoraprovado="valoraprovado"
+                                        :valorcomprovado="valorcomprovado"
+                                        :valorantigo="dado.valor"
                                     >
                                     </component>
                                 </template>
@@ -42,6 +48,10 @@ Vue.component('comprovantes', {
                   </div>
                 </li>
             </ul>
+            </template>
+            <template v-else>
+                <p> Sem comprovantes</p>
+            </template>
         </div>
     `,
     components:{
@@ -57,7 +67,11 @@ Vue.component('comprovantes', {
         'etapa',
         'componenteform',
         'tipo',
-        'url'
+        'url',
+        'datainicio',
+        'datafim',
+        'valoraprovado',
+        'valorcomprovado'
     ],
     created() {
         let vue = this;
@@ -70,9 +84,9 @@ Vue.component('comprovantes', {
 
             this.$root.$on('comprovante-nacional-atualizado', function(data) {
                 vue.formVisivel = false;
-                // vue.$data.dados[data._index] = data;
-                Vue.set(vue.$data.dados, data._index, data);
-                console.log(data._index, data);
+                if(vue.tipo =='nacional'){
+                    Vue.set(vue.$data.dados, data._index, data);
+                }
             })
 
             this.$root.$on('novo-comprovante-internacional', function(data) {
@@ -84,10 +98,9 @@ Vue.component('comprovantes', {
                 }
             })
 
-            // this.$root.$on('atualizado-comprovante-internacional', function(data) {
-            //     vue.formVisivel = false;
-            // })
-
+            this.$root.$on('atualizado-comprovante-internacional', function(data) {
+                vue.formVisivel = false;
+            })
     },
     mounted: function() {
         var vue = this;
@@ -107,12 +120,20 @@ Vue.component('comprovantes', {
         })
         .done(function(data) {
             vue.$data.dados = data.data;
+                $3('.collapsible').each(function() {
+                    $3(this).collapsible();
+                });
         })
         .fail(function(jqXHR) {
             alert('error');
         });
     },
     computed: {
+    },
+    updated() {
+        $3('.collapsible').each(function() {
+            $3(this).collapsible();
+        });
     },
     methods:{
         badgeCSS: function(id) {
