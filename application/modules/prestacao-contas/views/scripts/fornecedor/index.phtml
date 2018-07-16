@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>projeto</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+</head>
+<body>
+
+<div class="container" id="app"> <!-- inicio do container -->
+    <agente-form></agente-form>
+
+
+    <div class="row center-align">
+        <div class="col s4 offset-s4">
+            <a href="#" class="btn">Salvar</a>
+        </div>
+    </div>
+</div> <!-- final do container -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+    Vue.component('agente-form',{
+
+        template:  `
+        <form id="formulario">
+        <h4>Novo cadastro</h4>
+        <fieldset>
+            <legend>DADOS PRINCIPAIS</legend>
+
+            <div class="row">
+                <label>
+                    <input class="with-gap" name="group1" type="radio" id="test1" value="1" v-model="TipoPessoa"/>
+                    <label for="test1">CPF</label>
+                </label>
+                <label>
+                    <input class="with-gap" name="group1" type="radio" id="test2"  value="2" v-model="TipoPessoa">
+                    <label for="test2">CNPJ</label>
+                </label>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s3">
+                    <input type="text" id="first_name" type="text" v-model="CPFCNPJ">
+                    <label for="first_name">CPF/CNPJ</label>
+                </div>
+
+                <div class="input-field col s6">
+                    <input type="text" id="last_name" type="text" class="validate" v-model="Nome">
+                    <label for="last_name">Nome *</label>
+                </div>
+
+                <div class="col s3">
+                    <label>Visão do Agente</label>
+                    <select class="browser-default" v-model="Fornecedor">
+                        <option value="" disabled selected>Fornecedor</option>
+                        <option value="2">Fulano</option>
+                    </select>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>NOVO ENDEREÇO</legend>
+
+            <div class="row">
+                <div class="input-field col s3">
+                    <input type="text" id="first_name" type="text" class="validate" v-model="CEP">
+                    <label for="first_name">CEP *</label>
+                </div>
+                <div class="col s3">
+                    <label>Tipo *</label>
+                    <select class="browser-default" v-model="Tipo">
+                        <option value="" disabled selected>-Selecione-</option>
+                        <option value="1">-Selecione-</option>
+                        <option value="2">Aeroporto</option>
+                        <option value="3">Alameda</option>
+                        <option value="4">Area</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" id="last_name" type="text" class="validate" v-model="Logradouro">
+                    <label for="last_name">Logradouro *</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s6">
+                    <input type="text" id="last_name" type="text" class="validate" v-model="Numero">
+                    <label for="last_name">Número *</label>
+                </div>
+                <div class="input-field col s6">
+                    <input type="text" id="last_name" type="text" class="validate" v-model="Complemento">
+                    <label for="last_name">Complemento</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <label>UF *</label>
+                    <select class="browser-default" v-model="UF">
+                        <option value="" disabled selected>-Selecione-</option>
+                        <option value="1">AC</option>
+                        <option value="2">AL</option>
+                        <option value="3">AM</option>
+                    </select>
+                </div>
+                <div class="col s3">
+                    <label>Cidade *</label>
+                    <select class="browser-default" v-model="Cidade">
+                        <option value="" disabled selected>-Selecione-</option>
+                        <option value="1">br</option>
+                        <option value="2">br</option>
+                    </select>
+
+                </div>
+                <div class="input-field col s4">
+                    <input type="text" id="last_name" type="text" class="validate" v-model="Bairro">
+                    <label for="last_name">Bairro *</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <label>Tipo de Endereço *</label>
+                    <select class="browser-default" v-model="TipoDeEndereço">
+                        <option value="" disabled selected>-Selecione-</option>
+                        <option value="1">Comercial</option>
+                        <option value="2">Endereço-Receita Federal</option>
+                        <option value="3">Residencial</option>
+                    </select>
+                </div>
+                <div class="col s3">
+                    <label>Autorizar Divulgar?</label>
+                    <div class="align-bottom">
+                        <input class="with-gap" name="group1" type="radio" id="test4" value="4" v-model="Autorizar" />
+                        <label for="test4">Sim</label>
+
+                        <input class="with-gap" name="group1" type="radio" id="test5" value="5" v-model="Autorizar"/>
+                        <label for="test5">Não</label>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+        ` ,
+        data: function () {
+
+           return {
+               TipoPessoa:"",
+               CPFCNPJ: "",
+               Nome: "",
+               Fornecedor: "",
+               CEP: "",
+               Tipo: "",
+               Logradouro: "",
+               Numero: "",
+               Complemento: "",
+               UF:"",
+               Cidade:"",
+               Bairro:"",
+               TipoDeEndereço:"",
+               Autorizar:""
+           }
+
+        }
+
+    });
+
+
+    var app = new Vue({
+        el: '#app',
+
+    })
+
+</script>
+
+
+</body>
+</html>
