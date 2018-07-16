@@ -161,8 +161,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
             $idPronac = $params['idPronac'];
             $debug = $params['debug'];
-
+            $idPronacHash = $idPronac;
             if (strlen($idPronac) > 7) {
+                $idPronacHash = $idPronac;
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
 
@@ -177,9 +178,9 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 }
 
                 if ($projeto['Mecanismo'] == 1) {
-                    $this->redirect('/projeto/#/incentivo/' . $projeto['IdPRONAC']);
+                    $this->redirect('/projeto/#/incentivo/' . $idPronacHash);
                 } else {
-                    $this->redirect('/projeto/convenio/visualizar/idPronac/' . $projeto['IdPRONAC']);
+                    $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronacHash);
                 }
             }
 

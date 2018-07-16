@@ -9,6 +9,22 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
     private $debug = false;
     private $situacaoProjeto = '';
     private $IN2017 = false;
+    private $idUsuario = 0;
+    private $idGrupoAtivo = 0;
+
+    public function init()
+    {
+        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sess�o com o grupo ativo
+        $this->idGrupoAtivo = $GrupoAtivo->codGrupo;
+
+        $auth = Zend_Auth::getInstance();
+        $this->idUsuario = $auth->getIdentity()->IdUsuario;
+
+        if (!empty($this->idUsuario)) {
+            $this->usuarioExterno = true;
+        }
+
+    }
 
     public function obterMenu($idPronac)
     {
@@ -39,23 +55,21 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
     }
 
-    public function obterVersaoInDoProjeto($idPronac) {
+    public function obterVersaoInDoProjeto($idPronac)
+    {
         $tbProjetos = new Projeto_Model_DbTable_Projetos();
         $this->IN2017 = $tbProjetos->verificarIN2017($idPronac);
     }
 
     public function obterPermissoesMenu($idPronac, $projeto)
     {
-        $auth = Zend_Auth::getInstance();
 
-        if (!isset($auth->getIdentity()->usu_codigo)) {
-            $this->usuarioExterno = true;
-            $idUsuarioLogado = $auth->getIdentity()->IdUsuario;
+        if ($this->usuarioExterno && !empty($this->idUsuario)) {
 
             $projetos = new Projeto_Model_DbTable_Projetos();
 
             $links = new fnLiberarLinks();
-            $linksXpermissao = $links->links(2, $projeto['CgcCpf'], $idUsuarioLogado, $idPronac);
+            $linksXpermissao = $links->links(2, $projeto['CgcCpf'], $this->idUsuario, $idPronac);
 
             $linksGeral = str_replace(' ', '', explode('-', $linksXpermissao->links));
 
@@ -87,7 +101,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
     public function obterArrayMenuConvenio($idPronac, $projeto)
     {
         $idPronacHash = Seguranca::encrypt($idPronac);
-        $pronac = $projeto['AnoProjeto'] .''. $projeto['Sequencial'];
+        $pronac = $projeto['AnoProjeto'] . '' . $projeto['Sequencial'];
         $menu = [];
         $menu['informacoes'] = [
             'id' => 'informacoes',
@@ -128,7 +142,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $idPronacHash = Seguranca::encrypt($idPronac);
         $debug = $this->debug;
 
-        $pronac = $projeto['AnoProjeto'] .''. $projeto['Sequencial'];
+        $pronac = $projeto['AnoProjeto'] . '' . $projeto['Sequencial'];
         $menu = [];
         $menu['informacoes'] = [
             'id' => 'informacoes',
@@ -505,7 +519,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
             }
 
-             if ($this->permissoesMenu['ReadequacaoSaldoAplicacao'] || $debug) {
+            if ($this->permissoesMenu['ReadequacaoSaldoAplicacao'] || $debug) {
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Saldo de aplica&ccedil;&atilde;o',
                     'title' => 'Ir para Saldo de aplica&ccedil;&atilde;o',
@@ -518,7 +532,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['readequacao']['submenu'][] = [
                 'label' => 'Diversas',
                 'title' => 'Readequa&ccedil;&otilde;es Diversas',
-                'link' => '/readequacao/transferencia-recursos/index/?idPronac=' . $idPronacHash,
+                'link' => '/readequacao/readequacoes/index/?idPronac=' . $idPronacHash,
                 'ajax' => false,
                 'grupo' => []
             ];
@@ -598,13 +612,13 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'id' => 'comprovacaofinaceira',
                 'label' => 'Comprova&ccedil;&atilde;o Financeira',
                 'title' => 'Ir para Realizar Comprova&ccedil;&atilde;o Financeira',
-                'link' => '/default/comprovarexecucaofinanceira/pagamento?idusuario=' . $this->usuario->IdUsuario . '&idPronac=' . $idPronacHash,
+                'link' => '/default/comprovarexecucaofinanceira/pagamento?idusuario=' . $this->idUsuario . '&idpronac=' . $idPronac,
                 'ajax' => false,
                 'icon' => 'attach_money',
                 'submenu' => '',
                 'grupo' => []
             ];
-        }
+        }                    
 
         if ($this->situacaoProjeto != 'E24' || $debug) {
 
@@ -628,7 +642,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 $menu['comprovacaofisica']['submenu'][] = [
                     'label' => 'Relat&oacute;rio Trimestral',
                     'title' => 'Ir para Relat&oacute;rio Trimestral',
-                    'link' => '/default/comprovarexecucaofisica/relatoriotrimestral?idpronac =' . $idPronacHash,
+                    'link' => '/default/comprovarexecucaofisica/relatoriotrimestral/idpronac/' . $idPronacHash,
                     'ajax' => false,
                     'grupo' => []
                 ];
@@ -673,13 +687,13 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         $perfisMensagens = array(131, 92, 93, 122, 123, 121, 129, 94, 103, 110, 118, 126, 125, 124, 132, 136, 134, 135, 138, 139);
-        if (in_array($this->grupoAtivo, $perfisMensagens) || $debug) {
+        if (in_array($this->idGrupoAtivo, $perfisMensagens) || $debug) {
 
             $menu['mensagens'] = [
                 'id' => 'mensagens',
                 'label' => 'Mensagens',
                 'title' => 'Ir para Mensagens',
-                'link' => '/default/mantermensagens/consultarmensagem/idpronac/' . $idPronac,
+                'link' => '/default/mantermensagens/consultarmensagem/idpronac/' . $idPronacHash,
                 'ajax' => false,
                 'icon' => 'email',
                 'submenu' => '',
@@ -691,7 +705,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'solicitacoes',
             'label' => $this->usuarioExterno ? "Minhas solicita&ccedil;&otilde;es" : "Solicita&ccedil;&otilde;es",
             'title' => 'Ir para Solicitações',
-            'link' => '/solicitacao/mensagem/index/listarTudo/true/idpronac/' . $idPronac,
+            'link' => '/solicitacao/mensagem/index/listarTudo/true/idPronac/' . $idPronac,
             'ajax' => false,
             'icon' => 'contact_mail',
             'submenu' => '',
