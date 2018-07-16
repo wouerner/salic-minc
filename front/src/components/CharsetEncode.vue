@@ -1,6 +1,6 @@
 <template>
-    <div v-if="texto && texto.length > 0" v-html="messageFormated"></div>
-    <div v-else>N&atilde;o informado(a)</div>
+    <div v-if="texto && texto.length > 0" v-html="textFormated"></div>
+    <div v-else v-html="textNotInformed"></div>
 </template>
 
 <script>
@@ -8,8 +8,11 @@
         name: 'CharsetEncode',
         props: ['texto'],
         computed: {
-            messageFormated: function() {
+            textFormated: function() {
                 return decodeURI(this.texto, 'iso-8859-1');
+            },
+            textNotInformed: function() {
+                return decodeURI('N&atilde;o informado(a)', 'iso-8859-1');
             },
         },
     };

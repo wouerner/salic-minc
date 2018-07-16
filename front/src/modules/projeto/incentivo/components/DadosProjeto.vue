@@ -72,7 +72,7 @@
                     <!-- <td class="centro"><b>Prorroga&ccedil;&atilde;o autom&aacute;tica</b></td> -->
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Prorroga&ccedil;&atilde;o autom&aacute;tica'"></CharsetEncode>
+                            <CharsetEncode :texto="''"></CharsetEncode>
                         </b>
                     </td>
                     <td class="centro"><b>Plano de Execu&ccedil;&atilde;o Imediata</b></td>
