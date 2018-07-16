@@ -41,7 +41,10 @@ class Projeto_OrcamentoController extends Projeto_GenericController
         try {
 
             $spRenderizarPlanilha = new Projeto_Model_DbTable_SpRenderizarPlanilhas();
-            $planilha = $spRenderizarPlanilha->obterPlanilhaPorTipo($this->idPronac, 'AP');
+            $planilha = $spRenderizarPlanilha->obterPlanilhaPorTipo(
+                $this->idPronac,
+                Projeto_Model_DbTable_SpRenderizarPlanilhas::TIPO_PLANILHA_HOMOLOGADA
+            );
 
             if (empty($planilha)) {
                 throw new Exception("Nenhuma planilha encontrada... ;(");
@@ -64,7 +67,10 @@ class Projeto_OrcamentoController extends Projeto_GenericController
         try {
 
             $spRenderizarPlanilha = new Projeto_Model_DbTable_SpRenderizarPlanilhas();
-            $planilha = $spRenderizarPlanilha->obterPlanilhaPorTipo($this->idPronac, 'RE');
+            $planilha = $spRenderizarPlanilha->obterPlanilhaPorTipo(
+                $this->idPronac,
+                Projeto_Model_DbTable_SpRenderizarPlanilhas::TIPO_PLANILHA_READEQUADA
+            );
 
             if (empty($planilha)) {
                 throw new Exception("Nenhuma planilha encontrada... ;(");

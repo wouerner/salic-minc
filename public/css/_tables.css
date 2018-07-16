@@ -68,18 +68,24 @@ x - TABELAS (legado)
     background: #f6f5f8;
 }
 
+table tr.linha-excluida,
 #conteudo table tr.linha-excluida {
     text-decoration: line-through;
 }
 
+table tr.linha-excluida td,
 #conteudo table tr.linha-excluida td {
     background-color: #dcdcdc;
     color: #777
 }
 
+table tr.linha-atualizada td,
+table tr.linha-incluida td,
 #conteudo table tr.linha-atualizada td,
 #conteudo table tr.linha-incluida td {
-    background-color: #d0e8d6
+    background-color: #d0e8d6;
+    color: #085020;
+    font-weight: 500;
 }
 
 #conteudo table tfoot td img {
