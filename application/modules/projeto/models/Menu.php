@@ -76,6 +76,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'SolicitarProrrogacao' => $linksGeral[13],
                 'ReadequacaoPlanilha' => $linksGeral[14],
                 'ReadequacaoTransferenciaRecursos' => $linksGeral[15],
+                'ReadequacaoSaldoAplicacao' => $linksGeral[16],
                 'AdequarExecucao' => $projetos->fnChecarLiberacaoDaAdequacaoDoProjeto($idPronac)
             );
 
@@ -499,6 +500,16 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                     'label' => 'Transfer&ecirc;ncia de recursos',
                     'title' => 'Readequar Transfer&ecirc;ncia de recursos',
                     'link' => '/readequacao/transferencia-recursos/index/?idPronac=' . $idPronacHash,
+                    'ajax' => false,
+                    'grupo' => []
+                ];
+            }
+
+             if ($this->permissoesMenu['ReadequacaoSaldoAplicacao'] || $debug) {
+                $menu['readequacao']['submenu'][] = [
+                    'label' => 'Saldo de aplica&ccedil;&atilde;o',
+                    'title' => 'Ir para Saldo de aplica&ccedil;&atilde;o',
+                    'link' => '/readequacao/saldo-aplicacao/index/?idPronac=' . $idPronacHash,
                     'ajax' => false,
                     'grupo' => []
                 ];
