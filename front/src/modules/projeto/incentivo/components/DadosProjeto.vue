@@ -69,7 +69,12 @@
                     <td class="centro"><b>N&ordm; Proposta</b></td>
                     <td class="centro"><b>Data Fixa</b></td>
                     <td class="centro"><b>Processo</b></td>
-                    <td class="centro"><b>Prorroga&ccedil;&atilde;o autom&aacute;tica</b></td>
+                    <!-- <td class="centro"><b>Prorroga&ccedil;&atilde;o autom&aacute;tica</b></td> -->
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'Prorroga&ccedil;&atilde;o autom&aacute;tica'"></CharsetEncode>
+                        </b>
+                    </td>
                     <td class="centro"><b>Plano de Execu&ccedil;&atilde;o Imediata</b></td>
                 </tr>
                 <tr>
@@ -504,6 +509,7 @@
     import {mapActions, mapGetters} from 'vuex';
     import Carregando from '@/components/Carregando';
     import SalicTextoSimples from '@/components/SalicTextoSimples';
+    import CharsetEncode from '@/components/CharsetEncode';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import {utils} from '@/mixins/utils';
@@ -522,6 +528,7 @@
         components: {
             Carregando,
             SalicTextoSimples,
+            CharsetEncode,
             SalicFormatarValor,
             SalicFormatarCpfCnpj
         },
