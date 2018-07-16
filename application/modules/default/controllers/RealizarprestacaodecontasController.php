@@ -3321,6 +3321,10 @@ class RealizarPrestacaoDeContasController extends MinC_Controller_Action_Abstrac
 
     public function painelAction()
     {
+        $perfisComPermissao[] = Autenticacao_Model_Grupos::CHEFE_DE_DIVISAO;
+        $perfisComPermissao[] = Autenticacao_Model_Grupos::COORDENADOR_PRESTACAO_DE_CONTAS;
+        parent::perfil(1, $perfisComPermissao);
+
         if (isset($_GET['msg']) && $_GET['msg'] == 'sucessoLaudoFinal') {
             parent::message('Laudo final da presta&ccedil;&atilde;o de contas emitido com sucesso!', "realizarprestacaodecontas/painel?pag=1&tipoFiltro=devolvidos", 'CONFIRM');
         }
