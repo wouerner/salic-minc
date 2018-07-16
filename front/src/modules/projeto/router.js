@@ -7,6 +7,7 @@ import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOri
 import PlanilhaPropostaAutorizada from './incentivo/components/PlanilhaPropostaAutorizada'
 import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAdequada'
 import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada'
+import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada'
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos'
 import Proponente from './incentivo/components/Proponente'
 
