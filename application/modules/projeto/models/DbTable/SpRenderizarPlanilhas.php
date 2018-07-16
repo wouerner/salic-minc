@@ -70,13 +70,13 @@ class Projeto_Model_DbTable_SpRenderizarPlanilhas extends MinC_Db_Table_Abstract
             $row['vlAprovado'] = $item["vlAprovado"];
             $row['VlComprovado'] = $item["VlComprovado"];   # @todo padronizar o nome
             $row['tpPlanilha'] = $item["tpPlanilha"];
+            $row['stCustoPraticado'] = $item["stCustoPraticado"];
 
             if ($tipo == $this::TIPO_PLANILHA_HOMOLOGADA) {
                 $row['vlSolicitado'] = $item["vlSolicitado"];
                 $row['vlSugerido'] = $item["vlSugerido"];
                 $row['JustParecerista'] = $item["JustParecerista"];
                 $row['JustComponente'] = $item["JustComponente"];
-                $row['stCustoPraticado'] = $item["stCustoPraticado"];
                 $row['idPlanilhaAprovacao'] = $item["idPlanilhaAprovacao"];
                 $row['idPlanilhaAprovacaoPai'] = $item["idPlanilhaAprovacaoPai"];
             }

@@ -8,7 +8,7 @@
                 <th>Dias</th>
                 <th>Qtde</th>
                 <th>Ocor.</th>
-                <th>Vl. Unit&aacute;rio</th>
+                <th><CharsetEncode :texto="'Vl. Unit&aacute;rio'"/></th>
                 <th>Vl. Solicitado</th>
                 <th>#</th>
             </tr>
@@ -43,6 +43,7 @@
 
 <script>
     import numeral from 'numeral'
+    import CharsetEncode from '@/components/CharsetEncode';
 
     export default {
         name: 'ListaDeItensAprovados',
@@ -55,6 +56,9 @@
             'table',
             'full'
         ],
+        components: {
+            CharsetEncode
+        },
         methods: {
             isObject: function (el) {
 

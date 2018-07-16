@@ -76,7 +76,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             if ($usuario) {
                 $this->idUsuario = $usuario['usu_codigo'];
             }
-
             $this->view->idAgenteKeyLog = $this->idAgente;
             $this->view->idResponsavelKeyLog = $this->idResponsavel;
             $this->view->idUsuarioKeyLog = $this->idUsuario;

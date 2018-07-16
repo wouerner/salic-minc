@@ -300,8 +300,12 @@
                 </tr>
                 <tr>
                     <td align="center">{{ dadosProjeto.DtSituacao | formatarData }}</td>
-                    <td class="left-align destacar">{{ dadosProjeto.Situacao }}</td>
-                    <td class="left-align">{{ dadosProjeto.ProvidenciaTomada }}</td>
+                    <td class="left-align destacar">
+                        <SalicTextoSimples :texto="dadosProjeto.Situacao"/>
+                    </td>
+                    <td class="left-align">
+                        <SalicTextoSimples :texto="dadosProjeto.ProvidenciaTomada"/>
+                    </td>
                     <td align="center" class="bold">{{ dadosProjeto.LocalizacaoAtual }}</td>
                 </tr>
             </table>
@@ -363,7 +367,7 @@
                     <td align="center"><b>Cx.Final</b></td>
                 </tr>
                 <tr>
-                    <td align="center">{{ dadosProjeto.DtArquivamento }}</td>
+                    <td align="center">{{ dadosProjeto.DtArquivamento | formatarData }}</td>
                     <td align="center">{{ dadosProjeto.CaixaInicio }}</td>
                     <td align="center">{{ dadosProjeto.CaixaFinal }}</td>
                 </tr>
@@ -697,6 +701,11 @@
         },
         filters: {
             formatarData: function (date) {
+
+                if(date.length == 0) {
+                    return '-';
+                }
+
                 return moment(date).format('DD/MM/YYYY');
             }
         }

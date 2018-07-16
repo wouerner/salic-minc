@@ -9,11 +9,11 @@
                 <th class="center-align">Dias</th>
                 <th class="center-align">Qtde</th>
                 <th class="center-align">Ocor.</th>
-                <th class="right-align">Vl. Unit&aacute;rio</th>
+                <th class="right-align"><CharsetEncode :texto="'Vl. Unit&aacute;rio'" /></th>
                 <th class="right-align">Vl. Aprovado</th>
                 <th class="right-align">Vl. Comprovado</th>
-                <th class="center-align">Justf. de Readequa&ccedil;&atilde;o</th>
-                <th class="center-align">A&ccedil;&atilde;o</th>
+                <th class="center-align"><CharsetEncode :texto="'Justf. de Readequa&ccedil;&atilde;o'" /></th>
+                <th class="center-align"><CharsetEncode :texto="'A&ccedil;&atilde;o'" /></th>
             </tr>
             </thead>
             <tbody>
@@ -55,8 +55,8 @@
     import numeral from 'numeral'
     import 'numeral/locales';
 
+    import CharsetEncode from '@/components/CharsetEncode';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
-
 
     export default {
         name: 'ListaDeItensReadequados',
@@ -70,7 +70,8 @@
             'full': ''
         },
         components: {
-            SalicFormatarValor
+            SalicFormatarValor,
+            CharsetEncode
         },
         created: function() {
             numeral.locale('pt-br');

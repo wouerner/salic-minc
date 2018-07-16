@@ -1,17 +1,24 @@
 <template>
     <div class="incentivo">
-        <SidebarMenu :url-ajax="urlAjax"></SidebarMenu>
-        <div class="container-fluid">
-            <TituloPagina :titulo="$route.meta.title"></TituloPagina>
-            <router-view></router-view>
+        <Carregando v-if="carregando" :text="'Validando acesso ao projeto'"></Carregando>
+        <div v-if="Object.keys(projeto).length > 0 && projeto.permissao">
+            <SidebarMenu :url-ajax="urlAjax"></SidebarMenu>
+            <div class="container-fluid">
+                <TituloPagina :titulo="$route.meta.title"></TituloPagina>
+                <router-view></router-view>
+            </div>
+            <MenuSuspenso/>
         </div>
-        <MenuSuspenso/>
+        <div v-if="permissao == false">
+            <SalicMensagemErro :texto="'Sem permiss&atilde;o de acesso para este projeto'" />
+        </div>
     </div>
 </template>
-
 <script>
     import SidebarMenu from '@/components/SidebarMenu';
+    import Carregando from '@/components/Carregando';
     import TituloPagina from '@/components/TituloPagina';
+    import SalicMensagemErro from '@/components/SalicMensagemErro';
     import MenuSuspenso from '../components/MenuSuspenso';
     import {mapActions, mapGetters} from 'vuex';
     import {utils} from '@/mixins/utils';
@@ -23,19 +30,23 @@
         components: {
             SidebarMenu,
             TituloPagina,
-            MenuSuspenso
+            MenuSuspenso,
+            Carregando,
+            SalicMensagemErro
         },
         mixins: [utils],
         data() {
             return {
                 urlAjax: URL_MENU + this.$route.params.idPronac,
+                carregando: true,
+                permissao: true
             }
         },
         watch: {
             '$route' (to, from) {
                 /**
                  * se o alterar apenas o parametro na url, o vue não recarrega o componente.
-                 * aqui eu estou recarregando os dados do novo projeto se o idPronac for diferente
+                 * aqui está recarregando os dados do novo projeto se o idPronac for diferente
                  * */
                 if (typeof to.params.idPronac != 'undefined'
                         && to.params.idPronac != from.params.idPronac) {
@@ -59,6 +70,14 @@
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
             }),
+            projeto: function () {
+                if(Object.keys(this.dadosProjeto).length > 0) {
+                    this.carregando = false;
+                    this.permissao = this.dadosProjeto.permissao;
+                }
+
+                return this.dadosProjeto;
+            }
         }
     }
 </script>
