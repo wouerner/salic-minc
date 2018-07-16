@@ -131,8 +131,7 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             ['d.NrReuniao'],
             $this->_schema
         );
-
-        $sql->join(
+        $sql->joinInner(
             ['e' => 'Orgaos'],
             'a.OrgaoOrigem = e.Codigo',
             ['e.idSecretaria AS idOrgaoSuperior'],
@@ -151,10 +150,27 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             $this->_schema
         );
 
+        $sql->joinInner(
+          ['h'=> 'tbVerificaProjeto'],
+          'h.IdPRONAC = a.IdPRONAC',
+          ['stAnaliseProjeto'],
+          $this->_schema
+        );
+
+        $sql->joinInner(
+            ['i' => 'Usuarios'],
+            'h.idUsuario = i.usu_codigo',
+            [
+                'usu_nome AS Tecnico',
+                new Zend_Db_Expr("DATEDIFF(day, h.dtrecebido, GETDATE()) AS tempoAnalise")
+            ],
+            'TABELAS.dbo'
+        );
+
         $sql->where('a.Situacao = ?', Projeto_Model_Situacao::PROJETO_APRECIADO_PELA_CNIC);
 
         if (!empty($search['value'])) {
-            $sql->where('a.NomeProjeto like ? OR a.AnoProjeto+a.Sequencial like ?', '%'.$search['value'].'%');
+            $sql->where('a.NomeProjeto like ? OR a.AnoProjeto+a.Sequencial like ? OR d.NrReuniao like ?', '%'.$search['value'].'%');
         }
 
         foreach ($where as $coluna => $valor) {

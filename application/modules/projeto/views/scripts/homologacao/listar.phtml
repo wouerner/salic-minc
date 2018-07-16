@@ -3,20 +3,28 @@
         left: 234px;
         top: 33px;
     }
+    div.expansivel{
+        display: none;
+        /*height: inherit !important;*/
+    }
+    table.dataTable tbody td.no-padding{
+        padding: 0;
+    }
 </style>
 
-<div class="col s4">
-    <select class="browser-default" id="seletorSelect">
-        <option value="">Aguardando Análise Documental</option>
-        <option value="desistencias" selected="selected">Desistências do Recurso</option>
+<div class="col s2 input-field">
+    <select class="" id="seletorSelect">
+        <option value="">Aguardando An&aacute;lise Documental</option>
+        <option value="desistencias" selected="selected">Desist&ecirc;ncias do Recurso</option>
         <option value="diligenciados">Proponente Diligenciado</option>
-        <option value="respondidos">Diligencia Respondida</option>
+        <option value="respondidos">Dilig&ecirc;ncia Respondida</option>
         <option value="finalizados">Projetos Finalizados</option>
         <option value="irregulares">Proponente Irregular</option>
         <option value="recursos">Recursos Analisados</option>
     </select>
+    <label>Filtrar Situa&ccedil;&atilde;o</label>
 </div>
-<table id="listagemHomologacao">
+<table id="expansivelHomologacao" class="striped">
     <thead>
     <tr>
         <th rowspan="2">&nbsp;</th>
@@ -40,9 +48,9 @@
 <script src="/public/js/jquery-1.12.4.min.js"></script>
 <script src="/public/js/moment.js"></script>
 <script type="text/javascript" src="/public/scripts/layout/datatables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.4/numeral.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js" type="text/javascript"></script>
+<script src="/public/scripts/plugins/numeral.min.js" type="text/javascript"></script>
+<script src="/public/js/dataTables.buttons.min.js" type="text/javascript"></script>
+<script src="/public/js/buttons.print.min.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="/public/css/layout/datatables.min.css"/>
 <script type="text/javascript">
     (function (global, factory) {
@@ -61,7 +69,7 @@
             },
             abbreviations: {
                 thousand: 'mil',
-                million: 'milhões',
+                million: 'milhÃµes',
                 billion: 'b',
                 trillion: 't'
             },
@@ -79,7 +87,7 @@
         $(document).ready(function ($) {
             $3('.modal').modal();
 
-            var listagemHomologacao = $('#listagemHomologacao').DataTable({
+            var expansivelHomologacao = $('#expansivelHomologacao').DataTable({
                 dom: 'Blfrtip',
                 buttons: [
                     {
@@ -129,8 +137,8 @@
                         "targets": 0,
                         "data": null,
                         "name": "IdPRONAC",
-                        render: (data, type, row, index) => {
-                            return index.row+1;
+                        render: () => {
+                            return '<button class="btn small waves-effect waves-light btn-secondary expand"><i class="material-icons">expand_more</i></button>';
                         }
                     },
                     {
@@ -193,7 +201,7 @@
                             var homologar = '<button data-ajax-modal-full="true" title="Homologar" class="btn-floating waves-effect waves-light btn-primary" data-ajax-modal="/projeto/homologacao/homologar/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
                             var visualizarParecer = '<button data-ajax-modal-full="true" title="Visualizar parecer" class="btn-floating waves-effect waves-light btn-secondary" data-ajax-modal="/projeto/homologacao/visualizar/id/'+ data.IdPRONAC +'"><i class="material-icons">visibility</i></button>';
                             var diligenciar = '<a title="Dilig&ecirc;nciar" class="btn-floating waves-effect waves-light tooltipped" href="/proposta/diligenciar/listardiligenciaanalista/idPronac/'+ data.IdPRONAC +'/situacao/D25/tpDiligencia/181"><i class="material-icons">warning</i></a>';
-                            var homologacaoFluxo= '<a title="Iniciar fluxo de Homologação" class="btn-floating btn-primary tooltipped" href="/projeto/homologacao/iniciar-fluxo-assinatura?idPronac=' + data.IdPRONAC + '"><i class="material-icons">edit</i></a>';
+                            var homologacaoFluxo= '<a title="Iniciar fluxo de Homologa&ccedil;&atilde;o" class="btn-floating btn-primary tooltipped" href="/projeto/homologacao/iniciar-fluxo-assinatura?idPronac=' + data.IdPRONAC + '"><i class="material-icons">edit</i></a>';
 
                             return '<div style="position: relative; height: 60px;">'
                                 + '<div class="fixed-action-btn horizontal" style="position: absolute; top: 0px; right: 0; z-index: 996; padding: 15px 0 0 15px;">'
@@ -207,13 +215,48 @@
                                 + homologacaoFluxo
                                 + '</a></li>'
                                 + '</ul>'
-                                + '</div></div>'
+                                + '</div></div>';
 
                             return homologar + visualizarParecer + diligenciar + homologacaoFluxo;
                         }
                     }
                 ]
             });
+
+            function informacoes(data){
+               return '<div class="expansivel">'+
+                   '<div class="col s12">'+
+                       '<div class="card">'+
+                        '<div class="card-content">'+
+                                '<div clas="row">'+
+                                '<b>Nome do T&eacute;cnico: </b>'+ data.Tecnico+
+                                '</div>'+
+                                '<div clas="row">'+
+                                '<b>Tempo de An&aacute;lise: </b>' + data.tempoAnalise + ' dias'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                   '</div>'+
+               '</div>';
+            }
+
+            $('#expansivelHomologacao tbody').on('click', '.expand', function(){
+                 var tr = $(this).closest('tr');
+                 var row = expansivelHomologacao.row(tr);
+
+                 if(row.child.isShown()){
+                     $('div.expansivel', row.child()).slideUp(function(){
+                         row.child.hide();
+                         tr.removeClass('shown');
+                     });
+                     $(this).find('i').first().html('expand_more');
+                 } else{
+                     row.child(informacoes(row.data()), 'no-padding').show();
+                     tr.addClass('shown');
+                     $('div.expansivel', row.child()).slideDown();
+                     $(this).find('i').first().html('expand_less');
+                 }
+            })
         });
     }($.noConflict(true)));
 </script>
