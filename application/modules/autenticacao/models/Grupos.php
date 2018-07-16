@@ -71,6 +71,8 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const SECRETARIO = 149;
     const PRESIDENTE_VINCULADA_SUBSTITUTO = 151;
 
+    const CHEFE_DE_DIVISAO = 132;
+
     public function obterPerfisEncaminhamentoAvaliacaoProposta($id_perfil)
     {
 
