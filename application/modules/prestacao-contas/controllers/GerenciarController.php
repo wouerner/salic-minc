@@ -490,6 +490,28 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         $this->view->cdproduto = $this->getRequest()->getParam('produto');
         $this->view->cdcidade = $this->getRequest()->getParam('cidade');
         $this->view->cdetapa = $this->getRequest()->getParam('etapa');
+
+        $projetoModel = new Projetos();
+        $projeto = $projetoModel->find($this->view->idpronac)->current();
+
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $planilha = $planilhaAprovacaoModel->planilhaAprovada($this->view->idpronac);
+
+        $planilha = $planilhaAprovacaoModel->planilhaAprovada(
+            $this->view->idpronac,
+            $this->view->uf,
+            $this->view->cdetapa,
+            $this->view->cdproduto,
+            $this->view->cdcidade,
+            null,
+            $this->view->idPlanilhaItens
+        );
+
+        $this->view->dataInicioExecucao = (new DateTime($projeto->DtInicioExecucao))->format('Y-m-d');
+        $this->view->dataFimExecucao = (new DateTime($projeto->DtFimExecucao))->format('Y-m-d');
+        $this->view->valorAprovado = $planilha->current()->toArray()['vlAprovado'];
+        $this->view->valorComprovado = $planilha->current()->toArray()['vlComprovado'];
+        /* var_dump($planilha->current()->toArray()['vlComprovado']); */
     }
 
     public function cadastrarAction()

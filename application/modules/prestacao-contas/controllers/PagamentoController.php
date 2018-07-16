@@ -108,11 +108,16 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
     {
         $idpronac = (int)$this->_request->getParam('idpronac');
 
+        $projetoModel = new Projetos();
+        $projeto = $projetoModel->find($idpronac)->current();
+
+        $dtInicioExecucao = new DateTime($projeto->DtInicioExecucao);
+        $dtFimExecucao = new DateTime($projeto->DtFimExecucao);
+
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
 
         $planilhaJSON = null;
-
 
         foreach($resposta as $item) {
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
@@ -126,7 +131,9 @@ class PrestacaoContas_PagamentoController extends MinC_Controller_Action_Abstrac
                 'Pronac' => $item->Pronac,
                 'vlAprovado' => $vlAprovado,
                 'vlComprovado' => $vlComprovado,
-                'vlComprovar' => $vlTotalComprovar
+                'vlComprovar' => $vlTotalComprovar,
+                'dtInicioExecucao' => $dtInicioExecucao->format('Y-m-d'),
+                'dtFimExecucao' => $dtFimExecucao->format('Y-m-d')
             ];
         }
         $this->_helper->json($planilhaJSON);

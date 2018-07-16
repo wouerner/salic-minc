@@ -77,6 +77,10 @@ Vue.component('item', {
             vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) + parseFloat(data.valor);
         })
 
+        this.$root.$on('comprovante-nacional-atualizado', function(data) {
+            vue.informacoes.vlComprovado = (parseFloat(vue.informacoes.vlComprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+        })
+
         this.$root.$on('novo-comprovante-internacional', function(data) {
             vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) + parseFloat(data.valor);
         })

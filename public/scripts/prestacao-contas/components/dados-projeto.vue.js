@@ -40,14 +40,21 @@ Vue.component('dados-projeto', {
                     <div class="card horizontal">
                         <div class="card-stacked">
                             <div class="center-align card-content  lighten-4">
-                                <span class="card-title"
-                                      >
-                                      Projeto: {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
+                                <span class="card-title">
+                                    Projeto: {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
                                 </span>
                             </div>
                             <div class="card-content">
                                  <table class="bordered">
                                     <tbody>
+                                        <tr>
+                                            <th v-html>Data Inicio da execu&ccedil;&atilde;o</th>
+                                            <td>{{ dataInicio }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th v-html>Data Final da execu&ccedil;&atilde;o</th>
+                                            <td>{{ dataFim }}</td>
+                                        </tr>
                                         <tr>
                                             <th>Valor Aprovado</th>
                                             <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
@@ -79,6 +86,14 @@ Vue.component('dados-projeto', {
             vue.$data.informacoes = data;
         });
     },
+    computed: {
+        dataInicio() {
+            return moment(this.informacoes.dtInicioExecucao).format('DD/MM/YYYY');
+        },
+        dataFim() {
+            return moment(this.informacoes.dtFimExecucao).format('DD/MM/YYYY');
+        }
+    },
     data: function () {
         return {
             informacoes: []
@@ -88,6 +103,10 @@ Vue.component('dados-projeto', {
         converterParaReal: function (value) {
             value = parseFloat(value);
             return numeral(value).format('0,0.00');
+        },
+        moment: function (value) {
+            
+            return moment();
         }
     }
 })

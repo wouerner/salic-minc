@@ -23,6 +23,12 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
 
         $tipo = $this->getRequest()->getParam('tipo');
 
+        $projetoModel = new Projetos();
+        $projeto = $projetoModel->find($idpronac)->current();
+
+        $dtInicioExecucao = new DateTime($projeto->DtInicioExecucao);
+        $dtFimExecucao = new DateTime($projeto->DtFimExecucao);
+
         $vwComprovacoes = new PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario();
 
         if ($tipo == 'internacional') {
@@ -57,6 +63,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['valor'] = $value['vlComprovacao'];
             $dataAux[$key]['justificativa'] = $value['dsJustificativa'];
             $dataAux[$key]['justificativa'] = $value['justificativa'];
+            $dataAux[$key]['dataPagamento'] = $value['dtPagamento'];
             $dataAux[$key]['numeroDocumento'] = $value['numeroDocumento'];
             $dataAux[$key]['nrDocumentoDePagamento'] = $value['nrDocumentoDePagamento'];
             $dataAux[$key]['fornecedor']['CNPJCPF'] = $value['CNPJCPF'];
@@ -64,6 +71,8 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['fornecedor']['endereco'] = $value['endereco'];
             $dataAux[$key]['arquivo']['nome'] = $value['nmArquivo'];
             $dataAux[$key]['arquivo']['id'] = $value['idArquivo'];
+            $dataAux[$key]['projeto']['dataInicioExecucao'] = $dtInicioExecucao;
+            $dataAux[$key]['projeto']['dataFimExecucao'] = $dtFimExecucao;
         }
         /* var_dump($data); */
         /* die; */

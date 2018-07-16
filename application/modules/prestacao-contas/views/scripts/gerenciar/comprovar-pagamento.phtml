@@ -38,6 +38,10 @@
         etapa="<?php echo $this->cdetapa ?>"
         tipo="nacional"
         componenteform="sl-comprovante-nacional-form"
+        datainicio="<?php echo $this->dataInicioExecucao ?>"
+        datafim="<?php echo $this->dataFimExecucao ?>"
+        valoraprovado="<?php echo $this->valorAprovado ?>"
+        valorcomprovado="<?php echo $this->valorComprovado ?>"
     ></comprovantes>
 
     <h4>Comprovantes Internacionais</h4>
@@ -52,10 +56,16 @@
         etapa="<?php echo $this->cdetapa ?>"
         tipo="internacional"
         componenteform="sl-comprovante-internacional-form"
+        datainicio="<?php echo $this->dataInicioExecucao ?>"
+        datafim="<?php echo $this->dataFimExecucao ?>"
+        valoraprovado="<?php echo $this->valorAprovado ?>"
+        valorcomprovado="<?php echo $this->valorComprovado ?>"
     ></comprovantes>
 
     <div class="fixed-action-btn">
-        <a  href="#modal1" class="btn-floating btn-large" v-on:click="visivel()">
+        <a  href="#modal1" class="btn-floating btn-large" v-on:click="visivel()"
+            <?php echo  $this->valorAprovado ==  $this->valorComprovado ? 'disabled' : '' ?>
+        >
           <i class="large material-icons">add</i>
         </a>
     </div>
@@ -69,6 +79,10 @@
             tipoform="cadastro"
             item="<?php echo $this->idPlanilhaItens ?>"
             idplanilhaaprovacao="<?php echo $this->idPlanilhaAprovacao ?>"
+            datainicio="<?php echo $this->dataInicioExecucao ?>"
+            datafim="<?php echo $this->dataFimExecucao ?>"
+            valoraprovado="<?php echo $this->valorAprovado ?>"
+            valorcomprovado="<?php echo $this->valorComprovado ?>"
           ></sl-comprovar-form>
         </div>
     </div>
