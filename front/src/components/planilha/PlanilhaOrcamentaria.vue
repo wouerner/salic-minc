@@ -57,6 +57,8 @@
     import ListaDeItensCurtos from '@/components/planilha/ListaDeItensCurtos'
     import ListaDeItensAutorizados from '@/components/planilha/ListaDeItensAutorizados'
     import ListaDeItensAprovados from '@/components/planilha/ListaDeItensAprovados'
+    import ListaDeItensHomologados from '@/components/planilha/ListaDeItensHomologados'
+    import ListaDeItensReadequados from '@/components/planilha/ListaDeItensReadequados'
 
     export default {
         name: 'PlanilhaOrcamentaria',
@@ -69,7 +71,9 @@
             ListaDeItensPadrao,
             ListaDeItensCurtos,
             ListaDeItensAprovados,
-            ListaDeItensAutorizados
+            ListaDeItensAutorizados,
+            ListaDeItensHomologados,
+            ListaDeItensReadequados
         },
         props: {
             'arrayPlanilha':  {},

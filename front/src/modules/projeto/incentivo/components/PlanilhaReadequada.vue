@@ -2,7 +2,7 @@
     <div id="planilha-homologada">
         <Carregando v-if="loading" :text="'Procurando planilha'"></Carregando>
         <PlanilhaOrcamentaria v-if="Object.keys(planilha).length > 0"
-                              :componenteTabelaItens="'ListaDeItensHomologados'"
+                              :componenteTabelaItens="'ListaDeItensReadequados'"
                               :arrayPlanilha="planilha"></PlanilhaOrcamentaria>
         <div v-if="semResposta" class="card-panel padding 20 center-align">{{ mensagem }}</div>
     </div>
@@ -14,7 +14,7 @@
     import {mapGetters} from 'vuex';
 
     export default {
-        name: "PlanilhaPropostaHomologada",
+        name: "PlanilhaPropostaReadequada",
         data: function () {
             return {
                 planilha: [],
@@ -53,7 +53,7 @@
 
                 let self = this;
                 $3.ajax({
-                    url: '/projeto/orcamento/obter-planilha-homologada-ajax/',
+                    url: '/projeto/orcamento/obter-planilha-readequada-ajax/',
                     data: {
                         idPronac: id
                     }

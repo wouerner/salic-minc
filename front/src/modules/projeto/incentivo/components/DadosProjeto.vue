@@ -19,11 +19,17 @@
                 </tr>
                 <tr>
                     <td>
-                        <router-link :to="{ name: 'proponente', params: { idPronac: idPronac }}">
+                        <span v-if="dadosProjeto.idUsuarioExterno" ><SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/></span>
+                        <a  v-else
+                           :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
                             <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
+                        </a>
+                    </td>
+                    <td>
+                        <router-link :to="{ name: 'proponente', params: { idPronac: idPronac }}">
+                            <span v-html="dadosProjeto.Proponente"></span>
                         </router-link>
                     </td>
-                    <td>{{ dadosProjeto.Proponente }}</td>
                 </tr>
             </table>
             <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
@@ -392,7 +398,7 @@
                         <td class="right-align destaque-texto">
                             <b>
                                 <router-link v-if="dadosProjeto.vlReadequadoIncentivo > 0"
-                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                             :to="{ name: 'planilhareadequada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlReadequadoIncentivo"/>
                                 </router-link>
                                 <SalicFormatarValor v-else :valor="dadosProjeto.vlReadequadoIncentivo"/>
@@ -404,7 +410,7 @@
                         <td class="right-align destaque-texto-primary">
                             <b>
                                 <router-link v-if="dadosProjeto.vlTotalReadequado > 0"
-                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                             :to="{ name: 'planilhareadequada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalReadequado"/>
                                 </router-link>
                                 <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalReadequado"/>
@@ -502,6 +508,7 @@
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import {utils} from '@/mixins/utils';
     import moment from 'moment';
+
     export default {
         data: function () {
             return {

@@ -219,29 +219,6 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
         return $arrayDetalhamentos;
     }
 
-    public static function utf8EncodeArray($input)
-    {
-
-        if (is_string($input)) {
-            return utf8_encode($input);
-        } else if (is_array($input)) {
-
-            $arrIter = [];
-
-            foreach ($input as $key => $value) {
-                $key = utf8_encode($key);
-
-                if (is_string($value)) {
-                    $value = utf8_encode($value);
-                } else if (is_array($value)) {
-                    $value = self::utf8EncodeArray($value);
-                }
-                $arrIter[$key] = $value;
-            }
-            return $arrIter;
-        }
-    }
-
     public function obterPlanilhaPropostaCongelada($idPreProjeto, $meta = 'alterarprojeto')
     {
         if (empty($idPreProjeto) || empty($meta)) {
@@ -255,7 +232,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
             return false;
         }
 
-        $planilha = $this->utf8EncodeArray($planilha);
+        $planilha = TratarArray::utf8EncodeArrayTemp($planilha);
         $planilha = $this->montarPlanilhaProposta($planilha);
 
         return $planilha;
@@ -275,7 +252,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
             return false;
         }
 
-        $planilha = $this->utf8EncodeArray($planilha);
+        $planilha = TratarArray::utf8EncodeArrayTemp($planilha);
         $planilha = $this->montarPlanilhaProposta($planilha);
 
         return $planilha;

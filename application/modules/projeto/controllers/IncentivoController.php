@@ -141,6 +141,7 @@ class Projeto_IncentivoController extends Projeto_GenericController
 
         $data['ProponenteInabilitado'] = ($proponenteInabilitado->Habilitado == 'I');
         $data['EmAnaliseNaCNIC'] = (count($parecerAnaliseCNIC) > 0) ? true : false;
+        $data['idUsuarioExterno'] = !empty($this->idUsuarioExterno) ? $this->idUsuarioExterno : false;
 
         $this->getResponse()->setHttpResponseCode(200);
         $this->_helper->json(

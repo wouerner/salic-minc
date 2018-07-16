@@ -78,6 +78,14 @@ const routes = [
                 }
             },
             {
+                path: 'planilha-readequada',
+                name: 'planilhareadequada',
+                component: PlanilhaReadequada,
+                meta: {
+                    title: 'Planilha Readequada pelo Proponente'
+                }
+            },
+            {
                 path: 'relacao-de-pagamentos',
                 name: 'relacaodepagamentos',
                 component: RelacaoDePagamentos,
