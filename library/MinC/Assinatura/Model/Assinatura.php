@@ -14,6 +14,15 @@ use Mockery\Exception;
  */
 class Assinatura implements IModel
 {
+    /**
+     * @var \Zend_Controller_Request_Abstract $request
+     */
+    public $request;
+    /**
+     * @var \Zend_Controller_Response_Abstract $response
+     */
+    public $response;
+
     public $modeloTbAssinatura;
     public $modeloTbAtoAdministrativo;
     public $modeloTbDespacho;

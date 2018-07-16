@@ -39,7 +39,7 @@ class Assinatura implements IServico
 
     private function executarAcoes(string $tipoAcao)
     {
-        foreach ($this->listaAcoes as $acao) {
+        foreach ($this->listaAcoes->obterLista() as $acao) {
             /**
              * @var \MinC\Assinatura\Acao\IAcao $acao
              */
@@ -51,7 +51,7 @@ class Assinatura implements IServico
 
     public static function definirAcoesGerais(\MinC\Assinatura\Acao\IListaAcoesGerais $listaAcoes)
     {
-        if (!isset(self::$listaAcoesGerais)) {
+        if (count(self::$listaAcoesGerais) < 1) {
             self::$listaAcoesGerais = $listaAcoes->obterLista();
         }
     }
@@ -176,10 +176,10 @@ class Assinatura implements IServico
         );
 
         $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $data = array(
+        $data = [
             'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA,
             'stEstado' => \Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_INATIVO
-        );
+        ];
         $where = [
             'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
         ];
@@ -193,14 +193,17 @@ class Assinatura implements IServico
 
     public function finalizar()
     {
-        $data = [
-            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
-        ];
-        $where = [
-            'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
-        ];
-        $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $documentoAssinaturaDbTable->update($data, $where);
+//        $data = [
+//            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+//        ];
+//        $where = [
+//            'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
+//        ];
+//        $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+//        $documentoAssinaturaDbTable->update(
+//            $data,
+//            $where
+//        );
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoFinalizar');
     }

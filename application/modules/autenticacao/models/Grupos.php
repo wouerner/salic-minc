@@ -32,6 +32,7 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const PRESTACAO_DE_CONTAS = 100;
     const TECNICO_PRESTACAO_DE_CONTAS = 124;
     const COORDENADOR_PRESTACAO_DE_CONTAS = 125;
+    const COORDENADOR_GERAL_PRESTACAO_DE_CONTAS = 126;
 
     const COORDENADOR_ANALISE = 103;
     const TECNICO_ANALISE = 110;
@@ -69,6 +70,8 @@ class Autenticacao_Model_Grupos extends MinC_Db_Table_Abstract
     const DIRETOR_DEPARTAMENTO = 148;
     const SECRETARIO = 149;
     const PRESIDENTE_VINCULADA_SUBSTITUTO = 151;
+
+    const CHEFE_DE_DIVISAO = 132;
 
     public function obterPerfisEncaminhamentoAvaliacaoProposta($id_perfil)
     {
