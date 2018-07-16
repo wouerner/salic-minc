@@ -66,16 +66,24 @@
 
             <table class="tabela">
                 <tr class="destacar">
-                    <td class="centro"><b>N&ordm; Proposta</b></td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'N&ordm; Proposta'"></CharsetEncode>
+                        </b>
+                    </td>
                     <td class="centro"><b>Data Fixa</b></td>
                     <td class="centro"><b>Processo</b></td>
                     <!-- <td class="centro"><b>Prorroga&ccedil;&atilde;o autom&aacute;tica</b></td> -->
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="''"></CharsetEncode>
+                            <CharsetEncode :texto="'Prorroga&ccedil;&atilde;o autom&aacute;tica'"></CharsetEncode>
                         </b>
                     </td>
-                    <td class="centro"><b>Plano de Execu&ccedil;&atilde;o Imediata</b></td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'Plano de Execu&ccedil;&atilde;o Imediata'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td align="center">
@@ -98,18 +106,52 @@
 
             <table class="tabela">
                 <tr class="destacar">
-                    <td colspan="2" class="centro bold">Per&iacute;odo de capta&ccedil;&atilde;o</td>
-                    <td colspan="2" class="centro bold">Per&iacute;odo de execu&ccedil;&atilde;o</td>
-                    <td colspan="3" class="centro bold">Per&iacute;odo Vigente</td>
+                    <td colspan="2" class="centro bold">
+                        <CharsetEncode :texto="'Per&iacute;odo de capta&ccedil;&atilde;o'"></CharsetEncode>
+                    </td>
+                    <td colspan="2" class="centro bold">
+                        <CharsetEncode :texto="'Per&iacute;odo de execu&ccedil;&atilde;o'"></CharsetEncode>
+                    </td>
+                    <td colspan="3" class="centro bold">
+                        <CharsetEncode :texto="'Per&iacute;odo Vigente'"></CharsetEncode>
+                    </td>
                 </tr>
                 <tr class="destacar">
-                    <td class="centro"><b>Dt. In&iacute;cio</b></td>
-                    <td class="centro"><b>Dt. Final</b></td>
-                    <td class="centro"><b>Dt. In&iacute;cio</b></td>
-                    <td class="centro"><b>Dt. Final</b></td>
-                    <td class="centro"><b>Tipo de portaria</b></td>
-                    <td class="centro"><b>N&ordm; Portaria</b></td>
-                    <td class="centro"><b>Dt. Publica&ccedil;&atilde;o</b></td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'Dt. In&iacute;cio'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="centro">
+                        <b>
+                            Dt. Final
+                        </b>
+                    </td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'Dt. In&iacute;cio'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="centro">
+                        <b>
+                            Dt. Final
+                        </b>
+                    </td>
+                    <td class="centro">
+                        <b>
+                            Tipo de portaria
+                        </b>
+                    </td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'N&ordm; Portaria'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'Dt. Publica&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td align="center"
@@ -146,17 +188,45 @@
 
             <table class="tabela">
                 <tr class="destacar">
-                    <td align="center" colspan="5"><b>Informa&ccedil;&otilde;es banc&aacute;rias</b></td>
+                    <td align="center" colspan="5">
+                        <b>
+                            <CharsetEncode :texto="'Informa&ccedil;&otilde;es banc&aacute;rias'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr class="destacar">
-                    <td class="centro" rowspan="2"><b>Ag&ecirc;ncia</b></td>
-                    <td class="centro" colspan="2"><b>N&uacute;meros das Contas</b></td>
-                    <td class="centro" rowspan="2" width="10%"><b>Conta Liberada</b></td>
-                    <td class="centro" rowspan="2"><b>Dt. Libera&ccedil;&atilde;o</b></td>
+                    <td class="centro" rowspan="2">
+                        <b>
+                            <CharsetEncode :texto="'Ag&ecirc;ncia'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="centro" colspan="2">
+                        <b>
+                            <CharsetEncode :texto="'N&uacute;meros das Contas'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="centro" rowspan="2" width="10%">
+                        <b>
+                            Conta Liberada
+                        </b>
+                    </td>
+                    <td class="centro" rowspan="2">
+                        <b>
+                            <CharsetEncode :texto="'Dt. Libera&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr class="destacar">
-                    <td class="centro"><b>Capta&ccedil;&atilde;o</b></td>
-                    <td class="centro"><b>Movimenta&ccedil;&atilde;o</b></td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'Capta&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'Movimenta&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td align="center">
@@ -179,7 +249,11 @@
 
             <table class="tabela">
                 <tr class="destacar">
-                    <td class="centro"><b>S&iacute;ntese do projeto</b></td>
+                    <td class="centro">
+                        <b>
+                            <CharsetEncode :texto="'S&iacute;ntese do projeto'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -196,13 +270,33 @@
             </div>
             <table v-else class="tabela">
                 <tr class="destacar">
-                    <td align="center" colspan="4"><b>Situa&ccedil;&atilde;o do projeto</b></td>
+                    <td align="center" colspan="4">
+                        <b>
+                            <CharsetEncode :texto="'Situa&ccedil;&atilde;o do projeto'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr class="destacar">
-                    <td align="center"><b>Dt.Situa&ccedil;&atilde;o</b></td>
-                    <td class="left-align"><b>Situa&ccedil;&atilde;o</b></td>
-                    <td class="left-align"><b>Provid&ecirc;ncia Tomada</b></td>
-                    <td align="center"><b>Localiza&ccedil;&atilde;o atual</b></td>
+                    <td align="center">
+                        <b>
+                            <CharsetEncode :texto="'Dt.Situa&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="left-align">
+                        <b>
+                            <CharsetEncode :texto="'Situa&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td class="left-align">
+                        <b>
+                            <CharsetEncode :texto="'Provid&ecirc;ncia Tomada'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td align="center">
+                        <b>
+                            <CharsetEncode :texto="'Localiza&ccedil;&atilde;o atual'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td align="center">{{ dadosProjeto.DtSituacao | formatarData }}</td>
@@ -218,7 +312,11 @@
                 </tr>
                 <tr class="destacar">
                     <td class="left-align"><b>Fase</b></td>
-                    <td align="center"><b>Dt. in&iacute;cio</b></td>
+                    <td align="center">
+                        <b>
+                            <CharsetEncode :texto="'Dt. in&iacute;cio'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td class="left-align">{{ dadosProjeto.FaseProjeto }}</td>
@@ -228,13 +326,27 @@
 
             <table class="tabela">
                 <tr class="destacar">
-                    <td align="center" colspan="3"><b>Normativo vigente na apresenta&ccedil;&atilde;o do projeto</b>
+                    <td align="center" colspan="3">
+                        <b>
+                            <CharsetEncode
+                                :texto="'Normativo vigente na apresenta&ccedil;&atilde;o do projeto'"
+                            >
+                            </CharsetEncode>
+                        </b>
                     </td>
                 </tr>
                 <tr class="destacar">
                     <td class="left-align"><b>Normativo</b></td>
-                    <td align="center"><b>Dt. Publica&ccedil;&atilde;o</b></td>
-                    <td align="center"><b>Dt. Revoga&ccedil;&atilde;o</b></td>
+                    <td align="center">
+                        <b>
+                            <CharsetEncode :texto="'Dt. Publica&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
+                    <td align="center">
+                        <b>
+                            <CharsetEncode :texto="'Dt. Revoga&ccedil;&atilde;o'"></CharsetEncode>
+                        </b>
+                    </td>
                 </tr>
                 <tr>
                     <td class="left-align destacar">{{ dadosProjeto.Normativo }}</td>
@@ -261,7 +373,14 @@
                 <legend>Valores em R$</legend>
                 <table class="tabela">
                     <tr class="destacar">
-                        <td align="center" colspan="5"><b>Solicita&ccedil;&atilde;o da proposta original</b></td>
+                        <td align="center" colspan="5">
+                            <b>
+                                <CharsetEncode
+                                    :texto="'Solicita&ccedil;&atilde;o da proposta original'"
+                                >
+                                </CharsetEncode>
+                            </b>
+                        </td>
                     </tr>
                     <tr class="destacar">
                         <td class="right-align"><b>Solicitado (A)</b></td>
@@ -335,8 +454,14 @@
 
                 <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6">
                     <tr class="destacar">
-                        <td align="center" colspan="3"><b>Adequado &agrave; realidade de execu&ccedil;&atilde;o pelo
-                            proponente</b></td>
+                        <td align="center" colspan="3">
+                            <b>
+                                <CharsetEncode
+                                    :texto="'Adequado &agrave; realidade de execu&ccedil;&atilde;o pelo proponente'"
+                                >
+                                </CharsetEncode>
+                            </b>
+                        </td>
                     </tr>
                     <tr class="destacar">
                         <td class="right-align"><b>Adequado (G)</b></td>
@@ -364,7 +489,11 @@
 
                 <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6">
                     <tr class="destacar">
-                        <td align="center" colspan="3"><b>Homologado para execu&ccedil;&atilde;o</b></td>
+                        <td align="center" colspan="3">
+                            <b>
+                                <CharsetEncode :texto="'Homologado para execu&ccedil;&atilde;o'"></CharsetEncode>
+                            </b>
+                        </td>
                     </tr>
                     <tr class="destacar">
                         <td class="right-align"><b>Homologado (J)</b></td>
@@ -392,7 +521,11 @@
 
                 <table class="tabela">
                     <tr class="destacar">
-                        <td align="center" colspan="3"><b>Readequa&ccedil;&atilde;o na execu&ccedil;&atilde;o</b></td>
+                        <td align="center" colspan="3">
+                            <b>
+                                <CharsetEncode :texto="'Readequa&ccedil;&atilde;o na execu&ccedil;&atilde;o'"></CharsetEncode>
+                            </b>
+                        </td>
                     </tr>
                     <tr class="destacar">
                         <td class="right-align"><b>Readequado (M)</b></td>
@@ -426,7 +559,11 @@
 
                 <table class="tabela">
                     <tr class="destacar">
-                        <td align="center" colspan="5"><b>Capta&ccedil;&atilde;o de recursos</b></td>
+                        <td align="center" colspan="5">
+                            <b>
+                                <CharsetEncode :texto="'Capta&ccedil;&atilde;o de recursos'"></CharsetEncode>
+                            </b>
+                        </td>
                     </tr>
                     <tr class="destacar">
                         <td class="right-align"><b>Captado(P)</b></td>
@@ -467,7 +604,11 @@
                 </table>
                 <table class="tabela">
                     <tr class="destacar">
-                        <td align="center" colspan="3"><b>Comprova&ccedil;&atilde;o</b></td>
+                        <td align="center" colspan="3">
+                            <b>
+                                <CharsetEncode :texto="'Comprova&ccedil;&atilde;o'"></CharsetEncode>
+                            </b>
+                        </td>
                     </tr>
                     <tr class="destacar">
                         <td class="right-align"><b>Comprovado(U)</b></td>
