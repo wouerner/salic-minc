@@ -59,6 +59,7 @@
                     }
                 }).done(function (response) {
                     self.planilha = response.data;
+                    console.log('planilha', self.planilha);
                 }).fail(function (response) {
                     self.semResposta = true;
                     self.mensagem = response.responseJSON.msg;
