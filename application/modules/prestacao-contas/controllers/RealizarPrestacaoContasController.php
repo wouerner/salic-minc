@@ -27,9 +27,9 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
 
     public function indexAction()
     {
-        $idpronac = $this->_request->getParam('idpronac');
+        $idpronac = $this->_request->getParam('idPronac');
 
-        $this->view->idpronac = $idpronac;
+        $this->view->idPronac = $idpronac;
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
@@ -51,11 +51,13 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
         $this->view->pronac = $pronac;
         $this->view->nomeProjeto = $nomeProjeto;
 
+        $diligencia = new Diligencia();
+        $this->view->existeDiligenciaAberta = $diligencia->existeDiligenciaAberta($idpronac);
     }
 
     public function planilhaAnaliseAction()
     {
-        $idpronac = (int)$this->_request->getParam('idpronac');
+        $idpronac = (int)$this->_request->getParam('idPronac');
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);

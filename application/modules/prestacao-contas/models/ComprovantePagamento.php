@@ -40,6 +40,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
 
         $this->eInternacional = $obj->fornecedor->eInternacional;
         $this->item = $obj->item;
+        $this->idPlanilhaAprovacao = $obj->idPlanilhaAprovacao;
 
         if($obj->fornecedor->eInternacional) {
             $this->fornecedorInternacional($obj);
@@ -53,7 +54,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         $this->nrComprovante = $obj->numero;
         $this->serie = $obj->serie;
         $this->dsJustificativa = $obj->justificativa;
-        $this->vlComprovacao = $obj->valor; // not null
+        $this->vlComprovacao = $obj->valor;
         $this->setDataEmissao($obj->dataEmissao, 'd/m/Y');
         $this->setDataPagamento($obj->dataPagamento, 'd/m/Y');
         $this->idFornecedor = $obj->fornecedor->idAgente;
@@ -121,7 +122,9 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         }
 
         $this->idComprovantePagamento = $this->insert($dados);
+
         $this->comprovarPlanilhaCadastrar();
+
         return $this->idComprovantePagamento;
     }
 
@@ -171,12 +174,12 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             ];
         }
 
-        $this->comprovarPlanilhaCadastrar();
-        $result =  $this->update(
+        /* $this->comprovarPlanilhaCadastrar(); */
+        $this->update(
             $dados,
             ['idComprovantePagamento = ?' => $this->idComprovantePagamento]
         );
-        return $result;
+        return $this->idComprovantePagamento;
     }
 
     public function upload()
@@ -548,9 +551,6 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         return $statement->fetchAll();
     }
 
-    /**
-     *
-     */
     public function toStdclass()
     {
         return (object) array(
@@ -560,19 +560,17 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
 
     protected function comprovarPlanilhaCadastrar()
     {
-        $comprovantePlanilha = new ComprovantePagamentoxPlanilhaAprovacao();
+        $comprovantePlanilha = new PrestacaoContas_Model_ComprovantePagamentoxPlanilhaAprovacao();
+
         $dados =
            [
                 'idComprovantePagamento' => $this->idComprovantePagamento,
-                'idPlanilhaAprovacao' => $this->item,
+                'idPlanilhaAprovacao' => (int) $this->idPlanilhaAprovacao,
                 'vlComprovado' => $this->vlComprovacao,
             ];
-        $comprovantePlanilha->insert($dados);
+        $result = $comprovantePlanilha->insert($dados);
     }
 
-    /**
-     * @todo remover esse metodo apos implementacao ideal planilha comprovacao
-     */
     public function comprovarPlanilhaAtualizarStatus($status, $vlComprovado, $idComprovantePagamento)
     {
         $comprovantePlanilha = new ComprovantePagamentoxPlanilhaAprovacao();

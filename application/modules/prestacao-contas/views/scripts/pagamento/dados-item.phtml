@@ -45,11 +45,6 @@
 
     numeral.locale('pt-br');
 
-    function converteParaReal(value) {
-        value = parseFloat(value);
-        return numeral(value).format('0,0.00');
-    }
-
     Vue.component('item', {
         props: ['idpronac', 'uf', 'etapa', 'cidade', 'produto', 'idplanilhaitens'],
         template: `<div class="col s12 m12" :informacoes = "informacoes">
