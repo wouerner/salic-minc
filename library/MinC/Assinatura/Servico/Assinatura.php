@@ -199,17 +199,17 @@ class Assinatura implements IServico
 
     public function finalizar()
     {
-//        $data = [
-//            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
-//        ];
-//        $where = [
-//            'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
-//        ];
-//        $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
-//        $documentoAssinaturaDbTable->update(
-//            $data,
-//            $where
-//        );
+        $data = [
+            'cdSituacao' => \Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA
+        ];
+        $where = [
+            'idDocumentoAssinatura = ?' => $this->viewModelAssinatura->modeloTbDocumentoAssinatura->getIdDocumentoAssinatura(),
+        ];
+        $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $documentoAssinaturaDbTable->update(
+            $data,
+            $where
+        );
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoFinalizar');
     }
