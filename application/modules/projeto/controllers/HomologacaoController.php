@@ -201,16 +201,16 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $arrValue['acaoProjeto'] = $dbTableAcaoProjeto->findBy([
             'tpAnalise' => '1',
             'idPronac' => $intIdPronac
-        ]); # 3
+        ]);
         $arrValue['aparicaoComissario'] = $dbTableParecer->findBy([
             'TipoParecer' => '1',
             'idTipoAgente' => '6',
             'IdPRONAC' => $intIdPronac
-        ]); # 4
+        ]);
         $arrValue['parecerHomologacao'] = $dbTableHomologacao->getBy([
             'idPronac' => $intIdPronac,
             'tpHomologacao' => '1'
-        ]); # 5
+        ]);
 
         if (isset($arrValue['IdPRONAC'])) {
             $arrValue['idPronac'] = $arrValue['IdPRONAC'];
