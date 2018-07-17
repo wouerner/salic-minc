@@ -256,9 +256,9 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
         $orgaos = new Usuariosorgaosgrupos();
         $orgaoSuperior = $orgaos->buscarOrgaoSuperior($GrupoAtivo->codOrgao)->current()->org_superior;
         if($orgaoSuperior === Orgaos::ORGAO_SUPERIOR_SEFIC){
-            $sql->where('a.AreaAbrangencia = ?', 0);
-        }elseif($orgaoSuperior === Orgaos::ORGAO_SUPERIOR_SAV){
             $sql->where('a.AreaAbrangencia = ?', 1);
+        }elseif($orgaoSuperior === Orgaos::ORGAO_SUPERIOR_SAV){
+            $sql->where('a.AreaAbrangencia = ?', 0);
         }
 
         foreach ($where as $coluna=>$valor) {
