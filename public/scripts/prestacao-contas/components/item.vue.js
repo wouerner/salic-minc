@@ -84,6 +84,10 @@ Vue.component('item', {
         this.$root.$on('novo-comprovante-internacional', function(data) {
             vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) + parseFloat(data.valor);
         })
+
+        this.$root.$on('excluir-comprovante-nacional', function(data) {
+            vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) - parseFloat(data.valor);
+        })
     },
     mounted: function () {
         let vue = this;

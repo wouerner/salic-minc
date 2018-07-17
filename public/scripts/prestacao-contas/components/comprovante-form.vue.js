@@ -17,7 +17,7 @@ Vue.component('sl-comprovar-form',
                     :datainicio="datainicio"
                     :datafim="datafim"
                     :valoraprovado=valoraprovado
-                    :valorcomprovado="valorcomprovado"
+                    :valorcomprovado="valorComprovado"
                 >
                 </sl-comprovante-nacional-form>
             </div>
@@ -30,12 +30,27 @@ Vue.component('sl-comprovar-form',
                     :datainicio="datainicio"
                     :datafim="datainicio"
                     :valoraprovado="valoraprovado"
-                    :valorcomprovado="valorcomprovado"
+                    :valorcomprovado="valorComprovado"
                 >
                 </sl-comprovante-internacional-form>
             </div>
         </div>
     `,
+    created: function () {
+        let vue = this;
+        this.$root.$on('novo-comprovante-nacional', function(data) {
+            vue.valorComprovado = parseFloat(vue.valorComprovado) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('comprovante-nacional-atualizado', function(data) {
+            vue.formVisivel = false;
+            if(vue.tipo =='nacional'){
+                Vue.set(vue.$data.dados, data._index, data);
+                vue.$data.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+                console.log(vue.valorComprovado);
+            }
+        })
+    },
     mounted: function() {
     },
     props: ['item', 'idplanilhaaprovacao', 'datainicio', 'datafim', 'valoraprovado', 'valorcomprovado'],
@@ -46,7 +61,8 @@ Vue.component('sl-comprovar-form',
         return {
             itemId: this.item ,
             idplanilhaaprovacaoId: this.idplanilhaaprovacao ,
-            v: true
+            v: true,
+            valorComprovado: this.valorcomprovado 
         };
     },
     methods: {

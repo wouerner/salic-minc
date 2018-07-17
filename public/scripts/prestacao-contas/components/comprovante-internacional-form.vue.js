@@ -115,7 +115,9 @@ Vue.component('sl-comprovante-internacional-form',
                         size="10" value=""/>
                         <label for="vlComprovadoInternacional"
                             :class="[this.c.valor.css]"
-                        >Valor * </label>
+                        >
+                           Valor * (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
+                        </label>
                     </div>
                     <div class="file-field input-field col s4">
                         <div :class="['btn small', c.arquivo.css] ">
@@ -145,7 +147,6 @@ Vue.component('sl-comprovante-internacional-form',
         </form>
     `,
     mounted: function() {
-        console.log(this.dados);
         this.paises();
 
         this.comprovante.item = this.item;
@@ -155,22 +156,39 @@ Vue.component('sl-comprovante-internacional-form',
             }
 
             this.comprovante.id = this.dados.idComprovantePagamento;
-            this.comprovante.fornecedor.CNPJCPF = this.dados.CNPJCPF;
             this.comprovante.fornecedor.nome = this.dados.fornecedor.nome;
             this.comprovante.fornecedor.endereco = this.dados.fornecedor.endereco;
+            this.comprovante.fornecedor.id = this.dados.fornecedor.id;
+
             this.comprovante.numero = this.dados.numero;
             this.comprovante.serie = this.dados.nrSerie;
-
             this.comprovante.dataEmissao = moment(this.dados.dataEmissao).format('DD/MM/YYYY');
             this.comprovante.dataPagamento = moment(this.dados.dataPagamento).format('DD/MM/YYYY');
-
             this.comprovante.valor = this.dados.valor;
             this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
             this.comprovante.arquivo = { name: this.dados.nmArquivo };
             this.comprovante.justificativa = this.dados.dsJustificativaProponente;
         }
     },
-    props: ['dados', 'url', 'messages', 'tipoform', 'item', 'idplanilhaaprovacao'],
+    props: ['dados', 'url', 'messages', 'tipoform', 'item', 'idplanilhaaprovacao',
+        'index', 
+        'datainicio', 
+        'datafim',
+        'valoraprovado',
+        'valorcomprovado',
+        'valorantigo'
+    ],
+    computed:{
+        dataInicio() {
+            return moment(this.datainicio).format('DD/MM/YYYY');
+        },
+        dataFim() {
+            return moment(this.datafim).format('DD/MM/YYYY');
+        },
+        valorMaxItem: function() {
+            return parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ));
+        }
+    },
     data: function () {
         return {
             comprovante: {
@@ -182,6 +200,7 @@ Vue.component('sl-comprovante-internacional-form',
                     nome: '',
                     idAgente: '',
                     eInternacional: true,
+                    id: '',
                 },
                 item: this.item,
                 idPlanilhaAprovacao: this.idplanilhaaprovacao,
@@ -196,6 +215,7 @@ Vue.component('sl-comprovante-internacional-form',
                 arquivo: '',
                 justificativa: '',
                 foiAtualizado: false,
+                _index: this.index
             },
             pais: '',
             c: {
@@ -343,11 +363,15 @@ Vue.component('sl-comprovante-internacional-form',
                 return false;
             }
 
-            if(!this.comprovante.valor) {
-                this.$refs.valor.focus();
-                this.c.valor.css = 'active invalid red-text';
-                return false;
+            if(!this.validarValor()) {
+               return false;
             }
+
+            // if(!this.comprovante.valor) {
+            //     this.$refs.valor.focus();
+            //     this.c.valor.css = 'active invalid red-text';
+            //     return false;
+            // }
 
             if(!this.comprovante.arquivo) {
                 this.$refs.arquivo.focus();
@@ -356,6 +380,35 @@ Vue.component('sl-comprovante-internacional-form',
             }
 
             return true;
+        },
+        validarValor: function() {
+
+            let result = true;
+            let valor = numeral(this.comprovante.valor);
+            let valorAntigo = this.valorantigo ? parseFloat(this.valorantigo) : 0;
+            let valorcomprovado = parseFloat(this.valorcomprovado);
+            let valorComprovadoAtual = (valorcomprovado - valorAntigo) + (valor.value());
+            let valoraprovado = numeral(parseFloat(this.valoraprovado));
+            let valorPermitido = parseFloat(this.valoraprovado) - parseFloat(this.valorcomprovado);
+
+            if(this.comprovante.valor == '') {
+                this.$refs.valor.focus();
+                this.c.valor.css = 'active invalid red-text';
+
+                return false;
+            }
+
+            if(valorComprovadoAtual > valoraprovado.value()) {
+                this.$refs.valor.focus();
+                this.c.valor.css = 'active invalid red-text';
+                alert(
+                    'Valor acima do permitido:' + this.comprovante.valor 
+                    + ', maximo a ser acrescentado e: ' + valorPermitido
+                );
+
+                return false;
+            }
+            return result;
         },
         file: function() {
             this.comprovante.arquivo = this.$refs.arquivo.files[0];

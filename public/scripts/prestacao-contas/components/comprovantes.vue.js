@@ -38,7 +38,7 @@ Vue.component('comprovantes', {
                                         :datainicio="datainicio"
                                         :datafim="datafim"
                                         :valoraprovado="valoraprovado"
-                                        :valorcomprovado="valorcomprovado"
+                                        :valorcomprovado="valorComprovado"
                                         :valorantigo="dado.valor"
                                     >
                                     </component>
@@ -77,8 +77,8 @@ Vue.component('comprovantes', {
         let vue = this;
             this.$root.$on('novo-comprovante-nacional', function(data) {
                 if(vue.tipo =='nacional'){
-                    // console.log('evento nacional!!!!', vue._uid)
                     vue.$data.dados.push(data);
+                    vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
                 }
             })
 
@@ -86,13 +86,12 @@ Vue.component('comprovantes', {
                 vue.formVisivel = false;
                 if(vue.tipo =='nacional'){
                     Vue.set(vue.$data.dados, data._index, data);
+                    vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+                    console.log(vue.valorComprovado);
                 }
             })
 
             this.$root.$on('novo-comprovante-internacional', function(data) {
-                // vue.formVisivel = false;
-                // vue.dados.push(data);
-                // console.log('evento internacional');
                 if(vue.tipo =='internacional'){
                     vue.$data.dados.push(data);
                 }
@@ -100,6 +99,7 @@ Vue.component('comprovantes', {
 
             this.$root.$on('atualizado-comprovante-internacional', function(data) {
                 vue.formVisivel = false;
+                Vue.set(vue.$data.dados, data._index, data);
             })
     },
     mounted: function() {
@@ -171,7 +171,9 @@ Vue.component('comprovantes', {
             this.formVisivel = true;
         },
         excluir: function(id, idArquivo, index) {
-            this.$delete(this.dados, index)
+            this.$root.$emit('excluir-comprovante-nacional', this.dados[index]);
+            this.$delete(this.dados, index);
+
             var vue = this;
             url = '/prestacao-contas/gerenciar/excluir';
             $3.ajax({
@@ -195,7 +197,8 @@ Vue.component('comprovantes', {
     data: function(){
         return {
             dados:{},
-            formVisivel: false
+            formVisivel: false,
+            valorComprovado: this.valorcomprovado
         }
     }
 });

@@ -37,6 +37,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
 
     public function preencher($request) {
         $obj = (json_decode($request));
+        /* var_dump($obj);die; */
 
         $this->eInternacional = $obj->fornecedor->eInternacional;
         $this->item = $obj->item;
@@ -70,6 +71,11 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         $this->fornecedor['nome'] = $obj->fornecedor->nome;
         $this->fornecedor['endereco'] = $obj->fornecedor->endereco;
         $this->fornecedor['pais'] = $obj->fornecedor->nacionalidade;
+
+        if($obj->fornecedor->id) {
+            $this->fornecedor['id'] = $obj->fornecedor->id;
+        }
+
         $this->nrDocumentoDePagamento = $obj->numeroDocumento;
         $this->setTipoDocumento($obj->tipo);
         $this->setDataEmissao($obj->dataEmissao, 'd/m/Y');
@@ -77,6 +83,10 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         $this->vlComprovacao = $obj->valor; // not null
         $this->dsJustificativa = $obj->justificativa;
         $this->serie = $obj->serie;
+
+        if ($obj->id) {
+            $this->idComprovantePagamento = $obj->id;
+        }
     }
 
     public function cadastrar()
@@ -138,14 +148,14 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             $arquivoId = $this->upload();
         }
 
+        $fornecedorInternacional = new PrestacaoContas_Model_FornecedorInternacional();
         if($this->eInternacional) {
-            $fornecedorInternacional = new PrestacaoContas_Model_FornecedorInternacional();
 
+            $fornecedorInternacional->id = $this->fornecedor['id'];
             $fornecedorInternacional->nome = $this->fornecedor['nome'];
             $fornecedorInternacional->endereco = $this->fornecedor['endereco'];
             $fornecedorInternacional->pais = $this->fornecedor['pais'];
-
-            $this->idFornecedorExterior =  $fornecedorInternacional->save();
+            $fornecedorInternacional->atualizar();
         }
 
         $dados = [
@@ -170,9 +180,10 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             ];
         } else {
             $dados += [
-                'idFornecedorExterior' => $this->idFornecedorExterior,
+                'idFornecedorExterior' => $fornecedorInternacional->id,
             ];
         }
+        /* var_dump($dados);die; */
 
         /* $this->comprovarPlanilhaCadastrar(); */
         $this->update(

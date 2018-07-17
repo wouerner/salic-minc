@@ -258,9 +258,15 @@ Vue.component('sl-comprovante-nacional-form',
         }
     },
     props: [
-        'dados', 'url',
-        'messages', 'tipoform',
-        'item', 'idplanilhaaprovacao', 'index', 'datainicio', 'datafim',
+        'dados', 
+        'url',
+        'messages', 
+        'tipoform',
+        'item', 
+        'idplanilhaaprovacao', 
+        'index', 
+        'datainicio', 
+        'datafim',
         'valoraprovado',
         'valorcomprovado',
         'valorantigo'
@@ -488,10 +494,11 @@ Vue.component('sl-comprovante-nacional-form',
             return true;
         },
         validarValor: function() {
+
             let result = true;
             let valor = numeral(this.comprovante.valor);
-            let valorAntigo = parseFloat(this.valorantigo);
-            let valorcomprovado = (parseFloat(this.valorcomprovado));
+            let valorAntigo = this.valorantigo ? parseFloat(this.valorantigo) : 0;
+            let valorcomprovado = parseFloat(this.valorcomprovado);
             let valorComprovadoAtual = (valorcomprovado - valorAntigo) + (valor.value());
             let valoraprovado = numeral(parseFloat(this.valoraprovado));
             let valorPermitido = parseFloat(this.valoraprovado) - parseFloat(this.valorcomprovado);
@@ -616,7 +623,6 @@ Vue.component('sl-comprovante-nacional-form',
             }
         },
         cancelar: function () {
-            console.log('cancelar');
             $3('#modal1').modal('close');
 
             if (this.tipoform == 'edicao'){

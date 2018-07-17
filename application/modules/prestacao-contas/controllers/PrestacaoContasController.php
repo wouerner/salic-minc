@@ -57,7 +57,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         }
 
         if ($avaliacao == "todos") {
-            $this->redirect('/realizarprestacaodecontas/planilhaorcamentaria/idPronac/' . $idPronac );
+            $this->redirect('/prestacao-contas/realizar-prestacao-contas/index/idPronac/' . $idPronac );
         }
 
         $this->redirect('/prestacao-contas/prestacao-contas/amostragem/idPronac/' . $idPronac . '/tipoAvaliacao/' . $avaliacao);
