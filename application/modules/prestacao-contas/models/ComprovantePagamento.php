@@ -83,6 +83,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         $this->vlComprovacao = $obj->valor; // not null
         $this->dsJustificativa = $obj->justificativa;
         $this->serie = $obj->serie;
+        $this->numero = $obj->numero;
 
         if ($obj->id) {
             $this->idComprovantePagamento = $obj->id;
@@ -159,6 +160,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         }
 
         $dados = [
+            'nrComprovante' => $this->numero,
             'tpDocumento' => $this->tipoDocumento,
             'dtEmissao' => $this->dataEmissao->format('Y-m-d h:i:s'),
             'vlComprovacao' => $this->vlComprovacao,
@@ -174,7 +176,6 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
 
         if(!$this->eInternacional) {
             $dados += [
-                'nrComprovante' => $this->nrComprovante,
                 'tpFormaDePagamento' => $this->tpFormaDePagamento,
                 'idFornecedor' => $this->idFornecedor,
             ];

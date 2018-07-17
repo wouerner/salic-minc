@@ -423,7 +423,7 @@ Vue.component('sl-comprovante-nacional-form',
 
                     if (vue.tipoform == 'edicao'){
                         // vue.$root.$emit('comprovante-atualizado', vue.comprovante);
-                        vue.$root.$emit('comprovante-nacional-atualizado', vue.comprovante);
+                        vue.$root.$emit('atualizado-comprovante-nacional', vue.comprovante);
                     }
                 });
             }
@@ -626,7 +626,7 @@ Vue.component('sl-comprovante-nacional-form',
             $3('#modal1').modal('close');
 
             if (this.tipoform == 'edicao'){
-                this.$root.$emit('comprovante-nacional-atualizado', this.comprovante);
+                this.$root.$emit('atualizado-comprovante-nacional', this.comprovante);
             }
         },
         data: function () {

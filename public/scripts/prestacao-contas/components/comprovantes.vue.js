@@ -74,33 +74,36 @@ Vue.component('comprovantes', {
         'valorcomprovado'
     ],
     created() {
+
         let vue = this;
-            this.$root.$on('novo-comprovante-nacional', function(data) {
-                if(vue.tipo =='nacional'){
-                    vue.$data.dados.push(data);
-                    vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
-                }
-            })
+        this.$root.$on('novo-comprovante-nacional', function(data) {
+            if(vue.tipo =='nacional'){
+                vue.$data.dados.push(data);
+                vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
+            }
+        })
 
-            this.$root.$on('comprovante-nacional-atualizado', function(data) {
-                vue.formVisivel = false;
-                if(vue.tipo =='nacional'){
-                    Vue.set(vue.$data.dados, data._index, data);
-                    vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
-                    console.log(vue.valorComprovado);
-                }
-            })
+        this.$root.$on('atualizado-comprovante-nacional', function(data) {
+            vue.formVisivel = false;
+            if(vue.tipo =='nacional'){
+                Vue.set(vue.$data.dados, data._index, data);
+                vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+            }
+        })
 
-            this.$root.$on('novo-comprovante-internacional', function(data) {
-                if(vue.tipo =='internacional'){
-                    vue.$data.dados.push(data);
-                }
-            })
+        this.$root.$on('novo-comprovante-internacional', function(data) {
+            if(vue.tipo =='internacional'){
+                vue.$data.dados.push(data);
+                vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
+            }
+        })
 
-            this.$root.$on('atualizado-comprovante-internacional', function(data) {
+        this.$root.$on('atualizado-comprovante-internacional', function(data) {
+            if(vue.tipo =='internacional'){
                 vue.formVisivel = false;
                 Vue.set(vue.$data.dados, data._index, data);
-            })
+            }
+        })
     },
     mounted: function() {
         var vue = this;

@@ -18,6 +18,7 @@ Vue.component('sl-comprovar-form',
                     :datafim="datafim"
                     :valoraprovado=valoraprovado
                     :valorcomprovado="valorComprovado"
+                    :valorantigo="0"
                 >
                 </sl-comprovante-nacional-form>
             </div>
@@ -31,6 +32,7 @@ Vue.component('sl-comprovar-form',
                     :datafim="datainicio"
                     :valoraprovado="valoraprovado"
                     :valorcomprovado="valorComprovado"
+                    :valorantigo="0"
                 >
                 </sl-comprovante-internacional-form>
             </div>
@@ -42,13 +44,20 @@ Vue.component('sl-comprovar-form',
             vue.valorComprovado = parseFloat(vue.valorComprovado) + parseFloat(data.valor);
         })
 
-        this.$root.$on('comprovante-nacional-atualizado', function(data) {
+        this.$root.$on('atualizado-comprovante-nacional', function(data) {
             vue.formVisivel = false;
-            if(vue.tipo =='nacional'){
-                Vue.set(vue.$data.dados, data._index, data);
-                vue.$data.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+            // if(vue.tipo =='nacional'){
+                vue.$data.valorComprovado = (parseFloat(vue.valorComprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
                 console.log(vue.valorComprovado);
-            }
+            // }
+        })
+
+        this.$root.$on('novo-comprovante-internacional', function(data) {
+            vue.valorComprovado = parseFloat(vue.valorComprovado) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('excluir-comprovante-nacional', function(data) {
+            vue.valorComprovado = parseFloat(vue.valorComprovado) - parseFloat(data.valor);
         })
     },
     mounted: function() {
