@@ -239,6 +239,37 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
 
     }
 
+    public function obterValorTotalPlanilhaPropostaCongelada($idPreProjeto, $meta = 'alterarprojeto')
+    {
+        if (empty($idPreProjeto) || empty($meta)) {
+            return false;
+        }
+
+        $TbPreProjetoMeta = new Proposta_Model_DbTable_TbPreProjetoMeta();
+        $planilha = unserialize($TbPreProjetoMeta->buscarMeta($idPreProjeto, $meta . '_tbplanilhaproposta'));
+
+        if (empty($planilha)) {
+            return 0;
+        }
+
+        $arrSoma = [];
+        $arrSoma['vlSolicitadoOriginal'] = 0;
+        $arrSoma['vlOutrasFontesPropostaOriginal'] = 0;
+        $arrSoma['vlTotalPropostaOriginal'] = 0;
+
+        foreach ($planilha as $item) {
+
+            if ($item['FonteRecurso'] == 109) {
+                $arrSoma['vlSolicitadoOriginal'] += ($item['ValorUnitario'] * $item['Quantidade'] * $item['Ocorrencia']);
+            } else {
+                $arrSoma['vlOutrasFontesPropostaOriginal'] += ($item['ValorUnitario'] * $item['Quantidade'] * $item['Ocorrencia']);
+            }
+        }
+        $arrSoma['vlTotalPropostaOriginal'] = $arrSoma['vlSolicitadoOriginal'] + $arrSoma['vlOutrasFontesPropostaOriginal'];
+        
+        return $arrSoma;
+    }
+
     public function obterPlanilhaPropostaAtual($idPreProjeto) {
 
         if (empty($idPreProjeto)) {

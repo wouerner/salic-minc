@@ -656,6 +656,10 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             }
         }
 
+        if ($callback) {
+            return ['status' => true];
+        }
+
     } // fecha metodo verificarPermissaoAcesso()
 
     public static function validarSenhaInicial()

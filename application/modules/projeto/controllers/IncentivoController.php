@@ -63,7 +63,18 @@ class Projeto_IncentivoController extends Projeto_GenericController
             $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
             $projetoCompleto = $dbTableProjetos->obterProjetoIncentivoCompleto($this->idPronac);
 
+            $tbPreProjetoMeta = new Proposta_Model_PreProjetoMapper();
+            $planilhaOriginal = $tbPreProjetoMeta->obterValorTotalPlanilhaPropostaCongelada($projetoCompleto->idPreProjeto);
+
             $data = array_map('utf8_encode', $projetoCompleto->toArray());
+            $data['vlSolicitadoOriginal'] = !empty($planilhaOriginal) ? $planilhaOriginal['vlSolicitadoOriginal'] : $data['vlSolicitadoOriginal'];
+            $data['vlOutrasFontesPropostaOriginal'] = !empty($planilhaOriginal) ? $planilhaOriginal['vlOutrasFontesPropostaOriginal'] : $data['vlOutrasFontesPropostaOriginal'];
+            $data['vlTotalPropostaOriginal'] = !empty($planilhaOriginal) ? $planilhaOriginal['vlTotalPropostaOriginal'] : $data['vlTotalPropostaOriginal'];
+
+            $data['vlAutorizado'] = !empty($planilhaOriginal) ? $planilhaOriginal['vlSolicitadoOriginal'] : $data['vlAutorizado'];
+            $data['vlAutorizadoOutrasFontes'] = !empty($planilhaOriginal) ? $planilhaOriginal['vlOutrasFontesPropostaOriginal'] : $data['vlAutorizadoOutrasFontes'];
+            $data['vlTotalAutorizado'] = !empty($planilhaOriginal) ? $planilhaOriginal['vlTotalPropostaOriginal'] : $data['vlTotalAutorizado'];
+
             $data['permissao'] = true;
             $dbTableInabilitado = new Inabilitado();
             $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projetoCompleto->CgcCPf);

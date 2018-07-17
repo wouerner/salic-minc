@@ -686,6 +686,7 @@
             dadosProjeto: function (value) {
                 if (Object.keys(value).length > 0) {
                     this.loading = false;
+                    this.idPronac = this.dadosProjeto.idPronac
                 }
             }
         },
