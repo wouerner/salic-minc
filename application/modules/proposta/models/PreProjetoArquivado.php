@@ -255,9 +255,9 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $orgaos = new Usuariosorgaosgrupos();
         $orgaoSuperior = $orgaos->buscarOrgaoSuperior($GrupoAtivo->codOrgao)->current()->org_superior;
-        if($orgaoSuperior === Orgaos::ORGAO_SUPERIOR_SEFIC){
+        if((string)$orgaoSuperior === (string)Orgaos::ORGAO_SUPERIOR_SEFIC){
             $sql->where('a.AreaAbrangencia = ?', 0);
-        }elseif($orgaoSuperior === Orgaos::ORGAO_SUPERIOR_SAV){
+        }elseif((string)$orgaoSuperior === (string)Orgaos::ORGAO_SUPERIOR_SAV){
             $sql->where('a.AreaAbrangencia = ?', 1);
         }
 
@@ -274,7 +274,6 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
             $limit = (int) $limit;
             $sql->limit($limit, $start);
         }
-        
         return $this->fetchAll($sql);
     }
 }
