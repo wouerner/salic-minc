@@ -173,7 +173,23 @@
                Autorizar:""
            }
 
-        }
+        },
+        mounted: function () {
+            var vue = this;
+
+            url = 'http://localhost/prestacao-contas/fornecedor/cidade/id/50';
+            $3.ajax({
+                type: "GET",
+                url: url,
+        })
+        .done(function (data) {
+            console.info(data);
+            vue.cidades = data;
+        })
+        .fail(function (jqXHR) {
+            alert('error');
+        });
+    },
 
     });
 
