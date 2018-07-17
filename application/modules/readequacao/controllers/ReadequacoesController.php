@@ -3800,6 +3800,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                         'DtAprovacao' => new Zend_Db_Expr('GETDATE()'),
                         'AprovadoReal' => $valorDaReadequacao,
                         'ResumoAprovacao' => $parecerTecnico->ResumoParecer,
+                        'idParecer' => $parecerTecnico->IdParecer,
                         'Logon' => $auth->getIdentity()->usu_codigo,
                         'idReadequacao' => $idReadequacao
                     );
@@ -3875,7 +3876,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             }
             return $retorno;
         } catch (Exception $objExcetion) {
-xd($objExcetion->getMessage());
+            xd($objExcetion->getMessage());
             throw $objExcetion;
         }
     }
