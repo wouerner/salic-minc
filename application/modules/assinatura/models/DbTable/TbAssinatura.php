@@ -9,6 +9,12 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
      * @var Assinatura_Model_TbAssinatura $modeloTbAssinatura
      */
     public $modeloTbAssinatura;
+
+    /**
+     * @var Assinatura_Model_TbAtoAdministrativo $modeloTbAssinatura
+     */
+    public $modeloTbAtoAdministrativo;
+
     protected $_schema = 'sac';
     protected $_name = 'tbAssinatura';
     protected $_primary = 'idAssinatura';
@@ -18,8 +24,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     const TIPO_ATO_ANALISE_INICIAL = 630;
     const TIPO_ATO_ANALISE_CNIC = 631;
     const TIPO_ATO_HOMOLOGAR_PROJETO = 643;
-    const TIPO_ATO_READEQUACAO_COM_PORTARIA = 643; // @todo readequacao atualizar
-    const TIPO_ATO_READEQUACAO_SEM_PORTARIA = 643; // @todo readequacao atualizar
     const TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS = 653;
     const TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO = 654;
     const TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC = 655;
@@ -27,6 +31,12 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     public function preencherModeloAssinatura(array $dados)
     {
         $this->modeloTbAssinatura = new Assinatura_Model_TbAssinatura($dados);
+        return $this;
+    }
+
+    public function preencherModeloAtoAdministrativo(array $dados)
+    {
+        $this->modeloTbAtoAdministrativo = new Assinatura_Model_TbAtoAdministrativo($dados);
         return $this;
     }
 
@@ -242,22 +252,36 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         return false;
     }
 
-    public function obterAssinaturasDisponiveis(
-        $idOrgaoDoAssinante,
-        $idPerfilDoAssinante,
-        $idOrgaoSuperiorDoAssinante,
-        $idTipoDoAtoAdministrativos = []
-    )
+    public function obterAssinaturasDisponiveis()
     {
+
+        if (!$this->modeloTbAtoAdministrativo) {
+            throw new Exception("&Eacute; necess&aacute;rio definir uma entidade de Assinatura.");
+        }
+
+        if (is_null($this->modeloTbAtoAdministrativo->getIdOrgaoDoAssinante())) {
+            throw new Exception("`Identificador do Org&atilde;o` n&atilde;o informado.");
+        }
+
+        if (is_null($this->modeloTbAtoAdministrativo->getIdPerfilDoAssinante())) {
+            throw new Exception("`Identificador do Perfil` n&atilde;o informado.");
+        }
+
+        if (is_null($this->modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante())) {
+            throw new Exception("`Identificador do Org&atilde;o Superior` n&atilde;o informado.");
+        }
+
+        if (is_null($this->modeloTbAtoAdministrativo->getIdTipoDoAto())) {
+            throw new Exception("`Identificador do Tipo do Ato Administrativo` n&atilde;o informado.");
+        }
 
         $query = $this->select();
         $query->setIntegrityCheck(false);
 
         $sqlQuantidadeAssinaturas = "(select count(*) 
-                     from TbAssinatura
-                    where idPronac = Projetos.IdPRONAC
-                       
-                      and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura)";
+                                        from TbAssinatura
+                                       where idPronac = Projetos.IdPRONAC
+                                         and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura)";
 
         $query->from(
             array("Projetos" => "Projetos"),
@@ -283,9 +307,9 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                            from {$this->_schema}.TbAssinatura
                           inner join {$this->_schema}.TbAtoAdministrativo 
                              ON {$this->_schema}.TbAtoAdministrativo.idAtoAdministrativo = {$this->_schema}.TbAssinatura.idAtoAdministrativo
-                            AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
-                            AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
-                            AND {$this->_schema}.TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$idOrgaoSuperiorDoAssinante}
+                            AND {$this->_schema}.TbAtoAdministrativo.idOrgaoDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoDoAssinante()}
+                            AND {$this->_schema}.TbAtoAdministrativo.idPerfilDoAssinante = {$this->modeloTbAtoAdministrativo->getIdPerfilDoAssinante()}
+                            AND {$this->_schema}.TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()}
                           WHERE {$this->_schema}.TbAssinatura.idDocumentoAssinatura = {$this->_schema}.tbDocumentoAssinatura.idDocumentoAssinatura
                           AND {$this->_schema}.TbAtoAdministrativo.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo
                       )
@@ -330,15 +354,15 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 
         $query->joinInner(
             array('TbAtoAdministrativo' => 'TbAtoAdministrativo'),
-            "TbAtoAdministrativo.idOrgaoDoAssinante = {$idOrgaoDoAssinante}
-             AND TbAtoAdministrativo.idPerfilDoAssinante = {$idPerfilDoAssinante}
-             AND TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$idOrgaoSuperiorDoAssinante}
+            "TbAtoAdministrativo.idOrgaoDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoDoAssinante()}
+             AND TbAtoAdministrativo.idPerfilDoAssinante = {$this->modeloTbAtoAdministrativo->getIdPerfilDoAssinante()}
+             AND TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()}
              AND TbAtoAdministrativo.idTipoDoAto = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
             array('idOrdemDaAssinatura'),
             $this->_schema
         );
 
-        $query->where("TbAtoAdministrativo.idOrgaoDoAssinante = ?", $idOrgaoDoAssinante);
+        $query->where("TbAtoAdministrativo.idOrgaoDoAssinante = ?", $this->modeloTbAtoAdministrativo->getIdOrgaoDoAssinante());
         $query->where("tbDocumentoAssinatura.cdSituacao = ?", Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
         $query->where("tbDocumentoAssinatura.stEstado = ?", Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
         $query->where("tbDocumentoAssinatura.idDocumentoAssinatura not in (
@@ -350,8 +374,8 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         )");
         $query->where("{$sqlQuantidadeAssinaturas} + 1 = idOrdemDaAssinatura");
 
-        if ($idTipoDoAtoAdministrativos) {
-            $query->where("tbDocumentoAssinatura.idTipoDoAtoAdministrativo in (?)", $idTipoDoAtoAdministrativos);
+        if ($this->modeloTbAtoAdministrativo->getIdTipoDoAto()) {
+            $query->where("tbDocumentoAssinatura.idTipoDoAtoAdministrativo in (?)", $this->modeloTbAtoAdministrativo->getIdTipoDoAto());
         }
 
         return $this->_db->fetchAll($query);

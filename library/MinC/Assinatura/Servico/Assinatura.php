@@ -1,6 +1,7 @@
 <?php
 
 namespace MinC\Assinatura\Servico;
+use MinC\Assinatura\Acao\IListaAcoesModulo;
 
 /**
  * @var \Assinatura_Model_DbTable_TbAssinatura $dbTableTbAssinatura
@@ -12,7 +13,10 @@ class Assinatura implements IServico
     public $isEncaminharParaProximoAssinanteAoAssinar = true;
     public $viewModelAssinatura;
     private static $listaAcoesGerais = [];
-    private $listaAcoes = [];
+    /**
+     * @var IListaAcoesModulo IListaAcoesModulo
+     */
+    private $listaAcoesModulo = null;
     private $idTipoDoAtoAdministrativo;
 
     function __construct(array $dadosViewModelAssinatura)
@@ -33,18 +37,20 @@ class Assinatura implements IServico
     private function isolarAcoesPorTipoDeAto()
     {
         if (count(self::$listaAcoesGerais) > 0 && isset(self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo])) {
-            $this->listaAcoes = self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo];
+            $this->listaAcoesModulo = self::$listaAcoesGerais[$this->idTipoDoAtoAdministrativo];
         }
     }
 
-    private function executarAcoes(string $tipoAcao)
+    private function executarAcoes(string $interfaceDeAcao)
     {
-        foreach ($this->listaAcoes->obterLista() as $acao) {
-            /**
-             * @var \MinC\Assinatura\Acao\IAcao $acao
-             */
-            if ($acao instanceof $tipoAcao) {
-                $acao->executar($this->viewModelAssinatura);
+        if(!is_null($this->listaAcoesModulo)) {
+            foreach ($this->listaAcoesModulo->obterLista() as $acaoModulo) {
+                /**
+                 * @var \MinC\Assinatura\Acao\IAcao $acaoModulo
+                 */
+                if ($acaoModulo instanceof $interfaceDeAcao) {
+                    $acaoModulo->executar($this->viewModelAssinatura);
+                }
             }
         }
     }

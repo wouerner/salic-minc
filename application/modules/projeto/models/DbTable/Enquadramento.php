@@ -95,6 +95,7 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
                 [
                     new Zend_Db_Expr('a.AnoProjeto+a.Sequencial as Pronac'),
                     'a.IdPRONAC',
+                    'ResumoProjeto',
                     'a.NomeProjeto',
                     'a.DtInicioExecucao',
                     'a.DtFimExecucao',
@@ -167,8 +168,6 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             'TABELAS.dbo'
         );
 
-        $sql->where('a.Situacao = ?', Projeto_Model_Situacao::PROJETO_APRECIADO_PELA_CNIC);
-
         if (!empty($search['value'])) {
             $sql->where('a.NomeProjeto like ? OR a.AnoProjeto+a.Sequencial like ? OR d.NrReuniao like ?', '%'.$search['value'].'%');
         }
@@ -186,6 +185,7 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
             $limit = (int) $limit;
             $sql->limit($limit, $start);
         }
+
 
         return $this->fetchAll($sql);
     }
