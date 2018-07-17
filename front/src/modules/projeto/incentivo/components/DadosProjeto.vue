@@ -56,7 +56,7 @@
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.Segmento"/>
                     </td>
-                    <td align="center" class="bold destacar">
+                    <td align="center" class="bold destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.Enquadramento"/>
                     </td>
                 </tr>
@@ -96,7 +96,7 @@
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.ProrrogacaoAutomatica"/>
                     </td>
-                    <td align="center" class="destacar">
+                    <td align="center" class="destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.PlanoExecucaoImediata"/>
                     </td>
                 </tr>
@@ -153,22 +153,22 @@
                 </tr>
                 <tr>
                     <td align="center"
-                        class="bold destacar text-darken-2"
+                        class="bold destacar-celula text-darken-2"
                         :class="[ isDataExpirada(dadosProjeto.DtFimCaptacao) ? 'orange-text' : 'green-text' ]"
                     >{{ dadosProjeto.DtInicioCaptacao | formatarData }}
                     </td>
                     <td align="center"
-                        class="bold destacar text-darken-2"
+                        class="bold destacar-celula text-darken-2"
                         :class="[ isDataExpirada(dadosProjeto.DtFimCaptacao) ? 'orange-text' : 'green-text' ]"
                     >{{ dadosProjeto.DtFimCaptacao | formatarData }}
                     </td>
                     <td align="center"
-                        class="bold destacar text-darken-2"
+                        class="bold destacar-celula text-darken-2"
                         :class="[ isDataExpirada(dadosProjeto.DtFimExecucao) ? 'orange-text' : 'green-text' ]"
                     >{{ dadosProjeto.DtInicioExecucao | formatarData }}
                     </td>
                     <td align="center"
-                        class="bold destacar text-darken-2"
+                        class="bold destacar-celula text-darken-2"
                         :class="[ isDataExpirada(dadosProjeto.DtFimExecucao) ? 'orange-text' : 'green-text' ]"
                     >{{ dadosProjeto.DtFimExecucao | formatarData }}
                     </td>
@@ -236,7 +236,7 @@
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao"/>
                     </td>
-                    <td align="center" class="destacar">
+                    <td align="center" class="destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
                     </td>
                     <td align="center">
@@ -298,7 +298,7 @@
                 </tr>
                 <tr>
                     <td align="center">{{ dadosProjeto.DtSituacao | formatarData }}</td>
-                    <td class="left-align destacar">
+                    <td class="left-align destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.Situacao"/>
                     </td>
                     <td class="left-align">
@@ -351,7 +351,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="left-align destacar">{{ dadosProjeto.Normativo }}</td>
+                    <td class="left-align destacar-celula">{{ dadosProjeto.Normativo }}</td>
                     <td align="center">{{ dadosProjeto.dtPublicacaoNormativo | formatarData }}</td>
                     <td align="center">{{ dadosProjeto.dtRevogacaoNormativo | formatarData }}</td>
                 </tr>
@@ -537,11 +537,7 @@
                     <tr>
                         <td class="right-align destaque-texto">
                             <b>
-                                <router-link v-if="dadosProjeto.vlReadequadoIncentivo > 0"
-                                             :to="{ name: 'planilhareadequada', params: { idPronac: idPronac }}">
-                                    <SalicFormatarValor :valor="dadosProjeto.vlReadequadoIncentivo"/>
-                                </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlReadequadoIncentivo"/>
+                                <SalicFormatarValor :valor="dadosProjeto.vlReadequadoIncentivo"/>
                             </b>
                         </td>
                         <td class="right-align destaque-texto-secondary"><b>
@@ -575,7 +571,7 @@
                         <td class="right-align"><b>% Captado(T)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align destaque-texto-primary destacar">
+                        <td class="right-align destaque-texto-primary destacar-celula">
                             <b>
                                 <a v-if="dadosProjeto.vlCaptado > 0"
                                    :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
@@ -590,7 +586,7 @@
                         <td class="right-align"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlRecebido"/>
                         </b></td>
-                        <td class="right-align destacar"><b>
+                        <td class="right-align destacar-celula"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlSaldoACaptar"/>
                         </b></td>
                         <td class="right-align destaque-texto-primary">
@@ -618,7 +614,7 @@
                         <td class="right-align"><b>% Comprovado(X)</b></td>
                     </tr>
                     <tr>
-                        <td class="right-align destaque-texto-primary destacar">
+                        <td class="right-align destaque-texto-primary destacar-celula">
                             <b>
                                 <router-link v-if="dadosProjeto.vlComprovado > 0"
                                              :to="{ name: 'relacaodepagamentos', params: { idPronac: idPronac }}">
@@ -627,7 +623,7 @@
                                 <SalicFormatarValor v-else :valor="dadosProjeto.vlComprovado"/>
                             </b>
                         </td>
-                        <td class="right-align destacar">
+                        <td class="right-align destacar-celula">
                             <b>
                                 <SalicFormatarValor :valor="dadosProjeto.vlAComprovar"/>
                             </b>

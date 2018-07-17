@@ -81,7 +81,7 @@ table tr.linha-excluida td,
 
 table tr.linha-atualizada td,
 #conteudo table tr.linha-atualizada td {
-    background-color: #d0e8d6;
+    background-color: #d0d8e8;
     color: #10504e;
 }
 
@@ -362,7 +362,7 @@ table > tbody > tr {
     border: 1px solid #d0d0d0;
 }
 
-table tr td.destacar {
+table tr td.destacar-celula {
     /*background-color: #fce4d7 !important;*/
     background-color: #d6ecd8 !important;
 }
