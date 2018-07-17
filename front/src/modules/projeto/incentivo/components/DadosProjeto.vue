@@ -26,9 +26,7 @@
                         </a>
                     </td>
                     <td>
-                        <router-link :to="{ name: 'proponente', params: { idPronac: idPronac }}">
-                            <span v-html="dadosProjeto.Proponente"></span>
-                        </router-link>
+                        <span v-html="dadosProjeto.Proponente"></span>
                     </td>
                 </tr>
             </table>
@@ -41,7 +39,7 @@
                 <tr class="destacar">
                     <td class="centro"><b>UF</b></td>
                     <td class="centro"><b>Mecanismo</b></td>
-                    <td class="centro"><b>&Aacute;rea Cultural</b></td>
+                    <td class="centro"><b><CharsetEncode :texto="'&Aacute;rea Cultural'"></CharsetEncode></b></td>
                     <td class="centro"><b>Segmento Cultural</b></td>
                     <td class="centro"><b>Enquadramento</b></td>
                 </tr>

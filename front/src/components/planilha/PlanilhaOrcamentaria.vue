@@ -110,6 +110,11 @@
                             Object.entries(locais).forEach(([local, itens]) => {
                                 totalLocal = 0;
                                 Object.entries(itens).forEach(([column, cell]) => {
+
+                                    if(cell.tpAcao && cell.tpAcao == 'E') {
+                                        return;
+                                    }
+
                                     totalLocal += cell.vlSolicitado;
                                 });
                                 this.$set(this.planilha[fonte][produto][etapa][local], 'total', numeral(totalLocal).format('0,0.00'));

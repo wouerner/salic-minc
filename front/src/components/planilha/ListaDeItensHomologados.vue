@@ -77,6 +77,8 @@
         created: function() {
             numeral.locale('pt-br');
             numeral.defaultFormat('0,0.00');
+
+            this.scroll();
         },
         computed: {
             vlSolicitadoTotal: function () {

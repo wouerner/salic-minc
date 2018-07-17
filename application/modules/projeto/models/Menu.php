@@ -235,7 +235,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'grupo' => []
         ];
 
-        if ($this->IN2017) {
+        if (!$this->IN2017) {
             $menu['outrasinformacoes']['submenu'][] = [
                 'label' => 'Plano de distribui&ccedil;&atilde;o',
                 'title' => 'Ir para Plano de distribui&ccedil;&atilde;o',
@@ -274,7 +274,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'label' => 'Hist&oacute;rico encaminhamento',
                 'title' => 'Ir para Hist&oacute;rico encaminhamento',
                 'link' => '/default/consultardadosprojeto/historico-encaminhamento/?idPronac=' . $idPronacHash,
-                'ajax' => true,
+                'ajax' => false,
                 'grupo' => []
             ];
         }
@@ -317,13 +317,6 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            $menu['analiseaprovacao']['submenu'][] = [
-                'label' => 'Recursos',
-                'title' => 'Ir para Recursos',
-                'link' => '/default/consultardadosprojeto/recurso/?idPronac=' . $idPronacHash,
-                'ajax' => true,
-                'grupo' => []
-            ];
         }
 
         # Execução
@@ -686,20 +679,20 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        $perfisMensagens = array(131, 92, 93, 122, 123, 121, 129, 94, 103, 110, 118, 126, 125, 124, 132, 136, 134, 135, 138, 139);
-        if (in_array($this->idGrupoAtivo, $perfisMensagens) || $debug) {
-
-            $menu['mensagens'] = [
-                'id' => 'mensagens',
-                'label' => 'Mensagens',
-                'title' => 'Ir para Mensagens',
-                'link' => '/default/mantermensagens/consultarmensagem/idpronac/' . $idPronacHash,
-                'ajax' => false,
-                'icon' => 'email',
-                'submenu' => '',
-                'grupo' => []
-            ];
-        }
+//        $perfisMensagens = array(131, 92, 93, 122, 123, 121, 129, 94, 103, 110, 118, 126, 125, 124, 132, 136, 134, 135, 138, 139);
+//        if (in_array($this->idGrupoAtivo, $perfisMensagens) || $debug) {
+//
+//            $menu['mensagens'] = [
+//                'id' => 'mensagens',
+//                'label' => 'Mensagens',
+//                'title' => 'Ir para Mensagens',
+//                'link' => '/default/mantermensagens/consultarmensagem/idpronac/' . $idPronacHash,
+//                'ajax' => false,
+//                'icon' => 'email',
+//                'submenu' => '',
+//                'grupo' => []
+//            ];
+//        }
 
         $menu['solicitacoes'] = [
             'id' => 'solicitacoes',

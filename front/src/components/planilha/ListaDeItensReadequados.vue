@@ -9,11 +9,17 @@
                 <th class="center-align">Dias</th>
                 <th class="center-align">Qtde</th>
                 <th class="center-align">Ocor.</th>
-                <th class="right-align"><CharsetEncode :texto="'Vl. Unit&aacute;rio'" /></th>
+                <th class="right-align">
+                    <CharsetEncode :texto="'Vl. Unit&aacute;rio'"/>
+                </th>
                 <th class="right-align">Vl. Aprovado</th>
                 <th class="right-align">Vl. Comprovado</th>
-                <th class="center-align"><CharsetEncode :texto="'Justf. de Readequa&ccedil;&atilde;o'" /></th>
-                <th class="center-align"><CharsetEncode :texto="'A&ccedil;&atilde;o'" /></th>
+                <th class="center-align">
+                    <CharsetEncode :texto="'Justf. de Readequa&ccedil;&atilde;o'"/>
+                </th>
+                <th class="center-align">
+                    <CharsetEncode :texto="'A&ccedil;&atilde;o'"/>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -27,24 +33,25 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlUnitario"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlAprovado"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.VlComprovado"/></td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlUnitario"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlAprovado"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.VlComprovado"/>
+                </td>
                 <td class="justify" width="30%" v-html="row.JustProponente"></td>
                 <td class="justify" width="30%" v-html="row.DescAcao"></td>
             </tr>
             </tbody>
             <tfoot v-if="table && Object.keys(table).length > 0" style="opacity: 0.5">
             <tr>
-                <td colspan="6"><b>Totais</b></td>
-                <td class="right-align">
-                    <b>{{ vlSolicitadoTotal }}</b>
-                </td>  <td class="right-align">
-                    <b>{{ vlSolicitadoTotal }}</b>
-                </td>  <td class="right-align">
-                    <b>{{ vlSolicitadoTotal }}</b>
-                </td>
-                <td class="right-align"></td>
+                <td colspan="7"><b>Totais</b></td>
+                <td class="right-align"><b>{{ vlAprovadoTotal }}</b></td>
+                <td class="right-align"><b>{{ vlComprovadoTotal }}</b></td>
+                <td colspan="2" class="right-align"></td>
             </tr>
             </tfoot>
         </table>
@@ -73,16 +80,31 @@
             SalicFormatarValor,
             CharsetEncode
         },
-        created: function() {
+        created: function () {
             numeral.locale('pt-br');
             numeral.defaultFormat('0,0.00');
         },
         computed: {
-            vlSolicitadoTotal: function () {
+            vlComprovadoTotal: function () {
                 var soma = numeral();
                 Object.entries(this.table).forEach(([column, cell]) => {
-                    if(typeof cell.vlSolicitado != 'undefined') {
-                        soma.add(parseFloat(cell.vlSolicitado));
+                    if (typeof cell.VlComprovado != 'undefined') {
+                        if (cell.tpAcao && cell.tpAcao == 'E') {
+                            return;
+                        }
+                        soma.add(parseFloat(cell.VlComprovado));
+                    }
+                });
+                return soma.format();
+            },
+            vlAprovadoTotal: function () {
+                var soma = numeral();
+                Object.entries(this.table).forEach(([column, cell]) => {
+                    if (typeof cell.vlAprovado != 'undefined') {
+                        if (cell.tpAcao && cell.tpAcao == 'E') {
+                            return;
+                        }
+                        soma.add(parseFloat(cell.vlAprovado));
                     }
                 });
                 return soma.format();

@@ -80,12 +80,15 @@ table tr.linha-excluida td,
 }
 
 table tr.linha-atualizada td,
-table tr.linha-incluida td,
-#conteudo table tr.linha-atualizada td,
-#conteudo table tr.linha-incluida td {
+#conteudo table tr.linha-atualizada td {
     background-color: #d0e8d6;
-    color: #085020;
-    font-weight: 500;
+    color: #10504e;
+}
+
+table tr.linha-incluida td,
+#conteudo table tr.linha-incluida td {
+    background-color: #a5ceaf;
+    color: #155025;
 }
 
 #conteudo table tfoot td img {
