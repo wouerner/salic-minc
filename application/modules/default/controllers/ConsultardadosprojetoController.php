@@ -1071,8 +1071,8 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
 
             /* ================== PAGINACAO ======================*/
             $where = array();
-            $where['p.IdPRONAC = ?'] = $get->idPronac;
-            $this->view->idPronac = $get->idPronac;
+            $where['p.IdPRONAC = ?'] = $idPronac;
+            $this->view->idPronac = $idPronac;
 
             $tblHisSituacao = new HistoricoSituacao();
             $total = $tblHisSituacao->buscarHistoricosEncaminhamentoIdPronac($where, $order, null, null, true);
