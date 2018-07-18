@@ -17,7 +17,7 @@
 
         template:  `
         <form id="formulario">
-        <h4>Novo cadastro</h4>
+        <h4>Novo Cadastro</h4>
         <fieldset>
             <legend>DADOS PRINCIPAIS</legend>
 
@@ -45,9 +45,8 @@
 
                 <div class="col s3">
                     <label>Visão do Agente</label>
-                    <select class="browser-default" v-model="Fornecedor">
-                        <option value="" disabled selected>Fornecedor</option>
-                        <option value="2">Fulano</option>
+                    <select class="browser-default" v-on:change="fornecedor()" v-model="Fornecedor">
+                        <option v-for="fornecedor in Fornecedores" :value="fornecedor.id" v-if="fornecedor.descricao === 'Fornecedor'">Fornecedor</option>
                     </select>
                 </div>
             </div>
@@ -65,7 +64,7 @@
                 <div class="col s3">
                     <label>Tipo *</label>
                     <select class="browser-default" v-model="Tipo">
-                        <option value="" disabled selected>-Selecione-</option>
+                        <option v-if="">-Selecione-</option>
                         <option value="1">-Selecione-</option>
                         <option value="2">Aeroporto</option>
                         <option value="3">Alameda</option>
@@ -124,7 +123,7 @@
                     </select>
                 </div>
                 <div class="col s3">
-                    <label>Autorizar Divulgar?</label>
+                    <label>Autoriza Divulgar?</label>
                     <div class="align-bottom">
                         <input class="with-gap" name="group1" type="radio" id="test4" value="4" v-model="Autorizar" />
                         <label for="test4">Sim</label>
@@ -157,7 +156,8 @@
                TipoDeEndereço: "",
                Autorizar: "",
                uf: "",
-               Cidades: ""
+               Cidades: "",
+               Fornecedores: "",
            }
 
         },
@@ -185,9 +185,19 @@
                         url: url,
                 })
                         .done( (cidade) => vue.Cidades = cidade )
+                },
+                fornecedor: function () {
+                    var vue = this;
+                    let url = '/prestacao-contas/fornecedor/fornecedores-tipo';
+                    $3.ajax({
+                        type: "GET",
+                        url: url,
+                    })
+                        .done( (fornecedores) => vue.Fornecedores = fornecedores )
                 }
 
             },
+
 
     });
 
