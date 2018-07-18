@@ -115,7 +115,13 @@
                                         return;
                                     }
 
-                                    totalLocal += cell.vlSolicitado;
+                                    // planilha homologada e readequada o valor total e a soma do vlAprovado
+                                    if(cell.vlAprovado || cell.vlAprovado >= 0) {
+                                        totalLocal += cell.vlAprovado;
+                                    } else {
+                                        console.log('valorrrr solicitaado', cell.vlAprovado === 0);
+                                        totalLocal += cell.vlSolicitado;
+                                    }
                                 });
                                 this.$set(this.planilha[fonte][produto][etapa][local], 'total', numeral(totalLocal).format('0,0.00'));
                                 totalEtapa += totalLocal;
