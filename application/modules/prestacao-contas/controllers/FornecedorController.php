@@ -4,8 +4,7 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
 {
     public function init()
     {
-        Zend_Json::$useBuiltinEncoderDecoder = true;
-        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
+//        Zend_Json::$useBuiltinEncoderDecoder = true;
 
         parent::init();
     }
@@ -27,12 +26,14 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
     }
 
     public function ufAction() {
+        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $estados = new Agente_Model_DbTable_UF();
         $lista = $this->view->comboEstados = $estados->listar();
         $this->retornaJson($lista);
     }
 
     public function cidadeAction() {
+        $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $id = $this->_request->getParam("id");
         $cidade = new Cidade();
         $dados = $this->view->combocidades = $cidade->buscar($id);
