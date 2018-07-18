@@ -504,7 +504,11 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         $select->join(
             ['c' => 'tbComprovantePagamento'],
             '(b.idComprovantePagamento = c.idComprovantePagamento)',
-            null,
+            [
+                "c.nrComprovante as numero", 
+                "c.nrSerie as serie", 
+                'c.tpDocumento as tipo'
+            ],
             'BDCORPORATIVO.scSAC'
         );
 
@@ -546,7 +550,7 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         $select->join(
             ['i' => 'tbFonecedorExterior'],
             '(c.idFornecedorExterior = i.idFornecedorExterior)',
-            'i.dsEndereco as endereco',
+            ['i.dsEndereco as endereco', 'i.idFornecedorExterior as id'],
             'BDCORPORATIVO.scSAC'
         );
 

@@ -77,13 +77,23 @@ Vue.component('item', {
             vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) + parseFloat(data.valor);
         })
 
-        this.$root.$on('comprovante-nacional-atualizado', function(data) {
+        this.$root.$on('atualizado-comprovante-nacional', function(data) {
             vue.informacoes.vlComprovado = (parseFloat(vue.informacoes.vlComprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('excluir-comprovante-nacional', function(data) {
+            vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) - parseFloat(data.valor);
         })
 
         this.$root.$on('novo-comprovante-internacional', function(data) {
             vue.informacoes.vlComprovado = parseFloat(vue.informacoes.vlComprovado) + parseFloat(data.valor);
         })
+
+        this.$root.$on('atualizado-comprovante-internacional', function(data) {
+            console.log(data.valorAntigo, data.valor);
+            vue.informacoes.vlComprovado = (parseFloat(vue.informacoes.vlComprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+        })
+
     },
     mounted: function () {
         let vue = this;

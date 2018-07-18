@@ -38,7 +38,7 @@ Vue.component('comprovantes', {
                                         :datainicio="datainicio"
                                         :datafim="datafim"
                                         :valoraprovado="valoraprovado"
-                                        :valorcomprovado="valorcomprovado"
+                                        :valorcomprovado="valorComprovado"
                                         :valorantigo="dado.valor"
                                     >
                                     </component>
@@ -74,33 +74,36 @@ Vue.component('comprovantes', {
         'valorcomprovado'
     ],
     created() {
+
         let vue = this;
-            this.$root.$on('novo-comprovante-nacional', function(data) {
-                if(vue.tipo =='nacional'){
-                    // console.log('evento nacional!!!!', vue._uid)
-                    vue.$data.dados.push(data);
-                }
-            })
+        this.$root.$on('novo-comprovante-nacional', function(data) {
+            if(vue.tipo =='nacional'){
+                vue.$data.dados.push(data);
+                vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
+            }
+        })
 
-            this.$root.$on('comprovante-nacional-atualizado', function(data) {
+        this.$root.$on('atualizado-comprovante-nacional', function(data) {
+            vue.formVisivel = false;
+            if(vue.tipo =='nacional'){
+                Vue.set(vue.$data.dados, data._index, data);
+                vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+            }
+        })
+
+        this.$root.$on('novo-comprovante-internacional', function(data) {
+            if(vue.tipo =='internacional'){
+                vue.$data.dados.push(data);
+                vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
+            }
+        })
+
+        this.$root.$on('atualizado-comprovante-internacional', function(data) {
+            if(vue.tipo =='internacional'){
                 vue.formVisivel = false;
-                if(vue.tipo =='nacional'){
-                    Vue.set(vue.$data.dados, data._index, data);
-                }
-            })
-
-            this.$root.$on('novo-comprovante-internacional', function(data) {
-                // vue.formVisivel = false;
-                // vue.dados.push(data);
-                // console.log('evento internacional');
-                if(vue.tipo =='internacional'){
-                    vue.$data.dados.push(data);
-                }
-            })
-
-            this.$root.$on('atualizado-comprovante-internacional', function(data) {
-                vue.formVisivel = false;
-            })
+                Vue.set(vue.$data.dados, data._index, data);
+            }
+        })
     },
     mounted: function() {
         var vue = this;
@@ -171,7 +174,9 @@ Vue.component('comprovantes', {
             this.formVisivel = true;
         },
         excluir: function(id, idArquivo, index) {
-            this.$delete(this.dados, index)
+            this.$root.$emit('excluir-comprovante-nacional', this.dados[index]);
+            this.$delete(this.dados, index);
+
             var vue = this;
             url = '/prestacao-contas/gerenciar/excluir';
             $3.ajax({
@@ -195,7 +200,8 @@ Vue.component('comprovantes', {
     data: function(){
         return {
             dados:{},
-            formVisivel: false
+            formVisivel: false,
+            valorComprovado: this.valorcomprovado
         }
     }
 });

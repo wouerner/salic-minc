@@ -7,7 +7,7 @@ Vue.component('sl-comprovante-internacional-table', {
                     <tr>
                         <th>Fornecedor</th>
                         <td>{{dados.fornecedor.nome}}</td>
-                        <th>Endereço</th>
+                        <th>Endere&ccedil;o</th>
                         <td colspan="5">{{dados.fornecedor.endereco}}</td>
                     </tr>
                     <tr>
@@ -25,8 +25,6 @@ Vue.component('sl-comprovante-internacional-table', {
                         <td>{{formaPagamento}}</td>
                         <th>Data do Pagamento</th>
                         <td>{{dataPagamento}}</td>
-                        <th>N&ordm; Documento Pagamento</th>
-                        <td>{{dados.numeroDocumento}}</td>
                     </tr>
                     <tr>
                         <th>Valor</th>

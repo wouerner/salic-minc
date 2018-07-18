@@ -17,7 +17,8 @@ Vue.component('sl-comprovar-form',
                     :datainicio="datainicio"
                     :datafim="datafim"
                     :valoraprovado=valoraprovado
-                    :valorcomprovado="valorcomprovado"
+                    :valorcomprovado="valorComprovado"
+                    :valorantigo="0"
                 >
                 </sl-comprovante-nacional-form>
             </div>
@@ -30,12 +31,35 @@ Vue.component('sl-comprovar-form',
                     :datainicio="datainicio"
                     :datafim="datainicio"
                     :valoraprovado="valoraprovado"
-                    :valorcomprovado="valorcomprovado"
+                    :valorcomprovado="valorComprovado"
+                    :valorantigo="0"
                 >
                 </sl-comprovante-internacional-form>
             </div>
         </div>
     `,
+    created: function () {
+        let vue = this;
+        this.$root.$on('novo-comprovante-nacional', function(data) {
+            vue.valorComprovado = parseFloat(vue.valorComprovado) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('atualizado-comprovante-nacional', function(data) {
+            vue.formVisivel = false;
+            // if(vue.tipo =='nacional'){
+                vue.$data.valorComprovado = (parseFloat(vue.valorComprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+                console.log(vue.valorComprovado);
+            // }
+        })
+
+        this.$root.$on('novo-comprovante-internacional', function(data) {
+            vue.valorComprovado = parseFloat(vue.valorComprovado) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('excluir-comprovante-nacional', function(data) {
+            vue.valorComprovado = parseFloat(vue.valorComprovado) - parseFloat(data.valor);
+        })
+    },
     mounted: function() {
     },
     props: ['item', 'idplanilhaaprovacao', 'datainicio', 'datafim', 'valoraprovado', 'valorcomprovado'],
@@ -46,7 +70,8 @@ Vue.component('sl-comprovar-form',
         return {
             itemId: this.item ,
             idplanilhaaprovacaoId: this.idplanilhaaprovacao ,
-            v: true
+            v: true,
+            valorComprovado: this.valorcomprovado 
         };
     },
     methods: {
