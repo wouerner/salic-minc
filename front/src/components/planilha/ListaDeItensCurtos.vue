@@ -8,7 +8,7 @@
                 <th class="center-align">Dias</th>
                 <th class="center-align">Qtde</th>
                 <th class="center-align">Ocor.</th>
-                <th class="right-align"><CharsetEncode :texto="'Vl. Unit&aacute;rio'" /></th>
+                <th class="right-align">Vl. Unit&aacute;rio</th>
                 <th>Vl. Solicitado</th>
                 <th>#</th>
             </tr>
@@ -43,7 +43,6 @@
 
 <script>
     import numeral from 'numeral'
-    import CharsetEncode from '@/components/CharsetEncode';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
 
     export default {
@@ -58,7 +57,6 @@
             'full'
         ],
         components: {
-            CharsetEncode,
             SalicFormatarValor
         },
         methods: {

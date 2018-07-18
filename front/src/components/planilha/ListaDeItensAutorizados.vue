@@ -8,7 +8,7 @@
                 <th class="center-align">Dias</th>
                 <th class="center-align">Qtde</th>
                 <th class="center-align">Ocor.</th>
-                <th class="right-align"><CharsetEncode :texto="'Vl. Unit&aacute;rio'" /></th>
+                <th class="right-align">Vl. Unit&aacute;rio</th>
                 <th class="right-align">Vl. Solicitado</th>
                 <th class="right-align">Vl. Aprovado</th>
                 <th class="center-align">Justif. Proponente</th>
@@ -50,7 +50,6 @@
 <script>
     import numeral from 'numeral'
     import 'numeral/locales';
-    import CharsetEncode from '@/components/CharsetEncode';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
 
 
@@ -66,8 +65,7 @@
             'full': ''
         },
         components: {
-            SalicFormatarValor,
-            CharsetEncode
+            SalicFormatarValor
         },
         computed: {
             vlSolicitadoTotal: function () {

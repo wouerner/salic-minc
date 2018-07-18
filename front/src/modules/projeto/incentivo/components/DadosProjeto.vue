@@ -39,7 +39,7 @@
                 <tr class="destacar">
                     <td class="centro"><b>UF</b></td>
                     <td class="centro"><b>Mecanismo</b></td>
-                    <td class="centro"><b><CharsetEncode :texto="'&Aacute;rea Cultural'"></CharsetEncode></b></td>
+                    <td class="centro"><b>&Aacute;rea Cultural</b></td>
                     <td class="centro"><b>Segmento Cultural</b></td>
                     <td class="centro"><b>Enquadramento</b></td>
                 </tr>
@@ -66,7 +66,7 @@
                 <tr class="destacar">
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'N&ordm; Proposta'"></CharsetEncode>
+                            N&ordm; Proposta
                         </b>
                     </td>
                     <td class="centro"><b>Data Fixa</b></td>
@@ -74,12 +74,12 @@
                     <!-- <td class="centro"><b>Prorroga&ccedil;&atilde;o autom&aacute;tica</b></td> -->
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Prorroga&ccedil;&atilde;o autom&aacute;tica'"></CharsetEncode>
+                            Prorroga&ccedil;&atilde;o autom&aacute;tica
                         </b>
                     </td>
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Plano de Execu&ccedil;&atilde;o Imediata'"></CharsetEncode>
+                            Plano de Execu&ccedil;&atilde;o Imediata
                         </b>
                     </td>
                 </tr>
@@ -105,19 +105,19 @@
             <table class="tabela">
                 <tr class="destacar">
                     <td colspan="2" class="centro bold">
-                        <CharsetEncode :texto="'Per&iacute;odo de capta&ccedil;&atilde;o'"></CharsetEncode>
+                        Per&iacute;odo de capta&ccedil;&atilde;o
                     </td>
                     <td colspan="2" class="centro bold">
-                        <CharsetEncode :texto="'Per&iacute;odo de execu&ccedil;&atilde;o'"></CharsetEncode>
+                        Per&iacute;odo de execu&ccedil;&atilde;o
                     </td>
                     <td colspan="3" class="centro bold">
-                        <CharsetEncode :texto="'Per&iacute;odo Vigente'"></CharsetEncode>
+                        Per&iacute;odo Vigente
                     </td>
                 </tr>
                 <tr class="destacar">
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Dt. In&iacute;cio'"></CharsetEncode>
+                            Dt. In&iacute;cio
                         </b>
                     </td>
                     <td class="centro">
@@ -127,7 +127,7 @@
                     </td>
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Dt. In&iacute;cio'"></CharsetEncode>
+                            Dt. In&iacute;cio
                         </b>
                     </td>
                     <td class="centro">
@@ -142,12 +142,12 @@
                     </td>
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'N&ordm; Portaria'"></CharsetEncode>
+                            N&ordm; Portaria
                         </b>
                     </td>
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Dt. Publica&ccedil;&atilde;o'"></CharsetEncode>
+                            Dt. Publica&ccedil;&atilde;o
                         </b>
                     </td>
                 </tr>
@@ -188,19 +188,19 @@
                 <tr class="destacar">
                     <td align="center" colspan="5">
                         <b>
-                            <CharsetEncode :texto="'Informa&ccedil;&otilde;es banc&aacute;rias'"></CharsetEncode>
+                            Informa&ccedil;&otilde;es banc&aacute;rias
                         </b>
                     </td>
                 </tr>
                 <tr class="destacar">
                     <td class="centro" rowspan="2">
                         <b>
-                            <CharsetEncode :texto="'Ag&ecirc;ncia'"></CharsetEncode>
+                            Ag&ecirc;ncia
                         </b>
                     </td>
                     <td class="centro" colspan="2">
                         <b>
-                            <CharsetEncode :texto="'N&uacute;meros das Contas'"></CharsetEncode>
+                            N&uacute;meros das Contas
                         </b>
                     </td>
                     <td class="centro" rowspan="2" width="10%">
@@ -210,19 +210,19 @@
                     </td>
                     <td class="centro" rowspan="2">
                         <b>
-                            <CharsetEncode :texto="'Dt. Libera&ccedil;&atilde;o'"></CharsetEncode>
+                            Dt. Libera&ccedil;&atilde;o
                         </b>
                     </td>
                 </tr>
                 <tr class="destacar">
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Capta&ccedil;&atilde;o'"></CharsetEncode>
+                            Capta&ccedil;&atilde;o
                         </b>
                     </td>
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'Movimenta&ccedil;&atilde;o'"></CharsetEncode>
+                            Movimenta&ccedil;&atilde;o
                         </b>
                     </td>
                 </tr>
@@ -249,7 +249,7 @@
                 <tr class="destacar">
                     <td class="centro">
                         <b>
-                            <CharsetEncode :texto="'S&iacute;ntese do projeto'"></CharsetEncode>
+                            S&iacute;ntese do projeto
                         </b>
                     </td>
                 </tr>
@@ -270,29 +270,29 @@
                 <tr class="destacar">
                     <td align="center" colspan="4">
                         <b>
-                            <CharsetEncode :texto="'Situa&ccedil;&atilde;o do projeto'"></CharsetEncode>
+                            Situa&ccedil;&atilde;o do projeto
                         </b>
                     </td>
                 </tr>
                 <tr class="destacar">
                     <td align="center">
                         <b>
-                            <CharsetEncode :texto="'Dt.Situa&ccedil;&atilde;o'"></CharsetEncode>
+                            Dt.Situa&ccedil;&atilde;o
                         </b>
                     </td>
                     <td class="left-align">
                         <b>
-                            <CharsetEncode :texto="'Situa&ccedil;&atilde;o'"></CharsetEncode>
+                            Situa&ccedil;&atilde;o
                         </b>
                     </td>
                     <td class="left-align">
                         <b>
-                            <CharsetEncode :texto="'Provid&ecirc;ncia Tomada'"></CharsetEncode>
+                            Provid&ecirc;ncia Tomada
                         </b>
                     </td>
                     <td align="center">
                         <b>
-                            <CharsetEncode :texto="'Localiza&ccedil;&atilde;o atual'"></CharsetEncode>
+                            Localiza&ccedil;&atilde;o atual
                         </b>
                     </td>
                 </tr>
@@ -316,7 +316,7 @@
                     <td class="left-align"><b>Fase</b></td>
                     <td align="center">
                         <b>
-                            <CharsetEncode :texto="'Dt. in&iacute;cio'"></CharsetEncode>
+                            Dt. in&iacute;cio
                         </b>
                     </td>
                 </tr>
@@ -330,10 +330,7 @@
                 <tr class="destacar">
                     <td align="center" colspan="3">
                         <b>
-                            <CharsetEncode
-                                :texto="'Normativo vigente na apresenta&ccedil;&atilde;o do projeto'"
-                            >
-                            </CharsetEncode>
+                            Normativo vigente na apresenta&ccedil;&atilde;o do projeto
                         </b>
                     </td>
                 </tr>
@@ -341,12 +338,12 @@
                     <td class="left-align"><b>Normativo</b></td>
                     <td align="center">
                         <b>
-                            <CharsetEncode :texto="'Dt. Publica&ccedil;&atilde;o'"></CharsetEncode>
+                            Dt. Publica&ccedil;&atilde;o
                         </b>
                     </td>
                     <td align="center">
                         <b>
-                            <CharsetEncode :texto="'Dt. Revoga&ccedil;&atilde;o'"></CharsetEncode>
+                            Dt. Revoga&ccedil;&atilde;o
                         </b>
                     </td>
                 </tr>
@@ -377,10 +374,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="5">
                             <b>
-                                <CharsetEncode
-                                    :texto="'Solicita&ccedil;&atilde;o da proposta original'"
-                                >
-                                </CharsetEncode>
+                               Solicita&ccedil;&atilde;o da proposta original
                             </b>
                         </td>
                     </tr>
@@ -458,10 +452,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
-                                <CharsetEncode
-                                    :texto="'Adequado &agrave; realidade de execu&ccedil;&atilde;o pelo proponente'"
-                                >
-                                </CharsetEncode>
+                                    Adequado &agrave; realidade de execu&ccedil;&atilde;o pelo proponente
                             </b>
                         </td>
                     </tr>
@@ -493,7 +484,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
-                                <CharsetEncode :texto="'Homologado para execu&ccedil;&atilde;o'"></CharsetEncode>
+                                Homologado para execu&ccedil;&atilde;o
                             </b>
                         </td>
                     </tr>
@@ -525,7 +516,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
-                                <CharsetEncode :texto="'Readequa&ccedil;&atilde;o na execu&ccedil;&atilde;o'"></CharsetEncode>
+                                Readequa&ccedil;&atilde;o na execu&ccedil;&atilde;o
                             </b>
                         </td>
                     </tr>
@@ -559,7 +550,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="5">
                             <b>
-                                <CharsetEncode :texto="'Capta&ccedil;&atilde;o de recursos'"></CharsetEncode>
+                                Capta&ccedil;&atilde;o de recursos
                             </b>
                         </td>
                     </tr>
@@ -604,7 +595,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
-                                <CharsetEncode :texto="'Comprova&ccedil;&atilde;o'"></CharsetEncode>
+                                Comprova&ccedil;&atilde;o
                             </b>
                         </td>
                     </tr>
@@ -648,7 +639,6 @@
     import {mapActions, mapGetters} from 'vuex';
     import Carregando from '@/components/Carregando';
     import SalicTextoSimples from '@/components/SalicTextoSimples';
-    import CharsetEncode from '@/components/CharsetEncode';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import {utils} from '@/mixins/utils';
@@ -667,7 +657,6 @@
         components: {
             Carregando,
             SalicTextoSimples,
-            CharsetEncode,
             SalicFormatarValor,
             SalicFormatarCpfCnpj
         },

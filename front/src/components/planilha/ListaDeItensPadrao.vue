@@ -8,7 +8,7 @@
                 <th class="center-align">Dias</th>
                 <th class="center-align">Qtde</th>
                 <th class="center-align">Ocor.</th>
-                <th class="right-align"><CharsetEncode :texto="'Vl. Unit&aacute;rio'" /></th>
+                <th class="right-align">Vl. Unit&aacute;rio</th>
                 <th class="right-align">Vl. Solicitado</th>
                 <th class="center-align">Justificativa</th>
             </tr>
