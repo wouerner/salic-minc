@@ -641,12 +641,13 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
 
             }
+            
 
             if ($this->permissoesMenu['RelatorioFinal'] || $debug) {
                 $menu['comprovacaofisica']['submenu'][] = [
                     'label' => 'Comprovar Realiza&ccedil;&atilde;o do Objeto',
                     'title' => 'Ir para Comprovar Realiza&ccedil;&atilde;o do Objeto',
-                    'link' => '/default/comprovarexecucaofisica/etapas-de-trabalho-final?idpronac =' . $idPronacHash,
+                    'link' => '/default/comprovarexecucaofisica/etapas-de-trabalho-final/idpronac/' . $idPronacHash,
                     'ajax' => false,
                     'grupo' => []
                 ];
