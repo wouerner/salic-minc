@@ -45,8 +45,8 @@
 
                 <div class="col s3">
                     <label>Visão do Agente</label>
-                    <select class="browser-default" v-on:change="fornecedor()" v-model="Fornecedor">
-                        <option v-for="fornecedor in Fornecedores" :value="fornecedor.id" v-if="fornecedor.descricao === 'Fornecedor'">Fornecedor</option>
+                    <select class="browser-default"  v-model="Fornecedor">
+                        <option v-for="forne in Fornecedores" :value="forne.id" v-if="forne.descricao === 'Fornecedor'">{{forne.descricao}}</option>
                     </select>
                 </div>
             </div>
@@ -164,10 +164,10 @@
         mounted: function () {
             var vue = this;
 
-           let url = '/prestacao-contas/fornecedor/uf';
+           let url = ['/prestacao-contas/fornecedor/uf', 'http://localhost/prestacao-contas/fornecedor/fornecedores-tipo' ];
             $3.ajax({
                 type: "GET",
-                url: url,
+                url: url[0],
         })
         .done(function (data) {
             vue.UFs = data;
@@ -175,27 +175,26 @@
         .fail(function (jqXHR) {
             alert('error');
         });
+            $3.ajax({
+                type: "GET",
+                url: url[1],
+            })
+                .done( (fornecedor) => vue.Fornecedores = fornecedor)
+                .fail(function (jqXHR) {
+                    alert('error');
+                });
     },
         methods:
-            { combo:function () {
-                var vue = this;
-                let url = '/prestacao-contas/fornecedor/cidade/id/'+this.uf;
-                    $3.ajax({
-                        type: "GET",
-                        url: url,
+            {
+               combo:function () {
+                 var vue = this;
+                 let url = '/prestacao-contas/fornecedor/cidade/id/'+this.uf;
+                 $3.ajax({
+                     type: "GET",
+                     url: url,
                 })
-                        .done( (cidade) => vue.Cidades = cidade )
+                 .done( (cidade) => vue.Cidades = cidade )
                 },
-                fornecedor: function () {
-                    var vue = this;
-                    let url = '/prestacao-contas/fornecedor/fornecedores-tipo';
-                    $3.ajax({
-                        type: "GET",
-                        url: url,
-                    })
-                        .done( (fornecedores) => vue.Fornecedores = fornecedores )
-                }
-
             },
 
 
