@@ -399,6 +399,11 @@ class Proposta_DiligenciarController extends Proposta_GenericController
         $PreProjetodao              = new Proposta_Model_DbTable_PreProjeto();
         //$dao                      = new DiligenciarDao();
         //$this->view->idPronac     = 118389;
+
+        if (strlen($this->idPronac) > 7) {
+            $this->idPronac = Seguranca::dencrypt($this->idPronac);
+        }
+
         $this->view->idPronac       = $this->idPronac;
         $this->view->idPreProjeto   = $this->idPreProjeto;
         $this->view->idProduto      = $this->idProduto;
