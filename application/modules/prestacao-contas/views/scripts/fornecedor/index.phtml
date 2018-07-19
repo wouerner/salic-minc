@@ -63,12 +63,8 @@
                 </div>
                 <div class="col s3">
                     <label>Tipo *</label>
-                    <select class="browser-default" v-model="Tipo">
-                        <option v-if="">-Selecione-</option>
-                        <option value="1">-Selecione-</option>
-                        <option value="2">Aeroporto</option>
-                        <option value="3">Alameda</option>
-                        <option value="4">Area</option>
+                    <select class="browser-default" v-model="TipoDeEndereço">
+                        <option v-for="end in TiposEnderecos" :value="end.descricao" >{{end.descricao}}</option>
                     </select>
                 </div>
 
@@ -158,13 +154,14 @@
                uf: "",
                Cidades: "",
                Fornecedores: "",
+               TiposEnderecos: "",
            }
 
         },
         mounted: function () {
             var vue = this;
 
-           let url = ['/prestacao-contas/fornecedor/uf', 'http://localhost/prestacao-contas/fornecedor/fornecedores-tipo' ];
+           let url = ['/prestacao-contas/fornecedor/uf', '/prestacao-contas/fornecedor/fornecedores-tipo', '/prestacao-contas/fornecedor/endereco-tipo'];
             $3.ajax({
                 type: "GET",
                 url: url[0],
@@ -183,6 +180,12 @@
                 .fail(function (jqXHR) {
                     alert('error');
                 });
+            $3.ajax({
+                type: "GET" ,
+                url: url[2]
+            })
+                .done((endereco) => vue.TiposEnderecos = endereco)
+                .fail((jqXHR) => alert('error'))
     },
         methods:
             {

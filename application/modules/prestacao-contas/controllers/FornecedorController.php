@@ -24,6 +24,9 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
             } elseif (is_object($dado)){
                 $data[$index]['id']= utf8_encode($dado->id);
                 $data[$index]['descricao'] = utf8_encode($dado->descricao);
+            }elseif(!is_array($dado) and !is_object($dado)){
+                $data[$index]['descricao'] = utf8_encode($dado);
+
             }
         };
 
@@ -47,5 +50,11 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
         $consulta = new Agente_Model_DbTable_Visao();
         $this->retornaJson($consulta->buscarVisoes());
+    }
+
+    public function enderecoTipoAction(){
+        $mapperVerificacao = new Agente_Model_VerificacaoMapper();
+        $tipos = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 13));
+        $this->retornaJson($tipos);
     }
 }
