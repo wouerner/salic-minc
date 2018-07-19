@@ -61,26 +61,19 @@
 
     echo $this->partial('partials/favicons.phtml');
 
-    $this->headTitle(html_entity_decode($configLayout->layout->headTitle, ENT_QUOTES, $config->resources->db->params->charset));
     $this->doctype($config->layout->doctype);
     $this->headMeta()->setHttpEquiv('Content-Type', 'text/html; charset=' . $config->resources->db->params->charset);
     $this->headMeta()->appendName('name', 'Sistema Salic');
     $this->headMeta()->appendName('description', 'Sistema de Apoio às Leis de Incentivo à Cultura');
     $this->headMeta()->appendName('viewport', 'width=device-width, user-scalable=no');
 
-
-    // Titulo da pagina
-    $this->headTitle()->setSeparator(' | ');
-
-    $mSet = false;
-    foreach ($this->headTitle() as $t) {
-        if ($t == 'Salic') $mSet = true;
+    $request = Zend_Controller_Front::getInstance()->getRequest();
+    $this->headTitle('Salic', Zend_View_Helper_Placeholder_Container_Abstract::PREPEND);
+    if($request->getModuleName() != 'default') {
+        $this->headTitle(ucfirst($request->getModuleName()));
     }
-    if (!$mSet) $this->headTitle('Salic', Zend_View_Helper_Placeholder_Container_Abstract::PREPEND);
 
-    // Adicionar o HeadTitle default caso exista apenas um registrado
-    if (count($this->headTitle()) == 1)
-        $this->headTitle($config->layout->headTitle);
+    $this->headTitle()->setSeparator(' / ');
 
     if ($this->docType()->getDoctype() == Zend_View_Helper_Doctype::XHTML1_RDFA) {
         foreach ($this->view->FacebookOpenGraphTags()->getTags() as $k => $v) {
