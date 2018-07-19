@@ -1,14 +1,15 @@
 <?php
 
+use Application\Modules\Foo\Service\Foo\Bar as BarService;
+
 class Foo_FooRestController extends Zend_Rest_Controller
 {
     public function init()
     {
         $this->_helper->getHelper('contextSwitch')
+            ->addActionContext('get', 'json')
             ->addActionContext('index', 'json')
             ->addActionContext('post', 'json')
-            ->addActionContext('get', 'json')
-            ->addActionContext('head', 'json')
             ->addActionContext('put', 'json')
             ->addActionContext('delete', 'json')
             ->initContext('json');
@@ -28,8 +29,12 @@ class Foo_FooRestController extends Zend_Rest_Controller
 
     public function getAction()
     {
-        $dataAux = $_REQUEST;
-        $this->view->assign('data', $dataAux);
+        $parametros = $this->getRequest()->getParams();
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->buscar($parametros['id']);
+
+        $this->view->assign('data', $resposta);
+
         $this->getResponse()->setHttpResponseCode(200);
     }
 
@@ -40,14 +45,17 @@ class Foo_FooRestController extends Zend_Rest_Controller
 
     public function postAction()
     {
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->salvarRegistro();
+
+        $this->view->assign('data', $resposta);
         $this->getResponse()->setHttpResponseCode(201);
     }
 
     public function putAction()
     {
-        $dataAux = $_REQUEST;
-        $this->view->assign('data', $dataAux);
-        $this->getResponse()->setHttpResponseCode(200);
+
+        $this->view->assign('data', 'asda');
         $this->getResponse()->setHttpResponseCode(200);
     }
 
