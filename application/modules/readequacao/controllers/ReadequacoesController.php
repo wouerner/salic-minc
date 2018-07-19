@@ -1501,7 +1501,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                         'idUnidade' => $this->_request->getParam('vinculada'),
                         'DtEncaminhamento' => new Zend_Db_Expr('GETDATE()'),
                         'idAvaliador' => (null !== $this->_request->getParam('destinatario')) ? $this->_request->getParam('destinatario') : null,
-                        'dtEnvioAvaliador' => !empty($dqataEnvio) ? $dataEnvio : null,
+                        'dtEnvioAvaliador' => !empty($dataEnvio) ? $dataEnvio : null,
                         'stValidacaoCoordenador' => $stValidacaoCoordenador,
                         'dsOrientacao' => $r->dsAvaliacao
                     );
@@ -1512,7 +1512,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                         'idUnidade' => $this->_request->getParam('vinculada'),
                         'DtEncaminhamento' => new Zend_Db_Expr('GETDATE()'),
                         'idAvaliador' => (null !== $this->_request->getParam('destinatario')) ? $this->_request->getParam('destinatario') : null,
-                        'dtEnvioAvaliador' => !empty($dqataEnvio) ? $dataEnvio : null,
+                        'dtEnvioAvaliador' => !empty($dataEnvio) ? $dataEnvio : null,
                         'stValidacaoCoordenador' => $stValidacaoCoordenador,
                         'dsOrientacao' => $r->dsAvaliacao
                     );
