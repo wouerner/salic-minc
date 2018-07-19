@@ -79,7 +79,12 @@ class Assinatura_IndexController extends Assinatura_GenericController
     {
         $this->_helper->layout->disableLayout();
         $idPronac = $this->_request->getParam("idPronac");
+
         $idPronac = isset($idPronac) ? $idPronac : null;
+
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
 
         $this->view->idUsuarioLogado = $this->cod_usuario;
 
