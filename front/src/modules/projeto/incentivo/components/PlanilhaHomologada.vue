@@ -1,16 +1,16 @@
 <template>
     <div id="planilha-homologada">
         <Carregando v-if="loading" :text="'Procurando planilha'"></Carregando>
-        <PlanilhaOrcamentaria v-if="Object.keys(planilha).length > 0"
-                              :componenteTabelaItens="'ListaDeItensHomologados'"
-                              :arrayPlanilha="planilha"></PlanilhaOrcamentaria>
+        <Planilha v-if="Object.keys(planilha).length > 0"
+                              :componenteTabelaItens="'PlanilhaItensHomologados'"
+                              :arrayPlanilha="planilha"></Planilha>
         <div v-if="semResposta" class="card-panel padding 20 center-align">{{ mensagem }}</div>
     </div>
 </template>
 
 <script>
     import Carregando from '@/components/Carregando';
-    import PlanilhaOrcamentaria from '@/components/planilha/PlanilhaOrcamentaria';
+    import Planilha from '@/components/Planilha/Planilha';
     import {mapGetters} from 'vuex';
 
     export default {
@@ -25,7 +25,7 @@
         },
         components: {
             Carregando,
-            PlanilhaOrcamentaria
+            Planilha
         },
         mounted: function() {
             if (typeof this.dadosProjeto != 'undefined') {

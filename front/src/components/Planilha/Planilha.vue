@@ -53,32 +53,32 @@
     import numeral from 'numeral'
     import 'numeral/locales';
     import moment from 'moment'
-    import ListaDeItensPadrao from '@/components/planilha/ListaDeItensPadrao'
-    import ListaDeItensCurtos from '@/components/planilha/ListaDeItensCurtos'
-    import ListaDeItensAutorizados from '@/components/planilha/ListaDeItensAutorizados'
-    import ListaDeItensAprovados from '@/components/planilha/ListaDeItensAprovados'
-    import ListaDeItensHomologados from '@/components/planilha/ListaDeItensHomologados'
-    import ListaDeItensReadequados from '@/components/planilha/ListaDeItensReadequados'
+    import PlanilhaItensPadrao from '@/components/Planilha/PlanilhaItensPadrao'
+    import PlanilhaItensCurtos from '@/components/Planilha/PlanilhaItensCurtos'
+    import PlanilhaItensAutorizados from '@/components/Planilha/PlanilhaItensAutorizados'
+    import PlanilhaItensAprovados from '@/components/Planilha/PlanilhaItensAprovados'
+    import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados'
+    import PlanilhaItensReadequados from '@/components/Planilha/PlanilhaItensReadequados'
 
     export default {
-        name: 'PlanilhaOrcamentaria',
+        name: 'Planilha',
         data: function () {
             return {
                 planilha: []
             }
         },
         components: {
-            ListaDeItensPadrao,
-            ListaDeItensCurtos,
-            ListaDeItensAprovados,
-            ListaDeItensAutorizados,
-            ListaDeItensHomologados,
-            ListaDeItensReadequados
+            PlanilhaItensPadrao,
+            PlanilhaItensCurtos,
+            PlanilhaItensAprovados,
+            PlanilhaItensAutorizados,
+            PlanilhaItensHomologados,
+            PlanilhaItensReadequados
         },
         props: {
             'arrayPlanilha':  {},
             'componenteTabelaItens': {
-                default: 'ListaDeItensPadrao',
+                default: 'PlanilhaItensPadrao',
                 type: String
             },
         },
@@ -115,11 +115,10 @@
                                         return;
                                     }
 
-                                    // planilha homologada e readequada o valor total e a soma do vlAprovado
+                                    // planilha homologada e readequada o valor total é a soma do vlAprovado
                                     if(cell.vlAprovado || cell.vlAprovado >= 0) {
                                         totalLocal += cell.vlAprovado;
                                     } else {
-                                        console.log('valorrrr solicitaado', cell.vlAprovado === 0);
                                         totalLocal += cell.vlSolicitado;
                                     }
                                 });

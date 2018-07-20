@@ -19,8 +19,9 @@
                 </tr>
                 <tr>
                     <td>
-                        <span v-if="dadosProjeto.idUsuarioExterno" ><SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/></span>
-                        <a  v-else
+                        <span v-if="dadosProjeto.idUsuarioExterno"><SalicFormatarCpfCnpj
+                                :cpf="dadosProjeto.CgcCPf"/></span>
+                        <a v-else
                            :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
                             <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
                         </a>
@@ -374,7 +375,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="5">
                             <b>
-                               Solicita&ccedil;&atilde;o da proposta original
+                                Solicita&ccedil;&atilde;o da proposta original
                             </b>
                         </td>
                     </tr>
@@ -452,7 +453,7 @@
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
-                                    Adequado &agrave; realidade de execu&ccedil;&atilde;o pelo proponente
+                                Adequado &agrave; realidade de execu&ccedil;&atilde;o pelo proponente
                             </b>
                         </td>
                     </tr>
@@ -685,11 +686,9 @@
         },
         filters: {
             formatarData: function (date) {
-
-                if(date.length == 0) {
+                if (date.length == 0) {
                     return '-';
                 }
-
                 return moment(date).format('DD/MM/YYYY');
             }
         }

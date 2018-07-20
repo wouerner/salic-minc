@@ -3,12 +3,12 @@
         <table class="bordered">
             <thead>
             <tr>
-                <th>#</th>
-                <th>Item</th>
-                <th>Dias</th>
-                <th>Qtde</th>
-                <th>Ocor.</th>
-                <th>Vl. Unit&aacute;rio</th>
+                <th class="center-align">#</th>
+                <th class="left-align">Item</th>
+                <th class="center-align">Dias</th>
+                <th class="center-align">Qtde</th>
+                <th class="center-align">Ocor.</th>
+                <th class="right-align">Vl. Unit&aacute;rio</th>
                 <th>Vl. Solicitado</th>
                 <th>#</th>
             </tr>
@@ -18,13 +18,13 @@
                 :key="row.idPlanilhaProposta"
                 v-if="isObject(row)"
                 v-bind:class="{'orange lighten-2': ultrapassaValor(row)}">
-                <td>{{row.Seq}}</td>
-                <td>{{row.Item}}</td>
-                <td>{{row.QtdeDias}}</td>
-                <td>{{row.Quantidade}}</td>
-                <td>{{row.Ocorrencia}}</td>
-                <td>{{converterParaReal(row.vlUnitario)}}</td>
-                <td>{{converterParaReal(row.vlSolicitado)}}</td>
+                <td class="center-align">{{row.Seq}}</td>
+                <td class="left-align">{{row.Item}}</td>
+                <td class="center-align">{{row.QtdeDias}}</td>
+                <td class="center-align">{{row.Quantidade}}</td>
+                <td class="center-align">{{row.Ocorrencia}}</td>
+                <td class="right-align"><SalicFormatarValor :valor="row.vlUnitario"/></td>
+                <td class="right-align"><SalicFormatarValor :valor="row.vlSolicitado"/></td>
                 <td>
                     <a v-if="row.JustProponente.length > 3"
                        class="tooltipped"
@@ -43,18 +43,21 @@
 
 <script>
     import numeral from 'numeral'
+    import SalicFormatarValor from '@/components/SalicFormatarValor';
 
     export default {
-        name: 'ListaDeItensAprovados',
+        name: 'PlanilhaListaDeItensCurta',
         data: function () {
             return {
                 planilha: []
             }
         },
-        props: [
-            'table',
-            'full'
-        ],
+        props: {
+            'table': {}
+        },
+        components: {
+            SalicFormatarValor
+        },
         methods: {
             isObject: function (el) {
 

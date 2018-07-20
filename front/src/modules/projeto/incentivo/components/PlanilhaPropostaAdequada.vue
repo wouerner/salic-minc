@@ -11,7 +11,7 @@
                 </router-link>
             </div>
 
-            <PlanilhaOrcamentaria :arrayPlanilha="planilha"></PlanilhaOrcamentaria>
+            <Planilha :arrayPlanilha="planilha"></Planilha>
         </div>
         <div v-if="semResposta" class="card-panel padding 20 center-align">{{ mensagem }}</div>
     </div>
@@ -19,7 +19,7 @@
 
 <script>
     import Carregando from '@/components/Carregando';
-    import PlanilhaOrcamentaria from '@/components/planilha/PlanilhaOrcamentaria';
+    import Planilha from '@/components/Planilha/Planilha';
     import {mapGetters} from 'vuex';
 
     export default {
@@ -34,7 +34,7 @@
         },
         components: {
             Carregando,
-            PlanilhaOrcamentaria
+            Planilha
         },
         mounted: function() {
             if (typeof this.dadosProjeto != 'undefined') {

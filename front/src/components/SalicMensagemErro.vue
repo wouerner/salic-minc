@@ -5,12 +5,8 @@
                 <div class="col s2 right-align"><i class="medium red-text material-icons">not_interested</i></div>
                 <div class="col s10 left-align">
                     <br>
-                    <b>
-                        <CharsetEncode :texto="texto"></CharsetEncode>
-                    </b>
-                    <a v-if="urlRetorno" href="urlRetorno">
-                        <CharsetEncode :texto="msgUrlRetorno"></CharsetEncode>
-                    </a>
+                    <b v-html="texto"></b>
+                    <a v-if="urlRetorno" href="urlRetorno"> {{msgUrlRetorno}}</a>
                 </div>
             </div>
         </div>
@@ -18,13 +14,8 @@
 </template>
 
 <script>
-    import CharsetEncode from '@/components/CharsetEncode';
-
     export default {
         name: 'SalicMensagemErro',
-        components: {
-            CharsetEncode
-        },
         props: ['texto', 'urlRetorno', 'msgUrlRetorno'],
     };
 </script>
