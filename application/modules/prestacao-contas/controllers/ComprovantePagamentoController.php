@@ -5,6 +5,8 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
     public function init()
     {
         $this->_helper->getHelper('contextSwitch')
+            ->addActionContext('get', 'json')
+            ->addActionContext('put', 'json')
             ->addActionContext('index', 'json')
             ->addActionContext('post', 'json')
             ->initContext('json');
@@ -83,7 +85,9 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
     }
 
     public function getAction()
-    {}
+    {
+        die('teste');
+    }
 
     public function postAction()
     {
