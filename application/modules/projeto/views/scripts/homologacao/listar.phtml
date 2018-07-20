@@ -5,22 +5,21 @@
     }
     div.expansivel{
         display: none;
-        /*height: inherit !important;*/
     }
     table.dataTable tbody td.no-padding{
         padding: 0;
+    }
+
+    table td + td {
+        border-left: 1px solid #d2d0d0;
     }
 </style>
 
 <div class="col s2 input-field">
     <select class="" id="seletorSelect">
         <option value="">Aguardando An&aacute;lise Documental</option>
-        <option value="desistencias" selected="selected">Desist&ecirc;ncias do Recurso</option>
         <option value="diligenciados">Proponente Diligenciado</option>
         <option value="respondidos">Dilig&ecirc;ncia Respondida</option>
-        <option value="finalizados">Projetos Finalizados</option>
-        <option value="irregulares">Proponente Irregular</option>
-        <option value="recursos">Recursos Analisados</option>
     </select>
     <label>Filtrar Situa&ccedil;&atilde;o</label>
 </div>
@@ -87,13 +86,20 @@
         $(document).ready(function ($) {
             $3('.modal').modal();
 
+            $(document).ajaxStart(function () {
+                $('#container-loading').fadeIn('slow');
+            });
+            $(document).ajaxComplete(function () {
+                $('#container-loading').fadeOut('slow');
+            });
+
+
             var expansivelHomologacao = $('#expansivelHomologacao').DataTable({
                 dom: 'Blfrtip',
                 buttons: [
                     {
                         title: '',
                         text: '<i class="material-icons">print</i>',
-                        orientation: 'landscape',
                         extend: 'print',
                         className: 'waves-effect waves-dark btn white black-text',
                         exportOptions: {
@@ -198,14 +204,28 @@
                         "targets": 7,
                         "data": null,
                         render: function (data) {
+                            var corDiligencia = '';
+                            switch($("#seletorSelect").val()) {
+                                case '':
+                                    corDiligencia = 'green';
+                                    break;
+                                case 'diligenciados':
+                                    corDiligencia = 'amber accent-4';
+                                    break;
+                                case 'respondidos':
+                                    corDiligencia = 'light-blue darken-4';
+                                    break;
+                            }
+
+
                             var homologar = '<button data-ajax-modal-full="true" title="Homologar" class="btn-floating waves-effect waves-light btn-primary" data-ajax-modal="/projeto/homologacao/homologar/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
                             var visualizarParecer = '<button data-ajax-modal-full="true" title="Visualizar parecer" class="btn-floating waves-effect waves-light btn-secondary" data-ajax-modal="/projeto/homologacao/visualizar/id/'+ data.IdPRONAC +'"><i class="material-icons">visibility</i></button>';
-                            var diligenciar = '<a title="Dilig&ecirc;nciar" class="btn-floating waves-effect waves-light tooltipped" href="/proposta/diligenciar/listardiligenciaanalista/idPronac/'+ data.IdPRONAC +'/situacao/D25/tpDiligencia/181"><i class="material-icons">warning</i></a>';
+                            var diligenciar = '<a title="Dilig&ecirc;nciar" class="btn-floating waves-effect waves-light tooltipped '+ corDiligencia +'" href="/proposta/diligenciar/listardiligenciaanalista/idPronac/'+ data.IdPRONAC +'/situacao/D25/tpDiligencia/181"><i class="material-icons">warning</i></a>';
                             var homologacaoFluxo= '<a title="Iniciar fluxo de Homologa&ccedil;&atilde;o" class="btn-floating btn-primary tooltipped" href="/projeto/homologacao/iniciar-fluxo-assinatura?idPronac=' + data.IdPRONAC + '"><i class="material-icons">edit</i></a>';
 
                             return '<div style="position: relative; height: 60px;">'
                                 + '<div class="fixed-action-btn horizontal" style="position: absolute; top: 0px; right: 0; z-index: 996; padding: 15px 0 0 15px;">'
-                                + '<a class="btn btn-primary small">'
+                                + '<a class="btn btn-primary small '+ corDiligencia +'">'
                                 + '<i class="material-icons">more_vert</i></a>'
                                 + '<ul>'
                                 + '<li>'
@@ -228,6 +248,9 @@
                    '<div class="col s12">'+
                        '<div class="card">'+
                         '<div class="card-content">'+
+                                '<div clas="row">'+
+                                '<b>Resumo do projeto: </b>'+ data.ResumoProjeto+
+                                '</div>'+
                                 '<div clas="row">'+
                                 '<b>Nome do T&eacute;cnico: </b>'+ data.Tecnico+
                                 '</div>'+
