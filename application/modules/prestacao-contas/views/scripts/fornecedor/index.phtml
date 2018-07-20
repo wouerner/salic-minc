@@ -63,8 +63,8 @@
                 </div>
                 <div class="col s3">
                     <label>Tipo *</label>
-                    <select class="browser-default" v-model="TipoDeEndereço">
-                        <option v-for="end in TiposEnderecos" :value="end.descricao" >{{end.descricao}}</option>
+                    <select class="browser-default" v-model="Tipo">
+                        <option v-for="logradouro in TiposLogradouros" :value="logradouro.descricao" >{{logradouro.descricao}}</option>
                     </select>
                 </div>
 
@@ -112,10 +112,7 @@
                 <div class="col s3">
                     <label>Tipo de Endereço *</label>
                     <select class="browser-default" v-model="TipoDeEndereço">
-                        <option value="" disabled selected>-Selecione-</option>
-                        <option value="1">Comercial</option>
-                        <option value="2">Endereço-Receita Federal</option>
-                        <option value="3">Residencial</option>
+                        <option v-for="endereco in TiposEnderecos" :value="endereco.descricao" >{{endereco.descricao}}</option>
                     </select>
                 </div>
                 <div class="col s3">
@@ -155,13 +152,18 @@
                Cidades: "",
                Fornecedores: "",
                TiposEnderecos: "",
+               TiposLogradouros: "",
            }
 
         },
         mounted: function () {
             var vue = this;
 
-           let url = ['/prestacao-contas/fornecedor/uf', '/prestacao-contas/fornecedor/fornecedores-tipo', '/prestacao-contas/fornecedor/endereco-tipo'];
+           let url = ['/prestacao-contas/fornecedor/uf',
+                      '/prestacao-contas/fornecedor/fornecedores-tipo',
+                      '/prestacao-contas/fornecedor/logradouro-tipo',
+                      '/prestacao-contas/fornecedor/endereco-tipo'];
+
             $3.ajax({
                 type: "GET",
                 url: url[0],
@@ -176,13 +178,17 @@
                 type: "GET",
                 url: url[1],
             })
-                .done( (fornecedor) => vue.Fornecedores = fornecedor)
-                .fail(function (jqXHR) {
-                    alert('error');
-                });
+                .done((fornecedor) => vue.Fornecedores = fornecedor)
+                .fail((jqXHR) => alert('error'));
             $3.ajax({
                 type: "GET" ,
                 url: url[2]
+            })
+                .done((logradouro) => vue.TiposLogradouros = logradouro)
+                .fail((jqXHR) => alert('error'))
+            $3.ajax({
+                type: "GET" ,
+                url: url[3]
             })
                 .done((endereco) => vue.TiposEnderecos = endereco)
                 .fail((jqXHR) => alert('error'))

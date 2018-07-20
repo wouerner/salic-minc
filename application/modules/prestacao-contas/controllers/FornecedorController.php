@@ -4,7 +4,6 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
 {
     public function init()
     {
-//        Zend_Json::$useBuiltinEncoderDecoder = true;
 
         parent::init();
     }
@@ -52,9 +51,15 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
         $this->retornaJson($consulta->buscarVisoes());
     }
 
-    public function enderecoTipoAction(){
+    public function logradouroTipoAction(){
         $mapperVerificacao = new Agente_Model_VerificacaoMapper();
         $tipos = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 13));
         $this->retornaJson($tipos);
+    }
+
+    public function enderecoTipoAction(){
+        $mapperVerificacao = new Agente_Model_VerificacaoMapper();
+        $endereco = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 2));
+        $this->retornaJson($endereco);
     }
 }
