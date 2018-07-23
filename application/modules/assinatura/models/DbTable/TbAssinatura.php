@@ -196,9 +196,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             throw new Exception("&Eacute; necess&aacute;rio definir uma entidade de Assinatura.");
         }
 
-        if (is_null($this->modeloTbAssinatura->getIdPronac())) {
-            throw new Exception("Identificador do Projeto Cultural n&atilde;o informado.");
-        }
 
         if (is_null($this->modeloTbAssinatura->getIdAtoAdministrativo())) {
             throw new Exception("Identificador do Ato Administrativo n&atilde;o informado.");
@@ -209,9 +206,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         }
 
         $assinaturaExistente = $this->buscar(array(
-            'idPronac = ?' => $this->modeloTbAssinatura->getIdPronac(),
             'idAtoAdministrativo = ?' => $this->modeloTbAssinatura->getIdAtoAdministrativo(),
-            'idAssinante = ?' => $this->modeloTbAssinatura->getIdAssinante(),
             'idDocumentoAssinatura = ?' => $this->modeloTbAssinatura->getIdDocumentoAssinatura()
         ));
 
