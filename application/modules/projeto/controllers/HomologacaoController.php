@@ -95,7 +95,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         );
     }
 
-    public function visualizarAction()
+    public function homologarParecerAction()
     {
         $this->_helper->layout->disableLayout();
         $this->prepareData($this->getRequest()->getParam('id'));
@@ -136,26 +136,6 @@ class Projeto_HomologacaoController extends Projeto_GenericController
                 'msg' => $mapper->getMessages(),
                 'close' => 1
             ]);
-        } else {
-            $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
-            $this->view->urlAction = '/projeto/homologacao/homologar';
-            $intId = $this->getRequest()->getParam('id');
-            $dbTable = new Projeto_Model_DbTable_TbHomologacao();
-
-            $arrValue = $dbTable->getBy(['idPronac' => $intId, 'tpHomologacao' => '1']);
-            if (empty($arrValue)) {
-                $arrValue = $dbTableEnquadramento->obterProjetosApreciadosCnic([
-                    'a.IdPRONAC = ?' => $intId
-                ])->current()->toArray();
-                $arrValue['idPronac'] = $arrValue['IdPRONAC'];
-                $arrValue['tpHomologacao'] = 1;
-            }
-
-            $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
-                ['a.IdPRONAC = ?' => $intId, 'a.Situacao = ?' => $this->situacaoParaHomologacao]
-            )->current()->toArray();
-
-            $this->view->dataForm = $arrValue;
         }
     }
 
@@ -244,7 +224,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
 
         parent::message(
-            "Operação realizada com sucesso! ",
+            "Opera&ccedil;&atilde;o realizada com sucesso! ",
             "/assinatura/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}",
             "CONFIRM"
         );

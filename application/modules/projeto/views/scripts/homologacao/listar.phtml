@@ -217,9 +217,7 @@
                                     break;
                             }
 
-
-                            var homologar = '<button data-ajax-modal-full="true" title="Homologar" class="btn-floating waves-effect waves-light btn-primary" data-ajax-modal="/projeto/homologacao/homologar/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
-                            var visualizarParecer = '<button data-ajax-modal-full="true" title="Visualizar parecer" class="btn-floating waves-effect waves-light btn-secondary" data-ajax-modal="/projeto/homologacao/visualizar/id/'+ data.IdPRONAC +'"><i class="material-icons">visibility</i></button>';
+                            var homologar = '<button data-ajax-modal-full="true" title="Homologar" class="btn-floating waves-effect waves-light btn-secondary" data-ajax-modal="/projeto/homologacao/homologar-parecer/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
                             var diligenciar = '<a title="Dilig&ecirc;nciar" class="btn-floating waves-effect waves-light tooltipped '+ corDiligencia +'" href="/proposta/diligenciar/listardiligenciaanalista/idPronac/'+ data.IdPRONAC +'/situacao/D25/tpDiligencia/181"><i class="material-icons">warning</i></a>';
                             var homologacaoFluxo= '<a title="Iniciar fluxo de Homologa&ccedil;&atilde;o" class="btn-floating btn-primary tooltipped" href="/projeto/homologacao/iniciar-fluxo-assinatura?idPronac=' + data.IdPRONAC + '"><i class="material-icons">edit</i></a>';
 
@@ -230,14 +228,13 @@
                                 + '<ul>'
                                 + '<li>'
                                 + homologar
-                                + visualizarParecer
                                 + diligenciar
                                 + homologacaoFluxo
                                 + '</a></li>'
                                 + '</ul>'
                                 + '</div></div>';
 
-                            return homologar + visualizarParecer + diligenciar + homologacaoFluxo;
+                            return homologar + diligenciar + homologacaoFluxo;
                         }
                     }
                 ]
