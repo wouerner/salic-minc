@@ -10,5 +10,5 @@ export const buscaProjeto = ({commit}, idPronac) => {
             const data = response.data;
             const projeto = data.data;
             commit(types.SET_PROJETO, projeto);
-        });
+        })
 };
