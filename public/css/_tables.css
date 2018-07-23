@@ -68,18 +68,27 @@ x - TABELAS (legado)
     background: #f6f5f8;
 }
 
+table tr.linha-excluida,
 #conteudo table tr.linha-excluida {
     text-decoration: line-through;
 }
 
+table tr.linha-excluida td,
 #conteudo table tr.linha-excluida td {
     background-color: #dcdcdc;
     color: #777
 }
 
-#conteudo table tr.linha-atualizada td,
+table tr.linha-atualizada td,
+#conteudo table tr.linha-atualizada td {
+    background-color: #d0d8e8;
+    color: #10504e;
+}
+
+table tr.linha-incluida td,
 #conteudo table tr.linha-incluida td {
-    background-color: #d0e8d6
+    background-color: #a5ceaf;
+    color: #155025;
 }
 
 #conteudo table tfoot td img {
@@ -327,14 +336,11 @@ table.tablesorter .headerSortDown {
     background-position: bottom;
 }
 
-
 /*--------------------------------------------------------------
 x - Tabelas
 --------------------------------------------------------------*/
 
 .bordered {
-    /*border: 1px solid #d0d0d0;*/
-    /*border-left: 1px solid #d0d0d0;*/
     border: 1px solid #ccc;
     padding: 10px;
 }
@@ -350,8 +356,31 @@ table > tbody > tr {
     transition: background-color .25s ease;
 }
 
-table > tbody > tr:hover {
-    /*background-color: #f2f2f2;*/
+.planilha-orcamentaria table.bordered tr > td,
+.planilha-orcamentaria table.bordered tr > th {
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+}
+
+table tr td.destacar-celula {
+    /*background-color: #fce4d7 !important;*/
+    background-color: #d6ecd8 !important;
+}
+
+table .destaque-texto,
+table .destaque-texto a {
+    color: #009900 !important;
+}
+
+#conteudo table td.destaque-texto-primary a:not(.btn),
+table .destaque-texto-primary,
+table .destaque-texto-primary a {
+    color: #0000FF !important;
+}
+
+table .destaque-texto-secondary,
+table .destaque-texto-secondary a {
+    color: #CC0000 !important;
 }
 
 

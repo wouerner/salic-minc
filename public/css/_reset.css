@@ -91,7 +91,7 @@ table.tabela td.destacar span,
 #conteudo p[align="center"],
 #conteudo table.tabela th[align="center"],
 #conteudo table.tabela td[align="center"] {
-    text-align: center !important;
+    /*text-align: center !important;*/
 }
 
 #conteudo table.tabela tr a:not(.btn) {

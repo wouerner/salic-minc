@@ -51,12 +51,12 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $propostaHistorico = $preProjetoMapper->obterArrayVersaoPropostaCompleta($idPreProjeto, $tipo);
 
             $tbProjeto = new Projeto_Model_DbTable_Projetos();
-            $projeto = $tbProjeto->findBy(['idProjeto'=> $idPreProjeto]);
+            $projeto = $tbProjeto->findBy(['idProjeto' => $idPreProjeto]);
 
             if (!empty($projeto)) {
 
                 $pronac = $projeto['AnoProjeto'] . $projeto['Sequencial'];
-                $propostaAtual = array_merge($propostaAtual, ['PRONAC'=>$pronac, 'idPronac'=> $projeto['IdPRONAC']]);
+                $propostaAtual = array_merge($propostaAtual, ['PRONAC' => $pronac, 'idPronac' => $projeto['IdPRONAC']]);
 
             }
 
@@ -84,7 +84,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $objDateTime = new DateTime($dado->DtAvaliacao);
                 $newArray[$key]['Tipo'] = $dado->tipo;
                 $newArray[$key]['DtAvaliacao'] = $objDateTime->format('d/m/Y H:i:s');
-                $newArray[$key]['Avaliacao'] =  str_replace('<p>&nbsp;</p>','',$dado->Avaliacao);
+                $newArray[$key]['Avaliacao'] = str_replace('<p>&nbsp;</p>', '', $dado->Avaliacao);
             }
             $json['class'] = 'bordered striped';
             $json['lines'] = $newArray;
@@ -92,7 +92,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 'Tipo' => ['name' => 'Tipo'],
                 'DtAvaliacao' => ['name' => 'Data', 'class' => 'valig'],
                 'Avaliacao' => [
-                        'name' => html_entity_decode('Avalia&ccedil;&atilde;o')]
+                    'name' => html_entity_decode('Avalia&ccedil;&atilde;o')]
             ];
 
             $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $json));
@@ -246,7 +246,6 @@ class Proposta_VisualizarController extends Proposta_GenericController
 
     public function obterFonteDeRecursoAction()
     {
-
         $this->_helper->layout->disableLayout();
         $idPreProjeto = $this->_request->getParam('idPreProjeto');
 
@@ -277,14 +276,14 @@ class Proposta_VisualizarController extends Proposta_GenericController
         try {
 
             $tbCustosVinculados = new Proposta_Model_DbTable_TbCustosVinculados();
-            $dados= $tbCustosVinculados->buscarCustosVinculados(['idProjeto = ?' => $this->idPreProjeto])->toArray();
+            $dados = $tbCustosVinculados->buscarCustosVinculados(['idProjeto = ?' => $this->idPreProjeto])->toArray();
 
             $data = [];
             $newArray = [];
 
             foreach ($dados as $key => $dado) {
                 $objDateTime = new DateTime($dado['dtCadastro']);
-                $newArray[$key]['item'] =  utf8_encode($dado['item']);
+                $newArray[$key]['item'] = utf8_encode($dado['item']);
                 $newArray[$key]['dtCadastro'] = $objDateTime->format('d/m/Y');
                 $newArray[$key]['pcCalculo'] = $dado['pcCalculo'] . '%';
             }
@@ -302,4 +301,77 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
         }
     }
+
+    public function obterPlanilhaPropostaOriginalAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        try {
+
+            $idPreProjeto = $this->_request->getParam('idPreProjeto');
+
+            if (empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
+            }
+
+            $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
+            $planilha = $preProjetoMapper->obterPlanilhaPropostaCongelada($idPreProjeto);
+
+            if (empty($planilha)) {
+                $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
+                $planilha = $preProjetoMapper->obterPlanilhaPropostaAtual($idPreProjeto);
+            }
+
+            if (empty($planilha)) {
+                throw new Exception("Nenhuma planilha encontrada... ;(");
+            }
+
+            $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $planilha));
+        } catch (Exception $e) {
+            $this->getResponse()
+                ->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => [], 'success' => 'false', 'msg' => $e->getMessage()));
+
+        }
+    }
+
+    public function obterPlanilhaPropostaAdequadaAjaxAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        try {
+
+            $idPreProjeto = $this->_request->getParam('idPreProjeto');
+
+            if (empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
+            }
+
+            $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
+            $projeto = $dbTableProjetos->findBy(array(
+                'idProjeto' => $idPreProjeto
+            ));
+
+            $tbAvaliacao = new Analise_Model_DbTable_TbAvaliarAdequacaoProjeto();
+            $avaliacao = $tbAvaliacao->buscarUltimaAvaliacao($projeto->IdPRONAC);
+
+            $planilha = [];
+            if (!empty($avaliacao)) {
+                $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
+                $planilha = $preProjetoMapper->obterPlanilhaPropostaAtual($idPreProjeto);
+            }
+
+            if (empty($planilha)) {
+                throw new Exception("Nenhuma planilha encontrada... ;(");
+            }
+
+            $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $planilha));
+        } catch (Exception $e) {
+            $this->getResponse()
+                ->setHttpResponseCode(412);
+            $this->_helper->json(array('data' => [], 'success' => 'false', 'msg' => $e->getMessage()));
+
+        }
+    }
+
 }

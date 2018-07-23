@@ -174,12 +174,23 @@ class UploadController extends MinC_Controller_Action_Abstract
             $this->view->inabilitado = $inabilitado;
 
             /*             * ************************************************************************* */
+
+
+            $this->view->urlMenu = [
+                'module' => 'projeto',
+                'controller' => 'menu',
+                'action' => 'obter-menu-ajax',
+                'idPronac' => $idPronac
+            ];
         }
         $this->view->blnProponente = $this->blnProponente;
 
         //$this->orgaoAutorizado = "272"; //correto e 272
         $this->orgaoAutorizado = "251";
         $this->orgaoLogado = !isset($auth->getIdentity()->IdUsuario) ? $_SESSION['Zend_Auth']['storage']->usu_orgao : 0;
+
+
+
     }
 
     /**
