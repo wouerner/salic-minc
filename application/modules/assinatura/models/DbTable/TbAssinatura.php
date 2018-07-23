@@ -254,7 +254,13 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 
     public function obterAssinaturasDisponiveis()
     {
+        $query = $this->obterQueryAssinaturasDisponiveis();
 
+        return $this->_db->fetchAll($query);
+    }
+
+    public function obterQueryAssinaturasDisponiveis()
+    {
         if (!$this->modeloTbAtoAdministrativo) {
             throw new Exception("&Eacute; necess&aacute;rio definir uma entidade de Assinatura.");
         }
@@ -378,6 +384,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             $query->where("tbDocumentoAssinatura.idTipoDoAtoAdministrativo in (?)", $this->modeloTbAtoAdministrativo->getIdTipoDoAto());
         }
 
-        return $this->_db->fetchAll($query);
+        return $query;
     }
 }
