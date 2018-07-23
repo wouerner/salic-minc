@@ -1,5 +1,7 @@
 <?php
 
+// Colocando esse comentário somente para retira-lo.
+
 /**
  * Arquivo principal da aplicacao (bootstrap)
  * Define todos os caminhos onde os arquivos estao armazenados
