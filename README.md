@@ -4,8 +4,6 @@
 
 Bem vindo/a à documentação do SALIC! Aqui você vai encontrar diversas documentações sobre o processo de desenvolvimento do SALIC, versionameno e publicação.
 
-Estou testando o git junto com a Fernanda!
-
 ## Passos iniciais:
 
 - ```composer update```

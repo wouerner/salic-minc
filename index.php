@@ -1,6 +1,5 @@
 <?php
 
-// Colocando esse comentário somente para retira-lo.
 
 /**
  * Arquivo principal da aplicacao (bootstrap)
