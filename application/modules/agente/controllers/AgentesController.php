@@ -202,11 +202,22 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
                 }
             }
 
+            if(empty($dados[0]->idResponsavel)) {
+
+                if($dados[0]->tipopessoa == 1) {
+                    $sgcAcesso = new Autenticacao_Model_Sgcacesso();
+                    $this->view->responsaveis = $sgcAcesso->buscarUsuario(['Cpf = ?' => $dados[0]->cnpjcpf]);
+                }
+            }
+
             if ($dados[0]->tipopessoa == 1) {
                 $dirigentes = Agente_Model_ManterAgentesDAO::buscarVinculados(null, null, null, null, $idAgente);
                 $qtdDirigentes = count($dirigentes);
                 $this->view->dirigentes = $dirigentes;
+                $this->view->responsaveis = $dirigentes;
             }
+
+
 
             $this->view->dados = $dados;
             $this->view->qtdDirigentes = $qtdDirigentes;
