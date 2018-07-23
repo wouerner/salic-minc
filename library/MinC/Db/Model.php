@@ -10,6 +10,8 @@ class MinC_Db_Model
     protected $order;
     protected $columns;
 
+
+
     /**
      * @return mixed
      */

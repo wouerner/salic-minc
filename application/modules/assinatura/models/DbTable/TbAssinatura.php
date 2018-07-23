@@ -93,35 +93,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
         return $this->_db->fetchAll($objQuery);
     }
 
-//    public function obterSituacaoAtualAssinaturas($idPronac, $idOrgaoDoAssinante, $idTipoDoAto)
-//    {
-//        $objQuery = $this->select();
-//        $objQuery->setIntegrityCheck(false);
-//        $objQuery->from(
-//            $this->_name,
-//            array(
-//                'idAtoAdministrativo',
-//                'idTipoDoAto',
-//                'idCargoDoAssinante',
-//                'idOrdemDaAssinatura'
-//            ),
-//            $this->_schema
-//        );
-//        $objQuery->joinInner(
-//            array('Verificacao' => 'Verificacao'),
-//            'Verificacao.idVerificacao = tbAtoAdministrativo.idCargoDoAssinante',
-//            array('dsCargoAssinante' => 'Verificacao.Descricao'),
-//            $this->getSchema('Agentes')
-//        );
-//        $objQuery->where('idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
-    ////        $objQuery->where('idPerfilDoAssinante = ?', $idPerfilDoAssinante);
-//        $objQuery->where('idTipoDoAto = ?', $idTipoDoAto);
-//        $result = $this->fetchAll($objQuery);
-//        if ($result) {
-//            return $result->toArray();
-//        }
-//    }
-
     public function obterProjetosAssinados(
         $idOrgaoSuperiorDoAssinante,
         $idAssinante = null
@@ -198,8 +169,6 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             'Verificacao.Descricao as tipoDoAtoAdministrativo',
             $this->_schema
         );
-
-//        $query->where("Projetos.Orgao = ?", $idOrgaoDoAssinante);
 
         if ($idAssinante) {
             $objQuery->where(new Zend_Db_Expr(
