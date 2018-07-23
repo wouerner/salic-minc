@@ -253,17 +253,17 @@ class Proposta_Model_PreProjetoArquivado  extends MinC_Db_Table_Abstract
 
         $sql->where('SolicitacaoDesarquivamento IS NOT NULL');
 
+        if (!empty($search['value'])) {
+            $sql->where('a.idpreprojeto like ? OR a.nomeprojeto like ?', '%' . $search['value'] . '%');
+        }
+
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $orgaos = new Usuariosorgaosgrupos();
         $orgaoSuperior = $orgaos->buscarOrgaoSuperior($GrupoAtivo->codOrgao)->current()->org_superior;
-        if($orgaoSuperior === Orgaos::ORGAO_SUPERIOR_SEFIC){
+        if((string)$orgaoSuperior === (string)Orgaos::ORGAO_SUPERIOR_SEFIC){
             $sql->where('a.AreaAbrangencia = ?', 0);
-        }elseif($orgaoSuperior === Orgaos::ORGAO_SUPERIOR_SAV){
+        }elseif((string)$orgaoSuperior === (string)Orgaos::ORGAO_SUPERIOR_SAV){
             $sql->where('a.AreaAbrangencia = ?', 1);
-        }
-
-        if (!empty($search['value'])) {
-            $sql->where('a.idpreprojeto like ? OR a.nomeprojeto like ?', '%' . $search['value'] . '%');
         }
 
         foreach ($where as $coluna=>$valor) {

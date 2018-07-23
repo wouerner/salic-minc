@@ -51,6 +51,11 @@ abstract class Solicitacao_GenericController extends MinC_Controller_Action_Abst
         $this->view->idPreProjeto = $this->idPreProjeto;
 
         $this->idPronac = $this->getRequest()->getParam('idPronac');
+
+        if (strlen($this->idPronac) > 7) {
+            $this->idPronac = Seguranca::dencrypt($this->idPronac);
+        }
+
         if (!empty($this->idPronac)) {
             $tbProjetos = new Projeto_Model_DbTable_Projetos();
             $this->projeto = $tbProjetos->buscar(array('IdPRONAC = ?' => $this->idPronac))->current();

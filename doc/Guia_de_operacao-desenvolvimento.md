@@ -77,11 +77,13 @@ Cada desenvolvedor criará uma branch a partir da `develop`.
     
 ### 5 - Excluir a branch criada
  
- Após o merge para a branch `develop` delete sua branch no [github](https://github.com/culturagovbr/salic-minc/branches).
+ - Após o merge para a branch `develop` delete sua branch no [github](https://github.com/culturagovbr/salic-minc/branches).
+ - Para remover sua branch do conteúdo local execute o comando `git branch -D feature/minha-feature`
  
 ## Hmg - Homologando seu trabalho
 
   Para o cliente testar e homologar o seu trabalho, você deve fazer o merge da sua branch para a branch `hmg`.
+  Atualmente utilizamos a biblioteca node chamada Husky para versionar nossos hooks do git e adicionar tratativas para versionamento de código. Recomendamos que na raiz do projeto você execute o comando ```npm install``` pelo ao menos uma vez, para que sejam instaladas todas as dependência necessárias.
 
 ```sh
     $ git checkout hmg
@@ -98,6 +100,8 @@ Cada desenvolvedor criará uma branch a partir da `develop`.
   Após o `push`, se você executou `npm install`, um hook atualizará automaticamente o [ambiente de homologação](https://hmg.salic.cultura.gov.br/) utilizando o [jenkins](http://jenkins.cultura.gov.br/).
 
   Solicite ao cliente para validar o trabalho desenvolvido. Após a validação você deverá fazer um `pull request` da sua branch para a branch `develop`(passo 4 do item Develop).
+  
+  **OBS:** NUNCA FAÇA UM PULL REQUEST DA BRANCH **HMG** PARA QUALQUER OUTRA BRANCH.
 
 # 2 - Hotfix
 
@@ -108,14 +112,18 @@ Para criar um hotfix, siga os passos abaixo:
 ```sh
     $ git checkout master
     $ git checkout -b hotfix/nome-da-correcao
-    $ ... comite suas correções
+    $ # Adicione os arquivos alterados
+    $ git add pasta1/pasta2/arquivo2.php
+    $ # Faça o commit de suas alterações suas correções
     $ git push hotfix/nome-da-correcao
 ```
 
 **No github:**  
 
-  1. crie um pull request da branch hotfix/nome-da-correcao para a **master** no [github](https://github.com/culturagovbr/salic-minc/pulls).
+  1. crie dois pull requests da branch **hotfix/nome-da-correcao** para a branch **master** e para a branch **develop** no [github](https://github.com/culturagovbr/salic-minc/pulls).
   2. solicite a um colega que revise e aprove seu código.   
+  
+  Dessa maneira conseguimos garantir que a branch **develop** estará sempre mais atualizada.
 
 # 3 - Publicando uma versão para a master
 

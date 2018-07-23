@@ -8,6 +8,7 @@ Bem vindo/a à documentação do SALIC! Aqui você vai encontrar diversas docume
 
 - ```composer update```
 - ```npm install```
+- ```npm run build```
 
 ## Docker
 Utilizamos o Docker como plataforma de desenvolvimento com o intuito de garantir o mesmo ambiente de desenvolvimento 
@@ -24,6 +25,9 @@ Para parar o container basta digitar:
   docker-compose stop
 ```
 
+## Front-end
+* Estamos desacoplando o front-end. [Clique aqui para ver mais](front/README.md).
+
 ## Submodulos
 * Esse projeto contem os manuais e implementações de layout do salic [Layout](https://github.com/culturagovbr/salic-minc-layout)
 
@@ -33,6 +37,7 @@ Para parar o container basta digitar:
 * [Composer](https://getcomposer.org/)
 * [jQuery](https://jquery.com/)
 * [Vuejs](https://vuejs.org/)
+* [Webpack](https://webpack.js.org/)
 * [Materialize](http://materializecss.com/)
 * [SqlServer](https://www.microsoft.com/en-us/sql-server/sql-server-2017)
 

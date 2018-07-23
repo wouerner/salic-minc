@@ -69,13 +69,13 @@ x - Menu lateral (legado)
     font-size: 13px;
 }
 
-#qm0.qmmc > a:first-child,
-#qm0.qmmc > a:first-child:hover {
-    font-weight: 500;
-    font-size: 13px;
-    height: 60px;
-    padding-top: 5px;
-}
+/*#qm0.qmmc > a:first-child,*/
+/*#qm0.qmmc > a:first-child:hover {*/
+    /*font-weight: 500;*/
+    /*font-size: 13px;*/
+    /*height: 60px;*/
+    /*padding-top: 5px;*/
+/*}*/
 
 #qm0.qmmc #pronacProjeto {
     font-size: 12px;
@@ -190,6 +190,8 @@ x - Menu lateral (legado)
     background-color: #2d2f40;
     padding: 10px;
     line-height: 12px;
+    max-height: 90px;
+    overflow: hidden;
 }
 
 #sidenav .sidebar-info.disabled {
