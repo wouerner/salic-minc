@@ -45,8 +45,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     public function gerenciarAssinaturaAjaxAction()
     {
-
         $start = $this->getRequest()->getParam('start');
+        $length = $this->getRequest()->getParam('length');
         $draw = (int)$this->getRequest()->getParam('draw');
         $search = $this->getRequest()->getParam('search');
         $order = $this->getRequest()->getParam('order');
@@ -73,6 +73,12 @@ class Assinatura_IndexController extends Assinatura_GenericController
             'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
             'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior,
             'idTipoDoAto' => $idTipoDoAtoAdministrativos,
+            'search' => $search,
+            'start' => $start,
+            'length' => $length,
+            'draw' => $draw,
+            'order' => $order,
+            'columns' => $columns
         ]);
 
         $projetosDisponiveis = $tbAssinaturaDbTable->obterAssinaturasDisponiveis();
