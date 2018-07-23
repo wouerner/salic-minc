@@ -1,16 +1,9 @@
 import API from './base';
 
-export default class Projeto extends API {
-    constructor(path) {
-        // config.path = 'categories';
-        const config = {};
-        config.path = path;
+const api = () => new API();
 
-        super(config);
-    }
+export const buscaProjeto = (idPronac) => {
+    const url = '/projeto/incentivo/obter-projeto-ajax/?idPronac=' +  idPronac;
+    return api().get(url);
+};
 
-    buscaProjeto(idPronac) {
-        const url = '/projeto/incentivo/obter-projeto-ajax/?idPronac=' +  idPronac;
-        return this.get(url);
-    }
-}

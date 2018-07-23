@@ -1,3 +1,6 @@
+# Coverage directory used by tools like istanbul
+front/test/unit/coverage/
+
 # configs do salic
 application/configs/bancos_*.ini
 application/configs/config.ini
@@ -43,6 +46,3 @@ node_modules/
 .DS_Store
 Thumbs.db
 log/
-
-# Coverage directory used by tools like istanbul
-front/test/unit/coverage/
