@@ -76,7 +76,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             if ($usuario) {
                 $this->idUsuario = $usuario['usu_codigo'];
             }
-
             $this->view->idAgenteKeyLog = $this->idAgente;
             $this->view->idResponsavelKeyLog = $this->idResponsavel;
             $this->view->idUsuarioKeyLog = $this->idUsuario;
@@ -657,6 +656,10 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             }
         }
 
+        if ($callback) {
+            return ['status' => true];
+        }
+
     } // fecha metodo verificarPermissaoAcesso()
 
     public static function validarSenhaInicial()
@@ -797,7 +800,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 $count++;
                 $seq++;
             }
-        } else if ($tipoPlanilha == 6) {
+        } else if ($tipoPlanilha == 6 || $tipoPlanilha == 7) {
             foreach ($planilhaOrcamentaria as $resuplanilha) {
                 $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
                 $planilha[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Municipio][$count]['Seq'] = $seq;
@@ -952,11 +955,13 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
         }
     }
 
-    function getBodyClass($class = '') {
-        return join(' ', $this->getArrayBodyClass( $class ));
+    function getBodyClass($class = '')
+    {
+        return join(' ', $this->getArrayBodyClass($class));
     }
 
-    function getArrayBodyClass( $class = '' ) {
+    function getArrayBodyClass($class = '')
+    {
         $classes = array();
 
         $classes[] = $this->getRequest()->getCookie('menu');
@@ -969,16 +974,13 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
 
         if (!empty($class)) {
 
-            if (!is_array( $class)) {
-                $class = preg_split( '#\s+#', $class );
+            if (!is_array($class)) {
+                $class = preg_split('#\s+#', $class);
             }
 
-            $classes = array_merge( $classes, $class );
-        } else {
-            $class = array();
+            $classes = array_merge($classes, $class);
         }
-
-        return array_unique( $classes );
+        return array_unique($classes);
 
     }
 }

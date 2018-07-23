@@ -1,4 +1,3 @@
-<!--
 /**
  * M�scaras, efeitos din�micos e etc
  * @author Emanuel Sampaio <contato@emanuelsampaio.com.br>

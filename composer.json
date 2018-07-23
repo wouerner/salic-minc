@@ -36,6 +36,9 @@
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\": "./application/modules/prestacao-contas/service/assinatura/",
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\Laudo\\": "./application/modules/prestacao-contas/service/assinatura/laudo/",
             "Application\\Modules\\PrestacaoContas\\Service\\Assinatura\\Laudo\\Acao\\": "./application/modules/prestacao-contas/service/assinatura/laudo/acao/",
+            "Application\\Modules\\Foo\\": "./application/modules/foo/",
+            "Application\\Modules\\Foo\\Service\\": "./application/modules/foo/service/",
+            "Application\\Modules\\Foo\\Service\\Foo\\": "./application/modules/foo/service/foo/",
             "MinC\\Assinatura\\Servico\\": "./library/MinC/Assinatura/"
         }
     },

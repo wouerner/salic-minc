@@ -11,9 +11,12 @@ if ($this->listarTudo == true) {
 }
 
 ?>
-<?php if ($this->idPreProjeto && $this->isProponente) : ?>
-    <?php echo $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto)); ?>
-<?php endif; ?>
+<?php if ($this->idPreProjeto && $this->isProponente)            {
+    echo $this->action('menu', 'menu', 'proposta', array('idPreProjeto' => $this->idPreProjeto));
+ } else if ($this->idPronac && $this->isProponente && !empty($this->urlMenu)) {
+    $this->SidebarVue($this->url($this->urlMenu, '', true));
+} 
+?>
 
 <div class="container-fluid">
     <div class="row">

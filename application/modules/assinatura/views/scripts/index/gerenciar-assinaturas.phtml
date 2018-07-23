@@ -49,85 +49,6 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <!--                        --><?php //foreach ($this->dados as $dado): ?>
-                    <!--                            <tr>-->
-                    <!--                                <td class="center-align" style="padding-left: 20px">-->
-                    <!--                                    --><?php
-                    //                                                        if (is_null($dado['possuiAssinatura'])) : ?>
-                    <!--                                                            <input type="checkbox"-->
-                    <!--                                                                   name="IdPRONAC[]"-->
-                    <!--                                                                   id="IdPRONAC-->
-                    <!--                    --><?php //echo $dado['IdPRONAC'] ?><!--"-->
-                    <!--                                                                   class="checkbox_legal filled-in"-->
-                    <!--                                                                   value="-->
-                    <!--                    --><?php //echo $dado['IdPRONAC'] ?><!--"-->
-                    <!--                                                                   data-idtipoatoadministrativo="-->
-                    <!--                    --><?php //echo $dado['idTipoDoAtoAdministrativo'] ?><!--"-->
-                    <!--                                                            />-->
-                    <!--                                                            <label for="IdPRONAC-->
-                    <!--                    --><?php //echo $dado['IdPRONAC'] ?><!--"></label>-->
-                    <!--                                    --><?php //endif; ?>
-                    <!--                                </td>-->
-                    <!--                                <td class="center-align" align="center">-->
-                    <!--                                    <a class="waves-effect waves-dark btn white black-text"-->
-                    <!--                                       href="--><?php //echo $this->url(
-                    //                                               array(
-                    //                                                   'module' => 'default',
-                    //                                                   'controller' => 'consultardadosprojeto',
-                    //                                                   'action' => 'index'
-                    //                                               )
-                    //                                           ) . "?idPronac={$dado['IdPRONAC']}"; ?><!--"><u>-->
-                    <?php //echo $dado['pronac']; ?><!--</u></a>-->
-                    <!--                                </td>-->
-                    <!--                                <td class="center-align" align="center">-->
-                    <?php //echo $dado['nomeProjeto']; ?><!--</td>-->
-                    <!--                                <td class="center-align" align="center">-->
-                    <?php //echo $dado['area']; ?><!--</td>-->
-                    <!--                                <td class="center-align" align="center">-->
-                    <?php //echo $dado['segmento']; ?><!--</td>-->
-                    <!--                                <td class="center-align" align="center">-->
-                    <?php //echo $dado['dias']; ?><!--</td>-->
-                    <!--                                <td class="center-align"-->
-                    <!--                                    align="center">-->
-                    <?php //echo $dado['tipoDoAtoAdministrativo']; ?><!--</td>-->
-                    <!--                                <td class="center-align" align="center">-->
-                    <!--                                    --><?php
-                    //                                    $parametrosVisualicacao = "?idDocumentoAssinatura={$dado['idDocumentoAssinatura']}";
-                    //                                    ?>
-                    <a class="btn waves-effect waves-light tooltipped small "
-                       href="<?php echo $this->url(array(
-                               'module' => 'assinatura',
-                               'controller' => 'index',
-                               'action' => 'visualizar-projeto'
-                           )) . $parametrosVisualicacao ?>"
-                       data-position="top"
-                       data-delay="50"
-                       data-tooltip="Visualizar">
-                        <i class="material-icons">search</i>
-                    </a>
-                    </td>
-                    <td class="center-align" align="center">
-                        <?php
-                        $parametrosAssinatura = "?IdPRONAC={$dado['IdPRONAC']}&idTipoDoAtoAdministrativo={$dado['idTipoDoAtoAdministrativo']}";
-                        if (is_null($dado['possuiAssinatura'])) :
-                            ?>
-                            <a class="btn waves-effect waves-light tooltipped small"
-                               href="<?php echo $this->url(
-                                       array(
-                                           'module' => 'assinatura',
-                                           'controller' => 'index',
-                                           'action' => 'assinar-projeto'
-                                       )
-                                   ) . $parametrosAssinatura ?>"
-                               data-position="top"
-                               data-delay="50"
-                               data-tooltip="Assinar">
-                                <i class="material-icons">create</i>
-                            </a>
-                        <?php endif; ?>
-                        <!--                                </td>-->
-                        <!--                            </tr>-->
-                        <!--                        --><?php //endforeach; ?>
                     </tbody>
                 </table>
                 <div class="center-align" id="divAssinaturaEmMassa"
@@ -268,8 +189,14 @@
                         },
                         {
                             "targets": 2,
-                            "data": "pronac",
-                            "name": "pronac"
+                            "data": null,
+                            "name": "pronac",
+                            render: (data) => {
+                                return '<a class="waves-effect waves-dark btn white black-text" ' +
+                                    'href="/consultardadosprojeto/index?idPronac=' + data.IdPRONAC + '"><u> ' +
+                                    data.pronac +
+                                    '</u></a>';
+                            }
                         },
                         {
                             "targets": 3,
@@ -335,37 +262,37 @@
                     ]
                 });
 
-                function informacoes(data){
-                    return '<div class="expansivel">'+
-                        '<div class="col s12">'+
-                        '<div class="card">'+
-                        '<div class="card-content">'+
-                        '<div clas="row">'+
-                        '<b>Resumo do Projeto </b>'+ data.ResumoProjeto +
-                        '</div>'+
-                        '<div clas="row">'+
+                function informacoes(data) {
+                    return '<div class="expansivel">' +
+                        '<div class="col s12">' +
+                        '<div class="card">' +
+                        '<div class="card-content">' +
+                        '<div clas="row">' +
+                        '<b>Resumo do Projeto </b>' + data.ResumoProjeto +
+                        '</div>' +
+                        '<div clas="row">' +
                         '<b>Tipo do ato administrativo: </b>' + data.tipoDoAtoAdministrativo +
-                        '</div>'+
-                        '<div clas="row">'+
+                        '</div>' +
+                        '<div clas="row">' +
                         '<b>Quantidade de assinaturas: </b>' + data.quantidadeAssinaturas +
-                        '</div>'+
-                        '</div>'+
-                        '</div>'+
-                        '</div>'+
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
                         '</div>';
                 }
 
-                $('#assinaturaProjetos tbody').on('click', '.expand', function(){
+                $('#assinaturaProjetos tbody').on('click', '.expand', function () {
                     var tr = $(this).closest('tr');
                     var row = assinaturaProjetos.row(tr);
 
-                    if(row.child.isShown()){
-                        $('div.expansivel', row.child()).slideUp(function(){
+                    if (row.child.isShown()) {
+                        $('div.expansivel', row.child()).slideUp(function () {
                             row.child.hide();
                             tr.removeClass('shown');
                         });
                         $(this).find('i').first().html('expand_more');
-                    } else{
+                    } else {
                         row.child(informacoes(row.data()), 'no-padding').show();
                         tr.addClass('shown');
                         $('div.expansivel', row.child()).slideDown();
