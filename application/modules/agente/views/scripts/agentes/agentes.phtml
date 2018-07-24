@@ -207,43 +207,6 @@
         <?php }  ?>
     </div>
 
-    <?php // if(empty($this->dados[0]->idResponsavel)) : ?>
-    <div id="formNovo">
-        <form id="formInfoAdicionais"
-              action="<?php echo $this->url(array('module' => 'agente', 'controller' => 'agentes', 'action' => 'salvar-responsavel')); ?>"
-              method="post">
-            <table class="tabela">
-                <caption class="red-text">Agente sem respons&aacute;vel cadastrado</caption>
-                <input type="hidden" name="agente" id="agente" value="<?php echo $this->dados[0]->idAgente; ?>"/>
-                <th colspan="2">Cadastrar Respons&aacute;vel pelo Proponente</th>
-                <tr>
-                    <td class="destacar bold" align="right" width="150px" nowrap>Usu&aacute;rio <span
-                            style="color: red;">*</span></td>
-                    <td>
-                        <select name="idResponsavel" id="idResponsavel" class="select_simples obrigatorio">
-                            <?php foreach ($this->responsaveis as $responsavel) : ?>
-                                <?php if ($responsavel->idResponsavel) : ?>
-                                    <option
-                                        value="<?= $responsavel->idResponsavel; ?>">
-                                        [<?= $responsavel->cpfResponsavel; ?>]
-                                        <?= $responsavel->nomeResponsavel; ?>
-                                    </option>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div style="width: 100%; " align="center">
-                            <a type="button" class="btn btn-primary" id="btnsalvar">Salvar</a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-    <?php //endif; ?>
 </div>
 </div>
 </div>

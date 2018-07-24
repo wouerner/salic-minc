@@ -477,7 +477,7 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $this->view->modulo = $modulo;
 
         if (!empty($modal)) {
-            $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
+            $this->_helper->layout->disableLayout(); // desabilita 0o Zend_Layout
             $this->view->modal = "s";
             $this->view->cpf = $this->_request->getParam("cpf");
             $this->view->caminho = $this->_request->getParam("caminho");
@@ -604,7 +604,11 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             parent::message("Você n&atilde;o tem permiss&atilde;o para essa funcionalidade!", "agente/agentes/sempermissao", "ALERT");
         }
 
-        $idAgente = $this->_request->getParam("id");
+        $idAgente = (int)$this->_request->getParam("id");
+
+        if (empty($idAgente)) {
+            throw new Exception("Agente &eacute; obrigat&oacute;rio!");
+        }
 
         if (($this->GrupoAtivoSalic == 94) || ($this->GrupoAtivoSalic == 118)) {
             $idAgente = $this->getIdUsuario;
@@ -3112,6 +3116,90 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
             parent::message("Dados $msg com sucesso!", "agente/agentes/area-cultural/id/" . $post->agente, "CONFIRM");
         } catch (Exception $e) {
             parent::message("Ocorreu um erro durante a opera&ccedil;&atilde;o!", "agente/agentes/area-cultural/id/" . $post->agente, "ERROR");
+        }
+    }
+
+
+    public function formUsuarioAgenteAction()
+    {
+        $this->view->menuLateral = true;
+
+        $idAgente = $this->_request->getParam("id");
+
+        try {
+
+            if (empty($idAgente)) {
+                throw new Exception("Agente n&atilde;o encontrado");
+            }
+
+            if ($this->GrupoAtivoSalic == Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar esta funcionalidade");
+            }
+
+            $dados = Agente_Model_ManterAgentesDAO::buscarAgentes(null, null, $idAgente);
+
+            if (!$dados) {
+                throw new Exception("Agente n&atilde;o encontrado!");
+            }
+
+            $visaoTable = new Agente_Model_DbTable_Visao();
+            $visoes = $visaoTable->buscarVisao($idAgente);
+            $this->view->visoes = $visoes;
+            $this->view->dados = $dados;
+
+            if ($dados[0]->tipopessoa == 1) {
+                $dirigentes = Agente_Model_ManterAgentesDAO::buscarVinculados(null, null, null, null, $idAgente);
+                $this->view->responsaveis = $dirigentes->toArray();
+            } else {
+                $sgcAcesso = new Autenticacao_Model_Sgcacesso();
+                $responsaveis = $sgcAcesso->buscarUsuario(['Cpf = ?' => $dados[0]->cnpjcpf])->toArray();
+                $responsaveis[0]['idResponsavel'] = $responsaveis[0]['IdUsuario'];
+                $responsaveis[0]['cpfResponsavel'] = $responsaveis[0]['cpf'];
+                $responsaveis[0]['nomeResponsavel'] = $responsaveis[0]['nome'];
+                $this->view->responsaveis = $responsaveis;
+            }
+            $this->view->dados = $dados;
+        } catch (Exception $e) {
+            parent::message($e->getMessage(), "agente/agentes/agentes/id/" . $idAgente, "ERROR");
+        }
+    }
+
+    /**
+     * Este metodo é para correcao de erro ao transformar projeto em proposta
+     * o erro acontece quando existe agente com usuario invalido
+     */
+    public function salvarUsuarioAgenteAction()
+    {
+        $idAgente = (int)$this->_request->getParam("agente");
+        $idResponsavel = (int)$this->_request->getParam("idResponsavel");
+
+        try {
+
+            if ($this->GrupoAtivoSalic == Autenticacao_Model_Grupos::PROPONENTE) {
+                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para esta a&ccedil;&atilde;o");
+            }
+
+            if (empty($idAgente) || empty($idResponsavel)) {
+                throw new Exception("Dados obrigat&oacute;rios n&atilde;o informados");
+            }
+
+            $mprAgentes = new Agente_Model_AgentesMapper();
+            $agente = $mprAgentes->findBy(['idAgente' => $idAgente]);
+
+            if (empty($agente)) {
+                throw new Exception("Agente n&atilde;o existe");
+            }
+
+            $where = [];
+            $dados = [];
+            $dbTableAgentes = new Agente_Model_DbTable_Agentes();
+            $where[] = $dbTableAgentes->getAdapter()->quoteInto('idAgente = ?', $idAgente);
+            $dados['Usuario'] = $idResponsavel;
+            $dbTableAgentes->update($dados, $where);
+
+            parent::message("Agente atualizado com sucesso!", "agente/agentes/form-usuario-agente/id/" . $idAgente, "CONFIRM");
+        } catch (Exception $e) {
+            parent::message($e->getMessage(), "agente/agentes/incluiragente", "ERROR");
         }
     }
 }

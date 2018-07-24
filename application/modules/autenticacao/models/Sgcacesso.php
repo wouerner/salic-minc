@@ -306,7 +306,7 @@ class Autenticacao_Model_Sgcacesso extends MinC_Db_Table_Abstract
         $slct = $this->select();
         $slct->from(
             $this->_name,
-            array("nome", "cpf"),
+            array("IdUsuario", "nome", "cpf"),
             $this->_schema
         );
 
