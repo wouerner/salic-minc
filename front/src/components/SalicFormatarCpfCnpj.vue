@@ -12,6 +12,8 @@ export default {
       if (typeof this.cpf !== 'undefined') {
         return this.formatarCpfOuCnpj(this.cpf);
       }
+
+      return '';
     },
   },
   methods: {

@@ -158,8 +158,8 @@
 </template>
 
 <script>
-import Carregando from "@/components/Carregando";
-import SalicFormatarCpfCnpj from "@/components/SalicFormatarCpfCnpj";
+import Carregando from '@/components/Carregando';
+import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
 
 export default {
   name: 'Proponente',
@@ -167,34 +167,34 @@ export default {
     return {
       proponente: [],
       identificacao: [],
-      loading: true
+      loading: true,
     };
   },
   components: {
     Carregando,
-    SalicFormatarCpfCnpj
+    SalicFormatarCpfCnpj,
   },
   props: ['id', 'cpf'],
   mounted() {
-    if (typeof this.id != 'undefined') {
+    if (typeof this.id !== 'undefined') {
       this.fetch(this.id);
     }
 
-    if (typeof this.cpf != 'undefined') {
+    if (typeof this.cpf !== 'undefined') {
       this.fetch(null, this.cpf);
     }
   },
   watch: {
     id(value) {
-      if (typeof value != 'undefined') {
+      if (typeof value !== 'undefined') {
         this.fetch(this.id);
       }
     },
     cpf(value) {
-      if (typeof value != 'undefined') {
+      if (typeof value !== 'undefined') {
         this.fetch(null, value);
       }
-    }
+    },
   },
   computed: {
     idusuario() {
@@ -203,7 +203,7 @@ export default {
     },
     TipoPessoa() {
       return this.label_tipo_pessoa(this.identificacao.tipopessoa);
-    }
+    },
   },
   methods: {
     fetch(id = null, cpf = null) {
@@ -214,14 +214,16 @@ export default {
       }
 
       if (cpf) {
+        /* eslint-disable-next-line */
         params = { cpf: cpf };
       }
 
-      let self = this;
+      const self = this;
+      /* eslint-disable-next-line */
       $3
         .ajax({
           url: '/agente/visualizar/obter-dados-proponente/',
-          data: params
+          data: params,
         })
         .done((response) => {
           self.proponente = response.data;

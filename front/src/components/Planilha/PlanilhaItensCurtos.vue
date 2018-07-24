@@ -42,36 +42,36 @@
 </template>
 
 <script>
-import numeral from "numeral";
-import SalicFormatarValor from "@/components/SalicFormatarValor";
+import numeral from 'numeral';
+import SalicFormatarValor from '@/components/SalicFormatarValor';
 
 export default {
-  name: "PlanilhaListaDeItensCurta",
+  name: 'PlanilhaListaDeItensCurta',
   data() {
     return {
-      planilha: []
+      planilha: [],
     };
   },
   props: {
-    table: {}
+    table: {},
   },
   components: {
-    SalicFormatarValor
+    SalicFormatarValor,
   },
   methods: {
     isObject(el) {
-      return typeof el === "object";
+      return typeof el === 'object';
     },
     converterStringParaClasseCss(text) {
       return text
         .toString()
         .toLowerCase()
         .trim()
-        .replace(/&/g, "-and-")
-        .replace(/[\s\W-]+/g, "-");
+        .replace(/&/g, '-and-')
+        .replace(/[\s\W-]+/g, '-');
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado == true;
+      return row.stCustoPraticado === true;
     },
     converterParaReal(value) {
       value = parseFloat(value);

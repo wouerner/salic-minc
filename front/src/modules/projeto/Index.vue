@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    export default {
-        name: 'Index',
-    }
+  export default {
+    name: 'Index',
+  };
 </script>

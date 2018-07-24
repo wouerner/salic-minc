@@ -15,31 +15,31 @@
     </div>
 </template>
 <script>
-import SidebarMenu from "@/components/SidebarMenu";
-import Carregando from "@/components/Carregando";
-import TituloPagina from "@/components/TituloPagina";
-import SalicMensagemErro from "@/components/SalicMensagemErro";
-import MenuSuspenso from "../components/MenuSuspenso";
-import { mapActions, mapGetters } from "vuex";
-import { utils } from "@/mixins/utils";
+import { mapActions, mapGetters } from 'vuex';
+import { utils } from '@/mixins/utils';
+import SidebarMenu from '@/components/SidebarMenu';
+import Carregando from '@/components/Carregando';
+import TituloPagina from '@/components/TituloPagina';
+import SalicMensagemErro from '@/components/SalicMensagemErro';
+import MenuSuspenso from '../components/MenuSuspenso';
 
-const URL_MENU = "/projeto/menu/obter-menu-ajax/idPronac/";
+const URL_MENU = '/projeto/menu/obter-menu-ajax/idPronac/';
 
 export default {
-  name: "Index",
+  name: 'Index',
   components: {
     SidebarMenu,
     TituloPagina,
     MenuSuspenso,
     Carregando,
-    SalicMensagemErro
+    SalicMensagemErro,
   },
   mixins: [utils],
   data() {
     return {
       urlAjax: URL_MENU + this.$route.params.idPronac,
       carregando: true,
-      permissao: true
+      permissao: true,
     };
   },
   watch: {
@@ -55,7 +55,7 @@ export default {
         this.buscaProjeto(to.params.idPronac);
         this.urlAjax = URL_MENU + to.params.idPronac;
       }
-    }
+    },
   },
   created() {
     if (

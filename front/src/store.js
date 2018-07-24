@@ -8,8 +8,8 @@ Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== 'production' || process.env.NODE_ENV !== 'staging';
 
 export default new Vuex.Store({
-    modules: {
-        projeto
-    },
-    strict: debug,
+  modules: {
+    projeto,
+  },
+  strict: debug,
 });

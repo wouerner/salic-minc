@@ -6,35 +6,36 @@
 </template>
 
 <script>
-import Carregando from "@/components/Carregando";
+import Carregando from '@/components/Carregando';
 
 export default {
-  name: "CarregarTemplateAjax",
+  name: 'CarregarTemplateAjax',
   components: {
-    Carregando
+    Carregando,
   },
   data() {
     return {
       active: true,
-      loading: true
+      loading: true,
     };
   },
   props: {
-    urlAjax: ""
+    urlAjax: '',
   },
   mounted() {
-    if (typeof this.urlAjax != "undefined" && this.urlAjax != "") {
+    if (typeof this.urlAjax !== 'undefined' && this.urlAjax !== '') {
       this.obterTemplate();
     }
   },
   methods: {
     obterTemplate() {
-      let self = this;
-      if (self.urlAjax == "") {
+      const self = this;
+      if (self.urlAjax === '') {
         return;
       }
-
+      /* eslint-disable-next-line */
       let elmRetorno = $3("#template-ajax");
+      /* eslint-disable-next-line */
       $3.ajax({
         url: self.urlAjax,
         success(data) {

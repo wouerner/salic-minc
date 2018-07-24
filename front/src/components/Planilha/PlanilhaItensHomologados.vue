@@ -52,71 +52,74 @@
 </template>
 
 <script>
-import numeral from "numeral";
-import "numeral/locales";
+import numeral from 'numeral';
+import 'numeral/locales';
 
-import SalicFormatarValor from "@/components/SalicFormatarValor";
+import SalicFormatarValor from '@/components/SalicFormatarValor';
 
 export default {
-  name: "PlanilhaListaDeItensHomologados",
+  name: 'PlanilhaListaDeItensHomologados',
   data() {
     return {
-      planilha: []
+      planilha: [],
     };
   },
   props: {
-    table: {}
+    table: {},
   },
   components: {
-    SalicFormatarValor
+    SalicFormatarValor,
   },
   created() {
-    numeral.locale("pt-br");
-    numeral.defaultFormat("0,0.00");
+    numeral.locale('pt-br');
+    numeral.defaultFormat('0,0.00');
   },
   computed: {
     vlSolicitadoTotal() {
-      var soma = numeral();
+      const soma = numeral();
+      /* eslint-disable-next-line */
       Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlSolicitado != "undefined") {
+        if (typeof cell.vlSolicitado !== 'undefined') {
           soma.add(parseFloat(cell.vlSolicitado));
         }
       });
       return soma.format();
     },
     vlSugeridoTotal() {
-      var soma = numeral();
+      const soma = numeral();
+      /* eslint-disable-next-line */
       Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlSugerido != "undefined") {
+        if (typeof cell.vlSugerido !== 'undefined') {
           soma.add(parseFloat(cell.vlSugerido));
         }
       });
       return soma.format();
     },
     vlAprovadoTotal() {
-      var soma = numeral();
+      const soma = numeral();
+      /* eslint-disable-next-line */
       Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlAprovado != "undefined") {
+        if (typeof cell.vlAprovado !== 'undefined') {
           soma.add(parseFloat(cell.vlAprovado));
         }
       });
       return soma.format();
-    }
+    },
   },
   methods: {
     isObject(el) {
-      return typeof el === "object";
+      return typeof el === 'object';
     },
     converterStringParaClasseCss(text) {
       return text
         .toString()
         .toLowerCase()
         .trim()
-        .replace(/&/g, "-and-")
-        .replace(/[\s\W-]+/g, "-");
+        .replace(/&/g, '-and-')
+        .replace(/[\s\W-]+/g, '-');
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado == true;
+      return row.stCustoPraticado === true;
     },
     converterParaReal(value) {
       value = parseFloat(value);

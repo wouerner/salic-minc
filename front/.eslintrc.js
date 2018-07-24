@@ -20,15 +20,15 @@ module.exports = {
     'import/resolver': {
       'webpack': {
         'config': 'front/build/webpack.base.conf.js'
-      }
-    }
+      },
+    },
   },
   // add your custom rules here
   'rules': {
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       'js': 'never',
-      'vue': 'never'
+      'vue': 'never',
     }],
     // allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
@@ -38,6 +38,7 @@ module.exports = {
     'no-shadow': 0,
     'import/no-unresolved': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'import/prefer-default-export': 'off',
   }
 }

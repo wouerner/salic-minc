@@ -10,9 +10,9 @@ import {
 
 Vue.config.productionTip = false;
 
-/* eslint-disable no-new */
 window.onload = () => {
-  let main = new Vue({
+  /* eslint-disable-next-line */
+  const main = new Vue({
     el: '#app',
     router,
     store,

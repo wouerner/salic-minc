@@ -6,22 +6,22 @@
     </div>
 </template>
 <script>
-    import Proponente from '@/modules/agente/Proponente';
-    import {mapGetters} from 'vuex';
+import Proponente from '@/modules/agente/Proponente';
+import { mapGetters } from 'vuex';
 
-    export default {
-        data() {
-            return {
-                links: '/default/consultardadosprojeto/planilha-orcamentaria?idPronac=' + this.$route.params.idPronac
-            }
-        },
-        components: {
-            Proponente
-        },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-            }),
-        }
+export default {
+  data() {
+    return {
+      links: `/default/consultardadosprojeto/planilha-orcamentaria?idPronac=${this.$route.params.idPronac}`,
     };
+  },
+  components: {
+    Proponente,
+  },
+  computed: {
+    ...mapGetters({
+      dadosProjeto: 'projeto/projeto',
+    }),
+  },
+};
 </script>

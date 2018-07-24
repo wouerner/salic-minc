@@ -9,19 +9,19 @@
 </template>
 
 <script>
-import Carregando from "@/components/Carregando";
-import Planilha from "@/components/Planilha/Planilha";
-import { mapGetters } from "vuex";
+import Carregando from '@/components/Carregando';
+import Planilha from '@/components/Planilha/Planilha';
+import { mapGetters } from 'vuex';
 
 export default {
   /* eslint-disable */
-  name: "PlanilhaPropostaReadequada",
+  name: 'PlanilhaPropostaReadequada',
   data: function() {
     return {
       planilha: [],
       loading: true,
       semResposta: false,
-      mensagem: ""
+      mensagem: ''
     };
   },
   components: {
@@ -29,25 +29,25 @@ export default {
     Planilha
   },
   mounted: function() {
-    if (typeof this.dadosProjeto != "undefined") {
+    if (typeof this.dadosProjeto !== 'undefined') {
       this.fetch(this.dadosProjeto.idPronac);
     }
   },
   watch: {
     dadosProjeto: function(value) {
-      if (typeof value != "undefined") {
+      if (typeof value !== 'undefined') {
         this.fetch(value.idPronac);
       }
     }
   },
   computed: {
     ...mapGetters({
-      dadosProjeto: "projeto/projeto"
+      dadosProjeto: 'projeto/projeto'
     })
   },
   methods: {
     fetch: function(id) {
-      if (typeof id == "undefined") {
+      if (typeof id == 'undefined') {
         return;
       }
 

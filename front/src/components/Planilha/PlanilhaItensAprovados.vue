@@ -48,7 +48,7 @@ export default {
   name: 'PlanilhaListaDeItensAprovados',
   data() {
     return {
-      planilha: []
+      planilha: [],
     };
   },
   props: ['table', 'full'],
@@ -65,7 +65,7 @@ export default {
         .replace(/[\s\W-]+/g, '-');
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado == true;
+      return row.stCustoPraticado === true;
     },
     converterParaReal(value) {
       value = parseFloat(value);

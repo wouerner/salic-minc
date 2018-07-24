@@ -637,7 +637,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import Carregando from '@/components/Carregando';
 import SalicTextoSimples from '@/components/SalicTextoSimples';
 import SalicFormatarValor from '@/components/SalicFormatarValor';
@@ -651,7 +651,7 @@ export default {
       loading: true,
       idPronac: this.$route.params.idPronac,
       ProponenteInabilitado: false,
-      emAnaliseNaCNIC: false
+      emAnaliseNaCNIC: false,
     };
   },
   mixins: [utils],
@@ -659,7 +659,7 @@ export default {
     Carregando,
     SalicTextoSimples,
     SalicFormatarValor,
-    SalicFormatarCpfCnpj
+    SalicFormatarCpfCnpj,
   },
   created() {
     if (Object.keys(this.dadosProjeto).length > 0) {

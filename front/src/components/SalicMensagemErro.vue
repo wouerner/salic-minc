@@ -14,8 +14,8 @@
 </template>
 
 <script>
-    export default {
-        name: 'SalicMensagemErro',
-        props: ['texto', 'urlRetorno', 'msgUrlRetorno'],
-    };
+export default {
+  name: 'SalicMensagemErro',
+  props: ['texto', 'urlRetorno', 'msgUrlRetorno'],
+};
 </script>
