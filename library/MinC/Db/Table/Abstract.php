@@ -7,6 +7,7 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
     private $_config;
     protected $_rowClass = "MinC_Db_Table_Row";
     protected $debugMode = false;
+    protected $modelDatatable;
 
     public function init()
     {
@@ -71,6 +72,8 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
     public function __construct($config = array())
     {
         $this->createConnection();
+
+        $this->modelDatatable = new \MinC\Db\DataTable($config);
         parent::__construct($config);
     }
 

@@ -76,9 +76,7 @@ class Assinatura_IndexController extends Assinatura_GenericController
             'search' => $search,
             'start' => $start,
             'length' => $length,
-            'draw' => $draw,
             'order' => $order,
-            'columns' => $columns
         ]);
 
         $projetosDisponiveis = $tbAssinaturaDbTable->obterAssinaturasDisponiveis();
