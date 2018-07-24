@@ -1,27 +1,27 @@
 <template>
     <div v-if="planilha" class="planilha-orcamentaria card">
         <ul class="collapsible no-margin" data-collapsible="expandable">
-            <li v-for="(fontes, fonte) of planilhaCompleta" v-if="isObject(fontes)">
+            <li v-for="(fontes, fonte, indexFonte) of planilhaCompleta" v-if="isObject(fontes)" :key="indexFonte">
                 <div class="collapsible-header active red-text fonte" :class="converterStringParaClasseCss(fonte)">
                     <i class="material-icons">beenhere</i>{{fonte}}<span class="badge">R$ {{fontes.total}}</span>
                 </div>
                 <div class="collapsible-body no-padding">
                     <ul class="collapsible no-border no-margin" data-collapsible="expandable">
-                        <li v-for="(produtos, produto) of fontes" v-if="isObject(produtos)">
+                        <li v-for="(produtos, produto, indexProduto) of fontes" v-if="isObject(produtos)" :key="indexProduto">
                             <div class="collapsible-header active green-text" style="padding-left: 30px;"
                                  :class="converterStringParaClasseCss(produto)">
                                 <i class="material-icons">perm_media</i>{{produto}}<span class="badge">R$ {{produtos.total}}</span>
                             </div>
                             <div class="collapsible-body no-padding no-border">
                                 <ul class="collapsible no-border no-margin" data-collapsible="expandable">
-                                    <li v-for="(etapas, etapa) of produtos" v-if="isObject(etapas)">
+                                    <li v-for="(etapas, etapa, indexEtapa) of produtos" v-if="isObject(etapas)" :key="indexEtapa">
                                         <div class="collapsible-header active orange-text" style="padding-left: 50px;"
                                              :class="converterStringParaClasseCss(etapa)">
                                             <i class="material-icons">label</i>{{etapa}}<span class="badge">R$ {{etapas.total}}</span>
                                         </div>
                                         <div class="collapsible-body no-padding no-border">
                                             <ul class="collapsible no-border no-margin" data-collapsible="expandable">
-                                                <li v-for="(locais, local) of etapas" v-if="isObject(locais)">
+                                                <li v-for="(locais, local, indexLocal) of etapas" v-if="isObject(locais)" :key="indexLocal">
                                                     <div class="collapsible-header active blue-text"
                                                          style="padding-left: 70px;"
                                                          :class="converterStringParaClasseCss(local)">
