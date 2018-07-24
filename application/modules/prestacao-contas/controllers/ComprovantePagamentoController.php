@@ -56,7 +56,8 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         }
 
         $dataAux = [];
-        foreach($data as $key => $value) {
+        foreach($data as $value) {
+            $key =  $value['idComprovantePagamento'];
             $dataAux[$key] = $value;
             $dataAux[$key]['tipo'] = $value['tipo'];
             $dataAux[$key]['numero'] = $value['numero'];

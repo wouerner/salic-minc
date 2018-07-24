@@ -67,6 +67,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         $this->idFornecedor = $obj->fornecedor->idAgente;
         $this->tpFormaDePagamento = $obj->forma;
         $this->nrDocumentoDePagamento = $obj->numeroDocumento;
+        $this->numero = $obj->numero;
 
         if ($obj->id) {
             $this->idComprovantePagamento = $obj->id;
@@ -125,11 +126,11 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             'dsJustificativa' => $this->dsJustificativa,
             'nrDocumentoDePagamento' => $this->nrDocumentoDePagamento,
             'nrSerie' => $this->serie,
+            'nrComprovante' => $this->numero,
         ];
 
         if (!$this->eInternacional) {
             $dados += [
-                'nrComprovante' => $this->nrComprovante,
                 'tpFormaDePagamento' => $this->tpFormaDePagamento,
                 'idFornecedor' => $this->idFornecedor,
             ];
@@ -139,6 +140,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             ];
         }
 
+        /* var_dump($dados);die; */
         $this->idComprovantePagamento = $this->insert($dados);
 
         $this->comprovarPlanilhaCadastrar();
@@ -176,6 +178,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
             'dsJustificativa' => $this->dsJustificativa,
             'nrDocumentoDePagamento' => $this->nrDocumentoDePagamento,
             'nrSerie' => $this->serie,
+            'nrComprovante' => $this->numero,
         ];
 
         if ($arquivoTamanho) {
@@ -194,7 +197,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
         }
         /* var_dump($dados);die; */
 
-        $this->comprovarPlanilhaCadastrar();
+        /* $this->comprovarPlanilhaCadastrar(); */
         $result = $this->update(
             $dados,
             ['idComprovantePagamento = ?' => $this->idComprovantePagamento]

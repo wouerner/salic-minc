@@ -216,7 +216,7 @@ Vue.component('sl-comprovante-nacional-form',
                 </fieldset>
             </template>
             <button type="button" class="btn" @click="salvar">salvar</button>
-            <button 
+            <button
                 type="button" class="btn white black-text"
                 @click="cancelar()">cancelar</button>
         </form>
@@ -258,18 +258,19 @@ Vue.component('sl-comprovante-nacional-form',
         }
     },
     props: [
-        'dados', 
+        'dados',
         'url',
-        'messages', 
+        'messages',
         'tipoform',
-        'item', 
-        'idplanilhaaprovacao', 
-        'index', 
-        'datainicio', 
+        'item',
+        'idplanilhaaprovacao',
+        'index',
+        'datainicio',
         'datafim',
         'valoraprovado',
         'valorcomprovado',
-        'valorantigo'
+        'valorantigo',
+        'status'
     ],
     computed:{
         dataInicio() {
@@ -294,6 +295,10 @@ Vue.component('sl-comprovante-nacional-form',
                     idAgente: '',
                     eInternacional: false,
                 },
+                arquivo: {
+                    nome: '',
+                    file: ''
+                },
                 item: this.item,
                 idPlanilhaAprovacao: this.idplanilhaaprovacao,
                 tipo: 1,
@@ -306,10 +311,10 @@ Vue.component('sl-comprovante-nacional-form',
                 valor: 0,
                 valorAntigo: this.valorantigo,
                 valorPermitido: (parseFloat(this.valoraprovado) - parseFloat(this.valorcomprovado)),
-                arquivo: '',
                 justificativa: '',
                 foiAtualizado: false,
-                _index: this.index
+                _index: this.index,
+                status: this.status
             },
             pais: '',
             c: {
@@ -350,7 +355,7 @@ Vue.component('sl-comprovante-nacional-form',
                 let formData = new FormData();
 
                 if (this.comprovante.foiAtualizado) {
-                    formData.append('arquivo', this.comprovante.arquivo);
+                    formData.append('arquivo', this.comprovante.arquivo.file);
                 }
 
                 formData.append('comprovante', JSON.stringify(this.comprovante));
@@ -367,6 +372,9 @@ Vue.component('sl-comprovante-nacional-form',
                     $3('#modal1').modal('close');
 
                     if (vue.tipoform == 'cadastro') {
+                        
+                       vue.comprovante._index = data.idComprovantePagamento;
+                       vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
                        vue.$root.$emit('novo-comprovante-nacional', vue.comprovante);
 
                        vue.c = {
@@ -406,6 +414,7 @@ Vue.component('sl-comprovante-nacional-form',
                                 idAgente: '',
                                 eInternacional: false,
                             },
+                            idPlanilhaAprovacao: vue.idplanilhaaprovacao,
                             item: vue.item,
                             tipo: 1,
                             numero: '',
@@ -415,7 +424,10 @@ Vue.component('sl-comprovante-nacional-form',
                             forma: 1,
                             numeroDocumento: '',
                             valor: '',
-                            arquivo: '',
+                            arquivo: {
+                                nome:'',
+                                file: ''
+                            },
                             justificativa: '',
                             foiAtualizado: false,
                         }
@@ -485,7 +497,7 @@ Vue.component('sl-comprovante-nacional-form',
             }
 
 
-            if(!this.comprovante.arquivo) {
+            if(!this.comprovante.arquivo.file && this.tipoform == 'cadastro') {
                 this.$refs.arquivo.focus();
                 this.c.arquivo.css = 'active red';
                 return false;
@@ -514,7 +526,7 @@ Vue.component('sl-comprovante-nacional-form',
                 this.$refs.valor.focus();
                 this.c.valor.css = 'active invalid red-text';
                 alert(
-                    'Valor acima do permitido:' + this.comprovante.valor 
+                    'Valor acima do permitido:' + this.comprovante.valor
                     + ', maximo a ser acrescentado e: ' + valorPermitido
                 );
 
@@ -523,7 +535,8 @@ Vue.component('sl-comprovante-nacional-form',
             return result;
         },
         file: function() {
-            this.comprovante.arquivo = this.$refs.arquivo.files[0];
+            this.comprovante.arquivo.file = this.$refs.arquivo.files[0];
+            this.comprovante.arquivo.nome = this.comprovante.arquivo.file.name;
             this.comprovante.foiAtualizado = true;
             this.c.arquivo.css = '';
         },
@@ -641,6 +654,10 @@ Vue.component('sl-comprovante-nacional-form',
                         idAgente: '',
                         eInternacional: false,
                     },
+                    arquivo: {
+                        file:true,
+                        nome:''
+                    },
                     item: this.item,
                     idPlanilhaAprovacao: this.idplanilhaaprovacao,
                     tipo: 1,
@@ -653,7 +670,6 @@ Vue.component('sl-comprovante-nacional-form',
                     valor: 0,
                     valorAntigo: this.valorantigo,
                     valorPermitido: (parseFloat(this.valoraprovado) - parseFloat(this.valorcomprovado)),
-                    arquivo: '',
                     justificativa: '',
                     foiAtualizado: false,
                     _index: this.index

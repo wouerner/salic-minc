@@ -78,14 +78,14 @@ const comprovanteTable = {
             forma = '';
             switch(parseInt(this.dados.forma)) {
                 case 1: forma = 'Cheque'; break;
-                case 2: forma = 'Transferência Bancária'; break;
+                case 2: forma = 'Transfer\xeancia Banc\xe1ria'; break;
                 case 3: forma = 'Saque/Dinheiro'; break;
             }
 
             return forma;
         },
         valorFormatado() {
-           return  this.dados.valor;
+           return  numeral(parseFloat(this.dados.valor)).format('0,0.00');
         },
         nomeArquivo() {
            return  this.dados.arquivo.nome;

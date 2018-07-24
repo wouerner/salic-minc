@@ -1,13 +1,21 @@
 Vue.component('comprovantes', {
     template: `
         <div>
-            <template v-if="dados.length > 0 ">
-            <ul class="collapsible" data-collapsible="accordion">
-                <li v-for="(dado, index) in dados">
+            <template v-if="dados.length > 0 || Object.keys(dados).length > 0 ">
+              <transition-group  
+                tag="ul" 
+                class="collapsible" 
+                name="list" 
+                data-collapsible="accordion" 
+                enter-active-class="animated tada"
+                leave-active-class="animated bounceOutRight"
+              >
+                <li 
+                    v-for="dado in dados" 
+                    :key="dado.idComprovantePagamento">
                   <div class="collapsible-header">
                         Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
-                        <span :class="['badge white-text', badgeCSS(dado.stItemAvaliado)]">
-                            {{situacao(dado.stItemAvaliado)}}
+                        <span :class="['badge white-text ', badgeStatus(dado.status)]">
                         </span>
                   </div>
                   <div :class="['collapsible-body lighten-5', badgeCSS(dado.stItemAvaliado)]">
@@ -25,13 +33,13 @@ Vue.component('comprovantes', {
                                 <div class="center-align">
                                     <button v-if="!formVisivel" v-on:click="mostrarForm()" class="btn ">editar</button>
                                     <button v-if="!formVisivel" type="button" class="btn red white-text center-align"
-                                        @click.prevent="excluir(dado.idComprovantePagamento, dado.idArquivo, index)">excluir</button>
+                                        @click.prevent="excluir(dado.idComprovantePagamento, dado.idArquivo, dado.idComprovantePagamento)">excluir</button>
                                 </div>
                                 <template v-if="formVisivel">
                                     <component
                                         :is="componenteform"
                                         :dados="dado"
-                                        :index="index"
+                                        :index="dado.idComprovantePagamento"
                                         url="/prestacao-contas/gerenciar/atualizar"
                                         tipoform="edicao"
                                         :item="idplanilhaitem"
@@ -40,6 +48,7 @@ Vue.component('comprovantes', {
                                         :valoraprovado="valoraprovado"
                                         :valorcomprovado="valorComprovado"
                                         :valorantigo="dado.valor"
+                                        :status="edicao"
                                     >
                                     </component>
                                 </template>
@@ -47,7 +56,7 @@ Vue.component('comprovantes', {
                         </div>
                   </div>
                 </li>
-            </ul>
+              </transition-group>
             </template>
             <template v-else>
                 <p> Sem comprovantes</p>
@@ -78,7 +87,9 @@ Vue.component('comprovantes', {
         let vue = this;
         this.$root.$on('novo-comprovante-nacional', function(data) {
             if(vue.tipo =='nacional'){
-                vue.$data.dados.push(data);
+                data.status='novo';
+                // vue.$data.dados.push(data);
+                Vue.set(vue.$data.dados, data._index, data);
                 vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
             }
         })
@@ -86,6 +97,7 @@ Vue.component('comprovantes', {
         this.$root.$on('atualizado-comprovante-nacional', function(data) {
             vue.formVisivel = false;
             if(vue.tipo =='nacional'){
+                data.status='atualizado';
                 Vue.set(vue.$data.dados, data._index, data);
                 vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
             }
@@ -93,6 +105,7 @@ Vue.component('comprovantes', {
 
         this.$root.$on('novo-comprovante-internacional', function(data) {
             if(vue.tipo =='internacional'){
+                data.status='novo';
                 vue.$data.dados.push(data);
                 vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
             }
@@ -100,6 +113,7 @@ Vue.component('comprovantes', {
 
         this.$root.$on('atualizado-comprovante-internacional', function(data) {
             if(vue.tipo =='internacional'){
+                data.status='atualizado';
                 vue.formVisivel = false;
                 Vue.set(vue.$data.dados, data._index, data);
             }
@@ -122,10 +136,11 @@ Vue.component('comprovantes', {
           }
         })
         .done(function(data) {
+            console.log(data.data);
             vue.$data.dados = data.data;
-                $3('.collapsible').each(function() {
-                    $3(this).collapsible();
-                });
+            $3('.collapsible').each(function() {
+                $3(this).collapsible();
+            });
         })
         .fail(function(jqXHR) {
             alert('error');
@@ -169,6 +184,19 @@ Vue.component('comprovantes', {
                     estado =  'N\xE3o avaliado';
             }
             return estado;
+        },
+        badgeStatus: function(id) {
+            if (id == 'novo') {
+                return {
+                    ' green accent-2': true,
+                }
+            }
+
+            if (id == 'atualizado') {
+                return {
+                    'blue': true,
+                }
+            }
         },
         mostrarForm: function() {
             this.formVisivel = true;
