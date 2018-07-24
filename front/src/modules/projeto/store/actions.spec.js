@@ -13,8 +13,8 @@ describe('Projeto actions', () => {
           data: {
             projeto: {
               IdPRONAC: '132451',
-              Item: 'Hospedagem sem Alimentação',
-              NomeProjeto: 'Criança Para Vida - 15 anos',
+              Item: 'Hospedagem sem Alimentaï¿½ï¿½o',
+              NomeProjeto: 'Crianï¿½a Para Vida - 15 anos',
             },
           },
         },

@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import Carregando from "@/components/Carregando";
-import Planilha from "@/components/Planilha/Planilha";
-import { mapGetters } from "vuex";
+import Carregando from '@/components/Carregando';
+import Planilha from '@/components/Planilha/Planilha';
+import { mapGetters } from 'vuex';
 
 export default {
   /* eslint-disable */  
