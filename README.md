@@ -49,4 +49,4 @@ Para parar o container basta digitar:
 ## Autores
 Várias pessoas colaboraram com o desenvimento do projeto SALIC e decidimos centralizar em um único local todos os que participaram com o desenvolvimento do projeto.
   
-Clique [aqui](doc/Autores.md) para visualizar.
+Clique [aqui](https://github.com/culturagovbr/salic-minc/graphs/contributors) para visualizar.
