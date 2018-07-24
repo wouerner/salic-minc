@@ -430,7 +430,7 @@
                             </b>
                         </td>
                     </tr>
-                    <tr v-else> <!--@todo pensar melhor essa parte para não duplicar o código -->
+                    <tr v-else> <!--@todo pensar melhor essa parte para nï¿½o duplicar o cï¿½digo -->
                         <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlHomologadoIncentivo"/>
                         </b></td>
@@ -637,60 +637,60 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
-    import Carregando from '@/components/Carregando';
-    import SalicTextoSimples from '@/components/SalicTextoSimples';
-    import SalicFormatarValor from '@/components/SalicFormatarValor';
-    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
-    import {utils} from '@/mixins/utils';
-    import moment from 'moment';
+import { mapActions, mapGetters } from 'vuex';
+import Carregando from '@/components/Carregando';
+import SalicTextoSimples from '@/components/SalicTextoSimples';
+import SalicFormatarValor from '@/components/SalicFormatarValor';
+import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
+import { utils } from '@/mixins/utils';
+import moment from 'moment';
 
-    export default {
-        data: function () {
-            return {
-                loading: true,
-                idPronac: this.$route.params.idPronac,
-                ProponenteInabilitado: false,
-                emAnaliseNaCNIC: false
-            }
-        },
-        mixins: [utils],
-        components: {
-            Carregando,
-            SalicTextoSimples,
-            SalicFormatarValor,
-            SalicFormatarCpfCnpj
-        },
-        created() {
-            if (Object.keys(this.dadosProjeto).length > 0) {
-                this.loading = false;
-            }
-        },
-        watch: {
-            dadosProjeto: function (value) {
-                if (Object.keys(value).length > 0) {
-                    this.loading = false;
-                    this.idPronac = this.dadosProjeto.idPronac
-                }
-            }
-        },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-            }),
-        },
-        methods: {
-            isDataExpirada: function (date) {
-                return moment().diff(date, 'days') > 0;
-            }
-        },
-        filters: {
-            formatarData: function (date) {
-                if (date.length == 0) {
-                    return '-';
-                }
-                return moment(date).format('DD/MM/YYYY');
-            }
-        }
+export default {
+  data() {
+    return {
+      loading: true,
+      idPronac: this.$route.params.idPronac,
+      ProponenteInabilitado: false,
+      emAnaliseNaCNIC: false
     };
+  },
+  mixins: [utils],
+  components: {
+    Carregando,
+    SalicTextoSimples,
+    SalicFormatarValor,
+    SalicFormatarCpfCnpj
+  },
+  created() {
+    if (Object.keys(this.dadosProjeto).length > 0) {
+      this.loading = false;
+    }
+  },
+  watch: {
+    dadosProjeto(value) {
+      if (Object.keys(value).length > 0) {
+        this.loading = false;
+        this.idPronac = this.dadosProjeto.idPronac;
+      }
+    },
+  },
+  computed: {
+    ...mapGetters({
+      dadosProjeto: 'projeto/projeto',
+    }),
+  },
+  methods: {
+    isDataExpirada(date) {
+      return moment().diff(date, 'days') > 0;
+    },
+  },
+  filters: {
+    formatarData(date) {
+      if (date.length === 0) {
+        return '-';
+      }
+      return moment(date).format('DD/MM/YYYY');
+    },
+  },
+};
 </script>

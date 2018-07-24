@@ -50,131 +50,149 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
-    import 'numeral/locales';
-    import moment from 'moment'
-    import PlanilhaItensPadrao from '@/components/Planilha/PlanilhaItensPadrao'
-    import PlanilhaItensCurtos from '@/components/Planilha/PlanilhaItensCurtos'
-    import PlanilhaItensAutorizados from '@/components/Planilha/PlanilhaItensAutorizados'
-    import PlanilhaItensAprovados from '@/components/Planilha/PlanilhaItensAprovados'
-    import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados'
-    import PlanilhaItensReadequados from '@/components/Planilha/PlanilhaItensReadequados'
+import numeral from 'numeral';
+import 'numeral/locales';
+import moment from 'moment';
+import PlanilhaItensPadrao from '@/components/Planilha/PlanilhaItensPadrao';
+import PlanilhaItensCurtos from '@/components/Planilha/PlanilhaItensCurtos';
+import PlanilhaItensAutorizados from '@/components/Planilha/PlanilhaItensAutorizados';
+import PlanilhaItensAprovados from '@/components/Planilha/PlanilhaItensAprovados';
+import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados';
+import PlanilhaItensReadequados from '@/components/Planilha/PlanilhaItensReadequados';
 
-    export default {
-        name: 'Planilha',
-        data: function () {
-            return {
-                planilha: []
-            }
-        },
-        components: {
-            PlanilhaItensPadrao,
-            PlanilhaItensCurtos,
-            PlanilhaItensAprovados,
-            PlanilhaItensAutorizados,
-            PlanilhaItensHomologados,
-            PlanilhaItensReadequados
-        },
-        props: {
-            'arrayPlanilha':  {},
-            'componenteTabelaItens': {
-                default: 'PlanilhaItensPadrao',
-                type: String
-            },
-        },
-        mounted: function () {
-            if (typeof this.arrayPlanilha !== 'undefined') {
-                this.planilha = this.arrayPlanilha;
-            }
+export default {
+  /* eslint-disable */
+  name: 'Planilha',
+  data: function() {
+    return {
+      planilha: []
+    };
+  },
+  components: {
+    PlanilhaItensPadrao,
+    PlanilhaItensCurtos,
+    PlanilhaItensAprovados,
+    PlanilhaItensAutorizados,
+    PlanilhaItensHomologados,
+    PlanilhaItensReadequados
+  },
+  props: {
+    arrayPlanilha: {},
+    componenteTabelaItens: {
+      default: 'PlanilhaItensPadrao',
+      type: String
+    }
+  },
+  mounted() {
+    if (typeof this.arrayPlanilha !== 'undefined') {
+      this.planilha = this.arrayPlanilha;
+    }
 
-            numeral.locale('pt-br');
-            numeral.defaultFormat('0,0.00');
-        },
-        computed: {
-            planilhaCompleta: function () {
+    numeral.locale('pt-br');
+    numeral.defaultFormat('0,0.00');
+  },
+  computed: {
+    planilhaCompleta() {
+      if (!this.planilha) {
+        return 0;
+      }
 
-                if (!this.planilha) {
-                    return 0;
+      let novaPlanilha = {},
+        totalProjeto = 0,
+        totalFonte = 0,
+        totalProduto = 0,
+        totalEtapa = 0,
+        totalLocal = 0;
+
+      novaPlanilha = this.planilha;
+      Object.entries(this.planilha).forEach(([fonte, produtos]) => {
+        totalFonte = 0;
+        Object.entries(produtos).forEach(([produto, etapas]) => {
+          totalProduto = 0;
+          Object.entries(etapas).forEach(([etapa, locais]) => {
+            totalEtapa = 0;
+            Object.entries(locais).forEach(([local, itens]) => {
+              totalLocal = 0;
+              Object.entries(itens).forEach(([column, cell]) => {
+                if (cell.tpAcao && cell.tpAcao === 'E') {
+                  return;
                 }
 
-                let novaPlanilha = {}, totalProjeto = 0, totalFonte = 0, totalProduto = 0, totalEtapa = 0,
-                    totalLocal = 0;
+                // planilha homologada e readequada o valor total ï¿½ a soma do vlAprovado
+                if (cell.vlAprovado || cell.vlAprovado >= 0) {
+                  totalLocal += cell.vlAprovado;
+                } else {
+                  totalLocal += cell.vlSolicitado;
+                }
+              });
+              this.$set(
+                this.planilha[fonte][produto][etapa][local],
+                "total",
+                numeral(totalLocal).format('0,0.00')
+              );
+              totalEtapa += totalLocal;
+            });
+            this.$set(
+              this.planilha[fonte][produto][etapa],
+              "total",
+              numeral(totalEtapa).format('0,0.00')
+            );
+            totalProduto += totalEtapa;
+          });
+          this.$set(
+            this.planilha[fonte][produto],
+            'total',
+            numeral(totalProduto).format('0,0.00')
+          );
+          totalFonte += totalProduto;
+        });
+        this.$set(
+          this.planilha[fonte],
+          "total",
+          numeral(totalFonte).format('0,0.00')
+        );
+        totalProjeto += totalFonte;
+      });
+      this.$set(novaPlanilha, 'total', numeral(totalProjeto).format('0,0.00'));
 
-                novaPlanilha = this.planilha;
-                Object.entries(this.planilha).forEach(([fonte, produtos]) => {
-                    totalFonte = 0;
-                    Object.entries(produtos).forEach(([produto, etapas]) => {
-                        totalProduto = 0;
-                        Object.entries(etapas).forEach(([etapa, locais]) => {
-                            totalEtapa = 0;
-                            Object.entries(locais).forEach(([local, itens]) => {
-                                totalLocal = 0;
-                                Object.entries(itens).forEach(([column, cell]) => {
+      return novaPlanilha;
+    }
+  },
+  watch: {
+    arrayPlanilha(value) {
+      this.planilha = value;
+      this.iniciarCollapsible();
+    }
+  },
+  methods: {
+    formatar_data(date) {
+      date = moment(date).format('DD/MM/YYYY');
 
-                                    if(cell.tpAcao && cell.tpAcao == 'E') {
-                                        return;
-                                    }
-
-                                    // planilha homologada e readequada o valor total é a soma do vlAprovado
-                                    if(cell.vlAprovado || cell.vlAprovado >= 0) {
-                                        totalLocal += cell.vlAprovado;
-                                    } else {
-                                        totalLocal += cell.vlSolicitado;
-                                    }
-                                });
-                                this.$set(this.planilha[fonte][produto][etapa][local], 'total', numeral(totalLocal).format('0,0.00'));
-                                totalEtapa += totalLocal;
-                            });
-                            this.$set(this.planilha[fonte][produto][etapa], 'total', numeral(totalEtapa).format('0,0.00'));
-                            totalProduto += totalEtapa;
-                        });
-                        this.$set(this.planilha[fonte][produto], 'total', numeral(totalProduto).format('0,0.00'));
-                        totalFonte += totalProduto;
-                    });
-                    this.$set(this.planilha[fonte], 'total', numeral(totalFonte).format('0,0.00'));
-                    totalProjeto += totalFonte;
-                });
-                this.$set(novaPlanilha, 'total', numeral(totalProjeto).format('0,0.00'));
-
-                return novaPlanilha;
-            }
-        },
-        watch: {
-            arrayPlanilha: function (value) {
-                this.planilha = value;
-                this.iniciarCollapsible();
-            }
-        },
-        methods: {
-            formatar_data: function (date) {
-
-                date = moment(date).format('DD/MM/YYYY');
-
-                return date;
-            },
-            isObject: function (el) {
-
-                return typeof el === "object";
-
-            },
-            iniciarCollapsible: function () {
-                $3('.planilha-orcamentaria .collapsible').each(function () {
-                    $3(this).collapsible();
-                });
-            },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                    .replace(/&/g, '-and-')
-                    .replace(/[\s\W-]+/g, '-');
-            },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
-    };
+      return date;
+    },
+    isObject(el) {
+      return typeof el === 'object';
+    },
+    iniciarCollapsible() {
+      $3(".planilha-orcamentaria .collapsible").each(function() {
+        $3(this).collapsible();
+      });
+    },
+    converterStringParaClasseCss(text) {
+      return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, '-and-')
+        .replace(/[\s\W-]+/g, '-');
+    },
+    ultrapassaValor(row) {
+      return row.stCustoPraticado === true;
+    },
+    converterParaReal(value) {
+      value = parseFloat(value);
+      return numeral(value).format('0,0.00');
+    },
+  },
+};
 </script>

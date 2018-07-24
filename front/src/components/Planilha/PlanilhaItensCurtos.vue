@@ -42,41 +42,41 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
-    import SalicFormatarValor from '@/components/SalicFormatarValor';
+import numeral from "numeral";
+import SalicFormatarValor from "@/components/SalicFormatarValor";
 
-    export default {
-        name: 'PlanilhaListaDeItensCurta',
-        data: function () {
-            return {
-                planilha: []
-            }
-        },
-        props: {
-            'table': {}
-        },
-        components: {
-            SalicFormatarValor
-        },
-        methods: {
-            isObject: function (el) {
-
-                return typeof el === "object";
-
-            },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                    .replace(/&/g, '-and-')
-                    .replace(/[\s\W-]+/g, '-');
-            },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
+export default {
+  name: "PlanilhaListaDeItensCurta",
+  data() {
+    return {
+      planilha: []
     };
+  },
+  props: {
+    table: {}
+  },
+  components: {
+    SalicFormatarValor
+  },
+  methods: {
+    isObject(el) {
+      return typeof el === "object";
+    },
+    converterStringParaClasseCss(text) {
+      return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, "-and-")
+        .replace(/[\s\W-]+/g, "-");
+    },
+    ultrapassaValor(row) {
+      return row.stCustoPraticado == true;
+    },
+    converterParaReal(value) {
+      value = parseFloat(value);
+      return numeral(value).format('0,0.00');
+    },
+  },
+};
 </script>

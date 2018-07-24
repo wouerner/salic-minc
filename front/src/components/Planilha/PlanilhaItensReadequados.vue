@@ -53,78 +53,83 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
-    import 'numeral/locales';
+import numeral from 'numeral';
+import 'numeral/locales';
 
-    import SalicFormatarValor from '@/components/SalicFormatarValor';
+import SalicFormatarValor from '@/components/SalicFormatarValor';
 
-    export default {
-        name: 'PlanilhaListaDeItensReadequados',
-        data: function () {
-            return {
-                planilha: []
-            }
-        },
-        props: {
-            'table': {}
-        },
-        components: {
-            SalicFormatarValor
-        },
-        created: function () {
-            numeral.locale('pt-br');
-            numeral.defaultFormat('0,0.00');
-        },
-        computed: {
-            vlComprovadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if (typeof cell.VlComprovado != 'undefined') {
-                        if (cell.tpAcao && cell.tpAcao == 'E') {
-                            return;
-                        }
-                        soma.add(parseFloat(cell.VlComprovado));
-                    }
-                });
-                return soma.format();
-            },
-            vlAprovadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if (typeof cell.vlAprovado != 'undefined') {
-                        if (cell.tpAcao && cell.tpAcao == 'E') {
-                            return;
-                        }
-                        soma.add(parseFloat(cell.vlAprovado));
-                    }
-                });
-                return soma.format();
-            }
-        },
-        methods: {
-            isObject: function (el) {
-                return typeof el === "object";
-            },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                        .replace(/&/g, '-and-')
-                        .replace(/[\s\W-]+/g, '-');
-            },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            },
-            definirClasseItem: function (row) {
-                return {
-                    'orange lighten-2': row.stCustoPraticado == true,
-                    'linha-incluida': row.tpAcao == 'I',
-                    'linha-excluida': row.tpAcao == 'E',
-                    'linha-atualizada': row.tpAcao == 'A',
-                }
-            }
-        }
+export default {
+  name: 'PlanilhaListaDeItensReadequados',
+  data() {
+    return {
+      planilha: [],
     };
+  },
+  props: {
+    table: {},
+  },
+  components: {
+    SalicFormatarValor,
+  },
+  created() {
+    numeral.locale('pt-br');
+    numeral.defaultFormat('0,0.00');
+  },
+  computed: {
+    vlComprovadoTotal() {
+      const soma = numeral();
+      // eslint-disable-next-line
+      Object.entries(this.table).forEach(([column, cell]) => {
+        if (typeof cell.VlComprovado !== 'undefined') {
+          if (cell.tpAcao && cell.tpAcao === 'E') {
+            return;
+          }
+          soma.add(parseFloat(cell.VlComprovado));
+        }
+      });
+      return soma.format();
+    },
+    vlAprovadoTotal() {
+      const soma = numeral();
+      // eslint-disable-next-line
+      Object.entries(this.table).forEach(([column, cell]) => {
+        if (typeof cell.vlAprovado !== 'undefined') {
+          if (cell.tpAcao && cell.tpAcao === 'E') {
+            return;
+          }
+          soma.add(parseFloat(cell.vlAprovado));
+        }
+      });
+      return soma.format();
+    },
+  },
+  methods: {
+    isObject(el) {
+      return typeof el === 'object';
+    },
+    converterStringParaClasseCss(text) {
+      return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, '-and-')
+        .replace(/[\s\W-]+/g, '-');
+    },
+    ultrapassaValor(row) {
+      return row.stCustoPraticado === true;
+    },
+    converterParaReal(value) {
+      value = parseFloat(value);
+      return numeral(value).format('0,0.00');
+    },
+    definirClasseItem(row) {
+      return {
+        'orange lighten-2': row.stCustoPraticado === true,
+        'linha-incluida': row.tpAcao === 'I',
+        'linha-excluida': row.tpAcao === 'E',
+        'linha-atualizada': row.tpAcao === 'A',
+      };
+    },
+  },
+};
 </script>

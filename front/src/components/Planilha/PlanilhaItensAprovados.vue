@@ -42,38 +42,35 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
+import numeral from 'numeral';
 
-    export default {
-        name: 'PlanilhaListaDeItensAprovados',
-        data: function () {
-            return {
-                planilha: []
-            }
-        },
-        props: [
-            'table',
-            'full'
-        ],
-        methods: {
-            isObject: function (el) {
-
-                return typeof el === "object";
-
-            },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                    .replace(/&/g, '-and-')
-                    .replace(/[\s\W-]+/g, '-');
-            },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
+export default {
+  name: 'PlanilhaListaDeItensAprovados',
+  data() {
+    return {
+      planilha: []
     };
+  },
+  props: ['table', 'full'],
+  methods: {
+    isObject(el) {
+      return typeof el === 'object';
+    },
+    converterStringParaClasseCss(text) {
+      return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, '-and-')
+        .replace(/[\s\W-]+/g, '-');
+    },
+    ultrapassaValor(row) {
+      return row.stCustoPraticado == true;
+    },
+    converterParaReal(value) {
+      value = parseFloat(value);
+      return numeral(value).format('0,0.00');
+    },
+  },
+};
 </script>

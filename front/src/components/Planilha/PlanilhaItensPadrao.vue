@@ -47,55 +47,57 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
-    import 'numeral/locales';
-    import SalicFormatarValor from '@/components/SalicFormatarValor';
+import numeral from "numeral";
+import "numeral/locales";
+import SalicFormatarValor from "@/components/SalicFormatarValor";
 
-    export default {
-        name: 'PlanilhaListaDeItensPadrao',
-        data: function () {
-            return {
-                planilha: []
-            }
-        },
-        props: {
-            'table': {}
-        },
-        components: {
-            SalicFormatarValor
-        },
-        created: function() {
-            numeral.locale('pt-br');
-            numeral.defaultFormat('0,0.00');
-        },
-        computed: {
-            vlSolicitadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if(typeof cell.vlSolicitado != 'undefined') {
-                        soma.add(parseFloat(cell.vlSolicitado));
-                    }
-                });
-                return soma.format();
-            }
-        },
-        methods: {
-            isObject: function (el) {
-                return typeof el === "object";
-            },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                        .replace(/&/g, '-and-')
-                        .replace(/[\s\W-]+/g, '-');
-            },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
+export default {
+  name: "PlanilhaListaDeItensPadrao",
+  data() {
+    return {
+      planilha: []
     };
+  },
+  props: {
+    table: {}
+  },
+  components: {
+    SalicFormatarValor
+  },
+  created() {
+    numeral.locale("pt-br");
+    numeral.defaultFormat("0,0.00");
+  },
+  computed: {
+    vlSolicitadoTotal() {
+      var soma = numeral();
+      Object.entries(this.table).forEach(([column, cell]) => {
+        if (typeof cell.vlSolicitado != "undefined") {
+          soma.add(parseFloat(cell.vlSolicitado));
+        }
+      });
+      return soma.format();
+    }
+  },
+  methods: {
+    isObject(el) {
+      return typeof el === "object";
+    },
+    converterStringParaClasseCss(text) {
+      return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, "-and-")
+        .replace(/[\s\W-]+/g, "-");
+    },
+    ultrapassaValor(row) {
+      return row.stCustoPraticado == true;
+    },
+    converterParaReal(value) {
+      value = parseFloat(value);
+      return numeral(value).format('0,0.00');
+    },
+  },
+};
 </script>
