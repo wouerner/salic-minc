@@ -14,7 +14,7 @@
                     <p class="info-title" v-html="menu.informacoes.descricao"></p>
                 </div>
             </li>
-            <li v-for="(item, index) in menu" v-if="index != 'informacoes'"
+            <li v-for="(item, index) in menu" :key="index" v-if="index != 'informacoes'"
                 :class="[item.submenu ? 'no-padding' : 'bold']">
                 <ul v-if="item.submenu" class="collapsible collapsible-accordion">
                     <li class="bold">
@@ -28,7 +28,7 @@
                         </a>
                         <div class="collapsible-body">
                             <ul>
-                                <li v-for="subitem in item.submenu">
+                                <li v-for="(subitem, index) in item.submenu" :key="index">
                                     <a class="waves-effect waves-cyan"
                                        href="javascript:void(0)"
                                        v-on:click="carregarDados(subitem)"
@@ -84,17 +84,17 @@ export default {
     this.adicionarBotaoNoTopo();
   },
   mounted() {
-    if (typeof this.urlAjax != "undefined" && this.urlAjax != "") {
+    if (typeof this.urlAjax !== 'undefined' && this.urlAjax !== '') {
       this.obterMenu();
     }
 
-    if (typeof this.arrayMenu != "undefined" && this.arrayMenu != "") {
+    if (typeof this.arrayMenu !== 'undefined' && this.arrayMenu !== '') {
       this.menu = this.arrayMenu;
     }
   },
   watch: {
     urlAjax(value) {
-      if (typeof value != "undefined" && value != "") {
+      if (typeof value !== 'undefined' && value !== '') {
         this.obterMenu();
       }
     }

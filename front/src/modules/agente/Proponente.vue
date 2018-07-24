@@ -40,7 +40,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="endereco in proponente.enderecos">
+                        <tr v-for="(endereco, index) in proponente.enderecos" :key="index">
                             <td>{{ endereco.tipoendereco }}</td>
                             <td>{{ endereco.dstipologradouro }}</td>
                             <td>{{ endereco.logradouro }}</td>
@@ -94,7 +94,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="email in proponente.emails">
+                        <tr v-for="(email, index) in proponente.emails" :key="index">
                             <td nowrap>{{ email.tipo }}</td>
                             <td nowrap>{{ email.descricao }}</td>
                             <td>{{ label_sim_ou_nao(email.divulgar) }}</td>
@@ -142,7 +142,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="dirigente in proponente.dirigentes">
+                        <tr v-for="(dirigente, index) in proponente.dirigentes" :key="index">
                             <td align="center">
                                 <SalicFormatarCpfCnpj :cpf="dirigente.cnpjcpfdirigente"/>
                             </td>
