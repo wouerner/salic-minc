@@ -150,9 +150,7 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
 
     public function atualizar()
     {
-        /* $this->validarCadastrar(); */
-
-        $arquivoTamanho = $_FILES['arquivo']['size']; // tamanho
+        $arquivoTamanho = $_FILES['arquivo']['size'];
 
         if ($arquivoTamanho) {
             $arquivoId = $this->upload();
@@ -195,7 +193,6 @@ final class PrestacaoContas_Model_ComprovantePagamento extends MinC_Db_Table_Abs
                 'idFornecedorExterior' => $fornecedorInternacional->id,
             ];
         }
-        /* var_dump($dados);die; */
 
         /* $this->comprovarPlanilhaCadastrar(); */
         $result = $this->update(

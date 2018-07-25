@@ -106,7 +106,8 @@ Vue.component('comprovantes', {
         this.$root.$on('novo-comprovante-internacional', function(data) {
             if(vue.tipo =='internacional'){
                 data.status='novo';
-                vue.$data.dados.push(data);
+                // vue.$data.dados.push(data);
+                Vue.set(vue.$data.dados, data._index, data);
                 vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
             }
         })
