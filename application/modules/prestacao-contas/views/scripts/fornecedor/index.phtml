@@ -23,12 +23,10 @@
 
             <div class="row">
                 <label>
-                    <input class="with-gap" name="group1" type="radio" id="test1" value="1" v-model="TipoPessoa"/>
-                    <label for="test1">CPF</label>
-                </label>
-                <label>
-                    <input class="with-gap" name="group1" type="radio" id="test2"  value="2" v-model="TipoPessoa">
-                    <label for="test2">CNPJ</label>
+                    <input class="with-gap" type="radio" id="cpf" value="1" v-model="TipoPessoa"/>
+                    <label for="cpf">CPF</label>
+                    <input class="with-gap" type="radio" id="cnpj"  value="2" v-model="TipoPessoa">
+                    <label for="cnpj">CNPJ</label>
                 </label>
             </div>
 
@@ -58,7 +56,17 @@
 
             <div class="row">
                 <div class="input-field col s3">
-                    <input type="text" id="first_name" class="validate" v-model="CEP">
+                    <input type="text"
+                           name="cep"
+                           id="cep"
+                           class="validate"
+                           :value="CEPmask"
+                           maxlength="8"
+                           v-on:keyup="cepMask(CEP)"
+                           v-on:blur="buscarcep(CEPmask)"
+                           v-on:input="inputCEP($event.target.value)">
+                        <span id="erroCep" class="spanError"></span>
+
                     <label for="first_name">CEP *</label>
                 </div>
                 <div class="col s3">
@@ -72,7 +80,7 @@
 
             <div class="row">
                 <div class="input-field col s12">
-                    <input type="text" id="last_name" class="validate" v-model="Logradouro">
+                    <input type="text" id="logradouro" name="logradouro" class="validate" v-model.lazy="Logradouro">
                     <label for="last_name">Logradouro *</label>
                 </div>
             </div>
@@ -118,11 +126,11 @@
                 <div class="col s3">
                     <label>Autoriza Divulgar?</label>
                     <div class="align-bottom">
-                        <input class="with-gap" name="group1" type="radio" id="test4" value="4" v-model="Autorizar" />
-                        <label for="test4">Sim</label>
+                        <input class="with-gap" type="radio" id="sim" value="1" v-model="Autorizar" />
+                        <label for="sim">Sim</label>
 
-                        <input class="with-gap" name="group1" type="radio" id="test5" value="5" v-model="Autorizar"/>
-                        <label for="test5">Não</label>
+                        <input class="with-gap" type="radio" id="nao" value="0" v-model="Autorizar"/>
+                        <label for="nao">Não</label>
                     </div>
                 </div>
             </div>
@@ -139,6 +147,7 @@
                Nome: "",
                Fornecedor: "",
                CEP: "",
+               CEPmask: "",
                Tipo: "",
                Logradouro: "",
                Numero: "",
@@ -157,7 +166,7 @@
 
         },
         mounted: function () {
-            var vue = this;
+           var vue = this;
 
            let url = ['/prestacao-contas/fornecedor/uf',
                       '/prestacao-contas/fornecedor/fornecedores-tipo',
@@ -167,32 +176,31 @@
             $3.ajax({
                 type: "GET",
                 url: url[0],
-        })
-        .done(function (data) {
-            vue.UFs = data;
-        })
-        .fail(function (jqXHR) {
-            alert('error');
-        });
+            })
+            .done((data) => vue.UFs = data)
+            .fail((jqXHR) => alert('error'));
+
             $3.ajax({
                 type: "GET",
                 url: url[1],
             })
-                .done((fornecedor) => vue.Fornecedores = fornecedor)
-                .fail((jqXHR) => alert('error'));
+            .done((fornecedor) => vue.Fornecedores = fornecedor)
+            .fail((jqXHR) => alert('error'));
+
             $3.ajax({
                 type: "GET" ,
                 url: url[2]
             })
-                .done((logradouro) => vue.TiposLogradouros = logradouro)
-                .fail((jqXHR) => alert('error'))
+            .done((logradouro) => vue.TiposLogradouros = logradouro)
+            .fail((jqXHR) => alert('error'));
+
             $3.ajax({
                 type: "GET" ,
                 url: url[3]
             })
-                .done((endereco) => vue.TiposEnderecos = endereco)
-                .fail((jqXHR) => alert('error'))
-    },
+            .done((endereco) => vue.TiposEnderecos = endereco)
+            .fail((jqXHR) => alert('error'));
+        },
         methods:
             {
                combo:function () {
@@ -204,6 +212,69 @@
                 })
                  .done( (cidade) => vue.Cidades = cidade )
                 },
+
+                cepMask: function(){
+                        return this.CEP.replace(/(\d{2})(\d{3})(\d{2})/,"$1.$2-$3")
+                },
+
+                inputCEP: function(e) {
+                        if (e.length == 8) {
+                            this.CEP = e;
+                            this.CEPmask = this.cepMask();
+                        } else {
+                            this.CEP = '';
+                        }
+                },
+
+                buscarcep(cep) {
+
+                   let vue = this;
+
+                    var elmLogradouro = $3("#logradouro");
+                    var elmTipoLogradouro = $3("#tipoLogradouro");
+                    var elmBairro = $3("#bairro");
+                    var elmCidade = $3("#cidade");
+                    var elmUF = $3("#uf");
+
+                    if (cep.length != 10) {
+                        $3('#erroCep').html("CEP inv&aacute;lido");
+                        limparEndereco();
+                        return false;
+                    }
+
+                    $3.ajax({
+                        url: "<?= $this->url(array('module' => 'default', 'controller' => 'cep', 'action' => 'cep-ajax')); ?>",
+                        data: {
+                            cep: cep
+                        }
+                    }).done(function (result) {
+                        
+                        if (result.status === true) {
+                            console.info(result);
+
+                            vue.Logradouro = result.logradouro;
+                            vue.uf = result.idcidadeuf;
+                                // this.Tipo= "";
+                                // this.UFs= "";
+                                // this.Cidade= "";
+                                // this.Bairro= "";
+                                // this.TiposLogradouros= "";
+                                // this.uf="";
+                                // this.Cidades= "";
+
+                            console.info("Resultado: "+ this.Logradouro)
+
+
+                        } else {
+
+                            $3('#erroCep').html("CEP inv&aacute;lido ou n&atilde;o encontrado!");
+                            limparEndereco();
+                        }
+                    });
+
+
+                } // fecha funcao buscar_cep()
+
             },
 
 
