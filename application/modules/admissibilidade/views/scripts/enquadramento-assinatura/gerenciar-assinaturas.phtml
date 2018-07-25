@@ -189,10 +189,9 @@
 
                     function tratarExibicaoCheckboxChecados(seletorCheckboxes, seletorExibicao) {
                         var quantidadeCheckboxChecados = $(seletorCheckboxes).filter(':checked').length;
+                        $3(seletorExibicao).hide('fast');
                         if (quantidadeCheckboxChecados > 0) {
                             $3(seletorExibicao).show('fast');
-                        } else {
-                            $3(seletorExibicao).hide('fast');
                         }
                     }
 
