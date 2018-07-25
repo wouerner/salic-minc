@@ -51,8 +51,8 @@ class Assinatura_IndexController extends Assinatura_GenericController
         $search = $this->getRequest()->getParam('search');
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
-
-        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["Pronac desc"];
+//
+//        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["Pronac desc"];
 
         $get = Zend_Registry::get('get');
         $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
@@ -71,8 +71,10 @@ class Assinatura_IndexController extends Assinatura_GenericController
             'search' => $search,
             'start' => $start,
             'length' => $length,
-            'order' => $order
+            'order' => $order,
+            'columns' => $columns
         ]);
+
         $tbAssinaturaDbTable->preencherModeloAtoAdministrativo([
             'idOrgaoDoAssinante' => $this->grupoAtivo->codOrgao,
             'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
