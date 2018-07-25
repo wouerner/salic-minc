@@ -1,4 +1,4 @@
-const comprovanteTable = {
+Vue.component('sl-comprovante-internacional-table', {
     props: ['dados'],
     template: `
         <div>
@@ -7,8 +7,8 @@ const comprovanteTable = {
                     <tr>
                         <th>Fornecedor</th>
                         <td>{{dados.fornecedor.nome}}</td>
-                        <th>CNPJ/CPF</th>
-                        <td colspan="5">{{CNPJCPF}}</td>
+                        <th>Endere&ccedil;o</th>
+                        <td colspan="5">{{dados.fornecedor.endereco}}</td>
                     </tr>
                     <tr>
                         <th>Tipo Comprovante</th>
@@ -25,8 +25,6 @@ const comprovanteTable = {
                         <td>{{formaPagamento}}</td>
                         <th>Data do Pagamento</th>
                         <td>{{dataPagamento}}</td>
-                        <th>N&ordm; Documento Pagamento</th>
-                        <td>{{dados.numeroDocumento}}</td>
                     </tr>
                     <tr>
                         <th>Valor</th>
@@ -52,8 +50,7 @@ const comprovanteTable = {
                 CNPJCPF = this.dados.fornecedor.CNPJCPF.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
             } else {
                 CNPJCPF = this.dados.fornecedor.CNPJCPF.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
-            }
-
+            } 
             return CNPJCPF;
         },
         dataEmissaoComprovante() {
@@ -70,6 +67,8 @@ const comprovanteTable = {
                 case 3: tipo = 'Nota Fiscal/Fatura'; break;
                 case 4: tipo = 'Recibo de Pagamento'; break;
                 case 5: tipo = 'RPA'; break;
+                case 6: tipo = 'INVOICE'; break;
+                case 7: tipo = 'OUTROS'; break;
             }
 
             return tipo;
@@ -78,17 +77,17 @@ const comprovanteTable = {
             forma = '';
             switch(parseInt(this.dados.forma)) {
                 case 1: forma = 'Cheque'; break;
-                case 2: forma = 'Transfer\xeancia Banc\xe1ria'; break;
+                case 2: forma = 'Transferência Bancária'; break;
                 case 3: forma = 'Saque/Dinheiro'; break;
             }
 
             return forma;
         },
         valorFormatado() {
-           return  numeral(parseFloat(this.dados.valor)).format('0,0.00');
+           return  this.dados.valor;
         },
         nomeArquivo() {
            return  this.dados.arquivo.nome;
         }
     }
-}
+});
