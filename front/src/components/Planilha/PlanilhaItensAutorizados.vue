@@ -52,6 +52,7 @@
 import numeral from 'numeral';
 import 'numeral/locales';
 import SalicFormatarValor from '@/components/SalicFormatarValor';
+import * as planilhas from '@/mixins/planilhas';
 
 export default {
   name: "PlanilhaListaDeItensPadrao",
@@ -69,28 +70,15 @@ export default {
   },
   computed: {
     vlSolicitadoTotal() {
-      var soma = numeral();
-      Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlSolicitado != "undefined") {
-          soma.add(parseFloat(cell.vlSolicitado));
-        }
-      });
-      numeral.locale("pt-br");
-      numeral.defaultFormat("0,0.00");
-      return soma.format();
-    }
+      return planilhas.formataValorSolicitadoTotal(this.table);
+    },
   },
   methods: {
     isObject(el) {
       return typeof el === "object";
     },
     converterStringParaClasseCss(text) {
-      return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, "-and-")
-        .replace(/[\s\W-]+/g, "-");
+      return planilhas.converterStringParaClasseCss(text);
     },
     ultrapassaValor(row) {
       return row.stCustoPraticado == true;
