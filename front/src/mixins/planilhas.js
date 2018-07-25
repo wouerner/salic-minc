@@ -1,4 +1,5 @@
 import numeral from 'numeral';
+import 'numeral/locales';
 
 export const formataValorSolicitadoTotal = (table) => {
   const soma = numeral();
@@ -24,6 +25,21 @@ export const converterStringParaClasseCss = (text) => {
     .replace(/[\s\W-]+/g, '-');
 
   return classeCss;
+};
+
+export const formataValorAprovadoTotal = (table) => {
+  const soma = numeral();
+
+  Object.entries(table).forEach(([, cell]) => {
+    if (typeof cell.vlAprovado !== 'undefined') {
+      if (cell.tpAcao && cell.tpAcao === 'E') {
+        return;
+      }
+      soma.add(parseFloat(cell.vlAprovado));
+    }
+  });
+
+  return soma.format();
 };
 
 export const converterParaReal = (value) => {

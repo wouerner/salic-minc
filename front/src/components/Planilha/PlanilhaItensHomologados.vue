@@ -43,7 +43,7 @@
                 <td colspan="7"><b>Totais</b></td>
                 <td class="right-align"><b>{{ vlSolicitadoTotal }}</b></td>
                 <td class="right-align"><b>{{ vlSugeridoTotal }}</b></td>
-                <td class="right-align"><b>{{ vlAprovadoTotal }}</b></td>
+                <td class="right-align"><b>{{ formataValorAprovadoTotal }}</b></td>
                 <td colspan="3" class="right-align"></td>
             </tr>
             </tfoot>
@@ -54,8 +54,8 @@
 <script>
 import numeral from 'numeral';
 import 'numeral/locales';
-
 import SalicFormatarValor from '@/components/SalicFormatarValor';
+import * as planilhas from '@/mixins/planilhas';
 
 export default {
   name: 'PlanilhaListaDeItensHomologados',
@@ -76,14 +76,7 @@ export default {
   },
   computed: {
     vlSolicitadoTotal() {
-      const soma = numeral();
-      /* eslint-disable-next-line */
-      Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlSolicitado !== 'undefined') {
-          soma.add(parseFloat(cell.vlSolicitado));
-        }
-      });
-      return soma.format();
+      return planilhas.formataValorSolicitadoTotal(this.table);
     },
     vlSugeridoTotal() {
       const soma = numeral();
@@ -95,35 +88,16 @@ export default {
       });
       return soma.format();
     },
-    vlAprovadoTotal() {
-      const soma = numeral();
-      /* eslint-disable-next-line */
-      Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlAprovado !== 'undefined') {
-          soma.add(parseFloat(cell.vlAprovado));
-        }
-      });
-      return soma.format();
+    formataValorAprovadoTotal() {
+      return planilhas.formataValorAprovadoTotal(this.table);
     },
   },
   methods: {
     isObject(el) {
       return typeof el === 'object';
     },
-    converterStringParaClasseCss(text) {
-      return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, '-and-')
-        .replace(/[\s\W-]+/g, '-');
-    },
     ultrapassaValor(row) {
       return row.stCustoPraticado === true;
-    },
-    converterParaReal(value) {
-      value = parseFloat(value);
-      return numeral(value).format('0,0.00');
     },
   },
 };

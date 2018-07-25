@@ -48,9 +48,6 @@
 </template>
 
 <script>
-/* eslint-disable */
-import numeral from 'numeral';
-import 'numeral/locales';
 import SalicFormatarValor from '@/components/SalicFormatarValor';
 import * as planilhas from '@/mixins/planilhas';
 
@@ -78,7 +75,7 @@ export default {
       return typeof el === 'object';
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado == true;
+      return row.stCustoPraticado === true;
     },
   },
 };
