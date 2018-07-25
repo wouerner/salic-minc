@@ -34,10 +34,10 @@
             <tr>
                 <td colspan="6"><b>Totais</b></td>
                 <td class="right-align">
-                    <b>{{ vlSolicitadoTotal }}</b>
+                    <b>{{ formataValorSolicitadoTotal }}</b>
                 </td>
                 <td class="right-align">
-                    <b>{{ vlSolicitadoTotal }}</b>
+                    <b>{{ formataValorSolicitadoTotal }}</b>
                 </td>
                 <td class="right-align"></td>
             </tr>
@@ -63,13 +63,13 @@ export default {
   },
   props: {
     table: {},
-    full: ""
+    full: '',
   },
   components: {
     SalicFormatarValor
   },
   computed: {
-    vlSolicitadoTotal() {
+    formataValorSolicitadoTotal() {
       return planilhas.formataValorSolicitadoTotal(this.table);
     },
   },
@@ -84,8 +84,7 @@ export default {
       return row.stCustoPraticado == true;
     },
     converterParaReal(value) {
-      value = parseFloat(value);
-      return numeral(value).format('0,0.00');
+      return planilhas.converterParaReal(value);
     },
   },
 };

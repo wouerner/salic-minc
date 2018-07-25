@@ -25,3 +25,8 @@ export const converterStringParaClasseCss = (text) => {
 
   return classeCss;
 };
+
+export const converterParaReal = (value) => {
+  const parsedValue = parseFloat(value);
+  return numeral(parsedValue).format('0,0.00');
+};
