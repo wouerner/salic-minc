@@ -55,10 +55,10 @@ import SalicFormatarValor from '@/components/SalicFormatarValor';
 import * as planilhas from '@/mixins/planilhas';
 
 export default {
-  name: "PlanilhaListaDeItensPadrao",
+  name: 'PlanilhaListaDeItensPadrao',
   data() {
     return {
-      planilha: []
+      planilha: [],
     };
   },
   props: {
@@ -66,7 +66,7 @@ export default {
     full: '',
   },
   components: {
-    SalicFormatarValor
+    SalicFormatarValor,
   },
   computed: {
     formataValorSolicitadoTotal() {
@@ -75,16 +75,10 @@ export default {
   },
   methods: {
     isObject(el) {
-      return typeof el === "object";
-    },
-    converterStringParaClasseCss(text) {
-      return planilhas.converterStringParaClasseCss(text);
+      return typeof el === 'object';
     },
     ultrapassaValor(row) {
       return row.stCustoPraticado == true;
-    },
-    converterParaReal(value) {
-      return planilhas.converterParaReal(value);
     },
   },
 };
