@@ -8,6 +8,25 @@ class DataTable  extends \MinC_Db_Model
     protected $start;
     protected $length;
     protected $order;
+    protected $columns;
+
+    /**
+     * @return mixed
+     */
+    public function getColumns()
+    {
+        return $this->columns;
+    }
+
+    /**
+     * @param mixed $columns
+     * @return DataTable
+     */
+    public function setColumns($columns)
+    {
+        $this->columns = $columns;
+        return $this;
+    }
 
     /**
      * @return mixed
