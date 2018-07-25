@@ -21,7 +21,7 @@ if (isset ($auth->getIdentity()->Cpf)) { ?>
                             <img alt="Salic" src="<?php echo $this->baseUrl(); ?>/public/img/logo.png">
                         </div>
                         <div class="col s12">
-                            <span class="card-title"><b>Cadastro</b></span>
+                            <span class="card-title black-text"><b>Cadastro</b></span>
                         </div>
                     </div>
                 </div>
@@ -84,9 +84,9 @@ if (isset ($auth->getIdentity()->Cpf)) { ?>
                 </div>
                 <div class="card-action center-align">
                     <a href="javascript:redirect('<?php echo $this->url(array('controller' => 'index', 'action' => 'index', 'module' => 'autenticacao')); ?>');"
-                       class="tooltipped" data-delay="50" data-tooltip="Acessar o sistema">J&aacute; sou cadastrado</a>&nbsp;&nbsp;&nbsp;
-                    <a href="javascript:redirect('<?php echo $this->url(array('controller' => 'index', 'action' => 'solicitarsenha', 'module' => 'autenticacao')); ?>');"
-                       class="tooltipped" data-delay="50" data-tooltip="Resetar senha">Esqueci a senha</a>
+                       class="tooltipped" data-delay="50" data-tooltip="Acessar o sistema">Voltar</a>&nbsp;&nbsp;&nbsp;
+                    <!-- <a href="javascript:redirect('<?php //echo $this->url(array('controller' => 'index', 'action' => 'solicitarsenha', 'module' => 'autenticacao')); ?>');"
+                       class="tooltipped" data-delay="50" data-tooltip="Resetar senha">Esqueci a senha</a> -->
                 </div>
             </div>
         </div>

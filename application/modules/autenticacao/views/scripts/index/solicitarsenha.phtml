@@ -22,7 +22,7 @@
                             <img alt="Salic" src="<?php echo $this->baseUrl(); ?>/public/img/logo.png">
                         </div>
                         <div class="col s12">
-                            <span class="card-title"><b>Nova senha</b></span>
+                            <span class="card-title black-text"><b>Nova senha</b></span>
                         </div>
                     </div>
                 </div>
@@ -33,6 +33,9 @@
                         action="<?php echo $this->url(array('module' => 'autenticacao', 'controller' => 'index', 'action' => 'solicitarsenha')); ?>"
                         name="solicitaSenha" id="solicitaSenha"
                         method="POST">
+                        <div class="col s12">
+                            <span class="card" style="font-size:15px;">Preencha com seus dados para receber a nova senha via e-mail</span>
+                        </div>
                         <div class="row">
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">account_circle</i>
@@ -69,10 +72,10 @@
                 <div class="card-action center-align">
                     <a class="tooltipped" data-delay="50"
                        data-tooltip="Acessar o sistema"
-                        href="javascript:redirect('<?php echo $this->url(array('controller' => 'index', 'action' => 'index', 'module' => 'autenticacao')); ?>');">J&aacute; sou cadastrado</a>&nbsp;&nbsp;&nbsp;
+                        href="javascript:redirect('<?php echo $this->url(array('controller' => 'index', 'action' => 'index', 'module' => 'autenticacao')); ?>');">Voltar</a>&nbsp;&nbsp;&nbsp;
                     <a class="tooltipped" data-delay="50"
                         data-tooltip="Realizar o cadastro no sistema" href="javascript:redirect('<?php echo $this->url(array('controller' => 'index', 'action' => 'cadastrarusuario', 'module' => 'autenticacao')); ?>');">
-                        N&atilde;o sou cadastrado
+                        Cadastrar-se
                     </a>&nbsp;&nbsp;&nbsp;
                 </div>
             </div>
