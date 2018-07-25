@@ -152,12 +152,12 @@
                Logradouro: "",
                Numero: "",
                Complemento: "",
-               UFs: "",
                Cidade: "",
                Bairro: "",
                TipoDeEndereço: "",
                Autorizar: "",
                uf: "",
+               UFs: "",
                Cidades: "",
                Fornecedores: "",
                TiposEnderecos: "",
@@ -166,40 +166,7 @@
 
         },
         mounted: function () {
-           var vue = this;
-
-           let url = ['/prestacao-contas/fornecedor/uf',
-                      '/prestacao-contas/fornecedor/fornecedores-tipo',
-                      '/prestacao-contas/fornecedor/logradouro-tipo',
-                      '/prestacao-contas/fornecedor/endereco-tipo'];
-
-            $3.ajax({
-                type: "GET",
-                url: url[0],
-            })
-            .done((data) => vue.UFs = data)
-            .fail((jqXHR) => alert('error'));
-
-            $3.ajax({
-                type: "GET",
-                url: url[1],
-            })
-            .done((fornecedor) => vue.Fornecedores = fornecedor)
-            .fail((jqXHR) => alert('error'));
-
-            $3.ajax({
-                type: "GET" ,
-                url: url[2]
-            })
-            .done((logradouro) => vue.TiposLogradouros = logradouro)
-            .fail((jqXHR) => alert('error'));
-
-            $3.ajax({
-                type: "GET" ,
-                url: url[3]
-            })
-            .done((endereco) => vue.TiposEnderecos = endereco)
-            .fail((jqXHR) => alert('error'));
+            this.carregarInfoFornecedores();
         },
         methods:
             {
@@ -211,6 +178,42 @@
                      url: url,
                 })
                  .done( (cidade) => vue.Cidades = cidade )
+                },
+                carregarInfoFornecedores: function () {
+                    let self = this;
+
+                    let url = ['/prestacao-contas/fornecedor/uf',
+                        '/prestacao-contas/fornecedor/fornecedores-tipo',
+                        '/prestacao-contas/fornecedor/logradouro-tipo',
+                        '/prestacao-contas/fornecedor/endereco-tipo'];
+
+                    $3.ajax({
+                        type: "GET",
+                        url: url[0],
+                    })
+                        .done((data) => self.UFs = data)
+                        .fail((jqXHR) => alert('error'));
+
+                    $3.ajax({
+                        type: "GET",
+                        url: url[1],
+                    })
+                        .done((fornecedor) => self.Fornecedores = fornecedor)
+                        .fail((jqXHR) => alert('error'));
+
+                    $3.ajax({
+                        type: "GET" ,
+                        url: url[2]
+                    })
+                        .done((logradouro) => self.TiposLogradouros = logradouro)
+                        .fail((jqXHR) => alert('error'));
+
+                    $3.ajax({
+                        type: "GET" ,
+                        url: url[3]
+                    })
+                        .done((endereco) => self.TiposEnderecos = endereco)
+                        .fail((jqXHR) => alert('error'));
                 },
 
                 cepMask: function(){
@@ -274,10 +277,7 @@
 
 
                 } // fecha funcao buscar_cep()
-
-            },
-
-
+        }
     });
 
 
