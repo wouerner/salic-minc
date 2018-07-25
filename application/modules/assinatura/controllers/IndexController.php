@@ -67,16 +67,17 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $idTipoDoAtoAdministrativos[] = $idTipoDoAtoAdministrativo;
         }
 
-        $tbAssinaturaDbTable = new Assinatura_Model_DbTable_TbAssinatura();
+        $tbAssinaturaDbTable = new Assinatura_Model_DbTable_TbAssinatura([
+            'search' => $search,
+            'start' => $start,
+            'length' => $length,
+            'order' => $order
+        ]);
         $tbAssinaturaDbTable->preencherModeloAtoAdministrativo([
             'idOrgaoDoAssinante' => $this->grupoAtivo->codOrgao,
             'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
             'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior,
-            'idTipoDoAto' => $idTipoDoAtoAdministrativos,
-            'search' => $search,
-            'start' => $start,
-            'length' => $length,
-            'order' => $order,
+            'idTipoDoAto' => $idTipoDoAtoAdministrativos
         ]);
 
         $projetosDisponiveis = $tbAssinaturaDbTable->obterAssinaturasDisponiveis();
