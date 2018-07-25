@@ -28,6 +28,9 @@ export const formataValorAprovadoTotal = (table) => {
     }
   });
 
+  numeral.locale('pt-br');
+  numeral.defaultFormat('0,0.00');
+
   return soma.format();
 };
 
@@ -43,6 +46,9 @@ export const formataValorComprovadoTotal = (table) => {
     }
   });
 
+  numeral.locale('pt-br');
+  numeral.defaultFormat('0,0.00');
+
   return soma.format();
 };
 
@@ -54,6 +60,9 @@ export const formataValorSugeridoTotal = (table) => {
       soma.add(parseFloat(cell.vlSugerido));
     }
   });
+
+  numeral.locale('pt-br');
+  numeral.defaultFormat('0,0.00');
 
   return soma.format();
 };
