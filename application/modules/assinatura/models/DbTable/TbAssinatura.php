@@ -219,21 +219,12 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     public function obterAssinaturasDisponiveis()
     {
         $query = $this->obterQueryAssinaturasDisponiveis();
-
-        $search = $this->modelDatatable->getSearch();
-xd($search);
-
-        if (!empty($search['value'])) {
-            // search
-        }
-
-        $query = $this->tratarResultadoOrdenacaoDatatable($query);
-        $query = $this->tratarLimiteResultadosDatatable($query);
+        $query = $this->filtrarBuscaDatatable($query);
 
         return $this->_db->fetchAll($query);
     }
 
-    public function obterQueryAssinaturasDisponiveis() : \MinC_Db_Table_Select
+    public function obterQueryAssinaturasDisponiveis(): \MinC_Db_Table_Select
     {
         if (!$this->modeloTbAtoAdministrativo) {
             throw new Exception("&Eacute; necess&aacute;rio definir uma entidade de Assinatura.");

@@ -36,9 +36,10 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
             }
 
             if ($isReturnDb && strpos($strSchema, '.') === false) {
-                $strSchema = $strNameDb;
                 if ($strSchema) {
                     $strSchema = $strSchema . "." . $strNameDb;
+                } else {
+                    $strSchema = $strNameDb;
                 }
             } elseif (strpos($strSchema, '.') === false) {
                 $strSchema = $strNameDb;
@@ -290,10 +291,6 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
      * @name findBy
      * @param array $where
      * @return array
-     *
-     * @author Ruy Junior Ferreira Silva <ruyjfs@gmail.com>
-     * @author wouerner <wouerner@gmail.com>
-     * @since  05/09/2016
      */
     public function findBy($where)
     {
@@ -313,9 +310,6 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
      * @param $select - Objeto select da query montada para no final por os parametros do where.
      * @param $where - Array ou string onde a string e considerado uma pk.
      * @return void
-     *
-     * @author Ruy Junior Ferreira Silva <ruyjfs@gmail.com>
-     * @since  06/12/2016
      */
     public function setWhere(&$select, $where, $typeWhere = 'where')
     {
@@ -502,12 +496,16 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
 
         if (
             isset($order[0])
-            && $order[0]['column']
-            && $order[0]['dir']
+            && isset($order[0]['column'])
+            && isset($order[0]['dir'])
             && !empty($order[0]['column'])
             && !empty($order[0]['dir'])
         ) {
-            $query->order($order[0]['column'], $order[0]['dir']);
+            $identificadorDaColuna = $order[0]['column'];
+            $columns = $this->modelDatatable->getColumns();
+            if(isset($columns[$identificadorDaColuna]['name']) && !empty($columns[$identificadorDaColuna]['name'])) {
+                $query->order("{$columns[$identificadorDaColuna]['name']} {$order[0]['dir']}");
+            }
         }
 
         return $query;
@@ -525,6 +523,43 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
         }
 
         return $query;
+    }
+
+    protected function tratarBuscaPorResultadosDatatable(\MinC_Db_Table_Select $query): \MinC_Db_Table_Select
+    {
+        $queryExterna = $this->select();
+        $queryExterna->isUseSchema(false);
+        $queryExterna->setIntegrityCheck(false);
+        $queryExterna->from(
+            ['tabelaTemporaria' => new Zend_Db_Expr("($query)")],
+            '*'
+        );
+
+        $search = $this->modelDatatable->getSearch();
+        $columns = $this->modelDatatable->getColumns();
+
+        if (!empty($search['value']) && count($columns) > 0) {
+            foreach($columns as $column) {
+                if($column['searchable'] === 'true' && !empty($column['name'])) {
+
+                    $queryExterna->orWhere(
+                        "{$column['name']} like ?",
+                        "%{$search['value']}%"
+                    );
+                }
+            }
+        }
+
+        return $queryExterna;
+    }
+
+    protected function filtrarBuscaDatatable(\MinC_Db_Table_Select $query): \MinC_Db_Table_Select
+    {
+        $query = $this->tratarLimiteResultadosDatatable($query);
+        $queryExterna = $this->tratarBuscaPorResultadosDatatable($query);
+        $queryExterna = $this->tratarResultadoOrdenacaoDatatable($queryExterna);
+
+        return $queryExterna;
     }
 
 }
