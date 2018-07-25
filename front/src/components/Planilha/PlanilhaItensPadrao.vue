@@ -85,14 +85,6 @@ export default {
     isObject(el) {
       return typeof el === 'object';
     },
-    converterStringParaClasseCss(text) {
-      return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, '-and-')
-        .replace(/[\s\W-]+/g, '-');
-    },
     ultrapassaValor(row) {
       return planilhas.ultrapassaValor(row);
     },

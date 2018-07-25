@@ -59,11 +59,12 @@ import PlanilhaItensAutorizados from '@/components/Planilha/PlanilhaItensAutoriz
 import PlanilhaItensAprovados from '@/components/Planilha/PlanilhaItensAprovados';
 import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados';
 import PlanilhaItensReadequados from '@/components/Planilha/PlanilhaItensReadequados';
+import * as planilhas from '@/mixins/planilhas';
 
 export default {
   /* eslint-disable */
   name: 'Planilha',
-  data: function() {
+  data() {
     return {
       planilha: []
     };
@@ -127,14 +128,14 @@ export default {
               });
               this.$set(
                 this.planilha[fonte][produto][etapa][local],
-                "total",
+                'total',
                 numeral(totalLocal).format('0,0.00')
               );
               totalEtapa += totalLocal;
             });
             this.$set(
               this.planilha[fonte][produto][etapa],
-              "total",
+              'total',
               numeral(totalEtapa).format('0,0.00')
             );
             totalProduto += totalEtapa;
@@ -148,7 +149,7 @@ export default {
         });
         this.$set(
           this.planilha[fonte],
-          "total",
+          'total',
           numeral(totalFonte).format('0,0.00')
         );
         totalProjeto += totalFonte;
@@ -179,12 +180,7 @@ export default {
       });
     },
     converterStringParaClasseCss(text) {
-      return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, '-and-')
-        .replace(/[\s\W-]+/g, '-');
+      return planilhas.converterStringParaClasseCss(text);
     },
     ultrapassaValor(row) {
       return planilhas.ultrapassaValor(row);
