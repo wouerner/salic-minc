@@ -1,8 +1,8 @@
 <?php
 
-namespace MinC\Db;
+namespace MinC\Db\Model;
 
-class DataTable  extends MinC_Db_Model
+class DataTable  extends \MinC_Db_Model
 {
     protected $search;
     protected $start;

@@ -9,12 +9,13 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
     protected $_rowClass = "MinC_Db_Table_Row";
     protected $debugMode = false;
     protected $modelDatatable;
+    protected $_banco;
 
     public function __construct($config = array())
     {
         $this->createConnection();
 
-        $this->modelDatatable = new \MinC\Db\DataTable($config);
+        $this->modelDatatable = new \MinC\Db\Model\DataTable($config);
         parent::__construct($config);
     }
 
@@ -133,7 +134,9 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
     public function getBanco($strName = '')
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-        $strName = 'dbo';
+//        if(!$strName) {
+//            $strName = 'dbo';
+//        }
 
         if (!($db instanceof Zend_Db_Adapter_Pdo_Mssql)) {
             $arrayConfiguracaoes = $db->getConfig();
@@ -493,7 +496,7 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
         return $entries;
     }
 
-    public function tratarOrdenacaoDatatable(\MinC_Db_Table_Select $query): \MinC_Db_Table_Select
+    protected function tratarResultadoOrdenacaoDatatable(\MinC_Db_Table_Select $query): \MinC_Db_Table_Select
     {
         $order = $this->modelDatatable->getOrder();
 
@@ -505,6 +508,20 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
             && !empty($order[0]['dir'])
         ) {
             $query->order($order[0]['column'], $order[0]['dir']);
+        }
+
+        return $query;
+    }
+
+    protected function tratarLimiteResultadosDatatable(\MinC_Db_Table_Select $query): \MinC_Db_Table_Select
+    {
+        $length = $this->modelDatatable->getLength();
+        $start = $this->modelDatatable->getStart();
+
+        if (!is_null($start) && $length) {
+            $start = (int) $start;
+            $length = (int) $length;
+            $query->limit($length, $start);
         }
 
         return $query;

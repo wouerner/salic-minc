@@ -220,21 +220,15 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
     {
         $query = $this->obterQueryAssinaturasDisponiveis();
 
-        $length = $this->modelDatatable->getLength();
-        $start = $this->modelDatatable->getStart();
-
-
         $search = $this->modelDatatable->getSearch();
+xd($search);
+
         if (!empty($search['value'])) {
             // search
         }
-        $query = $this->tratarOrdenacaoDatatable($query);
 
-        if (!is_null($start) && $length) {
-            $start = (int) $start;
-            $length = (int) $length;
-            $query->limit($length, $start);
-        }
+        $query = $this->tratarResultadoOrdenacaoDatatable($query);
+        $query = $this->tratarLimiteResultadosDatatable($query);
 
         return $this->_db->fetchAll($query);
     }
