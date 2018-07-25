@@ -78,9 +78,6 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['projeto']['dataInicioExecucao'] = $dtInicioExecucao;
             $dataAux[$key]['projeto']['dataFimExecucao'] = $dtFimExecucao;
         }
-        /* var_dump($data); */
-        /* die; */
-
         $this->view->assign('data', $dataAux);
         $this->getResponse()->setHttpResponseCode(200);
     }
