@@ -325,4 +325,20 @@ class Autenticacao_Model_Sgcacesso extends MinC_Db_Table_Abstract
         }
         return $this->fetchAll($slct);
     }
+
+    public function isUsuarioValido($idUsuario)
+    {
+
+        if (empty($idUsuario)) {
+            return false;
+        }
+
+        $usuario = $this->buscarUsuario(['IdUsuario = ?' => $idUsuario]);
+        if (count($usuario) === 0) {
+            return false;
+        }
+
+        return true;
+
+    }
 }

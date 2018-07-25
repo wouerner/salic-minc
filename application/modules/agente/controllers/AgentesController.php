@@ -3149,13 +3149,17 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
             if ($dados[0]->tipopessoa == 1) {
                 $dirigentes = Agente_Model_ManterAgentesDAO::buscarVinculados(null, null, null, null, $idAgente);
-                $this->view->responsaveis = $dirigentes->toArray();
+                $this->view->responsaveis = $dirigentes;
             } else {
                 $sgcAcesso = new Autenticacao_Model_Sgcacesso();
-                $responsaveis = $sgcAcesso->buscarUsuario(['Cpf = ?' => $dados[0]->cnpjcpf])->toArray();
-                $responsaveis[0]['idResponsavel'] = $responsaveis[0]['IdUsuario'];
-                $responsaveis[0]['cpfResponsavel'] = $responsaveis[0]['cpf'];
-                $responsaveis[0]['nomeResponsavel'] = $responsaveis[0]['nome'];
+                $responsavel = $sgcAcesso->buscarUsuario(['Cpf = ?' => $dados[0]->cnpjcpf])->current();
+
+                $responsaveis = [];
+                $responsavel = new stdClass();
+                $responsavel->idResponsavel = $responsavel->IdUsuario;
+                $responsavel->cpfResponsavel = $responsavel->cpf;
+                $responsavel->nomeResponsavel = $responsavel->nome;
+                $responsaveis[]  = $responsavel;
                 $this->view->responsaveis = $responsaveis;
             }
             $this->view->dados = $dados;
