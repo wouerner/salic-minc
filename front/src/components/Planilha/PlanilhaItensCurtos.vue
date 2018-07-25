@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import numeral from 'numeral';
 import SalicFormatarValor from '@/components/SalicFormatarValor';
+import * as planilhas from '@/mixins/planilhas';
 
 export default {
   name: 'PlanilhaListaDeItensCurta',
@@ -62,20 +62,8 @@ export default {
     isObject(el) {
       return typeof el === 'object';
     },
-    converterStringParaClasseCss(text) {
-      return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, '-and-')
-        .replace(/[\s\W-]+/g, '-');
-    },
     ultrapassaValor(row) {
-      return row.stCustoPraticado === true;
-    },
-    converterParaReal(value) {
-      value = parseFloat(value);
-      return numeral(value).format('0,0.00');
+      return planilhas.ultrapassaValor(row);
     },
   },
 };

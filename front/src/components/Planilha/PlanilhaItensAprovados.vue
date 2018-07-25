@@ -43,6 +43,7 @@
 
 <script>
 import numeral from 'numeral';
+import * as planilhas from '@/mixins/planilhas';
 
 export default {
   name: 'PlanilhaListaDeItensAprovados',
@@ -65,7 +66,7 @@ export default {
         .replace(/[\s\W-]+/g, '-');
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado === true;
+      return planilhas.ultrapassaValor(row);
     },
     converterParaReal(value) {
       value = parseFloat(value);

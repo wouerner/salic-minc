@@ -50,6 +50,7 @@
 import numeral from 'numeral';
 import 'numeral/locales';
 import SalicFormatarValor from '@/components/SalicFormatarValor';
+import * as planilhas from '@/mixins/planilhas';
 
 export default {
   name: 'PlanilhaListaDeItensPadrao',
@@ -93,7 +94,7 @@ export default {
         .replace(/[\s\W-]+/g, '-');
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado === true;
+      return planilhas.ultrapassaValor(row);
     },
     converterParaReal(value) {
       value = parseFloat(value);

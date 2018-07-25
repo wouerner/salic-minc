@@ -79,14 +79,7 @@ export default {
       return planilhas.formataValorSolicitadoTotal(this.table);
     },
     vlSugeridoTotal() {
-      const soma = numeral();
-      /* eslint-disable-next-line */
-      Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlSugerido !== 'undefined') {
-          soma.add(parseFloat(cell.vlSugerido));
-        }
-      });
-      return soma.format();
+      return planilhas.formataValorSugeridoTotal(this.table);
     },
     formataValorAprovadoTotal() {
       return planilhas.formataValorAprovadoTotal(this.table);
@@ -97,7 +90,7 @@ export default {
       return typeof el === 'object';
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado === true;
+      return planilhas.ultrapassaValor(row);
     },
   },
 };

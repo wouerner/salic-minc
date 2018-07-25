@@ -75,7 +75,7 @@ export default {
       return typeof el === 'object';
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado === true;
+      return planilhas.ultrapassaValor(row);
     },
   },
 };

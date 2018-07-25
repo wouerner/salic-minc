@@ -187,7 +187,7 @@ export default {
         .replace(/[\s\W-]+/g, '-');
     },
     ultrapassaValor(row) {
-      return row.stCustoPraticado === true;
+      return planilhas.ultrapassaValor(row);
     },
     converterParaReal(value) {
       value = parseFloat(value);

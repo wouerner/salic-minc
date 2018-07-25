@@ -43,8 +43,8 @@
             <tfoot v-if="table && Object.keys(table).length > 0" style="opacity: 0.5">
             <tr>
                 <td colspan="7"><b>Totais</b></td>
-                <td class="right-align"><b>{{ vlAprovadoTotal }}</b></td>
-                <td class="right-align"><b>{{ vlComprovadoTotal }}</b></td>
+                <td class="right-align"><b>{{ formataValorAprovadoTotal }}</b></td>
+                <td class="right-align"><b>{{ formataValorComprovadoTotal }}</b></td>
                 <td colspan="2" class="right-align"></td>
             </tr>
             </tfoot>
@@ -53,10 +53,8 @@
 </template>
 
 <script>
-import numeral from 'numeral';
-import 'numeral/locales';
-
 import SalicFormatarValor from '@/components/SalicFormatarValor';
+import * as planilhas from '@/mixins/planilhas';
 
 export default {
   name: 'PlanilhaListaDeItensReadequados',
@@ -71,56 +69,20 @@ export default {
   components: {
     SalicFormatarValor,
   },
-  created() {
-    numeral.locale('pt-br');
-    numeral.defaultFormat('0,0.00');
-  },
   computed: {
-    vlComprovadoTotal() {
-      const soma = numeral();
-      // eslint-disable-next-line
-      Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.VlComprovado !== 'undefined') {
-          if (cell.tpAcao && cell.tpAcao === 'E') {
-            return;
-          }
-          soma.add(parseFloat(cell.VlComprovado));
-        }
-      });
-      return soma.format();
+    formataValorComprovadoTotal() {
+      return planilhas.formataValorComprovadoTotal();
     },
-    vlAprovadoTotal() {
-      const soma = numeral();
-      // eslint-disable-next-line
-      Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlAprovado !== 'undefined') {
-          if (cell.tpAcao && cell.tpAcao === 'E') {
-            return;
-          }
-          soma.add(parseFloat(cell.vlAprovado));
-        }
-      });
-      return soma.format();
+    formataValorAprovadoTotal() {
+      return planilhas.formataValorAprovadoTotal();
     },
   },
   methods: {
     isObject(el) {
       return typeof el === 'object';
     },
-    converterStringParaClasseCss(text) {
-      return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, '-and-')
-        .replace(/[\s\W-]+/g, '-');
-    },
-    ultrapassaValor(row) {
-      return row.stCustoPraticado === true;
-    },
     converterParaReal(value) {
-      value = parseFloat(value);
-      return numeral(value).format('0,0.00');
+      return planilhas.converterParaReal(value);
     },
     definirClasseItem(row) {
       return {
