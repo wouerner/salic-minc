@@ -34,8 +34,10 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
 
     public function ufAction() {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        $estados = new Agente_Model_DbTable_UF();
-        $this->retornaJson($estados->listar());
+        $estados = new PrestacaoContas_Model_DbTable_Enderecos();
+        var_dump($estados->ufRetorno());
+        die;
+        $this->retornaJson($estados->ufRetorno());
     }
 
     public function cidadeAction() {
