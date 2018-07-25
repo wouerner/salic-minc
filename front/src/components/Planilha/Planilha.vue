@@ -186,8 +186,7 @@ export default {
       return planilhas.ultrapassaValor(row);
     },
     converterParaReal(value) {
-      value = parseFloat(value);
-      return numeral(value).format('0,0.00');
+      return planilhas.converterParaReal(value);
     },
   },
 };

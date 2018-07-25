@@ -36,7 +36,7 @@
             <tr>
                 <td colspan="6"><b>Totais</b></td>
                 <td class="right-align">
-                    <b>{{ vlSolicitadoTotal }}</b>
+                    <b>{{ formataValorSolicitadoTotal }}</b>
                 </td>
                 <td class="right-align"></td>
             </tr>
@@ -47,8 +47,6 @@
 </template>
 
 <script>
-import numeral from 'numeral';
-import 'numeral/locales';
 import SalicFormatarValor from '@/components/SalicFormatarValor';
 import * as planilhas from '@/mixins/planilhas';
 
@@ -65,20 +63,9 @@ export default {
   components: {
     SalicFormatarValor,
   },
-  created() {
-    numeral.locale('pt-br');
-    numeral.defaultFormat('0,0.00');
-  },
   computed: {
-    vlSolicitadoTotal() {
-      const soma = numeral();
-      /* eslint-disable-next-line */
-      Object.entries(this.table).forEach(([column, cell]) => {
-        if (typeof cell.vlSolicitado !== 'undefined') {
-          soma.add(parseFloat(cell.vlSolicitado));
-        }
-      });
-      return soma.format();
+    formataValorSolicitadoTotal() {
+      return planilhas.formataValorSolicitadoTotal(this.table);
     },
   },
   methods: {
@@ -89,8 +76,7 @@ export default {
       return planilhas.ultrapassaValor(row);
     },
     converterParaReal(value) {
-      value = parseFloat(value);
-      return numeral(value).format('0,0.00');
+      return planilhas.converterParaReal(value);
     },
   },
 };

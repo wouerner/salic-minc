@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import numeral from 'numeral';
 import * as planilhas from '@/mixins/planilhas';
 
 export default {
@@ -61,8 +60,7 @@ export default {
       return planilhas.ultrapassaValor(row);
     },
     converterParaReal(value) {
-      value = parseFloat(value);
-      return numeral(value).format('0,0.00');
+      return planilhas.converterParaReal(value);
     },
   },
 };
