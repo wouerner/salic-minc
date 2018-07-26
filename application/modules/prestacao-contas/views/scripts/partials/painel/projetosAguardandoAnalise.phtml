@@ -5,6 +5,7 @@
             <th>Nome do Projeto</th>
             <th>Situação</th>
             <th>Encaminhar para Análise</th>
+            <th>Prioridades</th>
         </tr>
     </thead>
     <tbody>
@@ -29,19 +30,38 @@
                 "autoWidth": false,
                 "processing": true,
                 "serverSide": true,
+                "order": [[4, "desc"]],
                 "columnDefs": [
-                    { "orderable": false, "targets": [3]},
+                    { "orderable": false, "targets": [3,4]},
                     {
                         "targets": 0,
                         "data": null,
                         render: (data) => {
-                            return '<a class="btn modal-trigger pre-visualizar" data-idpronac="' + data[5] + '" >' + data[0] + '</a>'
+                            return '<a class="btn modal-trigger pre-visualizar" data-idpronac="' + data[3] + '" >' + data[0] + '</a>'
                         }
                     },
                     {
                         "targets": 3,
                         "data": null,
-                        "defaultContent": '<button class="btn modal-trigger encaminharAnalise" href="#encaminharProjetoModal"><i class=" tiny material-icons">assignment_ind</i></button>'
+                        "defaultContent": '<button class="btn modal-trigger encaminharAnalise" href="#encaminharProjetoModal"><i class="tiny material-icons">assignment_ind</i></button>'
+                    },
+                    {
+                        "targets": 4,
+                        "data": null,
+                        render: (data) => {
+                            var icone = 'tag_faces';
+                            var cor = 'green darken-4';
+                            numeroDeProcessos = parseInt(data[4]);
+                            if(numeroDeProcessos <= 9 && numeroDeProcessos != 0) {
+                                icone = 'filter_' + numeroDeProcessos;
+                                cor = 'red accent-4';
+                            }else if (numeroDeProcessos > 9){
+                                icone = 'filter_9_plus';
+                                cor = 'red accent-4';
+                            }
+
+                            return '<a class="small btn modal-trigger visualizarPrioridades ' + cor + '" href="#visualizarPrioridadesModal"><i class="tiny material-icons">' + icone + '</i></a>'
+                        }
                     }
                 ]
             });

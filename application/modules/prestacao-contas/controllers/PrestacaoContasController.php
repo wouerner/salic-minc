@@ -325,4 +325,27 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         ]);
 
     }
+
+    public function obterPrioridadesAction(){
+        $idPronac = Zend_Registry::get("post")->idPronac;
+
+        if (empty($idPronac)) {
+            $this->_helper->json([
+                'data' => []
+            ]);
+        }
+
+        $parecerControle = new PrestacaoContas_Model_DbTable_ParecerControle();
+        $prioridades = $parecerControle->obterPrioridadesOrgaosDeControle($idPronac);
+
+        foreach($prioridades as $index =>$prioridade){
+            foreach($prioridade as $key => $value){
+                $rsPrioridades[$index][$key] = utf8_encode($value);
+            }
+        }
+
+        $this->_helper->json([
+            'data' => $rsPrioridades
+        ]);
+    }
 }

@@ -576,9 +576,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'd.AnoProjeto+d.Sequencial AS Pronac',
                     'd.NomeProjeto',
                     'd.Situacao as cdSituacao',
-                    'g.Descricao as dsSegmento',
-                    'f.Descricao as dsArea',
-                    'a.IdPRONAC'
+                    'a.IdPRONAC',
                 ];
                 $select->where("d.Situacao IN ('E17','E20','E27','E30','E68')");
                 $select->where(
@@ -627,6 +625,14 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                 );
                 break;
         }
+        $colunasOrdenadas[] = '
+            (select
+                count(Contador)
+            from
+                sac.dbo.parecercontrole
+            where
+                AnoProjeto+Sequencial = d.AnoProjeto+d.Sequencial) as Prioridade';
+
 
         $colunasOrdenadas = implode(", ", $colunasOrdenadas);
         $colunasOrdenadas = new Zend_Db_Expr($colunasOrdenadas);
