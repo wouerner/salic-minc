@@ -68,10 +68,8 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
     }
 
     public function buscarCepAction(){
-       $cep = $this->_request->getParam("cep");
+      // $cep = $this->_request->getParam("cep");
        $logradouro = new PrestacaoContas_Model_DbTable_Enderecos();
-       var_dump($logradouro->buscarCep($cep));
-       die;
        $this -> retornaJson($logradouro);
     }
 }
