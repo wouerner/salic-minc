@@ -1,9 +1,15 @@
 <template>
     <div id="index">
-        <div>Componente inicial</div>
+        <div>{{ message }}</div>
     </div>
 </template>
 
 <script>
-  export default {};
+export default {
+  data() {
+    return {
+      message: 'Componente inicial',
+    };
+  },
+};
 </script>
