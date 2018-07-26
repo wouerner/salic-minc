@@ -19,17 +19,27 @@ class PrestacaoContas_Model_DbTable_Enderecos extends MinC_Db_Table_Abstract
     public function ufRetorno(){
 
         $objQuery = $this->select()
-         ->from($this->_name);
+         ->from($this);
 
         return $this->_db->fetchAll($objQuery);
     }
 
     public function cidadesRetorno(){
-        $otherTable = array('ot' => 'other_table');
+        $this->setName('tbLocalidade') ;
         $objQuery = $this->select()
-            ->from($this->_name);
+            ->from($this);
 
         return $this->_db->fetchAll($objQuery);
 
+    }
+
+    public function buscarCep($cep){
+
+        $objQuery = $this->select()
+                ->setIntegrityCheck(false)
+                ->from(['logradouro'=>'tbLogradouroUf'], '*')
+                ->joinLeft(['bairro' =>'tbBairro'],'logradouro.nrInicioBairro = bairro.nrBairro', '*',$this->_schema)
+                ->joinLeft(['cidade' => 'tbLocalidade'], 'logradouro.nrLocalidade = cidade.nrLocalidade','*',$this->_schema);
+        return $this->_db->fetchAll($objQuery);
     }
 }

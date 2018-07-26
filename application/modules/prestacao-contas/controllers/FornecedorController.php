@@ -42,8 +42,10 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
 
     public function cidadeAction() {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        $id = $this->_request->getParam("id");
-        $cidade = new Cidade();
+        //$id = $this->_request->getParam("id");
+        $cidade = new PrestacaoContas_Model_DbTable_Enderecos();
+        var_dump($cidade->cidadesRetorno());
+        die;
         $this->retornaJson($cidade->buscar($id));
     }
 
@@ -63,5 +65,13 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
         $mapperVerificacao = new Agente_Model_VerificacaoMapper();
         $endereco = $mapperVerificacao->fetchPairs('idVerificacao', 'Descricao', array('idtipo' => 2));
         $this->retornaJson($endereco);
+    }
+
+    public function buscarCepAction(){
+       $cep = $this->_request->getParam("cep");
+       $logradouro = new PrestacaoContas_Model_DbTable_Enderecos();
+       var_dump($logradouro->buscarCep($cep));
+       die;
+       $this -> retornaJson($logradouro);
     }
 }
