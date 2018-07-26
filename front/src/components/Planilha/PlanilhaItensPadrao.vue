@@ -47,37 +47,37 @@
 </template>
 
 <script>
-import SalicFormatarValor from '@/components/SalicFormatarValor';
-import * as planilhas from '@/mixins/planilhas';
+    import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import * as planilhas from '@/mixins/planilhas';
 
-export default {
-  name: 'PlanilhaListaDeItensPadrao',
-  data() {
-    return {
-      planilha: [],
+    export default {
+        name: 'PlanilhaListaDeItensPadrao',
+        data() {
+            return {
+                planilha: [],
+            };
+        },
+        props: {
+            table: {},
+        },
+        components: {
+            SalicFormatarValor,
+        },
+        computed: {
+            formataValorSolicitadoTotal() {
+                return planilhas.formataValorSolicitadoTotal(this.table);
+            },
+        },
+        methods: {
+            isObject(el) {
+                return typeof el === 'object';
+            },
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
+            },
+            converterParaReal(value) {
+                return planilhas.converterParaReal(value);
+            },
+        },
     };
-  },
-  props: {
-    table: {},
-  },
-  components: {
-    SalicFormatarValor,
-  },
-  computed: {
-    formataValorSolicitadoTotal() {
-      return planilhas.formataValorSolicitadoTotal(this.table);
-    },
-  },
-  methods: {
-    isObject(el) {
-      return typeof el === 'object';
-    },
-    ultrapassaValor(row) {
-      return planilhas.ultrapassaValor(row);
-    },
-    converterParaReal(value) {
-      return planilhas.converterParaReal(value);
-    },
-  },
-};
 </script>

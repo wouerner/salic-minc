@@ -23,8 +23,12 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlUnitario"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlSolicitado"/></td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlUnitario"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlSolicitado"/>
+                </td>
                 <td>
                     <a v-if="row.JustProponente.length > 3"
                        class="tooltipped"
@@ -42,29 +46,29 @@
 </template>
 
 <script>
-import SalicFormatarValor from '@/components/SalicFormatarValor';
-import * as planilhas from '@/mixins/planilhas';
+    import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import * as planilhas from '@/mixins/planilhas';
 
-export default {
-  name: 'PlanilhaListaDeItensCurta',
-  data() {
-    return {
-      planilha: [],
+    export default {
+        name: 'PlanilhaListaDeItensCurta',
+        data() {
+            return {
+                planilha: [],
+            };
+        },
+        props: {
+            table: {},
+        },
+        components: {
+            SalicFormatarValor,
+        },
+        methods: {
+            isObject(el) {
+                return typeof el === 'object';
+            },
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
+            },
+        },
     };
-  },
-  props: {
-    table: {},
-  },
-  components: {
-    SalicFormatarValor,
-  },
-  methods: {
-    isObject(el) {
-      return typeof el === 'object';
-    },
-    ultrapassaValor(row) {
-      return planilhas.ultrapassaValor(row);
-    },
-  },
-};
 </script>

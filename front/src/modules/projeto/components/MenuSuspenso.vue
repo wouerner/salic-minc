@@ -24,98 +24,97 @@
     </div>
 </template>
 <script>
-export default {
-  /* eslint-disable */
-  data() {
-    return {
-      idPronac: this.$route.params.idPronac
-    };
-  },
-  mounted() {
-    this.irParaOTopo();
-  },
-  methods: {
-    imprimirProjeto(idPronac) {
-      let self = this;
-
-      $("#boxImprimirProjeto").html(
-        "<br><br><center>Carregando dados...</center>"
-      );
-
-      $.ajax({
-        url:
-          "/default/consultardadosprojeto/form-imprimir-projeto?idPronac=" +
-          idPronac,
-        data: {
-          idPronac: idPronac
+    export default {
+        /* eslint-disable */
+        data() {
+            return {
+                idPronac: this.$route.params.idPronac
+            };
         },
-        success: function(data) {
-          $("#boxImprimirProjeto").html(data);
+        mounted() {
+            this.irParaOTopo();
         },
-        type: "post"
-      });
+        methods: {
+            imprimirProjeto(idPronac) {
+                let self = this;
 
-      $("#boxImprimirProjeto").dialog({
-        title: "Imprimir Projeto",
-        resizable: true,
-        width: 750,
-        height: 460,
-        modal: true,
-        autoOpen: false,
-        buttons: {
-          Fechar: function() {
-            $(this).dialog("close");
-          },
-          OK: function() {
-            self.submeteForm();
-            //$('#frmOpcoesImpressao').submit();
-          }
-        }
-      });
-      $("#boxImprimirProjeto").dialog("open");
-    },
-    submeteForm() {
-      var n = $("input:checked").length;
-      if (n > 0) {
-        $("#msgErroImpressao").html("");
-        $("#frmOpcoesImpressao").submit();
-      } else {
-        $("#msgErroImpressao").html(
-          "<center><font color='red'>� obrigat�rio selecionar ao menos uma informa��o para impress�o.</font></center>"
-        );
-      }
-    },
-    irParaOTopo() {
-      if ($3("#ir-para-o-topo").length) {
-        var scrollTrigger = 100, // px
-          backToTop = function() {
-            var scrollTop = $3(window).scrollTop();
-            $3("#ir-para-o-topo")
-              .parent()
-              .hide();
-            if (scrollTop > scrollTrigger) {
-              $3("#ir-para-o-topo")
-                .parent()
-                .show();
-            }
-          };
-        backToTop();
+                $("#boxImprimirProjeto").html(
+                    "<br><br><center>Carregando dados...</center>"
+                );
 
-        $3(window).on("scroll", function() {
-          backToTop();
-        });
+                $.ajax({
+                    url: "/default/consultardadosprojeto/form-imprimir-projeto?idPronac=" +
+                    idPronac,
+                    data: {
+                        idPronac: idPronac
+                    },
+                    success: function (data) {
+                        $("#boxImprimirProjeto").html(data);
+                    },
+                    type: "post"
+                });
 
-        $3("#ir-para-o-topo").on("click", function(e) {
-          e.preventDefault();
-          $3("html,body").animate(
-            {
-              scrollTop: 0,
+                $("#boxImprimirProjeto").dialog({
+                    title: "Imprimir Projeto",
+                    resizable: true,
+                    width: 750,
+                    height: 460,
+                    modal: true,
+                    autoOpen: false,
+                    buttons: {
+                        Fechar: function () {
+                            $(this).dialog("close");
+                        },
+                        OK: function () {
+                            self.submeteForm();
+                            //$('#frmOpcoesImpressao').submit();
+                        }
+                    }
+                });
+                $("#boxImprimirProjeto").dialog("open");
             },
-            700,
-          );
-        });
-      }
-    },
-  },
-};
+            submeteForm() {
+                var n = $("input:checked").length;
+                if (n > 0) {
+                    $("#msgErroImpressao").html("");
+                    $("#frmOpcoesImpressao").submit();
+                } else {
+                    $("#msgErroImpressao").html(
+                        "<center><font color='red'>� obrigat�rio selecionar ao menos uma informa��o para impress�o.</font></center>"
+                    );
+                }
+            },
+            irParaOTopo() {
+                if ($3("#ir-para-o-topo").length) {
+                    var scrollTrigger = 100, // px
+                        backToTop = function () {
+                            var scrollTop = $3(window).scrollTop();
+                            $3("#ir-para-o-topo")
+                                .parent()
+                                .hide();
+                            if (scrollTop > scrollTrigger) {
+                                $3("#ir-para-o-topo")
+                                    .parent()
+                                    .show();
+                            }
+                        };
+                    backToTop();
+
+                    $3(window).on("scroll", function () {
+                        backToTop();
+                    });
+
+                    $3("#ir-para-o-topo").on("click", function (e) {
+                        e.preventDefault();
+                        $3("html,body").animate(
+                            {
+                                scrollTop: 0,
+                            },
+                            700,
+                        );
+                    });
+                }
+            },
+        },
+    };
 </script>

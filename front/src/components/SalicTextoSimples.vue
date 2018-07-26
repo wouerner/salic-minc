@@ -4,8 +4,8 @@
 </template>
 
 <script>
-export default {
-  name: 'SalicTextoSimples',
-  props: ['texto'],
-};
+    export default {
+        name: 'SalicTextoSimples',
+        props: ['texto'],
+    };
 </script>

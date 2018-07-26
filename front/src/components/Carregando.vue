@@ -18,13 +18,13 @@
 </template>
 
 <script>
-export default {
-  name: 'Carregando',
-  props: {
-    text: {
-      type: String,
-      default: '',
-    },
-  },
-};
+    export default {
+        name: 'Carregando',
+        props: {
+            text: {
+                type: String,
+                default: '',
+            },
+        },
+    };
 </script>

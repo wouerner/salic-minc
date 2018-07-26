@@ -29,10 +29,18 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlUnitario"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlSolicitado"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlSugerido"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlAprovado"/></td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlUnitario"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlSolicitado"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlSugerido"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlAprovado"/>
+                </td>
                 <td class="justify" width="30%" v-html="row.JustProponente"></td>
                 <td class="justify" width="30%" v-html="row.JustParecerista"></td>
                 <td class="justify" width="30%" v-html="row.JustComponente"></td>
@@ -52,46 +60,46 @@
 </template>
 
 <script>
-import numeral from 'numeral';
-import 'numeral/locales';
-import SalicFormatarValor from '@/components/SalicFormatarValor';
-import * as planilhas from '@/mixins/planilhas';
+    import numeral from 'numeral';
+    import 'numeral/locales';
+    import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import * as planilhas from '@/mixins/planilhas';
 
-export default {
-  name: 'PlanilhaListaDeItensHomologados',
-  data() {
-    return {
-      planilha: [],
+    export default {
+        name: 'PlanilhaListaDeItensHomologados',
+        data() {
+            return {
+                planilha: [],
+            };
+        },
+        props: {
+            table: {},
+        },
+        components: {
+            SalicFormatarValor,
+        },
+        created() {
+            numeral.locale('pt-br');
+            numeral.defaultFormat('0,0.00');
+        },
+        computed: {
+            vlSolicitadoTotal() {
+                return planilhas.formataValorSolicitadoTotal(this.table);
+            },
+            vlSugeridoTotal() {
+                return planilhas.formataValorSugeridoTotal(this.table);
+            },
+            formataValorAprovadoTotal() {
+                return planilhas.formataValorAprovadoTotal(this.table);
+            },
+        },
+        methods: {
+            isObject(el) {
+                return typeof el === 'object';
+            },
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
+            },
+        },
     };
-  },
-  props: {
-    table: {},
-  },
-  components: {
-    SalicFormatarValor,
-  },
-  created() {
-    numeral.locale('pt-br');
-    numeral.defaultFormat('0,0.00');
-  },
-  computed: {
-    vlSolicitadoTotal() {
-      return planilhas.formataValorSolicitadoTotal(this.table);
-    },
-    vlSugeridoTotal() {
-      return planilhas.formataValorSugeridoTotal(this.table);
-    },
-    formataValorAprovadoTotal() {
-      return planilhas.formataValorAprovadoTotal(this.table);
-    },
-  },
-  methods: {
-    isObject(el) {
-      return typeof el === 'object';
-    },
-    ultrapassaValor(row) {
-      return planilhas.ultrapassaValor(row);
-    },
-  },
-};
 </script>

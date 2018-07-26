@@ -53,45 +53,45 @@
 </template>
 
 <script>
-import SalicFormatarValor from '@/components/SalicFormatarValor';
-import * as planilhas from '@/mixins/planilhas';
+    import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import * as planilhas from '@/mixins/planilhas';
 
-export default {
-  name: 'PlanilhaListaDeItensReadequados',
-  data() {
-    return {
-      planilha: [],
+    export default {
+        name: 'PlanilhaListaDeItensReadequados',
+        data() {
+            return {
+                planilha: [],
+            };
+        },
+        props: {
+            table: {},
+        },
+        components: {
+            SalicFormatarValor,
+        },
+        computed: {
+            formataValorComprovadoTotal() {
+                return planilhas.formataValorComprovadoTotal();
+            },
+            formataValorAprovadoTotal() {
+                return planilhas.formataValorAprovadoTotal();
+            },
+        },
+        methods: {
+            isObject(el) {
+                return typeof el === 'object';
+            },
+            converterParaReal(value) {
+                return planilhas.converterParaReal(value);
+            },
+            definirClasseItem(row) {
+                return {
+                    'orange lighten-2': row.stCustoPraticado === true,
+                    'linha-incluida': row.tpAcao === 'I',
+                    'linha-excluida': row.tpAcao === 'E',
+                    'linha-atualizada': row.tpAcao === 'A',
+                };
+            },
+        },
     };
-  },
-  props: {
-    table: {},
-  },
-  components: {
-    SalicFormatarValor,
-  },
-  computed: {
-    formataValorComprovadoTotal() {
-      return planilhas.formataValorComprovadoTotal();
-    },
-    formataValorAprovadoTotal() {
-      return planilhas.formataValorAprovadoTotal();
-    },
-  },
-  methods: {
-    isObject(el) {
-      return typeof el === 'object';
-    },
-    converterParaReal(value) {
-      return planilhas.converterParaReal(value);
-    },
-    definirClasseItem(row) {
-      return {
-        'orange lighten-2': row.stCustoPraticado === true,
-        'linha-incluida': row.tpAcao === 'I',
-        'linha-excluida': row.tpAcao === 'E',
-        'linha-atualizada': row.tpAcao === 'A',
-      };
-    },
-  },
-};
 </script>

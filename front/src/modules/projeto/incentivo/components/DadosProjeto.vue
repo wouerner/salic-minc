@@ -20,7 +20,7 @@
                 <tr>
                     <td>
                         <span v-if="dadosProjeto.idUsuarioExterno"><SalicFormatarCpfCnpj
-                                :cpf="dadosProjeto.CgcCPf"/></span>
+                            :cpf="dadosProjeto.CgcCPf"/></span>
                         <a v-else
                            :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
                             <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
@@ -637,60 +637,60 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import Carregando from '@/components/Carregando';
-import SalicTextoSimples from '@/components/SalicTextoSimples';
-import SalicFormatarValor from '@/components/SalicFormatarValor';
-import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
-import { utils } from '@/mixins/utils';
-import moment from 'moment';
+    import { mapGetters } from 'vuex';
+    import Carregando from '@/components/Carregando';
+    import SalicTextoSimples from '@/components/SalicTextoSimples';
+    import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
+    import { utils } from '@/mixins/utils';
+    import moment from 'moment';
 
-export default {
-  data() {
-    return {
-      loading: true,
-      idPronac: this.$route.params.idPronac,
-      ProponenteInabilitado: false,
-      emAnaliseNaCNIC: false,
+    export default {
+        data() {
+            return {
+                loading: true,
+                idPronac: this.$route.params.idPronac,
+                ProponenteInabilitado: false,
+                emAnaliseNaCNIC: false,
+            };
+        },
+        mixins: [utils],
+        components: {
+            Carregando,
+            SalicTextoSimples,
+            SalicFormatarValor,
+            SalicFormatarCpfCnpj,
+        },
+        created() {
+            if (Object.keys(this.dadosProjeto).length > 0) {
+                this.loading = false;
+            }
+        },
+        watch: {
+            dadosProjeto(value) {
+                if (Object.keys(value).length > 0) {
+                    this.loading = false;
+                    this.idPronac = this.dadosProjeto.idPronac;
+                }
+            },
+        },
+        computed: {
+            ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
+            }),
+        },
+        methods: {
+            isDataExpirada(date) {
+                return moment().diff(date, 'days') > 0;
+            },
+        },
+        filters: {
+            formatarData(date) {
+                if (date.length === 0) {
+                    return '-';
+                }
+                return moment(date).format('DD/MM/YYYY');
+            },
+        },
     };
-  },
-  mixins: [utils],
-  components: {
-    Carregando,
-    SalicTextoSimples,
-    SalicFormatarValor,
-    SalicFormatarCpfCnpj,
-  },
-  created() {
-    if (Object.keys(this.dadosProjeto).length > 0) {
-      this.loading = false;
-    }
-  },
-  watch: {
-    dadosProjeto(value) {
-      if (Object.keys(value).length > 0) {
-        this.loading = false;
-        this.idPronac = this.dadosProjeto.idPronac;
-      }
-    },
-  },
-  computed: {
-    ...mapGetters({
-      dadosProjeto: 'projeto/projeto',
-    }),
-  },
-  methods: {
-    isDataExpirada(date) {
-      return moment().diff(date, 'days') > 0;
-    },
-  },
-  filters: {
-    formatarData(date) {
-      if (date.length === 0) {
-        return '-';
-      }
-      return moment(date).format('DD/MM/YYYY');
-    },
-  },
-};
 </script>

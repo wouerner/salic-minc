@@ -158,96 +158,96 @@
 </template>
 
 <script>
-import Carregando from '@/components/Carregando';
-import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
+    import Carregando from '@/components/Carregando';
+    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
 
-export default {
-  name: 'Proponente',
-  data() {
-    return {
-      proponente: [],
-      identificacao: [],
-      loading: true,
+    export default {
+        name: 'Proponente',
+        data() {
+            return {
+                proponente: [],
+                identificacao: [],
+                loading: true,
+            };
+        },
+        components: {
+            Carregando,
+            SalicFormatarCpfCnpj,
+        },
+        props: ['id', 'cpf'],
+        mounted() {
+            if (typeof this.id !== 'undefined') {
+                this.fetch(this.id);
+            }
+
+            if (typeof this.cpf !== 'undefined') {
+                this.fetch(null, this.cpf);
+            }
+        },
+        watch: {
+            id(value) {
+                if (typeof value !== 'undefined') {
+                    this.fetch(this.id);
+                }
+            },
+            cpf(value) {
+                if (typeof value !== 'undefined') {
+                    this.fetch(null, value);
+                }
+            },
+        },
+        computed: {
+            idusuario() {
+                // We will see what `params` is shortly
+                return this.$route.params.idusuario;
+            },
+            TipoPessoa() {
+                return this.label_tipo_pessoa(this.identificacao.tipopessoa);
+            },
+        },
+        methods: {
+            fetch(id = null, cpf = null) {
+                let params = {};
+
+                if (id) {
+                    params = { idAgente: id };
+                }
+
+                if (cpf) {
+                    /* eslint-disable-next-line */
+                    params = { cpf: cpf };
+                }
+
+                const self = this;
+                /* eslint-disable-next-line */
+                $3
+                    .ajax({
+                        url: '/agente/visualizar/obter-dados-proponente/',
+                        data: params,
+                    })
+                    .done((response) => {
+                        self.proponente = response.data;
+
+                        if (self.proponente && self.proponente.identificacao) {
+                            self.identificacao = self.proponente.identificacao;
+                        }
+
+                        self.loading = false;
+                    });
+            },
+            label_tipo_pessoa(tipo) {
+                let string = 'Pessoa Física';
+
+                if (tipo === '1') string = 'Pessoa Jurídica';
+
+                return string;
+            },
+            label_sim_ou_nao(valor) {
+                if (valor === 1) {
+                    return 'Sim';
+                }
+                return 'Não';
+            },
+        },
     };
-  },
-  components: {
-    Carregando,
-    SalicFormatarCpfCnpj,
-  },
-  props: ['id', 'cpf'],
-  mounted() {
-    if (typeof this.id !== 'undefined') {
-      this.fetch(this.id);
-    }
-
-    if (typeof this.cpf !== 'undefined') {
-      this.fetch(null, this.cpf);
-    }
-  },
-  watch: {
-    id(value) {
-      if (typeof value !== 'undefined') {
-        this.fetch(this.id);
-      }
-    },
-    cpf(value) {
-      if (typeof value !== 'undefined') {
-        this.fetch(null, value);
-      }
-    },
-  },
-  computed: {
-    idusuario() {
-      // We will see what `params` is shortly
-      return this.$route.params.idusuario;
-    },
-    TipoPessoa() {
-      return this.label_tipo_pessoa(this.identificacao.tipopessoa);
-    },
-  },
-  methods: {
-    fetch(id = null, cpf = null) {
-      let params = {};
-
-      if (id) {
-        params = { idAgente: id };
-      }
-
-      if (cpf) {
-        /* eslint-disable-next-line */
-        params = { cpf: cpf };
-      }
-
-      const self = this;
-      /* eslint-disable-next-line */
-      $3
-        .ajax({
-          url: '/agente/visualizar/obter-dados-proponente/',
-          data: params,
-        })
-        .done((response) => {
-          self.proponente = response.data;
-
-          if (self.proponente && self.proponente.identificacao) {
-            self.identificacao = self.proponente.identificacao;
-          }
-
-          self.loading = false;
-        });
-    },
-    label_tipo_pessoa(tipo) {
-      let string = 'Pessoa Física';
-
-      if (tipo === '1') string = 'Pessoa Jurídica';
-
-      return string;
-    },
-    label_sim_ou_nao(valor) {
-      if (valor === 1) {
-        return 'Sim';
-      }
-      return 'Não';
-    },
-  },
-};
 </script>

@@ -4,22 +4,23 @@
 import Vue from 'vue';
 import Index from './Index';
 import {
-  store,
-  router,
+    store,
+    router,
 } from './config';
 
 Vue.config.productionTip = false;
 
 window.onload = () => {
-  /* eslint-disable-next-line */
-  const main = new Vue({
-    el: '#app',
-    router,
-    store,
-    components: {
-      Index,
-    },
-    template: '<Index/>',
-    created: () => {},
-  });
+    /* eslint-disable-next-line */
+    const main = new Vue({
+        el: '#app',
+        router,
+        store,
+        components: {
+            Index,
+        },
+        template: '<Index/>',
+        created: () => {
+        },
+    });
 };

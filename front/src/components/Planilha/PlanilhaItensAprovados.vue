@@ -42,26 +42,26 @@
 </template>
 
 <script>
-import * as planilhas from '@/mixins/planilhas';
+    import * as planilhas from '@/mixins/planilhas';
 
-export default {
-  name: 'PlanilhaListaDeItensAprovados',
-  data() {
-    return {
-      planilha: [],
+    export default {
+        name: 'PlanilhaListaDeItensAprovados',
+        data() {
+            return {
+                planilha: [],
+            };
+        },
+        props: ['table', 'full'],
+        methods: {
+            isObject(el) {
+                return typeof el === 'object';
+            },
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
+            },
+            converterParaReal(value) {
+                return planilhas.converterParaReal(value);
+            },
+        },
     };
-  },
-  props: ['table', 'full'],
-  methods: {
-    isObject(el) {
-      return typeof el === 'object';
-    },
-    ultrapassaValor(row) {
-      return planilhas.ultrapassaValor(row);
-    },
-    converterParaReal(value) {
-      return planilhas.converterParaReal(value);
-    },
-  },
-};
 </script>
