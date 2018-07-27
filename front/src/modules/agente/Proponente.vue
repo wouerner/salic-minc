@@ -40,7 +40,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="endereco in proponente.enderecos">
+                        <tr v-for="(endereco, index) in proponente.enderecos" :key="index">
                             <td>{{ endereco.tipoendereco }}</td>
                             <td>{{ endereco.dstipologradouro }}</td>
                             <td>{{ endereco.logradouro }}</td>
@@ -70,7 +70,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="telefone in proponente.telefones">
+                        <tr v-for="(telefone, index) in proponente.telefones" :key="index">
                             <td>{{ telefone.dstelefone }}</td>
                             <td>{{ telefone.ufsigla }}</td>
                             <td>{{ telefone.ddd }}</td>
@@ -94,7 +94,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="email in proponente.emails">
+                        <tr v-for="(email, index) in proponente.emails" :key="index">
                             <td nowrap>{{ email.tipo }}</td>
                             <td nowrap>{{ email.descricao }}</td>
                             <td>{{ label_sim_ou_nao(email.divulgar) }}</td>
@@ -142,7 +142,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="dirigente in proponente.dirigentes">
+                        <tr v-for="(dirigente, index) in proponente.dirigentes" :key="index">
                             <td align="center">
                                 <SalicFormatarCpfCnpj :cpf="dirigente.cnpjcpfdirigente"/>
                             </td>
@@ -162,90 +162,92 @@
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
 
     export default {
-        name: "Proponente",
-        data: function () {
+        name: 'Proponente',
+        data() {
             return {
                 proponente: [],
                 identificacao: [],
                 loading: true,
-            }
+            };
         },
         components: {
             Carregando,
-            SalicFormatarCpfCnpj
+            SalicFormatarCpfCnpj,
         },
         props: ['id', 'cpf'],
-        mounted: function () {
-            if (typeof this.id != 'undefined') {
+        mounted() {
+            if (typeof this.id !== 'undefined') {
                 this.fetch(this.id);
             }
 
-            if (typeof this.cpf != 'undefined') {
+            if (typeof this.cpf !== 'undefined') {
                 this.fetch(null, this.cpf);
             }
         },
         watch: {
-            id: function (value) {
-                if (typeof value != 'undefined') {
+            id(value) {
+                if (typeof value !== 'undefined') {
                     this.fetch(this.id);
                 }
             },
-            cpf: function (value) {
-                if (typeof value != 'undefined') {
+            cpf(value) {
+                if (typeof value !== 'undefined') {
                     this.fetch(null, value);
                 }
-            }
+            },
         },
         computed: {
             idusuario() {
                 // We will see what `params` is shortly
-                return this.$route.params.idusuario
+                return this.$route.params.idusuario;
             },
-            TipoPessoa: function () {
+            TipoPessoa() {
                 return this.label_tipo_pessoa(this.identificacao.tipopessoa);
-            }
+            },
         },
         methods: {
-            fetch: function (id = null, cpf = null) {
-                let params = {}
+            fetch(id = null, cpf = null) {
+                let params = {};
 
                 if (id) {
-                    params = {idAgente: id};
+                    params = { idAgente: id };
                 }
 
                 if (cpf) {
-                    params = {cpf: cpf};
+                    /* eslint-disable-next-line */
+                    params = { cpf: cpf };
                 }
 
-                let self = this;
-                $3.ajax({
-                    url: '/agente/visualizar/obter-dados-proponente/',
-                    data: params
-                }).done(function (response) {
-                    self.proponente = response.data;
+                const self = this;
+                /* eslint-disable-next-line */
+                $3
+                    .ajax({
+                        url: '/agente/visualizar/obter-dados-proponente/',
+                        data: params,
+                    })
+                    .done((response) => {
+                        self.proponente = response.data;
 
-                    if (self.proponente && self.proponente.identificacao) {
-                        self.identificacao = self.proponente.identificacao;
-                    }
+                        if (self.proponente && self.proponente.identificacao) {
+                            self.identificacao = self.proponente.identificacao;
+                        }
 
-                    self.loading = false;
-
-                });
+                        self.loading = false;
+                    });
             },
-            label_tipo_pessoa: function (tipo) {
+            label_tipo_pessoa(tipo) {
                 let string = 'Pessoa Física';
 
-                if (tipo == '1')
-                    string = 'Pessoa Jurídica';
+                if (tipo === '1') string = 'Pessoa Jurídica';
 
                 return string;
             },
-            label_sim_ou_nao: function (valor) {
-                if (valor == 1) {
+            label_sim_ou_nao(valor) {
+                if (valor === 1) {
                     return 'Sim';
                 }
                 return 'Não';
-            }
-        }
+            },
+        },
     };
 </script>

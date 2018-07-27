@@ -29,10 +29,18 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlUnitario"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlSolicitado"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlSugerido"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlAprovado"/></td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlUnitario"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlSolicitado"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlSugerido"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlAprovado"/>
+                </td>
                 <td class="justify" width="30%" v-html="row.JustProponente"></td>
                 <td class="justify" width="30%" v-html="row.JustParecerista"></td>
                 <td class="justify" width="30%" v-html="row.JustComponente"></td>
@@ -43,7 +51,7 @@
                 <td colspan="7"><b>Totais</b></td>
                 <td class="right-align"><b>{{ vlSolicitadoTotal }}</b></td>
                 <td class="right-align"><b>{{ vlSugeridoTotal }}</b></td>
-                <td class="right-align"><b>{{ vlAprovadoTotal }}</b></td>
+                <td class="right-align"><b>{{ formataValorAprovadoTotal }}</b></td>
                 <td colspan="3" class="right-align"></td>
             </tr>
             </tfoot>
@@ -52,75 +60,46 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
+    import numeral from 'numeral';
     import 'numeral/locales';
-
     import SalicFormatarValor from '@/components/SalicFormatarValor';
-
+    import * as planilhas from '@/mixins/planilhas';
 
     export default {
         name: 'PlanilhaListaDeItensHomologados',
-        data: function () {
+        data() {
             return {
-                planilha: []
-            }
+                planilha: [],
+            };
         },
         props: {
-            'table': {}
+            table: {},
         },
         components: {
-            SalicFormatarValor
+            SalicFormatarValor,
         },
-        created: function() {
+        created() {
             numeral.locale('pt-br');
             numeral.defaultFormat('0,0.00');
         },
         computed: {
-            vlSolicitadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if(typeof cell.vlSolicitado != 'undefined') {
-                        soma.add(parseFloat(cell.vlSolicitado));
-                    }
-                });
-                return soma.format();
+            vlSolicitadoTotal() {
+                return planilhas.formataValorSolicitadoTotal(this.table);
             },
-            vlSugeridoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if(typeof cell.vlSugerido != 'undefined') {
-                        soma.add(parseFloat(cell.vlSugerido));
-                    }
-                });
-                return soma.format();
+            vlSugeridoTotal() {
+                return planilhas.formataValorSugeridoTotal(this.table);
             },
-            vlAprovadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if(typeof cell.vlAprovado != 'undefined') {
-                        soma.add(parseFloat(cell.vlAprovado));
-                    }
-                });
-                return soma.format();
-            }
+            formataValorAprovadoTotal() {
+                return planilhas.formataValorAprovadoTotal(this.table);
+            },
         },
         methods: {
-            isObject: function (el) {
-                return typeof el === "object";
+            isObject(el) {
+                return typeof el === 'object';
             },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                        .replace(/&/g, '-and-')
-                        .replace(/[\s\W-]+/g, '-');
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
             },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
+        },
     };
 </script>

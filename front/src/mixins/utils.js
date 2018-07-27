@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const utils = {
     methods: {
         converterParaMoedaAmericana: function (valor) {
@@ -36,8 +37,8 @@ export const utils = {
                 cents = "0" + cents;
             }
             for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
-                num = num.substring(0, num.length - (4 * i + 3)) + '.'
-                    + num.substring(num.length - (4 * i + 3));
+                num = num.substring(0, num.length - (4 * i + 3)) + '.' +
+                    num.substring(num.length - (4 * i + 3));
 
             var ret = num + ',' + cents;
             if (x == 1) {

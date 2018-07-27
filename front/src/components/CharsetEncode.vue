@@ -8,10 +8,10 @@
         name: 'CharsetEncode',
         props: ['texto'],
         computed: {
-            textFormated: function() {
+            textFormated: function () {
                 return decodeURI(this.texto, 'iso-8859-1');
             },
-            textNotInformed: function() {
+            textNotInformed: function () {
                 return decodeURI('N&atilde;o informado(a)', 'iso-8859-1');
             },
         },

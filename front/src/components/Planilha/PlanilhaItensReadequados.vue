@@ -43,8 +43,8 @@
             <tfoot v-if="table && Object.keys(table).length > 0" style="opacity: 0.5">
             <tr>
                 <td colspan="7"><b>Totais</b></td>
-                <td class="right-align"><b>{{ vlAprovadoTotal }}</b></td>
-                <td class="right-align"><b>{{ vlComprovadoTotal }}</b></td>
+                <td class="right-align"><b>{{ formataValorAprovadoTotal }}</b></td>
+                <td class="right-align"><b>{{ formataValorComprovadoTotal }}</b></td>
                 <td colspan="2" class="right-align"></td>
             </tr>
             </tfoot>
@@ -53,78 +53,45 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
-    import 'numeral/locales';
-
     import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import * as planilhas from '@/mixins/planilhas';
 
     export default {
         name: 'PlanilhaListaDeItensReadequados',
-        data: function () {
+        data() {
             return {
-                planilha: []
-            }
+                planilha: [],
+            };
         },
         props: {
-            'table': {}
+            table: {},
         },
         components: {
-            SalicFormatarValor
-        },
-        created: function () {
-            numeral.locale('pt-br');
-            numeral.defaultFormat('0,0.00');
+            SalicFormatarValor,
         },
         computed: {
-            vlComprovadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if (typeof cell.VlComprovado != 'undefined') {
-                        if (cell.tpAcao && cell.tpAcao == 'E') {
-                            return;
-                        }
-                        soma.add(parseFloat(cell.VlComprovado));
-                    }
-                });
-                return soma.format();
+            formataValorComprovadoTotal() {
+                return planilhas.formataValorComprovadoTotal();
             },
-            vlAprovadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if (typeof cell.vlAprovado != 'undefined') {
-                        if (cell.tpAcao && cell.tpAcao == 'E') {
-                            return;
-                        }
-                        soma.add(parseFloat(cell.vlAprovado));
-                    }
-                });
-                return soma.format();
-            }
+            formataValorAprovadoTotal() {
+                return planilhas.formataValorAprovadoTotal();
+            },
         },
         methods: {
-            isObject: function (el) {
-                return typeof el === "object";
+            isObject(el) {
+                return typeof el === 'object';
             },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                        .replace(/&/g, '-and-')
-                        .replace(/[\s\W-]+/g, '-');
+            converterParaReal(value) {
+                return planilhas.converterParaReal(value);
             },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            },
-            definirClasseItem: function (row) {
+            definirClasseItem(row) {
                 return {
-                    'orange lighten-2': row.stCustoPraticado == true,
-                    'linha-incluida': row.tpAcao == 'I',
-                    'linha-excluida': row.tpAcao == 'E',
-                    'linha-atualizada': row.tpAcao == 'A',
-                }
-            }
-        }
+                    'orange lighten-2': row.stCustoPraticado === true,
+                    'linha-incluida': row.tpAcao === 'I',
+                    'linha-excluida': row.tpAcao === 'E',
+                    'linha-atualizada': row.tpAcao === 'A',
+                };
+            },
+        },
     };
 </script>

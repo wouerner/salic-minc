@@ -8,36 +8,38 @@
         name: 'SalicFormatarCpfCnpj',
         props: ['cpf'],
         computed: {
-            cpfCnpjFormatado: function () {
-                if (typeof this.cpf != 'undefined') {
+            cpfCnpjFormatado() {
+                if (typeof this.cpf !== 'undefined') {
                     return this.formatarCpfOuCnpj(this.cpf);
                 }
-            }
+
+                return '';
+            },
         },
         methods: {
-            formatarCpfOuCnpj: function (cpfOrCnpj) {
-                if (cpfOrCnpj.length == 11) {
+            formatarCpfOuCnpj(cpfOrCnpj) {
+                if (cpfOrCnpj.length === 11) {
                     return this.formatarCpf(cpfOrCnpj);
                 }
                 return this.formatarCnpj(cpfOrCnpj);
             },
-            formatarCpf: function (v) // formato: 999.999.999-99
-            {
-                v = v.replace(/\D/g, "");
-                v = v.replace(/(\d{3})(\d)/, "$1.$2");
-                v = v.replace(/(\d{3})(\d)/, "$1.$2");
-                v = v.replace(/(\d{3})(\d)/, "$1-$2");
+            // formato: 999.999.999-99
+            formatarCpf(v) {
+                v = v.replace(/\D/g, '');
+                v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                v = v.replace(/(\d{3})(\d)/, '$1-$2');
                 return v;
             },
-            formatarCnpj: function (v) // formato: 99.999.999/9999-99
-            {
-                v = v.replace(/\D/g, "");
-                v = v.replace(/(\d{2})(\d)/, "$1.$2");
-                v = v.replace(/(\d{3})(\d)/, "$1.$2");
-                v = v.replace(/(\d{3})(\d)/, "$1/$2");
-                v = v.replace(/(\d{4})(\d)/, "$1-$2");
+            // formato: 99.999.999/9999-99
+            formatarCnpj(v) {
+                v = v.replace(/\D/g, '');
+                v = v.replace(/(\d{2})(\d)/, '$1.$2');
+                v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                v = v.replace(/(\d{3})(\d)/, '$1/$2');
+                v = v.replace(/(\d{4})(\d)/, '$1-$2');
                 return v;
-            }
-        }
+            },
+        },
     };
 </script>
