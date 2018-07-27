@@ -157,7 +157,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     'projeto-extrato-ano-rest',
                     'projeto-extrato-mes-rest'
                 )));
-        $controller->getRouter()->addRoute('rest', $restRoute);
+        $controller->getRouter()->addRoute('rest-mobile', $restRoute);
     }
 
     public function _initCarregarDependenciasComposer()
