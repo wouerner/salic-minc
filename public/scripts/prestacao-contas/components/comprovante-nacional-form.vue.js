@@ -120,6 +120,7 @@ Vue.component('sl-comprovante-nacional-form',
                                name="nrDocumentoDePagamento"
                                v-model="comprovante.numeroDocumento"
                                :class="c.numeroDocumento.css"
+                               placeholder="00000000000"
                                id="nrDocumentoDePagamento"
                                maxlength="10"
                                ref="numeroDocumento"
@@ -135,8 +136,9 @@ Vue.component('sl-comprovante-nacional-form',
                                 id="nrSerie"
                                 maxlength="8"
                                 v-model="comprovante.serie"
+                                placeholder="00000000000"
                            />
-                            <label>S&eacute;rie</label>
+                            <label for="nrSerie" :class="active">S&eacute;rie</label>
                         </div>
                     </div>
                     <div class="row">
@@ -180,14 +182,17 @@ Vue.component('sl-comprovante-nacional-form',
                         >Data do pagamento *</label>
                     </div>
                     <div class="input-field col s2">
-                        <input type="text" name="nrComprovante"
-                               id="nrComprovante"
-                               maxlength="50" null="false"
-                               value=""
-                               v-model="comprovante.numero"
-                               :class="c.numero.css"
-                               ref="numero"
-                               v-on:input="inputNumero($event.target.value)"
+                        <input
+                           type="text"
+                           name="nrComprovante"
+                           id="nrComprovante"
+                           maxlength="50"
+                           placeholder="00000000"
+                           value=""
+                           v-model="comprovante.numero"
+                           :class="c.numero.css"
+                           ref="numero"
+                           v-on:input="inputNumero($event.target.value)"
                         />
                         <label
                             for="nrComprovante"
