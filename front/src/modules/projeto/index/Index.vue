@@ -1,6 +1,6 @@
 <template>
     <div id="index">
-        <div>Componente inicial</div>
+        <div>{{ message }}</div>
     </div>
 </template>
 
