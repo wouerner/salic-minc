@@ -6,45 +6,45 @@
 </template>
 
 <script>
-
     import Carregando from '@/components/Carregando';
 
     export default {
         name: 'CarregarTemplateAjax',
         components: {
-            Carregando
+            Carregando,
         },
-        data: function () {
+        data() {
             return {
                 active: true,
                 loading: true,
-            }
+            };
         },
         props: {
-            urlAjax: ''
+            urlAjax: '',
         },
-        mounted: function () {
-            if (typeof this.urlAjax != 'undefined' && this.urlAjax != '') {
+        mounted() {
+            if (typeof this.urlAjax !== 'undefined' && this.urlAjax !== '') {
                 this.obterTemplate();
             }
         },
         methods: {
-            obterTemplate: function () {
-                let self = this;
-                if (self.urlAjax == '') {
+            obterTemplate() {
+                const self = this;
+                if (self.urlAjax === '') {
                     return;
                 }
-
+                /* eslint-disable-next-line */
                 let elmRetorno = $3("#template-ajax");
+                /* eslint-disable-next-line */
                 $3.ajax({
                     url: self.urlAjax,
-                    success: function (data) {
+                    success(data) {
                         elmRetorno.html(data);
                         self.loading = false;
                     },
-                    type: 'post'
+                    type: 'post',
                 });
-            }
-        }
+            },
+        },
     };
 </script>
