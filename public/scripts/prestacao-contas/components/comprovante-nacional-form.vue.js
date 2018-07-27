@@ -79,9 +79,9 @@ Vue.component('sl-comprovante-nacional-form',
             </fieldset>
             <template v-if="(!comprovante.fornecedor.eInternacional)">
                 <fieldset>
-                    <legend>Dados da Comprova&ccedil;&atilde;o de Pagamento</legend>
+                    <legend>Dados do Comprovante de Despesa</legend>
                     <div class="row">
-                        <div class="col s4">
+                        <div class="col s2">
                             <label for="tpDocumento">Tipo Comprovante *</label>
                             <select name="tpDocumento" id="tpDocumento"
                                 v-model="comprovante.tipo"
@@ -94,32 +94,6 @@ Vue.component('sl-comprovante-nacional-form',
                                 <option value="5">RPA</option>
                             </select>
                         </div>
-                        <div class="input-field col s4">
-                            <input type="text" name="nrComprovante"
-                                   id="nrComprovante"
-                                   maxlength="50" null="false"
-                                   value=""
-                                   v-model="comprovante.numero"
-                                   :class="c.numero.css"
-                                   ref="numero"
-                                   v-on:input="inputNumero($event.target.value)"
-                            />
-                            <label
-                                for="nrComprovante"
-                                :class="c.numero.css"
-                            >N&uacute;mero * </label>
-                        </div>
-                        <div class="input-field col s4">
-                           <input type="text"
-                                name="nrSerie"
-                                id="nrSerie"
-                                maxlength="8"
-                                v-model="comprovante.serie"
-                           />
-                            <label>S&eacute;rie</label>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="input-field col s2">
                             <input
                                 placeholder="DD/MM/AAAA"
@@ -141,28 +115,6 @@ Vue.component('sl-comprovante-nacional-form',
                                 :data-tooltip="'Inicio em: ' + dataInicio + ' at\xe9 ' + dataFim">help</i>
                         </div>
                         <div class="input-field col s3">
-                            <input placeholder="DD/MM/AAAA" type="text"
-                                name="dtPagamento" id="dtPagamento"
-                                v-model="comprovante.dataPagamento"
-                                ref="dataPagamento"
-                                :class="c.dataPagamento.css"
-                                v-on:input="inputDataPagamento($event.target.value)"
-                            />
-                            <label
-                                :class="c.dataPagamento.css"
-                            >Data do pagamento *</label>
-                        </div>
-                        <div class=" col s3">
-                            <label>Forma de Pagamento<span style='color:red'>*</span></label>
-                            <select class="browser-default" name="tpFormaDePagamento" id="tpFormaDePagamento"
-                                    v-model="comprovante.forma"
-                                    >
-                                    <option value="1">Cheque</option>
-                                    <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
-                                    <option value="3">Saque/Dinheiro</option>
-                            </select>
-                        </div>
-                        <div class="input-field col s3">
                             <input
                                type="text"
                                name="nrDocumentoDePagamento"
@@ -174,25 +126,26 @@ Vue.component('sl-comprovante-nacional-form',
                                v-on:input="inputNumeroDocumento($event.target.value)"
                            />
                            <label for="nrDocumentoDePagamento"
-                               :class="c.numeroDocumento.css"
+                               :class="['active',c.numeroDocumento.css]"
                            >N&ordm; Documento Pagamento*</label>
+                        </div>
+                        <div class="input-field col s2">
+                           <input type="text"
+                                name="nrSerie"
+                                id="nrSerie"
+                                maxlength="8"
+                                v-model="comprovante.serie"
+                           />
+                            <label>S&eacute;rie</label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-field col s3">
-                            <input type="text" name="vlComprovado" size="10" id="vlComprovado"
-                                   v-model="comprovante.valor"
-                                   :class="c.valor.css"
-                                   v-on:input="inputValor($event.target.value)"
-                                   ref="valor"
-                           />
-                           <label :class="c.valor.css">
-                                   Valor do Item (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
-                        </div>
+                    </div>
+                    <div class="row">
                         <div class="file-field input-field col s4">
                             <div :class="['btn small', c.arquivo.css] ">
                                 <input name="arquivo" id="arquivo" ref="arquivo" type="file" @change="file">
-                                <span>Arquivo *</span>
+                                <span>Comprovante *</span>
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate" type="text"
@@ -201,6 +154,59 @@ Vue.component('sl-comprovante-nacional-form',
                             </div>
                         </div>
                     </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Dados do Comprovante Bancario</legend>
+                    <div class=" col s3">
+                        <label>Forma de Pagamento<span style='color:red'>*</span></label>
+                        <select class="browser-default" name="tpFormaDePagamento" id="tpFormaDePagamento"
+                                v-model="comprovante.forma"
+                                >
+                                <option value="1">Cheque</option>
+                                <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
+                                <option value="3">Saque/Dinheiro</option>
+                        </select>
+                    </div>
+                    <div class="input-field col s3">
+                        <input placeholder="DD/MM/AAAA" type="text"
+                            name="dtPagamento" id="dtPagamento"
+                            v-model="comprovante.dataPagamento"
+                            ref="dataPagamento"
+                            :class="c.dataPagamento.css"
+                            v-on:input="inputDataPagamento($event.target.value)"
+                        />
+                        <label
+                            :class="c.dataPagamento.css"
+                        >Data do pagamento *</label>
+                    </div>
+                    <div class="input-field col s2">
+                        <input type="text" name="nrComprovante"
+                               id="nrComprovante"
+                               maxlength="50" null="false"
+                               value=""
+                               v-model="comprovante.numero"
+                               :class="c.numero.css"
+                               ref="numero"
+                               v-on:input="inputNumero($event.target.value)"
+                        />
+                        <label
+                            for="nrComprovante"
+                            :class="['active ', c.numero.css]"
+                        >N&uacute;mero * </label>
+                    </div>
+                    <div class="input-field col s2">
+                        <input type="text" name="vlComprovado" size="10" id="vlComprovado"
+                               v-model="comprovante.valor"
+                               :class="c.valor.css"
+                               v-on:input="inputValor($event.target.value)"
+                               ref="valor"
+                       />
+                       <label :class="c.valor.css">
+                               Valor do Item (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
+                        </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Justificativa</legend>
                     <div class="row">
                         <div class="input-field col s12">
                             <textarea class="materialize-textarea" rows="5"
@@ -208,9 +214,6 @@ Vue.component('sl-comprovante-nacional-form',
                                       name="dsJustificativa"
                                       id="dsJustificativa">
                                       </textarea>
-                            <label>
-                                Justificativa
-                            </label>
                         </div>
                     </div>
                 </fieldset>
@@ -372,7 +375,7 @@ Vue.component('sl-comprovante-nacional-form',
                     $3('#modal1').modal('close');
 
                     if (vue.tipoform == 'cadastro') {
-                        
+
                        vue.comprovante._index = data.idComprovantePagamento;
                        vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
                        vue.$root.$emit('novo-comprovante-nacional', vue.comprovante);
