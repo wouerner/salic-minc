@@ -13,7 +13,11 @@
 
 <div class="container-fluid" id="app-comprovante">
 
-    <page-title nome="Comprovantes"></page-title>
+    <page-title 
+        nome="Comprovantes"
+        url="/prestacao-contas/pagamento/index/idpronac/<?php echo $this->idpronac ?>"
+    >
+    </page-title>
 
     <dados-projeto idpronac="<?php echo $this->idpronac ?>"></dados-projeto>
 

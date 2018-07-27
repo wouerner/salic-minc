@@ -2,16 +2,16 @@ Vue.component('comprovantes', {
     template: `
         <div>
             <template v-if="dados.length > 0 || Object.keys(dados).length > 0 ">
-              <transition-group  
-                tag="ul" 
-                class="collapsible" 
-                name="list" 
-                data-collapsible="accordion" 
+              <transition-group
+                tag="ul"
+                class="collapsible"
+                name="list"
+                data-collapsible="accordion"
                 enter-active-class="animated tada"
                 leave-active-class="animated bounceOutRight"
               >
-                <li 
-                    v-for="dado in dados" 
+                <li
+                    v-for="dado in dados"
                     :key="dado.idComprovantePagamento">
                   <div class="collapsible-header">
                         Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
@@ -89,7 +89,14 @@ Vue.component('comprovantes', {
             if(vue.tipo =='nacional'){
                 data.status='novo';
                 // vue.$data.dados.push(data);
-                Vue.set(vue.$data.dados, data._index, data);
+                // console.log(data._index, data);
+                if (Object.values(vue.$data.dados).length == 0) {
+                    let a = new Object;
+                    a[data._index]  = data;
+                    vue.$data.dados = a;
+                } else {
+                    Vue.set(vue.$data.dados, data._index, data);
+                }
                 vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
             }
         })
@@ -106,7 +113,13 @@ Vue.component('comprovantes', {
         this.$root.$on('novo-comprovante-internacional', function(data) {
             if(vue.tipo =='internacional'){
                 data.status='novo';
-                vue.$data.dados.push(data);
+                if (Object.values(vue.$data.dados).length == 0) {
+                    let a = new Object;
+                    a[data._index]  = data;
+                    vue.$data.dados = a;
+                } else {
+                    Vue.set(vue.$data.dados, data._index, data);
+                }
                 vue.valorComprovado = parseFloat(vue.valorcomprovado) + parseFloat(data.valor);
             }
         })
@@ -137,7 +150,10 @@ Vue.component('comprovantes', {
         })
         .done(function(data) {
             console.log(data.data);
-            vue.$data.dados = data.data;
+            if (data.data.length != 0) {
+                vue.$data.dados = data.data;
+            }
+
             $3('.collapsible').each(function() {
                 $3(this).collapsible();
             });
@@ -227,7 +243,7 @@ Vue.component('comprovantes', {
     },
     data: function(){
         return {
-            dados:{},
+            dados: {},
             formVisivel: false,
             valorComprovado: this.valorcomprovado
         }

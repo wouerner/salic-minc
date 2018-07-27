@@ -277,6 +277,8 @@ Vue.component('sl-comprovante-internacional-form',
                     $3('#modal1').modal('close');
 
                     if (vue.tipoform == 'cadastro') {
+                       vue.comprovante._index = data.idComprovantePagamento;
+                       vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
                        vue.$root.$emit('novo-comprovante-internacional', vue.comprovante);
 
                        vue.c = {
