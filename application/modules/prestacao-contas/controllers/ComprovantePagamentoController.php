@@ -67,6 +67,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['justificativa'] = $value['dsJustificativa'];
             $dataAux[$key]['justificativa'] = $value['justificativa'];
             $dataAux[$key]['dataPagamento'] = $value['dtPagamento'];
+            $dataAux[$key]['dataEmissao'] = $value['dataEmissao'];
             $dataAux[$key]['numeroDocumento'] = $value['numeroDocumento'];
             $dataAux[$key]['nrDocumentoDePagamento'] = $value['nrDocumentoDePagamento'];
             $dataAux[$key]['fornecedor']['CNPJCPF'] = $value['CNPJCPF'];

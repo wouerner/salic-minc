@@ -7,16 +7,16 @@ Vue.component('comprovantes', {
                 class="collapsible"
                 name="list"
                 data-collapsible="accordion"
-                enter-active-class="animated tada"
-                leave-active-class="animated bounceOutRight"
+                enter-active-class="animated fadeIn"
+                leave-active-class="animated fadeOut"
               >
                 <li
                     v-for="dado in dados"
-                    :key="dado.idComprovantePagamento">
+                    :key="dado.idComprovantePagamento"
+                >
                   <div class="collapsible-header">
-                        Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
-                        <span :class="['badge white-text ', badgeStatus(dado.status)]">
-                        </span>
+                    Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
+                    <span :class="['badge white-text ', badgeStatus(dado.status)]"></span>
                   </div>
                   <div :class="['collapsible-body lighten-5', badgeCSS(dado.stItemAvaliado)]">
                         <div class="card">
@@ -48,7 +48,6 @@ Vue.component('comprovantes', {
                                         :valoraprovado="valoraprovado"
                                         :valorcomprovado="valorComprovado"
                                         :valorantigo="dado.valor"
-                                        :status="edicao"
                                     >
                                     </component>
                                 </template>
@@ -149,7 +148,6 @@ Vue.component('comprovantes', {
           }
         })
         .done(function(data) {
-            console.log(data.data);
             if (data.data.length != 0) {
                 vue.$data.dados = data.data;
             }

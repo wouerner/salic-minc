@@ -505,8 +505,10 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
             ['c' => 'tbComprovantePagamento'],
             '(b.idComprovantePagamento = c.idComprovantePagamento)',
             [
-                "c.nrComprovante as numero", 
-                "c.nrSerie as serie", 
+                "c.nrComprovante as numero",
+                "c.dtEmissao as dataEmissao",
+                "c.dtPagamento as dataPagamento",
+                "c.nrSerie as serie",
                 'c.tpDocumento as tipo'
             ],
             'BDCORPORATIVO.scSAC'
@@ -581,7 +583,7 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         }
 
         $select->where('a.IdPRONAC = ?', $idpronac);
-        /* echo $select; die; */ 
+        /* echo $select; die; */
         return $this->fetchAll($select);
     }
 
@@ -658,6 +660,7 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
                 "c.nrComprovante as numero",
                 "c.nrSerie as serie",
                 "c.tpFormaDePagamento as forma",
+                "c.dtEmissao as dataEmissao",
                 "c.nrDocumentoDePagamento as numeroDocumento",
                 "c.dsJustificativa as justificativa",
             ],
@@ -727,7 +730,7 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         }
 
         $select->where('a.IdPRONAC = ?', $idpronac);
-        /* echo $select; die; */ 
+        /* echo $select; die; */
         return $this->fetchAll($select);
     }
 }

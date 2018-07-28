@@ -1,5 +1,4 @@
 Vue.component('sl-comprovante-internacional-table', {
-    props: ['dados'],
     template: `
         <div>
             <table class="bordered">
@@ -21,10 +20,8 @@ Vue.component('sl-comprovante-internacional-table', {
                     <tr>
                         <th>Dt. Emiss&atilde;o do comprovante de despesa</th>
                         <td>{{dataEmissaoComprovante}}</td>
-                        <th>Forma de Pagamento</th>
-                        <td>{{formaPagamento}}</td>
                         <th>Data do Pagamento</th>
-                        <td>{{dataPagamento}}</td>
+                        <td>{{dataPagamentoFormatado}}</td>
                     </tr>
                     <tr>
                         <th>Valor</th>
@@ -42,6 +39,7 @@ Vue.component('sl-comprovante-internacional-table', {
             </table>
         </div>
     `,
+    props: ['dados'],
     computed: {
         CNPJCPF() {
             CNPJCPF = null;
@@ -54,10 +52,13 @@ Vue.component('sl-comprovante-internacional-table', {
             return CNPJCPF;
         },
         dataEmissaoComprovante() {
-            return moment(this.dados.dtEmissao).format('DD/MM/Y');
+            return moment(this.dados.dataEmissao).format('DD/MM/Y');
         },
-        dataPagamento() {
-            return moment(this.dados.dtPagamento).format('DD/MM/Y');
+        dataPagamentoFormatado() {
+            if (moment(this.dados.dataPagamento).isValid()){
+                return moment(this.dados.dataPagamento).format('DD/MM/Y');
+            } 
+            return moment(this.dados.dataPagamento, 'DD/MM/Y').format('DD/MM/Y');
         },
         tipoDocumento() {
             tipo = '';
