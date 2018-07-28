@@ -42,38 +42,26 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
+    import * as planilhas from '@/mixins/planilhas';
 
     export default {
         name: 'PlanilhaListaDeItensAprovados',
-        data: function () {
+        data() {
             return {
-                planilha: []
-            }
+                planilha: [],
+            };
         },
-        props: [
-            'table',
-            'full'
-        ],
+        props: ['table', 'full'],
         methods: {
-            isObject: function (el) {
-
-                return typeof el === "object";
-
+            isObject(el) {
+                return typeof el === 'object';
             },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                    .replace(/&/g, '-and-')
-                    .replace(/[\s\W-]+/g, '-');
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
             },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
+            converterParaReal(value) {
+                return planilhas.converterParaReal(value);
             },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
+        },
     };
 </script>

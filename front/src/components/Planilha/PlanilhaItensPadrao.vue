@@ -36,7 +36,7 @@
             <tr>
                 <td colspan="6"><b>Totais</b></td>
                 <td class="right-align">
-                    <b>{{ vlSolicitadoTotal }}</b>
+                    <b>{{ formataValorSolicitadoTotal }}</b>
                 </td>
                 <td class="right-align"></td>
             </tr>
@@ -47,55 +47,37 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
-    import 'numeral/locales';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import * as planilhas from '@/mixins/planilhas';
 
     export default {
         name: 'PlanilhaListaDeItensPadrao',
-        data: function () {
+        data() {
             return {
-                planilha: []
-            }
+                planilha: [],
+            };
         },
         props: {
-            'table': {}
+            table: {},
         },
         components: {
-            SalicFormatarValor
-        },
-        created: function() {
-            numeral.locale('pt-br');
-            numeral.defaultFormat('0,0.00');
+            SalicFormatarValor,
         },
         computed: {
-            vlSolicitadoTotal: function () {
-                var soma = numeral();
-                Object.entries(this.table).forEach(([column, cell]) => {
-                    if(typeof cell.vlSolicitado != 'undefined') {
-                        soma.add(parseFloat(cell.vlSolicitado));
-                    }
-                });
-                return soma.format();
-            }
+            formataValorSolicitadoTotal() {
+                return planilhas.formataValorSolicitadoTotal(this.table);
+            },
         },
         methods: {
-            isObject: function (el) {
-                return typeof el === "object";
+            isObject(el) {
+                return typeof el === 'object';
             },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                        .replace(/&/g, '-and-')
-                        .replace(/[\s\W-]+/g, '-');
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
             },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
+            converterParaReal(value) {
+                return planilhas.converterParaReal(value);
             },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
+        },
     };
 </script>

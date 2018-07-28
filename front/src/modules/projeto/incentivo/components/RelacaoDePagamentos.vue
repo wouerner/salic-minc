@@ -11,11 +11,13 @@
     export default {
         data() {
             return {
-                url: '/default/consultardadosprojeto/dados-relacao-pagamentos?idPronac=' + this.$route.params.idPronac
-            }
+                url: `/default/consultardadosprojeto/dados-relacao-pagamentos?idPronac=${
+                    this.$route.params.idProna
+                }`,
+            };
         },
         components: {
-            CarregarTemplateAjax
-        }
+            CarregarTemplateAjax,
+        },
     };
 </script>
