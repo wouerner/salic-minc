@@ -545,7 +545,10 @@ Vue.component('sl-comprovante-internacional-form',
         },
         cancelar: function () {
             $3('#modal1').modal('close');
-            this.$root.$emit('atualizado-comprovante-internacional');
+
+            if (this.tipoform == 'edicao'){
+                this.$root.$emit('atualizado-comprovante-internacional', this.comprovante);
+            }
         },
     }
 });
