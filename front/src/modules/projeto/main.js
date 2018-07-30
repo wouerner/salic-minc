@@ -3,19 +3,24 @@
 // Vue.config.productionTip = false
 import Vue from 'vue';
 import Index from './Index';
-import { store, router } from './config';
+import {
+    store,
+    router,
+} from './config';
 
 Vue.config.productionTip = false;
 
-/* eslint-disable no-new */
-window.onload = function () {
-    var main = new Vue({
+window.onload = () => {
+    /* eslint-disable-next-line */
+    const main = new Vue({
         el: '#app',
         router,
         store,
-        components: { Index },
+        components: {
+            Index,
+        },
         template: '<Index/>',
-        created:  function () {
-        }
+        created: () => {
+        },
     });
-}
+};

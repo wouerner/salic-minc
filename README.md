@@ -1,6 +1,12 @@
 # SALIC
 
 [![Junte-se ao nosso chat no https://gitter.im/salic-minc/Lobby](https://badges.gitter.im/salic-minc/Lobby.svg)](https://gitter.im/salic-minc/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<a href="https://app.zenhub.com/workspace/o/culturagovbr/salic-minc/boards" target="_blank">
+    <img src="https://img.shields.io/badge/Managed_with-ZenHub-5e60ba.svg" alt="zenhub">
+  </a>
+
+[![GitHub Issues Abertas](https://img.shields.io/github/issues/culturagovbr/salic-minc.svg?maxAge=2592000)]() 
+[![GitHub Issues Fechas](https://img.shields.io/github/issues-closed-raw/culturagovbr/salic-minc.svg?maxAge=2592000)]()
 
 Bem vindo/a à documentação do SALIC! Aqui você vai encontrar diversas documentações sobre o processo de desenvolvimento do SALIC, versionameno e publicação.
 

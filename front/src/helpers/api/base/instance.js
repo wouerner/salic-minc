@@ -9,9 +9,9 @@ export default () => {
         return instance;
     }
 
-    instance = axios.create(
-        {baseURL: API_ENDPOINT},
-    );
+    instance = axios.create({
+        baseURL: API_ENDPOINT,
+    });
 
     return instance;
 };
