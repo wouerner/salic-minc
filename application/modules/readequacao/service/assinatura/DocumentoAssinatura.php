@@ -70,7 +70,15 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             . 'template'
         );
 
-        $view->titulo = 'Parecer de Homologa&ccedil;&atilde;o para Execu&ccedil;&atilde;o do Projeto';
+        switch ($this->idAtoDeGestao) {
+            case \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO:
+                $view->titulo = 'Parecer de Ajuste de Projeto';
+                break;
+            case \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS:
+            case \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC:
+                $view->titulo = 'Parecer de Readequação de Projeto';
+                break;
+        }
         $view->IdPRONAC = $this->idPronac;
 
         $objProjeto = new \Projeto_Model_DbTable_Projetos();
