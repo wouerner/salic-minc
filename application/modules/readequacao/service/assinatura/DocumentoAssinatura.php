@@ -72,11 +72,11 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
 
         switch ($this->idAtoDeGestao) {
             case \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO:
-                $view->titulo = 'Parecer de Ajuste de Projeto';
+                $view->titulo = 'Parecer T&eacute;cnico de Ajuste de Projeto';
                 break;
             case \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS:
             case \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC:
-                $view->titulo = 'Parecer de Readequação de Projeto';
+                $view->titulo = 'Parecer T&eacute;cnico de Readequação de Projeto';
                 break;
         }
         $view->IdPRONAC = $this->idPronac;
