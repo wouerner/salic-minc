@@ -201,11 +201,16 @@ Vue.component('sl-comprovante-nacional-form',
                             >N&uacute;mero * </label>
                         </div>
                         <div class="input-field col s2">
-                            <input type="text" name="vlComprovado" size="10" id="vlComprovado"
-                                   v-model="comprovante.valor"
-                                   :class="c.valor.css"
-                                   v-on:input="inputValor($event.target.value)"
-                                   ref="valor"
+                            <input
+                               type="text"
+                               ref="valor"
+                               name="vlComprovado"
+                               size="10"
+                               id="vlComprovado"
+                               v-model="comprovante.valor"
+                               :class="c.valor.css"
+                               v-on:input="inputValor($event.target.value)"
+                               @blur="inputValorBlur()"
                            />
                            <label :class="c.valor.css">
                                    Valor (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
@@ -626,14 +631,23 @@ Vue.component('sl-comprovante-nacional-form',
                this.c.numero.css = {};
             }
         },
-        inputDataEmissao: function(e) {
+        inputDataEmissao: function (e) {
+            console.log(e.length);
             if (e.length > 0) {
                this.c.dataEmissao.css = {};
+            }
+
+            if ( e.length == 8 ) {
+               this.comprovante.dataEmissao = this.comprovante.dataEmissao.replace(/(\d{2})(\d{2})(\d{4})/,"$1/$2/$3")
             }
         },
         inputDataPagamento: function(e) {
             if (e.length > 0) {
                this.c.dataPagamento.css = {};
+            }
+
+            if ( e.length == 8 ) {
+               this.comprovante.dataPagamento = this.comprovante.dataPagamento.replace(/(\d{2})(\d{2})(\d{4})/,"$1/$2/$3")
             }
         },
         inputNumeroDocumento(e) {
@@ -645,6 +659,9 @@ Vue.component('sl-comprovante-nacional-form',
             if (e > 0) {
                this.c.valor.css = {};
             }
+        },
+        inputValorBlur() {
+            this.comprovante.valor = numeral(numeral(this.comprovante.valor).value() /100).format('0,0.00');
         },
         cancelar: function () {
             $3('#modal1').modal('close');
