@@ -1,19 +1,19 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+// import Vue from 'vue';
+// import Router from 'vue-router';
 // import Index from './Index';
 import Bar from './components/Bar';
 
-Vue.use(Router);
+// Vue.use(Router);
 
-const routes = [
-  {
-    path: '/',
-    name: 'index',
-    component: Bar,
-    meta: {
-      title: 'Principal',
+export default [
+    {
+        path: '/foo',
+        name: 'fooIndex',
+        component: Bar,
+        meta: {
+            title: 'Principal',
+        },
     },
-  },
 ];
 
-export default new Router({ routes });
+// export default new Router({ routes });

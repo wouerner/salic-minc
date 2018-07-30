@@ -25,7 +25,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     },
     watch: true,
     // cheap-module-eval-source-map is faster for development
-    devtool: config.build.productionSourceMap ? config.build.devtool : false,
+    devtool: config.dev.devtool,
     plugins: [
         new webpack.DefinePlugin({
             'process.env': require('../config/dev.env')
@@ -77,7 +77,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             host: 'localhost',
             port: 3000,
             files: [path.resolve(__dirname, '../../application/modules/*.phtml'), path.resolve(__dirname, '../../application/modules/*.php')],
-            proxy: 'http://localhost/',
+            proxy: config.dev.host,
 
             // server: { baseDir: [config.dev.assetsSubDirectory] }
         })

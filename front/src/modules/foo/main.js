@@ -8,13 +8,13 @@ import router from './router';
 Vue.config.productionTip = false;
 
 window.onload = () => {
-  /* eslint-disable-next-line */
-  const main = new Vue({
-    el: '#app',
-    router,
-    components: {
-      Index,
-    },
-    template: '<Index/>',
-  });
+    /* eslint-disable-next-line */
+    const main = new Vue({
+        el: '#app',
+        router,
+        components: {
+            Index,
+        },
+        template: '<Index/>',
+    });
 };

@@ -1,6 +1,6 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Index from './index/Index';
+// import Vue from 'vue';
+// import Router from 'vue-router';
+import Index from './Index';
 import DadosProjeto from './incentivo/components/DadosProjeto';
 import IncentivoTemplate from './incentivo/Index';
 import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOriginal';
@@ -11,23 +11,24 @@ import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
 import Proponente from './incentivo/components/Proponente';
 
-Vue.use(Router);
+// Vue.use(Router);
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',
 };
 
-const routes = [
+// const routes = [
+export default [
     {
-        path: '/',
-        name: 'index',
+        path: '/projeto',
+        name: 'indexProjeto',
         component: Index,
         meta: {
             title: 'Principal',
         },
     },
     {
-        path: '/incentivo/:idPronac',
+        path: '/projeto/incentivo/:idPronac',
         component: IncentivoTemplate,
         children: [
             {
@@ -103,4 +104,4 @@ const routes = [
     },
 ];
 
-export default new Router({ routes });
+// export default new Router({ routes });

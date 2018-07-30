@@ -1,10 +1,11 @@
 <template>
-    <div id="projeto">
-        Aqui o index de projeto
+    <div id="app-principal">
+        <router-view/>
     </div>
 </template>
 
 <script>
     export default {
+        name: 'App',
     };
 </script>

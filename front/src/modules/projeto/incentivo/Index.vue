@@ -45,8 +45,8 @@
         watch: {
             $route(to, from) {
                 /**
-                 * se o alterar apenas o parametro na url, o vue n�o recarrega o componente.
-                 * aqui est� recarregando os dados do novo projeto se o idPronac for diferente
+                 * se alterar apenas o parametro na url, o vue não recarrega o componente.
+                 * aqui esta recarregando os dados do novo projeto se o idPronac for diferente
                  * */
                 if (
                     typeof to.params.idPronac !== 'undefined' &&
@@ -79,7 +79,6 @@
                     this.carregando = false;
                     this.permissao = this.dadosProjeto.permissao;
                 }
-
                 return this.dadosProjeto;
             },
         },

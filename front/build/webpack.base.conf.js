@@ -3,7 +3,6 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-// var EncodingPlugin = require('webpack-encoding-plugin')
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
@@ -24,8 +23,7 @@ const createLintingRule = () => ({
 module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
-        projeto: './src/modules/projeto/main.js',
-        foo: './src/modules/foo/main.js',
+        main: './src/main.js',
     },
     output: {
         path: config.build.assetsRoot,
@@ -78,9 +76,6 @@ module.exports = {
             }
         ]
     },
-    // plugins: [new EncodingPlugin({
-    //     encoding: 'iso-8859-1'
-    // })],
     node    : {
         // prevent webpack from injecting useless setImmediate polyfill because Vue
         // source contains it (although only uses it if it's native).

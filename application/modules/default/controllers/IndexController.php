@@ -2,6 +2,8 @@
 
 class IndexController extends MinC_Controller_Action_Abstract
 {
+
+
     /**
      * Metodo principal
      * @access public
@@ -10,7 +12,14 @@ class IndexController extends MinC_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        $this->redirect("/autenticacao/index/index");
+
+        xd($_REQUEST);
+        $gitTag = '?v=' . $this->view->gitTag();
+        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/main.js'. $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+
+//        $this->redirect("/autenticacao/index/index");
     }
 
     public function indisponivelAction()
@@ -305,7 +314,7 @@ class IndexController extends MinC_Controller_Action_Abstract
     public function montarPlanilhaOrcamentariaAction()
     {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        
+
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $this->view->idPerfil = $GrupoAtivo->codGrupo;
 
@@ -318,10 +327,10 @@ class IndexController extends MinC_Controller_Action_Abstract
         $params = [];
         $params['link'] = $link;
         $params['view_edicao'] = $view_edicao;
-        
+
         $spPlanilhaOrcamentaria = new spPlanilhaOrcamentaria();
         $planilhaOrcamentaria = $spPlanilhaOrcamentaria->exec($idPronac, $tipoPlanilha, $params);
-        
+
         $planilha = $this->montarPlanilhaOrcamentaria($planilhaOrcamentaria, $tipoPlanilha);
         // tipoPlanilha = 0 : Planilha Orcamentaria da Proposta
         // tipoPlanilha = 1 : Planilha Orcamentaria do Proponente
@@ -330,7 +339,7 @@ class IndexController extends MinC_Controller_Action_Abstract
         // tipoPlanilha = 4 : Cortes Orcamentarios Aprovados
         // tipoPlanilha = 5 : Remanejamento menor que 20%
         // tipoPlanilha = 6 : Readequacao
-        
+
         $this->montaTela(
             'index/montar-planilha-orcamentaria.phtml',
             array(
