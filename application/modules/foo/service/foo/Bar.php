@@ -20,11 +20,6 @@ class Bar
         $this->response = $response;
     }
 
-    public function soma()
-    {
-        return [ 'resultado' => 1 + 1 ];
-    }
-
     public function buscar($codigo)
     {
         $tabelaDbTabela = new \Foo_Model_DbTable_Tabela();
@@ -70,5 +65,4 @@ class Bar
         $mapper = new \Foo_Model_TabelaMapper();
         $codigo = $mapper->delete($tabela);
     }
-
 }
