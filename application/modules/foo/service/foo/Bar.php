@@ -35,6 +35,14 @@ class Bar
         return $tabelaDbTabela->findBy($where);
     }
 
+    public function buscarTodos()
+    {
+        $tabelaDbTabela = new \Foo_Model_DbTable_Tabela();
+
+        $registros = $tabelaDbTabela->fetchAll();
+        return $registros->toArray();
+    }
+
     public function salvarRegistro()
     {
         $parametros = $this->request->getParams();

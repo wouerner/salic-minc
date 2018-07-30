@@ -14,16 +14,6 @@ class Foo_Model_Tabela extends MinC_Db_Model
     }
 
     /**
-     * @param mixed $Codigo
-     * @return Foo_Model_Tabela
-     */
-    public function setCodigo($Codigo)
-    {
-        $this->_Codigo = $Codigo;
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getDadoNr()
