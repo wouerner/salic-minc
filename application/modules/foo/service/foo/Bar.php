@@ -49,7 +49,7 @@ class Bar
         $tabela = new \Foo_Model_Tabela($parametros);
         $mapper = new \Foo_Model_TabelaMapper();
         $codigo = $mapper->save($tabela);
-        xd($parametros);
+
         return $this->buscar($codigo);
     }
 
@@ -62,4 +62,13 @@ class Bar
 
         return $this->buscar($codigo);
     }
+
+    public function removerRegistro()
+    {
+        $parametros = $this->request->getParams();
+        $tabela = new \Foo_Model_Tabela($parametros);
+        $mapper = new \Foo_Model_TabelaMapper();
+        $codigo = $mapper->delete($tabela);
+    }
+
 }

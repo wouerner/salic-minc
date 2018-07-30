@@ -61,6 +61,9 @@ class Foo_FooRestController extends Zend_Rest_Controller
 
     public function deleteAction()
     {
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->removerRegistro();
+
         $this->getResponse()->setHttpResponseCode(204);
     }
 }
