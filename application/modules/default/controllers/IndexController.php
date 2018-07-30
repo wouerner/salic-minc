@@ -2,24 +2,50 @@
 
 class IndexController extends MinC_Controller_Action_Abstract
 {
+    protected $autenticacao;
+    protected $cpfLogado;
 
+    const COD_USUARIO_INTERNO = 1;
+    const COD_USUARIO_EXTERNO = 4;
+    const SISTEMA_SALIC = 21;
 
-    /**
-     * Metodo principal
-     * @access public
-     * @param void
-     * @return void
-     */
+    public function init()
+    {
+        parent::init();
+
+        $this->autenticacao = array_change_key_case((array)Zend_Auth::getInstance()->getIdentity());
+        $this->cpfLogado = isset($this->autenticacao['usu_codigo']) ? $this->autenticacao['usu_identificacao'] : $this->autenticacao['cpf'];
+
+        $this->verificarPermissoes();
+    }
+
+    private function verificarPermissoes() {
+        $permissoesGrupo = [];
+        if ($this->autenticacao) {
+            if (!empty($this->idUsuario)) {
+                $dbTableUsuario = new Autenticacao_Model_DbTable_Usuario();
+                $grupos = $dbTableUsuario->buscarUnidades($this->idUsuario, self::SISTEMA_SALIC);
+
+                foreach ($grupos as $grupo) {
+                    $permissoesGrupo[] = $grupo->gru_codigo;
+                }
+                parent::perfil(self::COD_USUARIO_INTERNO, $permissoesGrupo);
+            } else {
+                parent::perfil(self::COD_USUARIO_EXTERNO, $permissoesGrupo);
+            }
+        }
+    }
+
     public function indexAction()
     {
+        if (empty($this->autenticacao)) {
+            $this->redirect("/autenticacao/index/index");
+        }
 
-        xd($_REQUEST);
         $gitTag = '?v=' . $this->view->gitTag();
         $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
         $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/main.js'. $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-
-//        $this->redirect("/autenticacao/index/index");
+        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/main.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
     }
 
     public function indisponivelAction()
