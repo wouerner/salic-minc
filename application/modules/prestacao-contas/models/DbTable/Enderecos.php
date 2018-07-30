@@ -33,14 +33,14 @@ class PrestacaoContas_Model_DbTable_Enderecos extends MinC_Db_Table_Abstract
 
     }
 
-    public function buscarCep(){
+    public function buscarCep($cep){
 
         $objQuery = $this->select()
                 ->setIntegrityCheck(false)
                 ->from(['logradouro'=>'tbLogradouroUf'], '*')
                 ->joinLeft(['bairro' =>'tbBairro'],'logradouro.nrInicioBairro = bairro.nrBairro', '*',$this->_schema)
                 ->joinLeft(['cidade' => 'tbLocalidade'], 'logradouro.nrLocalidade = cidade.nrLocalidade','*',$this->_schema)
-                ->where('logradouro.cdCep = ?', '70770100');
+                ->where('logradouro.cdCep = ?', $cep);
 
 
         return $this->_db->fetchAll($objQuery);

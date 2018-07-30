@@ -16,16 +16,17 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
     private function retornaJson($dados) {
 
         $data = [];
+
         foreach ($dados as $index => $dado) {
             if(is_array($dado)){
-                $data[$index]['id'] = utf8_encode($dado["idVerificacao"]);
-                $data[$index]['descricao'] = utf8_encode($dado["Descricao"]);
+                $data[$index]['id'] = utf8_encode($dado['idVerificacao']);
+                $data[$index]['descricao'] = utf8_encode($dado['Descricao']);
             } elseif (is_object($dado)){
-                $data[$index]['id']= utf8_encode($dado->id);
+                $data[$index]['id'] = utf8_encode($dado->id);
                 $data[$index]['descricao'] = utf8_encode($dado->descricao);
             }elseif(!is_array($dado) and !is_object($dado)){
+                $data[$index]['id'] = utf8_encode($index);
                 $data[$index]['descricao'] = utf8_encode($dado);
-
             }
         };
 
@@ -34,18 +35,14 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
 
     public function ufAction() {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        $estados = new PrestacaoContas_Model_DbTable_Enderecos();
-        var_dump($estados->ufRetorno());
-        die;
-        $this->retornaJson($estados->ufRetorno());
+        $estados = new Agente_Model_DbTable_UF();
+        $this->retornaJson($estados->listar());
     }
 
     public function cidadeAction() {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-        //$id = $this->_request->getParam("id");
-        $cidade = new PrestacaoContas_Model_DbTable_Enderecos();
-        var_dump($cidade->cidadesRetorno());
-        die;
+        $id = $this->_request->getParam("id");
+        $cidade = new Cidade();
         $this->retornaJson($cidade->buscar($id));
     }
 
@@ -68,8 +65,8 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
     }
 
     public function buscarCepAction(){
-      // $cep = $this->_request->getParam("cep");
+       $cep = $this->_request->getParam("cep");
        $logradouro = new PrestacaoContas_Model_DbTable_Enderecos();
-       $this -> retornaJson($logradouro);
+       $this -> retornaJson($logradouro->buscarCep($cep));
     }
 }

@@ -2,13 +2,8 @@
     <agente-form></agente-form>
 
 
-    <div class="row center-align">
-        <div class="col s4 offset-s4">
-            <a href="#" class="btn">Salvar</a>
-        </div>
-    </div>
-</div> <!-- final do container -->
 
+</div> <!-- final do container -->
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
@@ -16,16 +11,17 @@
     Vue.component('agente-form',{
 
         template:  `
-        <form id="formulario">
+        <form id="formulario" action="salvar()">
+
         <h4>Novo Cadastro</h4>
         <fieldset>
             <legend>DADOS PRINCIPAIS</legend>
 
             <div class="row">
                 <label>
-                    <input class="with-gap" type="radio" id="cpf" value="1" v-model="TipoPessoa"/>
+                    <input class="with-gap" type="radio" id="cpf" value="cpf" v-model="TipoPessoa"/>
                     <label for="cpf">CPF</label>
-                    <input class="with-gap" type="radio" id="cnpj"  value="2" v-model="TipoPessoa">
+                    <input class="with-gap" type="radio" id="cnpj"  value="cnpj" v-model="TipoPessoa">
                     <label for="cnpj">CNPJ</label>
                 </label>
             </div>
@@ -43,7 +39,7 @@
 
                 <div class="col s3">
                     <label>Visão do Agente</label>
-                    <select class="browser-default"  v-model="Fornecedor">
+                    <select class="browser-default"  v-model="Fornecedor" disabled>
                         <option v-for="forne in Fornecedores" :value="forne.id" v-if="forne.descricao === 'Fornecedor'">{{forne.descricao}}</option>
                     </select>
                 </div>
@@ -71,8 +67,8 @@
                 </div>
                 <div class="col s3">
                     <label>Tipo *</label>
-                    <select class="browser-default" v-model="Tipo">
-                        <option v-for="logradouro in TiposLogradouros" :value="logradouro.descricao" >{{logradouro.descricao}}</option>
+                    <select class="browser-default" v-model="Tipo" ref="tipo">
+                        <option v-for="logradouro in TiposLogradouros" :value="logradouro.id" >{{logradouro.descricao}}</option>
                     </select>
                 </div>
 
@@ -80,7 +76,7 @@
 
             <div class="row">
                 <div class="input-field col s12">
-                    <input type="text" id="logradouro" name="logradouro" class="validate" v-model.lazy="Logradouro">
+                    <input type="text" id="logradouro" name="logradouro" class="validate" v-model.lazy="Logradouro" ref="logradouro">
                     <label for="last_name">Logradouro *</label>
                 </div>
             </div>
@@ -99,19 +95,19 @@
             <div class="row">
                 <div class="col s3">
                     <label>UF *</label>
-                    <select class="browser-default" v-on:change="combo()" v-model="uf">
+                    <select class="browser-default" v-on:change="combo()" v-model="uf" ref="uf">
                         <option v-for="uf in UFs" :value="uf.id">{{uf.descricao}}</option>
                     </select>
                 </div>
                 <div class="col s3">
                     <label>Cidade *</label>
-                    <select class="browser-default" v-model="Cidade">
+                    <select class="browser-default" v-model="Cidade" ref="cidade">
                         <option v-for="cidade in Cidades" :value="cidade.id">{{cidade.descricao}}</option>
                     </select>
 
                 </div>
                 <div class="input-field col s4">
-                    <input type="text" id="last_name" class="validate" v-model="Bairro">
+                    <input type="text" id="last_name" class="validate" v-model="Bairro" ref="bairro">
                     <label for="last_name">Bairro *</label>
                 </div>
             </div>
@@ -136,16 +132,21 @@
             </div>
 
         </fieldset>
+           <div class="row center-align">
+        <div class="col s4 offset-s4">
+            <button class="btn" type="submit" onsubmit="salvar()">Salvar</button>
+        </div>
+    </div>
     </form>
 
         ` ,
         data: function () {
 
            return {
-               TipoPessoa: "",
+               TipoPessoa: "cpf",
                CPFCNPJ: "",
                Nome: "",
-               Fornecedor: "",
+               Fornecedor: "248",
                CEP: "",
                CEPmask: "",
                Tipo: "",
@@ -155,13 +156,14 @@
                Cidade: "",
                Bairro: "",
                TipoDeEndereço: "",
-               Autorizar: "",
+               Autorizar: "0",
                uf: "",
                UFs: "",
                Cidades: "",
                Fornecedores: "",
                TiposEnderecos: "",
                TiposLogradouros: "",
+
            }
 
         },
@@ -171,13 +173,13 @@
         methods:
             {
                combo:function () {
-                 var vue = this;
-                 let url = '/prestacao-contas/fornecedor/cidade/id/'+this.uf;
+                 let self = this;
+                 let url = '/prestacao-contas/fornecedor/cidade/id/'+self.uf;
                  $3.ajax({
                      type: "GET",
                      url: url,
                 })
-                 .done( (cidade) => vue.Cidades = cidade )
+                 .done( (cidade) => self.Cidades = cidade )
                 },
                 carregarInfoFornecedores: function () {
                     let self = this;
@@ -231,19 +233,7 @@
 
                 buscarcep(cep) {
 
-                   let vue = this;
-
-                    var elmLogradouro = $3("#logradouro");
-                    var elmTipoLogradouro = $3("#tipoLogradouro");
-                    var elmBairro = $3("#bairro");
-                    var elmCidade = $3("#cidade");
-                    var elmUF = $3("#uf");
-
-                    if (cep.length != 10) {
-                        $3('#erroCep').html("CEP inv&aacute;lido");
-                        limparEndereco();
-                        return false;
-                    }
+                    let self = this;
 
                     $3.ajax({
                         url: "<?= $this->url(array('module' => 'default', 'controller' => 'cep', 'action' => 'cep-ajax')); ?>",
@@ -251,22 +241,40 @@
                             cep: cep
                         }
                     }).done(function (result) {
-                        
+
                         if (result.status === true) {
-                            console.info(result);
 
-                            vue.Logradouro = result.logradouro;
-                            vue.uf = result.idcidadeuf;
-                                // this.Tipo= "";
-                                // this.UFs= "";
-                                // this.Cidade= "";
-                                // this.Bairro= "";
-                                // this.TiposLogradouros= "";
-                                // this.uf="";
-                                // this.Cidades= "";
+                            self.Logradouro = result.logradouro;
+                            self.UFs.forEach( uf => {
+                                if (uf.descricao === result.uf){
+                                    self.uf = uf.id;
+                                    self.Cidade = result.idCidade;
+                                    self.combo();
+                                    self.Bairro = result.bairro;
+                                }
+                            });
 
-                            console.info("Resultado: "+ this.Logradouro)
+                            let tipoLogradouro =  Object.keys(self.TiposLogradouros).map(key => self.TiposLogradouros[key]);
+                            tipoLogradouro.forEach( tipo => {
+                                if (tipo.descricao === result.tipoLogradouro)
+                                    self.Tipo = tipo.id;
+                            })
 
+                            if(self.Tipo != '' || self.Tipo != undefined){
+                                self.$refs.tipo.disabled = true;
+                            }
+                            if(self.Logradouro != '' || self.Logradouro != undefined){
+                                self.$refs.logradouro.disabled = true;
+                            }
+                            if(self.Bairro != '' || self.Bairro != undefined){
+                                self.$refs.bairro.disabled = true;
+                            }
+                            if(self.uf != '' || self.uf != undefined){
+                                self.$refs.uf.disabled = true;
+                            }
+                            if(self.Cidade != '' || self.Cidade != undefined){
+                                self.$refs.cidade.disabled = true;
+                            }
 
                         } else {
 
@@ -276,7 +284,10 @@
                     });
 
 
-                } // fecha funcao buscar_cep()
+                }, // fecha funcao buscar_cep()
+                salvar(){
+                    $3.ajax({url: "<?= $this->url(array('module' => 'default', 'controller' => 'cep', 'action' => 'cep-ajax')); ?>"});
+                }
         }
     });
 
