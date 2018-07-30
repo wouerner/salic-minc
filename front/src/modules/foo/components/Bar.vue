@@ -17,39 +17,37 @@
 </template>
 
 <script>
-    export default {
-        name: 'Bar',
-        data: function () {
-            return {
-                tabela: {},
-                nome: 'Nome',
-                sobrenome: 'Sobrenome'
-            }
+export default {
+    name: 'Bar',
+    data() {
+        return {
+            tabela: {},
+            nome: 'Nome',
+            sobrenome: 'Sobrenome',
+        };
+    },
+    created() {
+        this.obterDadosTabela();
+    },
+    computed: {
+        nomeCompleto() {
+            return `${this.nome} ${this.sobrenome}`;
         },
-        created: function () {
-            this.obterDadosTabela();
+    },
+    methods: {
+        obterDadosTabela() {
+            const self = this;
+            // eslint-disable-next-line
+            $3.ajax({
+                url: '/foo/foo-rest',
+                data: {
+                    // id: self.$router.params.id
+                    // id: 2
+                },
+            }).done((response) => {
+                self.tabela = response.data;
+            });
         },
-        computed: {
-            nomeCompleto : function () {
-                return this.nome + ' ' + this.sobrenome
-            }
-        },
-        methods: {
-            obterDadosTabela: function () {
-                let self = this;
-                $3.ajax({
-                    url: '/foo/foo-rest',
-                    data: {
-                        // id: self.$router.params.id
-                        // id: 2
-                    },
-                })
-                .done((response) => {
-                    self.tabela = response.data;
-                    console.log(response);
-                });
-
-            }
-        }
-    };
+    },
+};
 </script>

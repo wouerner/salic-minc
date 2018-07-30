@@ -6,14 +6,14 @@ import Bar from './components/Bar';
 Vue.use(Router);
 
 const routes = [
-  {
-    path: '/',
-    name: 'index',
-    component: Bar,
-    meta: {
-      title: 'Principal',
+    {
+        path: '/',
+        name: 'index',
+        component: Bar,
+        meta: {
+            title: 'Principal',
+        },
     },
-  },
 ];
 
 export default new Router({ routes });
