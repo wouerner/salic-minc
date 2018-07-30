@@ -52,8 +52,10 @@ class Foo_FooRestController extends Zend_Rest_Controller
 
     public function putAction()
     {
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->atualizarRegistro();
 
-        $this->view->assign('data', 'asda');
+        $this->view->assign('data', $resposta);
         $this->getResponse()->setHttpResponseCode(200);
     }
 
