@@ -260,16 +260,24 @@ footer {
     background-color: rgb(93, 64, 55);
 }
 
-.container-senha {
+.login .container-senha {
     position: relative;
 }
 
-.mostrar-senha {
+.login .mostrar-senha {
     position: absolute;
     right: 4px;
     top: 5px;
 }
 
-.login .cabecalho-login{
+.login .cabecalho-login {
     background: url(/public/img/bg-topo.png) no-repeat center center #1b5e20;
+    background-size: cover;
+}
+
+.login .cabecalho-login .logo-salic {
+    background: url(/public/img/logo_salic.png) no-repeat center center;
+    height: 85px;
+    width: 100%;
+    background-size: 170px;
 }
