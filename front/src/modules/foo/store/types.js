@@ -1,1 +1,1 @@
-export const SET_PROJETO = 'SET_PROJETO';
+export const SET_DADOS_TABELA = 'SET_DADOS_TABELA';

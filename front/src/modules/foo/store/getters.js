@@ -1,1 +1,1 @@
-export const projeto = state => state.projeto;
+export const dadosTabela = state => state.dadosTabela;

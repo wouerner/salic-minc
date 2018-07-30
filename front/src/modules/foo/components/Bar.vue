@@ -3,7 +3,7 @@
         <h1>Componente Bar</h1>
         <div>
             <h3>Exemplo Requisição Ajax</h3>
-            <div v-for="linha in tabela">
+            <div v-for="(linha, index) in dadosTabela" :key="index">
                 <div>{{ linha }}</div>
             </div>
         </div>
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
     name: 'Bar',
     data() {
@@ -30,24 +32,17 @@ export default {
         this.obterDadosTabela();
     },
     computed: {
+        ...mapGetters({
+            dadosTabela: 'foo/dadosTabela',
+        }),
         nomeCompleto() {
             return `${this.nome} ${this.sobrenome}`;
         },
     },
     methods: {
-        obterDadosTabela() {
-            const self = this;
-            // eslint-disable-next-line
-            $3.ajax({
-                url: '/foo/foo-rest',
-                data: {
-                    // id: self.$router.params.id
-                    // id: 2
-                },
-            }).done((response) => {
-                self.tabela = response.data;
-            });
-        },
+        ...mapActions({
+            obterDadosTabela: 'foo/obterDadosTabela',
+        }),
     },
 };
 </script>

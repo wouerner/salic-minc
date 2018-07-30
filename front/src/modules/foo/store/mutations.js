@@ -1,11 +1,11 @@
 import * as types from './types';
 
 export const state = {
-    projeto: {},
+    dadosTabela: [],
 };
 
 export const mutations = {
-    [types.SET_PROJETO](state, projeto) {
-        state.projeto = projeto;
+    [types.SET_DADOS_TABELA](state, dadosTabela) {
+        state.dadosTabela = dadosTabela;
     },
 };
