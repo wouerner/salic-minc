@@ -19,10 +19,7 @@ class RelatorioController extends MinC_Controller_Action_Abstract
     {
         $auth = Zend_Auth::getInstance(); // instancia da autentica��o
         if (empty($auth->getIdentity()->usu_codigo)) {
-            $script = "
-                <script>window.location.href = '".Zend_Controller_Front::getInstance()->getBaseUrl()."';</script>
-            ";
-            die($script);
+            $this->redirect(Zend_Controller_Front::getInstance()->getBaseUrl());
         }
 
         // autentica��o e permiss�es zend (AMBIENTE MINC)

@@ -481,21 +481,82 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
     }
 
     public function comprovarPagamentoAction()
-    { }
+    {
+        $this->view->idpronac = $this->getRequest()->getParam('idpronac');
+        $this->view->idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
+        $this->view->idPlanilhaItens = $this->getRequest()->getParam('idPlanilhaItens');
+        $this->view->idComprovantePagamento = $this->getRequest()->getParam('idComprovantePagamento');
+        $this->view->uf = $this->getRequest()->getParam('uf');
+        $this->view->cdproduto = $this->getRequest()->getParam('produto');
+        $this->view->cdcidade = $this->getRequest()->getParam('cidade');
+        $this->view->cdetapa = $this->getRequest()->getParam('etapa');
+
+        $projetoModel = new Projetos();
+        $projeto = $projetoModel->find($this->view->idpronac)->current();
+
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $planilha = $planilhaAprovacaoModel->planilhaAprovada($this->view->idpronac);
+
+        $planilha = $planilhaAprovacaoModel->planilhaAprovada(
+            $this->view->idpronac,
+            $this->view->uf,
+            $this->view->cdetapa,
+            $this->view->cdproduto,
+            $this->view->cdcidade,
+            null,
+            $this->view->idPlanilhaItens
+        );
+
+        $this->view->dataInicioExecucao = (new DateTime($projeto->DtInicioExecucao))->format('Y-m-d');
+        $this->view->dataFimExecucao = (new DateTime($projeto->DtFimExecucao))->format('Y-m-d');
+        $this->view->valorAprovado = $planilha->current()->toArray()['vlAprovado'];
+        $this->view->valorComprovado = $planilha->current()->toArray()['vlComprovado'];
+        /* var_dump($planilha->current()->toArray()['vlComprovado']); */
+    }
 
     public function cadastrarAction()
+    {
+        $comprovante = new PrestacaoContas_Model_ComprovantePagamento();
+        $comprovante->preencher($this->getRequest()->getPost()['comprovante']);
+
+        $data = [];
+        try {
+            $id = $comprovante->cadastrar();
+            $data = ['success' => true, 'idComprovantePagamento' => $id];
+        } catch (Exception $e) {
+            $this->view->message = $e->getMessage();
+            echo $e->getMessage();die;
+        }
+        $this->_helper->json($data);
+    }
+
+    public function atualizarAction()
     {
         $comprovante = new PrestacaoContas_Model_ComprovantePagamento();
 
         $comprovante->preencher($this->getRequest()->getPost()['comprovante']);
 
-            /* $request->getParam('tpFormaDePagamento'), */
-            /* str_replace(',', '.', str_replace('.', '', $request->getParam('vlComprovado'))), */
-            /* $request->getParam('nrDocumentoDePagamento'), */
         $data = [];
         try {
-            $id = $comprovante->cadastrar();
+            $id = $comprovante->atualizar();
             $data = ['success' => true, 'idComprovantePagamento' => $id];
+        } catch (Exception $e) {
+            $this->view->message = $e->getMessage();
+            echo $e->getMessage();die;
+        }
+        $this->_helper->json($data);
+    }
+
+    public function excluirAction()
+    {
+        $comprovante = new PrestacaoContas_Model_ComprovantePagamento();
+
+        $comprovante->idComprovantePagamento = $this->getRequest()->getPost()['comprovante']['idComprovantePagamento'];
+
+        $data = [];
+        try {
+            $comprovante->excluir();
+            $data = ['success' => true];
         } catch (Exception $e) {
             $this->view->message = $e->getMessage();
             echo $e->getMessage();die;

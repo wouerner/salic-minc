@@ -10,6 +10,15 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if (!empty($this->idPreProjeto) || !empty($this->idPronac)) {
             parent::verificarPermissaoAcesso(!empty($this->idPreProjeto), !empty($this->idPronac), false);
         }
+
+        if ($this->idPronac) {
+            $this->view->urlMenu = [
+                'module' => 'projeto',
+                'controller' => 'menu',
+                'action' => 'obter-menu-ajax',
+                'idPronac' => $this->idPronac
+            ];
+        }
     }
 
     public function indexAction()
@@ -67,13 +76,17 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $listarTudo = $this->getRequest()->getParam('listarTudo', null);
         $this->view->isTecnico = false;
 
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+
         $where = [];
         if ($idPronac) {
-            $where['a.idPronac = ?'] = $idPronac;
+            $where['a.idPronac = ?'] = (int) $idPronac;
         }
 
         if ($idPreProjeto) {
-            $where['a.idProjeto = ?'] = $idPreProjeto;
+            $where['a.idProjeto = ?'] = (int) $idPreProjeto;
         }
 
         # Proponente
@@ -114,13 +127,17 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         $tbSolicitacoes = new Solicitacao_Model_DbTable_TbSolicitacao();
 
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+
         $where = [];
         if ($idPronac) {
-            $where['a.idPronac = ?'] = $idPronac;
+            $where['a.idPronac = ?'] = (int) $idPronac;
         }
 
         if ($idPreProjeto) {
-            $where['a.idProjeto = ?'] = $idPreProjeto;
+            $where['a.idProjeto = ?'] = (int) $idPreProjeto;
         }
 
         # Proponente

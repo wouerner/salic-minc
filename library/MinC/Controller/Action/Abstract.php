@@ -1,25 +1,13 @@
 <?php
-
-/**
- * Controle Gen?rico (Utilizado por todos os controles)
- * Trata as mensagens do sistema
- * @since 12/08/2010
- * @version 2.0
- * @package application
- * @subpackage application.controllers
- * @copyright ? 2010 - Minist?rio da Cultura - Todos os direitos reservados.
- * @link http://www.cultura.gov.br
- */
 abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
 {
     protected $_msg;
     protected $_url;
     protected $_type;
     protected $_urlPadrao;
-    private $idResponsavel = 0;
-    private $idAgente = 0;
-    private $idUsuario = 0;
-
+    protected $idResponsavel = 0;
+    protected $idAgente = 0;
+    protected $idUsuario = 0;
     protected $moduleName;
 
     /**
@@ -62,6 +50,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             $this->view->idAgente = $idAgente;
         }
 //        @$cpf = isset($auth->getIdentity()->usu_codigo) ? $auth->getIdentity()->usu_identificacao : $auth->getIdentity()->Cpf;
+        //
         $cpf = isset($arrAuth['usu_codigo']) ? $arrAuth['usu_identificacao'] : $arrAuth['cpf'];
 
         if ($cpf) {
@@ -79,7 +68,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             $agente = $tblAgentes->findBy(array('cnpjcpf' => $cpf));
 
             if ($acessos) {
-                $this->idResponsavel = $acessos['idUsuario'];
+                $this->idResponsavel = $acessos['IdUsuario'];
             }
             if ($agente) {
                 $this->idAgente = $agente['idAgente'];
@@ -87,7 +76,6 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             if ($usuario) {
                 $this->idUsuario = $usuario['usu_codigo'];
             }
-
             $this->view->idAgenteKeyLog = $this->idAgente;
             $this->view->idResponsavelKeyLog = $this->idResponsavel;
             $this->view->idUsuarioKeyLog = $this->idUsuario;
@@ -668,6 +656,10 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
             }
         }
 
+        if ($callback) {
+            return ['status' => true];
+        }
+
     } // fecha metodo verificarPermissaoAcesso()
 
     public static function validarSenhaInicial()
@@ -808,7 +800,7 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
                 $count++;
                 $seq++;
             }
-        } else if ($tipoPlanilha == 6) {
+        } else if ($tipoPlanilha == 6 || $tipoPlanilha == 7) {
             foreach ($planilhaOrcamentaria as $resuplanilha) {
                 $produto = $resuplanilha->Produto == null ? 'Administra&ccedil;&atilde;o do Projeto' : $resuplanilha->Produto;
                 $planilha[$resuplanilha->FonteRecurso][$produto][$resuplanilha->idEtapa . ' - ' . $resuplanilha->Etapa][$resuplanilha->UF . ' - ' . $resuplanilha->Municipio][$count]['Seq'] = $seq;
@@ -963,11 +955,13 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
         }
     }
 
-    function getBodyClass($class = '') {
-        return join(' ', $this->getArrayBodyClass( $class ));
+    function getBodyClass($class = '')
+    {
+        return join(' ', $this->getArrayBodyClass($class));
     }
 
-    function getArrayBodyClass( $class = '' ) {
+    function getArrayBodyClass($class = '')
+    {
         $classes = array();
 
         $classes[] = $this->getRequest()->getCookie('menu');
@@ -980,16 +974,13 @@ abstract class MinC_Controller_Action_Abstract extends Zend_Controller_Action
 
         if (!empty($class)) {
 
-            if (!is_array( $class)) {
-                $class = preg_split( '#\s+#', $class );
+            if (!is_array($class)) {
+                $class = preg_split('#\s+#', $class);
             }
 
-            $classes = array_merge( $classes, $class );
-        } else {
-            $class = array();
+            $classes = array_merge($classes, $class);
         }
-
-        return array_unique( $classes );
+        return array_unique($classes);
 
     }
 }

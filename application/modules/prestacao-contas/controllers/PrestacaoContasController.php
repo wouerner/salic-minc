@@ -47,15 +47,19 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
     {
         $idPronac = $this->_request->getParam("idPronac");
         $avaliacao = $this->_request->getParam("avaliacao");
+
         if (!$idPronac) {
            throw new Exception('Não existe idPronac');
         }
+
         if (!$avaliacao) {
            throw new Exception('Não existe avaliacao');
         }
+
         if ($avaliacao == "todos") {
-            $this->redirect('/realizarprestacaodecontas/planilhaorcamentaria/idPronac/' . $idPronac );
+            $this->redirect('/prestacao-contas/realizar-prestacao-contas/index/idPronac/' . $idPronac );
         }
+
         $this->redirect('/prestacao-contas/prestacao-contas/amostragem/idPronac/' . $idPronac . '/tipoAvaliacao/' . $avaliacao);
     }
 
@@ -72,6 +76,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         $comprovantes = new PrestacaoContas_Model_spComprovantes();
         $comprovantes = $comprovantes->exec($idPronac, $tipoAvaliacao);
         $this->view->idPronac = $idPronac;
+        $this->view->tipoAvaliacao = $tipoAvaliacao;
         $this->view->comprovantes = $comprovantes;
 
 
@@ -85,6 +90,62 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
 
         $diligencia = new Diligencia();
         $this->view->existeDiligenciaAberta = $diligencia->existeDiligenciaAberta($idPronac, null);
+    }
+
+    public function comprovantesAmostragemAction()
+    {
+        $idPronac = $this->_request->getParam("idPronac");
+        $tipoAvaliacao = $this->_request->getParam("tipoAvaliacao");;
+
+        if (!$idPronac) {
+           throw new Exception('Não existe idPronac');
+        }
+
+        if (!$tipoAvaliacao) {
+           throw new Exception('Não existe tipoAvaliacao');
+        }
+
+        $comprovantes = new PrestacaoContas_Model_spComprovacaoFinanceiraProjeto();
+        $resposta = $comprovantes->exec($idPronac, $tipoAvaliacao);
+
+        $planilhaJSON = null;
+
+        foreach($resposta as $item) {
+            $produtoSlug = TratarString::criarSlug($item->Produto);
+            $etapaSlug = TratarString::criarSlug($item->cdEtapa);
+            $cidadeSlug = TratarString::criarSlug($item->Municipio);
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->cdUF]['cidade'][$cidadeSlug]['itens'][] = [
+                'item' => utf8_encode($item->Item),
+                'varlorAprovado' => 1,
+                'varlorComprovado' => 2,
+                'comprovacaoValidada' => 3,
+                'idPlanilhaAprovacao' => $item->idPlanilhaAprovacao,
+                'idPlanilhaItens' => $item->idPlanilhaItem,
+            ];
+
+            $planilhaJSON[$produtoSlug] += [
+                'produto' => html_entity_decode(utf8_encode($item->Produto)),
+                'cdProduto' => html_entity_decode($item->cdProduto),
+            ];
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug] += [
+                'etapa' => utf8_encode($item->cdEtapa),
+                'cdEtapa' =>  utf8_encode($item->cdEtapa)
+            ];
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->cdUF] += [
+                'Uf' => $item->cdUF,
+                'cdUF' => $item->cdUF
+            ];
+
+            $planilhaJSON[$produtoSlug]['etapa'][$etapaSlug]['UF'][$item->cdUF]['cidade'][$cidadeSlug] += [
+                'cidade' => utf8_encode($item->Municipio),
+                'cdCidade' => utf8_encode($item->Municipio)
+            ];
+        }
+
+        $this->_helper->json($planilhaJSON);
     }
 
     public function salvarAnaliseAction()
@@ -116,7 +177,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         }
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $planilha = $planilhaAprovacaoModel->vwComprovacaoFinanceiraProjeto($idpronac); 
+        $planilha = $planilhaAprovacaoModel->vwComprovacaoFinanceiraProjeto($idpronac);
 
         $planilhaJSON = null;
 
@@ -139,7 +200,7 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
 
             $planilhaJSON[$item->cdProduto] += [
                     'produto' => utf8_encode($item->Produto),
-                    'cdProduto' => $item->cdProduto, 
+                    'cdProduto' => $item->cdProduto,
             ];
 
             $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa] += [

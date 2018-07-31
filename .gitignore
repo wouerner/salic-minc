@@ -1,3 +1,6 @@
+# Coverage directory used by tools like istanbul
+front/test/unit/coverage/
+
 # configs do salic
 application/configs/bancos_*.ini
 application/configs/config.ini
@@ -12,6 +15,7 @@ index.php
 public/plenaria
 public/plenaria/log_exec_paEncerrarCNIC.txt
 public/txt
+public/dist
 .directory
 tags
 vendor
