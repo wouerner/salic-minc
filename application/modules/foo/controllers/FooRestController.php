@@ -44,7 +44,7 @@ class Foo_FooRestController extends Zend_Rest_Controller
     public function postAction()
     {
         $barService = new BarService($this->getRequest(), $this->getResponse());
-        $resposta = $barService->salvarRegistro();
+        $resposta = $barService->salvar();
 
         $this->view->assign('data', $resposta);
         $this->getResponse()->setHttpResponseCode(201);
@@ -53,7 +53,7 @@ class Foo_FooRestController extends Zend_Rest_Controller
     public function putAction()
     {
         $barService = new BarService($this->getRequest(), $this->getResponse());
-        $resposta = $barService->atualizarRegistro();
+        $resposta = $barService->atualizar();
 
         $this->view->assign('data', $resposta);
         $this->getResponse()->setHttpResponseCode(200);
@@ -62,7 +62,7 @@ class Foo_FooRestController extends Zend_Rest_Controller
     public function deleteAction()
     {
         $barService = new BarService($this->getRequest(), $this->getResponse());
-        $resposta = $barService->removerRegistro();
+        $resposta = $barService->remover();
 
         $this->getResponse()->setHttpResponseCode(204);
     }

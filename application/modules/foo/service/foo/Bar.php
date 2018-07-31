@@ -38,7 +38,7 @@ class Bar
         return $registros->toArray();
     }
 
-    public function salvarRegistro()
+    public function salvar()
     {
         $parametros = $this->request->getParams();
         $tabela = new \Foo_Model_Tabela($parametros);
@@ -48,7 +48,7 @@ class Bar
         return $this->buscar($codigo);
     }
 
-    public function atualizarRegistro()
+    public function atualizar()
     {
         $parametros = $this->request->getParams();
         $tabela = new \Foo_Model_Tabela($parametros);
@@ -58,7 +58,7 @@ class Bar
         return $this->buscar($codigo);
     }
 
-    public function removerRegistro()
+    public function remover()
     {
         $parametros = $this->request->getParams();
         $tabela = new \Foo_Model_Tabela($parametros);
