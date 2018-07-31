@@ -32,7 +32,7 @@
                 "serverSide": true,
                 "order": [[4, "desc"]],
                 "columnDefs": [
-                    { "orderable": false, "targets": [3,4]},
+                    { "orderable": false, "targets": [3]},
                     {
                         "targets": 0,
                         "data": null,
@@ -48,20 +48,7 @@
                     {
                         "targets": 4,
                         "data": null,
-                        render: (data) => {
-                            var icone = 'tag_faces';
-                            var cor = 'green darken-4';
-                            numeroDeProcessos = parseInt(data[4]);
-                            if(numeroDeProcessos <= 9 && numeroDeProcessos != 0) {
-                                icone = 'filter_' + numeroDeProcessos;
-                                cor = 'red accent-4';
-                            }else if (numeroDeProcessos > 9){
-                                icone = 'filter_9_plus';
-                                cor = 'red accent-4';
-                            }
-
-                            return '<a class="small btn modal-trigger visualizarPrioridades ' + cor + '" href="#visualizarPrioridadesModal"><i class="tiny material-icons">' + icone + '</i></a>'
-                        }
+                        render: (data) => gerarBotaoVisualizacaoPrioridades(data[4])
                     }
                 ]
             });

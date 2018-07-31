@@ -32,6 +32,24 @@
         $(document).ready(function () {
             $3('#visualizarPrioridadesModal').modal();
 
+            gerarBotaoVisualizacaoPrioridades = (valorPrioridades) => {
+                var icone = 'tag_faces';
+                var cor = 'green darken-4';
+                var buttonWithAction = '';
+                numeroDeProcessos = parseInt(valorPrioridades);
+                if(numeroDeProcessos <= 9 && numeroDeProcessos != 0) {
+                    icone = 'filter_' + numeroDeProcessos;
+                    cor = 'red accent-4';
+                    buttonWithAction = 'modal-trigger visualizarPrioridades ';
+                }else if (numeroDeProcessos > 9){
+                    icone = 'filter_9_plus';
+                    cor = 'red accent-4';
+                    buttonWithAction = 'modal-trigger visualizarPrioridades ';
+                }
+
+                return '<a class="small btn ' + buttonWithAction + cor + '" href="#visualizarPrioridadesModal"><i class="tiny material-icons">' + icone + '</i></a>'
+            };
+
             $3("tbody").on('click', '.visualizarPrioridades', function () {
                 let pronac = $3(this).closest('tr').find('td')[0].innerText;
                 let nomeProjeto = $3(this).closest('tr').find('td')[1].innerText;
@@ -48,8 +66,8 @@
                             $('.prioridades').append(
                                 '<li>' +
                                 '<div class="collapsible-header">' +
-                                '<i class="material-icons">expand_less</i>'+ prioridade.Controladores +' - ' + moment(prioridade.DtSolicitacao).format('DD/MM/YYYY') +'</div>' +
-                                '<div class="collapsible-body"><span>'+ prioridade.Constatacao +'</span></div>' +
+                                '<i class="material-icons">expand_less</i>' + prioridade.Controladores + ' - ' + moment(prioridade.DtSolicitacao).format('DD/MM/YYYY') + '</div>' +
+                                '<div class="collapsible-body"><span>' + prioridade.Constatacao +'</span></div>' +
                                 '</li>'
                             );
                         });

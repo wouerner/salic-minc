@@ -594,8 +594,9 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'd.Situacao as cdSituacao',
                     'k.usu_nome as nmTecnico',
                     'J.dtFimEncaminhamento',
-                    'DATEDIFF(DAY,J.dtInicioEncaminhamento,J.dtFimEncaminhamento) as qtDiasEmAnalise',
-                    'a.IdPRONAC'
+                    'DATEDIFF(DAY,J.dtInicioEncaminhamento, J.dtFimEncaminhamento) as qtDiasEmAnalise',
+                    'a.IdPRONAC',
+                    'J.dtInicioEncaminhamento'
                 ];
                 $select->where("d.Situacao IN ('E17','E20','E27','E30')");
                 $select->where(
