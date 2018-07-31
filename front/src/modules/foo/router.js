@@ -1,17 +1,25 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-// import Index from './Index';
-import Bar from './components/Bar';
+import ListBar from './components/ListBar';
+import CreateBar from './components/CreateBar';
 
 Vue.use(Router);
 
 const routes = [
     {
         path: '/',
-        name: 'index',
-        component: Bar,
+        name: 'ListBar',
+        component: ListBar,
         meta: {
             title: 'Principal',
+        },
+    },
+    {
+        path: '/create',
+        name: 'CreateBar',
+        component: CreateBar,
+        meta: {
+            title: 'Criar Bar',
         },
     },
 ];

@@ -10,3 +10,15 @@ export const obterDadosTabela = ({ commit }) => {
             commit(types.SET_DADOS_TABELA, dadosTabela);
         });
 };
+
+export const createBar = ({ commit, dispatch }, params) => {
+    console.log('CHEGAAA');
+    console.log(params);
+    fooHelperAPI.createBar(params)
+        .then((response) => {
+            console.log('CHEGANDO NO FIM DA REQUEST');
+            console.log(response.data);
+            console.log(dispatch);
+            console.log(commit);
+        });
+};

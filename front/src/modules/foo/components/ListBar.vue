@@ -17,6 +17,8 @@
                 </div>
             </tbody>
         </table>
+
+        <router-link :to="{ name: 'CreateBar', params: {} }">Criar</router-link>
     </div>
 </template>
 
@@ -24,7 +26,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-    name: 'Bar',
+    name: 'ListBar',
     created() {
         this.obterDadosTabela();
     },
