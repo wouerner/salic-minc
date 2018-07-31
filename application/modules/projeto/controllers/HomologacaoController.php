@@ -168,15 +168,25 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $dbTableAcaoProjeto = new tbAcaoAlcanceProjeto();
         $dbTableHomologacao = new Projeto_Model_DbTable_TbHomologacao();
         $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
-        $arrValue = $dbTableEnquadramento->obterProjetosApreciadosCnic([
+        $dadosEnquadramento = $dbTableEnquadramento->obterProjetosApreciadosCnic([
             'a.IdPRONAC = ?' => $intIdPronac
-        ])->current()->toArray();
-        $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
+        ])->current();
+
+        $arrValue = [];
+        if(!is_null($dadosEnquadramento)) {
+            $arrValue = $dadosEnquadramento->toArray();
+        }
+
+        $areaSegmentoProjeto = $dbTableEnquadramento->obterProjetoAreaSegmento(
             [
                 'a.IdPRONAC = ?' => $intIdPronac,
                 'a.Situacao = ?' => $this->situacaoParaHomologacao
             ]
-        )->current()->toArray();
+        )->current();
+        $arrValue['enquadramentoProjeto'] = [];
+        if(!is_null($areaSegmentoProjeto)) {
+            $arrValue['enquadramentoProjeto'] = $areaSegmentoProjeto->toArray();
+        }
 
         $arrValue['parecer'] = $dbTableParecer->findBy([
             'TipoParecer' => '1',
@@ -236,15 +246,25 @@ class Projeto_HomologacaoController extends Projeto_GenericController
             );
         }
 
-        $servicoDocumentoAssinatura = new \Application\Modules\Projeto\Service\Assinatura\DocumentoAssinatura(
+        $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $documentoAssinatura = $objDbTableDocumentoAssinatura->obterProjetoDisponivelParaAssinatura(
             $idPronac,
-            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO,
-            $parecer['IdParecer']
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO
         );
-        $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
+
+        $mensagem = "Opera&ccedil;&atilde;o realizada com sucesso!";
+        if (count($documentoAssinatura) < 1) {
+            $servicoDocumentoAssinatura = new \Application\Modules\Projeto\Service\Assinatura\DocumentoAssinatura(
+                $idPronac,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO,
+                $parecer['IdParecer']
+            );
+            $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
+        }
+
 
         parent::message(
-            "Operação realizada com sucesso! ",
+            $mensagem,
             "/assinatura/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}",
             "CONFIRM"
         );
