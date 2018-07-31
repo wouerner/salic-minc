@@ -100,27 +100,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         $this->view->codGrupo = $this->codGrupo;
 
-//        $movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-//        $movimentacao = $movimentacao->buscarStatusAtualProposta($idPreProjeto);
-//        $this->view->movimentacao = $movimentacao['Movimentacao'];
-
         //========== inicio codigo dirigente ================
         $arrMandatos = array();
-        $this->view->mandatos = $arrMandatos;
-        $preProjeto = new Proposta_Model_DbTable_PreProjeto();
         $rsDirigentes = array();
-
-//        $Empresa = $preProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
-//        $idEmpresa = $Empresa->idAgente;
+        $this->view->mandatos = $arrMandatos;
 
         $Projetos = new Projetos();
         $dadosProjeto = $Projetos->buscar(array('idProjeto = ?' => $this->idPreProjeto))->current();
-
-        // Busca na tabela apoio ExecucaoImediata stproposta
-//        $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
-//        if (!empty($this->view->itensGeral[0]->stProposta)) {
-//            $this->view->ExecucaoImediata = $tableVerificacao->findBy(array('idVerificacao' => $this->view->itensGeral[0]->stProposta));
-//        }
 
         $Pronac = null;
         if (count($dadosProjeto) > 0) {
