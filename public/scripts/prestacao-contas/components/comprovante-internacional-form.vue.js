@@ -119,7 +119,7 @@ Vue.component('sl-comprovante-internacional-form',
                             v-model="comprovante.valor"
                             :class="[this.c.valor.css]"
                             @input="inputValor($event.target.value)"
-                            @blur="inputValorBlur()"
+                            @blur="inputValorBlur($event.target.value)"
                             size="10"
                         />
                         <label for="vlComprovadoInternacional"
@@ -131,7 +131,7 @@ Vue.component('sl-comprovante-internacional-form',
                     <div class="file-field input-field col s4">
                         <div :class="['btn small', c.arquivo.css] ">
                             <input name="arquivo" id="arquivo" ref="arquivo" type="file" @change="file">
-                            <span>Arquivo *</span>
+                            <span>Comprovante *</span>
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text"
@@ -176,7 +176,7 @@ Vue.component('sl-comprovante-internacional-form',
 
             this.comprovante.valor = numeral(parseFloat(this.dados.valor)).format('0,0.00');
             this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
-            this.comprovante.arquivo = { nome: this.dados.nmArquivo };
+            this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
             this.comprovante.justificativa = this.dados.dsJustificativaProponente;
         }
     },
@@ -561,8 +561,10 @@ Vue.component('sl-comprovante-internacional-form',
                this.c.valor.css = {};
             }
         },
-        inputValorBlur() {
-            this.comprovante.valor = numeral(numeral(this.comprovante.valor).value() /100).format('0,0.00');
+        inputValorBlur(e) {
+            let valor = e.toString();
+            valor = e.replace('.', '').replace(',', '');
+            this.comprovante.valor = numeral(numeral(valor).value() / 100).format('0,0.00');
         },
         cancelar: function () {
             $3('#modal1').modal('close');

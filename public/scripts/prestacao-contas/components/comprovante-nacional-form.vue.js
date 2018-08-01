@@ -210,7 +210,7 @@ Vue.component('sl-comprovante-nacional-form',
                                v-model="comprovante.valor"
                                :class="c.valor.css"
                                v-on:input="inputValor($event.target.value)"
-                               @blur="inputValorBlur()"
+                               @blur="inputValorBlur($event.target.value)"
                            />
                            <label :class="c.valor.css">
                                    Valor (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
@@ -267,7 +267,7 @@ Vue.component('sl-comprovante-nacional-form',
             this.comprovante.valor = numeral(parseFloat(this.dados.valor)).format('0,0.00');
 
             this.comprovante.numeroDocumento = this.dados.numeroDocumento;
-            this.comprovante.arquivo = { nome: this.dados.nmArquivo };
+            this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
             this.comprovante.justificativa = this.dados.justificativa;
         }
     },
@@ -660,8 +660,10 @@ Vue.component('sl-comprovante-nacional-form',
                this.c.valor.css = {};
             }
         },
-        inputValorBlur() {
-            this.comprovante.valor = numeral(numeral(this.comprovante.valor).value() /100).format('0,0.00');
+        inputValorBlur(e) {
+            let valor = e.toString();
+            valor = e.replace('.', '').replace(',', '');
+            this.comprovante.valor = numeral(numeral(valor).value() / 100).format('0,0.00');
         },
         cancelar: function () {
             $3('#modal1').modal('close');

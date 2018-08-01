@@ -17,7 +17,7 @@ Vue.component('comprovantes', {
                     >
                       <div class="collapsible-header">
                         Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
-                        <span :class="['badge white-text ', badgeStatus(dado.status)]"></span>
+                        <span :class="['badge white-text ', badgeStatus(dado.status)]">{{dado.status}}</span>
                       </div>
                       <div :class="['collapsible-body lighten-5', badgeCSS(dado.stItemAvaliado)]">
                             <div class="card">
