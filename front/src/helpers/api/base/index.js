@@ -7,10 +7,14 @@ export default class API {
     }
 
     get(resource = '') {
-        return this.axios.get(`${this.path}${resource}`);
+        return this.axios.get(`${this.path}/${resource}`);
     }
 
     post(bodyFormData, resource = '') {
-        return this.axios.post(`${this.path}${resource}`, bodyFormData);
+        return this.axios.post(`${this.path}/${resource}`, bodyFormData);
+    }
+
+    put(bodyFormData, resource = '') {
+        return this.axios.post(`${this.path}/${resource}`, bodyFormData);
     }
 }

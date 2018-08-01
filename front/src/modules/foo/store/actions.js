@@ -19,3 +19,13 @@ export const criarRegistro = ({ commit }, params) => {
             router.push('/');
         });
 };
+
+export const atualizarRegistro = ({ commit }, params) => {
+    fooHelperAPI.atualizarRegistro(params)
+        .then(() => {
+            console.log(commit);
+            // const registro = response.data;
+            // commit(types.SET_REGISTROS_TABELA, registro);
+            // router.push('/');
+        });
+};

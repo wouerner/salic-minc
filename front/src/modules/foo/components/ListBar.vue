@@ -6,15 +6,17 @@
                 <tr>
                     <th>Codigo</th>
                     <th>DadoNr</th>
-                </tr>        
+                    <th>Acoes</th>
+                </tr>
             </thead>
             <tbody>
-                <div v-for="(linha, index) in dadosTabela" :key="index">
-                    <tr>
-                        <td>{{ linha.Codigo }}</td>
-                        <td>{{ linha.DadoNr }}</td>
-                    </tr>
-                </div>
+                <tr v-for="(linha, index) in dadosTabela" :key="index">
+                    <td>{{ linha.Codigo }}</td>
+                    <td>{{ linha.DadoNr }}</td>
+                    <td>
+                        <router-link class="btn btn-primary" :to="{ name: 'UpdateBar', params: { data: { registro: linha } } }">Atualizar</router-link>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -38,6 +40,7 @@ export default {
     methods: {
         ...mapActions({
             obterDadosTabela: 'foo/obterDadosTabela',
+            atualizarRegistro: 'foo/atualizarRegistro',
         }),
     },
 };
