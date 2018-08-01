@@ -32,21 +32,18 @@ RUN ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
 WORKDIR /var/www/
 
-
 EXPOSE 80
 EXPOSE 8888
 EXPOSE 9000
 
 COPY . /var/www/salic-web
-RUN ls -la /var/www/salic-web
 
-
-COPY ./docker/salic-web/ /tmp/src
-RUN chmod +x -R /tmp/src/
+RUN chmod +x -R /var/www/salic-web
 RUN usermod -u 1000 www-data
-
 
 COPY ./docker/salic-web/actions/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD /tmp/src/actions/apache.sh
+CMD /var/www/salic-web/docker/salic-web/actions/apache.sh
+
+CMD apachectl -DFOREGROUND

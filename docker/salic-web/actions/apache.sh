@@ -1,12 +1,11 @@
 
 echo "[******] Copying and enable virtualhost 'site.conf'";
-cp /tmp/src/actions/apache2/sites-available/site.conf /etc/apache2/sites-available/site.conf
+cp /var/www/salic-web/docker/salic-web/actions/apache2/sites-available/site.conf /etc/apache2/sites-available/site.conf
 
 echo "[******] Copying configurations for security of apache.";
-cp /tmp/src/actions/apache2/conf-available/security.conf /etc/apache2/conf-available/security.conf
+cp /var/www/salic-web/docker/salic-web/actions/apache2/conf-available/security.conf /etc/apache2/conf-available/security.conf
 
 a2ensite site.conf
-a2ensite status.conf
 
 echo "[******] Disable default virtualhost '000-default.conf'";
 a2dissite 000-default.conf
@@ -16,16 +15,3 @@ a2enmod rewrite
 
 echo "[******] Enable Apache Mod Headers";
 a2enmod headers
-
-echo "[******] Restarting Apache 2 Service";
-
-#ps auxw | grep apache2 | grep -v grep > /dev/null
-#
-#if [ $? != 0 ]
-#then
-#        /etc/init.d/apache2 start > /dev/null
-#fi
-
-echo "[******] Starts Apache using Foreground Mode";
-apache2ctl -D FOREGROUND
-#exec apache2 -DFOREGROUND
