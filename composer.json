@@ -39,11 +39,16 @@
             "Application\\Modules\\Foo\\": "./application/modules/foo/",
             "Application\\Modules\\Foo\\Service\\": "./application/modules/foo/service/",
             "Application\\Modules\\Foo\\Service\\Foo\\": "./application/modules/foo/service/foo/",
-            "MinC\\Assinatura\\Servico\\": "./library/MinC/Assinatura/"
+            "MinC\\Assinatura\\": "./library/MinC/Assinatura/",
+            "MinC\\Db\\Model\\": "./library/MinC/Db/Model/"
         }
     },
     "archive": {
-        "exclude": ["/demos", "/documentation", "/tests"]
+        "exclude": [
+            "/demos",
+            "/documentation",
+            "/tests"
+        ]
     },
     "config": {
         "platform": {

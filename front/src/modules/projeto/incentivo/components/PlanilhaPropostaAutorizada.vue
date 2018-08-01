@@ -2,8 +2,8 @@
     <div id="planilha-congelada">
         <Carregando v-if="loading" :text="'Procurando planilha'"></Carregando>
         <Planilha v-if="Object.keys(planilha).length > 0"
-                              :componenteTabelaItens="'PlanilhaItensAutorizados'"
-                              :arrayPlanilha="planilha"></Planilha>
+                  :componenteTabelaItens="'PlanilhaItensAutorizados'"
+                  :arrayPlanilha="planilha"></Planilha>
         <div v-if="semResposta" class="card-panel padding 20 center-align">{{ mensagem }}</div>
     </div>
 </template>
@@ -11,61 +11,65 @@
 <script>
     import Carregando from '@/components/Carregando';
     import Planilha from '@/components/Planilha/Planilha';
-    import {mapGetters} from 'vuex';
+    import { mapGetters } from 'vuex';
 
     export default {
-        name: "PlanilhaPropostaAutorizada",
-        data: function () {
+        name: 'PlanilhaPropostaAutorizada',
+        data() {
             return {
                 planilha: [],
                 loading: true,
                 semResposta: false,
-                mensagem: ''
-            }
+                mensagem: '',
+            };
         },
         components: {
             Carregando,
-            Planilha
+            Planilha,
         },
-        mounted: function() {
-            if (typeof this.dadosProjeto != 'undefined') {
+        mounted() {
+            if (typeof this.dadosProjeto !== 'undefined') {
                 this.fetch(this.dadosProjeto.idPreProjeto);
             }
         },
         watch: {
-            dadosProjeto: function (value) {
-                if (typeof value != 'undefined') {
+            dadosProjeto(value) {
+                if (typeof value !== 'undefined') {
                     this.fetch(value.idPreProjeto);
                 }
-            }
+            },
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
-            })
+            }),
         },
         methods: {
-            fetch: function (id) {
-
-                if (typeof id == 'undefined') {
-                    return
+            fetch(id) {
+                if (typeof id === 'undefined') {
+                    return;
                 }
 
-                let self = this;
-                $3.ajax({
-                    url: '/proposta/visualizar/obter-planilha-proposta-original-ajax/',
-                    data: {
-                        idPreProjeto: id
-                    }
-                }).done(function (response) {
-                    self.planilha = response.data;
-                }).fail(function (response) {
-                    self.semResposta = true;
-                    self.mensagem = response.responseJSON.msg;
-                }).always(function () {
-                    self.loading = false;
-                });
-            }
-        }
+                const self = this;
+                /* eslint-disable-next-line */
+                $3
+                    .ajax({
+                        url: '/proposta/visualizar/obter-planilha-proposta-original-ajax/',
+                        data: {
+                            idPreProjeto: id,
+                        },
+                    })
+                    .done((response) => {
+                        self.planilha = response.data;
+                    })
+                    .fail((response) => {
+                        self.semResposta = true;
+                        self.mensagem = response.responseJSON.msg;
+                    })
+                    .always(() => {
+                        self.loading = false;
+                    });
+            },
+        },
     };
 </script>

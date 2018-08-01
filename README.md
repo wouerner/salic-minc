@@ -1,6 +1,11 @@
 # SALIC
 
 [![Junte-se ao nosso chat no https://gitter.im/salic-minc/Lobby](https://badges.gitter.im/salic-minc/Lobby.svg)](https://gitter.im/salic-minc/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<a href="https://app.zenhub.com/workspace/o/culturagovbr/salic-minc/boards" target="_blank">
+    <img src="https://img.shields.io/badge/Managed_with-ZenHub-5e60ba.svg" alt="zenhub">
+  </a>
+[![GitHub Issues Abertas](https://img.shields.io/github/issues/culturagovbr/salic-minc.svg?maxAge=2592000)]() 
+[![GitHub Issues Fechas](https://img.shields.io/github/issues-closed-raw/culturagovbr/salic-minc.svg?maxAge=2592000)]()
 
 Bem vindo/a à documentação do SALIC! Aqui você vai encontrar diversas documentações sobre o processo de desenvolvimento do SALIC, versionameno e publicação.
 
@@ -22,7 +27,7 @@ Para criar um ambiente para trabalhar com o SALIC basta executar o comando abaix
 
 Para parar o container basta digitar:
 ```
-  docker-compose stop
+  docker-compose down
 ```
 
 ## Front-end
@@ -32,7 +37,7 @@ Para parar o container basta digitar:
 * Esse projeto contem os manuais e implementações de layout do salic [Layout](https://github.com/culturagovbr/salic-minc-layout)
 
 ## Tecnologias
-* [PHP](http://php.net/)
+* [PHP 7.x](http://php.net/)
 * [Zend Framework 1](https://framework.zend.com/manual/1.12/en/learning.quickstart.html) 
 * [Composer](https://getcomposer.org/)
 * [jQuery](https://jquery.com/)
@@ -54,4 +59,4 @@ Para parar o container basta digitar:
 ## Autores
 Várias pessoas colaboraram com o desenvimento do projeto SALIC e decidimos centralizar em um único local todos os que participaram com o desenvolvimento do projeto.
   
-Clique [aqui](doc/Autores.md) para visualizar.
+Clique [aqui](https://github.com/culturagovbr/salic-minc/graphs/contributors) para visualizar.

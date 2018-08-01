@@ -70,4 +70,25 @@ class PrestacaoContas_Model_FornecedorInternacional extends MinC_Db_Table_Abstra
         }
 
     }
+
+    public function atualizar()
+    {
+        $dados = [
+            'dsNome' => $this->nome,
+            'dsEndereco' => $this->endereco,
+            'dsPais' => $this->pais
+        ];
+
+        $result = null;
+        try{
+            $result = $this->update(
+                $dados,
+                ['idFornecedorExterior = ?' => $this->id]
+            );
+            return $result;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+    }
 }

@@ -23,8 +23,14 @@ class Foo_FooRestController extends Zend_Rest_Controller
 //        $tooModel = new Foo_Model_Too();
 //        $this->view->toos = $tooModel->listar();
 //        $dataAux = $_GET;
-//        $this->view->assign('data', $dataAux);
-//        $this->getResponse()->setHttpResponseCode(200);
+        $this->view->assign('data', [
+            1,
+            10,
+            100,
+            1000,
+            10000
+        ]);
+        $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function getAction()

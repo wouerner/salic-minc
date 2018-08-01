@@ -23,8 +23,8 @@
         props: {
             text: {
                 type: String,
-                default: ''
-            }
-        }
+                default: '',
+            },
+        },
     };
 </script>
