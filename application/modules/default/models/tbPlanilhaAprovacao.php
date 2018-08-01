@@ -578,7 +578,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'd.Situacao as cdSituacao',
                     'a.IdPRONAC',
                 ];
-                $select->where("d.Situacao IN ('E17','E20','E27','E30','E68')");
+                $select->where("d.Situacao = ?", 'E68');
                 $select->where(
                     "CASE
                         WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
@@ -598,7 +598,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'a.IdPRONAC',
                     'J.dtInicioEncaminhamento'
                 ];
-                $select->where("d.Situacao IN ('E17','E20','E27','E30')");
+                $select->where("d.Situacao IN ('E27', 'E17', 'E20', 'E30')");
                 $select->where(
                     "CASE
                         WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
@@ -616,7 +616,7 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
                     'f.Descricao as dsArea',
                     'a.IdPRONAC'
                 ];
-                $select->where("d.Situacao IN ('E17','E20','E30','E68')");
+                $select->where("d.Situacao IN ('E20','E30')");
                 $select->where(
                     "CASE
                         WHEN J.idSituacaoEncPrestContas IS NULL THEN 1
