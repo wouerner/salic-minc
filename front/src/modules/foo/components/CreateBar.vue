@@ -6,7 +6,7 @@
                 <label for="DadoNr">DadoNr</label>
                 <input type="text" name="DadoNr" id="DadoNr" v-model="DadoNr">
             </p>
-            <a @click="createBar({ DadoNr })">Salvar</a>
+            <a @click="criarRegistro({ DadoNr })">Salvar</a>
         </form>
     </div>
 </template>
@@ -23,7 +23,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            createBar: 'foo/createBar',
+            criarRegistro: 'foo/criarRegistro',
         }),        
     },
 };

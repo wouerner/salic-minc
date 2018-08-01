@@ -5,7 +5,7 @@ export const state = {
 };
 
 export const mutations = {
-    [types.SET_DADOS_TABELA](state, dadosTabela) {
+    [types.SET_REGISTROS_TABELA](state, dadosTabela) {
         state.dadosTabela = dadosTabela;
     },
 };

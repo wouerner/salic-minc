@@ -4,7 +4,7 @@ const api = () => new API('/foo/foo-rest');
 
 export const obterDadosTabela = () => api().get();
 
-export const createBar = (params) => {
+export const criarRegistro = (params) => {
     const bodyFormData = new FormData();
 
     Object.keys(params).forEach((key) => {
