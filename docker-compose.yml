@@ -1,7 +1,8 @@
 version: '2'
 services:
   web:
-    image: culturagovbr/salic-web:1.6
+    build: .
+    image: culturagovbr/salic-web:1.7
     container_name: salic-web
     ports:
      - "80:80"
@@ -33,5 +34,5 @@ networks:
    static-network:
     ipam:
       config:
-         - subnet: 172.20.0.0/16
-           ip_range: 172.28.5.0/24
+        - subnet: 172.20.0.0/16
+          iprange: 172.28.5.0/24
