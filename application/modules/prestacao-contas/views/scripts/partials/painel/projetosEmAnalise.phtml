@@ -48,7 +48,7 @@
                     {
                         "targets": 4,
                         "data": null,
-                        render: (data) => { return moment(data.dtInicioEncaminhamento).format('DD/MM/YYYY'); }
+                        render: (data) => moment(data[4]).format('DD/MM/YYYY')
                     },
                     {
                         "targets": 6,
