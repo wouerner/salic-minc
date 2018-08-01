@@ -14,13 +14,17 @@
                     <td>{{ linha.Codigo }}</td>
                     <td>{{ linha.DadoNr }}</td>
                     <td>
-                        <router-link class="btn btn-primary" :to="{ name: 'UpdateBar', params: { data: { registro: linha } } }">Atualizar</router-link>
+                        <router-link :to="{ name: 'UpdateBar', params: { id: linha.Codigo } }">
+                            <a class="btn btn-primary" @click="setActiveRecord(linha)">
+                                Atualizar
+                            </a>
+                        </router-link>
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <router-link :to="{ name: 'CreateBar', params: {} }">Criar</router-link>
+        <router-link :to="{ name: 'CreateBar' }">Criar</router-link>
     </div>
 </template>
 
@@ -40,7 +44,7 @@ export default {
     methods: {
         ...mapActions({
             obterDadosTabela: 'foo/obterDadosTabela',
-            atualizarRegistro: 'foo/atualizarRegistro',
+            setActiveRecord: 'foo/setActiveRecord',
         }),
     },
 };

@@ -6,15 +6,15 @@ export default class API {
         this.axios = instance();
     }
 
-    get(resource = '') {
-        return this.axios.get(`${this.path}/${resource}`);
+    get(id = '') {
+        return this.axios.get(`${this.path}/${id}`);
     }
 
-    post(bodyFormData, resource = '') {
-        return this.axios.post(`${this.path}/${resource}`, bodyFormData);
+    post(bodyFormData) {
+        return this.axios.post(this.path, bodyFormData);
     }
 
-    put(bodyFormData, resource = '') {
-        return this.axios.post(`${this.path}/${resource}`, bodyFormData);
+    put(bodyFormData, id) {
+        return this.axios.post(`${this.path}/${id}`, bodyFormData);
     }
 }

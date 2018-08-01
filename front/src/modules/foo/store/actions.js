@@ -20,12 +20,16 @@ export const criarRegistro = ({ commit }, params) => {
         });
 };
 
-export const atualizarRegistro = ({ commit }, params) => {
-    fooHelperAPI.atualizarRegistro(params)
-        .then(() => {
-            console.log(commit);
-            // const registro = response.data;
-            // commit(types.SET_REGISTROS_TABELA, registro);
-            // router.push('/');
+export const updateRecord = ({ commit }, params) => {
+    fooHelperAPI.updateRecord(params)
+        .then((response) => {
+            const record = response.data;
+            commit(types.UPDATE_REGISTRO_TABELA, record);
         });
+};
+
+export const setActiveRecord = ({ commit }, linha) => {
+    console.log('chegando');
+    console.log(linha);
+    commit(types.SET_ACTIVE_RECORD, linha);
 };

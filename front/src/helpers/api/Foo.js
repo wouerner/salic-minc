@@ -14,9 +14,9 @@ export const criarRegistro = (params) => {
     return api().post(bodyFormData);
 };
 
-export const atualizarRegistro = (params) => {
+export const updateRecord = (params) => {
     const bodyFormData = new FormData();
-    const id = params['Codigo'];
+    const id = params.Codigo;
 
     Object.keys(params).forEach((key) => {
         bodyFormData.set(key, params[key]);

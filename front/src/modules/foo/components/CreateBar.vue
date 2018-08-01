@@ -24,7 +24,7 @@ export default {
     methods: {
         ...mapActions({
             criarRegistro: 'foo/criarRegistro',
-        }),        
+        }),
     },
 };
 </script>
