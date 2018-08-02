@@ -64,8 +64,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['serie'] = $value['serie'];
             $dataAux[$key]['forma'] = $value['forma'];
             $dataAux[$key]['valor'] = $value['vlComprovacao'];
-            $dataAux[$key]['justificativa'] = $value['dsJustificativa'];
-            $dataAux[$key]['justificativa'] = $value['justificativa'];
+            $dataAux[$key]['justificativa'] = $value['dsJustificativaProponente'];
             $dataAux[$key]['dataPagamento'] = $value['dtPagamento'];
             $dataAux[$key]['dataEmissao'] = $value['dataEmissao'];
             $dataAux[$key]['numeroDocumento'] = $value['numeroDocumento'];
@@ -74,6 +73,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['fornecedor']['nome'] = $value['nmFornecedor'];
             $dataAux[$key]['fornecedor']['endereco'] = $value['endereco'];
             $dataAux[$key]['fornecedor']['id'] = $value['id'];
+            $dataAux[$key]['fornecedor']['pais'] = $value['pais'];
             $dataAux[$key]['arquivo']['nome'] = $value['nmArquivo'];
             $dataAux[$key]['arquivo']['id'] = $value['idArquivo'];
             $dataAux[$key]['projeto']['dataInicioExecucao'] = $dtInicioExecucao;

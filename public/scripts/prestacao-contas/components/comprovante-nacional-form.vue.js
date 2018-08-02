@@ -108,7 +108,7 @@ Vue.component('sl-comprovante-nacional-form',
                             <label
                                 for="dataEmissao"
                                 :class="c.dataEmissao.css"
-                            >Dt. de Emiss&atilde;o do comprovante</label>
+                            >Data de Emiss&atilde;o</label>
                         </div>
                         <div class="input-field col s1">
                             <i class="material-icons tooltipped" data-position="bottom" data-delay="50"
@@ -200,7 +200,7 @@ Vue.component('sl-comprovante-nacional-form',
                                 :class="[c.numero.css]"
                             >N&uacute;mero * </label>
                         </div>
-                        <div class="input-field col s2">
+                        <div class="input-field col s4">
                             <input
                                type="text"
                                ref="valor"
@@ -213,7 +213,7 @@ Vue.component('sl-comprovante-nacional-form',
                                @blur="inputValorBlur($event.target.value)"
                            />
                            <label :class="c.valor.css">
-                                   Valor (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
+                                   Valor (atual: {{valorAntigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
                             </div>
                     </div>
                 </fieldset>
@@ -271,21 +271,21 @@ Vue.component('sl-comprovante-nacional-form',
             this.comprovante.justificativa = this.dados.justificativa;
         }
     },
-    props: [
-        'dados',
-        'url',
-        'messages',
-        'tipoform',
-        'item',
-        'idplanilhaaprovacao',
-        'index',
-        'datainicio',
-        'datafim',
-        'valoraprovado',
-        'valorcomprovado',
-        'valorantigo',
-        'status'
-    ],
+    props: {
+        dados: null,
+        url:null,
+        messages:null,
+        tipoform:null,
+        item:null,
+        idplanilhaaprovacao:null,
+        index:null,
+        datainicio:null,
+        datafim:null,
+        valoraprovado: Number,
+        valorcomprovado: Number,
+        valorantigo: Number,
+        status:null
+    },
     computed:{
         dataInicio() {
             return moment(this.datainicio).format('DD/MM/YYYY');
@@ -294,7 +294,15 @@ Vue.component('sl-comprovante-nacional-form',
             return moment(this.datafim).format('DD/MM/YYYY');
         },
         valorMaxItem: function() {
-            return parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ));
+            let valorAprovado = numeral(parseFloat(this.valoraprovado)).value();
+            let valorComprovado = numeral(parseFloat(this.valorcomprovado)).value();
+            let valorAntigo = numeral(this.valorantigo ? parseFloat(this.valorantigo) : 0.0).value();
+            let value = numeral(valorAprovado - (valorComprovado - valorAntigo)).format('0,0.00');
+
+            return value;
+        },
+        valorAntigo() {
+            return numeral(parseFloat(this.valorantigo)).format('0,0.00');
         }
     },
     data: function () {

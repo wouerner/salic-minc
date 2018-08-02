@@ -552,7 +552,11 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         $select->join(
             ['i' => 'tbFonecedorExterior'],
             '(c.idFornecedorExterior = i.idFornecedorExterior)',
-            ['i.dsEndereco as endereco', 'i.idFornecedorExterior as id'],
+            [
+                'i.dsEndereco as endereco', 
+                'i.idFornecedorExterior as id',
+                'i.dsPais as pais'
+            ],
             'BDCORPORATIVO.scSAC'
         );
 

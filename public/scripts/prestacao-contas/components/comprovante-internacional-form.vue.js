@@ -162,9 +162,17 @@ Vue.component('sl-comprovante-internacional-form',
         if (this.dados) {
             if (this.dados.idComprovantePagamento) {
                 this.comprovante.id = this.dados.idComprovantePagamento;
+                this.comprovante.idComprovantePagamento = this.dados.idComprovantePagamento;
             }
 
-            this.comprovante.id = this.dados.idComprovantePagamento;
+            if(this.dados.fornecedor.pais) {
+                this.comprovante.fornecedor.nacionalidade = this.dados.fornecedor.pais;
+            }
+
+            if(this.dados.fornecedor.nacionalidade){
+                this.comprovante.fornecedor.nacionalidade = this.dados.fornecedor.nacionalidade;
+            }
+
             this.comprovante.fornecedor.nome = this.dados.fornecedor.nome;
             this.comprovante.fornecedor.endereco = this.dados.fornecedor.endereco;
             this.comprovante.fornecedor.id = this.dados.fornecedor.id;
@@ -177,7 +185,7 @@ Vue.component('sl-comprovante-internacional-form',
             this.comprovante.valor = numeral(parseFloat(this.dados.valor)).format('0,0.00');
             this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
             this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
-            this.comprovante.justificativa = this.dados.dsJustificativaProponente;
+            this.comprovante.justificativa = this.dados.justificativa;
         }
     },
     props: [
@@ -202,7 +210,12 @@ Vue.component('sl-comprovante-internacional-form',
             return moment(this.datafim).format('DD/MM/YYYY');
         },
         valorMaxItem: function() {
-            return numeral(parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ))).format('0,0.00');
+            let valorAprovado = numeral(parseFloat(this.valoraprovado)).value();
+            let valorComprovado = numeral(parseFloat(this.valorcomprovado)).value();
+            let valorAntigo = numeral(this.valorantigo ? parseFloat(this.valorantigo) : 0.0).value();
+            let value = numeral(valorAprovado - (valorComprovado - valorAntigo)).format('0,0.00');
+
+            return value;
         }
     },
     data: function () {
@@ -301,7 +314,9 @@ Vue.component('sl-comprovante-internacional-form',
                     Materialize.toast('Salvo com sucesso!', 4000, 'green');
                     $3('#modal1').modal('close');
 
+                    vue.comprovante.paisNome = vue.pais[vue.comprovante.fornecedor.nacionalidade]['nome'];
                     if (vue.tipoform == 'cadastro') {
+                       vue.comprovante.id = data.idComprovantePagamento;
                        vue.comprovante._index = data.idComprovantePagamento;
                        vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
                        vue.$root.$emit('novo-comprovante-internacional', vue.comprovante);
@@ -339,7 +354,7 @@ Vue.component('sl-comprovante-internacional-form',
                            },
                        }
 
-                       vue.comprovantee = {
+                       vue.comprovante = {
                             fornecedor: {
                                 nacionalidade: '' ,
                                 tipoPessoa: 1,
@@ -365,6 +380,8 @@ Vue.component('sl-comprovante-internacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
+                        vue.comprovante._index = data.idComprovantePagamento;
+                        vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
                         vue.$root.$emit('atualizado-comprovante-internacional', vue.comprovante);
                     }
                 });
@@ -405,7 +422,7 @@ Vue.component('sl-comprovante-internacional-form',
                return false;
             }
 
-            if(!this.comprovante.arquivo) {
+            if(!this.comprovante.arquivo.file && this.tipoform == 'cadastro') {
                 this.$refs.arquivo.focus();
                 this.c.arquivo.css = 'active red';
                 return false;
