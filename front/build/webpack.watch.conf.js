@@ -71,6 +71,20 @@ const devWebpackConfig = merge(baseWebpackConfig, {
                 ignore: ['.*']
             }
         ]),
+        new HtmlWebpackPlugin({
+            template: 'index.html',
+            filename: config.build.index,
+            inject: true,
+            // minify: {
+            //     removeComments: true,
+            //     collapseWhitespace: true,
+            //     removeAttributeQuotes: true
+            //     // more options:
+            //     // https://github.com/kangax/html-minifier#options-quick-reference
+            // },
+            // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+            chunksSortMode: 'dependency'
+        }),
         new BrowserSyncPlugin({
             // browse to http://localhost:3000/ during development,
             // ./public directory is being served

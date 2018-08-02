@@ -158,7 +158,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'label' => 'Dados do Projeto',
             'title' => '',
 //            'link' => '/default/consultardadosprojeto/index?idPronac=' . $idPronacHash,
-            'link' => '/projeto/#/incentivo/' . $idPronacHash,
+            'link' => '/#/projeto/incentivo/' . $idPronacHash,
             'ajax' => false,
             'icon' => 'home',
             'submenu' => '',
@@ -611,7 +611,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'submenu' => '',
                 'grupo' => []
             ];
-        }                    
+        }
 
         if ($this->situacaoProjeto != 'E24' || $debug) {
 
@@ -641,7 +641,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
 
             }
-            
+
 
             if ($this->permissoesMenu['RelatorioFinal'] || $debug) {
                 $menu['comprovacaofisica']['submenu'][] = [

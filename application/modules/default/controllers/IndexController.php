@@ -19,12 +19,13 @@ class IndexController extends MinC_Controller_Action_Abstract
         $this->verificarPermissoes();
     }
 
-    private function verificarPermissoes() {
+    private function verificarPermissoes()
+    {
         $permissoesGrupo = [];
         if ($this->autenticacao) {
-            if (!empty($this->idUsuario)) {
+            if ($this->autenticacao['usu_codigo']) {
                 $dbTableUsuario = new Autenticacao_Model_DbTable_Usuario();
-                $grupos = $dbTableUsuario->buscarUnidades($this->idUsuario, self::SISTEMA_SALIC);
+                $grupos = $dbTableUsuario->buscarUnidades($this->autenticacao['usu_codigo'], self::SISTEMA_SALIC);
 
                 foreach ($grupos as $grupo) {
                     $permissoesGrupo[] = $grupo->gru_codigo;
@@ -42,10 +43,10 @@ class IndexController extends MinC_Controller_Action_Abstract
             $this->redirect("/autenticacao/index/index");
         }
 
-        $gitTag = '?v=' . $this->view->gitTag();
-        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
-        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/main.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+//        $gitTag = '?v=' . $this->view->gitTag();
+//        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+//        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+//        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/main.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
     }
 
     public function indisponivelAction()

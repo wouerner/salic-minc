@@ -178,7 +178,7 @@ class ConsultarDadosProjetoController extends MinC_Controller_Action_Abstract
                 }
 
                 if ($projeto['Mecanismo'] == 1) {
-                    $this->redirect('/projeto/#/incentivo/' . $idPronacHash);
+                    $this->redirect('/#/projeto/incentivo/' . $idPronacHash);
                 } else {
                     $this->redirect('/projeto/convenio/visualizar/idPronac/' . $idPronacHash);
                 }

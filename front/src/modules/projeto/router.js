@@ -1,7 +1,6 @@
 // import Vue from 'vue';
 // import Router from 'vue-router';
 import Index from './Index';
-import DadosProjeto from './incentivo/components/DadosProjeto';
 import IncentivoTemplate from './incentivo/Index';
 import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOriginal';
 import PlanilhaPropostaAutorizada from './incentivo/components/PlanilhaPropostaAutorizada';
@@ -34,7 +33,7 @@ export default [
             {
                 path: '',
                 name: 'dadosprojeto',
-                component: DadosProjeto,
+                component: () => import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto.vue'),
                 meta: {
                     title: 'Dados do Projeto',
                 },

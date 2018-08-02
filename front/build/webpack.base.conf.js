@@ -28,7 +28,7 @@ module.exports = {
     output: {
         path: config.build.assetsRoot,
         filename: utils.assetsPath('js/[name].js'),
-        chunkFilename: utils.assetsPath('js/[id].[name].js')
+        chunkFilename: utils.assetsPath('js/[id].bundle.js')
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],

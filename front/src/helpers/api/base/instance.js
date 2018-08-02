@@ -1,22 +1,17 @@
 import axios from 'axios';
 
-// const API_ENDPOINT = process.env.API_ENDPOINT;
+const API_ENDPOINT = process.env.API_ENDPOINT;
 
-// let instance;
+let instance;
 
-// export default () => {
-//     // if (instance) {
-//     //     return instance;
-//     // }
-//
-//     instance = axios.create({
-//         baseURL: API_ENDPOINT,
-//     });
-//
-//     return instance;
-// };
+export default () => {
+    if (instance) {
+        return instance;
+    }
 
+    instance = axios.create({
+        baseURL: API_ENDPOINT,
+    });
 
-export const instance = axios.create({
-    baseURL: 'http://local.salic/',
-});
+    return instance;
+};
