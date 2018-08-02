@@ -10,10 +10,15 @@ if ! [ -d "/var/www/salic/vendor" ]; then
 
     cd /var/www/salic
 
-    echo [ ****************** ]" Installing composer dependencies."
+    echo "[ ****************** ] Installing composer dependencies."
     composer install --prefer-source --no-interaction
 fi
 
+if [ "$UPDATE_COMPOSER_DEPENDENCIES" == "true" ]; then
+	echo "[ ****************** ] Updating composer dependencies."
+	cd /var/www/salic
+    composer update --prefer-source --no-interaction
+fi
 
 if  ! [ -e "/var/www/salic/application/configs/application.ini" ] ; then
     echo "[ ****************** ] Copying sample application configuration to real one"
@@ -22,7 +27,7 @@ fi
 
 
 # X-Debug
-if ! [ -v $XDEBUG_INSTALL ] || [ $APPLICATION_ENV == 'development'] ; then
+if [ "$XDEBUG_INSTALL" == "true" ]; then
     echo "[ ****************** ] Starting install of XDebug and dependencies."
 	pecl shell-test xdebug && echo "Package xdebug Installed" || (
 		yes | pecl install xdebug 

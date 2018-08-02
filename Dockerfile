@@ -22,6 +22,7 @@ RUN docker-php-ext-install soap
 RUN docker-php-ext-install calendar
 #RUN docker-php-ext-configure mssql --with-libdir=/lib/x86_64-linux-gnu && docker-php-ext-install mssql
 RUN docker-php-ext-configure pdo_dblib --with-libdir=/lib/x86_64-linux-gnu && docker-php-ext-install pdo_dblib
+RUN docker-php-ext-install zip
 
 WORKDIR /tmp/
 RUN ls -la /tmp
@@ -33,17 +34,23 @@ RUN ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 WORKDIR /var/www/
 
 EXPOSE 80
-EXPOSE 8888
 EXPOSE 9000
 
-COPY . /var/www/salic-web
+COPY . /var/www/salic
 
-RUN chmod +x -R /var/www/salic-web
+RUN chmod +x -R /var/www/salic
 RUN usermod -u 1000 www-data
+
+COPY ./docker/salic-web/actions/apache2/sites-available/site.conf /etc/apache2/sites-available/site.conf
+COPY ./docker/salic-web/actions/apache2/conf-available/security.conf /etc/apache2/conf-available/security.conf
+COPY ./docker/salic-web/actions/apache2/ports.conf /etc/apache2/ports.conf
+
+RUN a2ensite site.conf
+RUN a2dissite 000-default.conf
+RUN a2enmod rewrite
+RUN a2enmod headers
 
 COPY ./docker/salic-web/actions/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
-
-CMD /var/www/salic-web/docker/salic-web/actions/apache.sh
 
 CMD apachectl -DFOREGROUND
