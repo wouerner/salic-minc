@@ -18,7 +18,6 @@ export const mutations = {
         dadosTabela.forEach((value, index) => {
             if (record.Codigo === value.Codigo) {
                 state.dadosTabela[index] = record;
-                return record;
             }
         });
     },

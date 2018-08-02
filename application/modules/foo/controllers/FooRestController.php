@@ -54,7 +54,7 @@ class Foo_FooRestController extends Zend_Rest_Controller
     {
         $barService = new BarService($this->getRequest(), $this->getResponse());
         $resposta = $barService->atualizar();
-
+        
         $this->view->assign('data', $resposta);
         $this->getResponse()->setHttpResponseCode(200);
     }

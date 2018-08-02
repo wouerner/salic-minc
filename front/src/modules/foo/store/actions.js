@@ -28,8 +28,6 @@ export const updateRecord = ({ commit }, params) => {
         });
 };
 
-export const setActiveRecord = ({ commit }, linha) => {
-    console.log('chegando');
-    console.log(linha);
-    commit(types.SET_ACTIVE_RECORD, linha);
+export const setActiveRecord = ({ commit }, record) => {
+    commit(types.SET_ACTIVE_RECORD, record);
 };

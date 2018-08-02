@@ -10,15 +10,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(linha, index) in dadosTabela" :key="index">
-                    <td>{{ linha.Codigo }}</td>
-                    <td>{{ linha.DadoNr }}</td>
+                <tr v-for="(record, index) in dadosTabela" :key="index">
+                    <td>{{ record.Codigo }}</td>
+                    <td>{{ record.DadoNr }}</td>
                     <td>
-                        <router-link :to="{ name: 'UpdateBar', params: { id: linha.Codigo } }">
-                            <a class="btn btn-primary" @click="setActiveRecord(linha)">
+                        <router-link :to="{ name: 'UpdateBar', params: { id: record.Codigo } }">
+                            <a class="btn btn-primary" @click="setActiveRecord(record)">
                                 Atualizar
                             </a>
                         </router-link>
+                        <a class="btn btn-danger">
+                            Remover
+                        </a>
                     </td>
                 </tr>
             </tbody>
