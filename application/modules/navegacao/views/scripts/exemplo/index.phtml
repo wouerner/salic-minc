@@ -17,13 +17,11 @@
                   <a id="menu-right" href="#" data-activates="nav-mobile" class="button-collapse right"><i class="material-icons">menu</i></a>
                     <ul class="left hide-on-med-and-down">
                         <li>
-                          <a class="dropdown-button" data-beloworigin="true" data-constrainwidth="false" href="javascript:void(0);" data-activates="administrativo" title="Ir para Administrativo">
-                          Administrativo
+                          <a class="dropdown-button" data-beloworigin="true" data-constrainwidth="false" href="javascript:void(0);" data-activates="administrativo" title="Ir para Analise">
+                          Analise
                           </a>
                             <ul id="administrativo" class="dropdown-content" style="white-space: nowrap; position: absolute; top: 40px; left: 0px; display: none; opacity: 1;">
-                               <li><a href="/agente/agentes/incluiragente" title="Ir para Manter Agentes">Cadastrar Proponente</a></li>
-                               <li><a href="/proposta/manterpropostaincentivofiscal/consultarresponsaveis" title="Ir para Aceitar vinculo">Gerenciar responsáveis</a></li>
-                               <li><a href="/procuracao" title="Ir para Procuração">Procuração</a></li>
+                              <li v-for="link in dados.data.analise.menu"><a>{{link.label}}</a></li>
                             </ul>
                         </li>
 
