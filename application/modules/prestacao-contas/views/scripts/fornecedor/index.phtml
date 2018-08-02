@@ -59,9 +59,9 @@
                            class="validate"
                            :value="CEPmask"
                            maxlength="8"
-                           v-on:keyup="cepMask(CEP)"
-                           v-on:blur="buscarcep(CEPmask)"
-                           v-on:input="inputCEP($event.target.value)">
+                           @keyup="cepMask(CEP)"
+                           @blur="buscarcep(CEPmask)"
+                           @input="inputCEP($event.target.value)">
                         <span id="erroCep" class="spanError"></span>
 
                     <label for="first_name">CEP *</label>
