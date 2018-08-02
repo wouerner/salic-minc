@@ -43,7 +43,6 @@ RUN usermod -u 1000 www-data
 
 COPY ./docker/salic-web/actions/apache2/sites-available/site.conf /etc/apache2/sites-available/site.conf
 COPY ./docker/salic-web/actions/apache2/conf-available/security.conf /etc/apache2/conf-available/security.conf
-COPY ./docker/salic-web/actions/apache2/ports.conf /etc/apache2/ports.conf
 
 RUN a2ensite site.conf
 RUN a2dissite 000-default.conf
