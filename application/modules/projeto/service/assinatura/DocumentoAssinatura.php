@@ -49,6 +49,14 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
         $objDocumentoAssinatura = new \MinC\Assinatura\Servico\DocumentoAssinatura();
         $objDocumentoAssinatura->registrarDocumentoAssinatura($objModelDocumentoAssinatura);
 
+        $objProjetos = new \Projetos();
+        $objProjetos->alterarSituacao(
+            $this->idPronac,
+            null,
+            \Projeto_Model_Situacao::ANALISE_TECNICA,
+            'Projeto aguardando an&aacute;lise para homologa&ccedil;&atilde;o de execu&ccedil;&atilde;o'
+        );
+
         return (int)$objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
             $this->idPronac,
             $this->idTipoDoAtoAdministrativo
@@ -92,13 +100,13 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             $view->secretaria = 'Secretaria de Fomento e Incentivo &agrave; Cultura - SEFIC';
         }
 
-        $tbParecer = new \Parecer();
-        $parecer = $tbParecer->buscar([
-            'IdParecer = ?' => $this->idAtoDeGestao
+        $tbHomologacao = new \Projeto_Model_DbTable_TbHomologacao();
+        $parecer = $tbHomologacao->buscar([
+            'idPronac = ?' => $this->idPronac
         ])->current();
 
 
-        switch ((string)$parecer->ParecerFavoravel) {
+        switch ((string)$parecer->stDecisao) {
             case '1':
                 $view->posicionamentoTecnico = 'Desfavor&aacute;vel';
                 break;
@@ -109,7 +117,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
                 $view->posicionamentoTecnico = 'N&atilde;o definido';
                 break;
         }
-        $view->parecer = $parecer->ResumoParecer;
+        $view->parecer = $parecer->dsHomologacao;
 
         return $view->render('documento-assinatura.phtml');
     }
