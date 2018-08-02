@@ -606,19 +606,15 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
 
         $idAgente = (int)$this->_request->getParam("id");
 
-        if (empty($idAgente)) {
-            throw new Exception("Agente &eacute; obrigat&oacute;rio!");
-        }
-
         if (($this->GrupoAtivoSalic == 94) || ($this->GrupoAtivoSalic == 118)) {
             $idAgente = $this->getIdUsuario;
         }
 
-        if (($this->GrupoAtivoSalic == 93) && ($idAgente == '')) {
+        if ($this->GrupoAtivoSalic == 93 && empty($idAgente)) {
             $this->redirect('agente/agentes/buscaragente');
         }
 
-        if (($idAgente == '')) {
+        if (empty($idAgente)) {
             $this->redirect('agente/agentes/incluiragente');
         }
 
