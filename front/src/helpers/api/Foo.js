@@ -25,3 +25,7 @@ export const updateRecord = (params) => {
     return api().put(bodyFormData, id);
 };
 
+export const removeRecord = (params) => {
+    const id = params.Codigo;
+    return api().delete(id);
+};

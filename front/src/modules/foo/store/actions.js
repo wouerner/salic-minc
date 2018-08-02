@@ -31,3 +31,10 @@ export const updateRecord = ({ commit }, params) => {
 export const setActiveRecord = ({ commit }, record) => {
     commit(types.SET_ACTIVE_RECORD, record);
 };
+
+export const removeRecord = ({ commit }, record) => {
+    fooHelperAPI.removeRecord(record)
+        .the(() => {
+            commit(types.DELETE_RECORD, record);
+        });
+};

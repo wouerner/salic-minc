@@ -21,4 +21,13 @@ export const mutations = {
             }
         });
     },
+    [types.DELETE_RECORD](state, record) {
+        const dadosTabela = state.dadosTabela;
+
+        dadosTabela.forEach((value, index) => {
+            if (record.Codigo === value.Codigo) {
+                state.dadosTabela.splice(index, 1);
+            }
+        });
+    },
 };

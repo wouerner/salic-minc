@@ -17,4 +17,8 @@ export default class API {
     put(bodyFormData, id) {
         return this.axios.post(`${this.path}/${id}`, bodyFormData);
     }
+
+    delete(id) {
+        return this.axios.delete(`${this.path}/${id}`);
+    }
 }

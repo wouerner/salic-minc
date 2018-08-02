@@ -19,7 +19,7 @@
                                 Atualizar
                             </a>
                         </router-link>
-                        <a class="btn btn-danger">
+                        <a class="btn btn-danger" @click="removeConfirm(record)">
                             Remover
                         </a>
                     </td>
@@ -48,7 +48,15 @@ export default {
         ...mapActions({
             obterDadosTabela: 'foo/obterDadosTabela',
             setActiveRecord: 'foo/setActiveRecord',
+            removeRecord: 'foo/removeRecord',
         }),
+        removeConfirm(record) {
+            const response = confirm('Deseja remover esse registro?');
+
+            if (response) {
+                this.removeRecord(record);
+            }
+        },
     },
 };
 </script>
