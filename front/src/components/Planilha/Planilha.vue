@@ -58,10 +58,6 @@
     import numeral from 'numeral';
     import 'numeral/locales';
     import PlanilhaItensPadrao from '@/components/Planilha/PlanilhaItensPadrao';
-    import PlanilhaItensAutorizados from '@/components/Planilha/PlanilhaItensAutorizados';
-    import PlanilhaItensAprovados from '@/components/Planilha/PlanilhaItensAprovados';
-
-
     import planilhas from '@/mixins/planilhas';
 
     export default {
@@ -75,8 +71,6 @@
         mixins: [planilhas],
         components: {
             PlanilhaItensPadrao,
-            PlanilhaItensAprovados,
-            PlanilhaItensAutorizados,
         },
         props: {
             arrayPlanilha: {},
