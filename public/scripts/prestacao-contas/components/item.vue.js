@@ -23,8 +23,9 @@ Vue.component('item', {
                                                 <th>UF</th>
                                                 <th>Cidade</th>
                                                 <th>Itens de Custo</th>
-                                                <th style="text-align: right">Valor Aprovado</th>
+                                                <th style="text-align: right">Aprovado</th>
                                                 <th style="text-align: right">Total Comprovado</th>
+                                                <th style="text-align: right">Faltando Comprovar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -36,6 +37,7 @@ Vue.component('item', {
                                                 <td>{{ informacoes.Item }}</td>
                                                 <td style="text-align: right">R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
                                                 <td style="text-align: right">R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
+                                                <td style="text-align: right">R$ {{ converterParaReal(informacoes.vlAprovado - informacoes.vlComprovado) }}</td>
                                             </tr>
                                         </tbody>
                                     </table>

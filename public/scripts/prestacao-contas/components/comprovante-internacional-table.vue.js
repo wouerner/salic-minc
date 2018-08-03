@@ -8,6 +8,8 @@ Vue.component('sl-comprovante-internacional-table', {
                         <td>{{dados.fornecedor.nome}}</td>
                         <th>Endere&ccedil;o</th>
                         <td colspan="5">{{dados.fornecedor.endereco}}</td>
+                        <th>Pa&iacute;s</th>
+                        <td colspan="5">{{dados.fornecedor.pais}}</td>
                     </tr>
                     <tr>
                         <th>Tipo Comprovante</th>
@@ -40,6 +42,22 @@ Vue.component('sl-comprovante-internacional-table', {
         </div>
     `,
     props: ['dados'],
+    mounted: function () {
+        var vue = this;
+        var url = '/prestacao-contas/gerenciar/pais' ;
+
+        $3.ajax({
+            url: url,
+            dataType: "json",
+        }).done(function(data){
+            vue.pais = data;
+        });
+    },
+    data() {
+        return {
+            pais: [],
+        }
+    },
     computed: {
         CNPJCPF() {
             CNPJCPF = null;
@@ -85,10 +103,10 @@ Vue.component('sl-comprovante-internacional-table', {
             return forma;
         },
         valorFormatado() {
-           return  this.dados.valor;
+           return  numeral(parseFloat(this.dados.valor)).format('0,0.00');
         },
         nomeArquivo() {
            return  this.dados.arquivo.nome;
-        }
+        },
     }
 });

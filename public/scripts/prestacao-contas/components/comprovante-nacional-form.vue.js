@@ -108,7 +108,7 @@ Vue.component('sl-comprovante-nacional-form',
                             <label
                                 for="dataEmissao"
                                 :class="c.dataEmissao.css"
-                            >Dt. de Emiss&atilde;o do comprovante</label>
+                            >Data de Emiss&atilde;o</label>
                         </div>
                         <div class="input-field col s1">
                             <i class="material-icons tooltipped" data-position="bottom" data-delay="50"
@@ -200,7 +200,7 @@ Vue.component('sl-comprovante-nacional-form',
                                 :class="[c.numero.css]"
                             >N&uacute;mero * </label>
                         </div>
-                        <div class="input-field col s2">
+                        <div class="input-field col s4">
                             <input
                                type="text"
                                ref="valor"
@@ -210,7 +210,7 @@ Vue.component('sl-comprovante-nacional-form',
                                v-model="comprovante.valor"
                                :class="c.valor.css"
                                v-money="money"
-                               />
+                            />
                             <label :class="c.valor.css">
                                Valor (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
                         </div>
@@ -270,21 +270,21 @@ Vue.component('sl-comprovante-nacional-form',
             this.comprovante.justificativa = this.dados.justificativa;
         }
     },
-    props: [
-        'dados',
-        'url',
-        'messages',
-        'tipoform',
-        'item',
-        'idplanilhaaprovacao',
-        'index',
-        'datainicio',
-        'datafim',
-        'valoraprovado',
-        'valorcomprovado',
-        'valorantigo',
-        'status'
-    ],
+    props: {
+        dados: null,
+        url:null,
+        messages:null,
+        tipoform:null,
+        item:null,
+        idplanilhaaprovacao:null,
+        index:null,
+        datainicio:null,
+        datafim:null,
+        valoraprovado: Number,
+        valorcomprovado: Number,
+        valorantigo: Number,
+        status:null
+    },
     computed:{
         dataInicio() {
             return moment(this.datainicio).format('DD/MM/YYYY');
@@ -293,7 +293,15 @@ Vue.component('sl-comprovante-nacional-form',
             return moment(this.datafim).format('DD/MM/YYYY');
         },
         valorMaxItem: function() {
-            return parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ));
+            let valorAprovado = numeral(parseFloat(this.valoraprovado)).value();
+            let valorComprovado = numeral(parseFloat(this.valorcomprovado)).value();
+            let valorAntigo = numeral(this.valorantigo ? parseFloat(this.valorantigo) : 0.0).value();
+            let value = numeral(valorAprovado - (valorComprovado - valorAntigo)).format('0,0.00');
+
+            return value;
+        },
+        valorAntigo() {
+            return numeral(parseFloat(this.valorantigo)).format('0,0.00');
         }
     },
     data () {
@@ -376,7 +384,7 @@ Vue.component('sl-comprovante-nacional-form',
                     formData.append('arquivo', this.comprovante.arquivo.file);
                 }
 
-                let c = this.comprovante;
+                let c = JSON.parse(JSON.stringify(this.comprovante))
                 c.valor = numeral(c.valor).value();
                 formData.append('comprovante', JSON.stringify(c));
 
@@ -393,9 +401,9 @@ Vue.component('sl-comprovante-nacional-form',
 
                     if (vue.tipoform == 'cadastro') {
 
-                       vue.comprovante._index = data.idComprovantePagamento;
-                       vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
-                       vue.$root.$emit('novo-comprovante-nacional', vue.comprovante);
+                       c._index = data.idComprovantePagamento;
+                       c.idComprovantePagamento = data.idComprovantePagamento;
+                       vue.$root.$emit('novo-comprovante-nacional', c);
 
                        vue.c = {
                            fornecedor: {
@@ -454,8 +462,7 @@ Vue.component('sl-comprovante-nacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
-                        // vue.$root.$emit('comprovante-atualizado', vue.comprovante);
-                        vue.$root.$emit('atualizado-comprovante-nacional', vue.comprovante);
+                        vue.$root.$emit('atualizado-comprovante-nacional', c);
                     }
                 });
             }
@@ -536,6 +543,13 @@ Vue.component('sl-comprovante-nacional-form',
             let valorPermitido = parseFloat(this.valoraprovado) - parseFloat(this.valorcomprovado);
 
             if(this.comprovante.valor == '') {
+                this.$refs.valor.focus();
+                this.c.valor.css = 'active invalid red-text';
+
+                return false;
+            }
+
+            if(numeral(this.comprovante.valor).value() == 0 ) {
                 this.$refs.valor.focus();
                 this.c.valor.css = 'active invalid red-text';
 
@@ -663,11 +677,6 @@ Vue.component('sl-comprovante-nacional-form',
             if (e > 0) {
                this.c.valor.css = {};
             }
-        },
-        inputValorBlur(e) {
-            let valor = e.toString();
-            valor = e.replace('.', '').replace(',', '');
-            this.comprovante.valor = numeral(numeral(valor).value() / 100).format('0,0.00');
         },
         cancelar: function () {
             $3('#modal1').modal('close');

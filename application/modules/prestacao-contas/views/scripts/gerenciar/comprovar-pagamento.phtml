@@ -45,8 +45,8 @@
         componenteform="sl-comprovante-nacional-form"
         datainicio="<?php echo $this->dataInicioExecucao ?>"
         datafim="<?php echo $this->dataFimExecucao ?>"
-        valoraprovado="<?php echo $this->valorAprovado ?>"
-        valorcomprovado="<?php echo $this->valorComprovado ?>"
+        :valoraprovado="parseFloat(<?php echo (float)$this->valorAprovado ?>)"
+        :valorcomprovado="parseFloat(<?php echo (float)$this->valorComprovado ?>)"
     ></comprovantes>
 
     <h4>Comprovantes Internacionais</h4>
@@ -63,8 +63,8 @@
         componenteform="sl-comprovante-internacional-form"
         datainicio="<?php echo $this->dataInicioExecucao ?>"
         datafim="<?php echo $this->dataFimExecucao ?>"
-        valoraprovado="<?php echo $this->valorAprovado ?>"
-        valorcomprovado="<?php echo $this->valorComprovado ?>"
+        :valoraprovado="parseFloat(<?php echo $this->valorAprovado ?>)"
+        :valorcomprovado="parseFloat(<?php echo $this->valorComprovado ?>)"
     ></comprovantes>
 
     <div class="fixed-action-btn">
@@ -73,7 +73,6 @@
         </a>
     </div>
 
-    <!-- Modal Structure -->
     <div id="modal1" class="modal full">
         <div class="modal-content">
           <h4>Cadastrar novo comprovante</h4>
@@ -84,12 +83,11 @@
             idplanilhaaprovacao="<?php echo $this->idPlanilhaAprovacao ?>"
             datainicio="<?php echo $this->dataInicioExecucao ?>"
             datafim="<?php echo $this->dataFimExecucao ?>"
-            valoraprovado="<?php echo $this->valorAprovado ?>"
-            valorcomprovado="<?php echo $this->valorComprovado ?>"
+            :valoraprovado="parseFloat(<?php echo $this->valorAprovado ?>)"
+            :valorcomprovado="parseFloat(<?php echo $this->valorComprovado ?>)"
           ></sl-comprovar-form>
         </div>
     </div>
-    <!-- Modal Structure -->
 </div>
 
 <script>

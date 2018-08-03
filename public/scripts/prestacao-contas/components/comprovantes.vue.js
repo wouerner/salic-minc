@@ -63,9 +63,9 @@ Vue.component('comprovantes', {
                                             :item="idplanilhaitem"
                                             :datainicio="datainicio"
                                             :datafim="datafim"
-                                            :valoraprovado="valoraprovado"
-                                            :valorcomprovado="valorComprovado"
-                                            :valorantigo="dado.valor"
+                                            :valoraprovado="parseFloat(valoraprovado)"
+                                            :valorcomprovado="parseFloat(valorComprovado)"
+                                            :valorantigo="parseFloat(dado.valor)"
                                         >
                                         </component>
                                     </template>
@@ -97,22 +97,22 @@ Vue.component('comprovantes', {
     components:{
         'comprovante-table': comprovanteTable,
     },
-    props: [
-        'idpronac',
-        'produto',
-        'stitemavaliado',
-        'uf',
-        'idmunicipio',
-        'idplanilhaitem',
-        'etapa',
-        'componenteform',
-        'tipo',
-        'url',
-        'datainicio',
-        'datafim',
-        'valoraprovado',
-        'valorcomprovado'
-    ],
+    props: {
+        idpronac: null,
+        produto: null,
+        stitemavaliado: null,
+        uf: null,
+        idmunicipio: null,
+        idplanilhaitem: null,
+        etapa: null,
+        componenteform: null,
+        tipo: null,
+        url: null,
+        datainicio: null,
+        datafim: null,
+        valoraprovado: null,
+        valorcomprovado: null
+    },
     created() {
         let vue = this;
         this.$root.$on('novo-comprovante-nacional', function(data) {
