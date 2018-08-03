@@ -324,6 +324,7 @@ Vue.component('sl-comprovante-internacional-form',
                        c.id = data.idComprovantePagamento;
                        c._index = data.idComprovantePagamento;
                        c.idComprovantePagamento = data.idComprovantePagamento;
+
                        vue.$root.$emit('novo-comprovante-internacional', c);
 
                        vue.c = {
