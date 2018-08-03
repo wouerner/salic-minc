@@ -1,18 +1,15 @@
 <template>
     <div>
         <h1>Componente Bar</h1>
-        <a class="button button--badge" @click="modalOpen('delete-trial')">
+        <a class="btn btn-primay" @click="modalOpen('delete-trial')">
             deletar
         </a>
         <Modal v-if="modalVisible === 'delete-trial'" @close="modalClose()">
-            <template slot="header">Tem certeza que deseja deletar o processo?</template>
+            <template slot="header">Header</template>
             <template slot="body">
-            <div>
-                Esse processo será excluído permanentemente, e você não poderá mais recuperá-lo, isso incluí todas as anotações referentes a ele.
-            </div>
-            <div class="marg--top__25">
-                <a class="button button--alpha-ghost" @click="modalClose()">Deletar</a>
-            </div>
+                <div>
+                    Bodydsdfdsfdsf
+                </div>
             </template>
         </Modal>
         <table>

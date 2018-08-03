@@ -1,22 +1,37 @@
 <template>
-  <div class="custom-modal">
-    <div class="custom-modal__dialog">
-      <div class="custom-modal__content">
-        <header class="custom-modal__header">
-          <h2 class="custom-modal__title"><slot name="header"></slot></h2>
-          <button class="custom-modal__close button" @click="$emit('close');$event.preventDefault()">
-            <i class="glyphicon glyphicon-remove">AAA</i>
-          </button>
-        </header>
-        <div class="custom-modal__body">
-          <slot name="body"></slot>
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <div class="">
+                <h2 class=""><slot name="header"></slot></h2>
+            </div>
+            <div class="">
+                <slot name="body"></slot>
+            </div>
         </div>
-      </div>
+        <div class="modal-footer">
+            <slot name="footer">
+                <button class="btn btn-danger" @click="fecharModal();$event.preventDefault()">
+                    Cancelar
+                </button>
+            </slot>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
 export default {
+    mounted() {
+        $3('.modal').modal();
+        $3('#modal1').modal('open');
+    },
+    methods: {
+        fecharModal() {
+            $3('#modal1').modal('close');
+            this.$emit('close');
+        }
+    }
 };
 </script>
+
+<style>
+</style>
