@@ -33,7 +33,7 @@ class Encaminhar implements IAcaoEncaminhar
     private function tratarEncaminhamentoVinculadas($idReadequacao)
     {
         $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
-        $objTbProjetos = new Projeto_Model_DbTable_Projetos();
+        $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objOrgaos = new \Orgaos();
         $dadosProjeto = $objTbProjetos->findBy(array(
             'IdPRONAC' => $this->assinatura->modeloTbAssinatura->getIdPronac()
@@ -104,7 +104,7 @@ class Encaminhar implements IAcaoEncaminhar
     private function tratarEncaminhamentoProjetosMinc($idReadequacao)
     {
         $atoAdministrativo = $this->assinatura->modeloTbAtoAdministrativo;
-        $objTbProjetos = new Projeto_Model_DbTable_Projetos();
+        $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objOrgaos = new \Orgaos();
         $dadosProjeto = $objTbProjetos->findBy(array(
             'IdPRONAC' => $this->assinatura->modeloTbAssinatura->getIdPronac()
