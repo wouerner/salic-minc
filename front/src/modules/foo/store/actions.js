@@ -1,6 +1,5 @@
 import * as fooHelperAPI from '@/helpers/api/Foo';
 import * as types from './types';
-import router from './../router';
 
 export const obterDadosTabela = ({ commit }) => {
     fooHelperAPI.obterDadosTabela()
@@ -14,9 +13,9 @@ export const obterDadosTabela = ({ commit }) => {
 export const criarRegistro = ({ commit }, params) => {
     fooHelperAPI.criarRegistro(params)
         .then((response) => {
-            const registro = response.data;
-            commit(types.SET_REGISTROS_TABELA, registro);
-            router.push('/');
+            const data = response.data;
+            const registro = data.data;
+            commit(types.SET_REGISTRO_TABELA, registro);
         });
 };
 

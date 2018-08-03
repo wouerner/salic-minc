@@ -1,5 +1,5 @@
 <template>
-    <div id="modal1" class="modal modal-fixed-footer">
+    <div id="modalTemplate" class="modal modal-fixed-footer">
         <div class="modal-content">
             <div class="modal-header">
                 <h2><slot name="header"></slot></h2>
@@ -11,7 +11,7 @@
         <div class="modal-footer">
             <slot name="footer">
                 <button class="btn btn-danger" @click="fecharModal();$event.preventDefault()">
-                    Cancelar
+                    Fechar
                 </button>
             </slot>
         </div>
@@ -24,12 +24,12 @@ export default {
         // eslint-disable-next-line
         $3('.modal').modal();
         // eslint-disable-next-line
-        $3('#modal1').modal('open');
+        $3('#modalTemplate').modal('open');
     },
     methods: {
         fecharModal() {
             // eslint-disable-next-line
-            $3('#modal1').modal('close');
+            $3('#modalTemplate').modal('close');
             this.$emit('close');
         },
     },

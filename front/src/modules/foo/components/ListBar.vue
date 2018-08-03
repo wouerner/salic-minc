@@ -34,13 +34,15 @@
             </tbody>
         </table>
 
-        <router-link :to="{ name: 'CreateBar' }">Criar</router-link>
+        <CreateBar/>
+        <!-- <router-link :to="{ name: 'CreateBar' }">Criar</router-link> -->
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Modal from '@/components/modal';
+import CreateBar from './CreateBar';
 
 export default {
     name: 'ListBar',
@@ -49,6 +51,7 @@ export default {
     },
     components: {
         Modal,
+        CreateBar,
     },
     computed: {
         ...mapGetters({

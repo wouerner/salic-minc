@@ -12,6 +12,9 @@ export const mutations = {
     [types.SET_ACTIVE_RECORD](state, record) {
         state.activeRecord = record;
     },
+    [types.SET_REGISTRO_TABELA](state, record) {
+        state.dadosTabela.push(record);
+    },
     [types.UPDATE_REGISTRO_TABELA](state, record) {
         const dadosTabela = state.dadosTabela;
 
