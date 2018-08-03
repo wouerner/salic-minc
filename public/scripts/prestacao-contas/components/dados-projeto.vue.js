@@ -34,54 +34,81 @@ function converteParaReal(value) {
     return numeral(value).format('0,0.00');
 }
 
-Vue.component('dados-projeto', {
-    props: ['idpronac'],
-    template: `<div class="col s12 m12" :informacoes = "informacoes">
-                    <div class="card horizontal">
-                        <div class="card-stacked">
-                            <div class="center-align card-content  lighten-4">
-                                <span class="card-title">
-                                    Projeto: {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
-                                </span>
-                            </div>
-                            <div class="card-content">
-                                 <table class="bordered">
-                                    <tbody>
-                                        <tr>
-                                            <th v-html>Data Inicio da execu&ccedil;&atilde;o</th>
-                                            <td>{{ dataInicio }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th v-html>Data Final da execu&ccedil;&atilde;o</th>
-                                            <td>{{ dataFim }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Valor Aprovado</th>
-                                            <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Valor Comprovado</th>
-                                            <td>R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Valor a Comprovar</th>
-                                            <td>R$ {{ converterParaReal(informacoes.vlComprovar) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="card-action">
-                                <a  :href="'/consultardadosprojeto/index?idPronac=' + idpronac " target="_blank"
-                                    class="btn waves-effect waves-dark white-text">Ver Projeto
-                                </a>
+Vue.component(
+    'dados-projeto', {
+    template: `
+        <div class="col s12 m12" :informacoes = "informacoes">
+            <div class="card horizontal">
+                <template v-if="!loading">
+                    <div class="card-stacked">
+                        <div class="center-align card-content  lighten-4">
+                            <span class="card-title">
+                                Projeto: {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
+                            </span>
+                        </div>
+                        <div class="card-content">
+                            <table class="bordered">
+                                <tbody>
+                                    <tr>
+                                        <th v-html>Data Inicio da execu&ccedil;&atilde;o</th>
+                                        <td>{{ dataInicio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th v-html>Data Final da execu&ccedil;&atilde;o</th>
+                                        <td>{{ dataFim }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Valor Aprovado</th>
+                                        <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Valor Comprovado</th>
+                                        <td>R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Valor a Comprovar</th>
+                                        <td>R$ {{ converterParaReal(informacoes.vlComprovar) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-action">
+                            <a  :href="'/consultardadosprojeto/index?idPronac=' + idpronac " target="_blank"
+                                class="btn waves-effect waves-dark white-text">Ver Projeto
+                            </a>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="card-content">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-green-only">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div><div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>`,
+                </template>
+            </div>
+        </div>
+    `,
+    props: ['idpronac'],
     mounted: function () {
         let vue = this;
+
         $3.ajax({
-            url: "/prestacao-contas/pagamento/planilha-dados-projeto/idpronac/" + this.idpronac
+            url: "/prestacao-contas/pagamento/planilha-dados-projeto/idpronac/" + this.idpronac,
+            beforeSend: function() {
+                vue.loading = true;
+            },
+            complete: function(){
+                vue.loading = false;
+            }
         }).done(function( data ) {
             vue.$data.informacoes = data;
         });
@@ -96,7 +123,8 @@ Vue.component('dados-projeto', {
     },
     data: function () {
         return {
-            informacoes: []
+            informacoes: [],
+            loading: false 
         };
     },
     methods:{
@@ -105,7 +133,6 @@ Vue.component('dados-projeto', {
             return numeral(value).format('0,0.00');
         },
         moment: function (value) {
-            
             return moment();
         }
     }
