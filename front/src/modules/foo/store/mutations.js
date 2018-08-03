@@ -20,7 +20,7 @@ export const mutations = {
 
         dadosTabela.forEach((value, index) => {
             if (record.Codigo === value.Codigo) {
-                state.dadosTabela[index] = record;
+                state.dadosTabela.splice(index, 1, record);
             }
         });
     },

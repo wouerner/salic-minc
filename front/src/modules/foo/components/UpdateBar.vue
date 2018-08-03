@@ -51,7 +51,6 @@ export default {
         buildRecord(event) {
             const DadoNr = event.target.value;
             this.currentRecord.DadoNr = DadoNr;
-            this.currentRecord.Codigo = this.activeRecord.Codigo;
         },
         checkChangesAndUpdate() {
             if (this.currentRecord !== this.record) {
