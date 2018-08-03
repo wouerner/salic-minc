@@ -9,7 +9,7 @@ Vue.component('sl-comprovante-internacional-table', {
                         <th>Endere&ccedil;o</th>
                         <td colspan="5">{{dados.fornecedor.endereco}}</td>
                         <th>Pa&iacute;s</th>
-                        <td colspan="5">{{dados.fornecedor.pais}}</td>
+                        <td colspan="5">{{dados.fornecedor.nacionalidade}}</td>
                     </tr>
                     <tr>
                         <th>Tipo Comprovante</th>

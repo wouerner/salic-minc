@@ -74,6 +74,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
             $dataAux[$key]['fornecedor']['endereco'] = $value['endereco'];
             $dataAux[$key]['fornecedor']['id'] = $value['id'];
             $dataAux[$key]['fornecedor']['pais'] = $value['pais'];
+            $dataAux[$key]['fornecedor']['nacionalidade'] = $value['pais'];
             $dataAux[$key]['arquivo']['nome'] = $value['nmArquivo'];
             $dataAux[$key]['arquivo']['id'] = $value['idArquivo'];
             $dataAux[$key]['projeto']['dataInicioExecucao'] = $dtInicioExecucao;

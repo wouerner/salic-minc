@@ -171,8 +171,11 @@ Vue.component('sl-comprovante-nacional-form',
                             </select>
                         </div>
                         <div class="input-field col s3">
-                            <input placeholder="DD/MM/AAAA" type="text"
-                                name="dtPagamento" id="dtPagamento"
+                            <input
+                                placeholder="DD/MM/AAAA"
+                                type="text"
+                                name="dtPagamento"
+                                id="dtPagamento"
                                 v-model="comprovante.dataPagamento"
                                 ref="dataPagamento"
                                 :class="c.dataPagamento.css"
@@ -260,8 +263,8 @@ Vue.component('sl-comprovante-nacional-form',
             this.comprovante.numero = this.dados.numero;
             this.comprovante.serie = this.dados.serie;
 
-            this.comprovante.dataEmissao = moment(this.dados.dtEmissao).format('DD/MM/YYYY');
-            this.comprovante.dataPagamento = moment(this.dados.dtPagamento).format('DD/MM/YYYY');
+            this.comprovante.dataEmissao = moment(this.dados.dataEmissao).format('DD/MM/YYYY');
+            this.comprovante.dataPagamento = moment(this.dados.dataPagamento).format('DD/MM/YYYY');
 
             this.comprovante.valor = numeral(parseFloat(this.dados.valor)).format('0,0.00');
 
@@ -399,6 +402,7 @@ Vue.component('sl-comprovante-nacional-form',
                     Materialize.toast('Salvo com sucesso!', 4000, 'green');
                     $3('#modal1').modal('close');
 
+                       console.log(c);
                     if (vue.tipoform == 'cadastro') {
 
                        c._index = data.idComprovantePagamento;
