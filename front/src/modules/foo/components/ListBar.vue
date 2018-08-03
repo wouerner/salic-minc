@@ -1,13 +1,7 @@
 <template>
     <div>
         <h1>Componente Bar</h1>
-        <a class="btn btn-primay" @click="modalOpen('delete-trial')">
-            Criar
-        </a>
-        <Modal v-if="modalVisible === 'delete-trial'" @close="modalClose()">
-            <template slot="header">Header</template>
-            <template slot="body">Body</template>
-        </Modal>
+        <CreateBar/>
         <table>
             <thead>
                 <tr>
@@ -21,11 +15,12 @@
                     <td>{{ record.Codigo }}</td>
                     <td>{{ record.DadoNr }}</td>
                     <td>
-                        <router-link :to="{ name: 'UpdateBar', params: { id: record.Codigo } }">
+                        <!-- <router-link :to="{ name: 'UpdateBar', params: { id: record.Codigo } }">
                             <a class="btn btn-primary" @click="setActiveRecord(record)">
                                 Atualizar
                             </a>
-                        </router-link>
+                        </router-link> -->
+                        <UpdateBar :activeRecord="record"/>
                         <a class="btn btn-danger" @click="removeConfirm(record)">
                             Remover
                         </a>
@@ -33,9 +28,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <CreateBar/>
-        <!-- <router-link :to="{ name: 'CreateBar' }">Criar</router-link> -->
     </div>
 </template>
 
@@ -43,6 +35,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import Modal from '@/components/modal';
 import CreateBar from './CreateBar';
+import UpdateBar from './UpdateBar';
 
 export default {
     name: 'ListBar',
@@ -52,6 +45,7 @@ export default {
     components: {
         Modal,
         CreateBar,
+        UpdateBar,
     },
     computed: {
         ...mapGetters({

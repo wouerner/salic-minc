@@ -2,10 +2,10 @@
     <div id="modalTemplate" class="modal modal-fixed-footer">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><slot name="header"></slot></h2>
+                <h2><slot name="header">Header</slot></h2>
             </div>
             <div class="modal-body">
-                <slot name="body"></slot>
+                <slot name="body">Body</slot>
             </div>
         </div>
         <div class="modal-footer">

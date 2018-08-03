@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a class="btn btn-primay" @click="modalOpen('create-bar')">
+        <a class="btn btn-primary" @click="modalOpen('create-bar')">
             Criar
         </a>
         <ModalTemplate v-if="modalVisible === 'create-bar'" @close="fecharModal()">
@@ -11,8 +11,13 @@
                         <label for="DadoNr">DadoNr</label>
                         <input type="text" name="DadoNr" id="DadoNr" v-model="DadoNr">
                     </p>
-                    <a @click="criarRegistro({ DadoNr });fecharModal();">Salvar</a>
                 </form>
+            </template>
+            <template slot="footer">
+                <a class="btn btn-danger" @click="fecharModal();$event.preventDefault()">
+                    Fechar
+                </a>
+                <a class="btn btn-primary" @click="criarRegistro({ DadoNr });fecharModal();">Salvar</a>
             </template>
         </ModalTemplate>
     </div>

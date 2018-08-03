@@ -22,7 +22,8 @@ export const criarRegistro = ({ commit }, params) => {
 export const updateRecord = ({ commit }, params) => {
     fooHelperAPI.updateRecord(params)
         .then((response) => {
-            const record = response.data;
+            const data = response.data;
+            const record = data.data;
             commit(types.UPDATE_REGISTRO_TABELA, record);
         });
 };
