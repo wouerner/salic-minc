@@ -4,6 +4,7 @@ import Vuetify from 'vuetify';
 
 import projeto from './modules/projeto/store';
 import foo from './modules/foo/store';
+import modal from '@/components/modal/store';
 
 Vue.use(Vuex);
 Vue.use(Vuetify);
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     modules: {
         projeto,
         foo,
+        modal,
     },
     strict: debug,
 });

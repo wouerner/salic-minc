@@ -1,7 +1,20 @@
 <template>
     <div>
         <h1>Componente Bar</h1>
-        <Modal></Modal>
+        <a class="button button--badge" @click="modalOpen('delete-trial')">
+            deletar
+        </a>
+        <Modal v-if="modalVisible === 'delete-trial'" @close="modalClose()">
+            <template slot="header">Tem certeza que deseja deletar o processo?</template>
+            <template slot="body">
+            <div>
+                Esse processo será excluído permanentemente, e você não poderá mais recuperá-lo, isso incluí todas as anotações referentes a ele.
+            </div>
+            <div class="marg--top__25">
+                <a class="button button--alpha-ghost" @click="modalClose()">Deletar</a>
+            </div>
+            </template>
+        </Modal>
         <table>
             <thead>
                 <tr>
@@ -47,6 +60,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosTabela: 'foo/dadosTabela',
+            modalVisible: 'modal/default',
         }),
     },
     methods: {
@@ -54,6 +68,8 @@ export default {
             obterDadosTabela: 'foo/obterDadosTabela',
             setActiveRecord: 'foo/setActiveRecord',
             removeRecord: 'foo/removeRecord',
+            modalOpen: 'modal/modalOpen',
+            modalClose: 'modal/modalClose',
         }),
         removeConfirm(record) {
             const response = confirm('Deseja remover esse registro?');
