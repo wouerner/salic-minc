@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>Componente Bar</h1>
+        <Modal></Modal>
         <table>
             <thead>
                 <tr>
@@ -33,11 +34,15 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Modal from '@/components/modal/Index';
 
 export default {
     name: 'ListBar',
     created() {
         this.obterDadosTabela();
+    },
+    components: {
+        Modal,
     },
     computed: {
         ...mapGetters({
