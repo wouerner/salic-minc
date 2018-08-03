@@ -209,12 +209,11 @@ Vue.component('sl-comprovante-nacional-form',
                                id="vlComprovado"
                                v-model="comprovante.valor"
                                :class="c.valor.css"
-                               v-on:input="inputValor($event.target.value)"
-                               @blur="inputValorBlur($event.target.value)"
-                           />
-                           <label :class="c.valor.css">
-                                   Valor (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
-                            </div>
+                               v-money="money"
+                               />
+                            <label :class="c.valor.css">
+                               Valor (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
@@ -297,8 +296,13 @@ Vue.component('sl-comprovante-nacional-form',
             return parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ));
         }
     },
-    data: function () {
+    data () {
         return {
+            money:{
+             decimal: ',',
+                thousands: '.',
+                precision: 2,
+            },
             comprovante: {
                 fornecedor: {
                     nacionalidade: 31,

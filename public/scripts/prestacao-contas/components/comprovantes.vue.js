@@ -19,7 +19,7 @@ Vue.component('comprovantes', {
                         Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
                         <span :class="['badge white-text ', badgeStatus(dado.status)]">{{dado.status}}</span>
                       </div>
-                      <div :class="['collapsible-body lighten-5', badgeCSS(dado.stItemAvaliado)]">
+                      <div :class="['collapsible-body lighten-2', badgeCSS(dado.stItemAvaliado)]">
                             <div class="card">
                                 <div class="card-content">
                                     <template v-if="!formVisivel" >

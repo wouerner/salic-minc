@@ -120,6 +120,7 @@ Vue.component('sl-comprovante-internacional-form',
                             :class="[this.c.valor.css]"
                             @input="inputValor($event.target.value)"
                             @blur="inputValorBlur($event.target.value)"
+                            v-money="money"
                             size="10"
                         />
                         <label for="vlComprovadoInternacional"
@@ -205,8 +206,13 @@ Vue.component('sl-comprovante-internacional-form',
             return numeral(parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ))).format('0,0.00');
         }
     },
-    data: function () {
+    data() {
         return {
+            money:{
+             decimal: ',',
+                thousands: '.',
+                precision: 2,
+            },
             comprovante: {
                 fornecedor: {
                     nacionalidade: 1,
