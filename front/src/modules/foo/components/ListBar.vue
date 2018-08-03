@@ -69,7 +69,7 @@ export default {
             modalClose: 'modal/modalClose',
         }),
         removeConfirm(record) {
-            const response = confirm('Deseja remover esse registro?');
+            const response = window.customConfirm('Deseja remover esse registro?');
 
             if (response) {
                 this.removeRecord(record);

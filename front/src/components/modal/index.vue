@@ -21,17 +21,17 @@
 <script>
 export default {
     mounted() {
+        // eslint-disable-next-line
         $3('.modal').modal();
+        // eslint-disable-next-line
         $3('#modal1').modal('open');
     },
     methods: {
         fecharModal() {
+            // eslint-disable-next-line
             $3('#modal1').modal('close');
             this.$emit('close');
-        }
-    }
+        },
+    },
 };
 </script>
-
-<style>
-</style>
