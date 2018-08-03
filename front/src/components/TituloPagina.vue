@@ -17,14 +17,13 @@
 
 <script>
     export default {
-        name: "TituloPagina",
+        name: 'TituloPagina',
         props: ['titulo'],
         methods: {
-            voltar: function () {
-                window.history.length > 1
-                        ? this.$router.go(-1)
-                        : this.$router.push('/')
-            }
-        }
-    }
+            voltar() {
+                /* eslint-disable-next-line */
+                window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
+            },
+        },
+    };
 </script>

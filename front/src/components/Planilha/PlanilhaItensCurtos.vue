@@ -23,8 +23,12 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlUnitario"/></td>
-                <td class="right-align"><SalicFormatarValor :valor="row.vlSolicitado"/></td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlUnitario"/>
+                </td>
+                <td class="right-align">
+                    <SalicFormatarValor :valor="row.vlSolicitado"/>
+                </td>
                 <td>
                     <a v-if="row.JustProponente.length > 3"
                        class="tooltipped"
@@ -42,41 +46,29 @@
 </template>
 
 <script>
-    import numeral from 'numeral'
     import SalicFormatarValor from '@/components/SalicFormatarValor';
+    import * as planilhas from '@/mixins/planilhas';
 
     export default {
         name: 'PlanilhaListaDeItensCurta',
-        data: function () {
+        data() {
             return {
-                planilha: []
-            }
+                planilha: [],
+            };
         },
         props: {
-            'table': {}
+            table: {},
         },
         components: {
-            SalicFormatarValor
+            SalicFormatarValor,
         },
         methods: {
-            isObject: function (el) {
-
-                return typeof el === "object";
-
+            isObject(el) {
+                return typeof el === 'object';
             },
-            converterStringParaClasseCss: function (text) {
-                return text.toString().toLowerCase().trim()
-                    .replace(/&/g, '-and-')
-                    .replace(/[\s\W-]+/g, '-');
+            ultrapassaValor(row) {
+                return planilhas.ultrapassaValor(row);
             },
-            ultrapassaValor: function (row) {
-                return row.stCustoPraticado == true;
-
-            },
-            converterParaReal: function (value) {
-                value = parseFloat(value);
-                return numeral(value).format('0,0.00');
-            }
-        }
+        },
     };
 </script>

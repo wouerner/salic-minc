@@ -148,15 +148,25 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $dbTableAcaoProjeto = new tbAcaoAlcanceProjeto();
         $dbTableHomologacao = new Projeto_Model_DbTable_TbHomologacao();
         $dbTableEnquadramento = new Projeto_Model_DbTable_Enquadramento();
-        $arrValue = $dbTableEnquadramento->obterProjetosApreciadosCnic([
+        $dadosEnquadramento = $dbTableEnquadramento->obterProjetosApreciadosCnic([
             'a.IdPRONAC = ?' => $intIdPronac
-        ])->current()->toArray();
-        $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
+        ])->current();
+
+        $arrValue = [];
+        if(!is_null($dadosEnquadramento)) {
+            $arrValue = $dadosEnquadramento->toArray();
+        }
+
+        $areaSegmentoProjeto = $dbTableEnquadramento->obterProjetoAreaSegmento(
             [
                 'a.IdPRONAC = ?' => $intIdPronac,
                 'a.Situacao = ?' => $this->situacaoParaHomologacao
             ]
-        )->current()->toArray();
+        )->current();
+        $arrValue['enquadramentoProjeto'] = [];
+        if(!is_null($areaSegmentoProjeto)) {
+            $arrValue['enquadramentoProjeto'] = $areaSegmentoProjeto->toArray();
+        }
 
         $arrValue['parecer'] = $dbTableParecer->findBy([
             'TipoParecer' => '1',
@@ -197,7 +207,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
     {
         if (!filter_input(INPUT_GET, 'idPronac')) {
             throw new Exception(
-                "Identificador do projeto é necess&aacute;rio para acessar essa funcionalidade."
+                "Identificador do projeto &eacute; necess&amp;aacute;rio para acessar essa funcionalidade."
             );
         }
         $get = Zend_Registry::get('get');
@@ -212,19 +222,29 @@ class Projeto_HomologacaoController extends Projeto_GenericController
 
         if (count($parecer) < 1 || empty($parecer['IdParecer'])) {
             throw new Exception(
-                "É necessário ao menos um parecer para iniciar o fluxo de assinatura."
+                "&Eacute; necess&amp;aacute;rio ao menos um parecer para iniciar o fluxo de assinatura."
             );
         }
 
-        $servicoDocumentoAssinatura = new \Application\Modules\Projeto\Service\Assinatura\DocumentoAssinatura(
+        $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
+        $documentoAssinatura = $objDbTableDocumentoAssinatura->obterProjetoDisponivelParaAssinatura(
             $idPronac,
-            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO,
-            $parecer['IdParecer']
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO
         );
-        $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
+
+        $mensagem = "Opera&amp;ccedil;&amp;atilde;o realizada com sucesso!";
+        if (count($documentoAssinatura) < 1) {
+            $servicoDocumentoAssinatura = new \Application\Modules\Projeto\Service\Assinatura\DocumentoAssinatura(
+                $idPronac,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO,
+                $parecer['IdParecer']
+            );
+            $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
+        }
+
 
         parent::message(
-            "Opera&ccedil;&atilde;o realizada com sucesso! ",
+            $mensagem,
             "/assinatura/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}",
             "CONFIRM"
         );

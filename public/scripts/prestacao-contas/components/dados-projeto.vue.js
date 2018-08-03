@@ -40,30 +40,35 @@ Vue.component('dados-projeto', {
                     <div class="card horizontal">
                         <div class="card-stacked">
                             <div class="center-align card-content  lighten-4">
-                                <span class="card-title"
-                                      >
-                                      {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
+                                <span class="card-title">
+                                    Projeto: {{ informacoes.Pronac }} - {{ informacoes.NomeProjeto }}
                                 </span>
                             </div>
                             <div class="card-content">
-                                <span style="font-weight: bold; font-size: medium">
-                                     <table>
-                                        <tbody>
-                                            <tr>
-                                                <td>Valor Aprovado</td>
-                                                <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Valor Comprovado</td>
-                                                <td>R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Valor a Comprovar</td>
-                                                <td>R$ {{ converterParaReal(informacoes.vlComprovar) }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </span>
+                                 <table class="bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th v-html>Data Inicio da execu&ccedil;&atilde;o</th>
+                                            <td>{{ dataInicio }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th v-html>Data Final da execu&ccedil;&atilde;o</th>
+                                            <td>{{ dataFim }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Valor Aprovado</th>
+                                            <td>R$ {{ converterParaReal(informacoes.vlAprovado) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Valor Comprovado</th>
+                                            <td>R$ {{ converterParaReal(informacoes.vlComprovado) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Valor a Comprovar</th>
+                                            <td>R$ {{ converterParaReal(informacoes.vlComprovar) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="card-action">
                                 <a  :href="'/consultardadosprojeto/index?idPronac=' + idpronac " target="_blank"
@@ -81,6 +86,14 @@ Vue.component('dados-projeto', {
             vue.$data.informacoes = data;
         });
     },
+    computed: {
+        dataInicio() {
+            return moment(this.informacoes.dtInicioExecucao).format('DD/MM/YYYY');
+        },
+        dataFim() {
+            return moment(this.informacoes.dtFimExecucao).format('DD/MM/YYYY');
+        }
+    },
     data: function () {
         return {
             informacoes: []
@@ -90,6 +103,10 @@ Vue.component('dados-projeto', {
         converterParaReal: function (value) {
             value = parseFloat(value);
             return numeral(value).format('0,0.00');
+        },
+        moment: function (value) {
+            
+            return moment();
         }
     }
 })

@@ -3,7 +3,11 @@
 <script src="/public/scripts/prestacao-contas/components/page-title.vue.js"></script>
 
 <div class="container-fluid" id="app-comprovante">
-    <page-title></page-title>
+    <page-title
+        nome="Analise"
+        url="/prestacao-contas/realizar-prestacao-contas/index/idPronac/<?php echo $this->idPronac ?>?cdProduto=<?php echo $this->codigoProduto ?>"
+    >
+    </page-title>
     <div class="row">
         <div class="col s12">
             <dados-comprovante

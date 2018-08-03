@@ -20,7 +20,7 @@
                 <tr>
                     <td>
                         <span v-if="dadosProjeto.idUsuarioExterno"><SalicFormatarCpfCnpj
-                                :cpf="dadosProjeto.CgcCPf"/></span>
+                            :cpf="dadosProjeto.CgcCPf"/></span>
                         <a v-else
                            :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
                             <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
@@ -430,7 +430,7 @@
                             </b>
                         </td>
                     </tr>
-                    <tr v-else> <!--@todo pensar melhor essa parte para não duplicar o código -->
+                    <tr v-else> <!--@todo pensar melhor essa parte para nï¿½o duplicar o cï¿½digo -->
                         <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlHomologadoIncentivo"/>
                         </b></td>
@@ -637,29 +637,29 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapGetters } from 'vuex';
     import Carregando from '@/components/Carregando';
     import SalicTextoSimples from '@/components/SalicTextoSimples';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
-    import {utils} from '@/mixins/utils';
+    import { utils } from '@/mixins/utils';
     import moment from 'moment';
 
     export default {
-        data: function () {
+        data() {
             return {
                 loading: true,
                 idPronac: this.$route.params.idPronac,
                 ProponenteInabilitado: false,
-                emAnaliseNaCNIC: false
-            }
+                emAnaliseNaCNIC: false,
+            };
         },
         mixins: [utils],
         components: {
             Carregando,
             SalicTextoSimples,
             SalicFormatarValor,
-            SalicFormatarCpfCnpj
+            SalicFormatarCpfCnpj,
         },
         created() {
             if (Object.keys(this.dadosProjeto).length > 0) {
@@ -667,12 +667,12 @@
             }
         },
         watch: {
-            dadosProjeto: function (value) {
+            dadosProjeto(value) {
                 if (Object.keys(value).length > 0) {
                     this.loading = false;
-                    this.idPronac = this.dadosProjeto.idPronac
+                    this.idPronac = this.dadosProjeto.idPronac;
                 }
-            }
+            },
         },
         computed: {
             ...mapGetters({
@@ -680,17 +680,17 @@
             }),
         },
         methods: {
-            isDataExpirada: function (date) {
+            isDataExpirada(date) {
                 return moment().diff(date, 'days') > 0;
-            }
+            },
         },
         filters: {
-            formatarData: function (date) {
-                if (date.length == 0) {
+            formatarData(date) {
+                if (date.length === 0) {
                     return '-';
                 }
                 return moment(date).format('DD/MM/YYYY');
-            }
-        }
+            },
+        },
     };
 </script>

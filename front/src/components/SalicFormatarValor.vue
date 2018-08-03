@@ -5,10 +5,11 @@
 
 <script>
     export default {
-        name: 'SalicFormatarValor',
-        props: ['valor'],
+        /* eslint-disable */
+        name: "SalicFormatarValor",
+        props: ["valor"],
         computed: {
-            valorFormatado: function() {
+            valorFormatado: function () {
                 return this.converterParaMoeda(this.valor);
             }
         },
@@ -32,16 +33,18 @@
                     cents = "0" + cents;
                 }
                 for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
-                    num = num.substring(0, num.length - (4 * i + 3)) + '.'
-                            + num.substring(num.length - (4 * i + 3));
+                    num =
+                        num.substring(0, num.length - (4 * i + 3)) +
+                        "." +
+                        num.substring(num.length - (4 * i + 3));
 
-                var ret = num + ',' + cents;
+                var ret = num + "," + cents;
                 if (x == 1) {
-                    ret = ' - ' + ret;
+                    ret = " - " + ret;
                 }
 
                 return ret;
-            }
-        }
+            },
+        },
     };
 </script>
