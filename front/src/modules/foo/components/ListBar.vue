@@ -2,15 +2,11 @@
     <div>
         <h1>Componente Bar</h1>
         <a class="btn btn-primay" @click="modalOpen('delete-trial')">
-            deletar
+            Criar
         </a>
         <Modal v-if="modalVisible === 'delete-trial'" @close="modalClose()">
             <template slot="header">Header</template>
-            <template slot="body">
-                <div>
-                    Bodydsdfdsfdsf
-                </div>
-            </template>
+            <template slot="body">Body</template>
         </Modal>
         <table>
             <thead>

@@ -1,10 +1,10 @@
 <template>
-    <div id="modal1" class="modal">
+    <div id="modal1" class="modal modal-fixed-footer">
         <div class="modal-content">
-            <div class="">
-                <h2 class=""><slot name="header"></slot></h2>
+            <div class="modal-header">
+                <h2><slot name="header"></slot></h2>
             </div>
-            <div class="">
+            <div class="modal-body">
                 <slot name="body"></slot>
             </div>
         </div>
