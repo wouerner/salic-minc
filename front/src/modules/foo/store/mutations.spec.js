@@ -5,7 +5,7 @@ describe('Foo Mutations', () => {
     let defaultState;
     let dadosTabela;
 
-    beforeEach(() => {
+    describe('when call mutation SET_REGISTROS_TABELA', () => {
         defaultState = {
             dadosTabela: [
                 {
@@ -20,13 +20,13 @@ describe('Foo Mutations', () => {
         dadosTabela = [
             {
                 Codigo: 1,
-                DadoNr: 'Random String',
+                DadoNr: 'Random String 1',
             },
         ];
-    });
 
-    test('SET_REGISTROS_TABELA', () => {
-        mutations.SET_REGISTROS_TABELA(state, dadosTabela);
-        expect(state.dadosTabela).toEqual(dadosTabela);
+        test('SET_REGISTROS_TABELA', () => {
+            mutations.SET_REGISTROS_TABELA(state, dadosTabela);
+            expect(state.dadosTabela).toEqual(dadosTabela);
+        });
     });
 });
