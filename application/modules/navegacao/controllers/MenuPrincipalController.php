@@ -219,6 +219,23 @@
                 'url' => ['controller' => 'configuracoes', 'action' => 'secretarios'],
                 'grupo' => [Autenticacao_Model_Grupos::TECNICO_PORTARIA]
             ];
+            $arrMenu['analise']['menu'][] = [[
+                'grupo' => [
+                 147
+                ,148
+                ,149
+                ,150
+                ,151
+                ,152
+                ],
+                'url' => [
+                    'module' => 'admissibilidade',
+                    'controller' => 'enquadramento-assinatura',
+                    'action' => 'gerenciar-assinaturas'
+                ], '', true],
+                'title' => 'Assinatura',
+                'label' => 'Assinatura'
+            ];
 
 
 
