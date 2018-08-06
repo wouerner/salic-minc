@@ -7,7 +7,7 @@ class sInformacaoReceitaFederalV3 extends MinC_Db_Table_Abstract
     public function gerarDBF($ano)
     {
         try {
-            $executar = new Zend_Db_Expr("EXEC " . $this->_schema . "." . $this->_schema . "." . $this->_name . " " . $ano);
+            $executar = new Zend_Db_Expr("EXEC " . $this->_schema . "." . $this->_name . " " . $ano);
             return $this->getAdapter()->query($executar);
         } catch (Zend_Exception $e) {
             return $e->getMessage();
