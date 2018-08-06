@@ -29,13 +29,14 @@ export const updateRecord = ({ commit }, params) => {
 };
 
 export const setActiveRecord = ({ commit }, record) => {
-    console.log('ta caindo aqui?');
     commit(types.SET_ACTIVE_RECORD, record);
 };
 
 export const removeRecord = ({ commit }, record) => {
+    console.log('MA OIIIIIII 1');
     fooHelperAPI.removeRecord(record)
-        .the(() => {
+        .then((response) => {
+            console.log('MA OIIIIIII 2' + response);
             commit(types.DELETE_RECORD, record);
         });
 };
