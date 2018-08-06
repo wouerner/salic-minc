@@ -29,6 +29,7 @@ export const updateRecord = ({ commit }, params) => {
 };
 
 export const setActiveRecord = ({ commit }, record) => {
+    console.log('ta caindo aqui?');
     commit(types.SET_ACTIVE_RECORD, record);
 };
 

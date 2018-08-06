@@ -33,10 +33,6 @@ export default {
             },
         };
     },
-    created() {
-        this.currentRecord.Codigo = this.record.Codigo;
-        this.currentRecord.DadoNr = this.record.DadoNr;
-    },
     props: ['activeRecord'],
     components: {
         ModalTemplate,
@@ -51,6 +47,7 @@ export default {
         buildRecord(event) {
             const DadoNr = event.target.value;
             this.currentRecord.DadoNr = DadoNr;
+            this.currentRecord.Codigo = this.record.Codigo;
         },
         checkChangesAndUpdate() {
             if (this.currentRecord !== this.record) {
