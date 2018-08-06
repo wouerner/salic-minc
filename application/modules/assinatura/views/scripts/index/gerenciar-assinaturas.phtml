@@ -258,10 +258,36 @@
                 });
 
                 function informacoes(data) {
+
+                    let htmlBotoes = '', corBotao = '';
+
+                    for(var contadorAssinatura = 1; contadorAssinatura <= data.quantidadeTotalAssinaturas; contadorAssinatura++) {
+                        corBotao = 'grey lighten-4 black-text';
+                        if(contadorAssinatura <= data.quantidadeAssinaturas) {
+                            corBotao = 'light-green darken-1'
+                        }
+                        if(contadorAssinatura > 1) {
+                            htmlBotoes += '<div style="display:inline-block"><i class="tiny material-icons">arrow_forward</i></div>';
+                        }
+                        htmlBotoes += '<div style="display:inline-block"><a class="margin20 btn-floating btn-large waves-effect waves-light ' + corBotao + '">' + contadorAssinatura + '</a></div>'
+                    }
+
                     return '<div class="expansivel">' +
                         '<div class="col s12">' +
                         '<div class="card">' +
                         '<div class="card-content">' +
+
+                        '<div class="row" style="text-align: center;">' +
+                        '<div clas="row">' +
+                        '<b>Fase atual do Projeto </b>' +
+                        '</div>' +
+
+                        '<div style="vertical-align:middle;">' +
+                        htmlBotoes +
+                        '</div>' +
+                        '</div>' +
+
+
                         '<div clas="row">' +
                         '<b>Resumo do Projeto </b>' + data.ResumoProjeto +
                         '</div>' +
@@ -269,9 +295,14 @@
                         '<b>Tipo do ato administrativo: </b>' + data.tipoDoAtoAdministrativo +
                         '</div>' +
                         '<div clas="row">' +
-                        '<b>Quantidade de assinaturas: </b>' + data.quantidadeAssinaturas +
+                        '<b>Quantidade atual de assinaturas: </b>' + data.quantidadeAssinaturas +
                         '</div>' +
+                        '<div clas="row">' +
+                        '<b>Quantidade de assinaturas necess&aacute;rias: </b>' + data.quantidadeTotalAssinaturas +
                         '</div>' +
+
+
+
                         '</div>' +
                         '</div>' +
                         '</div>';

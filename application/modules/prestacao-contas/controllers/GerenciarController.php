@@ -595,7 +595,8 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
         $paises = $pais->buscar();
         $data = [];
-        foreach($paises as $key => $pais) {
+        foreach($paises as  $pais) {
+            $key = $pais['idPais'];
             $data[$key]['id']  = $pais['idPais'];
             $data[$key]['nome']  = utf8_encode($pais['Descricao']);
         }
