@@ -8,12 +8,25 @@ class Projeto_HomologacaoController extends Projeto_GenericController
 
     public function init()
     {
+        $this->validarPerfis();
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
         $this->codOrgao = $GrupoAtivo->codOrgao;
         $this->codGrupo = $GrupoAtivo->codGrupo;
 
         $this->arrBreadCrumb[] = array('url' => '/principal', 'title' => 'In&iacute;cio', 'description' => 'Ir para in&iacute;cio');
         parent::init();
+    }
+
+    private function validarPerfis()
+    {
+        $auth = Zend_Auth::getInstance();
+
+        $PermissoesGrupo = [];
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_ANALISE;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO;
+        $PermissoesGrupo[] = Autenticacao_Model_Grupos::PRESIDENTE_VINCULADA_SUBSTITUTO;
+
+        isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo);
     }
 
     public function indexAction()
@@ -131,6 +144,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
             $mapper = new Projeto_Model_TbHomologacaoMapper();
             $arrPost = $this->getRequest()->getPost();
             $arrPost['stDecisao'] = (isset($arrPost['stDecisao'])) ? 2 : 1;
+            $arrPost['tpHomologacao'] = 1;
             $this->_helper->json([
                 'status' => $mapper->save($arrPost),
                 'msg' => $mapper->getMessages(),
@@ -157,16 +171,12 @@ class Projeto_HomologacaoController extends Projeto_GenericController
             $arrValue = $dadosEnquadramento->toArray();
         }
 
-        $areaSegmentoProjeto = $dbTableEnquadramento->obterProjetoAreaSegmento(
+        $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
             [
                 'a.IdPRONAC = ?' => $intIdPronac,
                 'a.Situacao = ?' => $this->situacaoParaHomologacao
             ]
         )->current();
-        $arrValue['enquadramentoProjeto'] = [];
-        if(!is_null($areaSegmentoProjeto)) {
-            $arrValue['enquadramentoProjeto'] = $areaSegmentoProjeto->toArray();
-        }
 
         $arrValue['parecer'] = $dbTableParecer->findBy([
             'TipoParecer' => '1',
