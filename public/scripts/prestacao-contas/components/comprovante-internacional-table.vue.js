@@ -1,5 +1,4 @@
 Vue.component('sl-comprovante-internacional-table', {
-    props: ['dados'],
     template: `
         <div>
             <table class="bordered">
@@ -9,6 +8,8 @@ Vue.component('sl-comprovante-internacional-table', {
                         <td>{{dados.fornecedor.nome}}</td>
                         <th>Endere&ccedil;o</th>
                         <td colspan="5">{{dados.fornecedor.endereco}}</td>
+                        <th>Pa&iacute;s</th>
+                        <td colspan="5">{{dados.fornecedor.nacionalidade}}</td>
                     </tr>
                     <tr>
                         <th>Tipo Comprovante</th>
@@ -21,10 +22,8 @@ Vue.component('sl-comprovante-internacional-table', {
                     <tr>
                         <th>Dt. Emiss&atilde;o do comprovante de despesa</th>
                         <td>{{dataEmissaoComprovante}}</td>
-                        <th>Forma de Pagamento</th>
-                        <td>{{formaPagamento}}</td>
                         <th>Data do Pagamento</th>
-                        <td>{{dataPagamento}}</td>
+                        <td>{{dataPagamentoFormatado}}</td>
                     </tr>
                     <tr>
                         <th>Valor</th>
@@ -42,6 +41,23 @@ Vue.component('sl-comprovante-internacional-table', {
             </table>
         </div>
     `,
+    props: ['dados'],
+    mounted: function () {
+        var vue = this;
+        var url = '/prestacao-contas/gerenciar/pais' ;
+
+        $3.ajax({
+            url: url,
+            dataType: "json",
+        }).done(function(data){
+            vue.pais = data;
+        });
+    },
+    data() {
+        return {
+            pais: [],
+        }
+    },
     computed: {
         CNPJCPF() {
             CNPJCPF = null;
@@ -54,10 +70,13 @@ Vue.component('sl-comprovante-internacional-table', {
             return CNPJCPF;
         },
         dataEmissaoComprovante() {
-            return moment(this.dados.dtEmissao).format('DD/MM/Y');
+            return moment(this.dados.dataEmissao).format('DD/MM/Y');
         },
-        dataPagamento() {
-            return moment(this.dados.dtPagamento).format('DD/MM/Y');
+        dataPagamentoFormatado() {
+            if (moment(this.dados.dataPagamento).isValid()){
+                return moment(this.dados.dataPagamento).format('DD/MM/Y');
+            } 
+            return moment(this.dados.dataPagamento, 'DD/MM/Y').format('DD/MM/Y');
         },
         tipoDocumento() {
             tipo = '';
@@ -84,10 +103,10 @@ Vue.component('sl-comprovante-internacional-table', {
             return forma;
         },
         valorFormatado() {
-           return  this.dados.valor;
+           return  numeral(parseFloat(this.dados.valor)).format('0,0.00');
         },
         nomeArquivo() {
            return  this.dados.arquivo.nome;
-        }
+        },
     }
 });
