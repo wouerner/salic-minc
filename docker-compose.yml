@@ -1,11 +1,11 @@
 version: '2'
 services:
   web:
-    image: culturagovbr/salic-web:1.6
+    build: .
+    image: culturagovbr/salic-web:1.7
     container_name: salic-web
     ports:
      - "80:80"
-     - "8888:8888"
     volumes:
      - .:/var/www/salic
      - ./log/apache2:/var/log/apache2
@@ -13,8 +13,9 @@ services:
      - ./public/plenaria:/var/www/salic/public/plenaria/
     environment:
       - APPLICATION_ENV=development
-      #xDebug configs for 'development' enviroment
-      - XDEBUG_INSTALL="true"
+      - UPDATE_COMPOSER_DEPENDENCIES="false"
+      # xDebug configs for 'development' enviroment
+      - XDEBUG_INSTALL="false"
       - XDEBUG_REMOTE_ENABLE=on
       - XDEBUG_REMOTE_AUTOSTART=on
       - XDEBUG_REMOTE_HANDLER=dbgp
@@ -33,5 +34,5 @@ networks:
    static-network:
     ipam:
       config:
-         - subnet: 172.20.0.0/16
-           ip_range: 172.28.5.0/24
+        - subnet: 172.20.0.0/16
+          iprange: 172.28.5.0/24

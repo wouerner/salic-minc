@@ -45,14 +45,14 @@ class Assinatura_IndexController extends Assinatura_GenericController
 
     public function gerenciarAssinaturaAjaxAction()
     {
-
         $start = $this->getRequest()->getParam('start');
+        $length = $this->getRequest()->getParam('length');
         $draw = (int)$this->getRequest()->getParam('draw');
         $search = $this->getRequest()->getParam('search');
         $order = $this->getRequest()->getParam('order');
         $columns = $this->getRequest()->getParam('columns');
-
-        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["Pronac desc"];
+//
+//        $order = ($order[0]['dir'] != 1) ? array($columns[$order[0]['column']]['name'] . ' ' . $order[0]['dir']) : ["Pronac desc"];
 
         $get = Zend_Registry::get('get');
         $idTipoDoAtoAdministrativo = $get->idTipoDoAtoAdministrativo;
@@ -67,12 +67,19 @@ class Assinatura_IndexController extends Assinatura_GenericController
             $idTipoDoAtoAdministrativos[] = $idTipoDoAtoAdministrativo;
         }
 
-        $tbAssinaturaDbTable = new Assinatura_Model_DbTable_TbAssinatura();
+        $tbAssinaturaDbTable = new Assinatura_Model_DbTable_TbAssinatura([
+            'search' => $search,
+            'start' => $start,
+            'length' => $length,
+            'order' => $order,
+            'columns' => $columns
+        ]);
+
         $tbAssinaturaDbTable->preencherModeloAtoAdministrativo([
             'idOrgaoDoAssinante' => $this->grupoAtivo->codOrgao,
             'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
             'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior,
-            'idTipoDoAto' => $idTipoDoAtoAdministrativos,
+            'idTipoDoAto' => $idTipoDoAtoAdministrativos
         ]);
 
         $projetosDisponiveis = $tbAssinaturaDbTable->obterAssinaturasDisponiveis();

@@ -263,8 +263,12 @@
                             <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'transferencia-recursos', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
                                title="Transfer&ecirc;ncia de recursos">Transfer&ecirc;ncia de recursos</a>
                         <?php endif; ?>
-
-                        <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
+                    <?php if ($this->fnLiberarLinks['ReadequacaoSaldoAplicacao']) {
+                    ?>
+			<a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'saldo-aplicacao', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>" title="Ir para Saldo de aplica&ccedil;&atilde;o">Saldo de aplica&ccedil;&atilde;o</a>
+		    <?php
+		    } ?>
+		    <a href="<?php echo $this->url(array('module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'index'), '', true); ?>?idPronac=<?php echo Seguranca::encrypt($this->idPronac); ?>"
                            title="Ir para Solicita&ccedil;&otilde;es Gerais"
                         >Diversas</a>
                     </div>

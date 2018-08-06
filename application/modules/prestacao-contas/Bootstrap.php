@@ -16,6 +16,6 @@ class PrestacaoContas_Bootstrap extends Zend_Application_Module_Bootstrap
             ]
         );
 
-        $frontController->getRouter()->addRoute('rest', $restRoute);
+        $frontController->getRouter()->addRoute('rest-prestacao-contas', $restRoute);
     }
 }

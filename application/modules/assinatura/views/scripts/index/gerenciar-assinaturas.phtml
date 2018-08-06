@@ -72,6 +72,14 @@
         (function ($) {
             $(document).ready(function () {
 
+                $(document).ajaxStart(function () {
+                    $('#container-loading').fadeIn('slow');
+                });
+
+                $(document).ajaxComplete(function () {
+                    $('#container-loading').fadeOut('slow');
+                });
+
                 $(document).on('click', "#marcarDesmarcarCheckboxLabel", function () {
                     $3('.checkbox_legal').prop("checked", !$3($("#marcarDesmarcarCheckbox")).prop("checked"));
                     tratarExibicaoCheckboxChecados('.checkbox_legal', '#divAssinaturaEmMassa');
@@ -84,11 +92,6 @@
                         $(seletorExibicao).show('fast');
                     }
                 }
-
-
-                $('#expansivelHomologacao').on('click', '.checkbox_legal', function () {
-                    alert('asdasd');
-                });
 
                 $(document).on('click', '.checkbox_legal', function () {
                     var quantidadeCheckBoxesSelecionados = $('.checkbox_legal').filter(':checked').length;
@@ -143,14 +146,6 @@
                     },
                     "autoWidth": false,
                     "serverSide": true,
-                    // "columnDefs": [
-                    //     { "width": "1%", "targets": 0 },
-                    //     { "width": "20%", "targets": 2 },
-                    //     { "width": "10%", "targets": 3 },
-                    //     { "width": "5%", "targets": [5,6,7,9] },
-                    //     {"className": "dt-center", "targets": [0,1,3,4,5,6,7,8,9]},
-                    //     {'bSortable': false, 'aTargets': [0, 9]},
-                    // ],
                     "searchDelay": 350,
                     "columnDefs": [
                         // { "width": "1%", "targets": 0 },
@@ -158,7 +153,7 @@
                         // { "width": "10%", "targets": 3 },
                         // { "width": "5%", "targets": [5,6,7,9] },
                         {"className": "dt-center", "targets": [0, 1, 2, 5, 7]},
-                        {'bSortable': false, 'aTargets': [0, 1, 7]},
+                        {'bSortable': true, 'aTargets': [0, 1, 7]},
                     ],
                     "columns": [
                         {
@@ -216,7 +211,7 @@
                             "data": null,
                             "name": "dias",
                             render: (data) => {
-                                return (parseInt(data.dias, 10) > 1) ? data.dias + ' Dias' : '-';
+                                return (parseInt(data.dias, 10) > 1) ? data.dias + ' dias' : '-';
                             }
                         },
                         {
@@ -263,10 +258,36 @@
                 });
 
                 function informacoes(data) {
+
+                    let htmlBotoes = '', corBotao = '';
+
+                    for(var contadorAssinatura = 1; contadorAssinatura <= data.quantidadeTotalAssinaturas; contadorAssinatura++) {
+                        corBotao = 'grey lighten-4 black-text';
+                        if(contadorAssinatura <= data.quantidadeAssinaturas) {
+                            corBotao = 'light-green darken-1'
+                        }
+                        if(contadorAssinatura > 1) {
+                            htmlBotoes += '<div style="display:inline-block"><i class="tiny material-icons">arrow_forward</i></div>';
+                        }
+                        htmlBotoes += '<div style="display:inline-block"><a class="margin20 btn-floating btn-large waves-effect waves-light ' + corBotao + '">' + contadorAssinatura + '</a></div>'
+                    }
+
                     return '<div class="expansivel">' +
                         '<div class="col s12">' +
                         '<div class="card">' +
                         '<div class="card-content">' +
+
+                        '<div class="row" style="text-align: center;">' +
+                        '<div clas="row">' +
+                        '<b>Fase atual do Projeto </b>' +
+                        '</div>' +
+
+                        '<div style="vertical-align:middle;">' +
+                        htmlBotoes +
+                        '</div>' +
+                        '</div>' +
+
+
                         '<div clas="row">' +
                         '<b>Resumo do Projeto </b>' + data.ResumoProjeto +
                         '</div>' +
@@ -274,9 +295,14 @@
                         '<b>Tipo do ato administrativo: </b>' + data.tipoDoAtoAdministrativo +
                         '</div>' +
                         '<div clas="row">' +
-                        '<b>Quantidade de assinaturas: </b>' + data.quantidadeAssinaturas +
+                        '<b>Quantidade atual de assinaturas: </b>' + data.quantidadeAssinaturas +
                         '</div>' +
+                        '<div clas="row">' +
+                        '<b>Quantidade de assinaturas necess&aacute;rias: </b>' + data.quantidadeTotalAssinaturas +
                         '</div>' +
+
+
+
                         '</div>' +
                         '</div>' +
                         '</div>';

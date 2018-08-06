@@ -17,7 +17,7 @@
                 <h1>Prestação de Contas: Comprovação Financeira</h1>
             </div>
             <div class="col s12 m3 l2 right-align">
-                <a href="javascript:voltar();" title="Página Anterior" class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle">
+                <a id="voltar" href="#" title="Página Anterior" class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle">
                     <i class="material-icons">keyboard_return</i>
                 </a>
             </div>
@@ -143,6 +143,7 @@
 </script>
 <script>
     $3(document).ready(function () {
+        document.getElementById("voltar").href = '/projeto/#/incentivo/' + <?php echo $this->idpronac?>;
 
         $3("#visualizar-form").on('click', function () {
             tinymce.remove();

@@ -31,8 +31,8 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
 
         $this->view->idPronac = $idpronac;
 
-        $planilhaAprovacaoModel = new PlanilhaAprovacao();
-        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
+        $planilhaAprovacaoModel = new PrestacaoContas_Model_spComprovacaoFinanceiraProjeto();
+        $resposta = $planilhaAprovacaoModel->exec($idpronac, 100);
 
         foreach ($resposta as $item) {
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
