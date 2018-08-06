@@ -31,7 +31,8 @@ Vue.component('sl-comprovante-nacional-form',
                 </div>
                     <div class="row">
                         <div
-                            :class="[this.c.fornecedor.CNPJCPF.css, 'input-field col s6']" >
+                            :class="[this.c.fornecedor.CNPJCPF.css, 'input-field col s6']" 
+                        >
                             <input
                                 type="text"
                                 ref="CNPJCPF"
@@ -74,6 +75,16 @@ Vue.component('sl-comprovante-nacional-form',
                             <template v-else >
                                 <label>Raz&atilde;o Social</label>
                             </template>
+                        </div>
+                    </div>
+                    <div class="row" v-show="novoFornecedor">
+                        <div class="col s12">
+                            <a 
+                                target="blank" 
+                                href="/prestacao-contas/fornecedor/index" 
+                                class="btn red">
+                                Cadastrar Fornecedor
+                            </a>
                         </div>
                     </div>
             </fieldset>
@@ -307,7 +318,7 @@ Vue.component('sl-comprovante-nacional-form',
             return numeral(parseFloat(this.valorantigo)).format('0,0.00');
         }
     },
-    data () {
+    data() {
         return {
             money:{
              decimal: ',',
@@ -372,7 +383,8 @@ Vue.component('sl-comprovante-nacional-form',
                     css: '',
                 },
             },
-            random: ''
+            random: '',
+            novoFornecedor: false
         }
     },
     methods: {
@@ -594,10 +606,14 @@ Vue.component('sl-comprovante-nacional-form',
                     data: {cnpjcpf: this.comprovante.fornecedor.CNPJCPF},
                     dataType: "json",
                }).done(function(data){
-                    if (data.retorno){
+                    if (data.retorno) {
                         vue.comprovante.fornecedor.nome= data.nome;
                         vue.comprovante.fornecedor.idAgente = data.idAgente;
                         vue.c.fornecedor.CNPJCPF.css = {};
+                        vue.novoFornecedor = false;
+                    } else {
+                        alert('Fornecedor n\xe3o cadastrado! Cadastre antes esse fornecedor.');
+                        vue.novoFornecedor = true;
                     }
                });
            }

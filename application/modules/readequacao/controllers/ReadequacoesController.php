@@ -2023,7 +2023,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         if ($return) {
 
-            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->idOrgao);
+            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->idOrgao); 
             $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $idDocumentoAssinatura = $objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
                 $idPronac,

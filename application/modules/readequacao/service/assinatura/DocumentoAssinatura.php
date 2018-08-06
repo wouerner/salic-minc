@@ -69,8 +69,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             . DIRECTORY_SEPARATOR
             . 'template'
         );
-
-        switch ((int)$this->idAtoDeGestao) {
+        switch ((int)$this->idTipoDoAtoAdministrativo) {
             case (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO:
                 $view->titulo = 'Parecer T&eacute;cnico de Ajuste de Projeto';
                 break;
