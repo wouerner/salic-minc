@@ -75,7 +75,7 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
                 break;
             case (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS:
             case (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC:
-                $view->titulo = 'Parecer T&eacute;cnico de Readequação de Projeto';
+                $view->titulo = 'Parecer T&eacute;cnico de Readequa&ccedil;&atilde;o de Projeto';
                 break;
         }
         $view->IdPRONAC = $this->idPronac;
