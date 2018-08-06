@@ -117,6 +117,15 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
         }
         $view->parecer = $parecer->ResumoParecer;
 
+        $tbReadequacaoXParecerDbTable = new \Readequacao_Model_DbTable_TbReadequacaoXParecer();
+        $tbReadequacaoXParecer = $tbReadequacaoXParecerDbTable->findBy([
+            'idParecer' => $this->idAtoDeGestao
+        ]);
+
+        $tbReadequacaoDbTable = new \Readequacao_Model_DbTable_TbReadequacao();
+        $readequacaoDetalhada = $tbReadequacaoDbTable->obterReadequacaoDetalhada($tbReadequacaoXParecer['idReadequacao']);
+        $view->dsTipoReadequacao = $readequacaoDetalhada['dsTipoReadequacao'];
+
         return $view->render('documento-assinatura.phtml');
     }
 }
