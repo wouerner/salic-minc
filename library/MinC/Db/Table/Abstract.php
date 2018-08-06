@@ -132,13 +132,9 @@ abstract class MinC_Db_Table_Abstract extends Zend_Db_Table_Abstract
      *
      * @todo melhorar e amadurecer codigo
      */
-    public function getBanco($strName = '')
+    public function getBanco($strName = 'dbo')
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-//        if(!$strName) {
-//            $strName = 'dbo';
-//        }
-
         if (!($db instanceof Zend_Db_Adapter_Pdo_Mssql)) {
             $arrayConfiguracaoes = $db->getConfig();
             $strName = $arrayConfiguracaoes['dbname'];
