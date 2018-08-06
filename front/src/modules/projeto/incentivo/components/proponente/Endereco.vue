@@ -1,5 +1,5 @@
 <template>
-    <div id="conteudo">
+    <div class="conteudo">
         <legend>Endereço</legend>
         <table class="tabela">
             <tr class="destacar">
@@ -17,6 +17,7 @@
         </table>
     </div>
 </template>
+
 <script>
 
     export default{

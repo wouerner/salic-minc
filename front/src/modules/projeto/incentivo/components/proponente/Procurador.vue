@@ -1,5 +1,5 @@
 <template>
-    <div id="conteudo">
+    <div class="conteudo">
         <legend>Procurador</legend>
         <table class="tabela" v-if="Object.keys(procuradores)>'0'">
             <tr class="destacar">
@@ -18,6 +18,7 @@
         </table>
     </div>
 </template>
+
 <script>
     export default{
         data(){

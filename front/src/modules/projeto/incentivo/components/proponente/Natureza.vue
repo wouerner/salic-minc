@@ -1,5 +1,5 @@
 <template>
-    <div id="conteudo">
+    <div class="conteudo">
         <legend>Natureza</legend>
         <table class="tabela">
             <tr class="destacar">
@@ -36,6 +36,7 @@
         </table>
     </div>
 </template>
+
 <script>
     export default{
         data(){

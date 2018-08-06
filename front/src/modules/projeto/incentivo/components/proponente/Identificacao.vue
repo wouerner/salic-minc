@@ -26,7 +26,7 @@
                 <td tabindex="3" align="center"><b>Tipo de Pessoa</b></td>
             </tr>
             <tr>
-                <td tabindex="4" align="center">{{cnpj_cpf|formataCPF}}</td>
+                <td tabindex="4" align="center">{{cnpj_cpf}}</td>
                 <td tabindex="5" align="center">{{nmeProponente}}</td>
                 <td tabindex="6" align="center">{{tpoPessoa}}</td>
             </tr>
@@ -35,26 +35,17 @@
 </template>
 
 <script type="text/javascript">
-    import numberToFormat from 'numeral';
 
     export default{
         data() {
             return{
                 codPronac: 510115,
                 nmeProjeto: 'NINE',
-                cnpj_cpf: '',
+                cnpj_cpf: '12378965219',
                 nmeProponente:'',
                 tpoPessoa:'Pessoa Jurídica',
                 ProponenteInabilitado: false,
             };
         },
-        filters:{
-            formataCPF(campo){
-                if (campo.length === 0) {
-                    return '';
-                }
-                return numberToFormat(campo).format('000.000.000-00');
-            }
-        }
     };
 </script>

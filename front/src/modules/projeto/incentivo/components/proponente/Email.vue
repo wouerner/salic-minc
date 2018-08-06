@@ -1,12 +1,12 @@
 <template>
-    <div id="conteudo">
+    <div class="conteudo">
         <legend>E-mail</legend>
         <table class="tabela">
             <tr class="destacar">
                 <td width="25%" align="center"><b>Tipo</b></td>
                 <td><b>E-mail</b></td>
             </tr>
-            <tr v-if="Object.keys(emails)>'0'" v-for="email in emails" v-bind:key="email.idInternet">
+            <tr v-if="Object.keys(emails) >'0'" v-for="email in emails" v-bind:key="email.idInternet">
                 <td align="center">{{email.TipoInternet}}</td>
                 <td align="center">{{email.Descricao}}</td>
             </tr>
@@ -16,6 +16,7 @@
         </table>
     </div>
 </template>
+
 <script>
     export default{
         data(){

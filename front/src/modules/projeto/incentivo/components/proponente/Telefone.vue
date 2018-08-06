@@ -1,5 +1,5 @@
 <template>
-    <div id="conteudo">
+    <div class="conteudo">
         <legend>Telefone</legend>
         <table class="tabela">
             <tr class="destacar" v-if="telefoneCadastrado">
@@ -22,6 +22,7 @@
         </table>
     </div>
 </template>
+
 <script>
     export default{
         data(){
