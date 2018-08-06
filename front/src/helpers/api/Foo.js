@@ -27,8 +27,5 @@ export const updateRecord = (params) => {
 
 export const removeRecord = (params) => {
     const id = params.Codigo;
-    const apiResponse = api().delete(id);
-    console.log('VENDO OQ CHEGA DA API');
-    console.log(apiResponse);
-    return apiResponse;
+    return api().delete(id);
 };

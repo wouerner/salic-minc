@@ -33,10 +33,8 @@ export const setActiveRecord = ({ commit }, record) => {
 };
 
 export const removeRecord = ({ commit }, record) => {
-    console.log('MA OIIIIIII 1');
     fooHelperAPI.removeRecord(record)
         .then((response) => {
-            console.log('MA OIIIIIII 2' + response);
             commit(types.DELETE_RECORD, record);
         });
 };
