@@ -7,9 +7,9 @@ Vue.component('agente-form', {
             <legend>DADOS PRINCIPAIS</legend>
             <div class="row">
                 <label>
-                    <input class="with-gap" type="radio" id="cpf" value="cpf" v-model="TipoPessoa"/>
+                    <input class="with-gap" type="radio" id="cpf" value="0" v-model="TipoPessoa"/>
                     <label for="cpf">CPF</label>
-                    <input class="with-gap" type="radio" id="cnpj" value="cnpj" v-model="TipoPessoa">
+                    <input class="with-gap" type="radio" id="cnpj" value="1" v-model="TipoPessoa">
                     <label for="cnpj">CNPJ</label>
                 </label>
             </div>
@@ -97,7 +97,7 @@ Vue.component('agente-form', {
                 <div class="col s3">
                     <label :class="[Erro.TipoEndereco ? 'erro': '']">Tipo de Endereço *</label>
                     <select :class="[Erro.TipoEndereco ? 'erro': '']" class="browser-default" v-model="TipoDeEndereco">
-                        <option v-for="endereco in TiposEnderecos" :value="endereco.descricao" >{{endereco.descricao}}</option>
+                        <option v-for="(endereco, index) in TiposEnderecos" :value="endereco.id" >{{endereco.descricao}}</option>
                     </select>
                 </div>
                 <div class="col s3">
@@ -120,7 +120,7 @@ Vue.component('agente-form', {
     ` ,
     data: function () {
        return {
-           TipoPessoa: "cpf",
+           TipoPessoa: "0",
            CpfCnpj: "",
            Nome: "",
            Fornecedor: "248",
@@ -140,6 +140,7 @@ Vue.component('agente-form', {
            Fornecedores: "",
            TiposEnderecos: "",
            TiposLogradouros: "",
+           visao: 248,
            css: false,
            Erro: {
                CpfCnpj: false,
@@ -276,11 +277,21 @@ Vue.component('agente-form', {
             },
             salvar: function(e) {
                 let vue = this;
+
+                let dados = this.$data;
+                dados.cpf = dados.CpfCnpj;
+                dados.Tipo = dados.TipoPessoa;
+                dados.tipoEndereco = dados.TipoDeEndereco;
+                dados.tipoLogradouro = dados.Tipo;
+                dados.logradouro = dados.Logradouro;
+                dados.divulgarEndereco = dados.Autorizar;
+                dados.nome = dados.Nome;
+
                 if(this.validarForm()) {
                     $3.ajax({
                          type: 'POST',
                          url: '/agente/agentes/salvaagentegeral',
-                        data: vue.$data
+                        data:dados 
                     })
                     .done(function(data) {
                             console.log(data);
