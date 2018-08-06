@@ -19,22 +19,22 @@ export const criarRegistro = ({ commit }, params) => {
         });
 };
 
-export const updateRecord = ({ commit }, params) => {
-    fooHelperAPI.updateRecord(params)
+export const atualizarRegistro = ({ commit }, params) => {
+    fooHelperAPI.atualizarRegistro(params)
         .then((response) => {
             const data = response.data;
-            const record = data.data;
-            commit(types.UPDATE_REGISTRO_TABELA, record);
+            const registro = data.data;
+            commit(types.ATUALIZAR_REGISTRO_TABELA, registro);
         });
 };
 
-export const setActiveRecord = ({ commit }, record) => {
-    commit(types.SET_ACTIVE_RECORD, record);
+export const setRegistroAtivo = ({ commit }, registro) => {
+    commit(types.SET_REGISTRO_ATIVO, registro);
 };
 
-export const removeRecord = ({ commit }, record) => {
-    fooHelperAPI.removeRecord(record)
+export const removerRegistro = ({ commit }, registro) => {
+    fooHelperAPI.removerRegistro(registro)
         .then(() => {
-            commit(types.DELETE_RECORD, record);
+            commit(types.REMOVER_REGISTRO, registro);
         });
 };

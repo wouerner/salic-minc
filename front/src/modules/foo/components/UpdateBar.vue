@@ -3,17 +3,17 @@
         <a
             style="width: 150px;"
             class="btn btn-primary"
-            @click="modalOpen('update-bar');
-            setActiveRecord(activeRecord);"
+            @click="modalOpen('atualizar-bar');
+            setRegistroAtivo(registroAtivo);"
         >
             Atualizar
         </a>
-        <ModalTemplate v-if="modalVisible === 'update-bar'" @close="fecharModal()">
+        <ModalTemplate v-if="modalVisible === 'atualizar-bar'" @close="fecharModal()">
             <template slot="header">Atualizar Bar</template>
             <template slot="body">
                 <form action="">
-                    <label for="record">DadoNr</label>
-                    <input type="text" name="DadoNr" :value="record.DadoNr" @input="buildRecord"/>
+                    <label for="registro">DadoNr</label>
+                    <input type="text" name="DadoNr" :value="registro.DadoNr" @input="buildRegistro"/>
                 </form>
             </template>
             <template slot="footer">
@@ -32,31 +32,31 @@ export default {
     name: 'UpdateBar',
     data() {
         return {
-            currentRecord: {
+            currentRegistro: {
                 Codigo: '',
                 DadoNr: '',
             },
         };
     },
-    props: ['activeRecord'],
+    props: ['registroAtivo'],
     components: {
         ModalTemplate,
     },
     methods: {
         ...mapActions({
-            updateRecord: 'foo/updateRecord',
-            setActiveRecord: 'foo/setActiveRecord',
+            atualizarRegistro: 'foo/atualizarRegistro',
+            setRegistroAtivo: 'foo/setRegistroAtivo',
             modalOpen: 'modal/modalOpen',
             modalClose: 'modal/modalClose',
         }),
-        buildRecord(event) {
+        buildRegistro(event) {
             const DadoNr = event.target.value;
-            this.currentRecord.DadoNr = DadoNr;
-            this.currentRecord.Codigo = this.record.Codigo;
+            this.currentRegistro.DadoNr = DadoNr;
+            this.currentRegistro.Codigo = this.registro.Codigo;
         },
         checkChangesAndUpdate() {
-            if (this.currentRecord !== this.record) {
-                this.updateRecord(this.currentRecord);
+            if (this.currentRegistro !== this.registro) {
+                this.atualizarRegistro(this.currentRegistro);
             }
         },
         fecharModal() {
@@ -67,7 +67,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            record: 'foo/record',
+            registro: 'foo/registro',
             modalVisible: 'modal/default',
         }),
     },

@@ -2,33 +2,33 @@ import * as types from './types';
 
 export const state = {
     dadosTabela: [],
-    activeRecord: {},
+    registroAtivo: {},
 };
 
 export const mutations = {
     [types.SET_REGISTROS_TABELA](state, dadosTabela) {
         state.dadosTabela = dadosTabela;
     },
-    [types.SET_ACTIVE_RECORD](state, record) {
-        state.activeRecord = record;
+    [types.SET_REGISTRO_ATIVO](state, registro) {
+        state.registroAtivo = registro;
     },
-    [types.SET_REGISTRO_TABELA](state, record) {
-        state.dadosTabela.push(record);
+    [types.SET_REGISTRO_TABELA](state, registro) {
+        state.dadosTabela.push(registro);
     },
-    [types.UPDATE_REGISTRO_TABELA](state, record) {
+    [types.ATUALIZAR_REGISTRO_TABELA](state, registro) {
         const dadosTabela = state.dadosTabela;
 
         dadosTabela.forEach((value, index) => {
-            if (record.Codigo === value.Codigo) {
-                state.dadosTabela.splice(index, 1, record);
+            if (registro.Codigo === value.Codigo) {
+                state.dadosTabela.splice(index, 1, registro);
             }
         });
     },
-    [types.DELETE_RECORD](state, record) {
+    [types.REMOVER_REGISTRO](state, registro) {
         const dadosTabela = state.dadosTabela;
 
         dadosTabela.forEach((value, index) => {
-            if (record.Codigo === value.Codigo) {
+            if (registro.Codigo === value.Codigo) {
                 state.dadosTabela.splice(index, 1);
             }
         });

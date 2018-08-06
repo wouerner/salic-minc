@@ -24,7 +24,7 @@ const routes = [
         },
     },
     {
-        path: '/update/:id',
+        path: '/atualizar/:id',
         name: 'UpdateBar',
         component: UpdateBar,
         meta: {

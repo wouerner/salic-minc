@@ -11,18 +11,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(record, index) in dadosTabela" :key="index">
-                    <td>{{ record.Codigo }}</td>
-                    <td>{{ record.DadoNr }}</td>
+                <tr v-for="(registro, index) in dadosTabela" :key="index">
+                    <td>{{ registro.Codigo }}</td>
+                    <td>{{ registro.DadoNr }}</td>
                     <td>
                         <div class="atualizar-action">
-                            <UpdateBar :activeRecord="record"/>
+                            <UpdateBar :registroAtivo="registro"/>
                         </div>
-                        <div class="remover-action">
+                        <div class="removerr-action">
                             <a
                                 style="width: 150px"
                                 class="btn btn-danger"
-                                @click="removeConfirm(record)"
+                                @click="confirmationRemove(registro)"
                             >
                                 Remover
                             </a>
@@ -59,17 +59,17 @@ export default {
     methods: {
         ...mapActions({
             obterDadosTabela: 'foo/obterDadosTabela',
-            setActiveRecord: 'foo/setActiveRecord',
-            removeRecord: 'foo/removeRecord',
+            setRegistroAtivo: 'foo/setRegistroAtivo',
+            removerRegistro: 'foo/removerRegistro',
             modalOpen: 'modal/modalOpen',
             modalClose: 'modal/modalClose',
         }),
-        removeConfirm(record) {
+        confirmationRemove(registro) {
             const currentConfirm = confirm;
-            const trueResponse = currentConfirm('Deseja remover esse registro?');
+            const trueResponse = currentConfirm('Deseja removerr esse registro?');
 
             if (trueResponse) {
-                this.removeRecord(record);
+                this.removerRegistro(registro);
             }
         },
     },
@@ -83,7 +83,7 @@ export default {
     width: 150px;
 }
 
-.remover-action {
+.removerr-action {
     display:inline-block;
     width: 150px;
 }
