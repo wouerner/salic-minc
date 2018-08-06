@@ -34,7 +34,7 @@ export const setActiveRecord = ({ commit }, record) => {
 
 export const removeRecord = ({ commit }, record) => {
     fooHelperAPI.removeRecord(record)
-        .then((response) => {
+        .then(() => {
             commit(types.DELETE_RECORD, record);
         });
 };

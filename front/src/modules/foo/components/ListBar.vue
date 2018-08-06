@@ -15,15 +15,18 @@
                     <td>{{ record.Codigo }}</td>
                     <td>{{ record.DadoNr }}</td>
                     <td>
-                        <!-- <router-link :to="{ name: 'UpdateBar', params: { id: record.Codigo } }">
-                            <a class="btn btn-primary" @click="setActiveRecord(record)">
-                                Atualizar
+                        <div class="atualizar-action">
+                            <UpdateBar :activeRecord="record"/>
+                        </div>
+                        <div class="remover-action">
+                            <a
+                                style="width: 150px"
+                                class="btn btn-danger"
+                                @click="removeConfirm(record)"
+                            >
+                                Remover
                             </a>
-                        </router-link> -->
-                        <UpdateBar :activeRecord="record"/>
-                        <a class="btn btn-danger" @click="removeConfirm(record)">
-                            Remover
-                        </a>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -72,3 +75,16 @@ export default {
     },
 };
 </script>
+
+<style>
+.atualizar-action {
+    display:inline-block;
+    margin-right:1px;
+    width: 150px;
+}
+
+.remover-action {
+    display:inline-block;
+    width: 150px;
+}
+</style>

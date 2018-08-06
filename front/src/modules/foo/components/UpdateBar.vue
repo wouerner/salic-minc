@@ -1,6 +1,11 @@
 <template>
     <div>
-        <a class="btn btn-primary" @click="modalOpen('update-bar');setActiveRecord(activeRecord);">
+        <a
+            style="width: 150px;"
+            class="btn btn-primary"
+            @click="modalOpen('update-bar');
+            setActiveRecord(activeRecord);"
+        >
             Atualizar
         </a>
         <ModalTemplate v-if="modalVisible === 'update-bar'" @close="fecharModal()">
