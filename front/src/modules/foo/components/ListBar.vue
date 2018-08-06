@@ -18,7 +18,7 @@
                         <div class="atualizar-action">
                             <UpdateBar :registroAtivo="registro"/>
                         </div>
-                        <div class="removerr-action">
+                        <div class="remover-action">
                             <a
                                 style="width: 150px"
                                 class="btn btn-danger"
@@ -83,7 +83,7 @@ export default {
     width: 150px;
 }
 
-.removerr-action {
+.remover-action {
     display:inline-block;
     width: 150px;
 }
