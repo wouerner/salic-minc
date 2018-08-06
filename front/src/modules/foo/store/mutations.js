@@ -13,7 +13,7 @@ export const mutations = {
         state.registroAtivo = registro;
     },
     [types.SET_REGISTRO_TABELA](state, registro) {
-        state.dadosTabela.push(registro);
+       state.dadosTabela.push(registro);
     },
     [types.ATUALIZAR_REGISTRO_TABELA](state, registro) {
         const dadosTabela = state.dadosTabela;
