@@ -242,7 +242,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
             Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_HOMOLOGAR_PROJETO
         );
 
-        $mensagem = "Opera&amp;ccedil;&amp;atilde;o realizada com sucesso!";
+        $mensagem = "Opera&ccedil;&atilde;o realizada com sucesso!";
         if (count($documentoAssinatura) < 1) {
             $servicoDocumentoAssinatura = new \Application\Modules\Projeto\Service\Assinatura\DocumentoAssinatura(
                 $idPronac,
@@ -250,6 +250,8 @@ class Projeto_HomologacaoController extends Projeto_GenericController
                 $parecer['IdParecer']
             );
             $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
+        } else {
+            $idDocumentoAssinatura = $documentoAssinatura['idDocumentoAssinatura'];
         }
 
 
