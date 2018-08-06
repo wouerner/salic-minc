@@ -1,95 +1,123 @@
 Vue.component('comprovantes', {
     template: `
         <div>
-            <template v-if="dados.length > 0 || Object.keys(dados).length > 0 ">
-              <transition-group
-                tag="ul"
-                class="collapsible"
-                name="list"
-                data-collapsible="accordion"
-                enter-active-class="animated tada"
-                leave-active-class="animated bounceOutRight"
-              >
-                <li
-                    v-for="dado in dados"
-                    :key="dado.idComprovantePagamento">
-                  <div class="collapsible-header">
+            <template v-if="!loading">
+                <template v-if="dados.length > 0 || Object.keys(dados).length > 0 ">
+                  <transition-group
+                    tag="ul"
+                    class="collapsible"
+                    name="list"
+                    data-collapsible="accordion"
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+                  >
+                    <li
+                        v-for="dado in dados"
+                        :key="dado.idComprovantePagamento"
+                    >
+                      <div class="collapsible-header">
                         Fornecedor: {{dado.fornecedor.nome}} - R$ {{valorFormatado(dado.valor)}}
-                        <span :class="['badge white-text ', badgeStatus(dado.status)]">
-                        </span>
-                  </div>
-                  <div :class="['collapsible-body lighten-5', badgeCSS(dado.stItemAvaliado)]">
-                        <div class="card">
-                            <div class="card-content">
-                                <template v-if="!formVisivel" >
-                                    <template v-if="(tipo == 'nacional')" >
-                                        <comprovante-table :dados="dado"></comprovante-table>
+                        <span :class="['badge white-text ', badgeStatus(dado.status)]">{{dado.status}}</span>
+                      </div>
+                      <div :class="['collapsible-body lighten-2', badgeCSS(dado.stItemAvaliado)]">
+                            <div class="card">
+                                <div class="card-content">
+                                    <template v-if="!formVisivel" >
+                                        <template v-if="(tipo == 'nacional')" >
+                                            <comprovante-table :dados="dado"></comprovante-table>
+                                        </template>
+                                        <template v-if="(tipo == 'internacional')" >
+                                            <sl-comprovante-internacional-table :dados="dado">
+                                            </sl-comprovante-internacional-table>
+                                        </template>
                                     </template>
-                                    <template v-if="(tipo == 'internacional')" >
-                                        <sl-comprovante-internacional-table :dados="dado">
-                                        </sl-comprovante-internacional-table>
+                                    <div class="row">
+                                    <div class="col s12">
+                                    <div class="center-align ">
+                                        <button
+                                            v-if="!formVisivel"
+                                            @click="mostrarForm()"
+                                            class="btn blue"
+                                        >
+                                            <i class="material-icons left">
+                                                edit
+                                            </i>
+                                            editar
+                                        </button>
+                                        <button v-if="!formVisivel" type="button" class="btn red white-text center-align"
+                                            @click.prevent="excluir(dado.idComprovantePagamento, dado.idArquivo, dado.idComprovantePagamento)">
+                                            <i class="material-icons left">
+                                                delete_forever
+                                            </i>
+                                            excluir</button>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <template v-if="formVisivel">
+                                        <component
+                                            :is="componenteform"
+                                            :dados="dado"
+                                            :index="dado.idComprovantePagamento"
+                                            url="/prestacao-contas/gerenciar/atualizar"
+                                            tipoform="edicao"
+                                            :item="idplanilhaitem"
+                                            :datainicio="datainicio"
+                                            :datafim="datafim"
+                                            :valoraprovado="parseFloat(valoraprovado)"
+                                            :valorcomprovado="parseFloat(valorComprovado)"
+                                            :valorantigo="parseFloat(dado.valor)"
+                                        >
+                                        </component>
                                     </template>
-                                </template>
-                                <div class="center-align">
-                                    <button v-if="!formVisivel" v-on:click="mostrarForm()" class="btn ">editar</button>
-                                    <button v-if="!formVisivel" type="button" class="btn red white-text center-align"
-                                        @click.prevent="excluir(dado.idComprovantePagamento, dado.idArquivo, dado.idComprovantePagamento)">excluir</button>
                                 </div>
-                                <template v-if="formVisivel">
-                                    <component
-                                        :is="componenteform"
-                                        :dados="dado"
-                                        :index="dado.idComprovantePagamento"
-                                        url="/prestacao-contas/gerenciar/atualizar"
-                                        tipoform="edicao"
-                                        :item="idplanilhaitem"
-                                        :datainicio="datainicio"
-                                        :datafim="datafim"
-                                        :valoraprovado="valoraprovado"
-                                        :valorcomprovado="valorComprovado"
-                                        :valorantigo="dado.valor"
-                                        :status="edicao"
-                                    >
-                                    </component>
-                                </template>
                             </div>
-                        </div>
-                  </div>
-                </li>
-              </transition-group>
+                      </div>
+                    </li>
+                  </transition-group>
+                </template>
+                <template v-else>
+                    <p> Sem comprovantes</p>
+                </template>
             </template>
             <template v-else>
-                <p> Sem comprovantes</p>
+                <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-green-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
             </template>
         </div>
     `,
     components:{
         'comprovante-table': comprovanteTable,
     },
-    props: [
-        'idpronac',
-        'produto',
-        'stitemavaliado',
-        'uf',
-        'idmunicipio',
-        'idplanilhaitem',
-        'etapa',
-        'componenteform',
-        'tipo',
-        'url',
-        'datainicio',
-        'datafim',
-        'valoraprovado',
-        'valorcomprovado'
-    ],
+    props: {
+        idpronac: null,
+        produto: null,
+        stitemavaliado: null,
+        uf: null,
+        idmunicipio: null,
+        idplanilhaitem: null,
+        etapa: null,
+        componenteform: null,
+        tipo: null,
+        url: null,
+        datainicio: null,
+        datafim: null,
+        valoraprovado: null,
+        valorcomprovado: null
+    },
     created() {
-
         let vue = this;
         this.$root.$on('novo-comprovante-nacional', function(data) {
             if(vue.tipo =='nacional'){
                 data.status='novo';
-                // vue.$data.dados.push(data);
-                // console.log(data._index, data);
                 if (Object.values(vue.$data.dados).length == 0) {
                     let a = new Object;
                     a[data._index]  = data;
@@ -133,23 +161,28 @@ Vue.component('comprovantes', {
         })
     },
     mounted: function() {
-        var vue = this;
+        let vue = this;
         url = '/prestacao-contas/comprovante-pagamento';
         $3.ajax({
-          type: "GET",
-          url:url,
-          data:{
-              idPronac: this.idpronac,
-              idPlanilhaItem: this.idplanilhaitem,
-              produto: this.produto,
-              uf: this.uf,
-              idmunicipio: this.idmunicipio,
-              etapa: this.etapa,
-              tipo: vue.tipo
-          }
+            type: "GET",
+            url:url,
+            data:{
+                idPronac: this.idpronac,
+                idPlanilhaItem: this.idplanilhaitem,
+                produto: this.produto,
+                uf: this.uf,
+                idmunicipio: this.idmunicipio,
+                etapa: this.etapa,
+                tipo: vue.tipo
+            },
+            beforeSend: function() {
+                vue.loading = true;
+            },
+            complete: function(){
+                vue.loading = false;
+            }
         })
         .done(function(data) {
-            console.log(data.data);
             if (data.data.length != 0) {
                 vue.$data.dados = data.data;
             }
@@ -245,7 +278,8 @@ Vue.component('comprovantes', {
         return {
             dados: {},
             formVisivel: false,
-            valorComprovado: this.valorcomprovado
+            valorComprovado: this.valorcomprovado,
+            loading: false
         }
     }
 });
