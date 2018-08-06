@@ -28,7 +28,10 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
         
         $dados = $this->getRequest()->getPost();
         $idPronac = $dados['idPronac'];
-
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         
         $idReadequacao = $tbReadequacao->criarReadequacaoPlanilha($idPronac, Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO);

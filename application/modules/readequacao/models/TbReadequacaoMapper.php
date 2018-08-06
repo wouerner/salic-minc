@@ -16,6 +16,10 @@ class Readequacao_Model_TbReadequacaoMapper extends MinC_Db_Mapper
     {
         try {
 
+            if (strlen($arrData['idPronac']) > 7) {
+                $arrData['idPronac'] = Seguranca::dencrypt($arrData['idPronac']);
+            }
+
             $auth = Zend_Auth::getInstance();
             $tblAgente = new Agente_Model_DbTable_Agentes();
             $rsAgente = $tblAgente->buscar(array('CNPJCPF=?' => $auth->getIdentity()->Cpf))->current();

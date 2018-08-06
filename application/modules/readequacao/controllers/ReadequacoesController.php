@@ -160,6 +160,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->layout->disableLayout();
         $idPlanilhaAprovacao = $this->_request->getParam("idPlanilha");
         $idPronac = $this->_request->getParam("idPronac");
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
         $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
 
         /* DADOS DO ITEM ATIVO */
@@ -3239,6 +3242,10 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->viewRenderer->setNoRender(true);
 
         $idPronac = $this->_request->getParam('idPronac');
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        
         $idDocumentoAtual = $this->_request->getParam('idDocumentoAtual');
         $idReadequacao = $this->_request->getParam('idReadequacao');
         $idTipoReadequacao = $this->_request->getParam('idTipoReadequacao');
@@ -3357,6 +3364,9 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->layout->disableLayout();
 
         $idPronac = $this->_request->getParam('idPronac');
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
         $tipoPlanilha = $this->_request->getParam('tipoPlanilha');
 
         $params = [];

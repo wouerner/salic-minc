@@ -1506,6 +1506,10 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         $siEncaminhamento = ''
     )
     {
+        if (strlen($idPronac) > 7) {
+            $idPronac = Seguranca::dencrypt($idPronac);
+        }
+        
         $where = [
             'a.idTipoReadequacao = ?' => $idTipoReadequacao,
             'a.stEstado = ?' => Readequacao_Model_DbTable_TbReadequacao::ST_ESTADO_EM_ANDAMENTO
