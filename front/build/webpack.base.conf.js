@@ -25,6 +25,7 @@ module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
         projeto: './src/modules/projeto/main.js',
+        readequacao: './src/modules/readequacao/main.js',
         foo: './src/modules/foo/main.js',
     },
     output: {
