@@ -4,21 +4,36 @@
       <h4>Saldo</h4>
       <div class="col s4 center-align">
 	<h6>Rendimento declarado</h6>
-	<span style="font-weight:bold">R$ {{valorSaldoAplicacaoFormatado}}</span>
+	<span style="font-weight:bold">
+	  <SalicFormatarValor
+	    :valor="valorSaldoAplicacao"
+	    :prefixo="prefixoValor"
+	    />
+	</span>
       </div>					
       <div
 	class="col s4 center-align"
 	v-bind:class="{ 'blue lighten-3': valorSaldoDisponivelParaUsoPositivo, 'red lighten-3': valorSaldoDisponivelParaUsoNegativo }"
 	>
 	<h6>Dispon&iacute;vel</h6>
-	<span style="font-weight:bold">R$ {{valorSaldoDisponivelParaUsoFormatado}}</span>
+	<span style="font-weight:bold">
+	  <SalicFormatarValor
+	    :valor="valorSaldoDisponivelParaUso"
+	    :prefixo="prefixoValor"
+	    />
+	  </span>
       </div>
       <div
 	class="col s4 center-align"
 	v-bind:class="{ 'blue lighten-3': valorSaldoUtilizadoPositivo, 'red lighten-3': valorSaldoUtilizadoNegativo }"
 	>
 	<h6>Utilizado</h6>
-	<span style="font-weight:bold">R$ {{valorSaldoUtilizadoFormatado}}</span>
+	<span style="font-weight:bold">
+	  <SalicFormatarValor
+	    :valor="valorSaldoUtilizado"
+	    :prefixo="prefixoValor"
+	    />
+	</span>
       </div>
     </div>
     <div
@@ -27,7 +42,10 @@
       >
       <div class="col s12 center-align">
 	<i class="medium red-text material-icons" style="vertical-align: middle">warning</i>
-	<span style="font-weight:bold" class="">Diminua os valores da planilha em R$ {{valorSaldoDisponivelParaUsoMensagem}} para poder finalizar a solicita&ccedil;&atilde;o.</span>
+	<span style="font-weight:bold" class="">Diminua os valores da planilha em R$
+	  <SalicFormatarValor
+	    :valor="valorSaldoDisponivelParaUsoMensagem" />
+	  para poder finalizar a solicita&ccedil;&atilde;o.</span>
       </div>
     </div>
     <div
@@ -55,6 +73,7 @@
 </template>
 <script>
 import numeral from 'numeral';
+import SalicFormatarValor from '@/components/SalicFormatarValor';
 
 export default {
     name: 'ReadequacaoSaldoAplicacaoResumo',
@@ -69,20 +88,19 @@ export default {
 	valorSaldoUtilizadoPositivo: false,
 	valorSaldoUtilizadoNeutro: false,
 	valorSaldoUtilizadoNegativo: false,
-	readequacaoAlterada: false
+	readequacaoAlterada: false,
+    },
+    data: function() {
+	return {
+	    prefixoValor: "R$ ",
+	}
+    },
+    components: {
+	SalicFormatarValor,
     },
     computed: {
-	valorSaldoAplicacaoFormatado: function() {
-	    return numeral(this.valorSaldoAplicacao).format();
-	},
 	valorSaldoDisponivelParaUsoMensagem: function() {
-	    return numeral(this.valorSaldoDisponivelParaUso * -1).format();
-	},
-	valorSaldoDisponivelParaUsoFormatado: function() {
-	    return numeral(this.valorSaldoDisponivelParaUso).format();
-	},
-	valorSaldoUtilizadoFormatado: function() {
-	    return numeral(this.valorSaldoUtilizado).format();
+	    return this.valorSaldoDisponivelParaUso * -1;
 	},
 	exibeMensagemFinalizar: function() {
 	    if (!this.valorSaldoUtilizadoNeutro

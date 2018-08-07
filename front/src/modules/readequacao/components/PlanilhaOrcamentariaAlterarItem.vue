@@ -37,7 +37,11 @@
 	    <td id="vlSolUnidade" class="left-align">{{dadosPlanilhaAtiva.descUnidade}}</td>
 	    <td id="vlSolQtd" class="right-align">{{dadosPlanilhaAtiva.Quantidade}}</td>
 	    <td id="vlSolOcor" class="right-align">{{dadosPlanilhaAtiva.Ocorrencia}}</td>
-	    <td id="vlSolVlUnit" class="right-align">{{dadosPlanilhaAtiva.ValorUnitario}}</td>
+	    <td id="vlSolVlUnit" class="right-align">
+	      <SalicFormatarValor
+		:valor="dadosPlanilhaAtiva.ValorUnitario"
+		/>
+	    </td>
 	    <td id="vlSolDias" class="right-align">{{dadosPlanilhaAtiva.QtdeDias}}</td>
 	    <td id="vlSolTotal" class="right-align">{{dadosPlanilhaAtiva.TotalSolicitado}}</td>
 	  </tr>
@@ -104,7 +108,12 @@
 	  
 	  <div class="input-field col s2">
 	    <span>Total</span><br/>
-	    <span>R$ {{totalItemFormatado}}</span>
+	    <span>R$ 
+	      <SalicFormatarValor
+		:valor="totalItem"
+
+		/>
+	    </span>
 	  </div>
 	  
 	</div>
@@ -147,11 +156,13 @@
 import numeral from 'numeral';
 import { utils } from '@/mixins/utils';
 import InputMoney from '@/components/InputMoney';
+import SalicFormatarValor from '@/components/SalicFormatarValor';
 
 export default {
     name: 'PlanilhaOrcamentariaAlterarItem',
     components: {
 	InputMoney,
+	SalicFormatarValor,
     },
     props: {
 	idPronac: '',
@@ -214,7 +225,7 @@ export default {
 	    let self = this;
 	    $3.ajax({
 		type: 'POST',
-		url: '/readequacao/readequacoes/alterar-item-solicitacao',
+		url: '/readequacao/saldo-aplicacao/obter-item-solicitacao',
 		data: {
 		    idPronac: self.idPronac,
 		    idPlanilha: self.idPlanilhaAprovacao
@@ -344,15 +355,12 @@ export default {
 	    if (this.dadosPlanilhaEditavel.Ocorrencia > 0
 		&& this.dadosPlanilhaEditavel.Quantidade > 0
 		&& this.dadosPlanilhaEditavel.ValorUnitario != ''
-	    ) {
-		return this.dadosPlanilhaEditavel.Ocorrencia * this.dadosPlanilhaEditavel.Quantidade * numeral(this.dadosPlanilhaEditavel.ValorUnitario).value();
+	       ) {
+		return this.dadosPlanilhaEditavel.Ocorrencia * this.dadosPlanilhaEditavel.Quantidade * this.dadosPlanilhaEditavel.ValorUnitario;
 	    } else {
 		return 0;
 	    }
 	},
-	totalItemFormatado: function() {
-	    return this.converterParaMoedaPontuado(this.totalItem);
-	}
     }
 }
 
