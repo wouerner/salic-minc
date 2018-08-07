@@ -10,7 +10,7 @@
       />
 </template>
 <script>
-import numeral from 'numeral';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'InputMoney',
@@ -23,19 +23,32 @@ export default {
             default: false
         }
     },
+    mixins: [utils],
     data: function () {
         return {
-            val: 1
+            val: 0
         }
     },
     mounted: function () {
-        this.formatValue();
         this.$refs.input.disabled = this.disabled;
+        this.val = this.value;
+        this.formatValue();
     },
     methods: {
         formatValue: function () {
-            this.$refs.input.value = numeral(this.$refs.input.value).format();
+	    let num = this.formatFloat(this.$refs.input.value);
+            this.$refs.input.value = this.converterParaMoedaPontuado(num);
+            this.updateMoney(
+                this.formatFloat(this.$refs.input.value)
+            );
         },
+	formatFloat: function (value) {
+	    if (value.search(',') > 0) {
+		value = value.replace('.', '');
+		value = value.replace(',', '.');
+	    }
+	    return value;
+	},
         updateMoney: function (value) {
             this.val = value;
             this.$emit('ev', this.val)
