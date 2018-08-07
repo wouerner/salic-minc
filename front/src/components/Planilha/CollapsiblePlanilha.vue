@@ -1,24 +1,10 @@
 <template>
     <div>
-        <ul
-            v-if="isObject(planilha) && typeof planilha.itens === 'undefined'"
-            class="collapsible no-margin"
-            data-collapsible="expandable">
-            <li
-                v-for="(item, key, index) of planilha"
-                v-if="isObject(item) && typeof item.total !== 'undefined' "
-                :key="index">
-                <div class="collapsible-header active" :class="obterClasseHeader(item.tipo)">
-                    <i class="material-icons" v-html="obterIconeHeader(item.tipo)"></i>{{key}}<span class="badge">R$ {{item.total | formatarParaReal}}</span>
-                </div>
-                <div class="collapsible-body no-padding">
-                    <CollapsiblePlanilha :planilha="item"></CollapsiblePlanilha>
-                </div>
-            </li>
-        </ul>
-        <div class="scroll-x">
-            <slot name="itensPlanilha" v-bind:itens="planilha"></slot>
-        </div>
+        <RecursiveItem :planilha="planilha">
+            <template slot-scope="slotProps">
+                <PlanilhaItensPadrao :table="slotProps.itens"></PlanilhaItensPadrao>
+            </template>
+        </RecursiveItem>
     </div>
 </template>
 
@@ -26,20 +12,40 @@
     import PlanilhaItensPadrao from '@/components/Planilha/PlanilhaItensPadrao';
     import planilhas from '@/mixins/planilhas';
 
-    export default {
-        name: 'CollapsiblePlanilha',
-        mixins: [planilhas],
-        components: {
-            PlanilhaItensPadrao,
-        },
+    const RecursiveItem = {
+        name: 'RecursiveItem',
         props: {
             planilha: {},
         },
-        beforeCreate: function () {
-            this.$options.components.CollapsiblePlanilha = require('./CollapsiblePlanilha.vue').default
-        },
+        mixins: [planilhas],
         mounted() {
             this.iniciarCollapsible();
+        },
+        render(h) {
+            let self = this;
+            if (this.isObject(this.planilha) && typeof this.planilha.itens === 'undefined') {
+                return h('ul', {class: 'collapsible no-margin', attrs: {'data-collapsible': 'expandable'}},
+                    Object.keys(this.planilha).map(function (key) {
+                        if (self.isObject(self.planilha[key])) {
+                            return h('li', [
+                                h('div', {class: self.obterClasseHeader(self.planilha[key].tipo)}, [
+                                    h('i', {class: 'material-icons'}, [self.obterIconeHeader(self.planilha[key].tipo)]),
+                                    h('div', key),
+                                    h('span', {class: 'badge'}, ['R$ ' + self.formatarParaReal(self.planilha[key].total)])
+                                ]),
+                                h('div', {class: 'collapsible-body no-padding'}, [
+                                    h(RecursiveItem, {
+                                        props: {planilha: self.planilha[key]},
+                                        scopedSlots: {default: self.$scopedSlots.default}
+                                    })
+                                ])
+                            ])
+                        }
+                    })
+                );
+            } else if (self.$scopedSlots.default !== 'undefined') {
+                return h('div', self.$scopedSlots.default({itens: self.planilha.itens}));
+            }
         },
         methods: {
             iniciarCollapsible() {
@@ -49,6 +55,7 @@
             },
             obterClasseHeader(tipo) {
                 return {
+                    'collapsible-header active': true,
                     'red-text fonte': tipo === 'fonte',
                     'green-text produto': tipo === 'produto',
                     'orange-text etapa': tipo === 'etapa',
@@ -74,10 +81,21 @@
                 return icone;
             },
         }
+    };
+
+    export default {
+        name: 'CollapsiblePlanilha',
+        components: {
+            PlanilhaItensPadrao,
+            RecursiveItem
+        },
+        props: {
+            planilha: {},
+        },
     }
 </script>
 
-<style scoped>
+<style>
     .collapsible .collapsible,
     .collapsible-body .collapsible-body {
         border: none;

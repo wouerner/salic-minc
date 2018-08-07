@@ -6,7 +6,7 @@
             </template>
         </CollapsiblePlanilha>
         <div class="card-action right-align">
-            <span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total | formatarParaReal}}</span>
+            <span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total | filtroFormatarParaReal}}</span>
         </div>
     </div>
     <div v-else>Nenhuma planilha encontrada</div>
