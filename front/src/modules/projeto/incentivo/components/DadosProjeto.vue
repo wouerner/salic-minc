@@ -401,8 +401,7 @@
                         </td>
                     </tr>
                 </table>
-
-                <table class="tabela" v-if="dadosProjeto.vlTotalAutorizado > 0 && dadosProjeto.vlTotalHomologado > 0">
+                <table class="tabela" v-if="dadosProjeto.vlTotalAutorizado > 0 || dadosProjeto.vlTotalHomologado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3"><b>Autorizado p/ Captar</b></td>
                     </tr>
@@ -411,7 +410,7 @@
                         <td class="right-align"><b>Outras fontes (E)</b></td>
                         <td class="right-align"><b>Total Autorizado (F=D+E)</b></td>
                     </tr>
-                    <tr v-if="parseInt(dadosProjeto.idNormativo) > 6">
+                    <tr v-if="parseInt(dadosProjeto.idNormativo) >= 6">
                         <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlAutorizado"/>
                         </b></td>
@@ -420,11 +419,9 @@
                         </b></td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.vlTotalAutorizado > 0"
-                                             :to="{ name: 'planilhaautorizada', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'planilhaautorizada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalAutorizado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalAutorizado"/>
                             </b>
                         </td>
                     </tr>
@@ -445,7 +442,7 @@
                     </tr>
                 </table>
 
-                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6 && dadosProjeto.vlTotalAdequado > 0">
+                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) >= 6 && dadosProjeto.vlTotalAdequado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
@@ -475,7 +472,7 @@
                     </tr>
                 </table>
 
-                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6 && dadosProjeto.vlTotalHomologado > 0">
+                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) >= 6 && dadosProjeto.vlTotalHomologado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>

@@ -22,5 +22,11 @@ class Finalizar implements IAcaoFinalizar
         $objReadequacao_ReadequacoesController->encaminharOuFinalizarReadequacaoChecklist(
             $tbReadequacaoXParecer['idReadequacao']
         );
+
+        $objProjetos = new \Projetos();
+        $objProjetos->alterarProvidenciaTomada(
+            $this->idPronac,
+            'Readequa&ccedil;&atilde;o analisada pela &aacute;rea t&eacute;cnica'
+        );
     }
 }

@@ -12,7 +12,7 @@ Vue.component('sl-comprovante-internacional-form',
                             name="pais"
                             class=" browser-default "
                          >
-                            <option v-for="p in pais" :value="p.id">
+                            <option v-for="p in pais" :value="p.nome">
                                 {{p.nome}}
                             </option>
                         </select>
@@ -33,10 +33,16 @@ Vue.component('sl-comprovante-internacional-form',
                     </div>
                     <div class="input-field col s6">
                         <input
+                            :class="[this.c.fornecedor.endereco.css]"
+                            ref="endereco"
                             v-model="comprovante.fornecedor.endereco"
                             type="text"
+                            @input="inputEndereco($event.target.value)"
                         />
-                        <label for="enderecoInternacional">Endere&ccedil;o</label>
+                        <label
+                            :class="[this.c.fornecedor.endereco.css]"
+                            for="enderecoInternacional">Endere&ccedil;o *
+                        </label>
                     </div>
                 </div>
                 <div class="row">
@@ -82,10 +88,9 @@ Vue.component('sl-comprovante-internacional-form',
                         <input
                             ref="dataEmissao"
                             type="text"
-                            name="dtEmissaoInternacional"
                             v-model="comprovante.dataEmissao"
                             :class="[this.c.dataEmissao.css]"
-                            v-on:input="inputDataEmissao($event.target.value)"
+                            @input="inputDataEmissao($event.target.value)"
                         />
                         <label for="dtEmissaoInternacional"
                             :class="[this.c.dataEmissao.css]"
@@ -107,12 +112,17 @@ Vue.component('sl-comprovante-internacional-form',
                 </div>
                 <div class="row">
                     <div class="input-field col s4">
-                        <input type="text" name="vlComprovadoInternacional"
+                        <input
+                            type="text"
+                            name="vlComprovadoInternacional"
                             ref="valor"
                             v-model="comprovante.valor"
                             :class="[this.c.valor.css]"
-                            v-on:input="inputValor($event.target.value)"
-                        size="10" value=""/>
+                            @input="inputValor($event.target.value)"
+                            @blur="inputValorBlur($event.target.value)"
+                            v-money="money"
+                            size="10"
+                        />
                         <label for="vlComprovadoInternacional"
                             :class="[this.c.valor.css]"
                         >
@@ -122,11 +132,11 @@ Vue.component('sl-comprovante-internacional-form',
                     <div class="file-field input-field col s4">
                         <div :class="['btn small', c.arquivo.css] ">
                             <input name="arquivo" id="arquivo" ref="arquivo" type="file" @change="file">
-                            <span>Arquivo *</span>
+                            <span>Comprovante *</span>
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text"
-                                   v-model="comprovante.arquivo.name"
+                                   v-model="comprovante.arquivo.nome"
                                 placeholder="Selecionar arquivo">
                         </div>
                     </div>
@@ -153,9 +163,17 @@ Vue.component('sl-comprovante-internacional-form',
         if (this.dados) {
             if (this.dados.idComprovantePagamento) {
                 this.comprovante.id = this.dados.idComprovantePagamento;
+                this.comprovante.idComprovantePagamento = this.dados.idComprovantePagamento;
             }
 
-            this.comprovante.id = this.dados.idComprovantePagamento;
+            if(this.dados.fornecedor.pais) {
+                this.comprovante.fornecedor.nacionalidade = this.dados.fornecedor.pais;
+            }
+
+            if(this.dados.fornecedor.nacionalidade){
+                this.comprovante.fornecedor.nacionalidade = this.dados.fornecedor.nacionalidade;
+            }
+
             this.comprovante.fornecedor.nome = this.dados.fornecedor.nome;
             this.comprovante.fornecedor.endereco = this.dados.fornecedor.endereco;
             this.comprovante.fornecedor.id = this.dados.fornecedor.id;
@@ -164,15 +182,22 @@ Vue.component('sl-comprovante-internacional-form',
             this.comprovante.serie = this.dados.nrSerie;
             this.comprovante.dataEmissao = moment(this.dados.dataEmissao).format('DD/MM/YYYY');
             this.comprovante.dataPagamento = moment(this.dados.dataPagamento).format('DD/MM/YYYY');
-            this.comprovante.valor = this.dados.valor;
+
+            this.comprovante.valor = numeral(parseFloat(this.dados.valor)).format('0,0.00');
             this.comprovante.numeroDocumento = this.dados.nrDocumentoDePagamento;
-            this.comprovante.arquivo = { name: this.dados.nmArquivo };
-            this.comprovante.justificativa = this.dados.dsJustificativaProponente;
+            this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
+            this.comprovante.justificativa = this.dados.justificativa;
         }
     },
-    props: ['dados', 'url', 'messages', 'tipoform', 'item', 'idplanilhaaprovacao',
-        'index', 
-        'datainicio', 
+    props: [
+        'dados',
+        'url',
+        'messages',
+        'tipoform',
+        'item',
+        'idplanilhaaprovacao',
+        'index',
+        'datainicio',
         'datafim',
         'valoraprovado',
         'valorcomprovado',
@@ -186,11 +211,21 @@ Vue.component('sl-comprovante-internacional-form',
             return moment(this.datafim).format('DD/MM/YYYY');
         },
         valorMaxItem: function() {
-            return parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ));
+            let valorAprovado = numeral(parseFloat(this.valoraprovado)).value();
+            let valorComprovado = numeral(parseFloat(this.valorcomprovado)).value();
+            let valorAntigo = numeral(this.valorantigo ? parseFloat(this.valorantigo) : 0.0).value();
+            let value = numeral(valorAprovado - (valorComprovado - valorAntigo)).format('0,0.00');
+
+            return value;
         }
     },
-    data: function () {
+    data() {
         return {
+            money:{
+             decimal: ',',
+                thousands: '.',
+                precision: 2,
+            },
             comprovante: {
                 fornecedor: {
                     nacionalidade: 1,
@@ -202,9 +237,14 @@ Vue.component('sl-comprovante-internacional-form',
                     eInternacional: true,
                     id: '',
                 },
+                arquivo: {
+                    file:'',
+                    nome:''
+                },
                 item: this.item,
                 idPlanilhaAprovacao: this.idplanilhaaprovacao,
-                tipo: 1,
+                idComprovantePagamento: '',
+                tipo: 6,
                 numero: '',
                 serie: '',
                 dataEmissao: '',
@@ -213,7 +253,6 @@ Vue.component('sl-comprovante-internacional-form',
                 numeroDocumento: '',
                 valor: '',
                 valorAntigo: this.valorantigo,
-                arquivo: '',
                 justificativa: '',
                 foiAtualizado: false,
                 _index: this.index
@@ -225,6 +264,9 @@ Vue.component('sl-comprovante-internacional-form',
                         css:'',
                     },
                     nome: {
+                        css:'',
+                    },
+                    endereco: {
                         css:'',
                     },
                 },
@@ -260,10 +302,12 @@ Vue.component('sl-comprovante-internacional-form',
                 let formData = new FormData();
 
                 if (this.comprovante.foiAtualizado) {
-                    formData.append('arquivo', this.comprovante.arquivo);
+                    formData.append('arquivo', this.comprovante.arquivo.file);
                 }
 
-                formData.append('comprovante', JSON.stringify(this.comprovante));
+                let c = JSON.parse(JSON.stringify(this.comprovante))
+                c.valor = numeral(c.valor).value();
+                formData.append('comprovante', JSON.stringify(c));
 
                 $3.ajax({
                     url: url,
@@ -277,9 +321,11 @@ Vue.component('sl-comprovante-internacional-form',
                     $3('#modal1').modal('close');
 
                     if (vue.tipoform == 'cadastro') {
-                       vue.comprovante._index = data.idComprovantePagamento;
-                       vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
-                       vue.$root.$emit('novo-comprovante-internacional', vue.comprovante);
+                       c.id = data.idComprovantePagamento;
+                       c._index = data.idComprovantePagamento;
+                       c.idComprovantePagamento = data.idComprovantePagamento;
+
+                       vue.$root.$emit('novo-comprovante-internacional', c);
 
                        vue.c = {
                            fornecedor: {
@@ -287,6 +333,9 @@ Vue.component('sl-comprovante-internacional-form',
                                    css:'',
                                },
                                nome: {
+                                   css:'',
+                               },
+                               endereco: {
                                    css:'',
                                },
                            },
@@ -311,7 +360,7 @@ Vue.component('sl-comprovante-internacional-form',
                            },
                        }
 
-                       vue.comprovantee = {
+                       vue.comprovante = {
                             fornecedor: {
                                 nacionalidade: '' ,
                                 tipoPessoa: 1,
@@ -322,7 +371,7 @@ Vue.component('sl-comprovante-internacional-form',
                                 eInternacional: false,
                             },
                             item: vue.item,
-                            tipo: 1,
+                            tipo: 6,
                             numero: '',
                             serie: '',
                             dataEmissao: '',
@@ -337,7 +386,9 @@ Vue.component('sl-comprovante-internacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
-                        vue.$root.$emit('atualizado-comprovante-internacional', vue.comprovante);
+                        c._index = data.idComprovantePagamento;
+                        c.idComprovantePagamento = data.idComprovantePagamento;
+                        vue.$root.$emit('atualizado-comprovante-internacional', c);
                     }
                 });
             }
@@ -350,17 +401,24 @@ Vue.component('sl-comprovante-internacional-form',
                 return false;
             }
 
+            if(!this.comprovante.fornecedor.endereco) {
+                this.$refs.endereco.focus();
+                this.c.fornecedor.endereco.css = 'active invalid red-text';
+                return false;
+            }
+
             if(!this.comprovante.numero) {
                 this.$refs.numero.focus();
                 this.c.numero.css = 'active invalid red-text';
                 return false;
             }
-            if(!this.comprovante.dataEmissao) {
+            if(!moment(this.comprovante.dataEmissao, 'D/M/YYYY').isValid()) {
                 this.$refs.dataEmissao.focus();
                 this.c.dataEmissao.css = 'active invalid red-text';
                 return false;
             }
-            if(!this.comprovante.dataPagamento) {
+
+            if(!moment(this.comprovante.dataPagamento, 'D/M/YYYY').isValid()) {
                 this.$refs.dataPagamento.focus();
                 this.c.dataPagamento.css = 'active invalid red-text';
                 return false;
@@ -370,13 +428,7 @@ Vue.component('sl-comprovante-internacional-form',
                return false;
             }
 
-            // if(!this.comprovante.valor) {
-            //     this.$refs.valor.focus();
-            //     this.c.valor.css = 'active invalid red-text';
-            //     return false;
-            // }
-
-            if(!this.comprovante.arquivo) {
+            if(!this.comprovante.arquivo.file && this.tipoform == 'cadastro') {
                 this.$refs.arquivo.focus();
                 this.c.arquivo.css = 'active red';
                 return false;
@@ -401,11 +453,18 @@ Vue.component('sl-comprovante-internacional-form',
                 return false;
             }
 
+            if(numeral(this.comprovante.valor).value() == 0 ) {
+                this.$refs.valor.focus();
+                this.c.valor.css = 'active invalid red-text';
+
+                return false;
+            }
+
             if(valorComprovadoAtual > valoraprovado.value()) {
                 this.$refs.valor.focus();
                 this.c.valor.css = 'active invalid red-text';
                 alert(
-                    'Valor acima do permitido:' + this.comprovante.valor 
+                    'Valor acima do permitido:' + this.comprovante.valor
                     + ', maximo a ser acrescentado e: ' + valorPermitido
                 );
 
@@ -414,7 +473,8 @@ Vue.component('sl-comprovante-internacional-form',
             return result;
         },
         file: function() {
-            this.comprovante.arquivo = this.$refs.arquivo.files[0];
+            this.comprovante.arquivo.file = this.$refs.arquivo.files[0];
+            this.comprovante.arquivo.nome = this.comprovante.arquivo.file.name;
             this.comprovante.foiAtualizado = true;
             this.c.arquivo.css = '';
         },
@@ -502,10 +562,23 @@ Vue.component('sl-comprovante-internacional-form',
             if (e.length > 0) {
                this.c.dataEmissao.css = {};
             }
+
+            if ( e.length == 8 ) {
+               this.comprovante.dataEmissao = this.comprovante.dataEmissao.replace(/(\d{2})(\d{2})(\d{4})/,"$1/$2/$3")
+            }
+        },
+        inputEndereco: function(e) {
+            if (e.length > 0) {
+                this.c.fornecedor.endereco.css = {};
+            }
         },
         inputDataPagamento: function(e) {
             if (e.length > 0) {
                this.c.dataPagamento.css = {};
+            }
+
+            if ( e.length == 8 ) {
+               this.comprovante.dataPagamento = this.comprovante.dataPagamento.replace(/(\d{2})(\d{2})(\d{4})/,"$1/$2/$3")
             }
         },
         inputNumeroDocumento(e) {
@@ -518,9 +591,17 @@ Vue.component('sl-comprovante-internacional-form',
                this.c.valor.css = {};
             }
         },
+        inputValorBlur(e) {
+            let valor = e.toString();
+            valor = e.replace('.', '').replace(',', '');
+            this.comprovante.valor = numeral(numeral(valor).value() / 100).format('0,0.00');
+        },
         cancelar: function () {
             $3('#modal1').modal('close');
-            this.$root.$emit('atualizado-comprovante-internacional');
+
+            if (this.tipoform == 'edicao'){
+                this.$root.$emit('atualizado-comprovante-internacional', this.comprovante);
+            }
         },
     }
 });
