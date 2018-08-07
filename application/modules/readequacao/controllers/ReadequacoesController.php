@@ -152,6 +152,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
+    
     /**
      * Essa função é acessada para alterar o item da planilha orçamentária.
      */
@@ -402,9 +403,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         $ValorUnitario = $this->_request->getParam('ValorUnitario');
 
-        $ValorUnitario = str_replace('R$ ', '', $ValorUnitario);
-        $ValorUnitario = str_replace('.', '', $ValorUnitario);
-        $ValorUnitario = str_replace(',', '.', $ValorUnitario);
+        if (strpos($ValorUnitario, 'R$')) {
+            $ValorUnitario = str_replace('R$ ', '', $ValorUnitario);
+            $ValorUnitario = str_replace('.', '', $ValorUnitario);
+            $ValorUnitario = str_replace(',', '.', $ValorUnitario);
+        }
 
         $idPronac = $this->_request->getParam("idPronac");
         if (strlen($idPronac) > 7) {
@@ -3357,6 +3360,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         $tbTitulacaoConselheiro = new tbTitulacaoConselheiro();
         $this->view->conselheiros = $tbTitulacaoConselheiro->buscarConselheirosTitularesTbUsuarios();
     }
+    
 
 
     public function obterPlanilhaOrcamentariaAction()
