@@ -294,7 +294,42 @@ Vue.component('agente-form', {
                         data:dados 
                     })
                     .done(function(data) {
-                            console.log(data);
+                        alert('Fornecedor cadastrado, retorne a tela anterior e pesquise novamente o CPF/CNPJ ou cadastre outro fornecedor.');
+
+                           vue.TipoPessoa = "0";
+                           vue.CpfCnpj= "";
+                           vue.Nome= "";
+                           vue.Fornecedor= "248";
+                           vue.CEP= "";
+                           vue.CEPmask= "";
+                           vue.Tipo= "";
+                           vue.Logradouro= "";
+                           vue.Numero= "";
+                           vue.Complemento= "";
+                           vue.Cidade= "";
+                           vue.Bairro= "";
+                           vue.TipoDeEndereco= "";
+                           vue.Autorizar= "0";
+                           vue.uf= "";
+                           vue.UFs= "";
+                           vue.Cidades= "";
+                           vue.Fornecedores= "";
+                           vue.TiposEnderecos= "";
+                           vue.TiposLogradouros= "";
+                           vue.visao= 248;
+                           vue.css= false;
+                           vue.Erro= {
+                               CpfCnpj: false,
+                               Nome: false,
+                               Cep: false,
+                               Tipo: false,
+                               Logradouro: false,
+                               Numero: false,
+                               Uf: false,
+                               Cidade: false,
+                               Bairro: false,
+                               TipoEndereco: false,
+                           }
                     })
                 }
             },
