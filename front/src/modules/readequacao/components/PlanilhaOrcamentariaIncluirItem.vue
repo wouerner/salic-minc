@@ -77,8 +77,8 @@
 		 type="text"
 		 class="validate"
 		 ref="itemOcorrencia"
-		 v-model="item.Ocorrencia"
-		 >
+		 v-model="item.Ocorrencia"	
+	 >
 	  <label for="ocorrencia">Ocorr&ecirc;ncia</label>
 	</div>
 	
@@ -282,7 +282,7 @@ export default {
 		&& this.item.Quantidade > 0
 		&& this.item.ValorUnitario != ''
 	    ) {
-		return this.item.Ocorrencia * this.item.Quantidade * numeral(this.item.ValorUnitario).value();
+		return this.item.Ocorrencia * this.item.Quantidade * this.item.ValorUnitario;
 	    } else {
 		return 0;
 	    }
