@@ -2,7 +2,7 @@ Vue.component('agente-form', {
     template: `
     <form id="formulario" >
         <h4>Novo Fornecedor</h4>
-        <div v-if="css == true " class="erro"> <h6>O campos com '*' são obrigatorios!</h6></div>
+        <div v-if="css == true " class="erro"> <h6>Os campos com '*' são obrigatorios!</h6></div>
         <fieldset>
             <legend>DADOS PRINCIPAIS</legend>
             <div class="row">
@@ -15,8 +15,15 @@ Vue.component('agente-form', {
             </div>
             <div class="row">
                 <div class="input-field col s3">
-                    <input id="first_name" :class="[Erro.CpfCnpj ? 'erro': '']" type="text" v-model="CpfCnpj" ref="CpfCnpj"
-                            @input="inputValidacao($event.target.value)">
+                    <input
+                        id="first_name"
+                        :class="[Erro.CpfCnpj ? 'erro': '']"
+                        type="text" v-model="CpfCnpj"
+                        ref="CpfCnpj"
+                        @input="inputValidacao($event.target.value)"
+                        @blur="inputCNPJCPF($event.target.value)"
+                        :value="cnpjcpfFormat()"
+                    >
                     <label :class="[Erro.CpfCnpj ? 'erro': '']" for="first_name">CPF/CNPJ *</label>
                 </div>
                 <div class="input-field col s6">
@@ -46,20 +53,27 @@ Vue.component('agente-form', {
                 </div>
                 <div class="col s3">
                     <label :class="[Erro.Tipo ? 'erro': '']">Tipo *</label>
-                    <select :class="[Erro.Tipo ? 'erro': '']"" class="browser-default" v-model="Tipo" ref="tipo">
-                        <option v-for="logradouro in TiposLogradouros" :value="logradouro.id" >{{logradouro.descricao}}</option>
+                    <select :class="[Erro.Tipo ? 'erro': '']"" class="browser-default" v-model="Tipo" :disabled="disabled.Tipo" ref="tipo">
+                        <option
+                            v-for="logradouro in TiposLogradouros"
+                            :value="logradouro.id"
+                        >
+                            {{logradouro.descricao}}
+                        </option>
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <input 
-                        :class="[Erro.Logradouro ? 'erro': '']" 
-                        @input="inputValidacao($event.target.value)" 
+                    <input
+                        :disabled="disabled.Logradouro"
+                        :class="[Erro.Logradouro ? 'erro': '']"
+                        @input="inputValidacao($event.target.value)"
                         type="text"
-                        id="logradouro" 
-                        name="logradouro" 
-                            class="validate" v-model.lazy="Logradouro" ref="logradouro">
+                        id="logradouro"
+                        name="logradouro"
+                            class="validate" v-model.lazy="Logradouro" ref="logradouro"
+                    >
                     <label :class="[Erro.Logradouro ? 'erro': '']" for="last_name">Logradouro *</label>
                 </div>
             </div>
@@ -77,19 +91,37 @@ Vue.component('agente-form', {
             <div class="row">
                 <div class="col s3">
                     <label :class="[Erro.Uf ? 'erro': '']">UF *</label>
-                    <select :class="[Erro.Uf ? 'erro': '']" class="browser-default" v-on:change="combo()" v-model="uf" ref="uf">
+                    <select :class="[Erro.Uf ? 'erro': '']"
+                        class="browser-default"
+                        v-on:change="combo()"
+                        v-model="uf"
+                        ref="uf"
+                        :disabled="disabled.Uf"
+                    >
                         <option v-for="uf in UFs" :value="uf.id">{{uf.descricao}}</option>
                     </select>
                 </div>
                 <div class="col s3">
                     <label :class="[Erro.Cidade ? 'erro': '']">Cidade *</label>
-                    <select :class="[Erro.Cidade ? 'erro': '']" class="browser-default" v-model="Cidade" ref="cidade">
+                    <select
+                        :disabled="disabled.Cidade"
+                        :class="[Erro.Cidade ? 'erro': '']"
+                        class="browser-default"
+                        v-model="Cidade"
+                        ref="cidade"
+                    >
                         <option v-for="cidade in Cidades" :value="cidade.id">{{cidade.descricao}}</option>
                     </select>
                 </div>
                 <div class="input-field col s4">
-                    <input :class="[Erro.Bairro ? 'erro': '']" @input="inputValidacao($event.target.value)"
-                    type="text" id="last_name" class="validate" v-model="Bairro" ref="bairro">
+                    <input
+                        :class="[Erro.Bairro ? 'erro': '']"
+                        @input="inputValidacao($event.target.value)"
+                        type="text" id="last_name"
+                        class="validate"
+                        :disabled="disabled.Bairro"
+                        v-model="Bairro"
+                        ref="bairro">
                     <label :class="[Erro.Bairro ? 'erro': '']" for="last_name">Bairro *</label>
                 </div>
             </div>
@@ -118,10 +150,11 @@ Vue.component('agente-form', {
     </div>
     </form>
     ` ,
-    data: function () {
+    data () {
        return {
            TipoPessoa: "0",
            CpfCnpj: "",
+           cnpjcpfMask: '',
            Nome: "",
            Fornecedor: "248",
            CEP: "",
@@ -153,6 +186,12 @@ Vue.component('agente-form', {
                Cidade: false,
                Bairro: false,
                TipoEndereco: false,
+           },
+           disabled: {
+               Logradouro: false,
+               Bairro: false,
+               Uf: false,
+               Cidade: false,
            }
        }
     },
@@ -161,235 +200,286 @@ Vue.component('agente-form', {
     },
     methods:
     {
-           combo: function () {
+        combo: function () {
              let self = this;
              let url = '/prestacao-contas/fornecedor/cidade/id/'+self.uf;
              $3.ajax({
                  type: "GET",
                  url: url,
             })
-             .done( (cidade) => self.Cidades = cidade )
-            },
-            carregarInfoFornecedores: function () {
-                let self = this;
+             .done( (cidade) => self.Cidades = cidade );
+        },
+        carregarInfoFornecedores: function () {
+            let self = this;
 
-                let url = ['/prestacao-contas/fornecedor/uf',
-                    '/prestacao-contas/fornecedor/fornecedores-tipo',
-                    '/prestacao-contas/fornecedor/logradouro-tipo',
-                    '/prestacao-contas/fornecedor/endereco-tipo'];
+            let url = ['/prestacao-contas/fornecedor/uf',
+                '/prestacao-contas/fornecedor/fornecedores-tipo',
+                '/prestacao-contas/fornecedor/logradouro-tipo',
+                '/prestacao-contas/fornecedor/endereco-tipo'];
 
-                $3.ajax({
-                    type: "GET",
-                    url: url[0],
-                })
-                    .done((data) => self.UFs = data)
-                    .fail((jqXHR) => alert('error'));
+            $3.ajax({
+                type: "GET",
+                url: url[0],
+            })
+                .done((data) => self.UFs = data)
+                .fail((jqXHR) => alert('error'));
 
-                $3.ajax({
-                    type: "GET",
-                    url: url[1],
-                })
-                    .done((fornecedor) => self.Fornecedores = fornecedor)
-                    .fail((jqXHR) => alert('error'));
+            $3.ajax({
+                type: "GET",
+                url: url[1],
+            })
+                .done((fornecedor) => self.Fornecedores = fornecedor)
+                .fail((jqXHR) => alert('error'));
 
-                $3.ajax({
-                    type: "GET" ,
-                    url: url[2]
-                })
-                    .done((logradouro) => self.TiposLogradouros = logradouro)
-                    .fail((jqXHR) => alert('error'));
+            $3.ajax({
+                type: "GET" ,
+                url: url[2]
+            })
+                .done((logradouro) => self.TiposLogradouros = logradouro)
+                .fail((jqXHR) => alert('error'));
 
-                $3.ajax({
-                    type: "GET" ,
-                    url: url[3]
-                })
-                    .done((endereco) => self.TiposEnderecos = endereco)
-                    .fail((jqXHR) => alert('error'));
-            },
+            $3.ajax({
+                type: "GET" ,
+                url: url[3]
+            })
+                .done((endereco) => self.TiposEnderecos = endereco)
+                .fail((jqXHR) => alert('error'));
+        },
+        cepMask: function() {
+            return this.CEP.replace(/(\d{2})(\d{3})(\d{2})/,"$1.$2-$3")
+        },
+        inputCEP: function(e) {
+                if (e.length == 8) {
+                    this.CEP = e;
+                    this.CEPmask = this.cepMask();
+                } else {
+                    this.CEP = '';
+                }
+        },
+        buscarcep(cep) {
 
-            cepMask: function(){
-                    return this.CEP.replace(/(\d{2})(\d{3})(\d{2})/,"$1.$2-$3")
-            },
+            let self = this;
 
-            inputCEP: function(e) {
-                    if (e.length == 8) {
-                        this.CEP = e;
-                        this.CEPmask = this.cepMask();
-                    } else {
-                        this.CEP = '';
-                    }
-            },
+            $3.ajax({
+                url: "/default/cep/cep-ajax",
+                data: {
+                    cep: cep
+                }
+            }).done(function (result) {
 
-            buscarcep(cep) {
+                if (result.status === true) {
 
-                let self = this;
+                    self.Logradouro = result.logradouro.trim();
+                    self.UFs.forEach( uf => {
+                        if (uf.descricao === result.uf){
+                            self.uf = uf.id;
+                            self.Cidade = result.idCidade;
+                            self.combo();
+                            self.Bairro = result.bairro;
+                        }
+                    });
 
-                $3.ajax({
-                    url: "/default/cep/cep-ajax",
-                    data: {
-                        cep: cep
-                    }
-                }).done(function (result) {
-
-                    if (result.status === true) {
-
-                        self.Logradouro = result.logradouro;
-                        self.UFs.forEach( uf => {
-                            if (uf.descricao === result.uf){
-                                self.uf = uf.id;
-                                self.Cidade = result.idCidade;
-                                self.combo();
-                                self.Bairro = result.bairro;
-                            }
-                        });
-
-                        let tipoLogradouro =  Object.keys(self.TiposLogradouros).map(key => self.TiposLogradouros[key]);
-                        tipoLogradouro.forEach( tipo => {
-                            if (tipo.descricao === result.tipoLogradouro)
-                                self.Tipo = tipo.id;
+                    let tipoLogradouro =  Object.keys(self.TiposLogradouros).map(key => self.TiposLogradouros[key]);
+                    tipoLogradouro.forEach( tipo => {
+                        if (tipo.descricao === result.tipoLogradouro){
+                            self.Tipo = tipo.id;
                             self.Erro.Cep = false
-                                self.Erro.Tipo =false
-                        })
+                        }
+                    })
 
-                        if(self.Tipo != '' || self.Tipo != undefined){
-                            self.$refs.tipo.disabled = true;
-                            self.Erro.Tipo = false;
-                        }
-                        if(self.Logradouro != '' || self.Logradouro != undefined){
-                            self.Erro.Logradouro = false
-                            self.$refs.logradouro.disabled = true;
-                        }
-                        if(self.Bairro != '' || self.Bairro != undefined){
-                            self.$refs.bairro.disabled = true;
-                            self.Erro.Bairro = false
-                        }
-                        if(self.uf != '' || self.uf != undefined){
-                            self.$refs.uf.disabled = true;
-                            self.Erro.Uf = false
-                        }
-                        if(self.Cidade != '' || self.Cidade != undefined){
-                            self.Erro.Cidade = false
-                            self.$refs.cidade.disabled = true;
-                        }
+                    if(self.Tipo != '' || self.Tipo != undefined){
+                        self.Erro.Tipo = false;
                     }
-                });
 
-            },
-            salvar: function(e) {
-                let vue = this;
+                    if(self.Logradouro){
+                        self.Erro.Logradouro = false
+                        self.disabled.Logradouro = true;
+                    } else {
+                        self.disabled.Logradouro = false;
+                    }
 
-                let dados = this.$data;
-                dados.cpf = dados.CpfCnpj;
-                dados.Tipo = dados.TipoPessoa;
-                dados.tipoEndereco = dados.TipoDeEndereco;
-                dados.tipoLogradouro = dados.Tipo;
-                dados.logradouro = dados.Logradouro;
-                dados.divulgarEndereco = dados.Autorizar;
-                dados.nome = dados.Nome;
+                    if(self.Bairro.trim()){
+                        self.disabled.Bairro = true;
+                        self.Erro.Bairro = false
+                    } else {
+                        self.disabled.Logradouro = false;
+                    }
 
-                if(this.validarForm()) {
-                    $3.ajax({
-                         type: 'POST',
-                         url: '/agente/agentes/salvaagentegeral',
-                        data:dados 
-                    })
-                    .done(function(data) {
-                        alert('Fornecedor cadastrado, retorne a tela anterior e pesquise novamente o CPF/CNPJ ou cadastre outro fornecedor.');
+                    if(self.uf) {
+                        self.disabled.Uf = true;
+                        self.Erro.Uf = false
+                    }else {
+                        self.disabled.Uf = false;
+                    }
 
-                           vue.TipoPessoa = "0";
-                           vue.CpfCnpj= "";
-                           vue.Nome= "";
-                           vue.Fornecedor= "248";
-                           vue.CEP= "";
-                           vue.CEPmask= "";
-                           vue.Tipo= "";
-                           vue.Logradouro= "";
-                           vue.Numero= "";
-                           vue.Complemento= "";
-                           vue.Cidade= "";
-                           vue.Bairro= "";
-                           vue.TipoDeEndereco= "";
-                           vue.Autorizar= "0";
-                           vue.uf= "";
-                           vue.UFs= "";
-                           vue.Cidades= "";
-                           vue.Fornecedores= "";
-                           vue.TiposEnderecos= "";
-                           vue.TiposLogradouros= "";
-                           vue.visao= 248;
-                           vue.css= false;
-                           vue.Erro= {
-                               CpfCnpj: false,
-                               Nome: false,
-                               Cep: false,
-                               Tipo: false,
-                               Logradouro: false,
-                               Numero: false,
-                               Uf: false,
-                               Cidade: false,
-                               Bairro: false,
-                               TipoEndereco: false,
-                           }
-                    })
+                    if(self.Cidade){
+                        self.Erro.Cidade = false
+                        self.disabled.Cidade = true;
+                    }else {
+                        self.disabled.Cidade = false;
+                    }
+
+                } else {
+                   self.Tipo= "";
+                   self.Logradouro= "";
+                   self.Numero= "";
+                   self.Complemento= "";
+                   self.Cidade= "";
+                   self.Bairro= "";
+                   self.TipoDeEndereco= "";
+                   self.uf= "";
+                   self.Cidades= "";
+
+                   self.disabled.Uf = false;
+                   self.disabled.Cidade = false;
+                   self.disabled.Bairro = false;
+                   self.disabled.Logradouro = false;
                 }
-            },
-            validarForm: function(){
-               if(!this.CpfCnpj){
-                   this.css = this.Erro.CpfCnpj = true;
-                   return false;
-               }
-                if(!this.Nome){
-                    this.css = this.Erro.Nome = true;
-                   return false;
+
+            });
+
+        },
+        salvar: function(e) {
+            let vue = this;
+
+            // let dados = this.$data;
+
+            let dados = JSON.parse(JSON.stringify(this.$data))
+
+            dados.cpf = dados.CpfCnpj;
+            dados.Tipo = dados.TipoPessoa;
+            dados.tipoEndereco = dados.TipoDeEndereco;
+            dados.tipoLogradouro = dados.Tipo;
+            dados.logradouro = dados.Logradouro;
+            dados.divulgarEndereco = dados.Autorizar;
+            dados.nome = dados.Nome;
+
+            if(this.validarForm()) {
+                $3.ajax({
+                     type: 'POST',
+                     url: '/agente/agentes/salvaagentegeral',
+                    data:dados
+                })
+                .done(function(data) {
+                    alert('Fornecedor cadastrado, retorne a tela anterior e pesquise novamente o CPF/CNPJ ou cadastre outro fornecedor.');
+
+                       vue.TipoPessoa = "0";
+                       vue.CpfCnpj= "";
+                       vue.Nome= "";
+                       vue.Fornecedor= "248";
+                       vue.CEP= "";
+                       vue.CEPmask= "";
+                       vue.Tipo= "";
+                       vue.Logradouro= "";
+                       vue.Numero= "";
+                       vue.Complemento= "";
+                       vue.Cidade= "";
+                       vue.Bairro= "";
+                       vue.TipoDeEndereco= "";
+                       vue.Autorizar= "0";
+                       vue.uf= "";
+                       vue.Cidades= "";
+                       vue.Fornecedores= "";
+                       vue.TiposEnderecos= "";
+                       vue.TiposLogradouros= "";
+                       vue.visao= 248;
+                       vue.css= false;
+                       vue.Erro= {
+                           CpfCnpj: false,
+                           Nome: false,
+                           Cep: false,
+                           Tipo: false,
+                           Logradouro: false,
+                           Numero: false,
+                           Uf: false,
+                           Cidade: false,
+                           Bairro: false,
+                           TipoEndereco: false,
+                       }
+                })
+            }
+        },
+        validarForm: function() {
+           if(!this.CpfCnpj){
+               this.css = this.Erro.CpfCnpj = true;
+               return false;
+           }
+            if(!this.Nome){
+                this.css = this.Erro.Nome = true;
+               return false;
+            }
+            if(!this.CEP){
+               this.css = this.Erro.Cep = true;
+               return false;
+            }
+            if(!this.Tipo){
+                this.css = this.Erro.Tipo = true;
+               return false;
+            }
+            if(!this.Logradouro){
+                this.css = this.Erro.Logradouro = true;
+               return false;
+            }
+            if(!this.Numero){
+                this.css = this.Erro.Numero = true;
+               return false;
+            }
+            if(!this.uf){
+               this.css = this.Erro.Uf = true;
+               return false;
+            }
+            if(!this.Cidade){
+                this.css = this.Erro.Cidade = true;
+               return false;
+            }
+            if(!this.Bairro){
+                this.css = this.Erro.Bairro = true;
+               return false;
+            }
+            if(!this.TipoDeEndereco){
+                this.css = this.Erro.TipoEndereco = true;
+               return false;
+            }
+            return true;
+        },
+        inputValidacao: function(event){
+           if(event.length > 0){
+               this.css = false
+               this.Erro.CpfCnpj = false;
+               this.Erro.Nome = false;
+               this.Erro.Cep = false;
+               this.Erro.Tipo = false;
+               this.Erro.Logradouro = false;
+               this.Erro.Numero = false;
+               this.Erro.Uf = false;
+               this.Erro.Cidade = false;
+               this.Erro.Bairro = false;
+               this.Erro.TipoEndereco = false;
+           }
+        },
+        cnpjcpfFormat () {
+            if (
+                this.TipoPessoa == 1
+                && this.CpfCnpj.length == 11
+            ) {
+                return this.CpfCnpj.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4");
+            } else if(
+                this.tipoPessoa == 2
+                && this.CpfCnpj.length == 14
+            ) {
+                return this.CpfCnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5");
+            }
+        },
+        inputCNPJCPF(e) {
+            console.log(e);
+            if (e.length < 15) {
+                if (e.length == 11 || e.length == 14) {
+                   this.CpfCnpj = e;
+                   this.cnpjcpfMask = this.cnpjcpfFormat();
+                } else {
+                   this.CpfCnpj = '';
                 }
-                if(!this.CEP){
-                   this.css = this.Erro.Cep = true;
-                   return false;
-                }
-                if(!this.Tipo){
-                    this.css = this.Erro.Tipo = true;
-                   return false;
-                }
-                if(!this.Logradouro){
-                    this.css = this.Erro.Logradouro = true;
-                   return false;
-                }
-                if(!this.Numero){
-                    this.css = this.Erro.Numero = true;
-                   return false;
-                }
-                if(!this.uf){
-                   this.css = this.Erro.Uf = true;
-                   return false;
-                }
-                if(!this.Cidade){
-                    this.css = this.Erro.Cidade = true;
-                   return false;
-                }
-                if(!this.Bairro){
-                    this.css = this.Erro.Bairro = true;
-                   return false;
-                }
-                if(!this.TipoDeEndereco){
-                    this.css = this.Erro.TipoEndereco = true;
-                   return false;
-                }
-                return true;
-            },
-            inputValidacao: function(event){
-               if(event.length > 0){
-                   this.css = false
-                   this.Erro.CpfCnpj = false;
-                   this.Erro.Nome = false;
-                   this.Erro.Cep = false;
-                   this.Erro.Tipo = false;
-                   this.Erro.Logradouro = false;
-                   this.Erro.Numero = false;
-                   this.Erro.Uf = false;
-                   this.Erro.Cidade = false;
-                   this.Erro.Bairro = false;
-                   this.Erro.TipoEndereco = false;
-               }
-            },
+            }
+        },
     }
 });
