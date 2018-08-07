@@ -3,7 +3,7 @@
 class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_Abstract
 {
     private $idPreProjeto = null;
-    private $idUsuario = null;
+    protected $idUsuario = null;
     private $intTamPag = 50;
     private $codOrgaoSuperior = null;
     private $codGrupo = null;
@@ -100,27 +100,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         $this->view->codGrupo = $this->codGrupo;
 
-        $movimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-        $movimentacao = $movimentacao->buscarStatusAtualProposta($idPreProjeto);
-        $this->view->movimentacao = $movimentacao['Movimentacao'];
-
         //========== inicio codigo dirigente ================
         $arrMandatos = array();
-        $this->view->mandatos = $arrMandatos;
-        $preProjeto = new Proposta_Model_DbTable_PreProjeto();
         $rsDirigentes = array();
-
-        $Empresa = $preProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
-        $idEmpresa = $Empresa->idAgente;
+        $this->view->mandatos = $arrMandatos;
 
         $Projetos = new Projetos();
         $dadosProjeto = $Projetos->buscar(array('idProjeto = ?' => $this->idPreProjeto))->current();
-
-        // Busca na tabela apoio ExecucaoImediata stproposta
-        $tableVerificacao = new Proposta_Model_DbTable_Verificacao();
-        if (!empty($this->view->itensGeral[0]->stProposta)) {
-            $this->view->ExecucaoImediata = $tableVerificacao->findBy(array('idVerificacao' => $this->view->itensGeral[0]->stProposta));
-        }
 
         $Pronac = null;
         if (count($dadosProjeto) > 0) {
@@ -140,7 +126,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
             $tbDirigenteMandato = new tbAgentesxVerificacao();
             foreach ($rsDirigentes as $dirigente) {
-                $rsMandato = $tbDirigenteMandato->listarMandato(array('idEmpresa = ?' => $idEmpresa, 'idDirigente = ?' => $dirigente['idAgente'], 'stMandato = ?' => 0));
+                $rsMandato = $tbDirigenteMandato->listarMandato(array('idEmpresa = ?' => $dados[0]->idAgente, 'idDirigente = ?' => $dirigente['idAgente'], 'stMandato = ?' => 0));
                 $NomeDirigente = $dirigente['NomeDirigente'];
                 $arrMandatos[$NomeDirigente] = $rsMandato;
             }
@@ -254,6 +240,11 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $this->idPreProjeto
             );
 
+            $tbSgcAcesso = new Autenticacao_Model_Sgcacesso();
+            $this->view->isUsuarioAgenteInvalido = !$tbSgcAcesso->isUsuarioValido(
+                $dados[0]->idUsuarioAgente
+            );
+
             $orgaoDbTable = new Orgaos();
             $orgao = $orgaoDbTable->codigoOrgaoSuperior($this->codOrgao);
 
@@ -323,7 +314,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $recursoEnquadramento,
                 $this->codGrupo,
                 $this->view->isRecursoAvaliado
-            );
+            )  && !$this->view->isUsuarioAgenteInvalido;
 
             $this->view->isPermitidoEncaminharAvaliacao = $this->_isPermitidoEncaminharAvaliacao(
                 $distribuicaoAvaliacaoPropostaAtual,

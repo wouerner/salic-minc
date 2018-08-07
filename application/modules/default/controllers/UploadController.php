@@ -20,9 +20,9 @@ class UploadController extends MinC_Controller_Action_Abstract
     private $cod = null;
     private $blnProponente = false;
     private $intFaseProjeto = 0;
-    private $cpfLogado = 0;
-    private $idResponsavel = 0;
-    private $idAgente = 0;
+    protected $cpfLogado = 0;
+    protected $idResponsavel = 0;
+    protected $idAgente = 0;
     private $authIdentity;
 
     /**
@@ -174,12 +174,23 @@ class UploadController extends MinC_Controller_Action_Abstract
             $this->view->inabilitado = $inabilitado;
 
             /*             * ************************************************************************* */
+
+
+            $this->view->urlMenu = [
+                'module' => 'projeto',
+                'controller' => 'menu',
+                'action' => 'obter-menu-ajax',
+                'idPronac' => $idPronac
+            ];
         }
         $this->view->blnProponente = $this->blnProponente;
 
         //$this->orgaoAutorizado = "272"; //correto e 272
         $this->orgaoAutorizado = "251";
         $this->orgaoLogado = !isset($auth->getIdentity()->IdUsuario) ? $_SESSION['Zend_Auth']['storage']->usu_orgao : 0;
+
+
+
     }
 
     /**

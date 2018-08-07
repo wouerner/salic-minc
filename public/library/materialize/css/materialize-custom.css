@@ -14,6 +14,10 @@ body.open #container-progress {
     bottom: 0px;
 }
 
+body.open .card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+  margin-right: 0px;
+}
+
 main {
     flex: 1 0 auto;
 }
@@ -196,6 +200,9 @@ textarea.materialize-textarea:focus:not([readonly]) + label[data-error] {
     content: "Atual";
 }
 
+span.badge.new:after {
+    content: "";
+}
 
 ins {
     background-color: #c6ffc6;
@@ -251,4 +258,26 @@ footer a{
 footer {
     color: #FFFFFF;
     background-color: rgb(93, 64, 55);
+}
+
+.login .container-senha {
+    position: relative;
+}
+
+.login .mostrar-senha {
+    position: absolute;
+    right: 4px;
+    top: 5px;
+}
+
+.login .cabecalho-login {
+    background: url(/public/img/bg-topo.png) no-repeat center center #1b5e20;
+    background-size: cover;
+}
+
+.login .cabecalho-login .logo-salic {
+    background: url(/public/img/logo_salic.png) no-repeat center center;
+    height: 85px;
+    width: 100%;
+    background-size: 170px;
 }
