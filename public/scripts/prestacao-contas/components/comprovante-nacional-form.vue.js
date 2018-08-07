@@ -283,6 +283,10 @@ Vue.component('sl-comprovante-nacional-form',
             this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
             this.comprovante.justificativa = this.dados.justificativa;
         }
+        $3('textarea').trigger('autoresize');
+    },
+    updated(){
+        $3('textarea').trigger('autoresize');
     },
     props: {
         dados: null,
