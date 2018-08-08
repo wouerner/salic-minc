@@ -6,8 +6,8 @@ export default class API {
         this.axios = instance();
     }
 
-    get(id = '') {
-        return this.axios.get(`${this.path}/${id}`);
+    get(queryParams = '') {
+        return this.axios.get(`${this.path}${queryParams}`);
     }
 
     post(bodyFormData) {
