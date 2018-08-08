@@ -1,13 +1,13 @@
 <template>
     <div class="conteudo">
         <legend>Procurador</legend>
-        <table class="tabela" v-if="Object.keys(procuradores)>'0'">
+        <table class="tabela" v-if="Object.keys(procuradores).length>0">
             <tr class="destacar">
                 <td width="20%" align="center"><b>CPF</b></td>
                 <td align="center"><b>Nome</b></td>
             </tr>
-            <tr v-for="procurador in procuradores" v-bind:key="procurador.id">
-                <td align="center">{{procurador.CNPJCPF}}</td>
+            <tr v-for="(procurador, index) in procuradores" v-bind:key="index">
+                <td align="center"><SalicFormatarCpfCnpj :cpf="procurador.CNPJCPF" /></td>
                 <td align="left">{{procurador.nome}}</td>
             </tr>
         </table>
@@ -20,14 +20,18 @@
 </template>
 
 <script>
+    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
+
     export default{
         data(){
             return{
                 procuradores:[
-                    {id:'21', CNPJCPF:'235.245.301-55', nome:'Alguém'},
+                    {CNPJCPF:'23524530155', nome:'Alguém'},
                 ]
-
             }
-        }
+        },
+        components:{
+            SalicFormatarCpfCnpj,
+        },
     }
 </script>
