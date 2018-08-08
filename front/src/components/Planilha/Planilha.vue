@@ -1,10 +1,13 @@
 <template>
     <div v-if="planilhaCompleta" class="planilha-orcamentaria card">
-        <CollapsiblePlanilha :planilha="planilhaCompleta">
-            <template slot="itensPlanilha" slot-scope="slotProps">
-                <PlanilhaItensPadrao :table="slotProps.itens"></PlanilhaItensPadrao>
+        <CollapsibleRecursivo :planilha="planilhaCompleta">
+            <template slot-scope="slotProps">
+                <slot v-bind:itens="slotProps.itens">
+                    <PlanilhaItensPadrao :table="slotProps.itens"></PlanilhaItensPadrao>
+                </slot>
             </template>
-        </CollapsiblePlanilha>
+        </CollapsibleRecursivo>
+
         <div class="card-action right-align">
             <span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total | filtroFormatarParaReal}}</span>
         </div>
@@ -13,10 +16,86 @@
 </template>
 
 <script>
-    import CollapsiblePlanilha from '@/components/Planilha/CollapsiblePlanilha';
-    import PlanilhaItensAutorizados from '@/components/Planilha/PlanilhaItensAutorizados';
     import PlanilhaItensPadrao from '@/components/Planilha/PlanilhaItensPadrao';
     import planilhas from '@/mixins/planilhas';
+
+    const CollapsibleRecursivo = {
+        name: 'CollapsibleRecursivo',
+        props: {
+            planilha: {},
+        },
+        mixins: [planilhas],
+        mounted() {
+            this.iniciarCollapsible();
+        },
+        render(h) {
+            let self = this;
+            if (this.isObject(this.planilha) && typeof this.planilha.itens === 'undefined') {
+                return h('ul',
+                    { class: 'collapsible no-margin', attrs: { 'data-collapsible': 'expandable' } },
+                    Object.keys(this.planilha).map(key => {
+                        if (self.isObject(self.planilha[key])) {
+                            return h('li', [
+                                h('div',
+                                    { class: self.obterClasseHeader(self.planilha[key].tipo) },
+                                    [
+                                        h('i', { class: 'material-icons' }, [self.obterIconeHeader(self.planilha[key].tipo)]),
+                                        h('div', key),
+                                        h('span', { class: 'badge' }, [`R$ ${self.formatarParaReal(self.planilha[key].total)}`]),
+                                    ]
+                                ),
+                                h('div',
+                                    { class: 'collapsible-body no-padding' },
+                                    [
+                                        h(CollapsibleRecursivo, {
+                                            props: { planilha: self.planilha[key] },
+                                            scopedSlots: { default: self.$scopedSlots.default }
+                                        }),
+                                    ],
+                                ),
+                            ]);
+                        }
+                    }),
+                );
+            } else if (self.$scopedSlots.default !== 'undefined') {
+                return h('div', self.$scopedSlots.default({ itens: self.planilha.itens }));
+            }
+        },
+        methods: {
+            iniciarCollapsible() {
+                $3(".collapsible").each(function () {
+                    $3(this).collapsible();
+                });
+            },
+            obterClasseHeader(tipo) {
+                return {
+                    'collapsible-header active': true,
+                    'red-text fonte': tipo === 'fonte',
+                    'green-text produto': tipo === 'produto',
+                    'orange-text etapa': tipo === 'etapa',
+                    'blue-text local': tipo === 'local',
+                };
+            },
+            obterIconeHeader(tipo) {
+                let icone = '';
+                switch (tipo) {
+                    case 'fonte':
+                        icone = 'beenhere';
+                        break;
+                    case 'produto':
+                        icone = 'perm_media';
+                        break;
+                    case 'etapa':
+                        icone = 'label';
+                    break;
+                    case 'local':
+                        icone = 'place';
+                        break;
+                }
+                return icone;
+            },
+        },
+    };
 
     export default {
         /* eslint-disable */
@@ -26,8 +105,7 @@
         },
         mixins: [planilhas],
         components: {
-            CollapsiblePlanilha,
-            PlanilhaItensAutorizados,
+            CollapsibleRecursivo,
             PlanilhaItensPadrao,
         },
         computed: {
@@ -78,8 +156,8 @@
                                 this.$set(novaPlanilha[fonte][produto][etapa][local], 'tipo', 'local');
                                 totalEtapa += totalLocal;
                             });
-                            this.$set( novaPlanilha[fonte][produto][etapa], 'total', totalEtapa);
-                            this.$set( novaPlanilha[fonte][produto][etapa], 'tipo', 'etapa');
+                            this.$set(novaPlanilha[fonte][produto][etapa], 'total', totalEtapa);
+                            this.$set(novaPlanilha[fonte][produto][etapa], 'tipo', 'etapa');
                             totalProduto += totalEtapa;
                         });
                         this.$set(novaPlanilha[fonte][produto], 'total', totalProduto);
@@ -97,3 +175,28 @@
         },
     };
 </script>
+
+
+<style>
+    .planilha-orcamentaria .collapsible .collapsible,
+    .planilha-orcamentaria .collapsible-body .collapsible-body {
+        border: none;
+        box-shadow: none;
+    }
+
+    .planilha-orcamentaria .collapsible .collapsible .collapsible-header {
+        padding-left: 30px;
+    }
+
+    .planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible-header {
+        padding-left: 50px;
+    }
+
+    .planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible .collapsible-header {
+        padding-left: 70px;
+    }
+
+    .planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible .collapsible-body {
+        margin: 20px;
+    }
+</style>

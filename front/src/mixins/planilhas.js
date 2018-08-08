@@ -66,14 +66,14 @@ export default {
             };
         },
         formatarParaReal(value) {
-           return this.$options.filters.filtroFormatarParaReal(value);
+            return this.$options.filters.filtroFormatarParaReal(value);
         },
     },
     filters: {
         filtroFormatarParaReal(value) {
             const parsedValue = parseFloat(value);
             return numeral(parsedValue).format('0,0.00');
-        }
+        },
     },
 };
 
