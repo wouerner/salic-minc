@@ -4,11 +4,11 @@ const api = () => new API('/foo/foo-rest');
 
 export const obterDadosTabela = () => api().get();
 
-export const criarRegistro = (params) => {
+export const criar = (params) => {
     const bodyFormData = new FormData();
 
     Object.keys(params).forEach((key) => {
-        bodyFormData.set(key, params[key]);
+        bodyFormData.append(key, params[key]);
     });
 
     return api().post(bodyFormData);
@@ -19,7 +19,7 @@ export const updateRecord = (params) => {
     const id = params.Codigo;
 
     Object.keys(params).forEach((key) => {
-        bodyFormData.set(key, params[key]);
+        bodyFormData.append(key, params[key]);
     });
 
     return api().put(bodyFormData, id);

@@ -10,8 +10,8 @@ export default class API {
         return this.axios.get(`${this.path}/${id}`);
     }
 
-    post(bodyFormData) {
-        return this.axios.post(this.path, bodyFormData);
+    post(data) {
+        return this.axios.post(this.path, data);
     }
 
     put(bodyFormData, id) {
