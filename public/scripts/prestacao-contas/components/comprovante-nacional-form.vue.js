@@ -173,12 +173,15 @@ Vue.component('sl-comprovante-nacional-form',
                     <div class="row">
                         <div class=" col s3 m3">
                             <label>Forma de Pagamento<span style='color:red'>*</span></label>
-                            <select class="browser-default" name="tpFormaDePagamento" id="tpFormaDePagamento"
-                                    v-model="comprovante.forma"
-                                    >
-                                    <option value="1">Cheque</option>
-                                    <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
-                                    <option value="3">Saque/Dinheiro</option>
+                            <select 
+                                class="browser-default" 
+                                name="tpFormaDePagamento" 
+                                id="tpFormaDePagamento"
+                                v-model="comprovante.forma"
+                            >
+                                <option value="1">Cheque</option>
+                                <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
+                                <option value="3">Saque/Dinheiro</option>
                             </select>
                         </div>
                         <div class="input-field col s3">
@@ -596,7 +599,9 @@ Vue.component('sl-comprovante-nacional-form',
         },
         pesquisarFornecedor: function(){
            var vue = this;
-           var url = '/prestacao-contas/gerenciar/fornecedor' ;
+           //var url = '/prestacao-contas/gerenciar/fornecedor' ;
+           var url = '/agente/agentes/agentecadastrado';
+
 
            if (
                (this.comprovante.fornecedor.tipoPessoa == 1
@@ -607,12 +612,13 @@ Vue.component('sl-comprovante-nacional-form',
                $3.ajax({
                     url: url,
                     method: 'POST',
-                    data: {cnpjcpf: this.comprovante.fornecedor.CNPJCPF},
+                    data: {cpf: this.comprovante.fornecedor.CNPJCPF},
                     dataType: "json",
                }).done(function(data){
-                    if (data.retorno) {
-                        vue.comprovante.fornecedor.nome= data.nome;
-                        vue.comprovante.fornecedor.idAgente = data.idAgente;
+                   vue.comprovante.fornecedor.nome = '';
+                   if (data.length > 0 && data[0]['msgCPF'] == 'cadastrado') {
+                        vue.comprovante.fornecedor.nome= data[0]['Nome'];
+                        vue.comprovante.fornecedor.idAgente = data[0]['idAgente'];
                         vue.c.fornecedor.CNPJCPF.css = {};
                         vue.novoFornecedor = false;
                     } else {

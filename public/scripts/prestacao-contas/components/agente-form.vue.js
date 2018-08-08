@@ -18,13 +18,15 @@ Vue.component('agente-form', {
                     <input
                         id="first_name"
                         :class="[Erro.CpfCnpj ? 'erro': '']"
-                        type="text" v-model="CpfCnpj"
+                        type="text"
                         ref="CpfCnpj"
                         @input="inputValidacao($event.target.value)"
                         @blur="inputCNPJCPF($event.target.value)"
-                        :value="cnpjcpfFormat()"
+                        v-model="cnpjcpfMask"
                     >
-                    <label :class="[Erro.CpfCnpj ? 'erro': '']" for="first_name">CPF/CNPJ *</label>
+                    <label :class="[Erro.CpfCnpj ? 'erro': '']" for="first_name">
+                        CPF/CNPJ *
+                    </label>
                 </div>
                 <div class="input-field col s6">
                     <input :class="[Erro.Nome ? 'erro': '']" @input="inputValidacao($event.target.value)" id="last_name" type="text" class="validate" v-model="Nome">
@@ -400,10 +402,33 @@ Vue.component('agente-form', {
             }
         },
         validarForm: function() {
-           if(!this.CpfCnpj){
+            let vue = this;
+            let valido = true;
+
+            if(!this.CpfCnpj){
                this.css = this.Erro.CpfCnpj = true;
                return false;
-           }
+            }
+
+            $3.ajax({
+                type: 'POST',
+                url: '/agente/agentes/agentecadastrado',
+                data: {'cpf': vue.CpfCnpj},
+                async: false
+            })
+            .done(function(data) {
+                console.log(data);
+                if(data[0].msgCPF == 'cadastrado') {
+                    alert('Esse CPF/CNPJ j\xE1 est\xE1 cadastrado.');
+                    valido = false;
+                    vue.CpfCnpj = '';
+                }
+            });
+
+            if(!valido){
+                return false;
+            }
+
             if(!this.Nome){
                 this.css = this.Erro.Nome = true;
                return false;
@@ -459,19 +484,18 @@ Vue.component('agente-form', {
         },
         cnpjcpfFormat () {
             if (
-                this.TipoPessoa == 1
+                parseInt(this.TipoPessoa) == 0
                 && this.CpfCnpj.length == 11
             ) {
                 return this.CpfCnpj.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4");
             } else if(
-                this.tipoPessoa == 2
+                parseInt(this.TipoPessoa) == 1
                 && this.CpfCnpj.length == 14
             ) {
                 return this.CpfCnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5");
             }
         },
         inputCNPJCPF(e) {
-            console.log(e);
             if (e.length < 15) {
                 if (e.length == 11 || e.length == 14) {
                    this.CpfCnpj = e;
