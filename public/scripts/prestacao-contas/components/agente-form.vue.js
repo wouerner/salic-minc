@@ -355,6 +355,8 @@ Vue.component('agente-form', {
             dados.logradouro = dados.Logradouro;
             dados.divulgarEndereco = dados.Autorizar;
             dados.nome = dados.Nome;
+            dados.UFs = '';
+            dados.Cidades = '';
 
             if(this.validarForm()) {
                 $3.ajax({
@@ -382,8 +384,6 @@ Vue.component('agente-form', {
                        vue.uf= "";
                        vue.Cidades= "";
                        vue.Fornecedores= "";
-                       vue.TiposEnderecos= "";
-                       vue.TiposLogradouros= "";
                        vue.visao= 248;
                        vue.css= false;
                        vue.Erro= {
@@ -417,7 +417,6 @@ Vue.component('agente-form', {
                 async: false
             })
             .done(function(data) {
-                console.log(data);
                 if(data[0].msgCPF == 'cadastrado') {
                     alert('Esse CPF/CNPJ j\xE1 est\xE1 cadastrado.');
                     valido = false;
@@ -468,7 +467,7 @@ Vue.component('agente-form', {
             return true;
         },
         inputValidacao: function(event){
-           if(event.length > 0){
+           if(event.length > 0) {
                this.css = false
                this.Erro.CpfCnpj = false;
                this.Erro.Nome = false;
@@ -496,10 +495,25 @@ Vue.component('agente-form', {
             }
         },
         inputCNPJCPF(e) {
+            let vue = this;
             if (e.length < 15) {
                 if (e.length == 11 || e.length == 14) {
                    this.CpfCnpj = e;
                    this.cnpjcpfMask = this.cnpjcpfFormat();
+
+                    $3.ajax({
+                        type: 'POST',
+                        url: '/agente/agentes/agentecadastrado',
+                        data: { 'cpf': vue.CpfCnpj },
+                        async: false
+                    })
+                    .done(function(data) {
+                        if(data[0]['msgCPF'] == 'novo') {
+                           vue.Nome = data[0]['Nome'];
+                           vue.inputCEP(data[0]['Cep']);
+                        }
+                    });
+
                 } else {
                    this.CpfCnpj = '';
                 }
