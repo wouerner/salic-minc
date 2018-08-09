@@ -4,14 +4,18 @@ const api = () => new API('/foo/foo-rest');
 
 export const obterDadosTabela = () => api().get();
 
-export const criarRegistro = (params) => {
+const buildData = (params) => {
     const bodyFormData = new FormData();
 
     Object.keys(params).forEach((key) => {
         bodyFormData.append(key, params[key]);
     });
 
-    return api().post(bodyFormData);
+    return bodyFormData;
+};
+
+export const criarRegistro = (params) => {
+    return api().post(buildData(params));
 };
 
 export const atualizarRegistro = (params) => {
