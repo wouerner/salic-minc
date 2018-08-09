@@ -3,7 +3,7 @@
         <h1>Componente Bar</h1>
         <div>
             <h3>Exemplo Requisição Ajax</h3>
-            <div v-for="linha in tabela">
+            <div v-for="(linha, index) in tabela" v-bind:key="index">
                 <div>{{ linha }}</div>
             </div>
         </div>
@@ -49,7 +49,7 @@
                     console.log(response);
                 });
 
-            }
-        }
+            },
+        },
     };
 </script>

@@ -48,7 +48,7 @@
             return{
                 codPronac: '510115', nmeProjeto: 'NINE', ProponenteInabilitado: false,
                 proponentes:[
-                    {CNPJCPF:'12378965215', nmeProponente:''},
+                    {CNPJCPF:'12378965215', nmeProponente:'Teste Teste'},
                 ],
             };
         },

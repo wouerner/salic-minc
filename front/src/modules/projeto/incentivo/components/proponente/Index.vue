@@ -44,6 +44,6 @@ export default {
     Natureza,
     Dirigente,
     Procurador,
-  }
+  },
 };
 </script>
