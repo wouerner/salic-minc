@@ -123,4 +123,45 @@ describe('Foo actions', () => {
             expect(fooHelperAPI.atualizarRegistro).toHaveBeenCalled();
         });
     });
+
+    describe('removerRegistro', () => {
+        beforeEach(() => {
+            mockReponse = {};
+
+            commit = jest.fn();
+
+            MockAPI.setResponse(mockReponse);
+        });
+
+        afterEach(() => {
+            MockAPI.setResponse(null);
+        });
+
+        // test('it is commit to removerRegistro', (done) => {
+        //     const registro = mockReponse;
+        //     actions.removerRegistro({ commit }, registro);
+        //     done();
+        //     expect(commit).toHaveBeenCalledWith('ATUALIZAR_REGISTRO_TABELA', registro);
+        // });
+
+        test('it calls fooHelperAPI.removerRegistro', () => {
+            jest.spyOn(fooHelperAPI, 'removerRegistro');
+            const registro = mockReponse;
+            actions.removerRegistro({ commit }, registro);
+            expect(fooHelperAPI.removerRegistro).toHaveBeenCalled();
+        });
+    });
+
+    describe('setRegistroAtivo', () => {
+        beforeEach(() => {
+            commit = jest.fn();
+        });
+
+        test('it is commit to setRegistroAtivo', (done) => {
+            const registro = { Codigo: 1, DadoNr: 'Random String 1' };
+            actions.setRegistroAtivo({ commit }, registro);
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_REGISTRO_ATIVO', registro);
+        });
+    });
 });
