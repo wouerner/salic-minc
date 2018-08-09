@@ -16,10 +16,16 @@
         public function indexAction()
         {
             $menu = [];
-            $menu = $this->analise();
             $menu += $this->prestacaoContas();
+            $menu += $this->analise();
+            $menu += $this->administrativo();
+            $menu += $this->proposta();
+            $menu += $this->projeto();
+            $menu += $this->solicitacoes();
+            $menu += $this->usuario();
+            //$menu += $this->assinatura();
             $this->view->assign('data', $menu );
-//            $this->view->assign('data',  $this->analise() );
+    //        $this->view->assign('data',  $this->analise() );
             $this->getResponse()->setHttpResponseCode(200);
         }
 
@@ -34,66 +40,66 @@
             $arrMenu['prestacao-contas']['menu'][] = [
                 'label' => 'Analisar Presta&ccedil;&atilde;o de Contas',
                 'title' => 'Ir para Analisar Presta&ccedil;&atilde;o de Contas',
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'painel'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'painel'],
                 'grupo' =>[126]
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [125],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'painel'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'painel'],
                 'title' => 'Analisar Presta&ccedil;&atilde;o de Contas',
                 'label' => 'Analisar Presta&ccedil;&atilde;o de Contas'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [125],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'manter-assinantes'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'manter-assinantes'],
                 'title' => 'Ir para Assinantes',
                 'label' => 'Assinantes'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [124],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'tecnicoprestacaocontas'],
                 'title' => 'Analisar Presta&ccedil;&atilde;o de Contas',
                 'label' => 'Analisar Presta&ccedil;&atilde;o de Contas'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [12],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'conjurprestacaocontas'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'conjurprestacaocontas'],
                 'title' => 'Analisar Presta&ccedil;&atilde;o de Contas',
                 'label' => 'Ir para Presta&ccedil;&atilde;o de Contas'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [177],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'aeciprestacaocontas'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'aeciprestacaocontas'],
                 'title' => 'Analisar Presta&ccedil;&atilde;o de Contas',
                 'label' => 'Analisar Presta&ccedil;&atilde;o de Contas'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [132],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'chefedivisaoprestacaocontas'],
                 'title' => 'Analisar Presta&ccedil;&atilde;o de Contas',
                 'label' => 'Analisar Presta&ccedil;&atilde;o de Contas'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [93],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'coordenadorpareceristaprestacaocontas'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'coordenadorpareceristaprestacaocontas'],
                 'title' => 'Analisar Presta&ccedil;&atilde;o de Contas',
                 'label' => 'Analisar Presta&ccedil;&atilde;o de Contas'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [94, 93],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'pareceristaprestacaocontas'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'pareceristaprestacaocontas'],
                 'title' => 'Ir para Presta&ccedil;&atilde;o de Contas',
                 'label' => 'Analisar Presta&ccedil;&atilde;o de Contas'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [126,148,151],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'analisar-laudo-final'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'analisar-laudo-final'],
                 'title' => 'Ir para Analisar Laudo Final',
                 'label' => 'Analisar Laudo Final'
             ];
             $arrMenu['prestacao-contas']['menu'][] = [
                 'grupo' => [124,125,132],
-                'url' => ['controller' => 'realizarprestacaodecontas', 'action' => 'consultar-laudo-final'],
+                'url' => ['module' => 'default','controller' => 'realizarprestacaodecontas', 'action' => 'consultar-laudo-final'],
                 'title' => 'Ir para Analisar Laudo Final',
                 'label' => 'Analisar Laudo Final'
             ];
@@ -105,8 +111,8 @@
                 'label' => 'Assinatura'
             ];
             return $arrMenu;
-
         }
+
         public function analise (){
             $arrMenu['analise'] = [
                 'id' => 'analise',
@@ -320,8 +326,185 @@
             ];
 
             return $arrMenu;
-
         }
+
+        public function administrativo(){
+
+            $arrMenuProponente['administrativo'] = [
+                'id' => 'administrativo',
+                'label' => 'Administrativo',
+                'title' => 'Ir para Administrativo',
+                'menu' => [],
+                'grupo' => [],
+            ];
+            $arrMenuProponente['administrativo']['menu'][] = [
+                'label' => 'Cadastrar Proponente',
+                'title' => 'Ir para Manter Agentes',
+                'url' => ['module' => 'agente', 'controller' => 'agentes', 'action' => 'incluiragente'],
+                'grupo' => []
+            ];
+
+            //if ($this->idAgenteKeyLog != 0) {
+            $arrMenuProponente['administrativo']['menu'][] = [
+                'label' => 'Gerenciar respons&aacute;veis',
+                'title' => 'Ir para Aceitar vinculo',
+                'url' =>['module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'consultarresponsaveis'],
+                'grupo' => []
+                ];
+         //   }
+            $arrMenuProponente['administrativo']['menu'][] = [
+                'label' => 'Procura&ccedil;&atilde;o',
+                'title' => 'Ir para Procura&ccedil;&atilde;o',
+                'url' => ['module'=> 'default','controller' => 'procuracao', 'action' => 'index'],
+                'grupo' => []
+            ];
+
+            return $arrMenuProponente;
+        }
+        public function Proposta(){
+            $arrMenuProponente['proposta'] = [
+                'id' => 'proposta',
+                'label' => 'Proposta',
+                'title' => 'Ir para Proposta',
+                'menu' => [],
+                'grupo' => [],
+            ];
+            $arrMenuProponente['proposta']['menu'][] = [
+                'label' => 'Listar',
+                'title' => 'Ir para Manter Proposta por Incentivo Fiscal',
+                'url' => ['module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'listarproposta'],
+                'grupo' => []
+            ];
+
+            $arrMenuProponente['proposta']['menu'][] = [
+                'label' => 'Arquivadas',
+                'title' => 'Propostas Arquivadas',
+                'url' => ['module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'listar-propostas-arquivadas'],
+                'grupo' => []
+            ];
+            return $arrMenuProponente;
+        }
+
+        public function projeto (){
+
+            $arrMenuProponente['projeto'] = [
+                'id' => 'projeto',
+                'label' => 'Projeto',
+                'title' => 'Ir para Projetos',
+                'menu' => [],
+                'grupo' => [],
+            ];
+            $arrMenuProponente['projeto']['menu'][] = [
+                'label' => 'Listar Projetos',
+                'title' => 'Ir para Listar Projetos',
+                'url' => ['module' => 'projeto', 'controller' => 'index', 'action' => 'listar'],
+                'grupo' => []
+            ];
+
+            return $arrMenuProponente;
+        }
+
+        public function solicitacoes (){
+            $arrMenuProponente['solicitacoes'] = [
+                'id' => 'solicitacoes',
+                'label' => 'Solicita&ccedil;&otilde;es',
+                'title' => 'Ir para Solicitacoes',
+                'menu' => [],
+                'grupo' => []
+            ];
+            $arrMenuProponente['solicitacoes']['menu'][] = [
+                'label' => 'Listar Solicita&ccedil;&otilde;es', 'title' => 'Ir para Listar Solicita&ccedil;&otilde;es',
+                'url' => ['module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index'],
+                'grupo' => []
+                ];
+            return $arrMenuProponente;
+        }
+        public function usuario(){
+            $arrMenuProponente['usuario'] = [
+                'id' => 'usuario',
+                'label' => 'Usu&aacute;rio',
+                'title' => 'Ir para Usu&aacute;rio',
+                'menu' => [],
+                'grupo' => [],
+            ];
+            $arrMenuProponente['usuario']['menu'][] = [
+                'label' => 'Alterar Senha',
+                'title' => 'Ir para Alterar Senha',
+                'url' => ['module' => 'autenticacao', 'controller' => 'index', 'action' => 'alterarsenha'],
+                'grupo' => []
+            ];
+            $arrMenuProponente['usuario']['menu'][] = [
+                'label' => 'Alterar Dados',
+                'title' => 'Ir para Alterar Dados',
+                'url' => ['module' => 'autenticacao', 'controller' => 'index', 'action' => 'alterardados'],
+                'grupo' => []
+            ];
+            return $arrMenuProponente;
+        }
+//        public function assinatura(){
+//
+////            $arrMenu['assinatura'] = [
+////                'id' => 'assinatura',
+////                'label' => 'Assinatura',
+////                'title' => 'Ir para Assinatura',
+////                'menu' => [],
+//////    'grupo' => array(90,91,92,93,96,97,Autenticacao_Model_Grupos::COORDENADOR_ANALISE,104,110,114,115,Autenticacao_Model_Grupos::PRESIDENTE_CNIC,Autenticacao_Model_Grupos::COORDENADOR_CNIC,121,122,123,124,125,126,Autenticacao_Model_Grupos::COORDENADOR_ATENDIMENTO,Autenticacao_Model_Grupos::TECNICO_PORTARIA,131,132,135,138,139,148,151),
+////            ];
+////
+////            $arrMenu['assinatura']['menu'][] = [
+////                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'gerenciar-assinaturas'],
+////                'title' => 'Ir para Gerenciamento de assinaturas',
+////                'label' => 'Gerenciar Assinaturas'
+//////    'grupo' => array(114,130),
+////            ];
+//////            $arrMenu['assinatura']['menu'][] = [
+//////                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-assinaturas'],
+//////                'title' => 'Ir para Visualização de Assinaturas',
+//////                'label' => 'Visualizar Assinaturas'
+//////            ];
+////
+////            $arrMenu['assinatura']['menu'][] = [
+////                'grupo' => [
+////                    Autenticacao_Model_Grupos::PARECERISTA,
+////                    Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER,
+////                    Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO,
+////                    Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA,
+////                    Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO,
+////                    Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO,
+////                    Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO,
+////                    Autenticacao_Model_Grupos::SECRETARIO,
+////                ],
+////                'url' => ['module' => 'readequacao', 'controller' => 'readequacao-assinatura', 'action' => 'gerenciar-assinaturas'],
+////                'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
+////                'label' => 'Gerenciar Assinaturas - Readequa&ccedil;&atilde;o'
+////            ];
+////
+////
+////            $arrMenu['assinatura']['menu'][] = [
+////                'grupo' => [
+////                    Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS,
+////                    Autenticacao_Model_Grupos::COORDENADOR_PRESTACAO_DE_CONTAS,
+////                    Autenticacao_Model_Grupos::COORDENADOR_GERAL_PRESTACAO_DE_CONTAS,
+////                ],
+////                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'gerenciar-assinaturas'] . "?idTipoDoAtoAdministrativo=" . \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_LAUDO_PRESTACAO_CONTAS,
+////                'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
+////                'label' => 'Gerenciar Assinaturas - Laudo Presta&ccedil;&atilde;o de Contas'
+////            ];
+////
+////            $arrMenu['assinatura']['menu'][] = [
+////                'grupo' => [97],
+////                'url' => ['module' => 'assinatura', 'controller' => 'ato-administrativo', 'action' => 'gerir-atos-administrativos'],
+////                'title' => 'Ir para Gerir Atos Administrativos',
+////                'label' => 'Gerir Atos Administrativos'
+////            ];
+////
+////            return $arrMenu;
+//        }
+
+
+
+
+
 
 
         public function getAction()
