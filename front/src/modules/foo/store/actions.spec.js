@@ -68,12 +68,12 @@ describe('Foo actions', () => {
             MockAPI.setResponse(null);
         });
 
-        // test('it is commit to criarRegistro', (done) => {
-        //     const registro = mockReponse;
-        //     actions.criarRegistro({ commit }, registro);
-        //     done();
-        //     expect(commit).toHaveBeenCalledWith('SET_REGISTRO_TABELA', registro);
-        // });
+        test('it is commit to criarRegistro', (done) => {
+            const registro = mockReponse;
+            actions.criarRegistro({ commit }, registro);
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_REGISTRO_TABELA', registro);
+        });
 
         test('it calls fooHelperAPI.criarRegistro', () => {
             jest.spyOn(fooHelperAPI, 'criarRegistro');
