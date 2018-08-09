@@ -34,7 +34,7 @@
 		:disabled="disabled"
 		:id-tipo-readequacao="idTipoReadequacao"
 		:componente-ds-solicitacao='componenteFormulario'
-		:objReadequacao="readequacao"
+		:objReadequacao="dadosReadequacao"
 		v-on:eventoAtualizarReadequacao="atualizarReadequacao"
 		v-on:eventoSalvarReadequacao="salvarReadequacao"
 		>
@@ -72,7 +72,7 @@
 		    :id-pronac="idPronac"
 		    :tipo-planilha="tipoPlanilha"
 		    :link="1"
-		    :id-readequacao="readequacao.idReadequacao"
+		    :id-readequacao="dadosReadequacao.idReadequacao"
 		    :componente-planilha="componentePlanilha"
 		    :perfil="perfil"
 		    :disabled="disabled"
@@ -121,7 +121,7 @@
 		:id-pronac="idPronac"
 		:tipo-planilha="tipoPlanilha"
 		:link="1"
-		:id-readequacao="readequacao.idReadequacao"
+		:id-readequacao="dadosReadequacao.idReadequacao"
 		:componente-planilha="componentePlanilha"
 		:perfil="perfil"
 		:disabled="disabled"
@@ -138,9 +138,10 @@
 	  <div class="card-content">
 	    <div class="row">
 	      <div class="right-align padding20 col s12">
-		<a
+		<button
 		  class="waves-light waves-effect btn red modal-trigger"
-		  href="#modalExcluir">Excluir</a>
+		  v-on:click="excluirReadequacao()"
+		  >Excluir</button>
 		<a
 		  class="waves-light waves-effect btn modal-trigger"
 		  href="#modalFinalizar"
@@ -198,6 +199,7 @@
 
 import { mapActions, mapGetters } from 'vuex';
 import { utils } from '@/mixins/utils';
+import lodash from 'lodash';
 import ReadequacaoSaldoAplicacaoSaldo from './components/ReadequacaoSaldoAplicacaoSaldo';
 import ReadequacaoSaldoAplicacaoResumo from './components/ReadequacaoSaldoAplicacaoResumo';
 import ReadequacaoFormulario from '../components/ReadequacaoFormulario';
@@ -236,7 +238,7 @@ export default {
 	    nomeProjeto: '',    
 	    idTipoReadequacao: 22,
 	    siEncaminhamento: 12,
-	    readequacao,
+/*	    readequacao,*/
 	    perfil: 1111,
 	    exibirBotaoIniciar: false,
 	    exibirPaineis: false,
@@ -260,8 +262,11 @@ export default {
 	    }
         }
 	
-	// TODO: alterar implementação para vuex
-	this.obterDadosReadequacao();
+	if (typeof this.dadosReadequacao.idReadequacao == 'undefined') {
+	    let idPronac = this.idPronac;
+	    let idTipoReadequacao = this.idTipoReadequacao;
+	    this.buscaReadequacao({idPronac, idTipoReadequacao});
+	}
 	
         $3(document).ajaxStart(function () {
 	    $3('#container-loading').fadeIn('slow');
@@ -273,6 +278,7 @@ export default {
     methods: {
         obterDadosReadequacao: function () {
 	    // TODO: alterar implementação para vuex
+	    /*
             let self = this;
 	    
             $3.ajax({
@@ -300,6 +306,7 @@ export default {
 		    }
 		}
             });
+	    */
         },
 	solicitarUsoSaldo: function() {
 	    let self = this;
@@ -311,7 +318,9 @@ export default {
 		    idPronac: self.idPronac
 		},
 	    }).done( function(response) {
-		self.readequacao = response.readequacao;
+		let idPronac = self.idPronac;
+		let idTipoReadequacao = self.idTipoReadequacao;
+		self.buscaReadequacao({idPronac, idTipoReadequacao});
 		self.exibirPaineis = true;
 		self.exibirBotaoIniciar = false;
 		self.verificarDisponivelParaEdicaoReadequacaoPlanilha();
@@ -320,7 +329,7 @@ export default {
 	    
 	},
 	salvarReadequacao: function(readequacao) {
-	    if (readequacao.dsSolicitacao == ''
+	    if (dadosReadequacao.dsSolicitacao == ''
 		|| readequacao.dsSolicitacao == undefined
 		|| readequacao.dsSolicitacao == 0
 	    ) {
@@ -335,7 +344,9 @@ export default {
 		
 		return;
 	    }
-	    
+
+	    console.log('TODO: commit readequacao');
+	    /*
 	    let self = this;
             $3.ajax({
                 type: "POST",
@@ -352,6 +363,7 @@ export default {
 		self.readequacaoAlterada = false;
                 self.mensagemSucesso(response.msg);
             });
+            */
 	},
 	atualizarReadequacao: function (readequacao) {
 	    this.readequacaoAlterada = true;
@@ -393,20 +405,18 @@ export default {
 		url: "/readequacao/saldo-aplicacao/excluir-readequacao",
 		data: {
 		    idPronac: self.idPronac,
-		    idReadequacao: self.readequacao.idReadequacao
+		    idReadequacao: self.dadosReadequacao.idReadequacao
 		}
 	    }).done(function (response) {
+		// TODO: alterar o store
 		self.restaurarFormulario();
                 self.mensagemSucesso(response.msg);
-		$3('.collapsible').collapsible('open', 0);
-		$3('.collapsible').collapsible('close', 0);
 		self.solicitacaoIniciada = false;
 		self.exibirBotaoIniciar = true;
 		self.exibirPaineis = false;
-		$3('#modalExcluir').modal('close');
+			
             }).fail(function (response) {
                 self.mensagemErro(response.responseJSON.msg)
-		$3('#modalExcluir').modal('close');
             });
 	},
 	finalizarReadequacao: function() {
@@ -455,18 +465,31 @@ export default {
 	},
 	...mapActions({
             buscaProjeto: 'projeto/buscaProjeto',
+	    buscaReadequacao: 'readequacao/buscaReadequacao',
         }),
     },
     watch: {
-	readequacao: function() {
-	    if ((this.readequacao.idReadequacao == null
-	       ||this.readequacao.idReadequacao == undefined)
-		&& (!this.solicitacaoIniciada)) {
-		this.exibirBotaoIniciar = true;
-	    }
+	$route(to, from) {
+            if (
+                typeof to.params.idPronac !== 'undefined' &&
+                    to.params.idPronac !== from.params.idPronac
+            ) {
 
-	    if (typeof this.readequacao.idReadequacao == 'string') {
+		let idPronac = to.params.idPronac;
+		let idTipoReadequacao = this.idTipoReadequacao;
+		this.buscaReadequacao({idPronac, idTipoReadequacao});
+                this.urlAjax = URL_MENU + to.params.idPronac;
+            }	    
+	},
+	dadosReadequacao: function() {
+	    if (typeof this.dadosReadequacao.dsSolicitacao != 'undefined') {
+		this.exibirBotaoIniciar = false;
+		$3('.collapsible').collapsible();
+		this.verificarDisponivelParaEdicaoReadequacaoPlanilha();
+		this.carregarValorEntrePlanilhas();
 		this.exibirPaineis = true;
+	    } else {
+		this.exibirBotaoIniciar = true;
 	    }
 	},
 	solicitacaoIniciada: function() {
@@ -479,6 +502,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
+	    dadosReadequacao: 'readequacao/readequacao',
         }),	
 	vlDiferencaEntrePlanilhas: function() {
 	    if (typeof this.valorEntrePlanilhas.vlDiferencaPlanilhas != 'undefined') {
@@ -489,7 +513,7 @@ export default {
 	    return (this.valorEntrePlanilhas.PlanilhaAtivaTotal - this.valorEntrePlanilhas.PlanilhaReadequadaTotal).toFixed(2);
 	},
 	valorSaldoAplicacao: function() {
-	    let valorSaldoAplicacao = parseFloat(this.readequacao.dsSolicitacao);
+	    let valorSaldoAplicacao = parseFloat(this.dadosReadequacao.dsSolicitacao);
 	    return valorSaldoAplicacao;
 	},
 	valorSaldoAplicacaoFormatado: function() {
@@ -553,11 +577,10 @@ export default {
 	    }
 	},
 	mostrarBotoes: function() {
-	    if (this.readequacao.idReadequacao
-	       && !this.disabled) {
-		return true;
-	    } else {
+	    if (typeof this.dadosReadequacao.idPronac == 'undefined') {
 		return false;
+	    } else {
+		return true;
 	    }
 	}
     }
