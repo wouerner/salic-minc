@@ -142,8 +142,6 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
         );
         $view->valoresProjeto = $objProjeto->obterValoresProjeto($this->idPronac);
 
-        $objProjeto = new \Projeto_Model_DbTable_Projetos();
-
         $objEnquadramento = new \Admissibilidade_Model_Enquadramento();
         $arrayPesquisa = array(
             'AnoProjeto' => $this->dadosProjeto['AnoProjeto'],
