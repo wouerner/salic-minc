@@ -58,8 +58,6 @@ describe('Foo actions', () => {
                 },
             };
 
-            commit = jest.fn();
-
             function FormDataMock() {
                 this.append = jest.fn();
             }
@@ -71,6 +69,8 @@ describe('Foo actions', () => {
 
             const resp = mockReponse;
             axios.post.mockResolvedValue(resp);
+
+            commit = jest.fn();
             actions.criarRegistro({ commit }, params);
         });
 

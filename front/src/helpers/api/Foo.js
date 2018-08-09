@@ -1,9 +1,5 @@
 import API from './base';
 
-const api = () => new API('/foo/foo-rest');
-
-export const obterDadosTabela = () => api().get();
-
 const buildData = (params) => {
     const bodyFormData = new FormData();
 
@@ -14,22 +10,12 @@ const buildData = (params) => {
     return bodyFormData;
 };
 
-export const criarRegistro = (params) => {
-    return api().post(buildData(params));
-};
+const api = () => new API('/foo/foo-rest');
 
-export const atualizarRegistro = (params) => {
-    const bodyFormData = new FormData();
-    const id = params.Codigo;
+export const obterDadosTabela = () => api().get();
 
-    Object.keys(params).forEach((key) => {
-        bodyFormData.append(key, params[key]);
-    });
+export const criarRegistro = params => api().post(buildData(params));
 
-    return api().put(bodyFormData, id);
-};
+export const atualizarRegistro = params => api().put(buildData(params), id);
 
-export const removerRegistro = (params) => {
-    const id = params.Codigo;
-    return api().delete(id);
-};
+export const removerRegistro = params => api().delete(params.Codigo);
