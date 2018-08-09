@@ -34,7 +34,9 @@ export const setRegistroAtivo = ({ commit }, registro) => {
 
 export const removerRegistro = ({ commit }, registro) => {
     fooHelperAPI.removerRegistro(registro)
-        .then(() => {
+        .then((response) => {
+            console.log('chega aqui');
+            console.log(response);
             commit(types.REMOVER_REGISTRO, registro);
         });
 };
