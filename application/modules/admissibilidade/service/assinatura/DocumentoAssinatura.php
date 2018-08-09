@@ -110,7 +110,11 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
     public function criarDocumento()
     {
         $view = new \Zend_View();
-        $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/enquadramento-documento-assinatura');
+        $view->setScriptPath(
+            __DIR__
+            . DIRECTORY_SEPARATOR
+            . 'template'
+        );
 
         $view->titulo = 'Parecer T&eacute;cnico de Aprova&ccedil;&atilde;o Preliminar';
 
