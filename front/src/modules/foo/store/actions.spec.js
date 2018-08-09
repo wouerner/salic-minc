@@ -1,6 +1,6 @@
-import * as actions from './actions';
-import * as MockAPI from '@/../test/unit/helpers/api.js';
+import * as MockAPI from '@/../test/unit/helpers/api';
 import * as fooHelperAPI from '@/helpers/api/Foo';
+import * as actions from './actions';
 
 describe('Foo actions', () => {
     let commit;
@@ -70,7 +70,7 @@ describe('Foo actions', () => {
 
         // test('it is commit to criarRegistro', (done) => {
         //     const registro = mockReponse;
-        //     actions.criar({ commit }, registro);
+        //     actions.criarRegistro({ commit }, registro);
         //     done();
         //     expect(commit).toHaveBeenCalledWith('SET_REGISTRO_TABELA', registro);
         // });
@@ -78,7 +78,7 @@ describe('Foo actions', () => {
         test('it calls fooHelperAPI.criarRegistro', () => {
             jest.spyOn(fooHelperAPI, 'criarRegistro');
             const registro = mockReponse.data;
-            actions.criar({ commit }, registro);
+            actions.criarRegistro({ commit }, registro);
             expect(fooHelperAPI.criarRegistro).toHaveBeenCalled();
         });
     });
