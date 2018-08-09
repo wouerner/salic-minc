@@ -4,7 +4,7 @@ const api = () => new API('/foo/foo-rest');
 
 export const obterDadosTabela = () => api().get();
 
-export const criar = (params) => {
+export const criarRegistro = (params) => {
     const bodyFormData = new FormData();
 
     Object.keys(params).forEach((key) => {
@@ -14,7 +14,7 @@ export const criar = (params) => {
     return api().post(bodyFormData);
 };
 
-export const updateRecord = (params) => {
+export const atualizarRegistro = (params) => {
     const bodyFormData = new FormData();
     const id = params.Codigo;
 
@@ -25,7 +25,7 @@ export const updateRecord = (params) => {
     return api().put(bodyFormData, id);
 };
 
-export const removeRecord = (params) => {
+export const removerRegistro = (params) => {
     const id = params.Codigo;
     return api().delete(id);
 };
