@@ -132,7 +132,6 @@ class Agente_AgentesController extends MinC_Controller_Action_Abstract
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::TECNICO_ADMISSIBILIDADE;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_ADMISSIBILIDADE;
         $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE;
-        $PermissoesGrupo[] = Autenticacao_Model_Grupos::COORDENADOR_ABMISSIBILIDADE;
 
         $params = $this->getRequest()->getParams();
         $params = array_change_key_case($params);
