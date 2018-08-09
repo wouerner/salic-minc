@@ -46,7 +46,7 @@ describe('Foo actions', () => {
     // });
 
     describe('criarRegistro', () => {
-        let params;
+        let registro;
 
         beforeEach(() => {
             mockReponse = {
@@ -58,20 +58,21 @@ describe('Foo actions', () => {
                 },
             };
 
+            axios.post.mockResolvedValue(mockReponse);
+
             function FormDataMock() {
                 this.append = jest.fn();
             }
 
             global.FormData = FormDataMock;
 
-            const data = mockReponse.data;
-            params = data.data;
-
-            const resp = mockReponse;
-            axios.post.mockResolvedValue(resp);
+            registro = {
+                Codigo: 1,
+                DadoNr: 'Random String 1',
+            };
 
             commit = jest.fn();
-            actions.criarRegistro({ commit }, params);
+            actions.criarRegistro({ commit }, registro);
         });
 
         afterEach(() => {
@@ -80,7 +81,7 @@ describe('Foo actions', () => {
 
         test('it is commit to criarRegistro', (done) => {
             done();
-            expect(commit).toHaveBeenCalledWith('SET_REGISTRO_TABELA', params);
+            expect(commit).toHaveBeenCalledWith('SET_REGISTRO_TABELA', registro);
         });
 
         test('it calls fooHelperAPI.criarRegistro', () => {
