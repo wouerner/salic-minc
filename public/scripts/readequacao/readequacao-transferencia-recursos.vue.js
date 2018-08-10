@@ -75,48 +75,57 @@ Vue.component('readequacao-transferencia-recursos', {
 						</tfoot>
 					</table>
 					<form class="row">
-		    <div class="col s6">
-					<div v-if="areasEspeciais()">
-						<label>Pronac recebedor</label>
-						<input type="text" 
-									 ref="pronacProjetoRecebedor"
-									 v-model="projetoRecebedor.pronac" 
-									 @blur="verificarPronacDisponivelReceber"
-									 />
-						<span>{{ projetoRecebedor.nome }}</span>
-						<br/>
-						<span class="green-text"
-									v-show="projetoRecebedor.disponivel"
-									>dispon&iacute;vel
-							<i class="material-icons green-text">check</i>
-						</span>
-          </div>
-					<div v-else>
-						<label>Projeto recebedor</label>
-						<select class="browser-default"
-										v-model="projetoRecebedor.idPronac"
-										ref="projetoRecebedorIdPronac"
-                    @change="updateRecebedor"
-										:disabled="!disponivelAdicionarRecebedor()">
-							<option v-for="(projeto, index) in projetosDisponiveis" v-bind:value="projeto.idPronac" v-bind:data-nome="projeto.nome">{{ projeto.pronac }} - {{ projeto.nome}}</option>
-						</select>
-					</div>
-				</div>
- 				<div class="input-field col s3">
-			    <input-money
-						ref="projetoRecebedorValorRecebido"
-            v-on:ev="projetoRecebedor.vlRecebido = $event"
-            v-bind:value="projetoRecebedor.valorComprovar"
-						:disabled="!disponivelAdicionarRecebedor()">
-			    </input-money>
-			    <label for="valor_recebido">Valor recebido</label>
-				</div>		
-				<div class="center-align padding20 col s3">
-			    <a href="javascript:void(0)"
-			       v-on:click="incluirRecebedor"
-			       :disabled="!disponivelAdicionarRecebedor()"
-			       class="btn">Adicionar recebedor</a>
-				</div>
+						<div v-if="disponivelAdicionarRecebedor">
+							
+							<div v-if="areasEspeciais()" class="col s6">
+								<label>Pronac recebedor</label>
+								<input type="text" 
+											 ref="pronacProjetoRecebedor"
+											 v-model="projetoRecebedor.pronac" 
+											 @blur="verificarPronacDisponivelReceber"
+											 />
+								<span>{{ projetoRecebedor.nome }}</span>
+								<br/>
+								<span class="green-text"
+											v-show="projetoRecebedor.disponivel"
+											>dispon&iacute;vel
+									<i class="material-icons green-text">check</i>
+								</span>
+							</div>
+							
+							<div v-else class="col s6">
+								<label>Projeto recebedor</label>
+								<select class="browser-default"
+												v-model="projetoRecebedor.idPronac"
+												ref="projetoRecebedorIdPronac"
+												@change="updateRecebedor"
+												:disabled="!disponivelAdicionarRecebedor">
+									<option v-for="(projeto, index) in projetosDisponiveis" v-bind:value="projeto.idPronac" v-bind:data-nome="projeto.nome">{{ projeto.pronac }} - {{ projeto.nome}}</option>
+								</select>
+							</div>
+
+ 							<div class="input-field col s3">
+								<input-money
+									ref="projetoRecebedorValorRecebido"
+									v-on:ev="projetoRecebedor.vlRecebido = $event"
+									v-bind:value="projetoRecebedor.valorComprovar"
+									:disabled="!disponivelAdicionarRecebedor">
+								</input-money>
+								<label for="valor_recebido">Valor recebido</label>
+							</div>		
+							<div class="center-align padding20 col s3">
+								<a href="javascript:void(0)"
+									 v-on:click="incluirRecebedor"
+									 :disabled="!disponivelAdicionarRecebedor"
+									 class="btn">Adicionar recebedor</a>
+							</div>
+							
+						</div>
+						
+						<div v-else-if="!disponivelAdicionarRecebedor">
+							<label>Sem projetos recebedores dispon&iacute;veis!</label>
+						</div>
+				
 					</form>
 				</div>
 	    </div>
@@ -533,21 +542,6 @@ Vue.component('readequacao-transferencia-recursos', {
 		return;
 	    }
 	},
-	disponivelAdicionarRecebedores: function() {
-	    if (this.areasEspeciais()) {
-		return true;
-	    } else {
-		if ((this.readequacao.idReadequacao == null
-		  || this.readequacao.idReadequacao == 'undefined')
-		) {
-		    return false;
-		} else if (this.projetosRecebedores.length == 0) {
-		    return false;
-		} else {
-		    return true;
-		}
-	    }		
-	},
 	disponivelFinalizar: function() {
 	    if (this.projetosRecebedores.length > 0 &&
 		this.totalRecebido <= this.projetoTransferidor.saldoDisponivel
@@ -555,19 +549,6 @@ Vue.component('readequacao-transferencia-recursos', {
 		return true;
 	    } else {
 		return false;
-	    }
-	},
-	disponivelAdicionarRecebedor: function() {
-	    if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
-		return false;
-	    } else {
-		if (!this.areaMultiplosProjeto &&
-		    this.projetosRecebedores.length == 0) {
-		    return true;
-		} else if (this.areaMultiplosProjeto &&
-			   this.projetosRecebedores.length > 0) {
-		    return true;		   
-		}
 	    }
 	},
 	exibeProjetosRecebedores: function() {
@@ -604,6 +585,34 @@ Vue.component('readequacao-transferencia-recursos', {
 	saldoDisponivel: function() {
 	    var saldo = parseFloat(this.projetoTransferidor.valorComprovar) - parseFloat(this.totalRecebido);
 	    return this.converterParaMoedaPontuado(saldo);
-	}
+	},
+	disponivelAdicionarRecebedor: function() {
+	    if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
+		return false;
+	    } else {
+		if (!this.areaMultiplosProjeto &&
+		    this.projetosRecebedores.length == 0) {
+		    return false;
+		} else if (this.areaMultiplosProjeto &&
+			   this.projetosRecebedores.length > 0) {
+		    return true;		   
+		}
+	    }
+	},
+	disponivelAdicionarRecebedores: function() {
+	    if (this.areasEspeciais()) {
+		return true;
+	    } else {
+		if ((this.readequacao.idReadequacao == null
+		  || this.readequacao.idReadequacao == 'undefined')
+		) {
+		    return false;
+		} else if (this.projetosRecebedores.length == 0) {
+		    return false;
+		} else {
+		    return true;
+		}
+	    }		
+	}	
     }
 })
