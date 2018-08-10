@@ -6,6 +6,8 @@ export const obterDadosTabela = ({ commit }) => {
         .then((response) => {
             const data = response.data;
             const dadosTabela = data.data;
+            console.log('CAI AQUI');
+            console.log(dadosTabela);
             commit(types.SET_REGISTROS_TABELA, dadosTabela);
         });
 };
@@ -34,9 +36,7 @@ export const setRegistroAtivo = ({ commit }, registro) => {
 
 export const removerRegistro = ({ commit }, registro) => {
     fooHelperAPI.removerRegistro(registro)
-        .then((response) => {
-            console.log('chega aqui');
-            console.log(response);
+        .then(() => {
             commit(types.REMOVER_REGISTRO, registro);
         });
 };

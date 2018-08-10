@@ -1,4 +1,3 @@
-import * as MockAPI from '@/../test/unit/helpers/api';
 import * as fooHelperAPI from '@/helpers/api/Foo';
 import * as actions from './actions';
 import axios from 'axios';
@@ -9,41 +8,45 @@ describe('Foo actions', () => {
     let commit;
     let mockReponse;
 
-    // describe('obterDadosTabela', () => {
-    //     beforeEach(() => {
-    //         mockReponse = {
-    //             data: {
-    //                 dadosTabela: [
-    //                     {
-    //                         Codigo: 1,
-    //                         DadoNr: 'Random String 1',
-    //                     },
-    //                 ],
-    //             },
-    //         };
+    describe('obterDadosTabela', () => {
+        let registro;
 
-    //         commit = jest.fn();
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: [
+                        {
+                            Codigo: 1,
+                            DadoNr: 'Random String 1',
+                        },
+                    ],
+                },
+            };
 
-    //         MockAPI.setResponse(mockReponse);
-    //     });
+            axios.get.mockResolvedValue(mockReponse);
 
-    //     afterEach(() => {
-    //         MockAPI.setResponse(null);
-    //     });
+            commit = jest.fn();
 
-    //     test('it is commit to obterDadosTabela', (done) => {
-    //         const dadosTabela = mockReponse.data;
-    //         actions.obterDadosTabela({ commit });
-    //         done();
-    //         expect(commit).toHaveBeenCalledWith('SET_REGISTROS_TABELA', dadosTabela);
-    //     });
+            jest.spyOn(fooHelperAPI, 'obterDadosTabela');
+            actions.obterDadosTabela({ commit });
 
-    //     test('it calls fooHelperAPI.obterDadosTabela', () => {
-    //         jest.spyOn(fooHelperAPI, 'obterDadosTabela');
-    //         actions.obterDadosTabela({ commit });
-    //         expect(fooHelperAPI.obterDadosTabela).toHaveBeenCalled();
-    //     });
-    // });
+            registro = [
+                {
+                    Codigo: 1,
+                    DadoNr: 'Random String 1',
+                }
+            ];
+        });
+
+        test('it is commit to obterDadosTabela', (done) => {
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_REGISTROS_TABELA', registro);
+        });
+
+        test('it calls fooHelperAPI.obterDadosTabela', () => {
+            expect(fooHelperAPI.obterDadosTabela).toHaveBeenCalled();
+        });
+    });
 
     describe('criarRegistro', () => {
         let registro;
@@ -73,10 +76,6 @@ describe('Foo actions', () => {
 
             commit = jest.fn();
             actions.criarRegistro({ commit }, registro);
-        });
-
-        afterEach(() => {
-            MockAPI.setResponse(null);
         });
 
         test('it is commit to criarRegistro', (done) => {
