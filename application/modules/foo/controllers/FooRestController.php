@@ -17,19 +17,11 @@ class Foo_FooRestController extends Zend_Rest_Controller
 
     public function indexAction()
     {
-//        $fooModel = new Foo_Model_Foo();
-//        $this->view->foos = $fooModel->listar();
-//
-//        $tooModel = new Foo_Model_Too();
-//        $this->view->toos = $tooModel->listar();
-//        $dataAux = $_GET;
-        $this->view->assign('data', [
-            1,
-            10,
-            100,
-            1000,
-            10000
-        ]);
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->buscarTodos();
+
+        $this->view->assign('data', $resposta);
+
         $this->getResponse()->setHttpResponseCode(200);
     }
 
@@ -52,7 +44,7 @@ class Foo_FooRestController extends Zend_Rest_Controller
     public function postAction()
     {
         $barService = new BarService($this->getRequest(), $this->getResponse());
-        $resposta = $barService->salvarRegistro();
+        $resposta = $barService->salvar();
 
         $this->view->assign('data', $resposta);
         $this->getResponse()->setHttpResponseCode(201);
@@ -60,13 +52,18 @@ class Foo_FooRestController extends Zend_Rest_Controller
 
     public function putAction()
     {
-
-        $this->view->assign('data', 'asda');
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->atualizar();
+        
+        $this->view->assign('data', $resposta);
         $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function deleteAction()
     {
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->remover();
+
         $this->getResponse()->setHttpResponseCode(204);
     }
 }
