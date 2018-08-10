@@ -129,39 +129,7 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
 
         $PercentualCaptado = ($PercentualCaptado->dado) ? $PercentualCaptado->dado : 0;
         $Readequacao_Model_DbTable_TbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-        
-        if ($PercentualCaptado > 20) {
-            $fnVlAcomprovar = new Zend_Db_Expr("SELECT sac.dbo.fnVlAComprovarProjeto($idPronac) AS vlAComprovar");
-            $vlAComprovar = $db->fetchOne($fnVlAcomprovar);
-            
-            if ($vlAComprovar > 0) {
-                $existeReadequacaoEmAndamento = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmAndamento(
-                    $idPronac,
-                    Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS
-                );
                 
-                $existeReadequacaoEmEdicao = $Readequacao_Model_DbTable_TbReadequacao->existeReadequacaoEmEdicao(
-                    $idPronac,
-                    Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS
-                );
-                
-                if (!$existeReadequacaoEmAndamento
-                    || $existeReadequacaoEmEdicao
-                ) {
-                    $TbSolicitacaoTransferenciaRecursos = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
-                    $projetosRecebedores = $TbSolicitacaoTransferenciaRecursos->obterProjetosRecebedores(
-                        '',
-                        $idPronac
-                    );
-                    if (count($projetosRecebedores) > 0) {
-                        $ReadequacaoTransferenciaRecursos = 1;
-                    } 
-                }
-            }            
-        }
-        // Future Flag
-        $ReadequacaoTransferenciaRecursos = 0;
-        
         # Verificar se h� dilig�ncia para responder
         $vDiligencia = $db->select()
            ->from(
@@ -350,8 +318,11 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
             if ($existeReadequacaoEmAndamento) {
                 $readequacaoAndamento = $Readequacao_Model_DbTable_TbReadequacao->obterReadequacaoOrcamentariaEmAndamento($idPronac);
                 
-                if ($existeReadequacaoEmEdicao) {
+                if ($readequacaoAndamento && $existeReadequacaoEmEdicao) {
+                    
                     switch ($readequacaoAndamento['idTipoReadequacao']) {
+
+
                     case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL:
                         $Readequacao_50 = 1;
                         break;
@@ -361,16 +332,21 @@ class fnLiberarLinks extends MinC_Db_Table_Abstract
                     case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_SALDO_APLICACAO:
                         $ReadequacaoSaldoAplicacao = 1;
                         break;
+                    case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS:
+                        $ReadequacaoTransferenciaRecursos = 1;
+                        break;
                     }
                 } else {
                     $Readequacao_50 = 0;
                     $ReadequacaoPlanilha = 0;
                     $ReadequacaoSaldoAplicacao = 0;
+                    $ReadequacaoTransferenciaRecursos = 0;
                 }
                 
             } else {
                 $Readequacao_50 = 1;
                 $ReadequacaoPlanilha = 1;
+                $ReadequacaoTransferenciaRecursos = 1;
                 if ($PercentualCaptado >= 100) {
                     $ReadequacaoSaldoAplicacao = 1;
                 }
