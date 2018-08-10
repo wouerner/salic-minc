@@ -91,46 +91,47 @@ describe('Foo actions', () => {
         });
     });
 
-    // describe('atualizarRegistro', () => {
-    //     beforeEach(() => {
-    //         mockReponse = {
-    //             data: {
-    //                 data: {
-    //                     Codigo: 1,
-    //                     DadoNr: 'Random String 1',
-    //                 },
-    //             },
-    //         };
+    describe('atualizarRegistro', () => {
+        let registro;
 
-    //         commit = jest.fn();
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        Codigo: 1,
+                        DadoNr: 'Random String 1',
+                    },
+                },
+            };
 
-    //         MockAPI.setResponse(mockReponse);
+            axios.post.mockResolvedValue(mockReponse);
 
-    //         function FormDataMock() {
-    //             this.append = jest.fn();
-    //         }
+            function FormDataMock() {
+                this.append = jest.fn();
+            }
 
-    //         global.FormData = FormDataMock;
-    //     });
+            global.FormData = FormDataMock;
 
-    //     afterEach(() => {
-    //         MockAPI.setResponse(null);
-    //     });
+            registro = {
+                Codigo: 1,
+                DadoNr: 'Random String 1',
+            };
 
-    //     // test('it is commit to atualizarRegistro', (done) => {
-    //     //     const registro = mockReponse;
-    //     //     actions.atualizarRegistro({ commit }, registro);
-    //     //     done();
-    //     //     expect(commit).toHaveBeenCalledWith('ATUALIZAR_REGISTRO_TABELA', registro);
-    //     // });
+            commit = jest.fn();
+            jest.spyOn(fooHelperAPI, 'atualizarRegistro');
+            actions.atualizarRegistro({ commit }, registro);
+        });
 
-    //     test('it calls fooHelperAPI.atualizarRegistro', () => {
-    //         jest.spyOn(fooHelperAPI, 'atualizarRegistro');
-    //         const registro = mockReponse.data;
-    //         actions.atualizarRegistro({ commit }, registro);
-    //         expect(fooHelperAPI.atualizarRegistro).toHaveBeenCalled();
-    //     });
-    // });
+        test('it is commit to atualizarRegistro', (done) => {
+            done();
+            expect(commit).toHaveBeenCalledWith('ATUALIZAR_REGISTRO_TABELA', registro);
+        });
+
+        test('it calls fooHelperAPI.atualizarRegistro', () => {
+            actions.atualizarRegistro({ commit }, registro);
+            expect(fooHelperAPI.atualizarRegistro).toHaveBeenCalled();
+        });
+    });
 
     describe('removerRegistro', () => {
         let registro;
