@@ -155,7 +155,7 @@ Vue.component('agente-form', {
     data () {
        return {
            TipoPessoa: "0",
-           CpfCnpj: "",
+           CpfCnpj: '' ,
            cnpjcpfMask: '',
            Nome: "",
            Fornecedor: "248",
@@ -197,8 +197,17 @@ Vue.component('agente-form', {
            }
        }
     },
+    props:['cpfcnpj'],
     mounted: function () {
         this.carregarInfoFornecedores();
+        this.inputCNPJCPF(this.cpfcnpj); 
+
+        if (this.cpfcnpj.length == 11) {
+           this.TipoPessoa = "0";
+        } else if(this.cpfcnpj.length == 14) {
+           this.TipoPessoa = "1";
+        }
+
     },
     methods:
     {
@@ -259,7 +268,6 @@ Vue.component('agente-form', {
                 }
         },
         buscarcep(cep) {
-
             let self = this;
 
             $3.ajax({
@@ -337,9 +345,7 @@ Vue.component('agente-form', {
                    self.disabled.Bairro = false;
                    self.disabled.Logradouro = false;
                 }
-
             });
-
         },
         salvar: function(e) {
             let vue = this;
@@ -481,25 +487,21 @@ Vue.component('agente-form', {
                this.Erro.TipoEndereco = false;
            }
         },
-        cnpjcpfFormat () {
-            if (
-                parseInt(this.TipoPessoa) == 0
-                && this.CpfCnpj.length == 11
-            ) {
-                return this.CpfCnpj.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4");
-            } else if(
-                parseInt(this.TipoPessoa) == 1
-                && this.CpfCnpj.length == 14
-            ) {
-                return this.CpfCnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5");
+        cnpjcpfFormat (e) {
+            if (e.length == 11) {
+                return e.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4");
+            } else if(e.length == 14) {
+                return e.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,"$1.$2.$3/$4-$5");
             }
         },
         inputCNPJCPF(e) {
             let vue = this;
+            e = e.replace(/[.-]/g, '');
+
             if (e.length < 15) {
                 if (e.length == 11 || e.length == 14) {
                    this.CpfCnpj = e;
-                   this.cnpjcpfMask = this.cnpjcpfFormat();
+                   this.cnpjcpfMask = this.cnpjcpfFormat(e);
 
                     $3.ajax({
                         type: 'POST',
@@ -512,11 +514,17 @@ Vue.component('agente-form', {
                            vue.Nome = data[0]['Nome'];
                            vue.inputCEP(data[0]['Cep']);
                         }
+
+                        if(data[0]['msgCPF'] == 'invalido') {
+                            alert('CPF/CNPJ invalido');
+                        }
+
+                        if(data[0]['msgCPF'] == 'cadastrado') {
+                            alert('Esse CPF/CNPJ j\xE1 est\xE1 cadastrado.');
+                        }
                     });
 
-                } else {
-                   this.CpfCnpj = '';
-                }
+                } 
             }
         },
     }

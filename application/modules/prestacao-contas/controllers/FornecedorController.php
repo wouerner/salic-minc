@@ -26,7 +26,7 @@ class PrestacaoContas_FornecedorController extends MinC_Controller_Action_Abstra
 
     public function indexAction()
     {
-
+        $this->view->cpfcnpj = $this->_request->getParam("cpfcnpj");
     }
 
     private function retornaJson($dados) {

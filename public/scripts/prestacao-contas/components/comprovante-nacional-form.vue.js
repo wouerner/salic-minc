@@ -81,7 +81,7 @@ Vue.component('sl-comprovante-nacional-form',
                         <div class="col s12">
                             <a 
                                 target="blank" 
-                                href="/prestacao-contas/fornecedor/index" 
+                                :href="'/prestacao-contas/fornecedor/index/cpfcnpj/'+comprovante.fornecedor.CNPJCPF"
                                 class="btn red">
                                 Cadastrar Fornecedor
                             </a>
@@ -642,13 +642,12 @@ Vue.component('sl-comprovante-nacional-form',
            });
         },
         inputCNPJCPF: function(e) {
+            console.log(e);
             if (e.length < 15) {
                 if (e.length == 11 || e.length == 14) {
                    this.comprovante.fornecedor.CNPJCPF = e;
                    this.comprovante.fornecedor.cnpjcpfMask = this.cnpjcpfMask();
-                } else {
-                   this.comprovante.fornecedor.CNPJCPF = '';
-                }
+                } 
             }
         },
         cnpjcpfMask: function() {
