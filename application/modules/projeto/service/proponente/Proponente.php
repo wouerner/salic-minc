@@ -1,17 +1,39 @@
 <?php
 
-class Agente_ProponenteProjetoRestController extends MinC_Controller_Action_Abstract
+namespace Application\Modules\Projeto\Service\Proponente;
+
+class Proponente
 {
-    protected $idAgente = 0;
-    private $idPreProjeto = 0;
+    /**
+     * @var \Zend_Controller_Request_Abstract $request
+     */
+    private $request;
 
-    public function dadosProponenteAction()
+    /**
+     * @var \Zend_Controller_Response_Abstract $response
+     */
+    private $response;
+
+    function __construct($request, $response)
     {
-        xd('chega Aqui');
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
+        $this->request = $request;
+        $this->response = $response;
+    }
 
-        $params = $this->getRequest()->getParams();
+    public function buscar($idPronac)
+    {
+        $tabelaDbTabela = new \Foo_Model_DbTable_Tabela();
+        $where = [
+            'idPronac' => $idPronac
+        ];
 
+        return $tabelaDbTabela->findBy($where);
+    }
+    
+    public function teste()
+    {
+
+        $parametros = $this->request->getParams();
         if (isset($params['idPronac'])) {
 
             $idPronac = $params['idPronac'];
