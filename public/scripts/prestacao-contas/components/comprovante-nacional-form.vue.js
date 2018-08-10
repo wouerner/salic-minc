@@ -42,7 +42,7 @@ Vue.component('sl-comprovante-nacional-form',
                             />
                             <template v-if="comprovante.fornecedor.tipoPessoa == 1">
                                 <label for="CNPJCPF"
-                                    :class="['active', this.c.fornecedor.CNPJCPF.css]"
+                                    :class="[this.c.fornecedor.CNPJCPF.css]"
                                 >
                                     CPF *
                                 </label>
@@ -108,7 +108,7 @@ Vue.component('sl-comprovante-nacional-form',
                             <label
                                 for="dataEmissao"
                                 :class="c.dataEmissao.css"
-                            >Dt. de Emiss&atilde;o do comprovante</label>
+                            >Data de Emiss&atilde;o</label>
                         </div>
                         <div class="input-field col s1">
                             <i class="material-icons tooltipped" data-position="bottom" data-delay="50"
@@ -127,7 +127,7 @@ Vue.component('sl-comprovante-nacional-form',
                                v-on:input="inputNumeroDocumento($event.target.value)"
                            />
                            <label for="nrDocumentoDePagamento"
-                               :class="['active',c.numeroDocumento.css]"
+                               :class="[c.numeroDocumento.css]"
                            >N&ordm; Documento Pagamento*</label>
                         </div>
                         <div class="input-field col s2">
@@ -138,7 +138,7 @@ Vue.component('sl-comprovante-nacional-form',
                                 v-model="comprovante.serie"
                                 placeholder="00000000000"
                            />
-                            <label for="nrSerie" :class="active">S&eacute;rie</label>
+                            <label for="nrSerie">S&eacute;rie</label>
                         </div>
                     </div>
                     <div class="row">
@@ -159,56 +159,65 @@ Vue.component('sl-comprovante-nacional-form',
                 </fieldset>
                 <fieldset>
                     <legend>Dados do Comprovante Bancario</legend>
-                    <div class=" col s3">
-                        <label>Forma de Pagamento<span style='color:red'>*</span></label>
-                        <select class="browser-default" name="tpFormaDePagamento" id="tpFormaDePagamento"
-                                v-model="comprovante.forma"
-                                >
-                                <option value="1">Cheque</option>
-                                <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
-                                <option value="3">Saque/Dinheiro</option>
-                        </select>
-                    </div>
-                    <div class="input-field col s3">
-                        <input placeholder="DD/MM/AAAA" type="text"
-                            name="dtPagamento" id="dtPagamento"
-                            v-model="comprovante.dataPagamento"
-                            ref="dataPagamento"
-                            :class="c.dataPagamento.css"
-                            v-on:input="inputDataPagamento($event.target.value)"
-                        />
-                        <label
-                            :class="c.dataPagamento.css"
-                        >Data do pagamento *</label>
-                    </div>
-                    <div class="input-field col s2">
-                        <input
-                           type="text"
-                           name="nrComprovante"
-                           id="nrComprovante"
-                           maxlength="50"
-                           placeholder="00000000"
-                           value=""
-                           v-model="comprovante.numero"
-                           :class="c.numero.css"
-                           ref="numero"
-                           v-on:input="inputNumero($event.target.value)"
-                        />
-                        <label
-                            for="nrComprovante"
-                            :class="['active ', c.numero.css]"
-                        >N&uacute;mero * </label>
-                    </div>
-                    <div class="input-field col s2">
-                        <input type="text" name="vlComprovado" size="10" id="vlComprovado"
+                    <div class="row">
+                        <div class=" col s3 m3">
+                            <label>Forma de Pagamento<span style='color:red'>*</span></label>
+                            <select class="browser-default" name="tpFormaDePagamento" id="tpFormaDePagamento"
+                                    v-model="comprovante.forma"
+                                    >
+                                    <option value="1">Cheque</option>
+                                    <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
+                                    <option value="3">Saque/Dinheiro</option>
+                            </select>
+                        </div>
+                        <div class="input-field col s3">
+                            <input
+                                placeholder="DD/MM/AAAA"
+                                type="text"
+                                name="dtPagamento"
+                                id="dtPagamento"
+                                v-model="comprovante.dataPagamento"
+                                ref="dataPagamento"
+                                :class="c.dataPagamento.css"
+                                v-on:input="inputDataPagamento($event.target.value)"
+                            />
+                            <label
+                                :class="c.dataPagamento.css"
+                            >Data do pagamento *</label>
+                        </div>
+                        <div class="input-field col s2">
+                            <input
+                               type="text"
+                               name="nrComprovante"
+                               id="nrComprovante"
+                               maxlength="50"
+                               placeholder="00000000"
+                               value=""
+                               v-model="comprovante.numero"
+                               :class="c.numero.css"
+                               ref="numero"
+                               v-on:input="inputNumero($event.target.value)"
+                            />
+                            <label
+                                for="nrComprovante"
+                                :class="[c.numero.css]"
+                            >N&uacute;mero * </label>
+                        </div>
+                        <div class="input-field col s4">
+                            <input
+                               type="text"
+                               ref="valor"
+                               name="vlComprovado"
+                               size="10"
+                               id="vlComprovado"
                                v-model="comprovante.valor"
                                :class="c.valor.css"
-                               v-on:input="inputValor($event.target.value)"
-                               ref="valor"
-                       />
-                       <label :class="c.valor.css">
-                               Valor do Item (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
+                               v-money="money"
+                            />
+                            <label :class="c.valor.css">
+                               Valor (atual: {{valorantigo}})(max: {{(valorMaxItem)}})<span style='color:red'>*</span></label>
                         </div>
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>Justificativa</legend>
@@ -230,7 +239,6 @@ Vue.component('sl-comprovante-nacional-form',
         </form>
     `,
     mounted: function() {
-
         this.comprovante.item = this.item;
         // this.comprovante.idPlanilhaAprovacao = this.idPlanilhaAprovacao;
         if (this.dados) {
@@ -251,35 +259,35 @@ Vue.component('sl-comprovante-nacional-form',
             this.pesquisarFornecedor();
 
             this.inputCNPJCPF(this.dados.fornecedor.CNPJCPF);
-            this.comprovante.tipo = this.dados.tipo;
+            this.comprovante.tipo = parseInt(this.dados.tipo);
             this.comprovante.numero = this.dados.numero;
             this.comprovante.serie = this.dados.serie;
 
-            this.comprovante.dataEmissao = moment(this.dados.dtEmissao).format('DD/MM/YYYY');
-            this.comprovante.dataPagamento = moment(this.dados.dtPagamento).format('DD/MM/YYYY');
+            this.comprovante.dataEmissao = moment(this.dados.dataEmissao).format('DD/MM/YYYY');
+            this.comprovante.dataPagamento = moment(this.dados.dataPagamento).format('DD/MM/YYYY');
 
-            this.comprovante.valor = this.dados.valor;
+            this.comprovante.valor = numeral(parseFloat(this.dados.valor)).format('0,0.00');
 
             this.comprovante.numeroDocumento = this.dados.numeroDocumento;
-            this.comprovante.arquivo = { nome: this.dados.nmArquivo };
+            this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
             this.comprovante.justificativa = this.dados.justificativa;
         }
     },
-    props: [
-        'dados',
-        'url',
-        'messages',
-        'tipoform',
-        'item',
-        'idplanilhaaprovacao',
-        'index',
-        'datainicio',
-        'datafim',
-        'valoraprovado',
-        'valorcomprovado',
-        'valorantigo',
-        'status'
-    ],
+    props: {
+        dados: null,
+        url:null,
+        messages:null,
+        tipoform:null,
+        item:null,
+        idplanilhaaprovacao:null,
+        index:null,
+        datainicio:null,
+        datafim:null,
+        valoraprovado: Number,
+        valorcomprovado: Number,
+        valorantigo: Number,
+        status:null
+    },
     computed:{
         dataInicio() {
             return moment(this.datainicio).format('DD/MM/YYYY');
@@ -288,11 +296,24 @@ Vue.component('sl-comprovante-nacional-form',
             return moment(this.datafim).format('DD/MM/YYYY');
         },
         valorMaxItem: function() {
-            return parseFloat(this.valoraprovado) - (parseFloat(this.valorcomprovado) - (this.valorantigo ? this.valorantigo : 0 ));
+            let valorAprovado = numeral(parseFloat(this.valoraprovado)).value();
+            let valorComprovado = numeral(parseFloat(this.valorcomprovado)).value();
+            let valorAntigo = numeral(this.valorantigo ? parseFloat(this.valorantigo) : 0.0).value();
+            let value = numeral(valorAprovado - (valorComprovado - valorAntigo)).format('0,0.00');
+
+            return value;
+        },
+        valorAntigo() {
+            return numeral(parseFloat(this.valorantigo)).format('0,0.00');
         }
     },
-    data: function () {
+    data () {
         return {
+            money:{
+             decimal: ',',
+                thousands: '.',
+                precision: 2,
+            },
             comprovante: {
                 fornecedor: {
                     nacionalidade: 31,
@@ -366,7 +387,9 @@ Vue.component('sl-comprovante-nacional-form',
                     formData.append('arquivo', this.comprovante.arquivo.file);
                 }
 
-                formData.append('comprovante', JSON.stringify(this.comprovante));
+                let c = JSON.parse(JSON.stringify(this.comprovante))
+                c.valor = numeral(c.valor).value();
+                formData.append('comprovante', JSON.stringify(c));
 
                 $3.ajax({
                     url: url,
@@ -379,11 +402,12 @@ Vue.component('sl-comprovante-nacional-form',
                     Materialize.toast('Salvo com sucesso!', 4000, 'green');
                     $3('#modal1').modal('close');
 
+                       console.log(c);
                     if (vue.tipoform == 'cadastro') {
 
-                       vue.comprovante._index = data.idComprovantePagamento;
-                       vue.comprovante.idComprovantePagamento = data.idComprovantePagamento;
-                       vue.$root.$emit('novo-comprovante-nacional', vue.comprovante);
+                       c._index = data.idComprovantePagamento;
+                       c.idComprovantePagamento = data.idComprovantePagamento;
+                       vue.$root.$emit('novo-comprovante-nacional', c);
 
                        vue.c = {
                            fornecedor: {
@@ -442,8 +466,7 @@ Vue.component('sl-comprovante-nacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
-                        // vue.$root.$emit('comprovante-atualizado', vue.comprovante);
-                        vue.$root.$emit('atualizado-comprovante-nacional', vue.comprovante);
+                        vue.$root.$emit('atualizado-comprovante-nacional', c);
                     }
                 });
             }
@@ -524,6 +547,13 @@ Vue.component('sl-comprovante-nacional-form',
             let valorPermitido = parseFloat(this.valoraprovado) - parseFloat(this.valorcomprovado);
 
             if(this.comprovante.valor == '') {
+                this.$refs.valor.focus();
+                this.c.valor.css = 'active invalid red-text';
+
+                return false;
+            }
+
+            if(numeral(this.comprovante.valor).value() == 0 ) {
                 this.$refs.valor.focus();
                 this.c.valor.css = 'active invalid red-text';
 
@@ -623,14 +653,23 @@ Vue.component('sl-comprovante-nacional-form',
                this.c.numero.css = {};
             }
         },
-        inputDataEmissao: function(e) {
+        inputDataEmissao: function (e) {
+            console.log(e.length);
             if (e.length > 0) {
                this.c.dataEmissao.css = {};
+            }
+
+            if ( e.length == 8 ) {
+               this.comprovante.dataEmissao = this.comprovante.dataEmissao.replace(/(\d{2})(\d{2})(\d{4})/,"$1/$2/$3")
             }
         },
         inputDataPagamento: function(e) {
             if (e.length > 0) {
                this.c.dataPagamento.css = {};
+            }
+
+            if ( e.length == 8 ) {
+               this.comprovante.dataPagamento = this.comprovante.dataPagamento.replace(/(\d{2})(\d{2})(\d{4})/,"$1/$2/$3")
             }
         },
         inputNumeroDocumento(e) {

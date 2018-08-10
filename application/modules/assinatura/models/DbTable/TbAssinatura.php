@@ -254,6 +254,11 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                                        where idPronac = Projetos.IdPRONAC
                                          and idDocumentoAssinatura = tbDocumentoAssinatura.idDocumentoAssinatura)";
 
+        $sqlTotalQuantidadeAssinaturas = "(SELECT count(1) 
+                                             FROM TbAtoAdministrativo TbAtoAdministrativoInterno 
+                                            WHERE TbAtoAdministrativoInterno.idOrgaoSuperiorDoAssinante = {$this->modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()}
+                                              AND TbAtoAdministrativoInterno.idTipoDoAto = {$this->_schema}.tbDocumentoAssinatura.idTipoDoAtoAdministrativo)";
+
         $query->from(
             array("Projetos" => "Projetos"),
             array(
@@ -287,7 +292,8 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
                       order by idOrdemDaAssinatura asc
                     )
                 "),
-                'quantidadeAssinaturas' => new Zend_Db_Expr($sqlQuantidadeAssinaturas)
+                'quantidadeAssinaturas' => new Zend_Db_Expr($sqlQuantidadeAssinaturas),
+                'quantidadeTotalAssinaturas' => new Zend_Db_Expr($sqlTotalQuantidadeAssinaturas),
             ),
             $this->_schema
         );
