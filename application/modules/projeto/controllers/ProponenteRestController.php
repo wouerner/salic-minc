@@ -1,4 +1,5 @@
 <?php
+use Application\Modules\Projeto\Service\Proponente\Proponente as ProponenteService;
 
 class Projeto_ProponenteRestController extends Zend_Rest_Controller
 {
@@ -18,8 +19,39 @@ class Projeto_ProponenteRestController extends Zend_Rest_Controller
 
     public function getAction()
     {
-        xd('chega Aqui');
+        // xd('Agora foi aqui');
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
-        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $ProponenteService = new ProponenteService($this->getRequest(), $this->getResponse());
+        $resposta = $ProponenteService->buscarDadosAgenteProponente();
+        $this->view->assign('data', $resposta);
+    }
+    
+    public function indexAction()
+    {
+        $this->getResponse()
+             ->setHttpResponseCode(200);
+    }
+
+    public function postAction()
+    {
+        $this->getResponse()
+             ->setHttpResponseCode(201);
+    }
+
+    public function putAction()
+    {
+        $this->getResponse()
+             ->setHttpResponseCode(200);
+    }
+
+    public function deleteAction()
+    {
+        $this->getResponse()
+             ->setHttpResponseCode(204);
+    }
+
+    public function headAction()
+    {
+        $this->getResponse()->setHttpResponseCode(200);
     }
 }

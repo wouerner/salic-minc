@@ -7,8 +7,8 @@
                 <td align="center"><b>Nome do Projeto</b></td>
             </tr>
             <tr>
-                <td align="center">{{codPronac}}</td>
-                <td align="center">{{nmeProjeto}}</td>
+                <td align="center">{{dadosProjeto.Pronac}}</td>
+                <td align="center">{{dadosProjeto.NomeProjeto}}</td>
             </tr>
         </table>
         <br clear="all">
@@ -41,12 +41,14 @@
 </template>
 
 <script type="text/javascript">
+
+    import { mapGetters } from 'vuex';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
 
     export default{
         data() {
             return{
-                codPronac: '510115', nmeProjeto: 'NINE', ProponenteInabilitado: false,
+                codPronac: '510115', nmeProjeto: '', ProponenteInabilitado: false,
                 proponentes:[
                     {CNPJCPF:'12378965215', nmeProponente:'Teste Teste'},
                 ],
@@ -70,7 +72,10 @@
                         return 'Dado não informado!'
                     }
                 }
-            }
+            },
+            ...mapGetters({
+                dadosProjeto: 'projeto/projeto',
+            }),
         }
     };
 </script>
