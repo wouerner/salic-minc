@@ -23,7 +23,10 @@
             $menu += $this->projeto();
             $menu += $this->solicitacoes();
             $menu += $this->usuario();
-            //$menu += $this->assinatura();
+            $menu += $this->assinatura();
+            $menu += $this->atendimento();
+            $menu += $this->acompanhamento();
+//            $menu += $this->assinatura();
             $this->view->assign('data', $menu );
     //        $this->view->assign('data',  $this->analise() );
             $this->getResponse()->setHttpResponseCode(200);
@@ -441,72 +444,231 @@
             ];
             return $arrMenuProponente;
         }
-//        public function assinatura(){
+
+        public function assinatura(){
+            $arrMenu['assinatura'] = [
+                'id' => 'assinatura',
+                'label' => 'Assinatura',
+                'title' => 'Ir para Assinatura',
+                'menu' => [],
+//    'grupo' => array(90,91,92,93,96,97,Autenticacao_Model_Grupos::COORDENADOR_ANALISE,104,110,114,115,Autenticacao_Model_Grupos::PRESIDENTE_CNIC,Autenticacao_Model_Grupos::COORDENADOR_CNIC,121,122,123,124,125,126,Autenticacao_Model_Grupos::COORDENADOR_ATENDIMENTO,Autenticacao_Model_Grupos::TECNICO_PORTARIA,131,132,135,138,139,148,151),
+            ];
+            $arrMenu['assinatura']['menu'][] = [
+//    'grupo' => array(114,130),
+                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'gerenciar-assinaturas'],
+                'title' => 'Ir para Gerenciamento de assinaturas',
+                'label' => 'Gerenciar Assinaturas'
+            ];
 //
-////            $arrMenu['assinatura'] = [
-////                'id' => 'assinatura',
-////                'label' => 'Assinatura',
-////                'title' => 'Ir para Assinatura',
-////                'menu' => [],
-//////    'grupo' => array(90,91,92,93,96,97,Autenticacao_Model_Grupos::COORDENADOR_ANALISE,104,110,114,115,Autenticacao_Model_Grupos::PRESIDENTE_CNIC,Autenticacao_Model_Grupos::COORDENADOR_CNIC,121,122,123,124,125,126,Autenticacao_Model_Grupos::COORDENADOR_ATENDIMENTO,Autenticacao_Model_Grupos::TECNICO_PORTARIA,131,132,135,138,139,148,151),
-////            ];
-////
-////            $arrMenu['assinatura']['menu'][] = [
-////                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'gerenciar-assinaturas'],
-////                'title' => 'Ir para Gerenciamento de assinaturas',
-////                'label' => 'Gerenciar Assinaturas'
-//////    'grupo' => array(114,130),
-////            ];
-//////            $arrMenu['assinatura']['menu'][] = [
-//////                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-assinaturas'],
-//////                'title' => 'Ir para Visualização de Assinaturas',
-//////                'label' => 'Visualizar Assinaturas'
-//////            ];
-////
-////            $arrMenu['assinatura']['menu'][] = [
-////                'grupo' => [
-////                    Autenticacao_Model_Grupos::PARECERISTA,
-////                    Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER,
-////                    Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO,
-////                    Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA,
-////                    Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO,
-////                    Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO,
-////                    Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO,
-////                    Autenticacao_Model_Grupos::SECRETARIO,
-////                ],
-////                'url' => ['module' => 'readequacao', 'controller' => 'readequacao-assinatura', 'action' => 'gerenciar-assinaturas'],
-////                'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
-////                'label' => 'Gerenciar Assinaturas - Readequa&ccedil;&atilde;o'
-////            ];
-////
-////
-////            $arrMenu['assinatura']['menu'][] = [
-////                'grupo' => [
-////                    Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS,
-////                    Autenticacao_Model_Grupos::COORDENADOR_PRESTACAO_DE_CONTAS,
-////                    Autenticacao_Model_Grupos::COORDENADOR_GERAL_PRESTACAO_DE_CONTAS,
-////                ],
-////                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'gerenciar-assinaturas'] . "?idTipoDoAtoAdministrativo=" . \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_LAUDO_PRESTACAO_CONTAS,
-////                'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
-////                'label' => 'Gerenciar Assinaturas - Laudo Presta&ccedil;&atilde;o de Contas'
-////            ];
-////
-////            $arrMenu['assinatura']['menu'][] = [
-////                'grupo' => [97],
-////                'url' => ['module' => 'assinatura', 'controller' => 'ato-administrativo', 'action' => 'gerir-atos-administrativos'],
-////                'title' => 'Ir para Gerir Atos Administrativos',
-////                'label' => 'Gerir Atos Administrativos'
-////            ];
-////
-////            return $arrMenu;
-//        }
+//            $arrMenu['assinatura']['menu'][] = [
+//                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-assinaturas'],
+//                'title' => 'Ir para Visualização de Assinaturas',
+//                'label' => 'Visualizar Assinaturas'
+//            ];
+
+            $arrMenu['assinatura']['menu'][] = [
+                'grupo' => [
+                    Autenticacao_Model_Grupos::PARECERISTA,
+                    Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER,
+                    Autenticacao_Model_Grupos::DIRETOR_DEPARTAMENTO,
+                    Autenticacao_Model_Grupos::PRESIDENTE_DE_VINCULADA,
+                    Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO,
+                    Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO,
+                    Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO,
+                    Autenticacao_Model_Grupos::SECRETARIO,
+                ],
+                'url' => ['module' => 'readequacao', 'controller' => 'readequacao-assinatura', 'action' => 'gerenciar-assinaturas'],
+                'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
+                'label' => 'Gerenciar Assinaturas - Readequa&ccedil;&atilde;o'
+            ];
+
+
+            $arrMenu['assinatura']['menu'][] = [
+                'grupo' => [
+                    Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS,
+                    Autenticacao_Model_Grupos::COORDENADOR_PRESTACAO_DE_CONTAS,
+                    Autenticacao_Model_Grupos::COORDENADOR_GERAL_PRESTACAO_DE_CONTAS,
+                ],
+                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'gerenciar-assinaturas'] . "?idTipoDoAtoAdministrativo=" . \Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_LAUDO_PRESTACAO_CONTAS,
+                'title' => 'Ir para Readequa&ccedil;&atilde;o - Gerenciar Assinaturas',
+                'label' => 'Gerenciar Assinaturas - Laudo Presta&ccedil;&atilde;o de Contas'
+            ];
+
+            $arrMenu['assinatura']['menu'][] = [
+                'grupo' => [97],
+                'url' => ['module' => 'assinatura', 'controller' => 'ato-administrativo', 'action' => 'gerir-atos-administrativos'],
+                'title' => 'Ir para Gerir Atos Administrativos',
+                'label' => 'Gerir Atos Administrativos'
+            ];
+            return $arrMenu;
+
+        }
+        public function atendimento(){
+            $arrMenu['atendimento'] = [
+                'id' => 'atendimento',
+                'title' => 'Ir para Assinatura',
+                'label' => 'Atendimento',
+                'menu' => [],
+                'grupo' => [Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO]
+            ];
+
+            $arrMenu['atendimento']['menu'][] = [
+                'title' => 'Ir para Solicita&ccedil;&otilde;es',
+                'label' => 'Solicita&ccedil;&otilde;es Proponente',
+                'url' => ['module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'index'],
+                'grupo' => [Autenticacao_Model_Grupos::TECNICO_DE_ATENDIMENTO]
+            ];
+            return $arrMenu;
+        }
+        public function acompanhamento(){
+            $arrMenu['acompanhamento'] = [
+                'title' => 'Ir para Acompanhamento',
+                'label' => 'Acompanhamento',
+                'id' => 'acompanhamento',
+                'menu' => [],
+                'grupo' => [94, 121, 122, 123, 124, 125, 126, 129, 134, 135, 137, 138, 139, 148, 151],
+            ];
+
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Ir para CheckList de Publica&ccedil;&atilde;o',
+                'label' => 'CheckList para Publica&ccedil;&atilde;o',
+                'url' => ['module'=> 'default','controller' => 'checklistpublicacao', 'action' => 'listas'],
+                'grupo' => [Autenticacao_Model_Grupos::COORDENADOR_ANALISE, 110, 121, 122, 123, Autenticacao_Model_Grupos::COORDENADOR_ATENDIMENTO]
+            ];
+
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Ir para Movimenta&ccedil;&atilde;o Banc&aacute;ria',
+                'label' => 'Movimenta&ccedil;&atilde;o Banc&aacute;ria',
+                'grupo' => [272, 166, 121, 122, 123, 129, 148, 151], // restringe ao órgao SACAV && CAP
+                'url' => ['module'=> 'default','controller' => 'movimentacaodeconta', 'action' => 'resultado-extrato-de-conta-captacao'],
+            ];
+
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Ir para Certid&otilde;es Negativas',
+                'label' => 'Certid&otilde;es Negativas',
+                'url' => ['module' => 'default', 'controller' => 'manterregularidadeproponente', 'action' => 'index'],
+                'grupo' => [108, 121, 122, 123, 124, 125, 134, 135, 138, 139]
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Analisar Relat&oacute;rios Trimestrais',
+                'label' => 'Analisar Relat&oacute;rios Trimestrais',
+                'url' => ['module'=> 'default','controller' => 'analisarexecucaofisica', 'action' => 'projetos'],
+                'grupo' => [122, 123]
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Verificar Readequa&ccedil;&atilde;o de Projetos',
+                'label' => 'Verificar Readequa&ccedil;&atilde;o de Projeto',
+                'url' => ['module'=> 'default','controller' => 'verificarreadequacaodeprojeto', 'action' => 'verificarreadequacaodeprojetocoordparecerista'],
+                'grupo' => [93]
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Enviar Pareceres para Pagamento',
+                'label' => 'Enviar Pareceres para Pagamento',
+                'url' => ['module'=> 'default','controller' => 'gerenciarparecer', 'action' => 'enviarpagamento'],
+                'grupo' => [93]
+            ];
+            /*if ($this->grupoAtivo == 94) : ?>
+            <li><a href="<?php echo $this->url(array('controller' => 'parecerista', 'action' => 'confirmacao-pagamento-parecerista'), '', true); ?>" title="Meus pagamentos">Meus Pagamentos</a></li>
+            <li><a href="<?php echo $this->url(array('controller' => 'verificarreadequacaodeprojeto', 'action' => 'verificarreadequacaodeprojetoparecerista'), '', true); ?>" title="Verificar Readequacao de Projetos">Verificar Readequacao de Projeto</a></li>
+            <?php endif;*/
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Meus pagamentos',
+                'label' => 'Meus Pagamentos',
+                'url' => ['module'=> 'default','controller' => 'parecerista', 'action' => 'confirmacao-pagamento-parecerista'],
+                'grupo' => [94],
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Analisar Relat&oacute;rios Trimestrais',
+                'label' => 'Analisar Relat&oacute;rios Trimestrais',
+                'grupo' => [121, 129],
+                'url' => ['module'=> 'default','controller' => 'analisarexecucaofisicatecnico', 'action' => 'index'],
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Ir para Fiscalizar Projeto',
+                'label' => 'Fiscalizar Projeto',
+                'grupo' => [134, 135],
+                'url' => ['module'=> 'default','controller' => 'pesquisarprojetofiscalizacao', 'action' => 'grid'],
+            ];
+
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Ir para Analisar Projeto Parecer',
+                'label' => 'Analisar Comprova&ccedil;&atilde;o do Objeto',
+                'grupo' => [138],
+                'url' => ['module'=> 'default','controller' => 'avaliaracompanhamentoprojeto', 'action' => 'index'],
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Ir para Analisar Projeto Parecer',
+                'label' => 'Analisar Comprova&ccedil;&atilde;o do Objeto',
+                'grupo' => [139, 148, 151],
+                'url' => ['module'=> 'default','controller' => 'avaliaracompanhamentoprojeto', 'action' => 'index-tecnico'],
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'title' => 'Ir para Pagamento de parecerista',
+                'label' => 'Pagamento de Pareceristas',
+                'grupo' => [137],
+                'url' => ['module'=> 'default','controller' => 'parecerista', 'action' => 'configurar-pagamento-parecerista'],
+            ];
+            $arrMenu['acompanhamento']['menu'][] =[
+                'grupo' => [137],
+                'url' => ['module'=> 'default','controller' => 'gerenciarparecer', 'action' => 'enviarpagamento'],
+                'title' => 'Ir para Gerar Memorando',
+                'label' => 'Gerar memorando de pagamento'
+            ];
+
+            $arrMenu['acompanhamento']['menu'][] = [
+                'grupo' => [121, 122, 123],
+                'url' => ['module'=> 'default','controller' => 'gerartermodeaprovacao', 'action' => 'index'],
+                'title' => 'Ir para Gerenciar Termo de Decis&atilde;o',
+                'label' => 'Gerar Termo de Decis&atilde;o'
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'grupo' => [121],
+                'url' => ['module'=> 'default','controller' => 'marcas', 'action' => 'index'],
+                'title' => 'Processar Marcas',
+                'label' => 'Processar Marcas'
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'grupo' => [121, 122],
+                'url' => ['module'=> 'default','controller' => 'avaliarpedidoprorrogacao', 'action' => 'index'],
+                'title' => 'Avaliar Pedido de Prorroga&ccedil;&atilde;o',
+                'label' => 'Avaliar Pedido de Prorroga&ccedil;&atilde;o'
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'grupo' => [122, 123, 148, 151],
+                'url' => ['module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel'],
+                'title' => 'Readequa&ccedil;&otilde;es',
+                'label' => 'Readequa&ccedil;&otilde;es'
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'grupo' => [93, 121],
+                'url' => ['module' => 'readequacao', 'controller' => 'readequacoes', 'action' => 'painel-readequacoes'],
+                'title' => 'Avaliar Readequa&ccedil;&otilde;es',
+                'label' => 'Avaliar Readequa&ccedil;&otilde;es'
+            ];
+            $arrMenu['acompanhamento']['menu'][] = [
+                'grupo' => [
+                    147
+                , 148
+                , 149
+                , 150
+                , 151
+                , 152
+                ],
+                'url' => ['module' => 'admissibilidade', 'controller' => 'enquadramento-assinatura', 'action' => 'gerenciar-assinaturas'],
+                'title' => 'Assinatura',
+                'label' => 'Assinatura'
+                ];
+            return $arrMenu;
+        }
 
 
 
 
 
 
- 
+
+
+
         public function getAction()
         {
             $parametros = $this->getRequest()->getParams();
