@@ -24,7 +24,7 @@ class Inabilitado extends MinC_Db_Table_Abstract
         return $insert;
     }
 
-    public function BuscarInabilitado($CgcCpf = null, $AnoProjeto = null, $Sequencial = null)
+    public function BuscarInabilitado($CgcCpf = null, $AnoProjeto = null, $Sequencial = null, $inabilitado = false)
     {
         $slct = $this->select();
         $slct->setIntegrityCheck(false);
@@ -42,6 +42,10 @@ class Inabilitado extends MinC_Db_Table_Abstract
 
         if ($Sequencial) {
             $slct->where('Sequencial = ?', $Sequencial);
+        }
+
+        if($inabilitado) {
+            $slct->where('Habilitado = ?', 'N');
         }
 
         return $this->fetchRow($slct);
