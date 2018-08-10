@@ -72,6 +72,7 @@ describe('Foo actions', () => {
             };
 
             commit = jest.fn();
+            jest.spyOn(fooHelperAPI, 'criarRegistro');
             actions.criarRegistro({ commit }, registro);
         });
 
@@ -81,9 +82,6 @@ describe('Foo actions', () => {
         });
 
         test('it calls fooHelperAPI.criarRegistro', () => {
-            jest.spyOn(fooHelperAPI, 'criarRegistro');
-            const registro = mockReponse.data;
-            actions.criarRegistro({ commit }, registro);
             expect(fooHelperAPI.criarRegistro).toHaveBeenCalled();
         });
     });
@@ -123,7 +121,6 @@ describe('Foo actions', () => {
         });
 
         test('it calls fooHelperAPI.atualizarRegistro', () => {
-            actions.atualizarRegistro({ commit }, registro);
             expect(fooHelperAPI.atualizarRegistro).toHaveBeenCalled();
         });
     });
@@ -144,6 +141,7 @@ describe('Foo actions', () => {
                 DadoNr: 'Random String 1',
             };
 
+            jest.spyOn(fooHelperAPI, 'removerRegistro');
             actions.removerRegistro({ commit }, registro);
         });
 
@@ -153,8 +151,6 @@ describe('Foo actions', () => {
         });
 
         test('it calls fooHelperAPI.removerRegistro', () => {
-            jest.spyOn(fooHelperAPI, 'removerRegistro');
-            actions.removerRegistro({ commit }, registro);
             expect(fooHelperAPI.removerRegistro).toHaveBeenCalled();
         });
     });
@@ -162,11 +158,11 @@ describe('Foo actions', () => {
     describe('setRegistroAtivo', () => {
         beforeEach(() => {
             commit = jest.fn();
+            registro = { Codigo: 1, DadoNr: 'Random String 1' };
+            actions.setRegistroAtivo({ commit }, registro);
         });
 
         test('it is commit to setRegistroAtivo', (done) => {
-            const registro = { Codigo: 1, DadoNr: 'Random String 1' };
-            actions.setRegistroAtivo({ commit }, registro);
             done();
             expect(commit).toHaveBeenCalledWith('SET_REGISTRO_ATIVO', registro);
         });
