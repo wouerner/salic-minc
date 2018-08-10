@@ -26,9 +26,7 @@
             $menu += $this->assinatura();
             $menu += $this->atendimento();
             $menu += $this->acompanhamento();
-//            $menu += $this->assinatura();
             $this->view->assign('data', $menu );
-    //        $this->view->assign('data',  $this->analise() );
             $this->getResponse()->setHttpResponseCode(200);
         }
 
@@ -459,12 +457,12 @@
                 'title' => 'Ir para Gerenciamento de assinaturas',
                 'label' => 'Gerenciar Assinaturas'
             ];
-//
-//            $arrMenu['assinatura']['menu'][] = [
-//                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-assinaturas'],
-//                'title' => 'Ir para Visualização de Assinaturas',
-//                'label' => 'Visualizar Assinaturas'
-//            ];
+
+            $arrMenu['assinatura']['menu'][] = [
+                'url' => ['module' => 'assinatura', 'controller' => 'index', 'action' => 'visualizar-assinaturas'],
+                'title' => 'Ir para VisualizaÃ§Ã£o de Assinaturas',
+                'label' => 'Visualizar Assinaturas'
+            ];
 
             $arrMenu['assinatura']['menu'][] = [
                 'grupo' => [
@@ -539,7 +537,7 @@
             $arrMenu['acompanhamento']['menu'][] = [
                 'title' => 'Ir para Movimenta&ccedil;&atilde;o Banc&aacute;ria',
                 'label' => 'Movimenta&ccedil;&atilde;o Banc&aacute;ria',
-                'grupo' => [272, 166, 121, 122, 123, 129, 148, 151], // restringe ao órgao SACAV && CAP
+                'grupo' => [272, 166, 121, 122, 123, 129, 148, 151], // restringe ao ï¿½rgao SACAV && CAP
                 'url' => ['module'=> 'default','controller' => 'movimentacaodeconta', 'action' => 'resultado-extrato-de-conta-captacao'],
             ];
 
