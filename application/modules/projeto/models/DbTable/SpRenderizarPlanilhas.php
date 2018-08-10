@@ -29,7 +29,7 @@ class Projeto_Model_DbTable_SpRenderizarPlanilhas extends MinC_Db_Table_Abstract
         }
 
         $planilha = $this->montarPlanilha($planilha, $tipoPlanilha);
-        $planilha = TratarArray::utf8EncodeArray($planilha);
+//        $planilha = TratarArray::utf8EncodeArray($planilha);
 
         return $planilha;
     }
@@ -38,7 +38,7 @@ class Projeto_Model_DbTable_SpRenderizarPlanilhas extends MinC_Db_Table_Abstract
     /**
      * @todo padronizar o nome da coluna VlComprovado
      */
-    public function montarPlanilha($planilhaOrcamentaria, $tipo)
+    public function montarPlanilha($planilhaOrcamentaria, $tipo = null)
     {
         if (!is_array($planilhaOrcamentaria)) {
             return [];
@@ -50,6 +50,9 @@ class Projeto_Model_DbTable_SpRenderizarPlanilhas extends MinC_Db_Table_Abstract
         $planilha = [];
 
         foreach ($planilhaOrcamentaria as $item) {
+
+            $item = array_map('TratarString::converterParaUTF8', $item);
+
             $item["Seq"] = $i;
             $produto = !empty($item['Produto']) ? $item['Produto'] : html_entity_decode('Administra&ccedil;&atilde;o do Projeto');
             $fonte = $item['FonteRecurso'];

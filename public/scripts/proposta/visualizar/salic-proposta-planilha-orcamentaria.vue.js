@@ -14,12 +14,12 @@
         },
         abbreviations: {
             thousand: 'mil',
-            million: 'milhões',
+            million: 'milhÃµes',
             billion: 'b',
             trillion: 't'
         },
         ordinal: function (number) {
-            return 'º';
+            return 'Âº';
         },
         currency: {
             symbol: 'R$'
@@ -34,25 +34,25 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
     <div v-if="planilha" class="planilha-orcamentaria card">
         <ul class="collapsible no-margin" data-collapsible="expandable">
             <li v-for="(fontes, fonte) of planilhaCompleta" v-if="isObject(fontes)">
-                <div class="collapsible-header active red-text fonte" :class="converterStringParaClasseCss(fonte)">
+                <div class="collapsible-header active red-text fonte">
                     <i class="material-icons">beenhere</i>{{fonte}}<span class="badge">R$ {{fontes.total}}</span>
                 </div>
                 <div class="collapsible-body no-padding">
                     <ul class="collapsible no-border no-margin" data-collapsible="expandable">
                         <li v-for="(produtos, produto) of fontes" v-if="isObject(produtos)">
-                            <div class="collapsible-header active green-text" style="padding-left: 30px;" :class="converterStringParaClasseCss(produto)">
+                            <div class="collapsible-header active green-text" style="padding-left: 30px;">
                                 <i class="material-icons">perm_media</i>{{produto}}<span class="badge">R$ {{produtos.total}}</span>
                             </div>
                             <div class="collapsible-body no-padding no-border">
                                 <ul class="collapsible no-border no-margin" data-collapsible="expandable">
                                     <li v-for="(etapas, etapa) of produtos" v-if="isObject(etapas)">
-                                         <div class="collapsible-header active orange-text" style="padding-left: 50px;" :class="converterStringParaClasseCss(etapa)">
+                                         <div class="collapsible-header active orange-text" style="padding-left: 50px;">
                                             <i class="material-icons">label</i>{{etapa}}<span class="badge">R$ {{etapas.total}}</span>
                                         </div>
                                         <div class="collapsible-body no-padding no-border">
                                             <ul class="collapsible no-border no-margin" data-collapsible="expandable">
                                                 <li v-for="(locais, local) of etapas" v-if="isObject(locais)">
-                                                     <div class="collapsible-header active blue-text" style="padding-left: 70px;" :class="converterStringParaClasseCss(local)">
+                                                     <div class="collapsible-header active blue-text" style="padding-left: 70px;">
                                                         <i class="material-icons">place</i>{{local}} <span class="badge">R$ {{locais.total}}</span>
                                                     </div>
                                                     <div class="collapsible-body no-padding margin20 scroll-x">
@@ -70,7 +70,7 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr v-for="row of locais" 
+                                                                <tr v-for="row of locais.itens" 
                                                                     :key="row.idPlanilhaProposta"  
                                                                     v-if="isObject(row)"
                                                                     v-bind:class="{'orange lighten-2': ultrapassaValor(row)}"
@@ -131,12 +131,17 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
             this.planilha = this.arrayPlanilha;
         }
     },
+    uppdate() {
+        this.iniciarCollapsible();
+    },
     computed: {
         planilhaCompleta: function () {
 
             if (!this.planilha) {
                 return 0;
             }
+
+            return this.planilha;
 
             let novaPlanilha = {}, totalProjeto = 0, totalFonte = 0, totalProduto = 0, totalEtapa = 0, totalLocal = 0;
 
@@ -147,9 +152,10 @@ Vue.component('salic-proposta-planilha-orcamentaria', {
                     totalProduto = 0;
                     Object.entries(etapas).forEach(([etapa, locais]) => {
                         totalEtapa = 0;
-                        Object.entries(locais).forEach(([local, itens]) => {
+                        Object.entries(locais.itens).forEach(([local, itens]) => {
                             totalLocal = 0;
                             Object.entries(itens).forEach(([column, cell]) => {
+                                console.log('testessss', itens);
                                 totalLocal += cell.vlSolicitado;
                             });
                             this.$set(this.planilha[fonte][produto][etapa][local], 'total',  numeral(totalLocal).format('0,0.00'));
