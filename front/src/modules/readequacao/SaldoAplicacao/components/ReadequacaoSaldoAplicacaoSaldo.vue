@@ -5,7 +5,7 @@
             <input-money
 	      ref="readequacaoSaldo"
 	      v-model="saldoDisponivel"
-	      v-on:ev="alterarSaldo"
+	      v-on:blur.native="alterarSaldo"
 	      >
             </input-money>
         </div>
@@ -37,8 +37,8 @@ export default {
         }
     },
     methods: {
-        alterarSaldo: function(valor) {
-	    this.updateReadequacaoDsSolicitacao(valor);
+        alterarSaldo: function(event) {
+	    this.updateReadequacaoDsSolicitacao(event.target.value);
         },
 	...mapActions({
             updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacaoDsSolicitacao',	
