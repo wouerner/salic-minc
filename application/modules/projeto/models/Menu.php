@@ -123,9 +123,9 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'grupo' => []
         ];
 
-        $menu['proponente'] = [
-            'id' => 'proponente',
-            'label' => 'Proponente',
+        $menu['proponenteUm'] = [
+            'id' => 'proponenteUm',
+            'label' => 'ProponenteUm',
             'title' => '',
             'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
             'ajax' => true,
@@ -169,8 +169,9 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'proponente',
             'label' => 'Proponente',
             'title' => '',
-            'link' => '/agente/proponente-rest/dados-proponente/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/incentivo/{$idPronacHash}/proponente",
+            // 'link' => '/projeto/proponente-rest/get/?idPronac=' . $idPronacHash,
+            'ajax' => false,
             'icon' => 'person',
             'submenu' => '',
             'grupo' => []

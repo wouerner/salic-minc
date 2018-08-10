@@ -24,16 +24,33 @@ class Proponente
     {
         $tabelaDbTabela = new \Foo_Model_DbTable_Tabela();
         $where = [
-            'idPronac' => $idPronac
+            'Codigo' => $idPronac
         ];
 
         return $tabelaDbTabela->findBy($where);
     }
-    
-    public function teste()
-    {
 
+    public function buscarProponente($metodo,$id)
+    {
+        $tblProponente = new ProponenteDAO();
+        if($metodo = BuscarEmail)
+            BuscarEmail($id);
+        $where = [
+            'Codigo' => $idPronac
+        ];
+
+        return $tabelaDbTabela->findBy($where);
+    }
+
+    public function buscarDadosAgenteProponente()
+    {
         $parametros = $this->request->getParams();
+        $idPronac = $parametros['idPronac'];
+        $dados = array();
+        $dados['idPronac'] = (int) $idPronac;
+        $resposta = \ConsultarDadosProjetoDAO::obterDadosProjeto($dados);
+        // xd($resposta);
+        return [ 'idPronac' => $resposta[0]->IdPRONAC ];
         if (isset($params['idPronac'])) {
 
             $idPronac = $params['idPronac'];
@@ -51,12 +68,14 @@ class Proponente
                     $this->view->menumsg = 'true';
                 }
                 $rst = ConsultarDadosProjetoDAO::obterDadosProjeto($dados);
-
                 if (count($rst) > 0) {
                     $this->view->projeto = $rst[0];
                     $this->view->idpronac = $idPronac;
                     $this->view->idprojeto = $rst[0]->idProjeto;
-                    if ($rst[0]->codSituacao == 'E12' || $rst[0]->codSituacao == 'E13' || $rst[0]->codSituacao == 'E15' || $rst[0]->codSituacao == 'E50' || $rst[0]->codSituacao == 'E59' || $rst[0]->codSituacao == 'E61' || $rst[0]->codSituacao == 'E62') {
+                    if ($rst[0]->codSituacao == 'E12' || $rst[0]->codSituacao == 'E13' || 
+                        $rst[0]->codSituacao == 'E15' || $rst[0]->codSituacao == 'E50' || 
+                        $rst[0]->codSituacao == 'E59' || $rst[0]->codSituacao == 'E61' || 
+                        $rst[0]->codSituacao == 'E62') {
                         $this->view->menuCompExec = 'true';
                     }
 
@@ -89,9 +108,7 @@ class Proponente
                     $tblAgente = new Agente_Model_DbTable_Agentes();
                     $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$dadosProjeto[0]->CNPJCPF))->current();
 
-                    $rsIdAgente = (isset($rsAgente->idAgente) && !empty($rsAgente->idAgente)) ? $rsAgente->idAgente : 0;
-
-                    $rsDirigentes = $tblAgente->buscarDirigentes(array('v.idVinculoPrincipal =?'=>$rsIdAgente,'n.Status =?'=>0), array('n.Descricao ASC'));
+                    $rsDirigentes = $tblAgente->buscarDirigentes(array('v.idVinculoPrincipal =?'=>$rsAgente->idAgente,'n.Status =?'=>0), array('n.Descricao ASC'));
                     $this->view->dirigentes = $rsDirigentes;
 
                     $tbProcuradorProjeto = new tbProcuradorProjeto();
@@ -113,13 +130,13 @@ class Proponente
                     }
                     $this->view->mandatos = $arrMandatos;
                 } else {
-                    parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
+                    // parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
                 }
             } else {
-                parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
+                // parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
             }
         } else {
-            parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
+            // parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
         }
     }
 }
