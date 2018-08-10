@@ -37,7 +37,7 @@ class Parecer_AnaliseInicialController extends MinC_Controller_Action_Abstract
             if (isset($get['IdPRONAC']) && !empty($get['IdPRONAC'])) {
                 $parecer = new Parecer();
                 $parecerTecnico = $parecer->getIdAtoAdministrativoParecerTecnico(
-                    $this->idPronac,
+                    $get['IdPRONAC'],
                     1
                 )->current();
 
