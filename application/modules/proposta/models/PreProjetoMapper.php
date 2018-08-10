@@ -33,7 +33,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
             'ImpactoAmbiental' => $preProjeto['ImpactoAmbiental']
         );
 
-        # detalhes técnicos (preprojeto)
+        # detalhes tecnicos (preprojeto)
         $proposta['detalhestecnicos'] = array(
             'EtapaDeTrabalho' => $preProjeto['EtapaDeTrabalho'],
             'FichaTecnica' => $preProjeto['FichaTecnica'],
@@ -115,7 +115,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
 
     public function prepararPropostaParaJson($proposta)
     {
-        $proposta = TratarArray::prepararArrayMultiParaJson($proposta);
+        $proposta = TratarArray::utf8EncodeArray($proposta);
 
         if (!isset($proposta['tbplanilhaproposta'][0]['OrdemEtapa'])) {
             $proposta['tbplanilhaproposta'] = TratarArray::ordenarArrayMultiPorColuna(
@@ -232,7 +232,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
             return false;
         }
 
-        $planilha = TratarArray::utf8EncodeArrayTemp($planilha);
+        $planilha = TratarArray::utf8EncodeArray($planilha);
         $planilha = $this->montarPlanilhaProposta($planilha);
 
         return $planilha;
@@ -283,7 +283,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
             return false;
         }
 
-        $planilha = TratarArray::utf8EncodeArrayTemp($planilha);
+        $planilha = TratarArray::utf8EncodeArray($planilha);
         $planilha = $this->montarPlanilhaProposta($planilha);
 
         return $planilha;
