@@ -9,6 +9,9 @@ export const mutations = {
         state.readequacao = readequacao;
     },
     [types.UPDATE_READEQUACAO](state, readequacao) {
-        console.log('mutation update readequacao');
+	state.readequacao = readequacao;
     },
+    [types.UPDATE_READEQUACAO_DS_SOLICITACAO](state, dsSolicitacao) {
+	state.readequacao.dsSolicitacao = dsSolicitacao;
+    },    
 };

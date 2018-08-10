@@ -2,7 +2,11 @@
     <div class="col s3">
         <div v-if="!disabled">
             <label>Saldo dispon&iacute;vel *</label>
-            <input-money ref="readequacaoSaldo" v-model="saldoDisponivel" v-on:ev="alterarSaldo">
+            <input-money
+	      ref="readequacaoSaldo"
+	      v-model="saldoDisponivel"
+	      v-on:ev="alterarSaldo"
+	      >
             </input-money>
         </div>
         <div v-else>
@@ -12,34 +16,39 @@
 </template>
 
 <script>
-    import {
-        utils
-    } from '@/mixins/utils';
-    import InputMoney from '@/components/InputMoney';
+import {
+    utils
+} from '@/mixins/utils';
+import InputMoney from '@/components/InputMoney';
+import { mapActions } from 'vuex';
 
-    export default {
-        name: 'ReadequacaoSaldoAplicacaoSaldo',
-        components: {
-            InputMoney,
-        },
-        props: [
-            'dsSolicitacao',
-            'disabled'
-        ],
-        data: function() {
-            return {
-                saldoDisponivel: 0
-            }
-        },
-        methods: {
-            alterarSaldo: function(valor) {
-                this.$emit('eventoAtualizarDsSolicitacao', valor);
-            }
-        },
-        watch: {
-            dsSolicitacao: function(valor) {
-                this.saldoDisponivel = valor;
-            }
+export default {
+    name: 'ReadequacaoSaldoAplicacaoSaldo',
+    components: {
+        InputMoney,
+    },
+    props: [
+        'dsSolicitacao',
+        'disabled'
+    ],
+    data: function() {
+        return {
+            saldoDisponivel: 0
         }
-    }
+    },
+    methods: {
+        alterarSaldo: function(valor) {
+	    this.updateReadequacaoDsSolicitacao(valor);
+        },
+	...mapActions({
+            updateReadequacaoDsSolicitacao: 'readequacao/updateReadequacaoDsSolicitacao',	
+	}),
+	
+    },
+    watch: {
+        dsSolicitacao: function(valor) {
+            this.saldoDisponivel = valor;
+        },
+    },
+}
 </script>
