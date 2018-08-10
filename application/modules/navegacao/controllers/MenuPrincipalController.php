@@ -26,6 +26,8 @@
             $menu += $this->assinatura();
             $menu += $this->atendimento();
             $menu += $this->acompanhamento();
+            $menu += $this->menuAdministrativo();
+            $menu += $this->protocolo();
             $this->view->assign('data', $menu );
             $this->getResponse()->setHttpResponseCode(200);
         }
@@ -656,6 +658,108 @@
                 'title' => 'Assinatura',
                 'label' => 'Assinatura'
                 ];
+            return $arrMenu;
+        }
+        public function menuAdministrativo(){
+
+            $arrMenu['administrativo'] = [
+                'id' => 'administrativo',
+                'label' => 'Administrativo',
+                'title' => 'Ir para Administrativo',
+                'menu' => [],
+                'grupo' => [
+                    93,
+                    94,
+                    97,
+                    Autenticacao_Model_Grupos::COORDENADOR_ANALISE,
+                    118,
+                    Autenticacao_Model_Grupos::COORDENADOR_CNIC,
+                    121,
+                    122,
+                    123,
+                    137,
+                ],
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Manter Agentes',
+                'title' => 'Ir para Manter Agentes',
+                'url' => ['module' => 'agente', 'controller' => 'agentes', 'action' => 'agentes'],
+                'grupo' => [97, Autenticacao_Model_Grupos::COORDENADOR_CNIC, 121, 122, 123]
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Gerenciar meus dados', 'title' => 'Ir para Gerenciar meus dados',
+                'url' => ['module' => 'agente', 'controller' => 'agentes', 'action' => 'agentes'],
+                'grupo' => [94, 118]
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Desvincular Agentes',
+                'title' => 'Ir para Desvincular Agentes',
+                'url' => ['controller' => 'desvincularagentes', 'action' => 'index'],
+                'grupo' => [Autenticacao_Model_Grupos::COORDENADOR_ANALISE, Autenticacao_Model_Grupos::COORDENADOR_CNIC, 122]
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Analisar Procura&ccedil;&atilde;o',
+                'title' => 'Ir para Analisar Procura&ccedil;&atilde;o',
+                'url' => ['controller' => 'procuracao', 'action' => 'analisar'],
+                'grupo' => [122, Autenticacao_Model_Grupos::COORDENADOR_ANALISE]
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Manter Parecerista',
+                'title' => 'Ir para Manter Parecerista',
+                'url' =>['module' => 'agente', 'controller' => 'agentes', 'action' => 'painelcredenciamento'],
+                'grupo' => [137, 93]
+            ];
+            $arrMenu['administrativo']['menu'][] = ['label' => 'Gerenciar assinantes',
+                'title' => 'Ir para Gerenciar assinantes',
+                'url' => ['controller' => 'parecerista', 'action' => 'gerenciar-assinantes'],
+                'grupo' => [137]
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Manter Termo de Decis&atilde;o',
+                'title' => 'Ir para Manter Termo de Decis&atilde;o',
+                'url' => ['controller' => 'mantertermodecisao', 'action' => 'index'],
+                'grupo' => [97]
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Manter Secret&aacute;rio',
+                'title' => 'Ir para Manter Secret&aacute;rio',
+                'url' => ['controller' => 'mantersecretarioorgao', 'action' => 'index'],
+                'grupo' => [97]
+            ];
+            $arrMenu['administrativo']['menu'][] = ['label' => 'Comunicados',
+                'title' => 'Ir para Comunicados',
+                'url' => ['controller' => 'comunicados', 'action' => 'index'],
+                'grupo' => [97]
+            ];
+            $arrMenu['administrativo']['menu'][] = [
+                'label' => 'Analisar Solicita&ccedil;&atilde;o de Item',
+                'title' => 'Ir para Analisar Solicita&ccedil;&atilde;o de Item',
+                'url' => ['module' => 'proposta', 'controller' => 'analisarsituacaoitem', 'action' => 'index'],
+                'grupo' => [97]
+            ];
+            return $arrMenu;
+
+        }
+        public function protocolo(){
+            $arrMenu['protocolo'] = [
+                'id' => 'protocolo',
+                'title' => 'Ir para Protocolo',
+                'label' => 'Protocolo',
+                'menu' => [],
+                'grupo' => [90, 91, 97, 104, 109, 115],
+            ];
+            $arrMenu['protocolo']['menu'][] = [
+                'grupo' => [91, 97, 104, 109, 115],
+                'url' => ['controller' => 'tramitarprojetos', 'action' => 'despacharprojetos'],
+                'title' => 'Ir para Tramitar Projetos',
+                'label' => 'Tramitar Projetos'
+            ];
+            $arrMenu['protocolo']['menu'][] = [
+                'grupo' => [90, 91, 97, 104, 109, 115],
+                'url' => ['controller' => 'tramitardocumentos', 'action' => 'index'],
+                'title' => 'Ir para Tramitar Documentos',
+                'label' => 'Tramitar Documentos'
+            ];
             return $arrMenu;
         }
 
