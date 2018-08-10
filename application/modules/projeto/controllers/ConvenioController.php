@@ -49,19 +49,13 @@ class Projeto_ConvenioController extends Projeto_GenericController
         $this->redirect("/projeto/index/listar");
     }
 
-    public function visualizarNovoAction()
-    {
-       $vwDadosProjeto = new Projeto_Model_DbTable_VwConsultarDadosDoProjetoFNC();
-       $this->view->dados = $vwDadosProjeto->obterDadosFnc($this->idPronac);
-    }
-
     public function visualizarAction()
     {
         $vwDadosProjeto = new Projeto_Model_DbTable_VwConsultarDadosDoProjetoFNC();
         $projeto = $vwDadosProjeto->obterDadosFnc($this->idPronac);
         $this->view->dados = $projeto;
         $dbTableInabilitado = new Inabilitado();
-        $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto['CNPJ_CPF']);
-        $this->view->ProponenteInabilitado = ($proponenteInabilitado->Habilitado == 'I');
+        $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto['CNPJ_CPF'], null, null, true);
+        $this->view->ProponenteInabilitado = !empty($proponenteInabilitado);
     }
 }

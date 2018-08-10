@@ -1,8 +1,8 @@
-import API from './base';
+import * as api from './base';
 
-const api = () => new API();
+const path = '/projeto/incentivo/obter-projeto-ajax';
 
 export const buscaProjeto = (idPronac) => {
-    const url = `/projeto/incentivo/obter-projeto-ajax/?idPronac=${idPronac}`;
-    return api().get(url);
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
 };
