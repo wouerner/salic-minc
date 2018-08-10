@@ -29,12 +29,7 @@ describe('Foo actions', () => {
             jest.spyOn(fooHelperAPI, 'obterDadosTabela');
             actions.obterDadosTabela({ commit });
 
-            registro = [
-                {
-                    Codigo: 1,
-                    DadoNr: 'Random String 1',
-                }
-            ];
+            registro = [{ Codigo: 1, DadoNr: 'Random String 1' }];
         });
 
         test('it is commit to obterDadosTabela', (done) => {
@@ -66,10 +61,7 @@ describe('Foo actions', () => {
 
             global.FormData = FormDataMock;
 
-            registro = {
-                Codigo: 1,
-                DadoNr: 'Random String 1',
-            };
+            registro = { Codigo: 1, DadoNr: 'Random String 1' };
 
             commit = jest.fn();
             jest.spyOn(fooHelperAPI, 'criarRegistro');
@@ -105,10 +97,7 @@ describe('Foo actions', () => {
 
             global.FormData = FormDataMock;
 
-            registro = {
-                Codigo: 1,
-                DadoNr: 'Random String 1',
-            };
+            registro = { Codigo: 1, DadoNr: 'Random String 1' };
 
             commit = jest.fn();
             jest.spyOn(fooHelperAPI, 'atualizarRegistro');
@@ -127,10 +116,7 @@ describe('Foo actions', () => {
 
     describe('removerRegistro', () => {
         beforeEach(() => {
-            mockReponse = {
-                Codigo: 1,
-                DadoNr: 'Random String 1',
-            };
+            mockReponse = { Codigo: 1, DadoNr: 'Random String 1' };
 
             commit = jest.fn();
 
