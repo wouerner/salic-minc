@@ -7,10 +7,9 @@ jest.mock('axios');
 describe('Foo actions', () => {
     let commit;
     let mockReponse;
+    let registro;
 
     describe('obterDadosTabela', () => {
-        let registro;
-
         beforeEach(() => {
             mockReponse = {
                 data: {
@@ -49,8 +48,6 @@ describe('Foo actions', () => {
     });
 
     describe('criarRegistro', () => {
-        let registro;
-
         beforeEach(() => {
             mockReponse = {
                 data: {
@@ -92,8 +89,6 @@ describe('Foo actions', () => {
     });
 
     describe('atualizarRegistro', () => {
-        let registro;
-
         beforeEach(() => {
             mockReponse = {
                 data: {
@@ -134,8 +129,6 @@ describe('Foo actions', () => {
     });
 
     describe('removerRegistro', () => {
-        let registro;
-
         beforeEach(() => {
             mockReponse = {
                 Codigo: 1,

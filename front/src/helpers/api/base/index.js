@@ -1,23 +1,17 @@
 import axios from 'axios';
 
-export default class API {
-    constructor(path) {
-        this.path = path;
-    }
+export const getRequest = (path, queryParams = '') => {
+    return axios.get(`${path}${queryParams}`);
+};
 
-    get(queryParams = '') {
-        return axios.get(`${this.path}${queryParams}`);
-    }
+export const postRequest = (path, data) => {
+    return axios.post(path, data);
+};
 
-    post(data) {
-        return axios.post(this.path, data);
-    }
+export const putRequest = (path, bodyFormData, id) => {
+    return axios.post(`${path}/${id}`, bodyFormData);
+};
 
-    put(bodyFormData, id) {
-        return axios.post(`${this.path}/${id}`, bodyFormData);
-    }
-
-    delete(id) {
-        return axios.delete(`${this.path}/${id}`);
-    }
-}
+export const deleteRequest = (path, id) => {
+    return axios.delete(`${path}/${id}`);
+};

@@ -6,8 +6,6 @@ export const obterDadosTabela = ({ commit }) => {
         .then((response) => {
             const data = response.data;
             const dadosTabela = data.data;
-            console.log('CAI AQUI');
-            console.log(dadosTabela);
             commit(types.SET_REGISTROS_TABELA, dadosTabela);
         });
 };
