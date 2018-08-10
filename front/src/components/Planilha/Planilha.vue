@@ -1,6 +1,6 @@
 <template>
-    <div v-if="planilhaCompleta" class="planilha-orcamentaria card">
-        <CollapsibleRecursivo :planilha="planilhaCompleta">
+    <div v-if="arrayPlanilha" class="planilha-orcamentaria card">
+        <CollapsibleRecursivo :planilha="arrayPlanilha">
             <template slot-scope="slotProps">
                 <slot v-bind:itens="slotProps.itens">
                     <PlanilhaItensPadrao :table="slotProps.itens"></PlanilhaItensPadrao>
@@ -9,7 +9,7 @@
         </CollapsibleRecursivo>
 
         <div class="card-action right-align">
-            <span><b>Valor total do projeto:</b> R$ {{planilhaCompleta.total | filtroFormatarParaReal}}</span>
+            <span><b>Valor total do projeto:</b> R$ {{arrayPlanilha.total | filtroFormatarParaReal}}</span>
         </div>
     </div>
     <div v-else>Nenhuma planilha encontrada</div>
@@ -23,6 +23,10 @@
         name: 'CollapsibleRecursivo',
         props: {
             planilha: {},
+            contador: {
+                default: 1,
+                type: Number
+            }
         },
         mixins: [planilhas],
         mounted() {
@@ -30,16 +34,16 @@
         },
         render(h) {
             let self = this;
-            if (this.isObject(this.planilha) && typeof this.planilha.itens === 'undefined') {
+            if (this.isObject(self.planilha) && typeof self.planilha.itens === 'undefined') {
                 return h('ul',
                     { class: 'collapsible no-margin', attrs: { 'data-collapsible': 'expandable' } },
                     Object.keys(this.planilha).map(key => {
                         if (self.isObject(self.planilha[key])) {
                             return h('li', [
                                 h('div',
-                                    { class: self.obterClasseHeader(self.planilha[key].tipo) },
+                                    { class: 'collapsible-header active' },
                                     [
-                                        h('i', { class: 'material-icons' }, [self.obterIconeHeader(self.planilha[key].tipo)]),
+                                        h('i', { class: 'material-icons' }, [self.obterIconeHeader(self.contador)]),
                                         h('div', key),
                                         h('span', { class: 'badge' }, [`R$ ${self.formatarParaReal(self.planilha[key].total)}`]),
                                     ]
@@ -48,8 +52,8 @@
                                     { class: 'collapsible-body no-padding' },
                                     [
                                         h(CollapsibleRecursivo, {
-                                            props: { planilha: self.planilha[key] },
-                                            scopedSlots: { default: self.$scopedSlots.default }
+                                            props: { planilha: self.planilha[key], contador: self.contador + 1},
+                                            scopedSlots: { default: self.$scopedSlots.default}
                                         }),
                                     ],
                                 ),
@@ -58,7 +62,10 @@
                     }),
                 );
             } else if (self.$scopedSlots.default !== 'undefined') {
-                return h('div', self.$scopedSlots.default({ itens: self.planilha.itens }));
+                return h('div', { class: 'margin20 scroll-x'}, [
+                        self.$scopedSlots.default({ itens: self.planilha.itens })
+                    ]
+                );
             }
         },
         methods: {
@@ -67,28 +74,19 @@
                     $3(this).collapsible();
                 });
             },
-            obterClasseHeader(tipo) {
-                return {
-                    'collapsible-header active': true,
-                    'red-text fonte': tipo === 'fonte',
-                    'green-text produto': tipo === 'produto',
-                    'orange-text etapa': tipo === 'etapa',
-                    'blue-text local': tipo === 'local',
-                };
-            },
             obterIconeHeader(tipo) {
                 let icone = '';
                 switch (tipo) {
-                    case 'fonte':
+                    case 1:
                         icone = 'beenhere';
                         break;
-                    case 'produto':
+                    case 2:
                         icone = 'perm_media';
                         break;
-                    case 'etapa':
+                    case 3:
                         icone = 'label';
                     break;
-                    case 'local':
+                    case 4:
                         icone = 'place';
                         break;
                 }
@@ -107,96 +105,58 @@
         components: {
             CollapsibleRecursivo,
             PlanilhaItensPadrao,
-        },
-        computed: {
-            planilhaCompleta() {
-
-                if (!this.arrayPlanilha) {
-                    return 0;
-                }
-
-                let novaPlanilha = {},
-                    totalProjeto = 0,
-                    totalFonte = 0,
-                    totalProduto = 0,
-                    totalEtapa = 0,
-                    totalLocal = 0;
-
-                novaPlanilha = JSON.parse(JSON.stringify(this.arrayPlanilha));
-
-                Object.entries(this.arrayPlanilha).forEach(([fonte, produtos]) => {
-                    totalFonte = 0;
-                    Object.entries(produtos).forEach(([produto, etapas]) => {
-                        totalProduto = 0;
-                        Object.entries(etapas).forEach(([etapa, locais]) => {
-                            totalEtapa = 0;
-                            Object.entries(locais).forEach(([local, itens]) => {
-                                totalLocal = 0;
-                                novaPlanilha[fonte][produto][etapa][local] = {};
-                                this.$set(
-                                    novaPlanilha[fonte][produto][etapa][local],
-                                    'itens',
-                                    itens
-                                );
-
-                                Object.entries(itens).forEach(([column, cell]) => {
-                                    if (cell.tpAcao && cell.tpAcao === 'E') {
-                                        return;
-                                    }
-
-                                    // planilha homologada e readequada o valor total � a soma do vlAprovado
-                                    if (cell.vlAprovado || cell.vlAprovado >= 0) {
-                                        totalLocal += cell.vlAprovado;
-                                    } else {
-                                        totalLocal += cell.vlSolicitado;
-                                    }
-                                });
-
-                                this.$set(novaPlanilha[fonte][produto][etapa][local], 'total', totalLocal);
-                                this.$set(novaPlanilha[fonte][produto][etapa][local], 'tipo', 'local');
-                                totalEtapa += totalLocal;
-                            });
-                            this.$set(novaPlanilha[fonte][produto][etapa], 'total', totalEtapa);
-                            this.$set(novaPlanilha[fonte][produto][etapa], 'tipo', 'etapa');
-                            totalProduto += totalEtapa;
-                        });
-                        this.$set(novaPlanilha[fonte][produto], 'total', totalProduto);
-                        this.$set(novaPlanilha[fonte][produto], 'tipo', 'produto');
-                        totalFonte += totalProduto;
-                    });
-                    this.$set(novaPlanilha[fonte], 'total', totalFonte);
-                    this.$set(novaPlanilha[fonte], 'tipo', 'fonte');
-                    totalProjeto += totalFonte;
-                });
-                this.$set(novaPlanilha, 'total', totalProjeto);
-
-                return novaPlanilha;
-            }
-        },
+        }
     };
 </script>
 
 
-<style>
-    .planilha-orcamentaria .collapsible .collapsible,
-    .planilha-orcamentaria .collapsible-body .collapsible-body {
-        border: none;
-        box-shadow: none;
-    }
+<style lang="scss">
 
-    .planilha-orcamentaria .collapsible .collapsible .collapsible-header {
-        padding-left: 30px;
-    }
+    $cor-fonte:  #F44336;
+    $cor-produto:  #4CAF50;
+    $cor-etapa: #ff9800;
+    $cor-regiao: #2196F3;
 
-    .planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible-header {
-        padding-left: 50px;
-    }
+    .planilha-orcamentaria {
+        .collapsible {
 
-    .planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible .collapsible-header {
-        padding-left: 70px;
-    }
+            .collapsible {
+                border: none;
+                box-shadow: none;
+                .collapsible-header {
+                    padding-left: 30px;
+                    color: $cor-produto;
+                }
 
-    .planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible .collapsible-body {
-        margin: 20px;
+                .collapsible {
+                    .collapsible-header  {
+                        padding-left: 50px;
+                        color: $cor-etapa;
+                    }
+
+                    .collapsible {
+                        .collapsible-header {
+                            padding-left: 70px;
+                            color: $cor-regiao;
+                        }
+
+                        .collapsible-body {
+                            margin: 20px;
+                        }
+                    }
+                }
+            }
+
+            .collapsible-header {
+                color: $cor-fonte;
+            }
+        }
+
+        .collapsible-body {
+            .collapsible-body {
+                border: none;
+                box-shadow: none;
+            }
+        }
     }
 </style>
