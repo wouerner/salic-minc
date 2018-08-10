@@ -536,7 +536,7 @@
                     </tr>
                 </table>
 
-                <table class="tabela" v-if="dadosProjeto.PercentualCaptado > 0">
+                <table class="tabela">
                     <tr class="destacar">
                         <td align="center" colspan="5">
                             <b>
