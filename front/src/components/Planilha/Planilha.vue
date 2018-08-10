@@ -7,7 +7,6 @@
                 </slot>
             </template>
         </CollapsibleRecursivo>
-
         <div class="card-action right-align">
             <span><b>Valor total do projeto:</b> R$ {{arrayPlanilha.total | filtroFormatarParaReal}}</span>
         </div>
@@ -36,34 +35,41 @@
             let self = this;
             if (this.isObject(self.planilha) && typeof self.planilha.itens === 'undefined') {
                 return h('ul',
-                    { class: 'collapsible no-margin', attrs: { 'data-collapsible': 'expandable' } },
+                    {class: 'collapsible no-margin', attrs: {'data-collapsible': 'expandable'}},
                     Object.keys(this.planilha).map(key => {
                         if (self.isObject(self.planilha[key])) {
                             return h('li', [
                                 h('div',
-                                    { class: 'collapsible-header active' },
+                                    {class: 'collapsible-header active'},
                                     [
-                                        h('i', { class: 'material-icons' }, [self.obterIconeHeader(self.contador)]),
+                                        h('i', {class: 'material-icons'}, [self.obterIconeHeader(self.contador)]),
                                         h('div', key),
-                                        h('span', { class: 'badge' }, [`R$ ${self.formatarParaReal(self.planilha[key].total)}`]),
+                                        h('span', {class: 'badge'}, [`R$ ${self.formatarParaReal(self.planilha[key].total)}`]),
                                     ]
                                 ),
                                 h('div',
-                                    { class: 'collapsible-body no-padding' },
+                                    {class: 'collapsible-body no-padding'},
                                     [
                                         h(CollapsibleRecursivo, {
-                                            props: { planilha: self.planilha[key], contador: self.contador + 1},
-                                            scopedSlots: { default: self.$scopedSlots.default}
+                                            props: {planilha: self.planilha[key], contador: self.contador + 1},
+                                            scopedSlots: {default: self.$scopedSlots.default}
                                         }),
                                     ],
                                 ),
                             ]);
                         }
+
+                        if(self.contador === 1) {
+                            console.log('tsdsd', self.planilha[key]);
+                            if(self.planilha[key]) {
+                                return  h('div', self.planilha[key].vlAprovadoTotal)
+                            }
+                        }
                     }),
                 );
             } else if (self.$scopedSlots.default !== 'undefined') {
-                return h('div', { class: 'margin20 scroll-x'}, [
-                        self.$scopedSlots.default({ itens: self.planilha.itens })
+                return h('div', {class: 'margin20 scroll-x'}, [
+                        self.$scopedSlots.default({itens: self.planilha.itens})
                     ]
                 );
             }
@@ -85,7 +91,7 @@
                         break;
                     case 3:
                         icone = 'label';
-                    break;
+                        break;
                     case 4:
                         icone = 'place';
                         break;
@@ -108,55 +114,3 @@
         }
     };
 </script>
-
-
-<style lang="scss">
-
-    $cor-fonte:  #F44336;
-    $cor-produto:  #4CAF50;
-    $cor-etapa: #ff9800;
-    $cor-regiao: #2196F3;
-
-    .planilha-orcamentaria {
-        .collapsible {
-
-            .collapsible {
-                border: none;
-                box-shadow: none;
-                .collapsible-header {
-                    padding-left: 30px;
-                    color: $cor-produto;
-                }
-
-                .collapsible {
-                    .collapsible-header  {
-                        padding-left: 50px;
-                        color: $cor-etapa;
-                    }
-
-                    .collapsible {
-                        .collapsible-header {
-                            padding-left: 70px;
-                            color: $cor-regiao;
-                        }
-
-                        .collapsible-body {
-                            margin: 20px;
-                        }
-                    }
-                }
-            }
-
-            .collapsible-header {
-                color: $cor-fonte;
-            }
-        }
-
-        .collapsible-body {
-            .collapsible-body {
-                border: none;
-                box-shadow: none;
-            }
-        }
-    }
-</style>
