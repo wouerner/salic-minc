@@ -29,7 +29,6 @@ class Projeto_Model_DbTable_SpRenderizarPlanilhas extends MinC_Db_Table_Abstract
         }
 
         $planilha = $this->montarPlanilha($planilha, $tipoPlanilha);
-//        $planilha = TratarArray::utf8EncodeArray($planilha);
 
         return $planilha;
     }
@@ -77,6 +76,7 @@ class Projeto_Model_DbTable_SpRenderizarPlanilhas extends MinC_Db_Table_Abstract
             }
 
             if ($tipo == self::TIPO_PLANILHA_READEQUADA) {
+                $valorTotal = $item['vlAprovado'];
                 $item['DescAcao'] = $this->obterNomeAcao($item["tpAcao"]);
                 $item['JustProponente'] = $item["dsJustificativa"]; # @todo padronizar o nome
             }

@@ -28,9 +28,6 @@
             },
         },
         mixins: [planilhas],
-        mounted() {
-            this.iniciarCollapsible();
-        },
         render(h) {
             const self = this;
             if (this.isObject(self.planilha) && typeof self.planilha.itens === 'undefined') {
@@ -76,17 +73,9 @@
                     self.$scopedSlots.default({ itens: self.planilha.itens }),
                 ]);
             }
-
             return true;
         },
         methods: {
-            iniciarCollapsible() {
-                // eslint-disable-next-line
-                $3(".collapsible").each(() => {
-                    // eslint-disable-next-line
-                    $3(this).collapsible();
-                });
-            },
             obterIconeHeader(tipo) {
                 let icone = '';
                 switch (tipo) {
@@ -119,6 +108,13 @@
         components: {
             CollapsibleRecursivo,
             PlanilhaItensPadrao,
+        },
+        mounted() {
+            // eslint-disable-next-line
+            $3(".collapsible").each(function() {
+                // eslint-disable-next-line
+                $3(this).collapsible();
+            });
         },
     };
 </script>
