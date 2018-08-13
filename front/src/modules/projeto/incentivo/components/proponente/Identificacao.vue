@@ -7,8 +7,8 @@
                 <td align="center"><b>Nome do Projeto</b></td>
             </tr>
             <tr>
-                <td align="center">{{dadosProjeto.Pronac}}</td>
-                <td align="center">{{dadosProjeto.NomeProjeto}}</td>
+                <td align="center">{{codPronac}}</td>
+                <td align="center">{{nmeProjeto}}</td>
             </tr>
         </table>
         <br clear="all">

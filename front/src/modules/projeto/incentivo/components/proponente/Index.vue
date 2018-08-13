@@ -22,28 +22,32 @@
             <fieldset>
                 <Procurador></Procurador>
             </fieldset>
-        </div>    
+        </div>
     </div>
 </template>
 
 <script>
-import Identificacao from './Identificacao';
-import Endereco from './Endereco';
-import Telefone from './Telefone';
-import Email from './Email';
-import Natureza from './Natureza';
-import Dirigente from './Dirigente';
-import Procurador from './Procurador';
+import Identificacao from "./Identificacao";
+import Endereco from "./Endereco";
+import Telefone from "./Telefone";
+import Email from "./Email";
+import Natureza from "./Natureza";
+import Dirigente from "./Dirigente";
+import Procurador from "./Procurador";
+// import { mapGetters } from "vuex";
 
 export default {
-  components: {
-    Identificacao,
-    Endereco,
-    Telefone,
-    Email,
-    Natureza,
-    Dirigente,
-    Procurador,
-  },
+    created() {
+        console.log('criando o componente');
+    },
+    components: {
+        Identificacao,
+        Endereco,
+        Telefone,
+        Email,
+        Natureza,
+        Dirigente,
+        Procurador
+    }
 };
 </script>

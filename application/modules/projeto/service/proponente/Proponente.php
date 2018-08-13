@@ -29,19 +29,7 @@ class Proponente
 
         return $tabelaDbTabela->findBy($where);
     }
-
-    public function buscarProponente($metodo,$id)
-    {
-        $tblProponente = new ProponenteDAO();
-        if($metodo = BuscarEmail)
-            BuscarEmail($id);
-        $where = [
-            'Codigo' => $idPronac
-        ];
-
-        return $tabelaDbTabela->findBy($where);
-    }
-
+    
     public function buscarDadosAgenteProponente()
     {
         $parametros = $this->request->getParams();
