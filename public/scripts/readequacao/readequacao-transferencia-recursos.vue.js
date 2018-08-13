@@ -42,11 +42,11 @@ Vue.component('readequacao-transferencia-recursos', {
       </div>
     </li>
     <li>
-			<div class="collapsible-header"><i class="material-icons">list</i>Projetos recebedores</div>
+			<div v-show="disponivelEditarProjetosRecebedores" class="collapsible-header"><i class="material-icons">list</i>Projetos recebedores</div>
 			<div class="collapsible-body card" >
 				<div class="card-content">
 					<span class="card-title">Projetos recebedores</span>
-					<table v-show="exibeProjetosRecebedores()" class="animated fadeIn">
+					<table v-show="exibeProjetosRecebedores" class="animated fadeIn">
 						<thead>
 							<th>Pronac</th>
 							<th>Nome do projeto</th>
@@ -145,7 +145,7 @@ Vue.component('readequacao-transferencia-recursos', {
 				<div class="card">
 					<span class="card-title">Projetos recebedores</span>
 					<div class="card-content">
-						<table v-show="exibeProjetosRecebedores()">
+						<table v-show="exibeProjetosRecebedores">
 							<thead>
 								<th>Pronac</th>
 								<th>Nome do projeto</th>
@@ -355,7 +355,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	       readequacao.dsSolicitacao == undefined
 	       ) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o tipo da transfer\xEAncia!");
-		this.$refs.readequacaoTipoTransferencia.focus();
+		this.$refs.formulario.$children[0].$refs.readequacaoTipoTransferencia.focus();
 		return;		
 	    }
 	    
@@ -371,15 +371,15 @@ Vue.component('readequacao-transferencia-recursos', {
                 type: "POST",
                 url: "/readequacao/transferencia-recursos/salvar-readequacao",
 		data: {
-		    idPronac: this.idPronac,
-		    idReadequacao: readequacao.idReadequacao,
-		    justificativa: readequacao.justificativa,
-		    dsSolicitacao: readequacao.dsSolicitacao
+		    idPronac: self.idPronac,
+		    idReadequacao: self.readequacao.idReadequacao,
+		    justificativa: self.readequacao.justificativa,
+		    dsSolicitacao: self.readequacao.dsSolicitacao
 		}
             }).done(function (response) {
 		$3('.collapsible').collapsible('close', 0);
 		$3('.collapsible').collapsible('open', 1);
-		self.readequacao = readequacao;
+		self.readequacao.idReadequacao = response.readequacao;
                 self.mensagemSucesso(response.msg);
             });
 	},
@@ -538,13 +538,6 @@ Vue.component('readequacao-transferencia-recursos', {
 		return false;
 	    }
 	},
-	exibeProjetosRecebedores: function() {
-	    if (this.projetosRecebedores.length > 0) {
-		return true;
-	    } else {
-		return false;
-	    }
-	}
     },
     watch: {
 	readequacao: function() {
@@ -570,6 +563,16 @@ Vue.component('readequacao-transferencia-recursos', {
 	    var saldo = parseFloat(this.projetoTransferidor.valorComprovar) - parseFloat(this.totalRecebido);
 	    return this.converterParaMoedaPontuado(saldo);
 	},
+	disponivelEditarProjetosRecebedores: function() {
+	    if (typeof this.readequacao.idReadequacao == 'undefined') {
+		return false;
+	    } else {
+		if (this.readequacao.idReadequacao == null || this.readequacao.idReadequacao == '') {
+		    return false;
+		}
+	    }
+    	    return true;
+	},
 	disponivelAdicionarRecebedor: function() {
 	    if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
 		return false;
@@ -591,6 +594,13 @@ Vue.component('readequacao-transferencia-recursos', {
 		    return true;
 		}
 	    }		
-	}	
+	},
+	exibeProjetosRecebedores: function() {
+	    if (this.projetosRecebedores.length > 0) {
+		return true;
+	    } else {
+		return false;
+	    }
+	}
     }
 })
