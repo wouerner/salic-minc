@@ -122,8 +122,15 @@ Vue.component('sl-comprovante-nacional-form',
                             >Data de Emiss&atilde;o</label>
                         </div>
                         <div class="input-field col s1">
-                            <i class="material-icons tooltipped" data-position="bottom" data-delay="50"
-                                :data-tooltip="'Inicio em: ' + dataInicio + ' at\xe9 ' + dataFim">help</i>
+                            <i 
+                                class="material-icons 
+                                tooltipped" 
+                                data-position="bottom" 
+                                data-delay="50"
+                                :data-tooltip="'Inicio em: ' + dataInicio + ' at\xe9 ' + dataFim"
+                            >
+                                help
+                            </i>
                         </div>
                         <div class="input-field col s3">
                             <input
