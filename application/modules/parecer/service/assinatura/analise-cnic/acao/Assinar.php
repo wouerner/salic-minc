@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\Parecer\Service\Assinatura\AnaliseInicial\Acao;
+namespace Application\Modules\Parecer\Service\Assinatura\AnaliseCNIC\Acao;
 
 use MinC\Assinatura\Acao\IAcaoAssinar;
 
