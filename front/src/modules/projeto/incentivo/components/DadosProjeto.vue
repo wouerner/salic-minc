@@ -564,7 +564,12 @@
                         </td>
                         <td class="right-align">
                             <b>
-                                <SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>
+                                <a
+                                    class="pode-ser-clicado"
+                                    @click="modalOpen('')"
+                                >
+                                    <SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>
+                                </a>
                             </b>
                         </td>
                         <td class="right-align">
@@ -636,6 +641,7 @@
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import { utils } from '@/mixins/utils';
     import moment from 'moment';
+    import ModalTemplate from '@/components/modal';
 
     export default {
         data() {
@@ -652,6 +658,7 @@
             SalicTextoSimples,
             SalicFormatarValor,
             SalicFormatarCpfCnpj,
+            ModalTemplate,
         },
         created() {
             if (Object.keys(this.dadosProjeto).length > 0) {
@@ -688,3 +695,9 @@
         },
     };
 </script>
+
+<style>
+    .pode-ser-clicado {
+        cursor: pointer;
+    }
+</style>
