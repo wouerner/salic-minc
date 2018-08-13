@@ -27,6 +27,15 @@ services:
 
       - XDEBUG_DEFAULT_ENABLE=1
       - XDEBUG_IDEKEY=PHPSTORM
+
+      - DB_ADAPTER=PDO_MSSQL
+      - DB_USERNAME=usuarios_internet
+      - DB_PASSWORD=_Salic
+      - DB_DBNAME=TABELAS
+      - DB_HOST=10.0.0.191
+      - DB_PORT=1434
+      - DB_CHARSET=ISO-8859-1
+      - DB_PDOTYPE=dblib
     networks:
       static-network:
         ipv4_address: 172.20.0.3
