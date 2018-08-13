@@ -3,6 +3,13 @@
         <div v-if="loading" class="row">
             <Carregando :text="'Carregando o projeto'"></Carregando>
         </div>
+
+        <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
+            <div style="background-color: #EF5350; text-transform: uppercase" class="darken-2 padding10 white-text center-align">
+                <div><b>Proponente Inabilitado</b></div>
+            </div>
+        </div>
+
         <div v-show="Object.keys(dadosProjeto).length > 0">
             <table class="tabela">
                 <tr class="destacar">
@@ -31,11 +38,6 @@
                     </td>
                 </tr>
             </table>
-            <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
-                <div style="background-color: #EF5350" class="darken-2 padding10 white-text">
-                    <div><b>Proponente Inabilitado</b></div>
-                </div>
-            </div>
             <table class="tabela">
                 <tr class="destacar">
                     <td class="centro"><b>UF</b></td>
@@ -371,7 +373,7 @@
 
             <fieldset>
                 <legend>Valores em R$</legend>
-                <table class="tabela">
+                <table class="tabela" v-if="dadosProjeto.vlTotalPropostaOriginal > 0">
                     <tr class="destacar">
                         <td align="center" colspan="5">
                             <b>
@@ -394,17 +396,14 @@
                         </td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.vlTotalPropostaOriginal > 0"
-                                             :to="{ name: 'planilhaproposta', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'planilhaproposta', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalPropostaOriginal"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalPropostaOriginal"/>
                             </b>
                         </td>
                     </tr>
                 </table>
-
-                <table class="tabela">
+                <table class="tabela" v-if="dadosProjeto.vlTotalAutorizado > 0 || dadosProjeto.vlTotalHomologado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3"><b>Autorizado p/ Captar</b></td>
                     </tr>
@@ -413,7 +412,7 @@
                         <td class="right-align"><b>Outras fontes (E)</b></td>
                         <td class="right-align"><b>Total Autorizado (F=D+E)</b></td>
                     </tr>
-                    <tr v-if="parseInt(dadosProjeto.idNormativo) > 6">
+                    <tr v-if="parseInt(dadosProjeto.idNormativo) >= 6">
                         <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlAutorizado"/>
                         </b></td>
@@ -422,15 +421,13 @@
                         </b></td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.vlTotalAutorizado > 0"
-                                             :to="{ name: 'planilhaautorizada', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'planilhaautorizada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalAutorizado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalAutorizado"/>
                             </b>
                         </td>
                     </tr>
-                    <tr v-else> <!--@todo pensar melhor essa parte para n�o duplicar o c�digo -->
+                    <tr v-else> <!--@todo pensar melhor essa parte para nao duplicar o codigo -->
                         <td class="right-align destaque-texto"><b>
                             <SalicFormatarValor :valor="dadosProjeto.vlHomologadoIncentivo"/>
                         </b></td>
@@ -439,17 +436,15 @@
                         </b></td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.vlTotalHomologado > 0"
-                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalHomologado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalHomologado"/>
                             </b>
                         </td>
                     </tr>
                 </table>
 
-                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6">
+                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) >= 6 && dadosProjeto.vlTotalAdequado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
@@ -471,17 +466,15 @@
                         </b></td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.vlTotalAdequado > 0"
-                                             :to="{ name: 'planilhaadequada', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'planilhaadequada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalAdequado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalAdequado"/>
                             </b>
                         </td>
                     </tr>
                 </table>
 
-                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) > 6">
+                <table class="tabela" v-if="parseInt(dadosProjeto.idNormativo) >= 6 && dadosProjeto.vlTotalHomologado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
@@ -503,17 +496,15 @@
                         </b></td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.vlTotalHomologado > 0"
-                                             :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'planilhahomologada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalHomologado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalHomologado"/>
                             </b>
                         </td>
                     </tr>
                 </table>
 
-                <table class="tabela">
+                <table class="tabela" v-if="dadosProjeto.vlTotalReadequado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
@@ -537,11 +528,9 @@
                         </b></td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.vlTotalReadequado > 0"
-                                             :to="{ name: 'planilhareadequada', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'planilhareadequada', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.vlTotalReadequado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlTotalReadequado"/>
                             </b>
                         </td>
                     </tr>
@@ -565,11 +554,9 @@
                     <tr>
                         <td class="right-align destaque-texto-primary destacar-celula">
                             <b>
-                                <a v-if="dadosProjeto.vlCaptado > 0"
-                                   :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
+                                <a :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
                                     <SalicFormatarValor :valor="dadosProjeto.vlCaptado"/>
                                 </a>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.vlCaptado"/>
                             </b>
                         </td>
                         <td class="right-align"><b>
@@ -583,16 +570,14 @@
                         </b></td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <a v-if="dadosProjeto.PercentualCaptado > 0"
-                                   :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
+                                <a :href="'/default/consultardadosprojeto/dados-bancarios-captacao?idPronac=' + idPronac">
                                     <SalicFormatarValor :valor="dadosProjeto.PercentualCaptado"/>
                                 </a>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.PercentualCaptado"/>
                             </b>
                         </td>
                     </tr>
                 </table>
-                <table class="tabela">
+                <table class="tabela" v-if="dadosProjeto.PercentualComprovado > 0">
                     <tr class="destacar">
                         <td align="center" colspan="3">
                             <b>
@@ -622,11 +607,9 @@
                         </td>
                         <td class="right-align destaque-texto-primary">
                             <b>
-                                <router-link v-if="dadosProjeto.PercentualComprovado > 0"
-                                             :to="{ name: 'relacaodepagamentos', params: { idPronac: idPronac }}">
+                                <router-link :to="{ name: 'relacaodepagamentos', params: { idPronac: idPronac }}">
                                     <SalicFormatarValor :valor="dadosProjeto.PercentualComprovado"/>
                                 </router-link>
-                                <SalicFormatarValor v-else :valor="dadosProjeto.PercentualComprovado"/>
                             </b>
                         </td>
                     </tr>

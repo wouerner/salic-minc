@@ -7,6 +7,16 @@ $this->SidebarVue($this->url($this->urlMenu, '', true)); ?>
     )); ?>
 
     <div id="conteudo">
+
+
+        <?php if ($this->ProponenteInabilitado) : ?>
+            <div class="row">
+                <div style="background-color: #EF5350; text-transform: uppercase" class="darken-2 padding10 white-text center-align">
+                    <div><b>Proponente Inabilitado</b></div>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <table class="tabela">
             <tr class="destacar">
                 <td><b>Pronac</b></td>
@@ -39,19 +49,11 @@ $this->SidebarVue($this->url($this->urlMenu, '', true)); ?>
             </tr>
         </table>
 
-        <?php if ($this->ProponenteInabilitado) : ?>
-            <div class="row">
-                <div style="background-color: #EF5350" class="darken-2 padding10 white-text">
-                    <div><b>Convenente Inabilitado</b></div>
-                </div>
-            </div>
-        <?php endif; ?>
-
         <table class="tabela">
             <tr class="destacar">
                 <th align="center"><b>UF</b></th>
                 <th align="center"><b>Mecanismo</b></th>
-                <th align="center"><b>Área Cultural</b></th>
+                <th align="center"><b>&Aacute;rea Cultural</b></th>
                 <th align="center"><b>Segmento Cultural</b></th>
                 <th align="center"><b>Processo</b></th>
             </tr>
@@ -67,11 +69,11 @@ $this->SidebarVue($this->url($this->urlMenu, '', true)); ?>
         <?php if (!empty($this->dados['DtConvenio'])) : ?>
             <table class="tabela">
                 <tr class="destacar">
-                    <th align="center" rowspan="2"><b>Período de vigência</b></th>
+                    <th align="center" rowspan="2"><b>PerÃ­odo de vigÃªncia</b></th>
                     <th align="center" colspan="3"><b>Conv&ecirc;nio</b></th>
                 </tr>
                 <tr class="destacar">
-                    <th align="center"><b>Nº Conv&ecirc;nio</b></th>
+                    <th align="center"><b>NÂº Conv&ecirc;nio</b></th>
                     <th align="center"><b>Dt. Conv&ecirc;nio</b></th>
                     <th align="center"><b>Dt. Publica&ccedil;&atilde;o</b></th>
                 </tr>
@@ -86,7 +88,7 @@ $this->SidebarVue($this->url($this->urlMenu, '', true)); ?>
 
         <table class="tabela">
             <tr class="destacar">
-                <th align="center">Síntese do Projeto</th>
+                <th align="center">S&iacute;ntese do Projeto</th>
             </tr>
             <tr>
                 <td align="justify"><?= $this->dados['ResumoProjeto']; ?></td>
@@ -109,7 +111,7 @@ $this->SidebarVue($this->url($this->urlMenu, '', true)); ?>
                 <th>Dt. Situa&ccedil;&atilde;o</th>
                 <th>Situa&ccedil;&atilde;o</th>
                 <th>Provid&ecirc;ncia Tomada</th>
-                <th>Localização Atual</th>
+                <th>Localiza&ccedil;&atilde;o Atual</th>
             </tr>
             <tr>
                 <td align="center"><?= $this->dados['DtSituacao']; ?></td>
@@ -126,8 +128,8 @@ $this->SidebarVue($this->url($this->urlMenu, '', true)); ?>
                 </tr>
                 <tr class="destacar">
                     <th>Dt. Arquivamento</th>
-                    <th>Nº inicial da caixa</th>
-                    <th>Nº final da caixa</th>
+                    <th>NÂº inicial da caixa</th>
+                    <th>NÂº final da caixa</th>
                 </tr>
                 <tr>
                     <td align="center"><?= Data::tratarDataZend($this->dados['DtArquivamento'], 'brasileiro'); ?></td>
