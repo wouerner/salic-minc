@@ -23,6 +23,7 @@ class Projeto_ProponenteRestController extends Zend_Rest_Controller
         $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
         $ProponenteService = new ProponenteService($this->getRequest(), $this->getResponse());
         $resposta = $ProponenteService->buscarDadosAgenteProponente();
+        xd($resposta);
         $this->view->assign('data', $resposta);
     }
     

@@ -14,8 +14,8 @@ export const buscaProjeto = ({ commit }, idPronac) => {
 export const buscaProponente = ({ commit }, idPronac) => {
     projetoHelperAPI.buscaProponente(idPronac)
         .then(() => {
-            // const data = response.data;
-            // const projeto = data.data;
-            // commit(types.SET_PROJETO, projeto);
+            const data = response.data;
+            const projeto = data.data;
+            commit(types.SET_PROPONENTE, projeto);
         });
 };

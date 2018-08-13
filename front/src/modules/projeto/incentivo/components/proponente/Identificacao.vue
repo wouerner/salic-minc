@@ -19,7 +19,7 @@
                 </td>
             </tr>
         </table>
-        <table class="tabela" v-else v-for="(proponente, index) in proponentes" v-bind:key="index">
+        <table class="tabela" v-else>
             <tr class="destacar">
                 <td tabindex="1" align="center"><b>CNPJ/CPF</b></td>
                 <td tabindex="2" align="center"><b>Nome do Proponente</b></td>

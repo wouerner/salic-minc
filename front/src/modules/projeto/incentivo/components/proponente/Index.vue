@@ -34,12 +34,9 @@ import Email from "./Email";
 import Natureza from "./Natureza";
 import Dirigente from "./Dirigente";
 import Procurador from "./Procurador";
-// import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-    created() {
-        console.log('criando o componente');
-    },
     components: {
         Identificacao,
         Endereco,
@@ -48,6 +45,24 @@ export default {
         Natureza,
         Dirigente,
         Procurador
+    },
+    created() {
+        if (
+            typeof this.$route.params.idPronac !== 'undefined' &&
+            Object.keys(this.dadosProponente).length === 0
+        ) {
+            this.buscaProponente(this.$route.params.idPronac);
+        }
+    },
+    methods: {
+        ...mapActions({
+            buscarProponente: 'projeto/buscaProponente',
+        }),
+    },
+    computed: {
+        ...mapGetters({
+            dadosProponente: 'projeto/proponente',
+        }),
     }
 };
 </script>

@@ -33,12 +33,6 @@ class Proponente
     public function buscarDadosAgenteProponente()
     {
         $parametros = $this->request->getParams();
-        $idPronac = $parametros['idPronac'];
-        $dados = array();
-        $dados['idPronac'] = (int) $idPronac;
-        $resposta = \ConsultarDadosProjetoDAO::obterDadosProjeto($dados);
-        // xd($resposta);
-        return [ 'idPronac' => $resposta[0]->IdPRONAC ];
         if (isset($params['idPronac'])) {
 
             $idPronac = $params['idPronac'];
@@ -46,25 +40,26 @@ class Proponente
                 $idPronac = Seguranca::dencrypt($idPronac);
             }
 
-            $dados = array();
+            $dados = [];
+            $proponente = [];
             $dados['idPronac'] = (int) $idPronac;
             if (is_numeric($dados['idPronac'])) {
                 if (isset($dados['idPronac'])) {
                     $idPronac = $dados['idPronac'];
                     //UC 13 - MANTER MENSAGENS (Habilitar o menu superior)
-                    $this->view->idPronac = $idPronac;
-                    $this->view->menumsg = 'true';
+                   $proponente['idPronac'] = $idPronac;
+                   $proponente['menumsg'] = 'true';
                 }
                 $rst = ConsultarDadosProjetoDAO::obterDadosProjeto($dados);
                 if (count($rst) > 0) {
-                    $this->view->projeto = $rst[0];
-                    $this->view->idpronac = $idPronac;
-                    $this->view->idprojeto = $rst[0]->idProjeto;
+                   $proponente['projeto'] = $rst[0];
+                   $proponente['idpronac'] = $idPronac;
+                   $proponente['idprojeto'] = $rst[0]->idProjeto;
                     if ($rst[0]->codSituacao == 'E12' || $rst[0]->codSituacao == 'E13' || 
                         $rst[0]->codSituacao == 'E15' || $rst[0]->codSituacao == 'E50' || 
                         $rst[0]->codSituacao == 'E59' || $rst[0]->codSituacao == 'E61' || 
                         $rst[0]->codSituacao == 'E62') {
-                        $this->view->menuCompExec = 'true';
+                       $proponente['menuCompExec'] = 'true';
                     }
 
                     $geral = new ProponenteDAO();
@@ -80,27 +75,27 @@ class Proponente
 
                     $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
                     $dadosProjeto = $geral->execPaProponente($idPronac);
-                    $this->view->dados = $dadosProjeto;
+                   $proponente['dados'] = $dadosProjeto;
 
                     $verificarHabilitado = $geral->verificarHabilitado($pronac);
                     if (count($verificarHabilitado)>0) {
-                        $this->view->ProponenteInabilitado = 1;
+                       $proponente['ProponenteInabilitado'] = 1;
                     }
 
                     $tbemail = $geral->buscarEmail($idPronac);
-                    $this->view->email = $tbemail;
+                   $proponente['email'] = $tbemail;
 
                     $tbtelefone = $geral->buscarTelefone($idPronac);
-                    $this->view->telefone = $tbtelefone;
+                   $proponente['telefone'] = $tbtelefone;
 
                     $tblAgente = new Agente_Model_DbTable_Agentes();
                     $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$dadosProjeto[0]->CNPJCPF))->current();
 
                     $rsDirigentes = $tblAgente->buscarDirigentes(array('v.idVinculoPrincipal =?'=>$rsAgente->idAgente,'n.Status =?'=>0), array('n.Descricao ASC'));
-                    $this->view->dirigentes = $rsDirigentes;
+                   $proponente['dirigentes'] = $rsDirigentes;
 
                     $tbProcuradorProjeto = new tbProcuradorProjeto();
-                    $this->view->procuradores = $tbProcuradorProjeto->buscarProcuradorDoProjeto($idPronac);
+                   $proponente['procuradores'] = $tbProcuradorProjeto->buscarProcuradorDoProjeto($idPronac);
 
                     //========== inicio codigo mandato dirigente ================
                     $arrMandatos = array();
@@ -116,7 +111,8 @@ class Proponente
                             $arrMandatos[$dirigente->NomeDirigente] = $rsMandato;
                         }
                     }
-                    $this->view->mandatos = $arrMandatos;
+                   $proponente['mandatos'] = $arrMandatos;
+                   return $proponente;
                 } else {
                     // parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
                 }
