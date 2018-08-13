@@ -7,6 +7,7 @@ application/configs/config.ini
 application.ini
 application/configs/config_desenv.ini
 application/configs/config_treinamento.ini
+docker-compose.yml
 
 # arquivos e diretorios do salic
 data/proposta/model/tbdocumentoagentes/*
