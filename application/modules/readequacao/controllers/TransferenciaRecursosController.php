@@ -428,22 +428,34 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
         try {
             $idPronac = $this->_request->getParam('idPronac');
             $pronacRecebedor = $this->_request->getParam('pronacRecebedor');
+            $idReadequacao = $this->_request->getParam('idReadequacao');
         
             $projeto = new Projetos();
             $verificarProjeto = $projeto->verificarPronacDisponivelReceber(
                 $idPronac,
-                $pronacRecebedor
+                $pronacRecebedor,
+                $idReadequacao
             );
-
-            $this->_helper->json(
-                [
-                    'projetoDisponivel' => $verificarProjeto['disponivel'],
-                    'idPronac' =>  utf8_encode($verificarProjeto['idPronac']),
-                    'nomeProjeto' =>  utf8_encode($verificarProjeto['nomeProjeto']),
-                    'resposta' => true,
-                    'msg' => 'Readequa&ccedil;&atilde;o finalizada com sucesso!'
-                ]
-            );            
+            
+            if ($verificarProjeto['disponivel'] == true) {
+                $this->_helper->json(
+                    [
+                        'projetoDisponivel' => $verificarProjeto['disponivel'],
+                        'idPronac' =>  utf8_encode($verificarProjeto['idPronac']),
+                        'nomeProjeto' =>  utf8_encode($verificarProjeto['nomeProjeto']),
+                        'resposta' => true,
+                        'msg' => 'Readequa&ccedil;&atilde;o finalizada com sucesso!'
+                    ]                  
+                );
+            } else {
+                $this->_helper->json(
+                    [
+                        'resposta' => false,
+                        'msg' => 'PRONAC inv&aacute;lido.'
+                    ]
+                );
+            }
+            
         } catch (Exception $objException) {
             $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json(

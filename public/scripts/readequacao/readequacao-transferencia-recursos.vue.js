@@ -15,10 +15,10 @@ Vue.component('readequacao-transferencia-recursos', {
           <b>&Aacute;rea: </b><span v-html="projetoTransferidor.area"></span>
         </div>
         <div class="col s2">
-          <b>Vl. a Comprovar: </b>R$ {{ vlAComprovar }}
+          <b>Vl. a Comprovar: </b><span style="white-space:nowrap;">R$ {{ vlAComprovar }}</span>
         </div>
         <div class="col s2">
-          <b>Saldo dispon&iacute;vel: </b>R$ {{ saldoDisponivel }}
+          <b>Saldo dispon&iacute;vel: </b><span style="white-space:nowrap;">R$ {{ saldoDisponivel }}</span>
         </div>
       </div>
 		</div>
@@ -77,33 +77,17 @@ Vue.component('readequacao-transferencia-recursos', {
 					<form class="row">
 						<div v-if="disponivelAdicionarRecebedor">
 							
-							<div v-if="areasEspeciais()" class="col s6">
+							<div class="col s6">
 								<label>Pronac recebedor</label>
 								<input type="text" 
-											 ref="pronacProjetoRecebedor"
+											 ref="projetoRecebedorIdPronac"
 											 v-model="projetoRecebedor.pronac" 
-											 @blur="verificarPronacDisponivelReceber"
+                       @blur="selecionaPronacRecebedor"
 											 />
 								<span>{{ projetoRecebedor.nome }}</span>
-								<br/>
-								<span class="green-text"
-											v-show="projetoRecebedor.disponivel"
-											>dispon&iacute;vel
-									<i class="material-icons green-text">check</i>
 								</span>
 							</div>
 							
-							<div v-else class="col s6">
-								<label>Projeto recebedor</label>
-								<select class="browser-default"
-												v-model="projetoRecebedor.idPronac"
-												ref="projetoRecebedorIdPronac"
-												@change="updateRecebedor"
-												:disabled="!disponivelAdicionarRecebedor">
-									<option v-for="(projeto, index) in projetosDisponiveis" v-bind:value="projeto.idPronac" v-bind:data-nome="projeto.nome">{{ projeto.pronac }} - {{ projeto.nome}}</option>
-								</select>
-							</div>
-
  							<div class="input-field col s3">
 								<input-money
 									ref="projetoRecebedorValorRecebido"
@@ -256,7 +240,6 @@ Vue.component('readequacao-transferencia-recursos', {
 	    projetoRecebedor,
 	    tiposTransferencia,
 	    projetosRecebedores: [],
-	    projetosDisponiveis: [],
 	    areasRecebedoresMultiplos,
 	    componente: 'readequacao-transferencia-recursos-tipo-transferencia'
 	}	
@@ -291,8 +274,8 @@ Vue.component('readequacao-transferencia-recursos', {
 	    }
 	},	
 	incluirRecebedor: function() {
-	    if (this.projetoRecebedor.idPronac == '' ||
-		this.projetoRecebedor.idPronac == undefined
+	    if (this.projetoRecebedor.pronac == '' ||
+		this.projetoRecebedor.pronac == undefined
 	    ) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o projeto recebedor!");
 		this.$refs.projetoRecebedorIdPronac.focus();
@@ -302,6 +285,12 @@ Vue.component('readequacao-transferencia-recursos', {
 		this.projetoRecebedor.vlRecebido == undefined
 	    ) {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o valor a ser recebido pelo projeto!");
+		this.$refs.projetoRecebedorValorRecebido.$refs.input.focus();		
+                return;
+	    }
+
+	    if (this.projetoRecebedor.vlRecebido <= 0) {
+		this.mensagemAlerta("Informe um valor positivo a ser recebido pelo projeto!");
 		this.$refs.projetoRecebedorValorRecebido.$refs.input.focus();		
                 return;
 	    }
@@ -333,11 +322,16 @@ Vue.component('readequacao-transferencia-recursos', {
 		    vlRecebido: self.projetoRecebedor.vlRecebido
 		}
 	    }).done(function(response) {
-		self.$data.projetosRecebedores.push(
-		    self.projetoRecebedor
-		);
-		self.projetoRecebedor = self.defaultProjetoRecebedor();
-		self.obterProjetosDisponiveis();
+		console.log(response.msg);
+		if (response.resposta == true) {
+		    self.$data.projetosRecebedores.push(
+			self.projetoRecebedor
+		    );
+		    self.projetoRecebedor = self.defaultProjetoRecebedor();
+		} else {
+		    self.mensagemAlerta("Erro ao incluir o projeto: <br/>" + response.msg);
+		    return;
+		}
 	    });
 	},
 	excluirRecebedor: function(index) {
@@ -383,7 +377,6 @@ Vue.component('readequacao-transferencia-recursos', {
 		    dsSolicitacao: readequacao.dsSolicitacao
 		}
             }).done(function (response) {
-		self.obterProjetosDisponiveis();
 		$3('.collapsible').collapsible('close', 0);
 		$3('.collapsible').collapsible('open', 1);
 		self.readequacao = readequacao;
@@ -458,7 +451,6 @@ Vue.component('readequacao-transferencia-recursos', {
             }).done(function (response) {
 		if (_.isObject(response.readequacao)) {
                     self.readequacao = response.readequacao;
-	    	    self.obterProjetosDisponiveis();
 		}
             });
         },	
@@ -474,18 +466,6 @@ Vue.component('readequacao-transferencia-recursos', {
             }).done(function (response) {
                 self.projetoTransferidor = response.projeto;
             });
-	},
-	obterProjetosDisponiveis: function(idPronac) {
-	    let self = this;
-	    $3.ajax({
-		type: "GET",
-		url: "/readequacao/transferencia-recursos/listar-projetos-recebedores-disponiveis",
-		data: {
-		    idPronac: this.idPronac
-		}
-	    }).done(function(response) {
-		self.projetosDisponiveis = response.projetos;
-	    });
 	},
 	obterProjetosRecebedores: function() {
 	    let self = this;
@@ -505,32 +485,39 @@ Vue.component('readequacao-transferencia-recursos', {
 		this.projetoRecebedor.nome = e.target.options[e.target.options.selectedIndex].dataset.nome;
             }
 	},
-	verificarPronacDisponivelReceber: function() {
-	    let self = this;
+	selecionaPronacRecebedor: function() {
+	    let self = this;	    
+	    
+	    if (this.projetoRecebedor.pronac == '') {
+		return;
+	    }
 
-	    if (self.projetoRecebedor.pronac == '') {
+	    if (isNaN(this.projetoRecebedor.pronac)) {
+		this.projetoRecebedor.pronac = '';
+		self.mensagemAlerta("O PRONAC informado &eacute; inv&aacute;lido.");
 		return;
 	    }
 	    
-	    $3.ajax({
+            $3.ajax({
 		type: "POST",
 		url: "/readequacao/transferencia-recursos/verificar-pronac-disponivel-receber",
 		data: {
-		    idPronac: self.idPronac,
-		    pronacRecebedor: self.projetoRecebedor.pronac
+                    idPronac: self.idPronac,
+		    idReadequacao: self.readequacao.idReadequacao,
+                    pronacRecebedor: self.projetoRecebedor.pronac
 		}
-	    }).done(function (response) {
+            }).done(function (response) {
 		if (!response.projetoDisponivel) {
-		    self.mensagemAlerta("Projeto n&atilde;o dispon&iacute;vel para receber transfer&ecirc;ncia de recursos, escolha outro PRONAC.");
-		    self.projetoRecebedor.pronac = '';
-		    self.projetoRecebedor.disponivel = false;
-		    self.$refs.pronacProjetoRecebedor.focus();
+                    self.mensagemAlerta("O PRONAC informado &eacute; duplicado ou inv&aacute;lido.");
+                    self.projetoRecebedor.pronac = '';
+                    self.projetoRecebedor.disponivel = false;
+                    self.$refs.projetoRecebedorIdPronac.focus();
 		} else {
-		    self.projetoRecebedor.nome = response.nomeProjeto;
-		    self.projetoRecebedor.idPronac = response.idPronac;
-		    self.projetoRecebedor.disponivel = true;
+                  self.projetoRecebedor.nome = response.nomeProjeto;
+                    self.projetoRecebedor.idPronac = response.idPronac;
+                    self.projetoRecebedor.disponivel = true;
 		}
-	    });
+            });
 	},
 	areasEspeciais: function() {    
 	    let self = this;
@@ -567,9 +554,6 @@ Vue.component('readequacao-transferencia-recursos', {
 		this.obterProjetosRecebedores();
 	    }
 	},
-	projetosRecebedores: function() {
-	    this.disponivelAdicionarRecebedores();	    
-	}
     },
     computed: {
 	totalRecebido: function() {
@@ -590,13 +574,7 @@ Vue.component('readequacao-transferencia-recursos', {
 	    if (this.totalRecebido == this.projetoTransferidor.saldoDisponivel) {
 		return false;
 	    } else {
-		if (!this.areaMultiplosProjeto &&
-		    this.projetosRecebedores.length == 0) {
-		    return false;
-		} else if (this.areaMultiplosProjeto &&
-			   this.projetosRecebedores.length > 0) {
-		    return true;		   
-		}
+		return true;		   
 	    }
 	},
 	disponivelAdicionarRecebedores: function() {
