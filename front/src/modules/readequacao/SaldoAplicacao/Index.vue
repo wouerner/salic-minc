@@ -1,5 +1,5 @@
 <template>
-    <div class='readequacao-saldo-aplicacao'>
+    <div class="readequacao-saldo-aplicacao container-fluid">
         <div class="card" v-if="!disabled">
 	    <div class="card-content">
                 <div class="col s2">
@@ -36,7 +36,6 @@
 		:componente-ds-solicitacao='componenteFormulario'
 		:objReadequacao="dadosReadequacao"
 		v-on:eventoAtualizarReadequacao="atualizarReadequacao"
-		v-on:eventoSalvarReadequacao="salvarReadequacao"
 		>
 	      </readequacao-formulario>
 	    </div>

@@ -2,23 +2,25 @@
   <div class="card">
       <div v-if="!disabled" class="card-content">
 	<span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
-	<input type="hidden" v-model="readequacao.idReadequacao"/>
+	<input type="hidden"
+	       :value="objReadequacao.idReadequacao"/>
         <div class="row">
           <div class="input-field col s12">
             <textarea
-              :disabled="disabled"
               id="textarea1"
               class="materialize-textarea"
               ref="readequacaoJustificativa"
-              v-model="readequacao.justificativa"></textarea>
+              :disabled="disabled"      
+	      :value="objReadequacao.justificativa"
+	      @input="updateJustificativa"
+	      ></textarea>
             <label for="textarea1">Justificativa *</label>
           </div>
         </div>
         <component
-          :ds-solicitacao="readequacao.dsSolicitacao"
+          :ds-solicitacao="objReadequacao.dsSolicitacao"
           :disabled="disabled"
           v-bind:is="componenteDsSolicitacao"
-          v-on:eventoAtualizarDsSolicitacao="atualizarDsSolicitacao($event)"
           ></component>
         <div class="row">
           <div class="col s12">
@@ -34,7 +36,9 @@
               <div class="file-path-wrapper">
                 <input class="file-path validate" type="text">
               </div>
-              <input type="hidden" v-model="readequacao.idDocumento"/>
+              <input type="hidden"
+		     :value="objReadequacao.idDocumento"
+		     />
             </div>
             <div id="carregando-arquivo" class="progress sumir">
               <div class="indeterminate"></div>
@@ -94,6 +98,7 @@
 import _ from "lodash";
 import numeral from "numeral";
 import { utils } from "@/mixins/utils";
+import { mapActions } from 'vuex';
 
 // TODO: implementar usando slot para não ter que importar os módulos
 import ReadequacaoSaldoAplicacaoSaldo from "../SaldoAplicacao/components/ReadequacaoSaldoAplicacaoSaldo";
@@ -131,22 +136,19 @@ export default {
 	componenteDsSolicitacao: ""
     },
     mixins: [utils],
-    mounted: function() {
-	if (!_.isEmpty(this.objReadequacao)) {
-	    this.readequacao = this.objReadequacao;
-	}
-    },
-    watch: {
-	objReadequacao: function(value) {
-	    if (typeof value.idReadequacao != "undefined") {
-		this.readequacao = value;
-	    }
-	}
-    },
     methods: {
 	salvarReadequacao: function() {
+	    if (this.readequacao.dsSolicitacao == ''
+		|| this.readequacao.dsSolicitacao == undefined
+		|| this.readequacao.dsSolicitacao == 0
+	    ) {
+		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel!");
+		this.$children[0].$refs.readequacaoSaldo.$el.focus();
+		return;		
+	    }
+	    
 	    if (
-		this.readequacao.justificativa.length < this.minCaracteresJustificativa
+		this.readequacao.dsJustificativa.length < this.minCaracteresJustificativa
 	    ) {
 		this.mensagemAlerta(
 		    "\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o!"
@@ -154,8 +156,8 @@ export default {
 		this.$refs.readequacaoJustificativa.focus();
 		return;
 	    }
-	    
-	    this.$emit("eventoSalvarReadequacao", this.readequacao);
+	    this.updateReadequacao(this.readequacao);
+	    //this.$emit("eventoSalvarReadequacao", this.readequacao);
 	},
 	subirDocumento: function() {
 	    let arquivo = $("#arquivo")[0].files[0],
@@ -195,7 +197,8 @@ export default {
 		    self.readequacao.idDocumento = response.documento.idDocumento;
 		    self.readequacao.nomeArquivo = response.documento.nomeArquivo;
 		    self.readequacao.idReadequacao = response.readequacao.idReadequacao;
-		    self.$emit("eventoAtualizarReadequacao", self.readequacao);
+		    // TODO: persistir via store
+		    //self.$emit("eventoAtualizarReadequacao", self.readequacao);
 		    $3("#carregando-arquivo").fadeOut("slow");
 		});
 	},
@@ -217,7 +220,8 @@ export default {
 		    self.mensagemSucesso("Documento excluido com sucesso.");
 		    self.readequacao.nomeArquivo = "";
 		    self.readequacao.idDocumento = "";
-		    self.$emit("eventoAtualizarReadequacao", self.readequacao);
+		    // TODO: persistir via store
+		    //self.$emit("eventoAtualizarReadequacao", self.readequacao);
 		    $3("#carregando-arquivo").fadeOut("slow");
 		})
 		.fail(function(response) {
@@ -249,10 +253,22 @@ export default {
 	    }
 	    return true;
 	},
-	atualizarDsSolicitacao: function(valor) {
-	    this.readequacao.dsSolicitacao = valor;
-	    this.$emit("eventoAtualizarReadequacao", this.readequacao);
-	}
+	updateJustificativa: function(event) {
+	    this.readequacao.dsJustificativa = event.target.value;
+	},
+	...mapActions({
+            updateReadequacao: 'readequacao/updateReadequacao',
+	}),	
+    },
+    watch: {
+	objReadequacao: function() {
+	    if (!_.isEmpty(this.objReadequacao)) {
+		this.readequacao.idReadequacao = this.objReadequacao.idReadequacao;
+		this.readequacao.idTipoReadequacao = this.objReadequacao.idTipoReadequacao;
+		this.readequacao.nomeArquivo = this.objReadequacao.nomeArquivo;
+		this.readequacao.idDocumento = this.objReadequacao.idDocumento;
+	    }
+	},
     }
 };
 </script>

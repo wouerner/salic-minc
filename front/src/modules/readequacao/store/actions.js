@@ -17,7 +17,7 @@ export const updateReadequacao = ({ commit }, params) => {
             const data = response.data;
             const readequacao = data.data;
             commit(types.UPDATE_READEQUACAO, readequacao);
-        });    
+        });
 };
 
 export const updateReadequacaoDsSolicitacao = ({ commit }, dsSolicitacao) => {
