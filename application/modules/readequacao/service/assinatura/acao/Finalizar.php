@@ -40,7 +40,7 @@ class Finalizar implements IAcaoFinalizar
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
         $objOrgaos = new \Orgaos();
         $dadosProjeto = $objTbProjetos->findBy(array(
-            'IdPRONAC' => $this->assinatura->modeloTbAssinatura->getIdPronac()
+            'IdPRONAC' => $assinatura->modeloTbAssinatura->getIdPronac()
         ));
 
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
