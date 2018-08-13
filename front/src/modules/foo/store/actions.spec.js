@@ -29,12 +29,7 @@ describe('Foo actions', () => {
             jest.spyOn(fooHelperAPI, 'obterDadosTabela');
             actions.obterDadosTabela({ commit });
 
-            registro = [
-                {
-                    Codigo: 1,
-                    DadoNr: 'Random String 1',
-                }
-            ];
+            registro = [{ Codigo: 1, DadoNr: 'Random String 1' }];
         });
 
         test('it is commit to obterDadosTabela', (done) => {
@@ -66,12 +61,10 @@ describe('Foo actions', () => {
 
             global.FormData = FormDataMock;
 
-            registro = {
-                Codigo: 1,
-                DadoNr: 'Random String 1',
-            };
+            registro = { Codigo: 1, DadoNr: 'Random String 1' };
 
             commit = jest.fn();
+            jest.spyOn(fooHelperAPI, 'criarRegistro');
             actions.criarRegistro({ commit }, registro);
         });
 
@@ -81,9 +74,6 @@ describe('Foo actions', () => {
         });
 
         test('it calls fooHelperAPI.criarRegistro', () => {
-            jest.spyOn(fooHelperAPI, 'criarRegistro');
-            const registro = mockReponse.data;
-            actions.criarRegistro({ commit }, registro);
             expect(fooHelperAPI.criarRegistro).toHaveBeenCalled();
         });
     });
@@ -107,10 +97,7 @@ describe('Foo actions', () => {
 
             global.FormData = FormDataMock;
 
-            registro = {
-                Codigo: 1,
-                DadoNr: 'Random String 1',
-            };
+            registro = { Codigo: 1, DadoNr: 'Random String 1' };
 
             commit = jest.fn();
             jest.spyOn(fooHelperAPI, 'atualizarRegistro');
@@ -123,17 +110,13 @@ describe('Foo actions', () => {
         });
 
         test('it calls fooHelperAPI.atualizarRegistro', () => {
-            actions.atualizarRegistro({ commit }, registro);
             expect(fooHelperAPI.atualizarRegistro).toHaveBeenCalled();
         });
     });
 
     describe('removerRegistro', () => {
         beforeEach(() => {
-            mockReponse = {
-                Codigo: 1,
-                DadoNr: 'Random String 1',
-            };
+            mockReponse = { Codigo: 1, DadoNr: 'Random String 1' };
 
             commit = jest.fn();
 
@@ -144,6 +127,7 @@ describe('Foo actions', () => {
                 DadoNr: 'Random String 1',
             };
 
+            jest.spyOn(fooHelperAPI, 'removerRegistro');
             actions.removerRegistro({ commit }, registro);
         });
 
@@ -153,8 +137,6 @@ describe('Foo actions', () => {
         });
 
         test('it calls fooHelperAPI.removerRegistro', () => {
-            jest.spyOn(fooHelperAPI, 'removerRegistro');
-            actions.removerRegistro({ commit }, registro);
             expect(fooHelperAPI.removerRegistro).toHaveBeenCalled();
         });
     });
@@ -162,11 +144,11 @@ describe('Foo actions', () => {
     describe('setRegistroAtivo', () => {
         beforeEach(() => {
             commit = jest.fn();
+            registro = { Codigo: 1, DadoNr: 'Random String 1' };
+            actions.setRegistroAtivo({ commit }, registro);
         });
 
         test('it is commit to setRegistroAtivo', (done) => {
-            const registro = { Codigo: 1, DadoNr: 'Random String 1' };
-            actions.setRegistroAtivo({ commit }, registro);
             done();
             expect(commit).toHaveBeenCalledWith('SET_REGISTRO_ATIVO', registro);
         });

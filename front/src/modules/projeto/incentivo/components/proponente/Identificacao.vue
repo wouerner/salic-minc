@@ -3,7 +3,7 @@
         <legend>Identificação</legend>
         <table class="tabela">
             <tr class="destacar">
-                <td align="center"><b>PRONAC</b></td>
+                <td align="center"><b>PRONAC</b></td> <!--PRONAC= AnoProjeto+Sequencial-->
                 <td align="center"><b>Nome do Projeto</b></td>
             </tr>
             <tr>
@@ -21,7 +21,7 @@
         </table>
         <table class="tabela" v-else v-for="(proponente, index) in proponentes" v-bind:key="index">
             <tr class="destacar">
-                <td tabindex="1" align="center"><b>CNPJ/CPF</b></td>
+                <td tabindex="1" align="center"><b>CNPJ/CPF</b></td> <!--CNPJCPF= CgcCpf-->
                 <td tabindex="2" align="center"><b>Nome do Proponente</b></td>
                 <td tabindex="3" align="center"><b>Tipo de Pessoa</b></td>
             </tr>
@@ -78,4 +78,6 @@
             }),
         }
     };
+
+
 </script>

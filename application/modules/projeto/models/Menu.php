@@ -404,6 +404,14 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'label' => 'Concilia&ccedil;&atilde;o Banc&aacute;ria',
                 'title' => 'Ir para Concilia&ccedil;&atilde;o Banc&aacute;ria',
                 'link' => '/default/consultardadosprojeto/conciliacao-bancaria/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['prestacaodecontas']['submenu'][] = [
+                'label' => 'Rela&ccedil;&atilde;o de pagamentos',
+                'title' => 'Ir para Rela&ccedil;&atilde;o de Pagamentos',
+                'link' => '/default/consultardadosprojeto/dados-relacao-pagamentos/?idPronac=' . $idPronacHash,
                 'ajax' => true,
                 'grupo' => []
             ];
@@ -422,6 +430,15 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'link' => '/default/consultardadosprojeto/relatorio-fisico/?idPronac=' . $idPronacHash,
                 'ajax' => true,
                 'grupo' => []
+            ];
+
+
+            $menu['prestacaodecontas']['submenu'][] = [
+              'label' => 'Pagamentos por UF / Munic&iacute;pio',
+              'title' => 'Ir para Pagamentos por UF / Munic&iacute;pio',
+              'link' => '/default/consultardadosprojeto/pagamentos-por-uf-municipio/?idPronac=' . $idPronacHash,
+              'ajax' => true,
+              'grupo' => []
             ];
 
             $menu['prestacaodecontas']['submenu'][] = [

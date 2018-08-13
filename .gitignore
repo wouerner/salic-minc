@@ -1,5 +1,5 @@
 # Coverage directory used by tools like istanbul
-front/test/unit/coverage/
+front/test/unit/coverage/*
 
 # configs do salic
 application/configs/bancos_*.ini
@@ -7,6 +7,7 @@ application/configs/config.ini
 application.ini
 application/configs/config_desenv.ini
 application/configs/config_treinamento.ini
+docker-compose.yml
 
 # arquivos e diretorios do salic
 data/proposta/model/tbdocumentoagentes/*
