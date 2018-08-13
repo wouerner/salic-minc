@@ -3,6 +3,7 @@
 class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract
 {
     private $idPronac;
+    const ID_TIPO_AGENTE_COMPONENTE_CNIC = 6;
 
     private function validarPerfis()
     {
@@ -64,7 +65,8 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract
         try {
             if (isset($idPronac) && !empty($idPronac)) {
                 $parecer = new Parecer();
-                $dadosParecer = $parecer->getIdAtoAdministrativoParecerTecnico($this->idPronac, self::ID_TIPO_AGENTE_COMPONENTE_CNIC);
+
+                $dadosParecer = $parecer->getIdAtoAdministrativoParecerTecnico($idPronac, self::ID_TIPO_AGENTE_COMPONENTE_CNIC);
                 $idAtoAdministrativo = $dadosParecer[0]['idParecer'];
 
                 $idTipoDoAtoAdministrativo = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ANALISE_CNIC;
@@ -78,7 +80,11 @@ class Parecer_AnaliseCnicController extends MinC_Controller_Action_Abstract
                 $this->redirect("/assinatura/index/visualizar-projeto/?idDocumentoAssinatura={$idDocumentoAssinatura}&origin={$origin}");
             }
         } catch (Exception $objException) {
-            parent::message($objException->getMessage(), $origin);
+            if($origin) {
+                parent::message($objException->getMessage(), $origin);
+            } else {
+                parent::message($objException->getMessage());
+            }
         }
     }
 
