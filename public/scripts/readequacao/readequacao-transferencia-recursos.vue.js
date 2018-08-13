@@ -59,7 +59,7 @@ Vue.component('readequacao-transferencia-recursos', {
 								<td colspan="2">R$ {{ projeto.vlRecebido}}</td>
 								<td class="right">
 									<a href="javascript:void(0)"
-										 v-on:click="excluirRecebedor(index)"
+										 v-on:click="excluirRecebedor(index, projeto.idSolicitacaoTransferenciaRecursos)"
 										 class="btn small">
 										<i class="material-icons">delete</i>					
 									</a>
@@ -334,14 +334,14 @@ Vue.component('readequacao-transferencia-recursos', {
 		}
 	    });
 	},
-	excluirRecebedor: function(index) {
+	excluirRecebedor: function(index, idSolicitacaoTransferenciaRecursos) {
 	    var self = this;
 	    $3.ajax({
 		type: "POST",
 		url: "/readequacao/transferencia-recursos/excluir-projeto-recebedor",
 		data: {
 		    idPronac: self.idPronac,
-		    idSolicitacaoTransferenciaRecursos: self.projetoTransferidor.idSolicitacaoTransferenciaRecursos
+		    idSolicitacaoTransferenciaRecursos
 		}
 	    }).done(function(response) {
 		if (response.resposta) {

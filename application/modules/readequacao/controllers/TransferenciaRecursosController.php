@@ -289,7 +289,9 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             $TbSolicitacaoTransferenciaRecursosDbTable = new Readequacao_Model_DbTable_TbSolicitacaoTransferenciaRecursos();
             
             $idSolicitacaoTransferenciaRecursos = $this->_request->getParam('idSolicitacaoTransferenciaRecursos');
-            $TbSolicitacaoTransferenciaRecursosDbTable->delete($idSolicitacaoTransferenciaRecursos);
+            $TbSolicitacaoTransferenciaRecursosDbTable->delete([
+                'idSolicitacaoTransferenciaRecursos = ?' => $idSolicitacaoTransferenciaRecursos]
+            );
             
             $this->_helper->json(
                 [
