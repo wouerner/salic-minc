@@ -98,7 +98,8 @@
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vuex-router-sync": "^5.0.0",
-    "webpack-encoding-plugin": "^0.2.1"
+    "webpack-encoding-plugin": "^0.2.1",
+    "jquery": "^3.3.1"
   },
   "engines": {
     "node": ">= 6.0.0",

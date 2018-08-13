@@ -14,6 +14,7 @@
     import Carregando from '@/components/Carregando';
     import Planilha from '@/components/Planilha/Planilha';
     import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados';
+    import $ from 'jquery';
 
     import { mapGetters } from 'vuex';
 
@@ -24,7 +25,7 @@
                 planilha: [],
                 loading: true,
                 semResposta: false,
-                mensagem: ''
+                mensagem: '',
             };
         },
         components: {
@@ -33,30 +34,30 @@
             PlanilhaItensHomologados,
         },
         mounted() {
-            if (typeof this.dadosProjeto != 'undefined') {
+            if (typeof this.dadosProjeto !== 'undefined') {
                 this.fetch(this.dadosProjeto.idPronac);
             }
         },
         watch: {
             dadosProjeto(value) {
-                if (typeof value != 'undefined') {
+                if (typeof value !== 'undefined') {
                     this.fetch(value.idPronac);
                 }
-            }
+            },
         },
         computed: {
             ...mapGetters({
-                dadosProjeto: 'projeto/projeto'
-            })
+                dadosProjeto: 'projeto/projeto',
+            }),
         },
         methods: {
             fetch(id) {
-                if (typeof id == 'undefined') {
+                if (typeof id === 'undefined') {
                     return;
                 }
 
-                let self = this;
-                $3
+                const self = this;
+                $
                     .ajax({
                         url: '/projeto/orcamento/obter-planilha-homologada-ajax/',
                         data: {
@@ -65,7 +66,6 @@
                     })
                     .done((response) => {
                         self.planilha = response.data;
-                        console.log('planilha', self.planilha);
                     })
                     .fail((response) => {
                         self.semResposta = true;
