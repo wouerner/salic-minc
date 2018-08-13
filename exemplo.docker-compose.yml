@@ -36,12 +36,12 @@ services:
       - DB_PORT=1434
       - DB_CHARSET=ISO-8859-1
       - DB_PDOTYPE=dblib
-    networks:
-      static-network:
-        ipv4_address: 172.20.0.3
-networks:
-   static-network:
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-          iprange: 172.28.5.0/24
+#    networks:
+#      static-network:
+#        ipv4_address: 172.20.0.3
+#networks:
+#   static-network:
+#    ipam:
+#      config:
+#        - subnet: 172.20.0.0/16
+#          iprange: 172.28.5.0/24
