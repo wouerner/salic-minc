@@ -9186,9 +9186,11 @@ class Projetos extends MinC_Db_Table_Abstract
             }
             
             $select = $this->select();
-            
+
+            if (!empty($listaProjetosRecebedores)) {
+                $select->where('IdPRONAC NOT IN (?)', $listaProjetosRecebedores);
+            }
             $select->where('IdPRONAC != ?', $idPronac);
-            $select->where('IdPRONAC NOT IN (?)', $listaProjetosRecebedores);
             $select->where(new Zend_Db_Expr('AnoProjeto + Sequencial = ?'), $pronacRecebedor);
             
             $projeto = $this->fetchAll($select);
