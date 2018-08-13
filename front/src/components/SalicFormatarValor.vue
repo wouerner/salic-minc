@@ -1,6 +1,6 @@
 <template>
-    <div v-if="valorFormatado && valorFormatado.length > 0" v-html="valorFormatado"></div>
-    <div v-else>0</div>
+    <a href="#" v-if="valorFormatado && valorFormatado.length > 0" v-html="valorFormatado"></a>
+    <a href="#" v-else>0</a>
 </template>
 
 <script>
