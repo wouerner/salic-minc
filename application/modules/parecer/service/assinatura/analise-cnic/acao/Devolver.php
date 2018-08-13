@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\Parecer\Service\Assinatura\AnaliseCNIC;
+namespace Application\Modules\Parecer\Service\Assinatura\AnaliseCNIC\Acao;
 
 use MinC\Assinatura\Acao\IAcaoDevolver;
 
