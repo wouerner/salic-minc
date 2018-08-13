@@ -77,12 +77,12 @@ class Projeto_IncentivoController extends Projeto_GenericController
 
             $data['permissao'] = true;
             $dbTableInabilitado = new Inabilitado();
-            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projetoCompleto->CgcCPf);
+            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projetoCompleto->CgcCPf, null, null, true);;
 
             $Parecer = new Parecer();
             $parecerAnaliseCNIC = $Parecer->verificaProjSituacaoCNIC($projetoCompleto->Pronac);
 
-            $data['ProponenteInabilitado'] = ($proponenteInabilitado->Habilitado == 'I');
+            $data['ProponenteInabilitado'] = !empty($proponenteInabilitado);
             $data['EmAnaliseNaCNIC'] = (count($parecerAnaliseCNIC) > 0) ? true : false;
             $data['idUsuarioExterno'] = !empty($this->idUsuarioExterno) ? $this->idUsuarioExterno : false;
 

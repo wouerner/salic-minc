@@ -3,6 +3,13 @@
         <div v-if="loading" class="row">
             <Carregando :text="'Carregando o projeto'"></Carregando>
         </div>
+
+        <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
+            <div style="background-color: #EF5350; text-transform: uppercase" class="darken-2 padding10 white-text center-align">
+                <div><b>Proponente Inabilitado</b></div>
+            </div>
+        </div>
+
         <div v-show="Object.keys(dadosProjeto).length > 0">
             <table class="tabela">
                 <tr class="destacar">
@@ -31,11 +38,6 @@
                     </td>
                 </tr>
             </table>
-            <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
-                <div style="background-color: #EF5350" class="darken-2 padding10 white-text">
-                    <div><b>Proponente Inabilitado</b></div>
-                </div>
-            </div>
             <table class="tabela">
                 <tr class="destacar">
                     <td class="centro"><b>UF</b></td>
@@ -534,7 +536,7 @@
                     </tr>
                 </table>
 
-                <table class="tabela" v-if="dadosProjeto.PercentualCaptado > 0">
+                <table class="tabela">
                     <tr class="destacar">
                         <td align="center" colspan="5">
                             <b>
