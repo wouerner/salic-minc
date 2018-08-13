@@ -8,10 +8,6 @@ class Parecer_AnaliseCnicDocumentoAssinaturaController implements \MinC\Assinatu
 
     const ID_TIPO_AGENTE_COMPONENTE_CNIC = 6;
     
-    public function __construct($post)
-    {
-        $this->post = $post;
-    }
 
     public function iniciarFluxo()
     {
