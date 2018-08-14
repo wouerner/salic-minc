@@ -383,17 +383,6 @@ class Readequacao_TransferenciaRecursosController extends Readequacao_GenericCon
             
             $projetoTransferidor = $projetos->buscarProjetoTransferidor($this->idPronac);
             
-            if (!in_array($projeto->codArea, $this->areasMultiplasTransferencias)) {
-                if (count($projetosRecebedores) > 1) {
-                    throw new Exception('Para projetos da &aacute;rea selecionada, n&atilde;o &eacute; poss&iacute;vel transferir recursos para mais de um projeto.');
-                }
-
-                if ($projetosRecebedores[0]->CgcCpf != $projetoTransferidor->CgcCpf) {
-                    throw new Exception('S&oacute; &eacute; poss&iacute;vel transferir recursos para projetos de um mesmo proponente!');
-                }
-                
-            }
-
             $statusReadequacao = $tbReadequacaoMapper->finalizarSolicitacaoReadequacao(
                 $this->idPronac,
                 Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS,
