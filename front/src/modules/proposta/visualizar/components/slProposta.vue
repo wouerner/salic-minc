@@ -1,6 +1,5 @@
 <template>
     <div v-if="idpreprojeto || dados" class="proposta">
-
             <ul class="collapsible" data-collapsible="expandable">
                  <li>
                     <div class="collapsible-header">
@@ -170,6 +169,7 @@
             <div class="padding10 green white-text">Opa! Proposta n&atilde;o informada...</div>
         </div>
 </template>
+
 <script>
 export default {
     name: 'slProposta',
