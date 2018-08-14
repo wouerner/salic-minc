@@ -1,5 +1,7 @@
 # Coverage directory used by tools like istanbul
 front/test/unit/coverage/*
+front/test/unit/coverage
+front/test/e2e/reports
 coverage
 
 # configs do salic
