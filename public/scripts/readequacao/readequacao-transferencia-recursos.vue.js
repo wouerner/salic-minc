@@ -15,10 +15,10 @@ Vue.component('readequacao-transferencia-recursos', {
           <b>&Aacute;rea: </b><span v-html="projetoTransferidor.area"></span>
         </div>
         <div class="col s2">
-          <b>Vl. a Comprovar: </b><span style="white-space:nowrap;">R$ {{ vlAComprovar }}</span>
+          <b>Vl. a Comprovar: </b><span style="white-space:nowrap;">R$ {{ valorFormatado(this.projetoTransferidor.valorComprovar) }}</span>
         </div>
         <div class="col s2">
-          <b>Saldo dispon&iacute;vel: </b><span style="white-space:nowrap;">R$ {{ saldoDisponivel }}</span>
+          <b>Saldo dispon&iacute;vel: </b><span style="white-space:nowrap;">R$ {{ valorFormatado(saldoDisponivel) }}</span>
         </div>
       </div>
 		</div>
@@ -56,7 +56,7 @@ Vue.component('readequacao-transferencia-recursos', {
 							<tr v-for="(projeto, index) in projetosRecebedores" class="animated fadeIn">
 								<td>{{ projeto.pronac }}</td>
 								<td>{{ projeto.nome}}</td>
-								<td colspan="2">R$ {{ projeto.vlRecebido}}</td>
+								<td colspan="2">R$ {{ valorFormatado(projeto.vlRecebido)}}</td>
 								<td class="right">
 									<a href="javascript:void(0)"
 										 v-on:click="excluirRecebedor(index, projeto.idSolicitacaoTransferenciaRecursos)"
@@ -70,7 +70,7 @@ Vue.component('readequacao-transferencia-recursos', {
 							<tr>
 								<td colspan="2"></td>
 								<td class="right">Total transferido: </td>
-								<td>R$ {{ totalRecebido }} </td>
+								<td>R$ {{ valorFormatado(totalRecebido) }} </td>
 							</tr>
 						</tfoot>
 					</table>
@@ -322,12 +322,16 @@ Vue.component('readequacao-transferencia-recursos', {
 		    vlRecebido: self.projetoRecebedor.vlRecebido
 		}
 	    }).done(function(response) {
-		console.log(response.msg);
 		if (response.resposta == true) {
-		    self.$data.projetosRecebedores.push(
+		    self.projetoRecebedor.idSolicitacaoTransferenciaRecursos = response.projetoRecebedor.idSolicitacaoTransferenciaRecursos;
+		    self.projetoRecebedor.vlRecebido = response.projetoRecebedor.vlRecebido;
+		    self.projetosRecebedores.push(
 			self.projetoRecebedor
 		    );
+		    
 		    self.projetoRecebedor = self.defaultProjetoRecebedor();
+		    self.projetoRecebedor.valorComprovar = "0";
+		    self.$refs.projetoRecebedorValorRecebido.$refs.input.value = "0";
 		} else {
 		    self.mensagemAlerta("Erro ao incluir o projeto: <br/>" + response.msg);
 		    return;
@@ -350,6 +354,7 @@ Vue.component('readequacao-transferencia-recursos', {
 		}
 	    });
 	},
+
 	salvarReadequacao: function(readequacao) {
 	    if (readequacao.dsSolicitacao == '' ||
 	       readequacao.dsSolicitacao == undefined
@@ -538,6 +543,10 @@ Vue.component('readequacao-transferencia-recursos', {
 		return false;
 	    }
 	},
+	valorFormatado: function(valor) {
+	    return this.converterParaMoedaPontuado(valor);
+	},
+
     },
     watch: {
 	readequacao: function() {
@@ -551,17 +560,15 @@ Vue.component('readequacao-transferencia-recursos', {
     computed: {
 	totalRecebido: function() {
 	    self = this;
+	    
 	    return this.projetosRecebedores.reduce(function (total, projeto) {
                 var resultado = parseFloat(total) + parseFloat(projeto.vlRecebido);
 		return resultado.toFixed(2);
-            }, 2);
-	},
-	vlAComprovar: function() {
-	    return this.converterParaMoedaPontuado(this.projetoTransferidor.valorComprovar);
+            }, 0);
 	},
 	saldoDisponivel: function() {
 	    var saldo = parseFloat(this.projetoTransferidor.valorComprovar) - parseFloat(this.totalRecebido);
-	    return this.converterParaMoedaPontuado(saldo);
+	    return saldo;
 	},
 	disponivelEditarProjetosRecebedores: function() {
 	    if (typeof this.readequacao.idReadequacao == 'undefined') {
