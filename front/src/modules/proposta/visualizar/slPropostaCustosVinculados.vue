@@ -1,7 +1,7 @@
 <template>
     <div class="tabelas">
         <div class="row">
-            <salic-table-easy v-bind:dados="dados"></salic-table-easy>
+            <slTableEasy v-bind:dados="dados"></slTableEasy>
         </div>
     </div>
 </template>

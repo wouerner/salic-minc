@@ -1,7 +1,8 @@
 <template>
     <div class="proposta">
             <div v-if="Object.keys(dadosHistorico).length > 2">
-                <salic-proposta-alteracoes :idpreprojeto="idpreprojeto" :dadosAtuais="dadosAtuais" :dadosHistorico="dadosHistorico"></salic-proposta-alteracoes>
+                <slPropostaAlteracoes :idpreprojeto="idpreprojeto" :dadosAtuais="dadosAtuais"
+                                      :dadosHistorico="dadosHistorico"></slPropostaAlteracoes>
             </div>
             <div v-else-if="Object.keys(dadosAtuais).length > 2">
                 <div class="card padding20">
@@ -10,7 +11,7 @@
                         <p style="margin-left: 44px">O proponente não fez alterações no projeto no prazo estabelecido.</p>
                     </div>
                 </div>
-                <salic-proposta :idpreprojeto="idpreprojeto" :proposta="dadosAtuais"></salic-proposta>
+                <slProposta :idpreprojeto="idpreprojeto" :proposta="dadosAtuais"></slProposta>
             </div>
             <div v-else>
                 <div class="card padding20">

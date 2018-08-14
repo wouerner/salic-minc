@@ -11,10 +11,16 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <salic-proposta-identificacao :idpreprojeto="idpreprojeto" :proposta="dadosHistorico"></salic-proposta-identificacao>
+                                <slPropostaIdentificacao
+                                        :idpreprojeto="idpreprojeto"
+                                        :proposta="dadosHistorico">
+                                </slPropostaIdentificacao>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <salic-proposta-identificacao :idpreprojeto="idpreprojeto" :proposta="dadosAtuais"></salic-proposta-identificacao>
+                                <slPropostaIdentificacao
+                                        :idpreprojeto="idpreprojeto"
+                                        :proposta="dadosAtuais">
+                                </slPropostaIdentificacao>
                             </div>
                         </div>
                     </div>
@@ -23,7 +29,9 @@
                     <div class="collapsible-header"><i class="material-icons">history</i>Hist&oacute;rico de avalia&ccedil;&otilde;es</div>
                     <div class="collapsible-body padding10">
                         <div class="card padding10">
-                            <salic-proposta-historico-avaliacoes :idpreprojeto="idpreprojeto"></salic-proposta-historico-avaliacoes>
+                            <slPropostaHistoricoAvaliacoes
+                                    :idpreprojeto="idpreprojeto">
+                            </slPropostaHistoricoAvaliacoes>
                         </div>
                     </div>
                 </li>
@@ -32,8 +40,12 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m12 12 scroll">
-                                <salic-agente-proponente :idagente="dadosAtuais.idAgente"></salic-agente-proponente>
-                                <salic-agente-usuario :idusuario="dadosAtuais.idUsuario"></salic-agente-usuario>
+                                <slAgenteProponente
+                                        :idagente="dadosAtuais.idAgente">
+                                </slAgenteProponente>
+                                <slAgenteUsuario
+                                        :idusuario="dadosAtuais.idUsuario">
+                                </slAgenteUsuario>
                             </div>
                         </div>
                     </div>
@@ -48,10 +60,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.FichaTecnica"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosHistorico.FichaTecnica">
+                                        </slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.FichaTecnica"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosAtuais.FichaTecnica">
+                                        </slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -68,10 +84,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.ResumoDoProjeto"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosHistorico.ResumoDoProjeto">
+                                        </slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20">
-                                        <salic-texto-simples :texto="dadosAtuais.ResumoDoProjeto"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosAtuais.ResumoDoProjeto">
+                                        </slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -88,10 +108,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.Objetivos"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosHistorico.Objetivos">
+                                        </slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.Objetivos"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosAtuais.Objetivos">
+                                        </slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -108,10 +132,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.EtapaDeTrabalho"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosHistorico.EtapaDeTrabalho">
+                                        </slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.EtapaDeTrabalho"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosAtuais.EtapaDeTrabalho">
+                                        </slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -128,10 +156,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.Acessibilidade"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosHistorico.Acessibilidade">
+                                        </slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.Acessibilidade"></salic-texto-simples>
+                                        <slTextoSimples
+                                                :texto="dadosAtuais.Acessibilidade">
+                                        </slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -148,10 +180,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.EspecificacaoTecnica"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosHistorico.EspecificacaoTecnica"></slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.EspecificacaoTecnica"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosAtuais.EspecificacaoTecnica"></slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -168,10 +200,10 @@
                             <table>
                                  <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.Sinopse"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosHistorico.Sinopse"></slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.Sinopse"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosAtuais.Sinopse"></slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -188,10 +220,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.DemocratizacaoDeAcesso"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosHistorico.DemocratizacaoDeAcesso"></slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.DemocratizacaoDeAcesso"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosAtuais.DemocratizacaoDeAcesso"></slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -208,10 +240,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.Justificativa"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosHistorico.Justificativa"></slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.Justificativa"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosAtuais.Justificativa"></slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -228,10 +260,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <salic-texto-simples :texto="dadosHistorico.DescricaoAtividade"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosHistorico.DescricaoAtividade"></slTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <salic-texto-simples :texto="dadosAtuais.DescricaoAtividade"></salic-texto-simples>
+                                        <slTextoSimples :texto="dadosAtuais.DescricaoAtividade"></slTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -246,12 +278,12 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <salic-proposta-local-realizacao-deslocamento
-                                        :localizacoes="dadosHistorico"></salic-proposta-local-realizacao-deslocamento>
+                                <slPropostaLocalRealizacaoDeslocamento
+                                        :localizacoes="dadosHistorico"></slPropostaLocalRealizacaoDeslocamento>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <salic-proposta-local-realizacao-deslocamento
-                                        :localizacoes="dadosAtuais"></salic-proposta-local-realizacao-deslocamento>
+                                <slPropostaLocalRealizacaoDeslocamento
+                                        :localizacoes="dadosAtuais"></slPropostaLocalRealizacaoDeslocamento>
                             </div>
                         </div>
                     </div>
@@ -264,10 +296,10 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <salic-proposta-documentos :arrayDocumentos="dadosHistorico"></salic-proposta-documentos>
+                                <slPropostaDocumentos :arrayDocumentos="dadosHistorico"></slPropostaDocumentos>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <salic-proposta-documentos :arrayDocumentos="dadosAtuais"></salic-proposta-documentos>
+                                <slPropostaDocumentos :arrayDocumentos="dadosAtuais"></slPropostaDocumentos>
                             </div>
                         </div>
                     </div>
@@ -280,16 +312,16 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <salic-proposta-plano-distribuicao
+                                <slPropostaPlanoDistribuicao
                                         :arrayProdutos="dadosHistorico.planodistribuicaoproduto"
                                         :arrayDetalhamentos="dadosHistorico.tbdetalhaplanodistribuicao"
-                                ></salic-proposta-plano-distribuicao>
+                                ></slPropostaPlanoDistribuicao>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <salic-proposta-plano-distribuicao
+                                <slPropostaPlanoDistribuicao
                                         :arrayProdutos="dadosAtuais.planodistribuicaoproduto"
                                         :arrayDetalhamentos="dadosAtuais.tbdetalhaplanodistribuicao"
-                                ></salic-proposta-plano-distribuicao>
+                                ></slPropostaPlanoDistribuicao>
                             </div>
                         </div>
                     </div>
@@ -303,12 +335,12 @@
                     <div class="collapsible-body padding20 active">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <salic-proposta-planilha-orcamentaria
-                                        :arrayPlanilha="dadosHistorico.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
+                                <slPropostaPlanilhaOrcamentaria
+                                        :arrayPlanilha="dadosHistorico.tbplanilhaproposta"></slPropostaPlanilhaOrcamentaria>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <salic-proposta-planilha-orcamentaria
-                                        :arrayPlanilha="dadosAtuais.tbplanilhaproposta"></salic-proposta-planilha-orcamentaria>
+                                <slPropostaPlanilhaOrcamentaria
+                                        :arrayPlanilha="dadosAtuais.tbplanilhaproposta"></slPropostaPlanilhaOrcamentaria>
                             </div>
                         </div>
                     </div>
@@ -321,14 +353,14 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <salic-proposta-custos-vinculados
+                                <slPropostaCustosVinculados
                                         :arrayCustos="dadosHistorico.tbcustosvinculados"
-                                ></salic-proposta-custos-vinculados>
+                                ></slPropostaCustosVinculados>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <salic-proposta-custos-vinculados
+                                <slPropostaCustosVinculados
                                         :arrayCustos="dadosAtuais.tbcustosvinculados"
-                                ></salic-proposta-custos-vinculados>
+                                ></slPropostaCustosVinculados>
                             </div>
                         </div>
                     </div>

@@ -99,9 +99,9 @@
                         </tbody>
                     </table>
 
-                    <salic-proposta-detalhamento-plano-distribuicao
+                    <slPropostaDetalhamentoPlanoDistribuicao
                             :arrayDetalhamentos="detalhamentosByID(detalhamentos, produto.idPlanoDistribuicao)">
-                    </salic-proposta-detalhamento-plano-distribuicao>
+                    </slPropostaDetalhamentoPlanoDistribuicao>
                 </div>
             </li>
         </ul>

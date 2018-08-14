@@ -53,7 +53,8 @@
 
                             </tr>
                         </tbody>
-                        <salic-proposta-detalhamento-consolidacao :items="detalhamento"></salic-proposta-detalhamento-consolidacao>
+                        <slPropostaDetalhamentoConsolidacao
+                                :items="detalhamento"></slPropostaDetalhamentoConsolidacao>
                     </table>
                 </div>
             </li>

@@ -14,7 +14,7 @@
                     </div>
                     <div class="col s12 l6 m6">
                         <b>Nome Projeto</b><br>
-                        <salic-texto-simples :texto="proposta.NomeProjeto"></salic-texto-simples>
+                        <slTextoSimples :texto="proposta.NomeProjeto"></slTextoSimples>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <div class="row">
                     <div class="col s12 l3 m3">
                         <b>Ag&ecirc;ncia banc&aacute;ria</b><br>
-                        <salic-texto-simples :texto="proposta.AgenciaBancaria"></salic-texto-simples>
+                        <slTextoSimples :texto="proposta.AgenciaBancaria"></slTextoSimples>
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.AreaAbrangencia">
                         <b>É proposta audiovisual</b><br>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col s12 l3 m3">
                         <b>Tipo de execu&ccedil;&atilde;o</b><br>
-                        <salic-texto-simples :texto="proposta.TipoExecucao"></salic-texto-simples>
+                        <slTextoSimples :texto="proposta.TipoExecucao"></slTextoSimples>
                     </div>
                 </div>
             </div>
