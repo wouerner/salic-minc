@@ -44,6 +44,8 @@
             "Application\\Modules\\Parecer\\Service\\Assinatura\\": "./application/modules/parecer/service/assinatura/",
             "Application\\Modules\\Parecer\\Service\\Assinatura\\AnaliseInicial\\": "./application/modules/parecer/service/assinatura/analise-inicial/",
             "Application\\Modules\\Parecer\\Service\\Assinatura\\AnaliseInicial\\Acao\\": "./application/modules/parecer/service/assinatura/analise-inicial/acao/",
+            "Application\\Modules\\Parecer\\Service\\Assinatura\\AnaliseCNIC\\": "./application/modules/parecer/service/assinatura/analise-cnic/",
+            "Application\\Modules\\Parecer\\Service\\Assinatura\\AnaliseCNIC\\Acao\\": "./application/modules/parecer/service/assinatura/analise-cnic/acao/",
             "MinC\\Assinatura\\": "./library/MinC/Assinatura/",
             "MinC\\Db\\Model\\": "./library/MinC/Db/Model/"
         }
