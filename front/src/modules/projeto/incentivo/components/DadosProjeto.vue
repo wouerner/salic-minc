@@ -549,7 +549,7 @@
                     </tr>
                     <tr class="destacar">
                         <td class="right-align"><b>Captado(P)</b></td>
-                        <td class="right-align"><b>Transferido(Q)AAAA</b></td>
+                        <td class="right-align"><b>Transferido(Q)</b></td>
                         <td class="right-align"><b>Recebido(R)</b></td>
                         <td class="right-align"><b>Saldo a captar(S)</b></td>
                         <td class="right-align"><b>% Captado(T)</b></td>
@@ -570,7 +570,7 @@
                                 <!--&gt;-->
                                     <!--<SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>-->
                                 <!--</a>-->
-                                <ValorTransferido></ValorTransferido>
+                                <ValorTransferido :valor="dadosProjeto.vlTransferido"></ValorTransferido>
                             </b>
                         </td>
                         <td class="right-align">

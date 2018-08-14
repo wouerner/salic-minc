@@ -14,7 +14,6 @@
     import Carregando from '@/components/Carregando';
     import Planilha from '@/components/Planilha/Planilha';
     import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados';
-    import $ from 'jquery';
 
     import { mapGetters } from 'vuex';
 
@@ -57,7 +56,8 @@
                 }
 
                 const self = this;
-                $
+                // eslint-disable-next-line
+                $3
                     .ajax({
                         url: '/projeto/orcamento/obter-planilha-homologada-ajax/',
                         data: {

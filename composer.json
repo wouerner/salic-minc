@@ -30,6 +30,7 @@
             "Application\\Modules\\Projeto\\": "./application/modules/projeto/",
             "Application\\Modules\\Projeto\\Service\\": "./application/modules/projeto/service/",
             "Application\\Modules\\Projeto\\Service\\Assinatura\\": "./application/modules/projeto/service/assinatura/",
+            "Application\\Modules\\Projeto\\Service\\Incentivo\\": "./application/modules/projeto/service/incentivo/",
             "Application\\Modules\\Projeto\\Service\\Assinatura\\Acao\\": "./application/modules/projeto/service/assinatura/acao/",
             "Application\\Modules\\PrestacaoContas\\": "./application/modules/prestacao-contas/",
             "Application\\Modules\\PrestacaoContas\\Service\\": "./application/modules/prestacao-contas/service/",

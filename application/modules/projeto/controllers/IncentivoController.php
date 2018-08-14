@@ -41,7 +41,12 @@ class Projeto_IncentivoController extends Projeto_GenericController
             }
         }
     }
-    
+
+    public function buscarValoresTransferidosAction()
+    {
+        xd('EEEEEEEEEEEEEEEEEEEEEEEE');
+    }
+
     public function obterProjetoAjaxAction()
     {
         $httpCode = 200;
