@@ -14,8 +14,8 @@ class Finalizar implements IAcaoFinalizar
         $objProjetos->alterarSituacao(
             $modeloTbAssinatura->getIdPronac(),
             null,
-            \Projeto_Model_Situacao::PROJETO_APROVADO_AGUARDANDO_ANALISE_DOCUMENTAL,
-            'Projeto aprovado - aguardando an&aacute;lise documental'
+            \Projeto_Model_Situacao::PROJETO_ENCAMINHADO_PARA_INCLUSAO_EM_PORTARIA,
+            'Projeto encaminhado para elabora&ccedil;&atilde;o de portaria'
         );
 
         $objTbProjetos = new \Projeto_Model_DbTable_Projetos();
@@ -23,14 +23,18 @@ class Finalizar implements IAcaoFinalizar
             'IdPRONAC' => $modeloTbAssinatura->getIdPronac()
         ));
 
-        $orgaoDestino = \Orgaos::ORGAO_SAV_DAP;
+
         $objOrgaos = new \Orgaos();
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
 
-        if ($dadosOrgaoSuperior['Codigo'] == \Orgaos::ORGAO_SUPERIOR_SEFIC) {
-            $orgaoDestino = \Orgaos::ORGAO_GEAAP_SUAPI_DIAAPI;
+        if ((int)$dadosOrgaoSuperior['Codigo'] == (int)\Orgaos::ORGAO_SUPERIOR_SEFIC) {
+            $orgaoDestino = (int)\Orgaos::ORGAO_GEAR_SACAV;
+        } elseif((int)$dadosOrgaoSuperior['Codigo'] == (int)\Orgaos::ORGAO_SUPERIOR_SAV) {
+            $orgaoDestino = (int)\Orgaos::ORGAO_SAV_DAP;
         }
-        $objTbProjetos->alterarOrgao($orgaoDestino, $modeloTbAssinatura->getIdPronac());
+        if(isset($orgaoDestino)) {
+            $objTbProjetos->alterarOrgao($orgaoDestino, $modeloTbAssinatura->getIdPronac());
+        }
 
         $enquadramento = new \Admissibilidade_Model_Enquadramento();
         $dadosEnquadramento = $enquadramento->obterEnquadramentoPorProjeto(
