@@ -1,7 +1,7 @@
 <template>
     <div>
         <a
-            @click="modalOpen('valor-transferidos')";
+            @click="abrirModal('valor-transferidos');"
         >
             TODO
         </a>
@@ -28,6 +28,11 @@
                 modalOpen: 'modal/modalOpen',
                 modalClose: 'modal/modalClose',
             }),
+            abrirModal(modalName) {
+                // eslint-disable-next-line
+                $3('#modalTemplate').modal('open');
+                this.modalOpen(modalName);
+            },
             fecharModal() {
                 // eslint-disable-next-line
                 $3('#modalTemplate').modal('close');

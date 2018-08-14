@@ -564,12 +564,13 @@
                         </td>
                         <td class="right-align">
                             <b>
-                                <a
-                                    class="pode-ser-clicado"
-                                    @click="modalOpen('')"
-                                >
-                                    <SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>
-                                </a>
+                                <!--<a-->
+                                    <!--class="pode-ser-clicado"-->
+                                    <!--@click="modalOpen('')"-->
+                                <!--&gt;-->
+                                    <!--<SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>-->
+                                <!--</a>-->
+                                <ValorTransferido></ValorTransferido>
                             </b>
                         </td>
                         <td class="right-align">
@@ -641,7 +642,7 @@
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import { utils } from '@/mixins/utils';
     import moment from 'moment';
-    import ModalTemplate from '@/components/modal';
+    import ValorTransferido from '@/modules/projeto/incentivo/components/ValorTransferido';
 
     export default {
         data() {
@@ -658,7 +659,7 @@
             SalicTextoSimples,
             SalicFormatarValor,
             SalicFormatarCpfCnpj,
-            ModalTemplate,
+            ValorTransferido,
         },
         created() {
             if (Object.keys(this.dadosProjeto).length > 0) {
