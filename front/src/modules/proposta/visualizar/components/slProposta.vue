@@ -172,7 +172,7 @@
 </template>
 <script>
 export default {
-    name: 'salic-proposta',
+    name: 'slProposta',
     data: function () {
         return {
             dados: {

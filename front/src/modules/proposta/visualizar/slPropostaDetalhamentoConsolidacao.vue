@@ -25,7 +25,7 @@
 </template>
 <script>
 export default {
-    name: 'salic-proposta-detalhamento-consolidacao',
+    name: 'slPropostaDetalhamentoConsolidacao',
     props: {
         items : {},
     },

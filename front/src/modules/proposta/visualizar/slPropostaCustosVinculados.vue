@@ -7,7 +7,7 @@
 </template>
 <script>
 export default {
-    name: 'salic-proposta-custos-vinculados',
+    name: 'slPropostaCustosVinculados',
     data: function () {
         return {
             dados: []

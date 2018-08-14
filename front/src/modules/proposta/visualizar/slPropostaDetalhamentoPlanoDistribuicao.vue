@@ -61,8 +61,10 @@
     </div>
 </template>
 <script>
+import slPropostaDetalhamentoConsolidacao from './slPropostaDetalhamentoConsolidacao';
+
 export default {
-    name: 'salic-proposta-detalhamento-plano-distribuicao',
+    name: 'slPropostaDetalhamentoPlanoDistribuicao',
     data: function () {
         return {
             detalhamentos: [],
