@@ -1,5 +1,7 @@
 <template>
-    <div v-if="idpreprojeto || dados" class="proposta">
+    <div>
+        <div v-if="idpreprojeto || dados" class="proposta">
+
             <ul class="collapsible" data-collapsible="expandable">
                  <li>
                     <div class="collapsible-header">
@@ -10,7 +12,10 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m12 l12 scroll">
-                                 <salic-proposta-identificacao :idpreprojeto="idpreprojeto" :proposta="dados"></salic-proposta-identificacao>
+                                 <slPropostaIdentificacao
+                                         :idpreprojeto="idpreprojeto"
+                                         :proposta="dados">
+                                 </slPropostaIdentificacao>
                             </div>
                         </div>
                     </div>
@@ -18,17 +23,17 @@
                 <li>
                     <div class="collapsible-header"><i class="material-icons">history</i>Hist&oacute;rico de avalia&ccedil;&otilde;es</div>
                     <div class="collapsible-body padding20">
-                        <salic-proposta-historico-avaliacoes
+                        <slPropostaHistoricoAvaliacoes
                                 :idpreprojeto="dados.idPreProjeto"
                                 :proposta="dados"
-                        ></salic-proposta-historico-avaliacoes>
+                        ></slPropostaHistoricoAvaliacoes>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">person</i>Proponente</div>
                     <div class="collapsible-body padding20">
-                        <salic-agente-proponente :idagente="dados.idAgente"></salic-agente-proponente>
-                        <salic-agente-usuario :idusuario="dados.idUsuario"></salic-agente-usuario>
+                        <slAgenteProponente :idagente="dados.idAgente"></slAgenteProponente>
+                        <slAgenteUsuario :idusuario="dados.idUsuario"></slAgenteUsuario>
                     </div>
                 </li>
 
@@ -36,7 +41,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Ficha t&eacute;cnica</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.FichaTecnica"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.FichaTecnica"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -44,7 +49,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Resumo</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.ResumoDoProjeto"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.ResumoDoProjeto"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -52,7 +57,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Objetivos</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.Objetivos"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.Objetivos"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -60,7 +65,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Etapa de Trabalho</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.EtapaDeTrabalho"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.EtapaDeTrabalho"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -68,7 +73,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Acessibilidade</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.Acessibilidade"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.Acessibilidade"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -78,7 +83,7 @@
                     </div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.EspecificacaoTecnica"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.EspecificacaoTecnica"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -86,7 +91,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Sinopse de Obra</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.Sinopse"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.Sinopse"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -94,7 +99,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Democratiza&ccedil;&atilde;o de Acesso</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.DemocratizacaoDeAcesso"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.DemocratizacaoDeAcesso"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -102,7 +107,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Justificativa</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.Justificativa"></salic-texto-simples>
+                            <salicTextoSimples :texto="dados.Justificativa"></salicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -110,14 +115,14 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Descri&ccedil;&atilde;o de Atividades</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salic-texto-simples :texto="dados.DescricaoAtividade"></salic-texto-simples>
+                            <slTextoSimples :texto="dados.DescricaoAtividade"></slTextoSimples>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">attachment</i>Documentos anexados</div>
                     <div class="collapsible-body padding20">
-                        <salic-proposta-documentos :proposta="dados"></salic-proposta-documentos>
+                        <slPropostaDocumentos :proposta="dados"></slPropostaDocumentos>
                     </div>
                 </li>
                 <li>
@@ -125,24 +130,26 @@
                         Distribui&ccedil;&atilde;o
                     </div>
                     <div class="collapsible-body padding20">
-                        <salic-proposta-plano-distribuicao
+                        <slPropostaPlanoDistribuicao
                                 :arrayProdutos="dados.planodistribuicaoproduto"
                                 :arrayDetalhamentos="dados.tbdetalhaplanodistribuicao"
-                        ></salic-proposta-plano-distribuicao>
+                        ></slPropostaPlanoDistribuicao>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">history</i>Fonte de Recurso</div>
                     <div class="collapsible-body padding20">
-                        <salic-proposta-fontes-de-recursos :idpreprojeto="idpreprojeto"></salic-proposta-fontes-de-recursos>
+                        <slPropostaFontesDeRecursos
+                                :idpreprojeto="idpreprojeto">
+                        </slPropostaFontesDeRecursos>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">place</i>Local de realiza&ccedil;&atilde;o/Deslocamento
                     </div>
                     <div class="collapsible-body padding20">
-                        <salic-proposta-local-realizacao-deslocamento
-                                :idpreprojeto="idpreprojeto"></salic-proposta-local-realizacao-deslocamento>
+                        <slPropostaLocalRealizacaoDeslocamento
+                                :idpreprojeto="idpreprojeto"></slPropostaLocalRealizacaoDeslocamento>
                     </div>
                 </li>
                 <li>
@@ -150,17 +157,17 @@
                         or&ccedil;ament&aacute;ria
                     </div>
                     <div class="collapsible-body padding20">
-                        <salic-proposta-planilha-orcamentaria
+                        <slPropostaPlanilhaOrcamentaria
                                 :arrayPlanilha="dados.tbplanilhaproposta"
-                        ></salic-proposta-planilha-orcamentaria>
+                        ></slPropostaPlanilhaOrcamentaria>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">attach_money</i>Custos Vinculados</div>
                     <div class="collapsible-body padding20" v-if="dados">
-                         <salic-proposta-custos-vinculados
+                         <slPropostaCustosVinculados
                                  :arrayCustos="dados.tbcustosvinculados"
-                         ></salic-proposta-custos-vinculados>
+                         ></slPropostaCustosVinculados>
                     </div>
                 </li>
             </ul>
@@ -168,6 +175,7 @@
         <div v-else class="center-align">
             <div class="padding10 green white-text">Opa! Proposta n&atilde;o informada...</div>
         </div>
+    </div>
 </template>
 
 <script>
