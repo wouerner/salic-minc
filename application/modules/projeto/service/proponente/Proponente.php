@@ -33,99 +33,81 @@ class Proponente
     public function buscarDadosAgenteProponente()
     {
         $parametros = $this->request->getParams();
-        // xd($parametros);
-        // xd($params['idPronac']);
-        if (isset($parametros['idPronac'])) {
+        $proponente = [];
+
+        try {
 
             $idPronac = $parametros['idPronac'];
             if (strlen($idPronac) > 7) {
-                $idPronac = Seguranca::dencrypt($idPronac);
+                $idPronac = \Seguranca::dencrypt($idPronac);
             }
 
-            $dados = [];
-            $proponente = [];
-            $dados['idPronac'] = (int) $idPronac;
-            if (is_numeric($dados['idPronac'])) {
-                if (isset($dados['idPronac'])) {
-                    $idPronac = $dados['idPronac'];
-                    //UC 13 - MANTER MENSAGENS (Habilitar o menu superior)
-                   $proponente['idPronac'] = $idPronac;
-                   $proponente['menumsg'] = 'true';
-                }
-                
-                $rst = ConsultarDadosProjetoDAO::obterDadosProjeto($dados);
-                if (count($rst) > 0) {
-                    $proponente['projeto'] = $rst[0];
-                    $proponente['idpronac'] = $idPronac;
-                    $proponente['idprojeto'] = $rst[0]->idProjeto;
-                    if ($rst[0]->codSituacao == 'E12' || $rst[0]->codSituacao == 'E13' || 
-                    $rst[0]->codSituacao == 'E15' || $rst[0]->codSituacao == 'E50' || 
-                    $rst[0]->codSituacao == 'E59' || $rst[0]->codSituacao == 'E61' || 
-                    $rst[0]->codSituacao == 'E62') {
-                        $proponente['menuCompExec'] = 'true';
-                    }
-                    
-                    $geral = new ProponenteDAO();
-                    $tblProjetos = new Projetos();
-                    
-                    $arrBusca['IdPronac = ?']=$idPronac;
-                    $rsProjeto = $tblProjetos->buscar($arrBusca)->current();
-                    $idPreProjeto = 0;
-                    
-                    if (!empty($rsProjeto->idProjeto)) {
-                        $idPreProjeto = $rsProjeto->idProjeto;
-                    }
-                    
-                    $pronac = $rsProjeto->AnoProjeto.$rsProjeto->Sequencial;
-                    $dadosProjeto = $geral->execPaProponente($idPronac);
-                    $proponente['dados'] = $dadosProjeto;
-                    
-                    $verificarHabilitado = $geral->verificarHabilitado($pronac);
-                    if (count($verificarHabilitado)>0) {
-                        $proponente['ProponenteInabilitado'] = 1;
-                    }
-                    
-                    $tbemail = $geral->buscarEmail($idPronac);
-                    $proponente['email'] = $tbemail;
-                    
-                    $tbtelefone = $geral->buscarTelefone($idPronac);
-                    $proponente['telefone'] = $tbtelefone;
-                    
-                    $tblAgente = new Agente_Model_DbTable_Agentes();
-                    $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$dadosProjeto[0]->CNPJCPF))->current();
-                    
-                    $rsDirigentes = $tblAgente->buscarDirigentes(array('v.idVinculoPrincipal =?'=>$rsAgente->idAgente,'n.Status =?'=>0), array('n.Descricao ASC'));
-                    $proponente['dirigentes'] = $rsDirigentes;
-                    
-                    $tbProcuradorProjeto = new tbProcuradorProjeto();
-                    $proponente['procuradores'] = $tbProcuradorProjeto->buscarProcuradorDoProjeto($idPronac);
-                    
-                    //========== inicio codigo mandato dirigente ================
-                    $arrMandatos = array();
-                    
-                    if (!empty($this->idPreProjeto)) {
-                        $preProjeto = new Proposta_Model_DbTable_PreProjeto();
-                        $Empresa = $preProjeto->buscar(array('idPreProjeto = ?' => $this->idPreProjeto))->current();
-                        $idEmpresa = $Empresa->idAgente;
-                        
-                        $tbDirigenteMandato = new tbAgentesxVerificacao();
-                        foreach ($rsDirigentes as $dirigente) {
-                            $rsMandato = $tbDirigenteMandato->listarMandato(array('idEmpresa = ?' => $idEmpresa, 'idDirigente = ?' => $dirigente->idAgente,'stMandato = ?' => 0));
-                            $arrMandatos[$dirigente->NomeDirigente] = $rsMandato;
-                        }
-                    }
-                    $proponente['mandatos'] = $arrMandatos;
-                } else {
-                    // parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
-                }
-            } else {
-                // parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
+            if (empty($idPronac)) {
+                throw new \Exception("idPronac &eacute; obrigat&oacute;rio");
             }
-        } else {
-            // parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
+
+            $dbTableProjetos = new \Projeto_Model_DbTable_Projetos();
+            $projeto = $dbTableProjetos->findBy(['IdPronac = ?' => $idPronac]);
+
+            if (empty($projeto)) {
+                throw new \Exception("Nenhum projeto encontrado!");
+            }
+
+            $proponenteDAO = new \ProponenteDAO();
+
+            $dadosProponente = $proponenteDAO->execPaProponente($idPronac, \Zend_DB::FETCH_ASSOC);
+            $proponente['dados'] = $dadosProponente[0];
+
+            $idAgente = $dadosProponente[0]['idAgente'];
+
+            $dbTableInabilitado = new \Inabilitado();
+            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto["CgcCpf"], null, null, true);
+
+            $proponente['ProponenteInabilitado'] = !empty($proponenteInabilitado);
+
+            $dbTableInternet = new \Agente_Model_DbTable_Internet();
+            $proponente['emails'] = $dbTableInternet->buscarEmails($idAgente)->toArray();
+
+            $dbTableTelefones = new \Agente_Model_DbTable_Telefones();
+            $proponente['telefones'] = $dbTableTelefones->buscarFones($idAgente)->toArray();
+
+            $dbTableEndereco = new \Agente_Model_DbTable_EnderecoNacional();
+            $proponente['enderecos'] = $dbTableEndereco->buscarEnderecos($idAgente)->toArray();
+
+            $tbProcuradorProjeto = new \tbProcuradorProjeto();
+            $proponente['procuradores'] = $tbProcuradorProjeto->buscarProcuradorDoProjeto($idPronac)->toArray();
+
+
+            $dbTableAgente = new \Agente_Model_DbTable_Agentes();
+            $dirigentes = $dbTableAgente->buscarDirigentes(
+                ['v.idVinculoPrincipal = ?' => $idAgente, 'n.Status =?' => 0],
+                ['n.Descricao ASC']
+            )->toArray();
+
+            $arrDirigentes = [];
+            if (!empty($projeto["idProjeto"])) {
+                $dbTablePreProjeto = new \Proposta_Model_DbTable_PreProjeto();
+                $preProjeto = $dbTablePreProjeto->findBy(['idPreProjeto = ?' => $projeto["idProjeto"]]);
+                $tbDirigenteMandato = new \tbAgentesxVerificacao();
+                foreach ($dirigentes as $dirigente) {
+                    $rsMandato = $tbDirigenteMandato->listarMandato([
+                        'idEmpresa = ?' => $preProjeto['idAgente'],
+                        'idDirigente = ?' => $dirigente['idAgente'],
+                        'stMandato = ?' => 0]
+                    )->toArray();
+                    $dirigente['mandatos'] = $rsMandato;
+                    $arrDirigentes[] = $dirigente;
+                }
+            }
+
+            $proponente['dirigentes'] = $arrDirigentes;
+
+            $proponente = \TratarArray::utf8EncodeArray($proponente);
+
+            return $proponente;
+
+        } catch (\Exception $objExecption) {
+            throw $objExecption;
         }
-        $proponente = TratarArray::utf8EncodeArray($proponente);
-        // xd($proponente);
-        return $proponente;
     }
 }
