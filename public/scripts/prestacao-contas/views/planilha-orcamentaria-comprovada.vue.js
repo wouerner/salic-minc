@@ -2,7 +2,18 @@ Vue.component('planilha-orcamentaria-comprovada', {
     props: ['idpronac'],
     template: `
         <div>
-            <sl-planilha-produtos :produtos="produtos" :idpronac="idpronac"></sl-planilha-produtos>
+            <sl-planilha-produtos :produtos="produtos" :idpronac="idpronac">
+                  <template slot-scope="slot">
+                        <sl-planilha-etapas
+                            v-for="(etapa, index) in slot.produto.etapa"
+                            :etapa="etapa"
+                            :idpronac="idpronac"
+                            :cdProduto="slot.produto.cdProduto"
+                            :key="index"
+                        >
+                        </sl-planilha-etapas>
+                  </template>
+            </sl-planilha-produtos>
         </div>
     `,
     mounted: function () {

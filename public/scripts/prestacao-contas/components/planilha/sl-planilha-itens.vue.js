@@ -1,6 +1,4 @@
 Vue.component('sl-planilha-itens', {
-    props: ['itens','idpronac','uf',
-        'cdproduto','cdcidade','cdetapa'],
     template: `
         <table class="bordered">
             <thead>
@@ -33,6 +31,14 @@ Vue.component('sl-planilha-itens', {
             </tbody>
         </table>
     `,
+    props: [
+        'itens',
+        'idpronac',
+        'uf',
+        'cdproduto',
+        'cdcidade',
+        'cdetapa'
+    ],
     methods: {
         isObject: function (el) {
             return typeof el === "object";
