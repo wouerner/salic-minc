@@ -108,6 +108,8 @@
     </div>
 </template>
 <script>
+import slPropostaDetalhamentoPlanoDistribuicao from './slPropostaDetalhamentoPlanoDistribuicao'
+
 export default {
     name: 'slPropostaPlanoDistribuicao',
     data: function () {

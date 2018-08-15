@@ -84,6 +84,8 @@
     </div>
 </template>
 <script>
+import slTextoSimples from '../components/slTextoSimples'
+
 export default {
     name: 'slPropostaIdentificacao',
     props: {

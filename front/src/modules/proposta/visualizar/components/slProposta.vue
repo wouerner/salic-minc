@@ -107,7 +107,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Justificativa</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <salicTextoSimples :texto="dados.Justificativa"></salicTextoSimples>
+                            <slTextoSimples :texto="dados.Justificativa"></slTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -179,6 +179,18 @@
 </template>
 
 <script>
+import slPropostaIdentificacao from '../slPropostaIdentificacao'
+import slPropostaHistoricoAvaliacoes from '../slPropostaHistoricoAvaliacoes'
+import slAgenteProponente from '../../components/slAgenteProponente'
+import slAgenteUsuario from '../../components/slAgenteUsuario'
+import slTextoSimples from '../../components/slTextoSimples'
+import slPropostaDocumentos from '../slPropostaDocumentos'
+import slPropostaPlanoDistribuicao from '../slPropostaPlanoDistribuicao'
+import slPropostaFontesDeRecursos from '../slPropostaFontesDeRecursos'
+import slPropostaLocalRealizacaoDeslocamento from '../slPropostaLocalRealizacaoDeslocamento'
+import slPropostaPlanilhaOrcamentaria from '../slPropostaPlanilhaOrcamentaria'
+import slPropostaCustosVinculados from '../slPropostaCustosVinculados'
+
 export default {
     name: 'slProposta',
     data: function () {

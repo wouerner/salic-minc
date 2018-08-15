@@ -6,6 +6,8 @@
     </div>
 </template>
 <script>
+import slTableEasy from '@/components/slTableEasy';
+
 export default {
     name: 'slPropostaFontesDeRecursos',
     data: function () {

@@ -24,6 +24,7 @@
 </template>
 <script>
 import slPropostaAlteracoes from './slPropostaAlteracoes';
+import slProposta from './components/slProposta';
 
 export default {
     name: 'slPropostaDiff',

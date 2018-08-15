@@ -369,6 +369,17 @@
     </div>
 </template>
 <script>
+import slPropostaIdentificacao from './slPropostaIdentificacao'
+import slPropostaHistoricoAvaliacoes from './slPropostaHistoricoAvaliacoes'
+import slAgenteProponente from '../components/slAgenteProponente'
+import slAgenteUsuario from '../components/slAgenteUsuario'
+import slTextoSimples from '@/components/slTextoSimples'
+import slPropostaLocalRealizacaoDeslocamento from './slPropostaLocalRealizacaoDeslocamento'
+import slPropostaDocumentos from './slPropostaDocumentos'
+import slPropostaPlanoDistribuicao from './slPropostaPlanoDistribuicao'
+import slPropostaPlanilhaOrcamentaria from './slPropostaPlanilhaOrcamentaria'
+import slPropostaCustosVinculados from './slPropostaCustosVinculados'
+
 export default {
     name: 'slPropostaAlteracoes',
     props: ['idpreprojeto', 'dadosAtuais', 'dadosHistorico'],
