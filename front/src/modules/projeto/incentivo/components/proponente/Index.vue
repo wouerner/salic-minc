@@ -27,42 +27,40 @@
 </template>
 
 <script>
-import Identificacao from "./Identificacao";
-import Endereco from "./Endereco";
-import Telefone from "./Telefone";
-import Email from "./Email";
-import Natureza from "./Natureza";
-import Dirigente from "./Dirigente";
-import Procurador from "./Procurador";
-import { mapGetters, mapActions } from "vuex";
-
-export default {
-    components: {
-        Identificacao,
-        Endereco,
-        Telefone,
-        Email,
-        Natureza,
-        Dirigente,
-        Procurador
-    },
-    created() {
-        if (
-            typeof this.$route.params.idPronac !== 'undefined' &&
-            Object.keys(this.dadosProponente).length === 0
-        ) {
-            this.buscaProponente(this.$route.params.idPronac);
+    import Identificacao from "./Identificacao";
+    import Endereco from "./Endereco";
+    import Telefone from "./Telefone";
+    import Email from "./Email";
+    import Natureza from "./Natureza";
+    import Dirigente from "./Dirigente";
+    import Procurador from "./Procurador";
+    import { mapGetters, mapActions } from "vuex";
+    
+    export default {
+        components: {
+            Identificacao,
+            Endereco,
+            Telefone,
+            Email,
+            Natureza,
+            Dirigente,
+            Procurador
+        },
+        created() {
+            if (typeof this.$route.params.idPronac !== 'undefined' &&
+                Object.keys(this.dadosProponente).length === 0) {
+                this.buscaProponente(this.$route.params.idPronac);
+            }
+        },
+        methods: {
+            ...mapActions({
+                buscaProponente: 'projeto/buscaProponente',
+            }),
+        },
+        computed: {
+            ...mapGetters({
+                dadosProponente: 'projeto/proponente',
+            }),
         }
-    },
-    methods: {
-        ...mapActions({
-            buscarProponente: 'projeto/buscaProponente',
-        }),
-    },
-    computed: {
-        ...mapGetters({
-            dadosProponente: 'projeto/proponente',
-        }),
-    }
-};
+    };
 </script>

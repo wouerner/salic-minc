@@ -15,20 +15,19 @@ class Projeto_ProponenteRestController extends Zend_Rest_Controller
             ->addActionContext('put', 'json')
             ->addActionContext('delete', 'json')
             ->initContext('json');
-    }
-
-    public function getAction()
-    {
-        // xd('Agora foi aqui');
-        $this->_helper->layout->disableLayout(); // Desabilita o Zend Layout
-        $ProponenteService = new ProponenteService($this->getRequest(), $this->getResponse());
-        $resposta = $ProponenteService->buscarDadosAgenteProponente();
-        xd($resposta);
-        $this->view->assign('data', $resposta);
-    }
-    
-    public function indexAction()
-    {
+        }
+        
+        public function getAction()
+        {
+            $ProponenteService = new ProponenteService($this->getRequest(), $this->getResponse());
+            $resposta = $ProponenteService->buscarDadosAgenteProponente();
+            print_r($resposta); die;
+            // xd($resposta);
+            $this->view->assign('data', $resposta);
+        }
+        
+        public function indexAction()
+        {
         $this->getResponse()
              ->setHttpResponseCode(200);
     }

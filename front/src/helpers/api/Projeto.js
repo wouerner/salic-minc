@@ -8,6 +8,6 @@ export const buscaProjeto = (idPronac) => {
 
 export const buscaProponente = (idPronac) => {
     const path = '/projeto/proponente-rest';
-    const queryParams = `?idPronac=${idPronac}`;
+    const queryParams = `/idPronac/${idPronac}`;
     return api.getRequest(path, queryParams);
 };

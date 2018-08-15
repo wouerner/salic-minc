@@ -19,16 +19,6 @@ class Proponente
         $this->request = $request;
         $this->response = $response;
     }
-
-    public function buscar($idPronac)
-    {
-        $tabelaDbTabela = new \Foo_Model_DbTable_Tabela();
-        $where = [
-            'Codigo' => $idPronac
-        ];
-
-        return $tabelaDbTabela->findBy($where);
-    }
     
     public function buscarDadosAgenteProponente()
     {
@@ -112,10 +102,10 @@ class Proponente
                         }
                     }
                    $proponente['mandatos'] = $arrMandatos;
-                   return $proponente;
                 } else {
                     // parent::message("Nenhum projeto encontrado com o n&uacute;mero de Pronac informado.", "listarprojetos/listarprojetos", "ERROR");
                 }
+            return $proponente;
             } else {
                 // parent::message("N&uacute;mero Pronac inv&aacute;lido!", "listarprojetos/listarprojetos", "ERROR");
             }
