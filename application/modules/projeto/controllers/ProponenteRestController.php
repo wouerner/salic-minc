@@ -1,4 +1,5 @@
 <?php
+
 use Application\Modules\Projeto\Service\Proponente\Proponente as ProponenteService;
 
 class Projeto_ProponenteRestController extends Zend_Rest_Controller
@@ -8,28 +9,30 @@ class Projeto_ProponenteRestController extends Zend_Rest_Controller
 
     public function init()
     {
-        $this->_helper->getHelper('contextSwitch')
-            ->addActionContext('get', 'json')
-            ->addActionContext('index', 'json')
-            ->addActionContext('post', 'json')
-            ->addActionContext('put', 'json')
-            ->addActionContext('delete', 'json')
-            ->initContext('json');
-        }
+    $this->_helper->getHelper('contextSwitch')
+        ->addActionContext('get', 'json')
+        ->addActionContext('index', 'json')
+        ->addActionContext('post', 'json')
+        ->addActionContext('put', 'json')
+        ->addActionContext('delete', 'json')
+        ->initContext('json');
+    }
+    
+    public function getAction()
+    {
+        $ProponenteService = new ProponenteService($this->getRequest(), $this->getResponse());
+        $resposta = $ProponenteService->buscarDadosAgenteProponente();
+        // xd('ta aqui', $resposta);
+
+        $this->view->assign('data', $resposta);
         
-        public function getAction()
-        {
-            $ProponenteService = new ProponenteService($this->getRequest(), $this->getResponse());
-            $resposta = $ProponenteService->buscarDadosAgenteProponente();
-            print_r($resposta); die;
-            // xd($resposta);
-            $this->view->assign('data', $resposta);
-        }
-        
-        public function indexAction()
-        {
-        $this->getResponse()
-             ->setHttpResponseCode(200);
+        $this->getResponse()->setHttpResponseCode(200);
+    }
+    
+    public function indexAction()
+    {
+    $this->getResponse()
+         ->setHttpResponseCode(200);
     }
 
     public function postAction()
