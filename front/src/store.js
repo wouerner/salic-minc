@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import modal from '@/components/modal/store';
 import projeto from './modules/projeto/store';
 import readequacao from './modules/readequacao/store';
+import foo from './modules/foo/store';
 
 Vue.use(Vuex);
 
@@ -12,6 +14,8 @@ export default new Vuex.Store({
     modules: {
         projeto,
         readequacao,
+        foo,
+        modal,
     },
     strict: debug,
 });
