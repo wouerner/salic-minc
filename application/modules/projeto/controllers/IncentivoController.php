@@ -42,12 +42,6 @@ class Projeto_IncentivoController extends Projeto_GenericController
         }
     }
 
-    public function buscarValoresTransferidosAction()
-    {
-        $teste = new \Application\Modules\Projeto\Service\Incentivo\ValorTransferido();
-        $teste->buscarValoresTransferidos();
-    }
-
     public function obterProjetoAjaxAction()
     {
         $httpCode = 200;
