@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Modules\Parecer\Service\Assinatura\AnaliseInicial;
+namespace Application\Modules\Parecer\Service\Assinatura\AnaliseInicial\Acao;
 
 use MinC\Assinatura\Acao\IListaAcoesModulo;
 

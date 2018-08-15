@@ -1,6 +1,8 @@
 import * as actions from './actions';
-import * as MockAPI from '../../../../test/unit/helpers/api';
 import * as ProjetoHelperAPI from '@/helpers/api/Projeto';
+import axios from 'axios';
+
+jest.mock('axios');
 
 describe('Projeto actions', () => {
     let commit;
@@ -20,26 +22,21 @@ describe('Projeto actions', () => {
                 },
             };
 
+            axios.get.mockResolvedValue(mockReponse);
+
             commit = jest.fn();
-
-            MockAPI.setResponse(mockReponse);
-        });
-
-        afterEach(() => {
-            MockAPI.setResponse(null);
+            jest.spyOn(ProjetoHelperAPI, 'buscaProjeto');
+            actions.buscaProjeto({ commit });
         });
 
         test('it calls ProjetoHelperAPI.buscaProjeto', () => {
-            jest.spyOn(ProjetoHelperAPI, 'buscaProjeto');
-            actions.buscaProjeto({ commit });
             expect(ProjetoHelperAPI.buscaProjeto).toHaveBeenCalled();
         });
 
         test('it is commit to buscaProjeto', (done) => {
             const projeto = mockReponse.data;
-            actions.buscaProjeto({ commit }, 132451);
             done();
-            expect(commit).toHaveBeenCalledWith('SET_PROJETO', projeto);
+            expect(commit).toHaveBeenCalledWith('SET_PROJETO', projeto.data);
         });
     });
 });
