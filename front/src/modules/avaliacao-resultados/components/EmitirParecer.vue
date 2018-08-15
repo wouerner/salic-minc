@@ -1,12 +1,13 @@
 <template>
-      <v-app id="inspire">
+    <div>
+ <v-layout wrap align-center>
         <v-flex xs12 sm6 d-flex>
           <v-select
             :items="items"
             label="Standard"
           ></v-select>
         </v-flex>
-
+  
         <v-flex xs12 sm6 d-flex>
           <v-select
             :items="items"
@@ -14,7 +15,7 @@
             label="Box style"
           ></v-select>
         </v-flex>
-
+  
         <v-flex xs12 sm6 d-flex>
           <v-select
             :items="items"
@@ -22,7 +23,7 @@
             outline
           ></v-select>
         </v-flex>
-
+  
         <v-flex xs12 sm6 d-flex>
           <v-select
             :items="items"
@@ -31,8 +32,7 @@
           ></v-select>
         </v-flex>
       </v-layout>
-    </v-container>
-  </v-app>
+    </div>
 </template>
 
 <script>
