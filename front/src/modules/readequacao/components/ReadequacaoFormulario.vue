@@ -3,22 +3,22 @@
       <div v-if="!disabled" class="card-content">
 	<span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
 	<input type="hidden"
-	       :value="objReadequacao.idReadequacao"/>
+	       :value="dadosReadequacao.idReadequacao"/>
         <div class="row">
           <div class="input-field col s12">
             <textarea
               id="textarea1"
               class="materialize-textarea"
               ref="readequacaoJustificativa"
-              :disabled="disabled"      
-	      :value="objReadequacao.justificativa"
+              :disabled="disabled"
+	      :value="dadosReadequacao.justificativa"
 	      @input="updateJustificativa"
 	      ></textarea>
             <label for="textarea1">Justificativa *</label>
           </div>
         </div>
         <component
-          :ds-solicitacao="objReadequacao.dsSolicitacao"
+          :ds-solicitacao="dadosReadequacao.dsSolicitacao"
           :disabled="disabled"
           v-bind:is="componenteDsSolicitacao"
           ></component>
@@ -37,7 +37,7 @@
                 <input class="file-path validate" type="text">
               </div>
               <input type="hidden"
-		     :value="objReadequacao.idDocumento"
+		     :value="dadosReadequacao.idDocumento"
 		     />
             </div>
             <div id="carregando-arquivo" class="progress sumir">
@@ -77,7 +77,7 @@
 	<div class="card-content">
 	  <span class="card-title">Solicita&ccedil;&atilde;o de readequa&ccedil;&atilde;o</span>
 	  <p>
-	    {{readequacao.justificativa}}
+	    {{dadosReadequacao.justificativa}}
 	  </p>
 	</div>
 	<div
@@ -86,9 +86,9 @@
 	  >
 	  <span class="card-title">Arquivo anexado</span>
 	  <a
-	    v-bind:href="'/readequacao/readequacoes/abrir-documento-readequacao?id=' + readequacao.idDocumento"
+	    v-bind:href="'/readequacao/readequacoes/abrir-documento-readequacao?id=' + dadosReadequacao.idDocumento"
 	    >
-            {{readequacao.nomeArquivo }}
+            {{dadosReadequacao.nomeArquivo }}
           </a>
 	</div>
       </div>
@@ -98,7 +98,7 @@
 import _ from "lodash";
 import numeral from "numeral";
 import { utils } from "@/mixins/utils";
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 // TODO: implementar usando slot para não ter que importar os módulos
 import ReadequacaoSaldoAplicacaoSaldo from "../SaldoAplicacao/components/ReadequacaoSaldoAplicacaoSaldo";
@@ -138,17 +138,15 @@ export default {
     mixins: [utils],
     methods: {
 	salvarReadequacao: function() {
-	    if (this.readequacao.dsSolicitacao == ''
-		|| this.readequacao.dsSolicitacao == undefined
-		|| this.readequacao.dsSolicitacao == 0
-	    ) {
+	    
+	    if (this.$parent.$refs.formulario.$children[0].dsSolicitacao == '') {
 		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel!");
-		this.$children[0].$refs.readequacaoSaldo.$el.focus();
+		this.$parent.$refs.formulario.$children.$el.focus();
 		return;		
 	    }
 	    
 	    if (
-		this.readequacao.dsJustificativa.length < this.minCaracteresJustificativa
+		this.dadosReadequacao.justificativa.length < this.minCaracteresJustificativa
 	    ) {
 		this.mensagemAlerta(
 		    "\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o!"
@@ -156,8 +154,9 @@ export default {
 		this.$refs.readequacaoJustificativa.focus();
 		return;
 	    }
+	    
+	    this.readequacao.dsSolicitacao = this.$parent.$refs.formulario.$children[0].dsSolicitacao;
 	    this.updateReadequacao(this.readequacao);
-	    //this.$emit("eventoSalvarReadequacao", this.readequacao);
 	},
 	subirDocumento: function() {
 	    let arquivo = $("#arquivo")[0].files[0],
@@ -254,19 +253,33 @@ export default {
 	    return true;
 	},
 	updateJustificativa: function(event) {
-	    this.readequacao.dsJustificativa = event.target.value;
+	    this.readequacao.justificativa = event.target.value;
 	},
 	...mapActions({
             updateReadequacao: 'readequacao/updateReadequacao',
 	}),	
     },
+    computed: {
+        ...mapGetters({
+	    dadosReadequacao: 'readequacao/readequacao',
+	}),
+	arquivoAnexado: function() {
+	    if (this.dadosReadequacao.idDocumento != "") {
+		return true;
+	    }
+	    return false;
+	}
+    },
+    
     watch: {
-	objReadequacao: function() {
+     	objReadequacao: function() {
 	    if (!_.isEmpty(this.objReadequacao)) {
 		this.readequacao.idReadequacao = this.objReadequacao.idReadequacao;
 		this.readequacao.idTipoReadequacao = this.objReadequacao.idTipoReadequacao;
 		this.readequacao.nomeArquivo = this.objReadequacao.nomeArquivo;
 		this.readequacao.idDocumento = this.objReadequacao.idDocumento;
+		this.readequacao.idPronac = this.objReadequacao.idPronac;
+		this.readequacao.justificativa = this.objReadequacao.justificativa;
 	    }
 	},
     }

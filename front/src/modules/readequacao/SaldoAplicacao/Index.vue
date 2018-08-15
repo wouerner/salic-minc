@@ -328,7 +328,7 @@ export default {
 	    
 	},
 	salvarReadequacao: function(readequacao) {
-	    if (dadosReadequacao.dsSolicitacao == ''
+	    if (this.dadosReadequacao.dsSolicitacao == ''
 		|| readequacao.dsSolicitacao == undefined
 		|| readequacao.dsSolicitacao == 0
 	    ) {
