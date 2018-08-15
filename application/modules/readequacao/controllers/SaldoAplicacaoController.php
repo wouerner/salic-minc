@@ -156,7 +156,11 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
             $readequacaoMapper = new Readequacao_Model_TbReadequacaoMapper();
             $id = $readequacaoMapper->salvarSolicitacaoReadequacao($dados);
                                                     
-            $this->_helper->json(array('readequacao' => $id, 'success' => 'true', 'msg' => 'Readequa&ccedil;&atilde;o salva com sucesso!'));
+            $this->_helper->json([
+                'data' => $dados,
+                'success' => 'true',
+                'msg' => 'Readequa&ccedil;&atilde;o salva com sucesso!'
+            ]);
         } catch (Exception $e) {
             $this->getResponse()->setHttpResponseCode(412);
             $this->_helper->json(array('data' => $dados, 'success' => 'false', 'msg' => $e->getMessage()));
