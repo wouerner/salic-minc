@@ -24,12 +24,15 @@ class AvaliacaoResultados_IndexController extends MinC_Controller_Action_Abstrac
 
         parent::init();
     }
-    
+
     public function indexAction()
     {
+        $this->_helper->layout->disableLayout();
         $gitTag = '?v=' . $this->view->gitTag();
         $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
         $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
         $this->view->headScript()->offsetSetFile(101, '/public/dist/js/avaliacao_resultados.js'. $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+        $this->view->headScript()->offsetSetFile(102, 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons', 'stylesheet', array('charset' => 'utf-8'));
+        $this->view->headScript()->offsetSetFile(103, 'https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css', 'stylesheet', array('charset' => 'utf-8'));
     }
 }

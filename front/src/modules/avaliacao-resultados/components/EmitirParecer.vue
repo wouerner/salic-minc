@@ -1,27 +1,38 @@
 <template>
-    <div>
-        <a
-            style="width: 150px;"
-            class="btn btn-primary"
-            @click="modalOpen('atualizar-bar');
-            setRegistroAtivo(registroAtivo);"
-        >
-            Atualizar
-        </a>
-        <ModalTemplate v-if="modalVisible === 'atualizar-bar'" @close="fecharModal()">
-            <template slot="header">Atualizar Bar</template>
-            <template slot="body">
-                <form action="">
-                    <label for="registro">DadoNr</label>
-                    <input type="text" name="DadoNr" :value="registro.DadoNr" @input="buildRegistro"/>
-                </form>
-            </template>
-            <template slot="footer">
-                <a class="btn btn-danger" @click="fecharModal();$event.preventDefault()">Fechar</a>
-                <a class="btn btn-primary" @click="checkChangesAndUpdate();fecharModal();">Atualizar</a>
-            </template>
-        </ModalTemplate>
-    </div>
+      <v-app id="inspire">
+        <v-flex xs12 sm6 d-flex>
+          <v-select
+            :items="items"
+            label="Standard"
+          ></v-select>
+        </v-flex>
+
+        <v-flex xs12 sm6 d-flex>
+          <v-select
+            :items="items"
+            box
+            label="Box style"
+          ></v-select>
+        </v-flex>
+
+        <v-flex xs12 sm6 d-flex>
+          <v-select
+            :items="items"
+            label="Outline style"
+            outline
+          ></v-select>
+        </v-flex>
+
+        <v-flex xs12 sm6 d-flex>
+          <v-select
+            :items="items"
+            label="Solo field"
+            solo
+          ></v-select>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -36,6 +47,7 @@ export default {
                 Codigo: '',
                 DadoNr: '',
             },
+            items: ['pedro', 'leo']
         };
     },
     props: ['registroAtivo'],
@@ -63,6 +75,9 @@ export default {
             // eslint-disable-next-line
             $3('#modalTemplate').modal('close');
             this.modalClose();
+        },
+        alert() {
+            alert('teste');
         },
     },
     computed: {

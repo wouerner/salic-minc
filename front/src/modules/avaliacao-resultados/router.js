@@ -1,14 +1,31 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import ListBar from './components/ListBar';
+import ComponenteEncaminhar from './components/ComponenteEncaminhar';
+import EmitirParecer from './components/EmitirParecer';
 
 Vue.use(Router);
 
 const routes = [
     {
-        path: '/emitir-parecer',
+        path: '/componente-encaminhar',
         name: 'ListBar',
-        component: ListBar,
+        component: ComponenteEncaminhar,
+        meta: {
+            title: 'Principal',
+        },
+    },
+    {
+        path: '/emitir-parecer/:id',
+        name: 'EmitirEditar',
+        component: EmitirParecer,
+        meta: {
+            title: 'Principal',
+        },
+    },
+    {
+        path: '/emitir-parecer',
+        name: 'Emitir',
+        component: EmitirParecer,
         meta: {
             title: 'Principal',
         },

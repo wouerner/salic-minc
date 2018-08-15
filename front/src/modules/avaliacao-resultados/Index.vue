@@ -1,8 +1,11 @@
 <template>
-    <div>
-        <div id="app">
-            <router-view></router-view>
-        </div>
+    <div id="app">
+    <v-app>
+    <v-container fluid grid-list-xl>
+      <v-layout wrap align-center>
+        <router-view></router-view>
+        </v-container>
+      </v-app>
     </div>
 </template>
 

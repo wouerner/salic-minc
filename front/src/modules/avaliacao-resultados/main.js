@@ -2,12 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // Vue.config.productionTip = false
 import Vue from 'vue';
+import Vuetify from 'vuetify';
 import Index from './Index';
+
 import {
     router,
     store,
 } from './config';
 
+Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
 window.onload = () => {
