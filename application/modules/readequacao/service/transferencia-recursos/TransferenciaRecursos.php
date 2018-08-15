@@ -22,6 +22,10 @@ class TransferenciaRecursos
 
     public function buscarValoresTransferidos()
     {
-        xd('chega na service');
+        $parametros = $this->request->getParams();
+        $idPronac = $parametros['idPronac'];
+        $transferenciaRecursosMapper = new \Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
+        $resultado = $transferenciaRecursosMapper->transferenciaDeRecursosEntreProjetos($idPronac);
+        return $resultado;
     }
 }
