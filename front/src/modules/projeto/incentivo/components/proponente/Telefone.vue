@@ -1,7 +1,7 @@
 <template>
     <div class="conteudo">
         <legend>Telefone</legend>
-        <table class="tabela" v-if="Object.keys(telefones).length>0">
+        <table class="tabela" v-if="Object(dadosProponente.telefones).length > 0">
             <tr class="destacar">
                 <td tabindex="42" class="centro"><b>Tipo</b></td>
                 <td tabindex="43" class="centro"><b>UF</b></td>
@@ -9,12 +9,12 @@
                 <td tabindex="45" class="centro"><b>N&uacute;mero</b></td>
                 <td tabindex="46" class="centro"><b>Divulgar</b></td>
             </tr>
-            <tr v-for="(telefone, index) in telefones" v-bind:key="index">
-                <td tabindex="47">{{telefone.TipoTelefone}}</td>
-                <td tabindex="48">{{telefone.UF}}</td>
-                <td tabindex="49">{{telefone.DDDTelefone}}</td>
-                <td tabindex="50">{{telefone.NumeroTelefone}}</td>
-                <td tabindex="51">{{telefone.Divulgar}}</td>
+            <tr v-for="telefone in dadosProponente.telefones" v-bind:key="telefone.idTelefone">
+                <td tabindex="47">{{telefone.dsTelefone}}</td>
+                <td tabindex="48">{{telefone.uf}}</td>
+                <td tabindex="49">{{telefone.ddd}}</td>
+                <td tabindex="50">{{telefone.numero}}</td>
+                <td tabindex="51">{{telefone.divulgar}}</td>
             </tr>
         </table>
         <table class='tabela' v-else>
@@ -26,14 +26,13 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default{
-        data(){
-            return{
-                telefones:[
-                    {TipoTelefone:'Residencial', UF:'Rio de Janeiro', DDDTelefone:'37',
-                     NumeroTelefone:'3873-1148', Divulgar:'Não'},
-                ],
-            }
+        computed: {
+            ...mapGetters({
+                dadosProponente: 'projeto/proponente',
+            }),
         }
     }
 </script>

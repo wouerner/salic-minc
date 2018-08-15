@@ -1,6 +1,7 @@
 <template>
     <div id="conteudo">
         <div id="proponente">
+            <h1>{{dadosProponente}}</h1>
             <fieldset>
                 <Identificacao></Identificacao>
             </fieldset>
