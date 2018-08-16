@@ -248,7 +248,6 @@ export default {
 	    componenteFormulario: 'ReadequacaoSaldoAplicacaoSaldo',
 	    componentePlanilha: 'ReadequacaoSaldoAplicacaoPlanilhaOrcamentaria',
 	    disponivelParaAdicaoItensReadequacaoPlanilha: false,
-	    disponivelParaEdicaoReadequacaoPlanilha: true,
 	    readequacaoAlterada: false
 	}
     },
@@ -368,18 +367,6 @@ export default {
 	    this.readequacaoAlterada = true;
             this.readequacao = readequacao;
         },
-	verificarDisponivelParaEdicaoReadequacaoPlanilha: function() {
-	    let self = this;
-	    $3.ajax({
-		type: "GET",
-		url: "/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha",
-		data: {
-		    idPronac: self.idPronac
-		}
-	    }).done(function(response) {
-		self.disponivelParaEdicaoReadequacaoPlanilha = response.disponivelParaEdicaoReadequacaoPlanilha;
-	    });
-	},
 	carregarValorEntrePlanilhas: function() {
 	    let self = this;
 	    $3.ajax({
@@ -465,6 +452,7 @@ export default {
 	...mapActions({
             buscaProjeto: 'projeto/buscaProjeto',
 	    buscaReadequacao: 'readequacao/buscaReadequacao',
+	    verificarDisponivelReadequacaoPlanilha: 'readequacao/verificarDisponivelReadequacaoPlanilha',
         }),
     },
     watch: {
@@ -484,7 +472,7 @@ export default {
 	    if (typeof this.dadosReadequacao.dsSolicitacao != 'undefined') {
 		this.exibirBotaoIniciar = false;
 		$3('.collapsible').collapsible();
-		this.verificarDisponivelParaEdicaoReadequacaoPlanilha();
+		this.verificarDisponivelReadequacaoPlanilha(this.dadosReadequacao.idPronac);
 		this.carregarValorEntrePlanilhas();
 		this.exibirPaineis = true;
 	    } else {
@@ -502,6 +490,7 @@ export default {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
 	    dadosReadequacao: 'readequacao/readequacao',
+	    disponivelParaEdicaoReadequacaoPlanilha: 'readequacao/disponivel_readequacao_planilha',
         }),	
 	vlDiferencaEntrePlanilhas: function() {
 	    if (typeof this.valorEntrePlanilhas.vlDiferencaPlanilhas != 'undefined') {

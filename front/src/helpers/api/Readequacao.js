@@ -12,9 +12,9 @@ const buildData = (params) => {
 
 export const buscaReadequacao = (params) => {
     const { idPronac, idTipoReadequacao } = params;
-    const url = `/readequacao/readequacoes/obter-dados-readequacao/?idPronac=${idPronac}&idTipoReadequacao=${idTipoReadequacao}`;
+    const path = `/readequacao/readequacoes/obter-dados-readequacao/?idPronac=${idPronac}&idTipoReadequacao=${idTipoReadequacao}`;
     
-    return api.getRequest(url);
+    return api.getRequest(path);
 };
 
 export const updateReadequacao = (params) => {
@@ -23,4 +23,9 @@ export const updateReadequacao = (params) => {
     const path = `/readequacao/saldo-aplicacao/salvar-readequacao`;
     
     return api.putRequest(path, buildData(params), params.idReadequacao);
+};
+
+export const verificarDisponivelReadequacaoPlanilha = (idPronac) => {
+    const path = `/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha/?idPronac=`;
+    return api.getRequest(path, idPronac);
 };

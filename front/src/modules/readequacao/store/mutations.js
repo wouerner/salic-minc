@@ -13,5 +13,8 @@ export const mutations = {
     },
     [types.UPDATE_READEQUACAO_DS_SOLICITACAO](state, dsSolicitacao) {
 	state.readequacao.dsSolicitacao = dsSolicitacao;
-    },    
+    },
+    [types.VERIFICAR_DISPONIVEL_READEQUACAO_PLANILHA](state, disponivel) {
+	state.disponivel_readequacao_planilha = disponivel;
+    },
 };
