@@ -24,7 +24,23 @@ class TransferenciaRecursos
     {
         $parametros = $this->request->getParams();
         $idPronac = $parametros['idPronac'];
-        $mapper = new \Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper();
-        $mapper->obterTransferenciaRecursosEntreProjetos($idPronac);
+        $mapper = new \Readequacao_Model_TbTransferenciaRecursosEntreProjetosMapper();
+
+        $result = $mapper->obterTransferenciaRecursosEntreProjetos($idPronac);
+
+        array_walk($result, function (&$value) {
+            $value = array_map('utf8_encode', $value->toArray());
+        });
+
+        return $this->utf8Encode($result);
+    }
+
+    private function utf8Encode($result)
+    {
+        array_walk($result, function (&$value) {
+            $value = array_map('utf8_encode', $value->toArray());
+        });
+
+        return $result;
     }
 }

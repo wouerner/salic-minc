@@ -32,10 +32,4 @@ class Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper extends MinC_Db
             throw $e;
         }
     }
-
-    public function obterTransferenciaRecursosEntreProjetos($idPronac)
-    {
-        $teste = new \Readequacao_Model_DbTable_TbProjetoRecebedorRecurso();
-        $teste->obterTransferenciaRecursosEntreProjetos(['idPronacTransferidor = ?' => 131036]);
-    }
 }

@@ -2,8 +2,9 @@
 
 class Readequacao_Model_DbTable_TbProjetoRecebedorRecurso extends MinC_Db_Table_Abstract
 {
-    protected $_schema  = "SAC.dbo";
-    protected $_name    = "tbprojetorecebedorrecurso";
+    protected $_schema  = "SAC";
+    protected $_name    = "TbProjetoRecebedorRecurso";
+    protected $_primary = "idPronacTransferidor";
 
     public function obterTransferenciaRecursosEntreProjetos($where = array())
     {
@@ -22,28 +23,28 @@ class Readequacao_Model_DbTable_TbProjetoRecebedorRecurso extends MinC_Db_Table_
                     a.dtRecebimento,
                     a.vlRecebido'
                 ),
-            )
+            ),
+            $this->_schema
         );
 
         $select->joinInner(
             array('b' => 'Projetos'),
             'b.IdPRONAC = a.idPronacTransferidor',
             array(''),
-            'SAC.dbo'
+            $this->_schema
         );
 
         $select->joinInner(
             array('c' => 'Projetos'),
             'c.IdPRONAC = a.idPronacRecebedor',
             array(''),
-            'SAC.dbo'
+            $this->_schema
         );
 
         foreach ($where as $coluna => $valor) {
             $select->where($coluna, $valor);
         }
 
-        xd($select->assemble());
-        return $this->$this->fetchAll($select);
+        return $this->fetchAll($select);
     }
 }
