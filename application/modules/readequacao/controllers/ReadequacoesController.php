@@ -3232,7 +3232,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $idReadequacao = $TbReadequacaoMapper->salvarSolicitacaoReadequacao($arrData);
 
             $this->_helper->json([
-                'mensagem' => utf8_encode('Houve um erro ao excluir o documento.'),
+                'mensagem' => utf8_encode('Documento excluído com sucesso.'),
             ]);
 
         } catch (Exception $objException) {

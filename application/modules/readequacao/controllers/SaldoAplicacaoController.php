@@ -280,7 +280,7 @@ class Readequacao_SaldoAplicacaoController extends Readequacao_GenericController
             $disponivelParaEdicaoReadequacaoPlanilha = $Readequacao_Model_DbTable_TbReadequacao->disponivelParaEdicaoReadequacaoPlanilha($idPronac, $idAgente);
             
             $this->_helper->json([
-                'success' => 'true',
+                'success' => true,
                 'disponivelParaEdicaoReadequacaoPlanilha' => $disponivelParaEdicaoReadequacaoPlanilha,
                 'msg' => 'Dispon&iacute;vel para edi&ccedil;&atilde;o de itens.'
             ]);
