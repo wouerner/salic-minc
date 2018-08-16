@@ -52,7 +52,9 @@
     </div>
 </template>
 <script>
-export default {
+import moment from 'moment'
+
+    export default {
     name: 'slPropostaDocumentos',
     data: function () {
         return {

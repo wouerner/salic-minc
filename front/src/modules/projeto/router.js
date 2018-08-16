@@ -97,7 +97,7 @@ const routes = [
             },
             {
                 path: 'proposta',
-                name: 'Proposta',
+                name: 'proposta',
                 component: Proposta,
                 meta: {
                     title: 'Proposta',

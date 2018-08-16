@@ -85,6 +85,7 @@
 </template>
 <script>
 import slTextoSimples from '../components/slTextoSimples'
+import moment from 'moment'
 
 export default {
     name: 'slPropostaIdentificacao',

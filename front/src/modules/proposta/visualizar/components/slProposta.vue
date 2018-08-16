@@ -6,8 +6,8 @@
                  <li>
                     <div class="collapsible-header">
                         <i class="material-icons">assignment</i>
-                        <span v-if="proposta.PRONAC">Projeto - {{proposta.PRONAC}} - {{proposta.NomeProjeto}}</span>
-                        <span v-else>Proposta - {{idpreprojeto}} - {{proposta.NomeProjeto}}</span>
+                        <span v-if="dados.PRONAC">Projeto - {{dados.PRONAC}} - {{dados.NomeProjeto}}</span>
+                        <span v-else>Proposta - {{idpreprojeto}} - {{dados.NomeProjeto}}</span>
                     </div>
                     <div class="collapsible-body padding20">
                         <div class="row">
@@ -232,7 +232,7 @@ export default {
         buscar_dados: function () {
             let vue = this;
             $3.ajax({
-                url: '/proposta/visualizar/obter-identificacao/idPreProjeto/' + vue.idpreprojeto
+                url: '/proposta/visualizar/obter-proposta-cultural-completa/idPreProjeto/' + vue.idpreprojeto
             }).done(function (response) {
                 vue.dados = response.data;
             });
