@@ -82,36 +82,8 @@
     <div v-else>Nenhuma planilha encontrada</div>
 </template>
 <script>
-(function (global, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['../numeral'], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        factory(require('../numeral'));
-    } else {
-        factory(global.numeral);
-    }
-}(this, function (numeral) {
-    numeral.register('locale', 'pt-br', {
-        delimiters: {
-            thousands: '.',
-            decimal: ','
-        },
-        abbreviations: {
-            thousand: 'mil',
-            million: 'milhões',
-            billion: 'b',
-            trillion: 't'
-        },
-        ordinal: function (number) {
-            return 'º';
-        },
-        currency: {
-            symbol: 'R$'
-        }
-    });
-}));
-
-numeral.locale('pt-br');
+import numeral from 'numeral';
+import 'numeral/locales';
 
 export default {
     name: 'slPropostaPlanilhaOrcamentaria',
@@ -132,6 +104,8 @@ export default {
         if (typeof this.arrayPlanilha != 'undefined') {
             this.planilha = this.arrayPlanilha;
         }
+        numeral.locale('pt-br');
+        numeral.defaultFormat('0,0.00');
     },
     computed: {
         planilhaCompleta: function () {
