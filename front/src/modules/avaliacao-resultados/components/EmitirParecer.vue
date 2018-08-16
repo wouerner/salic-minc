@@ -19,8 +19,8 @@
                 <v-list subheader>
                     <v-container fluid grid-list-sm>
                         <v-layout row wrap>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader> <v-icon>assignment</v-icon> PRONAC</v-subheader>
+                            <v-flex xs12 sm4 md2 offset-lg2>
+                                <v-subheader>PRONAC</v-subheader>
                                 <div>20213465653</div>
                             </v-flex>
                             <v-flex xs12 sm4 md2>
@@ -41,24 +41,33 @@
 
                 <v-divider></v-divider>
 
-                <v-list> Quantidade de Comprovantes
+                <h4 class="text-sm-center">Quantidade de Comprovantes</h4>
+                <v-list>
                     <v-container fluid grid-list-sm>
                         <v-layout row wrap>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Total</v-subheader>
-                                <div>20213465653</div>
+                            <v-flex xs12 sm3 md2 >
+                                <div>
+                                    <h4 class="label text-sm-right">Total</h4>
+                                    <p class="text-sm-right">20213465653</p>
+                                </div>
                             </v-flex>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Validos</v-subheader>
-                                <div>20213465653</div>
+                            <v-flex xs12 sm3 md2>
+                                <div>
+                                    <h4 class="label text-sm-right">Validos</h4>
+                                    <p class="text-sm-right">20213465653</p>
+                                </div>
                             </v-flex>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Recusados</v-subheader>
-                                <div>Sr. Juquinha Amaral</div>
+                            <v-flex xs12 sm3 md2>
+                                <div>
+                                    <h4 class="label text-sm-right">Recusados</h4>
+                                    <p class="text-sm-right">Sr. Juquinha Amaral</p>
+                                </div>
                             </v-flex>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Não Avaliados</v-subheader>
-                                <div>20213465653</div>
+                            <v-flex xs12 sm3 md2>
+                                <div>
+                                    <h4 class="label text-sm-right">Não Avaliados</h4>
+                                    <p class="text-sm-right">20213465653</p>
+                                </div>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -66,58 +75,28 @@
 
                 <v-divider></v-divider>
 
-                <v-list> Quantidade de Comprovantes
+                <h4 class="text-sm-center">Valores Comprovados</h4>
+                <v-list>
                     <v-container fluid grid-list-sm>
                         <v-layout row wrap>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Total</v-subheader>
-                                <div>20213465653</div>
+                            <v-flex xs12 sm3 md2>
+                                <h4 class="label text-sm-right">Total</h4>
+                                <p class="text-sm-right">20213465653</p>
                             </v-flex>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Validos</v-subheader>
-                                <div>20213465653</div>
+                            <v-flex xs12 sm3 md2>
+                                <h4 class="label text-sm-right">Validos</h4>
+                                <p class="text-sm-right">20213465653</p>
                             </v-flex>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Recusados</v-subheader>
-                                <div>Sr. Juquinha Amaral</div>
+                            <v-flex xs12 sm3 md2>
+                                <h4 class="label text-sm-right">Recusados</h4>
+                                <p class="text-sm-right">Sr. Juquinha Amaral</p>
                             </v-flex>
-                            <v-flex xs12 sm4 md2>
-                                <v-subheader>Não Avaliados</v-subheader>
-                                <div>20213465653</div>
+                            <v-flex xs12 sm3 md2>
+                                <h4 class="label text-sm-right">Não Avaliados</h4>
+                                <p class="text-sm-right">20213465653</p>
                             </v-flex>
                         </v-layout>
                     </v-container>
-                </v-list>
-
-                <v-list three-line subheader>
-                    <v-subheader>General</v-subheader>
-                    <v-list-tile avatar>
-                        <v-list-tile-action>
-                            <v-checkbox v-model="notifications"></v-checkbox>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Notifications</v-list-tile-title>
-                            <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile avatar>
-                        <v-list-tile-action>
-                            <v-checkbox v-model="sound"></v-checkbox>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Sound</v-list-tile-title>
-                            <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile avatar>
-                        <v-list-tile-action>
-                            <v-checkbox v-model="widgets"></v-checkbox>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Auto-add widgets</v-list-tile-title>
-                            <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
                 </v-list>
 
                 <v-layout wrap align-center>
@@ -125,7 +104,7 @@
                         <v-select height="20px"
                                   :items="items"
                                   box
-                                  label="Box style"
+                                  label="Manifestação"
                         ></v-select>
                     </v-flex>
                 </v-layout>
@@ -145,14 +124,12 @@
             return {
 
                 dialog: false,
-                notifications: false,
-                sound: true,
-                widgets: false,
+
                 currentRegistro: {
                     Codigo: '',
                     DadoNr: '',
                 },
-                items: ['pedro', 'leo']
+                items: [{'Reprovação':'R'}, {'Aprovação':'A'},{'Aprovação com Ressalva':'P'}]
             };
         },
         props: ['registroAtivo'],
@@ -193,3 +170,12 @@
         },
     };
 </script>
+
+<style scoped>
+    .label{
+        color: rgba(0,0,0,.54);
+        font-size: 14px;
+        font-weight: 500;
+        text-align-all: right;
+    }
+</style>
