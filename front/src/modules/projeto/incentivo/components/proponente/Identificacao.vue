@@ -21,20 +21,20 @@
         </table>
         <table class="tabela">
             <tr class="destacar">
-                <td tabindex="1" align="center"><b>CNPJ/CPF</b></td>
-                <td tabindex="2" align="center"><b>Nome do Proponente</b></td>
-                <td tabindex="3" align="center"><b>Tipo de Pessoa</b></td>
+                <td align="center"><b>CNPJ/CPF</b></td>
+                <td align="center"><b>Nome do Proponente</b></td>
+                <td align="center"><b>Tipo de Pessoa</b></td>
             </tr>
             <tr>
-                <td tabindex="4" align="center" v-if="dadosProjeto.CgcCPf">
+                <td align="center" v-if="dadosProjeto.CgcCPf">
                     <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
                 </td>
-                <td tabindex="4" align="center" v-else>Dado não informado!</td>
-                <td tabindex="5" align="center" v-if="dadosProjeto.Proponente">
+                <td align="center" v-else>Dado não informado!</td>
+                <td align="center" v-if="dadosProjeto.Proponente">
                     {{dadosProjeto.Proponente}}
                 </td>
-                <td tabindex="5" align="center" v-else>Dado não informado!</td>
-                <td tabindex="6" align="center">{{tipoProponente}}</td>
+                <td align="center" v-else>Dado não informado!</td>
+                <td align="center">{{tipoProponente}}</td>
             </tr>
         </table>
     </div>

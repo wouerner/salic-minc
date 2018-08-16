@@ -3,23 +3,21 @@
         <legend>Telefone</legend>
         <table class="tabela" v-if="Object(dadosProponente.telefones).length > 0">
             <tr class="destacar">
-                <td tabindex="42" class="centro"><b>Tipo</b></td>
-                <td tabindex="43" class="centro"><b>UF</b></td>
-                <td tabindex="44" class="centro"><b>DDD</b></td>
-                <td tabindex="45" class="centro"><b>N&uacute;mero</b></td>
-                <td tabindex="46" class="centro"><b>Divulgar</b></td>
+                <td class="centro"><b>Tipo</b></td>
+                <td class="centro"><b>UF</b></td>
+                <td class="centro"><b>N&uacute;mero</b></td>
+                <td class="centro"><b>Divulgar</b></td>
             </tr>
             <tr v-for="telefone in dadosProponente.telefones" v-bind:key="telefone.idTelefone">
-                <td tabindex="47">{{telefone.dsTelefone}}</td>
-                <td tabindex="48">{{telefone.uf}}</td>
-                <td tabindex="49">{{telefone.ddd}}</td>
-                <td tabindex="50">{{telefone.numero}}</td>
-                <td tabindex="51">{{telefone.divulgar}}</td>
+                <td>{{telefone.dstelefone}}</td>
+                <td>{{telefone.ufsigla}}</td>
+                <td>({{telefone.ddd}}) {{telefone.numero}}</td>
+                <td>{{label_sim_ou_nao(telefone.divulgar)}}</td>
             </tr>
         </table>
         <table class='tabela' v-else>
             <tr>
-                <td colspan="5"><em>N&atilde;o existem telefones cadastrados!</em></td>
+                <td colspan="5"><em>N&atilde;o existe telefone cadastrado!</em></td>
             </tr>
         </table>
     </div>
@@ -27,12 +25,14 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import { utils } from '@/mixins/utils.js';
 
     export default{
         computed: {
             ...mapGetters({
                 dadosProponente: 'projeto/proponente',
             }),
-        }
+        },
+        mixins:[utils]
     }
 </script>
