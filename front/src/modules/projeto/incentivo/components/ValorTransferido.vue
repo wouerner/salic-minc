@@ -3,7 +3,7 @@
         <a
             @click="abrirModal('valor-transferidos');"
         >
-            {{formatValue(valor)}}
+            {{valor | formatarParaReal}}
         </a>
         <ModalTemplate v-if="modalVisible === 'valor-transferidos'" @close="fecharModal();">
             <template slot="header">
@@ -27,14 +27,14 @@
                             <th>Vl. Recebido</th>
                         </tr>
                     </thead>
-                    <tbody v-for="(valor, index) in valoresTransferidos" :key="index">
+                    <tbody v-for="(transferencia, index) in valoresTransferidos" :key="index">
                         <tr>
-                            <td>{{valor.idPronacTransferidor}}</td>
-                            <td>{{valor.NomeProjetoTranferidor}}</td>
-                            <td>{{valor.idPronacRecebedor}}</td>
-                            <td>{{valor.NomeProjetoRecedor}}</td>
-                            <td>{{valor.dtRecebimento}}</td>
-                            <td>{{ valor.vlRecebido | formatarParaReal }}</td>
+                            <td>{{transferencia.idPronacTransferidor}}</td>
+                            <td>{{transferencia.NomeProjetoTranferidor}}</td>
+                            <td>{{transferencia.idPronacRecebedor}}</td>
+                            <td>{{transferencia.NomeProjetoRecedor}}</td>
+                            <td>{{transferencia.dtRecebimento | formatarData}}</td>
+                            <td>{{transferencia.vlRecebido | formatarParaReal}}</td>
                         </tr>
                     </tbody>
                 </table>

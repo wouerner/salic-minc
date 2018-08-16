@@ -564,12 +564,6 @@
                         </td>
                         <td class="right-align">
                             <b>
-                                <!--<a-->
-                                    <!--class="pode-ser-clicado"-->
-                                    <!--@click="modalOpen('')"-->
-                                <!--&gt;-->
-                                    <!--<SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>-->
-                                <!--</a>-->
                                 <ValorTransferido :valor="dadosProjeto.vlTransferido"></ValorTransferido>
                             </b>
                         </td>
