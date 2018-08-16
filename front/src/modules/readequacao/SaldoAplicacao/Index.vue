@@ -274,38 +274,6 @@ export default {
         });
     },
     methods: {
-        obterDadosReadequacao: function () {
-	    // TODO: alterar implementação para vuex
-	    /*
-            let self = this;
-	    
-            $3.ajax({
-                type: "GET",
-                url: "/readequacao/readequacoes/obter-dados-readequacao",
-                data: {
-                    idTipoReadequacao: self.idTipoReadequacao,
-                    idPronac: self.idPronac,
-		    siEncaminhamento: self.siEncaminhamento
-                }
-            }).done(function (response) {
-		if (_.isObject(response.readequacao)) {
-                    self.readequacao = response.readequacao;
-		    if (typeof response.readequacao.idReadequacao != 'undefined') {
-			$3('.collapsible').collapsible();
-			self.verificarDisponivelParaEdicaoReadequacaoPlanilha();
-			self.carregarValorEntrePlanilhas();
-			
-			if (self.readequacao.dsSolicitacao > 0
-			    && (typeof self.readequacao.idReadequacao != undefined
-			     || self.readequacao.idReadequacao > 0)
-			) {
-			    self.solicitacaoIniciada = true;
-			}
-		    }
-		}
-            });
-	    */
-        },
 	solicitarUsoSaldo: function() {
 	    let self = this;
 	    
