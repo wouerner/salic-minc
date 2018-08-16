@@ -11,13 +11,13 @@ export const buscaProjeto = ({ commit }, idPronac) => {
         });
 };
 
-export const buscarValoresTransferidos = ({ commit }) => {
+export const buscarTransferenciaRecursos = ({ commit }) => {
     const projeto = state.projeto;
     const idPronac = projeto.idPronac;
-    projetoHelperAPI.buscarValoresTransferidos(idPronac)
+    projetoHelperAPI.buscarTransferenciaRecursos(idPronac)
         .then((response) => {
             const data = response.data;
-            const valoresTransferidos = data.data;
-            commit(types.SET_VALORES_TRANSFERIDOS, valoresTransferidos);
+            const transferenciaRecursos = data.data;
+            commit(types.SET_TRANSFERENCIA_RECURSOS, transferenciaRecursos);
         });
 };

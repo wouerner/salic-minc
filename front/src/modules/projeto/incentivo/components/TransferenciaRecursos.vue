@@ -27,14 +27,14 @@
                             <th>Vl. Recebido</th>
                         </tr>
                     </thead>
-                    <tbody v-for="(transferencia, index) in valoresTransferidos" :key="index">
+                    <tbody v-for="(informacoesTransferencia, index) in transferenciaRecursos" :key="index">
                         <tr>
-                            <td>{{transferencia.idPronacTransferidor}}</td>
-                            <td>{{transferencia.NomeProjetoTranferidor}}</td>
-                            <td>{{transferencia.idPronacRecebedor}}</td>
-                            <td>{{transferencia.NomeProjetoRecedor}}</td>
-                            <td>{{transferencia.dtRecebimento | formatarData}}</td>
-                            <td>{{transferencia.vlRecebido | formatarParaReal}}</td>
+                            <td>{{informacoesTransferencia.idPronacTransferidor}}</td>
+                            <td>{{informacoesTransferencia.NomeProjetoTranferidor}}</td>
+                            <td>{{informacoesTransferencia.idPronacRecebedor}}</td>
+                            <td>{{informacoesTransferencia.NomeProjetoRecedor}}</td>
+                            <td>{{informacoesTransferencia.dtRecebimento | formatarData}}</td>
+                            <td>{{informacoesTransferencia.vlRecebido | formatarParaReal}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -60,10 +60,10 @@
             ...mapActions({
                 modalOpen: 'modal/modalOpen',
                 modalClose: 'modal/modalClose',
-                buscarValoresTransferidos: 'projeto/buscarValoresTransferidos',
+                buscarTransferenciaRecursos: 'projeto/buscarTransferenciaRecursos',
             }),
             abrirModal(modalName) {
-                this.buscarValoresTransferidos();
+                this.buscarTransferenciaRecursos();
                 // eslint-disable-next-line
                 $3('#modalTemplate').modal('open');
                 this.modalOpen(modalName);
@@ -77,7 +77,7 @@
         computed: {
             ...mapGetters({
                 modalVisible: 'modal/default',
-                valoresTransferidos: 'projeto/valoresTransferidos',
+                transferenciaRecursos: 'projeto/transferenciaRecursos',
             }),
         },
     };

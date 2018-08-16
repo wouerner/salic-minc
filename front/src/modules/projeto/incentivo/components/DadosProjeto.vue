@@ -564,7 +564,7 @@
                         </td>
                         <td class="right-align">
                             <b>
-                                <ValorTransferido :valor="dadosProjeto.vlTransferido"></ValorTransferido>
+                                <TransferenciaRecursos :valor="dadosProjeto.vlTransferido"></TransferenciaRecursos>
                             </b>
                         </td>
                         <td class="right-align">
@@ -636,7 +636,7 @@
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import { utils } from '@/mixins/utils';
     import moment from 'moment';
-    import ValorTransferido from '@/modules/projeto/incentivo/components/ValorTransferido';
+    import TransferenciaRecursos from '@/modules/projeto/incentivo/components/TransferenciaRecursos';
 
     export default {
         data() {
@@ -653,7 +653,7 @@
             SalicTextoSimples,
             SalicFormatarValor,
             SalicFormatarCpfCnpj,
-            ValorTransferido,
+            TransferenciaRecursos,
         },
         created() {
             if (Object.keys(this.dadosProjeto).length > 0) {
