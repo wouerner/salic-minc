@@ -129,6 +129,9 @@ export default {
         'arrayProdutos',
         'arrayDetalhamentos'
     ],
+    components: {
+        slPropostaDetalhamentoPlanoDistribuicao,
+    },
     computed: {
 
     },

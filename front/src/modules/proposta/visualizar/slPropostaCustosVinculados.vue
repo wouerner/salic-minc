@@ -1,12 +1,12 @@
 <template>
     <div class="tabelas">
         <div class="row">
-            <slTableEasy v-bind:dados="dados"></slTableEasy>
+            <slTabelaSimples v-bind:dados="dados"></slTabelaSimples>
         </div>
     </div>
 </template>
 <script>
-import slTableEasy from '@/components/slTableEasy';
+import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
     name: 'slPropostaCustosVinculados',
@@ -16,6 +16,9 @@ export default {
         }
     },
     props: ['idpreprojeto', 'arrayCustos'],
+    components: {
+        slTabelaSimples,
+    },
     mounted: function () {
         if (typeof this.idpreprojeto != 'undefined') {
             this.buscar_dados(this.idpreprojeto);

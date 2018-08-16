@@ -383,6 +383,18 @@ import slPropostaCustosVinculados from './slPropostaCustosVinculados'
 export default {
     name: 'slPropostaAlteracoes',
     props: ['idpreprojeto', 'dadosAtuais', 'dadosHistorico'],
+    components: {
+        slPropostaIdentificacao,
+        slPropostaHistoricoAvaliacoes,
+        slAgenteProponente,
+        slAgenteUsuario,
+        slTextoSimples,
+        slPropostaLocalRealizacaoDeslocamento,
+        slPropostaDocumentos,
+        slPropostaPlanoDistribuicao,
+        slPropostaPlanilhaOrcamentaria,
+        slPropostaCustosVinculados,
+    },
     mounted: function () {
         this.iniciarCollapsible();
         if (this.dadosHistorico != 'undefined') {

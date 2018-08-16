@@ -204,6 +204,19 @@ export default {
         }
     },
     props: ['idpreprojeto', 'proposta'],
+    components: {
+        slPropostaIdentificacao,
+        slPropostaHistoricoAvaliacoes,
+        slAgenteProponente,
+        slAgenteUsuario,
+        slTextoSimples,
+        slPropostaDocumentos,
+        slPropostaPlanoDistribuicao,
+        slPropostaFontesDeRecursos,
+        slPropostaLocalRealizacaoDeslocamento,
+        slPropostaPlanilhaOrcamentaria,
+        slPropostaCustosVinculados,
+    },
     mounted: function () {
         if(typeof this.idpreprojeto != 'undefined' && typeof this.proposta == 'undefined') {
             this.buscar_dados();

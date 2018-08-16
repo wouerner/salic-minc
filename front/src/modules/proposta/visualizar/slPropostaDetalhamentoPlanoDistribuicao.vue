@@ -74,6 +74,9 @@ export default {
     props: [
         'arrayDetalhamentos'
     ],
+    components: {
+        slPropostaDetalhamentoConsolidacao,
+    },
     computed: {
     },
     watch: {

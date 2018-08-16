@@ -97,6 +97,9 @@ export default {
             }
         }
     },
+    components: {
+        slTextoSimples,
+    },
     mounted: function () {
     },
     methods: {

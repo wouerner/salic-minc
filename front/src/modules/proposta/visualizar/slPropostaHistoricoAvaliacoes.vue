@@ -1,12 +1,12 @@
 <template>
     <div class="tabelas">
             <div class="row">
-                <slTableEasy v-bind:dados="dado"></slTableEasy>
+                <slTabelaSimples v-bind:dados="dado"></slTabelaSimples>
             </div>
     </div>
 </template>
 <script>
-import slTableEasy from '@/components/slTableEasy';
+import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
     name: 'slPropostaHistoricoAvaliacoes',
@@ -16,6 +16,9 @@ export default {
         }
     },
     props: ['idpreprojeto'],
+    components: {
+        slTabelaSimples,
+    },
     mounted: function () {
         if (typeof this.idpreprojeto != 'undefined') {
             this.fetch(this.idpreprojeto);

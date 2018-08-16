@@ -45,6 +45,10 @@ export default {
         }
     },
     props: ['idpreprojeto', 'tipo'],
+    components: {
+        slPropostaAlteracoes,
+        slProposta,
+    },
     mounted: function () {
         if (typeof this.idpreprojeto != 'undefined') {
             this.buscar_dados();
