@@ -31,3 +31,18 @@ export const verificarDisponivelEdicaoReadequacaoPlanilha = ({ commit }, idProna
 	    commit(types.VERIFICAR_DISPONIVEL_EDICAO_READEQUACAO_PLANILHA, data.disponivelParaEdicaoReadequacaoPlanilha);
 	});
 };
+
+export const adicionarDocumento = ({ commit }, params) => {
+    readequacaoHelperAPI.adicionarDocumento(params)
+	.then((response) => {
+	    const documento = response.data.documento;
+	    commit(types.ADICIONAR_DOCUMENTO, documento);
+	});
+};
+
+export const excluirDocumento = ({ commit }, params) => {
+    readequacaoHelperAPI.excluirDocumento(params)
+	.then((response) => {
+	    commit(types.EXCLUIR_DOCUMENTO);
+	});
+};

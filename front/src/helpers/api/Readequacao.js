@@ -29,3 +29,13 @@ export const verificarDisponivelEdicaoReadequacaoPlanilha = (idPronac) => {
     const path = `/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha/?idPronac=`;
     return api.getRequest(path, idPronac);
 };
+
+export const adicionarDocumento = (params) => {
+    const path = `/readequacao/readequacoes/salvar-documento/`;
+    return api.postRequest(path, buildData(params));
+};
+
+export const excluirDocumento = (params) => {
+    const path = `/readequacao/readequacoes/excluir-documento/`;
+    return api.postRequest(path, buildData(params));
+};

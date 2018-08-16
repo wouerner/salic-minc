@@ -30,7 +30,7 @@
                 <input type="file"
                        name="arquivo"
                        id="arquivo"
-                       @change="subirDocumento"
+                       @change="prepararAdicionarDocumento"
 		       >
               </div>
               <div class="file-path-wrapper">
@@ -45,17 +45,16 @@
             </div>
             <div
 	      class="col s12"
-	      v-if="readequacao.idDocumento"
+	      v-show="arquivoAnexado"
 	      >
-              Arquivo anexado: <a v-bind:href="'/readequacao/readequacoes/abrir-documento-readequacao?id=' + readequacao.idDocumento">
-                {{readequacao.nomeArquivo }}
+              Arquivo anexado: <a v-bind:href="'/readequacao/readequacoes/abrir-documento-readequacao?id=' + dadosReadequacao.idDocumento">
+                {{dadosReadequacao.nomeArquivo }}
               </a>
               <a
                 title="Remover aquivo"
                 class=" small waves-effect waves-light red-text lighten-2"
                 v-if="!disabled"
-                v-show="readequacao.idDocumento"
-                v-on:click="excluirDocumento"
+                v-on:click="preparaExcluirDocumento"
 		>
                 <i class="material-icons">delete</i>
               </a>
@@ -125,7 +124,8 @@ export default {
 	    arquivo: {
 		tamanhoMaximo: 500000,
 		tiposAceitos: ["pdf"]
-	    }
+	    },
+	    excluindoDocumento: false,
 	};
     },
     props: {
@@ -158,75 +158,30 @@ export default {
 	    this.readequacao.dsSolicitacao = this.$parent.$refs.formulario.$children[0].dsSolicitacao;
 	    this.updateReadequacao(this.readequacao);
 	},
-	subirDocumento: function() {
-	    let arquivo = $("#arquivo")[0].files[0],
-		self = this;
+	prepararAdicionarDocumento: function() {
+	    let arquivos = document.getElementById('arquivo'),
+		arquivo = arquivos.files[0];
 	    
 	    if (!this.validarDocumento(arquivo)) {
 		return;
 	    }
-	    var formData = new FormData();
-	    formData.append("arquivo", arquivo);
-	    formData.append("idPronac", self.idPronac);
-	    formData.append("idTipoReadequacao", self.idTipoReadequacao);
-	    formData.append("idDocumentoAtual", self.readequacao.idDocumento);
-	    if (self.readequacao.idReadequacao) {
-		formData.append("idReadequacao", self.readequacao.idReadequacao);
-	    }
-	    
-	    $3("#carregando-arquivo").fadeIn("slow");
-	    $3
-		.ajax(
-		    Object.assign(
-			{},
-			{
-			    type: "POST",
-			    url:
-			    "/readequacao/readequacoes/salvar-documento/idPronac/" +
-				self.idPronac,
-			    processData: false,
-			    contentType: false
-			},
-			{
-			    data: formData
-			}
-		    )
-		)
-		.done(function(response) {
-		    self.readequacao.idDocumento = response.documento.idDocumento;
-		    self.readequacao.nomeArquivo = response.documento.nomeArquivo;
-		    self.readequacao.idReadequacao = response.readequacao.idReadequacao;
-		    // TODO: persistir via store
-		    //self.$emit("eventoAtualizarReadequacao", self.readequacao);
-		    $3("#carregando-arquivo").fadeOut("slow");
-		});
+
+	    this.adicionarDocumento({
+		arquivo: arquivo,
+		idPronac: this.dadosReadequacao.idPronac,
+		idReadequacao: this.dadosReadequacao.idReadequacao,
+		idTipoReadequacao: this.dadosReadequacao.idTipoReadequacao,
+		idDocumentoAtual: this.dadosReadequacao.idDocumento,
+	    });
 	},
-	excluirDocumento: function() {
-	    $3("#carregando-arquivo").fadeIn("slow");
+	preparaExcluirDocumento: function() {
+	    this.excluindoDocumento = true;
 	    
-	    let self = this;
-	    $3
-		.ajax({
-		    type: "GET",
-		    url: "/readequacao/readequacoes/excluir-documento",
-		    data: {
-			idDocumento: self.readequacao.idDocumento,
-			idPronac: self.idPronac,
-			idReadequacao: self.readequacao.idReadequacao
-		    }
-		})
-		.done(function(response) {
-		    self.mensagemSucesso("Documento excluido com sucesso.");
-		    self.readequacao.nomeArquivo = "";
-		    self.readequacao.idDocumento = "";
-		    // TODO: persistir via store
-		    //self.$emit("eventoAtualizarReadequacao", self.readequacao);
-		    $3("#carregando-arquivo").fadeOut("slow");
-		})
-		.fail(function(response) {
-		    self.mensagemAlerta(response.mensagem);
-		    $3("#carregando-arquivo").fadeOut("slow");
-		});
+	    this.excluirDocumento({
+		idDocumento: this.dadosReadequacao.idDocumento,
+		idPronac: this.dadosReadequacao.idPronac,
+		idReadequacao: this.dadosReadequacao.idReadequacao,
+	    });
 	},
 	validarDocumento: function(arquivo) {
 	    if (
@@ -257,6 +212,8 @@ export default {
 	},
 	...mapActions({
             updateReadequacao: 'readequacao/updateReadequacao',
+	    adicionarDocumento: 'readequacao/adicionarDocumento',
+	    excluirDocumento: 'readequacao/excluirDocumento',
 	}),	
     },
     computed: {
@@ -268,7 +225,7 @@ export default {
 		return true;
 	    }
 	    return false;
-	}
+	},
     },
     
     watch: {
