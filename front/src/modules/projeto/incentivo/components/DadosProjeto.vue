@@ -676,7 +676,6 @@
             },
             formatarConta(conta) {
                 // formato: 99999-9
-                // conta = conta.replace(/\D/g, '');
                 conta = conta.replace(/0|0/g, '');
                 conta = conta.replace(/(\d{5})(\d)/, '$1-$2');
 
