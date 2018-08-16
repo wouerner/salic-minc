@@ -25,7 +25,7 @@ export const updateReadequacao = (params) => {
     return api.putRequest(path, buildData(params), params.idReadequacao);
 };
 
-export const verificarDisponivelReadequacaoPlanilha = (idPronac) => {
+export const verificarDisponivelEdicaoReadequacaoPlanilha = (idPronac) => {
     const path = `/readequacao/saldo-aplicacao/verificar-disponivel-para-edicao-readequacao-planilha/?idPronac=`;
     return api.getRequest(path, idPronac);
 };

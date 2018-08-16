@@ -24,10 +24,10 @@ export const updateReadequacaoDsSolicitacao = ({ commit }, dsSolicitacao) => {
     commit(types.UPDATE_READEQUACAO_DS_SOLICITACAO, dsSolicitacao);
 };
 
-export const verificarDisponivelReadequacaoPlanilha = ({ commit }, idPronac) => {
-    readequacaoHelperAPI.verificarDisponivelReadequacaoPlanilha(idPronac)
+export const verificarDisponivelEdicaoReadequacaoPlanilha = ({ commit }, idPronac) => {
+    readequacaoHelperAPI.verificarDisponivelEdicaoReadequacaoPlanilha(idPronac)
 	.then((response) => {
 	    const data = response.data;
-	    commit(types.VERIFICAR_DISPONIVEL_READEQUACAO_PLANILHA, data.disponivelParaEdicaoReadequacaoPlanilha);
+	    commit(types.VERIFICAR_DISPONIVEL_EDICAO_READEQUACAO_PLANILHA, data.disponivelParaEdicaoReadequacaoPlanilha);
 	});
 };

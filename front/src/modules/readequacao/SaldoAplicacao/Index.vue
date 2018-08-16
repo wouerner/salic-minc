@@ -76,7 +76,7 @@
 		    :perfil="perfil"
 		    :disabled="disabled"
 		    :disponivelParaAdicaoItensReadequacaoPlanilha="disponivelParaAdicaoItensReadequacaoPlanilha"
-		    :disponivelParaEdicaoReadequacaoPlanilha="disponivelParaEdicaoReadequacaoPlanilha"
+		    :disponivelParaEdicaoReadequacaoPlanilha="dadosReadequacao.disponivelEdicaoReadequacaoPlanilha"
 		    v-on:atualizarSaldoEntrePlanilhas="carregarValorEntrePlanilhas"
 		    >
 		  </planilha-orcamentaria>
@@ -452,7 +452,7 @@ export default {
 	...mapActions({
             buscaProjeto: 'projeto/buscaProjeto',
 	    buscaReadequacao: 'readequacao/buscaReadequacao',
-	    verificarDisponivelReadequacaoPlanilha: 'readequacao/verificarDisponivelReadequacaoPlanilha',
+	    verificarDisponivelReadequacaoPlanilha: 'readequacao/verificarDisponivelEdicaoReadequacaoPlanilha',
         }),
     },
     watch: {
@@ -474,6 +474,7 @@ export default {
 		$3('.collapsible').collapsible();
 		this.verificarDisponivelReadequacaoPlanilha(this.dadosReadequacao.idPronac);
 		this.carregarValorEntrePlanilhas();
+		this.solicitacaoIniciada = true;
 		this.exibirPaineis = true;
 	    } else {
 		this.exibirBotaoIniciar = true;
@@ -490,7 +491,6 @@ export default {
         ...mapGetters({
             dadosProjeto: 'projeto/projeto',
 	    dadosReadequacao: 'readequacao/readequacao',
-	    disponivelParaEdicaoReadequacaoPlanilha: 'readequacao/disponivel_readequacao_planilha',
         }),	
 	vlDiferencaEntrePlanilhas: function() {
 	    if (typeof this.valorEntrePlanilhas.vlDiferencaPlanilhas != 'undefined') {
