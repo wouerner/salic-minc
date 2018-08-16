@@ -563,12 +563,18 @@
                             </b>
                         </td>
                         <td class="right-align">
-                            <b>
+                            <b v-if="dadosProjeto.vlTransferido === '0'">
+                                <SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>
+                            </b>
+                            <b v-else>
                                 <TransferenciaRecursos :valor="dadosProjeto.vlTransferido" :acao="'transferidor'"></TransferenciaRecursos>
                             </b>
                         </td>
                         <td class="right-align">
-                            <b>
+                            <b v-if="dadosProjeto.vlRecebido === '0'">
+                                <SalicFormatarValor :valor="dadosProjeto.vlRecebido"/>
+                            </b>
+                            <b v-else>
                                 <TransferenciaRecursos :valor="dadosProjeto.vlRecebido" :acao="'recebedor'"></TransferenciaRecursos>
                             </b>
                         </td>
