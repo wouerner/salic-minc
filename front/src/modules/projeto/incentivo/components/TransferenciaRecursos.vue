@@ -2,11 +2,11 @@
     <div>
         <a
             class="cursor"
-            @click="abrirModal('valor-transferidos');"
+            @click="abrirModal('transferencia-recursos');"
         >
             {{valor | formatarParaReal}}
         </a>
-        <ModalTemplate v-if="modalVisible === 'valor-transferidos'" @close="fecharModal();">
+        <ModalTemplate v-if="modalVisible === 'transferencia-recursos'" @close="fecharModal();">
             <template slot="header">
                 <div style="float: left; margin-bottom: 20px;">
                     Transferencia de recursos entre projetos culturais
