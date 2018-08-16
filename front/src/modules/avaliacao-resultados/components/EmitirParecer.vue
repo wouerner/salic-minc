@@ -1,10 +1,10 @@
 <template>
     <v-container fluid grid-list-xl>
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-            <v-btn slot="activator" color="primary" dark>Open Dialog</v-btn>
+            <v-btn slot="activator" color="green" dark>Emitir Parecer</v-btn>
             <v-card>
 
-                <v-toolbar dark color="primary">
+                <v-toolbar dark color="green">
                     <v-btn icon dark @click.native="dialog = false">
                         <v-icon>close</v-icon>
                     </v-btn>
@@ -12,7 +12,7 @@
                     <v-toolbar-title>Avaliação Financeira - Emissão de Parecer</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark flat @click.native="dialog = false">Save</v-btn>
+                        <v-btn dark flat @click.native="dialog = false">Salvar</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
 
@@ -100,23 +100,20 @@
                 </v-list>
 
                 <v-layout wrap align-center>
-                    <v-flex xs12 sm12 d-flex>
+                    <v-flex xs10 sm10 d-flex offset-{xs1-md1}>
                         <v-select height="20px"
                                   :items="items"
                                   box
                                   label="Manifestação"
                         ></v-select>
                     </v-flex>
-
-                    <v-flex xs6>
-                        <v-textarea
-                            box
-                            name="input-7-4"
-                            label="Box textarea"
-                            value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-                        ></v-textarea>
-                    </v-flex>
                 </v-layout>
+
+                <v-textarea
+                    auto-grow="true"
+                    color="deep-purple"
+                    label="Bio"
+                ></v-textarea>
 
             </v-card>
         </v-dialog>
