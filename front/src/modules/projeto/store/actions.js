@@ -14,7 +14,6 @@ export const buscaProjeto = ({ commit }, idPronac) => {
 export const buscarValoresTransferidos = ({ commit }) => {
     const projeto = state.projeto;
     const idPronac = projeto.idPronac;
-
     projetoHelperAPI.buscarValoresTransferidos(idPronac)
         .then((response) => {
             const data = response.data;

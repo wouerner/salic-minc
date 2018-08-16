@@ -5,7 +5,7 @@
         >
             {{formatValue(valor)}}
         </a>
-        <ModalTemplate v-if="modalVisible === 'valor-transferidos'" @close="fecharModal();event.preventDefault()">
+        <ModalTemplate v-if="modalVisible === 'valor-transferidos'" @close="fecharModal();">
             <template slot="header">
                 <div style="float: left; margin-bottom: 20px;">
                     Transferencia de recursos entre projetos culturais
@@ -16,27 +16,25 @@
                     <thead>
                         <tr>
                             <th colspan="2">Projeto Recebedor</th>
-                            <th colspan="2">Projeto Transferidor</th>
+                            <th colspan="4">Projeto Transferidor</th>
                         </tr>
                         <tr>
                             <th>Pronac</th>
                             <th>Nome do Projeto</th>
                             <th>Pronac</th>
                             <th>Nome do Projeto</th>
+                            <th>Dt. Recebimento</th>
+                            <th>Vl. Recebido</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-for="(valor, index) in valoresTransferidos" :key="index">
                         <tr>
-                            <td>data1</td>
-                            <td>data2</td>
-                            <td>data3</td>
-                            <td>data4</td>
-                        </tr>
-                        <tr>
-                            <td>data1</td>
-                            <td>data2</td>
-                            <td>data3</td>
-                            <td>data4</td>
+                            <td>{{valor.idPronacTransferidor}}</td>
+                            <td>{{valor.NomeProjetoTranferidor}}</td>
+                            <td>{{valor.idPronacRecebedor}}</td>
+                            <td>{{valor.NomeProjetoRecedor}}</td>
+                            <td>{{valor.dtRecebimento}}</td>
+                            <td>{{ valor.vlRecebido | formatarParaReal }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -49,6 +47,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
+    import planilhas from '@/mixins/planilhas';
 
     export default {
         name: 'ValorTransferido',
@@ -56,6 +55,7 @@
         components: {
             ModalTemplate,
         },
+        mixins: [planilhas],
         methods: {
             ...mapActions({
                 modalOpen: 'modal/modalOpen',
@@ -73,34 +73,11 @@
                 $3('#modalTemplate').modal('close');
                 this.modalClose();
             },
-            formatValue(value) {
-                if (value === undefined) {
-                    return '0,00';
-                }
-
-                if (value.indexOf('.') === -1) {
-                    return this.formatValueWithoutCents(value);
-                }
-
-                return this.formatValueWithCents(value);
-            },
-            formatValueWithoutCents(value) {
-                const valueWithCents = value.concat(',00');
-                const result = valueWithCents.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                return result;
-            },
-            formatValueWithCents(value) {
-                const valueParsedToFloat = parseFloat(value).toFixed(2);
-                const valueParsedToString = valueParsedToFloat.toString();
-                const valueChangedPointByComma = valueParsedToString.replace('.', ',');
-                const result = valueChangedPointByComma.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-                return result;
-            },
         },
         computed: {
             ...mapGetters({
                 modalVisible: 'modal/default',
+                valoresTransferidos: 'projeto/valoresTransferidos',
             }),
         },
     };

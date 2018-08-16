@@ -28,10 +28,6 @@ class TransferenciaRecursos
 
         $result = $mapper->obterTransferenciaRecursosEntreProjetos($idPronac);
 
-        array_walk($result, function (&$value) {
-            $value = array_map('utf8_encode', $value->toArray());
-        });
-
         return $this->utf8Encode($result);
     }
 
