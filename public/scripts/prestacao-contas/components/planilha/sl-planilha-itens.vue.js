@@ -37,8 +37,15 @@ Vue.component('sl-planilha-itens', {
         'uf',
         'cdproduto',
         'cdcidade',
-        'cdetapa'
+        'cdetapa',
+        'stitemavaliado'
     ],
+    mounted() {
+        $3('ul.tabs').tabs();
+    },
+    updated() {
+        $3('ul.tabs').tabs();
+    },
     methods: {
         isObject: function (el) {
             return typeof el === "object";
@@ -55,13 +62,16 @@ Vue.component('sl-planilha-itens', {
             return this.urlDoTecnico(idPlanilhaAprovacao, idPlanilhaItens, stItemAvaliado);
         },
         urlDoTecnico: function(idPlanilhaAprovacao, idPlanilhaItens, stItemAvaliado) {
-            const url = '/prestacao-contas/analisar/comprovante'
+            let url = '/prestacao-contas/analisar/comprovante'
                 + '/idPronac/' + this.idpronac
                 + '/uf/' + this.uf
                 + '/produto/' + this.cdproduto
                 + '/idmunicipio/' + this.cdcidade
-                + '/idPlanilhaItem/' + idPlanilhaItens
-                + '/stItemAvaliado/' + stItemAvaliado;
+                + '/idPlanilhaItem/' + idPlanilhaItens;
+
+                if (this.stitemavaliado) {
+                    url += '/stItemAvaliado/' + this.stitemavaliado;
+                }
 
             return { url: url, icon: 'gavel', colorButton: 'red' };
         },

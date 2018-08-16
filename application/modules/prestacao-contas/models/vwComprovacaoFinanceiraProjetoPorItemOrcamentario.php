@@ -717,9 +717,9 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
             a.idPlanilhaItem)) > 0'
         ));
 
-        /* if ($stItemAvaliado) { */
-        /*     $select->where('stItemAvaliado = ?', $stItemAvaliado); */
-        /* } */
+        if ($stItemAvaliado) {
+            $select->where('b.stItemAvaliado = ?', $stItemAvaliado);
+        }
 
         if ($codigoProduto || ($codigoProduto == 0 && !is_null($codigoProduto))) {
             $select->where('a.idProduto = ?', $codigoProduto);
