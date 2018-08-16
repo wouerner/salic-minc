@@ -34,6 +34,7 @@
             $menu += $this->segurança();
             $menu += $this->manuais();
             $menu += $this->aulas();
+            $menu += $this->manutencao();
 
             $this->view->assign('data', $menu );
             $this->getResponse()->setHttpResponseCode(200);
@@ -1004,7 +1005,7 @@
                 'grupo' => [114],
             ];
             $arrMenu['relatorios']['menu'][] = [
-                'url' => ['controller' => 'Listareditais', 'action' => 'listarselecionados'],
+                'url' => ['module'=>'default','controller' => 'Listareditais', 'action' => 'listarselecionados'],
                 'title' => 'Ir para Listar Selecionados',
                 'label' => 'Listar Selecionados',
                 'grupo' => [114, 130]
@@ -1027,7 +1028,7 @@
             ];
             $arrMenu['seguranca']['menu'][] = [
                 'grupo' => [97],
-                'url' => ['module' => 'default', 'controller' => 'manterusuario', 'action' => 'regerarsenha'],
+                'url' => ['module'=> 'default', 'controller' => 'manterusuario', 'action' => 'regerarsenha'],
                 'title' => 'Ir para Regerar Senha Usu&aacute;rio',
                 'label' => 'Regerar Senha Usu&aacute;rio'
             ];
@@ -1038,7 +1039,7 @@
                 'grupo' => [97],
             ];
             $arrMenu['seguranca']['menu'][] = [
-                'url' => ['module' => 'default', 'controller' => 'manterusuario', 'action' => 'permissoessalic']. '?session=x&pag=1',
+                'url' => ['module' => 'default', 'controller' => 'manterusuario', 'action' => 'permissoessalic'],
                 'title' => 'Ir para Permiss&otilde;es do SalicWeb',
                 'label' => 'Permiss&otilde;es do SalicWeb',
                 'grupo' => [97],
@@ -1137,6 +1138,48 @@
                 'grupo' => [94, 137],
                 'target' => '_blank'
             ];
+            return $arrMenu;
+
+        }
+        public function manutencao(){
+            $arrMenu['manutencao'] = [
+                'id' => 'manutencao',
+                'title' => 'Ir para Manuten&ccedil;&atilde;o',
+                'label' => 'Manuten&ccedil;&atilde;o',
+                'grupo' => [148,151,92,93,97,103,Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],
+                'menu' => []
+            ];
+            $arrMenu['manutencao']['menu'][] = [
+                'title' => 'Ir para Alterar Projeto',
+                'label' => 'Alterar Projeto',
+                'url' => ['module'=>'default', 'controller' => 'alterarprojeto', 'action' => 'consultarprojeto'],
+                'grupo' => [148,151,92,93,97,103,Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],
+            ];
+            $arrMenu['manutencao']['menu'][] = [
+                'title' => 'Anexar Documentos',
+                'label' => 'Anexar Documentos',
+                'url' => ['module'=>'defalut', 'controller' => 'anexardocumentosminc', 'action' => 'index'],
+                'grupo' =>[148,151,92,93,97,103,Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],
+            ];
+            $arrMenu['manutencao']['menu'][] = [
+                'title' => 'Excluir Documentos',
+                'label' => 'Excluir Documentos',
+                'url' => ['module'=>'default','controller' => 'anexardocumentosminc', 'action' => 'excluir'],
+                'grupo' => [92,93,97,103,Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],
+            ];
+            $arrMenu['manutencao']['menu'][] = [
+                'grupo' => [148,151,92,93,97,103,Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],
+                'url' => ['module'=>'default','controller' => 'rastrearagente', 'action' => 'index'],
+                'title' => 'Ir para Rastrear Agente',
+                'label' => 'Rastrear Agente'
+            ];
+            $arrMenu['manutencao']['menu'][] = [
+                'title' => 'Localiza&ccedil;&atilde;o F&iacute;sica do Projeto',
+                'label' => 'Localiza&ccedil;&atilde;o F&iacute;sica do Projeto',
+                'url' => ['module'=>'default','controller' => 'localizacao-fisica', 'action' => 'index'],
+                'grupo' => [148,151,92,93,97,103,Autenticacao_Model_Grupos::PROTOCOLO_ENVIO_RECEBIMENTO,110,113,114,115,121,122,123,124,125,126,127,128,131,132,134,135,136,137,138,139,140,143],
+            ];
+
             return $arrMenu;
         }
 

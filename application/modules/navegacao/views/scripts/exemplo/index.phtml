@@ -17,7 +17,7 @@
                   <a id="menu-right" href="#" data-activates="nav-mobile" class="button-collapse right"><i class="material-icons">menu</i></a>
                     <ul class="left hide-on-med-and-down">
                         <li v-for="(menu,index)  in dados.data">
-                          <a v-html="menu.label" class="dropdown-button" data-beloworigin="true" data-constrainwidth="false" :data-activates="menu.id" title="Ir para Analise">
+                          <a v-html="menu.label"class="dropdown-button" data-beloworigin="true" data-constrainwidth="false" :data-activates="menu.id" title="Ir para Analise">
                           </a>
                             <ul :id="menu.id" class="dropdown-content" style="white-space: nowrap; position: absolute; top: 40px; left: 0px; display: none; opacity: 1;">
                               <li v-for="link in menu.menu">
