@@ -20,9 +20,9 @@ class Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper extends MinC_Db
 
             $objTbSolicitacaoTransferenciaRecursos->setIdSolicitacaoTransferenciaRecursos($arrData['idSolicitacaoTransferenciaRecursos']);
             $objTbSolicitacaoTransferenciaRecursos->setSiAnaliseTecnica($arrData['siAnaliseTecnica']);
-            
+
             $id = $this->save($objTbSolicitacaoTransferenciaRecursos);
-            
+
             if ($this->getMessage()) {
                 throw new Exception($this->getMessage());
             }
@@ -31,5 +31,11 @@ class Readequacao_Model_TbSolicitacaoTransferenciaRecursosMapper extends MinC_Db
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public function obterTransferenciaRecursosEntreProjetos($idPronac)
+    {
+        $teste = new \Readequacao_Model_DbTable_TbProjetoRecebedorRecurso();
+        $teste->obterTransferenciaRecursosEntreProjetos(['idPronacTransferidor = ?' => 131036]);
     }
 }
