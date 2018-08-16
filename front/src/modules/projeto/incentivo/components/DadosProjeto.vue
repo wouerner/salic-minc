@@ -564,12 +564,12 @@
                         </td>
                         <td class="right-align">
                             <b>
-                                <TransferenciaRecursos :valor="dadosProjeto.vlTransferido"></TransferenciaRecursos>
+                                <TransferenciaRecursos :valor="dadosProjeto.vlTransferido" :acao="'transferidor'"></TransferenciaRecursos>
                             </b>
                         </td>
                         <td class="right-align">
                             <b>
-                                <SalicFormatarValor :valor="dadosProjeto.vlRecebido"/>
+                                <TransferenciaRecursos :valor="dadosProjeto.vlRecebido" :acao="'recebedor'"></TransferenciaRecursos>
                             </b>
                         </td>
                         <td class="right-align destacar-celula">

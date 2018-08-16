@@ -6,10 +6,10 @@ class Readequacao_Model_TbTransferenciaRecursosEntreProjetosMapper extends MinC_
     {
     }
 
-    public function obterTransferenciaRecursosEntreProjetos($idPronac)
+    public function obterTransferenciaRecursosEntreProjetos($idPronac, $acao)
     {
         $tbProjetoRecebedorRecurso = new \Readequacao_Model_DbTable_TbProjetoRecebedorRecurso();
-        $queryResult = $tbProjetoRecebedorRecurso->obterTransferenciaRecursosEntreProjetos(['a.idPronacTransferidor = ?' => 131036]);
+        $queryResult = $tbProjetoRecebedorRecurso->obterTransferenciaRecursosEntreProjetos([$acao => $idPronac]);
 
         $result = array();
 

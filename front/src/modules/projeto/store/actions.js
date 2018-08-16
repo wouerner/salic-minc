@@ -11,10 +11,10 @@ export const buscaProjeto = ({ commit }, idPronac) => {
         });
 };
 
-export const buscarTransferenciaRecursos = ({ commit }) => {
+export const buscarTransferenciaRecursos = ({ commit }, acao) => {
     const projeto = state.projeto;
     const idPronac = projeto.idPronac;
-    projetoHelperAPI.buscarTransferenciaRecursos(idPronac)
+    projetoHelperAPI.buscarTransferenciaRecursos(idPronac, acao)
         .then((response) => {
             const data = response.data;
             const transferenciaRecursos = data.data;

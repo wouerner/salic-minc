@@ -1,6 +1,7 @@
 <template>
     <div>
         <a
+            class="cursor"
             @click="abrirModal('valor-transferidos');"
         >
             {{valor | formatarParaReal}}
@@ -51,7 +52,16 @@
 
     export default {
         name: 'ValorTransferido',
-        props: { valor: String },
+        props: {
+            valor: {
+                String,
+                required: true,
+            },
+            acao: {
+                String,
+                required: true,
+            },
+        },
         components: {
             ModalTemplate,
         },
@@ -63,7 +73,7 @@
                 buscarTransferenciaRecursos: 'projeto/buscarTransferenciaRecursos',
             }),
             abrirModal(modalName) {
-                this.buscarTransferenciaRecursos();
+                this.buscarTransferenciaRecursos(this.acao);
                 // eslint-disable-next-line
                 $3('#modalTemplate').modal('open');
                 this.modalOpen(modalName);
@@ -82,3 +92,9 @@
         },
     };
 </script>
+
+<style>
+    .cursor {
+        cursor: pointer;
+    }
+</style>
