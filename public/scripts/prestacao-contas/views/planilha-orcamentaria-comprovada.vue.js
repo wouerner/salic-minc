@@ -36,27 +36,27 @@ Vue.component('planilha-orcamentaria-comprovada', {
                                             <div class="col s12">
                                                 <ul class="tabs">
                                                   <li class="tab col s3">
-                                                    <a class="active" :href="'#test_1_' + slot.cidade.cdCidade +'_'+ slot.produto">
+                                                    <a class="active" :href="'#test_1_' + slot.cidade.cdCidade +'_' + slot.produto +'_'+ slot.etapa">
                                                         Todos
                                                     </a>
                                                   </li>
                                                   <li class="tab col s3">
-                                                    <a :href="'#test_2_' + slot.cidade.cdCidade +'_'+ slot.produto">
+                                                    <a :href="'#test_2_' + slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa">
                                                         Aguardando Analise</a>
                                                   </li>
                                                   <li class="tab col s3">
-                                                    <a :href="'#test_3_' + slot.cidade.cdCidade +'_'+ slot.produto">
+                                                    <a :href="'#test_3_' + slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa">
                                                         Avaliado
                                                     </a>
                                                   </li>
                                                   <li class="tab col s3">
-                                                    <a :href="'#test_4_' + slot.cidade.cdCidade +'_'+ slot.produto">
+                                                    <a :href="'#test_4_' + slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa">
                                                         Impugnados
                                                     </a>
                                                   </li>
                                                 </ul>
                                             </div>
-                                            <div :id="'test_1_'+ slot.cidade.cdCidade +'_'+ slot.produto" class="col s12">
+                                            <div :id="'test_1_'+ slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa" class="col s12">
                                                 <sl-planilha-itens
                                                     :itens="slot.cidade.itens['todos']"
                                                     :idpronac="idpronac"
@@ -66,7 +66,7 @@ Vue.component('planilha-orcamentaria-comprovada', {
                                                     :cdetapa="slot.etapa"
                                                 ></sl-planilha-itens>
                                             </div>
-                                            <div :id="'test_2_' + slot.cidade.cdCidade +'_'+ slot.produto" class="col s12">
+                                            <div :id="'test_2_' + slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa" class="col s12">
                                                 <sl-planilha-itens
                                                     :itens="slot.cidade.itens[4]"
                                                     :idpronac="idpronac"
@@ -77,7 +77,7 @@ Vue.component('planilha-orcamentaria-comprovada', {
                                                     stitemavaliado="4"
                                                 ></sl-planilha-itens>
                                             </div>
-                                            <div :id="'test_3_' + slot.cidade.cdCidade +'_'+ slot.produto" class="col s12">
+                                            <div :id="'test_3_' + slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa" class="col s12">
                                                 <sl-planilha-itens
                                                     :itens="slot.cidade.itens[1]"
                                                     :idpronac="idpronac"
@@ -88,7 +88,7 @@ Vue.component('planilha-orcamentaria-comprovada', {
                                                     stitemavaliado="1"
                                                 ></sl-planilha-itens>
                                             </div>
-                                            <div :id="'test_4_' + slot.cidade.cdCidade +'_'+ slot.produto" class="col s12">
+                                            <div :id="'test_4_' + slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa" class="col s12">
                                                 <sl-planilha-itens
                                                     :itens="slot.cidade.itens[3]"
                                                     :idpronac="idpronac"
