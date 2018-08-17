@@ -17,6 +17,7 @@
                 uf="<?php echo $this->uf ?>"
                 idmunicipio="<?php echo $this->municipio ?>"
                 idplanilhaitem="<?php echo $this->idPlanilhaItem ?>"
+                etapa="<?php echo $this->etapa ?>"
             >
             </dados-comprovante>
         </div>
@@ -386,7 +387,8 @@
             'stitemavaliado',
             'uf',
             'idmunicipio',
-            'idplanilhaitem'
+            'idplanilhaitem',
+            'etapa'
         ],
         components: {
             'comprovantes': comprovantes,
@@ -404,7 +406,8 @@
                     produto: this.produto,
                     uf: this.uf,
                     idmunicipio: this.idmunicipio,
-                    stItemAvaliado: this.stitemavaliado
+                    stItemAvaliado: this.stitemavaliado,
+                    etapa: this.etapa
                 }
             })
             .done(function (data) {

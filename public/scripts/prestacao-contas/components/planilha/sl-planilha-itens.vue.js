@@ -67,7 +67,8 @@ Vue.component('sl-planilha-itens', {
                 + '/uf/' + this.uf
                 + '/produto/' + this.cdproduto
                 + '/idmunicipio/' + this.cdcidade
-                + '/idPlanilhaItem/' + idPlanilhaItens;
+                + '/idPlanilhaItem/' + idPlanilhaItens
+                + '/etapa/' + this.cdetapa;
 
                 if (this.stitemavaliado) {
                     url += '/stItemAvaliado/' + this.stitemavaliado;
