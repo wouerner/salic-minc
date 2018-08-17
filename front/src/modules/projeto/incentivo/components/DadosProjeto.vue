@@ -669,15 +669,15 @@
             formatarAgencia(agencia) {
                 // formato: 9999-9
                 if (agencia.length === 5) {
-                    agencia = agencia.replace(/\D/g, '');
                     agencia = agencia.replace(/(\d{4})(\d)/, '$1-$2');
                 }
                 return agencia;
             },
             formatarConta(conta) {
                 // formato: 99999-9
-                conta = conta.replace(/0|0/g, '');
-                conta = conta.replace(/(\d{5})(\d)/, '$1-$2');
+                conta = parseInt(conta);
+                // conta = conta.replace(/^0|0/g, '');
+                conta = conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
 
                 return conta;
             }
