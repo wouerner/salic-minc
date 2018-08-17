@@ -24,6 +24,13 @@ export const updateReadequacaoDsSolicitacao = ({ commit }, dsSolicitacao) => {
     commit(types.UPDATE_READEQUACAO_DS_SOLICITACAO, dsSolicitacao);
 };
 
+export const excluirReadequacao = ({ commit }, params) => {
+    readequacaoHelperAPI.excluirReadequacao(params)
+	.then((response) => {
+	    commit(types.EXCLUIR_READEQUACAO);
+	});
+};
+
 export const verificarDisponivelEdicaoReadequacaoPlanilha = ({ commit }, idPronac) => {
     readequacaoHelperAPI.verificarDisponivelEdicaoReadequacaoPlanilha(idPronac)
 	.then((response) => {

@@ -18,11 +18,14 @@ export const buscaReadequacao = (params) => {
 };
 
 export const updateReadequacao = (params) => {
-    // TODO: refatorar controller que salva / mover para controller principal (tirar da saldo aplicacao)
-    
-    const path = `/readequacao/saldo-aplicacao/salvar-readequacao`;
-    
+    // TODO: refatorar controller que salva / mover para controller principal (tirar da saldo aplicacao)   
+    const path = `/readequacao/saldo-aplicacao/salvar-readequacao`;   
     return api.putRequest(path, buildData(params), params.idReadequacao);
+};
+
+export const excluirReadequacao = (params) => {
+    const path = `/readequacao/saldo-aplicacao/excluir-readequacao`;
+    return api.postRequest(path, buildData(params));
 };
 
 export const verificarDisponivelEdicaoReadequacaoPlanilha = (idPronac) => {

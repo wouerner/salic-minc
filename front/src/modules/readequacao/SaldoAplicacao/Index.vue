@@ -139,7 +139,7 @@
 	      <div class="right-align padding20 col s12">
 		<button
 		  class="waves-light waves-effect btn red modal-trigger"
-		  v-on:click="excluirReadequacao()"
+		  v-on:click="prepararExcluirReadequacao()"
 		  >Excluir</button>
 		<a
 		  class="waves-light waves-effect btn modal-trigger"
@@ -294,43 +294,6 @@ export default {
 	    });
 	    
 	},
-	salvarReadequacao: function(readequacao) {
-	    if (this.dadosReadequacao.dsSolicitacao == ''
-		|| readequacao.dsSolicitacao == undefined
-		|| readequacao.dsSolicitacao == 0
-	    ) {
-		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel.!");
-		this.$refs.formulario.$children[0].$refs.readequacaoSaldo.focus();
-		return;		
-	    }
-	    
-	    if (readequacao.justificativa.length == 0) {
-		this.mensagemAlerta("\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o!");
-		this.$refs.formulario.$refs.readequacaoJustificativa.focus();
-		
-		return;
-	    }
-
-	    console.log('TODO: commit readequacao');
-	    /*
-	    let self = this;
-            $3.ajax({
-                type: "POST",
-                url: "/readequacao/saldo-aplicacao/salvar-readequacao",
-		data: {
-		    idPronac: this.idPronac,
-		    idReadequacao: readequacao.idReadequacao,
-		    justificativa: readequacao.justificativa,
-		    dsSolicitacao: readequacao.dsSolicitacao
-		}
-            }).done(function (response) {
-		self.readequacao = readequacao;
-		self.solicitacaoIniciada = true;
-		self.readequacaoAlterada = false;
-                self.mensagemSucesso(response.msg);
-            });
-            */
-	},
 	atualizarReadequacao: function (readequacao) {
 	    this.readequacaoAlterada = true;
             this.readequacao = readequacao;
@@ -348,10 +311,17 @@ export default {
 		self.valorEntrePlanilhas = response.valorEntrePlanilhas;
 	    });
 	},
-	excluirReadequacao: function () {
+	prepararExcluirReadequacao: function () {
+	    this.excluirReadequacao({
+		idPronac: this.idPronac,
+		idReadequacao: this.dadosReadequacao.idReadequacao
+	    });
+	    
+	    /*
 	    $3('#modalExcluir .modal-content h4').html('');
 	    $3('#modalExcluir .modal-footer').html('<h5>Removendo os dados, aguarde...</h5>');
-	    
+
+
 	    let self = this;
 	    
 	    $3.ajax({
@@ -372,6 +342,7 @@ export default {
             }).fail(function (response) {
                 self.mensagemErro(response.responseJSON.msg)
             });
+*/
 	},
 	finalizarReadequacao: function() {
 	    let self = this;
@@ -420,6 +391,7 @@ export default {
 	...mapActions({
             buscaProjeto: 'projeto/buscaProjeto',
 	    buscaReadequacao: 'readequacao/buscaReadequacao',
+	    excluirReadequacao: 'readequacao/excluirReadequacao',
 	    verificarDisponivelReadequacaoPlanilha: 'readequacao/verificarDisponivelEdicaoReadequacaoPlanilha',
         }),
     },
