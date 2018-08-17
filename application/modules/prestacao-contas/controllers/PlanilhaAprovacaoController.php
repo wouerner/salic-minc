@@ -24,6 +24,7 @@ class PrestacaoContas_PlanilhaAprovacaoController extends Zend_Rest_Controller
         $idPlanilhaEtapa = $this->getRequest()->getParam('idplanilhaetapa');
         $codigoProduto = $this->getRequest()->getParam('produto');
         $stItemAvaliado = $this->getRequest()->getParam('stItemAvaliado');
+        $etapa = $this->getRequest()->getParam('etapa');
 
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
 
@@ -31,7 +32,7 @@ class PrestacaoContas_PlanilhaAprovacaoController extends Zend_Rest_Controller
             ->vwComprovacaoFinanceiraProjeto(
                 $idPronac,
                 $uf,
-                null,
+                $etapa,
                 $codigoProduto,
                 $municipio,
                 null,

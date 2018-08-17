@@ -100,7 +100,8 @@
             'idmunicipio',
             'idplanilhaetapa',
             'produto',
-            'stitemavaliado'
+            'stitemavaliado',
+            'etapa'
         ],
         data: function () {
             return {
@@ -120,6 +121,7 @@
                     produto: this.produto,
                     uf: this.uf,
                     idmunicipio: this.idmunicipio,
+                    etapa: this.etapa
                 }
             })
                 .done(function (data) {
@@ -372,6 +374,7 @@
                     :idmunicipio="idmunicipio"
                     :idplanilhaetapa="idplanilhaitem"
                     :produto="produto"
+                    :etapa="etapa"
                 >
                 </pc-projeto>
                 <comprovantes
