@@ -1069,13 +1069,13 @@
             ];
             $arrMenu['manuais']['menu'][] = [
                 'label' => 'Parecerista', 'title' => 'Ir para Parecerista',
-                'url' => ['module'=>'defalt','controller' => 'public', 'action' => 'manuais'] . '/Parecerista.m4v',
+                'url' => ['module'=>'default','controller' => 'public', 'action' => 'manuais'] . '/Parecerista.m4v',
                 'grupo' => [94],
                 'target' => '_blank'
             ];
             $arrMenu['manuais']['menu'][] = [
                 'label' => 'Confirmar Pagamento Parecerista', 'title' => 'Ir para Parecerista - An&aacute;lise',
-                'url' => ['module'=>'default','controller' => 'public', 'action' => 'manuais'] . '/Manual_do_Parecerista-Confirmar-Pagamento.m4v',
+                'url' => ['module' =>'default','controller' => 'public', 'action' => 'manuais'] . '/Manual_do_Parecerista-Confirmar-Pagamento.m4v',
                 'grupo' => [94],
                 'target' => '_blank'
             ];
