@@ -31,9 +31,12 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
 
         $this->view->idPronac = $idpronac;
 
-        $planilhaAprovacaoModel = new PrestacaoContas_Model_spComprovacaoFinanceiraProjeto();
-        $resposta = $planilhaAprovacaoModel->exec($idpronac, 100);
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $resposta = $planilhaAprovacaoModel->obterItensAprovados($idpronac);
 
+        $vlTotalComprovar = 0;
+        $vlComprovado = 0;
+        $vlAprovado = 0;
         foreach ($resposta as $item) {
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
             $vlTotalComprovar += $vlComprovar;
@@ -50,6 +53,8 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
         $this->view->vlComprovado = $vlComprovado;
         $this->view->pronac = $pronac;
         $this->view->nomeProjeto = $nomeProjeto;
+
+
 
         $diligencia = new Diligencia();
         $this->view->existeDiligenciaAberta = $diligencia->existeDiligenciaAberta($idpronac);
