@@ -29,8 +29,8 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align">{{ row.vlUnitario }}</td>
-                <td class="right-align">{{row.vlSolicitado  | formatarParaReal}}</td>
+                <td class="right-align">{{row.vlUnitario | formatarParaReal}}</td>
+                <td class="right-align">{{row.vlSolicitado | formatarParaReal}}</td>
                 <td class="right-align">{{row.vlSugerido  | formatarParaReal}}</td>
                 <td class="right-align">{{row.vlAprovado | formatarParaReal}}</td>
                 <td class="justify" width="15%" v-html="row.JustProponente"></td>
