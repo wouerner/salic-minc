@@ -437,7 +437,8 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         $idPlanilhaItem = null ,
         $stItemAvaliado = null,
         $codigoProduto = null,
-        $idComprovantePagamento = null
+        $idComprovantePagamento = null,
+        $etapa = null
     ) {
         $cols = [
             "a.idPlanilhaAprovacao",
@@ -586,8 +587,11 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
             $select->where('a.idPlanilhaItem = ?', $idPlanilhaItem);
         }
 
+        if ($etapa) {
+            $select->where('a.idEtapa = ?', $etapa);
+        }
+
         $select->where('a.IdPRONAC = ?', $idpronac);
-        /* echo $select; die; */
         return $this->fetchAll($select);
     }
 
@@ -596,8 +600,10 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
         $idPlanilhaItem = null ,
         $stItemAvaliado = null,
         $codigoProduto = null,
-        $idComprovantePagamento = null
+        $idComprovantePagamento = null,
+        $etapa = null
     ) {
+        /* var_dump($etapa);die; */
         $cols = [
             "a.idPlanilhaAprovacao",
             "c.idComprovantePagamento",
@@ -717,9 +723,9 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
             a.idPlanilhaItem)) > 0'
         ));
 
-        /* if ($stItemAvaliado) { */
-        /*     $select->where('stItemAvaliado = ?', $stItemAvaliado); */
-        /* } */
+        if ($stItemAvaliado) {
+            $select->where('b.stItemAvaliado = ?', $stItemAvaliado);
+        }
 
         if ($codigoProduto || ($codigoProduto == 0 && !is_null($codigoProduto))) {
             $select->where('a.idProduto = ?', $codigoProduto);
@@ -733,8 +739,12 @@ class PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario ex
             $select->where('a.idPlanilhaItem = ?', $idPlanilhaItem);
         }
 
+        if ($etapa) {
+            $select->where('a.idEtapa = ?', $etapa);
+        }
+
         $select->where('a.IdPRONAC = ?', $idpronac);
-        /* echo $select; die; */
+
         return $this->fetchAll($select);
     }
 }
