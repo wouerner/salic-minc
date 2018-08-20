@@ -7,8 +7,8 @@
                 <td><b>E-mail</b></td>
             </tr>
             <tr v-for="email in dadosProponente.emails" v-bind:key="email.idInternet">
-                <td align="center">{{email.tipo}}</td>
-                <td align="center">{{email.descricao}}</td>
+                <td>{{email.tipo}}</td>
+                <td>{{email.descricao}}</td>
             </tr>
         </table>
         <table class="tabela" v-else>
@@ -25,7 +25,7 @@
             ...mapGetters({
                 dadosProponente: 'projeto/proponente',
             }),
-        }
-    }
+        },
+    };
 </script>
 
