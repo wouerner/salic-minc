@@ -126,25 +126,6 @@
             },
             irParaOFim() {
                 if ($3("#ir-para-o-fim").length) {
-                    var scrollTrigger = $(document).height(), // px
-                        goToEnd = function () {
-                            var scrollEnd = $3(window).scrollTop();
-                            // console.log(scrollEnd);
-                            $3("#ir-para-o-fim")
-                                .parent()
-                                .show();
-                            if (scrollEnd > scrollTrigger-800) {
-                                $3("#ir-para-o-fim")
-                                    .parent()
-                                    .hide();
-                            }
-                        };
-                    goToEnd();
-
-                    $3(window).on("scroll", function () {
-                        goToEnd();
-                    });
-
                     $3("#ir-para-o-fim").on("click", function (e) {
                         e.preventDefault();
                         $3("html,body").animate(
