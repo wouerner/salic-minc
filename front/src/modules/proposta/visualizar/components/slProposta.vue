@@ -41,7 +41,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Ficha t&eacute;cnica</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.FichaTecnica"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.FichaTecnica"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -49,7 +49,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Resumo</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.ResumoDoProjeto"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.ResumoDoProjeto"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -57,7 +57,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Objetivos</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.Objetivos"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.Objetivos"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -65,7 +65,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Etapa de Trabalho</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.EtapaDeTrabalho"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.EtapaDeTrabalho"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -73,7 +73,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Acessibilidade</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.Acessibilidade"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.Acessibilidade"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.EspecificacaoTecnica"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.EspecificacaoTecnica"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -91,7 +91,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Sinopse de Obra</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.Sinopse"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.Sinopse"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -99,7 +99,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Democratiza&ccedil;&atilde;o de Acesso</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.DemocratizacaoDeAcesso"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.DemocratizacaoDeAcesso"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -107,7 +107,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Justificativa</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.Justificativa"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.Justificativa"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -115,7 +115,7 @@
                     <div class="collapsible-header"><i class="material-icons">subject</i>Descri&ccedil;&atilde;o de Atividades</div>
                     <div class="collapsible-body padding20" v-if="dados">
                         <div class="card padding20">
-                            <slTextoSimples :texto="dados.DescricaoAtividade"></slTextoSimples>
+                            <SalicTextoSimples :texto="dados.DescricaoAtividade"></SalicTextoSimples>
                         </div>
                     </div>
                 </li>
@@ -157,9 +157,9 @@
                         or&ccedil;ament&aacute;ria
                     </div>
                     <div class="collapsible-body padding20">
-                        <slPropostaPlanilhaOrcamentaria
+                        <Planilha
                                 :arrayPlanilha="dados.tbplanilhaproposta"
-                        ></slPropostaPlanilhaOrcamentaria>
+                        ></Planilha>
                     </div>
                 </li>
                 <li>
@@ -183,13 +183,13 @@ import slPropostaIdentificacao from '../slPropostaIdentificacao'
 import slPropostaHistoricoAvaliacoes from '../slPropostaHistoricoAvaliacoes'
 import slAgenteProponente from '../../components/slAgenteProponente'
 import slAgenteUsuario from '../../components/slAgenteUsuario'
-import slTextoSimples from '../../components/slTextoSimples'
+import SalicTextoSimples from '@/components/SalicTextoSimples'
 import slPropostaDocumentos from '../slPropostaDocumentos'
 import slPropostaPlanoDistribuicao from '../slPropostaPlanoDistribuicao'
 import slPropostaFontesDeRecursos from '../slPropostaFontesDeRecursos'
 import slPropostaLocalRealizacaoDeslocamento from '../slPropostaLocalRealizacaoDeslocamento'
-import slPropostaPlanilhaOrcamentaria from '../slPropostaPlanilhaOrcamentaria'
 import slPropostaCustosVinculados from '../slPropostaCustosVinculados'
+import Planilha from '@/components/Planilha/Planilha'
 
 export default {
     name: 'slProposta',
@@ -209,13 +209,13 @@ export default {
         slPropostaHistoricoAvaliacoes,
         slAgenteProponente,
         slAgenteUsuario,
-        slTextoSimples,
+        SalicTextoSimples,
         slPropostaDocumentos,
         slPropostaPlanoDistribuicao,
         slPropostaFontesDeRecursos,
         slPropostaLocalRealizacaoDeslocamento,
-        slPropostaPlanilhaOrcamentaria,
         slPropostaCustosVinculados,
+        Planilha,
     },
     mounted: function () {
         if(typeof this.idpreprojeto != 'undefined' && typeof this.proposta == 'undefined') {

@@ -60,14 +60,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosHistorico.FichaTecnica">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosAtuais.FichaTecnica">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -84,14 +84,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosHistorico.ResumoDoProjeto">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20">
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosAtuais.ResumoDoProjeto">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -108,14 +108,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosHistorico.Objetivos">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosAtuais.Objetivos">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -132,14 +132,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosHistorico.EtapaDeTrabalho">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosAtuais.EtapaDeTrabalho">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -156,14 +156,14 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosHistorico.Acessibilidade">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples
+                                        <SalicTextoSimples
                                                 :texto="dadosAtuais.Acessibilidade">
-                                        </slTextoSimples>
+                                        </SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -180,10 +180,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples :texto="dadosHistorico.EspecificacaoTecnica"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosHistorico.EspecificacaoTecnica"></SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples :texto="dadosAtuais.EspecificacaoTecnica"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosAtuais.EspecificacaoTecnica"></SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -200,10 +200,10 @@
                             <table>
                                  <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples :texto="dadosHistorico.Sinopse"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosHistorico.Sinopse"></SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples :texto="dadosAtuais.Sinopse"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosAtuais.Sinopse"></SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -220,10 +220,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples :texto="dadosHistorico.DemocratizacaoDeAcesso"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosHistorico.DemocratizacaoDeAcesso"></SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples :texto="dadosAtuais.DemocratizacaoDeAcesso"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosAtuais.DemocratizacaoDeAcesso"></SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -240,10 +240,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples :texto="dadosHistorico.Justificativa"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosHistorico.Justificativa"></SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples :texto="dadosAtuais.Justificativa"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosAtuais.Justificativa"></SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -260,10 +260,10 @@
                             <table>
                                 <tr>
                                     <td class="original historico padding20">
-                                        <slTextoSimples :texto="dadosHistorico.DescricaoAtividade"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosHistorico.DescricaoAtividade"></SalicTextoSimples>
                                     </td>
                                     <td class="changed atual padding20" >
-                                        <slTextoSimples :texto="dadosAtuais.DescricaoAtividade"></slTextoSimples>
+                                        <SalicTextoSimples :texto="dadosAtuais.DescricaoAtividade"></SalicTextoSimples>
                                     </td>
                                 </tr>
                             </table>
@@ -373,7 +373,7 @@ import slPropostaIdentificacao from './slPropostaIdentificacao'
 import slPropostaHistoricoAvaliacoes from './slPropostaHistoricoAvaliacoes'
 import slAgenteProponente from '../components/slAgenteProponente'
 import slAgenteUsuario from '../components/slAgenteUsuario'
-import slTextoSimples from '@/components/slTextoSimples'
+import SalicTextoSimples from '@/components/SalicTextoSimples'
 import slPropostaLocalRealizacaoDeslocamento from './slPropostaLocalRealizacaoDeslocamento'
 import slPropostaDocumentos from './slPropostaDocumentos'
 import slPropostaPlanoDistribuicao from './slPropostaPlanoDistribuicao'
@@ -388,7 +388,7 @@ export default {
         slPropostaHistoricoAvaliacoes,
         slAgenteProponente,
         slAgenteUsuario,
-        slTextoSimples,
+        SalicTextoSimples,
         slPropostaLocalRealizacaoDeslocamento,
         slPropostaDocumentos,
         slPropostaPlanoDistribuicao,

@@ -14,7 +14,7 @@
                     </div>
                     <div class="col s12 l6 m6">
                         <b>Nome Projeto</b><br>
-                        <slTextoSimples :texto="proposta.NomeProjeto"></slTextoSimples>
+                        <SalicTextoSimples :texto="proposta.NomeProjeto"></SalicTextoSimples>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <div class="row">
                     <div class="col s12 l3 m3">
                         <b>Ag&ecirc;ncia banc&aacute;ria</b><br>
-                        <slTextoSimples :texto="proposta.AgenciaBancaria"></slTextoSimples>
+                        <SalicTextoSimples :texto="proposta.AgenciaBancaria"></SalicTextoSimples>
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.AreaAbrangencia">
                         <b>É proposta audiovisual</b><br>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col s12 l3 m3">
                         <b>Tipo de execu&ccedil;&atilde;o</b><br>
-                        <slTextoSimples :texto="proposta.TipoExecucao"></slTextoSimples>
+                        <SalicTextoSimples :texto="proposta.TipoExecucao"></SalicTextoSimples>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
     </div>
 </template>
 <script>
-import slTextoSimples from '../components/slTextoSimples'
+import SalicTextoSimples from '@/components/SalicTextoSimples'
 import moment from 'moment'
 
 export default {
@@ -99,7 +99,7 @@ export default {
         }
     },
     components: {
-        slTextoSimples,
+        SalicTextoSimples,
     },
     mounted: function () {
     },
