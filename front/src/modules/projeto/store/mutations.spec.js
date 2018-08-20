@@ -31,7 +31,7 @@ describe('Projeto Mutations', () => {
             PronacRecebedor: 222222,
             NomeProjetoRecedor: 'Criança Para Vida - 15 anos',
             dtRecebimento: new Date(),
-            vlRecebido: parseFloat(1000000),
+            vlRecebido: parseFloat('1000000'),
         };
     });
 
