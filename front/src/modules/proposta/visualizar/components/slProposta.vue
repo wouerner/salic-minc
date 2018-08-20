@@ -1,8 +1,10 @@
 <template>
     <div>
         <div v-if="idpreprojeto || dados" class="proposta">
-
-            <ul class="collapsible" data-collapsible="expandable">
+            <div v-if="loading" class="row">
+                <Carregando :text="'Carregando proposta'"></Carregando>
+            </div>
+            <ul v-show="!loading" class="collapsible" data-collapsible="expandable">
                  <li>
                     <div class="collapsible-header">
                         <i class="material-icons">assignment</i>
@@ -184,6 +186,7 @@ import slPropostaHistoricoAvaliacoes from '../slPropostaHistoricoAvaliacoes'
 import slAgenteProponente from '../../components/slAgenteProponente'
 import slAgenteUsuario from '../../components/slAgenteUsuario'
 import SalicTextoSimples from '@/components/SalicTextoSimples'
+import Carregando from '@/components/Carregando'
 import slPropostaDocumentos from '../slPropostaDocumentos'
 import slPropostaPlanoDistribuicao from '../slPropostaPlanoDistribuicao'
 import slPropostaFontesDeRecursos from '../slPropostaFontesDeRecursos'
@@ -200,7 +203,8 @@ export default {
                 default: function () {
                     return {}
                 }
-            }
+            },
+            loading: true,
         }
     },
     props: ['idpreprojeto', 'proposta'],
@@ -210,6 +214,7 @@ export default {
         slAgenteProponente,
         slAgenteUsuario,
         SalicTextoSimples,
+        Carregando,
         slPropostaDocumentos,
         slPropostaPlanoDistribuicao,
         slPropostaFontesDeRecursos,
@@ -218,27 +223,32 @@ export default {
         Planilha,
     },
     mounted: function () {
-        if(typeof this.idpreprojeto != 'undefined' && typeof this.proposta == 'undefined') {
+        if(typeof this.idpreprojeto !== 'undefined' && typeof this.proposta === 'undefined') {
             this.buscar_dados();
         }
 
-        if(typeof this.proposta != 'undefined') {
+        if(typeof this.proposta !== 'undefined') {
             this.dados = this.proposta;
+            this.loading = false;
         }
 
         this.iniciarCollapsible();
     },
     methods: {
         buscar_dados: function () {
-            let vue = this;
+            const self = this;
+            /* eslint-disable */
             $3.ajax({
-                url: '/proposta/visualizar/obter-proposta-cultural-completa/idPreProjeto/' + vue.idpreprojeto
+                url: '/proposta/visualizar/obter-proposta-cultural-completa/idPreProjeto/' + self.idpreprojeto
             }).done(function (response) {
-                vue.dados = response.data;
+                self.dados = response.data;
+                self.loading = false;
             });
         },
         iniciarCollapsible: function () {
+            // eslint-disable-next-line
             $3('.collapsible').each(function () {
+                // eslint-disable-next-line
                 $3(this).collapsible();
             });
         }

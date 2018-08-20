@@ -43,13 +43,13 @@
 
                                 <td class="right-align">{{ item.qtPopularIntegral }}</td>
                                 <td class="right-align">{{ item.qtPopularParcial }}</td>
-                                <td class="right-align">{{ formatarValor(item.vlUnitarioPopularIntegral) }}</td>
+                                <td class="right-align">{{ item.vlUnitarioPopularIntegral | formatarParaReal }}</td>
 
                                 <td class="right-align">{{ item.qtProponenteIntegral }}</td>
                                 <td class="right-align">{{ item.qtProponenteParcial }}</td>
-                                <td class="right-align">{{ formatarValor(item.vlUnitarioProponenteIntegral) }}</td>
+                                <td class="right-align">{{ item.vlUnitarioProponenteIntegral | formatarParaReal }}</td>
 
-                                <td class="right-align">{{ formatarValor(item.vlReceitaPrevista) }}</td>
+                                <td class="right-align">{{ item.vlReceitaPrevista | formatarParaReal }}</td>
 
                             </tr>
                         </tbody>
@@ -63,6 +63,7 @@
 </template>
 <script>
 import slPropostaDetalhamentoConsolidacao from './slPropostaDetalhamentoConsolidacao';
+import planilhas from '@/mixins/planilhas';
 
 export default {
     name: 'slPropostaDetalhamentoPlanoDistribuicao',
@@ -71,6 +72,7 @@ export default {
             detalhamentos: [],
         }
     },
+    mixins: [planilhas],
     props: [
         'arrayDetalhamentos'
     ],
@@ -85,45 +87,16 @@ export default {
         }
     },
     mounted: function () {
-        if (typeof this.arrayDetalhamentos != 'undefined') {
+        if (typeof this.arrayDetalhamentos !== 'undefined') {
             this.iniciarCollapsible();
             this.detalhamentos = this.montarVisualizacao(this.arrayDetalhamentos);
         }
     },
     methods: {
-        fetch: function () {
-            let vue = this;
-
-            $3.ajax({
-                type: "GET",
-                url: "/proposta/visualizar/obter-detalhamento-plano-distribuicao",
-                data: {
-                    idPreProjeto: vue.idpreprojeto,
-                }
-            }).done(function (response) {
-                vue.detalhamentos = response.data;
-            });
-        },
-        converterParaMoedaAmericana: function (valor) {
-            if (!valor)
-                valor = '0';
-
-            valor = valor.replace(/\./g, '');
-            valor = valor.replace(/\,/g, '.');
-            valor = parseFloat(valor);
-            valor = valor.toFixed(2);
-
-            if (isNaN(valor))
-                valor = 0;
-
-            return valor;
-        },
-        formatarValor: function (valor) {
-            valor = parseFloat(valor);
-            return numeral(valor).format();
-        },
         iniciarCollapsible: function () {
+            // eslint-disable-next-line
             $3('.detalhamento-plano-distribuicao .collapsible').each(function () {
+                // eslint-disable-next-line
                 $3(this).collapsible();
             });
         },
@@ -134,7 +107,7 @@ export default {
             let idMunicipio = '';
 
             detalhamentos.forEach((element) => {
-                if(element.idMunicipio != idMunicipio) {
+                if(element.idMunicipio !== idMunicipio) {
                     novoDetalhamento[element.idMunicipio] = [];
                     i = 0;
                     idMunicipio = element.idMunicipio;
