@@ -6,7 +6,7 @@
                 <table v-if="proposta.localizacoes" class="bordered responsive-table">
                     <thead>
                     <tr>
-                        <th>Pais</th>
+                        <th>Pa&iacute;s</th>
                         <th>UF</th>
                         <th>Cidade</th>
                     </tr>

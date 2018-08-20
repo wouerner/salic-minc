@@ -9,7 +9,7 @@
                         {{ proposta.PRONAC }}
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.idPreProjeto">
-                        <b>Nº da proposta</b><br>
+                        <b>N&ordm; da proposta</b><br>
                         {{ proposta.idPreProjeto }}
                     </div>
                     <div class="col s12 l6 m6">
@@ -48,7 +48,7 @@
                         <SalicTextoSimples :texto="proposta.AgenciaBancaria"></SalicTextoSimples>
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.AreaAbrangencia">
-                        <b>É proposta audiovisual</b><br>
+                        <b>&Eacute; proposta audiovisual</b><br>
                         {{ AreaAbrangencia }}
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.tpProrrogacao">
@@ -67,7 +67,7 @@
                 <h5>Tombamento</h5>
                 <div class="row">
                     <div class="col s12 l4 m4">
-                        <b>Nº Ato</b><br>
+                        <b>NÂº Ato</b><br>
                         {{ proposta.NrAtoTombamento }}
                     </div>
                     <div class="col s12 l4 m4">
@@ -86,6 +86,7 @@
 <script>
 import SalicTextoSimples from '@/components/SalicTextoSimples'
 import moment from 'moment'
+import { utils } from '@/mixins/utils'
 
 export default {
     name: 'slPropostaIdentificacao',
@@ -98,25 +99,22 @@ export default {
             }
         }
     },
+    mixins: [
+        utils
+    ],
     components: {
         SalicTextoSimples,
     },
     mounted: function () {
     },
     methods: {
-        label_sim_ou_nao: function (valor) {
-            if (valor == 1)
-                return 'Sim';
-            else
-                return 'Não';
-        },
         label_mecanismo: function (valor) {
             switch (valor) {
                 case '1':
                     return 'Mecenato';
                     break;
                 default:
-                    return 'Inválido';
+                    return 'Inv\xE1lido';
                     break;
             }
         },
@@ -141,7 +139,7 @@ export default {
                     string = 'Federal';
                     break;
                 default:
-                    string = 'Não informada';
+                    string = 'N\xE3o informada';
                     break;
             }
 

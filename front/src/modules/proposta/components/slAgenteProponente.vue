@@ -154,6 +154,8 @@
     </div>
 </template>
 <script>
+import { utils } from '@/mixins/utils'
+
 export default {
     name: 'slAgenteProponente',
     data: function () {
@@ -168,6 +170,9 @@ export default {
             this.fetch(this.idagente);
         }
     },
+    mixins: [
+        utils
+    ],
     watch: {
         idagente: function (value) {
             this.fetch(value);
@@ -194,18 +199,12 @@ export default {
             }
         },
         label_tipo_pessoa: function (tipo) {
-            let string = 'Pessoa Física';
+            let string = 'Pessoa F\xEDsica';
 
             if (tipo == '1')
-                string = 'Pessoa Jurídica';
+                string = 'Pessoa Jur\xEDdica';
 
             return string;
-        },
-        label_sim_ou_nao: function (valor) {
-            if (valor == 1)
-                return 'Sim';
-            else
-                return 'Não';
         }
     }
 }
