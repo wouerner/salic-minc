@@ -23,8 +23,8 @@
     </div>
 </template>
 <script>
-import slPropostaAlteracoes from './slPropostaAlteracoes';
-import slProposta from './components/slProposta';
+import slPropostaAlteracoes from './components/slPropostaAlteracoes';
+import slProposta from './slProposta';
 
 export default {
     name: 'slPropostaDiff',

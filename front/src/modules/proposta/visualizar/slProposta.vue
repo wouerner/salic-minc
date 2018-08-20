@@ -181,17 +181,17 @@
 </template>
 
 <script>
-import slPropostaIdentificacao from '../slPropostaIdentificacao'
-import slPropostaHistoricoAvaliacoes from '../slPropostaHistoricoAvaliacoes'
-import slAgenteProponente from '../../components/slAgenteProponente'
-import slAgenteUsuario from '../../components/slAgenteUsuario'
+import slPropostaIdentificacao from './components/slPropostaIdentificacao'
+import slPropostaHistoricoAvaliacoes from './components/slPropostaHistoricoAvaliacoes'
+import slAgenteProponente from '../components/slAgenteProponente'
+import slAgenteUsuario from '../components/slAgenteUsuario'
 import SalicTextoSimples from '@/components/SalicTextoSimples'
 import Carregando from '@/components/Carregando'
-import slPropostaDocumentos from '../slPropostaDocumentos'
-import slPropostaPlanoDistribuicao from '../slPropostaPlanoDistribuicao'
-import slPropostaFontesDeRecursos from '../slPropostaFontesDeRecursos'
-import slPropostaLocalRealizacaoDeslocamento from '../slPropostaLocalRealizacaoDeslocamento'
-import slPropostaCustosVinculados from '../slPropostaCustosVinculados'
+import slPropostaDocumentos from './components/slPropostaDocumentos'
+import slPropostaPlanoDistribuicao from './components/slPropostaPlanoDistribuicao'
+import slPropostaFontesDeRecursos from './components/slPropostaFontesDeRecursos'
+import slPropostaLocalRealizacaoDeslocamento from './components/slPropostaLocalRealizacaoDeslocamento'
+import slPropostaCustosVinculados from './components/slPropostaCustosVinculados'
 import Planilha from '@/components/Planilha/Planilha'
 
 export default {

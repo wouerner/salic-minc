@@ -371,8 +371,8 @@
 <script>
 import slPropostaIdentificacao from './slPropostaIdentificacao'
 import slPropostaHistoricoAvaliacoes from './slPropostaHistoricoAvaliacoes'
-import slAgenteProponente from '../components/slAgenteProponente'
-import slAgenteUsuario from '../components/slAgenteUsuario'
+import slAgenteProponente from '../../components/slAgenteProponente'
+import slAgenteUsuario from '../../components/slAgenteUsuario'
 import SalicTextoSimples from '@/components/SalicTextoSimples'
 import slPropostaLocalRealizacaoDeslocamento from './slPropostaLocalRealizacaoDeslocamento'
 import slPropostaDocumentos from './slPropostaDocumentos'
