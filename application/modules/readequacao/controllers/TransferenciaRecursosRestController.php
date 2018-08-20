@@ -27,12 +27,6 @@ class Readequacao_TransferenciaRecursosRestController extends Zend_Rest_Controll
 
     public function getAction()
     {
-        $parametros = $this->getRequest()->getParams();
-        $barService = new TransferenciaService($this->getRequest(), $this->getResponse());
-        $resposta = $barService->buscar($parametros['id']);
-
-        $this->view->assign('data', $resposta);
-
         $this->getResponse()->setHttpResponseCode(200);
     }
 

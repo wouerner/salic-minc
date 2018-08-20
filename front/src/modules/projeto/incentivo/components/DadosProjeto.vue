@@ -563,19 +563,19 @@
                             </b>
                         </td>
                         <td class="right-align">
-                            <b>
-                                <!--<a-->
-                                    <!--class="pode-ser-clicado"-->
-                                    <!--@click="modalOpen('')"-->
-                                <!--&gt;-->
-                                    <!--<SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>-->
-                                <!--</a>-->
-                                <ValorTransferido :valor="dadosProjeto.vlTransferido"></ValorTransferido>
+                            <b v-if="dadosProjeto.vlTransferido === '0'">
+                                <SalicFormatarValor :valor="dadosProjeto.vlTransferido"/>
+                            </b>
+                            <b v-else>
+                                <TransferenciaRecursos :valor="dadosProjeto.vlTransferido" :acao="'transferidor'"></TransferenciaRecursos>
                             </b>
                         </td>
                         <td class="right-align">
-                            <b>
+                            <b v-if="dadosProjeto.vlRecebido === '0'">
                                 <SalicFormatarValor :valor="dadosProjeto.vlRecebido"/>
+                            </b>
+                            <b v-else>
+                                <TransferenciaRecursos :valor="dadosProjeto.vlRecebido" :acao="'recebedor'"></TransferenciaRecursos>
                             </b>
                         </td>
                         <td class="right-align destacar-celula">
@@ -642,7 +642,7 @@
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import { utils } from '@/mixins/utils';
     import moment from 'moment';
-    import ValorTransferido from '@/modules/projeto/incentivo/components/ValorTransferido';
+    import TransferenciaRecursos from '@/modules/projeto/incentivo/components/TransferenciaRecursos';
 
     export default {
         data() {
@@ -659,7 +659,7 @@
             SalicTextoSimples,
             SalicFormatarValor,
             SalicFormatarCpfCnpj,
-            ValorTransferido,
+            TransferenciaRecursos,
         },
         created() {
             if (Object.keys(this.dadosProjeto).length > 0) {

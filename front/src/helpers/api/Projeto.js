@@ -8,10 +8,10 @@ export const buscaProjeto = (idPronac) => {
     return api.getRequest(`${module}${controller}${action}`, queryParams);
 };
 
-export const buscarValoresTransferidos = (idPronac) => {
+export const buscarTransferenciaRecursos = (idPronac, acao) => {
     const module = '/readequacao';
     const controller = '/transferencia-recursos-rest';
     const action = '/index';
-    const queryParams = `?idPronac=${idPronac}`;
+    const queryParams = `?idPronac=${idPronac}&acao=${acao}`;
     return api.getRequest(`${module}${controller}${action}`, queryParams);
 };
