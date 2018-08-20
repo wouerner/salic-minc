@@ -35,12 +35,14 @@ class PrestacaoContas_AnalisarController extends MinC_Controller_Action_Abstract
         $idPlanilhaEtapa = $this->getRequest()->getParam('idplanilhaetapa');
         $codigoProduto = $this->getRequest()->getParam('produto');
         $stItemAvaliado = $this->getRequest()->getParam('stItemAvaliado');
+        $etapa = $this->getRequest()->getParam('etapa');
 
         $this->view->idPronac = $idPronac;
         $this->view->idPlanilhaItem = $idPlanilhaItem;
         $this->view->idPlanilhaAprovacao = $idPlanilhaAprovacao;
         $this->view->comprovantesPagamento = $comprovantes;
         $this->view->stItemAvaliado = $stItemAvaliado;
+        $this->view->etapa = $etapa;
 
         $this->view->uf = $uf;
         $this->view->municipio = $municipio;

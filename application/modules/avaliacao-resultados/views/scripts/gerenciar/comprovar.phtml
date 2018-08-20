@@ -1,0 +1,574 @@
+<div class="container-fluid">
+    <div class="row">
+        <?php
+            $buscarFornecedorHref = $this->url(array(
+                'module' => 'default',
+                'controller' => 'comprovarexecucaofinanceira',
+                'action' => 'buscarfornecedor'), null, true) . '?idusuario=' . $this->idusuario;
+
+        $urlArray = array(
+            'controller' => 'comprovarexecucaofinanceira',
+            'action' => 'pagamento',
+            'idusuario' => $this->idusuario,
+            'idpronac' => $this->idpronac,
+        );
+        $voltarHref = $this->url(\array_merge($urlArray, array('module' => 'default', 'action' => 'pagamento')));
+        $carregarSelectHref = $this->url(\array_merge($urlArray, array('action' => 'carregaselectajax')));
+
+        echo '<script type="text/javascript" language="javascript" src="' . $this->baseUrl() . '/public/js/jquery/jquery.formatCurrency-1.4.0.min.js"></script>';
+        echo '<script type="text/javascript" language="javascript" src="' . $this->baseUrl() . '/public/js/jquery/jquery.formatCurrency.pt-BR.js"></script>';
+        echo '<script type="text/javascript" language="javascript">var planilhaItem = ' . $this->itemPlanilhaAprovacao->idPlanilhaAprovacao . '</script>';
+
+        if (!$this->vrSituacao) {
+            echo '<div class="col s2">';
+            /* echo $this->partial('comprovarexecucaofinanceira/inc/menu.inc.php', $this); */
+            echo '</div>';
+        }
+
+        # tratamento para liberar edicao de comprovante
+        $formUrl = $this->url(array_merge(
+            $urlArray,
+            array(
+                'module' => 'prestacao-contas',
+                'controller' => 'gerenciar',
+                'action' => 'cadastrarcomprovacaopagamento',
+            'itemId' => $this->itemPlanilhaAprovacao->idPlanilhaAprovacao)
+        ));
+        if ($this->idComprovantePagamento) {
+            $formUrl = $this->url(array_merge(
+                $urlArray,
+                [
+                    'module' => 'prestacao-contas',
+                    'controller' => 'gerenciar',
+                    'action' => 'atualizarcomprovacaopagamento',
+                    'itemId' => $this->itemPlanilhaAprovacao->idPlanilhaAprovacao]
+            ));
+        }
+        ?>
+
+        <div id="divPerguntaFornecedor" class="sumir"></div>
+        <div id="divExcluirComprovantes" class="sumir"></div>
+        <div id="msgAlerta" class="sumir"></div>
+
+        <div class="col s12">
+            <?php if (!$this->vrSituacao) : ?>
+                <div id="breadcrumb">
+<!--                    <div class="col s12">-->
+                        <ul>
+                            <li class="first"><a
+                                    href="<?php echo $this->url(array('module' => 'default', 'controller' => 'principalproponente', 'action' => ''), null, true); ?>"
+                                    title="Ir para p&aacute;gina inicial" onclick="carregandoModal();">In&iacute;cio</a>
+                            </li>
+                            <li class="second"><a
+                                    href="<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'index', 'idPronac' => Seguranca::encrypt($this->idpronac)));  ?>"
+                                    title="Ir para In&iacute;cio">Consultar dados do Projeto</a></li>
+                            <li>
+                                <a
+                                    href="<?php echo $this->url(array('module' => 'prestacao-contas', 'controller' => 'pagamento', 'action' => 'index')) . '?idPronac=' . Seguranca::encrypt($this->idpronac); ?>"
+                                    title="Ir para Comprova&ccedil;&atilde;o Financeira">Comprova&ccedil;&atilde;o Financeira</a>
+                                </li>
+                            </li>
+                            <li class="last">Comprovar Pagamento</li>
+                        </ul>
+<!--                    </div>-->
+                </div>
+            <?php endif; ?>
+
+            <div class="row">
+                <div class="col s8">
+                    <h5>
+                        Comprovar Pagamento
+                        <?php if ($this->idComprovantePagamento): ?>
+                            - Editando item
+                        <?php else: ?>
+                            - Cadastrar item
+                        <?php endif; ?>
+                    </h5>
+                </div>
+                <div class="col s4">
+                    <?php if (!$this->vrSituacao || !$this->pagCompRecusado) : ?>
+                        <span class="voltar right">
+                            <a class="btn small" href="<?php echo $voltarHref; ?>" title="Ir para p&aacute;gina anterior">
+                    <i class="material-icons left">arrow_back</i>Voltar</a>
+                </span>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div id="incluircomprovacaoAjax">
+                        <form
+                            action="<?php echo $formUrl; ?>"
+                            id="frComprovarPagamento"
+                            name="frComprovarPagamento"
+                            enctype="multipart/form-data"
+                            method="post"
+                            class="browser-default"
+                        >
+                            <input type='hidden' name='idComprovantePagamento' id='idComprovantePagamento'
+                                   value='<?php echo $this->idComprovantePagamento; ?>'/>
+                            <input type='hidden' name='idpronac' id='idpronac' value='<?php echo $this->idpronac; ?>'/>
+                            <input type='hidden'
+                                   id='buscarFornecedorComprovacaoHref'
+                                   value='<?php echo $buscarFornecedorHref; ?>'/>
+
+                            <?php if ($this->idComprovantePagamento): ?>
+                                <input type='hidden' name='paginaRedirecionar' id='paginaRedirecionar'
+                                       value='gerenciar'/>
+                            <?php endif; ?>
+                            <input type='hidden' name='valorAprovado' id='valorAprovado'
+                                   value='<?php echo $this->valores->vlAprovado; ?>'/>
+
+                            <input type='hidden' name='totalComprovado' id='totalComprovado'
+                                   value='<?php echo $this->valores->vlComprovado; ?>'/>
+
+                      <div class="card ">
+                        <div class="card-content">
+                            <table id="tabelaItem" class="bordered">
+                                <caption><b>Vincular Item de Custo</b></caption>
+                                <thead>
+                                    <tr>
+                                        <th class="">Produto</th>
+                                        <th class="">Etapa</th>
+                                        <th class="">Itens de Custo</th>
+                                        <th class="" id="campoValorAprovado">Valor Aprovado</th>
+                                        <th class="" id="campoValorComprovado">Total Comprovado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><?php echo $this->produto; ?></td>
+                                        <td><?php echo $this->etapa; ?></td>
+                                        <td><?php echo $this->item; ?></td>
+                                        <td>
+                                            <?php echo $this->currency($this->valores->vlAprovado ? $this->valores->vlAprovado : '0'); ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $this->currency($this->valores->vlComprovado ? $this->valores->vlComprovado : '0'); ?>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="col s12">-->
+                            <?php if (!$this->vrSituacao) : ?>
+                                <?php echo $this->partial('partials/tabelaItens.phtml', 'prestacao-contas', $this) ?>
+                            <?php endif; ?>
+<!--                        </div>-->
+<!--                    </div>-->
+
+                        <div id="botaoMostrarFormulario" class="card" <?= (!$this->idComprovantePagamento) ? '' : 'style="display: none"';?>>
+                            <div class="card-content center-align">
+                                <a href="javascript:void(0)" class="btn btn-secondary" onclick="mostrarFormulario();">Inserir novo comprovante</a>
+                            </div>
+                        </div>
+
+                      <div id="formularioContainer" class="card" <?= ($this->idComprovantePagamento) ? '' : 'style="display: none"';?>>
+                        <div class="card-content">
+                                <div id="tabelaComprovante">
+                                    <fieldset>
+                                        <legend>Identifica&ccedil;&atilde;o do Contratado</legend>
+                                        <input type="hidden" name="idAgente" id="idAgente" value="<?php echo $this->idAgente; ?>"/>
+                                        <div class="row">
+                                            <div class="input-field col s4">
+                                                <select
+                                                    id="pais"
+                                                    name="pais"
+                                                    class="left-align "
+                                                    onchange="toggleTabelaComprovacaoPagamentoInvoice();" >
+                                                    <?php foreach ($this->paises as $pais) : ?>
+                                                        <option value="<?php echo $pais->Descricao; ?>"
+                                                            <?= ($this->paisFornecedor == $pais->Descricao) ? 'selected="selected"' : ''; ?>
+                                                            <?= ($this->paisFornecedor == '' && $pais->Descricao == 'Brasil') ? 'selected="selected"' : ''; ?>
+                                                        ><?php echo $pais->Descricao; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                                <label class="actived" for="pais">Nacionalidade do Fornecedor <span style='color:red'>*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class=" col s6">
+                                                <p>Tipo do Fornecedor <span style='color:red'>*</span></p>
+                                                <p>
+                                                    <input
+                                                        type="radio"
+                                                        id="tpFornecedorCpf"
+                                                        name="tpFornecedor"
+                                                        class="tpFornecedor"
+                                                        value="cpf"
+                                                        null="false"
+                                                        <?php echo $this->fornecedor && $this->fornecedor->usaCnpj ? '' : 'checked="checked"'; ?>
+                                                    />
+                                                    <label for="tpFornecedorCpf">CPF</label>
+                                                    <input
+                                                        type="radio"
+                                                        id="tpFornecedorCnpj"
+                                                        name="tpFornecedor"
+                                                        class="tpFornecedor"
+                                                        value="cnpj"
+                                                        <?php echo $this->fornecedor && $this->fornecedor->usaCnpj ? 'checked="checked"' : ''; ?>
+                                                    />
+                                                    <label for="tpFornecedorCnpj">CNPJ</label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-field col s6">
+                                                <input
+                                                    type="text"
+                                                    autocomplete="off"
+                                                    name="CNPJCPF"
+                                                    id="CNPJCPF"
+                                                    idAgente="idAgente"
+                                                    idDescricao="Descricao"
+                                                    cnpjcpf="true"
+                                                    classaux="tpFornecedor"
+                                                    null="false"
+                                                    value="<?php echo $this->CNPJCPF; ?>"
+                                                />
+                                                <label for="CNPJCPF">CNPJ/CPF<span style='color:red'>*</span></label>
+                                            </div>
+                                            <div class="input-field col s6">
+                                                <input
+                                                    type="text"
+                                                    name="Descricao"
+                                                    id="Descricao"
+                                                    null="false"
+                                                    value="<?php echo $this->Descricao; ?>"
+                                                    <?php echo $this->CNPJCPF ? 'readonly="readonly"' : ''; ?>
+                                                />
+                                                <label>Nome/Raz&atilde;o Social<span style='color:red'>*</span></label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <!-- Identificação Nacional -->
+                                    <div id="bodyTabelaComprovante">
+                                        <fieldset>
+                                            <legend>Dados da Comprova&ccedil;&atilde;o de Pagamento</legend>
+                                            <div class="row">
+                                                <div class="input-field col s4">
+                                                    <select name="tpDocumento" id="tpDocumento">
+                                                        <?php
+                                                        foreach ($this->tipoDocumentoConteudo as $key => $value) :
+                                                            $selected = $this->tpDocumento == $key ? 'selected="selected"' : null;
+                                                            echo "<option value='{$key}' {$selected}>{$value}</option>";
+                                                        endforeach
+                                                        ?>
+                                                    </select>
+                                                    <label>Comprovante<span style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="input-field col s4">
+                                                    <input type="text" name="nrComprovante" id="nrComprovante"
+                                                           maxlength="50" null="false"
+                                                           value="<?php echo $this->nrComprovante; ?>"/>
+                                                    <label>N&uacute;mero<span style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="input-field col s4">
+                                                    <input type="text" name="nrSerie" id="nrSerie" maxlength="8"
+                                                           null="true"
+                                                           value="<?php echo $this->nrSerie; ?>"/>
+                                                    <label><b id="nmSerieTxt">S&eacute;rie</b></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s3">
+                                                    <input type="text" name="dtEmissao" id="dtEmissao" null="false"
+                                                           data="true" value="<?php echo $this->dtEmissao; ?>"/>
+                                                    <label>Dt. de Emiss&atilde;o do comprovante de despesa<span style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="input-field col s3">
+                                                    <input type="text" name="dtPagamento" id="dtPagamento" null="false"
+                                                           data="true" value="<?php echo $this->dtPagamento; ?>"/>
+                                                    <label>Data do pagamento<span style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="input-field col s3">
+                                                    <select name="tpFormaDePagamento" id="tpFormaDePagamento"
+                                                            style="width: 180px;">
+                                                        <?php
+                                                        $selected1 = $this->tpFormaDePagamento == 1 ? 'selected="selected"' : null;
+                                                        $selected2 = $this->tpFormaDePagamento == 2 ? 'selected="selected"' : null;
+                                                        $selected3 = $this->tpFormaDePagamento == 3 ? 'selected="selected"' : null;
+                                                        ?>
+                                                        <option value="0"> - Selecione -</option>
+                                                        <option value="1" <?php echo $selected1; ?>>Cheque</option>
+                                                        <option value="2" <?php echo $selected2; ?>>Transfer&ecirc;ncia
+                                                            Banc&aacute;ria
+                                                        </option>
+                                                        <option value="3" <?php echo $selected3; ?>>Saque/Dinheiro
+                                                        </option>
+                                                    </select>
+                                                    <label>Forma de Pagamento<span style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="input-field col s3">
+                                                    <input type="text" name="nrDocumentoDePagamento"
+                                                           id="nrDocumentoDePagamento" maxlength="10"
+                                                           null="false" sonumero="true"
+                                                           value="<?php echo $this->nrDocumentoDePagamento; ?>"/>
+                                                    <label for="nrDocumentoDePagamento">N&ordm; Documento Pagamento<span
+                                                            style='color:red'>*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s3">
+                                                    <input type="hidden" name="vlComprovadoAntigo" size="10" id="vlComprovadoAntigo"
+                                                           value="<?php echo $this->vlComprovacao ? $this->vlComprovacao : 0 ; ?>"/>
+                                                    <input type="text" name="vlComprovado" size="10" id="vlComprovado"
+                                                           value="<?php echo $this->vlComprovacao; ?>"/>
+                                                    <label>Valor do Item <?php echo $this->vlComprovacao ? '(' . $this->vlComprovacao . ')' : ''; ?><span style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="file-field input-field col s4">
+                                                    <!-- input type="file" name="arquivo" id="arquivo" value=""/>
+                                                    <label>Anexar comprovante<span style='color:red'>*</span></label -->
+
+                                                    <div class="btn small">
+                                                        <input name="arquivo" id="arquivo" type="file">
+                                                        <span>Comprovante</span>
+                                                    </div>
+                                                    <div class="file-path-wrapper">
+                                                        <input class="file-path validate" type="text" placeholder="Selecionar arquivo">
+                                                    </div>
+                                                </div>
+                                                <?php if ($this->idComprovantePagamento): ?>
+                                                    <input type="hidden" name="arquivo_edit" id="arquivo_edit"
+                                                           value="<?php echo $this->idArquivo; ?>"/>
+                                                <?php endif; ?>
+                                                <a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir'), '', true); ?>?id=<?php echo $this->idArquivo; ?>"><?php echo $this->nomeArquivo; ?></a>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <textarea class="materialize-textarea" rows="5"
+                                                              name="dsJustificativa"
+                                                              id="dsJustificativa"><?php echo $this->dsJustificativa; ?></textarea>
+                                                    <label>
+                                                        <?php
+                                                        $auth = Zend_Auth::getInstance();
+                                                        if (isset($auth->getIdentity()->usu_codigo)) {
+                                                            echo 'Justificativa do Proponente';
+                                                        } else {
+                                                            echo 'Justificativa';
+                                                        }
+                                                        ?>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <?php if($this->JustificativaTecnico) : ?>
+                                                <div class="row">
+                                                    <div class="input-field col s12">
+                                                        <p>Ocorr&ecirc;ncia do T&eacute;cnico</p>
+                                                        <p><?php echo $this->JustificativaTecnico; ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </fieldset>
+                                    </div>
+
+                                    <!-- Comprovação internacional-->
+                                    <div id="bodyTabelaComprovanteInternacional">
+                                        <fieldset>
+                                            <legend>Dados da Comprova&ccedil;&atilde;o de Pagamento</legend>
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <input
+                                                        type="text"
+                                                        id="nomeRazaoSocialInternacional"
+                                                        name="nomeRazaoSocialInternacional"
+                                                        null="false"
+                                                        <?php if ($this->exterior) : ?>
+                                                            value="<?php echo $this->fornecedor[0]->dsEndereco; ?>"
+                                                        <?php endif; ?>
+                                                    />
+                                                    <label for="nomeRazaoSocialInternacional">Nome da Empresa<span
+                                                            style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <input
+                                                        type="text"
+                                                        id="enderecoInternacional"
+                                                        name="enderecoInternacional"
+                                                        <?php if ($this->exterior) : ?>
+                                                            value="<?php echo $this->fornecedor[0]->dsPais; ?>"
+                                                        <?php endif; ?>
+                                                    />
+                                                    <label for="enderecoInternacional"> Endere&ccedil;o</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <input type="text" id="nif" name="nif" null="false"
+                                                           value="<?php echo $this->nrComprovante; ?>"/>
+                                                    <label> N&uacute;mero do documento<span
+                                                            style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <p>
+                                                        <label><b id="nmSerieTxt" colspan="3">Tipo de
+                                                                Documento</b></label>
+                                                    </p>
+                                                    <p>
+                                                        <input type="radio" name="nrSerieInternacional"
+                                                               id="tipo_documento_invoice" value="6"
+                                                            <?php
+                                                            if (6 == $this->nrSerie || !$this->nrSerie) :
+                                                                echo 'checked="checked"';
+                                                            endif;
+                                                            ?>
+                                                        />
+                                                        <label for="tipo_documento_invoice">Invoice </label>
+                                                        <input type="radio" name="nrSerieInternacional"
+                                                               id="tipo_documento_outros" value="7"
+                                                            <?php
+                                                            if (7 == $this->nrSerie) :
+                                                                echo 'checked="checked"';
+                                                            endif;
+                                                            ?>
+                                                        />
+                                                        <label for="tipo_documento_outros">Outros</label>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <input
+                                                        type="text"
+                                                        id="dtEmissaoInternacional"
+                                                        name="dtEmissaoInternacional"
+                                                        null="false"
+                                                        data="true"
+                                                        value="<?php echo $this->dtEmissao; ?>"
+                                                    />
+                                                    <label for="dtEmissaoInternacional">Dt. do Documento<span
+                                                            style='color:red'>*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s4">
+                                                    <input type="text" name="vlComprovadoInternacional" size="10"
+                                                           id="vlComprovadoInternacional"
+                                                           value="<?php echo $this->vlComprovacao; ?>"/>
+                                                    <label for="vlComprovadoInternacional">Valor do Item <span
+                                                            style='color:red'>*</span></label>
+                                                </div>
+                                                <div class="file-field input-field col s4">
+                                                    <div class="btn">
+                                                        <span>Anexar comprovante</span>
+                                                        <input id="arquivoInternacional" name="arquivoInternacional"
+                                                               type="file">
+                                                    </div>
+                                                    <div class="file-path-wrapper">
+                                                        <input class="file-path validate" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="input-field col s4">
+                                                    <a href="<?php echo $this->url(array('controller' => 'upload', 'action' => 'abrir'), '', true); ?>?id=<?php echo $this->idArquivo; ?>"><?php echo $this->nomeArquivo; ?></a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <textarea id="dsJustificativaInternacionalId"
+                                                              class="materialize-textarea" rows="5"
+                                                              name="dsJustificativaInternacional"><?php echo $this->dsJustificativa; ?></textarea>
+                                                    <label for="dsJustificativaInternacionalId">Justificativa</label>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+
+                              <table id="tableItensCusto" class="tabela linhaMaior1 sumir">
+                                  <tr>
+                                      <td class="">Contrato</td>
+                                      <td class="">Produto</td>
+                                      <td class="">Etapa</td>
+                                      <td class="">Item</td>
+                                      <td class="">Valor do Item</td>
+                                      <td class="">Desvincular</td>
+                                  </tr>
+                              </table>
+
+                              <div class="row">
+                                  <div class="col s12 center-align">
+                                      <?php if (!$this->vrSituacao || !$this->pagCompRecusado) : ?>
+                                          <a class="btn" href="<?php echo $voltarHref; ?>" id="btnVoltar"><i
+                                                  class="material-icons left">arrow_back</i>voltar</a>
+                                      <?php endif; ?>
+                                      <?php if ($this->idComprovantePagamento): ?>
+                                          <button type="submit" name="frComprovarPagamentoSubmit"
+                                                  id="frComprovarPagamentoSubmit" value="" class="btn">salvar
+                                          </button>
+                                          <button type="button" name="incluirNovo" id="incluirNovo" value="" class="btn">novo
+                                          </button>
+                                      <?php else: ?>
+                                          <button type="submit" name="frComprovarPagamentoSubmit"
+                                                  id="frComprovarPagamentoSubmit" value="" class="btn">
+                                              <i class="material-icons left ">add</i>incluir
+                                          </button>
+                                      <?php endif; ?>
+                                  </div>
+                              </div>
+                              </br>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="desc_item"></div>
+        </div>
+    </div>
+</div>
+<iframe id="anexarArquivo" name="anexarArquivo" src="#" style="width: 300px;height: 300px;display: none;"></iframe>
+
+<div id="alerta"></div>
+
+<style type="text/css">
+    label.error {
+        display: block;
+    }
+
+    #bodyTabelaComprovante, #bodyTabelaComprovanteInternacional {
+        display: none;
+    }
+
+    #bodyTabelaComprovante:target, #bodyTabelaComprovanteInternacional:target {
+        display: table-row-group;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // adiciona zeros a n&uacute;meros que n¿o tem todos os d¿gitos depois do zero (sen¿o quebra)
+        $('#vlComprovado').val(parseFloat($('#vlComprovado').val()).toFixed(2));
+        $('#vlComprovadoInternacional').val(parseFloat($('#vlComprovadoInternacional').val()).toFixed(2));
+
+        // inicializa formata¿¿o de pre¿o
+        $('#vlComprovado').priceFormat({limit: 8});
+        $('#vlComprovadoInternacional').priceFormat({limit: 8});
+    });
+    <?php if ($this->idComprovantePagamento): ?>
+        $3("#incluirNovo").on('click', function () {
+            window.location = "<?php echo $this->url(
+                array(
+                'module' => 'prestacao-contas',
+                'controller' => 'gerenciar',
+                'action' => 'comprovar',
+                'idusuario' => $this->idusuario,
+                'idpronac' => $this->idpronac,
+                'idPlanilhaAprovacao' => $this->idPlanilhaAprovacao,
+                'cidade' => $this->cdcidade,
+                'produto' => $this->cdproduto,
+                'etapa' => $this->cdetapa,
+                'idPlanilhaItens' => $this->idplanilhaitens,
+            ),
+            null,
+            true
+        ); ?>";
+        });
+    <?php endif; ?>
+</script>
+<script type="text/javascript" src="/public/scripts/prestacao-contas/comprovacaopagamento.js?v=1"></script>
