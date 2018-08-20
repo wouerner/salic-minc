@@ -93,6 +93,7 @@
                     <v-layout wrap align-center>
                         <v-flex>
                             <v-select height="20px"
+
                                       :items="items"
                                       :item-value="value"
                                       item-text
@@ -131,7 +132,9 @@
                     Codigo: '',
                     DadoNr: '',
                 },
-                items: [{Reprovação:'R'}, {Aprovação:'A'},{Aprovação_com_Ressalva:'P'}]
+                item: '',
+                texto: '',
+                items: [{ Reprovação: 'R' }, { Aprovação: 'A' }, { Aprovação_com_Ressalva: 'P' }],
             };
         },
         props: ['registroAtivo'],
