@@ -19,7 +19,6 @@ class Readequacao_TransferenciaRecursosRestController extends Zend_Rest_Controll
     {
         $valorTransferidoService = new TransferenciaRecursosService($this->getRequest(), $this->getResponse());
         $resposta = $valorTransferidoService->buscarValoresTransferidos();
-        xd('chegando na controller', $resposta);
         $this->view->assign('data', $resposta);
 
         $this->getResponse()->setHttpResponseCode(200);
