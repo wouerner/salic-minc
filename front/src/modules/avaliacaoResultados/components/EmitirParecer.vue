@@ -38,7 +38,7 @@
                         </v-flex>
                         <v-flex xs10 sm3 md3>
                             <div>
-                                <h4 class="label text-sm-right">Validos</h4>
+                                <h4 class="label text-sm-right">Validados</h4>
                                 <p class="text-sm-right">20213465653</p>
                             </div>
                         </v-flex>
@@ -69,7 +69,7 @@
                         </v-flex>
                         <v-flex xs10 sm3 md3>
                             <div>
-                                <h4 class="label text-sm-right">Validos</h4>
+                                <h4 class="label text-sm-right">Validados</h4>
                                 <p class="text-sm-right">20213465653</p>
                             </div>
                         </v-flex>
@@ -93,11 +93,10 @@
                     <v-layout wrap align-center>
                         <v-flex>
                             <v-select height="20px"
-
+                                      v-model="item"
                                       :items="items"
-                                      :item-value="value"
-                                      item-text
-                                      filter="item in items"
+                                      item-text="text"
+                                      item-value="id"
                                       box
                                       label="Manifestação"
                             ></v-select>
@@ -107,7 +106,7 @@
                         <v-textarea
 
                             color="deep-purple"
-                            label="Bio"
+                            label="Parecer"
                             height="200px"
                         ></v-textarea>
                     </v-flex>
@@ -118,7 +117,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
     import ModalTemplate from '@/components/modal';
 
     export default {
@@ -132,9 +131,9 @@
                     Codigo: '',
                     DadoNr: '',
                 },
-                item: '',
                 texto: '',
-                items: [{ Reprovação: 'R' }, { Aprovação: 'A' }, { Aprovação_com_Ressalva: 'P' }],
+                item:'',
+                items: [{ 'id':  'R', 'text':'Reprovação' }, { 'id': 'A','text':'Aprovação' }, {'id' : 'P', 'text' :'Aprovação com Ressalva'}],
             };
         },
         props: ['registroAtivo'],
