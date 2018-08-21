@@ -30,6 +30,7 @@
             "Application\\Modules\\Admissibilidade\\Service\\Assinatura\\Acao\\": "./application/modules/admissibilidade/service/assinatura/acao/",
             "Application\\Modules\\Projeto\\": "./application/modules/projeto/",
             "Application\\Modules\\Projeto\\Service\\": "./application/modules/projeto/service/",
+            "Application\\Modules\\Projeto\\Service\\Proponente\\": "./application/modules/projeto/service/proponente/",
             "Application\\Modules\\Projeto\\Service\\Assinatura\\": "./application/modules/projeto/service/assinatura/",
             "Application\\Modules\\Projeto\\Service\\Assinatura\\Acao\\": "./application/modules/projeto/service/assinatura/acao/",
             "Application\\Modules\\PrestacaoContas\\": "./application/modules/prestacao-contas/",

@@ -15,3 +15,9 @@ export const buscarTransferenciaRecursos = (idPronac, acao) => {
     const queryParams = `?idPronac=${idPronac}&acao=${acao}`;
     return api.getRequest(`${module}${controller}${action}`, queryParams);
 };
+
+export const buscaProponente = (idPronac) => {
+    const path = '/projeto/proponente-rest';
+    const queryParams = `/idPronac/${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

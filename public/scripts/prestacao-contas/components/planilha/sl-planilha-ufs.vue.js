@@ -7,6 +7,7 @@ Vue.component('sl-planilha-ufs', {
                         </div>
                         <div class="collapsible-body no-padding">
                             <ul class="collapsible no-margin no-border" data-collapsible="expandable">
+                                <slot :estado="estado" :produto="cdProduto" :etapa="cdEtapa">
                                     <sl-planilha-cidades
                                         v-for="(cidade, index) in estado.cidade"
                                         :cidade="cidade"
@@ -17,6 +18,7 @@ Vue.component('sl-planilha-ufs', {
                                         :key="estado.cdUf"
                                         :id="estado.cdUf"
                                     ></sl-planilha-cidades>
+                                </slot>
                             </ul>
                         </div>
                     </li>
