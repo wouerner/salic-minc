@@ -1,11 +1,13 @@
 <template>
     <div>
-        <a
-            class="cursor"
-            @click="abrirModal('transferencia-recursos');"
-        >
-            {{valor | formatarParaReal}}
-        </a>
+        <div class="destaque-texto-primary">
+            <a
+                class="cursor"
+                @click="abrirModal('transferencia-recursos');"
+            >
+                {{valor | formatarParaReal}}
+            </a>
+        </div>
         <ModalTemplate v-if="modalVisible === 'transferencia-recursos'" @close="fecharModal();">
             <template slot="header">
                 <div style="float: left; margin-bottom: 20px;">
@@ -92,9 +94,3 @@
         },
     };
 </script>
-
-<style>
-    .cursor {
-        cursor: pointer;
-    }
-</style>

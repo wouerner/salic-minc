@@ -436,9 +436,3 @@
         },
     };
 </script>
-
-<style>
-    .pode-ser-clicado {
-        cursor: pointer;
-    }
-</style>
