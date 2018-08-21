@@ -233,13 +233,13 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.AgenciaBancaria"/>
+                        <SalicTextoSimples :texto=" formatarAgencia(dadosProjeto.AgenciaBancaria)"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.ContaCaptacao"/>
+                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaCaptacao)"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao"/>
+                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaMovimentacao)"/>
                     </td>
                     <td align="center" class="destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
@@ -425,6 +425,22 @@
             isDataExpirada(date) {
                 return moment().diff(date, 'days') > 0;
             },
+            formatarAgencia(agencia) {
+                // formato: 9999-9
+                if (agencia.length === 5) {
+                    agencia = agencia.replace(/\D/g, '');
+                    agencia = agencia.replace(/(\d{4})(\d)/, '$1-$2');
+                }
+                return agencia;
+            },
+            formatarConta(conta) {
+                // formato: 99999-9
+                // conta = conta.replace(/\D/g, '');
+                conta = conta.replace(/0|0/g, '');
+                conta = conta.replace(/(\d{5})(\d)/, '$1-$2');
+
+                return conta;
+            }
         },
         filters: {
             formatarData(date) {
