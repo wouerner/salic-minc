@@ -265,10 +265,9 @@
     </fieldset>
 </template>
 <script>
-
     import { utils } from '@/mixins/utils';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
-    import TransferenciaRecursos from '@/modules/projeto/incentivo/components/TransferenciaRecursos';
+    import TransferenciaRecursos from '@/modules/projeto/incentivo/components/dadosProjeto/TransferenciaRecursos';
 
     export default {
         components: {
