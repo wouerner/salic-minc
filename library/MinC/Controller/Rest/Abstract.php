@@ -4,8 +4,6 @@ abstract class MinC_Controller_Rest_Abstract extends MinC_Controller_Action_Abst
 {
     protected $_response;
 
-    protected $_publicMethods;
-
     protected $_request;
 
     protected $_methodsPermissions;
