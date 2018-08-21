@@ -10,3 +10,12 @@ export const buscaProjeto = ({ commit }, idPronac) => {
             commit(types.SET_PROJETO, projeto);
         });
 };
+
+export const buscaProponente = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaProponente(idPronac)
+        .then((response) => {
+            const data = response.data;
+            const proponente = data.data;
+            commit(types.SET_PROPONENTE, proponente);
+        });
+};

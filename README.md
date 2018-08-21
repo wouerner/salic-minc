@@ -37,6 +37,7 @@ Para parar o container basta digitar:
 * Esse projeto contem os manuais e implementações de layout do salic [Layout](https://github.com/culturagovbr/salic-minc-layout)
 
 ## Tecnologias
+* [Docker](https://www.docker.com/)
 * [PHP 7.x](http://php.net/)
 * [Zend Framework 1](https://framework.zend.com/manual/1.12/en/learning.quickstart.html) 
 * [Composer](https://getcomposer.org/)
