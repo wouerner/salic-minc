@@ -1,8 +1,8 @@
 <template>
     <div class="proposta">
             <div v-if="Object.keys(dadosHistorico).length > 2">
-                <slPropostaAlteracoes :idpreprojeto="idpreprojeto" :dadosAtuais="dadosAtuais"
-                                      :dadosHistorico="dadosHistorico"></slPropostaAlteracoes>
+                <PropostaAlteracoes :idpreprojeto="idpreprojeto" :dadosAtuais="dadosAtuais"
+                                      :dadosHistorico="dadosHistorico"></PropostaAlteracoes>
             </div>
             <div v-else-if="Object.keys(dadosAtuais).length > 2">
                 <div class="card padding20">
@@ -11,7 +11,7 @@
                         <p style="margin-left: 44px">O proponente não fez alterações no projeto no prazo estabelecido.</p>
                     </div>
                 </div>
-                <slProposta :idpreprojeto="idpreprojeto" :proposta="dadosAtuais"></slProposta>
+                <Proposta :idpreprojeto="idpreprojeto" :proposta="dadosAtuais"></Proposta>
             </div>
             <div v-else>
                 <div class="card padding20">
@@ -23,11 +23,11 @@
     </div>
 </template>
 <script>
-import slPropostaAlteracoes from './components/slPropostaAlteracoes';
-import slProposta from './slProposta';
+import PropostaAlteracoes from './components/PropostaAlteracoes';
+import Proposta from './Proposta';
 
 export default {
-    name: 'slPropostaDiff',
+    name: 'PropostaDiff',
     data: function () {
         return {
             dadosAtuais: {
@@ -46,8 +46,8 @@ export default {
     },
     props: ['idpreprojeto', 'tipo'],
     components: {
-        slPropostaAlteracoes,
-        slProposta,
+        PropostaAlteracoes,
+        Proposta,
     },
     mounted: function () {
         if (typeof this.idpreprojeto !== 'undefined') {

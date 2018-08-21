@@ -9,7 +9,7 @@
 import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
-    name: 'slPropostaFontesDeRecursos',
+    name: 'PropostaHistoricoAvaliacoes',
     data() {
         return {
             dado: [],
@@ -35,13 +35,12 @@ export default {
                 const self = this;
                 /* eslint-disable */
                 $3.ajax({
-                    url: '/proposta/visualizar/obter-fonte-de-recurso/idPreProjeto/' + id
+                    url: '/proposta/visualizar/obter-historico-avaliacoes/idPreProjeto/' + id
                 }).done(function (response) {
                     self.dado = response.data;
                 });
-
             }
         },
-    },
+    }
 };
 </script>

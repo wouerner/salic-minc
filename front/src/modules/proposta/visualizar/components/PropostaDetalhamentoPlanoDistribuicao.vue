@@ -53,8 +53,8 @@
 
                             </tr>
                         </tbody>
-                        <slPropostaDetalhamentoConsolidacao
-                                :items="detalhamento"></slPropostaDetalhamentoConsolidacao>
+                        <PropostaDetalhamentoConsolidacao
+                                :items="detalhamento"></PropostaDetalhamentoConsolidacao>
                     </table>
                 </div>
             </li>
@@ -63,10 +63,10 @@
 </template>
 <script>
 import planilhas from '@/mixins/planilhas';
-import slPropostaDetalhamentoConsolidacao from './slPropostaDetalhamentoConsolidacao';
+import PropostaDetalhamentoConsolidacao from './PropostaDetalhamentoConsolidacao';
 
 export default {
-    name: 'slPropostaDetalhamentoPlanoDistribuicao',
+    name: 'PropostaDetalhamentoPlanoDistribuicao',
     data() {
         return {
             detalhamentos: [],
@@ -77,7 +77,7 @@ export default {
         'arrayDetalhamentos',
     ],
     components: {
-        slPropostaDetalhamentoConsolidacao,
+        PropostaDetalhamentoConsolidacao,
     },
     watch: {
         arrayDetalhamentos(value) {

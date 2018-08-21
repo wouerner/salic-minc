@@ -99,19 +99,19 @@
                         </tbody>
                     </table>
 
-                    <slPropostaDetalhamentoPlanoDistribuicao
+                    <PropostaDetalhamentoPlanoDistribuicao
                             :arrayDetalhamentos="detalhamentosByID(detalhamentos, produto.idPlanoDistribuicao)">
-                    </slPropostaDetalhamentoPlanoDistribuicao>
+                    </PropostaDetalhamentoPlanoDistribuicao>
                 </div>
             </li>
         </ul>
     </div>
 </template>
 <script>
-import slPropostaDetalhamentoPlanoDistribuicao from './slPropostaDetalhamentoPlanoDistribuicao';
+import PropostaDetalhamentoPlanoDistribuicao from './PropostaDetalhamentoPlanoDistribuicao';
 
 export default {
-    name: 'slPropostaPlanoDistribuicao',
+    name: 'PropostaPlanoDistribuicao',
     data() {
         return {
             produtos: [],
@@ -130,7 +130,7 @@ export default {
         'arrayDetalhamentos',
     ],
     components: {
-        slPropostaDetalhamentoPlanoDistribuicao,
+        PropostaDetalhamentoPlanoDistribuicao,
     },
     watch: {
         idpreprojeto(value) {

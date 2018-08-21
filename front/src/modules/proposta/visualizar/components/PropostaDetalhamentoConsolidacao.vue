@@ -34,7 +34,7 @@ numeral.defaultFormat('0,0.00');
 
 
 export default {
-    name: 'slPropostaDetalhamentoConsolidacao',
+    name: 'PropostaDetalhamentoConsolidacao',
     props: {
         items: {},
     },

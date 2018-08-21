@@ -14,10 +14,10 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m12 l12 scroll">
-                                 <slPropostaIdentificacao
+                                 <PropostaIdentificacao
                                          :idpreprojeto="idpreprojeto"
                                          :proposta="dados">
-                                 </slPropostaIdentificacao>
+                                 </PropostaIdentificacao>
                             </div>
                         </div>
                     </div>
@@ -25,17 +25,17 @@
                 <li>
                     <div class="collapsible-header"><i class="material-icons">history</i>Hist&oacute;rico de avalia&ccedil;&otilde;es</div>
                     <div class="collapsible-body padding20">
-                        <slPropostaHistoricoAvaliacoes
+                        <PropostaHistoricoAvaliacoes
                                 :idpreprojeto="dados.idPreProjeto"
                                 :proposta="dados"
-                        ></slPropostaHistoricoAvaliacoes>
+                        ></PropostaHistoricoAvaliacoes>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">person</i>Proponente</div>
                     <div class="collapsible-body padding20">
-                        <slAgenteProponente :idagente="dados.idAgente"></slAgenteProponente>
-                        <slAgenteUsuario :idusuario="dados.idUsuario"></slAgenteUsuario>
+                        <AgenteProponente :idagente="dados.idAgente"></AgenteProponente>
+                        <AgenteUsuario :idusuario="dados.idUsuario"></AgenteUsuario>
                     </div>
                 </li>
 
@@ -124,7 +124,7 @@
                 <li>
                     <div class="collapsible-header"><i class="material-icons">attachment</i>Documentos anexados</div>
                     <div class="collapsible-body padding20">
-                        <slPropostaDocumentos :proposta="dados"></slPropostaDocumentos>
+                        <PropostaDocumentos :proposta="dados"></PropostaDocumentos>
                     </div>
                 </li>
                 <li>
@@ -132,26 +132,26 @@
                         Distribui&ccedil;&atilde;o
                     </div>
                     <div class="collapsible-body padding20">
-                        <slPropostaPlanoDistribuicao
+                        <PropostaPlanoDistribuicao
                                 :arrayProdutos="dados.planodistribuicaoproduto"
                                 :arrayDetalhamentos="dados.tbdetalhaplanodistribuicao"
-                        ></slPropostaPlanoDistribuicao>
+                        ></PropostaPlanoDistribuicao>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">history</i>Fonte de Recurso</div>
                     <div class="collapsible-body padding20">
-                        <slPropostaFontesDeRecursos
+                        <PropostaFontesDeRecursos
                                 :idpreprojeto="idpreprojeto">
-                        </slPropostaFontesDeRecursos>
+                        </PropostaFontesDeRecursos>
                     </div>
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">place</i>Local de realiza&ccedil;&atilde;o/Deslocamento
                     </div>
                     <div class="collapsible-body padding20">
-                        <slPropostaLocalRealizacaoDeslocamento
-                                :idpreprojeto="idpreprojeto"></slPropostaLocalRealizacaoDeslocamento>
+                        <PropostaLocalRealizacaoDeslocamento
+                                :idpreprojeto="idpreprojeto"></PropostaLocalRealizacaoDeslocamento>
                     </div>
                 </li>
                 <li>
@@ -167,9 +167,9 @@
                 <li>
                     <div class="collapsible-header"><i class="material-icons">attach_money</i>Custos Vinculados</div>
                     <div class="collapsible-body padding20" v-if="dados">
-                         <slPropostaCustosVinculados
+                         <PropostaCustosVinculados
                                  :arrayCustos="dados.tbcustosvinculados"
-                         ></slPropostaCustosVinculados>
+                         ></PropostaCustosVinculados>
                     </div>
                 </li>
             </ul>
@@ -184,18 +184,18 @@
 import Planilha from '@/components/Planilha/Planilha';
 import Carregando from '@/components/Carregando';
 import SalicTextoSimples from '@/components/SalicTextoSimples';
-import slPropostaIdentificacao from './components/slPropostaIdentificacao';
-import slPropostaHistoricoAvaliacoes from './components/slPropostaHistoricoAvaliacoes';
-import slAgenteProponente from '../components/slAgenteProponente';
-import slAgenteUsuario from '../components/slAgenteUsuario';
-import slPropostaDocumentos from './components/slPropostaDocumentos';
-import slPropostaPlanoDistribuicao from './components/slPropostaPlanoDistribuicao';
-import slPropostaFontesDeRecursos from './components/slPropostaFontesDeRecursos';
-import slPropostaLocalRealizacaoDeslocamento from './components/slPropostaLocalRealizacaoDeslocamento';
-import slPropostaCustosVinculados from './components/slPropostaCustosVinculados';
+import PropostaIdentificacao from './components/PropostaIdentificacao';
+import PropostaHistoricoAvaliacoes from './components/PropostaHistoricoAvaliacoes';
+import AgenteProponente from '../components/AgenteProponente';
+import AgenteUsuario from '../components/AgenteUsuario';
+import PropostaDocumentos from './components/PropostaDocumentos';
+import PropostaPlanoDistribuicao from './components/PropostaPlanoDistribuicao';
+import PropostaFontesDeRecursos from './components/PropostaFontesDeRecursos';
+import PropostaLocalRealizacaoDeslocamento from './components/PropostaLocalRealizacaoDeslocamento';
+import PropostaCustosVinculados from './components/PropostaCustosVinculados';
 
 export default {
-    name: 'slProposta',
+    name: 'Proposta',
     data() {
         return {
             dados: {
@@ -209,17 +209,17 @@ export default {
     },
     props: ['idpreprojeto', 'proposta'],
     components: {
-        slPropostaIdentificacao,
-        slPropostaHistoricoAvaliacoes,
-        slAgenteProponente,
-        slAgenteUsuario,
+        PropostaIdentificacao,
+        PropostaHistoricoAvaliacoes,
+        AgenteProponente,
+        AgenteUsuario,
         SalicTextoSimples,
         Carregando,
-        slPropostaDocumentos,
-        slPropostaPlanoDistribuicao,
-        slPropostaFontesDeRecursos,
-        slPropostaLocalRealizacaoDeslocamento,
-        slPropostaCustosVinculados,
+        PropostaDocumentos,
+        PropostaPlanoDistribuicao,
+        PropostaFontesDeRecursos,
+        PropostaLocalRealizacaoDeslocamento,
+        PropostaCustosVinculados,
         Planilha,
     },
     mounted() {

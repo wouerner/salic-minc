@@ -19,7 +19,7 @@
 </template>
 <script>
 export default {
-    name: 'slAgenteUsuario',
+    name: 'AgenteUsuario',
     data() {
         return {
             usuario: [],

@@ -89,7 +89,7 @@ import moment from 'moment';
 import { utils } from '@/mixins/utils';
 
 export default {
-    name: 'slPropostaIdentificacao',
+    name: 'PropostaIdentificacao',
     props: {
         idpreprojeto: null,
         proposta: {

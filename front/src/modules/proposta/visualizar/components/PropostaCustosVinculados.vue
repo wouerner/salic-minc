@@ -9,7 +9,7 @@
 import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
-    name: 'slPropostaCustosVinculados',
+    name: 'PropostaCustosVinculados',
     data() {
         return {
             dados: [],

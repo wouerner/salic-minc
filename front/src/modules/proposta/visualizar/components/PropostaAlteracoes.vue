@@ -11,16 +11,16 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <slPropostaIdentificacao
+                                <PropostaIdentificacao
                                         :idpreprojeto="idpreprojeto"
                                         :proposta="dadosHistorico">
-                                </slPropostaIdentificacao>
+                                </PropostaIdentificacao>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <slPropostaIdentificacao
+                                <PropostaIdentificacao
                                         :idpreprojeto="idpreprojeto"
                                         :proposta="dadosAtuais">
-                                </slPropostaIdentificacao>
+                                </PropostaIdentificacao>
                             </div>
                         </div>
                     </div>
@@ -29,9 +29,9 @@
                     <div class="collapsible-header"><i class="material-icons">history</i>Hist&oacute;rico de avalia&ccedil;&otilde;es</div>
                     <div class="collapsible-body padding10">
                         <div class="card padding10">
-                            <slPropostaHistoricoAvaliacoes
+                            <PropostaHistoricoAvaliacoes
                                     :idpreprojeto="idpreprojeto">
-                            </slPropostaHistoricoAvaliacoes>
+                            </PropostaHistoricoAvaliacoes>
                         </div>
                     </div>
                 </li>
@@ -40,12 +40,12 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m12 12 scroll">
-                                <slAgenteProponente
+                                <AgenteProponente
                                         :idagente="dadosAtuais.idAgente">
-                                </slAgenteProponente>
-                                <slAgenteUsuario
+                                </AgenteProponente>
+                                <AgenteUsuario
                                         :idusuario="dadosAtuais.idUsuario">
-                                </slAgenteUsuario>
+                                </AgenteUsuario>
                             </div>
                         </div>
                     </div>
@@ -278,12 +278,12 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <slPropostaLocalRealizacaoDeslocamento
-                                        :localizacoes="dadosHistorico"></slPropostaLocalRealizacaoDeslocamento>
+                                <PropostaLocalRealizacaoDeslocamento
+                                        :localizacoes="dadosHistorico"></PropostaLocalRealizacaoDeslocamento>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <slPropostaLocalRealizacaoDeslocamento
-                                        :localizacoes="dadosAtuais"></slPropostaLocalRealizacaoDeslocamento>
+                                <PropostaLocalRealizacaoDeslocamento
+                                        :localizacoes="dadosAtuais"></PropostaLocalRealizacaoDeslocamento>
                             </div>
                         </div>
                     </div>
@@ -296,10 +296,10 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <slPropostaDocumentos :arrayDocumentos="dadosHistorico"></slPropostaDocumentos>
+                                <PropostaDocumentos :arrayDocumentos="dadosHistorico"></PropostaDocumentos>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <slPropostaDocumentos :arrayDocumentos="dadosAtuais"></slPropostaDocumentos>
+                                <PropostaDocumentos :arrayDocumentos="dadosAtuais"></PropostaDocumentos>
                             </div>
                         </div>
                     </div>
@@ -312,16 +312,16 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <slPropostaPlanoDistribuicao
+                                <PropostaPlanoDistribuicao
                                         :arrayProdutos="dadosHistorico.planodistribuicaoproduto"
                                         :arrayDetalhamentos="dadosHistorico.tbdetalhaplanodistribuicao"
-                                ></slPropostaPlanoDistribuicao>
+                                ></PropostaPlanoDistribuicao>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <slPropostaPlanoDistribuicao
+                                <PropostaPlanoDistribuicao
                                         :arrayProdutos="dadosAtuais.planodistribuicaoproduto"
                                         :arrayDetalhamentos="dadosAtuais.tbdetalhaplanodistribuicao"
-                                ></slPropostaPlanoDistribuicao>
+                                ></PropostaPlanoDistribuicao>
                             </div>
                         </div>
                     </div>
@@ -335,12 +335,12 @@
                     <div class="collapsible-body padding20 active">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <slPropostaPlanilhaOrcamentaria
-                                        :arrayPlanilha="dadosHistorico.tbplanilhaproposta"></slPropostaPlanilhaOrcamentaria>
+                                <PropostaPlanilhaOrcamentaria
+                                        :arrayPlanilha="dadosHistorico.tbplanilhaproposta"></PropostaPlanilhaOrcamentaria>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <slPropostaPlanilhaOrcamentaria
-                                        :arrayPlanilha="dadosAtuais.tbplanilhaproposta"></slPropostaPlanilhaOrcamentaria>
+                                <PropostaPlanilhaOrcamentaria
+                                        :arrayPlanilha="dadosAtuais.tbplanilhaproposta"></PropostaPlanilhaOrcamentaria>
                             </div>
                         </div>
                     </div>
@@ -353,14 +353,14 @@
                     <div class="collapsible-body padding20">
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
-                                <slPropostaCustosVinculados
+                                <PropostaCustosVinculados
                                         :arrayCustos="dadosHistorico.tbcustosvinculados"
-                                ></slPropostaCustosVinculados>
+                                ></PropostaCustosVinculados>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
-                                <slPropostaCustosVinculados
+                                <PropostaCustosVinculados
                                         :arrayCustos="dadosAtuais.tbcustosvinculados"
-                                ></slPropostaCustosVinculados>
+                                ></PropostaCustosVinculados>
                             </div>
                         </div>
                     </div>
@@ -369,31 +369,31 @@
     </div>
 </template>
 <script>
-import slPropostaIdentificacao from './slPropostaIdentificacao'
-import slPropostaHistoricoAvaliacoes from './slPropostaHistoricoAvaliacoes'
-import slAgenteProponente from '../../components/slAgenteProponente'
-import slAgenteUsuario from '../../components/slAgenteUsuario'
+import PropostaIdentificacao from './PropostaIdentificacao'
+import PropostaHistoricoAvaliacoes from './PropostaHistoricoAvaliacoes'
+import AgenteProponente from '../../components/AgenteProponente'
+import AgenteUsuario from '../../components/AgenteUsuario'
 import SalicTextoSimples from '@/components/SalicTextoSimples'
-import slPropostaLocalRealizacaoDeslocamento from './slPropostaLocalRealizacaoDeslocamento'
-import slPropostaDocumentos from './slPropostaDocumentos'
-import slPropostaPlanoDistribuicao from './slPropostaPlanoDistribuicao'
+import PropostaLocalRealizacaoDeslocamento from './PropostaLocalRealizacaoDeslocamento'
+import PropostaDocumentos from './PropostaDocumentos'
+import PropostaPlanoDistribuicao from './PropostaPlanoDistribuicao'
 import Planilha from '@/components/Planilha/Planilha'
-import slPropostaCustosVinculados from './slPropostaCustosVinculados'
+import PropostaCustosVinculados from './PropostaCustosVinculados'
 
 export default {
-    name: 'slPropostaAlteracoes',
+    name: 'PropostaAlteracoes',
     props: ['idpreprojeto', 'dadosAtuais', 'dadosHistorico'],
     components: {
-        slPropostaIdentificacao,
-        slPropostaHistoricoAvaliacoes,
-        slAgenteProponente,
-        slAgenteUsuario,
+        PropostaIdentificacao,
+        PropostaHistoricoAvaliacoes,
+        AgenteProponente,
+        AgenteUsuario,
         SalicTextoSimples,
-        slPropostaLocalRealizacaoDeslocamento,
-        slPropostaDocumentos,
-        slPropostaPlanoDistribuicao,
+        PropostaLocalRealizacaoDeslocamento,
+        PropostaDocumentos,
+        PropostaPlanoDistribuicao,
         Planilha,
-        slPropostaCustosVinculados,
+        PropostaCustosVinculados,
     },
     mounted: function () {
         this.iniciarCollapsible();

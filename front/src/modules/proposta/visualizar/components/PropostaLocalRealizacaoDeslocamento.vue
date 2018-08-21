@@ -58,7 +58,7 @@
 </template>
 <script>
 export default {
-    name: 'slPropostaLocalRealizacaoDeslocamento',
+    name: 'PropostaLocalRealizacaoDeslocamento',
     data() {
         return {
             proposta: [],

@@ -157,7 +157,7 @@
 import { utils } from '@/mixins/utils';
 
 export default {
-    name: 'slAgenteProponente',
+    name: 'AgenteProponente',
     data() {
         return {
             proponente: [],

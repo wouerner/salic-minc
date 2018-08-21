@@ -55,7 +55,7 @@
 import moment from 'moment';
 
 export default {
-    name: 'slPropostaDocumentos',
+    name: 'PropostaDocumentos',
     data() {
         return {
             documentos: [],
