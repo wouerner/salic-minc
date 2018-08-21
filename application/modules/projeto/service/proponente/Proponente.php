@@ -63,7 +63,7 @@ class Proponente
             $dbTableInabilitado = new \Inabilitado();
             $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto["CgcCpf"], null, null, true);
 
-            $proponente['ProponenteInabilitado'] = !empty($proponenteInabilitado);
+            $proponente['proponenteInabilitado'] = !empty($proponenteInabilitado);
 
             $dbTableInternet = new \Agente_Model_DbTable_Internet();
             $proponente['emails'] = $dbTableInternet->buscarEmails($idAgente)->toArray();
@@ -106,8 +106,8 @@ class Proponente
 
             return $proponente;
 
-        } catch (\Exception $objExecption) {
-            throw $objExecption;
+        } catch (\Exception $objException) {
+            throw $objException;
         }
     }
 }

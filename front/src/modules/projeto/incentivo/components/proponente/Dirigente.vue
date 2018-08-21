@@ -1,20 +1,19 @@
 <template>
     <div class="conteudo">
         <legend>Dirigente</legend>
-        <table class="tabela" v-if="Object.keys(dirigentes)>'0'">
+        <table class="tabela" v-if="Object(dadosProponente.dirigentes).length > 0">
             <tr class="destacar">
                 <td width="20%" align="center"><b>Nome/CPF</b></td>
                 <td align="center"><b>Mandatos</b></td>
             </tr>
-            <tr v-for="dirigente in dirigentes" v-bind:key="dirigente.idAgente" 
-                v-if="dirigente.CNPJCPFDirigente">
+            <tr v-for="dirigente in dadosProponente.dirigentes" v-bind:key="dirigente.idAgente">
                 <td align="center">
                     <b>{{dirigente.NomeDirigente}}</b> <br>
-                    <SalicFormatarCpfCnpj :cpf="dirigente.CNPJCPFDirigente" />
+                    <SalicFormatarCpfCnpj :cpf="dirigente.CNPJCPFDirigente"/>
                 </td>
                 <td align="left">
-                    <table class='tabela' v-if="Object.keys(dirigente.mandatos).length>0">
-                        <tr v-for="mandato in dirigente.mandatos" v-bind:key="mandato.idMandato">
+                    <table class='tabela' v-if="Object(dirigente.mandatos).length > 0">
+                        <tr v-for="mandato in dirigente.mandatos" v-bind:key="mandato.idAgentexVerificacao">
                             <td width='25%'>
                                 <b>Tipo de documento</b><br>
                                 {{mandato.Descricao}}
@@ -25,7 +24,7 @@
                             </td>
                             <td width='25%'>
                                 <b>Per&iacute;odo de vig&ecirc;ncia</b><br>
-                                {{mandato.dtInicioMandato | formatarData}}&nbsp; 
+                                {{mandato.dtInicioMandato | formatarData}}&nbsp;
                                 à &nbsp;{{mandato.dtFimMandato | formatarData}}
                             </td>
                             <td width='25%'>
@@ -44,8 +43,8 @@
         </table>
         <table class="tabela" v-else>
             <tr>
-                <td colspan="2" align="center">
-                    <em>N&atilde;o existem Dirigentes cadastrados!</em>
+                <td colspan="2" align="left">
+                    <em>N&atilde;o existe dirigente cadastrado!</em>
                 </td>
             </tr>
         </table>
@@ -54,29 +53,17 @@
 
 <script>
     import moment from 'moment';
+    import { mapGetters } from 'vuex';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
-    
-    export default{
-        data(){
-            return{
-                dirigentes:[
-                    {idAgente:'152', CNPJCPFDirigente:'15648975602', NomeDirigente:'Fulano de Tal',
-                     mandatos:[
-                        {idMandato:'55', Descricao:'alguma coisa', dsNumeroDocumento:'156489',
-                         dtInicioMandato:'2018-08-01', dtFimMandato:'2018-08-10',
-                         idArquivo:'algum link', nmArquivo:'Baixar Mandato dnv'},
-                     ]},
-                    {idAgente:'007', CNPJCPFDirigente:'12345678902', NomeDirigente:'James Bond',
-                     mandatos:[
-                        {idMandato:'45', Descricao:'blablabla', dsNumeroDocumento:'789546',
-                         dtInicioMandato:'2018-08-03', dtFimMandato:'',
-                         idArquivo:'qualquer link', nmArquivo:'Baixar Mandato'},
-                     ]},
-                ],
-            }
-        },
-        components:{
+
+    export default {
+        components: {
             SalicFormatarCpfCnpj,
+        },
+        computed: {
+            ...mapGetters({
+                dadosProponente: 'projeto/proponente',
+            }),
         },
         filters: {
             formatarData(date) {
@@ -86,5 +73,5 @@
                 return moment(date).format('DD/MM/YYYY');
             },
         },
-    }
+    };
 </script>
