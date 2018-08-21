@@ -4,10 +4,10 @@
         <table class="tabela" v-if=" dadosProponente.dados.Direito || dadosProponente.dados.Esfera || 
                                 dadosProponente.dados.Administracao || dadosProponente.dados.Utilidade ">
             <tr class="destacar">
-                <td class="centro"><b>Natureza</b></td>
-                <td class="centro"><b>Esfera</b></td>
-                <td class="centro"><b>Administra&ccedil;&atilde;o</b></td>
-                <td class="centro"><b>Fins Lucrativos</b></td>
+                <td><b>Natureza</b></td>
+                <td><b>Esfera</b></td>
+                <td><b>Administra&ccedil;&atilde;o</b></td>
+                <td><b>Fins Lucrativos</b></td>
             </tr>
             <tr>
                 <td v-if="dadosProponente.dados.Direito">{{dadosProponente.dados.Direito}}</td>
@@ -39,6 +39,6 @@
             ...mapGetters({
                 dadosProponente: 'projeto/proponente',
             }),
-        }
-    }
+        },
+    };
 </script>

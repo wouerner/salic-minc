@@ -9,7 +9,7 @@
             <tr v-for="dirigente in dadosProponente.dirigentes" v-bind:key="dirigente.idAgente">
                 <td align="center">
                     <b>{{dirigente.NomeDirigente}}</b> <br>
-                    <SalicFormatarCpfCnpj :cpf="dirigente.CNPJCPFDirigente" />
+                    <SalicFormatarCpfCnpj :cpf="dirigente.CNPJCPFDirigente"/>
                 </td>
                 <td align="left">
                     <table class='tabela' v-if="Object(dirigente.mandatos).length > 0">
@@ -24,7 +24,7 @@
                             </td>
                             <td width='25%'>
                                 <b>Per&iacute;odo de vig&ecirc;ncia</b><br>
-                                {{mandato.dtInicioMandato | formatarData}}&nbsp; 
+                                {{mandato.dtInicioMandato | formatarData}}&nbsp;
                                 à &nbsp;{{mandato.dtFimMandato | formatarData}}
                             </td>
                             <td width='25%'>
@@ -53,11 +53,11 @@
 
 <script>
     import moment from 'moment';
-    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     import { mapGetters } from 'vuex';
-    
-    export default{
-        components:{
+    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
+
+    export default {
+        components: {
             SalicFormatarCpfCnpj,
         },
         computed: {
@@ -73,5 +73,5 @@
                 return moment(date).format('DD/MM/YYYY');
             },
         },
-    }
+    };
 </script>

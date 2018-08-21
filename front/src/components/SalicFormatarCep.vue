@@ -18,11 +18,11 @@
         methods: {
             formatarCep(cep) {
                 if (cep.length === 8) {
-                    return this.formatarCep(cep);
+                    return this.adicionarMascaraCep(cep);
                 }
             },
             // formato: 99.999.999
-            formatarCep(v) {
+            adicionarMascaraCep(v) {
                 v = v.replace(/\D/g, '');
                 v = v.replace(/(\d{2})(\d)/, '$1.$2');
                 v = v.replace(/(\d{3})(\d)/, '$1-$2');
