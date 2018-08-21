@@ -11,7 +11,7 @@
         <ModalTemplate v-if="modalVisible === 'transferencia-recursos'" @close="fecharModal();">
             <template slot="header">
                 <div style="float: left; margin-bottom: 20px;">
-                    Transferencia de recursos entre projetos culturais
+                    Transfer&ecirc;ncia de recursos entre projetos culturais
                 </div>
             </template>
             <template class="striped" slot="body">
@@ -36,13 +36,13 @@
                             <td>{{informacoesTransferencia.NomeProjetoTranferidor}}</td>
                             <td>{{informacoesTransferencia.idPronacRecebedor}}</td>
                             <td>{{informacoesTransferencia.NomeProjetoRecedor}}</td>
-                            <td>{{informacoesTransferencia.dtRecebimento | formatarData}}</td>
+                            <td>{{informacoesTransferencia.dtRecebimento}}</td>
                             <td>R${{informacoesTransferencia.vlRecebido | formatarParaReal}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="1">valor</td>
+                            <td colspan="1">Total</td>
                             <td style="text-align: right" colspan="5">R${{ somaValoresRecebidos | formatarParaReal }}</td>
                         </tr>
                     </tfoot>
