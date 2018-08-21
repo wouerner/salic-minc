@@ -6,7 +6,7 @@ abstract class MinC_Controller_Rest_Abstract extends MinC_Controller_Action_Abst
 
     protected $_request;
 
-    protected $_methodsPermissions;
+    protected $_methodsPermissions = [];
 
     protected $_usu_codigo;
 
@@ -18,16 +18,23 @@ abstract class MinC_Controller_Rest_Abstract extends MinC_Controller_Action_Abst
 
     protected $_IdUsuario;
 
+    protected $_checkUserIsLogged = false;
+
 
     const ALL_METHODS = '*';
     const COD_ORGAO_PROPONENTE = 1111;
 
     /**
-     * Validação de perfis de acesso ou comportamentos excepcionais na inicialização
+     * ValidaÃ§Ã£o de perfis de acesso ou comportamentos excepcionais na inicializaÃ§Ã£o
      */
     final public function init()
     {
         $authInstance = Zend_Auth::getInstance();
+
+        if ($this->_checkUserIsLogged) {
+            $authInstance->hasIdentity()?: $this->permissionDenied();
+        }
+
         $authObject = $authInstance->getIdentity();
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
 
@@ -62,6 +69,12 @@ abstract class MinC_Controller_Rest_Abstract extends MinC_Controller_Action_Abst
     {
         $this->_methodsPermissions = $permissionsPerMethod;
     }
+
+    final protected function setValidateUserIsLogged()
+    {
+        $this->_checkUserIsLogged = true;
+    }
+
 
     final private function checkPermission() : bool
     {
