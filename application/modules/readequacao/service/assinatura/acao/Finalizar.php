@@ -54,7 +54,7 @@ class Finalizar implements IAcaoFinalizar
             if (isset($orgaoDestino)) {
                 $objTbProjetos->alterarOrgao(
                     $orgaoDestino,
-                    $this->assinatura->modeloTbAssinatura->getIdPronac()
+                    $assinatura->modeloTbAssinatura->getIdPronac()
                 );
             }
         }
