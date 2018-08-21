@@ -42,7 +42,7 @@
                 if (typeof value !== 'undefined') {
                     this.fetch(value.idPronac);
                 }
-            },
+            }
         },
         computed: {
             ...mapGetters({
@@ -56,7 +56,6 @@
                 }
 
                 const self = this;
-
                 // eslint-disable-next-line
                 $3
                     .ajax({

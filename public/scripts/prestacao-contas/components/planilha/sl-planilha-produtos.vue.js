@@ -9,13 +9,15 @@ Vue.component('sl-planilha-produtos', {
                 </div>
                 <div class="collapsible-body no-padding">
                     <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                        <sl-planilha-etapas
-                            :etapa="etapa"
-                            v-for="(etapa, index) in produto.etapa"
-                            :idpronac="idpronac"
-                            :cdProduto="produto.cdProduto"
-                            :key="index"
-                        ></sl-planilha-etapas>
+                        <slot :produto="produto">
+                            <sl-planilha-etapas
+                                v-for="(etapa, index) in produto.etapa"
+                                :etapa="etapa"
+                                :idpronac="idpronac"
+                                :cdProduto="produto.cdProduto"
+                                :key="index"
+                            ></sl-planilha-etapas>
+                        </slot>
                     </ul>
                 </div>
             </li>
