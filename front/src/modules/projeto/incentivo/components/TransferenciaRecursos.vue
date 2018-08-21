@@ -104,7 +104,7 @@
                 default:
                     throw new Error('acao invalida');
                 }
-                console.log(cssClass);
+
                 return cssClass;
             },
         },

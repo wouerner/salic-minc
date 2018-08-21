@@ -42,7 +42,7 @@
                 if (typeof value !== 'undefined') {
                     this.fetch(value.idPronac);
                 }
-            }
+            },
         },
         computed: {
             ...mapGetters({
