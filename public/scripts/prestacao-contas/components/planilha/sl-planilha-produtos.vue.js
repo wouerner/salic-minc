@@ -3,19 +3,21 @@ Vue.component('sl-planilha-produtos', {
     template: `
         <ul class="collapsible no-margin" data-collapsible="expandable" id="produtos-collapsible">
             <li class="active" v-for="(produto, index) in produtos">
-                <div class="collapsible-header green-text" v-bind:class="{ active: isExpanded(produto.cdProduto) }" >
+                <div class=" active collapsible-header green-text" v-bind:class="{ active: isExpanded(produto.cdProduto) }" >
                     <i class="material-icons">perm_media</i>
                     {{ produto.produto }}
                 </div>
                 <div class="collapsible-body no-padding">
                     <ul class="collapsible no-margin no-border" data-collapsible="expandable">
-                        <sl-planilha-etapas
-                            :etapa="etapa"
-                            v-for="(etapa, index) in produto.etapa"
-                            :idpronac="idpronac"
-                            :cdProduto="produto.cdProduto"
-                            :key="index"
-                        ></sl-planilha-etapas>
+                        <slot :produto="produto">
+                            <sl-planilha-etapas
+                                v-for="(etapa, index) in produto.etapa"
+                                :etapa="etapa"
+                                :idpronac="idpronac"
+                                :cdProduto="produto.cdProduto"
+                                :key="index"
+                            ></sl-planilha-etapas>
+                        </slot>
                     </ul>
                 </div>
             </li>
