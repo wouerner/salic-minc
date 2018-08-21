@@ -26,7 +26,7 @@ module.exports = {
     entry: {
         projeto: './src/modules/projeto/main.js',
         foo: './src/modules/foo/main.js',
-        avaliacao_resultados: './src/modules/avaliacao-resultados/main.js',
+        avaliacao_resultados: './src/modules/avaliacaoResultados/main.js',
     },
     output: {
         path: config.build.assetsRoot,
