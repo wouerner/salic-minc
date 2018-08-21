@@ -4,7 +4,7 @@
             <div class="col s12 m9 l10">
                 <h1 v-html="titulo"></h1>
             </div>
-            <div class="col s12 m3 l2 right-align">
+            <div v-if="existeHistorico" class="col s12 m3 l2 right-align">
                 <a @click="voltar()"
                    title="P&aacute;gina Anterior"
                    class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"
@@ -19,6 +19,11 @@
     export default {
         name: 'TituloPagina',
         props: ['titulo'],
+        computed: {
+            existeHistorico() {
+                return window.history.length > 1;
+            },
+        },
         methods: {
             voltar() {
                 /* eslint-disable-next-line */

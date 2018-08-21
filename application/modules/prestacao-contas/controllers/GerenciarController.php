@@ -6,6 +6,20 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
     public function init()
     {
+        /* $auth = Zend_Auth::getInstance(); */
+
+        /* isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo); */
+
+        /* isset($auth->getIdentity()->usu_codigo) ? $this->idUsuario = $auth->getIdentity()->usu_codigo : $this->idUsuario = $auth->getIdentity()->IdUsuario; */
+
+        /* $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); */
+
+        /* if (isset($auth->getIdentity()->usu_codigo)) { */
+        /*     $this->codGrupo = $GrupoAtivo->codGrupo; */
+        /*     $this->codOrgao = $GrupoAtivo->codOrgao; */
+        /*     $this->codOrgaoSuperior = (!empty($auth->getIdentity()->usu_org_max_superior)) ? $auth->getIdentity()->usu_org_max_superior : null; */
+        /* } */
+
         parent::init();
     }
 
@@ -506,7 +520,15 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
             null,
             $this->view->idPlanilhaItens
         );
-
+        /* var_dump( */
+        /*     $this->view->idpronac, */
+        /*     $this->view->uf, */
+        /*     $this->view->cdetapa, */
+        /*     $this->view->cdproduto, */
+        /*     $this->view->cdcidade, */
+        /*     null, */
+        /*     $this->view->idPlanilhaItens */
+/* );die; */
         $this->view->dataInicioExecucao = (new DateTime($projeto->DtInicioExecucao))->format('Y-m-d');
         $this->view->dataFimExecucao = (new DateTime($projeto->DtFimExecucao))->format('Y-m-d');
         $this->view->valorAprovado = $planilha->current()->toArray()['vlAprovado'];
@@ -602,5 +624,89 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         }
 
         $this->_helper->json($data);
+    }
+
+    public function planilhaOrcamentariaCustosProdutoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $auth = Zend_Auth::getInstance();
+        $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
+
+        /* $this->dadosProjeto(); */
+        $this->view->idPronac = $this->getRequest()->getParam('idpronac');
+        $this->view->itemAvaliadoFilter = $this->getRequest()->getParam('itemAvaliadoFilter');
+        $this->view->idRelatorio = $this->getRequest()->getParam('relatorio');
+        $uf = $this->getRequest()->getParam('uf');
+        $municipio = $this->getRequest()->getParam('idmunicipio');
+        $etapa = $this->getRequest()->getParam('etapa');
+        $codigoProduto = $this->getRequest()->getParam('produto');
+
+        $dao = new PlanilhaAprovacao();
+
+        $resposta = $dao->vwComprovacaoFinanceiraProjeto(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+
+        $aux  = [];
+        foreach($resposta->toArray() as $item){
+            $aux['todos'][] =  array_map('utf8_encode', $item);
+        }
+
+        $respostaAguardandoAnalise = $dao->vwComprovacaoProjetoSemAnalise(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+
+        foreach($respostaAguardandoAnalise->toArray() as $item){
+            $aux['respostaAguardandoAnalise'][] =  array_map('utf8_encode', $item);
+        }
+        /* var_dump( */
+        /*     $this->view->idPronac, */
+        /*     $uf, */
+        /*     $etapa, */
+        /*     $codigoProduto, */
+        /*     $municipio, */
+        /*     'P' */
+        /* );die; */
+
+        $avaliadas = $dao->vwComprovacaoProjetoAvaliada(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+        foreach($avaliadas->toArray() as $item){
+            $aux['avaliadas'][] =  array_map('utf8_encode', $item);
+        }
+
+        $recusadas = $dao->vwComprovacaoProjetoRecusada(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+        foreach($recusadas->toArray() as $item){
+            $aux['recusadas'][] =  array_map('utf8_encode', $item);
+        }
+
+        $this->_helper->json($aux);
+
+        /* $this->view->todos = $resposta; */
+        /* $this->view->aguardandoAnalise = $respostaAguardandoAnalise; */
+        /* $this->view->avaliadas = $avaliadas; */
+        /* $this->view->recusadas = $recusadas; */
     }
 }
