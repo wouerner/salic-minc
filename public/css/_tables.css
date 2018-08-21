@@ -379,9 +379,9 @@ table > tbody > tr {
     cursor: pointer;
 }
 
+#conteudo .destaque-texto-secondary a:not(.btn),
 .destaque-texto-secondary,
 .destaque-texto-secondary a {
     color: #CC0000 !important;
+    cursor: pointer;
 }
-
-

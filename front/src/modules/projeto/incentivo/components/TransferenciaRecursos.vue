@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="destaque-texto-primary">
+        <div :class="tipoAcao">
             <a
                 class="cursor"
                 @click="abrirModal('transferencia-recursos');"
@@ -91,6 +91,22 @@
                 modalVisible: 'modal/default',
                 transferenciaRecursos: 'projeto/transferenciaRecursos',
             }),
+            tipoAcao() {
+                let cssClass = '';
+
+                switch (this.acao) {
+                case 'transferidor':
+                    cssClass = 'destaque-texto-secondary';
+                    break;
+                case 'recebedor':
+                    cssClass = 'destaque-texto-primary';
+                    break;
+                default:
+                    throw new Error('acao invalida');
+                }
+                console.log(cssClass);
+                return cssClass;
+            },
         },
     };
 </script>
