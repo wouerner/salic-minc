@@ -97,7 +97,7 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
     public function postAction()
     {
         $idPronac = $this->getRequest()->getParam('idpronac');
-        $observacao = $this->getRequest()->getParam('observacao');
+        $observacao = utf8_decode($this->getRequest()->getParam('observacao'));
         $situacao = $this->getRequest()->getParam('situacao');
         $idComprovantePagamento = $this->getRequest()->getParam('idcomprovantepagamento');
 
