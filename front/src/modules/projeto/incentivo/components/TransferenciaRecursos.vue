@@ -18,8 +18,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="2">Projeto Recebedor</th>
-                            <th colspan="4">Projeto Transferidor</th>
+                            <th style="background-color: #ff0000; color: #ffffff;" colspan="2">Projeto Transferidor</th>
+                            <th style="background-color: #00b0f0; color: #ffffff;" colspan="4">Projeto Recebedor</th>
                         </tr>
                         <tr>
                             <th>Pronac</th>
@@ -37,9 +37,15 @@
                             <td>{{informacoesTransferencia.idPronacRecebedor}}</td>
                             <td>{{informacoesTransferencia.NomeProjetoRecedor}}</td>
                             <td>{{informacoesTransferencia.dtRecebimento | formatarData}}</td>
-                            <td>{{informacoesTransferencia.vlRecebido | formatarParaReal}}</td>
+                            <td>R${{informacoesTransferencia.vlRecebido | formatarParaReal}}</td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="1">valor</td>
+                            <td style="text-align: right" colspan="5">R${{ somaValoresRecebidos | formatarParaReal }}</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </template>
             <template slot="footer"></template>
@@ -63,6 +69,11 @@
                 String,
                 required: true,
             },
+        },
+        data() {
+            return {
+                somaValoresRecebidos: 0,
+            };
         },
         components: {
             ModalTemplate,
@@ -104,8 +115,19 @@
                 default:
                     throw new Error('acao invalida');
                 }
-                console.log(cssClass);
+
                 return cssClass;
+            },
+        },
+        watch: {
+            transferenciaRecursos(queryResult) {
+                let somaValesRecebido = 0;
+
+                Object.entries(queryResult).forEach((value) => {
+                    somaValesRecebido += parseFloat(value[1].vlRecebido, 10);
+                });
+
+                this.somaValoresRecebidos = somaValesRecebido;
             },
         },
     };
