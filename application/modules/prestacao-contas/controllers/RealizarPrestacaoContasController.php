@@ -31,9 +31,12 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
 
         $this->view->idPronac = $idpronac;
 
-        $planilhaAprovacaoModel = new PrestacaoContas_Model_spComprovacaoFinanceiraProjeto();
-        $resposta = $planilhaAprovacaoModel->exec($idpronac, 100);
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $resposta = $planilhaAprovacaoModel->obterItensAprovados($idpronac);
 
+        $vlTotalComprovar = 0;
+        $vlComprovado = 0;
+        $vlAprovado = 0;
         foreach ($resposta as $item) {
             $vlComprovar = $item->vlAprovado - $item->vlComprovado;
             $vlTotalComprovar += $vlComprovar;
@@ -50,6 +53,8 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
         $this->view->vlComprovado = $vlComprovado;
         $this->view->pronac = $pronac;
         $this->view->nomeProjeto = $nomeProjeto;
+
+
 
         $diligencia = new Diligencia();
         $this->view->existeDiligenciaAberta = $diligencia->existeDiligenciaAberta($idpronac);
@@ -74,6 +79,82 @@ class PrestacaoContas_RealizarPrestacaoContasController extends MinC_Controller_
             ['cidade']
             [$item->cdCidade]
             ['itens']
+            [$item->idPlanilhaItens] = [
+                'item' => utf8_encode($item->Item),
+                'varlorAprovado' => $item->vlAprovado,
+                'varlorComprovado' => $item->vlComprovado,
+                'comprovacaoValidada' => $item->ComprovacaoValidada,
+                'idPlanilhaAprovacao' => $item->idPlanilhaAprovacao,
+                'idPlanilhaItens' => $item->idPlanilhaItens,
+                'ComprovacaoValidada' => $item->ComprovacaoValidada,
+                'stItemAvaliado' => $item->stItemAvaliado,
+            ];
+
+            $planilhaJSON[$item->cdProduto] += [
+                'produto' => html_entity_decode(utf8_encode($item->Produto)),
+                'cdProduto' => $item->cdProduto,
+            ];
+
+            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa] += [
+                'etapa' => utf8_encode($item->Etapa),
+                'cdEtapa' =>  $item->cdEtapa
+            ];
+
+            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa]['UF'][$item->cdUF] += [
+                'Uf' => $item->Uf,
+                'cdUF' => $item->cdUF
+            ];
+
+            $planilhaJSON[$item->cdProduto]['etapa'][$item->cdEtapa]['UF'][$item->cdUF]['cidade'][$item->cdCidade] += [
+                'cidade' => utf8_encode($item->Cidade),
+                'cdCidade' => $item->cdCidade
+            ];
+        }
+
+        $this->_helper->json($planilhaJSON);
+    }
+
+    public function planilhaAnaliseFiltrosAction()
+    {
+        $idpronac = (int)$this->_request->getParam('idPronac');
+
+        $planilhaAprovacaoModel = new PlanilhaAprovacao();
+        $resposta = $planilhaAprovacaoModel->planilhaAprovada($idpronac);
+
+        $planilhaJSON = null;
+
+        foreach($resposta as $item) {
+            $planilhaJSON
+            [$item->cdProduto]
+            ['etapa']
+            [$item->cdEtapa]
+            ['UF']
+            [$item->cdUF]
+            ['cidade']
+            [$item->cdCidade]
+            ['itens']
+            [$item->stItemAvaliado]
+            [$item->idPlanilhaItens] = [
+                'item' => utf8_encode($item->Item),
+                'varlorAprovado' => $item->vlAprovado,
+                'varlorComprovado' => $item->vlComprovado,
+                'comprovacaoValidada' => $item->ComprovacaoValidada,
+                'idPlanilhaAprovacao' => $item->idPlanilhaAprovacao,
+                'idPlanilhaItens' => $item->idPlanilhaItens,
+                'ComprovacaoValidada' => $item->ComprovacaoValidada,
+                'stItemAvaliado' => $item->stItemAvaliado,
+            ];
+
+            $planilhaJSON
+            [$item->cdProduto]
+            ['etapa']
+            [$item->cdEtapa]
+            ['UF']
+            [$item->cdUF]
+            ['cidade']
+            [$item->cdCidade]
+            ['itens']
+            ['todos']
             [$item->idPlanilhaItens] = [
                 'item' => utf8_encode($item->Item),
                 'varlorAprovado' => $item->vlAprovado,
