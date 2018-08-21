@@ -108,18 +108,18 @@
     </div>
 </template>
 <script>
-import slPropostaDetalhamentoPlanoDistribuicao from './slPropostaDetalhamentoPlanoDistribuicao'
+import slPropostaDetalhamentoPlanoDistribuicao from './slPropostaDetalhamentoPlanoDistribuicao';
 
 export default {
     name: 'slPropostaPlanoDistribuicao',
-    data: function () {
+    data() {
         return {
             produtos: [],
             detalhamentos: [],
             active: false,
             icon: 'add',
-            radio: 'n'
-        }
+            radio: 'n',
+        };
     },
     props: [
         'idpreprojeto',
@@ -127,64 +127,60 @@ export default {
         'idmunicipioibge',
         'iduf',
         'arrayProdutos',
-        'arrayDetalhamentos'
+        'arrayDetalhamentos',
     ],
     components: {
         slPropostaDetalhamentoPlanoDistribuicao,
     },
-    computed: {
-
-    },
     watch: {
-        idpreprojeto: function (value) {
+        idpreprojeto(value) {
             this.fetch(value);
         },
-        arrayProdutos: function (value) {
+        arrayProdutos(value) {
             this.produtos = value;
         },
-        arrayDetalhamentos: function (value) {
+        arrayDetalhamentos(value) {
             this.detalhamentos = value;
-        }
+        },
     },
-    mounted: function () {
-        if (typeof this.idpreprojeto != 'undefined') {
+    mounted() {
+        if (typeof this.idpreprojeto !== 'undefined') {
             this.fetch(this.idpreprojeto);
         }
 
-        if (typeof this.arrayProdutos != 'undefined') {
+        if (typeof this.arrayProdutos !== 'undefined') {
             this.produtos = this.arrayProdutos;
         }
 
-        if (typeof this.arrayDetalhamentos != 'undefined') {
+        if (typeof this.arrayDetalhamentos !== 'undefined') {
             this.detalhamentos = this.arrayDetalhamentos;
         }
 
         this.iniciarCollapsible();
     },
     methods: {
-        fetch: function () {
-            let vue = this;
-
+        fetch() {
+            const self = this;
+            /* eslint-disable */
             $3.ajax({
                 type: "GET",
                 url: "/proposta/visualizar/obter-plano-distribuicacao",
                 data: {
-                    idPreProjeto: vue.idpreprojeto
+                    idPreProjeto: self.idpreprojeto
                 }
             }).done(function (response) {
                 let dados = response.data;
-                vue.produtos = dados.planodistribuicaoproduto;
-                vue.detalhamentos = dados.tbdetalhaplanodistribuicao;
+                self.produtos = dados.planodistribuicaoproduto;
+                self.detalhamentos = dados.tbdetalhaplanodistribuicao;
             });
         },
-        detalhamentosByID: function (lista, id) {
-
+        detalhamentosByID(lista, id) {
             let novaLista = [];
 
-            if(typeof lista != 'undefined') {
+            if(typeof lista !== 'undefined') {
                 Object.keys(lista)
                     .map(function(key) {
-                        if(lista[key].idPlanoDistribuicao == id) {
+                        if(lista[key].idPlanoDistribuicao === id) {
                             novaLista.push(lista[key]);
                         }
                     });
@@ -193,17 +189,18 @@ export default {
             }
             return lista;
         },
-        label_sim_ou_nao: function (valor) {
-            if (valor == 1)
+        label_sim_ou_nao(valor) {
+            if (valor === 1)
                 return 'Sim';
             else
                 return 'N\xE3o';
         },
-        iniciarCollapsible: function () {
+        iniciarCollapsible() {
+            /* eslint-disable */
             $3('.collapsible').each(function () {
                 $3(this).collapsible();
             });
         },
-    }
+    },
 };
 </script>

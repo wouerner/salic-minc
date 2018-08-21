@@ -377,7 +377,7 @@ import SalicTextoSimples from '@/components/SalicTextoSimples'
 import slPropostaLocalRealizacaoDeslocamento from './slPropostaLocalRealizacaoDeslocamento'
 import slPropostaDocumentos from './slPropostaDocumentos'
 import slPropostaPlanoDistribuicao from './slPropostaPlanoDistribuicao'
-import slPropostaPlanilhaOrcamentaria from './slPropostaPlanilhaOrcamentaria'
+import Planilha from '@/components/Planilha/Planilha'
 import slPropostaCustosVinculados from './slPropostaCustosVinculados'
 
 export default {
@@ -392,35 +392,38 @@ export default {
         slPropostaLocalRealizacaoDeslocamento,
         slPropostaDocumentos,
         slPropostaPlanoDistribuicao,
-        slPropostaPlanilhaOrcamentaria,
+        Planilha,
         slPropostaCustosVinculados,
     },
     mounted: function () {
         this.iniciarCollapsible();
-        if (this.dadosHistorico != 'undefined') {
+        if (this.dadosHistorico !== 'undefined') {
             setTimeout(this.mostrar_diferenca, 1000)
         }
     },
     methods: {
         existe_diferenca: function (atual, historico) {
 
-            if (typeof atual == 'object') {
-                return JSON.stringify(atual) != JSON.stringify(historico);
+            if (typeof atual === 'object') {
+                return JSON.stringify(atual) !== JSON.stringify(historico);
             }
 
-            return atual != historico;
+            return atual !== historico;
         },
         mostrar_diferenca: function () {
+            /* eslint-disable */
             $(".alteracoes-proposta table tr").prettyTextDiff({
                 cleanup: true,
                 diffContainer: ".diff",
                 debug: false
             });
         }, iniciarCollapsible: function () {
+            // eslint-disable-next-line
             $3('.collapsible').each(function () {
+                // eslint-disable-next-line
                 $3(this).collapsible();
             });
-        }
+        },
     }
 };
 </script>

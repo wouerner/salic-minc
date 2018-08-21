@@ -50,10 +50,9 @@
 export default {
     name: 'slTableEasy',
     props: {
-        dados : null,
-        thead: { default: true},
-        tfoot: { default: false}
+        dados: null,
+        thead: { default: true },
+        tfoot: { default: false },
     },
-    mounted: function(){ }
 };
 </script>

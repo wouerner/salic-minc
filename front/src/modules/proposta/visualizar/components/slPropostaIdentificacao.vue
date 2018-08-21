@@ -26,15 +26,15 @@
                 <div class="row">
                     <div class="col s12 l3 m3" v-if="proposta.Mecanismo">
                         <b>Mecanismo</b><br>
-                        {{ Mecanismo }}
+                        {{ mecanismo }}
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.DtInicioDeExecucao">
                         <b>In&iacute;cio Execu&ccedil;&atilde;o</b><br>
-                        {{ DtInicioDeExecucao }}
+                        {{ dtInicioDeExecucao }}
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.DtFinalDeExecucao">
                         <b>Final Execu&ccedil;&atilde;o</b><br>
-                        {{ DtFinalDeExecucao }}
+                        {{ dtFinalDeExecucao }}
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.stDataFixa">
                         <b>Dt. Fixa</b><br>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.AreaAbrangencia">
                         <b>&Eacute; proposta audiovisual</b><br>
-                        {{ AreaAbrangencia }}
+                        {{ areaAbrangencia }}
                     </div>
                     <div class="col s12 l3 m3" v-if="proposta.tpProrrogacao">
                         <b>Prorroga&ccedil;&atilde;o autom&aacute;tica</b><br>
@@ -72,11 +72,11 @@
                     </div>
                     <div class="col s12 l4 m4">
                         <b>Dt. Ato</b><br>
-                        {{ DtAtoTombamento }}
+                        {{ dtAtoTombamento }}
                     </div>
                     <div class="col s12 l4 m4">
                         <b>Esfera</b><br>
-                        {{ EsferaTombamento }}
+                        {{ esferaTombamento }}
                     </div>
                 </div>
             </div>
@@ -84,9 +84,9 @@
     </div>
 </template>
 <script>
-import SalicTextoSimples from '@/components/SalicTextoSimples'
-import moment from 'moment'
-import { utils } from '@/mixins/utils'
+import SalicTextoSimples from '@/components/SalicTextoSimples';
+import moment from 'moment';
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'slPropostaIdentificacao',
@@ -94,83 +94,77 @@ export default {
         idpreprojeto: null,
         proposta: {
             type: Object,
-            default: function () {
-                return {}
-            }
-        }
+            default() {
+                return {};
+            },
+        },
     },
     mixins: [
-        utils
+        utils,
     ],
     components: {
         SalicTextoSimples,
     },
-    mounted: function () {
-    },
     methods: {
-        label_mecanismo: function (valor) {
+        label_mecanismo(valor) {
             switch (valor) {
-                case '1':
-                    return 'Mecenato';
-                    break;
-                default:
-                    return 'Inv\xE1lido';
-                    break;
+            case '1':
+                return 'Mecenato';
+            default:
+                return 'Inv\xE1lido';
             }
         },
-        formatar_data: function (date) {
-
+        formatar_data(date) {
             date = moment(date).format('DD/MM/YYYY');
 
             return date;
         },
-        label_esfera: function (esfera) {
-
+        label_esfera(esfera) {
             let string;
 
             switch (esfera) {
-                case '1':
-                    string = 'Municipal';
-                    break;
-                case '2':
-                    string = 'Estadual';
-                    break;
-                case '3':
-                    string = 'Federal';
-                    break;
-                default:
-                    string = 'N\xE3o informada';
-                    break;
+            case '1':
+                string = 'Municipal';
+                break;
+            case '2':
+                string = 'Estadual';
+                break;
+            case '3':
+                string = 'Federal';
+                break;
+            default:
+                string = 'N\xE3o informada';
+                break;
             }
 
             return string;
-        }
+        },
     },
     computed: {
-        stDataFixa: function () {
+        stDataFixa() {
             return this.label_sim_ou_nao(this.proposta.stDataFixa);
         },
-        AreaAbrangencia: function () {
+        areaAbrangencia() {
             return this.label_sim_ou_nao(this.proposta.AreaAbrangencia);
         },
-        tpProrrogacao: function () {
+        tpProrrogacao() {
             return this.label_sim_ou_nao(this.proposta.tpProrrogacao);
         },
-        Mecanismo: function () {
+        mecanismo() {
             return this.label_mecanismo(this.proposta.Mecanismo);
         },
-        DtInicioDeExecucao: function () {
+        dtInicioDeExecucao() {
             return this.formatar_data(this.proposta.DtInicioDeExecucao);
         },
-        DtFinalDeExecucao: function () {
+        dtFinalDeExecucao() {
             return this.formatar_data(this.proposta.DtFinalDeExecucao);
         },
-        DtAtoTombamento: function () {
+        dtAtoTombamento() {
             return this.formatar_data(this.proposta.DtAtoTombamento);
         },
-        EsferaTombamento: function () {
+        esferaTombamento() {
             return this.label_esfera(this.proposta.EsferaTombamento);
-        }
-    }
+        },
+    },
 };
 </script>

@@ -10,33 +10,34 @@ import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
     name: 'slPropostaHistoricoAvaliacoes',
-    data: function () {
+    data() {
         return {
-            dado: []
-        }
+            dado: [],
+        };
     },
     props: ['idpreprojeto'],
     components: {
         slTabelaSimples,
     },
-    mounted: function () {
-        if (typeof this.idpreprojeto != 'undefined') {
+    mounted() {
+        if (typeof this.idpreprojeto !== 'undefined') {
             this.fetch(this.idpreprojeto);
         }
     },
     watch: {
-        idpreprojeto: function (value) {
+        idpreprojeto(value) {
             this.fetch(value);
-        }
+        },
     },
     methods: {
-        fetch: function (id) {
+        fetch(id) {
             if (id) {
-                let vue = this;
+                const self = this;
+                /* eslint-disable */
                 $3.ajax({
                     url: '/proposta/visualizar/obter-historico-avaliacoes/idPreProjeto/' + id
                 }).done(function (response) {
-                    vue.dado = response.data;
+                    self.dado = response.data;
                 });
             }
         },

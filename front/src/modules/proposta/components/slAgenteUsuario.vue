@@ -20,33 +20,34 @@
 <script>
 export default {
     name: 'slAgenteUsuario',
-    data: function () {
+    data() {
         return {
-            usuario: []
-        }
+            usuario: [],
+        };
     },
     props: ['idusuario'],
-    mounted: function () {
-        if (typeof this.idusuario != 'undefined') {
+    mounted() {
+        if (typeof this.idusuario !== 'undefined') {
             this.fetch(this.idusuario);
         }
     },
     watch: {
-        idusuario: function (value) {
+        idusuario(value) {
             this.fetch(value);
-        }
+        },
     },
     methods: {
-        fetch: function (id) {
+        fetch(id) {
             if (id) {
-                let vue = this;
+                const self = this;
+                /* eslint-disable */
                 $3.ajax({
                     url: '/autenticacao/index/obter-dados-usuario/idUsuario/' + id
                 }).done(function (response) {
-                    vue.usuario = response.data;
+                    self.usuario = response.data;
                 });
             }
-        }
-    }
+        },
+    },
 }
 </script>

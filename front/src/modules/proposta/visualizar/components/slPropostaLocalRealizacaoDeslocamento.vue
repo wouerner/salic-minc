@@ -59,48 +59,43 @@
 <script>
 export default {
     name: 'slPropostaLocalRealizacaoDeslocamento',
-    data: function () {
+    data() {
         return {
-            proposta: []
-        }
+            proposta: [],
+        };
     },
     props: ['idpreprojeto', 'localizacoes'],
-    mounted: function () {
-        if (typeof this.idpreprojeto != 'undefined') {
+    mounted() {
+        if (typeof this.idpreprojeto !== 'undefined') {
             this.fetch(this.idpreprojeto);
         }
 
-        if (typeof this.localizacoes != 'undefined') {
+        if (typeof this.localizacoes !== 'undefined') {
             this.$set(this.proposta, 'localizacoes', this.localizacoes.abrangencia);
             this.$set(this.proposta, 'deslocamentos', this.localizacoes.deslocamento);
         }
     },
     watch: {
-        idpreprojeto: function (value) {
+        idpreprojeto(value) {
             this.fetch(value);
         },
-        localizacoes: function (value) {
+        localizacoes(value) {
             this.$set(this.proposta, 'localizacoes', value.abrangencia);
             this.$set(this.proposta, 'deslocamentos', value.deslocamento);
-        }
+        },
     },
     methods: {
-        fetch: function (id) {
+        fetch(id) {
             if (id) {
-                let vue = this;
+                const self = this;
+                /* eslint-disable */
                 $3.ajax({
                     url: '/proposta/visualizar/obter-local-realizacao-deslocamento/idPreProjeto/' + id
                 }).done(function (response) {
-                    vue.proposta = response.data;
+                    self.proposta = response.data;
                 });
             }
         },
-        formatar_data: function (date) {
-
-            date = moment(date).format('DD/MM/YYYY');
-
-            return date;
-        }
-    }
+    },
 };
 </script>

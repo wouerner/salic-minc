@@ -181,31 +181,31 @@
 </template>
 
 <script>
-import slPropostaIdentificacao from './components/slPropostaIdentificacao'
-import slPropostaHistoricoAvaliacoes from './components/slPropostaHistoricoAvaliacoes'
-import slAgenteProponente from '../components/slAgenteProponente'
-import slAgenteUsuario from '../components/slAgenteUsuario'
-import SalicTextoSimples from '@/components/SalicTextoSimples'
-import Carregando from '@/components/Carregando'
-import slPropostaDocumentos from './components/slPropostaDocumentos'
-import slPropostaPlanoDistribuicao from './components/slPropostaPlanoDistribuicao'
-import slPropostaFontesDeRecursos from './components/slPropostaFontesDeRecursos'
-import slPropostaLocalRealizacaoDeslocamento from './components/slPropostaLocalRealizacaoDeslocamento'
-import slPropostaCustosVinculados from './components/slPropostaCustosVinculados'
-import Planilha from '@/components/Planilha/Planilha'
+import Planilha from '@/components/Planilha/Planilha';
+import Carregando from '@/components/Carregando';
+import SalicTextoSimples from '@/components/SalicTextoSimples';
+import slPropostaIdentificacao from './components/slPropostaIdentificacao';
+import slPropostaHistoricoAvaliacoes from './components/slPropostaHistoricoAvaliacoes';
+import slAgenteProponente from '../components/slAgenteProponente';
+import slAgenteUsuario from '../components/slAgenteUsuario';
+import slPropostaDocumentos from './components/slPropostaDocumentos';
+import slPropostaPlanoDistribuicao from './components/slPropostaPlanoDistribuicao';
+import slPropostaFontesDeRecursos from './components/slPropostaFontesDeRecursos';
+import slPropostaLocalRealizacaoDeslocamento from './components/slPropostaLocalRealizacaoDeslocamento';
+import slPropostaCustosVinculados from './components/slPropostaCustosVinculados';
 
 export default {
     name: 'slProposta',
-    data: function () {
+    data() {
         return {
             dados: {
                 type: Object,
-                default: function () {
-                    return {}
-                }
+                default() {
+                    return {};
+                },
             },
             loading: true,
-        }
+        };
     },
     props: ['idpreprojeto', 'proposta'],
     components: {
@@ -222,12 +222,12 @@ export default {
         slPropostaCustosVinculados,
         Planilha,
     },
-    mounted: function () {
-        if(typeof this.idpreprojeto !== 'undefined' && typeof this.proposta === 'undefined') {
+    mounted() {
+        if (typeof this.idpreprojeto !== 'undefined' && typeof this.proposta === 'undefined') {
             this.buscar_dados();
         }
 
-        if(typeof this.proposta !== 'undefined') {
+        if (typeof this.proposta !== 'undefined') {
             this.dados = this.proposta;
             this.loading = false;
         }
@@ -235,7 +235,7 @@ export default {
         this.iniciarCollapsible();
     },
     methods: {
-        buscar_dados: function () {
+        buscar_dados() {
             const self = this;
             /* eslint-disable */
             $3.ajax({
@@ -245,7 +245,7 @@ export default {
                 self.loading = false;
             });
         },
-        iniciarCollapsible: function () {
+        iniciarCollapsible() {
             // eslint-disable-next-line
             $3('.collapsible').each(function () {
                 // eslint-disable-next-line

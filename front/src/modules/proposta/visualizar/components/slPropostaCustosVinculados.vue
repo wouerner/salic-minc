@@ -10,44 +10,44 @@ import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
     name: 'slPropostaCustosVinculados',
-    data: function () {
+    data() {
         return {
-            dados: []
-        }
+            dados: [],
+        };
     },
     props: ['idpreprojeto', 'arrayCustos'],
     components: {
         slTabelaSimples,
     },
-    mounted: function () {
-        if (typeof this.idpreprojeto != 'undefined') {
+    mounted() {
+        if (typeof this.idpreprojeto !== 'undefined') {
             this.buscar_dados(this.idpreprojeto);
         }
 
-        if (typeof this.arrayCustos != 'undefined') {
+        if (typeof this.arrayCustos !== 'undefined') {
             this.dados = this.arrayCustos;
         }
-
     },
     watch: {
-        idpreprojeto: function (value) {
+        idpreprojeto(value) {
             this.buscar_dados(value);
         },
-        arrayCustos: function (value) {
+        arrayCustos(value) {
             this.dados = value;
-        }
+        },
     },
     methods: {
-        buscar_dados: function (id) {
+        buscar_dados(id) {
             if (id) {
-                let vue = this;
+                const self = this;
+                /* eslint-disable */
                 $3.ajax({
                     url: '/proposta/visualizar/obter-custos-vinculados/idPreProjeto/' + id
                 }).done(function (response) {
-                    vue.dados = response.data;
+                    self.dados = response.data;
                 });
             }
         },
-    }
+    },
 };
 </script>

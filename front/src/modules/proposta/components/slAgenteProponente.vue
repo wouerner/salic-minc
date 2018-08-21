@@ -154,58 +154,60 @@
     </div>
 </template>
 <script>
-import { utils } from '@/mixins/utils'
+import { utils } from '@/mixins/utils';
 
 export default {
     name: 'slAgenteProponente',
-    data: function () {
+    data() {
         return {
             proponente: [],
-            identificacao: []
-        }
+            identificacao: [],
+        };
     },
     props: ['idagente'],
-    mounted: function () {
-        if (typeof this.idagente != 'undefined') {
+    mounted() {
+        if (typeof this.idagente !== 'undefined') {
             this.fetch(this.idagente);
         }
     },
     mixins: [
-        utils
+        utils,
     ],
     watch: {
-        idagente: function (value) {
+        idagente(value) {
             this.fetch(value);
-        }
+        },
     },
     computed: {
-        TipoPessoa: function () {
+        TipoPessoa() {
             return this.label_tipo_pessoa(this.identificacao.tipopessoa);
-        }
+        },
     },
     methods: {
-        fetch: function (id) {
+        fetch(id) {
             if (id) {
-                let vue = this;
+                const self = this;
+                /* eslint-disable */
                 $3.ajax({
                     url: '/agente/visualizar/obter-dados-proponente/idAgente/' + id
                 }).done(function (response) {
-                    vue.proponente = response.data;
+                    self.proponente = response.data;
 
-                    if (vue.proponente && vue.proponente.identificacao) {
-                        vue.identificacao = vue.proponente.identificacao;
+                    if (self.proponente && self.proponente.identificacao) {
+                        self.identificacao = self.proponente.identificacao;
                     }
                 });
             }
         },
-        label_tipo_pessoa: function (tipo) {
+        label_tipo_pessoa(tipo) {
             let string = 'Pessoa F\xEDsica';
 
-            if (tipo == '1')
+            if (tipo === '1') {
                 string = 'Pessoa Jur\xEDdica';
+            }
 
             return string;
-        }
-    }
-}
+        },
+    },
+};
 </script>

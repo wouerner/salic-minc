@@ -52,55 +52,55 @@
     </div>
 </template>
 <script>
-import moment from 'moment'
+import moment from 'moment';
 
-    export default {
+export default {
     name: 'slPropostaDocumentos',
-    data: function () {
+    data() {
         return {
-            documentos: []
-        }
+            documentos: [],
+        };
     },
     props: ['proposta', 'arrayDocumentos'],
-    mounted: function () {
-        if (typeof this.proposta != 'undefined') {
+    mounted() {
+        if (typeof this.proposta !== 'undefined') {
             this.fetch(this.proposta);
         }
 
-        if (typeof this.arrayDocumentos != 'undefined') {
+        if (typeof this.arrayDocumentos !== 'undefined') {
             this.$set(this.documentos, 'proposta', this.arrayDocumentos.documentos_proposta);
             this.$set(this.documentos, 'proponente', this.arrayDocumentos.documentos_proponente);
         }
     },
     watch: {
-        proposta: function (value) {
+        proposta(value) {
             this.fetch(value);
         },
-        arrayDocumentos: function (value) {
+        arrayDocumentos(value) {
             this.$set(this.documentos, 'proposta', value.documentos_proposta);
             this.$set(this.documentos, 'proponente', value.documentos_proponente);
-        }
+        },
     },
     methods: {
-        fetch: function (dados) {
-            if (typeof dados.default == 'undefined') {
-
-                let vue = this;
+        fetch(dados) {
+            if (typeof dados.default === 'undefined') {
+                const self = this;
+                /* eslint-disable */
                 $3.ajax({
                     url: '/proposta/visualizar/obter-documentos-anexados/idPreProjeto/' + dados.idPreProjeto + '/idAgente/' + dados.idAgente
                 }).done(function (response) {
-                    vue.documentos = response.data;
+                    self.documentos = response.data;
                 });
             }
         },
-        formatar_data: function (date) {
-
+        formatar_data(date) {
             date = moment(date).format('DD/MM/YYYY');
 
             return date;
-        }, get_url(id, tipo) {
-            return '/admissibilidade/admissibilidade/abrir-documentos-anexados-admissibilidade/?id=' + id + '&tipo=' + tipo
-        }
-    }
+        },
+        get_url(id, tipo) {
+            return `/admissibilidade/admissibilidade/abrir-documentos-anexados-admissibilidade/?id=${id}&tipo=${tipo}`;
+        },
+    },
 };
 </script>

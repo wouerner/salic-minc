@@ -42,7 +42,7 @@ export default {
                     return {}
                 }
             }
-        }
+        };
     },
     props: ['idpreprojeto', 'tipo'],
     components: {
@@ -50,18 +50,20 @@ export default {
         slProposta,
     },
     mounted: function () {
-        if (typeof this.idpreprojeto != 'undefined') {
+        if (typeof this.idpreprojeto !== 'undefined') {
             this.buscar_dados();
         }
     },
     methods: {
         buscar_dados: function () {
-            let vue = this;
+            const self = this;
+            /* eslint-disable */
             $3.ajax({
-                url: '/proposta/visualizar/obter-proposta-cultural-versionamento/idPreProjeto/' + vue.idpreprojeto + '/tipo/' + vue.tipo
+                url: '/proposta/visualizar/obter-proposta-cultural-versionamento/idPreProjeto/' + self.idpreprojeto +
+                '/tipo/' + self.tipo
             }).done(function (response) {
-                vue.dadosAtuais = response.data.atual;
-                vue.dadosHistorico = response.data.historico;
+                self.dadosAtuais = response.data.atual;
+                self.dadosHistorico = response.data.historico;
             });
         }
     }

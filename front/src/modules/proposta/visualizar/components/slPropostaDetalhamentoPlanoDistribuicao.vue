@@ -62,38 +62,36 @@
     </div>
 </template>
 <script>
-import slPropostaDetalhamentoConsolidacao from './slPropostaDetalhamentoConsolidacao';
 import planilhas from '@/mixins/planilhas';
+import slPropostaDetalhamentoConsolidacao from './slPropostaDetalhamentoConsolidacao';
 
 export default {
     name: 'slPropostaDetalhamentoPlanoDistribuicao',
-    data: function () {
+    data() {
         return {
             detalhamentos: [],
-        }
+        };
     },
     mixins: [planilhas],
     props: [
-        'arrayDetalhamentos'
+        'arrayDetalhamentos',
     ],
     components: {
         slPropostaDetalhamentoConsolidacao,
     },
-    computed: {
-    },
     watch: {
-        arrayDetalhamentos: function (value) {
+        arrayDetalhamentos(value) {
             this.detalhamentos = this.montarVisualizacao(value);
-        }
+        },
     },
-    mounted: function () {
+    mounted() {
         if (typeof this.arrayDetalhamentos !== 'undefined') {
             this.iniciarCollapsible();
             this.detalhamentos = this.montarVisualizacao(this.arrayDetalhamentos);
         }
     },
     methods: {
-        iniciarCollapsible: function () {
+        iniciarCollapsible() {
             // eslint-disable-next-line
             $3('.detalhamento-plano-distribuicao .collapsible').each(function () {
                 // eslint-disable-next-line
@@ -101,13 +99,12 @@ export default {
             });
         },
         montarVisualizacao(detalhamentos) {
-
-            let novoDetalhamento = {};
+            const novoDetalhamento = {};
             let i = 0;
             let idMunicipio = '';
 
             detalhamentos.forEach((element) => {
-                if(element.idMunicipio !== idMunicipio) {
+                if (element.idMunicipio !== idMunicipio) {
                     novoDetalhamento[element.idMunicipio] = [];
                     i = 0;
                     idMunicipio = element.idMunicipio;
@@ -115,11 +112,11 @@ export default {
 
                 novoDetalhamento[element.idMunicipio][i] = element;
 
-                i++;
+                i += 1;
             });
 
             return novoDetalhamento;
-        }
-    }
+        },
+    },
 };
 </script>
