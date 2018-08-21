@@ -520,7 +520,15 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
             null,
             $this->view->idPlanilhaItens
         );
-
+        /* var_dump( */
+        /*     $this->view->idpronac, */
+        /*     $this->view->uf, */
+        /*     $this->view->cdetapa, */
+        /*     $this->view->cdproduto, */
+        /*     $this->view->cdcidade, */
+        /*     null, */
+        /*     $this->view->idPlanilhaItens */
+/* );die; */
         $this->view->dataInicioExecucao = (new DateTime($projeto->DtInicioExecucao))->format('Y-m-d');
         $this->view->dataFimExecucao = (new DateTime($projeto->DtFimExecucao))->format('Y-m-d');
         $this->view->valorAprovado = $planilha->current()->toArray()['vlAprovado'];

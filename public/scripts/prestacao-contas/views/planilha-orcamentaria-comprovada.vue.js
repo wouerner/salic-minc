@@ -64,6 +64,7 @@ Vue.component('planilha-orcamentaria-comprovada', {
                                                     :cdproduto="slot.produto"
                                                     :cdcidade="slot.cidade.cdCidade"
                                                     :cdetapa="slot.etapa"
+                                                    tecnico="true"
                                                 ></sl-planilha-itens>
                                             </div>
                                             <div :id="'test_2_' + slot.cidade.cdCidade +'_'+ slot.produto+'_'+ slot.etapa" class="col s12">
