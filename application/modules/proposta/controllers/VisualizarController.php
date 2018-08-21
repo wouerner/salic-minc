@@ -12,6 +12,28 @@ class Proposta_VisualizarController extends Proposta_GenericController
     {
     }
 
+    public function obterPropostaCulturalCompletaAction()
+    {
+        $this->_helper->layout->disableLayout();
+        try {
+
+            $idPreProjeto = $this->_request->getParam('idPreProjeto');
+
+            if (empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;rio");
+            }
+
+            $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
+            $propostaAtual = $preProjetoMapper->obterArrayPropostaCompleta($idPreProjeto);
+
+            $dados = $propostaAtual;
+
+            $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $dados));
+        } catch (Exception $e) {
+            $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
+        }
+    }
+
     public function obterIdentificacaoAction()
     {
         $this->_helper->layout->disableLayout();
