@@ -9,7 +9,8 @@ import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAde
 import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
 import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
-import Proponente from './incentivo/components/proponente/Index.vue';
+import Proponente from './incentivo/components/proponente/Index';
+import Proposta from './incentivo/components/Proposta';
 
 Vue.use(Router);
 
@@ -92,6 +93,14 @@ const routes = [
                 component: RelacaoDePagamentos,
                 meta: {
                     title: 'Rela&ccedil;&atilde;o de Pagamentos',
+                },
+            },
+            {
+                path: 'proposta',
+                name: 'proposta',
+                component: Proposta,
+                meta: {
+                    title: 'Proposta',
                 },
             },
             {

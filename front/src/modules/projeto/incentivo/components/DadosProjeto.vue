@@ -87,8 +87,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.idPreProjeto"/>
+                    <td align="center" class="bold destaque-texto-primary">
+                        <router-link :to="{ name: 'proposta', params: { idPronac: idPronac }}">
+                            <SalicTextoSimples :texto="dadosProjeto.idPreProjeto"/>
+                        </router-link>
                     </td>
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.DataFixa"/>
