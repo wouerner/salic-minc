@@ -9,7 +9,7 @@ import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAde
 import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
 import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
-import Proponente from './incentivo/components/proponente/Index';
+import Proponente from './incentivo/components/proponente/Index.vue';
 
 Vue.use(Router);
 
