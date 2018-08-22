@@ -481,7 +481,7 @@ function validaEmail()
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
     }
-    else if (((email.indexOf("@") < 1) || (email.las0tIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(email))))
+    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(email))))
     {
         alertar("E-mail inv&aacute;lido!", "email");
     }
