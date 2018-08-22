@@ -39,7 +39,7 @@ function remarcarferias(id, diasmarcados)
     var dias 			= $("#dias").val();
     var diminuidias 	= ((parseInt(dias)) - (parseInt(diasmarcados)));
     var disponiveis 	= (60) - (parseInt(diminuidias));
-    $("#diassubtraidos").html('Total de dias dispon?veis: ' + disponiveis);
+    $("#diassubtraidos").html('Total de dias dispon&iacute;veis: ' + disponiveis);
 
 
 
@@ -229,7 +229,6 @@ function validaAgenteNovo()
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o Telefone!", "fone");
         exibirMsgErro('fone','erroFone');
     }
-    // debugger;
 
     if (
         $3('#exibirTelefone').val() == 's'
@@ -252,7 +251,6 @@ function validaAgenteNovo()
         exibirMsgErro('fone','erroFone');
         return;
     }
-    //debugger;
 
     // valida&ccedil;&atilde;o para emails
     if (
@@ -440,7 +438,6 @@ function validaTelefone()
     dddFone  = $3("#dddFone").val();
     fone     = $3("#fone").val();
 
-    // console.log(tipoFone);
     if (tipoFone == "")
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de Telefone!", "tipoFone");
@@ -473,8 +470,6 @@ function validaTelefone()
 
 function validaEmail()
 {
-    console.info("sabagaça aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-
     tipoEmail     = document.getElementById("tipoEmail").value;
     email         = document.getElementById("email").value;
 
