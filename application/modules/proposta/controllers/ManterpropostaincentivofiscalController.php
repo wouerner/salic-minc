@@ -228,7 +228,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             "areaabrangencia" => isset($post['areaabrangencia']) ? $post['areaabrangencia'] : '',
             "dtiniciodeexecucao" => isset($post['dtiniciodeexecucao']) ? $post['dtiniciodeexecucao'] : '',
             "dtfinaldeexecucao" => isset($post['dtfinaldeexecucao']) ? $post['dtfinaldeexecucao'] : '',
-            "dtatotombamento" => (isset($post['dtatotombamento']) && $post['dtatotombamento']) ? $post['dtatotombamento'] : null,            
+            "dtatotombamento" => (isset($post['dtatotombamento']) && $post['dtatotombamento']) ? $post['dtatotombamento'] : null,
             "nratotombamento" => isset($post['nratotombamento']) ? $post['nratotombamento'] : '',
             "esferatombamento" => isset($post['esferatombamento']) ? $post['esferatombamento'] : '0',
             "resumodoprojeto" => isset($post['resumodoprojeto']) ? $post['resumodoprojeto'] : '',
@@ -406,7 +406,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             if (!empty($idDocumento)) {
                 $arquivoExecucaoImediata = $tbl->buscarDocumentos(array("idprojeto = ?" => $this->idPreProjeto, "CodigoDocumento = ?" => $idDocumento));
             }
-            
+
             $this->view->arquivoExecucaoImediata = $arquivoExecucaoImediata;
         }
 
@@ -565,7 +565,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             } else {
                 $arrResultado = $this->validarEnvioPropostaComSp($idPreProjeto);
             }
-            
+
             if ($params['confirmarenvioaominc'] == true && $arrResultado->Observacao === true) {
                 $proposta = $tbPreProjeto->findBy(array('idPreProjeto' => $idPreProjeto));
 
@@ -657,6 +657,9 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
                 break;
             case 'endereco':
                 $url = array('module' => 'agente', 'controller' => 'agentes', 'action' => 'enderecos', 'id' => $this->_proposta['idagente']);
+                break;
+            case 'email':
+                $url = array('module' => 'agente', 'controller' => 'agentes', 'action' => 'emails', 'id' => $this->_proposta['idagente']);
                 break;
             case 'email':
                 $url = array('module' => 'agente', 'controller' => 'agentes', 'action' => 'emails', 'id' => $this->_proposta['idagente']);
