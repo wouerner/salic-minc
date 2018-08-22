@@ -16,6 +16,7 @@ class Projeto_Model_Situacao extends MinC_Db_Table_Abstract
     const PROJETO_ENCAMINHADO_PARA_INCLUSAO_EM_PORTARIA = 'D27';
     const PARECER_TECNICO_EMITIDO = 'C20';
     const PROJETO_LIBERADO_PARA_AJUSTES = 'E90';
-    const ANALISE_TECNICA = 'D51';
+    const PROJETO_AVALIADO = 'D51';
+    const PROJETO_ENCAMINHADO_PARA_HOMOLOGACAO = 'D52';
     const PROJETO_APRECIADO_PELA_CNIC = 'D50';
 }

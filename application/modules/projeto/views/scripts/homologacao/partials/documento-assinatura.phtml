@@ -1,24 +1,21 @@
-<div class="row">
-    <div class="col s1"></div>
-    <div class="col s10 center-align">
-        <div>
-            <img src="/public/img/planalto_presidencia_simbolosnacionais_brasao.gif" style="height:120px">
-        </div>
-        <div class="center-align" style="font-size: 23px;">
-            MINIST&Eacute;RIO DA CULTURA
-        </div>
-        <div class="center-align" style="font-size: 23px;">
-            <?php if ((int)$this->orgaoSuperior == (int)\Orgaos::ORGAO_SUPERIOR_SEFIC): ?>
-                <b>SECRETARIA DO AUDIOVISUAL</b>
-            <?php else : ?>
-                <b>SECRETARIA DE FOMENTO E INCENTIVO &Agrave; CULTURA</b>
-            <?php endif; ?>
+<div>
+
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <div class="col s1 right-align"><i class="medium orange-text material-icons">help_outline</i></div>
+                <div class="col s11">
+                    <p><b>Tem certeza que deseja finalizar a homologa&ccedil;&atilde;o desse projeto?</b></p>
+                    <p>Ap&oacute;s a finaliza&ccedil;&atilde;o o projeto ter&aacute; a seguinte situa&ccedil;&atilde;o:
+                        <?= $this->situacaoFutura['codigo']; ?> -  <?= $this->situacaoFutura['mensagem']; ?>.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col s1"></div>
-</div>
-<div>
-    <ul class="collapsible popout" data-collapsible="expandable">
-        <?= $this->partial('/homologacao/partials/homologar-parecer.phtml', ['arrValue' => $this->arrValue, 'booShowAll' => true]); ?>
+
+    <ul class="collapsible" data-collapsible="accordion">
+        <?= $this->partial('/homologacao/partials/homologar-parecer.phtml', ['arrValue' => $this->arrValue, 'booShowAll' => false]); ?>
+        <?= $this->partial('/homologacao/partials/visualizar-parecer-homologacao.phtml', ['arrValue' => $this->arrValue, 'booShowAll' => false]); ?>
     </ul>
 </div>

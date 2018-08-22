@@ -32,6 +32,7 @@ class Projeto_Model_DbTable_Enquadramento extends MinC_Db_Table_Abstract
                     new Zend_Db_Expr('sac.dbo.fnOutrasFontes(a.IdPRONAC) AS VlOutrasFontes'),
                     new Zend_Db_Expr('dbo.fnOutrasFontes(a.IdPRONAC) AS VlOutrasFontesAprovado'),
                     new Zend_Db_Expr('sac.dbo.fnValorDaProposta(a.idProjeto) AS VlProjeto'),
+                    new Zend_Db_Expr('sac.dbo.fnTotalAprovadoProjeto(a.AnoProjeto,a.Sequencial) as vlHomologado'),
                     new Zend_Db_Expr('dbo.fnValorDaProposta(a.idProjeto) AS CustoTotal')
                 ],
                 $this->_schema
