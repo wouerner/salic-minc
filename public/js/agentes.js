@@ -39,7 +39,7 @@ function remarcarferias(id, diasmarcados)
     var dias 			= $("#dias").val();
     var diminuidias 	= ((parseInt(dias)) - (parseInt(diasmarcados)));
     var disponiveis 	= (60) - (parseInt(diminuidias));
-    $("#diassubtraidos").html('Total de dias disponíveis: ' + disponiveis);
+    $("#diassubtraidos").html('Total de dias dispon?veis: ' + disponiveis);
 
 
 
@@ -229,7 +229,7 @@ function validaAgenteNovo()
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o Telefone!", "fone");
         exibirMsgErro('fone','erroFone');
     }
-    debugger;
+    // debugger;
 
     if (
         $3('#exibirTelefone').val() == 's'
@@ -252,7 +252,7 @@ function validaAgenteNovo()
         exibirMsgErro('fone','erroFone');
         return;
     }
-    debugger;
+    //debugger;
 
     // valida&ccedil;&atilde;o para emails
     if (
@@ -275,7 +275,7 @@ function validaAgenteNovo()
             ($3('#email').val().indexOf("@") < 1)
             || ($3('#email').val().lastIndexOf(".") <= $3('#email').val().indexOf("@"))
             || ($3('#email').val().indexOf("@") == $3('#email').val().length)
-            || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{3,3})+$/.test($3('#email').val()))
+            || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test($3('#email').val()))
         )
     ) {
         alertar("E-mail inv&aacute;lido!", "email");
@@ -413,7 +413,7 @@ function validaDirigenteNovo()
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
         exibirMsgErro('email','erroEmail');
     }
-    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) && document.getElementById('exibirTelefone').value == 's')
+    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(email))) && document.getElementById('exibirTelefone').value == 's')
     {
         alertar("E-mail inv&aacute;lido!", "email");
         exibirMsgErro('email','erroEmail');
@@ -440,7 +440,7 @@ function validaTelefone()
     dddFone  = $3("#dddFone").val();
     fone     = $3("#fone").val();
 
-    console.log(tipoFone);
+    // console.log(tipoFone);
     if (tipoFone == "")
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, selecione o Tipo de Telefone!", "tipoFone");
@@ -473,6 +473,7 @@ function validaTelefone()
 
 function validaEmail()
 {
+    console.info("sabagaÃ§a aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 
     tipoEmail     = document.getElementById("tipoEmail").value;
     email         = document.getElementById("email").value;
@@ -485,7 +486,7 @@ function validaEmail()
     {
         alertar("Dados obrigat&oacute;rios n&atilde;o informados:\nPor favor, informe o E-mail!", "email");
     }
-    else if (((email.indexOf("@") < 1) || (email.lastIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))))
+    else if (((email.indexOf("@") < 1) || (email.las0tIndexOf(".") <= email.indexOf("@")) || (email.indexOf("@") == email.length) || !(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i.test(email))))
     {
         alertar("E-mail inv&aacute;lido!", "email");
     }
