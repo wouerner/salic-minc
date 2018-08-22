@@ -7,7 +7,6 @@
             $this->auth = Zend_Auth::getInstance();
 
             $this->GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo');
-//            var_dump( $this->GrupoAtivo->codGrupo);die;
 
             if (isset($this->auth->getIdentity()->usu_codigo)) {
                 $this->codGrupo = $this->GrupoAtivo->codGrupo;
@@ -139,6 +138,7 @@
             ];
             return $arrMenu;
         }
+
         public function analise(){
             $arrMenu['analise'] = [
                 'id' => 'analise',

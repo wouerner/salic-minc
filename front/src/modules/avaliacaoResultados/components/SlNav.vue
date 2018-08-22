@@ -2,9 +2,14 @@
     <div>
         <v-toolbar
           app
-          color="green"
+          color="green darken-4 "
           dense
+          dark
         >
+            <v-toolbar-title>
+                <img src="/public/img/logo_salic.png" alt="logo" height="30px">
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
             <v-menu
                 :nudge-width="100"
                 v-for="item in dadosMenu"
@@ -25,7 +30,8 @@
                         <v-list-tile-title >
                             <a
                                 :href="('/' + menu.url.module + '/' + menu.url.controller + '/' + menu.url.action)"
-                                v-html="menu.label"></a>
+                                v-html="menu.label">
+                            </a>
                         </v-list-tile-title>
                     </v-list-tile>
                 </v-list>
