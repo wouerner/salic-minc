@@ -37,7 +37,7 @@
                             <td>{{informacoesTransferencia.PronacRecebedor}}</td>
                             <td>{{informacoesTransferencia.NomeProjetoRecedor}}</td>
                             <td>{{informacoesTransferencia.dtRecebimento}}</td>
-                            <td>R${{informacoesTransferencia.vlRecebido | formatarParaReal}}</td>
+                            <td style="float: right;">R${{informacoesTransferencia.vlRecebido | formatarParaReal}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
