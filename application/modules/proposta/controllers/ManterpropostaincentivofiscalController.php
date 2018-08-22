@@ -661,10 +661,10 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             case 'email':
                 $url = array('module' => 'agente', 'controller' => 'agentes', 'action' => 'emails', 'id' => $this->_proposta['idagente']);
                 break;
-            case 'email':
-                $url = array('module' => 'agente', 'controller' => 'agentes', 'action' => 'emails', 'id' => $this->_proposta['idagente']);
+            case 'perfil':
+                $url = array('module' => 'agente', 'controller' => 'agentes', 'action' => 'alterarvisao', 'id' => $this->_proposta['idagente']);
                 break;
-            case 'nascimento':
+            case 'data_nascimento':
                 $url = array('module' => 'agente', 'controller' => 'agentes', 'action' => 'info-adicionais', 'id' => $this->_proposta['idagente']);
                 break;
             case 'natureza':
