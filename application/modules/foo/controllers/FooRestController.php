@@ -25,6 +25,7 @@ class Foo_FooRestController extends MinC_Controller_Rest_Abstract
             'delete' => $perfilProponente,
         ];
 
+        $this->setValidateUserIsLogged();
         $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
 
         parent::__construct($request, $response, $invokeArgs);
