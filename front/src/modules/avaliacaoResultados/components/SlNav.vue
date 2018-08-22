@@ -16,12 +16,14 @@
                 :key="item"
                 offset-y
             >
-                <v-toolbar-items
+                <v-toolbar-title
                     slot="activator"
                 >
-                    <span v-html="item.label"></span>
-                    <v-icon dark>arrow_drop_down</v-icon>
-                </v-toolbar-items>
+                    <v-btn flat>
+                        <span v-html="item.label"></span> 
+                        <v-icon right dark>arrow_drop_down</v-icon>
+                    </v-btn>
+                </v-toolbar-title>
                 <v-list
                     v-for="menu in item.menu"
                     :key="item.menu"
@@ -32,6 +34,25 @@
                                 :href="('/' + menu.url.module + '/' + menu.url.controller + '/' + menu.url.action)"
                                 v-html="menu.label">
                             </a>
+                        </v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+            <v-spacer></v-spacer>
+            <v-menu
+                :nudge-width="100"
+                offset-y
+            >
+                <v-toolbar-title
+                    slot="activator"
+                >
+                    <span>Olá, Romulo</span>
+                    <v-icon dark>arrow_drop_down</v-icon>
+                </v-toolbar-title>
+                <v-list>
+                    <v-list-tile>
+                        <v-list-tile-title >
+                            Teste
                         </v-list-tile-title>
                     </v-list-tile>
                 </v-list>
