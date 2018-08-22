@@ -104,7 +104,7 @@
                     </v-layout>
                     <v-flex>
                         <v-textarea
-
+                            v-model="parecer"
                             color="deep-purple"
                             label="Parecer"
                             height="200px"
@@ -131,7 +131,7 @@
                     Codigo: '',
                     DadoNr: '',
                 },
-                texto: '',
+                parecer: '',
                 item:'',
                 items: [{ 'id':  'R', 'text':'Reprovação' }, { 'id': 'A','text':'Aprovação' }, {'id' : 'P', 'text' :'Aprovação com Ressalva'}],
             };
