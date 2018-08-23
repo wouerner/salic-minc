@@ -8,9 +8,13 @@ import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAde
 import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
 import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
-import Proponente from './incentivo/components/Proponente';
+// import Proponente from './incentivo/components/Proponente';
 
+import DadosProjeto from './incentivo/components/DadosProjeto';
 // Vue.use(Router);
+
+// const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto');
+const Proponente = () => import(/* webpackChunkName: "proponente" */ './incentivo/components/Proponente');
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',
@@ -33,7 +37,7 @@ export default [
             {
                 path: '',
                 name: 'dadosprojeto',
-                component: () => import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto.vue'),
+                component: DadosProjeto,
                 meta: {
                     title: 'Dados do Projeto',
                 },
