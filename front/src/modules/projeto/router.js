@@ -1,49 +1,19 @@
-// import Vue from 'vue';
-// import Router from 'vue-router';
 import Index from './Index';
 import IncentivoTemplate from './incentivo/Index';
+import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOriginal';
+import PlanilhaPropostaAutorizada from './incentivo/components/PlanilhaPropostaAutorizada';
 import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAdequada';
-// import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
+import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
+import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
-// import Proponente from './incentivo/components/Proponente';
 
-const DadosProjeto = () => {
-    import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto');
-};
-
-const Proponente = () => {
-    import(/* webpackChunkName: "proponente" */ './incentivo/components/Proponente');
-};
-
-const PlanilhaPropostaOriginal = () => {
-    import(/* webpackChunkName: "planilha-proposta" */ './incentivo/components/PlanilhaPropostaOriginal');
-};
-
-const PlanilhaPropostaAutorizada = () => {
-    import(/* webpackChunkName: "planilha-autorizada" */ './incentivo/components/PlanilhaPropostaAutorizada');
-};
-
-// const PlanilhaPropostaAdequada = () => {
-//     import(/* webpackChunkName: "planilha-adequada" */ './incentivo/components/PlanilhaPropostaAdequada');
-// };
-
-const PlanilhaHomologada = () => {
-    import(/* webpackChunkName: "planilha-homologada" */ './incentivo/components/PlanilhaHomologada');
-};
-
-const PlanilhaReadequada = () => {
-    import(/* webpackChunkName: "planilha-readequada" */ './incentivo/components/PlanilhaReadequada');
-};
-
-// const RelacaoDePagamentos = () => {
-//     import(/* webpackChunkName: "relacao-de-pagamentos" */ './incentivo/components/RelacaoDePagamentos');
-// };
+const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto');
+const Proponente = () => import(/* webpackChunkName: "proponente" */ './incentivo/components/Proponente');
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',
 };
 
-// const routes = [
 export default [
     {
         path: '/projeto',
@@ -129,5 +99,3 @@ export default [
         ],
     },
 ];
-
-// export default new Router({ routes });

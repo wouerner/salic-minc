@@ -1,6 +1,9 @@
 # Coverage directory used by tools like istanbul
 front/test/unit/coverage/
 
+# arquivo que o webpack injeta os scripts
+application/modules/default/views/scripts/index/index.phtml
+
 # configs do salic
 application/configs/bancos_*.ini
 application/configs/config.ini
