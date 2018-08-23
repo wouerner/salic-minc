@@ -152,7 +152,7 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
             'mensagem' => "Projeto encaminhado para homologa&ccedil;&atilde;o"
         ];
 
-        if ($enquadramentoProjeto['vlHomologado'] != $enquadramentoProjeto['CustoTotal']) {
+        if ($enquadramentoProjeto['VlHomologadoIncentivo'] != $enquadramentoProjeto['VlAdequadoIncentivo']) {
             $situacao['codigo'] = Projeto_Model_Situacao::PROJETO_AVALIADO;
             $situacao['mensagem'] = "Aguardando a supera&ccedil;&atilde;o do prazo recursal";
 

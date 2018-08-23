@@ -54,28 +54,28 @@
     </div>
 </li>
 <li>
-    <div class="collapsible-header <?= (isset($this->booShowAll) && $this->booShowAll === true)? 'active' : '' ?>"><b>Mem&oacute;ria de C&aacute;lculo</b></div>
+    <div class="collapsible-header <?= (isset($this->booShowAll) && $this->booShowAll === true)? 'active' : '' ?>"><b>Mem&oacute;ria de C&aacute;lculo (R$)</b></div>
     <div class="collapsible-body">
         <table class="tabela bordered" style="width: 100%;">
             <tbody>
-            <tr class="destacar">
-                <th colspan="2" class="center-align">Custos</th>
+            <tr>
+                <td class="right-align"><b>Vl. Adequado Incentivo</b></td>
+                <td class="right-align"><?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['VlAdequadoIncentivo']) ?></td>
+
+                <td class="right-align"><b>Vl. Homologado Incentivo</b></td>
+                <td class="right-align"><?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['VlHomologadoIncentivo']) ?></td>
             </tr>
             <tr>
-                <td><b>Custo do Projeto</b></td>
-                <td class="right-align"><?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['CustoProjeto']) ?></td>
+                <td class="right-align"><b>Vl. Outras Fontes</b></td>
+                <td class="right-align"> <?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['VlAdequadoOutrasFontes']) ?></td>
+                <td class="right-align"><b>Vl. Outras Fontes</b></td>
+                <td class="right-align"> <?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['VlHomologadoOutrasFontes']) ?></td>
             </tr>
             <tr>
-                <td><b>Vl.Outras Fontes</b></td>
-                <td class="right-align"> <?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['VlOutrasFontesAprovado']) ?></td>
-            </tr>
-            <tr>
-                <td><b>Custo Total</b></td>
-                <td class="right-align"><?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['CustoTotal']) ?></td>
-            </tr>
-            <tr>
-                <td><b>Custo homologado</b></td>
-                <td class="right-align"><?= Mascara::addMaskMoeda($this->arrValue['vlHomologado']) ?></td>
+                <td class="right-align"><b>Vl. Total Adequado</b></td>
+                <td class="right-align"><?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['VlTotalAdequado']) ?></td>
+                <td class="right-align"><b>Vl. Total Homologado</b></td>
+                <td class="right-align"><?= Mascara::addMaskMoeda($this->arrValue['enquadramentoProjeto']['VlTotalHomologado']) ?></td>
             </tr>
             </tbody>
         </table>
