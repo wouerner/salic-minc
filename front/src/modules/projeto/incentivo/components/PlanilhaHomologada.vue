@@ -56,6 +56,7 @@
                 }
 
                 const self = this;
+
                 // eslint-disable-next-line
                 $3
                     .ajax({

@@ -7,8 +7,16 @@
             <ul>
                 <li>
                     <a id="ir-para-o-topo" class="btn-floating yellow darken-1 tooltipped"
-                       data-tooltip="Ir para o topo">
+                       data-tooltip="Ir para o topo"
+                       href='javascript:void(0)'>
                         <i class="material-icons">arrow_upward</i>
+                    </a>
+                </li>
+                <li>
+                    <a id="ir-para-o-fim" class="btn-floating yellow darken-1 tooltipped"
+                       data-tooltip="Ir para o fim"
+                       href='javascript:void(0)'>
+                        <i class="material-icons">arrow_downward</i>
                     </a>
                 </li>
                 <li v-if="idPronac">
@@ -33,6 +41,7 @@
         },
         mounted() {
             this.irParaOTopo();
+            this.irParaOFim();
         },
         methods: {
             imprimirProjeto(idPronac) {
@@ -109,6 +118,19 @@
                         $3("html,body").animate(
                             {
                                 scrollTop: 0,
+                            },
+                            700,
+                        );
+                    });
+                }
+            },
+            irParaOFim() {
+                if ($3("#ir-para-o-fim").length) {
+                    $3("#ir-para-o-fim").on("click", function (e) {
+                        e.preventDefault();
+                        $3("html,body").animate(
+                            {
+                                scrollTop: $(document).height(),
                             },
                             700,
                         );

@@ -88,8 +88,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.idPreProjeto"/>
+                    <td align="center" class="bold destaque-texto-primary">
+                        <router-link :to="{ name: 'proposta', params: { idPronac: idPronac }}">
+                            <SalicTextoSimples :texto="dadosProjeto.idPreProjeto"/>
+                        </router-link>
                     </td>
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.DataFixa"/>
@@ -232,13 +234,13 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.AgenciaBancaria"/>
+                        <SalicTextoSimples :texto=" formatarAgencia(dadosProjeto.AgenciaBancaria)"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.ContaCaptacao"/>
+                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaCaptacao)"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao"/>
+                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaMovimentacao)"/>
                     </td>
                     <td align="center" class="destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
@@ -424,6 +426,21 @@
                 return moment()
                     .diff(date, 'days') > 0;
             },
+            formatarAgencia(agencia) {
+                // formato: 9999-9
+                if (agencia.length === 5) {
+                    agencia = agencia.replace(/(\d{4})(\d)/, '$1-$2');
+                }
+                return agencia;
+            },
+            formatarConta(conta) {
+                // formato: 99999-9
+                conta = parseInt(conta);
+                // conta = conta.replace(/^0|0/g, '');
+                conta = conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
+
+                return conta;
+            }
         },
         filters: {
             formatarData(date) {
