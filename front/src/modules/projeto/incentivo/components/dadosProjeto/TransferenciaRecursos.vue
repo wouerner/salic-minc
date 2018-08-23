@@ -27,14 +27,14 @@
                             <th>Pronac</th>
                             <th>Nome do Projeto</th>
                             <th>Dt. Recebimento</th>
-                            <th>Vl. Recebido</th>
+                            <th style="text-align: right">Vl. Recebido</th>
                         </tr>
                     </thead>
                     <tbody v-for="(informacoesTransferencia, index) in transferenciaRecursos" :key="index">
                         <tr>
-                            <td>{{informacoesTransferencia.idPronacTransferidor}}</td>
+                            <td>{{informacoesTransferencia.PronacTransferidor}}</td>
                             <td>{{informacoesTransferencia.NomeProjetoTranferidor}}</td>
-                            <td>{{informacoesTransferencia.idPronacRecebedor}}</td>
+                            <td>{{informacoesTransferencia.PronacRecebedor}}</td>
                             <td>{{informacoesTransferencia.NomeProjetoRecedor}}</td>
                             <td>{{informacoesTransferencia.dtRecebimento}}</td>
                             <td>R${{informacoesTransferencia.vlRecebido | formatarParaReal}}</td>
