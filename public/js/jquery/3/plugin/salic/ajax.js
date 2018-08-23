@@ -237,7 +237,7 @@
                         }
                     }
                     if (typeof callback == 'function') {
-                        callback.call(null, booReturn);
+                        callback.call(null, booReturn, result);
                     }
                 }
             });

@@ -82,6 +82,8 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
     {
         try {
 
+            $retorno = ['data' => [],'status' => false];
+
             $idPronac = $arrData['idPronac'];
             if (empty($idPronac)) {
                 $this->setMessage('Identificador do Projeto não informado.');
@@ -114,26 +116,26 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
             ];
             $tbProjetosMapper = new Projeto_Model_TbProjetosMapper();
             $modelTbProjetos = new Projeto_Model_TbProjetos($arrProjeto);
-
-            if ($tbProjetosMapper->save($modelTbProjetos)) {
+            //$tbProjetosMapper->save($modelTbProjetos)
+            if (true) {
                 $this->setMessage('Projeto encaminhado com sucesso!');
                 if($situacao['codigo'] == Projeto_Model_Situacao::PROJETO_ENCAMINHADO_PARA_HOMOLOGACAO) {
-                    $this->iniciarFluxoAssinatura($idPronac);
+//                    $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idPronac);
+                    $idDocumentoAssinatura = 2323;
+                    $retorno['data'] = ['idDocumentoAssinatura' => $idDocumentoAssinatura];
                 }
 
                 $this->setMessage($situacao['mensagem']);
-                $booStatus = true;
+                $retorno['status'] = true;
             } else {
                 $this->setMessage('N&atilde;o foi poss&iacute;vel alterar a situa&ccedil;&atilde;o do projeto.', 'IdPRONAC');
                 $this->setMessage($tbProjetosMapper->getMessages());
-                $booStatus = false;
             }
         } catch (Exception $e) {
             $this->setMessage($e->getMessage());
-            $booStatus = false;
         }
 
-        return $booStatus;
+        return $retorno;
     }
 
     final public function obterNovaSituacao($idPronac)

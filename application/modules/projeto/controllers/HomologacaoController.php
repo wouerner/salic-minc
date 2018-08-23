@@ -65,7 +65,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
                 $where['a.Situacao = ?'] = 'D51';
                 break;
             case 'pos-recurso':
-                $where['a.Situacao = ?'] = 'D21';
+                $where['a.Situacao = ?'] = 'D20';
                 break;
         }
 
@@ -128,10 +128,20 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $this->_helper->layout->disableLayout();
         $mapper = new Projeto_Model_TbHomologacaoMapper();
         if ($this->getRequest()->isPost()) {
+//            $this->_helper->json([
+//                'status' => true,
+//                'data' => ['idAssinatura' => 123],
+//                'msg' => 'Opera&ccedil;&atilde;o realizada com sucesso! todo',
+//                'close' => 0
+//            ]);
             $this->_helper->viewRenderer->setNoRender(true);
             $arrPost = $this->getRequest()->getPost();
+
+            $retorno = $mapper->encaminhar($arrPost);
+
+
             $this->_helper->json([
-                'status' => $mapper->encaminhar($arrPost),
+                $retorno,
                 'msg' => $mapper->getMessages(),
                 'close' => 1
             ]);
@@ -249,7 +259,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '../views/scripts/');
         $view->arrValue = $this->prepareData($intIdPronac);
-        return $view->render('homologacao/partials/documento-assinatura.phtml');
+        return $view->render('homologacao/partials/visualizar-parecer-completo.phtml');
     }
 
     final private function iniciarFluxoAssinatura($idPronac)
