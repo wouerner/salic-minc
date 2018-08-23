@@ -126,7 +126,16 @@ class Assinatura implements IServico
         if ($codigoOrgaoDestino) {
             $this->encaminhar();
         } else {
-            $this->finalizar();
+
+            $quantidadeTotalAssinaturas = $dbTableTbAssinatura->obterQuantidadeTotalAssinaturas();
+            $quantidadeMinimaAssinaturas = $dbTableTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
+                $modeloTbAtoAdministrativo->getIdTipoDoAto(),
+                $modeloTbAtoAdministrativo->getIdOrgaoSuperiorDoAssinante()
+            );
+            
+            if ((int) $quantidadeTotalAssinaturas === (int) $quantidadeMinimaAssinaturas) {
+                $this->finalizar();
+            }
         }
 
         $this->executarAcoes('\MinC\Assinatura\Acao\IAcaoAssinar');
