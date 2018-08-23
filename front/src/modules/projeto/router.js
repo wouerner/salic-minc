@@ -3,8 +3,7 @@
 import Index from './Index';
 import IncentivoTemplate from './incentivo/Index';
 import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAdequada';
-import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
-import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
+// import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
 // import Proponente from './incentivo/components/Proponente';
 
@@ -23,6 +22,22 @@ const PlanilhaPropostaOriginal = () => {
 const PlanilhaPropostaAutorizada = () => {
     import(/* webpackChunkName: "planilha-autorizada" */ './incentivo/components/PlanilhaPropostaAutorizada');
 };
+
+// const PlanilhaPropostaAdequada = () => {
+//     import(/* webpackChunkName: "planilha-adequada" */ './incentivo/components/PlanilhaPropostaAdequada');
+// };
+
+const PlanilhaHomologada = () => {
+    import(/* webpackChunkName: "planilha-homologada" */ './incentivo/components/PlanilhaHomologada');
+};
+
+const PlanilhaReadequada = () => {
+    import(/* webpackChunkName: "planilha-readequada" */ './incentivo/components/PlanilhaReadequada');
+};
+
+// const RelacaoDePagamentos = () => {
+//     import(/* webpackChunkName: "relacao-de-pagamentos" */ './incentivo/components/RelacaoDePagamentos');
+// };
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',
