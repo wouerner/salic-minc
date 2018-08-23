@@ -320,23 +320,6 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
         $valorComprovadoAntigo = $planilhaAprovacaoItem->current()->vlComprovacao;
 
-        /* $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto( */
-        /*     $idPronac, */
-        /*     null, */
-        /*     $planilhaAprovacaoItem->current()->cdEtapa, */
-        /*     $planilhaAprovacaoItem->current()->cdProduto, */
-        /*     $planilhaAprovacaoItem->current()->cdCidade, */
-        /*     null, */
-        /*     $planilhaAprovacaoItem->current()->idPlanilhaItem */
-        /* ); */
-        /* $this->view->valores = $valoresItem->current(); */
-
-        /* $valorAprovadoAtual = $valoresItem->current()->vlAprovado; */
-        /* $valorComprovadoAtual = $valoresItem->current()->vlComprovado; */
-
-        /* $valorComprovadoNovo = ($valorComprovadoAtual - $valorComprovadoAntigo) + $vlComprovadoNovo; */
-        /* var_dump($valorComprovadoNovo , $valorAprovadoAtual);die; */
-
         /*todo*/
         $planilhaAprovacao = new PlanilhaAprovacao();
         $valoresItem = $planilhaAprovacao->planilhaAprovada(
@@ -472,6 +455,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
                     '',
                     $this->view->url(
                         array(
+                            'module' => 'default',
                             'controller' => 'comprovarexecucaofinanceira',
                             'action' => $paginaRedirecionar,
                             'idusuario' => $this->view->idusuario,
