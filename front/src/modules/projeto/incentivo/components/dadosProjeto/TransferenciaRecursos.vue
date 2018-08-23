@@ -27,7 +27,7 @@
                             <th>Pronac</th>
                             <th>Nome do Projeto</th>
                             <th>Dt. Recebimento</th>
-                            <th style="text-align: right">Vl. Recebido</th>
+                            <th style="text-align: right;">Vl. Recebido</th>
                         </tr>
                     </thead>
                     <tbody v-for="(informacoesTransferencia, index) in transferenciaRecursos" :key="index">
