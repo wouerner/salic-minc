@@ -2,19 +2,27 @@
 // import Router from 'vue-router';
 import Index from './Index';
 import IncentivoTemplate from './incentivo/Index';
-import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOriginal';
-import PlanilhaPropostaAutorizada from './incentivo/components/PlanilhaPropostaAutorizada';
 import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAdequada';
 import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
 import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
 // import Proponente from './incentivo/components/Proponente';
 
-import DadosProjeto from './incentivo/components/DadosProjeto';
-// Vue.use(Router);
+const DadosProjeto = () => {
+    import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto');
+};
 
-// const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto');
-const Proponente = () => import(/* webpackChunkName: "proponente" */ './incentivo/components/Proponente');
+const Proponente = () => {
+    import(/* webpackChunkName: "proponente" */ './incentivo/components/Proponente');
+};
+
+const PlanilhaPropostaOriginal = () => {
+    import(/* webpackChunkName: "planilha-proposta" */ './incentivo/components/PlanilhaPropostaOriginal');
+};
+
+const PlanilhaPropostaAutorizada = () => {
+    import(/* webpackChunkName: "planilha-autorizada" */ './incentivo/components/PlanilhaPropostaAutorizada');
+};
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',

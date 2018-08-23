@@ -1,27 +1,22 @@
 <template>
-    <div id="conteudo">
-        <div class="row">
-            <Proponente :cpf="dadosProjeto.CgcCPf"></Proponente>
-        </div>
+    <!--<div id="conteudo">-->
+        <!--<div class="row">-->
+            <!--<Proponente :cpf="dadosProjeto.CgcCPf"></Proponente>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div>
+        <h1>
+            Oiiiii
+        </h1>
     </div>
 </template>
 <script>
-    import Proponente from '@/modules/agente/Proponente';
-    import { mapGetters } from 'vuex';
+    // import { mapGetters } from 'vuex';
 
     export default {
-        data() {
-            return {
-                links: `/default/consultardadosprojeto/planilha-orcamentaria?idPronac=${this.$route.params.idPronac}`,
-            };
-        },
-        components: {
-            Proponente,
-        },
-        computed: {
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-            }),
+        name: 'proponente',
+        created() {
+            console.log('chega aqui');
         },
     };
 </script>

@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: '',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/public/dist',
     proxyTable: {
         path: /./,
         target: "http://localhost"
@@ -52,17 +52,17 @@ module.exports = {
     index: path.resolve(__dirname, '../../application/modules/default/views/scripts/index/index.phtml'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../../public/dist'),
-    assetsSubDirectory: '',
-    assetsPublicPath: '/',
+    assetsRoot: path.resolve(__dirname, '../../public/'),
+    assetsSubDirectory: '/',
+    assetsPublicPath: '../../public/',
 
     /**
      * Source Maps
      */
 
-    productionSourceMap: false,
+    productionSourceMap: true,
     // https://webpack.js.org/configuration/devtool/#production
-    devtool: 'source-map',
+    devtool: '#source-map',
 
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
