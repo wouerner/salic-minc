@@ -105,7 +105,7 @@
      * @author Ruy Junior Ferreira Silva <ruyjfs@gmail.com>
      * @since 28/12/2016
      */
-    $.ajaxModal = function (objOption, callback, modalOptions) {
+    $.ajaxModal = function (objOption, callback, modalOptions = '') {
         var objDefaults = {strUrl: '', strIdModal: 'modal', strType: 'modal-fixed-footer', strHeight: '', strWidth: '', full: false},
             objSettings = $.extend({}, objDefaults, objOption),
             strIdModal = '#' + objSettings.strIdModal;

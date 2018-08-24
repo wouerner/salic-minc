@@ -120,6 +120,17 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $this->prepareData($this->getRequest()->getParam('id'));
     }
 
+    public function visualizarParecerAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPronac = $this->getRequest()->getParam('id');
+
+        if(empty($idPronac)) {
+            throw new Exception("Pronac &eacute; obrigat&oacute;rio");
+        }
+        $this->prepareData($idPronac);
+    }
+
     /**
      * @todo confirmar se setIdAtoDeGestao e o IdEnquadramento.
      */
@@ -217,8 +228,7 @@ class Projeto_HomologacaoController extends Projeto_GenericController
 
         $arrValue['enquadramentoProjeto'] = $dbTableEnquadramento->obterProjetoAreaSegmento(
             [
-                'a.IdPRONAC = ?' => $intIdPronac,
-                'a.Situacao = ?' => $this->situacaoParaHomologacao
+                'a.IdPRONAC = ?' => $intIdPronac
             ]
         )->current();
 
