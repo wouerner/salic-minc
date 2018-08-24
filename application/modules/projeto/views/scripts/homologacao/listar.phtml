@@ -89,7 +89,6 @@
 
     (function ($) {
         $(document).ready(function ($) {
-            $3('.modal').modal();
 
             $(document).ajaxStart(function () {
                 $('#container-loading').fadeIn('slow');
@@ -229,10 +228,10 @@
                                     break;
                             }
 
-                            var botaoHomologar = '<button data-ajax-modal-full="true" title="Homologar" class="btn-floating waves-effect waves-light btn-secondary" data-ajax-modal="/projeto/homologacao/homologar-parecer/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
+                            var botaoHomologar = '<button data-ajax-modal-full="true" title="Homologar" class="btn-floating waves-effect waves-light btn-secondary" data-ajax-modal2="/projeto/homologacao/homologar-parecer/id/'+ data.IdPRONAC +'"><i class="material-icons">assignment_turned_in</i></button>';
                             var botaoDiligenciar = '<a title="Dilig&ecirc;nciar" class="btn-floating waves-effect waves-light tooltipped '+ corDiligencia +'" href="/proposta/diligenciar/listardiligenciaanalista/idPronac/'+ data.IdPRONAC +'/situacao/D25/tpDiligencia/181"><i class="material-icons">warning</i></a>';
                             // var botaoHomologacaoFluxo= '<a title="Finalizar avalia&ccedil;&atilde;o" class="btn-floating btn- tooltipped" href="/projeto/homologacao/finalizar-parecer/idPronac/' + data.IdPRONAC + '"><i class="material-icons">forward</i></a>';
-                            var botaoHomologacaoFluxo = '<a href="javascript:void(0)" data-ajax-modal-full="true" title="Encaminhar" class="btn-floating waves-effect waves-light btn-info" data-ajax-modal="/projeto/homologacao/encaminhar/id/'+ data.IdPRONAC +'"><i class="material-icons">forward</i></a>';
+                            var botaoHomologacaoFluxo = '<a href="javascript:void(0)" data-ajax-modal-full="true" title="Encaminhar" class="btn-floating waves-effect waves-light btn-info" data-ajax-modal-encaminhar="/projeto/homologacao/encaminhar/id/'+ data.IdPRONAC +'"><i class="material-icons">forward</i></a>';
 
                             botoes = botaoHomologar + botaoDiligenciar + botaoHomologacaoFluxo;
                             if(aguardandoRespostaDiligencia){
@@ -293,6 +292,18 @@
                      $(this).find('i').first().html('expand_less');
                  }
             })
+
+
+            var elmBody = $3('body');
+            // Adicionando evento do ajax modal.
+            elmBody.on('click', '[data-ajax-modal-encaminhar]', function () {
+                var objConfig = {};
+                objConfig.strUrl = $3(this).attr('data-ajax-modal-encaminhar');
+                if ($3(this).attr('data-ajax-modal-full') !== '') {
+                    objConfig.full = ($3(this).attr('data-ajax-modal-full') === "true") ? true : false;
+                }
+                $3.ajaxModal(objConfig, null, { complete: function() { expansivelHomologacao.ajax.reload(); } });
+            });
         });
     }($.noConflict(true)));
 </script>

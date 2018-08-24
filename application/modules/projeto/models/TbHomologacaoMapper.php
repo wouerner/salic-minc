@@ -85,10 +85,11 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
             $retorno = ['data' => [],'status' => false];
 
             $idPronac = $arrData['idPronac'];
+
             if (empty($idPronac)) {
-                $this->setMessage('Identificador do Projeto não informado.');
-                $booStatus = true;
+                throw new Exception('Identificador do Projeto não informado.');
             }
+
             $objTbProjetos = new Projeto_Model_DbTable_Projetos();
             $projeto = $objTbProjetos->findBy(['IdPRONAC' => $idPronac]);
 
@@ -116,12 +117,10 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
             ];
             $tbProjetosMapper = new Projeto_Model_TbProjetosMapper();
             $modelTbProjetos = new Projeto_Model_TbProjetos($arrProjeto);
-            //$tbProjetosMapper->save($modelTbProjetos)
-            if (true) {
+            if ($tbProjetosMapper->save($modelTbProjetos)) {
                 $this->setMessage('Projeto encaminhado com sucesso!');
                 if($situacao['codigo'] == Projeto_Model_Situacao::PROJETO_ENCAMINHADO_PARA_HOMOLOGACAO) {
-//                    $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idPronac);
-                    $idDocumentoAssinatura = 2323;
+                    $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idPronac);
                     $retorno['data'] = ['idDocumentoAssinatura' => $idDocumentoAssinatura];
                 }
 
@@ -151,12 +150,12 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
 
         $situacao = [
             'codigo' => Projeto_Model_Situacao::PROJETO_ENCAMINHADO_PARA_HOMOLOGACAO,
-            'mensagem' => "Projeto encaminhado para homologa&ccedil;&atilde;o"
+            'mensagem' => "Projeto encaminhado para homologa&ccedil;&atilde;o."
         ];
 
         if ($enquadramentoProjeto['VlHomologadoIncentivo'] != $enquadramentoProjeto['VlAdequadoIncentivo']) {
             $situacao['codigo'] = Projeto_Model_Situacao::PROJETO_AVALIADO;
-            $situacao['mensagem'] = "Aguardando a supera&ccedil;&atilde;o do prazo recursal";
+            $situacao['mensagem'] = "Aguardando a supera&ccedil;&atilde;o do prazo recursal.";
 
             # @todo verificar se o proponente tem direito a recurso
 

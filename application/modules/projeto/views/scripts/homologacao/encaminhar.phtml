@@ -62,6 +62,7 @@
     </div>
 <?php endif; ?>
 <script>
+
     $3('.collapsible').collapsible();
 
     $3("#form-mensagem").on('submit', function(){
@@ -69,11 +70,11 @@
         $3("button#finalizar").addClass('disabled').attr('disabled');
         $3.ajaxFormSubmit({form: $3(this)}, function(status, response) {
 
-            if(status === true && response.data.idAssinatura) {
+            if(status === true && response.data.idDocumentoAssinatura) {
                 var botaoHomologar = '<h6>' + response.msg  + '</h6>' +
                     '<br><br>' +
                     '<a title="Assinatura" class="btn waves-effect waves-light btn-secondary" target="_blank" ' +
-                    'href="/assinatura/index/visualizar-projeto?idDocumentoAssinatura/'+ response.data.idAssinatura +'">' +
+                    'href="/assinatura/index/visualizar-projeto?idDocumentoAssinatura/'+ response.data.idDocumentoAssinatura +'">' +
                     '<i class="material-icons right">visibility</i>Visualizar documento gerado' +
                     '</a>';
 
@@ -83,4 +84,5 @@
         });
         return false;
     });
+
 </script>

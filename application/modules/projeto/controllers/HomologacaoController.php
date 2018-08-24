@@ -128,22 +128,17 @@ class Projeto_HomologacaoController extends Projeto_GenericController
         $this->_helper->layout->disableLayout();
         $mapper = new Projeto_Model_TbHomologacaoMapper();
         if ($this->getRequest()->isPost()) {
-//            $this->_helper->json([
-//                'status' => true,
-//                'data' => ['idAssinatura' => 123],
-//                'msg' => 'Opera&ccedil;&atilde;o realizada com sucesso! todo',
-//                'close' => 0
-//            ]);
+
             $this->_helper->viewRenderer->setNoRender(true);
             $arrPost = $this->getRequest()->getPost();
 
             $retorno = $mapper->encaminhar($arrPost);
 
-
             $this->_helper->json([
-                $retorno,
+                'data' => $retorno['data'],
+                'status' => $retorno['status'],
                 'msg' => $mapper->getMessages(),
-                'close' => 1
+                'close' => 0
             ]);
         } else {
             $idPronac = $this->getRequest()->getParam('id');
