@@ -10,8 +10,9 @@ class spPlanilhaOrcamentaria extends MinC_Db_Table_Abstract
      *  tipoPlanilha = 2 : Planilha Orcamentaria do Parecerista
      *  tipoPlanilha = 3 : Planilha Orcamentaria Aprovada Ativa
      *  tipoPlanilha = 4 : Cortes Orcamentarios Aprovados
-     *  tipoPlanilha = 5 : Remanejamento menor que 20%
-     *  tipoPlanilha = 6 : Readequacao
+     *  tipoPlanilha = 5 : Remanejamento menor que 20% (migradas para Zend)
+     *  tipoPlanilha = 6 : Readequacao (migradas para Zend)
+     *  tipoPlanilha = 7 : Saldo de Aplicação (migradas para Zend)
      */
 
     /**
