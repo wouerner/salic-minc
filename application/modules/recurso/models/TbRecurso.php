@@ -34,10 +34,9 @@ select * from sac.dbo.tbRecurso where stEstado = 1 and siFaseProjeto = 2 and tpS
 -- ja teve os dois recursos
 select * from sac.dbo.tbRecurso where stEstado = 1 and siFaseProjeto = 2 and tpSolicitacao in ('PI', 'OR', 'EN') and siRecurso in (9, 15) AND tpRecurso = 2;
 
-
  */
 
-class Projeto_Model_Situacao extends MinC_Db_Model
+class Recurso_Model_TbRecurso extends MinC_Db_Model
 {
     protected $_idRecurso;
     protected $_IdPRONAC;
@@ -49,10 +48,10 @@ class Projeto_Model_Situacao extends MinC_Db_Model
     protected $_tpRecurso;
     /**
      * @var $_tpSolicitacao
-        DR => Desistência do Prazo Recursal
-        EN => Enquadramento
-        PI => Projet Indeferido
-        OR => @todo ?
+    DR => Desistência do Prazo Recursal
+    EN => Enquadramento
+    PI => Projet Indeferido
+    OR => @todo ?
      */
     protected $_tpSolicitacao;
     protected $_idAgenteAvaliador;
@@ -68,6 +67,10 @@ class Projeto_Model_Situacao extends MinC_Db_Model
     const TIPO_SOLICITACAO_ENQUADRAMENTO = 'EN';
     const SITUACAO_TIPO_RECURSO_ATIVO = 0;
     const SITUACAO_TIPO_RECURSO_INATIVO = 1;
+    const SI_RECURSO_FINALIZADO = 15;
+
+    const FASE_ADMISSIBILIDADE = 1;
+    const FASE_HOMOLOGACAO = 2;
 
     public function getIdRecurso()
     {
@@ -231,7 +234,6 @@ class Projeto_Model_Situacao extends MinC_Db_Model
 
     public function isRecursoExpirouPrazoRecursal(array $recursoEnquadramento)
     {
-
         return (
             (is_null($recursoEnquadramento['stRascunho'])
                 || empty($recursoEnquadramento['stRascunho'])
@@ -245,10 +247,18 @@ class Projeto_Model_Situacao extends MinC_Db_Model
             && $recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL);
     }
 
-    public function isRecursoDesistidoDePrazoRecursal(array $recursoEnquadramento)
+
+    /**
+     * @param array $recurso
+     * @param int $fase
+     * @return bool
+     */
+    public function isRecursoDesistidoDePrazoRecursal(array $recurso, $fase = 1)
     {
-        return ((int) $recursoEnquadramento['stRascunho'] == (int) Recurso_Model_TbRecursoProposta::SITUACAO_RASCUNHO_ENVIADO
-            && $recursoEnquadramento['tpSolicitacao'] == Recurso_Model_TbRecursoProposta::TIPO_SOLICITACAO_DESISTENCIA_DO_PRAZO_RECURSAL);
+        return ((int) $recurso['stEstado'] == 1
+            &&  $recurso['tpSolicitacao'] == 'DR'
+            &&  (int) $recurso['siRecurso'] == 0
+            && $recurso['siFaseProjeto'] == $fase);
     }
 
     public function isRecursoDuplamenteIndeferido(array $recursoEnquadramento)
