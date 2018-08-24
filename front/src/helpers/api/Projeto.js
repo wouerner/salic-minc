@@ -11,3 +11,9 @@ export const buscaProponente = (idPronac) => {
     const queryParams = `/idPronac/${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscaPlanilhaHomologada = (idPronac) => {
+    const path = '/projeto/orcamento/obter-planilha-homologada-ajax';
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};

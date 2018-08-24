@@ -19,3 +19,13 @@ export const buscaProponente = ({ commit }, idPronac) => {
             commit(types.SET_PROPONENTE, proponente);
         });
 };
+
+export const buscaPlanilhaHomologada = ({ commit }, idPronac) => {
+    console.log('chega na action 1');
+    projetoHelperAPI.buscaPlanilhaHomologada(idPronac)
+        .then((response) => {
+            const data = response.data;
+            const planilhaHomologada = data.data;
+            commit(types.SET_PLANILHA_HOMOLOGADA, planilhaHomologada);
+        });
+};

@@ -14,8 +14,7 @@
     import Carregando from '@/components/Carregando';
     import Planilha from '@/components/Planilha/Planilha';
     import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados';
-
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     export default {
         name: 'PlanilhaPropostaHomologada',
@@ -32,9 +31,10 @@
             Planilha,
             PlanilhaItensHomologados,
         },
-        mounted() {
+        created() {
             if (typeof this.dadosProjeto !== 'undefined') {
                 this.fetch(this.dadosProjeto.idPronac);
+                this.buscaPlanilhaHomologada(this.dadosProjeto.idPronac);
             }
         },
         watch: {
@@ -50,6 +50,9 @@
             }),
         },
         methods: {
+            ...mapActions({
+                buscaPlanilhaHomologada: 'projeto/buscaPlanilhaHomologada',
+            }),
             fetch(id) {
                 if (typeof id === 'undefined') {
                     return;

@@ -434,12 +434,12 @@
             },
             formatarConta(conta) {
                 // formato: 99999-9
-                conta = parseInt(conta);
+                conta = parseInt(conta, 10);
                 // conta = conta.replace(/^0|0/g, '');
                 conta = conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
 
                 return conta;
-            }
+            },
         },
         filters: {
             formatarData(date) {
