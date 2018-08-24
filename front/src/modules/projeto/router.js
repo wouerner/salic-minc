@@ -6,9 +6,10 @@ import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAde
 import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
 import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
+import Proposta from './incentivo/components/Proposta';
 
 const DadosProjeto = () => import(/* webpackChunkName: "dados-projeto" */ './incentivo/components/DadosProjeto');
-const Proponente = () => import(/* webpackChunkName: "proponente" */ './incentivo/components/Proponente');
+const Proponente = () => import(/* webpackChunkName: "proponente" */ './incentivo/components/proponente/Index');
 
 const templateAjax = {
     template: '<div id="conteudo"></div>',
@@ -48,7 +49,7 @@ export default [
                 name: 'planilhaproposta',
                 component: PlanilhaPropostaOriginal,
                 meta: {
-                    title: 'Planilha Inicial da Proposta',
+                    title: 'Planilha de Solicita&ccedil;&atilde;o da Proposta Original',
                 },
             },
             {
@@ -56,7 +57,7 @@ export default [
                 name: 'planilhaautorizada',
                 component: PlanilhaPropostaAutorizada,
                 meta: {
-                    title: 'Planilha Aprovada para Capta&ccedil;&atilde;o',
+                    title: 'Planilha Autorizada para Captar',
                 },
             },
             {
@@ -64,7 +65,7 @@ export default [
                 name: 'planilhaadequada',
                 component: PlanilhaPropostaAdequada,
                 meta: {
-                    title: 'Planilha Adequada &agrave; Execu&ccedil;&atilde;o do Projeto',
+                    title: 'Planilha Adequada &agrave; realidade de execu&ccedil;&atilde;o pelo proponente',
                 },
             },
             {
@@ -76,11 +77,19 @@ export default [
                 },
             },
             {
+                path: 'planilha-aprovada',
+                name: 'planilhaaprovada',
+                component: PlanilhaHomologada,
+                meta: {
+                    title: 'Planilha Autorizada para Captar',
+                },
+            },
+            {
                 path: 'planilha-readequada',
                 name: 'planilhareadequada',
                 component: PlanilhaReadequada,
                 meta: {
-                    title: 'Planilha Readequada pelo Proponente',
+                    title: 'Planilha Readequada na execu&ccedil;&atilde;o',
                 },
             },
             {
@@ -89,6 +98,14 @@ export default [
                 component: RelacaoDePagamentos,
                 meta: {
                     title: 'Rela&ccedil;&atilde;o de Pagamentos',
+                },
+            },
+            {
+                path: 'proposta',
+                name: 'proposta',
+                component: Proposta,
+                meta: {
+                    title: 'Proposta',
                 },
             },
             {

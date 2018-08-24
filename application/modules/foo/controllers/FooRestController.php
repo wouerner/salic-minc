@@ -2,71 +2,77 @@
 
 use Application\Modules\Foo\Service\Foo\Bar as BarService;
 
-class Foo_FooRestController extends Zend_Rest_Controller
+class Foo_FooRestController extends MinC_Controller_Rest_Abstract
 {
-    public function init()
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
-        $this->_helper->getHelper('contextSwitch')
-            ->addActionContext('get', 'json')
-            ->addActionContext('index', 'json')
-            ->addActionContext('post', 'json')
-            ->addActionContext('put', 'json')
-            ->addActionContext('delete', 'json')
-            ->initContext('json');
+        $perfisComAcesso = [
+            Autenticacao_Model_Grupos::TECNICO_PRESTACAO_DE_CONTAS,
+            Autenticacao_Model_Grupos::COORDENADOR_PRESTACAO_DE_CONTAS,
+            Autenticacao_Model_Grupos::COORDENADOR_GERAL_PRESTACAO_DE_CONTAS,
+        ];
+
+        $perfilProponente = [
+            parent::COD_ORGAO_PROPONENTE
+        ];
+
+        $permissionsPerMethod  = [
+            'get' => $perfisComAcesso,
+            'index' => $perfisComAcesso,
+            'post' => $perfisComAcesso,
+            'head' => $perfisComAcesso,
+            'put' => $perfisComAcesso,
+            'delete' => $perfilProponente,
+        ];
+
+        $this->setValidateUserIsLogged();
+        $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
+
+        parent::__construct($request, $response, $invokeArgs);
     }
 
     public function indexAction()
     {
-//        $fooModel = new Foo_Model_Foo();
-//        $this->view->foos = $fooModel->listar();
-//
-//        $tooModel = new Foo_Model_Too();
-//        $this->view->toos = $tooModel->listar();
-//        $dataAux = $_GET;
-        $this->view->assign('data', [
-            1,
-            10,
-            100,
-            1000,
-            10000
-        ]);
-        $this->getResponse()->setHttpResponseCode(200);
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->buscarTodos();
+
+        $this->renderJsonResponse($resposta, 200);
+
     }
 
     public function getAction()
     {
         $parametros = $this->getRequest()->getParams();
         $barService = new BarService($this->getRequest(), $this->getResponse());
-        $resposta = $barService->buscar($parametros['id']);
+        $resposta = $barService->buscar($this->getParam('id'));
 
-        $this->view->assign('data', $resposta);
-
-        $this->getResponse()->setHttpResponseCode(200);
+        $this->renderJsonResponse($resposta, 200);
     }
 
-    public function headAction()
-    {
-        $this->getResponse()->setHttpResponseCode(200);
-    }
+    public function headAction(){}
 
     public function postAction()
     {
         $barService = new BarService($this->getRequest(), $this->getResponse());
-        $resposta = $barService->salvarRegistro();
+        $resposta = $barService->salvar();
 
-        $this->view->assign('data', $resposta);
-        $this->getResponse()->setHttpResponseCode(201);
+        $this->renderJsonResponse($resposta, 201);
+
     }
 
     public function putAction()
     {
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $resposta = $barService->atualizar();
 
-        $this->view->assign('data', 'asda');
-        $this->getResponse()->setHttpResponseCode(200);
+        $this->renderJsonResponse($resposta, 200);
     }
 
     public function deleteAction()
     {
+        $barService = new BarService($this->getRequest(), $this->getResponse());
+        $barService->remover();
+
         $this->getResponse()->setHttpResponseCode(204);
     }
 }

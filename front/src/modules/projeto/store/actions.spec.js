@@ -1,6 +1,8 @@
-import * as actions from './actions';
-import * as MockAPI from '../../../../test/unit/helpers/api';
+import axios from 'axios';
 import * as ProjetoHelperAPI from '@/helpers/api/Projeto';
+import * as actions from './actions';
+
+jest.mock('axios');
 
 describe('Projeto actions', () => {
     let commit;
@@ -20,26 +22,59 @@ describe('Projeto actions', () => {
                 },
             };
 
+            axios.get.mockResolvedValue(mockReponse);
+
             commit = jest.fn();
-
-            MockAPI.setResponse(mockReponse);
-        });
-
-        afterEach(() => {
-            MockAPI.setResponse(null);
+            jest.spyOn(ProjetoHelperAPI, 'buscaProjeto');
+            actions.buscaProjeto({ commit });
         });
 
         test('it calls ProjetoHelperAPI.buscaProjeto', () => {
-            jest.spyOn(ProjetoHelperAPI, 'buscaProjeto');
-            actions.buscaProjeto({ commit });
             expect(ProjetoHelperAPI.buscaProjeto).toHaveBeenCalled();
         });
 
         test('it is commit to buscaProjeto', (done) => {
             const projeto = mockReponse.data;
-            actions.buscaProjeto({ commit }, 132451);
             done();
-            expect(commit).toHaveBeenCalledWith('SET_PROJETO', projeto);
+            expect(commit).toHaveBeenCalledWith('SET_PROJETO', projeto.data);
+        });
+    });
+
+    describe('buscarTransferenciaRecursos', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        transferenciaRecursos: {
+                            idPronacTransferidor: 1,
+                            PronacTransferidor: 111111,
+                            NomeProjetoTranferidor: 'Criança Para Vida - 15 anos',
+                            idPronacRecebedor: 2,
+                            PronacRecebedor: 222222,
+                            NomeProjetoRecedor: 'Criança Para Vida - 15 anos',
+                            dtRecebimento: new Date(),
+                            vlRecebido: parseFloat('1000000'),
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(ProjetoHelperAPI, 'buscarTransferenciaRecursos');
+            const acao = 'transferidor';
+            actions.buscarTransferenciaRecursos({ commit }, acao);
+        });
+
+        test('it calls ProjetoHelperAPI.buscarTransferenciaRecursos', () => {
+            expect(ProjetoHelperAPI.buscarTransferenciaRecursos).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscarTransferenciaRecursos', (done) => {
+            const transferenciaRecursos = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_TRANSFERENCIA_RECURSOS', transferenciaRecursos.data);
         });
     });
 });

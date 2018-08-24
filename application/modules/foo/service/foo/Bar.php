@@ -20,11 +20,6 @@ class Bar
         $this->response = $response;
     }
 
-    public function soma()
-    {
-        return [ 'resultado' => 1 + 1 ];
-    }
-
     public function buscar($codigo)
     {
         $tabelaDbTabela = new \Foo_Model_DbTable_Tabela();
@@ -35,7 +30,15 @@ class Bar
         return $tabelaDbTabela->findBy($where);
     }
 
-    public function salvarRegistro()
+    public function buscarTodos()
+    {
+        $tabelaDbTabela = new \Foo_Model_DbTable_Tabela();
+
+        $registros = $tabelaDbTabela->fetchAll();
+        return $registros->toArray();
+    }
+
+    public function salvar()
     {
         $parametros = $this->request->getParams();
         $tabela = new \Foo_Model_Tabela($parametros);
@@ -43,5 +46,24 @@ class Bar
         $codigo = $mapper->save($tabela);
 
         return $this->buscar($codigo);
+    }
+
+    public function atualizar()
+    {
+        $parametros = $this->request->getParams();
+        $tabela = new \Foo_Model_Tabela($parametros);
+        $mapper = new \Foo_Model_TabelaMapper();
+        $codigo = $mapper->save($tabela);
+
+        return $this->buscar($codigo);
+    }
+
+    public function remover()
+    {
+        $parametros = $this->request->getParams();
+        $tabela = $this->buscar($this->getParam('id'));
+        $mapper = new \Foo_Model_TabelaMapper();
+        $id = (int) $tabela['Codigo'];
+        $mapper->delete($id);
     }
 }

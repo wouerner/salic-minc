@@ -1,19 +1,9 @@
-import instance from './instance';
+import axios from 'axios';
 
-const defaultConfig = () => ({
-    // eslint-disable-next-line
-    // headers: Object.assign({}, { 'Cookie': 'PHPSESSID=f35d28dcf98f13fded03d151ae088664' }),
-});
+export const getRequest = (path, queryParams = '') => axios.get(`${path}${queryParams}`);
 
-export default class API {
-    constructor(config = {}) {
-        this.path = config.path;
+export const postRequest = (path, data) => axios.post(path, data);
 
-        this.axios = instance();
-    }
+export const putRequest = (path, bodyFormData, id) => axios.post(`${path}/${id}`, bodyFormData);
 
-    // eslint-disable-next-line
-    get(url, resource = '', config = {}) {
-        return this.axios.get(url, Object.assign({}, defaultConfig(), config));
-    }
-}
+export const deleteRequest = (path, id) => axios.delete(`${path}/${id}`);

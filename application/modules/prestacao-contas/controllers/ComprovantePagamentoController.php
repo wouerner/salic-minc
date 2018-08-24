@@ -5,6 +5,8 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
     public function init()
     {
         $this->_helper->getHelper('contextSwitch')
+            ->addActionContext('get', 'json')
+            ->addActionContext('put', 'json')
             ->addActionContext('index', 'json')
             ->addActionContext('post', 'json')
             ->initContext('json');
@@ -20,14 +22,37 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         $stItemAvaliado = $this->getRequest()->getParam('stItemAvaliado');
         $UF = $this->getRequest()->getParam('uf');
         $idmunicipio = $this->getRequest()->getParam('idmunicipio');
+        $etapa = $this->getRequest()->getParam('etapa');
+
+        $tipo = $this->getRequest()->getParam('tipo');
+
+        $projetoModel = new Projetos();
+        $projeto = $projetoModel->find($idpronac)->current();
+
+        $dtInicioExecucao = new DateTime($projeto->DtInicioExecucao);
+        $dtFimExecucao = new DateTime($projeto->DtFimExecucao);
 
         $vwComprovacoes = new PrestacaoContas_Model_vwComprovacaoFinanceiraProjetoPorItemOrcamentario();
-        $comprovantes = $vwComprovacoes->comprovacoes(
-            $idPronac,
-            $idPlanilhaItem,
-            $stItemAvaliado,
-            $codigoProduto
-        );
+
+        if ($tipo == 'internacional') {
+            $comprovantes = $vwComprovacoes->comprovacoesInternacionais(
+                $idPronac,
+                $idPlanilhaItem,
+                $stItemAvaliado,
+                $codigoProduto,
+                null,
+                $etapa
+            );
+        } else {
+            $comprovantes = $vwComprovacoes->comprovacoesNacionais(
+                $idPronac,
+                $idPlanilhaItem,
+                $stItemAvaliado,
+                $codigoProduto,
+                null,
+                $etapa
+            );
+        }
 
         $data = [];
 
@@ -36,24 +61,43 @@ class PrestacaoContas_ComprovantePagamentoController extends Zend_Rest_Controlle
         }
 
         $dataAux = [];
-        foreach($data as $key => $value) {
+        foreach($data as $value) {
+            $key =  $value['idComprovantePagamento'];
             $dataAux[$key] = $value;
+            $dataAux[$key]['tipo'] = $value['tipo'];
+            $dataAux[$key]['numero'] = $value['numero'];
+            $dataAux[$key]['serie'] = $value['serie'];
+            $dataAux[$key]['forma'] = $value['forma'];
+            $dataAux[$key]['valor'] = $value['vlComprovacao'];
+            $dataAux[$key]['justificativa'] = $value['dsJustificativaProponente'];
+            $dataAux[$key]['dataPagamento'] = $value['dtPagamento'];
+            $dataAux[$key]['dataEmissao'] = $value['dataEmissao'];
+            $dataAux[$key]['numeroDocumento'] = $value['numeroDocumento'];
+            $dataAux[$key]['nrDocumentoDePagamento'] = $value['nrDocumentoDePagamento'];
             $dataAux[$key]['fornecedor']['CNPJCPF'] = $value['CNPJCPF'];
+            $dataAux[$key]['fornecedor']['nome'] = $value['nmFornecedor'];
+            $dataAux[$key]['fornecedor']['endereco'] = $value['endereco'];
+            $dataAux[$key]['fornecedor']['id'] = $value['id'];
+            $dataAux[$key]['fornecedor']['pais'] = $value['pais'];
+            $dataAux[$key]['fornecedor']['nacionalidade'] = $value['pais'];
+            $dataAux[$key]['arquivo']['nome'] = $value['nmArquivo'];
+            $dataAux[$key]['arquivo']['id'] = $value['idArquivo'];
+            $dataAux[$key]['projeto']['dataInicioExecucao'] = $dtInicioExecucao;
+            $dataAux[$key]['projeto']['dataFimExecucao'] = $dtFimExecucao;
         }
-        /* var_dump($data); */
-        /* die; */
-
         $this->view->assign('data', $dataAux);
         $this->getResponse()->setHttpResponseCode(200);
     }
 
     public function getAction()
-    {}
+    {
+        die('teste');
+    }
 
     public function postAction()
     {
         $idPronac = $this->getRequest()->getParam('idpronac');
-        $observacao = $this->getRequest()->getParam('observacao');
+        $observacao = utf8_decode($this->getRequest()->getParam('observacao'));
         $situacao = $this->getRequest()->getParam('situacao');
         $idComprovantePagamento = $this->getRequest()->getParam('idcomprovantepagamento');
 

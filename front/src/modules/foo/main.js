@@ -3,7 +3,10 @@
 // Vue.config.productionTip = false
 import Vue from 'vue';
 import Index from './Index';
-import router from './router';
+import {
+    router,
+    store,
+} from './config';
 
 Vue.config.productionTip = false;
 
@@ -12,6 +15,7 @@ window.onload = () => {
     const main = new Vue({
         el: '#app',
         router,
+        store,
         components: {
             Index,
         },

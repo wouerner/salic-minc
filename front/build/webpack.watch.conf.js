@@ -90,8 +90,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             // ./public directory is being served
             host: 'localhost',
             port: 3000,
-            files: [path.resolve(__dirname, '../../application/modules/*.phtml'), path.resolve(__dirname, '../../application/modules/*.php')],
             proxy: config.dev.host,
+            // files: [path.resolve(__dirname, '../../application/modules/*.phtml'), path.resolve(__dirname, '../../application/modules/*.php')],
 
             // server: { baseDir: [config.dev.assetsSubDirectory] }
         })

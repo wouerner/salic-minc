@@ -1,46 +1,44 @@
 const comprovanteTable = {
-    props: [
-        'dados',
-    ],
+    props: ['dados'],
     template: `
         <div>
             <table class="bordered">
                 <tbody>
                     <tr>
                         <th>Fornecedor</th>
-                        <td>{{dados.Descricao}}</td>
+                        <td>{{dados.fornecedor.nome}}</td>
                         <th>CNPJ/CPF</th>
                         <td colspan="5">{{CNPJCPF}}</td>
                     </tr>
                     <tr>
-                        <th>Comprovante</th>
-                        <td>{{dados.tpDocumento}}</td>
+                        <th>Tipo Comprovante</th>
+                        <td>{{tipoDocumento}}</td>
                         <th>Número</th>
-                        <td>{{dados.nrComprovante}}</td>
+                        <td>{{dados.numero}}</td>
                         <th>S&eacute;rie</th>
-                        <td colspan="3">{{dados.nrSerie}}</td>
+                        <td colspan="3">{{dados.serie}}</td>
                     </tr>
                     <tr>
                         <th>Dt. Emiss&atilde;o do comprovante de despesa</th>
                         <td>{{dataEmissaoComprovante}}</td>
                         <th>Forma de Pagamento</th>
-                        <td>{{dados.tpFormaDePagamento}}</td>
+                        <td>{{formaPagamento}}</td>
                         <th>Data do Pagamento</th>
                         <td>{{dataPagamento}}</td>
                         <th>N&ordm; Documento Pagamento</th>
-                        <td>{{dados.nrDocumentoDePagamento}}</td>
+                        <td>{{dados.numeroDocumento}}</td>
                     </tr>
                     <tr>
                         <th>Valor</th>
-                        <td>R$  {{valor}}</td>
+                        <td>R$  {{valorFormatado}}</td>
                         <th>Arquivo</th>
                         <td colspan="5">
-                            <a :href="'/upload/abrir/id/' + dados.idArquivo">{{dados.nmArquivo}}</a>
+                            <a :href="'/upload/abrir/id/' + dados.idArquivo">{{nomeArquivo}}</a>
                         </td>
                     </tr>
                     <tr>
                         <th>Justificativa do Proponente</th>
-                        <td colspan="7">{{dados.dsJustificativa}}</td>
+                        <td colspan="7">{{dados.justificativa}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -59,13 +57,38 @@ const comprovanteTable = {
             return CNPJCPF;
         },
         dataEmissaoComprovante() {
-            return moment(this.dados.dtEmissao).format('DD/MM/Y');
+            return moment(this.dados.dataEmissao).format('DD/MM/Y');
         },
         dataPagamento() {
-            return moment(this.dados.dtPagamento).format('DD/MM/Y');
+            return moment(this.dados.dataPagamento).format('DD/MM/Y');
         },
-        valor() {
-            return parseFloat(this.dados.vlComprovacao).toFixed(2);
+        tipoDocumento() {
+            tipo = '';
+            switch(parseInt(this.dados.tipo)) {
+                case 1: tipo = 'Cupom Fiscal'; break;
+                case 2: tipo = 'Guia de Recolhimentol'; break;
+                case 3: tipo = 'Nota Fiscal/Fatura'; break;
+                case 4: tipo = 'Recibo de Pagamento'; break;
+                case 5: tipo = 'RPA'; break;
+            }
+
+            return tipo;
+        },
+        formaPagamento() {
+            forma = '';
+            switch(parseInt(this.dados.forma)) {
+                case 1: forma = 'Cheque'; break;
+                case 2: forma = 'Transfer\xeancia Banc\xe1ria'; break;
+                case 3: forma = 'Saque/Dinheiro'; break;
+            }
+
+            return forma;
+        },
+        valorFormatado() {
+           return  numeral(parseFloat(this.dados.valor)).format('0,0.00');
+        },
+        nomeArquivo() {
+           return  this.dados.arquivo.nome;
         }
     }
 }

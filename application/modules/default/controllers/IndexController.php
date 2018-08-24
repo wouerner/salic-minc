@@ -341,7 +341,7 @@ class IndexController extends MinC_Controller_Action_Abstract
     public function montarPlanilhaOrcamentariaAction()
     {
         $this->_helper->layout->disableLayout(); // desabilita o Zend_Layout
-
+        
         $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
         $this->view->idPerfil = $GrupoAtivo->codGrupo;
 
@@ -366,6 +366,7 @@ class IndexController extends MinC_Controller_Action_Abstract
         // tipoPlanilha = 4 : Cortes Orcamentarios Aprovados
         // tipoPlanilha = 5 : Remanejamento menor que 20%
         // tipoPlanilha = 6 : Readequacao
+        // tipoPlanilha = 7 : Saldo
 
         $this->montaTela(
             'index/montar-planilha-orcamentaria.phtml',

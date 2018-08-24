@@ -69,8 +69,15 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
             . DIRECTORY_SEPARATOR
             . 'template'
         );
-
-        $view->titulo = 'Parecer T&eacute;cnico de Readequa&ccedil;&atilde;o do Projeto';
+        switch ((int)$this->idTipoDoAtoAdministrativo) {
+            case (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO:
+                $view->titulo = 'Parecer T&eacute;cnico de Ajuste de Projeto';
+                break;
+            case (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS:
+            case (int)\Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC:
+                $view->titulo = 'Parecer T&eacute;cnico de Readequa&ccedil;&atilde;o de Projeto';
+                break;
+        }
         $view->IdPRONAC = $this->idPronac;
 
         $objProjeto = new \Projeto_Model_DbTable_Projetos();
@@ -109,6 +116,15 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
                 break;
         }
         $view->parecer = $parecer->ResumoParecer;
+
+        $tbReadequacaoXParecerDbTable = new \Readequacao_Model_DbTable_TbReadequacaoXParecer();
+        $tbReadequacaoXParecer = $tbReadequacaoXParecerDbTable->findBy([
+            'idParecer' => $this->idAtoDeGestao
+        ]);
+
+        $tbReadequacaoDbTable = new \Readequacao_Model_DbTable_TbReadequacao();
+        $readequacaoDetalhada = $tbReadequacaoDbTable->obterReadequacaoDetalhada($tbReadequacaoXParecer['idReadequacao']);
+        $view->dsTipoReadequacao = $readequacaoDetalhada['dsTipoReadequacao'];
 
         return $view->render('documento-assinatura.phtml');
     }

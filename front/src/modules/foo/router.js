@@ -1,19 +1,12 @@
-// import Vue from 'vue';
-// import Router from 'vue-router';
-// import Index from './Index';
-import Bar from './components/Bar';
-
-// Vue.use(Router);
+import ListBar from './components/ListBar';
 
 export default [
     {
         path: '/foo',
-        name: 'fooIndex',
-        component: Bar,
+        name: 'ListBar',
+        component: ListBar,
         meta: {
             title: 'Principal',
         },
     },
 ];
-
-// export default new Router({ routes });

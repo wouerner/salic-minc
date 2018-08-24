@@ -1,5 +1,8 @@
 # Coverage directory used by tools like istanbul
-front/test/unit/coverage/
+front/test/unit/coverage/*
+front/test/unit/coverage
+front/test/e2e/reports
+coverage
 
 # arquivo que o webpack injeta os scripts
 application/modules/default/views/scripts/index/index.phtml
@@ -10,6 +13,7 @@ application/configs/config.ini
 application.ini
 application/configs/config_desenv.ini
 application/configs/config_treinamento.ini
+docker-compose.yml
 
 # arquivos e diretorios do salic
 data/proposta/model/tbdocumentoagentes/*

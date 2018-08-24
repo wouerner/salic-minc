@@ -114,7 +114,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
         $menu['dadosprojeto'] = [
             'id' => 'dadosdoprojeto',
-            'label' => 'Dados básicos',
+            'label' => 'Dados do Projeto',
             'title' => '',
             'link' => '/projeto/convenio/visualizar/idPronac/' . $idPronacHash,
             'ajax' => false,
@@ -130,6 +130,94 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
             'ajax' => true,
             'icon' => 'person',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes'] = [
+            'id' => 'outrasinformacoes',
+            'label' => 'Outras Informações',
+            'title' => 'Outras Informações',
+            'link' => '',
+            'ajax' => false,
+            'icon' => 'style',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Certid&otilde;es Negativas',
+            'title' => 'Ir para Dados Certid&otilde;es Negativas',
+            'link' => '/default/consultardadosprojeto/certidoes-negativas/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Documentos anexados',
+            'title' => 'Ir para  Documentos anexados',
+            'link' => '/default/consultardadosprojeto/documentos-anexados/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Dilig&ecirc;ncias do projeto',
+            'title' => 'Ir para Dilig&ecirc;ncias do projeto',
+            'link' => '/default/consultardadosprojeto/diligencias/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Provid&ecirc;ncia tomada',
+            'title' => 'Ir para Provid&ecirc;ncia tomada',
+            'link' => '/default/consultardadosprojeto/providencia-tomada/?idPronac=' . $idPronacHash,
+            'ajax' => false,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Tramita&ccedil;&atilde;o',
+            'title' => 'Ir para Tramita&ccedil;&atilde;o',
+            'link' => '/default/consultardadosprojeto/tramitacao/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        # Execução
+        if ($this->permissoesMenu['Execucao'] || !$this->usuarioExterno || $debug) {
+
+            $menu['execucao'] = [
+                'id' => 'execucao',
+                'label' => 'Execu&ccedil;&atilde;o',
+                'title' => 'Menu Execu&ccedil;&atilde;o',
+                'link' => '',
+                'ajax' => false,
+                'icon' => 'play_for_work',
+                'submenu' => '',
+                'grupo' => []
+            ];
+
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $debug) {
+
+                $menu['execucao']['submenu'][] = [
+                    'label' => 'Dados da fiscaliza&ccedil;&atilde;o',
+                    'title' => 'Ir para Dados da fiscaliza&ccedil;&atilde;o',
+                    'link' => '/default/consultardadosprojeto/dados-fiscalizacao/?idPronac=' . $idPronacHash,
+                    'ajax' => true,
+                    'grupo' => []
+                ];
+            }
+        }
+        
+        $menu['solicitacoes'] = [
+            'id' => 'solicitacoes',
+            'label' => $this->usuarioExterno ? "Minhas solicita&ccedil;&otilde;es" : "Solicita&ccedil;&otilde;es",
+            'title' => 'Ir para Solicitações',
+            'link' => '/solicitacao/mensagem/index/listarTudo/true/idPronac/' . $idPronac,
+            'ajax' => false,
+            'icon' => 'contact_mail',
             'submenu' => '',
             'grupo' => []
         ];
@@ -169,8 +257,9 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'proponente',
             'label' => 'Proponente',
             'title' => '',
-            'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/#/projeto/incentivo/{$idPronacHash}/proponente",
+            // 'link' => '/projeto/proponente-rest/get/?idPronac=' . $idPronacHash,
+            'ajax' => false,
             'icon' => 'person',
             'submenu' => '',
             'grupo' => []
@@ -403,6 +492,14 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'label' => 'Concilia&ccedil;&atilde;o Banc&aacute;ria',
                 'title' => 'Ir para Concilia&ccedil;&atilde;o Banc&aacute;ria',
                 'link' => '/default/consultardadosprojeto/conciliacao-bancaria/?idPronac=' . $idPronacHash,
+                'ajax' => false,
+                'grupo' => []
+            ];
+
+            $menu['prestacaodecontas']['submenu'][] = [
+                'label' => 'Rela&ccedil;&atilde;o de pagamentos',
+                'title' => 'Ir para Rela&ccedil;&atilde;o de Pagamentos',
+                'link' => '/default/consultardadosprojeto/dados-relacao-pagamentos/?idPronac=' . $idPronacHash,
                 'ajax' => true,
                 'grupo' => []
             ];
@@ -421,6 +518,15 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'link' => '/default/consultardadosprojeto/relatorio-fisico/?idPronac=' . $idPronacHash,
                 'ajax' => true,
                 'grupo' => []
+            ];
+
+
+            $menu['prestacaodecontas']['submenu'][] = [
+              'label' => 'Pagamentos por UF / Munic&iacute;pio',
+              'title' => 'Ir para Pagamentos por UF / Munic&iacute;pio',
+              'link' => '/default/consultardadosprojeto/pagamentos-por-uf-municipio/?idPronac=' . $idPronacHash,
+              'ajax' => true,
+              'grupo' => []
             ];
 
             $menu['prestacaodecontas']['submenu'][] = [

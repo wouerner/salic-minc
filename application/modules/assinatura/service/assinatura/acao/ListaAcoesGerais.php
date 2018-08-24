@@ -7,6 +7,8 @@ use \Assinatura_Model_DbTable_TbAssinatura as TbAssinaturaDbTable,
     \Application\Modules\Readequacao\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesReadequacao,
     \Application\Modules\PrestacaoContas\Service\Assinatura\Laudo\Acao\ListaAcoesModulo as ListaAcoesLaudoPrestacaoContas,
     \Application\Modules\Projeto\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesHomologacaoProjeto,
+    \Application\Modules\Parecer\Service\Assinatura\AnaliseCNIC\Acao\ListaAcoesModulo as ListaAcoesParecerAnaliseCNIC,
+    \Application\Modules\Parecer\Service\Assinatura\AnaliseInicial\Acao\ListaAcoesModulo as ListaAcoesParecerAnaliseInicial,
     \Application\Modules\Admissibilidade\Service\Assinatura\Acao\ListaAcoesModulo as ListaAcoesEnquadramento;
 
 class ListaAcoesGerais implements IListaAcoesGerais
@@ -21,6 +23,9 @@ class ListaAcoesGerais implements IListaAcoesGerais
             TbAssinaturaDbTable::TIPO_ATO_ENQUADRAMENTO => new ListaAcoesEnquadramento(),
             TbAssinaturaDbTable::TIPO_ATO_LAUDO_PRESTACAO_CONTAS => new ListaAcoesLaudoPrestacaoContas(),
             TbAssinaturaDbTable::TIPO_ATO_HOMOLOGAR_PROJETO => new ListaAcoesHomologacaoProjeto(),
+
+            TbAssinaturaDbTable::TIPO_ATO_ANALISE_CNIC => new ListaAcoesParecerAnaliseCNIC(),
+            TbAssinaturaDbTable::TIPO_ATO_ANALISE_INICIAL => new ListaAcoesParecerAnaliseInicial(),
         ];
     }
 }

@@ -1,15 +1,5 @@
 <?php
 
-/**
- * DAO tbReadequacao
- * @author jeffersonassilva@gmail.com - XTI
- * @since 19/11/2013
- * @version 1.0
- * @package application
- * @subpackage application.model
- * @copyright � 2011 - Minist�rio da Cultura - Todos os direitos reservados.
- * @link http://www.cultura.gov.br
- */
 class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
 {
     protected $_schema = "sac";
@@ -37,11 +27,19 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
     const TIPO_READEQUACAO_DEMOCRATIZACAO_ACESSO = 19;
     const TIPO_READEQUACAO_ETAPAS_TRABALHO = 20;
     const TIPO_READEQUACAO_FICHA_TECNICA = 21;
+    const TIPO_READEQUACAO_SALDO_APLICACAO = 22;
     const TIPO_READEQUACAO_TRANSFERENCIA_RECURSOS = 23;
 
     const PERCENTUAL_REMANEJAMENTO = 50;
     const ST_ESTADO_EM_ANDAMENTO = 0;
     const ST_ESTADO_FINALIZADO = 1;
+
+
+    const TIPOS_READEQUACOES_ORCAMENTARIAS = [
+        self::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
+        self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA,
+        self::TIPO_READEQUACAO_SALDO_APLICACAO
+    ];
 
     /**
      * @param array $dados
@@ -1174,10 +1172,7 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         if ($idTipoReadequacao) {
             $tiposReadequacoes = array($idTipoReadequacao);
         } else {
-            $tiposReadequacoes = array(
-                self::TIPO_READEQUACAO_REMANEJAMENTO_PARCIAL,
-                self::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA
-            );
+            $tiposReadequacoes = self::TIPOS_READEQUACOES_ORCAMENTARIAS;
         }
 
         $select->where('r.idTipoReadequacao IN(?)', $tiposReadequacoes);
@@ -1201,8 +1196,13 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
      */
     public function existeReadequacaoEmEdicao(
         $idPronac,
-        $idTipoReadequacao)
+        $idTipoReadequacao = '')
     {
+        $tiposSiEncaminhamentoProponente = [
+            Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE,
+            Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_NAO_ENVIA_MINC
+        ];
+
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from(
@@ -1210,8 +1210,11 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             'r.idReadequacao'
         );
         $select->where('r.idPronac = ?', $idPronac);
-        $select->where('r.siEncaminhamento = ?', Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE);
-        $select->where('r.idTipoReadequacao = ?', $idTipoReadequacao);
+        $select->where('r.siEncaminhamento IN (?)', $tiposSiEncaminhamentoProponente);
+
+        if ($idTipoReadequacao) {
+            $select->where('r.idTipoReadequacao = ?', $idTipoReadequacao);
+        }
         $select->where('r.stEstado=?', self::ST_ESTADO_EM_ANDAMENTO);
 
         $result = $this->fetchAll($select);
@@ -1260,6 +1263,35 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
 
         if (count($result) > 0) {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Método para obter a readequacao em andamento
+     * @access public
+     * @param integer $idPronac
+     * @return boolean
+     */
+    public function obterReadequacaoOrcamentariaEmAndamento($idPronac)
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            ['r' => $this->_name],
+            [
+                'r.idReadequacao',
+                'r.idTipoReadequacao'
+                ]
+        );
+        $select->where('r.idPronac = ?', $idPronac);
+        $select->where('r.idTipoReadequacao IN (?)', self::TIPOS_READEQUACOES_ORCAMENTARIAS);
+
+        $result = $this->fetchAll($select);
+
+        if (count($result) > 0) {
+            return $result[0];
         } else {
             return false;
         }
@@ -1495,5 +1527,126 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         }
 
         return $readequacaoArray;
+    }
+
+    /**
+     * Método criar readequação de planilha (orçamentária/saldo aplicação
+     * @access private
+     * @param integer $idPronac
+     * @param integer $idTipoReadequacao
+     * @return Bool
+     */
+    public function criarReadequacaoPlanilha(
+        $idPronac,
+        $idTipoReadequacao
+    )
+    {
+        $auth = Zend_Auth::getInstance();
+        $tblAgente = new Agente_Model_DbTable_Agentes();
+        $rsAgente = $tblAgente->buscar(array('CNPJCPF=?'=>$auth->getIdentity()->Cpf))->current();
+
+        $dados = array();
+        $dados['idPronac'] = $idPronac;
+        $dados['idTipoReadequacao'] = $idTipoReadequacao;
+        $dados['dtSolicitacao'] = new Zend_Db_Expr('GETDATE()');
+        $dados['idSolicitante'] = $rsAgente->idAgente;
+        $dados['dsJustificativa'] = '';
+        $dados['dsSolicitacao'] = '';
+        $dados['idDocumento'] = null;
+        $dados['siEncaminhamento'] = Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_CADASTRADA_PROPONENTE;
+        $dados['stEstado'] = 0;
+
+        $idReadequacao = $this->inserir($dados);
+
+        if (!$idReadequacao) {
+            throw new Exception("Houve um erro na cria&ccedil;&atilde;o das planilhas");
+        }
+
+        return $idReadequacao;
+    }
+
+
+    public function carregarValorEntrePlanilhas($idPronac, $idTipoReadequacao) {
+        $idReadequacao = $this->buscarIdReadequacaoAtiva(
+            $idPronac,
+            $idTipoReadequacao
+        );
+
+        $tbPlanilhaAprovacao = new tbPlanilhaAprovacao();
+        $PlanilhaAtiva = $tbPlanilhaAprovacao->valorTotalPlanilhaAtiva(
+            $idPronac,
+            [
+                Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL
+            ]
+        )->current();
+
+        $PlanilhaReadequada = $tbPlanilhaAprovacao->valorTotalPlanilhaReadequada(
+                            $idPronac,
+                            $idReadequacao,
+                            [
+                                Proposta_Model_Verificacao::INCENTIVO_FISCAL_FEDERAL
+                            ]
+        )->current();
+
+        $retorno = [];
+
+        if ($PlanilhaReadequada['Total'] > 0) {
+            if ($PlanilhaAtiva['Total'] == $PlanilhaReadequada['Total']) {
+                $retorno['statusPlanilha'] = 'neutro';
+            } elseif ($PlanilhaAtiva['Total'] > $PlanilhaReadequada['Total']) {
+                $retorno['statusPlanilha'] = 'positivo';
+            } else {
+                $retorno['statusPlanilha'] = 'negativo';
+            }
+        } else {
+            $retorno['PlanilhaAtivaTotal'] = 0;
+            $retorno['PlanilhaReadequadaTotal'] = 0;
+            $retorno['statusPlanilha'] = 'neutro';
+        }
+
+        $retorno['PlanilhaReadequadaTotal'] = $PlanilhaReadequada['Total'];
+        $retorno['PlanilhaAtivaTotal'] = $PlanilhaAtiva['Total'];
+
+        return $retorno;
+    }
+
+    public function obterReadequacaoDetalhada($idReadequacao) : array
+    {
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+        $select->from(
+            array($this->_name),
+            new Zend_Db_Expr("
+                tbReadequacao.idReadequacao,
+                tbReadequacao.idPronac,
+                tbReadequacao.dtSolicitacao,
+                CAST(tbReadequacao.dsSolicitacao AS TEXT) AS dsSolicitacao,
+                CAST(tbReadequacao.dsJustificativa AS TEXT) AS dsJustificativa,
+                tbReadequacao.idSolicitante,
+                tbReadequacao.idAvaliador,
+                tbReadequacao.dtAvaliador,
+                CAST(tbReadequacao.dsAvaliacao AS TEXT) AS dsAvaliacao,
+                tbReadequacao.idTipoReadequacao,
+                tbReadequacao.stAtendimento,
+                tbReadequacao.siEncaminhamento,
+                tbReadequacao.stEstado,
+                tbReadequacao.dtEnvio
+            ")
+        );
+        $select->joinInner(
+            array('tbTipoReadequacao'),
+            'tbTipoReadequacao.idTipoReadequacao = tbReadequacao.idTipoReadequacao',
+            [
+                'dsTipoReadequacao' => new Zend_Db_Expr('CAST(tbTipoReadequacao.dsReadequacao AS TEXT)')
+            ],
+            $this->_schema
+        );
+
+        $select->where("tbReadequacao.idReadequacao = ?", $idReadequacao);
+
+        $resultado = $this->fetchRow($select);
+        if($resultado) {
+            return $resultado->toArray();
+        }
     }
 }
