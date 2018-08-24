@@ -124,7 +124,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
 
     export default {
@@ -132,7 +132,7 @@
         data() {
             return {
                 valid: false,
-                dialog: false,
+                dialog: true,
                 itemRules: [
                     v => !!v || 'Tipo de manifestação e obrigatório!'
                 ],
