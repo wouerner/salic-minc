@@ -1,4 +1,5 @@
 import numeral from 'numeral';
+import moment from 'moment';
 import 'numeral/locales';
 
 numeral.locale('pt-br');
@@ -67,7 +68,7 @@ export default {
         },
         definirClasseItem(row) {
             return {
-                'orange lighten-2': row.stCustoPraticado === true,
+                'orange lighten-2': row.stCustoPraticado === true || row.stCustoPraticado === '1' || row.stCustoPraticado === 1,
                 'linha-incluida': row.tpAcao === 'I',
                 'linha-excluida': row.tpAcao === 'E',
                 'linha-atualizada': row.tpAcao === 'A',
@@ -78,6 +79,13 @@ export default {
         formatarParaReal(value) {
             const parsedValue = parseFloat(value);
             return numeral(parsedValue).format('0,0.00');
+        },
+        formatarData(value) {
+            if (value) {
+                return moment(String(value)).format('MM/DD/YYYY');
+            }
+
+            return '';
         },
     },
 };
