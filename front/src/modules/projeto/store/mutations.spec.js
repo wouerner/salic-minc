@@ -4,6 +4,7 @@ describe('Projeto Mutations', () => {
     let state;
     let defaultState;
     let projeto;
+    let planilhaHomologada;
 
     beforeEach(() => {
         defaultState = {
@@ -11,6 +12,11 @@ describe('Projeto Mutations', () => {
                 IdPRONAC: '',
                 Item: '',
                 NomeProjeto: '',
+            },
+            planilhaHomologada: {
+                tpPlanilha: '',
+                IdPronac: '',
+                PRONAC: '',
             },
         };
 
@@ -21,10 +27,21 @@ describe('Projeto Mutations', () => {
             Item: 'Hospedagem sem Alimentação',
             NomeProjeto: 'Criança Para Vida - 15 anos',
         };
+
+        planilhaHomologada = {
+            tpPlanilha: 'CO',
+            IdPronac: '189786',
+            PRONAC: '150151',
+        }
     });
 
     test('SET_PROJETO', () => {
         mutations.SET_PROJETO(state, projeto);
         expect(state.projeto).toEqual(projeto);
+    });
+
+    test('SET_PLANILHA_HOMOLOGADA', () => {
+        mutations.SET_PLANILHA_HOMOLOGADA(state, planilhaHomologada);
+        expect(state.planilhaHomologada).toEqual(planilhaHomologada);
     });
 });
