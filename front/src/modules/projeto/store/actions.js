@@ -30,11 +30,20 @@ export const buscaPlanilhaHomologada = ({ commit }, idPronac) => {
 };
 
 export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
-    console.log('chega na action 1');
     projetoHelperAPI.buscaPlanilhaOriginal(idPreProjeto)
         .then((response) => {
             const data = response.data;
             const planilhaOriginal = data.data;
             commit(types.SET_PLANILHA_ORIGINAL, planilhaOriginal);
+        });
+};
+
+export const buscaPlanilhaAutorizada = ({ commit }, idPreProjeto) => {
+    console.log('chega na action 1');
+    projetoHelperAPI.buscaPlanilhaAutorizada(idPreProjeto)
+        .then((response) => {
+            const data = response.data;
+            const planilhaAutorizada = data.data;
+            commit(types.SET_PLANILHA_AUTORIZADA, planilhaAutorizada);
         });
 };
