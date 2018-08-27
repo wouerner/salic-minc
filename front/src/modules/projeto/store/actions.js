@@ -38,3 +38,12 @@ export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
             commit(types.SET_PLANILHA_ORIGINAL, planilhaOriginal);
         });
 };
+
+export const buscaPlanilhaReadequada = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaPlanilhaReadequada(idPronac)
+        .then((response) => {
+            const data = response.data;
+            const planilhaReadequada = data.data;
+            commit(types.SET_PLANILHA_READEQUADA, planilhaReadequada);
+        });
+};

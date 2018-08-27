@@ -1,5 +1,5 @@
 <template>
-    <div id="planilha-homologada">
+    <div id="planilha-readequada">
         <Carregando v-if="loading" :text="'Procurando planilha'"></Carregando>
 
         <Planilha v-if="Object.keys(planilha).length > 0" :arrayPlanilha="planilha">
@@ -15,14 +15,13 @@
     import Carregando from '@/components/Carregando';
     import Planilha from '@/components/Planilha/Planilha';
     import PlanilhaItensReadequados from '@/components/Planilha/PlanilhaItensReadequados';
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     export default {
         /* eslint-disable */
         name: 'PlanilhaPropostaReadequada',
         data: function () {
             return {
-                planilha: [],
                 loading: true,
                 semResposta: false,
                 mensagem: ''
@@ -34,47 +33,26 @@
             PlanilhaItensReadequados
         },
         mounted: function () {
-            if (typeof this.dadosProjeto !== 'undefined') {
-                this.fetch(this.dadosProjeto.idPronac);
-            }
+            this.buscaPlanilhaReadequada(this.dadosProjeto.idPronac);
         },
         watch: {
-            dadosProjeto: function (value) {
-                if (typeof value !== 'undefined') {
-                    this.fetch(value.idPronac);
-                }
-            }
+            dadosProjeto(value) {
+                this.buscaPlanilhaReadequada(value.idPronac);
+            },
+            planilha() {
+                this.loading = false;
+            },
         },
         computed: {
             ...mapGetters({
-                dadosProjeto: 'projeto/projeto'
-            })
+                dadosProjeto: 'projeto/projeto',
+                planilha: 'projeto/planilhaReadequada',
+            }),
         },
         methods: {
-            fetch: function (id) {
-                if (typeof id == 'undefined') {
-                    return;
-                }
-
-                let self = this;
-                $3
-                    .ajax({
-                        url: '/projeto/orcamento/obter-planilha-readequada-ajax/',
-                        data: {
-                            idPronac: id,
-                        },
-                    })
-                    .done((response) => {
-                        self.planilha = response.data;
-                    })
-                    .fail((response) => {
-                        self.semResposta = true;
-                        self.mensagem = response.responseJSON.msg;
-                    })
-                    .always(() => {
-                        self.loading = false;
-                    });
-            },
+            ...mapActions({
+                buscaPlanilhaReadequada: 'projeto/buscaPlanilhaReadequada'
+            }),
         },
     };
 </script>

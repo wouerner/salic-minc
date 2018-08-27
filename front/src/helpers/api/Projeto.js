@@ -23,3 +23,9 @@ export const buscaPlanilhaOriginal = (idPreProjeto) => {
     const queryParams = `?idPreProjeto=${idPreProjeto}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscaPlanilhaReadequada = (idPronac) => {
+    const path = '/projeto/orcamento/obter-planilha-readequada-ajax/';
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(path, queryParams);
+};
