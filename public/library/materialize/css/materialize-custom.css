@@ -200,6 +200,33 @@ textarea.materialize-textarea:focus:not([readonly]) + label[data-error] {
     content: "Atual";
 }
 
+/* collapsible planilhas */
+
+.planilha-orcamentaria .collapsible .collapsible,
+.planilha-orcamentaria .collapsible-body .collapsible-body {
+    border: none;
+    box-shadow: none;
+}
+
+.planilha-orcamentaria .collapsible .collapsible-header {
+    color: #F44336;
+}
+
+.planilha-orcamentaria .collapsible .collapsible .collapsible-header {
+    padding-left: 30px;
+    color: #4CAF50;
+}
+
+.planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible-header {
+    padding-left: 50px;
+    color: #ff9800;
+}
+
+.planilha-orcamentaria .collapsible .collapsible .collapsible .collapsible .collapsible-header {
+    padding-left: 70px;
+    color: #2196F3;
+}
+
 span.badge.new:after {
     content: "";
 }

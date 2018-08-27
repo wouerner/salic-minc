@@ -23,8 +23,8 @@
                 <td class="center-align">{{row.QtdeDias}}</td>
                 <td class="center-align">{{row.Quantidade}}</td>
                 <td class="center-align">{{row.Ocorrencia}}</td>
-                <td class="right-align">{{ row.vlUnitario | formatarParaReal }}</td>
-                <td class="right-align">{{ row.vlSolicitado | formatarParaReal }}</td>
+                <td class="right-align">{{ row.vlUnitario | filtroFormatarParaReal }}</td>
+                <td class="right-align">{{ row.vlSolicitado | filtroFormatarParaReal }}</td>
                 <td class="justify" width="30%" v-html="row.JustProponente"></td>
             </tr>
             </tbody>
