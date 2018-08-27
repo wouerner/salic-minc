@@ -29,3 +29,15 @@ export const buscaPlanilhaReadequada = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscaPlanilhaAutorizada = (idPreProjeto) => {
+    const path = '/proposta/visualizar/obter-planilha-proposta-original-ajax/';
+    const queryParams = `?idPreProjeto=${idPreProjeto}`;
+    return api.getRequest(path, queryParams);
+};
+
+export const buscaPlanilhaAdequada = (idPreProjeto) => {
+    const path = '/proposta/visualizar/obter-planilha-proposta-adequada-ajax/';
+    const queryParams = `?idPreProjeto=${idPreProjeto}`;
+    return api.getRequest(path, queryParams);
+};

@@ -30,7 +30,6 @@ export const buscaPlanilhaHomologada = ({ commit }, idPronac) => {
 };
 
 export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
-    console.log('chega na action 1');
     projetoHelperAPI.buscaPlanilhaOriginal(idPreProjeto)
         .then((response) => {
             const data = response.data;
@@ -45,5 +44,23 @@ export const buscaPlanilhaReadequada = ({ commit }, idPronac) => {
             const data = response.data;
             const planilhaReadequada = data.data;
             commit(types.SET_PLANILHA_READEQUADA, planilhaReadequada);
+        });
+};
+
+export const buscaPlanilhaAutorizada = ({ commit }, idPreProjeto) => {
+    projetoHelperAPI.buscaPlanilhaAutorizada(idPreProjeto)
+        .then((response) => {
+            const data = response.data;
+            const planilhaAutorizada = data.data;
+            commit(types.SET_PLANILHA_AUTORIZADA, planilhaAutorizada);
+        });
+};
+
+export const buscaPlanilhaAdequada = ({ commit }, idPreProjeto) => {
+    projetoHelperAPI.buscaPlanilhaAdequada(idPreProjeto)
+        .then((response) => {
+            const data = response.data;
+            const planilhaAdequada = data.data;
+            commit(types.SET_PLANILHA_ADEQUADA, planilhaAdequada);
         });
 };

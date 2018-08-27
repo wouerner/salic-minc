@@ -6,6 +6,8 @@ export const state = {
     planilhaHomologada: {},
     planilhaOriginal: {},
     planilhaReadequada: {},
+    planilhaAutorizada: {},
+    planilhaAdequada: {},
 };
 
 export const mutations = {
@@ -24,5 +26,10 @@ export const mutations = {
     },
     [types.SET_PLANILHA_READEQUADA](state, planilhaReadequada) {
         state.planilhaReadequada = planilhaReadequada;
+    [types.SET_PLANILHA_AUTORIZADA](state, planilhaAutorizada) {
+        state.planilhaAutorizada = planilhaAutorizada;
+    },
+    [types.SET_PLANILHA_ADEQUADA](state, planilhaAdequada) {
+        state.planilhaAdequada = planilhaAdequada;
     },
 };
