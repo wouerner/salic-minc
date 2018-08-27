@@ -140,10 +140,10 @@ function obterColunasListagem () {
         }
     })
     colunas.push({
+        name: 'tipo_recurso',
         data: null,
         render: function (data, type, row) {
-            console.log(data.tipo_recurso);
-            if(data.tipo_recurso != null && data.tipo_recurso != "-") {
+            if(typeof data.tipo_recurso != 'undefined' && data.tipo_recurso != "-") {
                 return '<i class="material-icons">done</i>';
             }
             return '';
