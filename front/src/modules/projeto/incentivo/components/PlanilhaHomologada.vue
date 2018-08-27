@@ -20,7 +20,6 @@
         name: 'PlanilhaPropostaHomologada',
         data() {
             return {
-                planilha: [],
                 loading: true,
                 semResposta: false,
                 mensagem: '',
@@ -33,52 +32,54 @@
         },
         created() {
             if (typeof this.dadosProjeto !== 'undefined') {
-                this.fetch(this.dadosProjeto.idPronac);
+                // this.fetch(this.dadosProjeto.idPronac);
                 this.buscaPlanilhaHomologada(this.dadosProjeto.idPronac);
+                this.loading = false;
             }
         },
         watch: {
             dadosProjeto(value) {
                 if (typeof value !== 'undefined') {
-                    this.fetch(value.idPronac);
+                    this.buscaPlanilhaHomologada(value.idPronac);
                 }
             },
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                planilha: 'projeto/planilhaHomologada',
             }),
         },
         methods: {
             ...mapActions({
                 buscaPlanilhaHomologada: 'projeto/buscaPlanilhaHomologada',
             }),
-            fetch(id) {
-                if (typeof id === 'undefined') {
-                    return;
-                }
-
-                const self = this;
-
-                // eslint-disable-next-line
-                $3
-                    .ajax({
-                        url: '/projeto/orcamento/obter-planilha-homologada-ajax/',
-                        data: {
-                            idPronac: id,
-                        },
-                    })
-                    .done((response) => {
-                        self.planilha = response.data;
-                    })
-                    .fail((response) => {
-                        self.semResposta = true;
-                        self.mensagem = response.responseJSON.msg;
-                    })
-                    .always(() => {
-                        self.loading = false;
-                    });
-            },
+            // fetch(id) {
+            //     if (typeof id === 'undefined') {
+            //         return;
+            //     }
+            //
+            //     const self = this;
+            //
+            //     // eslint-disable-next-line
+            //     $3
+            //         .ajax({
+            //             url: '/projeto/orcamento/obter-planilha-homologada-ajax/',
+            //             data: {
+            //                 idPronac: id,
+            //             },
+            //         })
+            //         .done((response) => {
+            //             self.planilha = response.data;
+            //         })
+            //         .fail((response) => {
+            //             self.semResposta = true;
+            //             self.mensagem = response.responseJSON.msg;
+            //         })
+            //         .always(() => {
+            //             self.loading = false;
+            //         });
+            // },
         },
     };
 </script>
