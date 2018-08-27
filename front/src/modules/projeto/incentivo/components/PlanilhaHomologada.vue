@@ -31,17 +31,14 @@
             PlanilhaItensHomologados,
         },
         created() {
-            if (typeof this.dadosProjeto !== 'undefined') {
-                // this.fetch(this.dadosProjeto.idPronac);
-                this.buscaPlanilhaHomologada(this.dadosProjeto.idPronac);
-                this.loading = false;
-            }
+            this.buscaPlanilhaHomologada(this.dadosProjeto.idPronac);
         },
         watch: {
             dadosProjeto(value) {
-                if (typeof value !== 'undefined') {
-                    this.buscaPlanilhaHomologada(value.idPronac);
-                }
+                this.buscaPlanilhaHomologada(value.idPronac);
+            },
+            planilha() {
+                this.loading = false;
             },
         },
         computed: {
@@ -54,32 +51,6 @@
             ...mapActions({
                 buscaPlanilhaHomologada: 'projeto/buscaPlanilhaHomologada',
             }),
-            // fetch(id) {
-            //     if (typeof id === 'undefined') {
-            //         return;
-            //     }
-            //
-            //     const self = this;
-            //
-            //     // eslint-disable-next-line
-            //     $3
-            //         .ajax({
-            //             url: '/projeto/orcamento/obter-planilha-homologada-ajax/',
-            //             data: {
-            //                 idPronac: id,
-            //             },
-            //         })
-            //         .done((response) => {
-            //             self.planilha = response.data;
-            //         })
-            //         .fail((response) => {
-            //             self.semResposta = true;
-            //             self.mensagem = response.responseJSON.msg;
-            //         })
-            //         .always(() => {
-            //             self.loading = false;
-            //         });
-            // },
         },
     };
 </script>
