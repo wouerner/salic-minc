@@ -14,7 +14,6 @@ export const mutations = {
     [types.SET_PROJETO](state, projeto) {
         state.projeto = projeto;
     },
-
     [types.SET_PROPONENTE](state, proponente) {
         state.proponente = proponente;
     },
@@ -26,6 +25,7 @@ export const mutations = {
     },
     [types.SET_PLANILHA_READEQUADA](state, planilhaReadequada) {
         state.planilhaReadequada = planilhaReadequada;
+    },
     [types.SET_PLANILHA_AUTORIZADA](state, planilhaAutorizada) {
         state.planilhaAutorizada = planilhaAutorizada;
     },
