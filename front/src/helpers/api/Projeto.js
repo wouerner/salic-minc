@@ -29,3 +29,9 @@ export const buscaPlanilhaAutorizada = (idPreProjeto) => {
     const queryParams = `?idPreProjeto=${idPreProjeto}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscaPlanilhaAdequada = (idPreProjeto) => {
+    const path = '/proposta/visualizar/obter-planilha-proposta-adequada-ajax/';
+    const queryParams = `?idPreProjeto=${idPreProjeto}`;
+    return api.getRequest(path, queryParams);
+};

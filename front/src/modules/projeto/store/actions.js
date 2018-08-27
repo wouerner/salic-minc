@@ -39,11 +39,19 @@ export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
 };
 
 export const buscaPlanilhaAutorizada = ({ commit }, idPreProjeto) => {
-    console.log('chega na action 1');
     projetoHelperAPI.buscaPlanilhaAutorizada(idPreProjeto)
         .then((response) => {
             const data = response.data;
             const planilhaAutorizada = data.data;
             commit(types.SET_PLANILHA_AUTORIZADA, planilhaAutorizada);
+        });
+};
+
+export const buscaPlanilhaAdequada = ({ commit }, idPreProjeto) => {
+    projetoHelperAPI.buscaPlanilhaAdequada(idPreProjeto)
+        .then((response) => {
+            const data = response.data;
+            const planilhaAdequada = data.data;
+            commit(types.SET_PLANILHA_ADEQUADA, planilhaAdequada);
         });
 };
