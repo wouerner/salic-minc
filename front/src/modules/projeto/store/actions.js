@@ -21,11 +21,20 @@ export const buscaProponente = ({ commit }, idPronac) => {
 };
 
 export const buscaPlanilhaHomologada = ({ commit }, idPronac) => {
-    console.log('chega na action 1');
     projetoHelperAPI.buscaPlanilhaHomologada(idPronac)
         .then((response) => {
             const data = response.data;
             const planilhaHomologada = data.data;
             commit(types.SET_PLANILHA_HOMOLOGADA, planilhaHomologada);
+        });
+};
+
+export const buscaPlanilhaOriginal = ({ commit }, idPreProjeto) => {
+    console.log('chega na action 1');
+    projetoHelperAPI.buscaPlanilhaOriginal(idPreProjeto)
+        .then((response) => {
+            const data = response.data;
+            const planilhaOriginal = data.data;
+            commit(types.SET_PLANILHA_ORIGINAL, planilhaOriginal);
         });
 };

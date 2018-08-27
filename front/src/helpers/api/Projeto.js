@@ -17,3 +17,9 @@ export const buscaPlanilhaHomologada = (idPronac) => {
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(path, queryParams);
 };
+
+export const buscaPlanilhaOriginal = (idPreProjeto) => {
+    const path = '/proposta/visualizar/obter-planilha-proposta-original-ajax/';
+    const queryParams = `?idPreProjeto=${idPreProjeto}`;
+    return api.getRequest(path, queryParams);
+};
