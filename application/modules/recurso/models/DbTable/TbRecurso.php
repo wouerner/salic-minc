@@ -23,13 +23,13 @@ class Recurso_Model_DbTable_TbRecurso extends MinC_Db_Table_Abstract
 
             $dados = array(
                 'siRecurso' => Recurso_Model_TbRecurso::SI_RECURSO_FINALIZADO,
-                'stEstado' => Recurso_Model_TbRecurso::SITUACAO_TIPO_RECURSO_INATIVO
+                'stEstado' => Recurso_Model_TbRecurso::SITUACAO_RECURSO_INATIVO
             );
 
             $where = array(
                 'IdPRONAC = ?' => $idPronac,
-                'stEstado = ?' => Recurso_Model_TbRecurso::SITUACAO_TIPO_RECURSO_ATIVO,
-                'siFaseProjeto = ?' => Recurso_Model_TbRecurso::SITUACAO_TIPO_RECURSO_ATIVO
+                'stEstado = ?' => Recurso_Model_TbRecurso::SITUACAO_RECURSO_ATIVO,
+                'siFaseProjeto = ?' => Recurso_Model_TbRecurso::SITUACAO_RECURSO_ATIVO
             );
 
             $this->alterar($dados, $where);

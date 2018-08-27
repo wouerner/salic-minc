@@ -154,7 +154,7 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
         ];
 
         if ($enquadramentoProjeto['VlHomologadoIncentivo'] != $enquadramentoProjeto['VlAdequadoIncentivo']) {
-            $situacao['codigo'] = Projeto_Model_Situacao::PROJETO_AVALIADO;
+            $situacao['codigo'] = Projeto_Model_Situacao::PROJETO_HOMOLOGADO;
             $situacao['mensagem'] = "Aguardando a supera&ccedil;&atilde;o do prazo recursal.";
 
             # @todo verificar se o proponente tem direito a recurso
