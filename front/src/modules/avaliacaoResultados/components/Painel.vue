@@ -19,6 +19,8 @@
                 <td class="text-xs-right">{{ props.item.divisao }}</td>
                 <td class="text-xs-right">{{ props.item.diligencia }}</td>
                 <td class="text-xs-right">{{ props.item.historico }}</td>
+                <td> adfadsfasdfads
+                </td>
             </template>
         </v-data-table>
     </div>
@@ -55,7 +57,7 @@ export default {
             desserts: [
                 {
                     numero: 1,
-                    pronac: 'sdfsdfg',
+                    pronac: 'aaaa',
                     nome:'Crianca e vida - 15 anos',
                     situacao:'E17',
                     area:'Artes Integradas / Artes Integradas',
