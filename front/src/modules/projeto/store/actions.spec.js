@@ -104,4 +104,37 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_PLANILHA_HOMOLOGADA', planilhaHomologada.data);
         });
     });
+
+    describe('buscaPlanilhaOriginal', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        planilhaOriginal: {
+                            idPlanilhaProposta: '3675289',
+                            FonteRecurso: 'Incentivo Fiscal Federal',
+                            idEtapa: '2',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscaPlanilhaOriginal');
+            const idPreProjeto = 273246;
+            actions.buscaPlanilhaOriginal({ commit }, idPreProjeto);
+        });
+
+        test('it calls projetoHelperAPI.buscaPlanilhaOriginal', () => {
+            expect(projetoHelperAPI.buscaPlanilhaOriginal).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscaPlanilhaOriginal', (done) => {
+            const planilhaOriginal = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PLANILHA_ORIGINAL', planilhaOriginal.data);
+        });
+    });
 });
