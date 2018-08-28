@@ -170,4 +170,70 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_PLANILHA_READEQUADA', planilhaReadequada.data);
         });
     });
+
+    describe('buscaPlanilhaAutorizada', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        planilhaAutorizada: {
+                            tpPlanilha: 'CO',
+                            idPronac: '200728',
+                            PRONAC: '1510482',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscaPlanilhaAutorizada');
+            const idPreProjeto = 273246;
+            actions.buscaPlanilhaAutorizada({ commit }, idPreProjeto);
+        });
+
+        test('it calls projetoHelperAPI.buscaPlanilhaAutorizada', () => {
+            expect(projetoHelperAPI.buscaPlanilhaAutorizada).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscaPlanilhaAutorizada', (done) => {
+            const planilhaAutorizada = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PLANILHA_AUTORIZADA', planilhaAutorizada.data);
+        });
+    });
+
+    describe('buscaPlanilhaAdequada', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        planilhaAdequada: {
+                            Seq: '28',
+                            idPlanilhaProposta: '4913779',
+                            idEtapa: '8',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscaPlanilhaAdequada');
+            const idPreProjeto = 273246;
+            actions.buscaPlanilhaAdequada({ commit }, idPreProjeto);
+        });
+
+        test('it calls projetoHelperAPI.buscaPlanilhaAdequada', () => {
+            expect(projetoHelperAPI.buscaPlanilhaAdequada).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscaPlanilhaAdequada', (done) => {
+            const planilhaAdequada = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PLANILHA_ADEQUADA', planilhaAdequada.data);
+        });
+    });
 });
