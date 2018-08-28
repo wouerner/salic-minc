@@ -15,8 +15,8 @@ describe('Projeto actions', () => {
                     data: {
                         projeto: {
                             IdPRONAC: '132451',
-                            Item: 'Hospedagem sem Alimenta��o',
-                            NomeProjeto: 'Crian�a Para Vida - 15 anos',
+                            Item: 'Hospedagem sem Alimenta\xE7\xE3o',
+                            NomeProjeto: 'Crian\xE7a Para Vida - 15 anos',
                         },
                     },
                 },
@@ -37,6 +37,38 @@ describe('Projeto actions', () => {
             const projeto = mockReponse.data;
             done();
             expect(commit).toHaveBeenCalledWith('SET_PROJETO', projeto.data);
+        });
+    });
+
+    describe('buscaProponente', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        proponente: {
+                            Proponente: 'Associa\xE7\xC3o Beneficiente Cultural Religiosa Centro Judaico do Brooklin',
+                            idAgente: '24806',
+                            TipoPessoa: 'Jur\xCDdica',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscaProponente');
+            actions.buscaProponente({ commit });
+        });
+
+        test('it calls projetoHelperAPI.buscaProponente', () => {
+            expect(projetoHelperAPI.buscaProponente).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscaProponente', (done) => {
+            const proponente = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PROPONENTE', proponente.data);
         });
     });
 
