@@ -137,4 +137,37 @@ describe('Projeto actions', () => {
             expect(commit).toHaveBeenCalledWith('SET_PLANILHA_ORIGINAL', planilhaOriginal.data);
         });
     });
+
+    describe('buscaPlanilhaReadequada', () => {
+        beforeEach(() => {
+            mockReponse = {
+                data: {
+                    data: {
+                        planilhaReadequada: {
+                            tpPlanilha: 'RP',
+                            IdPronac: '189786',
+                            PRONAC: '150151',
+                        },
+                    },
+                },
+            };
+
+            axios.get.mockResolvedValue(mockReponse);
+
+            commit = jest.fn();
+            jest.spyOn(projetoHelperAPI, 'buscaPlanilhaReadequada');
+            const idPronac = 123456;
+            actions.buscaPlanilhaReadequada({ commit }, idPronac);
+        });
+
+        test('it calls projetoHelperAPI.buscaPlanilhaReadequada', () => {
+            expect(projetoHelperAPI.buscaPlanilhaReadequada).toHaveBeenCalled();
+        });
+
+        test('it is commit to buscaPlanilhaReadequada', (done) => {
+            const planilhaReadequada = mockReponse.data;
+            done();
+            expect(commit).toHaveBeenCalledWith('SET_PLANILHA_READEQUADA', planilhaReadequada.data);
+        });
+    });
 });
