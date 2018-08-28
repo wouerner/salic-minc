@@ -132,10 +132,12 @@
         data()
         {
             return {
-                idPronac: 132451,
+                idPronac: this.$route.params.id,
+                getConsolidacaoLink: '/avaliacao-resultados/emissao-parecer-rest/idPronac/' + this.idPronac,
                 redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
                 valid: false,
                 dialog: true,
+                data: '',
                 itemRules: [
                     v => !!v || 'Tipo de manifestação e obrigatório!'
                 ],
@@ -152,41 +154,38 @@
                 items: [{ id:  'R', text:'Reprovação' }, { id: 'A',text:'Aprovação' }, {id : 'P', text:'Aprovação com Ressalva'}],
             };
         },
-        props: ['registroAtivo'],
         components:
-         {
-            ModalTemplate,
-        },
-        methods:
-         {
-            ...mapActions({
-
-                modalOpen: 'modal/modalOpen',
-                modalClose: 'modal/modalClose',
-            }),
-            fecharModal()
             {
-                this.modalClose();
+                ModalTemplate,
             },
+        methods:
+            {
+                ...mapActions({
+                    modalOpen: 'modal/modalOpen',
+                    modalClose: 'modal/modalClose',
+                    getConsolidacaoData: 'avaliacaoResultados/getComParametro',
 
-        },
+                }),
+                fecharModal()
+                {
+                    this.modalClose();
+                },
+                getConsolidacao(link)
+                {
+                    this.data = this.getConsolidacaoData(link);
+                    console.info('sahushaudoabfsaojbfojasbfjosafasof')
+                },
+            },
         computed:
-         {
-            ...mapGetters({
-                registro: 'foo/registro',
-                modalVisible: 'modal/default',
-            }),
-        },
+            {
+                ...mapGetters({
+                    registro: 'foo/registro',
+                    modalVisible: 'modal/default',
+                }),
+            },
         mounted()
         {
-            console.info("AQUIIIIIIIIIIIIIIIIII");
-            console.info(this.$route.params);
-            fetch('../mocks/Parecer.json')
-                .then(r => r.json())
-                .then( json => { this.db = json;
-                    console.info("----------------");
-                    console.info(this.db)} );
-
+            this.getConsolidacao(this.getConsolidacaoLink);
         },
     };
 </script>
