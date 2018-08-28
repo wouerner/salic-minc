@@ -1,6 +1,6 @@
 <template>
     <div>
-       TipoAvaliaca 
+       TipoAvaliaca
     </div>
 </template>
 

@@ -1,25 +1,50 @@
 <template>
     <div>
         <v-data-table
-                :headers="headers"
-                :items="desserts"
+                :headers="cabecalho"
+                :items="dados"
                 hide-actions
                 class="elevation-1"
         >
             <template slot="items" slot-scope="props">
                 <td>{{ props.item.numero }}</td>
-                <td class="text-xs-right">{{ props.item.pronac }}</td>
+                <td class="text-xs-right">{{ props.item.pronac }}
+                    <v-flex xs12 sm4 text-xs-center>
+                        <div>
+                            <v-btn>131313131</v-btn>
+                        </div>
+                    </v-flex>
+                </td>
                 <td class="text-xs-right">{{ props.item.nome }}</td>
                 <td class="text-xs-right">{{ props.item.situacao }}</td>
                 <td class="text-xs-right">{{ props.item.area }}</td>
                 <td class="text-xs-right">{{ props.item.estado }}</td>
                 <td class="text-xs-right">{{ props.item.mecanismo }}</td>
                 <td class="text-xs-right">{{ props.item.data }}</td>
-                <td class="text-xs-right">{{ props.item.analisar }}</td>
-                <td class="text-xs-right">{{ props.item.divisao }}</td>
-                <td class="text-xs-right">{{ props.item.diligencia }}</td>
-                <td class="text-xs-right">{{ props.item.historico }}</td>
-                <td> adfadsfasdfads
+                <td class="text-xs-right">{{ props.item.analisar }}
+                    <div>
+                        <v-btn dark color="teal lighten-2">
+                            <i class="material-icons">compare_arrows</i>
+                        </v-btn>
+                    </div>
+                <td class="text-xs-right">{{ props.item.diligencia }}
+                    <div>
+                        <v-btn dark color="yellow accent-3">
+                            <i class="material-icons">
+                                warning
+                            </i>
+                        </v-btn>
+                    </div>
+                </td>
+                <td class="text-xs-right">{{ props.item.historico }}
+                    <v-flex xs12 sm4 text-xs-center>
+                        <div>
+                            <v-btn>
+                                <i class="material-icons">
+                                history
+                            </i></v-btn>
+                        </div>
+                    </v-flex>
                 </td>
             </template>
         </v-data-table>
@@ -34,7 +59,7 @@ export default {
     name: 'Painel',
     data () {
         return {
-            headers: [
+            cabecalho: [
                 {
                     text: '#',
                     align: 'left',
@@ -49,26 +74,28 @@ export default {
                 { text: 'Mecanismo', value: 'mecanismo' },
                 { text: 'Dt.recebimento', value: 'data' },
                 { text: 'Analisar', value: 'analisar' },
-                { text: 'Devolver para Chefe de Divisao', value: 'divisao' },
-                { text: 'Diligencia', value: 'divisao' },
+                { text: 'Diligencia', value: 'diligencia' },
                 { text: 'Historico', value: 'historico' },
 
             ],
-            desserts: [
+            dados: [
                 {
                     numero: 1,
-                    pronac: 'aaaa',
                     nome:'Crianca e vida - 15 anos',
                     situacao:'E17',
                     area:'Artes Integradas / Artes Integradas',
                     estado: 'SP',
                     mecanismo: 'Incentivo Fiscal',
                     data: '27/10/2017',
-                    analisar: '####',
-                    divisao: '###',
-                    diligencia: '###',
-                    historico: '###',
-
+                },
+                {
+                    numero: 1,
+                    nome:'Crianca e vida - 15 anos',
+                    situacao:'E17',
+                    area:'Artes Integradas / Artes Integradas',
+                    estado: 'SP',
+                    mecanismo: 'Incentivo Fiscal',
+                    data: '27/10/2017',
                 },
 
             ]
