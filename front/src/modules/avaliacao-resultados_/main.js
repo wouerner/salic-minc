@@ -5,10 +5,7 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import Index from './Index';
 
-import {
-    router,
-    store,
-} from './config';
+import { router, store, } from './config';
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;

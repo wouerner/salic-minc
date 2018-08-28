@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import Modal from '@/components/modal';
+    import { mapActions, mapGetters } from 'vuex';
+    import Modal from '@/components/modal';
 
-export default {
+    export default {
     name: 'ListBar',
     created() {
         this.obterDadosTabela();

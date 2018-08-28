@@ -129,7 +129,8 @@
 
     export default {
         name: 'UpdateBar',
-        data() {
+        data()
+        {
             return {
                 idPronac: 132451,
                 redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
@@ -152,10 +153,12 @@
             };
         },
         props: ['registroAtivo'],
-        components: {
+        components:
+         {
             ModalTemplate,
         },
-        methods: {
+        methods:
+         {
             ...mapActions({
 
                 modalOpen: 'modal/modalOpen',
@@ -166,19 +169,24 @@
                 this.modalClose();
             },
 
-            created()
-            {
-                fetch('../mocks/Parecer.json')
-                    .then(r => r.json())
-                    .then( json => { this.db = json;  } );
-            },
-
         },
-        computed: {
+        computed:
+         {
             ...mapGetters({
                 registro: 'foo/registro',
                 modalVisible: 'modal/default',
             }),
+        },
+        mounted()
+        {
+            console.info("AQUIIIIIIIIIIIIIIIIII");
+            console.info(this.$route.params);
+            fetch('../mocks/Parecer.json')
+                .then(r => r.json())
+                .then( json => { this.db = json;
+                    console.info("----------------");
+                    console.info(this.db)} );
+
         },
     };
 </script>
