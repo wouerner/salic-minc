@@ -81,17 +81,6 @@ export default {
         ...mapActions({
             buscaLocalRealizacaoDeslocamento: 'proposta/buscaLocalRealizacaoDeslocamento',
         }),
-        // fetch(id) {
-        //     if (id) {
-        //         const self = this;
-        //         /* eslint-disable */
-        //         $3.ajax({
-        //             url: '/proposta/visualizar/obter-local-realizacao-deslocamento/idPreProjeto/' + id
-        //         }).done(function (response) {
-        //             self.proposta = response.data;
-        //         });
-        //     }
-        // },
     },
 };
 </script>
