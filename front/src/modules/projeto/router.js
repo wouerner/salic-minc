@@ -11,6 +11,8 @@ import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
 import Proponente from './incentivo/components/proponente/Index';
 import Proposta from './incentivo/components/Proposta';
+import ConvenioTemplate from './convenio/Index';
+import DadosProjetoConvenio from './convenio/components/DadosProjeto';
 
 Vue.use(Router);
 
@@ -115,6 +117,20 @@ const routes = [
                 path: 'conteudo-dinamico',
                 name: 'container_ajax',
                 component: templateAjax,
+            },
+        ],
+    },
+    {
+        path: '/convenio/:idPronac',
+        component: ConvenioTemplate,
+        children: [
+            {
+                path: '',
+                name: 'dadosprojetoConvenio',
+                component: DadosProjetoConvenio,
+                meta: {
+                    title: 'Dados do Projeto',
+                },
             },
         ],
     },
