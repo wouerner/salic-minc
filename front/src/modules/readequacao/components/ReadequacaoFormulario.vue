@@ -138,16 +138,16 @@ export default {
     mixins: [utils],
     methods: {
 	salvarReadequacao: function() {
-	    if (Number(this.readequacao.dsSolicitacao) == 0) {
-		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel!");
-		this.$refs.formulario.$children[0].$refs.readequacaoSaldo.focus();
+	    if (this.dadosReadequacao.dsSolicitacao == 0 || this.dadosReadequacao.dsSolicitacao == '0,00') {
+		this.mensagemAlerta("\xC9 obrigat\xF3rio informar o saldo dispon\xEDvel; o valor deve ser diferente de R$ 0,00!");
+		this.$children[0].$children[0].$refs.input.focus();
 		
 		return;		
 	    }
 	    
 	    if (this.readequacao.justificativa.length < this.minCaracteresJustificativa) {
 		this.mensagemAlerta(
-		    "\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o! M\xEDnimo de caracteres: " + this.minCaracteresJustificativa
+		    "\xC9 obrigat\xF3rio preencher a justificativa da readequa\xE7\xE3o! M\xEDnimo de " + this.minCaracteresJustificativa + " caracteres."
 		);
 		this.$refs.readequacaoJustificativa.focus();
 		return;
