@@ -51,7 +51,7 @@
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
-                planilha: 'projeto/planilhaAdequada'
+                planilha: 'projeto/planilhaAdequada',
             }),
         },
         methods: {

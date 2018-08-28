@@ -122,7 +122,6 @@ export default {
         };
     },
     props: [
-        'idpreprojeto',
         'idplanodistribuicao',
         'idmunicipioibge',
         'iduf',
@@ -133,9 +132,6 @@ export default {
         PropostaDetalhamentoPlanoDistribuicao,
     },
     watch: {
-        idpreprojeto(value) {
-            this.fetch(value);
-        },
         arrayProdutos(value) {
             this.produtos = value;
         },
@@ -144,10 +140,6 @@ export default {
         },
     },
     mounted() {
-        if (typeof this.idpreprojeto !== 'undefined') {
-            this.fetch(this.idpreprojeto);
-        }
-
         if (typeof this.arrayProdutos !== 'undefined') {
             this.produtos = this.arrayProdutos;
         }
@@ -159,21 +151,6 @@ export default {
         this.iniciarCollapsible();
     },
     methods: {
-        fetch() {
-            const self = this;
-            /* eslint-disable */
-            $3.ajax({
-                type: "GET",
-                url: "/proposta/visualizar/obter-plano-distribuicacao",
-                data: {
-                    idPreProjeto: self.idpreprojeto
-                }
-            }).done(function (response) {
-                let dados = response.data;
-                self.produtos = dados.planodistribuicaoproduto;
-                self.detalhamentos = dados.tbdetalhaplanodistribuicao;
-            });
-        },
         detalhamentosByID(lista, id) {
             let novaLista = [];
 
