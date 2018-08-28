@@ -9,7 +9,7 @@ import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAde
 import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
 import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
 import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
-import Proponente from './incentivo/components/proponente/Index';
+import Proponente from './components/proponente/Index';
 import Proposta from './incentivo/components/Proposta';
 import ConvenioTemplate from './convenio/Index';
 import DadosProjetoConvenio from './convenio/components/DadosProjeto';

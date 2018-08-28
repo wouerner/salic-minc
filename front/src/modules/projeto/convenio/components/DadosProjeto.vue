@@ -25,12 +25,12 @@
                 <td><b>Convenente</b></td>
             </tr>
             <tr>
-                <td v-if="dadosProjeto.CNPJ_CPF && dadosProjeto.isProponente == false">
-                    <a :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CNPJ_CPF">
-                        <SalicFormatarCpfCnpj :cpf="dadosProjeto.CNPJ_CPF"/></a>
+                <td v-if="dadosProjeto.CgcCPf && dadosProjeto.isProponente == false">
+                    <a :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
+                        <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/></a>
                 </td>
                 <td v-else>
-                    <SalicFormatarCpfCnpj :cpf="dadosProjeto.CNPJ_CPF"/>
+                    <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
                 </td>
                 <td>{{dadosProjeto.Proponente}}</td>
             </tr>
