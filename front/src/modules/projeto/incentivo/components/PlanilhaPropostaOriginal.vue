@@ -11,13 +11,12 @@
 <script>
     import Carregando from '@/components/Carregando';
     import Planilha from '@/components/Planilha/Planilha';
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     export default {
         name: 'PlanilhaPropostaOriginal',
         data() {
             return {
-                planilha: [],
                 loading: true,
                 semResposta: false,
                 mensagem: '',
@@ -28,48 +27,26 @@
             Planilha,
         },
         mounted() {
-            if (typeof this.dadosProjeto !== 'undefined') {
-                this.fetch(this.dadosProjeto.idPreProjeto);
-            }
+            this.buscaPlanilhaOriginal(this.dadosProjeto.idPreProjeto);
         },
         watch: {
             dadosProjeto(value) {
-                if (typeof value !== 'undefined') {
-                    this.fetch(value.idPreProjeto);
-                }
+                this.buscaPlanilhaOriginal(value.idPreProjeto);
+            },
+            planilha() {
+                this.loading = false;
             },
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                planilha: 'projeto/planilhaOriginal',
             }),
         },
         methods: {
-            fetch(id) {
-                if (typeof id === 'undefined') {
-                    return;
-                }
-
-                const self = this;
-                /* eslint-disable-next-line */
-                $3
-                    .ajax({
-                        url: '/proposta/visualizar/obter-planilha-proposta-original-ajax/',
-                        data: {
-                            idPreProjeto: id,
-                        },
-                    })
-                    .done((response) => {
-                        self.planilha = response.data;
-                    })
-                    .fail((response) => {
-                        self.semResposta = true;
-                        self.mensagem = response.responseJSON.msg;
-                    })
-                    .always(() => {
-                        self.loading = false;
-                    });
-            },
+            ...mapActions({
+                buscaPlanilhaOriginal: 'projeto/buscaPlanilhaOriginal',
+            }),
         },
     };
 </script>

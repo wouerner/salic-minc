@@ -14,14 +14,12 @@
     import Carregando from '@/components/Carregando';
     import Planilha from '@/components/Planilha/Planilha';
     import PlanilhaItensHomologados from '@/components/Planilha/PlanilhaItensHomologados';
-
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
 
     export default {
         name: 'PlanilhaPropostaHomologada',
         data() {
             return {
-                planilha: [],
                 loading: true,
                 semResposta: false,
                 mensagem: '',
@@ -32,45 +30,27 @@
             Planilha,
             PlanilhaItensHomologados,
         },
-        mounted() {
-            if (typeof this.dadosProjeto !== 'undefined') {
-                this.fetch(this.dadosProjeto.idPronac);
-            }
+        created() {
+            this.buscaPlanilhaHomologada(this.dadosProjeto.idPronac);
         },
         watch: {
             dadosProjeto(value) {
-                if (typeof value !== 'undefined') {
-                    this.fetch(value.idPronac);
-                }
+                this.buscaPlanilhaHomologada(value.idPronac);
+            },
+            planilha() {
+                this.loading = false;
             },
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                planilha: 'projeto/planilhaHomologada',
             }),
         },
         methods: {
-            fetch(id) {
-                if (typeof id === 'undefined') {
-                    return;
-                }
-
-                const self = this;
-                // eslint-disable-next-line
-                $3.ajax({
-                    url: '/projeto/orcamento/obter-planilha-homologada-ajax/',
-                    data: {
-                        idPronac: id,
-                    },
-                }).done((response) => {
-                    self.planilha = response.data;
-                }).fail((response) => {
-                    self.semResposta = true;
-                    self.mensagem = response.responseJSON.msg;
-                }).always(() => {
-                    self.loading = false;
-                });
-            },
+            ...mapActions({
+                buscaPlanilhaHomologada: 'projeto/buscaPlanilhaHomologada',
+            }),
         },
     };
 </script>
