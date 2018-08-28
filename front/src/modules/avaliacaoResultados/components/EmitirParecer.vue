@@ -5,7 +5,7 @@
                 <v-btn slot="activator" color="green" dark>Emitir Parecer</v-btn>
                 <v-card>
                     <v-toolbar dark color="green">
-                        <v-btn icon dark @click.native="dialog = false">
+                        <v-btn icon dark :href="redirectLink+idPronac">
                             <v-icon>close</v-icon>
                         </v-btn>
 
@@ -124,15 +124,18 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
 
     export default {
         name: 'UpdateBar',
-        data() {
+        data()
+        {
             return {
+                idPronac: 132451,
+                redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
                 valid: false,
-                dialog: false,
+                dialog: true,
                 itemRules: [
                     v => !!v || 'Tipo de manifestação e obrigatório!'
                 ],
@@ -146,44 +149,44 @@
                 },
                 parecer: '',
                 item:'',
-                items: [{ 'id':  'R', 'text':'Reprovação' }, { 'id': 'A','text':'Aprovação' }, {'id' : 'P', 'text' :'Aprovação com Ressalva'}],
+                items: [{ id:  'R', text:'Reprovação' }, { id: 'A',text:'Aprovação' }, {id : 'P', text:'Aprovação com Ressalva'}],
             };
         },
         props: ['registroAtivo'],
-        components: {
+        components:
+         {
             ModalTemplate,
         },
-        methods: {
+        methods:
+         {
             ...mapActions({
-                atualizarRegistro: 'foo/atualizarRegistro',
-                setRegistroAtivo: 'foo/setRegistroAtivo',
+
                 modalOpen: 'modal/modalOpen',
                 modalClose: 'modal/modalClose',
             }),
-            buildRegistro(event) {
-                const DadoNr = event.target.value;
-                this.currentRegistro.DadoNr = DadoNr;
-                this.currentRegistro.Codigo = this.registro.Codigo;
-            },
-            checkChangesAndUpdate() {
-                if (this.currentRegistro !== this.registro) {
-                    this.atualizarRegistro(this.currentRegistro);
-                }
-            },
-            fecharModal() {
-                // eslint-disable-next-line
-                $3('#modalTemplate').modal('close');
+            fecharModal()
+            {
                 this.modalClose();
             },
-            alert() {
-                alert('teste');
-            },
+
         },
-        computed: {
+        computed:
+         {
             ...mapGetters({
                 registro: 'foo/registro',
                 modalVisible: 'modal/default',
             }),
+        },
+        mounted()
+        {
+            console.info("AQUIIIIIIIIIIIIIIIIII");
+            console.info(this.$route.params);
+            fetch('../mocks/Parecer.json')
+                .then(r => r.json())
+                .then( json => { this.db = json;
+                    console.info("----------------");
+                    console.info(this.db)} );
+
         },
     };
 </script>
