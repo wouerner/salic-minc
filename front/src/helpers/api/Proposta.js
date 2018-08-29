@@ -10,7 +10,7 @@ export const buscaFontesDeRecursos = (idPreProjeto) => {
     return api.getRequest(path);
 };
 
-export const buscaDocumentos = (dados) => {
-    const path = `/proposta/visualizar/obter-documentos-anexados/idPreProjeto/${dados.idPreProjeto}/idAgente/${dados.idAgente}`;
+export const buscaDocumentos = (idPreProjeto, idAgente) => {
+    const path = `/proposta/visualizar/obter-documentos-anexados/idPreProjeto/${idPreProjeto}/idAgente/${idAgente}`;
     return api.getRequest(path);
 };

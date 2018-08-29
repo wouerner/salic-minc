@@ -12,7 +12,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="documento in documentos.proposta">
+                    <tr v-for="(documento, index) in documentos.proposta" :key="index">
                         <td>{{ documento.Descricao }}</td>
                         <td>{{ formatar_data(documento.Data) }}</td>
                         <td>
@@ -37,7 +37,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="documento in documentos.proponente">
+                    <tr v-for="(documento, index) in documentos.proponente" :key="index">
                         <td>{{ documento.Descricao }}</td>
                         <td>{{ formatar_data(documento.Data) }}</td>
                         <td>
@@ -59,13 +59,13 @@ export default {
     name: 'PropostaDocumentos',
     props: ['proposta'],
     mounted() {
-        if (typeof this.proposta !== 'undefined') {
-            this.buscaDocumentos(this.proposta);
+        if (typeof this.proposta.idPreProjeto !== 'undefined' && typeof this.proposta.idAgente !== 'undefined') {
+            this.buscaDocumentos(this.proposta.idPreProjeto, this.proposta.idAgente);
         }
     },
     watch: {
         proposta(value) {
-            this.buscaDocumentos(value);
+            this.buscaDocumentos(value.idPreProjeto, value.idAgente);
         },
     },
     computed: {

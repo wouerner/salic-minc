@@ -20,8 +20,8 @@ export const buscaFontesDeRecursos = ({ commit }, idPreProjeto) => {
         });
 };
 
-export const buscaDocumentos = ({ commit }, dados) => {
-    propostaHelperAPI.buscaDocumentos(dados)
+export const buscaDocumentos = ({ commit }, idPreProjeto, idAgente) => {
+    propostaHelperAPI.buscaDocumentos(idPreProjeto, idAgente)
         .then((response) => {
             const data = response.data;
             const documentos = data.data;
