@@ -25,7 +25,7 @@
                 <td><b>Convenente</b></td>
             </tr>
             <tr>
-                <td v-if="dadosProjeto.CgcCPf && dadosProjeto.isProponente == false">
+                <td v-if="dadosProjeto.idUsuarioExterno">
                     <a :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
                         <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/></a>
                 </td>
@@ -151,11 +151,13 @@
                 <td class="right-align"><SalicFormatarValor :valor="dadosProjeto.ConcedidoCusteio" /></td>
                 <td class="right-align"><SalicFormatarValor :valor="dadosProjeto.ConcedidoCapital" /></td>
                 <td class="right-align"><SalicFormatarValor :valor="dadosProjeto.Contrapartida" /></td>
-                <td class="right-align" v-if="dadosProjeto.isProponente"><b>
-                    <!-- <a href="<?php echo $this->url(array('module' => 'default',
-                            'controller' => 'consultardadosprojeto','action' => 'dados-convenio')
-                            ); ?>?idPronac=<?php echo $this->idPronac; ?>" style="color: blue !important;">
-                    <SalicFormatarValor :valor="dadosProjeto.vlTotalAprovado" /></a>--></b>
+                <td class="right-align" v-if="dadosProjeto.isProponente">
+                    <b>
+                        <a :href="'/default/consultardadosprojeto/dados-convenio?idPronac=' + dadosProjeto.idPronac"
+                           style="color: blue !important;">
+                            <SalicFormatarValor :valor="dadosProjeto.vlTotalAprovado" />
+                        </a>
+                    </b>
                 </td>
                 <td class="right-align" v-else><b><SalicFormatarValor :valor="dadosProjeto.vlTotalAprovado" /></b></td>
                 <td class="right-align"><SalicFormatarValor :valor="dadosProjeto.ValorConvenio" /></td>

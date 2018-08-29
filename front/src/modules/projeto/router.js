@@ -132,6 +132,14 @@ const routes = [
                     title: 'Dados do Projeto',
                 },
             },
+            {
+                path: 'proponente',
+                name: 'proponenteConvenio',
+                component: Proponente,
+                meta: {
+                    title: 'Proponente',
+                },
+            },
         ],
     },
 ];
