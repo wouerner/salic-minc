@@ -34,18 +34,6 @@ export default {
         ...mapActions({
             buscaFontesDeRecursos: 'proposta/buscaFontesDeRecursos',
         }),
-        // fetch(id) {
-        //     if (id) {
-        //         const self = this;
-        //         /* eslint-disable */
-        //         $3.ajax({
-        //             url: '/proposta/visualizar/obter-fonte-de-recurso/idPreProjeto/' + id
-        //         }).done(function (response) {
-        //             self.dado = response.data;
-        //         });
-
-        //     }
-        // },
     },
 };
 </script>

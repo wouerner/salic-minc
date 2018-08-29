@@ -19,3 +19,12 @@ export const buscaFontesDeRecursos = ({ commit }, idPreProjeto) => {
             commit(types.SET_FONTES_DE_RECURSOS, fontesDeRecursos);
         });
 };
+
+export const buscaDocumentos = ({ commit }, dados) => {
+    propostaHelperAPI.buscaDocumentos(dados)
+        .then((response) => {
+            const data = response.data;
+            const documentos = data.data;
+            commit(types.SET_DOCUMENTOS, documentos);
+        });
+};

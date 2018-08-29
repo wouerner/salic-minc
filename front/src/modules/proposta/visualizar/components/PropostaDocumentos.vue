@@ -53,46 +53,30 @@
 </template>
 <script>
 import moment from 'moment';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'PropostaDocumentos',
-    data() {
-        return {
-            documentos: [],
-        };
-    },
-    props: ['proposta', 'arrayDocumentos'],
+    props: ['proposta'],
     mounted() {
         if (typeof this.proposta !== 'undefined') {
-            this.fetch(this.proposta);
-        }
-
-        if (typeof this.arrayDocumentos !== 'undefined') {
-            this.$set(this.documentos, 'proposta', this.arrayDocumentos.documentos_proposta);
-            this.$set(this.documentos, 'proponente', this.arrayDocumentos.documentos_proponente);
+            this.buscaDocumentos(this.proposta);
         }
     },
     watch: {
         proposta(value) {
-            this.fetch(value);
-        },
-        arrayDocumentos(value) {
-            this.$set(this.documentos, 'proposta', value.documentos_proposta);
-            this.$set(this.documentos, 'proponente', value.documentos_proponente);
+            this.buscaDocumentos(value);
         },
     },
+    computed: {
+        ...mapGetters({
+            documentos: 'proposta/documentos',
+        }),
+    },
     methods: {
-        fetch(dados) {
-            if (typeof dados.default === 'undefined') {
-                const self = this;
-                /* eslint-disable */
-                $3.ajax({
-                    url: '/proposta/visualizar/obter-documentos-anexados/idPreProjeto/' + dados.idPreProjeto + '/idAgente/' + dados.idAgente
-                }).done(function (response) {
-                    self.documentos = response.data;
-                });
-            }
-        },
+        ...mapActions({
+            buscaDocumentos: 'proposta/buscaDocumentos',
+        }),
         formatar_data(date) {
             date = moment(date).format('DD/MM/YYYY');
 

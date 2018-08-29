@@ -3,6 +3,7 @@ import * as types from './types';
 export const state = {
     localRealizacaoDeslocamento: {},
     fontesDeRecursos: {},
+    documentos: {},
 };
 
 export const mutations = {
@@ -11,5 +12,8 @@ export const mutations = {
     },
     [types.SET_FONTES_DE_RECURSOS](state, fontesDeRecursos) {
         state.fontesDeRecursos = fontesDeRecursos;
+    },
+    [types.SET_DOCUMENTOS](state, documentos) {
+        state.documentos = documentos;
     },
 };
