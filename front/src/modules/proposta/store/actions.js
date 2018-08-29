@@ -10,3 +10,12 @@ export const buscaLocalRealizacaoDeslocamento = ({ commit }, idPreProjeto) => {
             commit(types.SET_LOCAL_REALIZACAO_DESLOCAMENTO, localRealizacaoDeslocamento);
         });
 };
+
+export const buscaFontesDeRecursos = ({ commit }, idPreProjeto) => {
+    propostaHelperAPI.buscaFontesDeRecursos(idPreProjeto)
+        .then((response) => {
+            const data = response.data;
+            const fontesDeRecursos = data.data;
+            commit(types.SET_FONTES_DE_RECURSOS, fontesDeRecursos);
+        });
+};
