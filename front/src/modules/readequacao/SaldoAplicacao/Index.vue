@@ -111,7 +111,7 @@
 	  <div class="card">
 	    <div class="card-content">
 	      <h4>Saldo de aplica&ccedil;&atildeo declarado</h4>
-	      <h6 class="blue-text lighten-1">R$ {{valorSaldoAplicacaoFormatado}}</h6>
+	      <h6 class="blue-text lighten-1">R$ {{valorSaldoAplicacao}}</h6>
 	    </div>
 	  </div>
 	  <div class="card">
@@ -441,14 +441,10 @@ export default {
 	    return (this.valorEntrePlanilhas.PlanilhaAtivaTotal - this.valorEntrePlanilhas.PlanilhaReadequadaTotal).toFixed(2);
 	},
 	valorSaldoAplicacao: function() {
-	    let valorSaldoAplicacao = parseFloat(this.dadosReadequacao.dsSolicitacao);
-	    return valorSaldoAplicacao;
-	},
-	valorSaldoAplicacaoFormatado: function() {
-	    return numeral(this.valorSaldoAplicacao).format();
+	    return this.dadosReadequacao.dsSolicitacao;
 	},
 	valorSaldoDisponivelParaUso: function() {
-	    return this.valorSaldoAplicacao  + parseFloat(this.valorEntrePlanilhasLimpo);
+	    return Number(this.valorSaldoAplicacao)  + Number(this.valorEntrePlanilhasLimpo);
 	},
 	valorSaldoUtilizado: function() {
 	    return this.valorEntrePlanilhas.PlanilhaReadequadaTotal - this.valorEntrePlanilhas.PlanilhaAtivaTotal;
