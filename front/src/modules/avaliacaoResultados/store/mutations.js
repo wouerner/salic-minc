@@ -3,9 +3,13 @@ import * as types from './types';
 export const state = {
     dadosTabela: [],
     registroAtivo: {},
+    consolidacao: {},
 };
 
 export const mutations = {
+    [types.GET_CONSOLIDACAO_PARECER] (state, consolidacao){
+        state.consolidacao = consolidacao;
+    },
     [types.SET_REGISTROS_TABELA](state, dadosTabela) {
         state.dadosTabela = dadosTabela;
     },

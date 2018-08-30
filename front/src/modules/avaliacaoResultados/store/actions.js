@@ -20,16 +20,6 @@ export const criarRegistro = ({ commit }, params) => {
         });
 };
 
-export const atualizarRegistro = ({ commit }, params) => {
-    // fooHelperAPI.atualizarRegistro(params)
-    //     .then((response) => {
-    //         const data = response.data;
-    //         const registro = data.data;
-    //         commit(types.ATUALIZAR_REGISTRO_TABELA, registro);
-    //     });
-         console.log('teste');
-};
-
 export const setRegistroAtivo = ({ commit }, registro) => {
     commit(types.SET_REGISTRO_ATIVO, registro);
 };
@@ -39,4 +29,16 @@ export const removerRegistro = ({ commit }, registro) => {
         .then(() => {
             commit(types.REMOVER_REGISTRO, registro);
         });
+};
+
+export const getIndex = ({ commit }) => { };
+
+export const getComconsolidacaoParecer = ({ commit }, param) => {
+    return new Promise((resolve, reject) => {
+        fooHelperAPI.parecerConsolidacao(param)
+            .then((response) => {
+                commit(types.GET_CONSOLIDACAO_PARECER, response.data.data);
+                resolve();
+            }).catch(error => console.info(error));
+    });
 };
