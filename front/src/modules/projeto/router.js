@@ -115,7 +115,7 @@ const routes = [
             },
             {
                 path: 'conteudo-dinamico',
-                name: 'container_ajax',
+                name: 'containerAjax',
                 component: templateAjax,
             },
         ],
@@ -139,6 +139,11 @@ const routes = [
                 meta: {
                     title: 'Proponente',
                 },
+            },
+            {
+                path: 'conteudo-dinamico',
+                name: 'containerAjaxConvenio',
+                component: templateAjax,
             },
         ],
     },

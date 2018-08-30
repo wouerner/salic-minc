@@ -121,7 +121,7 @@
                 }
 
                 this.$router.push({
-                    name: "container_ajax",
+                    name: "containerAjax",
                     params: {idPronac: this.$route.params.idPronac}
                 });
 
