@@ -25,7 +25,7 @@ class AvaliacaoFinanceira
     public function buscarDadosProjeto()
     {
         $vwResultadoDaAvaliacaoFinanceira = new \AvaliacaoResultados_Model_DbTable_vwResultadoDaAvaliacaoFinanceira();
-        $dadosAvaliacaoFinanceira = $vwResultadoDaAvaliacaoFinanceira->buscar($this->request->idPronac);
+        $dadosAvaliacaoFinanceira = $vwResultadoDaAvaliacaoFinanceira->buscarConsolidacaoComprovantes($this->request->idPronac);
         $dadosAvaliacaoFinanceira = $dadosAvaliacaoFinanceira->toArray();
 
         $projeto = new \Projetos();
