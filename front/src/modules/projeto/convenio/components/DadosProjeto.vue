@@ -25,12 +25,12 @@
                 <td><b>Convenente</b></td>
             </tr>
             <tr>
-                <td v-if="dadosProjeto.idUsuarioExterno">
-                    <a :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
-                        <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/></a>
-                </td>
-                <td v-else>
-                    <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
+                <td v-if="dadosProjeto.CgcCPf">
+                    <a v-if="!dadosProjeto.isProponente" 
+                     :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
+                        <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
+                    </a>
+                    <SalicFormatarCpfCnpj v-else :cpf="dadosProjeto.CgcCPf"/>
                 </td>
                 <td>{{dadosProjeto.Proponente}}</td>
             </tr>
@@ -151,7 +151,7 @@
                 <td class="right-align"><SalicFormatarValor :valor="dadosProjeto.ConcedidoCusteio" /></td>
                 <td class="right-align"><SalicFormatarValor :valor="dadosProjeto.ConcedidoCapital" /></td>
                 <td class="right-align"><SalicFormatarValor :valor="dadosProjeto.Contrapartida" /></td>
-                <td class="right-align" v-if="dadosProjeto.isProponente">
+                <td class="right-align" v-if="!dadosProjeto.isProponente">
                     <b>
                         <a :href="'/default/consultardadosprojeto/dados-convenio?idPronac=' + dadosProjeto.idPronac"
                            style="color: blue !important;">

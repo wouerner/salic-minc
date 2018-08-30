@@ -12,7 +12,7 @@
             </tr>
         </table>
         <table class="tabela" v-else>
-            <td colspan="2" align="center"><em>N&atilde;o existe email cadastrado!</em></td>
+            <td colspan="2"><em>N&atilde;o existe email cadastrado!</em></td>
         </table>
     </div>
 </template>

@@ -8,12 +8,12 @@
                 <td class="center-align"><b>UF</b></td>
                 <td class="center-align"><b>CEP</b></td>
             </tr>
-            <tr v-for="endereco in dadosProponente.enderecos" v-bind:key="endereco.idEndereco">
-                <td>{{endereco.Logradouro}}</td>
-                <td>{{endereco.municipio}}</td>
-                <td class="center-align">{{endereco.uf}}</td>
+            <tr>
+                <td>{{dadosProponente.dados.Endereco}}</td>
+                <td>{{dadosProponente.dados.Municipio}}</td>
+                <td class="center-align">{{dadosProponente.dados.Uf}}</td>
                 <td class="center-align">
-                    <SalicFormatarCep :cep="endereco.Cep"/>
+                    <SalicFormatarCep :cep="dadosProponente.dados.Cep"/>
                 </td>
             </tr>
         </table>
