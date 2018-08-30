@@ -2,7 +2,7 @@
 
 /* use Application\Modules\AvaliacaoResultados\Service\ParecerTecnico\Encaminhamento as EncaminhamentoService; */
 
-class AvaliacaoResultados_EstadosController extends MinC_Controller_Rest_Abstract
+class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
 {
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
@@ -20,6 +20,21 @@ class AvaliacaoResultados_EstadosController extends MinC_Controller_Rest_Abstrac
         $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
 
         parent::__construct($request, $response, $invokeArgs);
+    }
+
+    public function init() {
+    
+        /* var_dump('qqq');die; */
+        $this->events = new Zend_EventManager_EventManager();
+
+        $this->events->attach('teste',  function ($e) { 
+        });
+
+        parent::init();
+    }
+
+    public function teste(){
+
     }
 
     public function indexAction()
@@ -41,7 +56,14 @@ class AvaliacaoResultados_EstadosController extends MinC_Controller_Rest_Abstrac
 
     public function putAction()
     {
+        $this->customRenderJsonResponse(['t1111 11este'], 200);
+
+        $this->events->trigger('teste');
     }
 
     public function deleteAction(){}
+
+    public function postDispatch() {
+        /* die('teste'); */
+    }
 }
