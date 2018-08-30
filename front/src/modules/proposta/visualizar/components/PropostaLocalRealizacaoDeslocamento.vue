@@ -12,7 +12,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="localizacao in local.localizacoes">
+                    <tr v-for="(localizacao,index) in local.localizacoes" :key="index">
                         <td>{{ localizacao.pais }}</td>
                         <td>{{ localizacao.uf }}</td>
                         <td>{{ localizacao.cidade }}</td>
@@ -40,7 +40,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="deslocamento in local.deslocamentos">
+                    <tr v-for="(deslocamento, index) in local.deslocamentos" :key="index">
                         <td>{{ deslocamento.paisorigem }}</td>
                         <td>{{ deslocamento.uforigem }}</td>
                         <td>{{ deslocamento.municipioorigem }}</td>
