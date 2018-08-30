@@ -33,10 +33,12 @@ export const removerRegistro = ({ commit }, registro) => {
 
 export const getIndex = ({ commit }) => { };
 
-export const getComParametro = ({ commit }, param) => {
-    fooHelperAPI.getIndex(param).then((response) => {
-        commit(types.GET_CONSOLIDACAO_PARECER, response);
-    }).catch((error) => {
-        console.log(error);
+export const getComconsolidacaoParecer = ({ commit }, param) => {
+    return new Promise((resolve, reject) => {
+        fooHelperAPI.parecerConsolidacao(param)
+            .then((response) => {
+                commit(types.GET_CONSOLIDACAO_PARECER, response.data.data);
+                resolve();
+            }).catch(error => console.info(error));
     });
 };

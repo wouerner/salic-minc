@@ -19,7 +19,7 @@
                     <v-container grid-list-sm>
                         <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
-                                <p><b>Projeto:</b> 20213465653 - QUALQUER NOME</p>
+                                <p><b>Projeto:</b>  - </p>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
                                 <p><b>Proponente:</b> 707.707.012-00 - Sr. Juquinha Amaral</p>
@@ -126,14 +126,15 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
+    // import Parecer from '../mocks/Parecer.json';
 
     export default {
         name: 'UpdateBar',
         data()
         {
             return {
+                // mock: Parecer,
                 idPronac: this.$route.params.id,
-                getConsolidacaoLink: '/avaliacao-resultados/emissao-parecer-rest/idPronac/' + this.idPronac,
                 redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
                 valid: false,
                 dialog: true,
@@ -163,17 +164,16 @@
                 ...mapActions({
                     modalOpen: 'modal/modalOpen',
                     modalClose: 'modal/modalClose',
-                    getConsolidacaoData: 'avaliacaoResultados/getComParametro',
+                    requestConsolidacao: 'avaliacaoResultados/getComconsolidacaoParecer',
 
                 }),
                 fecharModal()
                 {
                     this.modalClose();
                 },
-                getConsolidacao(link)
+                getConsolidacao(id)
                 {
-                    this.data = this.getConsolidacaoData(link);
-                    console.info('sahushaudoabfsaojbfojasbfjosafasof')
+                    this.requestConsolidacao(id);
                 },
             },
         computed:
@@ -185,7 +185,8 @@
             },
         mounted()
         {
-            this.getConsolidacao(this.getConsolidacaoLink);
+            this.getConsolidacao(this.idPronac);
+            console.info(this.avaliacaoResultados);
         },
     };
 </script>
