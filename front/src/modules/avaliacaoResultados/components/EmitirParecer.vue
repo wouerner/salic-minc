@@ -179,7 +179,6 @@
             },
         mounted()
         {
-            console.info(this.mock)
             this.redirectLink = this.redirectLink + this.idPronac;
             this.getConsolidacao(this.idPronac);
         },
