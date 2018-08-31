@@ -42,3 +42,7 @@ export const getComconsolidacaoParecer = ({ commit }, param) => {
             }).catch(error => console.info(error));
     });
 };
+
+export const mockAvaliacaDesempenho = ({ commit }) => {
+    commit(types.MOCK_AVALIACAO_RESULTADOS, Mock);
+}
