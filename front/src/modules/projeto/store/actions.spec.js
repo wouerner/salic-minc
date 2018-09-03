@@ -259,13 +259,13 @@ describe('Projeto actions', () => {
             axios.get.mockResolvedValue(mockReponse);
 
             commit = jest.fn();
-            jest.spyOn(ProjetoHelperAPI, 'buscarTransferenciaRecursos');
+            jest.spyOn(projetoHelperAPI, 'buscarTransferenciaRecursos');
             const acao = 'transferidor';
             actions.buscarTransferenciaRecursos({ commit }, acao);
         });
 
-        test('it calls ProjetoHelperAPI.buscarTransferenciaRecursos', () => {
-            expect(ProjetoHelperAPI.buscarTransferenciaRecursos).toHaveBeenCalled();
+        test('it calls projetoHelperAPI.buscarTransferenciaRecursos', () => {
+            expect(projetoHelperAPI.buscarTransferenciaRecursos).toHaveBeenCalled();
         });
 
         test('it is commit to buscarTransferenciaRecursos', (done) => {
