@@ -21,17 +21,17 @@ class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
 
         parent::__construct($request, $response, $invokeArgs);
     }
-
-    public function init() {
-    
-        /* var_dump('qqq');die; */
-        $this->events = new Zend_EventManager_EventManager();
-
-        $this->events->attach('teste',  function ($e) { 
-        });
-
-        parent::init();
-    }
+//
+//    public function init() {
+//
+//        /* var_dump('qqq');die; */
+//        $this->events = new Zend_EventManager_EventManager();
+//
+//        $this->events->attach('teste',  function ($e) {
+//        });
+//
+//        parent::init();
+//    }
 
     public function teste(){
 
@@ -56,14 +56,14 @@ class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
 
     public function putAction()
     {
-        $this->customRenderJsonResponse(['t1111 11este'], 200);
+//        $this->customRenderJsonResponse(['t1111 11este'], 200);
 
-        $this->events->trigger('teste');
+//        $this->events->trigger('teste');
     }
 
     public function deleteAction(){}
 
-    public function postDispatch() {
-        /* die('teste'); */
-    }
+//    public function postDispatch() {
+//        /* die('teste'); */
+//    }
 }
