@@ -64,3 +64,15 @@ export const buscaPlanilhaAdequada = ({ commit }, idPreProjeto) => {
             commit(types.SET_PLANILHA_ADEQUADA, planilhaAdequada);
         });
 };
+
+
+export const buscarTransferenciaRecursos = ({ commit }, acao) => {
+    const projeto = state.projeto;
+    const idPronac = projeto.idPronac;
+    projetoHelperAPI.buscarTransferenciaRecursos(idPronac, acao)
+        .then((response) => {
+            const data = response.data;
+            const transferenciaRecursos = data.data;
+            commit(types.SET_TRANSFERENCIA_RECURSOS, transferenciaRecursos);
+        });
+};

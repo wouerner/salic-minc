@@ -12,6 +12,7 @@ describe('Projeto getters', () => {
             planilhaReadequada: {},
             planilhaAutorizada: {},
             planilhaAdequada: {},
+            transferenciaRecursos: {},
         };
     });
 
@@ -48,5 +49,10 @@ describe('Projeto getters', () => {
     test('planilhaAdequada', () => {
         const result = getters.planilhaAdequada(state);
         expect(result).toEqual(state.planilhaAdequada);
+    });
+
+    test('transferenciaRecursos', () => {
+        const result = getters.transferenciaRecursos(state);
+        expect(result).toEqual(state.transferenciaRecursos);
     });
 });

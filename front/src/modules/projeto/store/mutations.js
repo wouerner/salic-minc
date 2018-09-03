@@ -8,11 +8,15 @@ export const state = {
     planilhaReadequada: {},
     planilhaAutorizada: {},
     planilhaAdequada: {},
+    transferenciaRecursos: [],
 };
 
 export const mutations = {
     [types.SET_PROJETO](state, projeto) {
         state.projeto = projeto;
+    },
+    [types.SET_TRANSFERENCIA_RECURSOS](state, transferenciaRecursos) {
+        state.transferenciaRecursos = transferenciaRecursos;
     },
     [types.SET_PROPONENTE](state, proponente) {
         state.proponente = proponente;

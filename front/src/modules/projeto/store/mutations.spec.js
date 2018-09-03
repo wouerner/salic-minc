@@ -10,6 +10,7 @@ describe('Projeto Mutations', () => {
     let planilhaReadequada;
     let planilhaAutorizada;
     let planilhaAdequada;
+    let transferenciaRecursos;
 
     beforeEach(() => {
         defaultState = {
@@ -93,6 +94,17 @@ describe('Projeto Mutations', () => {
             idPlanilhaProposta: '4913779',
             idEtapa: '8'
         };
+
+        transferenciaRecursos = {
+            idPronacTransferidor: 1,
+            PronacTransferidor: 111111,
+            NomeProjetoTranferidor: 'Criança Para Vida - 15 anos',
+            idPronacRecebedor: 2,
+            PronacRecebedor: 222222,
+            NomeProjetoRecedor: 'Criança Para Vida - 15 anos',
+            dtRecebimento: new Date(),
+            vlRecebido: parseFloat('1000000'),
+        };
     });
 
     test('SET_PROJETO', () => {
@@ -128,5 +140,10 @@ describe('Projeto Mutations', () => {
     test('SET_PLANILHA_ADEQUADA', () => {
         mutations.SET_PLANILHA_ADEQUADA(state, planilhaAdequada);
         expect(state.planilhaAdequada).toEqual(planilhaAdequada);
+    });
+
+    test('SET_TRANSFERENCIA_RECURSOS', () => {
+        mutations.SET_TRANSFERENCIA_RECURSOS(state, transferenciaRecursos);
+        expect(state.transferenciaRecursos).toEqual(transferenciaRecursos);
     });
 });

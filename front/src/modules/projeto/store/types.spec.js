@@ -29,4 +29,8 @@ describe('PrestacaoDeContas types', () => {
         expect(types.SET_PLANILHA_ADEQUADA).toEqual('SET_PLANILHA_ADEQUADA');
     });
 
+
+    test('SET_TRANSFERENCIA_RECURSOS', () => {
+        expect(types.SET_TRANSFERENCIA_RECURSOS).toEqual('SET_TRANSFERENCIA_RECURSOS');
+    });
 });
