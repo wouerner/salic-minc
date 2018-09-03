@@ -1,5 +1,5 @@
 import * as projetoHelperAPI from '@/helpers/api/Projeto';
-
+import { state } from './mutations';
 import * as types from './types';
 
 export const buscaProjeto = ({ commit }, idPronac) => {
