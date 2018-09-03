@@ -4,7 +4,7 @@
             <b>Aguarde! Carregando....</b>
         </div>
         <ul class="collapsible collapsible-produto no-padding" data-collapsible="expandable">
-            <li v-for="produto of produtos">
+            <li v-for="(produto, index) of produtos" :key="index">
                 <div class="collapsible-header green-text">
                     <i class="material-icons">perm_media</i> {{produto.Produto}}
                 </div>

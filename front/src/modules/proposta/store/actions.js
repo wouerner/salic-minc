@@ -21,7 +21,6 @@ export const buscaFontesDeRecursos = ({ commit }, idPreProjeto) => {
 };
 
 export const buscaDocumentos = ({ commit }, dados) => {
-    console.log('action', dados.idAgente, dados.idPreProjeto);
     propostaHelperAPI.buscaDocumentos(dados)
         .then((response) => {
             const data = response.data;

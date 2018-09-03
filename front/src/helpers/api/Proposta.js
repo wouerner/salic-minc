@@ -16,7 +16,6 @@ export const buscaDocumentos = (dados) => {
 };
 
 export const buscarDadosProposta = (idPreProjeto) => {
-    console.log('chegou aqui');
     const path = `/proposta/visualizar/obter-proposta-cultural-completa/idPreProjeto/${idPreProjeto}`;
     return api.getRequest(path);
 };

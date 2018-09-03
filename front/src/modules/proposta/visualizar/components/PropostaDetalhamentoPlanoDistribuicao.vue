@@ -43,13 +43,13 @@
 
                                 <td class="right-align">{{ item.qtPopularIntegral }}</td>
                                 <td class="right-align">{{ item.qtPopularParcial }}</td>
-                                <td class="right-align">{{ item.vlUnitarioPopularIntegral | formatarParaReal }}</td>
+                                <td class="right-align">{{ item.vlUnitarioPopularIntegral | filtroFormatarParaReal }}</td>
 
                                 <td class="right-align">{{ item.qtProponenteIntegral }}</td>
                                 <td class="right-align">{{ item.qtProponenteParcial }}</td>
-                                <td class="right-align">{{ item.vlUnitarioProponenteIntegral | formatarParaReal }}</td>
+                                <td class="right-align">{{ item.vlUnitarioProponenteIntegral | filtroFormatarParaReal }}</td>
 
-                                <td class="right-align">{{ item.vlReceitaPrevista | formatarParaReal }}</td>
+                                <td class="right-align">{{ item.vlReceitaPrevista | filtroFormatarParaReal }}</td>
 
                             </tr>
                         </tbody>
