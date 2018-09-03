@@ -1,13 +1,18 @@
 import * as types from './types';
+import Mock from '../mocks/Parecer.json';
 
 export const state = {
     dadosTabela: [],
     registroAtivo: {},
     consolidacao: {},
+    mock: Mock,
 };
 
 export const mutations = {
-    [types.GET_CONSOLIDACAO_PARECER] (state, consolidacao){
+    [types.MOCK_AVALIACAO_RESULTADOS](state){
+        state.mock = Mock;
+    },
+    [types.GET_CONSOLIDACAO_PARECER](state, consolidacao){
         state.consolidacao = consolidacao;
     },
     [types.SET_REGISTROS_TABELA](state, dadosTabela) {

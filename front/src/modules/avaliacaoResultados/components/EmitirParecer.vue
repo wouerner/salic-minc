@@ -126,14 +126,13 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
-    // import Parecer from '../mocks/Parecer.json';
 
     export default {
         name: 'UpdateBar',
         data()
         {
             return {
-                // mock: Parecer,
+
                 idPronac: this.$route.params.id,
                 redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
                 valid: false,
