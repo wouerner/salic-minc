@@ -4,6 +4,7 @@ export const state = {
     localRealizacaoDeslocamento: {},
     fontesDeRecursos: {},
     documentos: {},
+    proposta: {},
 };
 
 export const mutations = {
@@ -15,5 +16,8 @@ export const mutations = {
     },
     [types.SET_DOCUMENTOS](state, documentos) {
         state.documentos = documentos;
+    },
+    [types.SET_DADOS_PROPOSTA](state, proposta) {
+        state.proposta = proposta;
     },
 };

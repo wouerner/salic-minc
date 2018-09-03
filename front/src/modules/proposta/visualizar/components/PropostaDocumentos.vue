@@ -1,5 +1,5 @@
 <template>
-    <div class="documentos-anexados">
+    <div class="documentos-anexados" v-if="documentos">
         <div class="card">
             <div class="card-content">
                 <h5>Documentos da Proposta</h5>
@@ -57,15 +57,20 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'PropostaDocumentos',
-    props: ['proposta'],
+    props: {
+        'proposta': {},
+    },
     mounted() {
-        if (typeof this.proposta.idPreProjeto !== 'undefined' && typeof this.proposta.idAgente !== 'undefined') {
-            this.buscaDocumentos(this.proposta.idPreProjeto, this.proposta.idAgente);
+        if (Object.keys(this.proposta).length > 2) {
+            this.buscaDocumentos(this.proposta);
         }
     },
     watch: {
         proposta(value) {
-            this.buscaDocumentos(value.idPreProjeto, value.idAgente);
+
+            if (Object.keys(value).length > 2) {
+                this.buscaDocumentos(value);
+            }
         },
     },
     computed: {

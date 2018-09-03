@@ -20,11 +20,21 @@ export const buscaFontesDeRecursos = ({ commit }, idPreProjeto) => {
         });
 };
 
-export const buscaDocumentos = ({ commit }, idPreProjeto, idAgente) => {
-    propostaHelperAPI.buscaDocumentos(idPreProjeto, idAgente)
+export const buscaDocumentos = ({ commit }, dados) => {
+    console.log('action', dados.idAgente, dados.idPreProjeto);
+    propostaHelperAPI.buscaDocumentos(dados)
         .then((response) => {
             const data = response.data;
             const documentos = data.data;
             commit(types.SET_DOCUMENTOS, documentos);
+        });
+};
+
+export const buscarDadosProposta = ({ commit }, idPreProjeto) => {
+    propostaHelperAPI.buscarDadosProposta(idPreProjeto)
+        .then((response) => {
+            const data = response.data;
+            const proposta = data.data;
+            commit(types.SET_DADOS_PROPOSTA, proposta);
         });
 };

@@ -10,7 +10,13 @@ export const buscaFontesDeRecursos = (idPreProjeto) => {
     return api.getRequest(path);
 };
 
-export const buscaDocumentos = (idPreProjeto, idAgente) => {
-    const path = `/proposta/visualizar/obter-documentos-anexados/idPreProjeto/${idPreProjeto}/idAgente/${idAgente}`;
+export const buscaDocumentos = (dados) => {
+    const path = `/proposta/visualizar/obter-documentos-anexados/idPreProjeto/${dados.idPreProjeto}/idAgente/${dados.idAgente}`;
+    return api.getRequest(path);
+};
+
+export const buscarDadosProposta = (idPreProjeto) => {
+    console.log('chegou aqui');
+    const path = `/proposta/visualizar/obter-proposta-cultural-completa/idPreProjeto/${idPreProjeto}`;
     return api.getRequest(path);
 };
