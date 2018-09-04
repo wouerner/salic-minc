@@ -11,6 +11,24 @@ export const buscaProjeto = ({ commit }, idPronac) => {
         });
 };
 
+export const buscaProjetoIncentivo = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaProjetoIncentivo(idPronac)
+        .then((response) => {
+            const data = response.data;
+            const projeto = data.data;
+            commit(types.SET_PROJETO, projeto);
+        });
+};
+
+export const buscaProjetoConvenio = ({ commit }, idPronac) => {
+    projetoHelperAPI.buscaProjetoConvenio(idPronac)
+        .then((response) => {
+            const data = response.data;
+            const projeto = data.data;
+            commit(types.SET_PROJETO, projeto);
+        });
+};
+
 export const buscaProponente = ({ commit }, idPronac) => {
     projetoHelperAPI.buscaProponente(idPronac)
         .then((response) => {

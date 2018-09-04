@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+
 import Index from './index/Index';
-import DadosProjeto from './incentivo/components/DadosProjeto';
-import IncentivoTemplate from './incentivo/Index';
+import Visualizar from './visualizar/Index';
+import DadosProjeto from './visualizar/DadosProjeto';
 import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOriginal';
 import PlanilhaPropostaAutorizada from './incentivo/components/PlanilhaPropostaAutorizada';
 import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAdequada';
@@ -12,7 +13,6 @@ import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
 import Proponente from './components/proponente/Index';
 import Proposta from './incentivo/components/Proposta';
 import ConvenioTemplate from './convenio/Index';
-import DadosProjetoConvenio from './convenio/components/DadosProjeto';
 
 Vue.use(Router);
 
@@ -26,12 +26,12 @@ const routes = [
         name: 'index',
         component: Index,
         meta: {
-            title: 'Principal',
+            title: 'Lista de projetos',
         },
     },
     {
-        path: '/incentivo/:idPronac',
-        component: IncentivoTemplate,
+        path: '/:idPronac',
+        component: Visualizar,
         children: [
             {
                 path: '',
@@ -116,33 +116,6 @@ const routes = [
             {
                 path: 'conteudo-dinamico',
                 name: 'containerAjax',
-                component: templateAjax,
-            },
-        ],
-    },
-    {
-        path: '/convenio/:idPronac',
-        component: ConvenioTemplate,
-        children: [
-            {
-                path: '',
-                name: 'dadosprojetoConvenio',
-                component: DadosProjetoConvenio,
-                meta: {
-                    title: 'Dados do Projeto',
-                },
-            },
-            {
-                path: 'proponente',
-                name: 'proponenteConvenio',
-                component: Proponente,
-                meta: {
-                    title: 'Proponente',
-                },
-            },
-            {
-                path: 'conteudo-dinamico',
-                name: 'containerAjaxConvenio',
                 component: templateAjax,
             },
         ],

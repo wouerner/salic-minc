@@ -1,6 +1,6 @@
 <template>
-    <div id="index">
-        <div>{{ message }}</div>
+    <div id="listar-projetos">
+        indexx
     </div>
 </template>
 
