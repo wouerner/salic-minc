@@ -5,3 +5,4 @@ export const planilhaOriginal = state => state.planilhaOriginal;
 export const planilhaReadequada = state => state.planilhaReadequada;
 export const planilhaAutorizada = state => state.planilhaAutorizada;
 export const planilhaAdequada = state => state.planilhaAdequada;
+export const transferenciaRecursos = state => state.transferenciaRecursos;

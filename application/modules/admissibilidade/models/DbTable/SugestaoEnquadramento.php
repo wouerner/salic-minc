@@ -335,6 +335,14 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             ]);
         }
 
+        $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
+        $recursosAtivos = $tbRecursoPropostaDbTable->obterRecursoAtual($dadosSugestaoEnquadramento['id_preprojeto']);
+
+        if (!empty($recursosAtivos)) {
+            $tbRecursoPropostaDbTable->inativarRecursos($dadosSugestaoEnquadramento['id_preprojeto']);
+
+        }
+
         /**
          * @todo Mover bloco abaixo para o método "Cadastrar Recurso de proposta"
          */
@@ -351,27 +359,43 @@ class Admissibilidade_Model_DbTable_SugestaoEnquadramento extends MinC_Db_Table_
             && $distribuicaoAvaliacaoProposta
             && $this->isPermitidoCadastrarRecurso($dadosSugestaoEnquadramento['id_perfil'])
             && $this->isPropostaDistribuidaParaCoordenadorGeral($distribuicaoAvaliacaoProposta['id_perfil'])
-            && !$this->isEnquadramentoProponenteIgualEndramentoAvaliador(
+            && !$this->isEnquadramentoProponenteIgualEnquadramentoAvaliador(
                 $dadosSugestaoEnquadramento,
                 $id_area_proponente,
                 $id_segmento_proponente
             )
             ) {
-            $tbRecursoPropostaDbTable = new Recurso_Model_DbTable_TbRecursoProposta();
             $tbRecursoPropostaDbTable->cadastrarRecurso($dadosSugestaoEnquadramento['id_preprojeto']);
         }
 
     }
 
-    public function isEnquadramentoProponenteIgualEndramentoAvaliador(
+    public function isEnquadramentoProponenteIgualEnquadramentoAvaliador(
         array $dadosSugestaoEnquadramento,
         $id_area_proponente,
         $id_segmento_proponente
-    )
-    {
+    ) {
+
+        $Segmento = new Segmento();
+        $segmentoProponente = $Segmento->combo(
+            [
+                "s.codigo = ?" => $id_segmento_proponente,
+            ]
+            , ["s.segmento ASC"]
+        );
+
+        $tpEnquadramentoProponente = $segmentoProponente[0]["tp_enquadramento"];
+
+        $segmentoSugestaoEnquadramento = $Segmento->combo(
+            [
+                "s.codigo = ?" => $dadosSugestaoEnquadramento["id_segmento"],
+            ]
+            , ["s.segmento ASC"]
+        );
+        $tpEnquadramentoSugestao = $segmentoSugestaoEnquadramento[0]["tp_enquadramento"];
+
         return (
-            $dadosSugestaoEnquadramento['id_area'] == $id_area_proponente
-            && $dadosSugestaoEnquadramento['id_segmento'] == $id_segmento_proponente
+            $tpEnquadramentoProponente == $tpEnquadramentoSugestao
         );
     }
 

@@ -31,7 +31,7 @@
             PlanilhaItensAutorizados,
         },
         mounted() {
-           this.buscaPlanilhaAutorizada(this.dadosProjeto.idPreProjeto);
+            this.buscaPlanilhaAutorizada(this.dadosProjeto.idPreProjeto);
         },
         watch: {
             dadosProjeto(value) {
