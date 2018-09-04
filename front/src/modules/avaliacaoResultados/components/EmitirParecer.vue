@@ -19,10 +19,10 @@
                     <v-container grid-list-sm>
                         <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
-                                <p><b>Projeto:</b> {{consolidacao.items.IdPronac}} -  {{consolidacao.items.NomeProjeto}}</p>
+                                <p><b>Projeto:</b> {{projeto.IdPRONAC}} -  {{projeto.NomeProjeto}}</p>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
-                                <p><b>Proponente:</b> {{consolidacao.items.CnpjCpf}} - {{consolidacao.items.Proponente}}</p>
+                                <p><b>Proponente:</b> {{proponente.CgcCpf}} - {{proponente.Nome}}</p>
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
@@ -34,25 +34,25 @@
                             <v-flex xs10 sm3 md3 >
                                 <div>
                                     <h4 class="label text-sm-right">Total</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.qtTotalComprovante}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.qtTotalComprovante}}</p>
                                 </div>
                             </v-flex>
                             <v-flex xs10 sm3 md3>
                                 <div>
                                     <h4 class="label text-sm-right">Validados</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.qtComprovantesValidadosProjeto}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.qtComprovantesValidadosProjeto}}</p>
                                 </div>
                             </v-flex>
                             <v-flex xs10 sm3 md3>
                                 <div>
                                     <h4 class="label text-sm-right">Recusados</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.qtComprovantesRecusadosProjeto}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.qtComprovantesRecusadosProjeto}}</p>
                                 </div>
                             </v-flex>
                             <v-flex xs10 sm3 md3>
                                 <div>
                                     <h4 class="label text-sm-right">Não Avaliados</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.qtComprovantesNaoAvaliados}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.qtComprovantesNaoAvaliados}}</p>
                                 </div>
                             </v-flex>
                         </v-layout>
@@ -65,25 +65,25 @@
                             <v-flex xs10 sm3 md3 >
                                 <div>
                                     <h4 class="label text-sm-right">Total</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.vlComprovadoProjeto}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.vlComprovadoProjeto}}</p>
                                 </div>
                             </v-flex>
                             <v-flex xs10 sm3 md3>
                                 <div>
                                     <h4 class="label text-sm-right">Validados</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.vlComprovadoValidado}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.vlComprovadoValidado}}</p>
                                 </div>
                             </v-flex>
                             <v-flex xs10 sm3 md3>
                                 <div>
                                     <h4 class="label text-sm-right">Recusados</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.vlComprovadoRecusado}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.vlComprovadoRecusado}}</p>
                                 </div>
                             </v-flex>
                             <v-flex xs10 sm3 md3>
                                 <div>
                                     <h4 class="label text-sm-right">Não Avaliados</h4>
-                                    <p class="text-sm-right">{{consolidacao.items.vlNaoComprovado}}</p>
+                                    <p class="text-sm-right">{{consolidacaoComprovantes.vlNaoComprovado}}</p>
                                 </div>
                             </v-flex>
                         </v-layout>
@@ -117,7 +117,6 @@
                         </v-flex>
                     </v-container>
                 </v-card>
-
             </v-dialog>
         </v-form>
     </v-container>
@@ -144,9 +143,22 @@
                     v => !!v || 'Parecer e obrigatório!',
                     v => v.length >= 10 || 'Parecer deve conter mais que 10 characters'
                 ],
-                parecer: '',
+                // parecer: '',
                 item: '',
-                items: [{ id:  'R', text:'Reprovação' }, { id: 'A',text:'Aprovação' }, {id : 'P', text:'Aprovação com Ressalva'}],
+                items: [
+                    {
+                        id: "R",
+                        text: "Reprovação"
+                    },
+                    {
+                        id: "A",
+                        text: "Aprovação"
+                    },
+                    {
+                        id : "P",
+                        text: "Aprovação com Ressalva"
+                    }
+                ],
             };
         },
         components:
@@ -158,7 +170,7 @@
                 ...mapActions({
                     modalOpen: 'modal/modalOpen',
                     modalClose: 'modal/modalClose',
-                    requestConsolidacao: 'avaliacaoResultados/getComconsolidacaoParecer',
+                    requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
 
                 }),
                 fecharModal()
@@ -167,14 +179,17 @@
                 },
                 getConsolidacao(id)
                 {
-                    this.requestConsolidacao(id);
+                    this.requestEmissaoParecer(id);
                 },
             },
         computed:
             {
                 ...mapGetters({
                     modalVisible: 'modal/default',
-                    consolidacao: 'avaliacaoResultados/consolidacao',
+                    consolidacaoComprovantes: 'avaliacaoResultados/consolidacaoComprovantes',
+                    proponente: 'avaliacaoResultados/proponente',
+                    parecer: 'avaliacaoResultados/parecer',
+                    projeto: 'avaliacaoResultados/projeto',
                 }),
             },
         mounted()
