@@ -9,10 +9,10 @@ class AvaliacaoResultados_Model_tbEncaminhamentoPrestacaoContasMapper extends Mi
 
     public function save($model)
     {
-        if ($this->isValid($model)) {
+        /* if ($this->isValid($model)) { */
             return parent::save($model);
-        }
-        return false;
+        /* } */
+        /* return false; */
     }
 
 

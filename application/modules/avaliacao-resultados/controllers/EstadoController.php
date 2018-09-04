@@ -22,19 +22,14 @@ class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
         parent::__construct($request, $response, $invokeArgs);
     }
 
-    public function init() {
-    
-        /* var_dump('qqq');die; */
+    public function init()
+    {
         $this->events = new Zend_EventManager_EventManager();
 
-        $this->events->attach('teste',  function ($e) { 
+        $this->events->attach('teste',  function ($e) {
         });
 
         parent::init();
-    }
-
-    public function teste(){
-
     }
 
     public function indexAction()
@@ -46,12 +41,40 @@ class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
 
     public function getAction()
     {
+        $id = $this->getRequest()->getParam('id');
+
+        $estado = new  AvaliacaoResultados_Model_DbTable_Estados();
+
+        $estado = $estado->findBy($id);
+        $estado['proximo'] = json_decode($estado['proximo']);
+
+        $this->renderJsonResponse($estado, 200);
     }
 
     public function headAction(){}
 
     public function postAction()
     {
+        $atual = $this->getRequest()->getParam('atual');
+        $proximoEstado = $this->getRequest()->getParam('proximo');
+        $params = $this->getRequest()->getParams();
+
+        $estado = new  AvaliacaoResultados_Model_DbTable_Estados();
+        $estado = $estado->findBy($atual);
+        $proximo = json_decode($estado['proximo']);
+
+        if (!in_array($proximoEstado, $proximo->proximo)) {
+            throw new Exception('Esse fluxo não pode ser executado!');
+        }
+
+        include(APPLICATION_PATH . $proximo->path);
+
+        $eventClass = new $proximo->class();
+
+        $function = $proximo->function;
+        $eventClass->$function($params);
+
+        $this->renderJsonResponse(['post'], 200);
     }
 
     public function putAction()

@@ -2,7 +2,6 @@
 
 namespace Application\Modules\AvaliacaoResultados\Service\ParecerTecnico;
 
-
 class Encaminhamento
 {
     /**
@@ -44,6 +43,8 @@ class Encaminhamento
     }
 
     public function encaminharProjeto(){
+        die('funcao encaminhar');
+
         $tipoFiltro = $this->request->getParam('tipoFiltro');
 
         // caso o formulario seja enviado via post
