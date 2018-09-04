@@ -21,6 +21,7 @@
             "Application\\Modules\\Assinatura\\Service\\Assinatura\\Acao\\": "./application/modules/assinatura/service/assinatura/acao/",
             "Application\\Modules\\Readequacao\\": "./application/modules/readequacao/",
             "Application\\Modules\\Readequacao\\Service\\": "./application/modules/readequacao/service/",
+            "Application\\Modules\\Readequacao\\Service\\TransferenciaRecursos\\": "./application/modules/readequacao/service/transferencia-recursos/",
             "Application\\Modules\\Readequacao\\Service\\Assinatura\\": "./application/modules/readequacao/service/assinatura/",
             "Application\\Modules\\Readequacao\\Service\\Assinatura\\Acao\\": "./application/modules/readequacao/service/assinatura/acao/",
             "Application\\Modules\\Admissibilidade\\": "./application/modules/admissibilidade/",
@@ -29,6 +30,7 @@
             "Application\\Modules\\Admissibilidade\\Service\\Assinatura\\Acao\\": "./application/modules/admissibilidade/service/assinatura/acao/",
             "Application\\Modules\\Projeto\\": "./application/modules/projeto/",
             "Application\\Modules\\Projeto\\Service\\": "./application/modules/projeto/service/",
+            "Application\\Modules\\Projeto\\Service\\Proponente\\": "./application/modules/projeto/service/proponente/",
             "Application\\Modules\\Projeto\\Service\\Assinatura\\": "./application/modules/projeto/service/assinatura/",
             "Application\\Modules\\Projeto\\Service\\Assinatura\\Acao\\": "./application/modules/projeto/service/assinatura/acao/",
             "Application\\Modules\\PrestacaoContas\\": "./application/modules/prestacao-contas/",
@@ -46,6 +48,9 @@
             "Application\\Modules\\Parecer\\Service\\Assinatura\\AnaliseInicial\\Acao\\": "./application/modules/parecer/service/assinatura/analise-inicial/acao/",
             "Application\\Modules\\Parecer\\Service\\Assinatura\\AnaliseCNIC\\": "./application/modules/parecer/service/assinatura/analise-cnic/",
             "Application\\Modules\\Parecer\\Service\\Assinatura\\AnaliseCNIC\\Acao\\": "./application/modules/parecer/service/assinatura/analise-cnic/acao/",
+            "Application\\Modules\\AvaliacaoResultados\\": "./application/modules/avaliacao-resultados/",
+            "Application\\Modules\\AvaliacaoResultados\\Service\\": "./application/modules/avaliacao-resultados/service/",
+            "Application\\Modules\\AvaliacaoResultados\\Service\\ParecerTecnico\\": "./application/modules/avaliacao-resultados/service/parecer-tecnico",
             "MinC\\Assinatura\\": "./library/MinC/Assinatura/",
             "MinC\\Db\\Model\\": "./library/MinC/Db/Model/"
         }

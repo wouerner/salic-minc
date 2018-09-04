@@ -81,7 +81,7 @@ Vue.component('sl-comprovante-nacional-form',
                         <div class="col s12">
                             <a 
                                 target="blank" 
-                                href="/prestacao-contas/fornecedor/index" 
+                                :href="'/prestacao-contas/fornecedor/index/cpfcnpj/'+comprovante.fornecedor.CNPJCPF"
                                 class="btn red">
                                 Cadastrar Fornecedor
                             </a>
@@ -122,24 +122,33 @@ Vue.component('sl-comprovante-nacional-form',
                             >Data de Emiss&atilde;o</label>
                         </div>
                         <div class="input-field col s1">
-                            <i class="material-icons tooltipped" data-position="bottom" data-delay="50"
-                                :data-tooltip="'Inicio em: ' + dataInicio + ' at\xe9 ' + dataFim">help</i>
+                            <i 
+                                class="material-icons 
+                                tooltipped" 
+                                data-position="bottom" 
+                                data-delay="50"
+                                :data-tooltip="'Inicio em: ' + dataInicio + ' at\xe9 ' + dataFim"
+                            >
+                                help
+                            </i>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col s2">
                             <input
                                type="text"
-                               name="nrDocumentoDePagamento"
-                               v-model="comprovante.numeroDocumento"
-                               :class="c.numeroDocumento.css"
-                               placeholder="00000000000"
-                               id="nrDocumentoDePagamento"
-                               maxlength="10"
-                               ref="numeroDocumento"
-                               v-on:input="inputNumeroDocumento($event.target.value)"
-                           />
-                           <label for="nrDocumentoDePagamento"
-                               :class="[c.numeroDocumento.css]"
-                           >N&ordm; Documento Pagamento*</label>
+                               name="nrComprovante"
+                               id="nrComprovante"
+                               maxlength="50"
+                               placeholder="00000000"
+                               value=""
+                               v-model="comprovante.numero"
+                               :class="c.numero.css"
+                               ref="numero"
+                               v-on:input="inputNumero($event.target.value)"
+                            />
+                            <label
+                                for="nrComprovante"
+                                :class="[c.numero.css]"
+                            >N&uacute;mero * </label>
                         </div>
                         <div class="input-field col s2">
                            <input type="text"
@@ -173,12 +182,15 @@ Vue.component('sl-comprovante-nacional-form',
                     <div class="row">
                         <div class=" col s3 m3">
                             <label>Forma de Pagamento<span style='color:red'>*</span></label>
-                            <select class="browser-default" name="tpFormaDePagamento" id="tpFormaDePagamento"
-                                    v-model="comprovante.forma"
-                                    >
-                                    <option value="1">Cheque</option>
-                                    <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
-                                    <option value="3">Saque/Dinheiro</option>
+                            <select 
+                                class="browser-default" 
+                                name="tpFormaDePagamento" 
+                                id="tpFormaDePagamento"
+                                v-model="comprovante.forma"
+                            >
+                                <option value="1">Cheque</option>
+                                <option value="2">Transfer&ecirc;ncia Banc&aacute;ria</option>
+                                <option value="3">Saque/Dinheiro</option>
                             </select>
                         </div>
                         <div class="input-field col s3">
@@ -199,20 +211,18 @@ Vue.component('sl-comprovante-nacional-form',
                         <div class="input-field col s2">
                             <input
                                type="text"
-                               name="nrComprovante"
-                               id="nrComprovante"
-                               maxlength="50"
-                               placeholder="00000000"
-                               value=""
-                               v-model="comprovante.numero"
-                               :class="c.numero.css"
-                               ref="numero"
-                               v-on:input="inputNumero($event.target.value)"
-                            />
-                            <label
-                                for="nrComprovante"
-                                :class="[c.numero.css]"
-                            >N&uacute;mero * </label>
+                               name="nrDocumentoDePagamento"
+                               v-model="comprovante.numeroDocumento"
+                               :class="c.numeroDocumento.css"
+                               placeholder="00000000000"
+                               id="nrDocumentoDePagamento"
+                               maxlength="10"
+                               ref="numeroDocumento"
+                               v-on:input="inputNumeroDocumento($event.target.value)"
+                           />
+                           <label for="nrDocumentoDePagamento"
+                               :class="[c.numeroDocumento.css]"
+                           >N&ordm; Documento Pagamento*</label>
                         </div>
                         <div class="input-field col s4">
                             <input
@@ -283,6 +293,10 @@ Vue.component('sl-comprovante-nacional-form',
             this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
             this.comprovante.justificativa = this.dados.justificativa;
         }
+        $3('textarea').trigger('autoresize');
+    },
+    updated(){
+        $3('textarea').trigger('autoresize');
     },
     props: {
         dados: null,
@@ -399,7 +413,8 @@ Vue.component('sl-comprovante-nacional-form',
                     formData.append('arquivo', this.comprovante.arquivo.file);
                 }
 
-                let c = JSON.parse(JSON.stringify(this.comprovante))
+                // let c = JSON.parse(JSON.stringify(this.comprovante))
+                let c = Object.assign({}, this.comprovante);
                 c.valor = numeral(c.valor).value();
                 formData.append('comprovante', JSON.stringify(c));
 
@@ -414,7 +429,6 @@ Vue.component('sl-comprovante-nacional-form',
                     Materialize.toast('Salvo com sucesso!', 4000, 'green');
                     $3('#modal1').modal('close');
 
-                       console.log(c);
                     if (vue.tipoform == 'cadastro') {
 
                        c._index = data.idComprovantePagamento;
@@ -478,7 +492,11 @@ Vue.component('sl-comprovante-nacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
-                        vue.$root.$emit('atualizado-comprovante-nacional', c);
+                        vue.comprovante.dataEmissao = (moment(c.dataEmissao, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+                        vue.comprovante.dataPagamento = (moment(c.dataPagamento, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+                        vue.comprovante.valor = numeral(c.valor).value();
+
+                        vue.$root.$emit('atualizado-comprovante-nacional', vue.comprovante);
                     }
                 });
             }
@@ -592,7 +610,9 @@ Vue.component('sl-comprovante-nacional-form',
         },
         pesquisarFornecedor: function(){
            var vue = this;
-           var url = '/prestacao-contas/gerenciar/fornecedor' ;
+           //var url = '/prestacao-contas/gerenciar/fornecedor' ;
+           var url = '/agente/agentes/agentecadastrado';
+
 
            if (
                (this.comprovante.fornecedor.tipoPessoa == 1
@@ -603,12 +623,13 @@ Vue.component('sl-comprovante-nacional-form',
                $3.ajax({
                     url: url,
                     method: 'POST',
-                    data: {cnpjcpf: this.comprovante.fornecedor.CNPJCPF},
+                    data: {cpf: this.comprovante.fornecedor.CNPJCPF},
                     dataType: "json",
                }).done(function(data){
-                    if (data.retorno) {
-                        vue.comprovante.fornecedor.nome= data.nome;
-                        vue.comprovante.fornecedor.idAgente = data.idAgente;
+                   vue.comprovante.fornecedor.nome = '';
+                   if (data.length > 0 && data[0]['msgCPF'] == 'cadastrado') {
+                        vue.comprovante.fornecedor.nome= data[0]['agente']['nome'];
+                        vue.comprovante.fornecedor.idAgente = data[0]['idAgente'];
                         vue.c.fornecedor.CNPJCPF.css = {};
                         vue.novoFornecedor = false;
                     } else {
@@ -636,9 +657,7 @@ Vue.component('sl-comprovante-nacional-form',
                 if (e.length == 11 || e.length == 14) {
                    this.comprovante.fornecedor.CNPJCPF = e;
                    this.comprovante.fornecedor.cnpjcpfMask = this.cnpjcpfMask();
-                } else {
-                   this.comprovante.fornecedor.CNPJCPF = '';
-                }
+                } 
             }
         },
         cnpjcpfMask: function() {
@@ -670,7 +689,6 @@ Vue.component('sl-comprovante-nacional-form',
             }
         },
         inputDataEmissao: function (e) {
-            console.log(e.length);
             if (e.length > 0) {
                this.c.dataEmissao.css = {};
             }
@@ -701,8 +719,8 @@ Vue.component('sl-comprovante-nacional-form',
         cancelar: function () {
             $3('#modal1').modal('close');
 
-            if (this.tipoform == 'edicao'){
-                this.$root.$emit('atualizado-comprovante-nacional', this.comprovante);
+            if (this.tipoform == 'edicao') {
+                this.$root.$emit('cancelar-comprovante-nacional', this.comprovante);
             }
         },
         data: function () {

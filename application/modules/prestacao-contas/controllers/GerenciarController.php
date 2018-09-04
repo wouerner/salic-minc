@@ -6,6 +6,20 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
     public function init()
     {
+        /* $auth = Zend_Auth::getInstance(); */
+
+        /* isset($auth->getIdentity()->usu_codigo) ? parent::perfil(1, $PermissoesGrupo) : parent::perfil(4, $PermissoesGrupo); */
+
+        /* isset($auth->getIdentity()->usu_codigo) ? $this->idUsuario = $auth->getIdentity()->usu_codigo : $this->idUsuario = $auth->getIdentity()->IdUsuario; */
+
+        /* $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); */
+
+        /* if (isset($auth->getIdentity()->usu_codigo)) { */
+        /*     $this->codGrupo = $GrupoAtivo->codGrupo; */
+        /*     $this->codOrgao = $GrupoAtivo->codOrgao; */
+        /*     $this->codOrgaoSuperior = (!empty($auth->getIdentity()->usu_org_max_superior)) ? $auth->getIdentity()->usu_org_max_superior : null; */
+        /* } */
+
         parent::init();
     }
 
@@ -306,23 +320,6 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
 
         $valorComprovadoAntigo = $planilhaAprovacaoItem->current()->vlComprovacao;
 
-        /* $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto( */
-        /*     $idPronac, */
-        /*     null, */
-        /*     $planilhaAprovacaoItem->current()->cdEtapa, */
-        /*     $planilhaAprovacaoItem->current()->cdProduto, */
-        /*     $planilhaAprovacaoItem->current()->cdCidade, */
-        /*     null, */
-        /*     $planilhaAprovacaoItem->current()->idPlanilhaItem */
-        /* ); */
-        /* $this->view->valores = $valoresItem->current(); */
-
-        /* $valorAprovadoAtual = $valoresItem->current()->vlAprovado; */
-        /* $valorComprovadoAtual = $valoresItem->current()->vlComprovado; */
-
-        /* $valorComprovadoNovo = ($valorComprovadoAtual - $valorComprovadoAntigo) + $vlComprovadoNovo; */
-        /* var_dump($valorComprovadoNovo , $valorAprovadoAtual);die; */
-
         /*todo*/
         $planilhaAprovacao = new PlanilhaAprovacao();
         $valoresItem = $planilhaAprovacao->planilhaAprovada(
@@ -458,6 +455,7 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
                     '',
                     $this->view->url(
                         array(
+                            'module' => 'default',
                             'controller' => 'comprovarexecucaofinanceira',
                             'action' => $paginaRedirecionar,
                             'idusuario' => $this->view->idusuario,
@@ -506,7 +504,15 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
             null,
             $this->view->idPlanilhaItens
         );
-
+        /* var_dump( */
+        /*     $this->view->idpronac, */
+        /*     $this->view->uf, */
+        /*     $this->view->cdetapa, */
+        /*     $this->view->cdproduto, */
+        /*     $this->view->cdcidade, */
+        /*     null, */
+        /*     $this->view->idPlanilhaItens */
+/* );die; */
         $this->view->dataInicioExecucao = (new DateTime($projeto->DtInicioExecucao))->format('Y-m-d');
         $this->view->dataFimExecucao = (new DateTime($projeto->DtFimExecucao))->format('Y-m-d');
         $this->view->valorAprovado = $planilha->current()->toArray()['vlAprovado'];
@@ -602,5 +608,198 @@ class PrestacaoContas_GerenciarController extends MinC_Controller_Action_Abstrac
         }
 
         $this->_helper->json($data);
+    }
+
+    public function planilhaOrcamentariaCustosProdutoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $auth = Zend_Auth::getInstance();
+        $this->view->codGrupo = $_SESSION['GrupoAtivo']['codGrupo'];
+
+        /* $this->dadosProjeto(); */
+        $this->view->idPronac = $this->getRequest()->getParam('idpronac');
+        $this->view->itemAvaliadoFilter = $this->getRequest()->getParam('itemAvaliadoFilter');
+        $this->view->idRelatorio = $this->getRequest()->getParam('relatorio');
+        $uf = $this->getRequest()->getParam('uf');
+        $municipio = $this->getRequest()->getParam('idmunicipio');
+        $etapa = $this->getRequest()->getParam('etapa');
+        $codigoProduto = $this->getRequest()->getParam('produto');
+
+        $dao = new PlanilhaAprovacao();
+
+        $resposta = $dao->vwComprovacaoFinanceiraProjeto(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+
+        $aux  = [];
+        foreach($resposta->toArray() as $item){
+            $aux['todos'][] =  array_map('utf8_encode', $item);
+        }
+
+        $respostaAguardandoAnalise = $dao->vwComprovacaoProjetoSemAnalise(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+
+        foreach($respostaAguardandoAnalise->toArray() as $item){
+            $aux['respostaAguardandoAnalise'][] =  array_map('utf8_encode', $item);
+        }
+        /* var_dump( */
+        /*     $this->view->idPronac, */
+        /*     $uf, */
+        /*     $etapa, */
+        /*     $codigoProduto, */
+        /*     $municipio, */
+        /*     'P' */
+        /* );die; */
+
+        $avaliadas = $dao->vwComprovacaoProjetoAvaliada(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+        foreach($avaliadas->toArray() as $item){
+            $aux['avaliadas'][] =  array_map('utf8_encode', $item);
+        }
+
+        $recusadas = $dao->vwComprovacaoProjetoRecusada(
+            $this->view->idPronac,
+            $uf,
+            $etapa,
+            $codigoProduto,
+            $municipio,
+            'P'
+        );
+        foreach($recusadas->toArray() as $item){
+            $aux['recusadas'][] =  array_map('utf8_encode', $item);
+        }
+
+        $this->_helper->json($aux);
+
+        /* $this->view->todos = $resposta; */
+        /* $this->view->aguardandoAnalise = $respostaAguardandoAnalise; */
+        /* $this->view->avaliadas = $avaliadas; */
+        /* $this->view->recusadas = $recusadas; */
+    }
+
+    public function comprovacaopagamentoRecusadoAction()
+    {
+        $idPlanilhaAprovacao = $this->getRequest()->getParam('idPlanilhaAprovacao');
+        $idComprovantePagamento = $this->getRequest()->getParam('idComprovantePagamento');
+        $idpronac = $this->getRequest()->getParam('idpronac');
+
+        try {
+            $planilhaItemModel = new PlanilhaItem();
+
+            $itemPlanilhaAprovacao = $planilhaItemModel->buscarItemDaAprovacao($idPlanilhaAprovacao);
+
+            $planilhaAprovacao = new PlanilhaAprovacao();
+            $planilhaAprovacaoItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjetoPorItemOrcamentario(
+                $idpronac,
+                null,
+                null,
+                null,
+                $idComprovantePagamento
+            );
+
+            $valoresItem = $planilhaAprovacao->vwComprovacaoFinanceiraProjeto(
+                $idpronac,
+                null,
+                $planilhaAprovacaoItem->current()->cdEtapa,
+                $planilhaAprovacaoItem->current()->cdProduto,
+                $planilhaAprovacaoItem->current()->cdCidade,
+                null,
+                $planilhaAprovacaoItem->current()->idPlanilhaItem
+            );
+
+            $this->view->valores = $valoresItem->current();
+
+            if (empty($itemPlanilhaAprovacao)) {
+                throw new Exception("Erro! O item para comprova&ccedil;&atilde;o n&atilde;o foi encontrado!");
+            }
+
+            $produtoModel = new Produto();
+            $produto = $produtoModel->find($itemPlanilhaAprovacao->idProduto)->current();
+            $etapaModel = new PlanilhaEtapa();
+            $etapa = $etapaModel->find($itemPlanilhaAprovacao->idEtapa)->current();
+            $itemModel = new PlanilhaItem();
+            $item = $itemModel->find($itemPlanilhaAprovacao->idPlanilhaItem)->current();
+
+            $this->view->idpronac = $itemPlanilhaAprovacao->IdPRONAC;
+
+            $pais = new Pais();
+            $paises = $pais->buscar(array(), 'Descricao');
+            $this->view->paises = $paises;
+
+            $this->view->produto = $produto;
+            $this->view->etapa = $etapa;
+            $this->view->item = $item;
+            $this->view->itemPlanilhaAprovacao = $itemPlanilhaAprovacao;
+            # compatibilidade com o template da outra action
+            $this->view->ckItens = array();
+            $this->view->tipoDocumentoConteudo = $this->tipoDocumento;
+
+            $comprovantePagamentoModel = new ComprovantePagamento();
+            $comprovantesDePagamento = $comprovantePagamentoModel->pesquisarComprovante($idComprovantePagamento, Zend_DB::FETCH_OBJ);
+
+            $comprovantePagamento = (object) $comprovantesDePagamento[0];
+
+            $this->view->idComprovantePagamento = $idComprovantePagamento;
+            $this->view->vlComprovacao = $comprovantePagamento->vlComprovacao;
+
+            $fornecedorModel = new FornecedorModel();
+            $this->view->idAgente = $comprovantePagamento->idFornecedor;
+            $fornecedor = $fornecedorModel->pesquisarFornecedor($comprovantePagamento->idFornecedor);
+
+            if ($fornecedor) {
+                $cpfCnpj = $fornecedor->CNPJCPF;
+                $fornecedorUsaCnpj = 14 == strlen($cpfCnpj);
+                $fornecedor->CNPJCPF = $fornecedorUsaCnpj ? Mascara::addMaskCNPJ($cpfCnpj) : Mascara::addMaskCPF($cpfCnpj);
+                $fornecedor->usaCnpj = $fornecedorUsaCnpj;
+                $this->view->fornecedor = $fornecedor;
+                $this->view->Descricao = $fornecedor->Descricao;
+                $this->view->CNPJCPF = $fornecedor->CNPJCPF;
+            }
+
+            $dataEmissao = $comprovantePagamento->dtEmissao ? new DateTime(data::dataAmericana($comprovantePagamento->dtEmissao)) : new DateTime();
+            $dataPagamento = $comprovantePagamento->dtPagamento ? DateTime::createFromFormat('d/m/Y', $comprovantePagamento->dtPagamento) : new DateTime();
+
+            $this->view->tpDocumento = $comprovantePagamento->tpDocumento;
+            $this->view->nrComprovante = $comprovantePagamento->nrComprovante;
+            $this->view->nrSerie = $comprovantePagamento->nrSerie;
+            $this->view->dtEmissao = $dataEmissao->format('d/m/Y');
+            $this->view->dtPagamento = $dataPagamento->format('d/m/Y');
+            $this->view->tpFormaDePagamento = $comprovantePagamento->tpFormaDePagamento;
+            $this->view->nrDocumentoDePagamento = $comprovantePagamento->nrDocumentoDePagamento;
+            $this->view->dsJustificativa = $comprovantePagamento->dsJustificativa;
+            $this->view->idArquivo = $comprovantePagamento->idArquivo;
+            $this->view->nomeArquivo = $comprovantePagamento->nmArquivo;
+            $this->view->JustificativaTecnico = $comprovantePagamento->JustificativaTecnico;
+            $this->view->pagCompRecusado = true;
+
+            $tblProjetos = new Projetos();
+            $projeto = $tblProjetos->buscarTodosDadosProjeto($idpronac);
+            $this->view->projeto = $projeto->current();
+
+            $diligencia = new Diligencia();
+            $diligencia = $diligencia->aberta($idpronac);
+            $this->view->idTipoDiligencia = $diligencia->idTipoDiligencia;
+
+            $this->render('comprovacaopagamento');
+        } catch(Exception $e) {
+            parent::message($e->getMessage(), '/comprovarexecucaofinanceira/comprovantes-recusados/idpronac/' . $idpronac, 'ERROR');
+        }
     }
 }

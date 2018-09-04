@@ -134,7 +134,13 @@ Vue.component('comprovantes', {
             if(vue.tipo =='nacional'){
                 data.status='atualizado';
                 Vue.set(vue.$data.dados, data._index, data);
-                vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+            }
+            vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('cancelar-comprovante-nacional', function(data) {
+            if(vue.tipo =='nacional'){
+                vue.formVisivel = false;
             }
         })
 
@@ -157,6 +163,13 @@ Vue.component('comprovantes', {
                 data.status='atualizado';
                 vue.formVisivel = false;
                 Vue.set(vue.$data.dados, data._index, data);
+            }
+            vue.valorComprovado = (parseFloat(vue.valorcomprovado) - parseFloat(data.valorAntigo)) + parseFloat(data.valor);
+        })
+
+        this.$root.$on('cancelar-comprovante-internacional', function(data) {
+            if(vue.tipo =='internacional'){
+                vue.formVisivel = false;
             }
         })
     },

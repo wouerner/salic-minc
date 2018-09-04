@@ -84,7 +84,7 @@ Vue.component('sl-comprovante-internacional-form',
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s6">
+                    <div class="input-field col s5">
                         <input
                             ref="dataEmissao"
                             type="text"
@@ -95,6 +95,17 @@ Vue.component('sl-comprovante-internacional-form',
                         <label for="dtEmissaoInternacional"
                             :class="[this.c.dataEmissao.css]"
                         >Dt. do Documento *</label>
+                    </div>
+                    <div class="input-field col s1">
+                        <i
+                            class="material-icons
+                            tooltipped"
+                            data-position="bottom"
+                            data-delay="50"
+                            :data-tooltip="'Inicio em: ' + dataInicio + ' at\xe9 ' + dataFim"
+                        >
+                            help
+                        </i>
                     </div>
                     <div class="input-field col s6">
                         <input
@@ -188,6 +199,10 @@ Vue.component('sl-comprovante-internacional-form',
             this.comprovante.arquivo = { nome: this.dados.arquivo.nome };
             this.comprovante.justificativa = this.dados.justificativa;
         }
+        $3('textarea').trigger('autoresize');
+    },
+    updated(){
+        $3('textarea').trigger('autoresize');
     },
     props: [
         'dados',
@@ -600,7 +615,7 @@ Vue.component('sl-comprovante-internacional-form',
             $3('#modal1').modal('close');
 
             if (this.tipoform == 'edicao'){
-                this.$root.$emit('atualizado-comprovante-internacional', this.comprovante);
+                this.$root.$emit('cancelar-comprovante-internacional', this.comprovante);
             }
         },
     }

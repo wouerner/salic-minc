@@ -61,7 +61,7 @@ class Bar
     public function remover()
     {
         $parametros = $this->request->getParams();
-        $tabela = $this->buscar($parametros['id']);
+        $tabela = $this->buscar($this->getParam('id'));
         $mapper = new \Foo_Model_TabelaMapper();
         $id = (int) $tabela['Codigo'];
         $mapper->delete($id);

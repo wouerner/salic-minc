@@ -1,6 +1,4 @@
 Vue.component('sl-planilha-itens', {
-    props: ['itens','idpronac','uf',
-        'cdproduto','cdcidade','cdetapa'],
     template: `
         <table class="bordered">
             <thead>
@@ -13,10 +11,12 @@ Vue.component('sl-planilha-itens', {
                 </tr>
             </thead>
             <tbody>
-                <tr :item="item"
+                <tr 
+                   :item="item"
                    v-for="(item, index) in itens"
                    :key="index"
-                   v-if="isObject(item)">
+                   v-if="isObject(item)"
+                >
                     <td>
                         {{ item.item }}
                     </td>
@@ -24,15 +24,44 @@ Vue.component('sl-planilha-itens', {
                     <td style="text-align: right"> R$ {{ converterParaReal(item.varlorComprovado) }} </td>
                     <td style="text-align: right"> R$ {{ converterParaReal(item.varlorAprovado - item.varlorComprovado)  }} </td>
                     <td style="text-align: right">
-                        <sl-planilha-button
-                            :typeButton="url(item.idPlanilhaAprovacao, item.idPlanilhaItens, item.stItemAvaliado)"
-                        >
-                        </sl-planilha-button>
+                        <div v-if="(tecnico)">
+                            <div v-if="(item.varlorComprovado > 0)">
+                                <sl-planilha-button
+                                    :typeButton="url(item.idPlanilhaAprovacao, item.idPlanilhaItens, item.stItemAvaliado)"
+                                >
+                                </sl-planilha-button>
+                            </div>
+                            <div v-else>
+                               sem comprovantes.
+                            </div>
+                        </div>
+                        <div v-else>
+                            <sl-planilha-button
+                                :typeButton="url(item.idPlanilhaAprovacao, item.idPlanilhaItens, item.stItemAvaliado)"
+                            >
+                            </sl-planilha-button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     `,
+    props: [
+        'itens',
+        'idpronac',
+        'uf',
+        'cdproduto',
+        'cdcidade',
+        'cdetapa',
+        'stitemavaliado',
+        'tecnico'
+    ],
+    mounted() {
+        $3('ul.tabs').tabs();
+    },
+    updated() {
+        $3('ul.tabs').tabs();
+    },
     methods: {
         isObject: function (el) {
             return typeof el === "object";
@@ -49,13 +78,17 @@ Vue.component('sl-planilha-itens', {
             return this.urlDoTecnico(idPlanilhaAprovacao, idPlanilhaItens, stItemAvaliado);
         },
         urlDoTecnico: function(idPlanilhaAprovacao, idPlanilhaItens, stItemAvaliado) {
-            const url = '/prestacao-contas/analisar/comprovante'
+            let url = '/prestacao-contas/analisar/comprovante'
                 + '/idPronac/' + this.idpronac
                 + '/uf/' + this.uf
                 + '/produto/' + this.cdproduto
                 + '/idmunicipio/' + this.cdcidade
                 + '/idPlanilhaItem/' + idPlanilhaItens
-                + '/stItemAvaliado/' + stItemAvaliado;
+                + '/etapa/' + this.cdetapa;
+
+                if (this.stitemavaliado) {
+                    url += '/stItemAvaliado/' + this.stitemavaliado;
+                }
 
             return { url: url, icon: 'gavel', colorButton: 'red' };
         },

@@ -5,6 +5,7 @@ import modal from '@/components/modal/store';
 import projeto from './modules/projeto/store';
 import readequacao from './modules/readequacao/store';
 import foo from './modules/foo/store';
+import avaliacaoResultados from './modules/avaliacaoResultados/store';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
         readequacao,
         foo,
         modal,
+        avaliacaoResultados,
     },
     strict: debug,
 });

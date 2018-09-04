@@ -105,7 +105,7 @@ class Assinatura_Model_DbTable_TbAtoAdministrativo extends MinC_Db_Table_Abstrac
         $objQuery->where('idOrgaoSuperiorDoAssinante = ?', $idOrgaoSuperiorDoAssinante);
         $objQuery->order('idOrdemDaAssinatura asc');
         $objQuery->limit(1);
-
+        
         $objResultado = $this->fetchRow($objQuery);
         if ($objResultado) {
             $arrayResultado = $objResultado->toArray();
