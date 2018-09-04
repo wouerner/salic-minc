@@ -4,6 +4,4 @@ class AvaliacaoResultados_Model_DbTable_tbEncaminhamentoPrestacaoContas extends 
 {
     protected $_name   = 'tbEncaminhamentoPrestacaoContas';
     protected $_schema = 'BDCORPORATIVO.scSAC';
-
-
 }

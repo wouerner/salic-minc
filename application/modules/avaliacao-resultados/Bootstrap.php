@@ -12,8 +12,8 @@ class AvaliacaoResultados_Bootstrap extends Zend_Application_Module_Bootstrap
                 'avaliacao-resultados' => [
                     'index',
                     'emissao-parecer-rest',
-                    'encaminhamento-prestacao-contas',
-                    'fluxo'
+                    'fluxo',
+                    'estado'
                 ]
             ]
         );

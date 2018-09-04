@@ -21,3 +21,5 @@ export const atualizarRegistro = params => api.putRequest(path, buildData(params
 export const removerRegistro = params => api.deleteRequest(path, params.Codigo);
 
 export const parecerConsolidacao = params => api.getRequest("/avaliacao-resultados/emissao-parecer-rest/idPronac/" + params);
+
+export const getTeste = params => api.postRequest("/realizarprestacaodecontas/carregar-destinatarios/", buildData(params));

@@ -6,6 +6,7 @@ export const state = {
     registroAtivo: {},
     consolidacao: {},
     mock: Mock,
+    destinatarios: {}
 };
 
 export const mutations = {
@@ -42,4 +43,7 @@ export const mutations = {
             }
         });
     },
+    [types.DESTINATARIOS_ENCAMINHAMENTO](state, destinatarios){
+        state.destinatarios = destinatarios;
+    }
 };
