@@ -67,7 +67,6 @@ class Proponente
                 $proponente['proponenteInabilitado'] = !empty($proponenteInabilitado);
                 
                 $dbTableInternet = new \Agente_Model_DbTable_Internet();
-                xd('chegando aqui', $dbTableInternet->buscarEmails($idAgente)->toArray());
                 $proponente['emails'] = $dbTableInternet->buscarEmails($idAgente)->toArray();
                 
                 $dbTableTelefones = new \Agente_Model_DbTable_Telefones();
