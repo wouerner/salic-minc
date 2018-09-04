@@ -23,7 +23,7 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
             $whereProjeto['projeto.IdPRONAC = ?'] = $idPronac;
 
             if ($cpfCnpj) {
-                $whereProjeto['projeto.cpfCnpj = ?'] = $idPronac;
+                $whereProjeto['projeto.CgcCpf = ?'] = $idPronac;
             }
 
             $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
