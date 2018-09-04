@@ -1,8 +1,5 @@
 <template>
     <div id="conteudo">
-        <div v-if="loading" class="row">
-            <Carregando :text="'Carregando o projeto'"></Carregando>
-        </div>
 
         <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
             <div style="background-color: #EF5350; text-transform: uppercase"
@@ -10,8 +7,10 @@
                 <div><b>Proponente Inabilitado</b></div>
             </div>
         </div>
-
-        <div v-show="Object.keys(dadosProjeto).length > 0">
+        <div v-if="loading" class="row">
+            <Carregando :text="'Carregando o projeto'"></Carregando>
+        </div>
+        <div v-else-if="Object.keys(dadosProjeto).length > 0">
             <table class="tabela">
                 <tr class="destacar">
                     <td><b>PRONAC</b></td>
@@ -234,13 +233,13 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <SalicTextoSimples :texto=" formatarAgencia(dadosProjeto.AgenciaBancaria)"/>
+                        <SalicTextoSimples :texto="dadosProjeto.AgenciaBancaria | formatarAgencia"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaCaptacao)"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ContaCaptacao | formatarConta"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaMovimentacao)"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao | formatarConta"/>
                     </td>
                     <td align="center" class="destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
@@ -379,8 +378,7 @@
 </template>
 
 <script>
-    import moment from 'moment';
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import { utils } from '@/mixins/utils';
     import Carregando from '@/components/Carregando';
     import SalicTextoSimples from '@/components/SalicTextoSimples';
@@ -388,10 +386,12 @@
     import ValoresDoProjeto from './dadosProjeto/ValoresDoProjeto';
 
     export default {
+        props: {
+            idPronac: ''
+        },
         data() {
             return {
                 loading: true,
-                idPronac: this.$route.params.idPronac,
                 ProponenteInabilitado: false,
                 emAnaliseNaCNIC: false,
             };
@@ -404,17 +404,16 @@
             ValoresDoProjeto,
         },
         created() {
-            if (Object.keys(this.dadosProjeto).length > 0) {
-                this.loading = false;
-            }
+            this.buscaProjeto(this.idPronac);
         },
         watch: {
-            dadosProjeto(value) {
-                if (Object.keys(value).length > 0) {
-                    this.loading = false;
-                    this.idPronac = this.dadosProjeto.idPronac;
-                }
+            dadosProjeto() {
+                this.loading = false;
             },
+            idPronac(value) {
+                this.loading = true;
+                this.buscaProjeto(value);
+            }
         },
         computed: {
             ...mapGetters({
@@ -422,34 +421,9 @@
             }),
         },
         methods: {
-            isDataExpirada(date) {
-                return moment()
-                    .diff(date, 'days') > 0;
-            },
-            formatarAgencia(agencia) {
-                // formato: 9999-9
-                if (agencia.length === 5) {
-                    agencia = agencia.replace(/(\d{4})(\d)/, '$1-$2');
-                }
-                return agencia;
-            },
-            formatarConta(conta) {
-                // formato: 99999-9
-                conta = parseInt(conta);
-                // conta = conta.replace(/^0|0/g, '');
-                conta = conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
-
-                return conta;
-            }
-        },
-        filters: {
-            formatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date)
-                    .format('DD/MM/YYYY');
-            },
+            ...mapActions({
+                buscaProjeto: 'projeto/buscaProjetoIncentivo',
+            }),
         },
     };
 </script>
