@@ -79,7 +79,7 @@ const routes = [
     },
     {
         path: '/historico',
-        name: 'Diligenciar',
+        name: 'historico',
         component: Historico,
         meta: {
             title: 'Historico dos encaminhamentos',
