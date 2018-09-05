@@ -184,7 +184,7 @@
                     this.requestEmissaoParecer(id);
                 },
                 salvarParecer(){
-                   const data = {idPronac:this.idPronac, tpManifestacao:this.item , parecer:this.laudoTecnico};
+                   const data = {idPronac:this.idPronac, tpAvaliacaoFinanceira: this.tpAvaliacaoFinanceira, siManifestacao:this.item , dsParecer:this.laudoTecnico, };
                     this.salvar(data);
                     this.dialog = false;
                 }
