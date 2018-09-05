@@ -4,15 +4,14 @@ import Router from 'vue-router';
 import Index from './index/Index';
 import Visualizar from './visualizar/Index';
 import DadosProjeto from './visualizar/DadosProjeto';
-import PlanilhaPropostaOriginal from './incentivo/components/PlanilhaPropostaOriginal';
-import PlanilhaPropostaAutorizada from './incentivo/components/PlanilhaPropostaAutorizada';
-import PlanilhaPropostaAdequada from './incentivo/components/PlanilhaPropostaAdequada';
-import PlanilhaHomologada from './incentivo/components/PlanilhaHomologada';
-import PlanilhaReadequada from './incentivo/components/PlanilhaReadequada';
-import RelacaoDePagamentos from './incentivo/components/RelacaoDePagamentos';
+import PlanilhaPropostaOriginal from './visualizar/incentivo/components/PlanilhaPropostaOriginal';
+import PlanilhaPropostaAutorizada from './visualizar/incentivo/components/PlanilhaPropostaAutorizada';
+import PlanilhaPropostaAdequada from './visualizar/incentivo/components/PlanilhaPropostaAdequada';
+import PlanilhaHomologada from './visualizar/incentivo/components/PlanilhaHomologada';
+import PlanilhaReadequada from './visualizar/incentivo/components/PlanilhaReadequada';
+import RelacaoDePagamentos from './visualizar/incentivo/components/RelacaoDePagamentos';
 import Proponente from './components/proponente/Index';
-import Proposta from './incentivo/components/Proposta';
-import ConvenioTemplate from './convenio/Index';
+import Proposta from './visualizar/incentivo/components/Proposta';
 
 Vue.use(Router);
 

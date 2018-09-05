@@ -267,7 +267,7 @@
 <script>
     import { utils } from '@/mixins/utils';
     import SalicFormatarValor from '@/components/SalicFormatarValor';
-    import TransferenciaRecursos from '@/modules/projeto/incentivo/components/dadosProjeto/TransferenciaRecursos';
+    import TransferenciaRecursos from './TransferenciaRecursos';
 
     export default {
         components: {

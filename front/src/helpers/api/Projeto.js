@@ -18,7 +18,7 @@ export const buscaProjetoIncentivo = (idPronac) => {
 
 export const buscaProjetoConvenio = (idPronac) => {
     const module = '/projeto';
-    const controller = '/incentivo';
+    const controller = '/convenio';
     const action = '/obter-projeto-ajax';
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(`${module}${controller}${action}`, queryParams);

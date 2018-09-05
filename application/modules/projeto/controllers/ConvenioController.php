@@ -49,13 +49,35 @@ class Projeto_ConvenioController extends Projeto_GenericController
         $this->redirect("/projeto/index/listar");
     }
 
-    public function visualizarAction()
+    public function obterProjetoAjaxAction()
     {
+        if (empty($this->idPronac)) {
+            throw new Exception('Pronac &eacute; obrigat&oacute;rio!');
+        }
+        
+        $permissao = $this->verificarPermissaoAcesso(false, true, false, true);
         $vwDadosProjeto = new Projeto_Model_DbTable_VwConsultarDadosDoProjetoFNC();
         $projeto = $vwDadosProjeto->obterDadosFnc($this->idPronac);
-        $this->view->dados = $projeto;
+        $data = array_map('utf8_encode', $projeto);
+
+        if (!$permissao['status']) {
+            $data['permissao'] = false;
+            $httpCode = 203;
+            throw new Exception('Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar este projeto');
+        }
+        $data['permissao'] = true;
+
+        $this->view->dados = $data;
         $dbTableInabilitado = new Inabilitado();
         $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto['CNPJ_CPF'], null, null, true);
-        $this->view->ProponenteInabilitado = !empty($proponenteInabilitado);
+        $data['ProponenteInabilitado'] = !empty($proponenteInabilitado);
+        // $this->view->ProponenteInabilitado = !empty($proponenteInabilitado);
+        $this->_helper->json(
+            [
+                'data' => $data,
+                'success' => 'true'
+            ]
+        );
     }
+
 }

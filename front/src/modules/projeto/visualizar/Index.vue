@@ -1,5 +1,5 @@
 <template>
-    <div class="incentivo">
+    <div class="visualiza">
         <Carregando v-if="carregando" :text="'Validando acesso ao projeto'"></Carregando>
         <div v-if="Object.keys(projeto).length > 0 && projeto.permissao">
             <SidebarMenu :url-ajax="urlAjax"></SidebarMenu>
