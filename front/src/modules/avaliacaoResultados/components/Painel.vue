@@ -1,5 +1,4 @@
 <template>
-    <div>
         <v-data-table
                 :headers="cabecalho"
                 :items="dados"
@@ -27,6 +26,7 @@
                             <i class="material-icons">compare_arrows</i>
                         </v-btn>
                     </div>
+                </td>
                 <td class="text-xs-right">{{ props.item.diligencia }}
                     <div>
                         <v-btn dark color="yellow accent-3">
