@@ -1,13 +1,12 @@
-import * as fooHelperAPI from '@/helpers/api/AvaliacaoResultados';
+import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
 
 export const dadosMenu = ({ commit }) => {
-    fooHelperAPI.dadosMenu()
+    avaliacaoResultadosHelperAPI.dadosMenu()
         .then((response) => {
             const data = response.data;
             const dadosTabela = data.data;
             commit(types.SET_REGISTROS_TABELA, dadosTabela);
-            console.log('get dados', response);
         });
 };
 
@@ -25,7 +24,7 @@ export const setRegistroAtivo = ({ commit }, registro) => {
 };
 
 export const removerRegistro = ({ commit }, registro) => {
-    fooHelperAPI.removerRegistro(registro)
+    avaliacaoResultadosHelperAPI.removerRegistro(registro)
         .then(() => {
             commit(types.REMOVER_REGISTRO, registro);
         });
@@ -33,16 +32,56 @@ export const removerRegistro = ({ commit }, registro) => {
 
 export const getIndex = ({ commit }) => { };
 
-export const getComconsolidacaoParecer = ({ commit }, param) => {
-    return new Promise((resolve, reject) => {
-        fooHelperAPI.parecerConsolidacao(param)
+export const getDadosEmissaoParecer = ({ commit }, param) => {
+    return new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.parecerConsolidacao(param)
             .then((response) => {
-                commit(types.GET_CONSOLIDACAO_PARECER, response.data.data);
+
+                const data = response.data.data.items;
+
+                commit(types.GET_PROPONENTE, data.proponente);
+                commit(types.GET_PROJETO, data.projeto);
+                commit(types.GET_PARECER, data.parecer);
+                commit(types.GET_CONSOLIDACAO_PARECER, data.consolidacaoComprovantes);
                 resolve();
             }).catch(error => console.info(error));
     });
 };
 
+export const salvarParecer = ({ commit }, params) => {
+
+    return new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.criarParecer(params)
+            .then( (response) => {
+                console.info(response);
+                resolve();
+            })
+    });
+
+};
+
 export const mockAvaliacaDesempenho = ({ commit }) => {
     commit(types.MOCK_AVALIACAO_RESULTADOS, Mock);
-}
+};
+
+export const getDestinatariosEncaminhamento = ({ commit }, params) => {
+   // var  params = {
+   //      "idorgao" : 303,
+   //      "idPerfilDestino" : 125,
+   //      "verifica" : "a",
+   //  };
+
+    avaliacaoResultadosHelperAPI.getTeste(params)
+        .then((response) => {
+           // const data = response.data;
+           // const dadosTabela = data.data;
+            commit(types.DESTINATARIOS_ENCAMINHAMENTO, response.data);
+        });
+    // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    // console.log(params);
+    // avaliacaoResultadosHelperAPI.buscarDestinatariosParaEncaminhamento(param)
+    //     .then((destinatarios) => {
+    //         console.log(destinatarios)
+    //         commit(types.DESTINATARIOS_ENCAMINHAMENTO, destinatarios);
+    //     });
+};

@@ -12,24 +12,10 @@ class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
             Autenticacao_Model_Grupos::COORDENADOR_GERAL_PRESTACAO_DE_CONTAS,
         ];
 
-        $permissionsPerMethod  = [
-            /* '*' => [], */
-//            'index' => $profiles,
-//            'post' => $profiles
-        ];
+        $permissionsPerMethod  = [];
         $this->setProtectedMethodsProfilesPermission($permissionsPerMethod);
 
         parent::__construct($request, $response, $invokeArgs);
-    }
-
-    public function init()
-    {
-        $this->events = new Zend_EventManager_EventManager();
-
-        $this->events->attach('teste',  function ($e) {
-        });
-
-        parent::init();
     }
 
     public function indexAction()
@@ -68,14 +54,7 @@ class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
 
     public function putAction()
     {
-        $this->customRenderJsonResponse(['t1111 11este'], 200);
-
-        $this->events->trigger('teste');
     }
 
     public function deleteAction(){}
-
-    public function postDispatch() {
-        /* die('teste'); */
-    }
 }
