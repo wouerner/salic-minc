@@ -118,7 +118,10 @@ class Encaminhamento
 
                 if ($idTblEncaminhamento) {
                     // altera todos os encaminhamentos anteriores para stAtivo = 0
-                    $tblEncaminhamento->update(array('stAtivo' => 0), array('idPronac = ?' => $idPronac, 'idEncPrestContas != ?' => $idTblEncaminhamento));
+                    $tblEncaminhamento->update(
+                        array('stAtivo' => 0), 
+                        array('idPronac = ?' => $idPronac, 'idEncPrestContas != ?' => $idTblEncaminhamento)
+                    );
                 }
 
                 if ($this->codGrupo == 132) {

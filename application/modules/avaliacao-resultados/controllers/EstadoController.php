@@ -1,6 +1,6 @@
 <?php
 
-/* use Application\Modules\AvaliacaoResultados\Service\ParecerTecnico\Encaminhamento as EncaminhamentoService; */
+use Application\Modules\AvaliacaoResultados\Service\Fluxo\Estado as EstadoService;
 
 class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
 {
@@ -59,20 +59,9 @@ class AvaliacaoResultados_EstadoController extends MinC_Controller_Rest_Abstract
         $proximoEstado = $this->getRequest()->getParam('proximo');
         $params = $this->getRequest()->getParams();
 
-        $estado = new  AvaliacaoResultados_Model_DbTable_Estados();
-        $estado = $estado->findBy($atual);
-        $proximo = json_decode($estado['proximo']);
-
-        if (!in_array($proximoEstado, $proximo->proximo)) {
-            throw new Exception('Esse fluxo não pode ser executado!');
-        }
-
-        include(APPLICATION_PATH . $proximo->path);
-
-        $eventClass = new $proximo->class();
-
-        $function = $proximo->function;
-        $eventClass->$function($params);
+        $estado = new EstadoService();
+        $estado->validar($atual, $proximoEstado);
+        $estado->eventos($atual, $params);
 
         $this->renderJsonResponse(['post'], 200);
     }

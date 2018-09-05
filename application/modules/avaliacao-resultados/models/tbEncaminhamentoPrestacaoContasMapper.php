@@ -15,6 +15,12 @@ class AvaliacaoResultados_Model_tbEncaminhamentoPrestacaoContasMapper extends Mi
         /* return false; */
     }
 
+    public function update($data, $where)
+    {
+        $table = new AvaliacaoResultados_Model_DbTable_tbEncaminhamentoPrestacaoContas();
+        return $table->update($data, $where);
+    }
+
 
     public function isValid( $model)
     {
