@@ -32,14 +32,32 @@ export const removerRegistro = ({ commit }, registro) => {
 
 export const getIndex = ({ commit }) => { };
 
-export const getComconsolidacaoParecer = ({ commit }, param) => {
-    return new Promise((resolve, reject) => {
+export const getDadosEmissaoParecer = ({ commit }, param) => {
+    return new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.parecerConsolidacao(param)
             .then((response) => {
-                commit(types.GET_CONSOLIDACAO_PARECER, response.data.data);
+
+                const data = response.data.data.items;
+
+                commit(types.GET_PROPONENTE, data.proponente);
+                commit(types.GET_PROJETO, data.projeto);
+                commit(types.GET_PARECER, data.parecer);
+                commit(types.GET_CONSOLIDACAO_PARECER, data.consolidacaoComprovantes);
                 resolve();
             }).catch(error => console.info(error));
     });
+};
+
+export const salvarParecer = ({ commit }, params) => {
+
+    return new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.criarParecer(params)
+            .then( (response) => {
+                console.info(response);
+                resolve();
+            })
+    });
+
 };
 
 export const mockAvaliacaDesempenho = ({ commit }) => {
