@@ -66,7 +66,7 @@
                                     <legend>SELECIONAR O TIPO DE AVALIACAO FINANCERIA</legend>
                                     <p>Avaliar comprovantes por nivel de confianca:</p>
                                     <v-flex xs12 sm6 md6>
-                                        <v-radio-group  column>
+                                        <v-radio-group  column v-model="tipoAvaliacao">
 
                                             <v-radio
                                                     label="Todos Comprovantes"
@@ -120,7 +120,8 @@ export default {
             todos:75,
             valor1:80,
             valor2:10,
-            valor3:20
+            valor3:20,
+            tipoAvaliacao:""
 
 
 
