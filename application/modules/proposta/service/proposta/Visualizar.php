@@ -28,7 +28,12 @@ class Visualizar
         $sugestaoEnquadramentoDbTable = new \Admissibilidade_Model_DbTable_SugestaoEnquadramento();
         $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($idPreProjeto);
         $sugestao_enquadramento = $sugestaoEnquadramentoDbTable->obterHistoricoEnquadramento();
-        xd($sugestao_enquadramento);
+
+
+        array_walk($sugestao_enquadramento, function (&$value) {
+            $value = array_map('utf8_encode', $value);
+        });
+
         return $sugestao_enquadramento;
     }
 }

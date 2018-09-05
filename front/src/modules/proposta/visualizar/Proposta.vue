@@ -172,6 +172,15 @@
                         ></Planilha>
                     </div>
                 </li>
+                <li>
+                    <div id="planilha-orcamentaria" class="collapsible-header">
+                        Oiiii
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <div class="collapsible-body padding20">
+                        <Planilha></Planilha>
+                    </div>
+                </li>
             </ul>
         </div>
         <div v-else class="center-align">
