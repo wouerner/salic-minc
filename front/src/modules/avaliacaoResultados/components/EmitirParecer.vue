@@ -12,7 +12,8 @@
                         <v-toolbar-title>Avaliação Financeira - Emissão de Parecer</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="dialog = false" :disabled="!valid">Salvar</v-btn>
+                            <v-btn dark flat @click.native="salvarParecer" :disabled="!valid">Salvar</v-btn>
+                            <!--dialog = false -->
                         </v-toolbar-items>
                     </v-toolbar>
 
@@ -107,7 +108,7 @@
                         </v-layout>
                         <v-flex>
                             <v-textarea
-                                v-model="parecer"
+                                v-model="laudoTecnico"
                                 :rules="parecerRules"
                                 color="deep-purple"
                                 label="Parecer *"
@@ -123,7 +124,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
     import ModalTemplate from '@/components/modal';
 
     export default {
@@ -131,7 +132,7 @@
         data()
         {
             return {
-
+                siManifestacao: 0,
                 idPronac: this.$route.params.id,
                 redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
                 valid: false,
@@ -143,7 +144,7 @@
                     v => !!v || 'Parecer e obrigatório!',
                     v => v.length >= 10 || 'Parecer deve conter mais que 10 characters'
                 ],
-                // parecer: '',
+                laudoTecnico: '',
                 item: '',
                 items: [
                     {
@@ -171,6 +172,7 @@
                     modalOpen: 'modal/modalOpen',
                     modalClose: 'modal/modalClose',
                     requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
+                    salvar: 'avaliacaoResultados/salvarParecer',
 
                 }),
                 fecharModal()
@@ -181,6 +183,11 @@
                 {
                     this.requestEmissaoParecer(id);
                 },
+                salvarParecer(){
+                   const data = {idPronac:this.idPronac, tpManifestacao:this.item , parecer:this.laudoTecnico};
+                    this.salvar(data);
+                    this.dialog = false;
+                }
             },
         computed:
             {

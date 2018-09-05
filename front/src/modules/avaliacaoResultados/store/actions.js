@@ -48,6 +48,18 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
     });
 };
 
+export const salvarParecer = ({ commit }, params) => {
+
+    return new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.criarParecer(params)
+            .then( (response) => {
+                console.info(response);
+                resolve();
+            })
+    });
+
+};
+
 export const mockAvaliacaDesempenho = ({ commit }) => {
     commit(types.MOCK_AVALIACAO_RESULTADOS, Mock);
 };

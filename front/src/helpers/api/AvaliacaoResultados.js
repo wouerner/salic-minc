@@ -22,4 +22,13 @@ export const removerRegistro = params => api.deleteRequest(path, params.Codigo);
 
 export const parecerConsolidacao = params => api.getRequest("/avaliacao-resultados/emissao-parecer-rest/idPronac/" + params);
 
+export const criarParecer = params => {
+
+    const parametro = params['idPronac'];
+    delete params['idPronac'];
+    const data = params;
+
+  return api.postRequest( "/avaliacao-resultados/emissao-parecer-rest/idPronac/"+parametro, data);
+};
+
 export const getTeste = params => api.postRequest("/realizarprestacaodecontas/carregar-destinatarios/", buildData(params));
