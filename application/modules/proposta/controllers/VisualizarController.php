@@ -1,5 +1,7 @@
 <?php
 
+use \Application\Modules\Proposta\Service\Proposta\Visualizar as VisualizarService;
+
 class Proposta_VisualizarController extends Proposta_GenericController
 {
     public function init()
@@ -393,6 +395,25 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 ->setHttpResponseCode(412);
             $this->_helper->json(array('data' => [], 'success' => 'false', 'msg' => $e->getMessage()));
 
+        }
+    }
+
+    public function obterSugestaoEnquadramentoAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $idPreProjeto = $this->_request->getParam('idPreProjeto');
+
+        try {
+            if (empty($idPreProjeto)) {
+                throw new Exception("N&uacute;mero da proposta &eacute; obrigat&oacute;ria");
+            }
+
+            $visualizarService= new VisualizarService($this->getRequest(), $this->getResponse());
+            $sugestao_enquadramento = $visualizarService->obterSugestaoEnquadramento();
+
+            $this->_helper->json(array('data' => $sugestao_enquadramento, 'success' => 'true'));
+        } catch (Exception $e) {
+            $this->_helper->json(array('msg' => utf8_encode($e->getMessage()), 'data' => $sugestao_enquadramento, 'success' => 'false'));
         }
     }
 

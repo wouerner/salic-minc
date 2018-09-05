@@ -244,6 +244,14 @@ export default {
                 self.dados = response.data;
                 self.loading = false;
             });
+
+            console.log('chega aqui');
+            $3.ajax({
+                url: '/proposta/visualizar/obter-sugestao-enquadramento/idPreProjeto/' + 278419
+            }).done(function (response) {
+                console.log('VENDO OQ CHEGA');
+                console.log(response);
+            });
         },
         iniciarCollapsible() {
             // eslint-disable-next-line
