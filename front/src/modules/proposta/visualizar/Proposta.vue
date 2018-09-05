@@ -155,21 +155,21 @@
                     </div>
                 </li>
                 <li>
-                    <div id="planilha-orcamentaria" class="collapsible-header"><i class="material-icons">attach_money</i>Planilha
-                        or&ccedil;ament&aacute;ria
-                    </div>
-                    <div class="collapsible-body padding20">
-                        <Planilha
-                                :arrayPlanilha="dados.tbplanilhaproposta"
-                        ></Planilha>
-                    </div>
-                </li>
-                <li>
                     <div class="collapsible-header"><i class="material-icons">attach_money</i>Custos Vinculados</div>
                     <div class="collapsible-body padding20" v-if="dados">
                          <PropostaCustosVinculados
                                  :arrayCustos="dados.tbcustosvinculados"
                          ></PropostaCustosVinculados>
+                    </div>
+                </li>
+                <li>
+                    <div id="planilha-orcamentaria" class="collapsible-header"><i class="material-icons">attach_money</i>Planilha
+                        or&ccedil;ament&aacute;ria
+                    </div>
+                    <div class="collapsible-body padding20">
+                        <Planilha
+                            :arrayPlanilha="dados.tbplanilhaproposta"
+                        ></Planilha>
                     </div>
                 </li>
             </ul>
