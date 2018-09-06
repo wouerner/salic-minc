@@ -595,35 +595,15 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             }
 
             $obterSolicitacoes = new Solicitacao_Model_DbTable_TbSolicitacao();
-            $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where);
+            $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where)->toArray();
 
-            $json = [];
-            $newArray = [];
+            array_walk($solicitacoes, function (&$value) {
+                $value = array_map('utf8_encode', $value);
+            });
 
-            foreach ($solicitacoes as $key => $solicitacao) {
-                $objDateTimeSolicitacao = new DateTime($solicitacao->dtSolicitacao);
-                $objDateTimeResposta = new DateTime($solicitacao->dtResposta);
-                $newArray[$key]['idProjeto'] = $solicitacao->idProjeto;
-                $newArray[$key]['NomeProjeto'] = $solicitacao->NomeProjeto;
-                $newArray[$key]['dsSolicitacao'] = $solicitacao->dsSolicitacao;
-                $newArray[$key]['dsEncaminhamento'] = $solicitacao->dsEncaminhamento;
-                $newArray[$key]['dtSolicitacao'] = $objDateTimeSolicitacao->format('d/m/Y H:i:s');
-                $newArray[$key]['dtResposta'] = $objDateTimeResposta->format('d/m/Y H:i:s');
-            }
-            $json['class'] = 'bordered striped';
-            $json['lines'] = $newArray;
-            $json['cols'] = [
-                'idProjeto' => ['name' => 'idProjeto'],
-                'NomeProjeto' => ['name' => 'NomeProjeto'],
-                'dsSolicitacao' => ['name' => 'Solicitação'],
-                'dsEncaminhamento' => ['name' => 'Estado'],
-                'dtSolicitacao' => ['name' => 'dtSolicitacao', 'class' => 'valig'],
-                'dtResposta' => ['name' => 'dtResposta', 'class' => 'valig'],
-            ];
-
-            $this->_helper->json(array('data' => $json, 'success' => 'true'));
+            $this->_helper->json(array('data' => $solicitacoes, 'success' => 'true'));
         } catch (Exception $e) {
-            $this->_helper->json(array('msg' => utf8_encode($e->getMessage()), 'data' => $json, 'success' => 'false'));
+            $this->_helper->json(array('msg' => utf8_encode($e->getMessage()), 'data' => $solicitacoes, 'success' => 'false'));
         }
     }
 
