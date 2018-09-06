@@ -261,6 +261,14 @@ export default {
                 console.log('VENDO OQ CHEGA');
                 console.log(response);
             });
+
+            console.log('chega aqui222222');
+            $3.ajax({
+                url: '/solicitacao/mensagem/historico-solicitacoes/idPreProjeto/' + 282175
+            }).done(function (response) {
+                console.log('VENDO OQ CHEGA');
+                console.log(response);
+            });
         },
         iniciarCollapsible() {
             // eslint-disable-next-line
