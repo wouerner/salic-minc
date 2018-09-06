@@ -1,7 +1,7 @@
 <template>
     <div class="visualiza">
         <Carregando v-if="carregando" :text="'Validando acesso ao projeto'"></Carregando>
-        <div v-if="Object.keys(projeto).length > 0 && projeto.permissao">
+        <div v-else-if="Object.keys(dadosProjeto).length > 0 && permissao">
             <SidebarMenu :url-ajax="urlAjax"></SidebarMenu>
             <div class="container-fluid">
                 <TituloPagina :titulo="$route.meta.title"></TituloPagina>
@@ -9,7 +9,7 @@
             </div>
             <MenuSuspenso/>
         </div>
-        <div v-if="permissao == false">
+        <div v-if="!permissao">
             <SalicMensagemErro :texto="'Sem permiss&atilde;o de acesso para este projeto'"/>
         </div>
     </div>
@@ -45,7 +45,7 @@
         watch: {
             $route(to, from) {
                 /**
-                 * se o alterar apenas o parametro na url, o vue nao recarrega o componente.
+                 * se alterar apenas o parametro na url, o vue nao recarrega o componente.
                  * aqui esta recarregando os dados do novo projeto se o idPronac for diferente
                  * */
                 if (
@@ -56,32 +56,27 @@
                     this.urlAjax = URL_MENU + to.params.idPronac;
                 }
             },
+            dadosProjeto(value) {
+                if (Object.keys(value).length > 0) {
+                    this.carregando = false;
+                    this.permissao = value.permissao;
+                }
+            },
         },
         created() {
-            if (
-                typeof this.$route.params.idPronac !== 'undefined' &&
-                Object.keys(this.dadosProjeto).length === 0
-            ) {
+            if (Object.keys(this.dadosProjeto).length === 0) {
                 this.buscaProjeto(this.$route.params.idPronac);
             }
         },
         methods: {
             ...mapActions({
-                buscaProjeto: 'projeto/buscaProjeto',
+                buscaProjeto: 'projeto/buscaProjetoIncentivo',
             }),
         },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
             }),
-            projeto() {
-                if (Object.keys(this.dadosProjeto).length > 0) {
-                    this.carregando = false;
-                    this.permissao = this.dadosProjeto.permissao;
-                }
-
-                return this.dadosProjeto;
-            },
         },
     };
 </script>

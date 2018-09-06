@@ -206,8 +206,8 @@
             SalicFormatarCpfCnpj,
             SalicFormatarValor,
         },
-        created() {
-            this.buscaProjeto(this.idPronac);
+        mounted() {
+            this.buscaProjetoConvenio(this.idPronac);
         },
         watch: {
             dadosProjeto() {
@@ -215,7 +215,7 @@
             },
             idPronac(value) {
                 this.loading = true;
-                this.buscaProjeto(value);
+                this.buscaProjetoConvenio(value);
             }
         },
         computed: {
@@ -225,7 +225,7 @@
         },
         methods: {
             ...mapActions({
-                buscaProjeto: 'projeto/buscaProjetoConvenio',
+                buscaProjetoConvenio: 'projeto/buscaProjetoConvenio',
             }),
         },
     };

@@ -76,6 +76,7 @@ class Projeto_IncentivoController extends Projeto_GenericController
             $data['vlTotalAutorizado'] = !empty($planilhaOriginal) ? $planilhaOriginal['vlTotalPropostaOriginal'] : $data['vlTotalAutorizado'];
 
             $data['permissao'] = true;
+            $data['isTipoIncentivo'] = true;
             $dbTableInabilitado = new Inabilitado();
             $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projetoCompleto->CgcCPf, null, null, true);;
 

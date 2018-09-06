@@ -54,7 +54,7 @@ class Projeto_ConvenioController extends Projeto_GenericController
         if (empty($this->idPronac)) {
             throw new Exception('Pronac &eacute; obrigat&oacute;rio!');
         }
-        
+
         $permissao = $this->verificarPermissaoAcesso(false, true, false, true);
         $vwDadosProjeto = new Projeto_Model_DbTable_VwConsultarDadosDoProjetoFNC();
         $projeto = $vwDadosProjeto->obterDadosFnc($this->idPronac);
@@ -66,6 +66,7 @@ class Projeto_ConvenioController extends Projeto_GenericController
             throw new Exception('Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar este projeto');
         }
         $data['permissao'] = true;
+        $data['isTipoConvenio'] = true;
 
         $this->view->dados = $data;
         $dbTableInabilitado = new Inabilitado();
