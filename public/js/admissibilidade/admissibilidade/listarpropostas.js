@@ -37,8 +37,13 @@
                 'processing': true,
                 'serverSide': true,
                 'createdRow': function (row, data, index) {
-                    if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()) {
+                    if (data.CodSituacao == $('#PROPOSTA_EM_ANALISE_FINAL').val()
+                    && data.tipo_recurso == "-"
+                ) {
                         $(row).addClass('green lighten-5')
+                    } else if (
+			(data.tipo_recurso != '-' && data.prazo_recursal == 0) || data.isRecursoDesistidoDePrazoRecursal || data.isRecursoExpirou10dias){
+                        $(row).addClass('blue lighten-5')
                     }
                 },
                 'columns': obterColunasListagem()
@@ -136,10 +141,10 @@ function obterColunasListagem () {
         }
     })
     colunas.push({
+        name: 'tipo_recurso',
         data: null,
         render: function (data, type, row) {
-            console.log(data.tipo_recurso);
-            if(data.tipo_recurso != null && data.tipo_recurso != "-") {
+            if(typeof data.tipo_recurso != 'undefined' && data.tipo_recurso != "-") {
                 return '<i class="material-icons">done</i>';
             }
             return '';
