@@ -32,7 +32,7 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';
-    import Identificacao from '@/components/Agente/AgenteIdentificacao';
+    import Identificacao from '@/components/Projeto/ProjetoIdentificacao';
     import Endereco from '@/components/Agente/AgenteEndereco';
     import Telefone from '@/components/Agente/AgenteTelefone';
     import Email from '@/components/Agente/AgenteEmail';
@@ -81,6 +81,7 @@
         computed: {
             ...mapGetters({
                 dadosProponente: 'projeto/proponente',
+                dadosProjeto: 'projeto/projeto',
             }),
         },
     };

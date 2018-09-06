@@ -22,18 +22,16 @@
             <tr class="destacar">
                 <td><b>CNPJ/CPF</b></td>
                 <td><b>Nome do Proponente</b></td>
-                <td><b>Tipo de Pessoa</b></td>
             </tr>
             <tr>
-                <td v-if="dadosProponente.dados.CNPJCPF">
-                    <SalicFormatarCpfCnpj :cpf="dadosProponente.dados.CNPJCPF"/>
+                <td v-if="dadosProjeto.cgcCPf">
+                    <SalicFormatarCpfCnpj :cpf="dadosProjeto.cgcCPf"/>
                 </td>
                 <td v-else>Dado não informado!</td>
-                <td v-if="dadosProponente.dados.Proponente">
-                    {{dadosProponente.dados.Proponente}}
+                <td v-if="dadosProjeto.NomeProponente">
+                    {{dadosProjeto.NomeProponente}}
                 </td>
                 <td v-else>Dado não informado!</td>
-                <td>{{tipoProponente}}</td>
             </tr>
         </table>
     </div>
@@ -41,44 +39,14 @@
 
 <script type="text/javascript">
 
-    import { mapGetters } from 'vuex';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
 
     export default {
+        props: {
+            dadosProjeto: {},
+        },
         components: {
             SalicFormatarCpfCnpj,
-        },
-        methods: {
-            tipoCgcCPf(cgcCPf) {
-                let resposta = '';
-
-                switch (String(cgcCPf).length) {
-                case 11:
-                    resposta = 'Pessoa Física';
-                    break;
-                case 14:
-                    resposta = 'Pessoa Jurídica';
-                    break;
-                default:
-                    resposta = 'CPF/CNPJ inválido!';
-                }
-
-                return resposta;
-            },
-        },
-        computed: {
-            tipoProponente() {
-                const CNPJCPF = this.dadosProponente.dados.CNPJCPF;
-
-                if (String(CNPJCPF).length > 0) {
-                    return this.tipoCgcCPf(CNPJCPF);
-                }
-                return 'Dado não informado!';
-            },
-            ...mapGetters({
-                dadosProjeto: 'projeto/projeto',
-                dadosProponente: 'projeto/proponente',
-            }),
         },
     };
 </script>
