@@ -5,7 +5,7 @@
             <SidebarMenu :url-ajax="urlAjax"></SidebarMenu>
             <div class="container-fluid">
                 <TituloPagina :titulo="$route.meta.title"></TituloPagina>
-                <router-view></router-view>
+                <router-view class="child-view "></router-view>
             </div>
             <MenuSuspenso/>
         </div>

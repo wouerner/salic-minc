@@ -1,37 +1,55 @@
 <template>
     <div class="conteudo">
         <legend>Endereço</legend>
-        <table class="tabela">
+        <table class="tabela" v-if="enderecos">
             <tr class="destacar">
                 <td><b>Logradouro</b></td>
                 <td><b>Cidade</b></td>
                 <td class="center-align"><b>UF</b></td>
                 <td class="center-align"><b>CEP</b></td>
             </tr>
-            <tr>
-                <td>{{dadosProponente.dados.Endereco}}</td>
-                <td>{{dadosProponente.dados.Municipio}}</td>
-                <td class="center-align">{{dadosProponente.dados.Uf}}</td>
-                <td class="center-align">
-                    <SalicFormatarCep :cep="dadosProponente.dados.Cep"/>
+            <tr v-for="endereco in enderecos" :key="endereco.idEndereco">
+                <td>
+                    {{endereco.tipoendereco}} -
+                    {{endereco.dstipologradouro}} -
+                    {{endereco.Logradouro}} -
+                    {{endereco.Numero}} -
+                    {{endereco.Bairro}}
+                    <span v-if="endereco.Complemento && endereco.Complemento !== ' '">
+                        - {{endereco.Complemento}}
+                    </span>
                 </td>
+                <td>{{endereco.municipio}}</td>
+                <td class="center-align">{{endereco.uf}}</td>
+                <td class="center-align">
+                    <SalicFormatarCep :cep="endereco.Cep"/>
+                </td>
+            </tr>
+        </table>
+        <table class="tabela" v-else>
+            <tr>
+                <td colspan="2"><em>Dados não informados!</em></td>
             </tr>
         </table>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
     import SalicFormatarCep from '@/components/SalicFormatarCep';
 
     export default {
+        props: {
+            enderecos: {},
+        },
+        created() {
+                console.log('enderecos', this.enderecos[0].Complemento === ' ');
+        },
+        watch: {
+            enderecos() {
+            }
+        },
         components: {
             SalicFormatarCep,
-        },
-        computed: {
-            ...mapGetters({
-                dadosProponente: 'projeto/proponente',
-            }),
         },
     };
 </script>

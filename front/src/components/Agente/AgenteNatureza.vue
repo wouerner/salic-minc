@@ -1,8 +1,8 @@
 <template>
-    <div class="conteudo" v-if="dadosProponente.dados">
+    <div class="conteudo" v-if="dadosProponente">
         <legend>Natureza</legend>
-        <table class="tabela" v-if=" dadosProponente.dados.Direito || dadosProponente.dados.Esfera || 
-                                dadosProponente.dados.Administracao || dadosProponente.dados.Utilidade ">
+        <table class="tabela" v-if=" dadosProponente.Direito || dadosProponente.Esfera ||
+                                dadosProponente.Administracao || dadosProponente.Utilidade ">
             <tr class="destacar">
                 <td><b>Natureza</b></td>
                 <td><b>Esfera</b></td>
@@ -10,17 +10,17 @@
                 <td><b>Fins Lucrativos</b></td>
             </tr>
             <tr>
-                <td v-if="dadosProponente.dados.Direito">{{dadosProponente.dados.Direito}}</td>
-                <td v-else-if="dadosProponente.dados.Natureza">{{dadosProponente.dados.Natureza}}</td>
+                <td v-if="dadosProponente.Direito">{{dadosProponente.Direito}}</td>
+                <td v-else-if="dadosProponente.Natureza">{{dadosProponente.Natureza}}</td>
                 <td v-else>Dado não informado!</td>
 
-                <td v-if="dadosProponente.dados.Esfera">{{dadosProponente.dados.Esfera}}</td>
+                <td v-if="dadosProponente.Esfera">{{dadosProponente.Esfera}}</td>
                 <td v-else>Dado não informado!</td>
 
-                <td v-if="dadosProponente.dados.Administracao">{{dadosProponente.dados.Administracao}}</td>
+                <td v-if="dadosProponente.Administracao">{{dadosProponente.Administracao}}</td>
                 <td v-else>Dado não informado!</td>
 
-                <td v-if="dadosProponente.dados.Utilidade">{{dadosProponente.dados.Utilidade}}</td>
+                <td v-if="dadosProponente.Utilidade">{{dadosProponente.Utilidade}}</td>
                 <td v-else>Dado não informado!</td>
             </tr>
         </table>
@@ -35,11 +35,9 @@
 <script>
     import { mapGetters } from 'vuex';
 
-    export default{
-        computed: {
-            ...mapGetters({
-                dadosProponente: 'projeto/proponente',
-            }),
+    export default {
+        props: {
+            dadosProponente: {},
         },
     };
 </script>

@@ -4,11 +4,9 @@
             <Carregando :text="'Carregando proponente'"></Carregando>
         </div>
         <div v-else id="proponente">
+            <Identificacao :projeto="dadosProjeto"></Identificacao>
             <fieldset>
-                <Identificacao></Identificacao>
-            </fieldset>
-            <fieldset>
-                <Endereco></Endereco>
+                <Endereco :enderecos="dadosProponente.enderecos"></Endereco>
             </fieldset>
             <fieldset>
                 <Telefone></Telefone>
@@ -17,7 +15,7 @@
                 <Email></Email>
             </fieldset>
             <fieldset>
-                <Natureza></Natureza>
+                <Natureza :dadosProponente="dadosProponente"></Natureza>
             </fieldset>
             <fieldset>
                 <Dirigente></Dirigente>
@@ -57,10 +55,7 @@
             Procurador,
         },
         created() {
-            if (typeof this.$route.params.idPronac !== 'undefined' &&
-                Object.keys(this.dadosProponente).length === 0) {
-                this.buscaProponente(this.$route.params.idPronac);
-            }
+            this.buscaProponente(this.dadosProjeto.idPronac);
 
             if (Object.keys(this.dadosProponente).length > 0) {
                 this.loading = false;

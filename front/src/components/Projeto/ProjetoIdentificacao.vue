@@ -1,37 +1,38 @@
 <template>
-    <div class="conteudo">
-        <legend>Identificação</legend>
-        <table class="tabela">
-            <tr class="destacar">
-                <td><b>PRONAC</b></td>
-                <td><b>Nome do Projeto</b></td>
-            </tr>
-            <tr>
-                <td>{{dadosProjeto.Pronac}}</td>
-                <td>{{dadosProjeto.NomeProjeto}}</td>
-            </tr>
-        </table>
-        <table class="tabela" v-if="dadosProjeto.ProponenteInabilitado" style="background-color: red;">
+    <div class="proponente">
+        <table class="tabela" v-if="projeto.ProponenteInabilitado" style="background-color: red;">
             <tr style="background-color: red;">
                 <td align="center" style="text-transform: uppercase; color: red;">
                     <b>Proponente Inabilitado</b>
                 </td>
             </tr>
         </table>
+
         <table class="tabela">
             <tr class="destacar">
-                <td><b>CNPJ/CPF</b></td>
-                <td><b>Nome do Proponente</b></td>
+                <td><b>PRONAC</b></td>
+                <td><b>Nome do Projeto</b></td>
             </tr>
             <tr>
-                <td v-if="dadosProjeto.cgcCPf">
-                    <SalicFormatarCpfCnpj :cpf="dadosProjeto.cgcCPf"/>
+                <td>{{ projeto.Pronac }}</td>
+                <td>{{ projeto.NomeProjeto }}</td>
+            </tr>
+            <tr class="destacar">
+                <td><b>CNPJ/CPF</b></td>
+                <td><b>Proponente</b></td>
+            </tr>
+            <tr>
+                <td>
+                        <span v-if="projeto.idUsuarioExterno"><SalicFormatarCpfCnpj
+                            :cpf="projeto.CgcCPf"/></span>
+                    <a v-else
+                       :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + projeto.CgcCPf">
+                        <SalicFormatarCpfCnpj :cpf="projeto.CgcCPf"/>
+                    </a>
                 </td>
-                <td v-else>Dado não informado!</td>
-                <td v-if="dadosProjeto.NomeProponente">
-                    {{dadosProjeto.NomeProponente}}
+                <td>
+                    <span v-html="projeto.Proponente"></span>
                 </td>
-                <td v-else>Dado não informado!</td>
             </tr>
         </table>
     </div>
@@ -43,7 +44,7 @@
 
     export default {
         props: {
-            dadosProjeto: {},
+            projeto: {},
         },
         components: {
             SalicFormatarCpfCnpj,
