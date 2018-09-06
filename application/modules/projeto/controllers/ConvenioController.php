@@ -54,12 +54,13 @@ class Projeto_ConvenioController extends Projeto_GenericController
         if (empty($this->idPronac)) {
             throw new Exception('Pronac &eacute; obrigat&oacute;rio!');
         }
-
+        
         $permissao = $this->verificarPermissaoAcesso(false, true, false, true);
         $vwDadosProjeto = new Projeto_Model_DbTable_VwConsultarDadosDoProjetoFNC();
         $projeto = $vwDadosProjeto->obterDadosFnc($this->idPronac);
         $data = array_map('utf8_encode', $projeto);
-
+        
+        $permissao = $this->verificarPermissaoAcesso(false, true, false, true);
         if (!$permissao['status']) {
             $data['permissao'] = false;
             $httpCode = 203;
@@ -72,7 +73,6 @@ class Projeto_ConvenioController extends Projeto_GenericController
         $dbTableInabilitado = new Inabilitado();
         $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto['CNPJ_CPF'], null, null, true);
         $data['ProponenteInabilitado'] = !empty($proponenteInabilitado);
-        // $this->view->ProponenteInabilitado = !empty($proponenteInabilitado);
         $this->_helper->json(
             [
                 'data' => $data,

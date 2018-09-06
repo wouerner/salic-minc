@@ -25,13 +25,14 @@
                     <td><b>Convenente</b></td>
                 </tr>
                 <tr>
-                    <td v-if="dadosProjeto.CgcCPf">
-                        <a v-if="!dadosProjeto.isProponente"
-                           :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CgcCPf">
-                            <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
+                    <td v-if="dadosProjeto.CNPJ_CPF">
+                        <a v-if="!dadosProjeto.ProponenteInabilitado"
+                           :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CNPJ_CPF">
+                            <SalicFormatarCpfCnpj :cpf="dadosProjeto.CNPJ_CPF"/>
                         </a>
-                        <SalicFormatarCpfCnpj v-else :cpf="dadosProjeto.CgcCPf"/>
+                        <SalicFormatarCpfCnpj v-else :cpf="dadosProjeto.CNPJ_CPF"/>
                     </td>
+                    <td v-else>Dado não informado!</td>
                     <td>{{dadosProjeto.Proponente}}</td>
                 </tr>
             </table>
@@ -64,10 +65,10 @@
                     <th align="center"><b>Dt. Publica&ccedil;&atilde;o</b></th>
                 </tr>
                 <tr>
-                    <td align="center">{{DtConvenioPrimeiraVigencia}} &agrave; {{DtConvenioUltimaVigencia}}</td>
+                    <td align="center">{{dadosProjeto.DtConvenioPrimeiraVigencia}} &agrave; {{dadosProjeto.DtConvenioUltimaVigencia}}</td>
                     <!-- OBS:período entre essas datas-->
                     <td align="center">{{dadosProjeto.NrConvenio}}</td>
-                    <td align="center">{{dadosProjeto.DtConvenio | formatarData}}</td>
+                    <td align="center">{{dadosProjeto.DtConvenio}}</td>
                     <td align="center">{{dadosProjeto.DtConvenioPublicacao}}</td>
                 </tr>
             </table>
@@ -98,7 +99,7 @@
                     <th>Localiza&ccedil;&atilde;o Atual</th>
                 </tr>
                 <tr>
-                    <td align="center">{{dadosProjeto.DtSituacao | formatarData}}</td>
+                    <td align="center">{{dadosProjeto.DtSituacao}}</td>
                     <td align="center">{{dadosProjeto.Situacao}}</td>
                     <td align="center">{{dadosProjeto.ProvidenciaTomada}}</td>
                     <td align="center">{{dadosProjeto.LocalizacaoAtual}}</td>
@@ -107,7 +108,7 @@
 
             <table class="tabela" v-if="dadosProjeto.DtArquivamento">
                 <tr class="destacar">
-                    <th align="center" colspan="4" class="red-text"><b>Arquivado definitivamente</b></th>
+                    <th align="center" colspan="3" class="red-text"><b>Arquivado definitivamente</b></th>
                 </tr>
                 <tr class="destacar">
                     <th>Dt. Arquivamento</th>
@@ -115,7 +116,7 @@
                     <th>Nº final da caixa</th>
                 </tr>
                 <tr>
-                    <td align="center">{{dadosProjeto.DtArquivamento | formatarData}}</td>
+                    <td align="center">{{dadosProjeto.DtArquivamento}}</td>
                     <td align="center">{{dadosProjeto.CaixaInicio}}</td>
                     <td align="center">{{dadosProjeto.CaixaFinal}}</td>
                 </tr>
@@ -164,7 +165,7 @@
                     <td class="right-align">
                         <SalicFormatarValor :valor="dadosProjeto.Contrapartida"/>
                     </td>
-                    <td class="right-align" v-if="!dadosProjeto.isProponente">
+                    <td class="right-align" v-if="!dadosProjeto.ProponenteInabilitado">
                         <b>
                             <a :href="'/default/consultardadosprojeto/dados-convenio?idPronac=' + dadosProjeto.idPronac"
                                style="color: blue !important;">
