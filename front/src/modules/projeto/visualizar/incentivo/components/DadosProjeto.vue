@@ -374,7 +374,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
     import { utils } from '@/mixins/utils';
     import Carregando from '@/components/Carregando';
     import SalicTextoSimples from '@/components/SalicTextoSimples';

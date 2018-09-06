@@ -1,9 +1,6 @@
 <template>
     <div id="conteudo">
-        <div v-if="loading" class="row">
-            <Carregando :text="'Carregando o projeto'"></Carregando>
-        </div>
-        <div v-else>
+        <div>
             <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
                 <div style="background-color: #EF5350; text-transform: uppercase"
                      class="darken-2 padding10 white-text center-align">
@@ -65,7 +62,9 @@
                     <th align="center"><b>Dt. Publica&ccedil;&atilde;o</b></th>
                 </tr>
                 <tr>
-                    <td align="center">{{dadosProjeto.DtConvenioPrimeiraVigencia}} &agrave; {{dadosProjeto.DtConvenioUltimaVigencia}}</td>
+                    <td align="center">{{dadosProjeto.DtConvenioPrimeiraVigencia}} &agrave;
+                        {{dadosProjeto.DtConvenioUltimaVigencia}}
+                    </td>
                     <!-- OBS:período entre essas datas-->
                     <td align="center">{{dadosProjeto.NrConvenio}}</td>
                     <td align="center">{{dadosProjeto.DtConvenio}}</td>
@@ -186,7 +185,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
     import { utils } from '@/mixins/utils';
     import Carregando from '@/components/Carregando';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
@@ -196,37 +195,15 @@
         props: {
             idPronac: ''
         },
-        data() {
-            return {
-                loading: true,
-            }
-        },
         mixins: [utils],
         components: {
             Carregando,
             SalicFormatarCpfCnpj,
             SalicFormatarValor,
         },
-        mounted() {
-            this.buscaProjetoConvenio(this.idPronac);
-        },
-        watch: {
-            dadosProjeto() {
-                this.loading = false;
-            },
-            idPronac(value) {
-                this.loading = true;
-                this.buscaProjetoConvenio(value);
-            }
-        },
         computed: {
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
-            }),
-        },
-        methods: {
-            ...mapActions({
-                buscaProjetoConvenio: 'projeto/buscaProjetoConvenio',
             }),
         },
     };

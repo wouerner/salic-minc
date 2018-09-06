@@ -70,7 +70,7 @@
         },
         methods: {
             ...mapActions({
-                buscaProjeto: 'projeto/buscaProjetoIncentivo',
+                buscaProjeto: 'projeto/buscarProjetoCompleto',
             }),
         },
         computed: {
