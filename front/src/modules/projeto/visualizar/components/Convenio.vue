@@ -192,9 +192,6 @@
     import SalicFormatarValor from '@/components/SalicFormatarValor';
 
     export default {
-        props: {
-            idPronac: ''
-        },
         mixins: [utils],
         components: {
             Carregando,

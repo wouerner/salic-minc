@@ -5,8 +5,8 @@
 </template>
 <script>
     import { mapGetters } from 'vuex';
-    import DadosProjetoIncentivo from './incentivo/components/DadosProjeto';
-    import DadosProjetoConvenio from './convenio/components/DadosProjeto';
+    import DadosProjetoIncentivo from './incentivo/Incentivo';
+    import DadosProjetoConvenio from './Convenio';
 
     const MECANISMO_MECENATO = '1';
 
@@ -35,7 +35,7 @@
                 } else {
                     this.componenteProjeto = 'DadosProjetoConvenio';
                 }
-            }
-        }
+            },
+        },
     };
 </script>

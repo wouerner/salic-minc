@@ -32,13 +32,13 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';
-    import Identificacao from './Identificacao';
-    import Endereco from './Endereco';
-    import Telefone from './Telefone';
-    import Email from './Email';
-    import Natureza from './Natureza';
-    import Dirigente from './Dirigente';
-    import Procurador from './Procurador';
+    import Identificacao from '@/components/Agente/AgenteIdentificacao';
+    import Endereco from '@/components/Agente/AgenteEndereco';
+    import Telefone from '@/components/Agente/AgenteTelefone';
+    import Email from '@/components/Agente/AgenteEmail';
+    import Natureza from '@/components/Agente/AgenteNatureza';
+    import Dirigente from '@/components/Agente/AgenteDirigente';
+    import Procurador from '@/components/Agente/AgenteProcurador';
 
     export default {
         data() {

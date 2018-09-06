@@ -1,17 +1,17 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Index from './index/Index';
-import Visualizar from './visualizar/Index';
-import DadosProjeto from './visualizar/DadosProjeto';
-import PlanilhaPropostaOriginal from './visualizar/incentivo/components/PlanilhaPropostaOriginal';
-import PlanilhaPropostaAutorizada from './visualizar/incentivo/components/PlanilhaPropostaAutorizada';
-import PlanilhaPropostaAdequada from './visualizar/incentivo/components/PlanilhaPropostaAdequada';
-import PlanilhaHomologada from './visualizar/incentivo/components/PlanilhaHomologada';
-import PlanilhaReadequada from './visualizar/incentivo/components/PlanilhaReadequada';
-import RelacaoDePagamentos from './visualizar/incentivo/components/RelacaoDePagamentos';
-import Proponente from './components/proponente/Index';
-import Proposta from './visualizar/incentivo/components/Proposta';
+import Listar from './listar/Index';
+import Visualizar from './visualizar/Visualizar';
+import DadosProjeto from './visualizar/components/DadosProjeto';
+import PlanilhaPropostaOriginal from './visualizar/components/incentivo/planilha/PlanilhaPropostaOriginal';
+import PlanilhaPropostaAutorizada from './visualizar/components/incentivo/planilha/PlanilhaPropostaAutorizada';
+import PlanilhaPropostaAdequada from './visualizar/components/incentivo/planilha/PlanilhaPropostaAdequada';
+import PlanilhaHomologada from './visualizar/components/incentivo/planilha/PlanilhaHomologada';
+import PlanilhaReadequada from './visualizar/components/incentivo/planilha/PlanilhaReadequada';
+import RelacaoDePagamentos from './visualizar/components/incentivo/RelacaoDePagamentos';
+import Proponente from './visualizar/components/Proponente';
+import Proposta from './visualizar/components/incentivo/Proposta';
 
 Vue.use(Router);
 
@@ -23,7 +23,7 @@ const routes = [
     {
         path: '/',
         name: 'index',
-        component: Index,
+        component: Listar,
         meta: {
             title: 'Lista de projetos',
         },

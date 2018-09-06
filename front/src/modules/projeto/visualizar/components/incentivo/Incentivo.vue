@@ -379,11 +379,11 @@
     import Carregando from '@/components/Carregando';
     import SalicTextoSimples from '@/components/SalicTextoSimples';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
-    import ValoresDoProjeto from './dadosProjeto/ValoresDoProjeto';
+    import ValoresDoProjeto from './ValoresDoProjeto';
 
     export default {
         props: {
-            idPronac: ''
+            idPronac: '',
         },
         data() {
             return {
