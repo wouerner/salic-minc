@@ -89,7 +89,7 @@
                                                     value="99%"
                                             ></v-radio>
                                         </v-radio-group>
-                                        <v-btn dark large color="teal darken-1">AVALIAR</v-btn>
+                                        <v-btn dark large color="teal darken-1" to="/planilha">AVALIAR</v-btn>
                                     </v-flex>
                                 </fieldset>
                             </v-card-text>

@@ -22,7 +22,7 @@
                 <td class="text-xs-right">{{ props.item.data }}</td>
                 <td class="text-xs-right">{{ props.item.analisar }}
                     <div>
-                        <v-btn dark color="teal lighten-2">
+                        <v-btn dark color="teal lighten-2" to="/tipo-avaliacao">
                             <i class="material-icons">compare_arrows</i>
                         </v-btn>
                     </div>
@@ -39,7 +39,7 @@
                 <td class="text-xs-right">{{ props.item.historico }}
                     <v-flex xs12 sm4 text-xs-center>
                         <div>
-                            <v-btn>
+                            <v-btn to="/historico">
                                 <i class="material-icons">
                                 history
                             </i></v-btn>
