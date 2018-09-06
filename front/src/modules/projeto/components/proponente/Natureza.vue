@@ -11,6 +11,7 @@
             </tr>
             <tr>
                 <td v-if="dadosProponente.dados.Direito">{{dadosProponente.dados.Direito}}</td>
+                <td v-else-if="dadosProponente.dados.Natureza">{{dadosProponente.dados.Natureza}}</td>
                 <td v-else>Dado não informado!</td>
 
                 <td v-if="dadosProponente.dados.Esfera">{{dadosProponente.dados.Esfera}}</td>

@@ -25,12 +25,12 @@
                 <td><b>Tipo de Pessoa</b></td>
             </tr>
             <tr>
-                <td v-if="dadosProjeto.CgcCPf">
-                    <SalicFormatarCpfCnpj :cpf="dadosProjeto.CgcCPf"/>
+                <td v-if="dadosProponente.dados.CNPJCPF">
+                    <SalicFormatarCpfCnpj :cpf="dadosProponente.dados.CNPJCPF"/>
                 </td>
                 <td v-else>Dado não informado!</td>
-                <td v-if="dadosProjeto.Proponente">
-                    {{dadosProjeto.Proponente}}
+                <td v-if="dadosProponente.dados.Proponente">
+                    {{dadosProponente.dados.Proponente}}
                 </td>
                 <td v-else>Dado não informado!</td>
                 <td>{{tipoProponente}}</td>
@@ -68,15 +68,16 @@
         },
         computed: {
             tipoProponente() {
-                const cgcCPf = this.dadosProjeto.CgcCPf;
+                const CNPJCPF = this.dadosProponente.dados.CNPJCPF;
 
-                if (String(cgcCPf).length > 0) {
-                    return this.tipoCgcCPf(cgcCPf);
+                if (String(CNPJCPF).length > 0) {
+                    return this.tipoCgcCPf(CNPJCPF);
                 }
                 return 'Dado não informado!';
             },
             ...mapGetters({
                 dadosProjeto: 'projeto/projeto',
+                dadosProponente: 'projeto/proponente',
             }),
         },
     };
