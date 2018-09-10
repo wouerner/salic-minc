@@ -13,7 +13,8 @@ class AvaliacaoResultados_Bootstrap extends Zend_Application_Module_Bootstrap
                     'index',
                     'emissao-parecer-rest',
                     'fluxo',
-                    'estado'
+                    'estado',
+                    'tipo-avaliacao-rest',
                 ]
             ]
         );
