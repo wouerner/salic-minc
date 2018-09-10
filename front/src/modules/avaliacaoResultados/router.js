@@ -8,6 +8,7 @@ import Planilha from './components/Planilha';
 import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
+import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
 
 Vue.use(Router);
 
@@ -74,6 +75,14 @@ const routes = [
         component: Historico,
         meta: {
             title: 'Historico dos encaminhamentos',
+        },
+    },
+    {
+        path: '/consolidacao-analise',
+        name: 'ConsolidacaoAnalise',
+        component: ConsolidacaoAnalise,
+        meta: {
+            title: 'Consolidacao da Analise',
         },
     },
     {
