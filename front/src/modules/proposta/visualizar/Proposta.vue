@@ -263,13 +263,6 @@ export default {
                 self.loading = false;
             });
 
-            // $3.ajax({
-            //     url: '/proposta/visualizar/obter-sugestao-enquadramento/idPreProjeto/' + 278419
-            // }).done(function (response) {
-            //     console.log('VENDO OQ CHEGA');
-            //     console.log(response);
-            // });
-
             $3.ajax({
                 url: '/solicitacao/mensagem-rest/historico-solicitacoes/idPreProjeto/' + 278419
             }).done(function (response) {
