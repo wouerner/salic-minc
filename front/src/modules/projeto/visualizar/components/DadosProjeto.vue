@@ -6,7 +6,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import DadosProjetoIncentivo from './incentivo/Incentivo';
-    import DadosProjetoConvenio from './Convenio';
+    import DadosProjetoConvenio from './convenio/Convenio';
 
     const MECANISMO_MECENATO = '1';
 

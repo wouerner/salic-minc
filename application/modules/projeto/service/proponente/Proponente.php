@@ -58,13 +58,16 @@ class Proponente
             $dadosProponente = $proponenteDAO->execPaProponente($idPronac, \Zend_DB::FETCH_ASSOC);
             $proponente['dados'] = $dadosProponente[0];
 
+            $dbTableInabilitado = new \Inabilitado();
+            $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto["CgcCpf"], null, null, true);
+            $proponente['proponenteInabilitado'] = !empty($proponenteInabilitado);
+
+            $this->autenticacao = array_change_key_case((array)\Zend_Auth::getInstance()->getIdentity());
+
+            $proponente['isProponente'] = isset($this->autenticacao['usu_codigo']) ? false : true;
+
             if (!empty($dadosProponente[0]['idAgente'])){
                 $idAgente = $dadosProponente[0]['idAgente'];
-                
-                $dbTableInabilitado = new \Inabilitado();
-                $proponenteInabilitado = $dbTableInabilitado->BuscarInabilitado($projeto["CgcCpf"], null, null, true);
-                
-                $proponente['proponenteInabilitado'] = !empty($proponenteInabilitado);
                 
                 $dbTableInternet = new \Agente_Model_DbTable_Internet();
                 $proponente['emails'] = $dbTableInternet->buscarEmails($idAgente)->toArray();
@@ -102,8 +105,13 @@ class Proponente
                     }
                         
                 $proponente['dirigentes'] = $arrDirigentes;
+            } else {
+                $tbInteressado = new \Interessado();
+                $interessado = $tbInteressado->obterContatosInteressado(['CGCCPF = ?' => $projeto["CgcCpf"]])->toArray();
+                $proponente['dados'] = array_merge($proponente['dados'], $interessado);
+                $proponente['dados'] = array_map('trim', $proponente['dados']);
             }
-                        
+
             $proponente = \TratarArray::utf8EncodeArray($proponente);
             
             return $proponente;

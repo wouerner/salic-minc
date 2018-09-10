@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <td v-if="dadosProjeto.CNPJ_CPF">
-                        <a v-if="!dadosProjeto.ProponenteInabilitado"
+                        <a v-if="!dadosProjeto.isProponente"
                            :href="'/default/relatorio/resultado-projeto?cnpfcpf=' + dadosProjeto.CNPJ_CPF">
                             <SalicFormatarCpfCnpj :cpf="dadosProjeto.CNPJ_CPF"/>
                         </a>

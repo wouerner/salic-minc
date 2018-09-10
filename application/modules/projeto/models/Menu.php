@@ -120,7 +120,6 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'dadosdoprojeto',
             'label' => 'Dados do Projeto',
             'title' => '',
-            // 'link' => '/projeto/convenio/visualizar/idPronac/' . $idPronacHash,
             'link' => '/projeto/#/' . $idPronacHash,
             'ajax' => false,
             'icon' => 'home',
@@ -128,12 +127,11 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'grupo' => []
         ];
 
-        $menu['proponente'] = [
-            'id' => 'proponente',
-            'label' => 'Proponente',
+        $menu['convenente'] = [
+            'id' => 'convenente',
+            'label' => 'Convenente',
             'title' => '',
-            'link' => "/projeto/#/{$idPronacHash}/proponente",
-            // 'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
+            'link' => "/projeto/#/{$idPronacHash}/convenente",
             'ajax' => false,
             'icon' => 'person',
             'submenu' => '',

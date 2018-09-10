@@ -59,6 +59,10 @@ class Projeto_DadosProjetoController extends Projeto_GenericController
 
             $data = array_merge($data, $projeto);
 
+            $this->autenticacao = array_change_key_case((array)\Zend_Auth::getInstance()->getIdentity());
+
+            $data['isProponente'] = isset($this->autenticacao['usu_codigo']) ? false : true;
+
             $data = array_map('utf8_encode', $data);
 
             $this->getResponse()->setHttpResponseCode($httpCode);

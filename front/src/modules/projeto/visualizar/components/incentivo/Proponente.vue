@@ -9,19 +9,19 @@
                 <Endereco :enderecos="dadosProponente.enderecos"></Endereco>
             </fieldset>
             <fieldset>
-                <Telefone></Telefone>
+                <Telefone :telefones="dadosProponente.telefones"></Telefone>
             </fieldset>
             <fieldset>
-                <Email></Email>
+                <Email :emails="dadosProponente.emails"></Email>
             </fieldset>
             <fieldset>
-                <Natureza :dadosProponente="dadosProponente"></Natureza>
+                <Natureza :natureza="dadosProponente.dados"></Natureza>
             </fieldset>
             <fieldset>
-                <Dirigente></Dirigente>
+                <Dirigente :dirigentes="dadosProponente.dirigentes"></Dirigente>
             </fieldset>
             <fieldset>
-                <Procurador></Procurador>
+                <Procurador :procuradores="dadosProponente.procuradores"></Procurador>
             </fieldset>
         </div>
     </div>
