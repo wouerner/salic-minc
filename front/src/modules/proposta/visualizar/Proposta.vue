@@ -32,6 +32,22 @@
                     </div>
                 </li>
                 <li>
+                    <div class="collapsible-header"><i class="material-icons">history</i>Historico de sugestoes de enquadramento</div>
+                    <div class="collapsible-body padding20" v-if="dados">
+                        <PropostaCustosVinculados
+                            :arrayCustos="dados.tbcustosvinculados"
+                        ></PropostaCustosVinculados>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">history</i>Historico de solicitaçoes</div>
+                    <div class="collapsible-body padding20" v-if="dados">
+                        <PropostaCustosVinculados
+                            :arrayCustos="dados.tbcustosvinculados"
+                        ></PropostaCustosVinculados>
+                    </div>
+                </li>
+                <li>
                     <div class="collapsible-header"><i class="material-icons">person</i>Proponente</div>
                     <div class="collapsible-body padding20">
                         <AgenteProponente :idagente="dados.idAgente"></AgenteProponente>
@@ -172,15 +188,6 @@
                         ></Planilha>
                     </div>
                 </li>
-                <li>
-                    <div id="planilha-orcamentaria" class="collapsible-header">
-                        Oiiii
-                        <i class="material-icons">attach_money</i>
-                    </div>
-                    <div class="collapsible-body padding20">
-                        <Planilha></Planilha>
-                    </div>
-                </li>
             </ul>
         </div>
         <div v-else class="center-align">
@@ -195,6 +202,7 @@ import Carregando from '@/components/Carregando';
 import SalicTextoSimples from '@/components/SalicTextoSimples';
 import PropostaIdentificacao from './components/PropostaIdentificacao';
 import PropostaHistoricoAvaliacoes from './components/PropostaHistoricoAvaliacoes';
+import PropostaHistoricoSugestoesEnquadramento from './components/PropostaHistoricoSugestoesEnquadramento';
 import AgenteProponente from '../components/AgenteProponente';
 import AgenteUsuario from '../components/AgenteUsuario';
 import PropostaDocumentos from './components/PropostaDocumentos';
@@ -254,15 +262,13 @@ export default {
                 self.loading = false;
             });
 
-            console.log('chega aqui');
-            $3.ajax({
-                url: '/proposta/visualizar/obter-sugestao-enquadramento/idPreProjeto/' + 278419
-            }).done(function (response) {
-                console.log('VENDO OQ CHEGA');
-                console.log(response);
-            });
+            // $3.ajax({
+            //     url: '/proposta/visualizar/obter-sugestao-enquadramento/idPreProjeto/' + 278419
+            // }).done(function (response) {
+            //     console.log('VENDO OQ CHEGA');
+            //     console.log(response);
+            // });
 
-            console.log('chega aqui222222');
             $3.ajax({
                 url: '/solicitacao/mensagem/historico-solicitacoes/idPreProjeto/' + 282175
             }).done(function (response) {
