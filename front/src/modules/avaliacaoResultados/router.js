@@ -7,7 +7,6 @@ import TipoAvaliacao from './components/TipoAvaliacao';
 import Planilha from './components/Planilha';
 import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
-import Encaminhar from './components/Encaminhar';
 import Historico from './components/Historico';
 
 Vue.use(Router);
@@ -67,14 +66,6 @@ const routes = [
         component: Diligenciar,
         meta: {
             title: 'Dilengiar o proponente',
-        },
-    },
-    {
-        path: '/encaminhar',
-        name: 'Encaminhar',
-        component: Encaminhar,
-        meta: {
-            title: 'Encaminhar',
         },
     },
     {
