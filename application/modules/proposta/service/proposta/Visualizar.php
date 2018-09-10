@@ -60,7 +60,7 @@ class Visualizar
         $colunas = [];
 
         foreach (self::OBJECT_KEYS as $key => $value) {
-            $colunas[$key]['name'] = utf8_encode($value);
+            $colunas[$key]['name'] = html_entity_decode($value);
         }
 
         return $colunas;
@@ -83,7 +83,7 @@ class Visualizar
         $current_object = [];
 
         foreach (self::OBJECT_KEYS as $key => $value) {
-            $current_object[$key] = utf8_encode($sugestao_enquadramento[$key]);
+            $current_object[$key] = html_entity_decode(utf8_encode($sugestao_enquadramento[$key]));
         }
 
         return $current_object;
