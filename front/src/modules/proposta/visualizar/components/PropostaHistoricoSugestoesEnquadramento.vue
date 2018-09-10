@@ -36,7 +36,7 @@
 
                     /* eslint-disable */
                     $3.ajax({
-                        url: '/proposta/visualizar-rest/index/idPreProjeto/' + 278419
+                        url: '/proposta/visualizar-rest/obter-sugestao-enquadramento/idPreProjeto/' + 278419
                     }).done(function (response) {
                         console.log('Vendo o que esta chegando');
                         console.log(response);

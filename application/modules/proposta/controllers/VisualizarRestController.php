@@ -6,6 +6,7 @@ class Proposta_VisualizarRestController extends MinC_Controller_Rest_Abstract
 {
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
+
         $permissionsPerMethod  = ['*'];
 
         $this->setValidateUserIsLogged();
@@ -14,7 +15,7 @@ class Proposta_VisualizarRestController extends MinC_Controller_Rest_Abstract
         parent::__construct($request, $response, $invokeArgs);
     }
 
-    public function indexAction()
+    public function obterSugestaoEnquadramentoAction()
     {
         $idPreProjeto = $this->_request->getParam('idPreProjeto');
 
@@ -30,6 +31,11 @@ class Proposta_VisualizarRestController extends MinC_Controller_Rest_Abstract
         } catch (Exception $e) {
             $this->renderJsonResponse($data, 400);
         }
+    }
+
+    public function indexAction()
+    {
+        $this->renderJsonResponse(200);
     }
 
     public function getAction()
