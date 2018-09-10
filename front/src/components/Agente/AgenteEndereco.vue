@@ -41,13 +41,6 @@
         props: {
             enderecos: {},
         },
-        created() {
-                console.log('enderecos', this.enderecos[0].Complemento === ' ');
-        },
-        watch: {
-            enderecos() {
-            }
-        },
         components: {
             SalicFormatarCep,
         },
