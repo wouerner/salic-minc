@@ -34,9 +34,9 @@
                 <li>
                     <div class="collapsible-header"><i class="material-icons">history</i>Historico de sugestoes de enquadramento</div>
                     <div class="collapsible-body padding20" v-if="dados">
-                        <PropostaCustosVinculados
-                            :arrayCustos="dados.tbcustosvinculados"
-                        ></PropostaCustosVinculados>
+                        <PropostaHistoricoSugestoesEnquadramento
+                            :idpreprojeto="dados.idPreProjeto"
+                        ></PropostaHistoricoSugestoesEnquadramento>
                     </div>
                 </li>
                 <li>
