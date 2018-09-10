@@ -110,6 +110,7 @@ class Proposta_VisualizarController extends Proposta_GenericController
                 $newArray[$key]['DtAvaliacao'] = $objDateTime->format('d/m/Y H:i:s');
                 $newArray[$key]['Avaliacao'] = str_replace('<p>&nbsp;</p>', '', $dado->Avaliacao);
             }
+
             $json['class'] = 'bordered striped';
             $json['lines'] = $newArray;
             $json['cols'] = [

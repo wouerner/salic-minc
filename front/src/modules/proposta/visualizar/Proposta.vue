@@ -228,6 +228,7 @@ export default {
     components: {
         PropostaIdentificacao,
         PropostaHistoricoAvaliacoes,
+        PropostaHistoricoSugestoesEnquadramento,
         AgenteProponente,
         AgenteUsuario,
         SalicTextoSimples,
@@ -270,7 +271,7 @@ export default {
             // });
 
             $3.ajax({
-                url: '/solicitacao/mensagem/historico-solicitacoes/idPreProjeto/' + 282175
+                url: '/solicitacao/mensagem/historico-solicitacoes/idPreProjeto/' + 278419
             }).done(function (response) {
                 console.log('VENDO OQ CHEGA');
                 console.log(response);

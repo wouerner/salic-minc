@@ -4,6 +4,17 @@ namespace Application\Modules\Proposta\Service\Proposta;
 
 class Visualizar
 {
+    const OBJECT_KEYS = [
+        'ultima_sugestao' => 'N&uacute;mero',
+        'data_avaliacao' => 'Data',
+        'usu_nome' => 'Avaliador',
+        'org_sigla' => 'Unidade',
+        'area' => '&Aacute;rea',
+        'segmento' => 'Segmento',
+        'enquadramento' => 'Enquadramento',
+        'descricao_motivacao' => 'Parecer'
+    ];
+
     /**
      * @var \Zend_Controller_Request_Abstract $request
      */
@@ -25,15 +36,56 @@ class Visualizar
     {
         $idPreProjeto = $this->request->idPreProjeto;
 
-        $sugestaoEnquadramentoDbTable = new \Admissibilidade_Model_DbTable_SugestaoEnquadramento();
-        $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($idPreProjeto);
-        $sugestao_enquadramento = $sugestaoEnquadramentoDbTable->obterHistoricoEnquadramento();
+        $sugestoesEnquadramentoDbTable = new \Admissibilidade_Model_DbTable_SugestaoEnquadramento();
+        $sugestoesEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($idPreProjeto);
+        $sugestoes_enquadramento = $sugestoesEnquadramentoDbTable->obterHistoricoEnquadramento();
 
+        $data = $this->montarSugestoesEnquadramento($sugestoes_enquadramento );
 
-        array_walk($sugestao_enquadramento, function (&$value) {
-            $value = array_map('utf8_encode', $value);
-        });
+        return $data;
+    }
 
-        return $sugestao_enquadramento;
+    private function montarSugestoesEnquadramento($sugestoes_enquadramento): array
+    {
+        $resultado = [];
+        $resultado['class'] = 'bordered striped';
+        $resultado['cols'] = $this->montarSugestoesEnquadramentoColunas();
+        $resultado['lines'] = $this->montarSugestoesEnquadramentoLinhas($sugestoes_enquadramento);
+
+        return $resultado;
+    }
+
+    private function montarSugestoesEnquadramentoColunas(): array
+    {
+        $colunas = [];
+
+        foreach (self::OBJECT_KEYS as $key => $value) {
+            $colunas[$key]['name'] = utf8_encode($value);
+        }
+
+        return $colunas;
+    }
+
+    private function montarSugestoesEnquadramentoLinhas($sugestoes_enquadramento): array
+    {
+        $lines = [];
+
+        foreach ($sugestoes_enquadramento as $sugestao_enquadramento) {
+            $result = $this->montarSugestaoEnquadramento($sugestao_enquadramento);
+            array_push($lines, $result);
+        }
+
+        return $lines;
+    }
+
+    private function montarSugestaoEnquadramento($sugestao_enquadramento) : array
+    {
+        $current_object = [];
+
+        foreach (self::OBJECT_KEYS as $key => $value) {
+            $current_object[$key] = utf8_encode($sugestao_enquadramento[$key]);
+        }
+
+        return $current_object;
     }
 }
