@@ -606,5 +606,4 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $this->_helper->json(array('msg' => utf8_encode($e->getMessage()), 'data' => $solicitacoes, 'success' => 'false'));
         }
     }
-
 }
