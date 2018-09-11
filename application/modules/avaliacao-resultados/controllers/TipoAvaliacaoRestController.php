@@ -22,12 +22,12 @@ class AvaliacaoResultados_TipoAvaliacaoRestController extends MinC_Controller_Re
 
     public function headAction()
     {
-        // TODO: Implement headAction() method.
+        $this->renderJsonResponse(["Nenhum conteúdo"], 204);
     }
 
     public function indexAction()
     {
-        $this->customRenderJsonResponse([], 204);
+        $this->renderJsonResponse(["Nenhum conteúdo"], 204);
     }
 
     public function getAction()
@@ -53,7 +53,8 @@ class AvaliacaoResultados_TipoAvaliacaoRestController extends MinC_Controller_Re
     }
     public function deleteAction()
     {
-        // TODO: Implement deleteAction() method.
+//        403 Proibido
+        $this->customRenderJsonResponse(["Método não permitido"], 405);
     }
 
 }
