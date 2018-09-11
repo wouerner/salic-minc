@@ -11,6 +11,7 @@ class Mensagem
         'dsEncaminhamento' => 'Estado',
         'dtSolicitacao' => 'Dt. Solicita&ccedil;&atilde;o',
         'dtResposta' => 'Dt. Resposta',
+        // 'botao' => '#'
     ];
 
     /**
@@ -118,6 +119,12 @@ class Mensagem
             $current_object[$key] = html_entity_decode(utf8_encode($solicitacao[$key]));
         }
 
-        return $current_object;
+        return $this->pushButtonClass($current_object);
+    }
+
+    private function pushButtonClass($current_object)
+    {
+        $current_object['class'] = 'btn blue small white-text tooltipped';
+        xd($current_object);
     }
 }

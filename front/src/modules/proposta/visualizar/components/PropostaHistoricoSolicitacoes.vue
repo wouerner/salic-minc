@@ -35,7 +35,7 @@ export default {
                 const self = this;
                 /* eslint-disable */
                 $3.ajax({
-                    url: '/solicitacao/mensagem-rest/historico-solicitacoes/idPreProjeto/' + self.idpreprojeto
+                    url: '/solicitacao/mensagem-rest/historico-solicitacoes/idPreProjeto/' + 282175
                 }).done(function (response) {
                     self.dado = response.data.items;
                 });
