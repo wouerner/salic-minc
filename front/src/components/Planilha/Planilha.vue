@@ -16,6 +16,7 @@
 
 <script>
     import PlanilhaItensPadrao from '@/components/Planilha/PlanilhaItensPadrao';
+    import PlanilhaConsolidacao from '@/components/Planilha/PlanilhaConsolidacao';
     import planilhas from '@/mixins/planilhas';
 
     const CollapsibleRecursivo = {
@@ -54,15 +55,14 @@
                                             },
                                             scopedSlots: { default: self.$scopedSlots.default },
                                         }),
+                                        h(PlanilhaConsolidacao, {
+                                            props: {
+                                                planilha: self.planilha[key],
+                                            },
+                                        }),
                                     ],
                                 ),
                             ]);
-                        }
-
-                        if (self.contador === 1) {
-                            if (self.planilha[key]) {
-                                return h('div', self.planilha[key].vlAprovadoTotal);
-                            }
                         }
 
                         return true;
@@ -111,7 +111,7 @@
         },
         mounted() {
             // eslint-disable-next-line
-            $3(".collapsible").each(function() {
+            $3(".collapsible").each(function () {
                 // eslint-disable-next-line
                 $3(this).collapsible();
             });

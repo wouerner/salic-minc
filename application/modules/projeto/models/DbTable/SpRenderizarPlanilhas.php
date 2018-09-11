@@ -71,6 +71,10 @@ class Projeto_Model_DbTable_SpRenderizarPlanilhas extends MinC_Db_Table_Abstract
                 $planilha[$fonte]['vlAprovadoTotal'] += $item['vlAprovado'];
             }
 
+            if ($item['VlComprovado']) {
+                $planilha[$fonte]['vlComprovadoTotal'] += $item['VlComprovado'];
+            }
+
             if ($tipo == $this::TIPO_PLANILHA_HOMOLOGADA) {
                 $valorTotal = $item['vlAprovado'];
             }

@@ -185,6 +185,7 @@ class Proposta_Model_PreProjetoMapper extends MinC_Db_Mapper
             $row["Seq"] = $i;
             $row["idPlanilhaProposta"] = $item['idPlanilhaProposta'];
             $row["Item"] = $item['DescricaoItem'];
+            $row["Unidade"] = $item['DescricaoUnidade'];
             $row['FonteRecurso'] = $item['DescricaoRecurso'];
             $row['Municipio'] = $item['DescricaoMunicipio'];
             $row['UF'] = $item['DescricaoUf'];
