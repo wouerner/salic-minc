@@ -1,17 +1,17 @@
 <template>
     <div class="conteudo">
         <legend>Telefone</legend>
-        <table class="tabela" v-if="Object(dadosProponente.telefones).length > 0">
+        <table class="tabela" v-if="Object(telefones).length > 0">
             <tr class="destacar">
                 <td><b>Tipo</b></td>
                 <td class="centro"><b>UF</b></td>
                 <td><b>N&uacute;mero</b></td>
                 <td class="centro"><b>Divulgar</b></td>
             </tr>
-            <tr v-for="telefone in dadosProponente.telefones" v-bind:key="telefone.idTelefone">
+            <tr v-for="telefone in telefones" v-bind:key="telefone.idTelefone">
                 <td>{{telefone.dstelefone}}</td>
                 <td class="center-align">{{telefone.ufsigla}}</td>
-                <td class="left-align">({{telefone.ddd}}) {{telefone.numero}}</td>
+                <td class="left-align">{{telefone.ddd}} {{telefone.numero}}</td>
                 <td class="center-align">{{label_sim_ou_nao(telefone.divulgar)}}</td>
             </tr>
         </table>
@@ -24,14 +24,11 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
     import { utils } from '@/mixins/utils';
 
     export default {
-        computed: {
-            ...mapGetters({
-                dadosProponente: 'projeto/proponente',
-            }),
+        props: {
+            telefones: {},
         },
         mixins: [utils],
     };

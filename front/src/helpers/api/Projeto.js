@@ -2,8 +2,16 @@ import * as api from './base';
 
 export const buscaProjeto = (idPronac) => {
     const module = '/projeto';
-    const controller = '/incentivo';
-    const action = '/obter-projeto-ajax';
+    const controller = '/projeto';
+    const action = '/get';
+    const queryParams = `?idPronac=${idPronac}`;
+    return api.getRequest(`${module}${controller}${action}`, queryParams);
+};
+
+export const buscarProjetoCompleto = (idPronac) => {
+    const module = '/projeto';
+    const controller = '/dados-projeto';
+    const action = '/get';
     const queryParams = `?idPronac=${idPronac}`;
     return api.getRequest(`${module}${controller}${action}`, queryParams);
 };

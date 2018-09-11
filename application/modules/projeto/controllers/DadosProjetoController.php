@@ -1,5 +1,5 @@
 <?php
-class Projeto_ProjetoController extends Projeto_GenericController
+class Projeto_DadosProjetoController extends Projeto_GenericController
 {
 
     protected $idPronac;
@@ -47,19 +47,23 @@ class Projeto_ProjetoController extends Projeto_GenericController
 
             $permissao = $this->verificarPermissaoAcesso(false, true, false, true);
 
-            $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
-            $projeto = $dbTableProjetos->buscarProjeto(['p.IdPRONAC = ?' => $this->idPronac]);
-
-            $projeto = count($projeto) > 0 ? $projeto->current()->toArray() : [];
-
-            $data = array_map('utf8_encode', $projeto);
-
             $data['permissao'] = true;
             if (!$permissao['status']) {
                 $data['permissao'] = false;
                 $httpCode = 203;
                 throw new Exception('Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar este projeto');
             }
+
+            $dbTableProjetos = new Projeto_Model_TbProjetosMapper();
+            $projeto = $dbTableProjetos->obterProjetoCompleto($this->idPronac);
+
+            $data = array_merge($data, $projeto);
+
+            $this->autenticacao = array_change_key_case((array)\Zend_Auth::getInstance()->getIdentity());
+
+            $data['isProponente'] = isset($this->autenticacao['usu_codigo']) ? false : true;
+
+            $data = array_map('utf8_encode', $data);
 
             $this->getResponse()->setHttpResponseCode($httpCode);
             $this->_helper->json(
@@ -72,19 +76,5 @@ class Projeto_ProjetoController extends Projeto_GenericController
             $this->getResponse()->setHttpResponseCode($httpCode);
             $this->_helper->json(array('data' => $data, 'success' => 'false', 'msg' => $e->getMessage()));
         }
-    }
-
-    public function indexAction()
-    {
-    }
-
-    public function verificarIn2017Action()
-    {
-        $idPronac = $this->getRequest()->getParam('idPronac');
-
-        $tbProjetos = new Projeto_Model_DbTable_Projetos();
-        $IN2017 = $tbProjetos->verificarIN2017($idPronac);
-
-        $this->_helper->json(['idPronac' => $idPronac, 'IN2017' => $IN2017]);
     }
 }

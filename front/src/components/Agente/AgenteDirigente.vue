@@ -1,12 +1,12 @@
 <template>
     <div class="conteudo">
         <legend>Dirigente</legend>
-        <table class="tabela" v-if="Object(dadosProponente.dirigentes).length > 0">
+        <table class="tabela" v-if="dirigentes">
             <tr class="destacar">
                 <td width="20%" align="center"><b>Nome/CPF</b></td>
                 <td align="center"><b>Mandatos</b></td>
             </tr>
-            <tr v-for="dirigente in dadosProponente.dirigentes" v-bind:key="dirigente.idAgente">
+            <tr v-for="dirigente in dirigentes" v-bind:key="dirigente.idAgente">
                 <td align="center">
                     <b>{{dirigente.NomeDirigente}}</b> <br>
                     <SalicFormatarCpfCnpj :cpf="dirigente.CNPJCPFDirigente"/>
@@ -53,17 +53,14 @@
 
 <script>
     import moment from 'moment';
-    import { mapGetters } from 'vuex';
     import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
 
     export default {
+        props: {
+            dirigentes: {},
+        },
         components: {
             SalicFormatarCpfCnpj,
-        },
-        computed: {
-            ...mapGetters({
-                dadosProponente: 'projeto/proponente',
-            }),
         },
         filters: {
             formatarData(date) {

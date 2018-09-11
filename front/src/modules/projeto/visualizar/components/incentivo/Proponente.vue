@@ -4,26 +4,24 @@
             <Carregando :text="'Carregando proponente'"></Carregando>
         </div>
         <div v-else id="proponente">
+            <Identificacao :projeto="dadosProjeto"></Identificacao>
             <fieldset>
-                <Identificacao></Identificacao>
+                <Endereco :enderecos="dadosProponente.enderecos"></Endereco>
             </fieldset>
             <fieldset>
-                <Endereco></Endereco>
+                <Telefone :telefones="dadosProponente.telefones"></Telefone>
             </fieldset>
             <fieldset>
-                <Telefone></Telefone>
+                <Email :emails="dadosProponente.emails"></Email>
             </fieldset>
             <fieldset>
-                <Email></Email>
+                <Natureza :natureza="dadosProponente.dados"></Natureza>
             </fieldset>
             <fieldset>
-                <Natureza></Natureza>
+                <Dirigente :dirigentes="dadosProponente.dirigentes"></Dirigente>
             </fieldset>
             <fieldset>
-                <Dirigente></Dirigente>
-            </fieldset>
-            <fieldset>
-                <Procurador></Procurador>
+                <Procurador :procuradores="dadosProponente.procuradores"></Procurador>
             </fieldset>
         </div>
     </div>
@@ -32,13 +30,13 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import Carregando from '@/components/Carregando';
-    import Identificacao from './Identificacao';
-    import Endereco from './Endereco';
-    import Telefone from './Telefone';
-    import Email from './Email';
-    import Natureza from './Natureza';
-    import Dirigente from './Dirigente';
-    import Procurador from './Procurador';
+    import Identificacao from '@/components/Projeto/ProjetoIdentificacao';
+    import Endereco from '@/components/Agente/AgenteEndereco';
+    import Telefone from '@/components/Agente/AgenteTelefone';
+    import Email from '@/components/Agente/AgenteEmail';
+    import Natureza from '@/components/Agente/AgenteNatureza';
+    import Dirigente from '@/components/Agente/AgenteDirigente';
+    import Procurador from '@/components/Agente/AgenteProcurador';
 
     export default {
         data() {
@@ -57,10 +55,7 @@
             Procurador,
         },
         created() {
-            if (typeof this.$route.params.idPronac !== 'undefined' &&
-                Object.keys(this.dadosProponente).length === 0) {
-                this.buscaProponente(this.$route.params.idPronac);
-            }
+            this.buscaProponente(this.dadosProjeto.idPronac);
 
             if (Object.keys(this.dadosProponente).length > 0) {
                 this.loading = false;
@@ -81,6 +76,7 @@
         computed: {
             ...mapGetters({
                 dadosProponente: 'projeto/proponente',
+                dadosProjeto: 'projeto/projeto',
             }),
         },
     };

@@ -1,17 +1,12 @@
 <template>
     <div id="conteudo">
-        <div v-if="loading" class="row">
-            <Carregando :text="'Carregando o projeto'"></Carregando>
-        </div>
-
         <div class="row" v-if="dadosProjeto.ProponenteInabilitado">
             <div style="background-color: #EF5350; text-transform: uppercase"
                  class="darken-2 padding10 white-text center-align">
                 <div><b>Proponente Inabilitado</b></div>
             </div>
         </div>
-
-        <div v-show="Object.keys(dadosProjeto).length > 0">
+        <div v-if="Object.keys(dadosProjeto).length > 0">
             <table class="tabela">
                 <tr class="destacar">
                     <td><b>PRONAC</b></td>
@@ -75,7 +70,6 @@
                     </td>
                     <td class="centro"><b>Data Fixa</b></td>
                     <td class="centro"><b>Processo</b></td>
-                    <!-- <td class="centro"><b>Prorroga&ccedil;&atilde;o autom&aacute;tica</b></td> -->
                     <td class="centro">
                         <b>
                             Prorroga&ccedil;&atilde;o autom&aacute;tica
@@ -89,9 +83,10 @@
                 </tr>
                 <tr>
                     <td align="center" class="bold destaque-texto-primary">
-                        <router-link :to="{ name: 'proposta', params: { idPronac: idPronac }}">
-                            <SalicTextoSimples :texto="dadosProjeto.idPreProjeto"/>
+                        <router-link v-if="dadosProjeto.idPreProjeto" :to="{ name: 'proposta', params: { idPronac: idPronac }}">
+                            {{ dadosProjeto.idPreProjeto }}
                         </router-link>
+                        <SalicTextoSimples v-else :texto="dadosProjeto.idPreProjeto"/>
                     </td>
                     <td align="center">
                         <SalicTextoSimples :texto="dadosProjeto.DataFixa"/>
@@ -234,13 +229,13 @@
                 </tr>
                 <tr>
                     <td align="center">
-                        <SalicTextoSimples :texto=" formatarAgencia(dadosProjeto.AgenciaBancaria)"/>
+                        <SalicTextoSimples :texto="dadosProjeto.AgenciaBancaria | formatarAgencia"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaCaptacao)"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ContaCaptacao | formatarConta"/>
                     </td>
                     <td align="center">
-                        <SalicTextoSimples :texto=" formatarConta(dadosProjeto.ContaMovimentacao)"/>
+                        <SalicTextoSimples :texto="dadosProjeto.ContaMovimentacao | formatarConta"/>
                     </td>
                     <td align="center" class="destacar-celula">
                         <SalicTextoSimples :texto="dadosProjeto.ContaBancariaLiberada"/>
