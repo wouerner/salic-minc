@@ -1,12 +1,9 @@
 <template>
-    <div class="tabelas">
-        <div class="row">
-            <slTabelaSimples v-bind:dados="dado"></slTabelaSimples>
-        </div>
+    <div>
+        {{dado}}
     </div>
 </template>
 <script>
-import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
     name: 'PropostaHistoricoSolicitacoes',
@@ -16,9 +13,6 @@ export default {
         };
     },
     props: ['idpreprojeto'],
-    components: {
-        slTabelaSimples,
-    },
     mounted() {
         if (typeof this.idpreprojeto !== 'undefined') {
             this.fetch(this.idpreprojeto);
@@ -37,7 +31,8 @@ export default {
                 $3.ajax({
                     url: '/solicitacao/mensagem-rest/historico-solicitacoes/idPreProjeto/' + 282175
                 }).done(function (response) {
-                    self.dado = response.data.items;
+                    console.log(response);
+                    self.dado = response.data;
                 });
             }
         },

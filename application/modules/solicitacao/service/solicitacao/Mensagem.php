@@ -4,16 +4,6 @@ namespace Application\Modules\Solicitacao\Service\Solicitacao;
 
 class Mensagem
 {
-    const OBJECT_KEYS = [
-        'idProjeto' => 'N&uacute;mero',
-        'NomeProjeto' => 'Proposta/Projeto',
-        'dsSolicitacao' => 'Solicita&ccedil;&atilde;o',
-        'dsEncaminhamento' => 'Estado',
-        'dtSolicitacao' => 'Dt. Solicita&ccedil;&atilde;o',
-        'dtResposta' => 'Dt. Resposta',
-        // 'botao' => '#'
-    ];
-
     /**
      * @var \Zend_Controller_Request_Abstract $request
      */
@@ -72,59 +62,12 @@ class Mensagem
         }
 
         $obterSolicitacoes = new \Solicitacao_Model_DbTable_TbSolicitacao();
-        $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where);
+        $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where)->toArray();
 
-        $data = $this->montarHistoricoSolicitacoes($solicitacoes);
+        array_walk($solicitacoes, function (&$value) {
+            $value = array_map('utf8_encode', $value);
+        });
 
-        return $data;
-    }
-    private function montarHistoricoSolicitacoes($solicitacoes): array
-    {
-        $resultado = [];
-        $resultado['class'] = 'bordered striped';
-        $resultado['cols'] = $this->montarHistoricoSolicitacoesColunas();
-        $resultado['lines'] = $this->montarHistoricoSolicitacoesLinhas($solicitacoes);
-
-        return $resultado;
-    }
-
-    private function montarHistoricoSolicitacoesColunas(): array
-    {
-        $colunas = [];
-
-        foreach (self::OBJECT_KEYS as $key => $value) {
-            $colunas[$key]['name'] = html_entity_decode($value);
-        }
-
-        return $colunas;
-    }
-
-    private function montarHistoricoSolicitacoesLinhas($solicitacoes): array
-    {
-        $lines = [];
-
-        foreach ($solicitacoes as $solicitacao) {
-            $result = $this->montarHistoricoSolicitacao($solicitacao);
-            array_push($lines, $result);
-        }
-
-        return $lines;
-    }
-
-    private function montarHistoricoSolicitacao($solicitacao) : array
-    {
-        $current_object = [];
-
-        foreach (self::OBJECT_KEYS as $key => $value) {
-            $current_object[$key] = html_entity_decode(utf8_encode($solicitacao[$key]));
-        }
-
-        return $this->pushButtonClass($current_object);
-    }
-
-    private function pushButtonClass($current_object)
-    {
-        $current_object['class'] = 'btn blue small white-text tooltipped';
-        xd($current_object);
+        return $solicitacoes;
     }
 }
