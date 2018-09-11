@@ -129,24 +129,21 @@
 </template>
 
 <script>
-    import {
-        mapGetters,
-        mapActions
-    } from "vuex";
-    import Carregando from "@/components/Carregando";
-    import SalicFormatarCep from "@/components/SalicFormatarCep";
-    import SalicFormatarCpfCnpj from "@/components/SalicFormatarCpfCnpj";
+    import { mapGetters, mapActions } from 'vuex';
+    import Carregando from '@/components/Carregando';
+    import SalicFormatarCep from '@/components/SalicFormatarCep';
+    import SalicFormatarCpfCnpj from '@/components/SalicFormatarCpfCnpj';
     
     export default {
         data() {
             return {
-                loading: true
+                loading: true,
             };
         },
         components: {
             SalicFormatarCpfCnpj,
             SalicFormatarCep,
-            Carregando
+            Carregando,
         },
         created() {
             this.buscaProponente(this.dadosProjeto.idPronac);
@@ -160,18 +157,18 @@
                 if (Object.keys(this.dadosProponente).length > 0) {
                     this.loading = false;
                 }
-            }
+            },
         },
         methods: {
             ...mapActions({
-                buscaProponente: "projeto/buscaProponente"
-            })
+                buscaProponente: 'projeto/buscaProponente',
+            }),
         },
         computed: {
             ...mapGetters({
-                dadosProponente: "projeto/proponente",
-                dadosProjeto: "projeto/projeto"
-            })
-        }
+                dadosProponente: 'projeto/proponente',
+                dadosProjeto: 'projeto/projeto',
+            }),
+        },
     };
 </script>
