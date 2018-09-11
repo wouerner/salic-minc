@@ -1221,8 +1221,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
 
         $this->view->filtro = $filtro;
-
-        // lista apenas readequações do órgão atual
+        
         if ($filtro == 'aguardando_distribuicao') {
             $where['idOrgao = ?'] = $this->idOrgao;
         } else {
@@ -1235,14 +1234,24 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
         }
 
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
-
+        
         $total = $tbReadequacao->painelReadequacoesCoordenadorAcompanhamentoCount($where, $filtro);
-
+        
         $fim = $inicio + $this->intTamPag;
 
         $totalPag = (int)(($total % $this->intTamPag == 0) ? ($total / $this->intTamPag) : (($total / $this->intTamPag) + 1));
         $tamanho = ($fim > $total) ? $total - $inicio : $this->intTamPag;
 
+        if ($filtro == 'analisados') {
+            unset($where['idOrgaoOrigem = ?']);
+            $where['CASE 
+	                    WHEN projetos.Orgao in (160,179,682)
+		            THEN 166
+                        WHEN projetos.Orgao in (251,341)
+                    THEN 272
+                    ELSE projetos.Orgao
+                    END = ?'] = $this->idOrgao;
+        }
         $busca = $tbReadequacao->painelReadequacoesCoordenadorAcompanhamento($where, $order, $tamanho, $inicio, false, $filtro);
 
         $paginacao = array(
@@ -2023,7 +2032,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
 
         if ($return) {
 
-            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->idOrgao); 
+            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->idOrgao);
             $objDbTableDocumentoAssinatura = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $idDocumentoAssinatura = $objDbTableDocumentoAssinatura->getIdDocumentoAssinatura(
                 $idPronac,
