@@ -6,6 +6,7 @@
     </div>
 </template>
 <script>
+import slTabelaSimples from '@/components/slTabelaSimples';
 
 export default {
     name: 'PropostaHistoricoSolicitacoes',
@@ -15,6 +16,9 @@ export default {
         };
     },
     props: ['idpreprojeto'],
+    components: {
+        slTabelaSimples,
+    },
     mounted() {
         if (typeof this.idpreprojeto !== 'undefined') {
             this.fetch(this.idpreprojeto);
@@ -31,9 +35,9 @@ export default {
                 const self = this;
                 /* eslint-disable */
                 $3.ajax({
-                    url: '/solicitacao/mensagem/historico-solicitacoes/idPreProjeto/' + id
+                    url: '/solicitacao/mensagem-rest/historico-solicitacoes/idPreProjeto/' + self.idpreprojeto
                 }).done(function (response) {
-                    self.dado = response.data;
+                    self.dado = response.data.items;
                 });
             }
         },

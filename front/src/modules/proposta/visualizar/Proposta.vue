@@ -42,9 +42,9 @@
                 <li>
                     <div class="collapsible-header"><i class="material-icons">history</i>Historico de solicitaçoes</div>
                     <div class="collapsible-body padding20" v-if="dados">
-                        <PropostaCustosVinculados
-                            :arrayCustos="dados.tbcustosvinculados"
-                        ></PropostaCustosVinculados>
+                        <PropostaHistoricoSolicitacoes
+                            :idpreprojeto="dados.idPreProjeto"
+                        ></PropostaHistoricoSolicitacoes>
                     </div>
                 </li>
                 <li>
@@ -203,6 +203,7 @@ import SalicTextoSimples from '@/components/SalicTextoSimples';
 import PropostaIdentificacao from './components/PropostaIdentificacao';
 import PropostaHistoricoAvaliacoes from './components/PropostaHistoricoAvaliacoes';
 import PropostaHistoricoSugestoesEnquadramento from './components/PropostaHistoricoSugestoesEnquadramento';
+import PropostaHistoricoSolicitacoes from './components/PropostaHistoricoSolicitacoes';
 import AgenteProponente from '../components/AgenteProponente';
 import AgenteUsuario from '../components/AgenteUsuario';
 import PropostaDocumentos from './components/PropostaDocumentos';
@@ -229,6 +230,7 @@ export default {
         PropostaIdentificacao,
         PropostaHistoricoAvaliacoes,
         PropostaHistoricoSugestoesEnquadramento,
+        PropostaHistoricoSolicitacoes,
         AgenteProponente,
         AgenteUsuario,
         SalicTextoSimples,
@@ -261,13 +263,6 @@ export default {
             }).done(function (response) {
                 self.dados = response.data;
                 self.loading = false;
-            });
-
-            $3.ajax({
-                url: '/solicitacao/mensagem-rest/historico-solicitacoes/idPreProjeto/' + 278419
-            }).done(function (response) {
-                console.log('VENDO OQ CHEGA');
-                console.log(response);
             });
         },
         iniciarCollapsible() {

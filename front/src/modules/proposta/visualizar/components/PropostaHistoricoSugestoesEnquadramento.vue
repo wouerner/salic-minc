@@ -36,10 +36,8 @@
 
                     /* eslint-disable */
                     $3.ajax({
-                        url: '/proposta/visualizar-rest/obter-sugestao-enquadramento/idPreProjeto/' + 278419
+                        url: '/proposta/visualizar-rest/obter-sugestao-enquadramento/idPreProjeto/' + self.idpreprojeto
                     }).done(function (response) {
-                        console.log('Vendo o que esta chegando');
-                        console.log(response);
                         self.dado = response.data.items;
                     });
                 }
