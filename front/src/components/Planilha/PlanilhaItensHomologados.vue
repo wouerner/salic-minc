@@ -30,6 +30,7 @@
                 <td class="center-align">{{ row.Quantidade }}</td>
                 <td class="center-align">{{ row.Ocorrencia }}</td>
                 <td class="right-align">{{ row.vlUnitario | filtroFormatarParaReal }}</td>
+                <td class="right-align">{{ row.vlSolicitado | filtroFormatarParaReal }}</td>
                 <td class="right-align">{{ row.vlSugerido  | filtroFormatarParaReal }}</td>
                 <td class="right-align">{{ row.vlAprovado | filtroFormatarParaReal }}</td>
                 <td class="justify" width="15%" v-html="row.JustProponente"></td>
