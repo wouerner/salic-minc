@@ -23,7 +23,7 @@ class Encaminhamento
         $GrupoAtivo = new \Zend_Session_Namespace('GrupoAtivo');
 
 //        $GrupoAtivo->unlockAll();
-        xd($GrupoAtivo);
+        // xd($GrupoAtivo);
 //        xd($GrupoAtivo->__get('codGrupo'));
 //        $authIdentityInstance = (array) \Zend_Auth::getInstance()->getIdentity();
 
