@@ -1232,7 +1232,7 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
             $where['a.PRONAC = ?'] = $this->_request->getParam('pronac');
             $this->view->pronac = $this->_request->getParam('pronac');
         }
-
+        
         $tbReadequacao = new Readequacao_Model_DbTable_TbReadequacao();
         
         $total = $tbReadequacao->painelReadequacoesCoordenadorAcompanhamentoCount($where, $filtro);
@@ -1251,6 +1251,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     THEN 272
                     ELSE projetos.Orgao
                     END = ?'] = $this->idOrgao;
+
+            if ($this->_request->getParam('pronac')) {
+                unset($where['a.PRONAC = ?']);
+                $where[new Zend_Db_Expr('projetos.anoprojeto + projetos.sequencial') . ' = ?'] = $this->_request->getParam('pronac');
+            }           
         }
         $busca = $tbReadequacao->painelReadequacoesCoordenadorAcompanhamento($where, $order, $tamanho, $inicio, false, $filtro);
 
