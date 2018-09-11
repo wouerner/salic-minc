@@ -64,6 +64,11 @@ class Mensagem
         $obterSolicitacoes = new \Solicitacao_Model_DbTable_TbSolicitacao();
         $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where)->toArray();
 
+        foreach ($solicitacoes as $key => $solicitacao) {
+            $solicitacoes[$key]['dsSolicitacao'] = str_replace('<p>&nbsp;</p>', '', $solicitacao['dsSolicitacao']);
+            $solicitacoes[$key]['dsResposta'] = str_replace('<p>&nbsp;</p>', '', $solicitacao['dsResposta']);
+        }
+
         array_walk($solicitacoes, function (&$value) {
             $value = array_map('utf8_encode', $value);
         });
