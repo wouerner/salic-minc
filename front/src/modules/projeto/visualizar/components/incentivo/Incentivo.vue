@@ -421,6 +421,15 @@
                 return moment()
                     .diff(date, 'days') > 0;
             },
+        },
+        filters: {
+            formatarData(date) {
+                if (date.length === 0) {
+                    return '-';
+                }
+                return moment(date)
+                    .format('DD/MM/YYYY');
+            },
             formatarAgencia(agencia) {
                 // formato: 9999-9
                 if (agencia.length === 5) {
@@ -435,15 +444,6 @@
                 conta = conta.toString().replace(/(\d)(\d{1})$/, '$1-$2');
 
                 return conta;
-            },
-        },
-        filters: {
-            formatarData(date) {
-                if (date.length === 0) {
-                    return '-';
-                }
-                return moment(date)
-                    .format('DD/MM/YYYY');
             },
         },
     };
