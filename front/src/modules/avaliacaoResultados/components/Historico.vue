@@ -4,9 +4,9 @@
       scrollable
       max-width="750px"
     >
-      <v-btn slot="activator" color="green lighten-2" dark>
-        <v-icon dark>history</v-icon>
-      </v-btn>
+        <v-btn slot="activator" flat icon color="grey">
+            <v-icon>history</v-icon>
+        </v-btn>
       <v-card>
         <v-card-title class="green white--text" primary-title>
           Histórico de encaminhamentos

@@ -1,4 +1,5 @@
 <template>
+    <v-container fluid>
         <v-data-table
                 :headers="cabecalho"
                 :items="dados"
@@ -6,7 +7,7 @@
                 class="elevation-1"
         >
             <template slot="items" slot-scope="props">
-                <td>{{ props.item.numero }}</td>
+                <td>{{ props.index+1 }}</td>
                 <td class="text-xs-right">{{ props.item.pronac }}
                     <v-flex xs12 sm4 text-xs-center>
                         <div>
@@ -21,40 +22,27 @@
                 <td class="text-xs-right">{{ props.item.mecanismo }}</td>
                 <td class="text-xs-right">{{ props.item.data }}</td>
                 <td class="text-xs-right">{{ props.item.analisar }}
-                    <div>
-                        <v-btn dark color="teal lighten-2">
-                            <i class="material-icons">compare_arrows</i>
-                        </v-btn>
-                    </div>
+                    <v-btn flat icon color="green">
+                        <v-icon class="material-icons">compare_arrows</v-icon>
+                    </v-btn>
                 </td>
-                <td class="text-xs-right">{{ props.item.diligencia }}
-                    <div>
-                        <v-btn dark color="yellow accent-3">
-                            <i class="material-icons">
-                                warning
-                            </i>
-                        </v-btn>
-                    </div>
+                <td class="text-xs-right">
+                    <v-btn flat icon color="indigo">
+                        <v-icon>warning</v-icon>
+                    </v-btn>
                 </td>
-                <td class="text-xs-right">{{ props.item.historico }}
-                    <v-flex xs12 sm4 text-xs-center>
-                        <div>
-                            <v-btn>
-                                <i class="material-icons">
-                                history
-                            </i></v-btn>
-                        </div>
-                    </v-flex>
+                <td class="text-xs-right">
+                    <Historico></Historico>
                 </td>
             </template>
         </v-data-table>
-    </div>
+    </v-container>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import ModalTemplate from '@/components/modal';
-import ComponenteEncaminhar from './ComponenteEncaminhar';
+import Historico from './Historico';
 
 export default {
     name: 'Painel',
@@ -81,7 +69,6 @@ export default {
             ],
             dados: [
                 {
-                    numero: 1,
                     nome:'Crianca e vida - 15 anos',
                     situacao:'E17',
                     area:'Artes Integradas / Artes Integradas',
@@ -90,7 +77,6 @@ export default {
                     data: '27/10/2017',
                 },
                 {
-                    numero: 1,
                     nome:'Crianca e vida - 15 anos',
                     situacao:'E17',
                     area:'Artes Integradas / Artes Integradas',
@@ -104,7 +90,7 @@ export default {
     },
     components: {
         ModalTemplate,
-        ComponenteEncaminhar,
+        Historico,
     },
     methods: {
         ...mapActions({
@@ -112,11 +98,6 @@ export default {
             modalOpen: 'modal/modalOpen',
             modalClose: 'modal/modalClose',
         }),
-        fecharModal() {
-            // eslint-disable-next-line
-            $3('#modalTemplate').modal('close');
-            this.modalClose();
-        },
     },
     computed: mapGetters({
         modalVisible: 'modal/default',

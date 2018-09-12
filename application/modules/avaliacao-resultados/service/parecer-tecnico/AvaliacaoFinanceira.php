@@ -36,14 +36,14 @@ class AvaliacaoFinanceira
 
         $proponente = new \ProponenteDAO();
         $dadosProponente = $proponente->buscarDadosProponente($this->request->idPronac);
-        $dadosProponente = (array) $dadosProponente[0];
+        $dadosProponente = (array)$dadosProponente[0];
 
         $tbAvaliacaoFinanceira = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceira();
         $where = [
             'idPronac' => $this->request->idPronac
         ];
         $dadosParecer = $tbAvaliacaoFinanceira->findBy($where);
-        $dadosParecer = ($dadosParecer)?: new \stdClass();
+        $dadosParecer = ($dadosParecer) ?: new \stdClass();
 
         return [
             'consolidacaoComprovantes' => $dadosAvaliacaoFinanceira,
@@ -66,7 +66,7 @@ class AvaliacaoFinanceira
     public function salvar()
     {
         $authInstance = \Zend_Auth::getInstance();
-        $arrAuth = array_change_key_case((array) $authInstance->getIdentity());
+        $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
 
         $parametros = $this->request->getParams();
         $tbAvaliacaoFinanceira = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceira($parametros);
@@ -78,7 +78,7 @@ class AvaliacaoFinanceira
 
         $this->request->setParam('idAvaliacaoFinanceira', $codigo);
 
-        if(!$codigo){
+        if (!$codigo) {
             return $mapper->getMessages();
         }
 
@@ -99,10 +99,10 @@ class AvaliacaoFinanceira
         $where['e.idSituacaoEncPrestContas = ?'] = '2';
 
         $tbProjetos = new \Projetos();
-        
+
         $projetos = $tbProjetos->buscarPainelTecPrestacaoDeContas($where)->toArray();
 
         return $projetos;
     }
-
 }
+
