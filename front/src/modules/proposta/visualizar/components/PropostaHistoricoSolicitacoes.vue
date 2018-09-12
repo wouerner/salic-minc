@@ -12,24 +12,24 @@
                     <th>#</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr v-for="(dado, index) in dados" :key="index">
-                    <div>
-                        <td>{{ dado.idProjeto }}</td>
-                        <td>{{ dado.NomeProjeto }}</td>
-                        <td>{{ dado.dsSolicitacao }}</td>
-                        <td>{{ dado.dsEncaminhamento }}</td>
-                        <td>{{ dado.dtSolicitacao }}</td>
-                        <td>{{ dado.dtResposta }}</td>
-                        <td>
-                            <div class="btn blue small white-text tooltipped" data-tooltip="Visualizar" @click="setActiveTab(index);">
-                                <i class="material-icons">visibility</i>
-                            </div>
-                        </td>
-                    </div>
-                    <div v-if="activeTab === index">
+            <tbody v-for="(dado, index) in dados" :key="index">
+                <tr>
+                    <td>{{ dado.idProjeto }}</td>
+                    <td>{{ dado.NomeProjeto }}</td>
+                    <td>{{ dado.dsSolicitacao }}</td>
+                    <td>{{ dado.dsEncaminhamento }}</td>
+                    <td>{{ dado.dtSolicitacao }}</td>
+                    <td>{{ dado.dtResposta }}</td>
+                    <td>
+                        <div class="btn blue small white-text tooltipped" data-tooltip="Visualizar" @click="setActiveTab(index);">
+                            <i class="material-icons">visibility</i>
+                        </div>
+                    </td>
+                </tr>
+                <tr v-if="activeTab === index">
+                    <td colspan="7">
                         Informaçao collapse
-                    </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
