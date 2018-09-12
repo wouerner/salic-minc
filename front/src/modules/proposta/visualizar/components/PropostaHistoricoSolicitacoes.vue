@@ -14,17 +14,22 @@
             </thead>
             <tbody>
                 <tr v-for="(dado, index) in dados" :key="index">
-                    <td>{{ dado.idProjeto }}</td>
-                    <td>{{ dado.NomeProjeto }}</td>
-                    <td>{{ dado.dsSolicitacao }}</td>
-                    <td>{{ dado.dsEncaminhamento }}</td>
-                    <td>{{ dado.dtSolicitacao }}</td>
-                    <td>{{ dado.dtResposta }}</td>
-                    <td>
-                        <div class="btn blue small white-text tooltipped" data-tooltip="Visualizar">
-                            <i class="material-icons">visibility</i>
-                        </div>
-                    </td>
+                    <div>
+                        <td>{{ dado.idProjeto }}</td>
+                        <td>{{ dado.NomeProjeto }}</td>
+                        <td>{{ dado.dsSolicitacao }}</td>
+                        <td>{{ dado.dsEncaminhamento }}</td>
+                        <td>{{ dado.dtSolicitacao }}</td>
+                        <td>{{ dado.dtResposta }}</td>
+                        <td>
+                            <div class="btn blue small white-text tooltipped" data-tooltip="Visualizar" @click="setActiveTab(index);">
+                                <i class="material-icons">visibility</i>
+                            </div>
+                        </td>
+                    </div>
+                    <div v-if="activeTab === index">
+                        Informaçao collapse
+                    </div>
                 </tr>
             </tbody>
         </table>
@@ -37,6 +42,7 @@ export default {
     data() {
         return {
             dados: [],
+            activeTab: -1,
         };
     },
     props: ['idpreprojeto'],
@@ -51,6 +57,13 @@ export default {
         },
     },
     methods: {
+        setActiveTab(index) {
+            if (this.activeTab === index) {
+                this.activeTab = -1;
+            } else {
+                this.activeTab = index;
+            }
+        },
         fetch(id) {
             if (id) {
                 const self = this;
