@@ -120,7 +120,9 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
             if ($this->idTipoDoAtoAdministrativo == '') {
                 $this->idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
+                $this->view->idTipoDoAtoAdministrativo = $this->idTipoDoAtoAdministrativo;
             }
+
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $this->view->abertoParaDevolucao = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
                 $get->IdPRONAC,
