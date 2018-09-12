@@ -459,6 +459,61 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             parent::message($objException->getMessage(), $strActionBack, "ALERT");
         }
     }
+    
+    public function encaminharAction()
+    {
+        $idSolicitacao = $this->getRequest()->getParam('id', null);
+        $strActionBack = "solicitacao/mensagem/index";
+
+        try {
+
+            if (empty($idSolicitacao)) {
+                throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
+            }
+
+            $where['idSolicitacao = ?'] = $idSolicitacao;
+
+            $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
+            $solicitacao = $tbSolicitacao->obterSolicitacoes($where)->current()->toArray();
+
+            if (empty($solicitacao)) {
+                throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+            }
+
+            if (!empty($solicitacao['dsResposta'])) {
+                $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
+            }
+
+            $vwGrupos = new vwUsuariosOrgaosGrupos();
+
+            $arrConfig = [
+                'dsSolicitacao' => ['disabled' => true],
+                'dsResposta' => ['show' => true, 'disabled' => false],
+                'actions' => ['show' => true],
+                'actionredistribuirSolicitacao' => $this->_urlPadrao . "/solicitacao/mensagem/redistribuir-solicitacao",
+                'unidades' => $vwGrupos->carregarUnidade(),
+            ];
+
+            self::prepareForm($solicitacao, $arrConfig, '', $strActionBack);
+
+            $this->view->arrConfig['dsMensagem'] = ['disabled' => true];
+
+        } catch (Exception $objException) {
+            parent::message($objException->getMessage(), $strActionBack, "ALERT");
+        }
+    }
+    
+    public function usuariosAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $vw = new vwUsuariosOrgaosGrupos();
+        $intId = $this->getRequest()->getParam('intId', null);
+        $arrUsuarios = $vw->carregarTecnicosPorUnidade($intId)->toArray();
+        // xd($arrUsuarios);
+        $arrUsuarios = TratarArray::utf8EncodeArray($arrUsuarios);
+        $this->_helper->json($arrUsuarios);
+    }
 
     public function redistribuirSolicitacaoAction()
     {
