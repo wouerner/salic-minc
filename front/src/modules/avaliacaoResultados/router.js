@@ -7,8 +7,8 @@ import TipoAvaliacao from './components/TipoAvaliacao';
 import Planilha from './components/Planilha';
 import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
-import Encaminhar from './components/Encaminhar';
 import Historico from './components/Historico';
+import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
 
 Vue.use(Router);
 
@@ -70,19 +70,19 @@ const routes = [
         },
     },
     {
-        path: '/encaminhar',
-        name: 'Encaminhar',
-        component: Encaminhar,
-        meta: {
-            title: 'Encaminhar',
-        },
-    },
-    {
         path: '/historico',
-        name: 'Diligenciar',
+        name: 'historico',
         component: Historico,
         meta: {
             title: 'Historico dos encaminhamentos',
+        },
+    },
+    {
+        path: '/consolidacao-analise',
+        name: 'ConsolidacaoAnalise',
+        component: ConsolidacaoAnalise,
+        meta: {
+            title: 'Consolidacao da Analise',
         },
     },
     {
