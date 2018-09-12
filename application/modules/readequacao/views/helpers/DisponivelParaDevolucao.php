@@ -8,7 +8,7 @@ class Zend_View_Helper_DisponivelParaDevolucao
     /**
      * Método para verificar se o projeto está disponível para devolução
      * @access public
-     * @param integer $idPronac
+     * @param integer $siEncaminhamento
      * @return string
      */
     public function disponivelParaDevolucao($siEncaminhamento)

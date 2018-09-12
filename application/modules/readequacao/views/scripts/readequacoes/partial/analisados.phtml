@@ -89,20 +89,20 @@ foreach ($this->dados as $d): ?>
 	    <?php endif; ?>
         </td>
         <td align="center">
-<!--                href="javascript:void(0)"-->
-<!--                class="btn-finalizar finalizarAnaliseReadequacao btn small waves-effect waves-light white-text tooltipped btn-primary"-->
+	    <?php if ($this->disponivelParaAssinatura($d->siEncaminhamento, $d->idDocumentoAssinatura)): ?>
             <a
                 href="<?php echo $this->url([
-                'module' => 'readequacao',
-                'controller' => 'readequacao-assinatura',
-                'action' => 'gerenciar-assinaturas'
-            ], '', true); ?>"
+                      'module' => 'assinatura',
+                      'controller' => 'index',
+                      'action' => 'visualizar-projeto'
+		      ], '', true); ?>?idDocumentoAssinatura=<?php echo $d->idDocumentoAssinatura ?>"
                 class="btn small waves-effect waves-light white-text tooltipped btn-primary"
                 data-tooltip="Assinar"
                 idReadequacao="<?php echo $d->idReadequacao; ?>"
             >
                 <i class="material-icons">edit</i>
             </a>
+	    <?php endif; ?>
         </td>
         <td align="center">
             <a

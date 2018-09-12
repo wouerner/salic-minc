@@ -234,7 +234,29 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             [],
             $this->_schema
         );
-
+        
+        $select->joinLeft(
+            ['tbReadequacaoXParecer' => 'tbReadequacaoXParecer'],
+            'tbReadequacaoXParecer.idReadequacao = tbReadequacao.idReadequacao',
+            [],
+            $this->_schema
+        );
+        
+        $select->joinLeft(
+            ['tbDocumentoAssinatura' => 'tbDocumentoAssinatura'],
+            'tbReadequacaoXParecer.idParecer = tbDocumentoAssinatura.idAtoDeGestao AND
+             tbDocumentoAssinatura.idTipoDoAtoAdministrativo IN ('.
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS . ',' .
+            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC . ') AND
+            tbDocumentoAssinatura.cdSituacao =' . Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA . ' AND
+            tbDocumentoAssinatura.stEstado = ' . Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO,
+            [
+                'tbDocumentoAssinatura.idDocumentoAssinatura',
+                'tbDocumentoAssinatura.idTipoDoAtoAdministrativo',
+            ],
+            $this->_schema
+        );
+        
         $select->where('tbReadequacao.stEstado = ?', 0);
         $select->where('tbReadequacao.siEncaminhamento IN (?)', [
             Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_AO_MINC,
@@ -245,7 +267,8 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_ENCAMINHADA_AO_SECRETARIO,
             Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_COORDENADOR_GERAL,
             Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_DIRETOR,
-            Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_SECRETARIO
+            Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_SECRETARIO,
+            Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_FINAL
         ]);
         
         return $select;
