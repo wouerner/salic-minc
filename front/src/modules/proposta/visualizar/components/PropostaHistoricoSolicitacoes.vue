@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{dados[0]}}
         <table>
             <thead>
                 <tr>
@@ -21,7 +20,18 @@
                     <td>{{ dado.dsEncaminhamento }}</td>
                     <td>{{ dado.dtSolicitacao }}</td>
                     <td>{{ dado.dtResposta }}</td>
-                    <td><i class="material-icons">visibility</i></td>
+                    <td>
+                        <div class="btn blue small white-text tooltipped" data-tooltip="Visualizar" v-on:click="show = !show">
+                            <i class="material-icons">visibility</i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <transition name="fade">
+                            <div v-if="show">heeei</div>
+                        </transition>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -34,6 +44,7 @@ export default {
     data() {
         return {
             dados: [],
+            show: false,
         };
     },
     props: ['idpreprojeto'],
@@ -63,3 +74,11 @@ export default {
     }
 };
 </script>
+<style>
+    .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    }
+</style>
