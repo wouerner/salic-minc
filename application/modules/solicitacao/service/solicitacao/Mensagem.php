@@ -65,8 +65,8 @@ class Mensagem
         $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where)->toArray();
 
         foreach ($solicitacoes as $key => $solicitacao) {
-            $solicitacoes[$key]['dsSolicitacao'] = str_replace('<p>&nbsp;</p>', '', $solicitacao['dsSolicitacao']);
-            $solicitacoes[$key]['dsResposta'] = str_replace('<p>&nbsp;</p>', '', $solicitacao['dsResposta']);
+            $solicitacoes[$key]['dsSolicitacao'] = $this->removeHtmlTags($solicitacao['dsSolicitacao']);
+            $solicitacoes[$key]['dsResposta'] = $this->removeHtmlTags($solicitacao['dsResposta']);
         }
 
         array_walk($solicitacoes, function (&$value) {
@@ -74,5 +74,21 @@ class Mensagem
         });
 
         return $solicitacoes;
+    }
+
+    private function removeHtmlTags($string)
+    {
+        $result = $this->stripTags($string);
+        return $this->stringReplace($result);
+    }
+
+    private function stripTags($string)
+    {
+        return strip_tags($string);
+    }
+
+    private function stringReplace($string)
+    {
+        return str_replace('&nbsp;', '', $string);
     }
 }
