@@ -40,33 +40,33 @@ class Mensagem
             $where['a.idProjeto = ?'] = (int) $idPreProjeto;
         }
 
-        # Proponente
-        if (isset($this->usuario['cpf'])) {
-            $where["(a.idAgente = {$this->idAgente} OR a.idSolicitante = {$this->idUsuario})"] = '';
-        }
+        //    # Proponente
+        //    if (isset($this->usuario['cpf'])) {
+        //      $where["(a.idAgente = {$this->idAgente} OR a.idSolicitante = {$this->idUsuario})"] = '';
+        //    }
 
-        # funcionarios do minc
-        if (isset($this->usuario['usu_codigo'])) {
-
-            if (empty($listarTudo)) {
-
-                $tecnicos = (new \Autenticacao_Model_Grupos)->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
-
-                if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
-                    $where['a.idTecnico = ?'] = $this->idUsuario;
-                }
-
-                $where['a.idOrgao = ?'] = $this->grupoAtivo->codOrgao;
-                $where['a.siEncaminhamento = ?'] = \Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC;
-            }
-        }
+//        # funcionarios do minc
+//        if (isset($this->usuario['usu_codigo'])) {
+//
+//            if (empty($listarTudo)) {
+//
+//                $tecnicos = (new \Autenticacao_Model_Grupos)->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
+//
+//                if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
+//                    $where['a.idTecnico = ?'] = $this->idUsuario;
+//                }
+//
+//                $where['a.idOrgao = ?'] = $this->grupoAtivo->codOrgao;
+//                $where['a.siEncaminhamento = ?'] = \Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC;
+//            }
+//        }
 
         $obterSolicitacoes = new \Solicitacao_Model_DbTable_TbSolicitacao();
         $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where)->toArray();
 
         foreach ($solicitacoes as $key => $solicitacao) {
-            $solicitacoes[$key]['dsSolicitacao'] = $this->removeHtmlTags($solicitacao['dsSolicitacao']);
-            $solicitacoes[$key]['dsResposta'] = $this->removeHtmlTags($solicitacao['dsResposta']);
+            $solicitacoes[$key]['dsSolicitacao'] = $this->removerHtmlTags($solicitacao['dsSolicitacao']);
+            $solicitacoes[$key]['dsResposta'] = $this->removerHtmlTags($solicitacao['dsResposta']);
         }
 
         array_walk($solicitacoes, function (&$value) {
@@ -76,15 +76,10 @@ class Mensagem
         return $solicitacoes;
     }
 
-    private function removeHtmlTags($string)
+    private function removerHtmlTags($string)
     {
-        $result = $this->stripTags($string);
+        $result = strip_tags($string);
         return $this->stringReplace($result);
-    }
-
-    private function stripTags($string)
-    {
-        return strip_tags($string);
     }
 
     private function stringReplace($string)
