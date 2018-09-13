@@ -9,6 +9,7 @@ class Devolver implements IAcaoDevolver
 
     public function executar(\MinC\Assinatura\Model\Assinatura $assinatura)
     {
+        print "dentro do executar específico de readequação";
         $idTipoDoAtoAdministrativo = $assinatura->modeloTbDocumentoAssinatura->getIdTipoDoAtoAdministrativo();
         $documentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();
         $documentoAssinatura = $documentoAssinaturaDbTable->findBy(
@@ -46,18 +47,6 @@ class Devolver implements IAcaoDevolver
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
 
         switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
-            case \Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO:
-                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_COORDENADOR_TECNICO;
-                break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
-                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_COORDENADOR_GERAL;
-                break;
-            case \Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
-                // teria que verificar mudanÃ§a de Ã³rgÃ£o
-                if (!in_array($dadosOrgaoSuperior['Codigo'], [\Orgaos::ORGAO_GEAR_SACAV, \Orgaos::ORGAO_SAV_CAP])) {
-                    $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_AO_MINC;
-                }
-                break;
             case \Autenticacao_Model_Grupos::COORDENADOR_DE_PARECER:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_ENVIADO_ANALISE_TECNICA;
                 break;
@@ -124,8 +113,14 @@ class Devolver implements IAcaoDevolver
         $dadosOrgaoSuperior = $objOrgaos->obterOrgaoSuperior($dadosProjeto['Orgao']);
 
         switch ($atoAdministrativo->getIdPerfilDoAssinante()) {
+            case \Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO:
+                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_COORDENADOR_TECNICO;
+                break;
             case \Autenticacao_Model_Grupos::COORDENADOR_ACOMPANHAMENTO:
-                $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_ENVIADO_ANALISE_TECNICA;
+
+                if (!in_array($dadosOrgaoSuperior['Codigo'], [\Orgaos::ORGAO_GEAR_SACAV, \Orgaos::ORGAO_SAV_CAP])) {
+                    $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_DEVOLVIDA_AO_MINC;
+                }
                 break;
             case \Autenticacao_Model_Grupos::COORDENADOR_GERAL_ACOMPANHAMENTO:
                 $siEncaminhamento = \Readequacao_Model_tbTipoEncaminhamento::SI_ENCAMINHAMENTO_SOLICITACAO_DEVOLVIDA_AO_COORDENADOR_PELO_COORDENADOR_GERAL;
@@ -156,5 +151,6 @@ class Devolver implements IAcaoDevolver
             $tbReadequacao = new \Readequacao_Model_DbTable_TbReadequacao();
             $tbReadequacao->update($dados, $where);
         }
+        print $siEncaminhento; die;
     }
 }

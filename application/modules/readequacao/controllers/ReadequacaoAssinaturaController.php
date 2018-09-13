@@ -89,14 +89,10 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->view->projeto = $objTbProjetos->findBy(array(
                 'IdPRONAC' => $get->IdPRONAC
             ));
+            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
 
             $post = $this->getRequest()->getPost();
             if ($post) {
-                if (!filter_input(INPUT_POST, 'idTipoDoAtoAdministrativo')) {
-                    throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
-                }
-                $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
-
                 if (!filter_input(INPUT_POST, 'motivoDevolucao')) {
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' n&atilde;o informado.");
                 }
@@ -118,13 +114,11 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                 );
             }
 
-            if ($this->idTipoDoAtoAdministrativo == '') {
-                $this->idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
-            }
+
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $this->view->abertoParaDevolucao = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
                 $get->IdPRONAC,
-                $this->idTipoDoAtoAdministrativo
+                $idTipoDoAtoAdministrativo
             );
 
             $this->view->IdPRONAC = $get->IdPRONAC;
