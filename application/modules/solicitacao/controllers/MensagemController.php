@@ -391,22 +391,26 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         try {
 
-            if (empty($idSolicitacao))
+            if (empty($idSolicitacao)){
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
+            }
 
             $where['idSolicitacao = ?'] = $idSolicitacao;
 
             $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
             $solicitacao = $tbSolicitacao->obterSolicitacoes($where)->current()->toArray();
 
-            if (empty($solicitacao))
+            if (empty($solicitacao)){
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+            }
 
-            if ($solicitacao['idTecnico'] != $this->idUsuario)
+            if ($solicitacao['idTecnico'] != $this->idUsuario){
                 throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para responder esta solicita&ccedil;&atilde;o!");
+            }
 
-            if (!empty($solicitacao['dsResposta']))
+            if (!empty($solicitacao['dsResposta'])){
                 $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
+            }
 
 
             if ($this->getRequest()->isPost()) {
@@ -446,7 +450,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                     'dsResposta' => ['show' => true, 'disabled' => false],
                     'actions' => ['show' => true],
                     'actionredistribuirSolicitacao' => $this->_urlPadrao . "/solicitacao/mensagem/redistribuir-solicitacao",
-                    'redistribuirTecnicos' => $vwGrupos->carregarTecnicosPorUnidade($solicitacao['idOrgao'])
+                    'redistribuirTecnicos' => $vwGrupos->carregarTecnicosPorUnidade($solicitacao['idOrgao']),
                 ];
 
 
@@ -484,14 +488,16 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
             }
 
-            $vwGrupos = new vwUsuariosOrgaosGrupos();
+            $orgaos = new Orgaos();
 
             $arrConfig = [
                 'dsSolicitacao' => ['disabled' => true],
                 'dsResposta' => ['show' => true, 'disabled' => false],
                 'actions' => ['show' => true],
                 'actionredistribuirSolicitacao' => $this->_urlPadrao . "/solicitacao/mensagem/redistribuir-solicitacao",
-                'unidades' => $vwGrupos->carregarUnidade(),
+                'unidades' => $orgaos->pesquisarUnidades(array('o.Sigla != ?' => '', 'o.idSecretaria IN (?)' => [160,251])),
+                'tecnico' => $solicitacao['idTecnico'],
+                
             ];
 
             self::prepareForm($solicitacao, $arrConfig, '', $strActionBack);
@@ -539,6 +545,8 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 $model = new Solicitacao_Model_TbSolicitacao();
                 $model->setIdSolicitacao($arrayForm['idSolicitacao']);
                 $model->setIdTecnico($arrayForm['idTecnico']);
+                $model->setIdOrgao($arrayForm['idOrgao']);
+                $model->setDtEncaminhamento(date('Y-m-d h:i:s'));
 
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
                 $idSolicitacao = $mapperSolicitacao->atualizarSolicitacao($model);

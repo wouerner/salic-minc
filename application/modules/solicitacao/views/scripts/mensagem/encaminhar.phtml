@@ -35,17 +35,18 @@
                                value="<?= isset($this->arrPartial['dataForm']['idSolicitacao']) ? $this->arrPartial['dataForm']['idSolicitacao'] : ''; ?>"/>
                         <input name="idPronac" type="hidden" value="<?= $this->arrPartial['dataForm']['idPronac']; ?>"/>
                         <input name="idProjeto" type="hidden" value="<?= $this->arrPartial['dataForm']['idProjeto']; ?>"/>
+                        <input id="idTecnicoAtual" name="idTecnicoAtual" type="hidden" value="<?= $this->arrPartial['dataForm']['idTecnico']; ?>"/>
 
                         <div class="row">
                             <div class="col s6 m12 l4">
                                 <label>Unidade</label>
-                                <select class="browser-default" name="idUnidade" id="idUnidade">
+                                <select class="browser-default" name="idOrgao" id="idOrgao">
                                     <option value="" disabled selected>Selecione uma unidade</option>
                                     <?php foreach ($this->arrPartial['arrConfig']['unidades'] as $unidade) : ?>
                                         <option value="<?= $unidade->Codigo; ?>" 
                                         <?= $this->arrPartial['dataForm']['idOrgao'] == $unidade->Codigo ? 
                                         'selected': ''; ?>>
-                                                <?= $unidade->Sigla; ?>
+                                            <?= strlen($unidade->novaSigla) > 1 ? $unidade->novaSigla : $unidade->Sigla ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -75,9 +76,10 @@
 </div>
 
 <script>
-        $('#idUnidade').change(function () {
-            $('#idUnidade').addClass('obrigatorio');
-            ConsultarUsuariosUnidade($('#idUnidade').val());
+        ConsultarUsuariosUnidade($('#idOrgao').val());
+        $('#idOrgao').change(function () {
+            $('#idOrgao').addClass('obrigatorio');
+            ConsultarUsuariosUnidade($('#idOrgao').val());
         });
 
         function ConsultarUsuariosUnidade(unidade) {
@@ -91,11 +93,15 @@
                     },
                     success: function (data) {
                         var tecnico = $('#idTecnico');
+                        var idTecnicoAtual = $('#idTecnicoAtual').val();
+                        
                         tecnico.html('');
                         if (data) {
-                            tecnico.append('<option value=""> - Selecione um t&eacute;cnico - </option>');
+                            tecnico.append('<option value="" disabled selected> - Selecione um t&eacute;cnico - </option>');
                             for (i in data) {
-                                tecnico.append('<option value="' + data[i].usu_codigo + '">' + data[i].usu_nome + '</option>');
+                                var selecionado = (idTecnicoAtual == data[i].usu_codigo ) ? 'selected' : '';
+
+                                tecnico.append('<option value="' + data[i].usu_codigo + '"'  + selecionado + '>' + data[i].usu_nome + '</option>');
                             }
                         } else {
                             tecnico.append('<option> - N&atilde;o h&aacute; t&eacute;cnicos nessa unidade - </option>');
@@ -103,5 +109,5 @@
                     },
                     dataType: 'json'
                 });
-        }
+        };
 </script>
