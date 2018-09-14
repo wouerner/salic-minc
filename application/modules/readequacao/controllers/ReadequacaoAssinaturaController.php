@@ -50,7 +50,11 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\Readequacao(
             $this->grupoAtivo,
             $this->auth,
-            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC
+            [
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC
+            ]
         );
 
         $this->view->dados = $servicoReadequacaoAssinatura->obterAssinaturas();
