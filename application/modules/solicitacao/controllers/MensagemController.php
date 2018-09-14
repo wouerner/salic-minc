@@ -112,6 +112,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         $this->view->arrResult = (new Solicitacao_Model_DbTable_TbSolicitacao)->obterSolicitacoes($where);
         $this->view->idPronac = $idPronac;
+        $this->view->codOrgaoUsuario = $this->grupoAtivo->codOrgao;
 
     }
 
@@ -474,7 +475,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (empty($idSolicitacao)) {
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
             }
-
+            $where = [];
             $where['idSolicitacao = ?'] = $idSolicitacao;
 
             $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
@@ -482,6 +483,10 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             if (empty($solicitacao)) {
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
+            }
+
+            if ($this->isProponente || $this->grupoAtivo->codOrgao != $solicitacao['idOrgao']) {
+                throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa p&aacute;gina!");
             }
 
             if (!empty($solicitacao['dsResposta'])) {
@@ -532,11 +537,23 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 $arrayForm = $this->getRequest()->getPost();
 
-                if (empty($arrayForm['idTecnico']))
+                if (empty($arrayForm['idTecnico'])) {
                     throw new Exception("T&eacute;cnico &eacute; obrigat&oacute;rio!");
+                }
 
-                if (empty($arrayForm['idSolicitacao']))
+                if (empty($arrayForm['idSolicitacao'])) {
                     throw new Exception("Solicita&ccedil;&atilde;o &eacute; obrigat&oacute;rio!");
+                }
+
+                $where = [];
+                $where['idSolicitacao = ?'] = $arrayForm['idSolicitacao'];
+    
+                $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
+                $solicitacao = $tbSolicitacao->obterSolicitacoes($where)->current()->toArray();
+
+                if ($this->isProponente || $this->grupoAtivo->codOrgao != $solicitacao['idOrgao']) {
+                    throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa p&aacute;gina!");
+                }
 
                 $strUrl = '/solicitacao/mensagem/index';
                 $strUrl .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';

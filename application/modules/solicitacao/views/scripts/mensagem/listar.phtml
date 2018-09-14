@@ -93,18 +93,21 @@
                             <i class="material-icons">visibility</i>
                         </a>
                     </td>
-                    <td>
-                        <a class="btn btn-secondary small white-text tooltipped"
-                           data-tooltip="Encaminhar"
-                           href="<?php echo $this->url(['module' => 'solicitacao', 
-                                                        'controller' => 'mensagem', 
-                                                        'action' => 'encaminhar', 
-                                                        'id' => $arrValue['idSolicitacao']],
-                                                         null, 
-                                                         true); ?>">
-                            <i class="material-icons">forward</i>
-                        </a>
-                    </td>
+                    <?php if(!$this->isProponente 
+                            && $this->codOrgaoUsuario == $arrValue['idOrgao']) : ?>
+                        <td>
+                            <a class="btn btn-secondary small white-text tooltipped"
+                            data-tooltip="Encaminhar"
+                            href="<?php echo $this->url(['module' => 'solicitacao', 
+                                                            'controller' => 'mensagem', 
+                                                            'action' => 'encaminhar', 
+                                                            'id' => $arrValue['idSolicitacao']],
+                                                            null, 
+                                                            true); ?>">
+                                <i class="material-icons">forward</i>
+                            </a>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
             </tbody>
