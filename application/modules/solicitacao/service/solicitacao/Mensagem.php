@@ -40,27 +40,6 @@ class Mensagem
             $where['a.idProjeto = ?'] = (int) $idPreProjeto;
         }
 
-        //    # Proponente
-        //    if (isset($this->usuario['cpf'])) {
-        //      $where["(a.idAgente = {$this->idAgente} OR a.idSolicitante = {$this->idUsuario})"] = '';
-        //    }
-
-//        # funcionarios do minc
-//        if (isset($this->usuario['usu_codigo'])) {
-//
-//            if (empty($listarTudo)) {
-//
-//                $tecnicos = (new \Autenticacao_Model_Grupos)->buscarTecnicosPorOrgao($this->grupoAtivo->codOrgao)->toArray();
-//
-//                if (in_array($this->grupoAtivo->codGrupo, array_column($tecnicos, 'gru_codigo'))) {
-//                    $where['a.idTecnico = ?'] = $this->idUsuario;
-//                }
-//
-//                $where['a.idOrgao = ?'] = $this->grupoAtivo->codOrgao;
-//                $where['a.siEncaminhamento = ?'] = \Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC;
-//            }
-//        }
-
         $obterSolicitacoes = new \Solicitacao_Model_DbTable_TbSolicitacao();
         $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where)->toArray();
 

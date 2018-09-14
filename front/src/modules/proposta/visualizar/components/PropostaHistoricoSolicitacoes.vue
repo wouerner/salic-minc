@@ -4,7 +4,6 @@
             <table>
                 <thead>
                 <tr>
-                    <th style="text-align: center">N&ordm;</th>
                     <th style="text-align: center">Proposta/Projeto</th>
                     <th style="text-align: center">Solicita&ccedil;&atilde;o</th>
                     <th style="text-align: center">Estado</th>
@@ -15,14 +14,6 @@
                 </thead>
                 <tbody v-for="(dado, index) in dados" :key="index">
                 <tr>
-                    <td>
-                        <div v-if="dado.idPronac">
-                            {{ dado.Pronac }}
-                        </div>
-                        <div v-else>
-                            {{ dado.idProjeto }}
-                        </div>
-                    </td>
                     <td style="text-align: center">{{ dado.NomeProjeto }}</td>
                     <td>{{ dado.dsSolicitacao }}</td>
                     <td>{{ dado.dsEncaminhamento }}</td>
