@@ -20,17 +20,14 @@ class AvaliacaoResultados_HistoricoController extends MinC_Controller_Rest_Abstr
         parent::__construct($request, $response, $invokeArgs);
     }
 
-
-    public function indexAction()
-    {
-        // $this->customRenderJsonResponse([], 204);
+    public function getAction(){
         $encaminhamentoService = new EncaminhamentoService($this->getRequest(), $this->getResponse());
         $resposta = $encaminhamentoService->buscarHistorico();
-        
+
         $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta), 200);
     }
 
-    public function getAction(){}
+    public function indexAction(){}
 
     public function headAction(){}
 

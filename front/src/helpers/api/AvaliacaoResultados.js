@@ -27,9 +27,13 @@ export const criarParecer = params => {
     const parametro = params['idPronac'];
     delete params['idPronac'];
     const data = params;
-    console.info(data);
 
   return api.postRequest( "/avaliacao-resultados/emissao-parecer-rest/idPronac/"+parametro, data);
 };
 
 export const getTeste = params => api.postRequest("/realizarprestacaodecontas/carregar-destinatarios/", buildData(params));
+
+export const obterDadosTabelaTecnico = () => api.getRequest("/avaliacao-resultados/projetos-avaliacao-tecnica/");
+
+export const obterHistoricoEncaminhamento = params => api.getRequest("/avaliacao-resultados/historico/idPronac/" + params);
+
