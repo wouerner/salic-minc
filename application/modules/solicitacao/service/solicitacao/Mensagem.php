@@ -65,6 +65,11 @@ class Mensagem
         $solicitacoes = $obterSolicitacoes->obterSolicitacoes($where)->toArray();
 
         foreach ($solicitacoes as $key => $solicitacao) {
+            $objDateTimeSolicitacao = new \DateTime($solicitacao['dtSolicitacao']);
+            $objDateTimeResposta = new \DateTime($solicitacao['dtResposta']);
+
+            $solicitacoes[$key]['dtSolicitacao'] = $objDateTimeSolicitacao->format('d/m/Y H:i:s');
+            $solicitacoes[$key]['dtResposta'] = $objDateTimeResposta->format('d/m/Y H:i:s');
             $solicitacoes[$key]['dsSolicitacao'] = $this->removerHtmlTags($solicitacao['dsSolicitacao']);
             $solicitacoes[$key]['dsResposta'] = $this->removerHtmlTags($solicitacao['dsResposta']);
         }
