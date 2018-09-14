@@ -4,19 +4,26 @@
             <table>
                 <thead>
                 <tr>
-                    <th>N&ordm;</th>
-                    <th>Proposta/Projeto</th>
-                    <th>Solicita&ccedil;&atilde;o</th>
-                    <th>Estado</th>
+                    <th style="text-align: center">N&ordm;</th>
+                    <th style="text-align: center">Proposta/Projeto</th>
+                    <th style="text-align: center">Solicita&ccedil;&atilde;o</th>
+                    <th style="text-align: center">Estado</th>
                     <th>Dt. Solicita&ccedil;&atilde;o</th>
                     <th>Dt. Resposta</th>
-                    <th>#</th>
+                    <th style="text-align: center">#</th>
                 </tr>
                 </thead>
                 <tbody v-for="(dado, index) in dados" :key="index">
                 <tr>
-                    <td>{{ dado.idProjeto }}</td>
-                    <td>{{ dado.NomeProjeto }}</td>
+                    <td>
+                        <div v-if="dado.idPronac">
+                            {{ dado.Pronac }}
+                        </div>
+                        <div v-else>
+                            {{ dado.idProjeto }}
+                        </div>
+                    </td>
+                    <td style="text-align: center">{{ dado.NomeProjeto }}</td>
                     <td>{{ dado.dsSolicitacao }}</td>
                     <td>{{ dado.dsEncaminhamento }}</td>
                     <td>{{ dado.dtSolicitacao }}</td>
@@ -28,12 +35,17 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="activeTab === index">
+                <tr v-if="activeTab === index" bgcolor="#ffffff">
                     <td colspan="7">
                         <div>
                             <div class="row">
                                 <div class="col s12">
-                                    <b>N&ordm; da Proposta: </b>{{dado.idProjeto}}
+                                    <div v-if="dado.idPronac">
+                                        <b>Pronac: </b>{{dado.Pronac}}
+                                    </div>
+                                    <div v-else>
+                                        <b>N&ordm; da Proposta: </b>{{dado.idProjeto}}
+                                    </div>
                                 </div>
                                 <div class="col s12">
                                     <b>Proposta/Projeto: </b>{{dado.NomeProjeto}}
