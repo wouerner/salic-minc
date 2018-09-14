@@ -85,3 +85,17 @@ export const getDestinatariosEncaminhamento = ({ commit }, params) => {
     //         commit(types.DESTINATARIOS_ENCAMINHAMENTO, destinatarios);
     //     });
 };
+
+export const getTipoAvaliacao = ({ commit }, params) => {
+    return new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.getTipoAvaliacao(params)
+            .then((response) => {
+                console.info(params);
+
+                const data = response.data.data.items;
+
+                commit(types.GET_TIPO_AVALIACAO, data);
+                resolve();
+            }).catch(error => console.info(error));
+    });
+};

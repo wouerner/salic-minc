@@ -32,3 +32,5 @@ export const criarParecer = params => {
 };
 
 export const getTeste = params => api.postRequest("/realizarprestacaodecontas/carregar-destinatarios/", buildData(params));
+
+export const getTipoAvaliacao = params => api.getRequest("/avaliacao-resultados/tipo-avaliacao-rest/idPronac/" + params);

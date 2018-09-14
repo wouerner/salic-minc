@@ -1,21 +1,27 @@
 import * as types from './types';
-import Mock from '../mocks/Parecer.json';
+import Parecer from '../mocks/Parecer.json';
+import TipoAvaliacao from '../mocks/TipoAvaliacao.json';
 
 export const state = {
     consolidacaoComprovantes: {},
     dadosTabela: [],
     destinatarios: {},
-    mock: Mock,
+    mocks:
+    {
+        parecer:Parecer,
+        tipoAvaliacao:TipoAvaliacao,
+    },
     parecer: {},
     projeto: {},
     proponente: {},
     registroAtivo: {},
+    tipoAvaliacao: {},
 
 };
 
 export const mutations = {
     [types.MOCK_AVALIACAO_RESULTADOS](state){
-        state.mock = Mock;
+        state.mocks;
     },
     [types.GET_CONSOLIDACAO_PARECER](state, consolidacaoComprovantes){
         state.consolidacaoComprovantes = consolidacaoComprovantes;
@@ -58,5 +64,10 @@ export const mutations = {
     },
     [types.DESTINATARIOS_ENCAMINHAMENTO](state, destinatarios){
         state.destinatarios = destinatarios;
+    },
+    [types.GET_TIPO_AVALIACAO](state,tipoAvaliacao){
+        state.tipoAvaliacao = tipoAvaliacao;
     }
+
+
 };
