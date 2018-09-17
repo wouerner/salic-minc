@@ -12,12 +12,12 @@
                                             Dt.Envio Prestacao de Contas
                                         </th>
                                         <th class="text-xs-left">
-                                            {{tipoAvaliacao.DtEnvioDaPrestacaoContas}}
+                                            Resultado da Avaliacao do Objeto
                                         </th>
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td class="text-xs-left">{{tipoAvaliacao.ResultadoAvaliacaoObjeto}}</td>
+                                        <td class="text-xs-left">Cumpriu objeto e objetivos</td>
                                     </tr>
                                 </table>
                             </v-card-text>
@@ -46,12 +46,12 @@
                                         <th>99%</th>
                                     </tr>
                                     <tr>
-                                        <td class="text-xs-center">{{tipoAvaliacao.PRONAC}}</td>
-                                        <td class="text-xs-center">{{TipoAvaliacao.NomePRojeto}}</td>
-                                        <td class="text-xs-center">{{TipoAvaliacao.CNPJCPF}}</td>
-                                        <td class="text-xs-center">{{TipoAvaliacao.Proponente}}</td>
-                                        <td class="text-xs-center">{{tipoAvaliacao}}</td>
-                                        <td class="text-xs-center">{{}}</td>
+                                        <td class="text-xs-center">{{aprovado}}</td>
+                                        <td class="text-xs-center">{{captado}}</td>
+                                        <td class="text-xs-center">{{comprovado}}</td>
+                                        <td class="text-xs-center">{{todos}}</td>
+                                        <td class="text-xs-center">{{valor1}}</td>
+                                        <td class="text-xs-center">{{valor2}}</td>
                                         <td class="text-xs-center">{{valor3}}</td>
                                     </tr>
                                 </table>
@@ -66,7 +66,7 @@
                                     <legend>SELECIONAR O TIPO DE AVALIACAO FINANCERIA</legend>
                                     <p>Avaliar comprovantes por nivel de confianca:</p>
                                     <v-flex xs12 sm6 md6>
-                                        <v-radio-group  column v-model="">
+                                        <v-radio-group  column v-model="tipoAvaliacao">
 
                                             <v-radio
                                                     label="Todos Comprovantes"
@@ -133,27 +133,28 @@ export default {
             criarRegistro: 'foo/criarRegistro',
             modalOpen: 'modal/modalOpen',
             modalClose: 'modal/modalClose',
-            requestTipoAvaliacao:'avaliacaoResultados/getTipoAvaliacao'
+            getTipo: 'avaliacaoResultados/getTipoAvaliacao',
         }),
+
+        getTipoAvaliacaoResultado(id)
+        {
+            this.getTipo(id);
+        },
         fecharModal() {
             // eslint-disable-next-line
             $3('#modalTemplate').modal('close');
             this.modalClose();
         },
-        getTipoAvaliacao(id)
-        {
-            this.requestTipoAvaliacao(id);
-        },
     },
-    computed: mapGetters({
-        modalVisible: 'modal/default',
-        getTipoAvaliacao: 'avaliacaoResultados/mocks'
-    }),
+    computed: {
+        ...mapGetters({
+            modalVisible: 'modal/default',
+            tipoAvaliacao: 'avaliacaoResultados/tipoAvaliacao',
+        }),
+    },
     mounted()
     {
-        //this.redirectLink = this.redirectLink + this.idPronac;
-        this.getTipoAvaliacao(132451);
-        console.log(this.$route.params.id);
+        this.getTipoAvaliacaoResultado(this.idPronac);
     },
 };
 </script>
