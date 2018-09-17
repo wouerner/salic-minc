@@ -76,8 +76,7 @@ export const mutations = {
         });
     },
     [types.GET_TIPO_AVALIACAO](state,tipoAvaliacao){
-        state.tipoAvaliacao = tipoAvaliacao;
+        state.tipoAvaliacao = tipoAvaliacao[0];
     }
-
 
 };
