@@ -42,7 +42,7 @@ if(!empty($this->dataForm['idProjeto'])) {
             <div class="col s12">
                 <div id="comprovanteDocumentoAnexado"
                         class="doc<?= $this->dataForm['arquivo']['idDocumento']; ?>">
-                    <label for="arquivo">Documento anexado: </label>
+                    <b>Documento anexado: </b>
                     <a href="<?= $this->url(array('module' => 'solicitacao', 'controller' => 'mensagem', 'action' => 'abrirdocumentosolicitacao'), null, true); ?>?id=<?= $this->dataForm['arquivo']['idDocumento']; ?>">
                         <?= utf8_decode(htmlentities($this->dataForm['arquivo']['nmArquivo'])); ?>
                     </a>

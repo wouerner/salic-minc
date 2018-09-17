@@ -467,7 +467,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             parent::message($objException->getMessage(), $strActionBack, "ALERT");
         }
     }
-    
+
     public function encaminharAction()
     {
         $idSolicitacao = $this->getRequest()->getParam('id', null);
@@ -505,7 +505,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 'actionredistribuirSolicitacao' => $this->_urlPadrao . "/solicitacao/mensagem/redistribuir-solicitacao",
                 'unidades' => $orgaos->pesquisarUnidades(array('o.Sigla != ?' => '', 'o.idSecretaria IN (?)' => [160,251])),
                 'tecnico' => $solicitacao['idTecnico'],
-                
+
             ];
 
             self::prepareForm($solicitacao, $arrConfig, '', $strActionBack);
@@ -516,17 +516,20 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             parent::message($objException->getMessage(), $strActionBack, "ALERT");
         }
     }
-    
+
     public function usuariosAction()
     {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender(true);
-        $vw = new vwUsuariosOrgaosGrupos();
-        $intId = $this->getRequest()->getParam('intId', null);
-        $arrUsuarios = $vw->carregarTecnicosPorUnidade($intId)->toArray();
-        // xd($arrUsuarios);
-        $arrUsuarios = TratarArray::utf8EncodeArray($arrUsuarios);
-        $this->_helper->json($arrUsuarios);
+        try {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer->setNoRender(true);
+            $vw = new vwUsuariosOrgaosGrupos();
+            $intId = $this->getRequest()->getParam('intId', null);
+            $arrUsuarios = $vw->carregarTecnicosPorUnidade($intId)->toArray();
+            $arrUsuarios = TratarArray::utf8EncodeArray($arrUsuarios);
+            $this->_helper->json($arrUsuarios);
+        }  catch (Exception $objException) {
+            $this->_helper->json(array('status' => false, 'msg' => $objException->getMessage()));
+        }
     }
 
     public function redistribuirSolicitacaoAction()
@@ -550,7 +553,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 $where = [];
                 $where['idSolicitacao = ?'] = $arrayForm['idSolicitacao'];
-    
+
                 $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
                 $solicitacao = $tbSolicitacao->obterSolicitacoes($where)->current()->toArray();
 
