@@ -6,7 +6,6 @@ class Visualizar
 {
     const OBJECT_KEYS = [
         'data_avaliacao' => 'Data',
-        'usu_nome' => 'Avaliador',
         'org_sigla' => 'Unidade',
         'area' => '&Aacute;rea',
         'segmento' => 'Segmento',
@@ -71,6 +70,7 @@ class Visualizar
 
         foreach ($sugestoes_enquadramento as $sugestao_enquadramento) {
             $result = $this->montarSugestaoEnquadramento($sugestao_enquadramento);
+            ############################################
             array_push($lines, $result);
         }
 
@@ -82,7 +82,12 @@ class Visualizar
         $current_object = [];
 
         foreach (self::OBJECT_KEYS as $key => $value) {
-            $current_object[$key] = html_entity_decode(utf8_encode($sugestao_enquadramento[$key]));
+            if ($key != 'data_avaliacao') {
+                $current_object[$key] = html_entity_decode(utf8_encode($sugestao_enquadramento[$key]));
+            } else {
+                $date = new \DateTime($sugestao_enquadramento[$key]);
+                $current_object[$key] = $date->format('d/m/Y H:i:s');
+            }
         }
 
         return $current_object;
