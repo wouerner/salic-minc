@@ -7,4 +7,5 @@ export const parecer = state => state.parecer;
 export const projeto = state => state.projeto;
 export const mocks = state => state.mocks;
 export const tipoAvaliacao = state => state.tipoAvaliacao;
-
+export const dadosTabelaTecnico = state => state.dadosTabelaTecnico;
+export const dadosHistoricoEncaminhamento = state => state.dadosHistoricoEncaminhamento;

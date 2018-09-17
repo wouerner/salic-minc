@@ -86,6 +86,23 @@ export const getDestinatariosEncaminhamento = ({ commit }, params) => {
     //     });
 };
 
+export const obterDadosTabelaTecnico = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico()
+        .then((response) => {
+            const data = response.data;
+            const dadosTabela = data.data;
+            commit(types.PROJETOS_AVALIACAO_TECNICA, dadosTabela);
+        });
+};
+
+export const obterHistoricoEncaminhamento = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterHistoricoEncaminhamento(params)
+        .then((response) => {
+            const dadosEncaminhamento = response.data.data;
+            commit(types.HISTORICO_ENCAMINHAMENTO, dadosEncaminhamento.items);
+        });
+};
+
 export const getTipoAvaliacao = ({ commit }, params) => {
     return new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.getTipoAvaliacao(params)

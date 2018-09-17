@@ -24,7 +24,7 @@
                     <div slot="header">{{ produto.produto }}</div>
                     <v-card>
                         <!-- ETAPA -->
-                        <v-expansion-panel>
+                        <v-expansion-panel class="pl-3">
                             <v-expansion-panel-content
                             v-for="(etapa,i) in produto.etapa"
                             :key="i"
@@ -32,7 +32,7 @@
                             <div slot="header">{{ etapa.etapa }}</div>
                             <v-card>
                                 <!-- UF -->
-                                    <v-expansion-panel>
+                                    <v-expansion-panel class="pl-3">
                                         <v-expansion-panel-content
                                         v-for="(uf,i) in etapa.UF"
                                         :key="i"
@@ -40,7 +40,7 @@
                                         <div slot="header">{{ uf.Uf }}</div>
                                         <v-card>
                                             <!-- CIDADE -->
-                                                <v-expansion-panel>
+                                                <v-expansion-panel class="pl-3">
                                                     <v-expansion-panel-content
                                                     v-for="(cidade,i) in uf.cidade"
                                                     :key="i"
@@ -63,19 +63,19 @@
             </v-expansion-panel>
         </v-card>
 
-        <v-card class="mt-3">
-            <table>
+        <v-card class="mt-3 pa-3" color="teal">
+            <table class="white--text font-weight-bold" width="100%">
                 <tr>
                     <td>Valor Aprovado</td>                    
-                    <td></td>                    
+                    <td>R$ 00,00</td>                    
                 </tr>
                 <tr>
                     <td>Valor Comprovado</td>
-                    <td></td>
+                    <td>R$ 00,00</td>
                 </tr>
                 <tr>
                     <td>Valor a Comprovar</td>
-                    <td></td>
+                    <td>R$ 00,00</td>
                 </tr>
             </table>
         </v-card>
