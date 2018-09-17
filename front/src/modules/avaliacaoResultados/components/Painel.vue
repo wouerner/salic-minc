@@ -11,9 +11,6 @@ import TabelaProjetos from './TabelaProjetos';
 
 export default {
     name: 'Painel',
-    created() {
-        this.obterDadosTabelaTecnico();
-    },
     data() {
         return {
         };

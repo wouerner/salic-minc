@@ -16,7 +16,8 @@ class AvaliacaoResultados_Bootstrap extends Zend_Application_Module_Bootstrap
                     'fluxo',
                     'projetos-avaliacao-tecnica',
                     'historico',
-                    'estado'
+                    'estado',
+                    'tipo-avaliacao-rest'
                 ]
             ]
         );
