@@ -1650,4 +1650,32 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
             return $resultado->toArray();
         }
     }
+
+    public function obterAssinaturasReadequacaoDisponiveis($tbAssinaturaDbTable)
+    {
+        $query = $tbAssinaturaDbTable->obterQueryAssinaturasDisponiveis();
+        
+        $query->joinInner(
+            array('tbReadequacaoXParecer' => 'tbReadequacaoXParecer'),
+            "tbReadequacaoXParecer.idParecer = tbDocumentoAssinatura.idAtoDeGestao",
+            "",
+            $this->_schema
+        );
+
+        $query->joinInner(
+            array('tbReadequacao' => 'tbReadequacao'),
+            "tbReadequacao.idReadequacao = tbReadequacaoXParecer.idReadequacao",
+            "tbReadequacao.idReadequacao",
+            $this->_schema
+        );
+
+        $query->joinInner(
+            array('tbTipoReadequacao' => 'tbTipoReadequacao'),
+            "tbTipoReadequacao.idTipoReadequacao = tbReadequacao.idTipoReadequacao",
+            "tbTipoReadequacao.dsReadequacao",
+            $this->_schema
+        );
+        
+        return $this->_db->fetchAll($query);
+    }    
 }

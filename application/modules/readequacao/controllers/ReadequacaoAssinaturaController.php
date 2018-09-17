@@ -82,6 +82,10 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                 throw new Exception("Identificador do projeto &eacute; necess&atilde;rio para acessar essa funcionalidade.");
             }
 
+            if (!filter_input(INPUT_GET, 'idDocumentoAssinatura')) {
+                throw new Exception("Identificador do documento &eacute; necess&atilde;ria para acessar essa funcionalidade.");
+            }
+            
             if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
                 throw new Exception(
                     "O Perfil Parecerista n&atilde;o possui permiss&atilde;o para executar a a&ccedil;&atilde;o de devolver."
@@ -106,7 +110,8 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                         'Despacho' => $post['motivoDevolucao'],
                         'idTipoDoAto' => $idTipoDoAtoAdministrativo,
                         'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
-                        'idPronac' => $get->IdPRONAC
+                        'idPronac' => $get->IdPRONAC,
+                        'idDocumentoAssinatura' => $get->idDocumentoAssinatura
                     ]
                 );
                 $assinaturaService->devolver();

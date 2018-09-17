@@ -31,6 +31,10 @@ class Readequacao implements IServico
             'idTipoDoAto' => $this->idTipoDoAto
         ]);
 
-        return $tbAssinaturaDbTable->obterAssinaturasReadequacaoDisponiveis();
+        $tbReadequacaoDbTable = new \Readequacao_Model_DbTable_TbReadequacao();
+        
+        return $tbReadequacaoDbTable->obterAssinaturasReadequacaoDisponiveis($tbAssinaturaDbTable);
     }
+
+
 }
