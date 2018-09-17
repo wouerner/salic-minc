@@ -10,7 +10,7 @@
             <td class="text-xs-right">
                 <v-flex xs12 sm4 text-xs-center>
                     <div>
-                        <v-btn>{{ props.item.Pronac }}</v-btn>
+                        <v-btn :href="'/projeto/#/incentivo/'+ props.item.idPronac">{{ props.item.Pronac }}</v-btn>
                     </div>
                 </v-flex>
             </td>
@@ -21,12 +21,12 @@
             <td class="text-xs-right">{{ props.item.Mecanismo }}</td>
             <td class="text-xs-right">{{ props.item.DtSituacao }}</td>
             <td class="text-xs-right">
-                <v-btn flat icon color="green">
+                <v-btn flat icon color="green" :to="{ name: 'tipoAvaliacao', params:{ id:props.item.idPronac }}">
                     <v-icon class="material-icons">compare_arrows</v-icon>
                 </v-btn>
             </td>
             <td class="text-xs-right">
-                <v-btn flat icon color="indigo">
+                <v-btn flat icon color="indigo" :href="'/proposta/diligenciar/listardiligenciaanalista?idPronac='+ props.item.idPronac +'&situacao=E17&tpDiligencia=174'">
                     <v-icon>warning</v-icon>
                 </v-btn>
             </td>
