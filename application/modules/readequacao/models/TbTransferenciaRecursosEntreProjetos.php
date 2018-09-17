@@ -19,7 +19,7 @@ class Readequacao_Model_TbTransferenciaRecursosEntreProjetos extends MinC_Db_Mod
         $this->idPronacRecebedor = $params['idPronacRecebedor'];
         $this->PronacRecebedor = $params['PronacRecebedor'];
         $this->NomeProjetoRecedor = $params['NomeProjetoRecedor'];
-        $this->dtRecebimento = $params['dtRecebimento'];
+        $this->dtRecebimento = Data::tratarDataZend($params['dtRecebimento'], 'brasileiro');
         $this->vlRecebido = $params['vlRecebido'];
     }
 

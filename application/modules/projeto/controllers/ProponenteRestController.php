@@ -2,20 +2,15 @@
 
 use Application\Modules\Projeto\Service\Proponente\Proponente as ProponenteService;
 
-class Projeto_ProponenteRestController extends Zend_Rest_Controller
+class Projeto_ProponenteRestController extends MinC_Controller_Rest_Abstract
 {
     protected $idAgente = 0;
-    private $idPreProjeto = 0;
 
-    public function init()
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
     {
-    $this->_helper->getHelper('contextSwitch')
-        ->addActionContext('get', 'json')
-        ->addActionContext('index', 'json')
-        ->addActionContext('post', 'json')
-        ->addActionContext('put', 'json')
-        ->addActionContext('delete', 'json')
-        ->initContext('json');
+        $this->setValidateUserIsLogged();
+
+        parent::__construct($request, $response, $invokeArgs);
     }
 
     public function getAction()
@@ -24,42 +19,42 @@ class Projeto_ProponenteRestController extends Zend_Rest_Controller
             $ProponenteService = new ProponenteService($this->getRequest(), $this->getResponse());
             $resposta = $ProponenteService->buscarDadosAgenteProponente();
 
-            $this->view->assign('data', $resposta);
-            $this->getResponse()->setHttpResponseCode(200);
+            $this->customRenderJsonResponse(['data' => $resposta], 200);
+
         } catch (Exception $objException) {
-            $this->view->assign('data', $resposta);
-            $this->view->assign('message', $objException->getMessage());
-            $this->getResponse()->setHttpResponseCode(412);
+            $this->customRenderJsonResponse([
+                'error' => [
+                    'code' => 404,
+                    'message' => $objException->getMessage()
+                ]
+            ], 404);
+
         }
 
     }
 
     public function indexAction()
     {
-        $this->getResponse()
-             ->setHttpResponseCode(200);
+        $this->renderJsonResponse([], 200);
     }
 
     public function postAction()
     {
-        $this->getResponse()
-             ->setHttpResponseCode(201);
+        $this->renderJsonResponse([], 201);
     }
 
     public function putAction()
     {
-        $this->getResponse()
-             ->setHttpResponseCode(200);
+        $this->renderJsonResponse([], 200);
     }
 
     public function deleteAction()
     {
-        $this->getResponse()
-             ->setHttpResponseCode(204);
+        $this->renderJsonResponse([], 204);
     }
 
     public function headAction()
     {
-        $this->getResponse()->setHttpResponseCode(200);
+        $this->renderJsonResponse([], 200);
     }
 }

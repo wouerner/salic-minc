@@ -14,7 +14,7 @@ Vue.component('sl-planilha-cidades', {
                         :uf="uf"
                         :cdproduto="cdProduto"
                         :cdcidade="cidade.cdCidade"
-                        :cdetapa="etapa"
+                        :cdetapa="cdEtapa"
                     ></sl-planilha-itens>
                 </slot>
             </div>

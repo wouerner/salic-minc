@@ -12,9 +12,7 @@
         });
     </script>
 
-    <!-- in�cio: conte�do principal #container -->
     <div id="container">
-        <!-- in�cio: navega�?o local #qm0 -->
         <script type="text/javascript">
             function layout_fluido(){
                 var janela = $(window).width();
@@ -105,7 +103,7 @@
                     $('#msgErroImpressao').html("");
                     $('#frmOpcoesImpressao').submit();
                 }else{
-                    $('#msgErroImpressao').html("<center><font color='red'>� obrigat�rio selecionar ao menos uma informa��o para impress�o.</font></center>");
+                    $('#msgErroImpressao').html("<center><font color='red'>&eacute; obrigat&oacute;rio selecionar ao menos uma informacao para impress&atilde;o.</font></center>");
                 }
             }
 
@@ -143,9 +141,9 @@
                     Projeto Atual: <span id="pronacProjeto" data-pronac="<?php echo $this->idPronac ?>"><?php echo $this->pronac ?></span>
                 </a>
                 <a href='#' class="no_seta" onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'dados-proponente')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Dados do Proponente">Proponente</a>
-                <!-- ======================= Outras Informa��es  =======================   -->
+                <!-- ======================= Outras Informacoes  =======================   -->
                 <div class="sanfonaDiv" style="display:none;"></div>
-                <a href="#" title="Outras Informa��es" class="ancoraOutrasInformacoes" onclick="return false;">Outras Informa��es</a>
+                <a href="#" title="Outras Informa&ccedil;&otilde;es" class="ancoraOutrasInformacoes" onclick="return false;">Outras Informa&ccedil;&otilde;es</a>
                 <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'certidoes-negativas')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Certid&otilde;es Negativas">Certid&otilde;es Negativas</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'dados-complementares')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Dados complementares do projeto">Dados complementares do projeto</a>
@@ -164,27 +162,27 @@
                     <?php
         } ?>
                 </div>
-                <!-- ==================== FIM - Outras Informa��es  =======================   -->
+                <!-- ==================== FIM - Outras Informacoes  =======================   -->
 
                 <?php if ($this->fnLiberarLinks['Analise'] || $this->usuarioInterno) {
             ?>
-                <!-- ======================= An�lise e Aprova��o  =======================   -->
+                <!-- ======================= Analise e Aprovacao  =======================   -->
                 <div class="sanfonaDiv" style="display:none;"></div>
-                <a href="#" title="An�lise e Aprova��o" class="ancoraAnaliseAprovacao" onclick="return false;">An�lise e Aprova��o</a>
+                <a href="#" title="An&aacute;lise e Aprova&ccedil;&atilde;o" class="ancoraAnaliseAprovacao" onclick="return false;">An&aacute;lise e Aprova&ccedil;&atilde;o</a>
                 <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'analise-projeto')); ?><?php echo $codPronac; ?>','conteudo'); return false" title="Ir para An&aacute;lise do projeto">An&aacute;lise do projeto</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'aprovacao')); ?><?php echo $codPronac; ?>','conteudo'); return false" title="Ir para Aprova&ccedil;&atilde;o">Aprova&ccedil;&atilde;o</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'recurso')); ?><?php echo $codPronac; ?>','conteudo'); return false" title="Ir para Recursos">Recursos</a>
                 </div>
-                <!-- ==================== FIM - An�lise e Aprova��o  =======================   -->
+                <!-- ==================== FIM - Analise e Aprova&ccedil;&atilde;o  =======================   -->
                 <?php
         } ?>
 
                 <?php if ($this->fnLiberarLinks['Execucao'] || $this->usuarioInterno) {
             ?>
-                <!-- ======================= Execu��o  =======================   -->
+                <!-- ======================= Execucao  =======================   -->
                 <div class="sanfonaDiv" style="display:none;"></div>
-                <a href="#" title="Execu��o" class="ancoraExecucao" onclick="return false;">Execu��o</a>
+                <a href="#" title="Execu&ccedil;&atilde;o" class="ancoraExecucao" onclick="return false;">Execu&ccedil;&atilde;o</a>
                 <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
                     <?php if (in_array($this->fnLiberarLinks['FaseDoProjeto'], array('2','3','4','5')) || $this->usuarioInterno) {
                 ?>
@@ -198,19 +196,19 @@
                 </div>
                 <?php
         } ?>
-                <!-- ==================== FIM - Execu��o  =======================   -->
+                <!-- ==================== FIM - Execucao  =======================   -->
 
                 <?php if ($this->fnLiberarLinks['PrestacaoContas'] || $this->usuarioInterno) {
             ?>
-                <!-- ======================= Presta��o de Contas  =======================   -->
+                <!-- ======================= Prestacao de Contas  =======================   -->
                 <div class="sanfonaDiv" style="display:none;"></div>
-                <a href="#" title="Execu��o" class="ancoraExecucao" onclick="return false;">Presta&ccedil;&atilde;o de Contas</a>
+                <a href="#" title="Presta&ccedil;&atilde;o de Contas" class="ancoraExecucao" onclick="return false;">Presta&ccedil;&atilde;o de Contas</a>
                 <div class="sanfonaDiv" style="width: 90%; margin-left: 20px;">
                     <?php /*if(in_array($this->fnLiberarLinks['FaseDoProjeto'],array('4','5'))  || $this->usuarioInterno){ ?>
                         <a href='#' class="no_seta" onclick="carregaDados('<?php echo $this->url(array('controller' => 'consultardadosprojeto', 'action' => 'prestacao-de-contas')); ?><?php echo $codPronac;?>','conteudo'); return false" title="Ir para Presta&ccedil;&atilde;o de Contas">Presta&ccedil;&atilde;o de contas</a>
                     <?php }*/ ?>
 
-                    <a class="no_seta" href='<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'extratos-bancarios'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>' title="Ir para Capta&ccedil;&atilde;o">Extrato Banc�rio</a>
+                    <a class="no_seta" href='<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'extratos-bancarios'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>' title="Ir para Capta&ccedil;&atilde;o">Extrato Banc&aacute;rio</a>
                     <a class="no_seta" href='<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'conciliacao-bancaria'), '', true); ?>?idPronac=<?php echo $this->idPronac; ?>' title="Ir para Concilia&ccedil;&atilde;o Banc&aacute;ria">Concilia&ccedil;&atilde;o Banc&aacute;ria</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'execucao-receita-despesa')); ?><?php echo $codPronac; ?>','conteudo'); return false"  title="Ir para Execu&ccedil;&atilde;o da receita e despesa">Execu&ccedil;&atilde;o da receita e despesa</a>
                     <a href='#' onclick="carregaDados('<?php echo $this->url(array('module' => 'default', 'controller' => 'consultardadosprojeto', 'action' => 'dados-relacao-pagamentos')); ?><?php echo $codPronac; ?>','conteudo'); return false"  title="Ir para Rela&ccedil;&atilde;o de Pagamentos">Rela&ccedil;&atilde;o de pagamentos</a>
@@ -229,11 +227,11 @@
                     <?php
             } ?>
                 </div>
-                <!-- ==================== FIM - Presta��o de Contas  =======================   -->
+                <!-- ==================== FIM - Prestacao de Contas  =======================   -->
                 <?php
         } ?>
 
-                <!-- ======================= Readequa��o  =======================   -->
+                <!-- ======================= Readequacao  =======================   -->
                 <?php if ($this->blnProponente && ($this->fnLiberarLinks['Readequacao'] || $this->fnLiberarLinks['Readequacao_50'])) {
                     ?>
                     <div class="sanfonaDiv" style="display:none;"></div>
@@ -274,9 +272,9 @@
                     </div>
                     <?php
                 } ?>
-                <!-- ==================== FIM - Readequa��o  =======================   -->
+                <!-- ==================== FIM - Readequacao  =======================   -->
 
-                <!-- ======================= SOLICITAR PRAZO CAPTA��O  =======================   -->
+                <!-- ======================= SOLICITAR PRAZO CAPTACAO  =======================   -->
                 <?php if ($this->blnProponente) {
             ?>
 		<?php if ($this->fnLiberarLinks['SolicitarProrrogacao']): ?>
@@ -285,14 +283,14 @@
 
         <?php if ($this->isAdequarARealidade) : ?>
             <a class="no_seta tooltipped"
-               data-tooltip="Adequar � realidade ou Encaminhar projeto adequado para o MinC" target="_blank"
+               data-tooltip="Adequar &agrave; realidade ou Encaminhar projeto adequado para o MinC" target="_blank"
                href="<?php echo $this->url(array('module' => 'proposta', 'controller' => 'manterpropostaincentivofiscal', 'action' => 'identificacaodaproposta', 'idPreProjeto' => $this->resp->idProjeto)); ?>">
                 Adequar &agrave; realidade
             </a>
         <?php endif; ?>
                 <?php
         } ?>
-                <!-- ==================== FIM - SOLICITAR PRAZO CAPTA��O  =======================   -->
+                <!-- ==================== FIM - SOLICITAR PRAZO CAPTACAO  =======================   -->
 
                 <!-- ======================= DILIGENCIA ====================== -->
                 <?php if ($this->fnLiberarLinks['Diligencia']) {
@@ -315,7 +313,7 @@
                     <?php if ($this->codSituacao == 'B02'):
                         /**
                          * @dreprecated: a rotina de recurso do enquadramento foi substituida,
-                         * atualmente � feita na proposta, remover controllers e scripts utilizados.
+                         * atualmente eh feita na proposta, remover controllers e scripts utilizados.
                          */
                         ?>
                         <div class="sanfonaDiv" style="display:none;"></div>

@@ -383,16 +383,16 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $id_segmento_proponente = $planoDistribuicao[0]['Segmento'];
         $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
 
-        $isEnquadramentoProponenteIgualEndramentoAvaliador = false;
+        $isEnquadramentoProponenteIgualEnquadramentoAvaliador = false;
         if(is_array($ultimaSugestaoEnquadramento) && count($ultimaSugestaoEnquadramento) > 0) {
-            $isEnquadramentoProponenteIgualEndramentoAvaliador = $sugestaoEnquadramentoDbTable->isEnquadramentoProponenteIgualEndramentoAvaliador(
+            $isEnquadramentoProponenteIgualEnquadramentoAvaliador = $sugestaoEnquadramentoDbTable->isEnquadramentoProponenteIgualEnquadramentoAvaliador(
                 $ultimaSugestaoEnquadramento,
                 $id_area_proponente,
                 $id_segmento_proponente
             );
         }
 
-        if($isEnquadramentoProponenteIgualEndramentoAvaliador
+        if($isEnquadramentoProponenteIgualEnquadramentoAvaliador
             && count($distribuicaoAvaliacaoPropostaAtual) > 0
             && (int)$distribuicaoAvaliacaoPropostaAtual['id_perfil'] == (int)Autenticacao_Model_Grupos::COORDENADOR_GERAL_ADMISSIBILIDADE) {
             return true;
@@ -880,6 +880,20 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                     $rsProjeto,
                     $authIdentity['usu_codigo']
                 );
+
+                $servicoDocumentoAssinatura = new \Application\Modules\Admissibilidade\Service\Assinatura\DocumentoAssinatura(
+                    $rsProjeto->IdPRONAC,
+                    Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_ENQUADRAMENTO
+                );
+                $servicoDocumentoAssinatura->iniciarFluxo();
+
+                $tblProjeto->alterarSituacao(
+                    $rsProjeto->IdPRONAC,
+                    null,
+                    Projeto_Model_Situacao::PROJETO_EM_AVALIACAO_DOCUMENTAL,
+                    "Proposta transformada em projeto e encaminhado para assinatura."
+                );
+
             }
         } catch (Exception $objException) {
             $retorno['erro'] = $objException->getMessage();
@@ -937,7 +951,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
             $projetos->atualizarProjetoEnquadrado(
                 $dadosProjeto,
                 $idUsuario,
-                'B02'
+                Projeto_Model_Situacao::PROJETO_ENQUADRADO
             );
             return true;
         } catch (Exception $exception) {
@@ -2824,22 +2838,10 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
 
         $idPronac = $db->lastInsertId();
         if (!empty($idPronac)) {
-            // @todo a pedido do Rômulo todas as propostas seguirao o fluxo normal
-            //            if (!empty($stProposta) && $stProposta != $propostaNormal) {
-            //
-            //                $tbPlanoDistribuicao = new PlanoDistribuicao();
-            //                $idVinculada = $tbPlanoDistribuicao->buscarIdVinculada($idPreProjeto);
-            //
-            //                $tbDistribuirParecer = new tbDistribuirParecer();
-            //                $resultado = $tbDistribuirParecer->inserirDistribuicaoParaParecer($idPreProjeto, $idPronac, $idVinculada);
-            //
-            //                $tbAnaliseDeConteudo = new tbAnaliseDeConteudo();
-            //                $resultado = $tbAnaliseDeConteudo->inserirAnaliseConteudoParaParecerista($idPreProjeto, $idPronac);
-            //
-            //                $PlanilhaProjeto = new PlanilhaProjeto();
-            //                $resultado = $PlanilhaProjeto->inserirPlanilhaParaParecerista($idPreProjeto, $idPronac);
-            //
-            //            }
+            $tbSolicitacaoDbTable = new Solicitacao_Model_DbTable_TbSolicitacao();
+            $dados = ['idPronac' =>  $idPronac];
+            $where = ['idProjeto= ?' => $idPreProjeto];
+            $tbSolicitacaoDbTable->update($dados, $where);
 
             # INSERIR INFORMAÇÕES NA TABELA CONTABANCARIA
             $sqlContaBancaria = "INSERT INTO SAC.dbo.ContaBancaria (AnoProjeto,Sequencial,Mecanismo,Banco,Agencia,Logon)
@@ -2968,6 +2970,16 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $sugestaoEnquadramento->setIdPerfilUsuario($this->grupoAtivo->codGrupo);
                 $proposta->isEnquadrada = $sugestaoEnquadramentoDbTable->isPropostaEnquadrada($sugestaoEnquadramento);
 
+                $proposta->isRecursoDesistidoDePrazoRecursal = false;
+                $proposta->isRecursoExpirou10dias = false;
+
+                if ($proposta->tipo_recurso != '-') {
+                    $sugestaoEnquadramentoDbTable->sugestaoEnquadramento->setIdPreprojeto($proposta->idProjeto);
+                    $recursoEnquadramento   = $sugestaoEnquadramentoDbTable->obterRecursoEnquadramentoProposta();
+
+                    $proposta->isRecursoDesistidoDePrazoRecursal = $this->isRecursoDesistidoDePrazoRecursal($recursoEnquadramento);
+                    $proposta->isRecursoExpirou10dias = $this->isRecursoExpirou10dias($recursoEnquadramento);
+                }
                 $aux[$key] = $proposta;
             }
 

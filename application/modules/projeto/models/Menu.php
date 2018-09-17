@@ -100,7 +100,11 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
     public function obterArrayMenuConvenio($idPronac, $projeto)
     {
-        $idPronacHash = Seguranca::encrypt($idPronac);
+        $idPronacHash = $idPronac;
+        if ($this->usuarioExterno) {
+            $idPronacHash = Seguranca::encrypt($idPronac);
+        }
+
         $pronac = $projeto['AnoProjeto'] . '' . $projeto['Sequencial'];
         $menu = [];
         $menu['informacoes'] = [
@@ -114,22 +118,110 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
         $menu['dadosprojeto'] = [
             'id' => 'dadosdoprojeto',
-            'label' => 'Dados básicos',
+            'label' => 'Dados do Projeto',
             'title' => '',
-            'link' => '/projeto/convenio/visualizar/idPronac/' . $idPronacHash,
+            'link' => '/projeto/#/' . $idPronacHash,
             'ajax' => false,
             'icon' => 'home',
             'submenu' => '',
             'grupo' => []
         ];
 
-        $menu['proponente'] = [
-            'id' => 'proponente',
-            'label' => 'Proponente',
+        $menu['convenente'] = [
+            'id' => 'convenente',
+            'label' => 'Convenente',
             'title' => '',
-            'link' => '/default/consultardadosprojeto/dados-proponente/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/{$idPronacHash}/convenente",
+            'ajax' => false,
             'icon' => 'person',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes'] = [
+            'id' => 'outrasinformacoes',
+            'label' => 'Outras Informações',
+            'title' => 'Outras Informações',
+            'link' => '',
+            'ajax' => false,
+            'icon' => 'style',
+            'submenu' => '',
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Certid&otilde;es Negativas',
+            'title' => 'Ir para Dados Certid&otilde;es Negativas',
+            'link' => '/default/consultardadosprojeto/certidoes-negativas/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Documentos anexados',
+            'title' => 'Ir para  Documentos anexados',
+            'link' => '/default/consultardadosprojeto/documentos-anexados/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Dilig&ecirc;ncias do projeto',
+            'title' => 'Ir para Dilig&ecirc;ncias do projeto',
+            'link' => '/default/consultardadosprojeto/diligencias/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Provid&ecirc;ncia tomada',
+            'title' => 'Ir para Provid&ecirc;ncia tomada',
+            'link' => '/default/consultardadosprojeto/providencia-tomada/?idPronac=' . $idPronacHash,
+            'ajax' => false,
+            'grupo' => []
+        ];
+
+        $menu['outrasinformacoes']['submenu'][] = [
+            'label' => 'Tramita&ccedil;&atilde;o',
+            'title' => 'Ir para Tramita&ccedil;&atilde;o',
+            'link' => '/default/consultardadosprojeto/tramitacao/?idPronac=' . $idPronacHash,
+            'ajax' => true,
+            'grupo' => []
+        ];
+
+        # Execução
+        if ($this->permissoesMenu['Execucao'] || !$this->usuarioExterno || $this->debug) {
+
+            $menu['execucao'] = [
+                'id' => 'execucao',
+                'label' => 'Execu&ccedil;&atilde;o',
+                'title' => 'Menu Execu&ccedil;&atilde;o',
+                'link' => '',
+                'ajax' => false,
+                'icon' => 'play_for_work',
+                'submenu' => '',
+                'grupo' => []
+            ];
+
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $this->debug) {
+
+                $menu['execucao']['submenu'][] = [
+                    'label' => 'Dados da fiscaliza&ccedil;&atilde;o',
+                    'title' => 'Ir para Dados da fiscaliza&ccedil;&atilde;o',
+                    'link' => '/default/consultardadosprojeto/dados-fiscalizacao/?idPronac=' . $idPronacHash,
+                    'ajax' => true,
+                    'grupo' => []
+                ];
+            }
+        }
+        
+        $menu['solicitacoes'] = [
+            'id' => 'solicitacoes',
+            'label' => $this->usuarioExterno ? "Minhas solicita&ccedil;&otilde;es" : "Solicita&ccedil;&otilde;es",
+            'title' => 'Ir para Solicitações',
+            'link' => '/solicitacao/mensagem/index/listarTudo/true/idPronac/' . $idPronac,
+            'ajax' => false,
+            'icon' => 'contact_mail',
             'submenu' => '',
             'grupo' => []
         ];
@@ -139,8 +231,10 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
     public function obterArrayMenuMecenato($idPronac, $projeto)
     {
-        $idPronacHash = Seguranca::encrypt($idPronac);
-        $debug = $this->debug;
+        $idPronacHash = $idPronac;
+        if ($this->usuarioExterno) {
+            $idPronacHash = Seguranca::encrypt($idPronac);
+        }
 
         $pronac = $projeto['AnoProjeto'] . '' . $projeto['Sequencial'];
         $menu = [];
@@ -158,7 +252,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'label' => 'Dados do Projeto',
             'title' => '',
 //            'link' => '/default/consultardadosprojeto/index?idPronac=' . $idPronacHash,
-            'link' => '/projeto/#/incentivo/' . $idPronacHash,
+            'link' => '/projeto/#/' . $idPronacHash,
             'ajax' => false,
             'icon' => 'home',
             'submenu' => '',
@@ -169,7 +263,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'proponente',
             'label' => 'Proponente',
             'title' => '',
-            'link' => "/projeto/#/incentivo/{$idPronacHash}/proponente",
+            'link' => "/projeto/#/{$idPronacHash}/proponente",
             // 'link' => '/projeto/proponente-rest/get/?idPronac=' . $idPronacHash,
             'ajax' => false,
             'icon' => 'person',
@@ -270,7 +364,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'grupo' => []
         ];
 
-        if (!$this->usuarioExterno || $debug) {
+        if (!$this->usuarioExterno || $this->debug) {
             $menu['outrasinformacoes']['submenu'][] = [
                 'label' => 'Hist&oacute;rico encaminhamento',
                 'title' => 'Ir para Hist&oacute;rico encaminhamento',
@@ -281,7 +375,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Análise e Aprovação
-        if ($this->permissoesMenu['Analise'] || !$this->usuarioExterno || $debug) {
+        if ($this->permissoesMenu['Analise'] || !$this->usuarioExterno || $this->debug) {
 
             $menu['analiseaprovacao'] = [
                 'id' => 'analiseaprovacao',
@@ -321,7 +415,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Execução
-        if ($this->permissoesMenu['Execucao'] || !$this->usuarioExterno || $debug) {
+        if ($this->permissoesMenu['Execucao'] || !$this->usuarioExterno || $this->debug) {
 
             $menu['execucao'] = [
                 'id' => 'execucao',
@@ -334,7 +428,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $debug) {
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $this->debug) {
 
                 $menu['execucao']['submenu'][] = [
                     'label' => 'Dados banc&aacute;rios',
@@ -380,7 +474,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Prestação de contas
-        if ($this->permissoesMenu['PrestacaoContas'] || !$this->usuarioExterno || $debug) {
+        if ($this->permissoesMenu['PrestacaoContas'] || !$this->usuarioExterno || $this->debug) {
             $menu['prestacaodecontas'] = [
                 'id' => 'prestacaodecontas',
                 'label' => 'Presta&ccedil;&atilde;o de Contas',
@@ -449,7 +543,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $debug) {
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('2', '3', '4', '5')) || !$this->usuarioExterno || $this->debug) {
                 $menu['prestacaodecontas']['submenu'][] = [
                     'label' => 'Relat&oacute;rios trimestrais',
                     'title' => 'Ir para Relat&oacute;rios trimestrais',
@@ -459,7 +553,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
             }
 
-            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('4', '5')) || !$this->usuarioExterno || $debug) {
+            if (in_array($this->permissoesMenu['FaseDoProjeto'], array('4', '5')) || !$this->usuarioExterno || $this->debug) {
                 $menu['prestacaodecontas']['submenu'][] = [
                     'label' => 'Relat&oacute;rio de cumprimento do objeto',
                     'title' => 'Ir para Relat&oacute;rio de cumprimento do objeto',
@@ -471,7 +565,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
         # Readequacao
-        if ($this->usuarioExterno && ($this->permissoesMenu['Readequacao'] || $this->permissoesMenu['Readequacao_50']) || $debug) {
+        if ($this->usuarioExterno && ($this->permissoesMenu['Readequacao'] || $this->permissoesMenu['Readequacao_50']) || $this->debug) {
             $menu['readequacao'] = [
                 'id' => 'readequacao',
                 'label' => 'Readequa&ccedil;&atilde;o',
@@ -491,7 +585,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if ($this->permissoesMenu['ReadequacaoPlanilha'] || $debug) {
+            if ($this->permissoesMenu['ReadequacaoPlanilha'] || $this->debug) {
 
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Planilha orçament&aacute;ria',
@@ -510,7 +604,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'grupo' => []
             ];
 
-            if ($this->permissoesMenu['Readequacao_50'] || $debug) {
+            if ($this->permissoesMenu['Readequacao_50'] || $this->debug) {
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Remanejamento &le; 50%',
                     'title' => 'Readequar Remanejamento &le; 50%',
@@ -520,7 +614,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
             }
 
-            if ($this->permissoesMenu['ReadequacaoTransferenciaRecursos'] || $debug) {
+            if ($this->permissoesMenu['ReadequacaoTransferenciaRecursos'] || $this->debug) {
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Transfer&ecirc;ncia de recursos',
                     'title' => 'Readequar Transfer&ecirc;ncia de recursos',
@@ -530,7 +624,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
             }
 
-            if ($this->permissoesMenu['ReadequacaoSaldoAplicacao'] || $debug) {
+            if ($this->permissoesMenu['ReadequacaoSaldoAplicacao'] || $this->debug) {
                 $menu['readequacao']['submenu'][] = [
                     'label' => 'Saldo de aplica&ccedil;&atilde;o',
                     'title' => 'Ir para Saldo de aplica&ccedil;&atilde;o',
@@ -549,7 +643,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->permissoesMenu['SolicitarProrrogacao'] || $debug) {
+        if ($this->permissoesMenu['SolicitarProrrogacao'] || $this->debug) {
             $menu['prorrogacao'] = [
                 'id' => 'prorrogacao',
                 'label' => 'Solicitar Prorroga&ccedil;&atilde;o',
@@ -562,7 +656,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->permissoesMenu['AdequarExecucao'] || $debug) {
+        if ($this->permissoesMenu['AdequarExecucao'] || $this->debug) {
             $menu['adequacao'] = [
                 'id' => 'prorrogacao',
                 'label' => 'Adequar &agrave; realidade',
@@ -575,7 +669,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->permissoesMenu['Diligencia'] || $debug) {
+        if ($this->permissoesMenu['Diligencia'] || $this->debug) {
             $menu['diligencia'] = [
                 'id' => 'diligencia',
                 'label' => 'Dilig&ecirc;ncias',
@@ -589,7 +683,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->permissoesMenu['Recursos'] || $debug) {
+        if ($this->permissoesMenu['Recursos'] || $this->debug) {
             $menu['recurso'] = [
                 'id' => 'recurso',
                 'label' => 'Recurso',
@@ -618,7 +712,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->permissoesMenu['ComprovacaoFinanceira'] || $debug) {
+        if ($this->permissoesMenu['ComprovacaoFinanceira'] || $this->debug) {
             $menu['comprovacaofinaceira'] = [
                 'id' => 'comprovacaofinaceira',
                 'label' => 'Comprova&ccedil;&atilde;o Financeira',
@@ -631,10 +725,10 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }                    
 
-        if ($this->situacaoProjeto != 'E24' || $debug) {
+        if ($this->situacaoProjeto != 'E24' || $this->debug) {
 
             if ($this->permissoesMenu['RelatorioTrimestral']
-                || $this->permissoesMenu['RelatorioFinal'] || $debug) {
+                || $this->permissoesMenu['RelatorioFinal'] || $this->debug) {
 
                 $menu['comprovacaofisica'] = [
                     'id' => 'comprovacaofisica',
@@ -649,7 +743,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
 
             }
 
-            if ($this->permissoesMenu['RelatorioTrimestral'] || $debug) {
+            if ($this->permissoesMenu['RelatorioTrimestral'] || $this->debug) {
                 $menu['comprovacaofisica']['submenu'][] = [
                     'label' => 'Relat&oacute;rio Trimestral',
                     'title' => 'Ir para Relat&oacute;rio Trimestral',
@@ -661,7 +755,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             }
             
 
-            if ($this->permissoesMenu['RelatorioFinal'] || $debug) {
+            if ($this->permissoesMenu['RelatorioFinal'] || $this->debug) {
                 $menu['comprovacaofisica']['submenu'][] = [
                     'label' => 'Comprovar Realiza&ccedil;&atilde;o do Objeto',
                     'title' => 'Ir para Comprovar Realiza&ccedil;&atilde;o do Objeto',
@@ -672,12 +766,12 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             }
         }
 
-        if ($this->usuarioExterno && $this->permissoesMenu['Marcas'] || $debug) {
+        if ($this->usuarioExterno && $this->permissoesMenu['Marcas'] || $this->debug) {
             $menu['marcas'] = [
                 'id' => 'marcas',
                 'label' => 'Marcas',
                 'title' => 'Ir para Marcas',
-                'link' => '/default/upload/form-enviar-arquivo-marca/?idPronac=' . $idPronac,
+                'link' => '/default/upload/form-enviar-arquivo-marca/?idPronac=' . $idPronacHash,
                 'ajax' => false,
                 'icon' => 'image',
                 'submenu' => '',
@@ -685,7 +779,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             ];
         }
 
-        if ($this->usuarioExterno || $debug) {
+        if ($this->usuarioExterno || $this->debug) {
             $menu['projetos'] = [
                 'id' => 'projetos',
                 'label' => 'Listar Projetos',
@@ -699,7 +793,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         }
 
 //        $perfisMensagens = array(131, 92, 93, 122, 123, 121, 129, 94, 103, 110, 118, 126, 125, 124, 132, 136, 134, 135, 138, 139);
-//        if (in_array($this->idGrupoAtivo, $perfisMensagens) || $debug) {
+//        if (in_array($this->idGrupoAtivo, $perfisMensagens) || $this->debug) {
 //
 //            $menu['mensagens'] = [
 //                'id' => 'mensagens',
@@ -717,7 +811,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             'id' => 'solicitacoes',
             'label' => $this->usuarioExterno ? "Minhas solicita&ccedil;&otilde;es" : "Solicita&ccedil;&otilde;es",
             'title' => 'Ir para Solicitações',
-            'link' => '/solicitacao/mensagem/index/listarTudo/true/idPronac/' . $idPronac,
+            'link' => '/solicitacao/mensagem/index/listarTudo/true/idPronac/' . $idPronacHash,
             'ajax' => false,
             'icon' => 'contact_mail',
             'submenu' => '',

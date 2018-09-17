@@ -31,15 +31,16 @@ Vue.component('sl-comprovante-nacional-form',
                 </div>
                     <div class="row">
                         <div
-                            :class="[this.c.fornecedor.CNPJCPF.css, 'input-field col s6']" 
+                            :class="[this.c.fornecedor.CNPJCPF.css, 'input-field col s6']"
                         >
                             <input
                                 type="text"
                                 ref="CNPJCPF"
-                                :value="comprovante.fornecedor.cnpjcpfMask"
                                 v-on:keyup.enter="pesquisarFornecedor()"
-                                v-on:input="inputCNPJCPF($event.target.value)"
                                 :class="[this.c.fornecedor.CNPJCPF.css]"
+                                v-mask="maskCNPJCPF"
+                                v-model="comprovante.fornecedor.cnpjcpfMask"
+                                v-on:input="inputCNPJCPF($event.target.value)"
                             />
                             <template v-if="comprovante.fornecedor.tipoPessoa == 1">
                                 <label for="CNPJCPF"
@@ -79,8 +80,8 @@ Vue.component('sl-comprovante-nacional-form',
                     </div>
                     <div class="row" v-show="novoFornecedor">
                         <div class="col s12">
-                            <a 
-                                target="blank" 
+                            <a
+                                target="blank"
                                 :href="'/prestacao-contas/fornecedor/index/cpfcnpj/'+comprovante.fornecedor.CNPJCPF"
                                 class="btn red">
                                 Cadastrar Fornecedor
@@ -122,31 +123,33 @@ Vue.component('sl-comprovante-nacional-form',
                             >Data de Emiss&atilde;o</label>
                         </div>
                         <div class="input-field col s1">
-                            <i 
-                                class="material-icons 
-                                tooltipped" 
-                                data-position="bottom" 
+                            <i
+                                class="material-icons
+                                tooltipped"
+                                data-position="bottom"
                                 data-delay="50"
                                 :data-tooltip="'Inicio em: ' + dataInicio + ' at\xe9 ' + dataFim"
                             >
                                 help
                             </i>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col s2">
                             <input
                                type="text"
-                               name="nrDocumentoDePagamento"
-                               v-model="comprovante.numeroDocumento"
-                               :class="c.numeroDocumento.css"
-                               placeholder="00000000000"
-                               id="nrDocumentoDePagamento"
-                               maxlength="10"
-                               ref="numeroDocumento"
-                               v-on:input="inputNumeroDocumento($event.target.value)"
-                           />
-                           <label for="nrDocumentoDePagamento"
-                               :class="[c.numeroDocumento.css]"
-                           >N&ordm; Documento Pagamento*</label>
+                               name="nrComprovante"
+                               id="nrComprovante"
+                               maxlength="50"
+                               placeholder="00000000"
+                               value=""
+                               v-model="comprovante.numero"
+                               :class="c.numero.css"
+                               ref="numero"
+                               v-on:input="inputNumero($event.target.value)"
+                            />
+                            <label
+                                for="nrComprovante"
+                                :class="[c.numero.css]"
+                            >N&uacute;mero * </label>
                         </div>
                         <div class="input-field col s2">
                            <input type="text"
@@ -158,8 +161,6 @@ Vue.component('sl-comprovante-nacional-form',
                            />
                             <label for="nrSerie">S&eacute;rie</label>
                         </div>
-                    </div>
-                    <div class="row">
                     </div>
                     <div class="row">
                         <div class="file-field input-field col s4">
@@ -180,9 +181,9 @@ Vue.component('sl-comprovante-nacional-form',
                     <div class="row">
                         <div class=" col s3 m3">
                             <label>Forma de Pagamento<span style='color:red'>*</span></label>
-                            <select 
-                                class="browser-default" 
-                                name="tpFormaDePagamento" 
+                            <select
+                                class="browser-default"
+                                name="tpFormaDePagamento"
                                 id="tpFormaDePagamento"
                                 v-model="comprovante.forma"
                             >
@@ -209,20 +210,18 @@ Vue.component('sl-comprovante-nacional-form',
                         <div class="input-field col s2">
                             <input
                                type="text"
-                               name="nrComprovante"
-                               id="nrComprovante"
-                               maxlength="50"
-                               placeholder="00000000"
-                               value=""
-                               v-model="comprovante.numero"
-                               :class="c.numero.css"
-                               ref="numero"
-                               v-on:input="inputNumero($event.target.value)"
-                            />
-                            <label
-                                for="nrComprovante"
-                                :class="[c.numero.css]"
-                            >N&uacute;mero * </label>
+                               name="nrDocumentoDePagamento"
+                               v-model="comprovante.numeroDocumento"
+                               :class="c.numeroDocumento.css"
+                               placeholder="00000000000"
+                               id="nrDocumentoDePagamento"
+                               maxlength="10"
+                               ref="numeroDocumento"
+                               v-on:input="inputNumeroDocumento($event.target.value)"
+                           />
+                           <label for="nrDocumentoDePagamento"
+                               :class="[c.numeroDocumento.css]"
+                           >N&ordm; Documento Pagamento*</label>
                         </div>
                         <div class="input-field col s4">
                             <input
@@ -248,7 +247,7 @@ Vue.component('sl-comprovante-nacional-form',
                                    v-model="comprovante.justificativa"
                                       name="dsJustificativa"
                                       id="dsJustificativa">
-                                      </textarea>
+                            </textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -334,6 +333,7 @@ Vue.component('sl-comprovante-nacional-form',
     },
     data() {
         return {
+            maskCNPJCPF: '###.###.###-##',
             money:{
              decimal: ',',
                 thousands: '.',
@@ -413,7 +413,8 @@ Vue.component('sl-comprovante-nacional-form',
                     formData.append('arquivo', this.comprovante.arquivo.file);
                 }
 
-                let c = JSON.parse(JSON.stringify(this.comprovante))
+                // let c = JSON.parse(JSON.stringify(this.comprovante))
+                let c = Object.assign({}, this.comprovante);
                 c.valor = numeral(c.valor).value();
                 formData.append('comprovante', JSON.stringify(c));
 
@@ -428,11 +429,15 @@ Vue.component('sl-comprovante-nacional-form',
                     Materialize.toast('Salvo com sucesso!', 4000, 'green');
                     $3('#modal1').modal('close');
 
-                       console.log(c);
                     if (vue.tipoform == 'cadastro') {
 
                        c._index = data.idComprovantePagamento;
                        c.idComprovantePagamento = data.idComprovantePagamento;
+
+                       c.dataEmissao = (moment(c.dataEmissao, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+                       c.dataPagamento = (moment(c.dataPagamento, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+                       c.valor = numeral(c.valor).value();
+
                        vue.$root.$emit('novo-comprovante-nacional', c);
 
                        vue.c = {
@@ -492,7 +497,11 @@ Vue.component('sl-comprovante-nacional-form',
                     }
 
                     if (vue.tipoform == 'edicao'){
-                        vue.$root.$emit('atualizado-comprovante-nacional', c);
+                        vue.comprovante.dataEmissao = (moment(c.dataEmissao, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+                        vue.comprovante.dataPagamento = (moment(c.dataPagamento, 'DD/MM/YYYY').format('YYYY-MM-DD'));
+                        vue.comprovante.valor = numeral(c.valor).value();
+
+                        vue.$root.$emit('atualizado-comprovante-nacional', vue.comprovante);
                     }
                 });
             }
@@ -563,7 +572,6 @@ Vue.component('sl-comprovante-nacional-form',
             return true;
         },
         validarValor: function() {
-
             let result = true;
             let valor = numeral(this.comprovante.valor);
             let valorAntigo = this.valorantigo ? parseFloat(this.valorantigo) : 0;
@@ -606,10 +614,8 @@ Vue.component('sl-comprovante-nacional-form',
         },
         pesquisarFornecedor: function(){
            var vue = this;
-           //var url = '/prestacao-contas/gerenciar/fornecedor' ;
            var url = '/agente/agentes/agentecadastrado';
-
-
+// console.log(this.comprovante.fornecedor.CNPJCPF.length == 14);
            if (
                (this.comprovante.fornecedor.tipoPessoa == 1
                 && this.comprovante.fornecedor.CNPJCPF.length == 11)
@@ -624,7 +630,7 @@ Vue.component('sl-comprovante-nacional-form',
                }).done(function(data){
                    vue.comprovante.fornecedor.nome = '';
                    if (data.length > 0 && data[0]['msgCPF'] == 'cadastrado') {
-                        vue.comprovante.fornecedor.nome= data[0]['Nome'];
+                        vue.comprovante.fornecedor.nome= data[0]['agente']['nome'];
                         vue.comprovante.fornecedor.idAgente = data[0]['idAgente'];
                         vue.c.fornecedor.CNPJCPF.css = {};
                         vue.novoFornecedor = false;
@@ -649,13 +655,14 @@ Vue.component('sl-comprovante-nacional-form',
            });
         },
         inputCNPJCPF: function(e) {
-            console.log(e);
-            if (e.length < 15) {
-                if (e.length == 11 || e.length == 14) {
-                   this.comprovante.fornecedor.CNPJCPF = e;
-                   this.comprovante.fornecedor.cnpjcpfMask = this.cnpjcpfMask();
-                } 
-            }
+            // console.log(e.replace(/[.-]/g,""));
+            this.comprovante.fornecedor.CNPJCPF = e.replace(/[.\-\/]/g,"");
+            // if (e.length < 15) {
+            //     if (e.length == 11 || e.length == 14) {
+            //        this.comprovante.fornecedor.CNPJCPF = e.replace(/[.-]/g,"");
+            //        this.comprovante.fornecedor.cnpjcpfMask = this.cnpjcpfMask();
+            //     }
+            // }
         },
         cnpjcpfMask: function() {
             if ( this.comprovante.fornecedor.tipoPessoa == 1
@@ -679,6 +686,12 @@ Vue.component('sl-comprovante-nacional-form',
             this.comprovante.fornecedor.nome = '';
             this.comprovante.fornecedor.CNPJCPF = '';
             this.comprovante.fornecedor.cnpjcpfMask = '';
+
+            if (this.comprovante.fornecedor.tipoPessoa == 1 ) {
+                this.maskCNPJCPF = '###.###.###-##';
+            } else {
+                this.maskCNPJCPF = '##.###.###/####-##';
+            }
         },
         inputNumero: function(e) {
             if (e.length > 0) {
@@ -686,7 +699,6 @@ Vue.component('sl-comprovante-nacional-form',
             }
         },
         inputDataEmissao: function (e) {
-            console.log(e.length);
             if (e.length > 0) {
                this.c.dataEmissao.css = {};
             }
@@ -717,71 +729,9 @@ Vue.component('sl-comprovante-nacional-form',
         cancelar: function () {
             $3('#modal1').modal('close');
 
-            if (this.tipoform == 'edicao'){
-                this.$root.$emit('atualizado-comprovante-nacional', this.comprovante);
+            if (this.tipoform == 'edicao') {
+                this.$root.$emit('cancelar-comprovante-nacional', this.comprovante);
             }
         },
-        data: function () {
-            return {
-                comprovante: {
-                    fornecedor: {
-                        nacionalidade: 31,
-                        tipoPessoa: 1,
-                        CNPJCPF: '',
-                        cnpjcpfMask: '',
-                        nome: '',
-                        idAgente: '',
-                        eInternacional: false,
-                    },
-                    arquivo: {
-                        file:true,
-                        nome:''
-                    },
-                    item: this.item,
-                    idPlanilhaAprovacao: this.idplanilhaaprovacao,
-                    tipo: 1,
-                    numero: '',
-                    serie: '',
-                    dataEmissao: '',
-                    dataPagamento:'',
-                    forma: 1,
-                    numeroDocumento: '',
-                    valor: 0,
-                    valorAntigo: this.valorantigo,
-                    valorPermitido: (parseFloat(this.valoraprovado) - parseFloat(this.valorcomprovado)),
-                    justificativa: '',
-                    foiAtualizado: false,
-                    _index: this.index
-                },
-                pais: '',
-                c: {
-                    fornecedor: {
-                        CNPJCPF: {
-                            css:'',
-                        },
-                    },
-                    numero: {
-                        css: ''
-                    },
-                    serie: '',
-                    dataEmissao: {
-                        css:'',
-                    },
-                    dataPagamento:{
-                        css:'',
-                    },
-                    numeroDocumento: {
-                        css:'',
-                    } ,
-                    valor: {
-                        css:'',
-                    },
-                    arquivo: {
-                        css: '',
-                    },
-                },
-                random: ''
-            }
-        }
     }
 });
