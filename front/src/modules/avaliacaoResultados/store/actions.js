@@ -90,7 +90,7 @@ export const getTipoAvaliacao = ({ commit }, params) => {
 };
 
 export const redirectLinkAvaliacaoResultadoTipo = ({ commit }, params) => {
-    if (params.percentual === 0) {
+    if (params.percentual == 0) {
         commit(types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO, `/prestacao-contas/realizar-prestacao-contas/index/idPronac/${params.idPronac}`);
     } else {
         commit(types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO, `/prestacao-contas/prestacao-contas/amostragem/idPronac/${params.idPronac}/tipoAvaliacao/${params.percentual}`);

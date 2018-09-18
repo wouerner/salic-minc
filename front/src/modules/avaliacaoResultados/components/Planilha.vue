@@ -25,7 +25,7 @@
                         <v-icon class="mr-3 green--text">perm_media</v-icon>
                         {{ produto.produto }}
                     </v-layout>
-                    
+
                     <v-card flat="true">
                         <!-- ETAPA -->
                         <v-expansion-panel class="pl-3 elevation-0" value="true">
@@ -77,8 +77,8 @@
         <v-card class="mt-3 pa-3" color="teal">
             <table class="white--text font-weight-bold" width="100%">
                 <tr>
-                    <td>Valor Aprovado</td>                    
-                    <td>R$ 00,00</td>                    
+                    <td>Valor Aprovado</td>
+                    <td>R$ 00,00</td>
                 </tr>
                 <tr>
                     <td>Valor Comprovado</td>
@@ -94,8 +94,8 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
-    import ModalTemplate from '@/components/modal';
+import { mapActions } from 'vuex';
+import ModalTemplate from '@/components/modal';
 
     export default {
     name: 'Painel',
@@ -107,18 +107,9 @@
         };
     },
     computed: {
-        ...mapGetters({
-            modalVisible: 'modal/default',
-        }),
-        valorAprovado() {
-
-        },
-        valorComprovado() {
-
-        },
-        valorAComprovar() {
-
-        },
+        valorAprovado() { },
+        valorComprovado() { },
+        valorAComprovar() { },
     },
     props: {
         idpronac: '132451',
