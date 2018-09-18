@@ -28,6 +28,23 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $this->idPreProjeto,
             $this->idPronac
         );
+
+        $this->view->isArquivado = $this->verificarArquivamento();
+    }
+
+    private function verificarArquivamento() {
+        if (!empty($this->projeto)) {
+            return in_array(
+                $this->projeto->Situacao,
+                Projeto_Model_Situacao::obterSituacoesProjetoArquivado()
+            );
+        }
+        
+        if (!empty($this->proposta)) {
+            return $this->proposta->stEstado == 0;
+        }
+
+        return false;
     }
 
     /**
