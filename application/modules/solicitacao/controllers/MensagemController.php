@@ -298,8 +298,13 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $this->view->isEditavel = true;
         try {
 
-            if (empty($this->idPronac) && empty($this->idPreProjeto))
+            if (empty($this->idPronac) && empty($this->idPreProjeto)) {
                 throw new Exception("Informe o projeto ou proposta para realizar uma solicita&ccedil;&atilde;o");
+            }
+
+            if($this->verificarArquivamento()) {
+                throw new Exception("Projeto ou proposta arquivado, voc&ecirc; n&atilde;o pode realizar uma solicita&ccedil;&atilde;o");
+            }
 
             $dataForm = [
                 'siEncaminhamento' => Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_CADASTRADA
@@ -347,6 +352,11 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         if ($this->getRequest()->isPost()) {
 
             try {
+
+                if($this->verificarArquivamento()) {
+                    throw new Exception("Projeto ou proposta arquivado, voc&ecirc; n&atilde;o pode realizar uma solicita&ccedil;&atilde;o");
+                }
+                
                 $this->_helper->layout->disableLayout();
                 $this->_helper->viewRenderer->setNoRender(true);
 
