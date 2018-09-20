@@ -103,16 +103,18 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $db = $this->getAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
-        $sqlInicioDiligencia = "select convert( varchar( 20 ), DtAvaliacao,120 ) as DtInicioDiligencia
-from
-								SAC.dbo.tbAvaliacaoProposta tbAvaliacaoProposta
-where tbAvaliacaoProposta.idProjeto = {$idProposta}
-and conformidadeOk < 9 order by DtAvaliacao asc 
-";
+        $sqlInicioDiligencia = "SELECT convert( varchar( 20 ), DtAvaliacao,120 ) as DtInicioDiligencia
+                                    FROM SAC.dbo.tbAvaliacaoProposta tbAvaliacaoProposta
+                                    WHERE tbAvaliacaoProposta.idProjeto = {$idProposta}
+                                    AND conformidadeOk < 9 
+                                    ORDER BY DtAvaliacao ASC";
 
-        $sqlFimDiligencia = "select DtMovimentacao as DtFimDiligencia from sac..tbMovimentacao tbMovimentacao
-where tbMovimentacao.Movimentacao = 96
-and idprojeto = {$idProposta} AND CONVERT( VARCHAR (20), DtMovimentacao, 120) != '{$dtEnvio}' order by DtMovimentacao ASC";
+        $sqlFimDiligencia = "SELECT DtMovimentacao as DtFimDiligencia 
+                                FROM sac..tbMovimentacao tbMovimentacao
+                                WHERE tbMovimentacao.Movimentacao = 96
+                                AND idprojeto = {$idProposta} 
+                                AND CONVERT( VARCHAR (20), DtMovimentacao, 120) != '{$dtEnvio}' 
+                                ORDER BY DtMovimentacao ASC";
 
         $resultInicioDiligencia = $db->fetchAll($sqlInicioDiligencia);
         $resultFimDiligencia = $db->fetchAll($sqlFimDiligencia);
@@ -138,8 +140,10 @@ and idprojeto = {$idProposta} AND CONVERT( VARCHAR (20), DtMovimentacao, 120) !=
         $select = $this->select();
         $select->setIntegrityCheck(false);
 
-        $sqlDtEnvio = "select TOP 1 DtMovimentacao as DtEnvio
-FROM sac.dbo.tbMovimentacao where Movimentacao = 96 and idprojeto = {$idProposta}";
+        $sqlDtEnvio = "SELECT TOP 1 DtMovimentacao as DtEnvio
+                        FROM sac.dbo.tbMovimentacao 
+                        WHERE Movimentacao = 96 
+                        AND idprojeto = {$idProposta}";
         $DtEnvio = $db->fetchOne($sqlDtEnvio);
 
         $sqlDiasEmAnalise = "SELECT DATEDIFF(day, ?, GETDATE()) as DiasEmAnalise";
