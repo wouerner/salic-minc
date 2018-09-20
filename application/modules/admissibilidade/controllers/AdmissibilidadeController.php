@@ -2959,6 +2959,7 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
                 $proposta->Tecnico = utf8_encode($proposta->Tecnico);
                 $proposta->DtMovimentacao = Data::tratarDataZend($proposta->DtMovimentacao, '', true);
+                $proposta->diasCorridos = $vwPainelAvaliar->obterDiasEmAnalise($proposta->idProjeto);
                 $proposta->descricao_segmento = utf8_encode($proposta->descricao_segmento);
                 $proposta->descricao_area = utf8_encode($proposta->descricao_area);
                 $proposta->descricao_segmento_inicial = utf8_encode($proposta->descricao_segmento_inicial);

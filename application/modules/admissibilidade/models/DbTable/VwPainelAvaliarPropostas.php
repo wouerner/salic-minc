@@ -33,6 +33,148 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         return $db->fetchAll($sql);
     }
 
+    public function propostasQuery()
+    {
+        $db = $this->getAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $select->from(
+            ['a' => 'preprojeto'],
+            [
+                'idProjeto ' => 'idPreProjeto',
+                'NomeProposta' => 'NomeProjeto',
+                'idAgente',
+                new Zend_Db_Expr('(SELECT top 1 dtMovimentacao from sac..tbMovimentacao WHERE idprojeto = 280327 and Movimentacao = 96) AS DtEnvio'),
+            ]
+        );
+
+        $select->joinInner(
+            ['b' => 'tbMovimentacao'],
+            'b.idProjeto = a.idPreProjeto',
+            [
+                'b.idMovimentacao',
+                'CodSituacao' => 'b.Movimentacao',
+            ],
+            $this->getSchema('sac')
+        );
+
+        $select->joinInner(
+            ['c' => 'tbAvaliacaoProposta'],
+            'a.idPreProjeto = c.idProjeto',
+            [
+                new Zend_Db_Expr('CONVERT(CHAR(20), c.DtAvaliacao, 120 ) AS DtAdmissibilidade'),
+                new Zend_Db_Expr('DATEDIFF(d, c.DtAvaliacao, GETDATE()) AS diasCorridos'),
+                'idUsuario' => 'c.idTecnico',
+                'c.DtAvaliacao',
+                'c.idAvaliacaoProposta'
+            ],
+            $this->getSchema('sac')
+        );
+
+        $select->joinInner(
+            ['d' => 'Agentes'],
+            'a.idAgente = d.idAgente',
+            [],
+            $this->getSchema('agentes')
+        );
+
+        $select->joinInner(
+            ['e' => 'Verificacao'],
+            'b.Movimentacao = e.idVerificacao',
+            [],
+            $this->getSchema('sac')
+        );
+
+        $select->where('b.Movimentacao IN( 96, 97, 127, 128 )');
+        $select->where("a.stTipoDemanda = 'NA' ");
+        $select->where('a.stEstado = 1');
+        $select->where('b.stEstado = 0');
+        $select->where('c.stEstado = 0');
+        $select->where("NOT EXISTS(SELECT * FROM SAC.dbo.Projetos AS f WHERE a.idPreProjeto = f.idProjeto)");
+
+        return $db->fetchAll($select);
+    }
+
+    private function obterDatasDiligencias($idProposta, $dtEnvio)
+    {
+        $db = $this->getAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+
+        $sqlInicioDiligencia = "select convert( varchar( 20 ), DtAvaliacao,120 ) as DtInicioDiligencia
+from
+								SAC.dbo.tbAvaliacaoProposta tbAvaliacaoProposta
+where tbAvaliacaoProposta.idProjeto = {$idProposta}
+and conformidadeOk < 9 order by DtAvaliacao asc 
+";
+
+        $sqlFimDiligencia = "select DtMovimentacao as DtFimDiligencia from sac..tbMovimentacao tbMovimentacao
+where tbMovimentacao.Movimentacao = 96
+and idprojeto = {$idProposta} AND CONVERT( VARCHAR (20), DtMovimentacao, 120) != '{$dtEnvio}' order by DtMovimentacao ASC";
+
+        $resultInicioDiligencia = $db->fetchAll($sqlInicioDiligencia);
+        $resultFimDiligencia = $db->fetchAll($sqlFimDiligencia);
+
+        $diligencias = [];
+        for ($i = 0; $i < count($resultInicioDiligencia); $i++) {
+            $diligencias[$i] = new StdClass();
+            $diligencias[$i]->DtInicioDiligencia = $resultInicioDiligencia[$i]->DtInicioDiligencia;
+            $diligencias[$i]->DtFimDiligencia = '';
+        }
+
+        for ($j = 0; $j < count($resultFimDiligencia); $j++) {
+            $diligencias[$j]->DtFimDiligencia = $resultFimDiligencia[$j]->DtFimDiligencia;
+
+        }
+        return $diligencias;
+    }
+
+    public function obterDiasEmAnalise($idProposta)
+    {
+        $db = $this->getAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+        $select = $this->select();
+        $select->setIntegrityCheck(false);
+
+        $sqlDtEnvio = "select TOP 1 DtMovimentacao as DtEnvio
+FROM sac.dbo.tbMovimentacao where Movimentacao = 96 and idprojeto = {$idProposta}";
+        $DtEnvio = $db->fetchOne($sqlDtEnvio);
+
+        $sqlDiasEmAnalise = "SELECT DATEDIFF(day, ?, GETDATE()) as DiasEmAnalise";
+        $diasEmAnalise = $db->fetchOne($sqlDiasEmAnalise, $DtEnvio);
+        $diligencias = $this->obterDatasDiligencias($idProposta, $DtEnvio);
+
+        $diligenciaAberta = false;
+        foreach ($diligencias as $diligencia) {
+            if ($diligencia->DtFimDiligencia == '' || !$diligencia->DtFimDiligencia) {
+                if ($diligenciaAberta) {
+                    return $diasEmAnalise;
+                }
+                $sqlDiligencia = "SELECT DATEDIFF(day, ?, GETDATE())";
+                $diligencia->DtFimDiligencia = "GETDATE()";
+
+                $diasEmDiligencia = $db->fetchOne(
+                    $sqlDiligencia, $diligencia->DtInicioDiligencia
+                );
+                $diligenciaAberta = true;
+            } else {
+                $sqlDiligencia = "SELECT DATEDIFF(day, ?, ?)";
+                $diasEmDiligencia = $db->fetchOne(
+                    $sqlDiligencia,
+                    [
+                        $diligencia->DtInicioDiligencia,
+                        $diligencia->DtFimDiligencia
+                    ]
+                );
+            }
+
+            $diasEmAnalise = $diasEmAnalise - $diasEmDiligencia;
+        }
+        return $diasEmAnalise;
+    }
+
     public function obterPropostasParaAvaliacao(
         $where = [],
         $order = [],
