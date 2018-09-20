@@ -130,6 +130,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             $diligencias[$j]->DtFimDiligencia = $resultFimDiligencia[$j]->DtFimDiligencia;
 
         }
+
         return $diligencias;
     }
 
