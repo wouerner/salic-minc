@@ -25,6 +25,13 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             $this->view->blnPossuiDiligencias = $rsDiligencias->count();
 
             $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar";
+
+            $tbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
+            $this->movimentacao = $tbMovimentacao->buscarMovimentacaoProposta($this->view->idPreProjeto);
+
+            if (!empty($this->movimentacao) && $this->movimentacao['idMovimentacao'] != 95) {
+                $this->redirect("/proposta/visualizar/index/idPreProjeto/" . $this->idPreProjeto);
+            }
         }
 
         // Busca na tabela apoio ExecucaoImediata
@@ -860,7 +867,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
                 $proposta->nomeproponente = utf8_encode($proposta->nomeproponente);
                 $proposta->nomeprojeto = utf8_encode($proposta->nomeprojeto);
                 $proposta->situacao = utf8_encode($proposta->situacao);
-                $rsStatusAtual = $Movimentacao->buscarStatusPropostaNome($proposta->idpreprojeto);
+                $rsStatusAtual = $Movimentacao->buscarMovimentacaoProposta($proposta->idpreprojeto);
                 $proposta->situacao = isset($rsStatusAtual['MovimentacaoNome']) ? utf8_encode($rsStatusAtual['MovimentacaoNome']) : '';
 
                 $aux[$key] = $proposta;
