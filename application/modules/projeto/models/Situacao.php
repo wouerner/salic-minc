@@ -56,8 +56,8 @@ class Projeto_Model_Situacao extends MinC_Db_Table_Abstract
     const PROJETO_ARQUIVADO = 'K00';
     const ARQUIVADO_POR_EXCESSO_DE_PROJETOS_APRESENTADOS = 'K01';
     const ARQUIVADO_POR_INCAPACIDADE_TECNICA_DO_PROPONENTE = 'K02';
-    const BOLSA_VIRTUOSE_ARQUIVADO_ANÁLISE_DOCUMENTAL = 'K04';
-    const BOLSA_VIRTUOSE_ARQUIVADO_ANÁLISE_DO_MÉRITO = 'K05';
+    const BOLSA_VIRTUOSE_ARQUIVADO_ANALISE_DOCUMENTAL = 'K04';
+    const BOLSA_VIRTUOSE_ARQUIVADO_ANALISE_DO_MERITO = 'K05';
 
     public static function obterSituacoesProjetoArquivado() 
     {
