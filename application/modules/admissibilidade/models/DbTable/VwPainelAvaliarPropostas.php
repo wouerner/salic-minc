@@ -189,7 +189,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
 
         $diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);
 
-        return $diasEmAnalise;
+        return abs($diasEmAnalise);
     }
 
     public function obterPropostasParaAvaliacao(
