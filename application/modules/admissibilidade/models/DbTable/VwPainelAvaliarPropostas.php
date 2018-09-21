@@ -154,7 +154,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $diligencias = $this->obterDatasDiligencias($idProposta, $DtEnvio);
 
         $diasArquivado = 0;
-        $sqlArquivamento = "select datediff(day, dtArquivamento, dtAvaliacao)  from sac..PreProjetoArquivado where idpreprojeto = {$idProposta} and stDecisao = 1";
+        $sqlArquivamento = "SELECT datediff(day, dtArquivamento, dtAvaliacao) FROM sac..PreProjetoArquivado WHERE idpreprojeto = {$idProposta} AND stDecisao = 1";
         $projetoArquivado = $db->fetchOne($sqlArquivamento);
         if ($projetoArquivado) {
             $diasArquivado = $projetoArquivado;
