@@ -1,18 +1,6 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="page-title">
-            <div class="row">
-                <div class="col s12 m9 l10">
-                    <h1>Visualiza&ccedil;&atilde;o da proposta</h1>
-
-                </div>
-                <div class="col s12 m3 l2 right-align">
-                    <a href="javascript:voltar();" title="P&aacute;gina Anterior" title="P&aacute;gina Anterior"
-                       class="btn small grey lighten-3 grey-text z-depth-0 chat-toggle"><i class="material-icons">arrow_back</i>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <?= $this->pageTitle('Visualiza&ccedil;&atilde;o da proposta', []); ?>
 
         <div class="content">
             <div id="">
@@ -28,8 +16,10 @@
                                                     <div style="display:inline-block"><i class="tiny material-icons">forward</i></div>
                                                 <?php endif; ?>
                                                 <div style="display:inline-block">
-                                                    <a class="margin20 btn-large waves-effect waves-light
-                                                        <?= $this->movimentacao['idMovimentacao'] == $fase['id'] ? '' : 'disabled' ?>">
+                                                    <a class="margin20 btn-large
+                                                        <?= $this->movimentacao['idMovimentacao'] == $fase['id'] ? '' : 'disabled' ?>"
+                                                        style="cursor: default"
+                                                    >
                                                         <i class="tiny material-icons left"><?= $fase['icon']; ?></i><?= $fase['descricao']; ?>
                                                     </a>
                                                 </div>
@@ -43,11 +33,11 @@
                 </div>
             </div>
 
-            <div class="card-pansel">
-                <div id="container-vue">
-                    <proposta :idpreprojeto="<?= $this->idPreProjeto; ?>"></proposta>
-                </div>
+            <div id="container-vue">
+                <proposta :idpreprojeto="<?= $this->idPreProjeto; ?>"></proposta>
             </div>
         </div>
     </div>
 </div>
+
+<?= $this->partial('inc/menu-suspenso.phtml', $this); ?>
