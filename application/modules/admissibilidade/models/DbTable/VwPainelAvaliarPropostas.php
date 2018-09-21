@@ -155,6 +155,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
 
         $diasArquivado = 0;
         $sqlArquivamento = "SELECT datediff(day, dtArquivamento, dtAvaliacao) FROM sac..PreProjetoArquivado WHERE idpreprojeto = {$idProposta} AND stDecisao = 1";
+
         $projetoArquivado = $db->fetchOne($sqlArquivamento);
         if ($projetoArquivado) {
             $diasArquivado = $projetoArquivado;
@@ -169,13 +170,13 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 $sqlDiligencia = "SELECT DATEDIFF(day, ?, GETDATE())";
                 $diligencia->DtFimDiligencia = "GETDATE()";
 
-                $diasEmDiligencia = $db->fetchOne(
+                $diasEmDiligencia += (int) $db->fetchOne(
                     $sqlDiligencia, $diligencia->DtInicioDiligencia
                 );
                 $diligenciaAberta = true;
             } else {
                 $sqlDiligencia = "SELECT DATEDIFF(day, ?, ?)";
-                $diasEmDiligencia = $db->fetchOne(
+                $diasEmDiligencia += (int) $db->fetchOne(
                     $sqlDiligencia,
                     [
                         $diligencia->DtInicioDiligencia,
@@ -186,17 +187,8 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
 
         }
 
-/*        if ($diasArquivado > 0) {
-            print "($idProposta) " ;
-        }
+        $diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);
 
-        print $diasEmAnalise ;
-*/
-        $diasEmAnalise = $diasEmAnalise - $diasEmDiligencia - $diasArquivado;
-
-/*        print " - $diasEmDiligencia - $diasArquivado";
-        print " = $diasEmAnalise \n\n";
-*/
         return $diasEmAnalise;
     }
 
