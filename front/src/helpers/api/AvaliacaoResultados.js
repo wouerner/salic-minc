@@ -53,3 +53,6 @@ export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/te
 
 export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
 
+export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos-encaminhamento');
+
+export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
