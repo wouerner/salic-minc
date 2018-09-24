@@ -38,8 +38,7 @@
                 >
                     <v-card flat>
                         <v-card-text>
-                            <TabelaProjetos
-                            ></TabelaProjetos>
+                            <TabelaProjetos></TabelaProjetos>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
