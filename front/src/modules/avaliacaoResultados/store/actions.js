@@ -52,10 +52,12 @@ export const mockAvaliacaDesempenho = ({ commit }) => {
     commit(types.MOCK_AVALIACAO_RESULTADOS);
 };
 
-export const getDestinatariosEncaminhamento = ({ commit }, params) => {
-    avaliacaoResultadosHelperAPI.getTeste(params)
+export const obterDestinatarios = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.obterDestinatarios()
         .then((response) => {
-            commit(types.DESTINATARIOS_ENCAMINHAMENTO, response.data);
+            const data = response.data;
+            const destinatariosEncaminhamento = data.data;
+            commit(types.DESTINATARIOS_ENCAMINHAMENTO, destinatariosEncaminhamento.items);
         });
 };
 
@@ -96,4 +98,6 @@ export const redirectLinkAvaliacaoResultadoTipo = ({ commit }, params) => {
         commit(types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO, `/prestacao-contas/prestacao-contas/amostragem/idPronac/${params.idPronac}/tipoAvaliacao/${params.percentual}`);
     }
 
-}
+export const encaminharParaTecnico = ({ commit }, params) =>
+    avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+
