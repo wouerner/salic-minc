@@ -68,8 +68,8 @@
                                                             >
                                                                 <template slot="items" slot-scope="props">
                                                                     <td>{{ props.item.item }}</td>
-                                                                    <td>R$ {{ props.item.varlorAprovado }}</td>
-                                                                    <td>R$ {{ props.item.varlorComprovado }}</td>
+                                                                    <td>{{ moeda(props.item.varlorAprovado) }}</td>
+                                                                    <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>R$ # valorAprovado - valorComprovado</td>
                                                                     <td>
                                                                         <v-btn color="red" small dark title="Comprovar Item">
@@ -111,12 +111,12 @@
         
         <v-speed-dial
             v-model="fab"
-            bottom="true"
-            right="true"
+            bottom
+            right
             direction="top"
-            open-on-hover="true"
+            open-on-hover
             transition="slide-y-reverse-transition"
-            fixed="true"
+            fixed
         >
             <v-btn
                 slot="activator"
@@ -207,9 +207,6 @@ import ModalTemplate from '@/components/modal';
             };
         },
         computed: {
-            valorAprovado() { },
-            valorComprovado() { },
-            valorAComprovar() { },
             ...mapGetters({
                 getPlanilha: 'avaliacaoResultados/planilha',
             }),
@@ -227,6 +224,10 @@ import ModalTemplate from '@/components/modal';
             ...mapActions({
                 setPlanilha: 'avaliacaoResultados/planilha',
             }),
+            moeda: (moedaString) => {
+                const moeda = Number(moedaString);
+                return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            },
         },
     },
 };
