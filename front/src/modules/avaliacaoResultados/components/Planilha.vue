@@ -71,6 +71,11 @@
                                                                     <td>R$ {{ props.item.varlorAprovado }}</td>
                                                                     <td>R$ {{ props.item.varlorComprovado }}</td>
                                                                     <td>R$ # valorAprovado - valorComprovado</td>
+                                                                    <td>
+                                                                        <v-btn color="red" small dark title="Comprovar Item">
+                                                                            <v-icon>gavel</v-icon>
+                                                                        </v-btn>
+                                                                    </td>
                                                                 </template>
                                                             </v-data-table>
                                                         </v-tab-item>
@@ -180,48 +185,48 @@ import { mapActions } from 'vuex';
 import ModalTemplate from '@/components/modal';
 
     export default {
-    name: 'Painel',
-    data() {
-        return {
-            DadoNr: null,
-            existeDiligencia: true,
-            produtos: this.planilha,
-            headers: [
-                { text: 'Item de Custo', value: 'item', sortable: false },
-                { text: 'Valor Aprovado', value: 'item', sortable: false },
-                { text: 'Valor Comprovado', value: 'item', sortable: false },
-                { text: 'Valor a Comprovar', value: 'item', sortable: false },
-            ],
-            tabs: {
-                1: 'AVALIADO',
-                3: 'IMPUGNADOS',
-                4: 'AGUARDANDO ANÁLISE',
-                todos: 'TODOS',
-            },
-            fab: false,
-        };
-    },
-    computed: {
-        valorAprovado() { },
-        valorComprovado() { },
-        valorAComprovar() { },
-    },
-    props: {
-        idpronac: '132451',
-    },
-    components: {
-        ModalTemplate,
-    },
-    methods: {
-        ...mapActions({
-            criarRegistro: 'foo/criarRegistro',
-            modalOpen: 'modal/modalOpen',
-            modalClose: 'modal/modalClose',
-        }),
-        fecharModal() {
-            // eslint-disable-next-line
-            $3('#modalTemplate').modal('close');
-            this.modalClose();
+        name: 'Painel',
+        data() {
+            return {
+                existeDiligencia: true,
+                produtos: this.planilha,
+                headers: [
+                    { text: 'Item de Custo', value: 'item', sortable: false },
+                    { text: 'Valor Aprovado', value: 'varlorAprovado', sortable: false },
+                    { text: 'Valor Comprovado', value: 'varlorComprovado', sortable: false },
+                    { text: 'Valor a Comprovar', value: 'valorAComprovar', sortable: false },
+                    { text: '', value: 'comprovarItem', sortable: false },
+                ],
+                tabs: {
+                    1: 'AVALIADO',
+                    3: 'IMPUGNADOS',
+                    4: 'AGUARDANDO ANÁLISE',
+                    todos: 'TODOS',
+                },
+                fab: false,
+            };
+        },
+        computed: {
+            valorAprovado() { },
+            valorComprovado() { },
+            valorAComprovar() { },
+            ...mapGetters({
+                getPlanilha: 'avaliacaoResultados/planilha',
+            }),
+        },
+        props: {
+            idpronac: '132451',
+        },
+        mounted() {
+            this.setPlanilha();
+        },
+        components: {
+            ModalTemplate,
+        },
+        methods: {
+            ...mapActions({
+                setPlanilha: 'avaliacaoResultados/planilha',
+            }),
         },
     },
 };
