@@ -21,7 +21,7 @@
   "husky": {
     "hooks": {
       "pre-push": "npm run pre-push-action",
-      ""prepare-commit-msg": "npm run prepare-commit-msg-action"
+      "prepare-commit-msg": "npm run prepare-commit-msg-action"
     }
   },
   "repository": {
