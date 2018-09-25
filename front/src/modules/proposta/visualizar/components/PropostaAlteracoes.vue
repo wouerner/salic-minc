@@ -279,11 +279,11 @@
                         <div class="row">
                             <div class="col s12 m6 l6 scroll historico">
                                 <PropostaLocalRealizacaoDeslocamento
-                                        :localizacoes="dadosHistorico"></PropostaLocalRealizacaoDeslocamento>
+                                        :proposta="dadosHistorico"></PropostaLocalRealizacaoDeslocamento>
                             </div>
                             <div class="col s12 m6 l6 scroll atual">
                                 <PropostaLocalRealizacaoDeslocamento
-                                        :localizacoes="dadosAtuais"></PropostaLocalRealizacaoDeslocamento>
+                                        :proposta="dadosAtuais"></PropostaLocalRealizacaoDeslocamento>
                             </div>
                         </div>
                     </div>

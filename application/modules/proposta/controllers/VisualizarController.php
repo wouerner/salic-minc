@@ -187,10 +187,10 @@ class Proposta_VisualizarController extends Proposta_GenericController
         $arrBusca['idprojeto'] = $idPreProjeto;
         $arrBusca['stabrangencia'] = 1;
         $tblAbrangencia = new Proposta_Model_DbTable_Abrangencia();
-        $dados['localizacoes'] = $tblAbrangencia->buscar($arrBusca);
+        $dados['abrangencia'] = $tblAbrangencia->buscar($arrBusca);
 
         $tblDeslocamento = new Proposta_Model_DbTable_TbDeslocamento();
-        $dados['deslocamentos'] = $tblDeslocamento->buscarDeslocamentosGeral(array('idProjeto' => $idPreProjeto));
+        $dados['deslocamento'] = $tblDeslocamento->buscarDeslocamentosGeral(array('idProjeto' => $idPreProjeto));
 
         foreach ($dados as $key => $array) {
             foreach ($array as $key2 => $dado) {

@@ -67,8 +67,7 @@ export default {
     },
     mixins: [utils],
     mounted() {
-        console.log('versao', Object.keys(this.proposta).length, this.proposta.documentos_proposta, this.proposta);
-        if(this.proposta.documentos_proposta) {
+        if (this.proposta.documentos_proposta) {
             this.documentos = this.proposta;
         } else if (Object.keys(this.proposta).length > 2 && this.proposta.idAgente) {
             this.buscaDocumentos(this.proposta);
@@ -76,7 +75,7 @@ export default {
     },
     watch: {
         proposta(value) {
-            if(value.documentos_proposta) {
+            if (value.documentos_proposta) {
                 this.documentos = value.documentos_proposta;
             } else if (Object.keys(value).length > 2 && value.idAgente) {
                 this.buscaDocumentos(value);
