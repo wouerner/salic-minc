@@ -98,37 +98,23 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         return $db->fetchAll($select);
     }
 
-    private function obterDatasDiligencias($idProposta, $dtEnvio, $isArquivado)
+    private function obterDatasDiligencias($idProposta, $dtEnvio, $possuiArquivamento)
     {
         $db = $this->getAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
-        $sqlInicioDiligencia = "SELECT convert(varchar(20), DtMovimentacao, 120) as DtInicioDiligencia
-            FROM
-            sac.dbo.tbMovimentacao tbMovimentacao 
-            WHERE
-            tbMovimentacao.idProjeto = {$idProposta}
-            AND movimentacao = 95        
-            ORDER BY DtMovimentacao ASC
-        ";
-
-            /*"SELECT convert( varchar( 20 ), DtAvaliacao,120 ) as DtInicioDiligencia
+        $sqlInicioDiligencia = "SELECT convert( varchar( 20 ), DtAvaliacao,120 ) as DtInicioDiligencia
                                     FROM SAC.dbo.tbAvaliacaoProposta tbAvaliacaoProposta
                                     WHERE tbAvaliacaoProposta.idProjeto = {$idProposta}
-                                    AND conformidadeOk < 9 
+                                    AND conformidadeOk < 9
                                     {$excluiDataArquivado}
-                                    ORDER BY DtAvaliacao ASC";*/
+                                    ORDER BY DtAvaliacao ASC";
 
-        if ($idProposta == 278920) {
-
-//            print $sqlInicioDiligencia;die;
-        }
-
-        $sqlFimDiligencia = "SELECT DtMovimentacao as DtFimDiligencia 
+        $sqlFimDiligencia = "SELECT DtMovimentacao as DtFimDiligencia
                                 FROM sac..tbMovimentacao tbMovimentacao
                                 WHERE tbMovimentacao.Movimentacao = 96
-                                AND idprojeto = {$idProposta} 
-                                AND CONVERT( VARCHAR (20), DtMovimentacao, 120) != '{$dtEnvio}' 
+                                AND idprojeto = {$idProposta}
+                                AND CONVERT( VARCHAR (20), DtMovimentacao, 120) != '{$dtEnvio}'
                                 ORDER BY DtMovimentacao ASC";
 
         $resultInicioDiligencia = $db->fetchAll($sqlInicioDiligencia);
@@ -145,7 +131,6 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
             if (isset($diligencias[$j])) {
                 $diligencias[$j]->DtFimDiligencia = $resultFimDiligencia[$j]->DtFimDiligencia;
             }
-
         }
 
         return $diligencias;
@@ -187,8 +172,8 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $select->setIntegrityCheck(false);
 
         $sqlDtEnvio = "SELECT TOP 1 DtMovimentacao as DtEnvio
-                        FROM sac.dbo.tbMovimentacao 
-                        WHERE Movimentacao = 96 
+                        FROM sac.dbo.tbMovimentacao
+                        WHERE Movimentacao = 96
                         AND idprojeto = {$idProposta}";
         $DtEnvio = $db->fetchOne($sqlDtEnvio);
 
@@ -201,7 +186,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $diasEmDiligencia = 0;
 
         if ($idProposta == 278920) {
-            print $diasArquivado;
+           // print $diasArquivado;
             //die;
 //print_r($diligencias);
 //            print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);";
@@ -235,10 +220,10 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 );
             }
         }
-        if ($idProposta == 278920) {
-            print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado) . on teste = $sqlDiligencia, $diligencia->DtInicioDiligencia";
-            die;
-        }
+        // if ($idProposta == 278920) {
+        //     print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado) . on teste = $sqlDiligencia, $diligencia->DtInicioDiligencia";
+        //     die;
+        // }
 //        if ($idProposta == 278920){
 //            x("diasAnalise = $diasEmAnalise" );
 //            x("dias em Diligencia= $diasEmDiligencia");
@@ -315,7 +300,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $search = null,
         Admissibilidade_Model_DistribuicaoAvaliacaoProposta $distribuicaoAvaliacaoProposta = null
     )
-    { 
+    {
         $select = $this->select();
         $select->setIntegrityCheck(false);
         $select->from('vwPainelAvaliarPropostas',
@@ -331,7 +316,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $select->joinLeft(
             ['distribuicao_avaliacao_proposta']
             , "distribuicao_avaliacao_proposta.id_preprojeto = vwPainelAvaliarPropostas.idProjeto
-                    
+
                     and distribuicao_avaliacao_proposta.id_orgao_superior = {$distribuicaoAvaliacaoProposta->getIdOrgaoSuperior()}"
             ,
             [
@@ -413,7 +398,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 'tipo_recurso' => new Zend_Db_Expr(
                     "CASE WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_PEDIDO_DE_RECONSIDERACAO
                     . " THEN '1 - Pedido de Reconsidera&ccedil;&atilde;o' "
-                    . " WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO 
+                    . " WHEN tbRecursoProposta.tpRecurso = " . Recurso_Model_TbRecursoProposta::TIPO_RECURSO_RECURSO
                     . " THEN '2 - Recurso' "
                     . " ELSE '-' END"
                 ),
@@ -496,7 +481,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $selectPenultimaDistribuicao->order('data_avaliacao desc');
         $selectPenultimaDistribuicao->where('id_preprojeto = vwPainelAvaliarPropostas.idProjeto');
         $selectPenultimaDistribuicao->where(
-            'sub_select_sugestao_enquadramento.id_distribuicao_avaliacao_proposta 
+            'sub_select_sugestao_enquadramento.id_distribuicao_avaliacao_proposta
                    <> distribuicao_avaliacao_proposta.id_distribuicao_avaliacao_proposta
                OR sub_select_sugestao_enquadramento.id_distribuicao_avaliacao_proposta is null'
         );
