@@ -14,8 +14,10 @@
                         <v-toolbar-items>
                             <v-btn dark flat @click.native="salvarParecer()" :href="redirectLink" :disabled="!valid">Salvar</v-btn>
                             <v-btn dark flat
-                                   @click.native="finalizarParecer()"
-                                   :disabled="!valid">
+                                @click.native="finalizarParecer()"
+                                :href="redirectLink"
+                                :disabled="!valid"
+                            >
                                 Finalizar
                             </v-btn>
                         </v-toolbar-items>
@@ -188,7 +190,9 @@
                         idPronac: this.idPronac,
                         tpAvaliacaoFinanceira: this.tipo,
                         siManifestacao: this.parecer.siManifestacao,
-                        dsParecer: this.parecer.dsParecer };
+                        dsParecer: this.parecer.dsParecer,
+                    };
+                    console.log(data);
                     this.salvar(data);
                     /** Descomentar linha após migração da lista para o VUEJS */
                     // this.dialog = false;
