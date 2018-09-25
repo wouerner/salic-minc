@@ -2956,14 +2956,13 @@ class Admissibilidade_AdmissibilidadeController extends MinC_Controller_Action_A
         $recordsTotal = 0;
         $recordsFiltered = 0;
         if (!empty($propostas)) {
-            $zDate = new Zend_Date();
             $sugestaoEnquadramentoDbTable = new Admissibilidade_Model_DbTable_SugestaoEnquadramento();
             $sugestaoEnquadramento = new Admissibilidade_Model_SugestaoEnquadramento();
             foreach ($propostas as $key => $proposta) {
-                $zDate->set($proposta->DtMovimentacao);
                 $proposta->NomeProposta = utf8_encode($proposta->NomeProposta);
                 $proposta->Tecnico = utf8_encode($proposta->Tecnico);
-                $proposta->DtMovimentacao = $zDate->toString('dd/MM/y h:m');
+                $proposta->DtMovimentacao = Data::tratarDataZend($proposta->DtMovimentacao, '', true);
+                $proposta->diasCorridos = $vwPainelAvaliar->obterDiasEmAnalise($proposta->idProjeto);
                 $proposta->descricao_segmento = utf8_encode($proposta->descricao_segmento);
                 $proposta->descricao_area = utf8_encode($proposta->descricao_area);
                 $proposta->descricao_segmento_inicial = utf8_encode($proposta->descricao_segmento_inicial);
