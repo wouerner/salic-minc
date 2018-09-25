@@ -98,16 +98,31 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         return $db->fetchAll($select);
     }
 
-    private function obterDatasDiligencias($idProposta, $dtEnvio)
+    private function obterDatasDiligencias($idProposta, $dtEnvio, $isArquivado)
     {
         $db = $this->getAdapter();
         $db->setFetchMode(Zend_DB :: FETCH_OBJ);
 
-        $sqlInicioDiligencia = "SELECT convert( varchar( 20 ), DtAvaliacao,120 ) as DtInicioDiligencia
+        $sqlInicioDiligencia = "SELECT convert(varchar(20), DtMovimentacao, 120) as DtInicioDiligencia
+            FROM
+            sac.dbo.tbMovimentacao tbMovimentacao 
+            WHERE
+            tbMovimentacao.idProjeto = {$idProposta}
+            AND movimentacao = 95        
+            ORDER BY DtMovimentacao ASC
+        ";
+
+            /*"SELECT convert( varchar( 20 ), DtAvaliacao,120 ) as DtInicioDiligencia
                                     FROM SAC.dbo.tbAvaliacaoProposta tbAvaliacaoProposta
                                     WHERE tbAvaliacaoProposta.idProjeto = {$idProposta}
                                     AND conformidadeOk < 9 
-                                    ORDER BY DtAvaliacao ASC";
+                                    {$excluiDataArquivado}
+                                    ORDER BY DtAvaliacao ASC";*/
+
+        if ($idProposta == 278920) {
+
+//            print $sqlInicioDiligencia;die;
+        }
 
         $sqlFimDiligencia = "SELECT DtMovimentacao as DtFimDiligencia 
                                 FROM sac..tbMovimentacao tbMovimentacao
@@ -136,6 +151,34 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         return $diligencias;
     }
 
+    public function obterDataDesarquivamento($idProposta)
+    {
+        $db = $this->getAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+
+        $sqlArquivamento = "SELECT dtArquivamento, dtAvaliacao as dtDesarquivamento,DATEDIFF(day, dtArquivamento, dtAvaliacao) AS diasArquivado FROM sac..PreProjetoArquivado WHERE idpreprojeto = {$idProposta} AND stDecisao = 1";
+        return $db->fetchAll($sqlArquivamento);
+    }
+
+    public function obterDiasArquivado($idProposta)
+    {
+        $db = $this->getAdapter();
+        $db->setFetchMode(Zend_DB :: FETCH_OBJ);
+
+        $diasArquivado = 0;
+        $projetoArquivado = $this->obterDataDesarquivamento($idProposta);
+        if ($projetoArquivado) {
+            $diasArquivado = $projetoArquivado[0]->diasArquivado;
+            $dtDesarquivamento = $projetoArquivado[0]->dtDesarquivamento;
+            $sqlDescontoDiasAposDesarquivamento = "SELECT DATEDIFF(day,
+'{$dtDesarquivamento }',
+ (SELECT TOP 1 DtMovimentacao FROM sac..tbMovimentacao where movimentacao = 96 and idprojeto = {$idProposta} AND dtMovimentacao > '{$dtDesarquivamento }'))";
+            $descontoDiasAposDesarquivamento = $db->fetchOne($sqlDescontoDiasAposDesarquivamento);
+            $diasArquivado = $diasArquivado + $descontoDiasAposDesarquivamento;
+        }
+        return $diasArquivado;
+    }
+
     public function obterDiasEmAnalise($idProposta)
     {
         $db = $this->getAdapter();
@@ -151,20 +194,26 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
 
         $sqlDiasEmAnalise = "SELECT DATEDIFF(day, ?, GETDATE()) as DiasEmAnalise";
         $diasEmAnalise = $db->fetchOne($sqlDiasEmAnalise, $DtEnvio);
-        $diligencias = $this->obterDatasDiligencias($idProposta, $DtEnvio);
-
-        $diasArquivado = 0;
-        $sqlArquivamento = "SELECT datediff(day, dtArquivamento, dtAvaliacao) FROM sac..PreProjetoArquivado WHERE idpreprojeto = {$idProposta} AND stDecisao = 1";
-
-        $projetoArquivado = $db->fetchOne($sqlArquivamento);
-        if ($projetoArquivado) {
-            $diasArquivado = $projetoArquivado;
-        }
+        $diasArquivado = $this->obterDiasArquivado($idProposta);
+        $diligencias = $this->obterDatasDiligencias($idProposta, $DtEnvio, $diasArquivado);
 
         $diligenciaAberta = false;
+        $diasEmDiligencia = 0;
+
+        if ($idProposta == 278920) {
+            print $diasArquivado;
+            //die;
+//print_r($diligencias);
+//            print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);";
+            //die;
+        }
+           // print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);";die;
+
         foreach ($diligencias as $diligencia) {
             if ($diligencia->DtFimDiligencia == '' || !$diligencia->DtFimDiligencia) {
                 if ($diligenciaAberta) {
+                    $diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);
+
                     return $diasEmAnalise;
                 }
                 $sqlDiligencia = "SELECT DATEDIFF(day, ?, GETDATE())";
@@ -176,6 +225,7 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 $diligenciaAberta = true;
             } else {
                 $sqlDiligencia = "SELECT DATEDIFF(day, ?, ?)";
+
                 $diasEmDiligencia += (int) $db->fetchOne(
                     $sqlDiligencia,
                     [
@@ -184,12 +234,22 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                     ]
                 );
             }
-
         }
+        if ($idProposta == 278920) {
+            print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado) . on teste = $sqlDiligencia, $diligencia->DtInicioDiligencia";
+            die;
+        }
+//        if ($idProposta == 278920){
+//            x("diasAnalise = $diasEmAnalise" );
+//            x("dias em Diligencia= $diasEmDiligencia");
+//            x($diasArquivado);
+//            x("idProposta = $idProposta");
+//        x($diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado));
+//            die;
+//    }
 
-        $diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);
-
-        return abs($diasEmAnalise);
+            $diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);
+            return ($diasEmAnalise);
     }
 
     public function obterPropostasParaAvaliacao(
