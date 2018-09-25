@@ -97,13 +97,22 @@ export const redirectLinkAvaliacaoResultadoTipo = ({ commit }, params) => {
     } else {
         commit(types.LINK_REDIRECIONAMENTO_TIPO_AVALIACAO_RESULTADO, `/prestacao-contas/prestacao-contas/amostragem/idPronac/${params.idPronac}/tipoAvaliacao/${params.percentual}`);
     }
+};
 
-export const encaminharParaTecnico = ({ commit }, params) =>
-    avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+export const planilha = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.planilha(params)
+        .then((response) => {
+            const planilha = response.data;
+            commit(types.GET_PLANILHA, planilha);
+        });
+};
 
 export const finalizarParecer = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.finalizarParecer(params)
         .then(() => {
         });
 };
+
+export const encaminharParaTecnico = ({ commit }, params) =>
+    avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
 

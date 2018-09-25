@@ -13,12 +13,14 @@
                 <v-btn color="success" to="#">CONSOLIDAÇÃO</v-btn>
             </v-card-actions>
         </v-card>
-
-        <v-card class="mt-3" flat="true">
+        <v-card class="mt-3" flat>
             <!-- PRODUTO -->
-            <v-expansion-panel value="true">
+            <v-expansion-panel
+                expand
+                v-if="this.getPlanilha != undefined && Object.keys(this.getPlanilha)"
+            >
                 <v-expansion-panel-content
-                    v-for="(produto,i) in produtos"
+                    v-for="(produto,i) in getPlanilha"
                     :key="i"
                 >
                     <v-layout slot="header" class="green--text">
@@ -26,7 +28,9 @@
                         {{ produto.produto }}
                     </v-layout>
                         <!-- ETAPA -->
-                        <v-expansion-panel class="pl-3 elevation-0" value="true">
+                        <v-expansion-panel class="pl-3 elevation-0"
+                            expand
+                        >
                             <v-expansion-panel-content
                                 v-for="(etapa,i) in produto.etapa"
                                 :key="i"
@@ -36,7 +40,10 @@
                                     {{ etapa.etapa }}
                                 </v-layout>
                                 <!-- UF -->
-                                <v-expansion-panel class="pl-3 elevation-0" value="true">
+                                <v-expansion-panel
+                                    class="pl-3 elevation-0"
+                                    expand
+                                >
                                     <v-expansion-panel-content
                                         v-for="(uf,i) in etapa.UF"
                                         :key="i"
@@ -46,7 +53,10 @@
                                             {{ uf.Uf }}
                                         </v-layout>
                                         <!-- CIDADE -->
-                                        <v-expansion-panel class="pl-3 elevation-0" value="true">
+                                        <v-expansion-panel
+                                            class="pl-3 elevation-0"
+                                            expand
+                                        >
                                             <v-expansion-panel-content
                                                 v-for="(cidade,i) in uf.cidade"
                                                 :key="i"
@@ -87,7 +97,6 @@
                                 </v-expansion-panel>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
-                    </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-card>
@@ -181,8 +190,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import ModalTemplate from '@/components/modal';
+    import { mapActions, mapGetters } from 'vuex';
+    import ModalTemplate from '@/components/modal';
 
     export default {
         name: 'Painel',
@@ -229,6 +238,5 @@ import ModalTemplate from '@/components/modal';
                 return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
             },
         },
-    },
-};
+    };
 </script>
