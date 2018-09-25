@@ -185,15 +185,6 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
         $diligenciaAberta = false;
         $diasEmDiligencia = 0;
 
-        if ($idProposta == 278920) {
-           // print $diasArquivado;
-            //die;
-//print_r($diligencias);
-//            print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);";
-            //die;
-        }
-           // print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);";die;
-
         foreach ($diligencias as $diligencia) {
             if ($diligencia->DtFimDiligencia == '' || !$diligencia->DtFimDiligencia) {
                 if ($diligenciaAberta) {
@@ -220,21 +211,10 @@ class Admissibilidade_Model_DbTable_VwPainelAvaliarPropostas extends MinC_Db_Tab
                 );
             }
         }
-        // if ($idProposta == 278920) {
-        //     print "$diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado) . on teste = $sqlDiligencia, $diligencia->DtInicioDiligencia";
-        //     die;
-        // }
-//        if ($idProposta == 278920){
-//            x("diasAnalise = $diasEmAnalise" );
-//            x("dias em Diligencia= $diasEmDiligencia");
-//            x($diasArquivado);
-//            x("idProposta = $idProposta");
-//        x($diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado));
-//            die;
-//    }
 
-            $diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);
-            return ($diasEmAnalise);
+        $diasEmAnalise = ($diasEmAnalise - $diasEmDiligencia - $diasArquivado);
+
+        return ($diasEmAnalise);
     }
 
     public function obterPropostasParaAvaliacao(
