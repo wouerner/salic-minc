@@ -213,6 +213,7 @@
                     todos: 'TODOS',
                 },
                 fab: false,
+                idPronac: this.$route.params.id,
             };
         },
         computed: {
@@ -220,11 +221,8 @@
                 getPlanilha: 'avaliacaoResultados/planilha',
             }),
         },
-        props: {
-            idpronac: '132451',
-        },
         mounted() {
-            this.setPlanilha();
+            this.setPlanilha(this.idPronac);
         },
         components: {
             ModalTemplate,
