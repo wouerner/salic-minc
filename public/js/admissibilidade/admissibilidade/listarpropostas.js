@@ -89,6 +89,7 @@ function obterColunasListagem () {
     colunas.push({
         'data': 'diasCorridos',
         'name': 'diasCorridos',
+        'bSortable': false,
         'render': function(data, type, row) {
             if (data < 0) {
                 return '<strong>PD</strong>';
