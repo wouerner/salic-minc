@@ -101,3 +101,9 @@ export const redirectLinkAvaliacaoResultadoTipo = ({ commit }, params) => {
 export const encaminharParaTecnico = ({ commit }, params) =>
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
 
+export const finalizarParecer = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.finalizarParecer(params)
+        .then(() => {
+        });
+};
+
