@@ -114,9 +114,6 @@ class DocumentoAssinatura implements \MinC\Assinatura\Servico\IDocumentoAssinatu
                 $view->posicionamentoTecnico = 'Aprova&ccedil;&atilde;o com Ressalva';
                 break;
         };
-var_dump($dadosAvaliacaoFinanceira);
-        echo $view->render('documento-assinatura.phtml');
-        die;
 
         return $view->render('documento-assinatura.phtml');
     }
