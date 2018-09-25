@@ -28,7 +28,7 @@
                     <v-container grid-list-sm>
                         <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
-                                <p><b>Projeto:</b> {{projeto.IdPRONAC}} -  {{projeto.NomeProjeto}}</p>
+                                <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</p>
                             </v-flex>
                             <v-flex xs12 sm12 md12>
                                 <p><b>Proponente:</b> {{proponente.CgcCpf}} - {{proponente.Nome}}</p>
@@ -180,7 +180,6 @@
                 requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
                 salvar: 'avaliacaoResultados/salvarParecer',
                 finalizar: 'avaliacaoResultados/finalizarParecer',
-
             }),
             fecharModal() {
                 this.modalClose();
