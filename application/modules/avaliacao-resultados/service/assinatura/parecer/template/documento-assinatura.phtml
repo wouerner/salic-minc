@@ -8,7 +8,9 @@
             MINIST&Eacute;RIO DA CULTURA
         </div>
         <div class="center-align" style="font-size: 23px; color: black;">
-            <?php echo $view->secretaria ?>
+<!--         <?php //echo $view->secretaria ?>   -->
+            SECRETARIA
+
         </div>
     </div>
     <div class="col s1"></div>
@@ -46,7 +48,7 @@
         <label style="color: black">CNPJ / CPF</label>
         <p class="bold padding10 bordered">
             <?php
-            echo Mascara::addMaskCpfCnpj($this->projeto['CgcCpf']);;
+            echo Mascara::addMaskCpfCnpj($this->proponente['CgcCpf']);;
             ?>
         </p>
     </div>
@@ -55,11 +57,47 @@
         <br/>
         <p class="bold padding10 bordered">
             <?php
-            echo $this->nomeAgente;
+            echo $this->proponente['Nome'];
             ?>
         </p>
     </div>
     <div class="col s1"></div>
+</div>
+
+<div class="row">
+    <h2 class="col s10 center-align"> Quantidade de Comprovantes</h2>
+    <div style="display: table;">
+        <div style="display: table-row;">
+            <div style="display: table-cell;"><strong>Total</strong></div>
+            <div style="display: table-cell;"><strong>Validados</strong></div>
+            <div style="display: table-cell;"><strong>Recusados</strong></div>
+            <div style="display: table-cell;"><strong>Não Avaliados</strong></div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell;"><?php echo $this->consolidacao['qtTotalComprovante']; ?> </div>
+            <div style="display: table-cell;"><?php echo $this->consolidacao['qtComprovantesValidadosProjeto']; ?> </div>
+            <div style="display: table-cell;"><?php echo $this->consolidacao['qtComprovantesRecusadosProjeto']; ?> </div>
+            <div style="display: table-cell;"><?php echo $this->consolidacao['qtComprovantesNaoAvaliados']; ?> </div>
+        </div>
+    </div>
+
+    <h2> Valores Comprovados</h2>
+    <div style="display: table;">
+        <div style="display: table-row;">
+            <div style="display: table-cell;"><strong>Total</strong></div>
+            <div style="display: table-cell;"><strong>Validados</strong></div>
+            <div style="display: table-cell;"><strong>Recusados</strong></div>
+<!--            <div style="display: table-cell;"><strong>Não Avaliados</strong></div>-->
+            <div style="display: table-cell;"><strong>Não Comprovados</strong></div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell;"><?php echo Mascara::addMaskMoeda($this->consolidacao['vlComprovadoProjeto']); ?> </div>
+            <div style="display: table-cell;"><?php echo Mascara::addMaskMoeda($this->consolidacao['vlComprovadoValidado']); ?> </div>
+            <div style="display: table-cell;"><?php echo Mascara::addMaskMoeda($this->consolidacao['vlComprovadoRecusado']); ?> </div>
+<!--            <div style="display: table-cell;">--><?php //echo $this->consolidacao['']; ?><!-- </div>-->
+            <div style="display: table-cell;"><?php echo Mascara::addMaskMoeda($this->consolidacao['vlNaoComprovado']); ?> </div>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="col s1"></div>
@@ -78,11 +116,11 @@
 <div class="row">
     <div class="col s1"></div>
     <div class="col s10">
-        <label style="color: black">Parecer T&eacute;cnico:</label>
+        <label style="color: black">Manifesta&ccedil;&atilde;o:</label>
         <br />
         <div class="bold padding10 bordered">
             <?php
-            echo $this->parecer;
+            echo $this->parecer['dsParecer'];
             ?>
         </div>
     </div>
