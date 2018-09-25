@@ -26,7 +26,6 @@ export const criarParecer = (params) => {
     const parametro = params.idPronac;
     delete params.idPronac;
     const data = params;
-    console.log(params);
 
     return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
 };

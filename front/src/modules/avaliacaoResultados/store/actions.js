@@ -37,7 +37,7 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
     return p;
 };
 
-export const salvarParecer = (params) => {
+export const salvarParecer = ({ commit }, params) => {
     const p = new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.criarParecer(params)
             .then(() => {

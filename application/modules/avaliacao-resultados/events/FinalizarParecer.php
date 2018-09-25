@@ -1,6 +1,7 @@
 <?php
 
 use Application\Modules\AvaliacaoResultados\Service\Encaminhar\AvaliacaoFinanceira as EncaminharAvaliacaoService;
+use Application\Modules\AvaliacaoResultados\Service\Assinatura\Parecer\DocumentoAssinatura as DocumentoAssinaturaService;
 
 class AvaliacaoResultados_Events_FinalizarParecer
 {
@@ -19,7 +20,7 @@ class AvaliacaoResultados_Events_FinalizarParecer
 
     public function attach() {
         /* $this->events->attach('run', $this->alterarSituacaoProjeto()); */
-        /* $this->events->attach('run', $this->salvarEncaminhamento()); */
+        $this->events->attach('run', $this->iniciarAssinatura());
         $this->events->attach('run', $this->alterarEstado());
     }
 
@@ -48,6 +49,16 @@ class AvaliacaoResultados_Events_FinalizarParecer
             $mapper->save($model);
 
             echo ' alterarEstado || ';
+        };
+    }
+
+    public function iniciarAssinatura() {
+        return function($t) {
+            $params = $t->getParams();
+
+            $assinatura = new DocumentoAssinaturaService($params['idPronac'], 622);
+            $idDocumentoAssinatura = $assinatura->iniciarFluxo();
+
         };
     }
 }
