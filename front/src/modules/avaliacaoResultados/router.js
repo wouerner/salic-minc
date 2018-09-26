@@ -9,6 +9,7 @@ import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
 import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
+import Laudo from './components/Laudo';
 
 Vue.use(Router);
 
@@ -91,6 +92,14 @@ const routes = [
         component: Painel,
         meta: {
             title: 'Painel',
+        },
+    },
+    {
+        path: '/laudo',
+        name: 'Laudo',
+        component: Laudo,
+        meta: {
+            title: 'Laudo Final de Avaliação de Resultados',
         },
     },
 ];
