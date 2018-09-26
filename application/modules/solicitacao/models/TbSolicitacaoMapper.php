@@ -95,13 +95,16 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 $model->setDtSolicitacao(date('Y-m-d h:i:s'));
                 $model->setIdOrgao($arrData['idOrgao']);
                 $model->setIdAgente($arrData['idAgente']);
-                $model->setDsSolicitacao($arrData['dsSolicitacao']);
                 $model->setStEstado(Solicitacao_Model_TbSolicitacao::ESTADO_ATIVO);
                 $model->setIdPronac($arrData['idPronac']);
                 $model->setIdProjeto($arrData['idProjeto']);
                 $model->setIdTecnico($arrData['idTecnico']);
                 $model->setIdSolicitante($arrData['idUsuario']);
                 $model->setDtEncaminhamento(date('Y-m-d h:i:s'));
+
+                if (!empty($arrData['dsSolicitacao'])) {
+                    $model->setDsSolicitacao($arrData['dsSolicitacao']);
+                }
 
                 $mensagemSucesso = "Solicita&ccedil;&atilde;o enviada com sucesso!";
                 $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC);
@@ -153,10 +156,13 @@ class Solicitacao_Model_TbSolicitacaoMapper extends MinC_Db_Mapper
                 $model = new Solicitacao_Model_TbSolicitacao();
                 $model->setIdSolicitacao($arrData['idSolicitacao']);
                 $model->setDtResposta(date('Y-m-d h:i:s'));
-                $model->setDsResposta($arrData['dsResposta']);
                 $model->setIdTecnico($this->_idUsuario);
                 $model->setSiEncaminhamento(Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_FINALIZADA_MINC);
                 $model->setStEstado(0);
+
+                if (!empty($arrData['dsResposta'])) {
+                    $model->setdsResposta($arrData['dsResposta']);
+                }
 
                 $file = new Zend_File_Transfer();
 
