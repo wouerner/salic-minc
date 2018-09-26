@@ -9,7 +9,7 @@
   },
   "scripts": {
     "pre-push-action": "sh git_hooks/pre-push.sh",
-    "prepare-commit-msg-action": "sh git_hooks/prepare-commit-msg.sh",
+    "prepare-commit-msg-action": "bash git_hooks/prepare-commit-msg.sh",
     "watch": "webpack --watch --config front/build/webpack.watch.conf.js",
     "dev": "webpack-dev-server --inline --progress --config front/build/webpack.dev.conf.js",
     "build": "node front/build/build.js",
