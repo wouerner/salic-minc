@@ -114,16 +114,16 @@
                     tecnicos: ['Foo', 'Bar', 'Fizz', 'Buzz']
                 },
                 rules: {
-                    required: v => !!v
+                    required: v => !!v,
                 },
                 destinatarioEncaminhamento: null,
                 justificativa: null,
-                form: null
-            }
+                form: null,
+            };
         },
         watch: {
             dialog: function (val) {
-                if(!val) this.$refs.form.reset()
+                if(!val) this.$refs.form.reset();
             },
         },
         components: {
