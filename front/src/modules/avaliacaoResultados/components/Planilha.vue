@@ -82,7 +82,7 @@
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
-                                                                    <td>
+                                                                    <td v-if="props.item.stItemAvaliado">
                                                                         <v-btn
                                                                             :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
                                                                             replace
@@ -94,6 +94,7 @@
                                                                                 <v-icon>gavel</v-icon>
                                                                         </v-btn>
                                                                     </td>
+                                                                    <td v-else>Sem comprovantes</td>
                                                                 </template>
                                                             </v-data-table>
                                                         </v-tab-item>
