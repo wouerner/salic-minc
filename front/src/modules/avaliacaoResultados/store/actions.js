@@ -40,7 +40,8 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
 export const salvarParecer = ({ commit }, params) => {
     const p = new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.criarParecer(params)
-            .then(() => {
+            .then((response) => {
+                console.log(response.data);
                 resolve();
             });
     });
@@ -115,4 +116,8 @@ export const finalizarParecer = ({ commit }, params) => {
 
 export const encaminharParaTecnico = ({ commit }, params) =>
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+
+export const alterarParecer = ({ commit }, param) => {
+    commit(types.SET_PARECER, param);
+};
 

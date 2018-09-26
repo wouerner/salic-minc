@@ -14,12 +14,14 @@
                             <v-btn dark flat 
                                 @click.native="salvarParecer()" 
                                 :disabled="!valid"
+                                :href="redirectLink"
                             >
                                 Salvar
                             </v-btn>
                             <v-btn dark flat
                                 @click.native="finalizarParecer()"
                                 :disabled="!valid"
+                                :href="redirectLink"
                             >
                                 Finalizar
                             </v-btn>
@@ -100,7 +102,8 @@
                         <v-layout wrap align-center>
                             <v-flex>
                                 <v-select height="20px"
-                                          v-model="parecerData.siManifestacao"
+                                          :value="getParecer.siManifestacao"
+                                          @input="inputManifestacao($event)"
                                           :rules="itemRules"
                                           :items="items"
                                           item-text="text"
@@ -113,7 +116,8 @@
                         </v-layout>
                         <v-flex>
                             <v-textarea
-                                v-model="parecerData.dsParecer"
+                                :value="getParecer.dsParecer"
+                                @input="inputParecer($event)"
                                 :rules="parecerRules"
                                 color="deep-purple"
                                 label="Parecer *"
@@ -162,10 +166,7 @@
                         text: 'Aprovação com Ressalva',
                     },
                 ],
-                parecerData: {
-                    siManifestacao: null,
-                    dsParecer: null,
-                },
+                parecerData: { },
             };
         },
         components:
@@ -180,6 +181,7 @@
                 requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
                 salvar: 'avaliacaoResultados/salvarParecer',
                 finalizar: 'avaliacaoResultados/finalizarParecer',
+                alterarParecer: 'avaliacaoResultados/alterarParecer',
             }),
             fecharModal() {
                 this.modalClose();
@@ -188,12 +190,24 @@
                 this.requestEmissaoParecer(id);
             },
             salvarParecer() {
-                const data = {
+                let data = {
                     idPronac: this.idPronac,
                     tpAvaliacaoFinanceira: this.tipo,
-                    siManifestacao: this.parecerData.siManifestacao,
-                    dsParecer: this.parecerData.dsParecer,
+                    siManifestacao: this.getParecer.siManifestacao,
+                    dsParecer: this.getParecer.dsParecer,
                 };
+
+                if (this.parecer.idAvaliacaoFinanceira) {
+                    data.idAvaliacaoFinanceira = this.parecer.idAvaliacaoFinanceira;
+                }
+
+                if (this.parecerData.siManifestacao) {
+                    data.siManifestacao = this.parecerData.siManifestacao;
+                }
+
+                if (this.parecerData.dsParecer) {
+                    data.dsParecer = this.parecerData.dsParecer;
+                }
 
                 this.salvar(data);
                 /** Descomentar linha após migração da lista para o VUEJS */
@@ -210,6 +224,12 @@
                 };
                 this.finalizar(data);
             },
+            inputParecer(e) {
+                this.parecerData.dsParecer = e;
+            },
+            inputManifestacao(e) {
+                this.parecerData.siManifestacao = e;
+            },
         },
         computed:
         {
@@ -219,6 +239,7 @@
                 proponente: 'avaliacaoResultados/proponente',
                 parecer: 'avaliacaoResultados/parecer',
                 projeto: 'avaliacaoResultados/projeto',
+                getParecer: 'avaliacaoResultados/parecer',
             }),
         },
         mounted() {
