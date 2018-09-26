@@ -12,8 +12,12 @@
                         <v-toolbar-title>Avaliação Financeira - Emissão de Parecer</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="salvarParecer" :disabled="!valid">Salvar</v-btn>
-                            <!--dialog = false -->
+                            <v-btn dark flat @click.native="salvarParecer()" :href="redirectLink" :disabled="!valid">Salvar</v-btn>
+                            <v-btn dark flat
+                                   @click.native="finalizarParecer()"
+                                   :disabled="!valid">
+                                Finalizar
+                            </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
 
@@ -124,13 +128,12 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
     import ModalTemplate from '@/components/modal';
 
     export default {
         name: 'UpdateBar',
-        data()
-        {
+        data() {
             return {
                 tipo: true,
                 idPronac: this.$route.params.id,
@@ -138,25 +141,25 @@
                 valid: false,
                 dialog: true,
                 itemRules: [
-                    v => !!v || 'Tipo de manifestação e obrigatório!'
+                    v => !!v || 'Tipo de manifestação e obrigatório!',
                 ],
                 parecerRules: [
                     v => !!v || 'Parecer e obrigatório!',
-                    v => v.length >= 10 || 'Parecer deve conter mais que 10 characters'
+                    v => v.length >= 10 || 'Parecer deve conter mais que 10 characters',
                 ],
                 items: [
                     {
-                        id: "R",
-                        text: "Reprovação"
+                        id: 'R',
+                        text: 'Reprovação',
                     },
                     {
-                        id: "A",
-                        text: "Aprovação"
+                        id: 'A',
+                        text: 'Aprovação',
                     },
                     {
-                        id : "P",
-                        text: "Aprovação com Ressalva"
-                    }
+                        id: 'P',
+                        text: 'Aprovação com Ressalva',
+                    },
                 ],
             };
         },
@@ -171,21 +174,36 @@
                     modalClose: 'modal/modalClose',
                     requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
                     salvar: 'avaliacaoResultados/salvarParecer',
+                    finalizar: 'avaliacaoResultados/finalizarParecer',
 
                 }),
-                fecharModal()
-                {
+                fecharModal() {
                     this.modalClose();
                 },
-                getConsolidacao(id)
-                {
+                getConsolidacao(id) {
                     this.requestEmissaoParecer(id);
                 },
-                salvarParecer(){
-                   const data = {idPronac:this.idPronac, tpAvaliacaoFinanceira: this.tipo, siManifestacao:this.parecer.siManifestacao , dsParecer:this.parecer.dsParecer };
+                salvarParecer() {
+                    const data = {
+                        idPronac: this.idPronac,
+                        tpAvaliacaoFinanceira: this.tipo,
+                        siManifestacao: this.parecer.siManifestacao,
+                        dsParecer: this.parecer.dsParecer };
                     this.salvar(data);
-                    this.dialog = false;
-                }
+                    /** Descomentar linha após migração da lista para o VUEJS */
+                    // this.dialog = false;
+                },
+                finalizarParecer() {
+                    const data = {
+                        idPronac: this.idPronac,
+                        tpAvaliacaoFinanceira: this.tipo,
+                        siManifestacao: this.parecer.siManifestacao,
+                        dsParecer: this.parecer.dsParecer,
+                        atual: 5,
+                        proximo: 6,
+                    };
+                    this.finalizar(data);
+                },
             },
         computed:
             {
@@ -197,8 +215,7 @@
                     projeto: 'avaliacaoResultados/projeto',
                 }),
             },
-        mounted()
-        {
+        mounted() {
             this.redirectLink = this.redirectLink + this.idPronac;
             this.getConsolidacao(this.idPronac);
         },

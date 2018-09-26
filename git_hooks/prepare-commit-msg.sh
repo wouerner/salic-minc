@@ -1,6 +1,5 @@
 if [ -e .git/MERGE_MSG ]; then
 	MERGE_INTO_HMG=$(cat .git/MERGE_MSG | grep "Merge branch 'hmg' into $(git branch | grep \* | cut -d ' ' -f2)")
-	cat .git/MERGE_MSG
 	echo "Merge branch 'hmg' into $(git branch | grep \* | cut -d ' ' -f2)"
 
 	if [ -n MERGE_INTO_HMG ]; then
