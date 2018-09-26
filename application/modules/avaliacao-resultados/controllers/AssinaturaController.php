@@ -20,9 +20,6 @@ class AvaliacaoResultados_AssinaturaController extends MinC_Controller_Rest_Abst
 
     public function indexAction()
     {
-        var_dump(new DocumentoAssinaturaService());
-        /* var_dump($idPronac); */
-        die;
     }
 
     public function getAction()
