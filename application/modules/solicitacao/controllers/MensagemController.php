@@ -89,7 +89,12 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         # Proponente
         if (isset($this->usuario['cpf'])) {
-            $where["(a.idAgente = {$this->idAgente} OR a.idSolicitante = {$this->idUsuario})"] = '';
+
+            if (!empty($this->idAgente)) {
+                $whereAgente =  "OR a.idAgente = {$this->idAgente}";
+            }
+
+            $where["(a.idSolicitante = {$this->idUsuario} {$whereAgente})"] = '';
         }
 
         # funcionarios do minc
