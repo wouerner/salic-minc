@@ -142,12 +142,10 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
         ];
 
         $tbRecursoMapper = new Recurso_Model_TbRecursoMapper();
-        $projeto = $tbRecursoMapper->obterProjetoPassivelDeRecurso($idPronac, null, 2);
-
-        if ($this->isValorHomologadoDiferenteDoValorAdequado($idPronac) && !empty($projeto)) {
+        if ($this->isValorHomologadoDiferenteDoValorAdequado($idPronac)
+            && $tbRecursoMapper->isProjetoComDireitoARecursoPorFase($idPronac, 2)) {
             $situacao['codigo'] = Projeto_Model_Situacao::PROJETO_HOMOLOGADO;
             $situacao['mensagem'] = "Aguardando a supera&ccedil;&atilde;o do prazo recursal.";
-
         }
 
         return $situacao;

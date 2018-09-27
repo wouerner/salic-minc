@@ -12,7 +12,41 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
         return parent::save($model);
     }
 
-    public function obterProjetoPassivelDeRecurso($idPronac, $cpfCnpj = null, $siFaseProjeto = null)
+    public function isProjetoComDireitoARecursoPorFase($idPronac, $siFaseRecursoProjeto)
+    {
+        try {
+            if (empty($idPronac)) {
+                throw new Exception("IdPronac n&atilde;o informado");
+            }
+
+            $recurso = $this->obterRecursoJaCadastradoPorFase($idPronac, $siFaseRecursoProjeto);
+
+            if ($recurso && !$this->isDireitoASegundoRecurso($recurso)) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception $objException) {
+            throw $objException;
+        }
+    }
+
+    public function obterRecursoJaCadastradoPorFase($idPronac, $siFaseRecursoProjeto)
+    {
+        try {
+            $tbRecurso = new tbRecurso();
+            $recurso = $tbRecurso->buscar([
+                'IdPRONAC = ?' => $idPronac,
+                'siFaseProjeto = ?' => $siFaseRecursoProjeto
+            ], ['idRecurso DESC'])->current();
+
+            return ($recurso) ? $recurso->toArray() : false;
+        } catch (Exception $objException) {
+            throw $objException;
+        }
+    }
+
+    public function obterProjetoPassivelDeRecurso($idPronac, $cpfCnpj = null, $siFaseRecursoProjeto = null)
     {
         try {
             if (empty($idPronac)) {
@@ -23,7 +57,7 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
             $whereProjeto['projeto.IdPRONAC = ?'] = $idPronac;
 
             if ($cpfCnpj) {
-                $whereProjeto['projeto.CgcCpf = ?'] = $idPronac;
+                $whereProjeto['projeto.CgcCpf = ?'] = $cpfCnpj;
             }
 
             $dbTableProjetos = new Projeto_Model_DbTable_Projetos();
@@ -33,52 +67,68 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
                 throw new Exception("Projeto n&atilde;o encontrado");
             }
 
+            $dadosRecurso = $this->obterDadosDoRecurso($projeto, $siFaseRecursoProjeto);
 
-            if (empty($siFaseProjeto)) {
-
-                if (!$this->isProjetoEmSituacaoDeRecurso($projeto)) {
-                    return false;
-                }
-
-                $siFaseProjeto = $this->obterFaseRecurso($projeto['situacao']);
-
-            }
-
-            $dados = [];
-            $dados['siFaseProjeto'] = $siFaseProjeto;
-
-            $tbRecurso = new tbRecurso();
-            $recurso = $tbRecurso->buscar([
-                'IdPRONAC = ?' => $projeto['idPronac'],
-                'siFaseProjeto = ?' => $dados['siFaseProjeto']
-            ], ['idRecurso DESC'])->current();
-
-            if (!empty($recurso)) {
-                if ($recurso['stEstado'] == Recurso_Model_TbRecurso::SITUACAO_RECURSO_ATIVO
-                    || $recurso['tpRecurso'] == Recurso_Model_TbRecurso::RECURSO
-                    || $recurso['tpSolicitacao'] == Recurso_Model_TbRecurso::TIPO_RECURSO_DESISTENCIA_DO_PRAZO_RECURSAL) {
-                    return false;
-                }
-                $recurso = $recurso->toArray();
-            }
-
-            $dados['prazoRecurso'] = $this->obterPrazoDoRecurso($projeto, $recurso);
-
-            if ($dados['prazoRecurso'] <= 0) {
+            if (empty($dadosRecurso)) {
                 return false;
             }
 
-            $dados['tpSolicitacao'] = $this->obterTipoDaSolicitacao($projeto['situacao']);
-            $dados['tpRecurso'] = $this->obterTipoRecurso($recurso);
-
-            return array_merge($projeto, $dados);
+            return array_merge($projeto, $dadosRecurso);
         } catch (Exception $objException) {
             throw $objException;
         }
     }
 
-    public function obterFaseRecurso($situacao)
+    public function obterDadosDoRecurso($projeto, $siFaseRecursoProjeto = null)
     {
+        if (empty($siFaseRecursoProjeto)) {
+            $siFaseRecursoProjeto = $this->obterFaseRecursoPorSituacao($projeto['situacao']);
+        }
+
+        if (empty($siFaseRecursoProjeto)) {
+            return false;
+        }
+
+        $dadosRecurso['siFaseProjeto'] = $siFaseRecursoProjeto;
+
+        $recurso = $this->obterRecursoJaCadastradoPorFase($projeto['idPronac'], $siFaseRecursoProjeto);
+
+        $dadosRecurso['prazoRecurso'] = $this->obterPrazoPrimeiroRecurso($projeto);
+
+        if (!empty($recurso)) {
+            if (!$this->isDireitoASegundoRecurso($recurso)) {
+                return false;
+            }
+            $dadosRecurso['prazoRecurso'] = $this->obterPrazoSegundoRecurso($recurso);
+        }
+
+        if ($dadosRecurso['prazoRecurso'] <= 0) {
+            return false;
+        }
+
+        $dadosRecurso['tpSolicitacao'] = $this->obterTipoDaSolicitacao($projeto['situacao']);
+        $dadosRecurso['tpRecurso'] = $this->obterTipoRecurso($recurso);
+
+        return $dadosRecurso;
+    }
+
+    public function isDireitoASegundoRecurso($recurso)
+    {
+        if ($recurso['stEstado'] == Recurso_Model_TbRecurso::SITUACAO_RECURSO_ATIVO
+            || $recurso['tpRecurso'] == Recurso_Model_TbRecurso::RECURSO
+            || $recurso['tpSolicitacao'] == Recurso_Model_TbRecurso::TIPO_RECURSO_DESISTENCIA_DO_PRAZO_RECURSAL) {
+            return false;
+        }
+
+        return ($this->obterPrazoSegundoRecurso($recurso) > 0);
+    }
+
+    public function obterFaseRecursoPorSituacao($situacao)
+    {
+        if (!$this->isSituacaoDeRecurso($situacao)) {
+            return false;
+        }
+
         if (in_array($situacao, Recurso_Model_TbRecurso::obterSituacoesPassiveisDeRecursoFase2())) {
             return Recurso_Model_TbRecurso::FASE_HOMOLOGACAO;
         }
@@ -100,13 +150,9 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
         return $tipoSolicitacao;
     }
 
-    public function obterPrazoDoRecurso($projeto, $recurso = null)
+    public function obterPrazoPrimeiroRecurso($projeto)
     {
         $prazoRecursal = Recurso_Model_TbRecurso::PRAZO_RECURSAL - (int)$projeto['diasSituacao'];
-
-        if ($recurso && !empty($recurso['dtAvaliacao'])) {
-            $prazoRecursal = Recurso_Model_TbRecurso::PRAZO_RECURSAL - Data::datadiff($recurso['dtAvaliacao'], 'now');
-        }
 
         if (in_array($projeto['situacao'], Recurso_Model_TbRecurso::SITUACOES_RECURSO_PROJETO_INDEFERIDO)) {
             $tbReuniao = new tbreuniao();
@@ -115,6 +161,15 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
         }
 
         return $prazoRecursal;
+    }
+
+    public function obterPrazoSegundoRecurso($recurso)
+    {
+        if (empty($recurso['dtAvaliacao'])) {
+            return false;
+        }
+
+        return $dadosRecurso['prazoRecurso'] = Recurso_Model_TbRecurso::PRAZO_RECURSAL - Data::datadiff($recurso['dtAvaliacao'], 'now');
     }
 
     public function obterTipoRecurso($recurso)
@@ -126,12 +181,9 @@ class Recurso_Model_TbRecursoMapper extends MinC_Db_Mapper
         return Recurso_Model_TbRecurso::PEDIDO_DE_RECONSIDERACAO;
     }
 
-    public function isProjetoEmSituacaoDeRecurso($projeto)
+    public function isSituacaoDeRecurso($situacao)
     {
-        if (in_array(
-            $projeto['situacao'],
-            Recurso_Model_TbRecurso::obterSituacoesPassiveisDeRecurso())
-        ) {
+        if (in_array($situacao, Recurso_Model_TbRecurso::obterSituacoesPassiveisDeRecurso())) {
             return true;
         }
 
