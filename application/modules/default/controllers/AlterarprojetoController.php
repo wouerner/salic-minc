@@ -135,7 +135,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
                 $this->view->qtdDirigentes = $qtdDirigentes;
                 $this->view->parecerista = $this->getParecerista;
                 $this->view->pronac = $pronac;
-                //$this->view->idpronac = $_REQUEST['pronac'];
                 $this->view->id = $this->idAgente;
             }
         }
@@ -873,9 +872,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
         } else {
             parent::message("PRONAC n&atilde;o localizado!", "Alterarprojeto/consultarprojeto", "ALERT");
         }
-//        if ($listaparecer[0]->Orgao != $this->codOrgao) {
-//            parent::message("Usu&aacute;rio sem autoriza&ccedil;&atilde;o no org&atilde;o do projeto!", "Alterarprojeto/consultarprojeto", "ALERT");
-//        }
     }
 
     public function situacaoAction()
@@ -916,9 +912,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
         } else {
             parent::message("Dados obrigat&oacute;rios n&atilde;o informados", "alterarprojeto/consultarprojeto", "ERROR");
         }
-//        if ($dadosprojeto[0]->Orgao != $this->codOrgao && $this->codGrupo != 125 && $this->codGrupo != 126) {
-//            parent::message("Usu&aacute;rio sem autoriza&ccedil;&atilde;o no org&atilde;o do projeto", "alterarprojeto/consultarprojeto", "ERROR");
-//        }
     }
 
     public function imprimirsituacaoAction()
@@ -957,9 +950,6 @@ class AlterarprojetoController extends MinC_Controller_Action_Abstract
         } else {
             parent::message("Dados obrigat&oacute;rios n&atilde;o informados", "alterarprojeto/consultarprojeto", "ERROR");
         }
-//        if ($dadosprojeto[0]->Orgao != $this->codOrgao && $this->codGrupo != 125 && $this->codGrupo != 126) {
-//            parent::message("Usu&aacute;rio sem autoriza&ccedil;&atilde;o no org&atilde;o do projeto", "alterarprojeto/consultarprojeto", "ERROR");
-//        }
         $this->_helper->layout->disableLayout();// Desabilita o Zend Layout
     }
 
