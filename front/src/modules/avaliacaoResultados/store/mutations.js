@@ -85,4 +85,7 @@ export const mutations = {
     [types.GET_PLANILHA](state, planilha) {
         state.planilha = planilha;
     },
+    [types.SET_PARECER](state, parecer) {
+        state.parecer = parecer;
+    },
 };
