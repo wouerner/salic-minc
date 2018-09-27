@@ -126,7 +126,7 @@
                 </tr>
             </table>
         </v-card>
-        
+
         <v-speed-dial
             v-model="fab"
             bottom
