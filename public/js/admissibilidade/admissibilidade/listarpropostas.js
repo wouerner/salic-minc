@@ -41,7 +41,8 @@
                     && data.tipo_recurso == "-"
                 ) {
                         $(row).addClass('green lighten-5')
-                    } else if (data.tipo_recurso != '-' || data.isRecursoDesistidoDePrazoRecursal || data.isRecursoExpirou10dias){
+                    } else if (
+			(data.tipo_recurso != '-' && data.prazo_recursal == 0) || data.isRecursoDesistidoDePrazoRecursal || data.isRecursoExpirou10dias){
                         $(row).addClass('blue lighten-5')
                     }
                 },
@@ -86,8 +87,15 @@ function obterColunasListagem () {
         'data': 'DtMovimentacao'
     })
     colunas.push({
+        'data': 'diasCorridos',
         'name': 'diasCorridos',
-        'data': 'diasCorridos'
+        'bSortable': false,
+        'render': function(data, type, row) {
+            if (data < 0) {
+                return '<strong>PD</strong>';
+            }
+            return data;
+        }
     })
     if ($('#perfil_atual').val() != $('#perfil_componente_comissao').val()) {
         colunas.push({

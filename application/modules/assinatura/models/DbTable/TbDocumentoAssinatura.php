@@ -310,8 +310,34 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $objQuery->joinInner(
             ["Verificacao" => "Verificacao"],
             "(tbDocumentoAssinatura.idTipoDoAtoAdministrativo = Verificacao.idVerificacao)",
+            [],
+            $this->_schema
+        );
+
+        $objQuery->joinLeft(
+            ["tbReadequacaoXParecer" => "tbReadequacaoXParecer"],
+            "(tbReadequacaoXParecer.idParecer = tbDocumentoAssinatura.idAtoDeGestao)",
+            [],
+            $this->_schema
+        );
+
+        $objQuery->joinLeft(
+            ["tbReadequacao" => "tbReadequacao"],
+            "(tbReadequacao.idReadequacao = tbReadequacaoXParecer.idReadequacao)",
+            [],
+            $this->_schema
+        );
+
+        $objQuery->joinLeft(
+            ["tbTipoReadequacao" => "tbTipoReadequacao"],
+            "(tbTipoReadequacao.idTipoReadequacao = tbReadequacao.idTipoReadequacao)",
             [
-                'Verificacao.Descricao as dsAtoAdministrativo'
+                "dsAtoAdministrativo" => new Zend_Db_Expr("CASE WHEN tbDocumentoAssinatura.idTipoDoAtoAdministrativo IN(" .
+                                                         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS . "," .
+                                                         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO . "," .
+                                                         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC . ")
+                                                               THEN Verificacao.Descricao + ' - ' + tbTipoReadequacao.dsReadequacao 
+                                                               ELSE Verificacao.Descricao END")
             ],
             $this->_schema
         );
@@ -319,28 +345,50 @@ class Assinatura_Model_DbTable_TbDocumentoAssinatura extends MinC_Db_Table_Abstr
         $objQuery->where('tbDocumentoAssinatura.stEstado = ?', 1);
         $objQuery->where('tbDocumentoAssinatura.cdSituacao = ?', 2);
         $objQuery->where('tbDocumentoAssinatura.IdPRONAC = ?', $idPronac);
+        $objQuery->order('tbDocumentoAssinatura.dt_criacao ASC');
 
         return $this->_db->fetchAll($objQuery);
     }
 
     public function getIdDocumentoAssinatura($idPronac, $idTipoDoAtoAdministrativo)
     {
-        $objQuery = $this->select(); 
+        $objQuery = $this->select();
         $objQuery->setIntegrityCheck(false);
         $objQuery->from(
             $this->_name,
             '*',
             $this->_schema
         );
-        
+
         $objQuery->where('IdPRONAC = ?', $idPronac);
         $objQuery->where('idTipoDoAtoAdministrativo = ?', $idTipoDoAtoAdministrativo);
         $objQuery->where('stEstado = ?', 1);
-        
+
         $result = $this->fetchRow($objQuery);
         if ($result) {
             $resultadoArray = $result->toArray();
             return $resultadoArray['idDocumentoAssinatura'];
         }
-    }    
+    }
+
+    public function isDocumentoFinalizado($idTipoDoAtoAdministrativo, $idPronac){
+
+        $query = $this->select();
+        $query->setIntegrityCheck(false);
+
+        $query->from(
+            [$this->_name],
+            ['idDocumentoAssinatura'],
+            $this->_schema
+        );
+
+        $query->where('IdPRONAC = ?', $idPronac);
+        $query->where('idTipoDoAtoAdministrativo = ?', $idTipoDoAtoAdministrativo);
+        $query->where("tbDocumentoAssinatura.cdSituacao = ?", Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_FECHADO_PARA_ASSINATURA);
+        $query->where("tbDocumentoAssinatura.stEstado = ?", Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
+
+        $result = $this->fetchRow($query);
+
+        return (count($result) > 0);
+    }
 }
