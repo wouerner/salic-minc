@@ -127,10 +127,10 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
-    import ModalTemplate from '@/components/modal';
+import { mapActions, mapGetters } from 'vuex';
+import ModalTemplate from '@/components/modal';
 
-    export default {
+export default {
     name: 'Painel',
     data() {
         return {

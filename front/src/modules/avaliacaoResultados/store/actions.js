@@ -38,10 +38,10 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
 };
 
 export const salvarParecer = ({ commit }, params) => {
+    commit();
     const p = new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.criarParecer(params)
-            .then((response) => {
-                console.log(response.data);
+            .then(() => {
                 resolve();
             });
     });
@@ -109,13 +109,16 @@ export const planilha = ({ commit }, params) => {
 };
 
 export const finalizarParecer = ({ commit }, params) => {
+    commit();
     avaliacaoResultadosHelperAPI.finalizarParecer(params)
         .then(() => {
         });
 };
 
-export const encaminharParaTecnico = ({ commit }, params) =>
+export const encaminharParaTecnico = ({ commit }, params) => {
+    commit();
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+};
 
 export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
