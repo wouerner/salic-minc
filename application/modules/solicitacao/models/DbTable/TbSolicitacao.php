@@ -20,6 +20,7 @@ class Solicitacao_Model_DbTable_TbSolicitacao extends MinC_Db_Table_Abstract
                     'stLeitura',
                     'stEstado',
                     'idOrgao',
+                    'idAgente',
                     'idSolicitante',
                     'dtSolicitacao',
                     'CAST(dsSolicitacao AS TEXT) AS dsSolicitacao',
@@ -59,7 +60,7 @@ class Solicitacao_Model_DbTable_TbSolicitacao extends MinC_Db_Table_Abstract
         
         $select->joinInner(
             ['c' => 'Nomes'],
-            'a.idSolicitante = c.idAgente',
+            'a.idAgente = c.idAgente',
             ['idAgente', 'Descricao as Solicitante'],
             $this->getSchema('Agentes')
         );
