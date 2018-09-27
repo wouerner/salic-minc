@@ -2,7 +2,7 @@
     <div>
         <v-data-table
                 :headers="cabecalho"
-                :items="dadosTabelaTecnico.items"
+                :items="dados.items"
                 :pagination.sync="pagination"
                 hide-actions
 
@@ -12,7 +12,7 @@
                 <td class="text-xs-right">
                     <v-flex xs12 sm4 text-xs-center>
                         <div>
-                            <v-btn :href="'/projeto/#/incentivo/'+ props.item.idPronac">{{ props.item.Pronac }}</v-btn>
+                            <v-btn :href="'/projeto/#/incentivo/'+ props.item.idPronac">{{ props.item.PRONAC }}</v-btn>
                         </div>
                     </v-flex>
                 </td>
@@ -61,77 +61,75 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
-    import ModalTemplate from '@/components/modal';
-    import Historico from './Historico';
+import { mapActions, mapGetters } from 'vuex';
+import ModalTemplate from '@/components/modal';
+import Historico from './Historico';
 
-    export default {
-        name: 'Painel',
-        created() {
-            this.obterDadosTabelaTecnico();
-        },
-        data() {
-            return {
-                pagination: {
-                    rowsPerPage: 10,
+export default {
+    name: 'TabelaProjetos',
+    props: ['dados'],
+    data() {
+        return {
+            pagination: {
+                rowsPerPage: 10,
+            },
+            selected: [],
+            cabecalho: [
+                {
+                    text: '#',
+                    align: 'left',
+                    sortable: false,
+                    value: 'numero',
                 },
-                selected: [],
-                cabecalho: [
-                    {
-                        text: '#',
-                        align: 'left',
-                        sortable: false,
-                        value: 'numero',
-                    },
-                    { text: 'PRONAC', value: 'Pronac' },
-                    { text: 'Nome Do Projeto', value: 'NomeProjeto' },
-                    { text: 'Situacao', value: 'Situacao' },
-                    { text: 'Area/Segmento', value: 'Area' },
-                    { text: 'Estado', value: 'UfProjeto' },
-                    { text: 'Dt.recebimento', value: 'DtSituacao' },
-                    {
-                        text: 'Analisar',
-                        value: 'analisar',
-                        sortable: false,
-                    },
-                    {
-                        text: 'Diligencia',
-                        value: 'diligencia',
-                        sortable: false,
+                { text: 'PRONAC', value: 'Pronac' },
+                { text: 'Nome Do Projeto', value: 'NomeProjeto' },
+                { text: 'Situacao', value: 'Situacao' },
+                { text: 'Area/Segmento', value: 'Area' },
+                { text: 'Estado', value: 'UfProjeto' },
+                { text: 'Dt.recebimento', value: 'DtSituacao' },
+                {
+                    text: 'Analisar',
+                    value: 'analisar',
+                    sortable: false,
+                },
+                {
+                    text: 'Diligencia',
+                    value: 'diligencia',
+                    sortable: false,
 
-                    },
-                    {
-                        text: 'Historico',
-                        value: 'historico',
-                        sortable: false,
-                    },
-                ],
-            };
+                },
+                {
+                    text: 'Historico',
+                    value: 'historico',
+                    sortable: false,
+                },
+            ],
+        };
+    },
+    components: {
+        ModalTemplate,
+        Historico,
+    },
+    methods: {
+        ...mapActions({
+            obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
+        }),
+    },
+    watch: {
+        dadosTabelaTecnico() {
+            this.pagination.totalItems = this.dadosTabelaTecnico.items.length;
         },
-        components: {
-            ModalTemplate,
-            Historico,
+    },
+    computed: {
+        ...mapGetters({
+            dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
+        }),
+        pages() {
+            if (this.pagination.rowsPerPage == null ||
+                this.pagination.totalItems == null
+            ) return 0;
+            return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
         },
-        methods: {
-            ...mapActions({
-                obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
-            }),
-        },
-        watch: {
-            dadosTabelaTecnico() {
-                this.pagination.totalItems = this.dadosTabelaTecnico.items.length;
-            },
-        },
-        computed: {
-            ...mapGetters({
-                dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
-            }),
-            pages() {
-                if (this.pagination.rowsPerPage == null ||
-                    this.pagination.totalItems == null
-                ) return 0;
-                return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
-            },
-        },
-    };
+    },
+};
 </script>
