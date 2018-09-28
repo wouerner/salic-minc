@@ -117,7 +117,7 @@
                     dsParecer: this.characterParecer,
                 };
 
-                this.salvar(data);
+                // this.salvar(data);
                 /** Descomentar linha após migração da lista para o VUEJS */
                 // this.dialog = false;
             },
@@ -130,7 +130,7 @@
                     proximo: 6,
                 };
                 
-                this.finalizar();
+                // this.finalizar();
                 /** Descomentar linha após migração da lista para o VUEJS */
                 // this.dialog = false;
             },
@@ -148,6 +148,8 @@
                 proponente: 'avaliacaoResultados/proponente',
                 projeto: 'avaliacaoResultados/projeto',
                 parecerLaudoFinal: 'avaliacaoResultados/parecerLaudoFinal',
+                characterManifestacao: 'avaliacaoResultados/characterManifestacao',
+                characterParecer: 'avaliacaoResultados/characterParecer',
             }),
         },
         created() {
