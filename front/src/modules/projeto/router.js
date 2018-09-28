@@ -13,6 +13,7 @@ import RelacaoDePagamentos from './visualizar/components/incentivo/RelacaoDePaga
 import Proponente from './visualizar/components/incentivo/Proponente';
 import Convenente from './visualizar/components/convenio/Convenente';
 import Proposta from './visualizar/components/incentivo/Proposta';
+import CertidoesNegativas from './visualizar/components/outrasInformacoes/CertidoesNegativas';
 
 Vue.use(Router);
 
@@ -125,6 +126,14 @@ const routes = [
                 path: 'conteudo-dinamico',
                 name: 'containerAjax',
                 component: templateAjax,
+            },
+            {
+                path: 'certidoes-negativas',
+                name: 'CertidoesNegativas',
+                component: CertidoesNegativas,
+                meta: {
+                    title: 'Certid&otilde;es Negativas',
+                },
             },
         ],
     },
