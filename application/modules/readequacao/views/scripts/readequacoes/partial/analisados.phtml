@@ -30,7 +30,6 @@
     <th>Visualizar</th>
     <th>Devolver</th>
     <th>Assinar</th>
-    <th>CNIC</th>
 </tr>
 </thead>
 <tbody>
@@ -90,36 +89,24 @@ foreach ($this->dados as $d): ?>
         </td>
         <td align="center">
 	    <?php if ($this->disponivelParaAssinatura($d->siEncaminhamento, $d->idDocumentoAssinatura)): ?>
-            <a
-                href="<?php echo $this->url([
-                      'module' => 'assinatura',
-                      'controller' => 'index',
-                      'action' => 'visualizar-projeto'
-		      ], '', true); ?>?idDocumentoAssinatura=<?php echo $d->idDocumentoAssinatura ?>"
-                class="btn small waves-effect waves-light white-text tooltipped btn-primary"
-                data-tooltip="Assinar"
-                idReadequacao="<?php echo $d->idReadequacao; ?>"
-            >
+            <a data-ajax-modal="<?= $this->url([
+                        'module' => 'assinatura',
+                        'controller' => 'index',
+                        'action' => 'visualizar-projeto'
+                    ], '', true); ?>?idDocumentoAssinatura=<?php echo $d->idDocumentoAssinatura ?>&modal=1"
+                    href="javascript:void(0);"
+                    data-position="top"
+                    data-delay="50"
+                    data-ajax-modal-height="96%"
+                    data-ajax-modal-width="98%"
+                    data-tooltip="Assinar"
+                    class="btn small waves-effect waves-light white-text tooltipped btn-primary"
+                    idReadequacao="<?php echo $d->idReadequacao; ?>">
                 <i class="material-icons">edit</i>
             </a>
 	    <?php endif; ?>
         </td>
-        <td align="center">
-            <a
-                href="<?php echo $this->url([
-                    'module' => 'readequacao',
-                    'controller' => 'readequacoes',
-                    'action' => 'encaminhar-para-cnic',
-                    'id' => Seguranca::encrypt($d->idReadequacao),
-                    'idPronac' => $d->idPronac,
-                ], '', true); ?>"
-                class="btn small waves-effect waves-light white-text tooltipped btn-secondary"
-                data-tooltip="Enviar para um membro da comiss&atilde;o"
-                idReadequacao="<?php echo $d->idReadequacao; ?>"
-            >
-                <i class="material-icons">mail</i>
-            </a>
-        </td>
     </tr>
     <?php $count++; ?>
 <?php endforeach; ?>
+
