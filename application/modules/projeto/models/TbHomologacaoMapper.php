@@ -103,29 +103,24 @@ class Projeto_Model_TbHomologacaoMapper extends MinC_Db_Mapper
 
             $situacao = $this->obterNovaSituacao($idPronac);
 
-            $auth = Zend_Auth::getInstance();
-            $arrAuth = array_change_key_case((array)$auth->getIdentity());
-            $arrProjeto = [
-                'idPRONAC' => $idPronac,
-                'situacao' => $situacao['codigo'],
-                'dtSituacao' => $this->_dbTable->getExpressionDate(),
-                'providenciaTomada' => $situacao['mensagem'],
-                'logon' => $arrAuth['usu_codigo']
-            ];
-            $tbProjetosMapper = new Projeto_Model_TbProjetosMapper();
-            $modelTbProjetos = new Projeto_Model_TbProjetos($arrProjeto);
-            if ($tbProjetosMapper->save($modelTbProjetos)) {
+            $objProjetos = new \Projetos();
+            $updated = $objProjetos->alterarSituacao(
+                $idPronac,
+                null,
+                $situacao['codigo'],
+                $situacao['mensagem']
+            );
+
+            if ($updated) {
                 if ($situacao['codigo'] == Projeto_Model_Situacao::PROJETO_ENCAMINHADO_PARA_HOMOLOGACAO) {
                     $idDocumentoAssinatura = $this->iniciarFluxoAssinatura($idPronac);
                     $retorno['data'] = ['idDocumentoAssinatura' => $idDocumentoAssinatura];
                 }
 
-//                $this->setMessage('Projeto encaminhado com sucesso!');
                 $this->setMessage($situacao['mensagem']);
                 $retorno['status'] = true;
             } else {
                 $this->setMessage('N&atilde;o foi poss&iacute;vel alterar a situa&ccedil;&atilde;o do projeto.', 'IdPRONAC');
-                $this->setMessage($tbProjetosMapper->getMessages());
             }
         } catch (Exception $e) {
             $this->setMessage($e->getMessage());
