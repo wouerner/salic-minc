@@ -8,7 +8,30 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
     private $idTiposAtoAdministrativos = [
         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS,
         Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC,
+        
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PLANILHA_ORCAMENTARIA,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ALTERACAO_RAZAO_SOCIAL,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_AGENCIA_BANCARIA,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_SINOPSE_OBRA,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_IMPACTO_AMBIENTAL,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ESPECIFICACAO_TECNICA,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ESTRATEGIA_EXECUCAO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_LOCAL_REALIZACAO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ALTERACAO_PROPONENTE,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PLANO_DISTRIBUICAO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_NOME_PROJETO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PERIODO_EXECUCAO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PLANO_DIVULGACAO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_RESUMO_PROJETO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_OBJETIVOS,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_JUSTIFICATIVA,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ACESSIBILIDADE,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_DEMOCRATIZACAO_ACESSO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ETAPAS_TRABALHO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_FICHA_TECNICA,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_SALDO_APLICACAO,
+        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_TRANSFERENCIA_RECURSOS
     ];
 
     private function validarPerfis()
@@ -50,7 +73,11 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\Readequacao(
             $this->grupoAtivo,
             $this->auth,
-            Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC
+            [
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
+                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC
+            ]
         );
 
         $this->view->dados = $servicoReadequacaoAssinatura->obterAssinaturas();
@@ -78,6 +105,10 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                 throw new Exception("Identificador do projeto &eacute; necess&atilde;rio para acessar essa funcionalidade.");
             }
 
+            if (!filter_input(INPUT_GET, 'idDocumentoAssinatura')) {
+                throw new Exception("Identificador do documento &eacute; necess&atilde;ria para acessar essa funcionalidade.");
+            }
+            
             if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
                 throw new Exception(
                     "O Perfil Parecerista n&atilde;o possui permiss&atilde;o para executar a a&ccedil;&atilde;o de devolver."
@@ -89,14 +120,10 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->view->projeto = $objTbProjetos->findBy(array(
                 'IdPRONAC' => $get->IdPRONAC
             ));
+            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
 
             $post = $this->getRequest()->getPost();
             if ($post) {
-                if (!filter_input(INPUT_POST, 'idTipoDoAtoAdministrativo')) {
-                    throw new Exception("Identificador do Tipo do Ato Administrativo n&atilde;o informado");
-                }
-                $idTipoDoAtoAdministrativo = $post['idTipoDoAtoAdministrativo'];
-
                 if (!filter_input(INPUT_POST, 'motivoDevolucao')) {
                     throw new Exception("Campo 'Motivação da Devolução para nova avaliação' n&atilde;o informado.");
                 }
@@ -106,7 +133,8 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
                         'Despacho' => $post['motivoDevolucao'],
                         'idTipoDoAto' => $idTipoDoAtoAdministrativo,
                         'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
-                        'idPronac' => $get->IdPRONAC
+                        'idPronac' => $get->IdPRONAC,
+                        'idDocumentoAssinatura' => $get->idDocumentoAssinatura
                     ]
                 );
                 $assinaturaService->devolver();
@@ -126,7 +154,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
             $this->view->abertoParaDevolucao = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
                 $get->IdPRONAC,
-                $this->idTipoDoAtoAdministrativo
+                $idTipoDoAtoAdministrativo
             );
 
             $this->view->IdPRONAC = $get->IdPRONAC;
