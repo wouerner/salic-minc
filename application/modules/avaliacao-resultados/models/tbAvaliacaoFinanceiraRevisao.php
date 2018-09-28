@@ -1,10 +1,10 @@
 <?php
 
-class AvaliacaoResultados_Model_tbRevisaoParecer extends MinC_Db_Model
+class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao extends MinC_Db_Model
 {
 
-    protected $_idRevisaoParecer;
-    protected $_idParecerAvaliacaoFinanceira;
+    protected $_idAvaliacaoFinanceiraRevisao;
+    protected $_idAvaliacaoFinanceira;
     protected $_idUsuario;
     protected $_idGrupoAtivo;
     protected $_dtRevisao;
