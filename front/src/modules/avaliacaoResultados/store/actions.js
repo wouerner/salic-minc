@@ -38,15 +38,29 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
     return p;
 };
 
-export const salvarParecer = (params) => {
-    const p = new Promise((resolve) => {
-        avaliacaoResultadosHelperAPI.criarParecer(params)
-            .then(() => {
-                resolve();
-            });
-    });
+// export const salvarParecer = (params) => {
+//     const p = new Promise((resolve) => {
+//         avaliacaoResultadosHelperAPI.criarParecer(params)
+//             .then(() => {
+//                 resolve();
+//             });
+//     });
+//
+//     return p;
+// };
 
-    return p;
+export const salvarParecer = (_, data) => {
+    avaliacaoResultadosHelperAPI.criarParecer(data)
+        .then((response) => {
+            console.log(response);
+        });
+};
+
+export const finalizarParecer = (_, data) => {
+    avaliacaoResultadosHelperAPI.finalizarParecer(data)
+        .then((response) => {
+            console.log(response);
+        });
 };
 
 export const mockAvaliacaDesempenho = ({ commit }) => {
@@ -105,13 +119,6 @@ export const planilha = ({ commit }, params) => {
         .then((response) => {
             const planilha = response.data;
             commit(types.GET_PLANILHA, planilha);
-        });
-};
-
-export const finalizarParecer = ({ commit }, params) => {
-    console.log(state);
-    avaliacaoResultadosHelperAPI.finalizarParecer(params)
-        .then(() => {
         });
 };
 

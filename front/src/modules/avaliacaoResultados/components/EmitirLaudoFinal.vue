@@ -27,14 +27,14 @@
                 <v-container grid-list>
                     <v-layout wrap align-center>
                         <v-flex>
-                            <v-select height="20px" 
-                                      v-model="parecerLaudoFinal.manifestacao"
-                                      @change="updateManifestacao" 
+                            <v-select height="20px"
+                                      :value="parecerLaudoFinal.manifestacao"
+                                      @change="updateManifestacao"
                                       :rules="itemRules"
-                                      :items="items" 
-                                      item-text="text" 
-                                      item-value="id" 
-                                      box 
+                                      :items="items"
+                                      item-text="text"
+                                      item-value="id"
+                                      box
                                       label="Manifestação *"
                                       required="required">
                             </v-select>
@@ -117,7 +117,7 @@
                     dsParecer: this.characterParecer,
                 };
 
-                // this.salvar(data);
+                this.salvar(data);
                 /** Descomentar linha após migração da lista para o VUEJS */
                 // this.dialog = false;
             },
@@ -129,8 +129,8 @@
                     atual: 5,
                     proximo: 6,
                 };
-                
-                // this.finalizar();
+
+                this.finalizar(data);
                 /** Descomentar linha após migração da lista para o VUEJS */
                 // this.dialog = false;
             },
