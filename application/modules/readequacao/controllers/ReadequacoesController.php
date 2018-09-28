@@ -1976,8 +1976,11 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     $tbReadequacao->update($dados, $where);
                 }
                 
-                $servicoAssinaturaReadequacao = new \Application\Modules\Readequacao\Service\Assinatura\Readequacao();
-                $idTipoDoAto = $servicoAssinaturaReadequacao->obterAtoAdministrativoPorTipoReadequacao($dadosRead->idTipoReadequacao);
+                $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\ReadequacaoAssinatura(
+                    $this->grupoAtivo,
+                    $this->auth
+                );
+                $idTipoDoAto = $servicoReadequacaoAssinatura->obterAtoAdministrativoPorTipoReadequacao($dadosRead->idTipoReadequacao);
                 
                 $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
                     $idPronac,

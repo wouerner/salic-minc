@@ -5,35 +5,6 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
 
     private $grupoAtivo;
 
-    private $idTiposAtoAdministrativos = [
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC,
-        
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PLANILHA_ORCAMENTARIA,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ALTERACAO_RAZAO_SOCIAL,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_AGENCIA_BANCARIA,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_SINOPSE_OBRA,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_IMPACTO_AMBIENTAL,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ESPECIFICACAO_TECNICA,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ESTRATEGIA_EXECUCAO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_LOCAL_REALIZACAO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ALTERACAO_PROPONENTE,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PLANO_DISTRIBUICAO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_NOME_PROJETO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PERIODO_EXECUCAO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_PLANO_DIVULGACAO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_RESUMO_PROJETO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_OBJETIVOS,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_JUSTIFICATIVA,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ACESSIBILIDADE,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_DEMOCRATIZACAO_ACESSO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_ETAPAS_TRABALHO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_FICHA_TECNICA,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_SALDO_APLICACAO,
-        Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_READEQUACAO_TRANSFERENCIA_RECURSOS
-    ];
-
     private function validarPerfis()
     {
         $auth = Zend_Auth::getInstance();
@@ -70,26 +41,21 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         $this->validarPerfis();
         $this->view->idUsuarioLogado = $this->auth->getIdentity()->usu_codigo;
 
-        $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\Readequacao(
+        $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\ReadequacaoAssinatura(
             $this->grupoAtivo,
-            $this->auth,
-            [
-                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS,
-                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO,
-                Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC
-            ]
+            $this->auth
         );
 
         $this->view->dados = $servicoReadequacaoAssinatura->obterAssinaturas();
 
         $this->view->codGrupo = $this->grupoAtivo->codGrupo;
-
+        
         $objTbAtoAdministrativo = new Assinatura_Model_DbTable_TbAtoAdministrativo();
         $this->view->quantidade_minima_assinaturas = $objTbAtoAdministrativo->obterQuantidadeMinimaAssinaturas(
-            $this->idTiposAtoAdministrativos,
+            $servicoReadequacaoAssinatura->obterAtosAdministativos(),
             $this->auth->getIdentity()->usu_org_max_superior
         );
-        $this->view->idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
+        $this->view->idTipoDoAtoAdministrativo = $servicoReadequacaoAssinatura->obterAtosAdministativos();
         $this->view->isPermitidoDevolver = true;
         if ($this->grupoAtivo->codGrupo == Autenticacao_Model_Grupos::PARECERISTA) {
             $this->view->isPermitidoDevolver = false;
