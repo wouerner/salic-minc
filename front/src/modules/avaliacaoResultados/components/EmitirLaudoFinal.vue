@@ -57,7 +57,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters, mapState } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
 
     export default {
@@ -89,7 +89,6 @@
                         text: 'Aprovação com Ressalva',
                     },
                 ],
-                // currentParecerLaudoFinal: {},
             };
         },
         components:
@@ -123,13 +122,14 @@
                 // this.dialog = false;
             },
             finalizarParecer() {
-                // const data = {
-                //     idPronac: this.idPronac,
-                //     siManifestacao: this.characterManifestacao,
-                //     dsParecer: this.characterParecer,
-                //     atual: 5,
-                //     proximo: 6,
-                // };
+                const data = {
+                    idPronac: this.idPronac,
+                    siManifestacao: this.characterManifestacao,
+                    dsParecer: this.characterParecer,
+                    atual: 5,
+                    proximo: 6,
+                };
+                
                 this.finalizar();
                 /** Descomentar linha após migração da lista para o VUEJS */
                 // this.dialog = false;
@@ -154,7 +154,9 @@
             this.redirectLink = this.redirectLink + this.idPronac;
             this.getConsolidacao(this.idPronac);
             this.getLaudoFinal();
-            this.$refs.form.validate();
+            this.atualizarManifestacao(this.parecerLaudoFinal.manifestacao);
+            this.atualizarParecer(this.parecerLaudoFinal.laudoTecnico);
+            // this.$refs.form.validate();
         },
     };
 </script>
