@@ -2,7 +2,6 @@
 
 class Solicitacao_MensagemController extends Solicitacao_GenericController
 {
-
     public function init()
     {
         parent::init();
@@ -39,7 +38,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 Projeto_Model_Situacao::obterSituacoesProjetoArquivado()
             );
         }
-        
+
         if (!empty($this->proposta)) {
             return $this->proposta->stEstado == 0;
         }
@@ -47,13 +46,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         return false;
     }
 
-    /**
-     * Metodo responsavel por preparar o formulario conforme cada acao.
-     *
-     * @name prepareForm
-     * @param array $arrConfig
-     *
-     */
     public function prepareForm($dataForm = [], $arrConfig = [], $strUrlAction = '', $strActionBack = 'index')
     {
 
@@ -114,7 +106,12 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         # Proponente
         if (isset($this->usuario['cpf'])) {
-            $where["(a.idAgente = {$this->idAgente} OR a.idSolicitante = {$this->idUsuario})"] = '';
+
+            if (!empty($this->idAgente)) {
+                $whereAgente =  "OR a.idAgente = {$this->idAgente}";
+            }
+
+            $where["(a.idSolicitante = {$this->idUsuario} {$whereAgente})"] = '';
         }
 
         # funcionarios do minc
@@ -190,46 +187,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         $this->view->idPronac = $idPronac;
     }
 
-    private function liberarOpcoesMenuLateral($idPronac)
-    {
-        $idUsuarioLogado = Zend_Auth::getInstance()->getIdentity()->IdUsuario;
-
-        $projetos = $projetos = new Projetos();
-
-        $projeto = $projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
-        $cpf = $projeto->CgcCpf;
-
-        $links = new fnLiberarLinks();
-
-        $linksXpermissao = $links->links(2, $cpf, $idUsuarioLogado, $idPronac);
-        $linksGeral = str_replace(' ', '', explode('-', $linksXpermissao->links));
-
-        $arrayLinks = array(
-            'Permissao' => $linksGeral[0],
-            'FaseDoProjeto' => $linksGeral[1],
-            'Diligencia' => $linksGeral[2],
-            'Recursos' => $linksGeral[3],
-            'Readequacao' => $linksGeral[4],
-            'ComprovacaoFinanceira' => $linksGeral[5],
-            'RelatorioTrimestral' => $linksGeral[6],
-            'RelatorioFinal' => $linksGeral[7],
-            'Analise' => $linksGeral[8],
-            'Execucao' => $linksGeral[9],
-            'PrestacaoContas' => $linksGeral[10],
-            'Readequacao_50' => $linksGeral[11],
-            'Marcas' => $linksGeral[12],
-            'SolicitarProrrogacao' => $linksGeral[13],
-            'ReadequacaoPlanilha' => $linksGeral[14]
-        );
-
-        return [
-            'blnProponente' => true,
-            'fnLiberarLinks' => $arrayLinks,
-            'pronac' => $projeto->AnoProjeto . $projeto->Sequencial,
-            'usuarioInterno' => false
-        ];
-    }
-
     public function visualizarAction()
     {
         $urlAction = $this->_urlPadrao . "/solicitacao/mensagem/salvar";
@@ -250,6 +207,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             if (empty($dataForm)) {
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
             }
+
             $permissao = parent::verificarPermissaoAcesso($dataForm['idProjeto'], $dataForm['idPronac'], false, true);
 
             if ($permissao['status'] === false) {
@@ -265,18 +223,11 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                     $model->setStLeitura(1);
                     $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
                     $mapperSolicitacao->atualizarSolicitacao($model);
-
                 }
             }
 
-            if (!isset(Zend_Auth::getInstance()->getIdentity()->usu_codigo)) {
-                if ($dataForm['idPronac']) {
-                    $condicoesMenu = $this->liberarOpcoesMenuLateral($dataForm['idPronac']);
-                    foreach ($condicoesMenu as $condicao => $valor) {
-                        $this->view->{$condicao} = $valor;
-                    }
-                }
-            }else{
+            $this->view->usuarioInterno = false;
+            if (isset(Zend_Auth::getInstance()->getIdentity()->usu_codigo)) {
                 $this->view->usuarioInterno = true;
             }
 
@@ -292,7 +243,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
     public function solicitarAction()
     {
-
         $urlAction = $this->_urlPadrao . "/solicitacao/mensagem/salvar";
         $urlCallBack = $this->_urlPadrao . "/solicitacao/mensagem/index";
         $this->view->isEditavel = true;
@@ -312,8 +262,8 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
             $arrConfig['dsSolicitacao']['disabled'] = false;
             $arrConfig['actions']['show'] = true;
-            $whereSolicitacoes = [];
 
+            $whereSolicitacoes = [];
             if ($this->projeto) {
                 $urlCallBack .= '/idPronac/' . $this->idPronac;
                 $dataForm['idPronac'] = $this->idPronac;
@@ -325,21 +275,13 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             }
 
             $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
-            $dataForm = $mapperSolicitacao->solicitacaoNaoRespondida($whereSolicitacoes);
+            $dataForm = $mapperSolicitacao->obterSolicitacaoAtiva($whereSolicitacoes);
 
             if ($dataForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC) {
                 $this->redirect($this->_urlPadrao . '/solicitacao/mensagem/visualizar/id/' . $dataForm['idSolicitacao']);
             }
 
-            if ($this->idPronac) {
-                $condicoesMenu = $this->liberarOpcoesMenuLateral($this->idPronac);
-                foreach ($condicoesMenu as $condicao => $valor) {
-                    $this->view->{$condicao} = $valor;
-                }
-            }
-
             $this->prepareForm($dataForm, $arrConfig, $urlAction, $urlCallBack);
-
 
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), $urlCallBack, "ALERT");
@@ -348,7 +290,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
     public function salvarAction()
     {
-
         if ($this->getRequest()->isPost()) {
 
             try {
@@ -356,26 +297,19 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 if($this->verificarArquivamento()) {
                     throw new Exception("Projeto ou proposta arquivado, voc&ecirc; n&atilde;o pode realizar uma solicita&ccedil;&atilde;o");
                 }
-                
+
                 $this->_helper->layout->disableLayout();
                 $this->_helper->viewRenderer->setNoRender(true);
 
                 $arrayForm = $this->getRequest()->getPost();
-
-                $strUrl = '/solicitacao/mensagem/index';
-                $strParams = '';
-                $strParams .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
-                $strParams .= ($arrayForm['idProjeto']) ? '/idPreProjeto/' . $arrayForm['idProjeto'] : '';
-                $strUrl = $strUrl . $strParams;
                 $arrayForm['idUsuario'] = $this->idUsuario;
 
                 $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
+                $solicitacao = $mapperSolicitacao->obterSolicitacaoAtiva($arrayForm);
 
-                $solicitacao = $mapperSolicitacao->solicitacaoNaoRespondida($arrayForm);
+                if (!empty($solicitacao)) {
 
-                if (isset($solicitacao['siEncaminhamento'])) {
-
-                    if ($solicitacao['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC) {
+                    if ($solicitacao['siEncaminhamento'] <> Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_CADASTRADA) {
                         throw new Exception("Voc&ecirc; j&aacute; possui uma solicita&ccedil;&atilde;o aguardando resposta para este projeto!");
                     }
 
@@ -384,15 +318,19 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
                 $idSolicitacao = $mapperSolicitacao->salvar($arrayForm);
 
-
-                if ($arrayForm['siEncaminhamento'] == 1 && $idSolicitacao) {
-                    $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao . $strParams;
-                    $status = true;
-                } elseif ($idSolicitacao == 0) {
+                $status = true;
+                if (empty($idSolicitacao)) {
                     $status = false;
-                } else {
-                    $strUrl = '/solicitacao/mensagem/solicitar' . $strParams;
-                    $status = true;
+                }
+
+                $strParams = '';
+                $strParams .= ($arrayForm['idPronac']) ? '/idPronac/' . $arrayForm['idPronac'] : '';
+                $strParams .= ($arrayForm['idProjeto']) ? '/idPreProjeto/' . $arrayForm['idProjeto'] : '';
+
+                $strUrl = '/solicitacao/mensagem/solicitar' . $strParams;
+                if ($arrayForm['siEncaminhamento'] == Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC
+                    && $status) {
+                    $strUrl = '/solicitacao/mensagem/visualizar/id/' . $idSolicitacao . $strParams;
                 }
 
                 $this->_helper->json(array('status' => $status, 'msg' => $mapperSolicitacao->getMessages(), 'redirect' => $strUrl));
@@ -420,7 +358,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
     }
 
-
     public function responderAction()
     {
         $idSolicitacao = $this->getRequest()->getParam('id', null);
@@ -428,7 +365,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
 
         try {
 
-            if (empty($idSolicitacao)){
+            if (empty($idSolicitacao)) {
                 throw new Exception("Informe o id da solicita&ccedil;&atilde;o para responder!");
             }
 
@@ -437,15 +374,15 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
             $solicitacao = $tbSolicitacao->obterSolicitacoes($where)->current()->toArray();
 
-            if (empty($solicitacao)){
+            if (empty($solicitacao)) {
                 throw new Exception("Nenhuma solicita&ccedil;&atilde;o encontrada!");
             }
 
-            if ($solicitacao['idTecnico'] != $this->idUsuario){
+            if ($solicitacao['idTecnico'] != $this->idUsuario) {
                 throw new Exception("Voc&ecirc; n&atilde;o tem permiss&atilde;o para responder esta solicita&ccedil;&atilde;o!");
             }
 
-            if (!empty($solicitacao['dsResposta'])){
+            if (!empty($solicitacao['dsResposta'])) {
                 $this->redirect("/solicitacao/mensagem/visualizar/id/{$idSolicitacao}");
             }
 
@@ -536,7 +473,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
                 'dsResposta' => ['show' => true, 'disabled' => false],
                 'actions' => ['show' => true],
                 'actionredistribuirSolicitacao' => $this->_urlPadrao . "/solicitacao/mensagem/redistribuir-solicitacao",
-                'unidades' => $orgaos->pesquisarUnidades(array('o.Sigla != ?' => '', 'o.idSecretaria IN (?)' => [160,251])),
+                'unidades' => $orgaos->pesquisarUnidades(array('o.Sigla != ?' => '', 'o.idSecretaria IN (?)' => [160, 251])),
                 'tecnico' => $solicitacao['idTecnico'],
 
             ];
@@ -560,7 +497,7 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $arrUsuarios = $vw->carregarTecnicosPorUnidade($intId)->toArray();
             $arrUsuarios = TratarArray::utf8EncodeArray($arrUsuarios);
             $this->_helper->json($arrUsuarios);
-        }  catch (Exception $objException) {
+        } catch (Exception $objException) {
             $this->_helper->json(array('status' => false, 'msg' => $objException->getMessage()));
         }
     }
@@ -648,7 +585,6 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
     }
 
-
     public function contarSolicitacoesNaoLidasAjaxAction()
     {
         $this->_helper->layout->disableLayout();
@@ -668,15 +604,9 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
         }
     }
 
-    public function verificarSolicitacaoEnviadaNaoRespondida($idPreProjeto = null, $idPronac = null)
+    private function verificarSolicitacaoEnviadaNaoRespondida($idPreProjeto = null, $idPronac = null)
     {
-        $tbSolicitacao = new Solicitacao_Model_DbTable_TbSolicitacao();
-
-        $where = [
-            'dtResposta IS NULL' => '',
-            'siEncaminhamento' => Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_ENCAMINHADA_AO_MINC
-        ];
-
+        $where = [];
         if ($idPreProjeto) {
             $where['idProjeto'] = $idPreProjeto;
         }
@@ -685,8 +615,13 @@ class Solicitacao_MensagemController extends Solicitacao_GenericController
             $where['idPronac'] = $idPronac;
         }
 
-        return $tbSolicitacao->findBy($where);
+        $mapperSolicitacao = new Solicitacao_Model_TbSolicitacaoMapper();
+        $dataForm = $mapperSolicitacao->obterSolicitacaoAtiva($where);
 
+        if (empty($dataForm)) {
+            return false;
+        }
 
+        return $dataForm['siEncaminhamento'] != Solicitacao_Model_TbSolicitacao::SITUACAO_ENCAMINHAMENTO_CADASTRADA;
     }
 }
