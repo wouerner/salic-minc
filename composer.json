@@ -31,6 +31,7 @@
             "Application\\Modules\\Projeto\\": "./application/modules/projeto/",
             "Application\\Modules\\Projeto\\Service\\": "./application/modules/projeto/service/",
             "Application\\Modules\\Projeto\\Service\\Proponente\\": "./application/modules/projeto/service/proponente/",
+            "Application\\Modules\\Projeto\\Service\\CertidoesNegativas\\": "./application/modules/projeto/service/certidoesNegativas/",
             "Application\\Modules\\Proposta\\": "./application/modules/proposta/",
             "Application\\Modules\\Proposta\\Service\\": "./application/modules/proposta/service/",
             "Application\\Modules\\Proposta\\Service\\Proposta\\": "./application/modules/proposta/service/proposta/",
