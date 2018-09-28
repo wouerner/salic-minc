@@ -112,7 +112,7 @@ class SolicitarRecursoDecisaoController extends MinC_Controller_Action_Abstract
                 $retorno = $tbRecursoMapper->inserirRecurso($post);
 
                 if ($retorno) {
-                    parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "/projeto/index/index/#/incentivo/" . Seguranca::encrypt($post->idPronac), "CONFIRM");
+                    parent::message('Solicita&ccedil;&atilde;o enviada com sucesso!', "/projeto/index/index/#/" . Seguranca::encrypt($post->idPronac), "CONFIRM");
                 }
             }
 
@@ -167,7 +167,7 @@ class SolicitarRecursoDecisaoController extends MinC_Controller_Action_Abstract
             $tbRecursoMapper = new Recurso_Model_TbRecursoMapper();
             $resposta = $tbRecursoMapper->inserirDesistenciaRecursal($post);
 
-            parent::message('A desist&ecirc;ncia do prazo recursal foi cadastrada com sucesso!', "/projeto/#/incentivo/" . Seguranca::encrypt($idPronac), "CONFIRM");
+            parent::message('A desist&ecirc;ncia do prazo recursal foi cadastrada com sucesso!', "/projeto/#/" . Seguranca::encrypt($idPronac), "CONFIRM");
         } catch (Exception $objException) {
             parent::message($objException->getMessage(), "solicitarrecursodecisao/recurso-desistir?idPronac=" . Seguranca::encrypt($idPronac), "ERROR");
         }
