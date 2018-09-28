@@ -1975,30 +1975,17 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     $where = "idReadequacao = $idReadequacao";
                     $tbReadequacao->update($dados, $where);
                 }
-
-                $idTipoDoAto = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_VINCULADAS;
-                if ($this->idPerfil == Autenticacao_Model_Grupos::TECNICO_ACOMPANHAMENTO) {
-                    switch ($dadosRead->idTipoReadequacao) {
-                        case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_PLANILHA_ORCAMENTARIA:
-                        case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RAZAO_SOCIAL:
-                        case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_ALTERACAO_PROPONENTE:
-                        case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_NOME_PROJETO:
-                        case Readequacao_Model_DbTable_TbReadequacao::TIPO_READEQUACAO_RESUMO_PROJETO:
-                            $idTipoDoAto = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_READEQUACAO_PROJETOS_MINC;
-                            break;
-                        default:
-                            $idTipoDoAto = Assinatura_Model_DbTable_TbAssinatura::TIPO_ATO_PARECER_TECNICO_AJUSTE_DE_PROJETO;
-                            break;
-                    }
-                }
-
+                
+                $servicoAssinaturaReadequacao = new \Application\Modules\Readequacao\Service\Assinatura\Readequacao();
+                $idTipoDoAto = $servicoAssinaturaReadequacao->obterAtoAdministrativoPorTipoReadequacao($dadosRead->idTipoReadequacao);
+                
                 $servicoDocumentoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\DocumentoAssinatura(
                     $idPronac,
                     $idTipoDoAto,
                     $idParecer
                 );
                 $idDocumentoAssinatura = $servicoDocumentoAssinatura->iniciarFluxo();
-
+                
                 $origin = "readequacao/readequacao-assinatura";
 
                 parent::message(
@@ -2006,7 +1993,6 @@ class Readequacao_ReadequacoesController extends Readequacao_GenericController
                     "/assinatura/index/visualizar-projeto?idDocumentoAssinatura={$idDocumentoAssinatura}&origin={$origin}",
                     "CONFIRM"
                 );
-//                parent::message("A avalia&ccedil;&atilde;o da readequa&ccedil;&atilde;o foi finalizada com sucesso! ", "readequacao/readequacoes/painel-readequacoes", "CONFIRM");
             }
 
             $idReadequacao = Seguranca::encrypt($idReadequacao);

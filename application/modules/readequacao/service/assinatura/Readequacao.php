@@ -21,8 +21,12 @@ class Readequacao implements IServico
     }
 
 
-    function obterAssinaturas() {
-
+    public function obterAssinaturas()
+    {
+        if (is_null($this->idTipoDoAto)) {
+            throw new Exception("Identificador do Ato Administrativo n&atilde;o informado.");
+        }
+        
         $tbAssinaturaDbTable = new \Assinatura_Model_DbTable_TbAssinatura();
         $tbAssinaturaDbTable->preencherModeloAtoAdministrativo([
             'idOrgaoDoAssinante' => $this->grupoAtivo->codOrgao,
@@ -32,5 +36,10 @@ class Readequacao implements IServico
         ]);
 
         return $tbAssinaturaDbTable->obterAssinaturasReadequacaoDisponiveis();
+    }
+
+    public function obterAtoAdministrativoPorTipoReadequacao($idTipoReadequacao)
+    {
+        return;
     }
 }
