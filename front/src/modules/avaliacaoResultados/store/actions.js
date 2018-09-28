@@ -1,5 +1,6 @@
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
+import { state } from './mutations';
 
 export const dadosMenu = ({ commit }) => {
     avaliacaoResultadosHelperAPI.dadosMenu()
@@ -108,6 +109,7 @@ export const planilha = ({ commit }, params) => {
 };
 
 export const finalizarParecer = ({ commit }, params) => {
+    console.log(state);
     avaliacaoResultadosHelperAPI.finalizarParecer(params)
         .then(() => {
         });
@@ -116,3 +118,16 @@ export const finalizarParecer = ({ commit }, params) => {
 export const encaminharParaTecnico = ({ commit }, params) =>
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
 
+
+export const getLaudoFinal = ({ commit }) => {
+    const data = {'manifestacao':'A', 'laudoTecnico':'Tem mais de 10 caracteres!! 39 no total'};
+    commit(types.GET_LAUDO_FINAL, data);
+};
+
+export const atualizarManifestacao = ({ commit }, characterManifestacao) => {
+    commit(types.SET_MANIFESTACAO_PROVISORIA, characterManifestacao);
+};
+
+export const atualizarParecer = ({ commit }, characterParecer) => {
+    commit(types.SET_PARECER_PROVISORIO, characterParecer);
+};

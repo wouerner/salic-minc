@@ -1,0 +1,160 @@
+<template>
+    <v-container grid-list-xl>
+        <v-form ref="form" v-model="valid">
+            <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+                <v-toolbar dark color="green">
+                        <v-btn icon dark :href="redirectLink">
+                            <v-icon>close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title>Avaliação Financeira - Emissão de Laudo Final</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                            <v-btn dark flat @click.native="salvarParecer()" :disabled="!valid">Salvar</v-btn>
+                            <v-btn dark flat @click.native="finalizarParecer()" :disabled="!valid">Gerar Documento</v-btn>
+                        </v-toolbar-items>
+                </v-toolbar>
+                <v-container grid-list-sm>
+                    <v-layout row wrap>
+                        <v-flex xs12 sm12 md12>
+                            <p><b>Projeto:</b> {{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</p>
+                        </v-flex>
+                        <v-flex xs12 sm12 md12>
+                            <p><b>Proponente:</b> {{proponente.CgcCpf}} - {{proponente.Nome}}</p>
+                        </v-flex>
+                    </v-layout>
+                    <v-divider></v-divider>
+                </v-container>
+                <v-container grid-list>
+                    <v-layout wrap align-center>
+                        <v-flex>
+                            <v-select height="20px" 
+                                      v-model="parecerLaudoFinal.manifestacao"
+                                      @change="updateManifestacao" 
+                                      :rules="itemRules"
+                                      :items="items" 
+                                      item-text="text" 
+                                      item-value="id" 
+                                      box 
+                                      label="Manifestação *"
+                                      required="required">
+                            </v-select>
+                        </v-flex>
+                    </v-layout>
+                    <v-flex>
+                        <v-textarea :value="parecerLaudoFinal.laudoTecnico"
+                                    @input="updateParecer"
+                                    :rules="parecerRules"
+                                    color="deep-purple"
+                                    label="Parecer *"
+                                    height="200px"
+                                    required="required">
+                        </v-textarea>
+                    </v-flex>
+                </v-container>
+            </v-dialog>
+        </v-form>
+    </v-container>
+</template>
+
+<script>
+    import { mapActions, mapGetters, mapState } from 'vuex';
+    import ModalTemplate from '@/components/modal';
+
+    export default {
+        data() {
+            return {
+                tipo: true,
+                idPronac: this.$route.params.id,
+                redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
+                valid: false,
+                dialog: true,
+                itemRules: [
+                    v => !!v || 'Tipo de manifestação é obrigatório!',
+                ],
+                parecerRules: [
+                    v => !!v || 'Parecer é obrigatório!',
+                    v => Object(v).length >= 10 || 'Parecer deve conter mais que 10 caracteres',
+                ],
+                items: [
+                    {
+                        id: 'A',
+                        text: 'Aprovação',
+                    },
+                    {
+                        id: 'R',
+                        text: 'Reprovação',
+                    },
+                    {
+                        id: 'P',
+                        text: 'Aprovação com Ressalva',
+                    },
+                ],
+                // currentParecerLaudoFinal: {},
+            };
+        },
+        components:
+        {
+            ModalTemplate,
+        },
+        methods:
+        {
+            ...mapActions({
+                modalOpen: 'modal/modalOpen',
+                modalClose: 'modal/modalClose',
+                requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
+                salvar: 'avaliacaoResultados/salvarParecer',
+                finalizar: 'avaliacaoResultados/finalizarParecer',
+                getLaudoFinal: 'avaliacaoResultados/getLaudoFinal',
+                atualizarManifestacao: 'avaliacaoResultados/atualizarManifestacao',
+                atualizarParecer: 'avaliacaoResultados/atualizarParecer',
+            }),
+            getConsolidacao(id) {
+                this.requestEmissaoParecer(id);
+            },
+            salvarParecer() {
+                const data = {
+                    idPronac: this.idPronac,
+                    siManifestacao: this.characterManifestacao,
+                    dsParecer: this.characterParecer,
+                };
+
+                this.salvar(data);
+                /** Descomentar linha após migração da lista para o VUEJS */
+                // this.dialog = false;
+            },
+            finalizarParecer() {
+                // const data = {
+                //     idPronac: this.idPronac,
+                //     siManifestacao: this.characterManifestacao,
+                //     dsParecer: this.characterParecer,
+                //     atual: 5,
+                //     proximo: 6,
+                // };
+                this.finalizar();
+                /** Descomentar linha após migração da lista para o VUEJS */
+                // this.dialog = false;
+            },
+            updateManifestacao(characterManifestacao) {
+                this.atualizarManifestacao(characterManifestacao);
+            },
+            updateParecer(characterParecer) {
+                this.atualizarParecer(characterParecer);
+            },
+        },
+        computed:
+        {
+            ...mapGetters({
+                modalVisible: 'modal/default',
+                proponente: 'avaliacaoResultados/proponente',
+                projeto: 'avaliacaoResultados/projeto',
+                parecerLaudoFinal: 'avaliacaoResultados/parecerLaudoFinal',
+            }),
+        },
+        created() {
+            this.redirectLink = this.redirectLink + this.idPronac;
+            this.getConsolidacao(this.idPronac);
+            this.getLaudoFinal();
+            this.$refs.form.validate();
+        },
+    };
+</script>

@@ -9,6 +9,7 @@ import AnaliseComprovantes from './components/AnaliseComprovantes';
 import Diligenciar from './components/Diligenciar';
 import Historico from './components/Historico';
 import ConsolidacaoAnalise from './components/ConsolidacaoAnalise';
+import EmitirLaudoFinal from './components/EmitirLaudoFinal';
 
 Vue.use(Router);
 
@@ -83,6 +84,14 @@ const routes = [
         component: ConsolidacaoAnalise,
         meta: {
             title: 'Consolidacao da Analise',
+        },
+    },
+    {
+        path: '/emitir-laudo-final/:id',
+        name: 'EmitirLaudoFinal',
+        component: EmitirLaudoFinal,
+        meta: {
+            title: 'Emitir Laudo Final',
         },
     },
     {
