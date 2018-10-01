@@ -81,7 +81,7 @@
                         </v-btn>
                     </td>
                     <td class="text-xs-center">
-                        <v-btn flat icon color="blue">
+                        <v-btn flat icon color="blue" :href="LinkEmitirLaudo">
                             <v-icon>create</v-icon>
                         </v-btn>
                     </td>
@@ -123,6 +123,7 @@
         },
         data() {
             return {
+                LinkEmitirLaudo: '/avaliacao-resultado/#/emitir-laudo-final/',
                 pagination: {
                     rowsPerPage: 10,
                 },

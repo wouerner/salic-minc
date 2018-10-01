@@ -97,14 +97,6 @@ const routes = [
         },
     },
     {
-        path: '*',
-        name: 'Painel',
-        component: Painel,
-        meta: {
-            title: 'Painel',
-        },
-    },
-    {
         path: '/laudo',
         name: 'Laudo',
         component: Laudo,
@@ -118,6 +110,14 @@ const routes = [
         component: AnalisarAvaliacao,
         meta: {
             title: 'Análise da avaliação de resultados',
+        },
+    },
+    {
+        path: '*',
+        name: 'Painel',
+        component: Painel,
+        meta: {
+            title: 'Painel',
         },
     },
 ];

@@ -9,8 +9,8 @@
                         <v-toolbar-title>Avaliação Financeira - Emissão de Laudo Final</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="salvarParecer()" :disabled="!valid">Salvar</v-btn>
-                            <v-btn dark flat @click.native="finalizarParecer()" :disabled="!valid">Gerar Documento</v-btn>
+                            <v-btn dark flat @click.native="salvarLaudoFinal()" :disabled="!valid">Salvar</v-btn>
+                            <v-btn dark flat @click.native="finalizarLaudoFinal()" :disabled="!valid">Gerar Documento</v-btn>
                         </v-toolbar-items>
                 </v-toolbar>
                 <v-container grid-list-sm>
@@ -65,7 +65,7 @@
             return {
                 tipo: true,
                 idPronac: this.$route.params.id,
-                redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
+                redirectLink: '/avaliacao-resultado/#/laudo/',
                 valid: false,
                 dialog: true,
                 itemRules: [

@@ -55,15 +55,8 @@ export const salvarParecer = ({ commit }, params) => {
     });
 };
 
-export const finalizarParecer = (_, data) => {
-    avaliacaoResultadosHelperAPI.finalizarParecer(data)
-        .then((response) => {
-            console.log(response);
-        });
-};
-
 export const finalizarLaudoFinal = (_, data) => {
-    avaliacaoResultadosHelperAPI.finalizarParecer(data)
+    avaliacaoResultadosHelperAPI.finalizarLaudoFinal(data)
         .then((response) => {
             console.log(response);
         });
