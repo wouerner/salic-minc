@@ -38,13 +38,18 @@ class CertidoesNegativas
 
         $resultArray = [];
         foreach ($resultado as $item) {
+            $dsCertidao = html_entity_decode($item['dsCertidao']);
+            $situacao = html_entity_decode($item['Situacao']);
+            $objDateTimeDtEmissao = new \DateTime($item['DtEmissao']);
+            $objDateTimeDtValidade = new \DateTime($item['DtValidade']);
+
             $itemaArray = [
-                'dsCertidao' => $item['dsCertidao'],
+                'dsCertidao' => $dsCertidao,
                 'CodigoCertidao' => $item['CodigoCertidao'],
-                'DtEmissao' => $item['DtEmissao'],
-                'DtValidade' => $item['DtValidade'],
+                'DtEmissao' => $objDateTimeDtEmissao->format('d/m/Y H:i:s'),
+                'DtValidade' => $objDateTimeDtValidade->format('d/m/Y H:i:s'),
                 'Pronac' => $item['Pronac'],
-                'Situacao' => $item['Situacao'],
+                'Situacao' => $situacao,
             ];
 
             $resultArray[] = $itemaArray;
