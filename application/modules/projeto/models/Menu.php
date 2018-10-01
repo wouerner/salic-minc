@@ -285,8 +285,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Certid&otilde;es Negativas',
             'title' => 'Ir para Dados Certid&otilde;es Negativas',
-            'link' => '/default/consultardadosprojeto/certidoes-negativas/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/{$idPronacHash}/certidoes-negativas",
+            'ajax' => false,
             'grupo' => []
         ];
 
