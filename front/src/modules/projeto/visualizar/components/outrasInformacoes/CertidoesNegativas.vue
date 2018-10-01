@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="dados">
         <table class="tabela">
             <thead>
                 <tr class="destacar">
@@ -9,8 +9,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>209561</td>
-                    <td>Teste</td>
+                    <td>{{ dados.Pronac }}</td>
+                    <td>{{ dados.NomeProjeto }}</td>
                 </tr>
             </tbody>
         </table>
@@ -24,13 +24,13 @@
                     <th>SITUACAO</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody v-for="(dado, index) in dados" :key="index">
                 <tr>
-                    <td>teste certidoes</td>
-                    <td>teste data 1</td>
-                    <td>teste data 2</td>
-                    <td>209561</td>
-                    <td>Teste</td>
+                    <td>{{ dado.dsCertidao }}</td>
+                    <td>{{ dado.DtEmissao }}</td>
+                    <td>{{ dado.DtValidade }}</td>
+                    <td>{{ dado.Pronac }}</td>
+                    <td>{{ dado.Situacao }}</td>
                 </tr>
             </tbody>
         </table>
@@ -40,16 +40,16 @@
 export default {
     name: 'CertidoesNegativas',
     props: ['idPronac'],
-    data() {
-        return {
-            dados: {
-                    type: Object,
-                    default() {
-                        return {};
-                    },
-                },
-        };
-    },
+    // data() {
+    //     return {
+    //         dados: {
+    //                 type: Object,
+    //                 default() {
+    //                     return {};
+    //                 },
+    //             },
+    //     };
+    // },
     mounted() {
             this.buscar_dados();
         },
@@ -61,7 +61,8 @@ export default {
                 $3.ajax({
                     url: '/projeto/certidoes-negativas-rest/index/idPronac/' + idPronac,
                 }).done(function (response) {
-                    self.dados = response.data;
+                    self.dados = response.data.items;
+                    console.log(self.dados);
                 });
             },
         },

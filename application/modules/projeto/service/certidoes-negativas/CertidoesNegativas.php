@@ -1,7 +1,6 @@
 <?php
 
 namespace Application\Modules\Projeto\Service\CertidoesNegativas;
-//namespace Application\Modules\CertidoesNegativas\Service\CertidoesNegativas;
 
 use Seguranca;
 
