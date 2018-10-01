@@ -101,8 +101,8 @@
                 modalOpen: 'modal/modalOpen',
                 modalClose: 'modal/modalClose',
                 requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
-                salvar: 'avaliacaoResultados/salvarParecer',
-                finalizar: 'avaliacaoResultados/finalizarParecer',
+                salvar: 'avaliacaoResultados/salvarLaudoFinal',
+                finalizar: 'avaliacaoResultados/finalizarLaudoFinal',
                 getLaudoFinal: 'avaliacaoResultados/getLaudoFinal',
                 atualizarManifestacao: 'avaliacaoResultados/atualizarManifestacao',
                 atualizarParecer: 'avaliacaoResultados/atualizarParecer',
@@ -110,7 +110,7 @@
             getConsolidacao(id) {
                 this.requestEmissaoParecer(id);
             },
-            salvarParecer() {
+            salvarLaudoFinal() {
                 const data = {
                     idPronac: this.idPronac,
                     siManifestacao: this.characterManifestacao,
@@ -121,7 +121,7 @@
                 /** Descomentar linha após migração da lista para o VUEJS */
                 // this.dialog = false;
             },
-            finalizarParecer() {
+            finalizarLaudoFinal() {
                 const data = {
                     idPronac: this.idPronac,
                     siManifestacao: this.characterManifestacao,

@@ -14,3 +14,4 @@ export const planilha = state => state.planilha;
 export const parecerLaudoFinal = state => state.parecerLaudoFinal;
 export const characterManifestacao = state => state.characterManifestacao;
 export const characterParecer = state => state.characterParecer;
+export const getProjetosFinalizados = state => state.projetosFinalizados;

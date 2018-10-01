@@ -38,25 +38,31 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
     return p;
 };
 
-// export const salvarParecer = (params) => {
-//     const p = new Promise((resolve) => {
-//         avaliacaoResultadosHelperAPI.criarParecer(params)
-//             .then(() => {
-//                 resolve();
-//             });
-//     });
-//
-//     return p;
-// };
-
-export const salvarParecer = (_, data) => {
+export const salvarLaudoFinal = (_, data) => {
     avaliacaoResultadosHelperAPI.criarParecer(data)
         .then((response) => {
             console.log(response);
         });
 };
 
+export const salvarParecer = ({ commit }, params) => {
+    commit();
+    const p = new Promise((resolve) => {
+        avaliacaoResultadosHelperAPI.criarParecer(params)
+            .then(() => {
+                resolve();
+            });
+    });
+};
+
 export const finalizarParecer = (_, data) => {
+    avaliacaoResultadosHelperAPI.finalizarParecer(data)
+        .then((response) => {
+            console.log(response);
+        });
+};
+
+export const finalizarLaudoFinal = (_, data) => {
     avaliacaoResultadosHelperAPI.finalizarParecer(data)
         .then((response) => {
             console.log(response);
@@ -76,12 +82,21 @@ export const obterDestinatarios = ({ commit }) => {
         });
 };
 
-export const obterDadosTabelaTecnico = ({ commit }) => {
-    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico()
+export const obterDadosTabelaTecnico = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
         .then((response) => {
             const data = response.data;
             const dadosTabela = data.data;
             commit(types.PROJETOS_AVALIACAO_TECNICA, dadosTabela);
+        });
+};
+
+export const projetosFinalizados = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
+        .then((response) => {
+            const data = response.data;
+            const dadosTabela = data.data;
+            commit(types.SET_DADOS_PROJETOS_FINALIZADOS, dadosTabela);
         });
 };
 
@@ -122,8 +137,21 @@ export const planilha = ({ commit }, params) => {
         });
 };
 
-export const encaminharParaTecnico = ({ commit }, params) =>
+export const finalizarParecer = ({ commit }, params) => {
+    commit();
+    avaliacaoResultadosHelperAPI.finalizarParecer(params)
+        .then(() => {
+        });
+};
+
+export const encaminharParaTecnico = ({ commit }, params) => {
+    commit();
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+};
+
+export const alterarParecer = ({ commit }, param) => {
+    commit(types.SET_PARECER, param);
+};
 
 
 export const getLaudoFinal = ({ commit }) => {
