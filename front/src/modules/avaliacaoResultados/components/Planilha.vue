@@ -231,10 +231,13 @@
         computed: {
             ...mapGetters({
                 getPlanilha: 'avaliacaoResultados/planilha',
+                getProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
             }),
         },
         mounted() {
             this.setPlanilha(this.idPronac);
+            this.setProjetoAnalise(this.idPronac);
+            console.log(this.getProjetoAnalise);
         },
         components: {
             ModalTemplate,
@@ -242,6 +245,7 @@
         methods: {
             ...mapActions({
                 setPlanilha: 'avaliacaoResultados/planilha',
+                setProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
             }),
             moeda: (moedaString) => {
                 const moeda = Number(moedaString);

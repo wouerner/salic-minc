@@ -20,6 +20,7 @@ export const state = {
     tipoAvaliacao: {},
     redirectLink: {},
     planilha: {},
+    projetoAnalise: {},
     projetosFinalizados: {},
 };
 
@@ -85,6 +86,9 @@ export const mutations = {
     },
     [types.GET_PLANILHA](state, planilha) {
         state.planilha = planilha;
+    },
+    [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
+        state.projetoAnalise = projetoAnalise;
     },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;
