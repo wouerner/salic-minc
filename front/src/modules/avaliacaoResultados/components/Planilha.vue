@@ -147,16 +147,18 @@
                 <v-icon>close</v-icon>
             </v-btn>
             <v-tooltip left>
+                    <!-- Terminar Assinar -->
                 <v-btn
                     fab
                     dark
                     small
                     color="green"
                     slot="activator"
+                    to="/assinatura/index/visualizar-projeto?idDocumentoAssinatura=2257"
                 >
                     <v-icon>check</v-icon>
                 </v-btn>
-                <span>Finalizar Análise</span>
+                <span>Assinar</span>
             </v-tooltip>
             <v-tooltip left>
                 <v-btn
@@ -165,6 +167,7 @@
                     small
                     color="teal"
                     slot="activator"
+                    :to="'/emitir-parecer/' + idPronac"
                 >
                     <v-icon>gavel</v-icon>
                 </v-btn>
