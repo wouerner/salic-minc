@@ -18,6 +18,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
             $this->view->addScriptPath(APPLICATION_PATH . '/modules/proposta/views/scripts/manterpropostaincentivofiscal');
 
             $this->verificarPermissaoAcesso(true, false, false);
+            $this->validarEdicaoProposta();
 
             //VERIFICA SE A PROPOSTA TEM DILIGENCIAS
             $PreProjeto = new Proposta_Model_DbTable_PreProjeto();
@@ -26,12 +27,6 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
 
             $this->view->acao = $this->_urlPadrao . "/proposta/manterpropostaincentivofiscal/salvar";
 
-            $tbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-            $this->movimentacao = $tbMovimentacao->buscarMovimentacaoProposta($this->view->idPreProjeto);
-
-            if (!empty($this->movimentacao) && $this->movimentacao['idMovimentacao'] != 95) {
-                $this->redirect("/proposta/visualizar/index/idPreProjeto/" . $this->idPreProjeto);
-            }
         }
 
         // Busca na tabela apoio ExecucaoImediata

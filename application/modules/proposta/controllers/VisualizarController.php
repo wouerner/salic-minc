@@ -21,12 +21,6 @@ class Proposta_VisualizarController extends Proposta_GenericController
         $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
         $this->view->headScript()->offsetSetFile(101, '/public/dist/js/proposta.js'. $gitTag, 'text/javascript', array('charset' => 'utf-8'));
 
-        $this->view->fases = Proposta_Model_TbMovimentacao::obterFasesProposta();
-
-        $tbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
-        $this->view->movimentacao = $tbMovimentacao->buscarMovimentacaoProposta($this->view->idPreProjeto);
-
-
     }
 
     public function obterPropostaCulturalCompletaAction()
