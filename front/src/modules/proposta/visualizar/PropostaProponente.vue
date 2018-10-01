@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PropostaFluxo id-pre-projeto="idPreProjeto"></PropostaFluxo>
+        <PropostaFluxo :id-pre-projeto="idPreProjeto"></PropostaFluxo>
         <Proposta :idpreprojeto="idPreProjeto"></Proposta>
 
         <SalicMenuSuspenso v-if="Object.keys(dadosProposta).length > 0">

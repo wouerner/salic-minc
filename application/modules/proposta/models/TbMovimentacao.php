@@ -159,34 +159,4 @@ class Proposta_Model_TbMovimentacao extends MinC_Db_Model
         return $this;
     }
 
-    public static function obterFasesProposta()
-    {
-        $fases = [];
-        $fases[] = [
-            'id' => Proposta_Model_TbMovimentacao::PROPOSTA_COM_PROPONENTE,
-            'descricao'=> 'Com o proponente',
-            'icon' => 'create',
-        ];
-
-        $fases[] = [
-            'id' => Proposta_Model_TbMovimentacao::PROPOSTA_PARA_ANALISE_INICIAL,
-            'descricao'=> 'Em Avalia&ccedil;&atilde;o no MinC',
-            'icon' => 'how_to_reg'
-        ];
-
-        $fases[] = [
-            'id' => Proposta_Model_TbMovimentacao::PROPOSTA_ARQUIVADA,
-            'descricao'=> 'Proposta arquivada',
-            'icon' => 'archive'
-        ];
-
-        $fases[] = [
-            'id' => 0,
-            'descricao'=> 'Projeto Cultural',
-            'icon' => 'beenhere'
-        ];
-
-        return $fases;
-
-    }
 }

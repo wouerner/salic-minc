@@ -136,8 +136,8 @@ abstract class Proposta_GenericController extends MinC_Controller_Action_Abstrac
             $this->view->idPreProjeto = $this->idPreProjeto;
             $this->view->proposta = $this->_proposta;
             $this->view->proponente = $this->_proponente;
-
             $this->view->url = $this->getRequest()->REQUEST_URI;
+
             $this->isEditarProposta = $this->isEditarProposta($this->idPreProjeto);
             $this->isEditarProjeto = $this->isEditarProjeto($this->idPreProjeto);
             $this->isEditavel = $this->isEditavel($this->idPreProjeto);
