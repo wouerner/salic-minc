@@ -9,8 +9,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ dados.Pronac }}</td>
-                    <td>{{ dados.NomeProjeto }}</td>
+                    <td>{{ dados.informacoes['Pronac'] }}</td>
+                    <td>{{ dados.informacoes['NomeProjeto'] }}</td>
                 </tr>
             </tbody>
         </table>
@@ -24,13 +24,18 @@
                     <th>SITUACAO</th>
                 </tr>
             </thead>
-            <tbody v-for="(dado, index) in dados" :key="index">
+            <tbody v-for="(dado, index) in dados.certidoes" :key="index">
                 <tr>
                     <td>{{ dado.dsCertidao }}</td>
                     <td>{{ dado.DtEmissao }}</td>
                     <td>{{ dado.DtValidade }}</td>
                     <td>{{ dado.Pronac }}</td>
-                    <td>{{ dado.Situacao }}</td>
+                    <div v-if="dado.Situacao">
+                        <td>{{ dado.Situacao }}</td>  
+                    </div>
+                    <div v-else>
+                        Vencida.
+                    </div>
                 </tr>
             </tbody>
         </table>

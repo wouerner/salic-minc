@@ -36,6 +36,8 @@ class CertidoesNegativas
         $sv = new \certidaoNegativa();
         $resultado = $sv->buscarCertidaoNegativa($rs->CgcCpf);
 
+        $certidoes = [];
+        $informacoes = [];
         $resultArray = [];
         foreach ($resultado as $item) {
             $dsCertidao = html_entity_decode($item['dsCertidao']);
@@ -43,7 +45,7 @@ class CertidoesNegativas
             $objDateTimeDtEmissao = new \DateTime($item['DtEmissao']);
             $objDateTimeDtValidade = new \DateTime($item['DtValidade']);
 
-            $itemaArray = [
+            $itemArray = [
                 'dsCertidao' => $dsCertidao,
                 'CodigoCertidao' => $item['CodigoCertidao'],
                 'DtEmissao' => $objDateTimeDtEmissao->format('d/m/Y H:i:s'),
@@ -52,11 +54,14 @@ class CertidoesNegativas
                 'Situacao' => $situacao,
             ];
 
-            $resultArray[] = $itemaArray;
+            $certidoes[] = $itemArray;
         }
 
-        $resultArray['Pronac'] = $resultado[0]['Pronac'];
-        $resultArray['NomeProjeto'] = $rs['NomeProjeto'];
+        $informacoes['Pronac'] = $resultado[0]['Pronac'];
+        $informacoes['NomeProjeto'] = $rs['NomeProjeto'];
+
+        $resultArray['certidoes'] = $certidoes;
+        $resultArray['informacoes'] = $informacoes;
 
         return $resultArray;
     }
