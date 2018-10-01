@@ -20,6 +20,7 @@ export const state = {
     tipoAvaliacao: {},
     redirectLink: {},
     planilha: {},
+    projetosFinalizados: {},
 };
 
 export const mutations = {
@@ -87,5 +88,8 @@ export const mutations = {
     },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;
+    },
+    [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
+        state.projetosFinalizados = dados;
     },
 };

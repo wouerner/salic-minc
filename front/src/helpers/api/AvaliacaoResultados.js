@@ -34,7 +34,7 @@ export const getTeste = params => api.postRequest('/realizarprestacaodecontas/ca
 
 export const getTipoAvaliacao = params => api.getRequest(`/avaliacao-resultados/tipo-avaliacao-rest/idPronac/${params}`);
 
-export const obterDadosTabelaTecnico = () => api.getRequest('/avaliacao-resultados/projetos-avaliacao-tecnica/');
+export const obterDadosTabelaTecnico = params => api.getRequest(`/avaliacao-resultados/fluxo-projeto?estadoid=${params.estadoid}`);
 
 export const obterHistoricoEncaminhamento = params => api.getRequest(`/avaliacao-resultados/historico/idPronac/${params}`);
 

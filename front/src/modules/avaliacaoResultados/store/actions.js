@@ -62,12 +62,21 @@ export const obterDestinatarios = ({ commit }) => {
         });
 };
 
-export const obterDadosTabelaTecnico = ({ commit }) => {
-    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico()
+export const obterDadosTabelaTecnico = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
         .then((response) => {
             const data = response.data;
             const dadosTabela = data.data;
             commit(types.PROJETOS_AVALIACAO_TECNICA, dadosTabela);
+        });
+};
+
+export const projetosFinalizados = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
+        .then((response) => {
+            const data = response.data;
+            const dadosTabela = data.data;
+            commit(types.SET_DADOS_PROJETOS_FINALIZADOS, dadosTabela);
         });
 };
 

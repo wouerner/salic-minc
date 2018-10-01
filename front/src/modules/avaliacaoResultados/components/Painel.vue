@@ -16,7 +16,7 @@
                 </v-tab>
 
                 <v-tab href="#tab-2">
-                    Assinados
+                     Finalizados 
                     <v-icon>done_all</v-icon>
                 </v-tab>
 
@@ -28,6 +28,7 @@
                         <v-card-text>
                             <TabelaProjetos
                                 :analisar="true"
+                                :dados="dadosTabelaTecnico"
                             ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
@@ -38,7 +39,9 @@
                 >
                     <v-card flat>
                         <v-card-text>
-                            <TabelaProjetos></TabelaProjetos>
+                            <TabelaProjetos
+                                :dados="getProjetosFinalizados"
+                            ></TabelaProjetos>
                         </v-card-text>
                     </v-card>
                 </v-tab-item>
@@ -48,16 +51,33 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import TabelaProjetos from './TabelaProjetos';
 
 export default {
     name: 'Painel',
+    created() {
+        this.projetosFinalizados({ estadoid: 6 });
+        this.obterDadosTabelaTecnico({ estadoid: 5 });
+    },
     data() {
         return {
         };
     },
     components: {
         TabelaProjetos,
+    },
+    methods: {
+        ...mapActions({
+            obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
+            projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
+        }),
+    },
+    computed: {
+        ...mapGetters({
+            dadosTabelaTecnico: 'avaliacaoResultados/dadosTabelaTecnico',
+            getProjetosFinalizados: 'avaliacaoResultados/getProjetosFinalizados',
+        }),
     },
 };
 </script>
