@@ -109,7 +109,7 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
             $this->getSchema('tabelas')
         );
         $objQuery->where("IdPRONAC = ?", $idPronac);
-        $objQuery->where("tbAtoAdministrativo.idTipoDoAto = ?", $idTipoDoAtoAdministrativo);
+        $objQuery->where("tbAtoAdministrativo.idTipoDoAto IN (?)", $idTipoDoAtoAdministrativo);
         if (!is_null($idDocumentoAssinatura)) {
             $objQuery->where("tbAssinatura.idDocumentoAssinatura = ?", $idDocumentoAssinatura);
         }
