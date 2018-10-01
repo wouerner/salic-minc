@@ -61,7 +61,7 @@
         </v-toolbar>
     </div>
     <div v-else>
-        Carregando... 
+        Carregando...
     </div>
     </div>
 </template>
@@ -88,9 +88,13 @@ export default {
     mounted() {
         // this.dadosMenuAjax();
     },
+    created() {
+        this.perfisDisponiveis();
+    },
     methods: {
         ...mapActions({
             dadosMenuAjax: 'avaliacaoResultados/dadosMenu',
+            perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
         }),
     },
 };

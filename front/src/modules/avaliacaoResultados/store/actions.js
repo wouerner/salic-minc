@@ -133,3 +133,9 @@ export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
+export const perfisDisponiveis = (_, params) => {
+    avaliacaoResultadosHelperAPI.perfisDisponiveis(params)
+        .then((response) => {
+            console.log(response);
+        });
+};
