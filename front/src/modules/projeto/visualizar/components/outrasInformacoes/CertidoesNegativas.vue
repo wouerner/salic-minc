@@ -18,11 +18,11 @@
             <table class="tabela">
                 <thead>
                     <tr class="destacar">
-                        <th>CERTIDOES</th>
-                        <th>DATA DE EMISSAO</th>
+                        <th>CERTID&otilde;es</th>
+                        <th>DATA DE EMISS&Atilde;O</th>
                         <th>DATA DE VALIDADE</th>
                         <th>PRONAC</th>
-                        <th>SITUACAO</th>
+                        <th>SITUA&Ccedil;&Atilde;O</th>
                     </tr>
                 </thead>
                 <tbody v-for="(dado, index) in dados.certidoes" :key="index">
