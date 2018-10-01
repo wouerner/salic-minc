@@ -134,8 +134,10 @@ export const alterarParecer = ({ commit }, param) => {
 };
 
 export const perfisDisponiveis = (_, params) => {
+    console.log('em cima');
     avaliacaoResultadosHelperAPI.perfisDisponiveis(params)
         .then((response) => {
+            console.log('dentro');
             console.log(response);
         });
 };

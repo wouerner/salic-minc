@@ -16,7 +16,7 @@
                 </v-tab>
 
                 <v-tab href="#tab-2">
-                     Finalizados 
+                     Finalizados
                     <v-icon>done_all</v-icon>
                 </v-tab>
 
@@ -59,6 +59,8 @@ export default {
     created() {
         this.projetosFinalizados({ estadoid: 6 });
         this.obterDadosTabelaTecnico({ estadoid: 5 });
+        this.perfisDisponiveis();
+        console.log('Componente');
     },
     data() {
         return {
@@ -71,6 +73,7 @@ export default {
         ...mapActions({
             obterDadosTabelaTecnico: 'avaliacaoResultados/obterDadosTabelaTecnico',
             projetosFinalizados: 'avaliacaoResultados/projetosFinalizados',
+            perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
         }),
     },
     computed: {

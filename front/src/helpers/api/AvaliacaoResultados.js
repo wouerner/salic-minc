@@ -52,4 +52,4 @@ export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/te
 
 export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
 
-export const perfisDisponiveis = params => api.getRequest('');
+export const perfisDisponiveis = () => api.getRequest('/navegacao/menu-principal/index');

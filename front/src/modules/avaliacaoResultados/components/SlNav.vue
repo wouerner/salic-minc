@@ -88,9 +88,6 @@ export default {
     mounted() {
         // this.dadosMenuAjax();
     },
-    created() {
-        this.perfisDisponiveis();
-    },
     methods: {
         ...mapActions({
             dadosMenuAjax: 'avaliacaoResultados/dadosMenu',

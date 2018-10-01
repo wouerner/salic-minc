@@ -22,7 +22,7 @@ class PrincipalproponenteController extends MinC_Controller_Action_Abstract
 
     public function indexAction()
     {
-        xd('AAAAAAAAAAAAAAAAA');
+//        xd('AAAAAAAAAAAAAAAAA');
         $a = new Agente_Model_DbTable_Agentes();
         $verificarvinculo = $a->buscarAgenteVinculoResponsavel(array('vr.idAgenteProponente = ?'=>$this->idAgente, 'vprp.siVinculoProposta = ?'=>0))->count();
         $tbComunicados = new tbComunicados();
