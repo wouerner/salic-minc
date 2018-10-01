@@ -1,43 +1,8 @@
 <div class="container-fluid">
     <div class="row">
         <?= $this->pageTitle('Visualiza&ccedil;&atilde;o da proposta', []); ?>
-
-        <div class="content">
-            <div id="">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="cardd">
-                            <div class="cardd-content">
-                                <div class="row" style="text-align: center;">
-                                    <div style="vertical-align:middle;">
-                                        <?php if ($this->fases) : ?>
-                                            <?php foreach ($this->fases as $key => $fase) : $contadorAssinatura++ ?>
-                                                <?php if ($contadorAssinatura > 1) : ?>
-                                                    <div style="display:inline-block"><i class="tiny material-icons">forward</i></div>
-                                                <?php endif; ?>
-                                                <div style="display:inline-block">
-                                                    <a class="margin20 btn-large
-                                                        <?= $this->movimentacao['idMovimentacao'] == $fase['id'] ? '' : 'disabled' ?>"
-                                                        style="cursor: default"
-                                                    >
-                                                        <i class="tiny material-icons left"><?= $fase['icon']; ?></i><?= $fase['descricao']; ?>
-                                                    </a>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="container-vue">
-                <proposta :idpreprojeto="<?= $this->idPreProjeto; ?>"></proposta>
-            </div>
+        <div id="container-vue">
+            <proposta-proponente :id-pre-projeto="<?= $this->idPreProjeto; ?>"></proposta-proponente>
         </div>
     </div>
 </div>
-
-<?= $this->partial('inc/menu-suspenso.phtml', $this); ?>

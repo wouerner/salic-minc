@@ -44,13 +44,13 @@
                     {
                         id: PROPOSTA_PARA_ANALISE_INICIAL,
                         label: 'Em Avalia&ccedil;&atilde;o no MinC',
-                        descricao: 'A proposta está em avaliação pelo Ministério da Cultura, acompanhe na aba histórico de avaliação.',
+                        descricao: 'A proposta está em avaliação pelo Ministério da Cultura, acompanhe na aba histórico de avaliações.',
                         icon: 'how_to_reg',
                     },
                     {
                         id: PROPOSTA_ARQUIVADA,
                         label: 'Proposta arquivada',
-                        descricao: 'Proposta arquivada, acompanhe na aba histórico de avaliação para saber mais.',
+                        descricao: 'Proposta arquivada, acompanhe na aba histórico de avaliações para saber mais.',
                         icon: 'archive',
                     },
                     {

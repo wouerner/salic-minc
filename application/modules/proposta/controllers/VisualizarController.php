@@ -43,7 +43,10 @@ class Proposta_VisualizarController extends Proposta_GenericController
             $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
             $propostaAtual = $preProjetoMapper->obterArrayPropostaCompleta($idPreProjeto);
 
-            $dados = $propostaAtual;
+            $tbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
+            $movimentacao = $tbMovimentacao->buscarMovimentacaoProposta($idPreProjeto);
+
+            $dados = array_merge($propostaAtual, $movimentacao);
 
             $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $dados));
         } catch (Exception $e) {
