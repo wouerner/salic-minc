@@ -50,6 +50,7 @@ class CertidoesNegativas
 
             $resultArray[] = $itemaArray;
         }
+
         return $resultArray;
     }
 }
