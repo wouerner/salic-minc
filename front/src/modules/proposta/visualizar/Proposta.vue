@@ -166,8 +166,7 @@
                     <div class="collapsible-header"><i class="material-icons">place</i>Local de realiza&ccedil;&atilde;o/Deslocamento
                     </div>
                     <div class="collapsible-body padding20">
-                        <PropostaLocalRealizacaoDeslocamento
-                                :idpreprojeto="idpreprojeto"></PropostaLocalRealizacaoDeslocamento>
+                        <PropostaLocalRealizacaoDeslocamento :proposta="dados"></PropostaLocalRealizacaoDeslocamento>
                     </div>
                 </li>
                 <li>
@@ -191,7 +190,7 @@
             </ul>
         </div>
         <div v-else class="center-align">
-            <div class="padding10 green white-text">Opa! Proposta n&atilde;o informada...</div>
+            <div class="padding20 card-panel">Opa! Proposta n&atilde;o encontrada...</div>
         </div>
     </div>
 </template>
