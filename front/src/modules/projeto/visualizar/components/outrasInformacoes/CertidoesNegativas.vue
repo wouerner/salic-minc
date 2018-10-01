@@ -4,37 +4,37 @@
             <table class="tabela">
                 <thead>
                     <tr class="destacar">
-                        <th>PRONAC</th>
-                        <th>Nome do Projeto</th>
+                        <th class="center">PRONAC</th>
+                        <th class="center">Nome do Projeto</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ dados.informacoes['Pronac'] }}</td>
-                        <td>{{ dados.informacoes['NomeProjeto'] }}</td>
+                        <td class="center">{{ dados.informacoes['Pronac'] }}</td>
+                        <td class="center">{{ dados.informacoes['NomeProjeto'] }}</td>
                     </tr>
                 </tbody>
             </table>
             <table class="tabela">
                 <thead>
                     <tr class="destacar">
-                        <th>CERTID&otilde;es</th>
-                        <th>DATA DE EMISS&Atilde;O</th>
-                        <th>DATA DE VALIDADE</th>
-                        <th>PRONAC</th>
-                        <th>SITUA&Ccedil;&Atilde;O</th>
+                        <th class="center">CERTID&otilde;es</th>
+                        <th class="center">DATA DE EMISS&Atilde;O</th>
+                        <th class="center">DATA DE VALIDADE</th>
+                        <th class="center">PRONAC</th>
+                        <th class="center">SITUA&Ccedil;&Atilde;O</th>
                     </tr>
                 </thead>
                 <tbody v-for="(dado, index) in dados.certidoes" :key="index">
                     <tr>
-                        <td>{{ dado.dsCertidao }}</td>
-                        <td>{{ dado.DtEmissao }}</td>
-                        <td>{{ dado.DtValidade }}</td>
-                        <td>{{ dado.Pronac }}</td>
-                        <td v-if="dado.Situacao" >
+                        <td class="center">{{ dado.dsCertidao }}</td>
+                        <td class="center">{{ dado.DtEmissao }}</td>
+                        <td class="center">{{ dado.DtValidade }}</td>
+                        <td class="center">{{ dado.Pronac }}</td>
+                        <td class="center" v-if="dado.Situacao" >
                             {{ dado.Situacao }}
                         </td>
-                        <td v-else>
+                        <td class="center" v-else>
                             Vencida
                         </td>
                     </tr>
