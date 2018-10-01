@@ -35,5 +35,21 @@ class CertidoesNegativas
 
         $sv = new \certidaoNegativa();
         $resultado = $sv->buscarCertidaoNegativa($rs->CgcCpf);
+
+        $resultArray = [];
+        foreach ($resultado as $item){
+            $itemaArray = [
+                'dsCertidao' => $item['dsCertidao'],
+                'CodigoCertidao' => $item['CodigoCertidao'],
+                'DtEmissao' => $item['DtEmissao'],
+                'DtValidade' => $item['DtValidade'],
+                'Pronac' => $item['Pronac'],
+                'Situacao' => $item['Situacao']
+
+            ];
+
+            $resultArray[] = $itemaArray;
+        }
+        return $resultArray;
     }
 }
