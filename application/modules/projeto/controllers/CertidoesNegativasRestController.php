@@ -12,7 +12,7 @@ class Projeto_CertidoesNegativasRestController extends MinC_Controller_Rest_Abst
         parent::__construct($request, $response, $invokeArgs);
     }
 
-    public function getAction()
+    public function indexAction()
     {
         try {
             $CertidoesNegativasService = new CertidoesNegativasService($this->getRequest(), $this->getResponse());
@@ -32,9 +32,9 @@ class Projeto_CertidoesNegativasRestController extends MinC_Controller_Rest_Abst
 
     }
 
-    public function indexAction()
+    public function getAction()
     {
-        $this->renderJsonResponse([], 200);
+        $this->renderJsonResponse(200);
     }
 
     public function postAction()

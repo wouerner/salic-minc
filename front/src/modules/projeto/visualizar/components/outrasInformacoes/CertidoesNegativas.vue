@@ -41,19 +41,29 @@ export default {
     name: 'CertidoesNegativas',
     props: ['idPronac'],
     data() {
-        return idPronac = 216941;
+        return {
+            dados: {
+                    type: Object,
+                    default() {
+                        return {};
+                    },
+                },
+        };
     },
+    mounted() {
+            this.buscar_dados();
+        },
     methods: {
-            // buscar_dados() {
-            //     const self = this;
-            //     /* eslint-disable */
-            //     $3.ajax({
-            //         url: '/projeto/certidoes-negativas-rest/get-action/idPronac/' + self.idPronac
-            //     }).done(function (response) {
-            //         self.dadosAtuais = response.data.atual;
-            //         self.dadosHistorico = response.data.historico;
-            //     });
-            // },
+            buscar_dados() {
+                const self = this;
+                const idPronac = self.$route.params.idPronac
+                /* eslint-disable */
+                $3.ajax({
+                    url: '/projeto/certidoes-negativas-rest/index/idPronac/' + idPronac,
+                }).done(function (response) {
+                    self.dados = response.data;
+                });
+            },
         },
 }
 </script>
