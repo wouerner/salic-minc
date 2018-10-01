@@ -34,7 +34,7 @@ Para parar o container basta digitar:
 * Estamos desacoplando o front-end. [Clique aqui para ver mais](front/README.md).
 
 ## Submodulos
-* Esse     projeto contem os manuais e implementações de layout do salic [Layout](https://github.com/culturagovbr/salic-minc-layout)
+* Esse projeto contem os manuais e implementações de layout do salic [Layout](https://github.com/culturagovbr/salic-minc-layout)
 
 ## Tecnologias
 * [Docker](https://www.docker.com/)

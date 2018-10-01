@@ -11,7 +11,7 @@ if [ -e .git/MERGE_MSG ]; then
 		██║  ██║██║ ╚═╝ ██║╚██████╔╝ ██╗
 		╚═╝  ╚═╝╚═╝     ╚═╝ ╚═════╝  ╚═╝
 		'
-		echo "\033[0;31mVocê não pode usar o merge do${MERGE_INTO_HMG} hmg para sua branch!${NC}"
+		echo "\033[0;31mVocê não pode usar o merge de hmg para sua branch!${NC}"
 		echo "\033[0;32mUse 'git merge --abort' para cancelar o merge!${NC}"
 	  exit 1
 	fi
