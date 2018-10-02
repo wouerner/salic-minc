@@ -214,7 +214,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
             }
         }
-        
+
         $menu['solicitacoes'] = [
             'id' => 'solicitacoes',
             'label' => $this->usuarioExterno ? "Minhas solicita&ccedil;&otilde;es" : "Solicita&ccedil;&otilde;es",
@@ -325,8 +325,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Local de realiza&ccedil;&atilde;o/Deslocamento',
             'title' => 'Ir para Local de realiza&ccedil;&atilde;o/Deslocamento',
-            'link' => '/default/consultardadosprojeto/local-realizacao-deslocamento/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/{$idPronacHash}/local-realizacao-deslocamento",
+            'ajax' => false,
             'grupo' => []
         ];
 
@@ -723,7 +723,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 'submenu' => '',
                 'grupo' => []
             ];
-        }                    
+        }
 
         if ($this->situacaoProjeto != 'E24' || $this->debug) {
 
@@ -753,7 +753,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
                 ];
 
             }
-            
+
 
             if ($this->permissoesMenu['RelatorioFinal'] || $this->debug) {
                 $menu['comprovacaofisica']['submenu'][] = [
