@@ -36,7 +36,9 @@ class AvaliacaoResultados_RevisaoController extends MinC_Controller_Rest_Abstrac
         }
 
         $revisaoService = new RevisaoService($this->getRequest(), $this->getResponse());
-        $resposta = $revisaoService;
+        $resposta = $revisaoService->buscarRevisoes($this->_request->idAvaliacaoFinanceira);
+        var_dump($resposta);
+        die;
         $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta), 200);
     }
 
