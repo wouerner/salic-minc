@@ -142,3 +142,30 @@ export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
+
+export const getLaudoFinal = ({ commit }) => {
+    const data = { manifestacao: 'A', laudoTecnico: 'Tem mais de 10 caracteres!! 39 no total' };
+    commit(types.GET_LAUDO_FINAL, data);
+};
+
+export const atualizarManifestacao = ({ commit }, characterManifestacao) => {
+    commit(types.SET_MANIFESTACAO_PROVISORIA, characterManifestacao);
+};
+
+export const atualizarParecer = ({ commit }, characterParecer) => {
+    commit(types.SET_PARECER_PROVISORIO, characterParecer);
+};
+
+export const salvarLaudoFinal = (_, data) => {
+    avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
+        .then((response) => {
+            console.log(response);
+        });
+};
+
+export const finalizarLaudoFinal = (_, data) => {
+    avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
+        .then((response) => {
+            console.log(response);
+        });
+};

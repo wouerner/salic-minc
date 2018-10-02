@@ -6,6 +6,8 @@
             </v-card-title>
             <v-card-text>
                 <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
+                <p v-else-if="documento != 0">Existe Documento para esse projeto.</p>
+                <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
                 <p v-else>Sem Observações.</p>
             </v-card-text>
             <v-card-actions>
@@ -82,7 +84,11 @@
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
-                                                                    <td v-if="props.item.varlorComprovado !== 0">
+                                                                    <td v-if="(
+                                                                        props.item.varlorComprovado !== 0
+                                                                        && !dadosProjeto.items.diligencia
+                                                                        && documento == 0
+                                                                        )">
                                                                         <v-btn
                                                                             :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
                                                                             replace
@@ -146,17 +152,16 @@
                 <v-icon>menu</v-icon>
                 <v-icon>close</v-icon>
             </v-btn>
-            <v-tooltip left>
-                    <!-- Terminar Assinar -->
+            <v-tooltip left v-if="(documento != 0)">
                 <v-btn
                     fab
                     dark
                     small
                     color="green"
                     slot="activator"
-                    to="/assinatura/index/visualizar-projeto?idDocumentoAssinatura=2257"
+                    :href="'/assinatura/index/visualizar-projeto?idDocumentoAssinatura=' + documento.idDocumentoAssinatura"
                 >
-                    <v-icon>check</v-icon>
+                    <v-icon>edit</v-icon>
                 </v-btn>
                 <span>Assinar</span>
             </v-tooltip>
@@ -178,24 +183,12 @@
                     fab
                     dark
                     small
-                    color="white"
+                    color="red ligthen-4"
                     slot="activator"
                 >
                     <v-icon>warning</v-icon>
                 </v-btn>
                 <span>Diligenciar</span>
-            </v-tooltip>
-            <v-tooltip left>
-                <v-btn
-                    fab
-                    dark
-                    small
-                    color="yellow"
-                    slot="activator"
-                >
-                    <v-icon>arrow_upward</v-icon>
-                </v-btn>
-                <span>Ir para o topo</span>
             </v-tooltip>
         </v-speed-dial>
      </v-container>
@@ -232,7 +225,17 @@
                 getProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
             }),
             dadosProjeto() {
-                return this.getProjetoAnalise.data
+                return this.getProjetoAnalise.data;
+            },
+            documento() {
+                let documento = this.getProjetoAnalise.data.items.documento;
+                documento = documento !== null ? this.getProjetoAnalise.data.items.documento : 0;
+                return documento;
+            },
+            estado() {
+                let estado = this.getProjetoAnalise.data.items.estado;
+                estado = (estado !== null) ? this.getProjetoAnalise.data.items.estado : 0;
+                return estado;
             },
         },
         mounted() {

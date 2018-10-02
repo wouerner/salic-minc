@@ -21,6 +21,9 @@ export const state = {
     redirectLink: {},
     planilha: {},
     projetoAnalise: {},
+    parecerLaudoFinal: {},
+    characterManifestacao: '',
+    characterParecer: '',
     projetosFinalizados: {},
 };
 
@@ -89,6 +92,15 @@ export const mutations = {
     },
     [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
         state.projetoAnalise = projetoAnalise;
+    },
+    [types.GET_LAUDO_FINAL](state, data) {
+        state.parecerLaudoFinal = data;
+    },
+    [types.SET_MANIFESTACAO_PROVISORIA](state, characterManifestacao) {
+        state.characterManifestacao = characterManifestacao;
+    },
+    [types.SET_PARECER_PROVISORIO](state, characterParecer) {
+        state.characterParecer = characterParecer;
     },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;
