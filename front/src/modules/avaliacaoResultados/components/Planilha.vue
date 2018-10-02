@@ -1,8 +1,8 @@
 <template>
-    <v-container fluid>
+    <v-container fluid v-if="dadosProjeto">
         <v-card>
             <v-card-title primary-title>
-                <h3>TÍTULO A SER DEFINIDO</h3>
+                <h3>{{ dadosProjeto.items.nomeProjeto }}</h3>
             </v-card-title>
             <v-card-text>
                 <p v-if="existeDiligencia">Existe Diligência para esse projeto. Acesse <router-link to="#">aqui</router-link>.</p>
@@ -114,15 +114,15 @@
             <table class="white--text font-weight-bold" width="100%">
                 <tr>
                     <td>Valor Aprovado</td>
-                    <td>R$ 00,00</td>
+                    <td>{{ moeda(dadosProjeto.items.vlAprovado) }}</td>
                 </tr>
                 <tr>
                     <td>Valor Comprovado</td>
-                    <td>R$ 00,00</td>
+                    <td>{{ moeda(dadosProjeto.items.vlComprovado) }}</td>
                 </tr>
                 <tr>
                     <td>Valor a Comprovar</td>
-                    <td>R$ 00,00</td>
+                    <td>{{ moeda(dadosProjeto.items.vlTotalComprovar) }}</td>
                 </tr>
             </table>
         </v-card>
@@ -210,7 +210,6 @@
         data() {
             return {
                 existeDiligencia: true,
-                produtos: this.planilha,
                 headers: [
                     { text: 'Item de Custo', value: 'item', sortable: false },
                     { text: 'Valor Aprovado', value: 'varlorAprovado', sortable: false },
@@ -233,11 +232,13 @@
                 getPlanilha: 'avaliacaoResultados/planilha',
                 getProjetoAnalise: 'avaliacaoResultados/projetoAnalise',
             }),
+            dadosProjeto() {
+                return this.getProjetoAnalise.data
+            },
         },
         mounted() {
             this.setPlanilha(this.idPronac);
             this.setProjetoAnalise(this.idPronac);
-            console.log(this.getProjetoAnalise);
         },
         components: {
             ModalTemplate,

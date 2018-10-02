@@ -59,7 +59,7 @@ class AvaliacaoResultados_ProjetoController extends MinC_Controller_Rest_Abstrac
 
         $data = \TratarArray::utf8EncodeArray($data);
 
-        $this->renderJsonResponse([$data], 200);
+        $this->renderJsonResponse($data, 200);
     }
 
     public function indexAction(){}
