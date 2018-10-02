@@ -1,5 +1,4 @@
 <?php
-use \Application\Modules\AvaliacaoResultados\Service\ParecerTecnico\RevisaoAvaliacaoFinanceira as RevisaoAvaliacaoFinanceira;
 
 class AvaliacaoResultados_AvaliacaoTecnicaRevisaoRestController extends MinC_Controller_Rest_Abstract
 {
@@ -33,7 +32,7 @@ class AvaliacaoResultados_AvaliacaoTecnicaRevisaoRestController extends MinC_Con
         $this->customRenderJsonResponse([], 422);
     }
 
-    $revisaoService = new RevisaoAvaliacaoFinanceira($this->getRequest(), $this->getResponse());
+    $revisaoService = new RevisaoAvaliacaoFinanceiraRevisao($this->getRequest(), $this->getResponse());
 
     $resposta = $revisaoService;
     $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta), 200);
@@ -48,8 +47,8 @@ class AvaliacaoResultados_AvaliacaoTecnicaRevisaoRestController extends MinC_Con
 
     public function putAction()
 {
-    $avaliacaoFinanceiraService = new AvaliacaoFinanceiraService($this->getRequest(), $this->getResponse());
-    $response = $avaliacaoFinanceiraService->salvar();
+    $revisaoService = new RevisaoAvaliacaoFinanceiraRevisao($this->getRequest(), $this->getResponse());
+    $response = $revisaoService->salvar();
     $this->customRenderJsonResponse($response, 200);
 }
 

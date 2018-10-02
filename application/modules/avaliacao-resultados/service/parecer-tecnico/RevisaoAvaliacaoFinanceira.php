@@ -35,4 +35,42 @@ class RevisaoAvaliacaoFinanceira
             'revisao' => $dadosRevisao
         ];
     }
+
+    public function salvar()
+    {
+
+        $authInstance = \Zend_Auth::getInstance();
+        $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
+
+        $parametros = $this->request->getParams();
+        $tbAvaliacaoFinanceiraRevisao = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao($parametros);
+        $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
+        $tbAvaliacaoFinanceiraRevisao->setIdUsuario($arrAuth['usu_codigo']);
+        $tbAvaliacaoFinanceiraRevisao->setDsRevisao();
+        $tbAvaliacaoFinanceiraRevisao->setSiStattus();
+        $tbAvaliacaoFinanceiraRevisao->setIdGrupoAtivo();
+        $tbAvaliacaoFinanceiraRevisao->setIdParecerAvaliacaoFinanceira();
+
+        $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraMapper();
+        $codigo = $mapper->save($tbAvaliacaoFinanceiraRevisao);
+
+        $this->request->setParam('idAvaliacaoFinanceiraRevisao', $codigo);
+
+        if (!$codigo) {
+            return $mapper->getMessages();
+        }
+
+        return $this->buscarRevisao();
+
+    }
+
+    public function buscarRevisao()
+    {
+        $tbRevisao = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao();
+        $where = [
+            $tbRevisao->getPrimary() => $this->request->idAvaliacaoFinanceiraRevisao
+        ];
+
+        return $tbRevisao->findBy($where);
+    }
 }
