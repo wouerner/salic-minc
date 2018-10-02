@@ -1,6 +1,6 @@
 <template>
     <div id="conteudo">
-        <div v-if="dados">
+        <div v-if="dados.informacoes">
             <table class="tabela">
                 <thead>
                     <tr class="destacar">
