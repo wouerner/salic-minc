@@ -1,17 +1,17 @@
 <template>
     <div id="conteudo">
-        <div v-if="dados">
+        <div v-if="dados.informacoes">
             <table class="tabela">
                 <thead>
                     <tr class="destacar">
-                        <th class="center">PRONAC</th>
-                        <th class="center">Nome do Projeto</th>
+                        <th>PRONAC</th>
+                        <th>Nome do Projeto</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="center">{{ dados.informacoes['Pronac'] }}</td>
-                        <td class="center">{{ dados.informacoes['NomeProjeto'] }}</td>
+                        <td>{{ dados.informacoes.Pronac }}</td>
+                        <td>{{ dados.informacoes.NomeProjeto }}</td>
                     </tr>
                 </tbody>
             </table>

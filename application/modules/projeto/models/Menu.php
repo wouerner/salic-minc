@@ -309,8 +309,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Documentos assinados',
             'title' => 'Ir para Documentos assinados',
-            'link' => '/assinatura/index/visualizar-documentos-assinatura-ajax/idPronac/' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/{$idPronacHash}/documentos-assinados",
+            'ajax' => false,
             'grupo' => []
         ];
 

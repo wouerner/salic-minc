@@ -15,6 +15,7 @@ import Convenente from './visualizar/components/convenio/Convenente';
 import Proposta from './visualizar/components/incentivo/Proposta';
 import CertidoesNegativas from './visualizar/components/outrasInformacoes/CertidoesNegativas';
 import LocalRealizacaoDeslocamento from './visualizar/components/outrasInformacoes/LocalRealizacaoDeslocamento';
+import DocumentosAssinados from './visualizar/components/outrasInformacoes/DocumentosAssinados';
 
 Vue.use(Router);
 
@@ -142,6 +143,14 @@ const routes = [
                 component: LocalRealizacaoDeslocamento,
                 meta: {
                     title: 'Local de Realiza&ccedil;&atilde;o/Deslocamento',
+                },
+            },
+            {
+                path: 'documentos-assinados',
+                name: 'DocumentosAssinados',
+                component: DocumentosAssinados,
+                meta: {
+                    title: 'Documentos assinados',
                 },
             },
         ],
