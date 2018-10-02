@@ -11,4 +11,5 @@ export const dadosTabelaTecnico = state => state.dadosTabelaTecnico;
 export const dadosHistoricoEncaminhamento = state => state.dadosHistoricoEncaminhamento;
 export const redirectLink = state => state.redirectLink;
 export const planilha = state => state.planilha;
+export const projetoAnalise = state => state.projetoAnalise;
 export const getProjetosFinalizados = state => state.projetosFinalizados;

@@ -40,6 +40,8 @@ export const obterHistoricoEncaminhamento = params => api.getRequest(`/avaliacao
 
 export const planilha = params => api.getRequest(`/prestacao-contas/realizar-prestacao-contas/planilha-analise-filtros/idPronac/${params}`);
 
+export const projetoAnalise = params => api.getRequest(`/avaliacao-resultados/projeto/idPronac/${params}`);
+
 export const finalizarParecer = (params) => {
     // const parametro = params.idPronac;
     // delete params.idPronac;

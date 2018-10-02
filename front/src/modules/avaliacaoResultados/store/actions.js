@@ -117,6 +117,14 @@ export const planilha = ({ commit }, params) => {
         });
 };
 
+export const projetoAnalise = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.projetoAnalise(params)
+        .then((response) => {
+            const projetoAnalise = response.data;
+            commit(types.GET_PROJETO_ANALISE, projetoAnalise);
+        });
+};
+
 export const finalizarParecer = ({ commit }, params) => {
     commit();
     avaliacaoResultadosHelperAPI.finalizarParecer(params)

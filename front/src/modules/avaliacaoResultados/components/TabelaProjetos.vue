@@ -1,11 +1,10 @@
 <template>
     <div>
         <v-data-table
-                :headers="cabecalho"
-                :items="dados.items"
-                :pagination.sync="pagination"
-                hide-actions
-
+            :headers="cabecalho"
+            :items="dados.items"
+            :pagination.sync="pagination"
+            hide-actions
         >
             <template slot="items" slot-scope="props">
                 <td>{{ props.index+1 }}</td>
@@ -22,7 +21,7 @@
                 <td class="text-xs-right">{{ props.item.UfProjeto }}</td>
                 <td class="text-xs-right">{{ props.item.DtSituacao }}</td>
                 <td class="text-xs-right">
-                    <v-btn flat icon color="green" :to="{ name: 'tipoAvaliacao', params:{ id:props.item.idPronac }}">
+                    <v-btn flat icon color="green" :to="{ name: 'AnalisePlanilha', params:{ id:props.item.idPronac }}">
                         <v-icon class="material-icons">compare_arrows</v-icon>
                     </v-btn>
                 </td>
@@ -43,7 +42,6 @@
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="warning">
                     Nenhum dado encontrado ¯\_(ツ)_/¯
-
                 </v-alert>
             </template>
         </v-data-table>
@@ -65,6 +63,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import ModalTemplate from '@/components/modal';
 import Historico from './Historico';
+import TipoAvaliacao from './TipoAvaliacao';
 
 export default {
     name: 'TabelaProjetos',
@@ -110,6 +109,7 @@ export default {
     components: {
         ModalTemplate,
         Historico,
+        TipoAvaliacao,
     },
     methods: {
         ...mapActions({
