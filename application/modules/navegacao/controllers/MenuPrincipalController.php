@@ -50,245 +50,10 @@ class Navegacao_MenuPrincipalController extends Zend_Rest_Controller
         $menu += $this->manuais();
         $menu += $this->aulas();
         $menu += $this->manutencao();
-        $menu += $this->perfisDisponiveis();
 
         $menu = $this->filtro($menu, $menuProponente);
         $this->view->assign('data', $menu);
         $this->getResponse()->setHttpResponseCode(200);
-    }
-
-    public function perfisDisponiveis($tipo = 0, $permissoes = null)
-    {
-            xd('asdasdasdasdasd');
-        # Convertendo os objetos da sessao em array, transformando as chaves em minusculas.
-        $auth = Zend_Auth::getInstance();
-        $objIdentity = $auth->getIdentity();
-        $arrAuth = array_change_key_case((array)$objIdentity);
-
-        $objModelUsuario = new Autenticacao_Model_DbTable_Usuario(); // objeto usuario
-        $UsuarioAtivo = new Zend_Session_Namespace('UsuarioAtivo'); // cria a sessao com o usuario ativo
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-        // somente autenticacao zend
-
-        $from = base64_encode($this->getRequest()->getRequestUri());
-//            if ($tipo == 0 || empty($tipo)) {
-//                if ($auth->hasIdentity()) // caso o usuario esteja autenticado
-//                {
-//
-//                    // pega as unidades autorizadas, orgaos e grupos do usuario (pega todos os grupos)
-//                    if (isset($objIdentity->usu_codigo) && !empty($arrAuth['usu_codigo'])) {
-//                        $grupos = $objModelUsuario->buscarUnidades($arrAuth['usu_codigo'], 21);
-//                        $objAgente = $objModelUsuario->getIdUsuario($arrAuth['usu_codigo']);
-//                        $idAgente = $objAgente['idagente'];
-//                        $cpfLogado = $objAgente['usu_identificacao'];
-//                    } elseif (isset($objIdentity->auth) && isset($objIdentity->auth['uid'])) {
-//
-//                        $this->tratarPerfilOAuth($objIdentity);
-//                    } else {
-//                        return $this->_helper->redirector->goToRoute(array('controller' => 'index', 'action' => 'logout', 'module' => 'autenticacao', 'from' => $from), null, true);
-//                    }
-//
-//                    // manda os dados para a visao
-//                    $this->view->idAgente = $idAgente;
-//                    $this->view->usuario = $objIdentity; // manda os dados do usuario para a visao
-//                    $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuario para a visao
-//                    $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuario para a vis?o
-//                    $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o orgao ativo do usuario para a vis?o
-//                } else {
-//
-//                    return $this->_helper->redirector->goToRoute(
-//                        array(
-//                            'controller' => 'index',
-//                            'action' => 'logout',
-//                            'module' => 'autenticacao',
-//                            'from' => $from
-//                        )
-//                        , null
-//                        , true
-//                    );
-//
-//                }
-//                # autenticacao e permissoes zend (AMBIENTE MINC)
-//            } else if ($tipo === 1) {
-//                # Caso o usuario esteja autenticado
-//                if ($auth->hasIdentity()) {
-//                    if (empty($permissoes)) {
-//                        return $this->_helper->redirector->goToRoute(
-//                            array(
-//                                'controller' => 'index',
-//                                'action' => 'logout',
-//                                'module' => 'autenticacao'
-//                            ),
-//                            null,
-//                            true);
-//                    }
-//
-//                    # Verifica se o grupo ativo esta no array de permissoes
-//                    if (!in_array($GrupoAtivo->codGrupo, $permissoes)) {
-//                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
-//                    }
-//
-//                    // pega as unidades autorizadas, org?os e grupos do usu?rio (pega todos os grupos)
-//                    $grupos = $objModelUsuario->buscarUnidades($arrAuth['usu_codigo'], 21);
-//
-//                    // manda os dados para a vis?o
-//                    $objAgente = $objModelUsuario->getIdUsuario($arrAuth['usu_codigo']);
-//                    $idAgente = $objAgente['idagente'];
-//                    $this->view->usuario = $objIdentity; // manda os dados do usu?rio para a vis?o
-//                    $this->view->arrayGrupos = $grupos; // manda todos os grupos do usu?rio para a vis?o
-//                    $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usu?rio para a vis?o
-//                    $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o ?rg?o ativo do usu?rio para a vis?o
-//                } else {
-//                    return $this->_helper->redirector->goToRoute(
-//                        array(
-//                            'controller' => 'index',
-//                            'action' => 'logout',
-//                            'module' => 'autenticacao',
-//                            'from' => $from
-//                        )
-//                        , null
-//                        , true
-//                    );
-//                }
-//
-//                # autenticacao scriptcase (AMBIENTE PROPONENTE)
-//            } else if ($tipo == 2) {
-//                // configuracoes do layout padr?o para o scriptcase
-//                Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
-//
-//                // pega o id do usuario logado pelo scriptcase (sess?o)
-//                //$codUsuario = isset($_SESSION['gusuario']['id']) ? $_SESSION['gusuario']['id'] : $UsuarioAtivo->codUsuario;
-//                $codUsuario = isset($_GET['idusuario']) ? (int)$_GET['idusuario'] : $UsuarioAtivo->codUsuario;
-//                //$codUsuario = 366;
-//                if (isset($codUsuario) && !empty($codUsuario)) {
-//                    $UsuarioAtivo->codUsuario = $codUsuario;
-//                } else // caso o usuario n?o esteja autenticado
-//                {
-//                    $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "index", "ALERT");
-//                }
-//
-//                // tenta fazer a autenticacao do usuario logado no scriptcase para o zend
-//                $autenticar = UsuarioDAO::loginScriptcase($codUsuario);
-//
-//                if ($autenticar && $auth->hasIdentity()) // caso o usuario seja passado pelo scriptcase e esteja autenticado
-//                {
-//                    // manda os dados para a visao
-//                    $this->view->usuario = $objIdentity; // manda os dados do usuario para a visao
-//                } // fecha if
-//                else // caso o usuario n?o esteja autenticado
-//                {
-//                    $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "index", "ALERT");
-//                }
-//
-//                # autenticacao scriptcase e autenticacao/permissao zend (AMBIENTE PROPONENTE E MINC)
-//            } else if ($tipo == 3) {
-//
-//                // ========== INICIO AUTENTICACAO SCRIPTCASE ==========
-//                // pega o id do usuario logado pelo scriptcase
-//                //$codUsuario = isset($_SESSION['gusuario']['id']) ? $_SESSION['gusuario']['id'] : $UsuarioAtivo->codUsuario;
-//                $codUsuario = isset($_GET['idusuario']) ? (int)$_GET['idusuario'] : $UsuarioAtivo->codUsuario;
-//                //$codUsuario = 366;
-//                if (isset($codUsuario) && !empty($codUsuario)) {
-//                    // configura??es do layout padr?o para o scriptcase
-//                    Zend_Layout::startMvc(array('layout' => 'layout_scriptcase'));
-//
-//                    $UsuarioAtivo->codUsuario = $codUsuario;
-//
-//                    // tenta fazer a autenticacao do usuario logado no scriptcase para o zend
-//                    $autenticar = UsuarioDAO::loginScriptcase($codUsuario);
-//
-//                    if ($autenticar && $auth->hasIdentity()) // caso o usuario seja passado pelo scriptcase e esteja autenticado
-//                    {
-//                        // manda os dados para a visao
-//                        $this->view->usuario = $objIdentity; // manda os dados do usuario para a visao
-//                    } // fecha if
-//                    else // caso o usuario nao esteja autenticado
-//                    {
-//                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "index", "ALERT");
-//                    }
-//                    // ========== FIM AUTENTICACAO SCRIPTCASE ==========
-//                } else {
-//                    // ========== INICIO AUTENTICACAO ZEND ==========
-//                    # Caso o usuario nao esteja autenticado pelo scriptcase
-//
-//                    # verifica se o grupo ativo esta no array de permissoes
-//                    if (!in_array($GrupoAtivo->codGrupo, $permissoes)) {
-//                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
-//                    }
-//
-//                    # pega as unidades autorizadas, orgaos e grupos do usuario (pega todos os grupos)
-//                    if (isset($arrAuth['usu_codigo']) && !empty($arrAuth['usu_codigo'])) {
-//                        $grupos = $objModelUsuario->buscarUnidades($arrAuth['usu_codigo'], 21);
-//                    } else {
-//                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
-//                    }
-//
-//                    # manda os dados para a visao
-//                    $this->view->usuario = $arrAuth; // manda os dados do usuario para a visao
-//                    $this->view->arrayGrupos = $grupos; // manda todos os grupos do usuario para a visao
-//                    $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usuario para a visao
-//                    $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o orgao ativo do usuario para a visao
-//                }
-//            } else
-        if ($tipo == 4) {
-            # autenticacao migracao e autenticacao/permissao zend (AMBIENTE DE MIGRACAO E MINC)
-            $codUsuario = isset($arrAuth['idusuario']) ? (int)$arrAuth['idusuario'] : $UsuarioAtivo->codusuario;
-
-            if (isset($codUsuario) && !empty($codUsuario)) {
-
-                # ====== NICIO AUTENTICACAO MIGRACAO ==========
-                # configuracoes do layout padrao para o proponente
-//                Zend_Layout::startMvc(array('layout' => 'layout_proponente'));
-                $UsuarioAtivo->codUsuario = $codUsuario;
-
-                # tenta fazer a autenticacao do usuario logado no scriptcase para o zend
-                # Comentado para verificar se faz sentido autenticar duas vezes no sistema.
-                $autenticar = UsuarioDAO::loginScriptcase($codUsuario);
-
-                # caso o usuario seja passado pelo scriptcase e esteja autenticado
-                if ($autenticar || $auth->hasIdentity()) {
-                    $this->view->usuario = $objIdentity;
-                } else {
-                    $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "index", "ALERT");
-                }
-                # ========== FIM AUTENTICACAO MIGRACAO ==========
-            } else {
-                # ========== INICIO AUTENTICACAO ZEND ==========
-                # caso o usuario nao esteja autenticado pelo scriptcase
-                # verifica se o grupo ativo esta no array de permissoes
-
-                if (!$objIdentity) {
-                    return self::perfil(0, $permissoes);
-                } else {
-                    if (!in_array($GrupoAtivo->codGrupo, $permissoes)) {
-                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
-                    }
-
-                    // pega as unidades autorizadas, org?os e grupos do usuario (pega todos os grupos)
-                    if (isset($objIdentity->usu_codigo) && !empty($objIdentity->usu_codigo)) {
-                        $grupos = $objModelUsuario->buscarUnidades($objIdentity->usu_codigo, 21);
-                    } else {
-                        $this->message("Voc&ecirc; n&atilde;o tem permiss&atilde;o para acessar essa &aacute;rea do sistema!", "principal/index", "ALERT");
-                    }
-
-                    $this->view->usuario = $objIdentity; // manda os dados do usu?rio para a vis?o
-                    $this->view->arrayGrupos = $grupos; // manda todos os grupos do usu?rio para a vis?o
-                    $this->view->grupoAtivo = $GrupoAtivo->codGrupo; // manda o grupo ativo do usu?rio para a vis?o
-                    $this->view->orgaoAtivo = $GrupoAtivo->codOrgao; // manda o ?rg?o ativo do usu?rio para a vis?o
-
-                }
-            }
-        }
-
-        if (!empty($grupos)) {
-            $tblSGCacesso = new Autenticacao_Model_Sgcacesso();
-            $rsSGCacesso = $tblSGCacesso->buscar(array("Cpf = ? " => $objIdentity->usu_identificacao));
-            if ($rsSGCacesso->count() > 0) {
-                $this->view->arrayGrupoProponente = array("gru_codigo" => 1111, "uog_orgao" => 2222, "gru_nome" => "Proponente");
-            }
-        }
-
-        return '';
     }
 
     public function prestacaoContas(): array
@@ -1482,20 +1247,15 @@ class Navegacao_MenuPrincipalController extends Zend_Rest_Controller
 
     public function filtro($arrMenu, $menuProponente)
     {
-//            $arrMenuProponente = $arrMenu;
         $auth = (array)$this->auth->getIdentity();
-//            var_dump($this->grupoAtivo);die;
         if (isset ($auth['cpf'])) {
-//                $arrMenu = $arrMenuProponente;
         } elseif (isset($auth['usu_codigo'])) {
             $arrMenu = array_filter($arrMenu, function ($arrMenu) {
-//                    return (empty($arrMenu['grupo']) || in_array($this->grupoAtivo, $arrMenu['grupo']));
                 return (empty($arrMenu['grupo']) || in_array($this->codGrupo, $arrMenu['grupo']));
             });
 
             $arrMenu = array_map(function ($arrMenu) {
                 $arrMenu['menu'] = array_filter($arrMenu['menu'], function ($arrMenu2) {
-//                        return (empty($arrMenu2['grupo']) || in_array($this->grupoAtivo, $arrMenu2['grupo']));
                     return (empty($arrMenu2['grupo']) || in_array($this->codGrupo, $arrMenu2['grupo']));
                 });
                 return $arrMenu;
