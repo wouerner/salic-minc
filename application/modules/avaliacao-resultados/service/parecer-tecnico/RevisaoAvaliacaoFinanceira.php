@@ -26,7 +26,7 @@ class RevisaoAvaliacaoFinanceira
 
         $tbAvaliacaoFinanceira = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao();
         $where = [
-            'idPronac' => $this->request->idPronac
+            'idAvaliacaoFinanceiraRevisao' => $this->request->idAvaliacaoFinanceiraRevisao
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findBy($where);
         $dadosRevisao = ($dadosRevisao) ?: new \stdClass();
@@ -38,7 +38,6 @@ class RevisaoAvaliacaoFinanceira
 
     public function salvar()
     {
-
         $authInstance = \Zend_Auth::getInstance();
         $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
 
