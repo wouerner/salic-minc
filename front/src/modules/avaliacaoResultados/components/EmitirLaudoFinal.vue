@@ -58,7 +58,6 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
-    import ModalTemplate from '@/components/modal';
 
     export default {
         data() {
@@ -89,10 +88,6 @@
                     },
                 ],
             };
-        },
-        components:
-        {
-            ModalTemplate,
         },
         methods:
         {

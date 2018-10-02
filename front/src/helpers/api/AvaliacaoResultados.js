@@ -69,3 +69,12 @@ export const finalizarParecerLaudoFinal = (params) => {
     
     // return api.postRequest('/avaliacao-resultados/estado', buildData(data));
 };
+
+export const criarDiligencia = (params) => {
+    alert('Enviar Solicitação');
+    // const parametro = params.idPronac;
+    // delete params.idPronac;
+    // const data = params;
+    
+    // return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
+};

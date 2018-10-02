@@ -65,7 +65,7 @@ const routes = [
         },
     },
     {
-        path: '/diligenciar',
+        path: '/diligenciar/:id',
         name: 'Diligenciar',
         component: Diligenciar,
         meta: {

@@ -156,6 +156,13 @@ export const salvarLaudoFinal = (_, data) => {
 
 export const finalizarLaudoFinal = (_, data) => {
     avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
+    .then((response) => {
+        console.log(response);
+    });
+};
+
+export const enviarDiligencia = (_, data) => {
+    avaliacaoResultadosHelperAPI.criarDiligencia(data)
         .then((response) => {
             console.log(response);
         });
