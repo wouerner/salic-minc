@@ -68,20 +68,24 @@ class ReadequacaoAssinatura implements IServico
             );           
             $projeto['QtdeDePessoasQueFaltamAssinar'] = $qtPessoasQueFaltamAssinar;
             
-            // fnQtdeDePessoasQueAssinaramDocumento - OK
             $qtAssinaram = $tbAssinaturaDbTable->obterQuantidadeAssinaturasRealizadas();
             $qtAssinaram = (is_null($qtAssinaram)) ? 0 : $qtAssinaram;
             $projeto['QtdeDePessoasQueAssinaramDocumento'] = $qtAssinaram;
-            //            print "<pre>";
-            //            print_r($projeto);die;
-
-            // fnQtdeAssinaturasPorAtoAdministrativo
+            
             $qtAssinaturasPorAto = $tbAtoAdministrativoDbTable->obterQuantidadeMinimaAssinaturas(
                 $projeto['idTipoDoAtoAdministrativo'],
                 $projeto['idOrgaoSuperiorDoAssinante']
             );
             $qtAssinaturasPorAto = (is_null($qtAssinaturasPorAto)) ? 0 : $qtAssinaturasPorAto;
             $projeto['QtdeAssinaturasPorAtoAdministrativo'] = $qtAssinaturasPorAto;
+
+            if ($qtPessoasQueFaltamAssinar > 0) {
+                $ordemDaProximaAssinatura = $tbDocumentoAssinaturaDbTable->obterProximaAssinatura(
+                    $projeto->idDocumentoAssinatura,
+                    $projeto->idPronac
+                );
+            }
+            $projeto['ordemDaProximaAssinatura'] = $ordemDaProximaAssinatura;
             
             $arrProjetos[] = $projeto;
         }
