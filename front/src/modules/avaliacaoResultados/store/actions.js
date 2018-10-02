@@ -1,6 +1,5 @@
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
 import * as types from './types';
-import { state } from './mutations';
 
 export const dadosMenu = ({ commit }) => {
     avaliacaoResultadosHelperAPI.dadosMenu()
@@ -38,13 +37,6 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
     return p;
 };
 
-export const salvarLaudoFinal = (_, data) => {
-    avaliacaoResultadosHelperAPI.criarParecer(data)
-        .then((response) => {
-            console.log(response);
-        });
-};
-
 export const salvarParecer = ({ commit }, params) => {
     commit();
     const p = new Promise((resolve) => {
@@ -53,13 +45,8 @@ export const salvarParecer = ({ commit }, params) => {
                 resolve();
             });
     });
-};
 
-export const finalizarLaudoFinal = (_, data) => {
-    avaliacaoResultadosHelperAPI.finalizarLaudoFinal(data)
-        .then((response) => {
-            console.log(response);
-        });
+    return p;
 };
 
 export const mockAvaliacaDesempenho = ({ commit }) => {
@@ -148,7 +135,7 @@ export const alterarParecer = ({ commit }, param) => {
 
 
 export const getLaudoFinal = ({ commit }) => {
-    const data = {'manifestacao':'A', 'laudoTecnico':'Tem mais de 10 caracteres!! 39 no total'};
+    const data = { manifestacao: 'A', laudoTecnico: 'Tem mais de 10 caracteres!! 39 no total' };
     commit(types.GET_LAUDO_FINAL, data);
 };
 
@@ -158,4 +145,18 @@ export const atualizarManifestacao = ({ commit }, characterManifestacao) => {
 
 export const atualizarParecer = ({ commit }, characterParecer) => {
     commit(types.SET_PARECER_PROVISORIO, characterParecer);
+};
+
+export const salvarLaudoFinal = (_, data) => {
+    avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
+        .then((response) => {
+            console.log(response);
+        });
+};
+
+export const finalizarLaudoFinal = (_, data) => {
+    avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
+        .then((response) => {
+            console.log(response);
+        });
 };

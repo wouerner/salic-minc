@@ -3,7 +3,7 @@
         <v-form ref="form" v-model="valid">
             <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
                 <v-toolbar dark color="green">
-                        <v-btn icon dark :href="redirectLink">
+                        <v-btn icon dark :href="'#/laudo'">
                             <v-icon>close</v-icon>
                         </v-btn>
                         <v-toolbar-title>Avaliação Financeira - Emissão de Laudo Final</v-toolbar-title>
@@ -65,7 +65,6 @@
             return {
                 tipo: true,
                 idPronac: this.$route.params.id,
-                redirectLink: '/avaliacao-resultado/#/laudo/',
                 valid: false,
                 dialog: true,
                 itemRules: [
@@ -153,7 +152,6 @@
             }),
         },
         created() {
-            this.redirectLink = this.redirectLink + this.idPronac;
             this.getConsolidacao(this.idPronac);
             this.getLaudoFinal();
             this.atualizarManifestacao(this.parecerLaudoFinal.manifestacao);

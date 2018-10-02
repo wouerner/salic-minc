@@ -44,10 +44,28 @@ export const finalizarParecer = (params) => {
     // const parametro = params.idPronac;
     // delete params.idPronac;
     const data = params;
-
+    
     return api.postRequest('/avaliacao-resultados/estado', buildData(data));
 };
 
 export const obterDestinatarios = () => api.getRequest('/avaliacao-resultados/tecnicos-encaminhamento');
 
 export const encaminharParaTecnico = params => api.postRequest('/avaliacao-resultados/estado/', buildData(params));
+
+export const criarParecerLaudoFinal = (params) => {
+    alert('Salvar rascunho');
+    // const parametro = params.idPronac;
+    // delete params.idPronac;
+    // const data = params;
+    
+    // return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
+};
+
+export const finalizarParecerLaudoFinal = (params) => {
+    alert('Gerar documento');
+    // const parametro = params.idPronac;
+    // delete params.idPronac;
+    // const data = params;
+    
+    // return api.postRequest('/avaliacao-resultados/estado', buildData(data));
+};
