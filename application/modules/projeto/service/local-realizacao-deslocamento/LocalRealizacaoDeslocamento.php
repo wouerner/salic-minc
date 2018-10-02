@@ -61,7 +61,7 @@ class LocalRealizacaoDeslocamento
             $uf = html_entity_decode(utf8_encode($item->UF));
             $cidade = html_entity_decode(utf8_encode($item->Cidade));
 
-            $localRealizacoes = [
+            $localRealizacoes[] = [
                 'Descricao' => $descricao,
                 'UF' => $uf,
                 'Cidade' => $cidade,
@@ -82,7 +82,7 @@ class LocalRealizacaoDeslocamento
             $UFDestino = html_entity_decode(utf8_encode($item->UFDestino));
             $MunicipioDestino = html_entity_decode(utf8_encode($item->MunicipioDestino));
 
-            $deslocamentoResult = [
+            $deslocamentoResult[] = [
                 'Qtde' => $item->Qtde,
                 'PaisOrigem' => $PaisOrigem,
                 'UFOrigem' => $UFOrigem,

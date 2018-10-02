@@ -14,6 +14,7 @@ import Proponente from './visualizar/components/incentivo/Proponente';
 import Convenente from './visualizar/components/convenio/Convenente';
 import Proposta from './visualizar/components/incentivo/Proposta';
 import CertidoesNegativas from './visualizar/components/outrasInformacoes/CertidoesNegativas';
+import LocalRealizacaoDeslocamento from './visualizar/components/outrasInformacoes/LocalRealizacaoDeslocamento';
 
 Vue.use(Router);
 
@@ -133,6 +134,14 @@ const routes = [
                 component: CertidoesNegativas,
                 meta: {
                     title: 'Certid&otilde;es Negativas',
+                },
+            },
+            {
+                path: 'local-realizacao-deslocamento',
+                name: 'LocalRealizacaoDeslocamento',
+                component: LocalRealizacaoDeslocamento,
+                meta: {
+                    title: 'Local de Realiza&ccedil;&atilde;o/Deslocamento',
                 },
             },
         ],
