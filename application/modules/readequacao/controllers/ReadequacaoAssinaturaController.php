@@ -86,7 +86,11 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             $this->view->projeto = $objTbProjetos->findBy(array(
                 'IdPRONAC' => $get->IdPRONAC
             ));
-            $idTipoDoAtoAdministrativo = Readequacao_ReadequacaoAssinaturaController::obterIdTipoAtoAdministativoPorOrgaoSuperior($this->grupoAtivo->codOrgao);
+                        
+            $servicoReadequacaoAssinatura = new \Application\Modules\Readequacao\Service\Assinatura\ReadequacaoAssinatura(
+                $this->grupoAtivo,
+                $this->auth
+            );
 
             $post = $this->getRequest()->getPost();
             if ($post) {
@@ -118,9 +122,14 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
             }
 
             $objModelDocumentoAssinatura = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
+            $documentoAssinatura = $objModelDocumentoAssinatura->findBy(
+                ['idDocumentoAssinatura' => $get->idDocumentoAssinatura]
+            );
+            $idDocumentoAssinatura = $documentoAssinatura['idTipoDoAtoAdministrativo'];
+            
             $this->view->abertoParaDevolucao = $objModelDocumentoAssinatura->isProjetoDisponivelParaAssinatura(
                 $get->IdPRONAC,
-                $idTipoDoAtoAdministrativo
+                $idDocumentoAssinatura
             );
 
             $this->view->IdPRONAC = $get->IdPRONAC;
