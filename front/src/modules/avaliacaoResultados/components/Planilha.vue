@@ -2,10 +2,10 @@
     <v-container fluid v-if="dadosProjeto">
         <v-card>
             <v-card-title primary-title>
-                <h3>{{ dadosProjeto.items.nomeProjeto }}</h3>
+                <h3>{{ dadosProjeto.items.pronac}} &#45; {{ dadosProjeto.items.nomeProjeto }}</h3>
             </v-card-title>
             <v-card-text>
-                <p v-if="existeDiligencia">Existe Diligência para esse projeto. Acesse <router-link to="#">aqui</router-link>.</p>
+                <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
                 <p v-else>Sem Observações.</p>
             </v-card-text>
             <v-card-actions>
@@ -209,7 +209,6 @@
         name: 'Painel',
         data() {
             return {
-                existeDiligencia: true,
                 headers: [
                     { text: 'Item de Custo', value: 'item', sortable: false },
                     { text: 'Valor Aprovado', value: 'varlorAprovado', sortable: false },
