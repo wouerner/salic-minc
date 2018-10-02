@@ -126,7 +126,8 @@ export const projetoAnalise = ({ commit }, params) => {
 };
 
 export const finalizarParecer = ({ commit }, params) => {
-    commit();
+    // commit();
+    console.log(params);
     avaliacaoResultadosHelperAPI.finalizarParecer(params)
         .then(() => {
         });
