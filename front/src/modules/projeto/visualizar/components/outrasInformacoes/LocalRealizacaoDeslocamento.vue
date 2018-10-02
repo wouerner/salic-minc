@@ -1,20 +1,9 @@
 <template>
     <div id="conteudo">
         <div v-if="dados.informacoes">
-            <table class="tabela">
-                <thead>
-                    <tr class="destacar">
-                        <th class="center">PRONAC</th>
-                        <th class="center">Nome do Projeto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="center">{{ dados.informacoes.Pronac }}</td>
-                        <td class="center">{{ dados.informacoes.NomeProjeto }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <IdentificacaoProjeto :pronac="dados.informacoes.Pronac"
+                                  :nomeProjeto="dados.informacoes.NomeProjeto">
+            </IdentificacaoProjeto>
             <fieldset>
                 <legend>Local de Realiza&ccedil;&atilde;o</legend>
                 <table class="tabela">
@@ -68,8 +57,13 @@
     </div>
 </template>
 <script>
+import IdentificacaoProjeto from './IdentificacaoProjeto';
+
 export default {
     name: 'LocalRealizacaoDeslocamento',
+    components: {
+        IdentificacaoProjeto,
+    },
     data() {
         return {
             dados: {

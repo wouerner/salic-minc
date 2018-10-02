@@ -1,20 +1,9 @@
 <template>
     <div id="conteudo">
         <div v-if="dados.informacoes">
-            <table class="tabela">
-                <thead>
-                    <tr class="destacar">
-                        <th>PRONAC</th>
-                        <th>Nome do Projeto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ dados.informacoes.Pronac }}</td>
-                        <td>{{ dados.informacoes.NomeProjeto }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <IdentificacaoProjeto :pronac="dados.informacoes.Pronac"
+                                  :nomeProjeto="dados.informacoes.NomeProjeto">
+            </IdentificacaoProjeto>
             <table class="tabela">
                 <thead>
                     <tr class="destacar">
@@ -44,9 +33,13 @@
     </div>
 </template>
 <script>
+import IdentificacaoProjeto from './IdentificacaoProjeto';
 export default {
     name: 'CertidoesNegativas',
     props: ['idPronac'],
+    components: {
+        IdentificacaoProjeto,
+    },
     data() {
         return {
             dados: {

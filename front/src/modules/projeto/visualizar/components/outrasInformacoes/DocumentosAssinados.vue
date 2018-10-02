@@ -59,9 +59,7 @@
                 $3.ajax({
                     url: '/projeto/documentos-assinados-rest/index/idPronac/' + idPronac,
                 }).done(function (response) {
-
                     self.dados = response.data;
-                    console.log(self.dados);
                 });
             },
         },
