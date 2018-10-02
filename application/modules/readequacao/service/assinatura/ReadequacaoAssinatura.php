@@ -45,19 +45,50 @@ class ReadequacaoAssinatura implements IServico
     
     public function obterAssinaturas()
     {
-        $tbAssinaturaDbTable = new \Assinatura_Model_DbTable_TbAssinatura();
-        $tbAssinaturaDbTable->preencherModeloAtoAdministrativo([
-            'idOrgaoDoAssinante' => $this->grupoAtivo->codOrgao,
-            'idPerfilDoAssinante' => $this->grupoAtivo->codGrupo,
-            'idOrgaoSuperiorDoAssinante' => $this->auth->getIdentity()->usu_org_max_superior,
-            'idTipoDoAto' => array_values($this->idTiposAtoAdministrativos)
-        ]);
-
         $tbReadequacaoDbTable = new \Readequacao_Model_DbTable_TbReadequacao();
+        $tbAtoAdministrativoDbTable = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $tbDocumentoAssinaturaDbTable = new \Assinatura_Model_DbTable_TbDocumentoAssinatura();        
+        $tbAssinaturaDbTable = new \Assinatura_Model_DbTable_TbAssinatura();
         
-        return $tbReadequacaoDbTable->obterAssinaturasReadequacaoDisponiveis($tbAssinaturaDbTable);
-    }
+        $projetos = $tbReadequacaoDbTable->obterPainelDeDocumentosDeReadequacaoAguardandoAssinatura(
+            $this->grupoAtivo->codOrgao,
+            $this->grupoAtivo->codGrupo
+        );
 
+        $arrProjetos = (count($projetos) == 0) ? $projetos : [];
+        
+        foreach ($projetos as $projeto) {
+            $tbAssinaturaDbTable->preencherModeloAssinatura([
+                'idDocumentoAssinatura' => $projeto['idDocumentoAssinatura']
+            ]);
+            $qtPessoasQueFaltamAssinar = $this->qtPessoasQueFaltamAssinar(
+                $projeto['idDocumentoAssinatura'],
+                $projeto['idTipoDoAtoAdministrativo'],
+                $projeto['idOrgaoSuperiorDoAssinante']
+            );           
+            $projeto['QtdeDePessoasQueFaltamAssinar'] = $qtPessoasQueFaltamAssinar;
+            
+            // fnQtdeDePessoasQueAssinaramDocumento - OK
+            $qtAssinaram = $tbAssinaturaDbTable->obterQuantidadeAssinaturasRealizadas();
+            $qtAssinaram = (is_null($qtAssinaram)) ? 0 : $qtAssinaram;
+            $projeto['QtdeDePessoasQueAssinaramDocumento'] = $qtAssinaram;
+            //            print "<pre>";
+            //            print_r($projeto);die;
+
+            // fnQtdeAssinaturasPorAtoAdministrativo
+            $qtAssinaturasPorAto = $tbAtoAdministrativoDbTable->obterQuantidadeMinimaAssinaturas(
+                $projeto['idTipoDoAtoAdministrativo'],
+                $projeto['idOrgaoSuperiorDoAssinante']
+            );
+            $qtAssinaturasPorAto = (is_null($qtAssinaturasPorAto)) ? 0 : $qtAssinaturasPorAto;
+            $projeto['QtdeAssinaturasPorAtoAdministrativo'] = $qtAssinaturasPorAto;
+            
+            $arrProjetos[] = $projeto;
+        }
+        
+        return $arrProjetos;
+    }
+    
     public function obterAtoAdministrativoPorTipoReadequacao($idTipoReadequacao)
     {
         if (array_key_exists($idTipoReadequacao, $this->idTiposAtoAdministrativos)) {
@@ -68,5 +99,31 @@ class ReadequacaoAssinatura implements IServico
     public function obterAtosAdministativos()
     {
         return $this->idTiposAtoAdministrativos;
+    }
+
+    public function qtPessoasQueFaltamAssinar(
+        $idDocumentoAssinatura,
+        $idTipoDoAto,
+        $idOrgaoSuperiorDoAssinante
+    ) {
+        $tbAtoAdministrativoDbTable = new \Assinatura_Model_DbTable_TbAtoAdministrativo();
+        $qtAssinaturas = $tbAtoAdministrativoDbTable->obterQuantidadeMinimaAssinaturas(
+            array_values($this->idTiposAtoAdministrativos),
+            $idTipoDoAto, $this->grupoAtivo->codOrgao
+        );
+        $qtAssinaturas = (is_null($qtAssinaturas)) ? 0 : $qtAssinaturas;
+
+        $tbAssinaturaDbTable = new \Assinatura_Model_DbTable_TbAssinatura();
+        $tbAssinaturaDbTable->preencherModeloAssinatura([
+            'idDocumentoAssinatura' => $idDocumentoAssinatura
+        ]);
+        
+        $qtAssinaram = $tbAssinaturaDbTable->obterQuantidadeAssinaturasRealizadas();
+        $qtAssinaram = (is_null($qtAssinaram)) ? 0 : $qtAssinaram;
+
+        
+        $qtFaltamAssinar = $qtAssinaturas - $qtAssinaram;
+
+        return $qtFaltamAssinar;
     }
 }

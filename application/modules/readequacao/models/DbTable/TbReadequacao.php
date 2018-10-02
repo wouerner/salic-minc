@@ -1798,5 +1798,108 @@ class Readequacao_Model_DbTable_TbReadequacao extends MinC_Db_Table_Abstract
         );
         
         return $this->_db->fetchAll($query);
-    }    
+    }
+
+    public function obterPainelDeDocumentosDeReadequacaoAguardandoAssinatura($idOrgaoDoAssinante, $idPerfilDoAssinante)
+    {
+        $query = $this->select();
+        $query->setIntegrityCheck(false);
+        $query->from(
+            ['projetos' => 'projetos'],
+            [
+                'AnoProjeto' => 'projetos.AnoProjeto',
+                'pronac' => new Zend_Db_Expr('projetos.AnoProjeto + projetos.Sequencial'),
+                'nomeProjeto' => 'projetos.NomeProjeto',
+                'IdPRONAC' => 'projetos.IdPRONAC',
+                'Orgao' => 'projetos.Orgao'
+            ],
+            $this->_schema
+        );
+        
+        $query->joinInner(
+            ['Orgaos' => 'Orgaos'],
+            "Orgaos.Codigo = projetos.Orgao",
+            [],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ['tbDocumentoAssinatura' => 'tbDocumentoAssinatura'],
+            "tbDocumentoAssinatura.idPronac = projetos.idPronac",
+            [
+                'idTipoDoAtoAdministrativo',
+                'idDocumentoAssinatura'
+            ],
+            $this->_schema
+        );
+        
+        $query->joinInner(
+            ['Verificacao' => 'Verificacao'],
+            "Verificacao.idVerificacao = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
+            ['tipoDoAtoAdministrativo' => 'Descricao'],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ['TbAtoAdministrativo' => 'TbAtoAdministrativo'],
+            "TbAtoAdministrativo.idTipoDoAto = tbDocumentoAssinatura.idTipoDoAtoAdministrativo",
+            ['idOrgaoSuperiorDoAssinante'],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ['tbReadequacaoXParecer' => 'tbReadequacaoXParecer'],
+            "tbReadequacaoXParecer.idParecer = tbDocumentoAssinatura.idAtoDeGestao",
+            [],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ['tbReadequacao' => 'tbReadequacao'],
+            "tbReadequacao.idReadequacao = tbReadequacaoXParecer.idReadequacao",
+            [],
+            $this->_schema
+        );
+
+        $query->joinInner(
+            ['tbTipoReadequacao' => 'tbTipoReadequacao'],
+            "tbTipoReadequacao.idTipoReadequacao = tbReadequacao.idTipoReadequacao",
+            ['dsReadequacao'],
+            $this->_schema
+        );
+        
+
+        $query->where('tbDocumentoAssinatura.cdSituacao = ?', Assinatura_Model_TbDocumentoAssinatura::CD_SITUACAO_DISPONIVEL_PARA_ASSINATURA);
+        $query->where('tbDocumentoAssinatura.stEstado = ?', Assinatura_Model_TbDocumentoAssinatura::ST_ESTADO_DOCUMENTO_ATIVO);
+        $query->where('TbAtoAdministrativo.idOrgaoSuperiorDoAssinante = ?', new Zend_Db_Expr('Tabelas.dbo.fnCodigoOrgaoEstrutura(projetos.Orgao,1)'));
+
+        $query->where(
+            new Zend_Db_Expr("NOT EXISTS(SELECT TOP 1 * 
+                       FROM     sac.dbo.TbAssinatura          j
+                     INNER JOIN sac.dbo.tbDocumentoAssinatura k ON (j.idDocumentoAssinatura = k.idDocumentoAssinatura)
+	                 INNER JOIN sac.dbo.TbAtoAdministrativo   l ON (j.idAtoAdministrativo   = l.idAtoAdministrativo)
+
+                      WHERE     j.idDocumentoAssinatura       = k.idDocumentoAssinatura
+							AND j.idAtoAdministrativo         = l.idAtoAdministrativo
+							AND l.idPerfilDoAssinante         = TbAtoAdministrativo.idPerfilDoAssinante
+							AND l.idOrgaoDoAssinante          = TbAtoAdministrativo.idOrgaoDoAssinante
+							AND k.idTipoDoAtoAdministrativo   = TbAtoAdministrativo.idTipoDoAto
+							AND l.idOrdemDaAssinatura         = TbAtoAdministrativo.idOrdemDaAssinatura
+							AND l.idOrgaoSuperiorDoAssinante  = Tabelas.dbo.fnCodigoOrgaoEstrutura(projetos.Orgao,1)
+							AND j.idPronac = projetos.IdPRONAC)"
+            )
+        );
+
+        $query->where(new Zend_Db_Expr('sac.dbo.fnQtdeDePessoasQueAssinaramDocumento (projetos.IdPRONAC,tbDocumentoAssinatura.idDocumentoAssinatura) = (TbAtoAdministrativo.idOrdemDaAssinatura - 1)'));
+
+        $query->where('TbAtoAdministrativo.idOrgaoDoAssinante = ?', $idOrgaoDoAssinante);
+        $query->where('TbAtoAdministrativo.idPerfilDoAssinante = ?', $idPerfilDoAssinante);
+        
+        $query->order([
+            'idTipoDoAtoAdministrativo',
+            'nomeProjeto'
+        ]);
+
+        return $this->_db->fetchAll($query);
+    }
 }

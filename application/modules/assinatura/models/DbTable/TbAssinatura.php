@@ -249,8 +249,12 @@ class Assinatura_Model_DbTable_TbAssinatura extends MinC_Db_Table_Abstract
 
     public function obterQuantidadeAssinaturasRealizadas()
     {
+        if (!$this->modeloTbAssinatura) {
+            throw new Exception("&Eacute; necess&aacute;rio definir uma entidade de Assinatura.");
+        }
+        
         if (is_null($this->modeloTbAssinatura->getIdDocumentoAssinatura())) {
-            throw new Exception("`Identificador do Documento Assinatura n&atilde;o informado.");
+            throw new Exception("Identificador do Documento de Assinatura n&atilde;o informado.");
         }
 
         $query = $this->select();
