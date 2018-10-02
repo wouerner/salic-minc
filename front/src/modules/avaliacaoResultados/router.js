@@ -49,7 +49,7 @@ const routes = [
     },
     {
         path: '/planilha/:id',
-        name: 'Analise Planilha',
+        name: 'AnalisePlanilha',
         component: Planilha,
         meta: {
             title: 'Analise da planilha',
