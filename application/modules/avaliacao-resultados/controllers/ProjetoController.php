@@ -1,5 +1,7 @@
 <?php
 
+use Application\Modules\AvaliacaoResultados\Service\Fluxo\FluxoProjeto as FluxoProjetoService;
+
 class AvaliacaoResultados_ProjetoController extends MinC_Controller_Rest_Abstract
 {
 
@@ -20,11 +22,10 @@ class AvaliacaoResultados_ProjetoController extends MinC_Controller_Rest_Abstrac
 
     public function getAction(){
         $idPronac = $this->getRequest()->getParam('idPronac');
-        
+        $data = [];
+
         $planilhaAprovacaoModel = new PlanilhaAprovacao();
         $resposta = $planilhaAprovacaoModel->obterItensAprovados($idPronac);
-        var_dump($resposta);
-        die;
 
         $vlTotalComprovar = 0;
         $vlComprovado = 0;
@@ -40,24 +41,25 @@ class AvaliacaoResultados_ProjetoController extends MinC_Controller_Rest_Abstrac
             $pronac = $item->Pronac;
         }
 
-        $this->view->vlTotalComprovar = $vlTotalComprovar;
-        $this->view->vlAprovado = $vlAprovado;
-        $this->view->vlComprovado = $vlComprovado;
-        $this->view->pronac = $pronac;
-        $this->view->nomeProjeto = $nomeProjeto;
+        $data['nomeProjeto'] = $nomeProjeto;
+        $data['vlTotalComprovar'] = $vlTotalComprovar;
+        $data['vlAprovado'] = $vlAprovado;
+        $data['vlComprovado'] = $vlComprovado;
+        $data['pronac'] = $pronac;
 
         $diligencia = new Diligencia();
-        $this->view->existeDiligenciaAberta = $diligencia->existeDiligenciaAberta($idpronac);
+        $data['diligencia'] = $diligencia->existeDiligenciaAberta($idPronac);
 
         $fluxo = new FluxoProjetoService();
-        $estado = $fluxo->estado($idpronac);
-        $this->view->estado = $estado ? $estado->toArray() : null;
+        $estado = $fluxo->estado($idPronac);
+        $data['estado'] = $estado ? $estado->toArray() : null;
 
         $documento = new Assinatura_Model_DbTable_TbDocumentoAssinatura();
-        $documento = $documento->obterDocumentoAssinatura($idpronac, 622);
+        $data['documento'] = $documento->obterDocumentoAssinatura($idPronac, 622);
 
-        $this->view->idDocumento = $documento['idDocumentoAssinatura'];
-        $this->renderJsonResponse([$idPronac], 200);
+        $data = \TratarArray::utf8EncodeArray($data);
+
+        $this->renderJsonResponse([$data], 200);
     }
 
     public function indexAction(){}

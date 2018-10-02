@@ -14,10 +14,13 @@
                     Analisar
                     <v-icon>how_to_reg</v-icon>
                 </v-tab>
-
                 <v-tab href="#tab-2">
-                     Finalizados 
+                     Finalizados
                     <v-icon>done_all</v-icon>
+                </v-tab>
+                <v-tab href="#tab-3">
+                     Em assinatura
+                    <v-icon>edit</v-icon>
                 </v-tab>
 
                 <v-tab-item
@@ -36,6 +39,18 @@
                 <v-tab-item
                         :id="'tab-2'"
                         :key="2"
+                >
+                    <v-card flat>
+                        <v-card-text>
+                            <TabelaProjetos
+                                :dados="getProjetosFinalizados"
+                            ></TabelaProjetos>
+                        </v-card-text>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item
+                        :id="'tab-3'"
+                        :key="3"
                 >
                     <v-card flat>
                         <v-card-text>
