@@ -2,17 +2,16 @@
     <v-container fluid v-if="dadosProjeto">
         <v-card>
             <v-card-title primary-title>
-                <h3>{{ dadosProjeto.items.pronac}} &#45; {{ dadosProjeto.items.nomeProjeto }}</h3>
+                <h3>{{ dadosProjeto.items.pronac }} &#45; {{ dadosProjeto.items.nomeProjeto }}</h3>
             </v-card-title>
             <v-card-text>
                 <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
                 <p v-else-if="documento != 0">Existe Documento para assinar nesse projeto.</p>
                 <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
-
                 <p v-else>Sem Observações.</p>
             </v-card-text>
             <v-card-actions>
-                <v-btn color="success" to="#">VER PROJETO</v-btn>
+                <v-btn color="success" :href="'/consultardadosprojeto/index?idPronac=' + idPronac" target="_blank">VER PROJETO</v-btn>
                 <v-btn color="success" to="#">CONSOLIDAÇÃO</v-btn>
             </v-card-actions>
         </v-card>
