@@ -6,8 +6,9 @@
                         <v-toolbar-title>Diligenciar</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="enviarDiligencia()">Enviar</v-btn>
-                            <v-btn dark flat :href="'voltar'">Cancelar</v-btn>
+                            <v-btn v-if="tpDiligencia && solicitacao" dark flat @click.native="enviarDiligencia()">Enviar</v-btn>
+                            <v-btn v-else dark flat disabled>Enviar</v-btn>
+                            <v-btn dark flat :href="'#/planinha/' + this.$route.params.id">Cancelar</v-btn>
                         </v-toolbar-items>
                 </v-toolbar>
                 <v-container grid-list-sm>
@@ -21,34 +22,25 @@
                 <v-container grid-list>
                     <v-layout row wrap>
                         <v-flex>
-                            <h3>Tipo de Diligencia</h3>
+                            <h3>Tipo de Diligencia *</h3>
                         </v-flex>
                     </v-layout>
                     <v-divider></v-divider>
                     <v-layout wrap align-center>
                         <v-flex>
-                            <p>
-                                <input :value="174"
-                                       type="radio"
-                                       id="item1" />
-                                <label for="item1">
-                                    Somente itens recusados
-                                </label>
-                            </p>
-                            <p>
-                                <input :value="645"
-                                       type="radio"
-                                       id="item2" />
-                                <label for="item2">
-                                    Todos os itens or&ccedil;amentarios
-                                </label>
-                            </p>
+                            <v-radio-group v-model="tpDiligencia">
+                                <v-radio color="success" label="Somente itens recusados" value="174"></v-radio>
+                                <v-radio color="success" label="Todos os itens orçamentários" value="645"></v-radio>
+                            </v-radio-group>
                         </v-flex>
                     </v-layout>
                         <v-flex>
-                            <v-textarea label="Solicitação"
+                            <v-textarea v-model="solicitacao"
+                                        label="Solicitação *"
                                         color="green"
-                                        height="50px"></v-textarea>
+                                        height="50px"
+                                        :rules="solicitacaoRules">
+                            </v-textarea>
                         </v-flex>
                 </v-container>
             </v-dialog>
@@ -62,15 +54,20 @@
     export default {
         data() {
             return {
+                tpDiligencia: '',
+                solicitacao: '',
                 idPronac: this.$route.params.id,
                 dialog: true,
+                solicitacaoRules: [
+                    v => !!v || 'Solicitação é obrigatório!',
+                ],
             };
         },
         methods:
         {
             ...mapActions({
                 requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
-                salvar: 'avaliacaoResultados/salvarDiligencia',
+                salvar: 'avaliacaoResultados/enviarDiligencia',
             }),
             getConsolidacao(id) {
                 this.requestEmissaoParecer(id);
@@ -79,7 +76,7 @@
                 const data = {
                     idPronac: this.idPronac,
                     tpDiligencia: this.tpDiligencia,
-                    dssolicitacao: this.solicitacao,
+                    solicitacao: this.solicitacao,
                 };
 
                 this.salvar(data);
