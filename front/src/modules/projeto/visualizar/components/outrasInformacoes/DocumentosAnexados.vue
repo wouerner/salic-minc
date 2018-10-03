@@ -31,7 +31,6 @@
             </tbody>
         </table>
     </div>
-    <!--http://local.salic/consultardadosprojeto/abrir-documentos-anexados?id=222522&tipo=1&idPronac=209561-->
 </template>
 <script>
     import IdentificacaoProjeto from './IdentificacaoProjeto';
