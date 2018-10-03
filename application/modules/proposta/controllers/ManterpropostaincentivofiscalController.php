@@ -582,7 +582,7 @@ class Proposta_ManterpropostaincentivofiscalController extends Proposta_GenericC
                 $tbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
                 $insert = $tbMovimentacao->insert($dados);
 
-                parent::message("Proposta encaminhada com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/proposta/manterpropostaincentivofiscal/identificacaodaproposta/idPreProjeto/" . $idPreProjeto, "CONFIRM");
+                parent::message("Proposta encaminhada com sucesso para an&aacute;lise no Minist&eacute;rio da Cultura.", "/proposta/visualizar/index/idPreProjeto/" . $idPreProjeto, "CONFIRM");
             } else {
                 $this->view->resultado = $arrResultado;
             }
