@@ -1,6 +1,6 @@
 <?php
 
-use Application\Modules\Projeto\Service\DocumentosAnexados\DocumentosAnexados as DocumentosAnexadosService;
+use Application\Modules\Projeto\Service\DocumentosAnexados\DocumentosAnexados as DocumentosAnexados;
 
 class Projeto_DocumentosAnexadosRestController extends MinC_Controller_Rest_Abstract
 {
@@ -15,9 +15,9 @@ class Projeto_DocumentosAnexadosRestController extends MinC_Controller_Rest_Abst
     public function indexAction()
     {
         try {
-            $DocumentosAnexadosService = new DocumentosAnexadosService($this->getRequest(), $this->getResponse());
+            $DocumentosAnexadosService = new DocumentosAnexados($this->getRequest(), $this->getResponse());
             $resposta = $DocumentosAnexadosService->buscaDocumentosAnexados();
-
+//xd($resposta);
             $this->customRenderJsonResponse(['data' => $resposta], 200);
 
         } catch (Exception $objException) {

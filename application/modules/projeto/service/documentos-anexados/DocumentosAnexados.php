@@ -35,12 +35,12 @@ class DocumentosAnexados
 
         $tbDoc = new \paDocumentos();
         $documentos = $tbDoc->marcasAnexadas($idPronac);
-
         $docs = $this->montaArrayDocumentos($documentos);
 
         $resultArray = [];
-        $informacoes['Pronac'] = $projeto['AnoProjeto'] + $projeto['Sequencial'];
+        $informacoes['Pronac'] = $projeto['AnoProjeto'] . $projeto['Sequencial'];
         $informacoes['NomeProjeto'] = $projeto['NomeProjeto'];
+        $informacoes['idPronac'] = $idPronac;
 
         $resultArray['documentos'] = $docs;
         $resultArray['informacoes'] = $informacoes;
@@ -71,9 +71,10 @@ class DocumentosAnexados
             $itemArray = [
                 'Anexado' => $item->Anexado,
                 'Data' => $item->Data,
-                'Descricao' => $item->Descricao,
-                'NoArquivo' => $item->NoArquivo,
+                'Descricao' => utf8_encode($item->Descricao),
+                'NoArquivo' => utf8_encode($item->NoArquivo),
                 'idArquivo' => $item->idDocumentosAgentes,
+                'AgenteDoc' => $item->AgenteDoc,
             ];
             $docs[] = $itemArray;
         }
