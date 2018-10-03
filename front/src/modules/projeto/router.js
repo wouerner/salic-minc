@@ -16,6 +16,7 @@ import Proposta from './visualizar/components/incentivo/Proposta';
 import CertidoesNegativas from './visualizar/components/outrasInformacoes/CertidoesNegativas';
 import LocalRealizacaoDeslocamento from './visualizar/components/outrasInformacoes/LocalRealizacaoDeslocamento';
 import DocumentosAssinados from './visualizar/components/outrasInformacoes/DocumentosAssinados';
+import DadosComplementares from './visualizar/components/outrasInformacoes/DadosComplementares';
 
 Vue.use(Router);
 
@@ -151,6 +152,14 @@ const routes = [
                 component: DocumentosAssinados,
                 meta: {
                     title: 'Documentos assinados',
+                },
+            },
+            {
+                path: 'dados-complementares',
+                name: 'DadosComplementares',
+                component: DadosComplementares,
+                meta: {
+                    title: 'Dados Complementares',
                 },
             },
         ],
