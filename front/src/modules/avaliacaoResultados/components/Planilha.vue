@@ -8,6 +8,7 @@
                 <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
                 <p v-else-if="documento != 0">Existe Documento para assinar nesse projeto.</p>
                 <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
+
                 <p v-else>Sem Observações.</p>
             </v-card-text>
             <v-card-actions>
@@ -152,6 +153,7 @@
                 <v-icon>close</v-icon>
             </v-btn>
             <v-tooltip left v-if="(documento != 0)">
+
                 <v-btn
                     fab
                     dark
@@ -159,6 +161,7 @@
                     color="green"
                     slot="activator"
                     :href="'/assinatura/index/visualizar-projeto?idDocumentoAssinatura=' + documento.idDocumentoAssinatura"
+
                 >
                     <v-icon>edit</v-icon>
                 </v-btn>
