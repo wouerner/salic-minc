@@ -737,14 +737,6 @@ Vue.component('sl-comprovante-nacional-form',
                 if (e.length == 8) {
                     this.comprovante.dataEmissao = this.comprovante.dataEmissao.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
                 }
-                console.log('_______________________________________________');
-                console.log('dataEmissao');
-                console.log(this.comprovante.dataEmissao);
-                console.log('datainicio');
-                console.log(this.datainicio);
-                console.log('datafim');
-                console.log(this.datafim);
-                console.log('_______________________________________________');
             },
             inputDataPagamento: function (e) {
                 if (e.length > 0) {
