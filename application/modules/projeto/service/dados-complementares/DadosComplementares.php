@@ -74,17 +74,28 @@ class DadosComplementares
 
     private function montaArrayProposta($rsProposta) {
         $PropostaArray = [];
+        $Objetivos = html_entity_decode(utf8_encode($rsProposta['Objetivos']));
+        $Justificativa = html_entity_decode(utf8_encode($rsProposta['Justificativa']));
+        $Acessibilidade = html_entity_decode(utf8_encode($rsProposta['Acessibilidade']));
+        $DemocratizacaoDeAcesso = html_entity_decode(utf8_encode($rsProposta['DemocratizacaoDeAcesso']));
+        $EtapaDeTrabalho = html_entity_decode(utf8_encode($rsProposta['EtapaDeTrabalho']));
+        $FichaTecnica = html_entity_decode(utf8_encode($rsProposta['FichaTecnica']));
+        $ImpactoAmbiental = html_entity_decode(utf8_encode($rsProposta['ImpactoAmbiental']));
+        $EspecificacaoTecnica = html_entity_decode(utf8_encode($rsProposta['EspecificacaoTecnica']));
+        $OutrasInformacoes = html_entity_decode(utf8_encode($rsProposta['EstrategiadeExecucao']));
+        $Sinopse = html_entity_decode(utf8_encode($rsProposta['Sinopse']));
 
         $PropostaArray = [
-            'Objetivos' => $rsProposta['Objetivos'],
-            'Justificativa' => $rsProposta['Justificativa'],
-            'Acessibilidade' => $rsProposta['Acessibilidade'],
-            'DemocratizacaoDeAcesso' => $rsProposta['DemocratizacaoDeAcesso'],
-            'EtapaDeTrabalho' => $rsProposta['EtapaDeTrabalho'],
-            'FichaTecnica' => $rsProposta['FichaTecnica'],
-            'ImpactoAmbiental' => $rsProposta['ImpactoAmbiental'],
-            'EspecificacaoTecnica' => $rsProposta['EspecificacaoTecnica'],
-            'OutrasInformacoes' => $rsProposta['EstrategiadeExecucao'],
+            'Objetivos' => $Objetivos,
+            'Justificativa' => $Justificativa,
+            'Acessibilidade' => $Acessibilidade,
+            'DemocratizacaoDeAcesso' => $DemocratizacaoDeAcesso,
+            'EtapaDeTrabalho' => $EtapaDeTrabalho,
+            'FichaTecnica' => $FichaTecnica,
+            'ImpactoAmbiental' => $ImpactoAmbiental,
+            'EspecificacaoTecnica' => $EspecificacaoTecnica,
+            'OutrasInformacoes' => $OutrasInformacoes,
+            'Sinopse' => $Sinopse,
         ];
 
         return $PropostaArray;

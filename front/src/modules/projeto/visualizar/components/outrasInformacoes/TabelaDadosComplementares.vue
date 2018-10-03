@@ -8,11 +8,11 @@
                                 class="btn_adicionar"
                                 id="objetivos"
                                 @click="setActiveTab(1);">
-                        <b>{{ dadoComplementar }}</b>
+                        <b v-html="dadoComplementar">{{ dadoComplementar }}</b>
                     </td>
                 </tr>
                 <tr v-if="activeTab === 1" align="left" style="padding: 5px">
-                    <div v-if="dsDadoComplementar">
+                    <div v-if="dsDadoComplementar" v-html="dsDadoComplementar">
                         <td>{{ dsDadoComplementar }}</td>
                     </div>
                     <div v-else>

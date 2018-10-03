@@ -5,7 +5,39 @@
                                   :nomeProjeto="dados.informacoes.NomeProjeto">
             </IdentificacaoProjeto>
             <TabelaDadosComplementares  dadoComplementar="Objetivos"
-                                        dsDadoComplementar="blabla"></TabelaDadosComplementares>
+                                        :dsDadoComplementar="dados.Proposta.Objetivos">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Justificativa"
+                                        :dsDadoComplementar="dados.Proposta.Justificativa">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Custos Vinculados"
+                                        :custosVinculados="dados.CustosVinculados">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Acessibilidade"
+                                        :dsDadoComplementar="dados.Proposta.Acessibilidade">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Democratiza&ccedil;&atilde;o de Acesso"
+                                        :dsDadoComplementar="dados.Proposta.DemocratizacaoDeAcesso">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Etapa de Trabalho"
+                                        :dsDadoComplementar="dados.Proposta.EtapaDeTrabalho">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Ficha T&eacute;cnica"
+                                        :dsDadoComplementar="dados.Proposta.FichaTecnica">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Sinopse da Obra"
+                                        :dsDadoComplementar="dados.Proposta.Sinopse">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Impacto Ambiental"
+                                        :dsDadoComplementar="dados.Proposta.ImpactoAmbiental">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Especifica&ccedil;&otilde;es t&eacute;cnicas do produto"
+                                        :dsDadoComplementar="dados.Proposta.EspecificacaoTecnica">
+            </TabelaDadosComplementares>
+            <TabelaDadosComplementares  dadoComplementar="Outras Informa&ccedil;&otilde;es"
+                                        :dsDadoComplementar="dados.Proposta.OutrasInformacoes">
+            </TabelaDadosComplementares>
+
         </div>
     </div>
 </template>
@@ -40,9 +72,10 @@ export default {
             const idPronac = self.$route.params.idPronac
             /* eslint-disable */
             $3.ajax({
-                url: '/projeto/certidoes-negativas-rest/index/idPronac/' + idPronac,
+                url: '/projeto/dados-complementares-rest/index/idPronac/' + idPronac,
             }).done(function (response) {
                 self.dados = response.data;
+                console.log(self.dados);
             });
         },
     },
