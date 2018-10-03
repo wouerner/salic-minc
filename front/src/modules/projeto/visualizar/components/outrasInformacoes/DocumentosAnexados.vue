@@ -16,7 +16,7 @@
             </thead>
             <tbody v-for="(dado, index) in dados.documentos" :key="index">
             <tr>
-                <td class="center">{{index + 1}}</td>
+                <td class="center">{{ index + 1 }}</td>
                 <td class="center">{{ dado.Anexado }}</td>
                 <td class="center">{{ dado.Data }}</td>
                 <td class="center">{{ dado.Descricao }}</td>
