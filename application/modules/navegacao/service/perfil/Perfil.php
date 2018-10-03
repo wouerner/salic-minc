@@ -27,9 +27,11 @@ class Perfil
         $objIdentity = $auth->getIdentity();
         $arrAuth = array_change_key_case((array)$objIdentity);
 
-        $objModelUsuario = new \Autenticacao_Model_DbTable_Usuario(); // objeto usuario
+        $objModelUsuario = new \Navegacao_Model_PerfilMapper(); // objeto usuario
 //        $UsuarioAtivo = new \Zend_Session_Namespace('UsuarioAtivo'); // cria a sessao com o usuario ativo
 //        $GrupoAtivo = new \Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
+
+        $grupos = $objModelUsuario->buscarPerfisDisponiveis($arrAuth['usu_codigo'], 21)->toArray();
 
         $grupos = $objModelUsuario->buscarUnidades($arrAuth['usu_codigo'], 21)->toArray();
 //        $objAgente = $objModelUsuario->getIdUsuario($arrAuth['usu_codigo']);
@@ -37,14 +39,16 @@ class Perfil
 //        $cpfLogado = $objAgente['usu_identificacao'];
 
 
-        array_walk($grupos, function (&$value) {
-            $value = array_map('utf8_encode', $value);
-        });
+        xd('fim service');
 
-        $perfis = [];
-        foreach ($grupos as $key => $value) {
-            array_push($perfis, $value['gru_nome']);
-        }
+//        array_walk($grupos, function (&$value) {
+//            $value = array_map('utf8_encode', $value);
+//        });
+//
+//        $perfis = [];
+//        foreach ($grupos as $key => $value) {
+//            array_push($perfis, $value['gru_nome']);
+//        }
 
         return $perfis;
     }
