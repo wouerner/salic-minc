@@ -37,7 +37,7 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
     return p;
 };
 
-export const salvarParecer = ({ commit }, params) => {
+export const salvarParecer = (_, params) => {
     const p = new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.criarParecer(params)
             .then(() => {
@@ -61,12 +61,21 @@ export const obterDestinatarios = ({ commit }) => {
         });
 };
 
-export const obterDadosTabelaTecnico = ({ commit }) => {
-    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico()
+export const obterDadosTabelaTecnico = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
         .then((response) => {
             const data = response.data;
             const dadosTabela = data.data;
             commit(types.PROJETOS_AVALIACAO_TECNICA, dadosTabela);
+        });
+};
+
+export const projetosFinalizados = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.obterDadosTabelaTecnico(params)
+        .then((response) => {
+            const data = response.data;
+            const dadosTabela = data.data;
+            commit(types.SET_DADOS_PROJETOS_FINALIZADOS, dadosTabela);
         });
 };
 
@@ -107,12 +116,68 @@ export const planilha = ({ commit }, params) => {
         });
 };
 
-export const finalizarParecer = ({ commit }, params) => {
+export const projetoAnalise = ({ commit }, params) => {
+    avaliacaoResultadosHelperAPI.projetoAnalise(params)
+        .then((response) => {
+            const projetoAnalise = response.data;
+            commit(types.GET_PROJETO_ANALISE, projetoAnalise);
+        });
+};
+
+export const finalizarParecer = (_, params) => {
     avaliacaoResultadosHelperAPI.finalizarParecer(params)
         .then(() => {
         });
 };
 
-export const encaminharParaTecnico = ({ commit }, params) =>
+export const encaminharParaTecnico = ({ commit }, params) => {
+    commit();
     avaliacaoResultadosHelperAPI.encaminharParaTecnico(params);
+};
 
+export const alterarParecer = ({ commit }, param) => {
+    commit(types.SET_PARECER, param);
+};
+
+
+export const getLaudoFinal = ({ commit }) => {
+    const data = { manifestacao: 'A', laudoTecnico: 'Tem mais de 10 caracteres!! 39 no total' };
+    commit(types.GET_LAUDO_FINAL, data);
+};
+
+export const atualizarManifestacao = ({ commit }, characterManifestacao) => {
+    commit(types.SET_MANIFESTACAO_PROVISORIA, characterManifestacao);
+};
+
+export const atualizarParecer = ({ commit }, characterParecer) => {
+    commit(types.SET_PARECER_PROVISORIO, characterParecer);
+};
+
+export const salvarLaudoFinal = (_, data) => {
+    avaliacaoResultadosHelperAPI.criarParecerLaudoFinal(data)
+        .then((response) => {
+            console.log(response);
+        });
+};
+
+export const finalizarLaudoFinal = (_, data) => {
+    avaliacaoResultadosHelperAPI.finalizarParecerLaudoFinal(data)
+        .then((response) => {
+            console.log(response);
+        });
+};
+
+export const enviarDiligencia = (_, data) => {
+    avaliacaoResultadosHelperAPI.criarDiligencia(data)
+        .then((response) => {
+            console.log(response);
+        });
+};
+
+export const projetosParaDistribuir = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.obterProjetosParaDistribuir()
+        .then((response) => {
+            const data = response.data;
+            commit(types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR, data);
+        });
+};
