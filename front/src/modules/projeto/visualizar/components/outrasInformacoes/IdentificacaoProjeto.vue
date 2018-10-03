@@ -18,5 +18,5 @@
 export default {
     name: 'IdentificacaoProjeto',
     props: ['pronac', 'nomeProjeto'],
-}
+};
 </script>
