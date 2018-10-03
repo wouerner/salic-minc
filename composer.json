@@ -33,6 +33,7 @@
             "Application\\Modules\\Projeto\\Service\\Proponente\\": "./application/modules/projeto/service/proponente/",
             "Application\\Modules\\Projeto\\Service\\CertidoesNegativas\\": "./application/modules/projeto/service/certidoes-negativas/",
             "Application\\Modules\\Projeto\\Service\\LocalRealizacaoDeslocamento\\": "./application/modules/projeto/service/local-realizacao-deslocamento/",
+            "Application\\Modules\\Projeto\\Service\\DadosComplementares\\": "./application/modules/projeto/service/dados-complementares/",
             "Application\\Modules\\Projeto\\Service\\DocumentosAnexados\\": "./application/modules/projeto/service/documentos-anexados/",
             "Application\\Modules\\Projeto\\Service\\DocumentosAssinados\\": "./application/modules/projeto/service/documentos-assinados/",
             "Application\\Modules\\Proposta\\": "./application/modules/proposta/",
