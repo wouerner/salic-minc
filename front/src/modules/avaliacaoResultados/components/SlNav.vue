@@ -47,6 +47,23 @@
                 <v-toolbar-title
                     slot="activator"
                 >
+                    <span>OPA</span>
+                    <v-icon dark>arrow_drop_down</v-icon>
+                </v-toolbar-title>
+                <v-list v-for="perfil in perfisDisponiveis">
+                    <v-list-tile>
+                        {{perfil.gru_nome}}
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+            <v-spacer></v-spacer>
+            <v-menu
+                :nudge-width="100"
+                offset-y
+            >
+                <v-toolbar-title
+                    slot="activator"
+                >
                     <span>Olá, Romulo</span>
                     <v-icon dark>arrow_drop_down</v-icon>
                 </v-toolbar-title>
@@ -83,6 +100,7 @@ export default {
     computed: {
         ...mapGetters({
             dadosMenu: 'avaliacaoResultados/dadosMenu',
+            perfisDisponiveis: 'avaliacaoResultados/perfisDisponiveis',
         }),
     },
     mounted() {
