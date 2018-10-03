@@ -30,13 +30,9 @@ class RevisaoAvaliacaoFinanceira
             'idAvaliacaoFinanceira' => $this->request->idAvaliacaoFinanceira
         ];
 
-        $dadosRevisao = $tbAvaliacaoFinanceira->findBy($where);
+        $dadosRevisao = $tbAvaliacaoFinanceira->findByAvaliacaoFinanceira($where)->toArray();
 
-        $dadosRevisao = ($dadosRevisao) ?: new \stdClass();
-
-        return [
-            'revisao' => $dadosRevisao
-        ];
+        return $dadosRevisao;
     }
 
     public function salvar()
