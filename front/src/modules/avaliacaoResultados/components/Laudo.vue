@@ -82,7 +82,7 @@
                     </td>
                     <td class="text-xs-center">
                         <v-btn flat icon color="blue"
-                               :href="'#/emitir-laudo-final/' + props.item.pronac">
+                               :to="{ name: 'EmitirLaudoFinal', params:{ id:props.item.pronac }}">
                             <v-icon>create</v-icon>
                         </v-btn>
                     </td>

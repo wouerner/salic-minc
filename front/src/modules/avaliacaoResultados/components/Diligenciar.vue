@@ -1,57 +1,47 @@
 <template>
     <v-container grid-list-xl>
-        <v-form ref="form" v-model="valid">
+        <v-form ref="form">
             <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
                 <v-toolbar dark color="green">
                         <v-toolbar-title>Diligenciar</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click.native="enviarDiligencia()">Enviar</v-btn>
-                            <v-btn dark flat :href="'voltar'">Cancelar</v-btn>
+                            <v-btn v-if="tpDiligencia && solicitacao" dark flat @click.native="enviarDiligencia()">Enviar</v-btn>
+                            <v-btn v-else dark flat disabled>Enviar</v-btn>
+                            <v-btn dark flat :to="{ name: 'Analise Planilha', params:{ id:this.$route.params.id }}">Cancelar</v-btn>
                         </v-toolbar-items>
                 </v-toolbar>
                 <v-container grid-list-sm>
                     <v-layout row wrap>
                         <v-flex xs12 sm12 md12>
-                            <h3>{{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.nomeProjeto}}</h3>
+                            <h2>{{projeto.AnoProjeto}}{{projeto.Sequencial}} - {{projeto.NomeProjeto}}</h2>
                         </v-flex>
                     </v-layout>
                     <v-divider></v-divider>
                 </v-container>
                 <v-container grid-list>
-                    <v-layout wrap align-center>
+                    <v-layout row wrap>
                         <v-flex>
-                            <p><b>Tipo de Diligencia</b></p>
-                        </v-flex>
-                        <v-flex>
-                            <p>
-                                <input v-model="diligencia.tpDiligencia"
-                                       :value="174"
-                                       type="radio"
-                                       id="test1"
-                                       label="Somente itens recusados" />
-                                <!-- <label for="test1">
-                                    Somente itens recusados
-                                </label> -->
-                            </p>
-                            <p>
-                                <input v-model="diligencia.tpDiligencia"
-                                       :value="645"
-                                       type="radio"
-                                       id="test2"
-                                       label="Todos os itens or&ccedil;amentarios" />
-                                <!-- <label for="test2">
-                                    Todos os itens or&ccedil;amentarios
-                                </label> -->
-                            </p>
-                        </v-flex>
-                        <v-flex>
-                            <v-textarea v-model="diligencia.solicitacao"
-                                        id="solicitacao"
-                                        label="Solicita&ccedil;&atilde;o">
-                            </v-textarea>
+                            <h3>Tipo de Diligencia *</h3>
                         </v-flex>
                     </v-layout>
+                    <v-divider></v-divider>
+                    <v-layout wrap align-center>
+                        <v-flex>
+                            <v-radio-group v-model="tpDiligencia">
+                                <v-radio color="success" label="Somente itens recusados" value="174"></v-radio>
+                                <v-radio color="success" label="Todos os itens orçamentários" value="645"></v-radio>
+                            </v-radio-group>
+                        </v-flex>
+                    </v-layout>
+                        <v-flex>
+                            <v-textarea v-model="solicitacao"
+                                        label="Solicitação *"
+                                        color="green"
+                                        height="50px"
+                                        :rules="solicitacaoRules">
+                            </v-textarea>
+                        </v-flex>
                 </v-container>
             </v-dialog>
         </v-form>
@@ -64,21 +54,29 @@
     export default {
         data() {
             return {
+                tpDiligencia: '',
+                solicitacao: '',
                 idPronac: this.$route.params.id,
                 dialog: true,
+                solicitacaoRules: [
+                    v => !!v || 'Solicitação é obrigatório!',
+                ],
             };
         },
         methods:
         {
             ...mapActions({
-                salvar: 'avaliacaoResultados/salvarDiligencia',
-                getDiligencia: 'avaliacaoResultados/getDiligencia',
+                requestEmissaoParecer: 'avaliacaoResultados/getDadosEmissaoParecer',
+                salvar: 'avaliacaoResultados/enviarDiligencia',
             }),
+            getConsolidacao(id) {
+                this.requestEmissaoParecer(id);
+            },
             enviarDiligencia() {
                 const data = {
                     idPronac: this.idPronac,
                     tpDiligencia: this.tpDiligencia,
-                    dssolicitacao: this.solicitacao,
+                    solicitacao: this.solicitacao,
                 };
 
                 this.salvar(data);
@@ -90,8 +88,10 @@
         {
             ...mapGetters({
                 projeto: 'avaliacaoResultados/projeto',
-                diligencia: 'avaliacaoResultados/diligencia',
             }),
+        },
+        created() {
+            this.getConsolidacao(this.idPronac);
         },
     };
 </script>
