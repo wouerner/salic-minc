@@ -22,26 +22,18 @@ class Perfil
 
     public function buscarPerfisDisponoveis()
     {
-//        $parametros = $this->request->getParams();
-//        $acao = $this->identificaColuna($parametros['acao']);
-//        $idPronac = $parametros['idPronac'];
-//
-//        $mapper = new \Readequacao_Model_TbTransferenciaRecursosEntreProjetosMapper();
-//        $result = $mapper->obterTransferenciaRecursosEntreProjetos($idPronac, $acao);
-
         # Convertendo os objetos da sessao em array, transformando as chaves em minusculas.
-        $auth = Zend_Auth::getInstance();
+        $auth = \Zend_Auth::getInstance();
         $objIdentity = $auth->getIdentity();
         $arrAuth = array_change_key_case((array)$objIdentity);
 
-        $objModelUsuario = new Autenticacao_Model_DbTable_Usuario(); // objeto usuario
-        $UsuarioAtivo = new Zend_Session_Namespace('UsuarioAtivo'); // cria a sessao com o usuario ativo
-        $GrupoAtivo = new Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
-//        xd('AAAAAAAAAA', $UsuarioAtivo, $GrupoAtivo->codGrupo, $GrupoAtivo->codOrgao, $objIdentity, $idAgente);
+        $objModelUsuario = new \Autenticacao_Model_DbTable_Usuario(); // objeto usuario
+        $UsuarioAtivo = new \Zend_Session_Namespace('UsuarioAtivo'); // cria a sessao com o usuario ativo
+        $GrupoAtivo = new \Zend_Session_Namespace('GrupoAtivo'); // cria a sessao com o grupo ativo
 
         // somente autenticacao zend
         $resposta = [];
-        $from = base64_encode($this->getRequest()->getRequestUri());
+        $from = base64_encode($this->request->getRequestUri());
         if (0 == 0) {
 
 
