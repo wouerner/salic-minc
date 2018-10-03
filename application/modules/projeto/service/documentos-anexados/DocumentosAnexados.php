@@ -34,35 +34,50 @@ class DocumentosAnexados
         $projeto = $Projetos->buscar(array('IdPRONAC = ?' => $idPronac))->current();
 
         $tbDoc = new \paDocumentos();
-        $rs = $tbDoc->marcasAnexadas($idPronac);
-xd($rs);
-        $certidoes = [];
-        $informacoes = [];
+        $documentos = $tbDoc->marcasAnexadas($idPronac);
+
+        $docs = $this->montaArrayDocumentos($documentos);
+
         $resultArray = [];
-        foreach ($resultado as $item) {
-            $dsCertidao = html_entity_decode($item['dsCertidao']);
-            $situacao = html_entity_decode($item['Situacao']);
-            $objDateTimeDtEmissao = new \DateTime($item['DtEmissao']);
-            $objDateTimeDtValidade = new \DateTime($item['DtValidade']);
+        $informacoes['Pronac'] = $projeto['AnoProjeto'] + $projeto['Sequencial'];
+        $informacoes['NomeProjeto'] = $projeto['NomeProjeto'];
 
-            $itemArray = [
-                'dsCertidao' => $dsCertidao,
-                'CodigoCertidao' => $item['CodigoCertidao'],
-                'DtEmissao' => $objDateTimeDtEmissao->format('d/m/Y H:i:s'),
-                'DtValidade' => $objDateTimeDtValidade->format('d/m/Y H:i:s'),
-                'Pronac' => $item['Pronac'],
-                'Situacao' => $situacao,
-            ];
-
-            $certidoes[] = $itemArray;
-        }
-
-        $informacoes['Pronac'] = $resultado[0]['Pronac'];
-        $informacoes['NomeProjeto'] = $rs['NomeProjeto'];
-
-        $resultArray['certidoes'] = $certidoes;
+        $resultArray['documentos'] = $docs;
         $resultArray['informacoes'] = $informacoes;
 
         return $resultArray;
+    }
+
+    private function montaArrayDocumentos($documentos) {
+        $docs = [];
+        foreach ($documentos as $item) {
+            switch ($item->Anexado){
+                case 1:
+                    $item->Anexado = 'Documento do Proponente';
+                    break;
+                case 2:
+                    $item->Anexado = 'Documento da Proposta';
+                    break;
+                case 3:
+                    $item->Anexado = 'Documento do Projeto Anexado no Minc';
+                    break;
+                case 4:
+                    $item->Anexado = 'Documento do Projeto';
+                    break;
+                case 5:
+                    $item->Anexado = 'Documento do Projeto';
+                    break;
+            }
+            $itemArray = [
+                'Anexado' => $item->Anexado,
+                'Data' => $item->Data,
+                'Descricao' => $item->Descricao,
+                'NoArquivo' => $item->NoArquivo,
+                'idArquivo' => $item->idDocumentosAgentes,
+            ];
+            $docs[] = $itemArray;
+        }
+
+        return $docs;
     }
 }
