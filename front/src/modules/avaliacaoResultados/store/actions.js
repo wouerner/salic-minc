@@ -1,4 +1,5 @@
 import * as avaliacaoResultadosHelperAPI from '@/helpers/api/AvaliacaoResultados';
+import * as desencapsularResponse from '@/helpers/actions';
 import * as types from './types';
 
 export const dadosMenu = ({ commit }) => {
@@ -133,11 +134,11 @@ export const alterarParecer = ({ commit }, param) => {
     commit(types.SET_PARECER, param);
 };
 
-export const perfisDisponiveis = (_, params) => {
-    console.log('em cima');
+
+export const perfisDisponiveis = ({ commit }, params) => {
     avaliacaoResultadosHelperAPI.perfisDisponiveis(params)
         .then((response) => {
-            console.log('dentro');
-            console.log(response);
+            const items = desencapsularResponse.default(response);
+            commit('SET_PERFIS_DISPONIVEIS', items);
         });
 };

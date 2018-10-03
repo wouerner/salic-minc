@@ -21,6 +21,7 @@ export const state = {
     redirectLink: {},
     planilha: {},
     projetosFinalizados: {},
+    perfisDisponiveis: [],
 };
 
 export const mutations = {
@@ -91,5 +92,8 @@ export const mutations = {
     },
     [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
         state.projetosFinalizados = dados;
+    },
+    [types.SET_PERFIS_DISPONIVEIS](state, dados) {
+        state.perfisDisponiveis = dados;
     },
 };

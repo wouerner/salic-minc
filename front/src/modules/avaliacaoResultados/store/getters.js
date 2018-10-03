@@ -12,3 +12,4 @@ export const dadosHistoricoEncaminhamento = state => state.dadosHistoricoEncamin
 export const redirectLink = state => state.redirectLink;
 export const planilha = state => state.planilha;
 export const getProjetosFinalizados = state => state.projetosFinalizados;
+export const perfisDisponiveis = state => state.perfisDisponiveis;
