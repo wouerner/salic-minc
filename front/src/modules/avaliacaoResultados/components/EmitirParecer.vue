@@ -14,14 +14,14 @@
                             <v-btn dark flat 
                                 @click.native="salvarParecer()" 
                                 :disabled="!valid"
-                                :href="redirectLink"
+                                :to="redirectLink"
                             >
                                 Salvar
                             </v-btn>
                             <v-btn dark flat
                                 @click.native="finalizarParecer()"
                                 :disabled="!valid"
-                                :href="redirectLink"
+                                :to="redirectLink"
                             >
                                 Finalizar
                             </v-btn>
@@ -142,7 +142,7 @@ export default {
         return {
             tipo: true,
             idPronac: this.$route.params.id,
-            redirectLink: '/prestacao-contas/realizar-prestacao-contas/index/idPronac/',
+            redirectLink: '/planilha/',
             valid: false,
             dialog: true,
             itemRules: [
@@ -222,6 +222,7 @@ export default {
                 atual: 5,
                 proximo: 6,
             };
+
             this.finalizar(data);
         },
         inputParecer(e) {

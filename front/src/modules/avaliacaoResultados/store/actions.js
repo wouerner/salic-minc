@@ -37,8 +37,7 @@ export const getDadosEmissaoParecer = ({ commit }, param) => {
     return p;
 };
 
-export const salvarParecer = ({ commit }, params) => {
-    commit();
+export const salvarParecer = (_, params) => {
     const p = new Promise((resolve) => {
         avaliacaoResultadosHelperAPI.criarParecer(params)
             .then(() => {
@@ -125,8 +124,7 @@ export const projetoAnalise = ({ commit }, params) => {
         });
 };
 
-export const finalizarParecer = ({ commit }, params) => {
-    commit();
+export const finalizarParecer = (_, params) => {
     avaliacaoResultadosHelperAPI.finalizarParecer(params)
         .then(() => {
         });
@@ -173,5 +171,13 @@ export const enviarDiligencia = (_, data) => {
     avaliacaoResultadosHelperAPI.criarDiligencia(data)
         .then((response) => {
             console.log(response);
+        });
+};
+
+export const projetosParaDistribuir = ({ commit }) => {
+    avaliacaoResultadosHelperAPI.obterProjetosParaDistribuir()
+        .then((response) => {
+            const data = response.data;
+            commit(types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR, data);
         });
 };
