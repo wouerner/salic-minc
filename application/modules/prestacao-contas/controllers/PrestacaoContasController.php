@@ -352,11 +352,11 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
         $tbPlanilhaAplicacao = new tbPlanilhaAprovacao();
         $projetos = $tbPlanilhaAplicacao->obterAnaliseFinanceiraVirtual(
             $this->codOrgao,
-            $situacaoEncaminhamentoPrestacao,
-            $order,
-            $start,
-            $length,
-            $search
+            $situacaoEncaminhamentoPrestacao
+            /* $order, */
+            /* $start, */
+            /* $length, */
+            /* $search */
         );
         if (count($projetos) > 0) {
             foreach($projetos->toArray() as $coluna => $item){
@@ -365,8 +365,6 @@ class PrestacaoContas_PrestacaoContasController extends MinC_Controller_Action_A
                 /*     $projetosAnaliseFinanceiraVirtual[$coluna][] = utf8_encode($value); */
                 /* } */
             }
-            /* var_dump($projetosAnaliseFinanceiraVirtual); */
-            /* die; */
 
             $recordsTotal = $tbPlanilhaAplicacao->obterProjetosAnaliseFinanceiraVirtual(
                 $this->codOrgao,

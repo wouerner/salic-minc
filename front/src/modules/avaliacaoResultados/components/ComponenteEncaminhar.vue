@@ -10,9 +10,9 @@
                         color="green lighten-2"
                         text="white"
                         dark
+                        flat
                 >
-                    Encaminhar
-
+                    <v-icon class="material-icons">assignment_ind</v-icon>
                 </v-btn>
 
                 <v-card>

@@ -1,12 +1,15 @@
 <template>
     <v-container fluid>
-        teste
+        <v-btn> 
+            teste {{idPronac}}
+        </v-btn> 
     </v-container>
 </template>
 
 <script>
 export default {
     name: 'BtnEncaminhar',
+    props: ['idPronac'],
     data() {
         return {
         };

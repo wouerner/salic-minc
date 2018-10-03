@@ -795,8 +795,11 @@ class tbPlanilhaAprovacao extends MinC_Db_Table_Abstract
             case tbPlanilhaAprovacao::FILTRO_ANALISE_FINANCEIRA_VIRTUAL_AGUARDANDO_ANALISE :
                 $colunasOrdenadas = [
                     'd.AnoProjeto+d.Sequencial AS Pronac',
+                    'd.AnoProjeto+d.Sequencial AS PRONAC',
                     'd.NomeProjeto',
                     'd.Situacao as cdSituacao',
+                    'd.Situacao as Situacao',
+                    'd.UfProjeto',
                     'a.IdPRONAC',
                 ];
                 $select->where("d.Situacao = ?", 'E68');
