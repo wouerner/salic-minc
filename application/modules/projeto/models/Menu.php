@@ -301,18 +301,18 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Documentos anexados',
             'title' => 'Ir para  Documentos anexados',
-            'link' => '/default/consultardadosprojeto/documentos-anexados/?idPronac=' . $idPronacHash,
-            'ajax' => true,
-            'grupo' => []
-        ];
-
-        $menu['outrasinformacoes']['submenu'][] = [
-            'label' => 'Documentos assinados',
-            'title' => 'Ir para Documentos assinados',
-            'link' => "/projeto/#/{$idPronacHash}/documentos-assinados",
+            'link' => "/projeto/#/{$idPronacHash}/documentos-anexados",
             'ajax' => false,
             'grupo' => []
         ];
+
+//        $menu['outrasinformacoes']['submenu'][] = [
+//            'label' => 'Documentos assinados',
+//            'title' => 'Ir para Documentos assinados',
+//            'link' => "/projeto/#/{$idPronacHash}/documentos-assinados",
+//            'ajax' => false,
+//            'grupo' => []
+//        ];
 
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Dilig&ecirc;ncias do projeto',

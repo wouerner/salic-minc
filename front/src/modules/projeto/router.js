@@ -16,11 +16,9 @@ import Proposta from './visualizar/components/incentivo/Proposta';
 import CertidoesNegativas from './visualizar/components/outrasInformacoes/CertidoesNegativas';
 import LocalRealizacaoDeslocamento from './visualizar/components/outrasInformacoes/LocalRealizacaoDeslocamento';
 import DocumentosAssinados from './visualizar/components/outrasInformacoes/DocumentosAssinados';
-<<<<<<< Updated upstream
 import DadosComplementares from './visualizar/components/outrasInformacoes/DadosComplementares';
-=======
 import DocumentosAnexados from './visualizar/components/outrasInformacoes/DocumentosAnexados';
->>>>>>> Stashed changes
+
 
 Vue.use(Router);
 
