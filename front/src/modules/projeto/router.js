@@ -162,7 +162,7 @@ const routes = [
                 name: 'DadosComplementares',
                 component: DadosComplementares,
                 meta: {
-                    title: 'Dados Complementares',
+                    title: 'Dados Complementares do Projeto',
                 },
             },
             {

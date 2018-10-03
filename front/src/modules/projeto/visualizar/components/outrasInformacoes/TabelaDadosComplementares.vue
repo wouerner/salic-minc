@@ -15,7 +15,7 @@
                     <div v-if="dsDadoComplementar" v-html="dsDadoComplementar">
                         <td>{{ dsDadoComplementar }}</td>
                     </div>
-                    <div v-else>
+                    <div v-else-if="custosVinculados">
                         <td>
                             <table class="tabela">
                                 <thead>
@@ -33,6 +33,7 @@
                             </table>
                         </td>
                     </div>
+                    <div v-else>N&atilde;o se aplica.</div>
                 </tr>
             </tbody>
         </table>

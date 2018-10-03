@@ -293,8 +293,8 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
         $menu['outrasinformacoes']['submenu'][] = [
             'label' => 'Dados complementares do projeto',
             'title' => 'Ir para Dados complementares do projeto',
-            'link' => '/default/consultardadosprojeto/dados-complementares/?idPronac=' . $idPronacHash,
-            'ajax' => true,
+            'link' => "/projeto/#/{$idPronacHash}/dados-complementares",
+            'ajax' => false,
             'grupo' => []
         ];
 
