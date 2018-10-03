@@ -38,6 +38,7 @@
                     ></Historico>
 
                 </td>
+                <component :is="comp"></component>
             </template>
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="warning">
@@ -67,7 +68,7 @@ import TipoAvaliacao from './TipoAvaliacao';
 
 export default {
     name: 'TabelaProjetos',
-    props: ['dados'],
+    props: ['dados', 'comp'],
     data() {
         return {
             pagination: {
@@ -96,7 +97,6 @@ export default {
                     text: 'Diligencia',
                     value: 'diligencia',
                     sortable: false,
-
                 },
                 {
                     text: 'Historico',

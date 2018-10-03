@@ -80,3 +80,6 @@ export const criarDiligencia = (params) => {
     
     // return api.postRequest(`/avaliacao-resultados/emissao-parecer-rest/idPronac/${parametro}`, buildData(data));
 };
+
+
+export const obterProjetosParaDistribuir = () => api.getRequest('/prestacao-contas/prestacao-contas/obter-analise-financeira-virtual');

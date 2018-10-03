@@ -25,6 +25,7 @@ export const state = {
     characterManifestacao: '',
     characterParecer: '',
     projetosFinalizados: {},
+    projetosParaDistribuir: {},
 };
 
 export const mutations = {
@@ -107,5 +108,8 @@ export const mutations = {
     },
     [types.SET_DADOS_PROJETOS_FINALIZADOS](state, dados) {
         state.projetosFinalizados = dados;
+    },
+    [types.SET_DADOS_PROJETOS_PARA_DISTRIBUIR](state, dados) {
+        state.projetosParaDistribuir = dados;
     },
 };

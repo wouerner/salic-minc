@@ -6,7 +6,7 @@
             </v-card-title>
             <v-card-text>
                 <p v-if="dadosProjeto.items.diligencia">Existe Diligência para esse projeto. Acesse <a :href="'/proposta/diligenciar/listardiligenciaanalista/idPronac/' + idPronac">aqui</a>.</p>
-                <p v-else-if="documento != 0">Existe Documento para esse projeto.</p>
+                <p v-else-if="documento != 0">Existe Documento para assinar nesse projeto.</p>
                 <p v-else-if="estado.estadoId == 5">Projeto em analise.</p>
                 <p v-else>Sem Observações.</p>
             </v-card-text>
@@ -84,23 +84,22 @@
                                                                     <td>{{ moeda(props.item.varlorAprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorComprovado) }}</td>
                                                                     <td>{{ moeda(props.item.varlorAprovado - props.item.varlorComprovado) }}</td>
-                                                                    <td v-if="(
-                                                                        props.item.varlorComprovado !== 0
-                                                                        && !dadosProjeto.items.diligencia
-                                                                        && documento == 0
-                                                                        )">
-                                                                        <v-btn
-                                                                            :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
-                                                                            replace
-                                                                            color="red"
-                                                                            small
-                                                                            dark
-                                                                            title="Comprovar Item"
+                                                                    <td >
+                                                                        <template
+                                                                            v-if="podeEditar(props.item.varlorComprovado)"
                                                                         >
+                                                                            <v-btn
+                                                                                :href="'/prestacao-contas/analisar/comprovante/idPronac/' + idPronac + '/uf/' + uf.Uf + '/produto/' + produto.cdProduto + '/idmunicipio/' + cidade.cdCidade + '/idPlanilhaItem/' + props.item.idPlanilhaItens + '/etapa/' + etapa.cdEtapa"
+                                                                                replace
+                                                                                color="red"
+                                                                                small
+                                                                                dark
+                                                                                title="Comprovar Item"
+                                                                            >
                                                                                 <v-icon>gavel</v-icon>
-                                                                        </v-btn>
+                                                                            </v-btn>
+                                                                        </template>
                                                                     </td>
-                                                                    <td v-else>Sem comprovantes</td>
                                                                 </template>
                                                             </v-data-table>
                                                         </v-tab-item>
@@ -165,7 +164,7 @@
                 </v-btn>
                 <span>Assinar</span>
             </v-tooltip>
-            <v-tooltip left>
+            <v-tooltip left v-if="(documento == 0)">
                 <v-btn
                     fab
                     dark
@@ -178,7 +177,7 @@
                 </v-btn>
                 <span>Emitir Parecer</span>
             </v-tooltip>
-            <v-tooltip left>
+            <v-tooltip left v-if="(documento == 0)">
                 <v-btn
                     fab
                     dark
@@ -253,6 +252,15 @@
             moeda: (moedaString) => {
                 const moeda = Number(moedaString);
                 return moeda.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            },
+            podeEditar(varlorComprovado) {
+                if (varlorComprovado !== 0
+                    && !this.dadosProjeto.items.diligencia
+                    && this.documento == 0) {
+                    return true;
+                }
+
+                return false;
             },
         },
     };
