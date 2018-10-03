@@ -36,10 +36,16 @@ class Perfil
 //        $idAgente = $objAgente['idagente'];
 //        $cpfLogado = $objAgente['usu_identificacao'];
 
+
         array_walk($grupos, function (&$value) {
             $value = array_map('utf8_encode', $value);
         });
 
-        return $grupos;
+        $perfis = [];
+        foreach ($grupos as $key => $value) {
+            array_push($perfis, $value['gru_nome']);
+        }
+
+        return $perfis;
     }
 }

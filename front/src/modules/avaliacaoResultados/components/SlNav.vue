@@ -40,22 +40,35 @@
                 </v-list>
             </v-menu>
             <v-spacer></v-spacer>
-            <v-menu
-                :nudge-width="100"
-                offset-y
-            >
-                <v-toolbar-title
-                    slot="activator"
-                >
-                    <span>OPA</span>
-                    <v-icon dark>arrow_drop_down</v-icon>
-                </v-toolbar-title>
-                <v-list v-for="perfil in perfisDisponiveis">
-                    <v-list-tile>
-                        {{perfil.gru_nome}}
-                    </v-list-tile>
-                </v-list>
-            </v-menu>
+            <!--<v-menu-->
+                <!--:nudge-width="100"-->
+                <!--offset-y-->
+            <!--&gt;-->
+                <!--<v-toolbar-title-->
+                    <!--slot="activator"-->
+                    <!--style="width: 250px"-->
+                <!--&gt;-->
+                    <!--<span>OPA</span>-->
+                    <!--<v-icon dark>arrow_drop_down</v-icon>-->
+                <!--</v-toolbar-title>-->
+                <!--<v-list v-for="perfil in perfisDisponiveis">-->
+                    <!--<v-list-tile>-->
+                        <!--{{perfil.gru_nome}}-->
+                    <!--</v-list-tile>-->
+                <!--</v-list>-->
+            <!--</v-menu>-->
+            <v-spacer></v-spacer>
+            <v-layout row wrap align-center>
+                <v-flex xs6>
+                    <v-select
+                        :items="perfisDisponiveis"
+                        menu-props="auto"
+                        hide-details
+                        label="Select"
+                        single-line
+                    ></v-select>
+                </v-flex>
+            </v-layout>
             <v-spacer></v-spacer>
             <v-menu
                 :nudge-width="100"
@@ -94,7 +107,35 @@ export default {
     data() {
         return {
             dados: this.dadosMenuAjax(),
-            // dados: '',
+            e1: 'Florida',
+            e2: 'Texas',
+            e3: null,
+            e4: null,
+            items: [
+                { text: 'State 1' },
+                { text: 'State 2' },
+                { text: 'State 3' },
+                { text: 'State 4' },
+                { text: 'State 5' },
+                { text: 'State 6' },
+                { text: 'State 7' }
+            ],
+            states: [
+                'Alabama', 'Alaska', 'American Samoa', 'Arizona',
+                'Arkansas', 'California', 'Colorado', 'Connecticut',
+                'Delaware', 'District of Columbia', 'Federated States of Micronesia',
+                'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho',
+                'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+                'Louisiana', 'Maine', 'Marshall Islands', 'Maryland',
+                'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+                'Missouri', 'Montana', 'Nebraska', 'Nevada',
+                'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+                'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio',
+                'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico',
+                'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee',
+                'Texas', 'Utah', 'Vermont', 'Virgin Island', 'Virginia',
+                'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+            ],
         };
     },
     computed: {
