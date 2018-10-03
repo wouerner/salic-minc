@@ -23,6 +23,7 @@ export const state = {
     parecerLaudoFinal: {},
     characterManifestacao: '',
     characterParecer: '',
+    projetoAnalise: {},
     projetosFinalizados: {},
 };
 
@@ -97,6 +98,9 @@ export const mutations = {
     },
     [types.SET_PARECER_PROVISORIO](state, characterParecer) {
         state.characterParecer = characterParecer;
+    },
+    [types.GET_PROJETO_ANALISE](state, projetoAnalise) {
+        state.projetoAnalise = projetoAnalise;
     },
     [types.SET_PARECER](state, parecer) {
         state.parecer = parecer;
