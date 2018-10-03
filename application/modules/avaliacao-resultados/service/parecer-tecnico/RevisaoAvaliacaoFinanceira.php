@@ -22,56 +22,45 @@ class RevisaoAvaliacaoFinanceira
         $this->response = $response;
     }
 
-    public function buscarRevisoes() {
+    public function buscarRevisoes($data) {
 
         $tbAvaliacaoFinanceira = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao();
-
         $where = [
-            'idAvaliacaoFinanceira' => $this->request->idAvaliacaoFinanceira
+            'idAvaliacaoFinanceira' => $data
         ];
-
         $dadosRevisao = $tbAvaliacaoFinanceira->findByAvaliacaoFinanceira($where)->toArray();
-
         return $dadosRevisao;
     }
 
     public function salvar()
     {
-        var_dump('ali');
-        die;
-
         $authInstance = \Zend_Auth::getInstance();
         $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
-
         $parametros = $this->request->getParams();
         $tbAvaliacaoFinanceiraRevisao = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao($parametros);
-        $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
-        $tbAvaliacaoFinanceiraRevisao->setIdUsuario($arrAuth['usu_codigo']);
-        $tbAvaliacaoFinanceiraRevisao->setDsRevisao();
-        $tbAvaliacaoFinanceiraRevisao->setSiStattus();
-        $tbAvaliacaoFinanceiraRevisao->setIdGrupoAtivo();
-        $tbAvaliacaoFinanceiraRevisao->setIdParecerAvaliacaoFinanceira();
-
-        $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraMapper();
+        if(!isset($parametros->idAvaliacaoFinanceiraRevisao)){
+            $tbAvaliacaoFinanceiraRevisao->setDtAtualizacao(date('Y-m-d h:i:s'));
+        }else{
+            $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
+        }
+        $tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['usu_codigo']);
+        $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper();
         $codigo = $mapper->save($tbAvaliacaoFinanceiraRevisao);
-
         $this->request->setParam('idAvaliacaoFinanceiraRevisao', $codigo);
-
         if (!$codigo) {
             return $mapper->getMessages();
         }
-
-        return $this->buscarRevisao();
-
+        return $this->buscarRevisao($codigo);
     }
 
     public function buscarRevisao()
     {
-        $tbRevisao = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao();
+        $tbAvaliacaoFinanceira = new \AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao();
         $where = [
-            $tbRevisao->getPrimary() => $this->request->idAvaliacaoFinanceiraRevisao
+            'idAvaliacaoFinanceiraRevisao' => $this->request->idAvaliacaoFinanceiraRevisao
         ];
+        $dadosRevisao = $tbAvaliacaoFinanceira->findOneRevisao($where)->toArray();
 
-        return $tbRevisao->findBy($where);
+        return $dadosRevisao;
     }
 }

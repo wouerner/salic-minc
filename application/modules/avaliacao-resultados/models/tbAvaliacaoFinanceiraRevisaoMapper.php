@@ -14,7 +14,6 @@ class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper extends MinC_
         return false;
     }
 
-
     public function isValid($model)
     {
         $booStatus = true;
@@ -22,9 +21,8 @@ class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper extends MinC_
         $arrRequired = [
             'idAvaliacaoFinanceira',
             'idGrupoAtivo',
-            'idUsuario',
-            'dtRevisao',
-            'siStattus',
+            'idAgente',
+            'siStatus',
             'dsRevisao'
         ];
 

@@ -5,58 +5,59 @@ class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao extends MinC_Db_Mod
 
     protected $_idAvaliacaoFinanceiraRevisao;
     protected $_idAvaliacaoFinanceira;
-    protected $_idUsuario;
+    protected $_idAgente;
     protected $_idGrupoAtivo;
     protected $_dtRevisao;
-    protected $_siStattus;
+    protected $_dtAtualizacao;
+    protected $_siStatus;
     protected $_dsRevisao;
 
     /**
      * @return mixed
      */
-    public function getIdRevisaoParecer()
+    public function getIdAvaliacaoFinanceiraRevisao()
     {
-        return $this->_idRevisaoParecer;
+        return $this->_idAvaliacaoFinanceiraRevisao;
     }
 
     /**
-     * @param mixed $idRevisaoParecer
+     * @param mixed $idAvaliacaoFinanceiraRevisao
      */
-    public function setIdRevisaoParecer($idRevisaoParecer)
+    public function setIdAvaliacaoFinanceiraRevisao($idAvaliacaoFinanceiraRevisao)
     {
-        $this->_idRevisaoParecer = $idRevisaoParecer;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdParecerAvaliacaoFinanceira()
-    {
-        return $this->_idParecerAvaliacaoFinanceira;
-    }
-
-    /**
-     * @param mixed $idParecerAvaliacaoFinanceira
-     */
-    public function setIdParecerAvaliacaoFinanceira($idParecerAvaliacaoFinanceira)
-    {
-        $this->_idParecerAvaliacaoFinanceira = $idParecerAvaliacaoFinanceira;
+        $this->_idAvaliacaoFinanceiraRevisao = $idAvaliacaoFinanceiraRevisao;
     }
 
     /**
      * @return mixed
      */
-    public function getIdUsuario()
+    public function getIdAvaliacaoFinanceira()
     {
-        return $this->_idUsuario;
+        return $this->_idAvaliacaoFinanceira;
     }
 
     /**
-     * @param mixed $idUsuario
+     * @param mixed $idAvaliacaoFinanceira
      */
-    public function setIdUsuario($idUsuario)
+    public function setIdAvaliacaoFinanceira($idAvaliacaoFinanceira)
     {
-        $this->_idUsuario = $idUsuario;
+        $this->_idAvaliacaoFinanceira = $idAvaliacaoFinanceira;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdAgente()
+    {
+        return $this->_idAgente;
+    }
+
+    /**
+     * @param mixed $idAgente
+     */
+    public function setIdAgente($idAgente)
+    {
+        $this->_idAgente = $idAgente;
     }
 
     /**
@@ -94,17 +95,17 @@ class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao extends MinC_Db_Mod
     /**
      * @return mixed
      */
-    public function getSiStattus()
+    public function getSiStatus()
     {
-        return $this->_siStattus;
+        return $this->_siStatus;
     }
 
     /**
-     * @param mixed $siStattus
+     * @param mixed $siStatus
      */
-    public function setSiStattus($siStattus)
+    public function setSiStatus($siStatus)
     {
-        $this->_siStattus = $siStattus;
+        $this->_siStatus = $siStatus;
     }
 
     /**
@@ -123,5 +124,20 @@ class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao extends MinC_Db_Mod
         $this->_dsRevisao = $dsRevisao;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDtAtualizacao()
+    {
+        return $this->_dtAtualizacao;
+    }
+
+    /**
+     * @param mixed $dtAtualizacao
+     */
+    public function setDtAtualizacao($dtAtualizacao)
+    {
+        $this->_dtAtualizacao = $dtAtualizacao;
+    }
 }
 

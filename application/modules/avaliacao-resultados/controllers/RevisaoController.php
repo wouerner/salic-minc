@@ -26,18 +26,26 @@ class AvaliacaoResultados_RevisaoController extends MinC_Controller_Rest_Abstrac
 
     public function indexAction()
     {
-        $this->customRenderJsonResponse([], 401);
-    }
-
-    public function getAction()
-    {
-            if (!isset($this->_request->idPronac)){
+        if (!isset($this->_request->idAvaliacaoFinanceira))
+        {
             $this->customRenderJsonResponse([], 422);
         }
 
         $revisaoService = new RevisaoService($this->getRequest(), $this->getResponse());
         $resposta = $revisaoService->buscarRevisoes($this->_request->idAvaliacaoFinanceira);
         $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta), 200);
+    }
+
+    public function getAction()
+    {
+        if (!isset($this->_resquest->idAvaliacaoFinanceiraRevisao))
+        {
+            $this->customRenderJsonResponse([], 422);
+        }
+        $revisaoService = new RevisaoService($this->getRequest(), $this->getResponse());
+        $resposta = $revisaoService->buscarRevisao($this->_request->idAvaliacaoFinanceiraRevisao);
+        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta), 200);
+
     }
 
     public function headAction(){}
