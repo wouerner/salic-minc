@@ -3,7 +3,7 @@
         <v-form ref="form" v-model="valid">
             <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
                 <v-toolbar dark color="green">
-                        <v-btn icon dark :href="'#/laudo'">
+                        <v-btn icon dark :to="{ name: 'Laudo' }">
                             <v-icon>close</v-icon>
                         </v-btn>
                         <v-toolbar-title>Avaliação Financeira - Emissão de Laudo Final</v-toolbar-title>
