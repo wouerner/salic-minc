@@ -18,7 +18,7 @@ import LocalRealizacaoDeslocamento from './visualizar/components/outrasInformaco
 import DocumentosAssinados from './visualizar/components/outrasInformacoes/DocumentosAssinados';
 import DadosComplementares from './visualizar/components/outrasInformacoes/DadosComplementares';
 import DocumentosAnexados from './visualizar/components/outrasInformacoes/DocumentosAnexados';
-
+import HistoricoEncaminhamento from './visualizar/components/outrasInformacoes/HistoricoEncaminhamento';
 
 Vue.use(Router);
 
@@ -171,6 +171,15 @@ const routes = [
                 component: DocumentosAnexados,
                 meta: {
                     title: 'Documentos Anexados',
+
+                },
+            },
+            {
+                path: 'historico-encaminhamento',
+                name: 'HistoricoEncaminhamento',
+                component: HistoricoEncaminhamento,
+                meta: {
+                    title: 'Hist&oacute;rico Encaminhamento',
 
                 },
             },
