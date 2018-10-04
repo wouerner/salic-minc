@@ -10,6 +10,17 @@ class Proposta_VisualizarController extends Proposta_GenericController
 
     public function indexAction()
     {
+        $this->view->idPreProjeto = $this->_request->getParam('idPreProjeto');
+
+        if (empty($this->view->idPreProjeto)) {
+            $this->redirect("/proposta/manterpropostaincentivofiscal/listarproposta");
+        }
+
+        $gitTag = '?v=' . $this->view->gitTag();
+        $this->view->headScript()->offsetSetFile(99, '/public/dist/js/manifest.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+        $this->view->headScript()->offsetSetFile(100, '/public/dist/js/vendor.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+        $this->view->headScript()->offsetSetFile(101, '/public/dist/js/proposta.js' . $gitTag, 'text/javascript', array('charset' => 'utf-8'));
+
     }
 
     public function obterPropostaCulturalCompletaAction()
@@ -24,14 +35,52 @@ class Proposta_VisualizarController extends Proposta_GenericController
             }
 
             $preProjetoMapper = new Proposta_Model_PreProjetoMapper();
-            $propostaAtual = $preProjetoMapper->obterArrayPropostaCompleta($idPreProjeto);
-
-            $dados = $propostaAtual;
+            $dados = $preProjetoMapper->obterArrayPropostaCompleta($idPreProjeto);
+            $dados['fase_proposta'] = $this->obterFaseProposta($idPreProjeto, $dados);
 
             $this->_helper->json(array('success' => 'true', 'msg' => '', 'data' => $dados));
         } catch (Exception $e) {
             $this->_helper->json(array('success' => 'false', 'msg' => $e->getMessage(), 'data' => []));
         }
+    }
+
+
+    /** @todo migrar para service ou modelo */
+    public function obterFaseProposta($idPreProjeto, $proposta)
+    {
+        $tbMovimentacao = new Proposta_Model_DbTable_TbMovimentacao();
+        $movimentacao = $tbMovimentacao->buscarMovimentacaoProposta($idPreProjeto);
+
+        switch ($movimentacao['idMovimentacao']) {
+            case Proposta_Model_TbMovimentacao::PROPOSTA_COM_PROPONENTE:
+                $fase = 'proposta_com_proponente';
+                break;
+            case Proposta_Model_TbMovimentacao::PROPOSTA_PARA_ANALISE_INICIAL:
+                $fase = 'proposta_analise_inicial';
+                break;
+            case Proposta_Model_TbMovimentacao::PROPOSTA_PARA_ANALISE_FINAL:
+                $fase = 'proposta_em_enquadramento';
+                if (count($this->view->recursoEnquadramentoVisaoProponente) > 0) {
+                    $fase = 'recurso_enquadramento';
+                }
+
+                $tbProjetos = new Projeto_Model_DbTable_Projetos();
+                $projeto = $tbProjetos->findBy(['idProjeto' => $idPreProjeto] );
+                if (!empty($projeto)) {
+                    $fase = 'projeto_cultural';
+                }
+
+                break;
+            default:
+                $fase = 'invalido';
+                break;
+        }
+
+        if ($proposta['stEstado'] == 0) {
+            $fase = 'proposta_arquivada';
+        }
+
+        return $fase;
     }
 
     public function obterIdentificacaoAction()

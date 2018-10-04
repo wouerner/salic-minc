@@ -166,8 +166,7 @@
                     <div class="collapsible-header"><i class="material-icons">place</i>Local de realiza&ccedil;&atilde;o/Deslocamento
                     </div>
                     <div class="collapsible-body padding20">
-                        <PropostaLocalRealizacaoDeslocamento
-                                :idpreprojeto="idpreprojeto"></PropostaLocalRealizacaoDeslocamento>
+                        <PropostaLocalRealizacaoDeslocamento :proposta="dados"></PropostaLocalRealizacaoDeslocamento>
                     </div>
                 </li>
                 <li>
@@ -191,12 +190,14 @@
             </ul>
         </div>
         <div v-else class="center-align">
-            <div class="padding10 green white-text">Opa! Proposta n&atilde;o informada...</div>
+            <div class="padding20 card-panel">Opa! Proposta n&atilde;o encontrada...</div>
         </div>
     </div>
 </template>
 
 <script>
+
+import { mapActions, mapGetters } from 'vuex';
 import Planilha from '@/components/Planilha/Planilha';
 import Carregando from '@/components/Carregando';
 import SalicTextoSimples from '@/components/SalicTextoSimples';
@@ -211,7 +212,7 @@ import PropostaPlanoDistribuicao from './components/PropostaPlanoDistribuicao';
 import PropostaFontesDeRecursos from './components/PropostaFontesDeRecursos';
 import PropostaLocalRealizacaoDeslocamento from './components/PropostaLocalRealizacaoDeslocamento';
 import PropostaCustosVinculados from './components/PropostaCustosVinculados';
-import { mapActions, mapGetters } from 'vuex';
+
 export default {
     name: 'Proposta',
     data() {
@@ -246,7 +247,6 @@ export default {
         if (typeof this.idpreprojeto !== 'undefined' && typeof this.proposta === 'undefined') {
             this.buscarDadosProposta(this.idpreprojeto);
             this.dados = this.dadosProposta;
-
         }
 
         if (typeof this.proposta !== 'undefined') {
@@ -260,7 +260,7 @@ export default {
         dadosProposta(value) {
             this.dados = value;
             this.loading = false;
-        }
+        },
     },
     computed: {
         ...mapGetters({
@@ -277,7 +277,7 @@ export default {
                 // eslint-disable-next-line
                 $3(this).collapsible();
             });
-        }
+        },
     },
 };
 </script>
