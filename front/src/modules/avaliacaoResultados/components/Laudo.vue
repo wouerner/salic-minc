@@ -81,7 +81,8 @@
                         </v-btn>
                     </td>
                     <td class="text-xs-center">
-                        <v-btn flat icon color="blue">
+                        <v-btn flat icon color="blue"
+                               :to="{ name: 'EmitirLaudoFinal', params:{ id:props.item.pronac }}">
                             <v-icon>create</v-icon>
                         </v-btn>
                     </td>
@@ -123,6 +124,7 @@
         },
         data() {
             return {
+                // LinkEmitirLaudo: 'localhost/avaliacao-resultado/#/emitir-laudo-final/',
                 pagination: {
                     rowsPerPage: 10,
                 },
@@ -220,7 +222,6 @@
                 if (this.pagination.rowsPerPage == null ||
                     this.pagination.totalItems == null
                 ) return 0;
-                console.log(this.pagination.totalItems);
                 return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
             },
         },

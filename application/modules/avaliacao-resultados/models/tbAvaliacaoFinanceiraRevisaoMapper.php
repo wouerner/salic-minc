@@ -1,10 +1,9 @@
 <?php
-
-class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraMapper extends MinC_Db_Mapper
+class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper extends MinC_Db_Mapper
 {
     public function __construct()
     {
-        $this->setDbTable('AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceira');
+        $this->setDbTable('AvaliacaoResultados_Model_DbTable_tbAvaliacaoFinanceiraRevisao');
     }
 
     public function save($model)
@@ -15,18 +14,16 @@ class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraMapper extends MinC_Db_Mapp
         return false;
     }
 
-
-    public function isValid( $model)
+    public function isValid($model)
     {
         $booStatus = true;
         $arrData = $model->toArray();
         $arrRequired = [
-            'idPronac',
-            'dtAvaliacaoFinanceira',
-            'tpAvaliacaoFinanceira',
-            'siManifestacao',
-            'dsParecer',
-            'idUsuario'
+            'idAvaliacaoFinanceira',
+            'idGrupoAtivo',
+            'idAgente',
+            'siStatus',
+            'dsRevisao'
         ];
 
         foreach ($arrRequired as $strValue) {
@@ -36,19 +33,17 @@ class AvaliacaoResultados_Model_tbAvaliacaoFinanceiraMapper extends MinC_Db_Mapp
             }
         }
 
-        if (!isset($arrData['idAvaliacaoFinanceira']) && isset($arrData['idPronac'])) {
+        if (isset($arrData['idAvaliacaoFinanceiraRevisao']) && isset($arrData['idAvaliacaoFinanceira'])) {
             $row = $this->getDbTable()->findBy([
-                'idPronac' => $arrData['idPronac']
+                'idAvaliacaoFinanceira' => $arrData['idAvaliacaoFinanceira']
             ]);
 
-//            xd(array_diff($arrData, $row));
-            if(!empty($row)){
-                $this->setMessage('J&aacute; existe uma avalia&ccedil;&atilde;o cadastrada nesse Projeto!', 'idPronac');
+            if (!empty($row)) {
+                $this->setMessage('J&aacute; existe uma revis&atilde;o da avalia&ccedil;&atilde;o cadastrada nesse Projeto!', 'idPronac');
                 $booStatus = false;
             }
         }
 
         return $booStatus;
     }
-
 }
