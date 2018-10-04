@@ -58,7 +58,6 @@
         },
         watch: {
             dados(value) {
-                console.log('aleterando informação', value);
                 this.informacoes = value.informacoes;
             },
         },
