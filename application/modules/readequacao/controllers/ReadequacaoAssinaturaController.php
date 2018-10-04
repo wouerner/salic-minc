@@ -152,7 +152,7 @@ class Readequacao_ReadequacaoAssinaturaController extends Readequacao_GenericCon
         } catch (Exception $objException) {
             parent::message(
                 $objException->getMessage(),
-                "/{$this->moduleName}/readequacao-assinatura/devolver-projeto?IdPRONAC={$get->IdPRONAC}"
+                "/{$this->moduleName}/readequacao-assinatura/devolver-projeto?IdPRONAC={$get->IdPRONAC}&idDocumentoAssinatura={$get->idDocumentoAssinatura}"
             );
         }
     }
