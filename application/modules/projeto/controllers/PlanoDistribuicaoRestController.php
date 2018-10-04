@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\Projeto\Service\HistoricoEnquadramento\HistoricoEnquadramento as HistoricoEnquadramentoService;
+use Application\Modules\Projeto\Service\PlanoDistribuicao\PlanoDistribuicao as PlanoDistribuicaoService;
 
-class Projeto_HistoricoEnquadramentoRestController extends MinC_Controller_Rest_Abstract
+class Projeto_PlanoDistribuicaoRestController extends MinC_Controller_Rest_Abstract
 {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -15,8 +15,8 @@ class Projeto_HistoricoEnquadramentoRestController extends MinC_Controller_Rest_
     public function indexAction()
     {
         try {
-            $HistoricoEnquadramentoService = new HistoricoEnquadramentoService($this->getRequest(), $this->getResponse());
-            $resposta = $HistoricoEnquadramentoService->buscaHistoricoEnquadramento();
+            $HistoricoEnquadramentoService = new PlanoDistribuicaoService($this->getRequest(), $this->getResponse());
+            $resposta = $HistoricoEnquadramentoService->buscaPlanoDistribuicao();
 
             $this->customRenderJsonResponse(['data' => $resposta], 200);
 

@@ -15,7 +15,7 @@
                             @click="setActiveTab(1)">
                     <b v-html="">
                         <b>{{ dado.Produto }}</b>
-                            <span class="red" v-if="dado.stPrincipal == 1 ">(produto principal)</span>
+                            <span class="red">(produto principal)</span>
                         </b>
                 </td>
             </tr>

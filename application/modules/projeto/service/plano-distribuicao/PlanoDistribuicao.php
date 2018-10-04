@@ -31,13 +31,36 @@ class PlanoDistribuicao
         }
 
         $Projetos = new \Projetos();
-        $planoDistribuicao = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
+        $projeto = $Projetos->buscar(array('IdPRONAC = ?'=>$idPronac))->current();
 
-        xd($planoDistribuicao);
+        $informacoes['Pronac'] = $projeto['AnoProjeto'] . $projeto['Sequencial'];
+        $informacoes['NomeProjeto'] = $projeto['NomeProjeto'];
+        $resultArray['informacoes'] = $informacoes;
+
         if (!empty($idPronac)) {
             $buscarDistribuicao = \RealizarAnaliseProjetoDAO::planodedistribuicao($idPronac);
         }
 
-//        return $itemArray;
+        foreach ($buscarDistribuicao as $item) {
+
+            $resultArray[] = [
+                'idPlanoDistribuicao' => $item->idPlanoDistribuicao,
+                'idProjeto' => $item->idProjeto,
+                'idProduto' => $item->idProduto,
+                'stPrincipal' => $item->stPrincipal,
+                'QtdeProduzida' => $item->QtdeProduzida,
+                'QtdeProponente' => $item->QtdeProponente,
+                'QtdeVendaNormal' => $item->QtdeVendaNormal,
+                'QtdePatrocinador' => $item->QtdePatrocinador,
+                'QtdeOutros' => $item->QtdeOutros,
+                'QtdeVendaPromocional' => $item->QtdeVendaPromocional,
+                'Produto' => utf8_encode($item->Produto),
+                'Area' => utf8_encode($item->Area),
+                'Segmento' => utf8_encode($item->Segmento),
+                'PosicaoDaLogo' => utf8_encode($item->PosicaoDaLogo)
+            ];
+        }
+
+        return $resultArray;
     }
 }
