@@ -25,8 +25,18 @@
                 </div>
             </v-card-text>
             <v-card-actions>
-                <v-btn color="success" :href="'/consultardadosprojeto/index?idPronac=' + idPronac" target="_blank">VER PROJETO</v-btn>
-                <v-btn color="success" to="#">CONSOLIDAÇÃO</v-btn>
+
+                <v-btn
+                    color="success"
+                    :href="'/consultardadosprojeto/index?idPronac=' + idPronac" target="_blank"
+                    class="mr-2"
+                >VER PROJETO</v-btn>
+
+                <consolidacao-analise
+                    :idPronac="idPronac"
+                    :nomeProjeto="dadosProjeto.items.nomeProjeto"
+                ></consolidacao-analise>
+
             </v-card-actions>
         </v-card>
         <v-card class="mt-3" flat>
@@ -195,6 +205,7 @@
 <script>
     import { mapActions, mapGetters } from 'vuex';
     import ModalTemplate from '@/components/modal';
+    import ConsolidacaoAnalise from './ConsolidacaoAnalise';
 
     export default {
         name: 'Painel',
@@ -242,6 +253,7 @@
         },
         components: {
             ModalTemplate,
+            ConsolidacaoAnalise,
         },
         methods: {
             ...mapActions({

@@ -3,33 +3,39 @@
         v-model="dialog"
         fullscreen
         hide-overlay
+        scrollable
     >
         <v-btn slot="activator" color="success">CONSOLIDAÇÃO</v-btn>
         <v-card>
-            <!-- <h2>{{ nomeProjeto }}</h2> -->
-            <div>
-                <v-expansion-panel class="mt-2">
-                    <v-expansion-panel-content>
-                        <div slot="header"></div>
-                        <v-card>
-                            <v-card-text>
-                                <table>
-                                    <tr>
-                                        <th>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                        </td>
-                                    </tr>
+            <v-card-text>
+                <h2>{{ nomeProjeto }}</h2>
+                <div class="mt-3">
+                    <v-expansion-panel>
+                        <v-expansion-panel-content
+                            v-for="(consolidacao, i) in getConsolidacaoAnalise"
+                            :key="i"
+                        >
+                            <div slot="header" v-text="consolidacao.title"></div>
+                            <v-card>
+                                <v-card-text>
+                                    <table>
+                                        <tr>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                            </td>
+                                        </tr>
 
-                                </table>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-            </div>
-            <v-btn color="red" @click="dialog = false" flat block>FECHAR</v-btn>
+                                    </table>
+                                </v-card-text>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </div>
+            </v-card-text>
+            <v-btn color="red" @click="dialog = false" flat>FECHAR</v-btn>
         </v-card>
     </v-dialog>
 </template>
@@ -45,7 +51,7 @@
             };
         },
         props: {
-            idPronac: Number,
+            idPronac: String,
             nomeProjeto: String,
         },
         computed: {
