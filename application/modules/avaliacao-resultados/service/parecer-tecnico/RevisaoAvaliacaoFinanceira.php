@@ -46,7 +46,6 @@ class RevisaoAvaliacaoFinanceira
             'idAvaliacaoFinanceiraRevisao' => $data
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findOneRevisao($where)->toArray();
-
         return $dadosRevisao;
     }
 }
