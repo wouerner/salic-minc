@@ -46,7 +46,7 @@ class AvaliacaoResultados_RevisaoController extends MinC_Controller_Rest_Abstrac
 
         $revisaoService = new RevisaoService();
         $resposta = $revisaoService->buscarRevisoes($this->request->getParams()["idAvaliacaoFinanceira"]);
-        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta), 200);
+        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta[0]), $resposta[1]);
     }
 
     public function getAction()
@@ -57,7 +57,7 @@ class AvaliacaoResultados_RevisaoController extends MinC_Controller_Rest_Abstrac
         }
         $revisaoService = new RevisaoService();
         $resposta = $revisaoService->buscarRevisao($this->request->getParams()["idAvaliacaoFinanceiraRevisao"]);
-        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta), 200);
+        $this->renderJsonResponse(\TratarArray::utf8EncodeArray($resposta[0]), $resposta[1]);
 
     }
 
@@ -72,7 +72,8 @@ class AvaliacaoResultados_RevisaoController extends MinC_Controller_Rest_Abstrac
     {
         $revisaoService = new RevisaoService();
         $response = $revisaoService->salvar($this->request->getParams());
-        $this->customRenderJsonResponse($response, 200);
+
+        $this->renderJsonResponse($response[0], $response[1]);
     }
 
     public function deleteAction(){}

@@ -13,7 +13,11 @@ class RevisaoAvaliacaoFinanceira
             'idAvaliacaoFinanceira' => $data
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findByAvaliacaoFinanceira($where)->toArray();
-        return $dadosRevisao;
+        if(!$dadosRevisao)
+        {
+            return [$dadosRevisao, 400];
+        }
+        return [$dadosRevisao, 200];
     }
 
     public function salvar($data)
@@ -22,21 +26,21 @@ class RevisaoAvaliacaoFinanceira
         $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
         $tbAvaliacaoFinanceiraRevisao = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao($data);
 
-        if(!isset($data["idAvaliacaoFinanceiraRevisao"])){
+        if(isset($data['idAvaliacaoFinanceiraRevisao'])){
             $tbAvaliacaoFinanceiraRevisao->setDtAtualizacao(date('Y-m-d h:i:s'));
         }else{
             $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
         }
-
         $tbAvaliacaoFinanceiraRevisao->setIdAgente($arrAuth['usu_codigo']);
         $mapper = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisaoMapper();
         $codigo = $mapper->save($tbAvaliacaoFinanceiraRevisao);
 
-        //$this->request->setParam('idAvaliacaoFinanceiraRevisao', $codigo);
         if (!$codigo) {
-            return $mapper->getMessages();
+            $error = [$mapper->getMessages(), 400];
+            return $error;
         }
-        return $this->buscarRevisao($codigo);
+        $retorno = [$this->buscarRevisao($codigo),200];
+        return $retorno;
     }
 
     public function buscarRevisao($data)
@@ -46,6 +50,11 @@ class RevisaoAvaliacaoFinanceira
             'idAvaliacaoFinanceiraRevisao' => $data
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findOneRevisao($where)->toArray();
-        return $dadosRevisao;
+
+        if(!$dadosRevisao)
+        {
+         return [$dadosRevisao, 400];
+        }
+        return [$dadosRevisao, 200];
     }
 }
