@@ -360,7 +360,7 @@ class Projeto_Model_Menu extends MinC_Db_Table_Abstract
             $menu['outrasinformacoes']['submenu'][] = [
                 'label' => 'Hist&oacute;rico encaminhamento',
                 'title' => 'Ir para Hist&oacute;rico encaminhamento',
-                'link' => '/default/consultardadosprojeto/historico-encaminhamento/?idPronac=' . $idPronacHash,
+                'link' => "/projeto/#/{$idPronacHash}/historico-encaminhamento",
                 'ajax' => false,
                 'grupo' => []
             ];

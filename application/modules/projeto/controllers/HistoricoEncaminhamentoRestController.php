@@ -1,8 +1,8 @@
 <?php
 
-use Application\Modules\Projeto\Service\HistoricoEnquadramento\HistoricoEnquadramento as HistoricoEnquadramentoService;
+use Application\Modules\Projeto\Service\HistoricoEncaminhamento\HistoricoEncaminhamento as HistoricoEncaminhamentoService;
 
-class Projeto_HistoricoEnquadramentoRestController extends MinC_Controller_Rest_Abstract
+class Projeto_HistoricoEncaminhamentoRestController extends MinC_Controller_Rest_Abstract
 {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -15,8 +15,8 @@ class Projeto_HistoricoEnquadramentoRestController extends MinC_Controller_Rest_
     public function indexAction()
     {
         try {
-            $HistoricoEnquadramentoService = new HistoricoEnquadramentoService($this->getRequest(), $this->getResponse());
-            $resposta = $HistoricoEnquadramentoService->buscaHistoricoEnquadramento();
+            $HistoricoEncaminhamentoService = new HistoricoEncaminhamentoService($this->getRequest(), $this->getResponse());
+            $resposta = $HistoricoEncaminhamentoService->buscaHistoricoEncaminhamento();
 
             $this->customRenderJsonResponse(['data' => $resposta], 200);
 

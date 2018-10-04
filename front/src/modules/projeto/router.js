@@ -19,7 +19,7 @@ import DocumentosAssinados from './visualizar/components/outrasInformacoes/Docum
 import DadosComplementares from './visualizar/components/outrasInformacoes/DadosComplementares';
 import DocumentosAnexados from './visualizar/components/outrasInformacoes/DocumentosAnexados';
 import PlanoDistribuicao from './visualizar/components/outrasInformacoes/PlanoDistribuicao';
-
+import HistoricoEncaminhamento from './visualizar/components/outrasInformacoes/HistoricoEncaminhamento';
 
 Vue.use(Router);
 
@@ -181,7 +181,14 @@ const routes = [
                 component: PlanoDistribuicao,
                 meta: {
                     title: 'Plano de Distribui&ccedil;&atilde;o',
-
+                },
+            },
+            {
+                path: 'historico-encaminhamento',
+                name: 'HistoricoEncaminhamento',
+                component: HistoricoEncaminhamento,
+                meta: {
+                    title: 'Hist&oacute;rico Encaminhamento',
                 },
             },
         ],

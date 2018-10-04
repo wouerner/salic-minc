@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Modules\Projeto\Service\HistoricoEnquadramento;
+namespace Application\Modules\Projeto\Service\HistoricoEncaminhamento;
 
 use Seguranca;
 
-class HistoricoEnquadramento
+class HistoricoEncaminhamento
 {
     /**
      * @var \Zend_Controller_Request_Abstract $request
@@ -22,7 +22,7 @@ class HistoricoEnquadramento
         $this->response = $response;
     }
 
-    public function buscaHistoricoEnquadramento()
+    public function buscaHistoricoEncaminhamento()
     {
         $idPronac = $this->request->idPronac;
 
@@ -36,35 +36,37 @@ class HistoricoEnquadramento
             $DadosProjeto = $projetos->dadosProjeto(array('idPronac = ?' => $idPronac))->current();
 
             $tbDistribuirParecer = new \tbDistribuirParecer();
-            $historicoEnquadramento = $tbDistribuirParecer->buscarHistoricoEncaminhamento(array('a.idPRONAC = ?'=>$idPronac));
+            $historicoEncaminhamento = $tbDistribuirParecer->buscarHistoricoEncaminhamento(array('a.idPRONAC = ?'=>$idPronac));
         }
         $resultArray = [];
 
-        $enquadramentos = $this->montaArrayHistoricoEnquadramento($historicoEnquadramento);
+        $Encaminhamentos = $this->montaArrayHistoricoEncaminhamento($historicoEncaminhamento);
+       
+        $informacoes['Pronac'] = $DadosProjeto['pronac'];
+        $informacoes['NomeProjeto'] = $DadosProjeto['nomeProjeto'];
 
-        $informacoes['Pronac'] = $DadosProjeto['AnoProjeto'] + $DadosProjeto['Sequencial'];
-        $informacoes['NomeProjeto'] = $DadosProjeto['NomeProjeto'];
-
-        $resultArray['enquadramentos'] = $enquadramentos;
+        $resultArray['Encaminhamentos'] = $Encaminhamentos;
         $resultArray['informacoes'] = $informacoes;
 
         return $resultArray;
     }
 
-    private function montaArrayHistoricoEnquadramento($historicoEnquadramento) {
+    private function montaArrayHistoricoEncaminhamento($historicoEncaminhamento) {
         $result = [];
 
-        foreach ($historicoEnquadramento as $item) {
+        foreach ($historicoEncaminhamento as $item) {
             $produto = html_entity_decode(utf8_encode($item['Produto']));
             $unidade = html_entity_decode(utf8_encode($item['Unidade']));
             $observacao = html_entity_decode(utf8_encode($item['Observacao']));
+            $objDateTimeDtEnvio = new \DateTime($item['DtEnvio']);
+            $objDateTimeDtRetorno = new \DateTime($item['DtRetorno']);
 
             $result[] = [
                 'Produto' => $produto,
                 'Unidade' => $unidade,
                 'Observacao' => $observacao,
-                'DtEnvio' => $item['DtEnvio'],
-                'DtRetorno' => $item['DtRetorno'],
+                'DtEnvio' => $objDateTimeDtEnvio->format('d/m/Y H:i:s'),
+                'DtRetorno' => $objDateTimeDtRetorno->format('d/m/Y H:i:s'),
                 'qtDias' => $item['qtDias']
             ];
 
