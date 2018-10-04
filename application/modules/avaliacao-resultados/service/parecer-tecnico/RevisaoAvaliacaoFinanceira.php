@@ -13,7 +13,7 @@ class RevisaoAvaliacaoFinanceira
             'idAvaliacaoFinanceira' => $data
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findByAvaliacaoFinanceira($where)->toArray();
-        if(!$dadosRevisao)
+        if(!$dadosRevisao && empty($dadosRevisao))
         {
             return [$dadosRevisao, 400];
         }
@@ -26,7 +26,7 @@ class RevisaoAvaliacaoFinanceira
         $arrAuth = array_change_key_case((array)$authInstance->getIdentity());
         $tbAvaliacaoFinanceiraRevisao = new \AvaliacaoResultados_Model_tbAvaliacaoFinanceiraRevisao($data);
 
-        if(isset($data['idAvaliacaoFinanceiraRevisao'])){
+        if(isset($data['idAvaliacaoFinanceiraRevisao']) && !empty($data['idAvaliacaoFinanceiraRevisao'])){
             $tbAvaliacaoFinanceiraRevisao->setDtAtualizacao(date('Y-m-d h:i:s'));
         }else{
             $tbAvaliacaoFinanceiraRevisao->setDtRevisao(date('Y-m-d h:i:s'));
@@ -51,10 +51,10 @@ class RevisaoAvaliacaoFinanceira
         ];
         $dadosRevisao = $tbAvaliacaoFinanceira->findOneRevisao($where)->toArray();
 
-        if(!$dadosRevisao)
+        if(!$dadosRevisao && empty($dadosRevisao))
         {
-         return [$dadosRevisao, 400];
+         return ['dados'=>$dadosRevisao,'code'=> 400];
         }
-        return [$dadosRevisao, 200];
+        return ['dados'=>$dadosRevisao, 'code'=> 200];
     }
 }
